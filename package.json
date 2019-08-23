@@ -1,0 +1,40 @@
+{
+  "name": "parcel-express-react-server",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev:run:back": "node parcel.config.js",
+    "dev:run:client": "parcel watch -p 1236 client/src/assets/index.html",
+    "dev:build:client": "parcel watch client/src/assets/index.html",
+    "setup": "yarn add global parcel-bundler && yarn install && cd client && yarn install"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "cookie-parser": "~1.4.4",
+    "express": "~4.16.1",
+    "global": "^4.4.0",
+    "morgan": "~1.9.1",
+    "nodemon": "^1.19.1",
+    "parcel-bundler": "^1.12.3",
+    "ramda": "^0.26.1"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
+    "@types/express": "^4.17.1",
+    "@types/morgan": "^1.7.37",
+    "@types/node": "^12.7.2",
+    "@types/parcel-bundler": "^1.12.1",
+    "@types/ramda": "^0.26.19",
+    "debug": "~2.6.9",
+    "typescript": "^3.5.3"
+  },
+  "main": "parcel.config.js",
+  "keywords": [
+    "express",
+    "react",
+    "parcel"
+  ],
+  "author": "Yacine Mohamdi",
+  "license": "MIT",
+  "description": ""
+}
