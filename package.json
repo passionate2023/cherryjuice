@@ -2,17 +2,23 @@
   "name": "parcel-express-react-server",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "v12.2.0",
+    "yarn": "1.16.0"
+  },
   "scripts": {
-    "dev:run:back": "node parcel.config.js",
-    "dev:run:client": "parcel watch -p 1236 client/src/assets/index.html",
-    "dev:build:client": "parcel watch client/src/assets/index.html",
-    "setup": "yarn add global parcel-bundler && yarn install && cd client && yarn install"
+    "dev:server": "node parcel.config.js",
+    "dev:client": "parcel watch -p 1236 client/src/assets/index.html",
+    "build:client": "parcel build client/src/assets/index.html",
+    "build:server": "parcel build src/index.ts",
+    "setup": "yarn global add parcel-bundler && yarn install && cd client && yarn install",
+    "heroku-postbuild": "yarn run setup && yarn run build:client && yarn run build:client",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "chalk": "^2.4.2",
     "cookie-parser": "~1.4.4",
     "express": "~4.16.1",
-    "global": "^4.4.0",
     "morgan": "~1.9.1",
     "nodemon": "^1.19.1",
     "parcel-bundler": "^1.12.3",
