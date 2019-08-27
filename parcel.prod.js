@@ -24,5 +24,5 @@ const options = {
       detailedReport: false, // Prints a detailed report of the bundles, assets, filesizes and times, defaults to false, reports are only printed if watch is disabled
       */
 };
-
-new Bundler(entryFiles, options).bundle()
+const entryFiles = './src/index.ts';
+new Bundler(entryFiles, options).bundle();
