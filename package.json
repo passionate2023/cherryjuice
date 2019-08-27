@@ -11,17 +11,14 @@
     "dev:client": "parcel watch -p 1236 client/src/assets/index.html",
     "build:client": "parcel build client/src/assets/index.html",
     "build:server": "parcel build src/index.ts",
-    "setup": "yarn global add parcel-bundler && yarn install && cd client && yarn install",
+    "setup": "yarn install && cd client && yarn install",
     "heroku-postbuild": "yarn run setup && yarn run build:client && yarn run build:client",
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "chalk": "^2.4.2",
     "cookie-parser": "~1.4.4",
     "express": "~4.16.1",
     "morgan": "~1.9.1",
-    "nodemon": "^1.19.1",
-    "parcel-bundler": "^1.12.3",
     "ramda": "^0.26.1"
   },
   "devDependencies": {
@@ -32,7 +29,9 @@
     "@types/parcel-bundler": "^1.12.1",
     "@types/ramda": "^0.26.19",
     "debug": "~2.6.9",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "chalk": "^2.4.2",
+    "nodemon": "^1.19.1"
   },
   "main": "parcel.config.js",
   "keywords": [
