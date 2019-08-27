@@ -7,12 +7,12 @@
     "yarn": "1.16.0"
   },
   "scripts": {
-    "dev:server": "node parcel.config.js",
+    "dev:server": "node parcel.dev.js",
     "dev:client": "parcel watch -p 1236 client/src/assets/index.html",
-    "build:client": "parcel build client/src/assets/index.html",
-    "build:server": "parcel build src/index.ts",
+    "build:client": "cd client && parcel build src/assets/index.html",
+    "build:server": "node parcel.prod.js",
     "setup": "yarn install && cd client && yarn install",
-    "heroku-postbuild": "yarn run setup && yarn run build:client && yarn run build:client",
+    "heroku-postbuild": "yarn run setup && yarn run build:server && yarn run build:client",
     "start": "node dist/index.js"
   },
   "dependencies": {
@@ -31,7 +31,8 @@
     "debug": "~2.6.9",
     "typescript": "^3.5.3",
     "chalk": "^2.4.2",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "parcel-bundler": "^1.12.3"
   },
   "main": "parcel.config.js",
   "keywords": [

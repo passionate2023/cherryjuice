@@ -12,7 +12,8 @@
   },
   "devDependencies": {
     "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0"
+    "@types/react-dom": "^16.9.0",
+    "cssnano": "^4.1.10"
   },
   "main": "src/index.ts",
   "keywords": [
