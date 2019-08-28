@@ -7,10 +7,10 @@
     "yarn": "1.16.0"
   },
   "scripts": {
-    "dev:server": "node parcel.dev.js",
-    "dev:client": "parcel watch -p 1236 client/src/assets/index.html",
-    "build:client": "cd client && parcel build src/assets/index.html",
+    "watch:server": "node parcel.dev.js",
     "build:server": "node parcel.prod.js",
+    "watch:client": "cd client && yarn run watch",
+    "build:client": "cd client && yarn run build",
     "setup": "yarn install && cd client && yarn install",
     "heroku-postbuild": "yarn run setup && yarn run build:server && yarn run build:client",
     "start": "node dist/index.js"

@@ -2,7 +2,9 @@
   "name": "parcel-express-react-client",
   "version": "0.1.0",
   "scripts": {
-    "dev": "parcel -p 1236 watch src/assets/index.html "
+    "watch:liveserver": "parcel -p 1236 watch src/assets/index.html ",
+    "watch": "parcel watch src/assets/index.html ",
+    "build": "parcel build src/assets/index.html"
   },
   "author": "Yacine Mohamdi",
   "license": "MIT",

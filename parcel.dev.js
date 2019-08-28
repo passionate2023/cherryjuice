@@ -26,10 +26,12 @@ const options = {
       */
 };
 
-const createDebug = name => (debug.enable(name), debug(name));
+const helpers = {
+ createDebug : name => (debug.enable(name), debug(name))
+}
 
 const run = () => {
-  const debugParcel = createDebug('parcel');
+  const debugParcel = helpers.createDebug('parcel');
   const entryFiles = './src/index.ts';
   const outFile = 'dist/index.js';
   const bundler = new Bundler(entryFiles, options);
@@ -38,8 +40,8 @@ const run = () => {
     .bundle()
     .then(() => {
       debugParcel(chalk.bgGreen.black('restarting the app'));
-      const process = exec(`nodemon ${outFile}`);
-      process.stdout.on('data', createDebug('nodemon'));
+      const process = exec(`nodemon ${outFile} --watch src`);
+      process.stdout.on('data', helpers.createDebug('server'));
     })
     .catch(error => debugParcel(chalk.bgRed.black(error)));
 };
