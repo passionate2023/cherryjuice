@@ -12,6 +12,7 @@
     "watch:client": "cd client && yarn run watch",
     "build:client": "cd client && yarn run build",
     "setup": "yarn global add parcel-bundler && yarn install && cd client && yarn install",
+    "heroku-prebuild": "npm install --only=dev",
     "heroku-postbuild": "yarn run setup && yarn run build:server && yarn run build:client",
     "start": "node dist/index.js"
   },
