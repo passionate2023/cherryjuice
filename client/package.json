@@ -9,13 +9,18 @@
   "author": "Yacine Mohamdi",
   "license": "MIT",
   "dependencies": {
-
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },
   "devDependencies": {
     "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0"
+    "@types/react-dom": "^16.9.0",
+    "cssnano": "^4.1.10",
+    "postcss-import": "^12.0.1",
+    "postcss-mixins": "^6.2.2",
+    "postcss-modules": "^1.4.1",
+    "postcss-nested": "^4.1.2",
+    "postcss-parcel-import": "^0.0.2"
   },
   "main": "src/index.ts",
   "keywords": [

@@ -1,4 +1,5 @@
-const Bundler = require('parcel-bundler');
+const importGlobal = require('import-global');
+const Bundler = importGlobal('parcel-bundler');
 const chalk = require('chalk');
 let debug = require('debug');
 const { exec } = require('child_process');
