@@ -30,7 +30,7 @@ const interpreter = ogObject => {
   return styles;
 };
 
-const parseRichText = ({ xml, stringify }) =>
+const parseRichText = ({ xml }) =>
   new Promise((resolve, reject) => {
     parseString(xml, async function(err, result) {
       if (err) reject(err);
@@ -42,7 +42,7 @@ const parseRichText = ({ xml, stringify }) =>
           return node;
         });
 
-        resolve(stringify ? JSON.stringify(mappedRes) : mappedRes);
+        resolve(mappedRes);
       }
     });
   });

@@ -51,6 +51,8 @@ import * as path from 'path';
 import * as sqlite from 'sqlite';
 import { TCtNode } from '../../client/types/types';
 import { parseRichText } from '../helpers/cherrytree/interpreter/interpreter';
+import { splitter } from '../helpers/cherrytree/interpreter/splitter';
+import { separator } from '../helpers/cherrytree/interpreter/separator';
 
 const query = `
   SELECT 
@@ -106,7 +108,11 @@ const loadNodes = async (): Promise<TCtNode[]> => {
   let rawData = await getData();
   rawData.forEach(async node => {
     console.log('parsing node', node.name);
-    node.txt_parsed = await parseRichText({ xml: node.txt, stringify: true });
+    node.txt_parsed = await parseRichText({
+      xml: node.txt
+    }).then(parsed => {
+      return JSON.stringify(splitter(separator(parsed)));
+    });
   });
   const { nodes } = await organizeData(rawData);
   return Array.from(nodes.values());
