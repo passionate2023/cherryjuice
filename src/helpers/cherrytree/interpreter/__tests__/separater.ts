@@ -106,7 +106,6 @@ const testData = {
         }
       },
       '\n',
-
       '\n',
       '    this is the fourth line. the previous line was empty'
     ]
@@ -254,6 +253,106 @@ const testData = {
       },
       ' '
     ]
+  },
+  test4: {
+    input: [
+      'this is the fourth line. the previous line was empty\n',
+      {
+        _: 'this ',
+        $: {
+          foreground: '#e9e96161c7c7'
+        },
+        $$: {
+          color: '#e961c7',
+          tags: []
+        }
+      },
+      {
+        _: 'is',
+        $: {
+          foreground: '#e9e96161c7c7',
+          underline: 'single'
+        },
+        $$: {
+          color: '#e961c7',
+          'text-decoration': 'underline',
+          tags: []
+        }
+      },
+      {
+        _: ' the fourth',
+        $: {
+          underline: 'single'
+        },
+        $$: {
+          'text-decoration': 'underline',
+          tags: []
+        }
+      },
+      ' line. the previous line was empty'
+    ],
+
+    output: [
+      'this is the fourth line. the previous line was empty',
+      '\n',
+      {
+        _: 'this ',
+        $: {
+          foreground: '#e9e96161c7c7'
+        },
+        $$: {
+          color: '#e961c7',
+          tags: []
+        }
+      },
+      {
+        _: 'is',
+        $: {
+          foreground: '#e9e96161c7c7',
+          underline: 'single'
+        },
+        $$: {
+          color: '#e961c7',
+          'text-decoration': 'underline',
+          tags: []
+        }
+      },
+      {
+        _: ' the fourth',
+        $: {
+          underline: 'single'
+        },
+        $$: {
+          'text-decoration': 'underline',
+          tags: []
+        }
+      },
+      ' line. the previous line was empty'
+    ]
+  },
+  test5: {
+    input: [
+      '1. hello\n2. world!\n3. :D\n• hello\n• world\n• :D\n☐ hello\n☐ world\n☐ :D'
+    ],
+    output: [
+      '1. hello',
+      '\n',
+      '2. world!',
+      '\n',
+      '3. :D',
+      '\n',
+      '• hello',
+      '\n',
+      '• world',
+      '\n',
+      '• :D',
+      '\n',
+      '☐ hello',
+      '\n',
+      '☐ world',
+      '\n',
+      '☐ :D'
+    ]
   }
 };
 describe('it should split by newline character', () => {
@@ -276,4 +375,15 @@ describe('it should split by newline character', () => {
     console.log(res);
     expect(res).toEqual(output);
   });
-});
+  it('test4 (advanced)', () => {
+    const { input, output } = testData.test4;
+    const res = separator(input);
+    console.log(res);
+    expect(res).toEqual(output);
+  });
+  it('test5 (advanced)', () => {
+    const { input, output } = testData.test5;
+    const res = separator(input);
+    console.log("res",res);
+    expect(res).toEqual(output);
+  });});

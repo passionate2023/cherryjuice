@@ -111,6 +111,7 @@ const loadNodes = async (): Promise<TCtNode[]> => {
     node.txt_parsed = await parseRichText({
       xml: node.txt
     }).then(parsed => {
+      console.log(parsed);
       return JSON.stringify(splitter(separator(parsed)));
     });
   });

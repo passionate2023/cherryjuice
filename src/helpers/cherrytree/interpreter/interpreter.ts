@@ -1,4 +1,4 @@
-import { parseString } from 'xml2js';
+
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10]
 };
@@ -27,23 +27,7 @@ const interpreter = ogObject => {
   });
   // @ts-ignore
   styles.tags = tags;
-  return styles;
+  return styles
 };
 
-const parseRichText = ({ xml }) =>
-  new Promise((resolve, reject) => {
-    parseString(xml, async function(err, result) {
-      if (err) reject(err);
-      else {
-        const mappedRes = result.node.rich_text.map(node => {
-          if (typeof node === 'object') {
-            node.$$ = interpreter(node.$);
-          }
-          return node;
-        });
-
-        resolve(mappedRes);
-      }
-    });
-  });
-export { interpreter, parseRichText };
+export { interpreter };
