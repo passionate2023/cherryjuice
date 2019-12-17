@@ -3,7 +3,7 @@ import { getLastArrElm, newLineCharacter } from './helpers/helpers';
 const separator = parsedXml => {
   const res = parsedXml.reduce((acc, val, i) => {
     const text = typeof val === 'string' ? val : val._;
-    if (text.includes(newLineCharacter) && text.length > 1) {
+    if (text && text.includes(newLineCharacter) && text.length > 1) {
       // const parts = text
       //   .split('\n')
       //   .map((part, i, arr) => {

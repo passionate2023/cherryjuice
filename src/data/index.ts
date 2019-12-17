@@ -49,8 +49,8 @@ db.close(err => {
 
 import * as path from 'path';
 import * as sqlite from 'sqlite';
-import { TCtNode } from '../../client/types/types';
-import { parseRichText } from '../helpers/cherrytree/interpreter/interpreter';
+import { TCt_node } from '../types/types';
+import { parseRichText } from '../helpers/cherrytree/interpreter/';
 import { splitter } from '../helpers/cherrytree/interpreter/splitter';
 import { separator } from '../helpers/cherrytree/interpreter/separator';
 
@@ -81,7 +81,7 @@ const getData = async () => {
   const dbPath = path.resolve(__dirname, '../../ctb/file.ctb');
   const db = await sqlite.open(dbPath);
 
-  const data: TCtNode[] = await db
+  const data: TCt_node[] = await db
     .all(query)
     .then(data => data.map(node => ({ ...node, child_nodes: [] })));
 
@@ -92,7 +92,7 @@ const getData = async () => {
 };
 
 const organizeData = async data => {
-  const nodes: Map<number, TCtNode> = new Map(
+  const nodes: Map<number, TCt_node> = new Map(
     data.map(node => [node.node_id, node])
   );
 
@@ -104,15 +104,13 @@ const organizeData = async data => {
   return { nodes };
 };
 
-const loadNodes = async (): Promise<TCtNode[]> => {
+const loadNodes = async (): Promise<TCt_node[]> => {
   let rawData = await getData();
   rawData.forEach(async node => {
     console.log('parsing node', node.name);
     node.txt_parsed = await parseRichText({
-      xml: node.txt
-    }).then(parsed => {
-      console.log(parsed);
-      return JSON.stringify(splitter(separator(parsed)));
+      xml: node.txt,
+      stringify: true
     });
   });
   const { nodes } = await organizeData(rawData);

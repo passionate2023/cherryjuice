@@ -353,6 +353,75 @@ const testData = {
       '\n',
       '☐ :D'
     ]
+  },
+  test6: {
+    input: [
+      'tesla cyber truck:\n',
+      {
+        $: {
+          justification: 'left'
+        },
+        $$: {
+          'text-align': 'left',
+          tags: []
+        }
+      },
+      '\n\ngoogle link: ',
+      {
+        _: 'https://google.com',
+        $: {
+          link: 'webs https://google.com'
+        },
+        $$: {
+          tags: [
+            [
+              'a',
+              [
+                {
+                  href: 'webs https://google.com'
+                }
+              ]
+            ]
+          ]
+        }
+      },
+      ' '
+    ],
+    output: [
+      'tesla cyber truck:',
+      '\n',
+      {
+        $: {
+          justification: 'left'
+        },
+        $$: {
+          'text-align': 'left',
+          tags: []
+        }
+      },
+      '\n',
+      '\n',
+      'google link: ',
+      {
+        _: 'https://google.com',
+        $: {
+          link: 'webs https://google.com'
+        },
+        $$: {
+          tags: [
+            [
+              'a',
+              [
+                {
+                  href: 'webs https://google.com'
+                }
+              ]
+            ]
+          ]
+        }
+      },
+      ' '
+    ]
   }
 };
 describe('it should split by newline character', () => {
@@ -384,6 +453,13 @@ describe('it should split by newline character', () => {
   it('test5 (advanced)', () => {
     const { input, output } = testData.test5;
     const res = separator(input);
-    console.log("res",res);
+    console.log('res', res);
     expect(res).toEqual(output);
-  });});
+  });
+  it('test6 (advanced)', () => {
+    const { input, output } = testData.test6;
+    const res = separator(input);
+    console.log('res', res);
+    expect(res).toEqual(output);
+  });
+});

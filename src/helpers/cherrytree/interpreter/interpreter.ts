@@ -1,9 +1,8 @@
-
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10]
 };
 const createTranslator = (
-  tags: string[],
+  tags: (string | { href: any })[],
   styles: { [key: string]: string }
 ) => {
   return {
@@ -15,7 +14,10 @@ const createTranslator = (
     weight: () => tags.push('strong'),
     style: () => tags.push('em'),
     scale: c => tags.push(c), // todo: complete this
-    family: () => tags.push('code')
+    family: () => tags.push('code'),
+    justification: c => (styles['text-align'] = c),
+    // @ts-ignore
+    link: c => tags.push(['a', [{ href: c }]])
   };
 };
 const interpreter = ogObject => {
@@ -23,11 +25,17 @@ const interpreter = ogObject => {
   const styles = {};
   const translator = createTranslator(tags, styles);
   Object.entries(ogObject).forEach(([key, value]) => {
-    translator[key](value);
+    try {
+      translator[key](value);
+    } catch {
+      throw new Error(
+        `Exception in the interpreter: translator[${key}] is not defined`
+      );
+    }
   });
   // @ts-ignore
   styles.tags = tags;
-  return styles
+  return styles;
 };
 
 export { interpreter };

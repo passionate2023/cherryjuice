@@ -4,8 +4,8 @@ const splitter = parsedXml => {
   parsedXml.reduce((acc, val, i, arr) => {}, []);
   const res = parsedXml.reduce(
     (acc, val, i, arr) => {
-        console.log(i)
-      const text = typeof val === 'string' ? val : val._;
+      console.log(i);
+      const text = typeof val === 'string' ? val : val._ || '';
       if (text.includes(newLineCharacter)) {
         acc.push([]);
         if (text.length > 1) {
