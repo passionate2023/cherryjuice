@@ -11,3 +11,9 @@ export type TCt_node = {
   ts_lastsave: number;
   child_nodes: number[];
 };
+
+export type TCt_nodeImages = {
+  node_id: number;
+  png: string;
+  offset: number;
+};

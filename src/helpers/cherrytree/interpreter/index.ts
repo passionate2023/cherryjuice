@@ -2,9 +2,11 @@ import { interpreter } from './interpreter';
 import { parseString } from 'xml2js';
 import { separator } from './separator';
 import { splitter } from './splitter';
-const parseRichText = ({ xml, stringify }) =>
+const parseRichText = ({ xml, stringify,node_name }) =>
   new Promise((resolve, reject) => {
+
     parseString(xml, async function(err, result) {
+      if(err) console.log(`Error 😱😱😱 node_name: ${node_name} error:${err}`);
       if (err) reject(err);
       else {
         const interpreted = result.node.rich_text.map(node => {
@@ -13,9 +15,11 @@ const parseRichText = ({ xml, stringify }) =>
           }
           return node;
         });
-
+        console.log('pre separation');
         const separated = separator(interpreted);
+        console.log('pre splitting');
         const split = splitter(separated);
+        console.log('pre resolving');
         resolve(stringify ? JSON.stringify(split) : split);
       }
     });
