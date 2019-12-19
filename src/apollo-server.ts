@@ -10,6 +10,7 @@ const typeDefs = gql`
     png: String
     offset: Int
     node_id: Int
+    anchor: String
   }
 
 

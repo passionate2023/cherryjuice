@@ -1,5 +1,9 @@
 const utils = {
-  rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10]
+  rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10],
+  parseUrlAndAnchor : c => {
+    const [, id, anchor] = /node (\d+) (.+)/.exec('node 12 node-_b');
+    return id?`node-${id}#${encodeURIComponent(anchor)}`:c
+  }
 };
 const createTranslator = (
   tags: (string | { href: any })[],
@@ -17,9 +21,10 @@ const createTranslator = (
     family: () => tags.push('code'),
     justification: c => (styles['text-align'] = c),
     // @ts-ignore
-    link: c => tags.push(['a', [{ href: c }]])
+    link: c => tags.push(['a', [{ href: utils.parseUrlAndAnchor(c) }]])
   };
 };
+
 const interpreter = ogObject => {
   const tags = [];
   const styles = {};
