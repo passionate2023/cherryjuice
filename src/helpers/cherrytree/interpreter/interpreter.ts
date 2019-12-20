@@ -1,8 +1,26 @@
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10],
-  parseUrlAndAnchor : c => {
-    const [, id, anchor] = /node (\d+) (.+)/.exec('node 12 node-_b');
-    return id?`node-${id}#${encodeURIComponent(anchor)}`:c
+  parseLink: c => {
+    let attributes = { href: '', target: '' };
+    if (c.startsWith('node')) {
+      const [, id, anchor] = /node (\d+) (.+)/.exec(c);
+      attributes.href = `node-${id}#${encodeURIComponent(anchor)}`;
+      attributes.target = 'node';
+    } else if (c.startsWith('webs')) {
+      const [, url] = /webs (.+)/.exec(c);
+      attributes.href = url;
+      attributes.target = '_blank';
+    } else if (c.startsWith('file')) {
+      const [, url] = /file (.+)/.exec(c);
+      attributes.href = url;
+      attributes.target = 'file';
+    } else {
+      const [, url] = /fold (.+)/.exec(c);
+      attributes.href = url;
+      attributes.target = 'folder';
+    }
+
+    return attributes;
   }
 };
 const createTranslator = (
@@ -21,7 +39,7 @@ const createTranslator = (
     family: () => tags.push('code'),
     justification: c => (styles['text-align'] = c),
     // @ts-ignore
-    link: c => tags.push(['a', [{ href: utils.parseUrlAndAnchor(c) }]])
+    link: c => tags.push(['a', utils.parseLink(c)])
   };
 };
 

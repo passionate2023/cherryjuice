@@ -23,17 +23,33 @@ const testData = {
   },
   test2: {
     input: {
-      link: 'node 12 node-_b'
+      link: 'node 6 déè_eé&heé&_'
     },
     output: {
       tags: [
         [
           'a',
-          [
-            {
-              href: `node-12#${encodeURIComponent('node-_b')}`
-            }
-          ]
+          {
+            href: 'node-6#d%C3%A9%C3%A8_e%C3%A9%26he%C3%A9%26_',
+            target: 'node'
+          }
+        ]
+      ]
+    }
+  },
+  test3: {
+    input: {
+      link: 'webs https://en.wiktionary.org/wiki/%D9%85%D8%B1%D8%AD%D8%A8%D8%A7'
+    },
+    output: {
+      tags: [
+        [
+          'a',
+          {
+            href:
+              'https://en.wiktionary.org/wiki/%D9%85%D8%B1%D8%AD%D8%A8%D8%A7',
+            target: '_blank'
+          }
         ]
       ]
     }
@@ -47,6 +63,11 @@ describe('map css and attributes', () => {
   });
   test('test2', () => {
     const { input, output } = testData.test2;
+    const res = interpreter(input);
+    expect(res).toEqual(output);
+  });
+  test('test3', () => {
+    const { input, output } = testData.test3;
     const res = interpreter(input);
     expect(res).toEqual(output);
   });
