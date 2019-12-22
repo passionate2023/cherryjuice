@@ -1,18 +1,18 @@
 import { ApolloServer, gql } from 'apollo-server-express';
-import {  loadNodes, loadPNG, loadRichText } from './data';
+import { loadNodes, loadPNG, loadPNGMeta, loadRichText } from './data';
 import { app } from './server';
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
 // your data.
 const typeDefs = gql`
-  type Ct_nodeImage {
-    png: String
+  type PngMeta {
     offset: Int
     node_id: Int
     anchor: String
+    width: Int
+    height: Int
   }
-
 
   type Ct_node {
     node_id: Int
@@ -27,11 +27,12 @@ const typeDefs = gql`
     ts_lastsave: Float
     child_nodes: [Int]
     rich_txt: String
-    png: [Ct_nodeImage]
+    png: [PngMeta]
   }
 
   type Query {
     ct_nodes(node_id: Int): [Ct_node]
+    base64(node_id: Int, offset: Int): String
   }
 `;
 
@@ -39,12 +40,13 @@ const typeDefs = gql`
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
   Query: {
-    ct_nodes: loadNodes
+    ct_nodes: loadNodes,
+    base64: loadPNG
   },
   Ct_node: {
     rich_txt: loadRichText,
-    png: loadPNG,
-  },
+    png: loadPNGMeta
+  }
 };
 const server = new ApolloServer({ typeDefs, resolvers });
 

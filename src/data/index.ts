@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as sqlite from 'sqlite';
-import { TCt_node, TCt_nodeImages } from '../types/types';
+import { TCt_node } from '../types/types';
 import { parseRichText } from '../helpers/cherrytree/interpreter/';
 
 const query = {
@@ -13,11 +13,13 @@ const query = {
    on n.node_id = c.node_id ${node_id ? `AND n.node_id = ${node_id}` : ''}
    
    `,
-  images: node_id => `
+  images: ({ node_id, offset }) => `
     SELECT 
     n.node_id, i.png, i.offset, i.anchor
    FROM node as n INNER JOIN image as i
-   on n.node_id = i.node_id  ${node_id ? `AND n.node_id = ${node_id}` : ''}
+   on n.node_id = i.node_id  ${node_id ? `AND n.node_id = ${node_id}` : ''} ${
+    offset ? `AND i.offset = ${offset}` : ''
+  }
   `
 };
 const rootNode = {
@@ -74,21 +76,79 @@ const loadNodes = async (rootValue, { node_id }): Promise<TCt_node[]> => {
   // console.log('res', res);
   return res;
 };
+function getPngDimensions(base64) {
+  if (!base64) return undefined;
+  const header = atob(base64.slice(0, 50)).slice(16, 24);
+  const uint8 = Uint8Array.from(header, c => c.charCodeAt(0));
+  const dataView = new DataView(uint8.buffer);
 
-const loadPNG = async (rootValue, { node_id }) => {
+  return {
+    width: dataView.getInt32(0),
+    height: dataView.getInt32(4)
+  };
+}
+function getPNGSize(buffer) {
+  if (!buffer) return undefined;
+  if (buffer.toString('ascii', 12, 16) === 'CgBI') {
+    return {
+      width: buffer.readUInt32BE(32),
+      height: buffer.readUInt32BE(36)
+    };
+  }
+  return {
+    width: buffer.readUInt32BE(16),
+    height: buffer.readUInt32BE(20)
+  };
+}
+
+const loadPNG = async (_, { node_id, offset }) => {
+  const db = await sqlite.open(dbPath);
+  return db
+    .all(query.images({ node_id: node_id, offset: offset }))
+    .then(nodes =>
+      nodes.map(({ png }) => {
+        return png
+          ? new Buffer(png, 'binary').toString('base64')
+          : undefined
+      })[0]
+    );
+  /*
+      offset: Int
+    node_id: Int
+    anchor: String
+    width: Int
+    height: Int
+   */
+};
+const loadPNGMeta = async (rootValue, { node_id }) => {
   // console.log('loadPNG', { node_id, rootValue });
   // const dbPath = path.resolve(__dirname, '../../ctb/file.ctb');
   const db = await sqlite.open(dbPath);
   // console.log('loadPng', rootValue);
-  return db.all(query.images(rootValue.node_id)).then(nodes =>
-    nodes.map(node => ({
-      ...node,
-      png: node.png
-        ? new Buffer(node.png, 'binary').toString('base64')
-        : undefined,
-      anchor: node.anchor
-    }))
-  );
+  return db
+    .all(query.images({ node_id: rootValue.node_id, offset: undefined }))
+    .then(
+      nodes =>
+        nodes.map(({ offset, node_id, anchor ,png}) => {
+          // const png = node.png
+          //   ? new Buffer(node.png, 'binary').toString('base64')
+          //   : undefined;
+          const dimensions = getPNGSize(png);
+          return {
+            node_id,
+            offset,
+            anchor,
+            ...dimensions
+          };
+        })
+      /*
+            offset: Int
+    node_id: Int
+    anchor: String
+    width: Int
+    height: Int
+         */
+    );
 };
 const loadRichText = async rootValue => {
   // console.log('txt 😳', rootValue);
@@ -101,7 +161,7 @@ const loadRichText = async rootValue => {
     node_name: `id:${rootValue.node_id} name:${rootValue.name}`
   });
 };
-export { loadNodes, loadRichText, loadPNG };
+export { loadNodes, loadRichText, loadPNGMeta, loadPNG };
 // rootValue is the node
 // const loadImages = async rootValue => {
 //   if (!rootValue.has_image) return [];
