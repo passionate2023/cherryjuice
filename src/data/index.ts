@@ -33,8 +33,10 @@ const rootNode = {
   has_table: 0,
   ts_creation: 0,
   ts_lastsave: 0,
-  child_nodes: []
+  child_nodes: [],
+  has_txt: false
 };
+const defaultXMLLength = rootNode.txt.length;
 const dbPath = path.resolve(__dirname, '../../ctb/languages.ctb');
 const getData = async node_id => {
   const db = await sqlite.open(dbPath);
@@ -42,7 +44,8 @@ const getData = async node_id => {
   const data: TCt_node[] = await db.all(query.nodes(node_id)).then(data =>
     data.map(node => ({
       ...node,
-      child_nodes: []
+      child_nodes: [],
+      has_txt: node.txt.length > defaultXMLLength
     }))
   );
   if (!node_id) {
@@ -103,15 +106,12 @@ function getPNGSize(buffer) {
 
 const loadPNG = async (_, { node_id, offset }) => {
   const db = await sqlite.open(dbPath);
-  return db
-    .all(query.images({ node_id: node_id, offset: offset }))
-    .then(nodes =>
+  return db.all(query.images({ node_id: node_id, offset: offset })).then(
+    nodes =>
       nodes.map(({ png }) => {
-        return png
-          ? new Buffer(png, 'binary').toString('base64')
-          : undefined
+        return png ? new Buffer(png, 'binary').toString('base64') : undefined;
       })[0]
-    );
+  );
   /*
       offset: Int
     node_id: Int
@@ -129,7 +129,7 @@ const loadPNGMeta = async (rootValue, { node_id }) => {
     .all(query.images({ node_id: rootValue.node_id, offset: undefined }))
     .then(
       nodes =>
-        nodes.map(({ offset, node_id, anchor ,png}) => {
+        nodes.map(({ offset, node_id, anchor, png }) => {
           // const png = node.png
           //   ? new Buffer(node.png, 'binary').toString('base64')
           //   : undefined;

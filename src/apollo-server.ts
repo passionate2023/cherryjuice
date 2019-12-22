@@ -28,6 +28,7 @@ const typeDefs = gql`
     child_nodes: [Int]
     rich_txt: String
     png: [PngMeta]
+    has_txt: Boolean
   }
 
   type Query {
