@@ -33,7 +33,7 @@ const rootNode = {
   ts_lastsave: 0,
   child_nodes: []
 };
-const dbPath = path.resolve(__dirname, '../../ctb/file.ctb');
+const dbPath = path.resolve(__dirname, '../../ctb/languages.ctb');
 const getData = async node_id => {
   const db = await sqlite.open(dbPath);
 
@@ -43,9 +43,10 @@ const getData = async node_id => {
       child_nodes: []
     }))
   );
-
-  rootNode.child_nodes = [];
-  data.push(rootNode);
+  if (!node_id) {
+    rootNode.child_nodes = [];
+    data.push(rootNode);
+  }
 
   return data;
 };
@@ -64,14 +65,21 @@ const organizeData = async data => {
 };
 
 const loadNodes = async (rootValue, { node_id }): Promise<TCt_node[]> => {
+  // console.log('loadNodes', { node_id, rootValue });
   let rawData = await getData(node_id);
+  // console.log('rawData', rawData);
   const { nodes: organizedNodes } = await organizeData(rawData);
-  return Array.from(organizedNodes.values());
+  const res = Array.from(organizedNodes.values());
+  // console.log('organizedNodes', organizedNodes);
+  // console.log('res', res);
+  return res;
 };
 
-const loadPNG = async rootValue => {
+const loadPNG = async (rootValue, { node_id }) => {
+  // console.log('loadPNG', { node_id, rootValue });
   // const dbPath = path.resolve(__dirname, '../../ctb/file.ctb');
   const db = await sqlite.open(dbPath);
+  // console.log('loadPng', rootValue);
   return db.all(query.images(rootValue.node_id)).then(nodes =>
     nodes.map(node => ({
       ...node,
@@ -83,7 +91,7 @@ const loadPNG = async rootValue => {
   );
 };
 const loadRichText = async rootValue => {
-  console.log('txt 😳', rootValue);
+  // console.log('txt 😳', rootValue);
   //
   // const png: TCt_nodeImages[] = await ;
   // const txt = await ;
