@@ -28,7 +28,8 @@ const createTranslator = (
   styles: { [key: string]: string }
 ) => {
   return {
-    foreground: c => (styles['color'] = utils.rrrrggggbbbbbToRrggbb(c)),
+    foreground: c =>
+      (styles['color'] = c.length === 7 ? c : utils.rrrrggggbbbbbToRrggbb(c)),
     background: c =>
       (styles['background-color'] = utils.rrrrggggbbbbbToRrggbb(c)),
     underline: () => (styles['text-decoration'] = 'underline'),
