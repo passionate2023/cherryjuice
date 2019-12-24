@@ -3,6 +3,8 @@ import * as sqlite from 'sqlite';
 import { TCt_node } from '../types/types';
 import { parseRichText } from '../helpers/cherrytree/interpreter/';
 
+import imageThumbnail from 'image-thumbnail';
+
 const query = {
   nodes: node_id => `
   SELECT 
@@ -38,6 +40,13 @@ const rootNode = {
 };
 const defaultXMLLength = rootNode.txt.length;
 const dbPath = path.resolve(__dirname, '../../ctb/languages.ctb');
+{
+  try {
+    console.log(thumbnail);
+  } catch (err) {
+    console.error(err);
+  }
+}
 const getData = async node_id => {
   const db = await sqlite.open(dbPath);
 
@@ -103,13 +112,14 @@ function getPNGSize(buffer) {
     height: buffer.readUInt32BE(20)
   };
 }
-
+const bufferToPng = buffer =>
+  buffer ? new Buffer(buffer, 'binary').toString('base64') : undefined;
 const loadPNG = async (_, { node_id, offset }) => {
   const db = await sqlite.open(dbPath);
   return db.all(query.images({ node_id: node_id, offset: offset })).then(
     nodes =>
       nodes.map(({ png }) => {
-        return png ? new Buffer(png, 'binary').toString('base64') : undefined;
+        return bufferToPng(png);
       })[0]
   );
   /*
@@ -120,6 +130,8 @@ const loadPNG = async (_, { node_id, offset }) => {
     height: Int
    */
 };
+
+let options = { percentage: 20, responseType: 'base64' };
 const loadPNGMeta = async (rootValue, { node_id }) => {
   // console.log('loadPNG', { node_id, rootValue });
   // const dbPath = path.resolve(__dirname, '../../ctb/file.ctb');
@@ -138,6 +150,7 @@ const loadPNGMeta = async (rootValue, { node_id }) => {
             node_id,
             offset,
             anchor,
+            thumbnail: imageThumbnail(png, options),
             ...dimensions
           };
         })

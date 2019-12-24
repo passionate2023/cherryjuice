@@ -12,6 +12,7 @@ const typeDefs = gql`
     anchor: String
     width: Int
     height: Int
+    thumbnail: String
   }
 
   type Ct_node {
