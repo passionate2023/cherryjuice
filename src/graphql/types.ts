@@ -22,9 +22,9 @@ const typeDefs = gql`
     ts_creation: Float
     ts_lastsave: Float
     child_nodes: [Int]
-    rich_txt: String
-    png: [PngMeta]
     has_txt: Boolean
+    rich_txt: String
+    png_meta(file_id: String!): [PngMeta]
   }
 
   type Ct_file {
@@ -40,9 +40,9 @@ const typeDefs = gql`
   }
 
   type Query {
+    ct_files(file_id: String): [Ct_file]
     ct_nodes(file_id: String!, node_id: Int): [Ct_node]
-    base64(node_id: Int, offset: Int): String
-    ct_files: [Ct_file]
+    png_base64(file_id: String!, node_id: Int!, offset: Int!): String
   }
 `;
 export { typeDefs };

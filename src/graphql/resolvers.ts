@@ -1,7 +1,3 @@
-import * as path from 'path';
-import * as fs from 'fs';
-import * as crypto from 'crypto';
-import slugify from 'slugify';
 import * as sqlite from 'sqlite';
 import imageThumbnail from 'image-thumbnail';
 import { parseRichText } from '../helpers/ctb-interpreter';
@@ -12,16 +8,15 @@ import {
   rootNode,
   ctbQuery
 } from '../helpers/ctb-content';
-import { TCt_node } from '../types/types';
+import { TCt_node, TFile } from '../types/types';
 
 type TState = {
-  folderPath: string;
   pngThumbnailOptions: { percentage: number; responseType: string };
-  filePath: string;
+  files: Map<number, TFile>;
 };
 const createResolvers = ({ state }: { state: TState }) => {
   const getNodes = async ({ file_id, node_id }) => {
-    const db = await sqlite.open(state.filePath);
+    const db = await sqlite.open(state.files.get(file_id).filePath);
 
     const data: TCt_node[] = await db.all(ctbQuery.nodes(node_id)).then(data =>
       data.map(node => ({
@@ -38,8 +33,8 @@ const createResolvers = ({ state }: { state: TState }) => {
     return data;
   };
 
-  const loadPNG = async (_, { node_id, offset }) => {
-    const db = await sqlite.open(state.filePath);
+  const loadPNG = async (_, { file_id, node_id, offset }) => {
+    const db = await sqlite.open(state.files.get(file_id).filePath);
     return db.all(ctbQuery.images({ node_id: node_id, offset: offset })).then(
       nodes =>
         nodes.map(({ png }) => {
@@ -48,8 +43,9 @@ const createResolvers = ({ state }: { state: TState }) => {
     );
   };
 
-  const loadPNGMeta = async (rootValue, { node_id }) => {
-    const db = await sqlite.open(state.filePath);
+  const loadPNGMeta = async (rootValue, { file_id }) => {
+    console.log({ file_id, node_id: rootValue.node_id });
+    const db = await sqlite.open(state.files.get(file_id).filePath);
     return db
       .all(ctbQuery.images({ node_id: rootValue.node_id, offset: undefined }))
       .then(nodes =>
@@ -59,11 +55,14 @@ const createResolvers = ({ state }: { state: TState }) => {
             node_id,
             offset,
             anchor,
-            thumbnail: imageThumbnail(png, state.pngThumbnailOptions),
+            thumbnail: anchor
+              ? null
+              : imageThumbnail(png, state.pngThumbnailOptions),
             ...dimensions
           };
         })
-      );
+      )
+      .catch(console.error);
   };
   const loadRichText = async rootValue => {
     return parseRichText({
@@ -76,39 +75,14 @@ const createResolvers = ({ state }: { state: TState }) => {
     rootValue,
     { file_id, node_id }
   ): Promise<TCt_node[]> => {
-    let rawData = await getNodes(node_id);
+    let rawData = await getNodes({ file_id, node_id });
     const { nodes: organizedNodes } = await organizeData(rawData);
     return Array.from(organizedNodes.values());
   };
-  const scanFolder = () => {
-    const fullFolderPath = path.resolve(__dirname, state.folderPath);
-    const dir = fs.readdirSync(fullFolderPath);
-    const res = [];
-    dir.forEach(file => {
-      if (file.endsWith('ctb')) {
-        const filePath = path.resolve(fullFolderPath, file);
-        const { size, birthtimeMs, mtimeMs, ctimeMs, atimeMs } = fs.statSync(
-          filePath
-        );
-        res.push({
-          name: file,
-          size,
-          fileCreation: birthtimeMs,
-          fileContentModification: mtimeMs,
-          fileAttributesModification: ctimeMs,
-          fileAccess: atimeMs,
-          slug: slugify(file.replace('.ctb', '')).substr(0, 30),
-          id: crypto
-            .createHash('md5')
-            .update(file)
-            .digest('hex'),
-          filePath
-        });
-      }
-    });
-    return res;
+  const getFiles = (_, { file_id }) => {
+    return file_id ? [state.files.get(file_id)] : state.files.values();
   };
-  return { loadNodes, loadRichText, loadPNGMeta, loadPNG, scanFolder };
+  return { loadNodes, loadRichText, loadPNGMeta, loadPNG, getFiles };
 };
 
 export { createResolvers };

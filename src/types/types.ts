@@ -17,3 +17,14 @@ export type TCt_nodeImages = {
   png: string;
   offset: number;
 };
+export type TFile = {
+  name: string;
+  size: number;
+  fileCreation: number;
+  fileContentModification: number;
+  fileAttributesModification: number;
+  fileAccess: number;
+  slug: string;
+  id: string;
+  filePath: string;
+};
