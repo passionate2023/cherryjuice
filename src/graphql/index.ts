@@ -5,13 +5,19 @@ import * as path from 'path';
 import { scanFolder } from '../helpers/files';
 
 const config = {
-  folderPath: '../../ctb'
+  folders: ['C:\\Users\\lpflo\\Desktop\\notes', '../../ctb']
 };
 const resolversState = {
   pngThumbnailOptions: { percentage: 20, responseType: 'base64' },
-  files: scanFolder({ folderPath: config.folderPath })
+  files: scanFolder({ folders: config.folders })
 };
-const { loadNodes, loadPNG, loadPNGMeta, loadRichText, getFiles } = createResolvers({
+const {
+  loadNodes,
+  loadPNG,
+  loadPNGMeta,
+  loadRichText,
+  getFiles
+} = createResolvers({
   state: resolversState
 });
 
@@ -19,7 +25,7 @@ const resolvers = {
   Query: {
     ct_files: getFiles,
     ct_nodes: loadNodes,
-    png_base64: loadPNG,
+    png_base64: loadPNG
   },
   Ct_node: {
     rich_txt: loadRichText,
