@@ -39,12 +39,14 @@ const createTranslator = (
     scale: c => tags.push(c), // todo: complete this
     family: () => tags.push('code'),
     justification: c => (styles['text-align'] = c),
+    width: c => (styles['width'] = `${c}px`),
+    height: c => (styles['height'] = `${c}px`),
     // @ts-ignore
     link: c => tags.push(['a', utils.parseLink(c)])
   };
 };
 
-const interpreter = ogObject => {
+const translateAttributesToHtmlAndCss = ogObject => {
   const tags = [];
   const styles = {};
   const translator = createTranslator(tags, styles);
@@ -62,4 +64,4 @@ const interpreter = ogObject => {
   return styles;
 };
 
-export { interpreter };
+export { translateAttributesToHtmlAndCss };

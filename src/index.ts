@@ -1,3 +1,5 @@
+import sourceMapSupport from 'source-map-support'
+sourceMapSupport.install()
 import * as http from 'http';
 import { onError, onListening } from './helpers/server';
 import { app } from './server';

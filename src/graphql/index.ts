@@ -5,32 +5,34 @@ import * as path from 'path';
 import { scanFolder } from '../helpers/files';
 
 const config = {
-  folders: ['C:\\Users\\lpflo\\Desktop\\notes', '../../ctb']
+  folders: ['C:\\Users\\lpflo\\Desktop\\notes', '../../ctb'],
 };
 const resolversState = {
   pngThumbnailOptions: { percentage: 20, responseType: 'base64' },
-  files: scanFolder({ folders: config.folders })
+  files: scanFolder({ folders: config.folders }),
 };
 const {
-  loadNodes,
-  loadPNG,
-  loadPNGMeta,
-  loadRichText,
-  getFiles
+  getNodeMeta,
+  getPNGFullBase64,
+  getPNGThumbnailBase64,
+  getRichText,
+  getFiles,
+  getNodeContent,
 } = createResolvers({
-  state: resolversState
+  state: resolversState,
 });
 
 const resolvers = {
   Query: {
     ct_files: getFiles,
-    ct_nodes: loadNodes,
-    png_base64: loadPNG
+    ct_node_meta: getNodeMeta,
+    ct_node_content: getNodeContent,
   },
-  Ct_node: {
-    rich_txt: loadRichText,
-    png_meta: loadPNGMeta
-  }
+  Ct_node_content: {
+    rich_txt: getRichText,
+    png_thumbnail_base64: getPNGThumbnailBase64,
+    png_full_base64: getPNGFullBase64,
+  },
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });

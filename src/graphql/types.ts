@@ -1,32 +1,6 @@
 import { gql } from 'apollo-server-express';
 
-const typeDefs = gql`
-  type PngMeta {
-    offset: Int
-    node_id: Int
-    anchor: String
-    width: Int
-    height: Int
-    thumbnail: String
-  }
-
-  type Ct_node {
-    node_id: Int
-    father_id: Int
-    name: String
-    txt: String
-    is_richtxt: Int
-    has_image: Int
-    has_codebox: Int
-    has_table: Int
-    ts_creation: Float
-    ts_lastsave: Float
-    child_nodes: [Int]
-    has_txt: Boolean
-    rich_txt: String
-    png_meta(file_id: String!): [PngMeta]
-  }
-
+const ct_file = `
   type Ct_file {
     name: String
     size: Int
@@ -38,11 +12,37 @@ const typeDefs = gql`
     id: String
     filePath: String
   }
-
+`;
+const ct_node_meta = `
+  type Ct_node_meta {
+    node_id: Int
+    father_id: Int
+    name: String
+    child_nodes: [Int]
+    is_empty: Int 
+    is_richtxt: Int
+    has_image: Int
+    has_codebox: Int
+    has_table: Int
+    ts_creation: Float
+    ts_lastsave: Float
+  }
+`;
+const ct_node_content = `
+  type Ct_node_content {
+    rich_txt: String
+    png_thumbnail_base64(offset: Int!): String 
+    png_full_base64(offset: Int!): String
+  }
+`;
+const typeDefs = gql`
+  ${ct_file}
+  ${ct_node_meta}
+  ${ct_node_content}
   type Query {
     ct_files(file_id: String): [Ct_file]
-    ct_nodes(file_id: String!, node_id: Int): [Ct_node]
-    png_base64(file_id: String!, node_id: Int!, offset: Int!): String
+    ct_node_meta(file_id: String!, node_id: Int): [Ct_node_meta]
+    ct_node_content(file_id: String!, node_id: Int!): [Ct_node_content]
   }
 `;
 export { typeDefs };

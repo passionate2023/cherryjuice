@@ -1,4 +1,4 @@
-import { interpreter } from '../interpreter';
+import { translateAttributesToHtmlAndCss } from '../steps/translate-attributes-to-html-and-css';
 {
   // const res = interpreter.foreground('#e9e96161c7c7');
   // console.log(
@@ -70,7 +70,7 @@ describe('map css and attributes', () => {
     .forEach(testName => {
       test(testName, () => {
         const { input, output } = testData[testName];
-        const res = interpreter(input);
+        const res = translateAttributesToHtmlAndCss(input);
         expect(res).toEqual(output);
       });
     });
