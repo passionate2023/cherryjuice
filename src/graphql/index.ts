@@ -39,4 +39,4 @@ const server = new ApolloServer({ typeDefs, resolvers });
 
 const applyApollo = app => server.applyMiddleware({ app });
 
-export { applyApollo };
+export { applyApollo,resolversState };

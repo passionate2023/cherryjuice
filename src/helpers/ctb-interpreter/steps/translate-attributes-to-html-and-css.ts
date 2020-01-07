@@ -21,11 +21,11 @@ const utils = {
     }
 
     return attributes;
-  }
+  },
 };
 const createTranslator = (
   tags: (string | { href: any })[],
-  styles: { [key: string]: string }
+  styles: { [key: string]: string },
 ) => {
   return {
     foreground: c =>
@@ -42,7 +42,8 @@ const createTranslator = (
     width: c => (styles['width'] = `${c}px`),
     height: c => (styles['height'] = `${c}px`),
     // @ts-ignore
-    link: c => tags.push(['a', utils.parseLink(c)])
+    link: c => tags.push(['a', utils.parseLink(c)]),
+    // @ts-ignore
   };
 };
 
@@ -55,7 +56,7 @@ const translateAttributesToHtmlAndCss = ogObject => {
       translator[key](value);
     } catch {
       throw new Error(
-        `Exception in the interpreter: translator[${key}] is not defined`
+        `Exception in the interpreter: translator[${key}] is not defined`,
       );
     }
   });

@@ -7,12 +7,12 @@ import {
   getPNGSize,
   organizeData,
 } from '../helpers/ctb-content';
-import { TCt_node, TFile } from '../types/types';
+import { Ct_Node_Meta, Ct_File } from '../types/generated';
 import { getNodes } from '../helpers/files';
 
 type TState = {
   pngThumbnailOptions: { percentage: number; responseType: string };
-  files: Map<number, TFile>;
+  files: Map<number, Ct_File>;
 };
 const createResolvers = ({ state }: { state: TState }) => {
   const getFiles = (_, { file_id }) => {
@@ -21,8 +21,11 @@ const createResolvers = ({ state }: { state: TState }) => {
   const getNodeMeta = async (
     rootValue,
     { file_id, node_id },
-  ): Promise<TCt_node[]> => {
-    let nodes = await getNodes({ filePath: state.files.get(file_id).filePath, node_id });
+  ): Promise<Ct_Node_Meta[]> => {
+    let nodes = await getNodes({
+      filePath: state.files.get(file_id).filePath,
+      node_id,
+    });
     const { nodes: organizedNodes } = await organizeData(nodes);
     return Array.from(organizedNodes.values());
   };

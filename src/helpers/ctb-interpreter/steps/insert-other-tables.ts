@@ -7,28 +7,41 @@ const adjustNode = ({ node, type }) => {
         $: {
           justification: node.justification,
           width: node.width,
-          height: node.height
+          height: node.height,
         },
         other_attributes: {
+          width_raw: node.width,
           offset: node.offset,
           syntax: node.syntax,
           is_width_pix: node.is_width_pix,
           do_highl_bra: node.do_highl_bra,
-          o_show_linenum: node.o_show_linenum
-        }
+          o_show_linenum: node.o_show_linenum,
+        },
       };
     case 'image':
-      return {
-        type: node.anchor ? 'anchor' : 'png',
-        $: {
-          justification: node.justification,
-          height: node.height,
-          width: node.width
-        },
-        other_attributes: {
-          offset: node.offset
-        }
-      };
+      if (node.anchor) console.log('anchor!', node);
+      return node.anchor
+        ? {
+            type: 'anchor',
+            $: {
+              justification: node.justification,
+            },
+            other_attributes: {
+              id: `#${node.anchor}`,
+              offset: node.offset,
+            },
+          }
+        : {
+            type: 'png',
+            $: {
+              justification: node.justification,
+              height: node.height,
+              width: node.width,
+            },
+            other_attributes: {
+              offset: node.offset,
+            },
+          };
   }
 };
 
@@ -50,7 +63,7 @@ const insertOtherTables = ({ xml: oldXml, otherTables }) => {
           if (localOffset <= nodeLength) {
             const [firstHalf, secondHalf] = [
               nodeString.substring(0, localOffset - numberOfInsertedElements),
-              nodeString.substring(localOffset - numberOfInsertedElements)
+              nodeString.substring(localOffset - numberOfInsertedElements),
             ];
 
             const i = xml.indexOf(node);
