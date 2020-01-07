@@ -7,7 +7,9 @@ const testData = {
         image: [
           {
             offset: 0,
-            justification: 'left'
+            justification: 'left',
+            width: 90,
+            height: 500
           }
         ],
         codebox: [
@@ -48,7 +50,9 @@ const testData = {
       {
         type: 'png',
         $: {
-          justification: 'left'
+          justification: 'left',
+          width: 90,
+          height: 500
         },
         other_attributes: {
           offset: 0
@@ -68,7 +72,8 @@ const testData = {
           offset: 36,
           is_width_pix: 1,
           do_highl_bra: 1,
-          o_show_linenum: 1
+          o_show_linenum: 1,
+          width_raw: 900,
         }
       },
       '\nexample: alerting the user\n',
@@ -85,10 +90,58 @@ const testData = {
           offset: 65,
           is_width_pix: 0,
           do_highl_bra: 1,
-          o_show_linenum: 1
+          o_show_linenum: 1,
+          width_raw: 90,
         }
       },
       '\n\nconclusion: foo bar!'
+    ]
+  },
+  test2: {
+    input: {
+      otherTables: {
+        image: [
+          {
+            offset: 0,
+            justification: 'left',
+            height: 100,
+            width: 100
+          },
+          {
+            offset: 2,
+            justification: 'left',
+            height: 200,
+            width: 200
+          }
+        ]
+      },
+      xml: ['\n']
+    },
+    output: [
+      {
+        type: 'png',
+        $: {
+          justification: 'left',
+          height: 100,
+          width: 100
+        },
+        other_attributes: {
+          offset: 0
+        }
+      },
+      '\n',
+
+      {
+        type: 'png',
+        $: {
+          justification: 'left',
+          height: 200,
+          width: 200
+        },
+        other_attributes: {
+          offset: 2
+        }
+      }
     ]
   }
 };
@@ -96,6 +149,12 @@ const testData = {
 describe('it should split by newline character', () => {
   it('test1', () => {
     const { input, output } = testData.test1;
+    const res = insertOtherTables(input);
+    console.log(res);
+    expect(res).toEqual(output);
+  });
+  it('test2', () => {
+    const { input, output } = testData.test2;
     const res = insertOtherTables(input);
     console.log(res);
     expect(res).toEqual(output);

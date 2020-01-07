@@ -8,7 +8,7 @@ const config = {
   folders: ['C:\\Users\\lpflo\\Desktop\\notes', '../../ctb'],
 };
 const resolversState = {
-  pngThumbnailOptions: { percentage: 20, responseType: 'base64' },
+  pngThumbnailOptions: { percentage: 5, responseType: 'base64' },
   files: scanFolder({ folders: config.folders }),
 };
 const {
