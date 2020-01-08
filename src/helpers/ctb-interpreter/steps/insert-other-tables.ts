@@ -1,4 +1,8 @@
+import { parseTable } from './parse-table';
+import { parseXml } from '../helpers/helpers';
+
 const adjustNode = ({ node, type }) => {
+  console.log('inside adjust-node', { node, type });
   switch (type) {
     case 'codebox':
       return {
@@ -42,11 +46,24 @@ const adjustNode = ({ node, type }) => {
               offset: node.offset,
             },
           };
+    case 'table':
+      return {
+        type: 'table',
+        table: parseTable({ xmlTable: node.txt }),
+        $: {
+          justification: node.justification,
+        },
+
+        other_attributes: {
+          offset: node.offset,
+          col_min_width: node.col_min,
+          col_max_width: node.col_max,
+        },
+      };
   }
 };
 
 const insertOtherTables = ({ xml: oldXml, otherTables }) => {
-  console.log('*****', { oldXml, otherTables });
   // remove any empty nodes that ct uses for images/anchors/code...
   const xml = oldXml.filter(
     node => node && (typeof node === 'string' || node._),
@@ -66,7 +83,6 @@ const insertOtherTables = ({ xml: oldXml, otherTables }) => {
           if (nodeString && !node.type) {
             const nodeLength = nodeString.length;
             const localOffset = offset - totalLength;
-            console.log({ nodeString, node, nodeLength, localOffset, offset });
             if (localOffset - numberOfInsertedElements <= nodeLength) {
               const [firstHalf, secondHalf] = [
                 nodeString.substring(0, localOffset - numberOfInsertedElements),
@@ -80,7 +96,6 @@ const insertOtherTables = ({ xml: oldXml, otherTables }) => {
               if (secondHalf) toBeInserted.push(secondHalf);
               xml.splice(i, 1, ...toBeInserted);
               numberOfInsertedElements++;
-              console.log({ firstHalf, secondHalf, toBeInserted, nodeString });
               break;
             } else {
               totalLength += nodeLength;
@@ -90,7 +105,7 @@ const insertOtherTables = ({ xml: oldXml, otherTables }) => {
       }
     });
   });
-
+  console.log({ xml });
   return xml;
 };
 // things to consider

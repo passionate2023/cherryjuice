@@ -42,6 +42,11 @@ const ctbQuery = {
   node_id, offset, justification, txt, syntax, width, height, is_width_pix, do_highl_bra, do_show_linenum
   from codebox where node_id = ${node_id} 
   `,
+  table: ({ node_id }) => `
+  SELECT node_id, offset, justification, txt, col_min, col_max
+  FROM grid
+  WHERE node_id = ${node_id};
+  `,
 };
 
 const organizeData = async data => {

@@ -9,6 +9,7 @@ import {
 } from '../helpers/ctb-content';
 import { Ct_Node_Meta, Ct_File } from '../types/generated';
 import { getNodes } from '../helpers/files';
+import { parseXml } from '../helpers/ctb-interpreter/helpers/helpers';
 
 type TState = {
   pngThumbnailOptions: { percentage: number; responseType: string };
@@ -60,6 +61,15 @@ const createResolvers = ({ state }: { state: TState }) => {
           })),
         ),
       codebox: await db.all(ctbQuery.codebox({ node_id })),
+      table: await db.all(ctbQuery.table({ node_id })).then(
+        async tables =>
+          await Promise.all(
+            tables.map(async table => ({
+              ...table,
+              txt: await parseXml({ xml: table.txt }),
+            })),
+          ),
+      ),
     };
 
     return parseRichText({

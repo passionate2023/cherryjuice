@@ -1,15 +1,9 @@
 import { translateAttributesToHtmlAndCss } from './steps/translate-attributes-to-html-and-css';
-import { parseString } from 'xml2js';
+
 import { flattenIntoLines } from './steps/flatten-into-lines';
 import { groupNodesByLine } from './steps/group-nodes-by-line';
 import { insertOtherTables } from './steps/insert-other-tables';
-
-const parse = xml =>
-  new Promise((resolve, reject) => {
-    parseString(xml, async function(err, result) {
-      err ? reject(err) : resolve(result);
-    });
-  });
+import { parseXml } from './helpers/helpers';
 
 const parseRichText = async ({
   nodeTableXml,
@@ -17,7 +11,7 @@ const parseRichText = async ({
   meta: { name },
   options: { stringify }
 }) => {
-  const parsedXml = await parse(nodeTableXml);
+  const parsedXml = await parseXml({ xml: nodeTableXml });
   // @ts-ignore
   const richText = parsedXml.node.rich_text;
   console.log('pre insert-other-tables', richText);
