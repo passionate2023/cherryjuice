@@ -7,7 +7,7 @@ const adjustNode = ({ node, type }) => {
         $: {
           justification: node.justification,
           width: node.width,
-          height: node.height
+          height: node.height,
         },
         other_attributes: {
           width_raw: node.width,
@@ -15,8 +15,8 @@ const adjustNode = ({ node, type }) => {
           syntax: node.syntax,
           is_width_pix: node.is_width_pix,
           do_highl_bra: node.do_highl_bra,
-          o_show_linenum: node.o_show_linenum
-        }
+          o_show_linenum: node.o_show_linenum,
+        },
       };
     case 'image':
       if (node.anchor) console.log('anchor!', node);
@@ -24,23 +24,23 @@ const adjustNode = ({ node, type }) => {
         ? {
             type: 'anchor',
             $: {
-              justification: node.justification
+              justification: node.justification,
             },
             other_attributes: {
               id: `#${node.anchor}`,
-              offset: node.offset
-            }
+              offset: node.offset,
+            },
           }
         : {
             type: 'png',
             $: {
               justification: node.justification,
               height: node.height,
-              width: node.width
+              width: node.width,
             },
             other_attributes: {
-              offset: node.offset
-            }
+              offset: node.offset,
+            },
           };
   }
 };
@@ -48,7 +48,9 @@ const adjustNode = ({ node, type }) => {
 const insertOtherTables = ({ xml: oldXml, otherTables }) => {
   console.log('*****', { oldXml, otherTables });
   // remove any empty nodes that ct uses for images/anchors/code...
-  const xml = oldXml.filter(node => typeof node === 'string' || node._);
+  const xml = oldXml.filter(
+    node => node && (typeof node === 'string' || node._),
+  );
   let numberOfInsertedElements = 0;
   const xmlLength = xml.length;
   Object.entries(otherTables).forEach(([key, value]) => {
@@ -64,11 +66,11 @@ const insertOtherTables = ({ xml: oldXml, otherTables }) => {
           if (nodeString && !node.type) {
             const nodeLength = nodeString.length;
             const localOffset = offset - totalLength;
-            console.log({ nodeString, node,nodeLength, localOffset,offset });
+            console.log({ nodeString, node, nodeLength, localOffset, offset });
             if (localOffset - numberOfInsertedElements <= nodeLength) {
               const [firstHalf, secondHalf] = [
                 nodeString.substring(0, localOffset - numberOfInsertedElements),
-                nodeString.substring(localOffset - numberOfInsertedElements)
+                nodeString.substring(localOffset - numberOfInsertedElements),
               ];
 
               const i = xml.indexOf(node);
