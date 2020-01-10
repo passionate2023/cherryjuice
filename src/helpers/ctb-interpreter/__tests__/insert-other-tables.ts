@@ -73,7 +73,7 @@ const testData = {
           is_width_pix: 1,
           do_highl_bra: 1,
           o_show_linenum: 1,
-          width_raw: 900,
+          width_raw: 900
         }
       },
       '\nexample: alerting the user\n',
@@ -91,7 +91,7 @@ const testData = {
           is_width_pix: 0,
           do_highl_bra: 1,
           o_show_linenum: 1,
-          width_raw: 90,
+          width_raw: 90
         }
       },
       '\n\nconclusion: foo bar!'
@@ -143,6 +143,66 @@ const testData = {
         }
       }
     ]
+  },
+  test3: {
+    input: {
+      otherTables: {
+        image: [
+          {
+            offset: 2,
+            justification: 'left',
+            height: 100,
+            width: 100
+          },
+          {
+            offset: 4,
+            justification: 'left',
+            height: 200,
+            width: 200
+          }
+        ]
+      },
+      xml: [
+        '\n\n',
+        {
+          $: {
+            justification: 'left'
+          }
+        },
+        '\n',
+        {
+          $: {
+            justification: 'left'
+          }
+        }
+      ]
+    },
+    output: [
+      '\n\n',
+      {
+        type: 'png',
+        $: {
+          justification: 'left',
+          height: 100,
+          width: 100
+        },
+        other_attributes: {
+          offset: 2
+        }
+      },
+      '\n',
+      {
+        type: 'png',
+        $: {
+          justification: 'left',
+          height: 200,
+          width: 200
+        },
+        other_attributes: {
+          offset: 4
+        }
+      }
+    ]
   }
 };
 
@@ -155,6 +215,12 @@ describe('it should split by newline character', () => {
   });
   it('test2', () => {
     const { input, output } = testData.test2;
+    const res = insertOtherTables(input);
+    console.log(res);
+    expect(res).toEqual(output);
+  });
+  it('test3', () => {
+    const { input, output } = testData.test3;
     const res = insertOtherTables(input);
     console.log(res);
     expect(res).toEqual(output);

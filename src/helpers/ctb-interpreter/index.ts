@@ -7,20 +7,22 @@ import { compose } from 'ramda';
 import { fixCharacters } from './steps/fix-characters';
 
 const processingPipe = compose(
-  fixCharacters.replaceSpaceCharacter,
+  fixCharacters.replaceTabCharacter,
   fixCharacters.replaceSpaceCharacter,
   JSON.stringify,
   groupNodesByLine,
   flattenIntoLines,
   translateAttributesToHtmlAndCss,
+  // @ts-ignore
+  fixCharacters.fillGhostNewLines
 );
 const parseRichText = async ({ nodeTableXml, otherTables = {} }) => {
-  const temp = fixCharacters.flagGhostNewLines(nodeTableXml);
-  const parsedXml = await parseXml({ xml: temp });
-  // @ts-ignore
-  const richText = parsedXml.node.rich_text;
-  const withNewLines = fixCharacters.fillGhostNewLines(richText);
-  return processingPipe(insertOtherTables({ xml: withNewLines, otherTables }));
+  nodeTableXml = fixCharacters.flagGhostNewLines(nodeTableXml);
+  let richText = await parseXml({ xml: nodeTableXml }).then(
+    ({ node: { rich_text } }) => rich_text
+  );
+  richText = insertOtherTables({ xml: richText, otherTables });
+  return processingPipe(richText);
 };
 
 export { parseRichText };
