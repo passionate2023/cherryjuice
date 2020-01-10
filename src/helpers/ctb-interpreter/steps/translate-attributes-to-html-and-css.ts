@@ -46,23 +46,28 @@ const createTranslator = (
     // @ts-ignore
   };
 };
-
-const translateAttributesToHtmlAndCss = ogObject => {
-  const tags = [];
-  const styles = {};
-  const translator = createTranslator(tags, styles);
-  Object.entries(ogObject).forEach(([key, value]) => {
-    try {
-      translator[key](value);
-    } catch {
-      throw new Error(
-        `Exception in the interpreter: translator[${key}] is not defined`,
-      );
-    }
-  });
-  // @ts-ignore
-  styles.tags = tags;
-  return styles;
+const whiteListedAttributes = {
+  containsNewLine: true,
 };
-
+const translateAttributesToHtmlAndCss = xml =>
+  xml.map(node => {
+    if (node.$) {
+      const tags = [];
+      const styles = {};
+      const translator = createTranslator(tags, styles);
+      Object.entries(node.$).forEach(([key, value]) => {
+        try {
+          translator[key](value);
+        } catch {
+          if (!whiteListedAttributes[key])
+            throw new Error(
+              `Exception in the interpreter: translator[${key}] is not defined`,
+            );
+        }
+      });
+      node.$ = styles;
+      node.$.tags = tags;
+    }
+    return node;
+  });
 export { translateAttributesToHtmlAndCss };

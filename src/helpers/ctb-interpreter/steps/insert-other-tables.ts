@@ -64,9 +64,10 @@ const adjustNode = ({ node, type }) => {
 };
 
 const insertOtherTables = ({ xml: oldXml, otherTables }) => {
+  console.log("______________",{oldXml,otherTables});
   // remove any empty nodes that ct uses for images/anchors/code...
   const xml = oldXml.filter(
-    node => node && (typeof node === 'string' || node._ ),
+    node => node && (typeof node === 'string' || node._),
   );
   // console.log('before inside insertOtherTable', JSON.stringify(xml))
   let numberOfInsertedElements = 0;
