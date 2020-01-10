@@ -2,7 +2,7 @@ import { parseTable } from './parse-table';
 import { parseXml } from '../helpers/helpers';
 
 const adjustNode = ({ node, type }) => {
-  console.log('inside adjust-node', { node, type });
+  // console.log('inside adjust-node', { node, type });
   switch (type) {
     case 'codebox':
       return {
@@ -23,7 +23,7 @@ const adjustNode = ({ node, type }) => {
         },
       };
     case 'image':
-      if (node.anchor) console.log('anchor!', node);
+      // if (node.anchor) console.log('anchor!', node);
       return node.anchor
         ? {
             type: 'anchor',
@@ -66,8 +66,9 @@ const adjustNode = ({ node, type }) => {
 const insertOtherTables = ({ xml: oldXml, otherTables }) => {
   // remove any empty nodes that ct uses for images/anchors/code...
   const xml = oldXml.filter(
-    node => node && (typeof node === 'string' || node._),
+    node => node && (typeof node === 'string' || node._ ),
   );
+  // console.log('before inside insertOtherTable', JSON.stringify(xml))
   let numberOfInsertedElements = 0;
   const xmlLength = xml.length;
   Object.entries(otherTables).forEach(([key, value]) => {
@@ -105,7 +106,7 @@ const insertOtherTables = ({ xml: oldXml, otherTables }) => {
       }
     });
   });
-  console.log({ xml });
+  // console.log('after inside insertOtherTable', JSON.stringify(xml))
   return xml;
 };
 // things to consider

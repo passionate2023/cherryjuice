@@ -17,14 +17,14 @@ const flattenIntoLines = xml => {
             arr[i + 1] !== newLineCharacter
           ) {
             acc.push(newLineCharacter);
-            console.log('inserting nwl', `[${val}], i:${i}, arr:${arr}`);
+            // console.log('inserting nwl', `[${val}], i:${i}, arr:${arr}`);
           }
           return acc;
         }, [])
         .filter(str => str.length > 0);
       //deal with the case where the text is all newline characters
       if (parts.every(part => part === newLineCharacter)) parts.pop();
-      console.log('parts', parts);
+      // console.log('parts', parts);
       // if the text has styles, assign the styles to the first non-newline text
       if (typeof val === 'object') {
         const i = parts.findIndex(value => value !== newLineCharacter);
