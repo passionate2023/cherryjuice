@@ -4,13 +4,15 @@ import { flattenIntoLines } from './steps/flatten-into-lines';
 import { groupNodesByLine } from './steps/group-nodes-by-line';
 import { insertOtherTables } from './steps/insert-other-tables';
 import { parseXml } from './helpers/helpers';
-import { insertTab } from './steps/insert-tab';
 
 const flagGhostLines = xmlString =>
   xmlString.replace(/>(\s*\n\s*<\/rich_text>)/g, ' containsNewLine="true" >$1');
 
 const replaceTabCharacter = xmlString =>
-  xmlString.replace(/\t/g, '<rich_text tab="true">_</rich_text>');
+  xmlString.replace(/\t/g, '\u00A0 \u00A0 ');
+const replaceSpaceCharacter = xmlString =>
+  xmlString.replace(/ {2}/g, '\u00A0 ');
+//'&nbsp;&nbsp;&nbsp;&nbsp;'); //<rich_text tab="true">_</rich_text>');
 const applyFixes = xml =>
   xml.map(node => {
     if (typeof node === 'object') {
@@ -21,11 +23,13 @@ const applyFixes = xml =>
       // if (node._) {
       //   console.log('replacing tab character');
       //   node._ = replaceTabCharacter(node._);
+      //   node._ = replaceSpaceCharacter(node._);
       //   console.log(node._);
       // }
     }
     // else {
     //   node = replaceTabCharacter(node);
+    //   node = replaceSpaceCharacter(node);
     // }
 
     return node;
@@ -39,6 +43,7 @@ const parseRichText = async ({
 }) => {
   // const temp1 = replaceTabCharacter(nodeTableXml);
   // console.log({temp1})
+  nodeTableXml = replaceSpaceCharacter(replaceTabCharacter(nodeTableXml));
   const temp = flagGhostLines(nodeTableXml);
   // console.log({ temp });
   const parsedXml = await parseXml({ xml: temp });
@@ -61,9 +66,10 @@ const parseRichText = async ({
     }
     return node;
   });
-  const replacedTabs = insertTab({ parsedXml: translated });
+
+  // const replacedTabs = insertTab({ parsedXml: translated });
   // console.log('pre separation', replacedTabs);
-  const separated = flattenIntoLines(replacedTabs);
+  const separated = flattenIntoLines(translated);
   // console.log('pre splitting', separated);
   const split = groupNodesByLine(separated);
   // console.log('pre resolving', split);
