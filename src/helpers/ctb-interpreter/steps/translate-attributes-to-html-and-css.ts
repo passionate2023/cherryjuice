@@ -31,14 +31,14 @@ const createTranslator = (
     foreground: c =>
       (styles['color'] = c.length === 7 ? c : utils.rrrrggggbbbbbToRrggbb(c)),
     background: c =>
-      (styles['background-color'] = utils.rrrrggggbbbbbToRrggbb(c)),
-    underline: () => (styles['text-decoration'] = 'underline'),
-    strikethrough: () => (styles['text-decoration'] = 'line-through'),
+      (styles['backgroundColor'] = utils.rrrrggggbbbbbToRrggbb(c)),
+    underline: () => (styles['textDecoration'] = 'underline'),
+    strikethrough: () => (styles['textDecoration'] = 'line-through'),
     weight: () => tags.push('strong'),
     style: () => tags.push('em'),
     scale: c => tags.push(c), // todo: complete this
     family: () => tags.push('code'),
-    justification: c => (styles['text-align'] = c),
+    justification: c => (styles['textAlign'] = c),
     width: c => (styles['width'] = `${c}px`),
     height: c => (styles['height'] = `${c}px`),
     // @ts-ignore
