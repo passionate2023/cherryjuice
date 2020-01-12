@@ -1,5 +1,6 @@
 import { parseTable } from './parse-table';
-import { parseXml } from '../helpers/helpers';
+import { parseXml } from '../../helpers';
+import { curry } from 'ramda';
 
 const adjustNode = ({ node, type }) => {
   // console.log('inside adjust-node', { node, type });
@@ -63,29 +64,32 @@ const adjustNode = ({ node, type }) => {
   }
 };
 
-const insertOtherTables = ({ xml: oldXml, otherTables }) => {
+const insertOtherTables = curry((otherTables, oldXml) => {
   // remove any empty nodes that ct uses for images/anchors/code...
   const xml = oldXml.filter(
-    node =>
-      node &&
-      (typeof node === 'string' || node._ || (node.$ && node.$.containsNewLine))
+    node => node && (typeof node === 'string' || node._)
   );
-  // console.log('before inside insertOtherTable', JSON.stringify(xml))
+  let log = [];
   let numberOfInsertedElements = 0;
   const xmlLength = xml.length;
-  Object.entries(otherTables).forEach(([key, value]) => {
-    (value as Array<any>).forEach(miscNode => {
+  Object.entries(otherTables).forEach(([tableType, tables]) => {
+    (tables as Array<any>).forEach(miscNode => {
       const offset = miscNode.offset;
       let totalLength = 0;
       if (!xmlLength) {
-        xml.push(adjustNode({ node: miscNode, type: key }));
+        xml.push(adjustNode({ node: miscNode, type: tableType }));
       } else {
         for (const node of xml) {
-          const nodeString =
-            typeof node === 'string' ? node : node._ ? node._ : undefined;
+          const nodeString = typeof node === 'string' ? node : node._;
           if (nodeString && !node.type) {
             const nodeLength = nodeString.length;
             const localOffset = offset - totalLength;
+            // log.push([
+            //   nodeString,
+            //   totalLength,
+            //   localOffset,
+            //   node.$ && node.$.containsNewLine
+            // ]);
             if (localOffset - numberOfInsertedElements <= nodeLength) {
               const [firstHalf, secondHalf] = [
                 nodeString.substring(0, localOffset - numberOfInsertedElements),
@@ -95,9 +99,15 @@ const insertOtherTables = ({ xml: oldXml, otherTables }) => {
               const i = xml.indexOf(node);
               const toBeInserted = [];
               if (firstHalf) toBeInserted.push(firstHalf);
-              toBeInserted.push(adjustNode({ node: miscNode, type: key }));
+              toBeInserted.push(
+                adjustNode({ node: miscNode, type: tableType })
+              );
               if (secondHalf) toBeInserted.push(secondHalf);
               xml.splice(i, 1, ...toBeInserted);
+              // log.push([
+              //   'inserting',
+              //   JSON.stringify({ firstHalf, secondHalf, offset })
+              // ]);
               numberOfInsertedElements++;
               break;
             } else {
@@ -108,9 +118,9 @@ const insertOtherTables = ({ xml: oldXml, otherTables }) => {
       }
     });
   });
-  // console.log('after inside insertOtherTable', JSON.stringify(xml))
+  // console.log({ str: log });
   return xml;
-};
+});
 // things to consider
 // a node adds 3 units to the total length
 

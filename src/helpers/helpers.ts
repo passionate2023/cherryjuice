@@ -8,5 +8,4 @@ const parseXml = ({ xml })  =>
       err ? reject(err) : resolve(result);
     });
   });
-
 export { newLineCharacter, getLastArrElm, parseXml };

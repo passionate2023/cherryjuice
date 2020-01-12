@@ -1,4 +1,4 @@
-import { getLastArrElm, newLineCharacter } from '../helpers/helpers';
+import { getLastArrElm, newLineCharacter } from '../../helpers';
 
 const flattenIntoLines = xml => {
   const res = xml.reduce((acc, val, i) => {

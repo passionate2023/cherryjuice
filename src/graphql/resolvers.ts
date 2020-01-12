@@ -1,6 +1,6 @@
 import * as sqlite from 'sqlite';
 import imageThumbnail from 'image-thumbnail';
-import { parseRichText } from '../helpers/ctb-interpreter';
+import { parseRichText } from '../helpers/ctb-interpreter/pipe';
 import {
   bufferToPng,
   ctbQuery,
@@ -9,7 +9,7 @@ import {
 } from '../helpers/ctb-content';
 import { Ct_Node_Meta, Ct_File } from '../types/generated';
 import { getNodes } from '../helpers/files';
-import { parseXml } from '../helpers/ctb-interpreter/helpers/helpers';
+import { parseXml } from '../helpers/helpers';
 
 type TState = {
   pngThumbnailOptions: { percentage: number; responseType: string };
@@ -75,8 +75,6 @@ const createResolvers = ({ state }: { state: TState }) => {
     return parseRichText({
       nodeTableXml: txt,
       otherTables,
-      options: { stringify: true },
-      meta: { name: `id:${node_id} name:${name}` },
     });
   };
   const getPNGThumbnailBase64 = async ({ file_id, node_id }, { offset }) => {

@@ -1,5 +1,8 @@
-import { insertOtherTables } from '../steps/insert-other-tables';
-
+import { insertOtherTables } from "../insert-other-tables";
+import {bug1_offset_images} from "../../../assets/integration";
+import {fixCharacters} from "../fix-characters";
+import {processingPipe} from "../../pipe";
+import { parseString } from 'xml2js';
 const testData = {
   test1: {
     input: {
@@ -209,22 +212,32 @@ const testData = {
 describe('it should split by newline character', () => {
   it('test1', () => {
     const { input, output } = testData.test1;
-    const res = insertOtherTables(input);
+    const res = insertOtherTables(input.otherTables,input.xml);
     console.log(res);
     expect(res).toEqual(output);
   });
   it('test2', () => {
     const { input, output } = testData.test2;
-    const res = insertOtherTables(input);
+    const res = insertOtherTables(input.otherTables,input.xml);
     console.log(res);
     expect(res).toEqual(output);
   });
   it('test3', () => {
     const { input, output } = testData.test3;
-    const res = insertOtherTables(input);
+    const res = insertOtherTables(input.otherTables,input.xml);
     console.log(res);
     expect(res).toEqual(output);
   });
+  // it('test4', () => {
+  //   let nodeTableXml = bug1_offset_images.txt;
+  //   nodeTableXml = fixCharacters.flagGhostNewLines(nodeTableXml);
+  //
+  //   parseString(nodeTableXml, function(err, result) {
+  //     let richText = result.node.rich_text;
+  //     const res = processingPipe(bug1_offset_images.otherTables)(richText);
+  //     expect(res).toEqual(bug1_offset_images.expected.full);
+  //   });
+  // });
 });
 
 export { testData as testData_insertOtherTables };

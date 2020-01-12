@@ -1,4 +1,4 @@
-const helpers = {
+const fixCharacters = {
   flagGhostNewLines: xmlString =>
     xmlString.replace(
       /(<rich_text[\w"= #]+)>(\s*\n\s*<\/rich_text>)/g,
@@ -17,4 +17,4 @@ const helpers = {
     })
 };
 
-export { helpers as fixCharacters };
+export { fixCharacters };
