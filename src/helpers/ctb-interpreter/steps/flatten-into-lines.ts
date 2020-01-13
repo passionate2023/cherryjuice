@@ -1,39 +1,46 @@
 import { getLastArrElm, newLineCharacter } from '../../helpers';
 
 const flattenIntoLines = xml => {
+  // const logs = [];
+  console.log({ xml });
   const res = xml.reduce((acc, val, i) => {
     const text = typeof val === 'string' ? val : val._;
-    if (!val.type && text && text.includes(newLineCharacter) && text.length > 1) {
-      const parts = text
-        .split('\n')
-        .reduce((acc, val, i, arr) => {
-          acc.push(val.length === 0 ? '\n' : val);
-          // if \n is in the middle of two strings, insert \n in the accumulated array
-          if (
-            val.length &&
-            val !== newLineCharacter &&
-            arr[i + 1] &&
-            arr[i + 1].length &&
-            arr[i + 1] !== newLineCharacter
-          ) {
-            acc.push(newLineCharacter);
-            // console.log('inserting nwl', `[${val}], i:${i}, arr:${arr}`);
-          }
-          return acc;
-        }, [])
-        .filter(str => str.length > 0);
-      //deal with the case where the text is all newline characters
-      if (parts.every(part => part === newLineCharacter)) parts.pop();
-      // console.log('parts', parts);
-      // if the text has styles, assign the styles to the first non-newline text
+    // let log = { text, parts: undefined, pushed: undefined };
+    if (
+      !val.type &&
+      text &&
+      text.includes(newLineCharacter) &&
+      text.length > 1
+    ) {
+      const parts = (Array.from(text) as string[])
+        .reduce(
+          (acc, val) => {
+            const str = acc[acc.length - 1];
+            if (val !== newLineCharacter) {
+              acc[acc.length - 1] = str + val;
+            } else {
+              acc.push(val, '');
+            }
+            return acc;
+          },
+          ['']
+        )
+        .filter(part => part);
+
+      // log.parts = parts;
+
       if (typeof val === 'object') {
         const i = parts.findIndex(value => value !== newLineCharacter);
         parts.splice(i, 1, { ...val, _: parts[i] });
       }
+      // log.pushed = parts;
+      // logs.push(log);
       acc.push(...parts);
     } else acc.push(val);
     return acc;
   }, []);
+  // console.log({ res });
+  // console.log(logs);
   return res;
 };
 export { flattenIntoLines };

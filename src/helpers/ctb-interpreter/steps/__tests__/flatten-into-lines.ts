@@ -1,4 +1,4 @@
-import { flattenIntoLines } from '../steps/flatten-into-lines';
+import { flattenIntoLines } from '../flatten-into-lines';
 const testData = {
   test1: {
     input: [

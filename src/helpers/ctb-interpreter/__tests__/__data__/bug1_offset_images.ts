@@ -1,6 +1,5 @@
-const renderingBus = {
-  bug1_offset_images: {
-    description: `images are not positioned where they should
+  const bug1_offset_images= {
+    description: `images are not positioned where they should be
   update: the bug was caused by ghost newlines
     to solve it, i moved the fillGhostNewLines fn to run before insertOtherTables fn
   `,
@@ -366,7 +365,6 @@ example2
         ['(run is equivalent to it.next)'],
       ],
     },
-  },
-};
+  }
 
-export { renderingBus };
+export { bug1_offset_images };
