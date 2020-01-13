@@ -3,15 +3,19 @@ import { flattenIntoLines } from './steps/flatten-into-lines';
 import { groupNodesByLine } from './steps/group-nodes-by-line';
 import { insertOtherTables } from './steps/insert-other-tables';
 import { parseXml } from '../helpers';
-import { compose,  } from 'ramda';
+import { compose } from 'ramda';
 import { fixCharacters } from './steps/fix-characters';
+
+const tap = label => val => (console.log(label, val), val);
 
 const processingPipe = otherTables =>
   compose(
     fixCharacters.replaceTabCharacter,
     fixCharacters.replaceSpaceCharacter,
     JSON.stringify,
+    tap('two'),
     groupNodesByLine,
+    tap('one'),
     flattenIntoLines,
     translateAttributesToHtmlAndCss,
     // @ts-ignore

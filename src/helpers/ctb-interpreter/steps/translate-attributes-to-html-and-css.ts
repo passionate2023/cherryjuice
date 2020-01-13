@@ -1,3 +1,5 @@
+const preferences = { mono: { backgroundColor: '#2B2B2B' } };
+
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10],
   parseLink: c => {
@@ -37,7 +39,10 @@ const createTranslator = (
     weight: () => tags.push('strong'),
     style: () => tags.push('em'),
     scale: c => tags.push(c), // todo: complete this
-    family: () => tags.push('code'),
+    family: () => (
+      (styles['backgroundColor'] = preferences.mono.backgroundColor),
+      tags.push('code')
+    ),
     justification: c => (styles['textAlign'] = c),
     width: c => (styles['width'] = `${c}px`),
     height: c => (styles['height'] = `${c}px`),

@@ -28,4 +28,11 @@ describe('rendering bugs', () => {
       expected: renderingBus.bug2_empty_newline_ignred.expected.full
     });
   });
+  test('bug 3 - full', () => {
+    renderingTestTemplate({
+      nodeTableXml: renderingBus.issue3_monospace_not_fully_applied.txt,
+      otherTables: renderingBus.issue3_monospace_not_fully_applied.otherTables,
+      expected: renderingBus.issue3_monospace_not_fully_applied.expected.full
+    });
+  });
 });

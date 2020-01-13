@@ -12,7 +12,7 @@ const flattenIntoLines = xml => {
       text.includes(newLineCharacter) &&
       text.length > 1
     ) {
-      const parts = (Array.from(text) as string[])
+      let parts = (Array.from(text) as string[])
         .reduce(
           (acc, val) => {
             const str = acc[acc.length - 1];
@@ -30,8 +30,8 @@ const flattenIntoLines = xml => {
       // log.parts = parts;
 
       if (typeof val === 'object') {
-        const i = parts.findIndex(value => value !== newLineCharacter);
-        parts.splice(i, 1, { ...val, _: parts[i] });
+        // const i = parts.findIndex(value => value !== newLineCharacter);
+        parts = parts.map(part => ({ ...val, _: part }));
       }
       // log.pushed = parts;
       // logs.push(log);
