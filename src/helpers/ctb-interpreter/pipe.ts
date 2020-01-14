@@ -16,14 +16,14 @@ const processingPipe = otherTables =>
     tap('two'),
     groupNodesByLine,
     tap('one'),
+    // @ts-ignore
     flattenIntoLines,
     translateAttributesToHtmlAndCss,
-    // @ts-ignore
     insertOtherTables(otherTables),
-    fixCharacters.fillGhostNewLines
+    fixCharacters.restoreOrphanWhiteSpace
   );
 const parseRichText = async ({ nodeTableXml, otherTables = {} }) => {
-  nodeTableXml = fixCharacters.flagGhostNewLines(nodeTableXml);
+  nodeTableXml = fixCharacters.flagOrphanWhiteSpace(nodeTableXml);
   let richText = await parseXml({ xml: nodeTableXml }).then(
     ({ node: { rich_text } }) => rich_text
   );

@@ -1,16 +1,20 @@
+import { compose } from 'ramda';
+
 const fixCharacters = {
-  flagGhostNewLines: xmlString =>
+  flagOrphanWhiteSpace: xmlString =>
     xmlString.replace(
-      /(<rich_text[\w"= #]+)>(\s*\n\s*<\/rich_text>)/g,
-      '$1 containsNewLine="true" >$2'
+      /(<rich_text[\w"= #]+)>((\s+)<\/rich_text>)/g,
+      '$1 containsWhiteSpace="$3" >$2'
     ),
   replaceTabCharacter: xmlString => xmlString.replace(/\\t/g, '\u00A0 \u00A0 '),
   replaceSpaceCharacter: xmlString => xmlString.replace(/ {2}/g, '\u00A0 '),
-  fillGhostNewLines: (xml: any) =>
+
+  restoreOrphanWhiteSpace: (xml: any) =>
     xml.map(node => {
       if (typeof node === 'object') {
-        if (node.$.containsNewLine) {
-          node = '\n';
+        if (node.$.containsWhiteSpace) {
+          node._ = node.$.containsWhiteSpace.replace(/ /g, '\u00A0');
+          delete node.$.containsWhiteSpace;
         }
       }
       return node;

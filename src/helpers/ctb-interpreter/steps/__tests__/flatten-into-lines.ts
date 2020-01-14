@@ -239,8 +239,26 @@ const testData = {
       ' '
     ],
     output: [
-      '\n',
-      '\n',
+      {
+        _: '\n',
+        $: {
+          foreground: '#ffff00000000'
+        },
+        $$: {
+          color: '#ff0000',
+          tags: []
+        }
+      },
+      {
+        _: '\n',
+        $: {
+          foreground: '#ffff00000000'
+        },
+        $$: {
+          color: '#ff0000',
+          tags: []
+        }
+      },
       {
         _: 'red text',
         $: {

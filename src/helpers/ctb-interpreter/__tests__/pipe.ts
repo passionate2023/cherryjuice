@@ -4,11 +4,12 @@ import { fixCharacters } from '../steps/fix-characters';
 import { parseString } from 'xml2js';
 
 const renderingTestTemplate = ({ nodeTableXml, otherTables, expected }) => {
-  nodeTableXml = fixCharacters.flagGhostNewLines(nodeTableXml);
+  nodeTableXml = fixCharacters.flagOrphanWhiteSpace(nodeTableXml);
+
   parseString(nodeTableXml, function(err, result) {
     let richText = result.node.rich_text;
     const res = processingPipe(otherTables)(richText);
-    console.log(res);
+    console.log(JSON.stringify(res));
     expect(JSON.parse(res)).toEqual(expected);
   });
 };
@@ -33,6 +34,13 @@ describe('rendering bugs', () => {
       nodeTableXml: renderingBus.issue3_monospace_not_fully_applied.txt,
       otherTables: renderingBus.issue3_monospace_not_fully_applied.otherTables,
       expected: renderingBus.issue3_monospace_not_fully_applied.expected.full
+    });
+  });
+  test('issue 4 - full', () => {
+    renderingTestTemplate({
+      nodeTableXml: renderingBus.issue4_offset_images.txt,
+      otherTables: renderingBus.issue4_offset_images.otherTables,
+      expected: renderingBus.issue4_offset_images.expected.full
     });
   });
 });

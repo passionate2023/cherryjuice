@@ -66,32 +66,17 @@ const translateAttributesToHtmlAndCss = xml =>
               `Exception in the interpreter: translator[${key}] is not defined`
             );
         }
-
-        // if (!styles[key]) styles[key] = value;
       });
-
-      // if (styles.backgroundColor)
-      // {
-      // console.log({ customStyles, styles, tags, node });
-
+      // add default/preferred styles, such as monospace background
       Object.entries(preferences).forEach(([tag, customStyles]) => {
         if (tags.includes(tag)) {
           Object.entries(customStyles).forEach(([customStyle, value]) => {
-              console.log('__', {
-                tags,
-                styles,
-                customStyle,
-                value,
-                condition: Boolean(styles[customStyle])
-              });
-            if (Boolean(styles[customStyle]) === false) {
-              console.log('***inserting')
+            if (!styles[customStyle]) {
               styles[customStyle] = value;
             }
           });
         }
       });
-      // }
       node.$ = styles;
       node.$.tags = tags;
     }
