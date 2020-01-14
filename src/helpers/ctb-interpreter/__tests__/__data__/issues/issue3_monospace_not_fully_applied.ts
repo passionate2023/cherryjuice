@@ -7,26 +7,82 @@ const issue3_monospace_not_fully_applied = {
 import * </rich_text><rich_text family="monospace" foreground="#c792ea" scale="small">f </rich_text><rich_text family="monospace" foreground="#c3e88d" scale="small">''</rich_text><rich_text family="monospace" foreground="#89ddff" scale="small">;</rich_text></node> 
 `,
   otherTables: {
-    image: [],
+    image: []
   },
   expected: {
     full: [
       [
-        { _: 'i ', $: { color: '#89ddff', tags: ['code', 'small'] } },
-        { _: 'a ', $: { tags: ['code', 'small'] } },
-        { _: 'f ', $: { color: '#c792ea', tags: ['code', 'small'] } },
-        { _: "''", $: { color: '#c3e88d', tags: ['code', 'small'] } },
-        { _: ';', $: { color: '#89ddff', tags: ['code', 'small'] } },
+        {
+          _: 'i ',
+          $: {
+            backgroundColor: '#2B2B2B',
+            color: '#89ddff',
+            tags: ['code', 'small']
+          }
+        },
+        { _: 'a ', $: { backgroundColor: '#2B2B2B', tags: ['code', 'small'] } },
+        {
+          _: 'f ',
+          $: {
+            backgroundColor: '#2B2B2B',
+            color: '#c792ea',
+            tags: ['code', 'small']
+          }
+        },
+        {
+          _: "''",
+          $: {
+            backgroundColor: '#2B2B2B',
+            color: '#c3e88d',
+            tags: ['code', 'small']
+          }
+        },
+        {
+          _: ';',
+          $: {
+            backgroundColor: '#2B2B2B',
+            color: '#89ddff',
+            tags: ['code', 'small']
+          }
+        }
       ],
       [
-        { _: 'import * ', $: { color: '#89ddff', tags: ['code', 'small'] } },
-        { _: 'f ', $: { color: '#c792ea', tags: ['code', 'small'] } },
-        { _: "''", $: { color: '#c3e88d', tags: ['code', 'small'] } },
-        { _: ';', $: { color: '#89ddff', tags: ['code', 'small'] } },
-      ],
+        {
+          _: 'import * ',
+          $: {
+            backgroundColor: '#2B2B2B',
+            color: '#89ddff',
+            tags: ['code', 'small']
+          }
+        },
+        {
+          _: 'f ',
+          $: {
+            backgroundColor: '#2B2B2B',
+            color: '#c792ea',
+            tags: ['code', 'small']
+          }
+        },
+        {
+          _: "''",
+          $: {
+            backgroundColor: '#2B2B2B',
+            color: '#c3e88d',
+            tags: ['code', 'small']
+          }
+        },
+        {
+          _: ';',
+          $: {
+            backgroundColor: '#2B2B2B',
+            color: '#89ddff',
+            tags: ['code', 'small']
+          }
+        }
+      ]
     ],
-    noOtherTables: [],
-  },
+    noOtherTables: []
+  }
 };
 
 export { issue3_monospace_not_fully_applied };

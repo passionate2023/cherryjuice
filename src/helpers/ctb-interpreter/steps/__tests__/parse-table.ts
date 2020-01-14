@@ -1,4 +1,4 @@
-import {parseTable} from "../steps/parse-table";
+import {parseTable} from "../parse-table";
 
 const testData = {
   test1: {

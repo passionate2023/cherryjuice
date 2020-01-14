@@ -2,7 +2,7 @@ import { translateAttributesToHtmlAndCss } from './steps/translate-attributes-to
 import { flattenIntoLines } from './steps/flatten-into-lines';
 import { groupNodesByLine } from './steps/group-nodes-by-line';
 import { insertOtherTables } from './steps/insert-other-tables';
-import { parseXml } from '../helpers';
+import { parseXml } from './helpers';
 import { compose } from 'ramda';
 import { fixCharacters } from './steps/fix-characters';
 

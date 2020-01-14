@@ -9,7 +9,7 @@ import {
 } from '../helpers/ctb-content';
 import { Ct_Node_Meta, Ct_File } from '../types/generated';
 import { getNodes } from '../helpers/files';
-import { parseXml } from '../helpers/helpers';
+import { parseXml } from '../helpers/ctb-interpreter/helpers';
 
 type TState = {
   pngThumbnailOptions: { percentage: number; responseType: string };

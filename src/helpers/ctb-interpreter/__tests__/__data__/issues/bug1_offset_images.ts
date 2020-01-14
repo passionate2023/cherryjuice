@@ -37,12 +37,12 @@ example2
       full: [
         [],
         [
-          { _: 'let ', $: { color: '#c792ea', tags: ['code', 'small', 'em'] } },
-          { _: 'it ', $: { tags: ['code', 'small', 'em'] } },
-          { _: '= ', $: { color: '#89ddff', tags: ['code', 'small', 'em'] } },
-          { _: 'gen', $: { color: '#82aaff', tags: ['code', 'small', 'em'] } },
-          { _: '()', $: { color: '#f78c6c', tags: ['code', 'small', 'em'] } },
-          { _: ';', $: { color: '#89ddff', tags: ['code', 'small', 'em'] } },
+          { _: 'let ', $: { "backgroundColor": "#2B2B2B",color: '#c792ea', tags: ['code', 'small', 'em'] } },
+          { _: 'it ', $: { "backgroundColor": "#2B2B2B",tags: ['code', 'small', 'em'] } },
+          { _: '= ', $: { "backgroundColor": "#2B2B2B",color: '#89ddff', tags: ['code', 'small', 'em'] } },
+          { _: 'gen', $: { "backgroundColor": "#2B2B2B",color: '#82aaff', tags: ['code', 'small', 'em'] } },
+          { _: '()', $: { "backgroundColor": "#2B2B2B",color: '#f78c6c', tags: ['code', 'small', 'em'] } },
+          { _: ';', $: { "backgroundColor": "#2B2B2B",color: '#89ddff', tags: ['code', 'small', 'em'] } },
         ],
         [
           {

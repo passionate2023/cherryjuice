@@ -1,4 +1,4 @@
-const preferences = { mono: { backgroundColor: '#2B2B2B' } };
+const preferences = { code: { backgroundColor: '#2B2B2B' } };
 
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10],
@@ -23,11 +23,11 @@ const utils = {
     }
 
     return attributes;
-  },
+  }
 };
 const createTranslator = (
   tags: (string | { href: any })[],
-  styles: { [key: string]: string },
+  styles: { [key: string]: string }
 ) => {
   return {
     foreground: c =>
@@ -39,20 +39,17 @@ const createTranslator = (
     weight: () => tags.push('strong'),
     style: () => tags.push('em'),
     scale: c => tags.push(c), // todo: complete this
-    family: () => (
-      (styles['backgroundColor'] = preferences.mono.backgroundColor),
-      tags.push('code')
-    ),
+    family: () => tags.push('code'),
     justification: c => (styles['textAlign'] = c),
     width: c => (styles['width'] = `${c}px`),
     height: c => (styles['height'] = `${c}px`),
     // @ts-ignore
-    link: c => tags.push(['a', utils.parseLink(c)]),
+    link: c => tags.push(['a', utils.parseLink(c)])
     // @ts-ignore
   };
 };
 const whiteListedAttributes = {
-  containsNewLine: true,
+  containsNewLine: true
 };
 const translateAttributesToHtmlAndCss = xml =>
   xml.map(node => {
@@ -66,10 +63,35 @@ const translateAttributesToHtmlAndCss = xml =>
         } catch {
           if (!whiteListedAttributes[key])
             throw new Error(
-              `Exception in the interpreter: translator[${key}] is not defined`,
+              `Exception in the interpreter: translator[${key}] is not defined`
             );
         }
+
+        // if (!styles[key]) styles[key] = value;
       });
+
+      // if (styles.backgroundColor)
+      // {
+      // console.log({ customStyles, styles, tags, node });
+
+      Object.entries(preferences).forEach(([tag, customStyles]) => {
+        if (tags.includes(tag)) {
+          Object.entries(customStyles).forEach(([customStyle, value]) => {
+              console.log('__', {
+                tags,
+                styles,
+                customStyle,
+                value,
+                condition: Boolean(styles[customStyle])
+              });
+            if (Boolean(styles[customStyle]) === false) {
+              console.log('***inserting')
+              styles[customStyle] = value;
+            }
+          });
+        }
+      });
+      // }
       node.$ = styles;
       node.$.tags = tags;
     }
