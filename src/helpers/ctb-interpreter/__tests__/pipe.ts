@@ -55,12 +55,16 @@ describe('rendering bugs', () => {
   });
   test('issue 6 - full', () => {
     renderingTestTemplate({
-      nodeTableXml:
-      renderingBus.issue6.txt,
-      otherTables:
-      renderingBus.issue6.otherTables,
-      expected:
-      renderingBus.issue6.expected.full
+      nodeTableXml: renderingBus.issue6.txt,
+      otherTables: renderingBus.issue6.otherTables,
+      expected: renderingBus.issue6.expected.full
+    });
+  });
+  test('issue 7 - full', () => {
+    renderingTestTemplate({
+      nodeTableXml: renderingBus.issue7.txt,
+      otherTables: renderingBus.issue7.otherTables,
+      expected: renderingBus.issue7.expected.full
     });
   });
 });

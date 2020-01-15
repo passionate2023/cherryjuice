@@ -90,7 +90,20 @@ const insertOtherTables = curry((otherTables, oldXml) => {
             const nodeLength = nodeString.length;
             const localOffset = miscNodeOffset - totalLength;
 
-            if (localOffset - numberOfInsertedElements < nodeLength) {
+            // log.push([
+            //   'verifying',
+            //   JSON.stringify({
+            //     nodeLength,
+            //     localOffset,
+            //     offset: miscNodeOffset,
+            //     cond: localOffset - numberOfInsertedElements < nodeLength,
+            //     numberOfInsertedElements
+            //   })
+            // ]);
+            if (
+              localOffset - numberOfInsertedElements < nodeLength ||
+              nodeIndex + numberOfInsertedElements === xml.length - 1
+            ) {
               const [firstHalf, secondHalf] = [
                 nodeString.substring(0, localOffset - numberOfInsertedElements),
                 nodeString.substring(localOffset - numberOfInsertedElements)
