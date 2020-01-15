@@ -9,7 +9,7 @@ const renderingTestTemplate = ({ nodeTableXml, otherTables, expected }) => {
   parseString(nodeTableXml, function(err, result) {
     let richText = result.node.rich_text;
     const res = processingPipe(otherTables)(richText);
-    console.log(JSON.stringify(res));
+    console.log(res);
     expect(JSON.parse(res)).toEqual(expected);
   });
 };
@@ -41,6 +41,16 @@ describe('rendering bugs', () => {
       nodeTableXml: renderingBus.issue4_offset_images.txt,
       otherTables: renderingBus.issue4_offset_images.otherTables,
       expected: renderingBus.issue4_offset_images.expected.full
+    });
+  });
+  test('issue 5 - full', () => {
+    renderingTestTemplate({
+      nodeTableXml:
+        renderingBus.issue5_offset_images_and_tables_and_code_box.txt,
+      otherTables:
+        renderingBus.issue5_offset_images_and_tables_and_code_box.otherTables,
+      expected:
+        renderingBus.issue5_offset_images_and_tables_and_code_box.expected.full
     });
   });
 });

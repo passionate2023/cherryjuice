@@ -1,5 +1,4 @@
 import { parseTable } from './parse-table';
-import { parseXml } from '../../helpers';
 import { curry } from 'ramda';
 
 const adjustNode = ({ node, type }) => {
@@ -72,52 +71,64 @@ const insertOtherTables = curry((otherTables, oldXml) => {
   let log = [];
   let numberOfInsertedElements = 0;
   const xmlLength = xml.length;
-  Object.entries(otherTables).forEach(([tableType, tables]) => {
-    (tables as Array<any>).forEach(miscNode => {
-      const offset = miscNode.offset;
+  Object.entries(otherTables)
+    // @ts-ignore
+    .flatMap(([type, elements]) =>
+      elements.map(element => ({ ...element, type }))
+    )
+    .sort((a, b) => a.offset - b.offset)
+    .forEach(miscNode => {
+      const miscNodeOffset = miscNode.offset;
       let totalLength = 0;
+      let nodeIndex = 0;
       if (!xmlLength) {
-        xml.push(adjustNode({ node: miscNode, type: tableType }));
+        xml.push(adjustNode({ node: miscNode, type: miscNode.type }));
       } else {
         for (const node of xml) {
           const nodeString = typeof node === 'string' ? node : node._;
           if (nodeString && !node.type) {
             const nodeLength = nodeString.length;
-            const localOffset = offset - totalLength;
-            // log.push([
-            //   nodeString,
-            //   totalLength,
-            //   localOffset,
-            //   node.$ && node.$.containsNewLine
-            // ]);
+            const localOffset = miscNodeOffset - totalLength;
+
             if (localOffset - numberOfInsertedElements <= nodeLength) {
               const [firstHalf, secondHalf] = [
                 nodeString.substring(0, localOffset - numberOfInsertedElements),
                 nodeString.substring(localOffset - numberOfInsertedElements)
               ];
 
-              const i = xml.indexOf(node);
               const toBeInserted = [];
               if (firstHalf) toBeInserted.push(firstHalf);
               toBeInserted.push(
-                adjustNode({ node: miscNode, type: tableType })
+                adjustNode({
+                  node: miscNode,
+                  type: miscNode.type
+                })
               );
               if (secondHalf) toBeInserted.push(secondHalf);
-              xml.splice(i, 1, ...toBeInserted);
+              xml.splice(
+                nodeIndex + numberOfInsertedElements,
+                1,
+                ...toBeInserted
+              );
               // log.push([
               //   'inserting',
-              //   JSON.stringify({ firstHalf, secondHalf, offset })
+              //   JSON.stringify({
+              //     firstHalf,
+              //     secondHalf,
+              //     offset: miscNodeOffset,
+              //     numberOfInsertedElements
+              //   })
               // ]);
               numberOfInsertedElements++;
               break;
             } else {
               totalLength += nodeLength;
             }
+            nodeIndex++;
           }
         }
       }
     });
-  });
   // console.log({ str: log });
   return xml;
 });
