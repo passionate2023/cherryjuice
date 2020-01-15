@@ -73,8 +73,8 @@ const insertOtherTables = curry((otherTables, oldXml) => {
   const xmlLength = xml.length;
   Object.entries(otherTables)
     // @ts-ignore
-    .flatMap(([type, elements]) =>
-      elements.map(element => ({ ...element, type }))
+    .flatMap(([tableName, elements]) =>
+      elements.map(element => ({ ...element, tableName }))
     )
     .sort((a, b) => a.offset - b.offset)
     .forEach(miscNode => {
@@ -82,7 +82,7 @@ const insertOtherTables = curry((otherTables, oldXml) => {
       let totalLength = 0;
       let nodeIndex = 0;
       if (!xmlLength) {
-        xml.push(adjustNode({ node: miscNode, type: miscNode.type }));
+        xml.push(adjustNode({ node: miscNode, type: miscNode.tableName }));
       } else {
         for (const node of xml) {
           const nodeString = typeof node === 'string' ? node : node._;
@@ -90,7 +90,7 @@ const insertOtherTables = curry((otherTables, oldXml) => {
             const nodeLength = nodeString.length;
             const localOffset = miscNodeOffset - totalLength;
 
-            if (localOffset - numberOfInsertedElements <= nodeLength) {
+            if (localOffset - numberOfInsertedElements < nodeLength) {
               const [firstHalf, secondHalf] = [
                 nodeString.substring(0, localOffset - numberOfInsertedElements),
                 nodeString.substring(localOffset - numberOfInsertedElements)
@@ -101,7 +101,7 @@ const insertOtherTables = curry((otherTables, oldXml) => {
               toBeInserted.push(
                 adjustNode({
                   node: miscNode,
-                  type: miscNode.type
+                  type: miscNode.tableName
                 })
               );
               if (secondHalf) toBeInserted.push(secondHalf);
@@ -113,8 +113,8 @@ const insertOtherTables = curry((otherTables, oldXml) => {
               // log.push([
               //   'inserting',
               //   JSON.stringify({
-              //     firstHalf,
-              //     secondHalf,
+              //     toBeInserted,
+              //     localOffset,
               //     offset: miscNodeOffset,
               //     numberOfInsertedElements
               //   })

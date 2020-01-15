@@ -53,4 +53,14 @@ describe('rendering bugs', () => {
         renderingBus.issue5_offset_images_and_tables_and_code_box.expected.full
     });
   });
+  test('issue 6 - full', () => {
+    renderingTestTemplate({
+      nodeTableXml:
+      renderingBus.issue6.txt,
+      otherTables:
+      renderingBus.issue6.otherTables,
+      expected:
+      renderingBus.issue6.expected.full
+    });
+  });
 });
