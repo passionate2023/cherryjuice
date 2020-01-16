@@ -20,7 +20,7 @@ const ctbQuery = {
   SELECT 
     n.node_id, n.name, 
     n.is_richtxt, n.has_image, n.has_codebox,
-    n.has_table,n.ts_creation,n.ts_lastsave, c.father_id 
+    n.has_table,n.ts_creation,n.ts_lastsave, c.father_id,c.sequence 
    FROM node as n INNER JOIN children AS c
    on n.node_id = c.node_id ${node_id ? `AND n.node_id = ${node_id}` : ''}
    `,
@@ -56,23 +56,19 @@ const organizeData = async data => {
 
   data.forEach(node => {
     let parentNode = nodes.get(node.father_id);
-    if (parentNode) parentNode.child_nodes.push(node.node_id);
+    if (parentNode) {
+      parentNode.child_nodes.push(node.node_id);
+    }
   });
 
+  data.forEach(node => {
+    node.child_nodes.sort(
+      (a, b) => nodes.get(a).sequence - nodes.get(b).sequence,
+    );
+  });
   return { nodes };
 };
 
-const getPngDimensions = base64 => {
-  if (!base64) return undefined;
-  const header = atob(base64.slice(0, 50)).slice(16, 24);
-  const uint8 = Uint8Array.from(header, c => c.charCodeAt(0));
-  const dataView = new DataView(uint8.buffer);
-
-  return {
-    width: dataView.getInt32(0),
-    height: dataView.getInt32(4),
-  };
-};
 const getPNGSize = buffer => {
   if (!buffer) return undefined;
   if (buffer.toString('ascii', 12, 16) === 'CgBI') {
