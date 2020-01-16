@@ -63,14 +63,71 @@ const adjustNode = ({ node, type }) => {
   }
 };
 
+const getInsertionPosition = ({ xml, miscNodeOffset }) => {
+  let accumulatedLength = 0;
+  let nodeIndex = 0;
+  let nodeString = undefined;
+
+  for (const node of xml) {
+    let _nodeString, nodeLength;
+    if (node.type) {
+      nodeLength = 1;
+    } else {
+      _nodeString = typeof node === 'string' ? node : node._ ? node._ : '';
+      nodeLength = _nodeString.length;
+    }
+    if (miscNodeOffset < nodeLength + accumulatedLength) {
+      nodeString = _nodeString;
+      break;
+    } else {
+      nodeIndex++;
+      accumulatedLength += nodeLength;
+    }
+  }
+  return { nodeString, nodeIndex, accumulatedLength };
+};
+
+const insertNode = ({
+  nodeString,
+  nodeIndex,
+  accumulatedLength,
+  xml,
+  miscNode
+}) => {
+  if (!nodeString) {
+    xml.push(
+      adjustNode({
+        node: miscNode,
+        type: miscNode.tableName
+      })
+    );
+  } else {
+    const localOffset = miscNode.offset - accumulatedLength;
+    const [firstHalf, secondHalf] = [
+      nodeString.substring(0, localOffset),
+      nodeString.substring(localOffset)
+    ];
+
+    const toBeInserted = [];
+    if (firstHalf) toBeInserted.push(firstHalf);
+    toBeInserted.push(
+      adjustNode({
+        node: miscNode,
+        type: miscNode.tableName
+      })
+    );
+    if (secondHalf) toBeInserted.push(secondHalf);
+    xml.splice(nodeIndex, 1, ...toBeInserted);
+  }
+};
+
 const insertOtherTables = curry((otherTables, oldXml) => {
   // remove any empty nodes that ct uses for images/anchors/code...
   const xml = oldXml.filter(
     node => node && (typeof node === 'string' || node._)
   );
   let log = [];
-  let numberOfInsertedElements = 0;
-  const xmlLength = xml.length;
+  console.log({ xml });
   Object.entries(otherTables)
     // @ts-ignore
     .flatMap(([tableName, elements]) =>
@@ -78,69 +135,22 @@ const insertOtherTables = curry((otherTables, oldXml) => {
     )
     .sort((a, b) => a.offset - b.offset)
     .forEach(miscNode => {
-      const miscNodeOffset = miscNode.offset;
-      let totalLength = 0;
-      let nodeIndex = 0;
-      if (!xmlLength) {
-        xml.push(adjustNode({ node: miscNode, type: miscNode.tableName }));
-      } else {
-        for (const node of xml) {
-          const nodeString = typeof node === 'string' ? node : node._;
-          if (nodeString && !node.type) {
-            const nodeLength = nodeString.length;
-            const localOffset = miscNodeOffset - totalLength;
-
-            // log.push([
-            //   'verifying',
-            //   JSON.stringify({
-            //     nodeLength,
-            //     localOffset,
-            //     offset: miscNodeOffset,
-            //     cond: localOffset - numberOfInsertedElements < nodeLength,
-            //     numberOfInsertedElements
-            //   })
-            // ]);
-            if (
-              localOffset - numberOfInsertedElements < nodeLength ||
-              nodeIndex + numberOfInsertedElements === xml.length - 1
-            ) {
-              const [firstHalf, secondHalf] = [
-                nodeString.substring(0, localOffset - numberOfInsertedElements),
-                nodeString.substring(localOffset - numberOfInsertedElements)
-              ];
-
-              const toBeInserted = [];
-              if (firstHalf) toBeInserted.push(firstHalf);
-              toBeInserted.push(
-                adjustNode({
-                  node: miscNode,
-                  type: miscNode.tableName
-                })
-              );
-              if (secondHalf) toBeInserted.push(secondHalf);
-              xml.splice(
-                nodeIndex + numberOfInsertedElements,
-                1,
-                ...toBeInserted
-              );
-              // log.push([
-              //   'inserting',
-              //   JSON.stringify({
-              //     toBeInserted,
-              //     localOffset,
-              //     offset: miscNodeOffset,
-              //     numberOfInsertedElements
-              //   })
-              // ]);
-              numberOfInsertedElements++;
-              break;
-            } else {
-              totalLength += nodeLength;
-            }
-            nodeIndex++;
-          }
-        }
-      }
+      const {
+        nodeString,
+        nodeIndex,
+        accumulatedLength
+      } = getInsertionPosition({ xml, miscNodeOffset: miscNode.offset });
+      insertNode({ miscNode, xml, nodeIndex, nodeString, accumulatedLength });
+      // log.push([
+      //   'inserting',
+      //   JSON.stringify({
+      //     accumulatedLength,
+      //     nodeIndex,
+      //     nodeString,
+      //     offset: miscNode.offset,
+      //     xml
+      //   })
+      // ]);
     });
   // console.log({ str: log });
   return xml;
