@@ -35,7 +35,6 @@ const createResolvers = ({ state }: { state: TState }) => {
     const db = await sqlite.open(state.files.get(file_id).filePath);
     console.log({ file_id, node_id });
     const res = await db.all(ctbQuery.node_text({ node_id })).then(nodes => {
-      console.log({ nodes });
       return nodes.map(({ txt, name }) => ({
         name,
         txt,
