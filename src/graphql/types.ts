@@ -13,6 +13,7 @@ const ct_file = `
     filePath: String
   }
 `;
+
 const ct_node_meta = `
   type Ct_node_meta {
     node_id: Int
@@ -26,6 +27,8 @@ const ct_node_meta = `
     has_table: Int
     ts_creation: Float
     ts_lastsave: Float
+    node_title_styles: String
+    icon_id: String
   }
 `;
 const ct_node_content = `

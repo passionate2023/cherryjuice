@@ -18,7 +18,7 @@ const rootNode = {
 const ctbQuery = {
   node_meta: ({ node_id }) => `
   SELECT 
-    n.node_id, n.name, 
+    n.node_id, n.name, n.is_ro, 
     n.is_richtxt, n.has_image, n.has_codebox,
     n.has_table,n.ts_creation,n.ts_lastsave, c.father_id,c.sequence 
    FROM node as n INNER JOIN children AS c
@@ -49,6 +49,14 @@ const ctbQuery = {
   `,
 };
 
+const nodeTitleStyle = ({ is_richtxt }) => {
+  return JSON.stringify({
+    color: nodeTitleHelpers.hasForground(is_richtxt)
+      ? nodeTitleHelpers.rgb_str_from_int24bit(is_richtxt)
+      : '#ffffff',
+    fontWeight: nodeTitleHelpers.isBold(is_richtxt) ? 'bold' : 'normal',
+  });
+};
 const organizeData = async data => {
   const nodes: Map<number, TCt_node> = new Map(
     data.map(node => [node.node_id, node]),
@@ -59,6 +67,9 @@ const organizeData = async data => {
     if (parentNode) {
       parentNode.child_nodes.push(node.node_id);
     }
+
+    node.node_title_styles = nodeTitleStyle({ is_richtxt: node.is_richtxt });
+    node.icon_id = nodeTitleHelpers.customIconId(node.is_ro);
   });
 
   data.forEach(node => {
@@ -85,4 +96,25 @@ const getPNGSize = buffer => {
 const bufferToPng = buffer =>
   buffer ? new Buffer(buffer, 'binary').toString('base64') : undefined;
 
-export { ctbQuery, rootNode, bufferToPng, organizeData, getPNGSize };
+const nodeTitleHelpers = {
+  hasForground: is_richtxt => (is_richtxt >> 2) & 0x01,
+
+  isBold: is_richtxt => (is_richtxt >> 1) & 0x01,
+  customIconId: is_ro => is_ro >> 1,
+  rgb_str_from_int24bit: int24bit => {
+    const r = (int24bit >> 16) & 0xff;
+    const g = (int24bit >> 8) & 0xff;
+    const b = int24bit & 0xff;
+    // todo: convert to hex
+    return `rgb(${r},${g},${b})`;
+  },
+};
+
+export {
+  nodeTitleStyle,
+  ctbQuery,
+  rootNode,
+  bufferToPng,
+  organizeData,
+  getPNGSize,
+};
