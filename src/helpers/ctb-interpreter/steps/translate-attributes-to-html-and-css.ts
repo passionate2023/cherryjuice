@@ -1,4 +1,4 @@
-const preferences = { code: { backgroundColor: '#2B2B2B' } };
+const preferences = { code: { 'background-color': '#2B2B2B' } };
 
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10],
@@ -23,19 +23,19 @@ const utils = {
     }
 
     return attributes;
-  }
+  },
 };
 const createTranslator = (
   tags: (string | { href: any })[],
-  styles: { [key: string]: string }
+  styles: { [key: string]: string },
 ) => {
   return {
     foreground: c =>
       (styles['color'] = c.length === 7 ? c : utils.rrrrggggbbbbbToRrggbb(c)),
     background: c =>
-      (styles['backgroundColor'] = utils.rrrrggggbbbbbToRrggbb(c)),
-    underline: () => (styles['textDecoration'] = 'underline'),
-    strikethrough: () => (styles['textDecoration'] = 'line-through'),
+      (styles['background-color'] = utils.rrrrggggbbbbbToRrggbb(c)),
+    underline: () => (styles['text-decoration'] = 'underline'),
+    strikethrough: () => (styles['text-decoration'] = 'line-through'),
     weight: () => tags.push('strong'),
     style: () => tags.push('em'),
     scale: c => tags.push(c), // todo: complete this
@@ -44,12 +44,12 @@ const createTranslator = (
     width: c => (styles['width'] = `${c}px`),
     height: c => (styles['height'] = `${c}px`),
     // @ts-ignore
-    link: c => tags.push(['a', utils.parseLink(c)])
+    link: c => tags.push(['a', utils.parseLink(c)]),
     // @ts-ignore
   };
 };
 const whiteListedAttributes = {
-  containsNewLine: true
+  containsNewLine: true,
 };
 const translateAttributesToHtmlAndCss = xml =>
   xml.map(node => {
@@ -63,7 +63,7 @@ const translateAttributesToHtmlAndCss = xml =>
         } catch {
           if (!whiteListedAttributes[key])
             throw new Error(
-              `Exception in the interpreter: translator[${key}] is not defined`
+              `Exception in the interpreter: translator[${key}] is not defined`,
             );
         }
       });
@@ -78,7 +78,7 @@ const translateAttributesToHtmlAndCss = xml =>
         }
       });
       node.$ = styles;
-      node.$.tags = tags;
+      node.tags = tags;
     }
     return node;
   });

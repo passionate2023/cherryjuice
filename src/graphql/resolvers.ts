@@ -10,6 +10,7 @@ import {
 import { Ct_Node_Meta, Ct_File } from '../types/generated';
 import { getNodes } from '../helpers/files';
 import { parseXml } from '../helpers/ctb-interpreter/helpers';
+import { RichText } from '../helpers/rich-text';
 
 type TState = {
   pngThumbnailOptions: { percentage: number; responseType: string };
@@ -44,7 +45,6 @@ const createResolvers = ({ state }: { state: TState }) => {
     });
     return res;
   };
-
   const getRichText = async ({ file_id, node_id, name, txt }, ...params) => {
     const db = await sqlite.open(state.files.get(file_id).filePath);
     const otherTables = {
@@ -76,29 +76,70 @@ const createResolvers = ({ state }: { state: TState }) => {
       otherTables,
     });
   };
+  const getHtml = async ({ file_id, node_id, name, txt }, ...params) => {
+    const db = await sqlite.open(state.files.get(file_id).filePath);
+    const otherTables = {
+      image: await db
+        .all(ctbQuery.images({ node_id, offset: undefined }))
+        .then(nodes =>
+          nodes.map(({ node_id, offset, justification, anchor, png }) => ({
+            node_id,
+            offset,
+            justification,
+            anchor,
+            ...getPNGSize(png),
+          })),
+        ),
+      codebox: await db.all(ctbQuery.codebox({ node_id })),
+      table: await db.all(ctbQuery.table({ node_id })).then(
+        async tables =>
+          await Promise.all(
+            tables.map(async table => ({
+              ...table,
+              txt: await parseXml({ xml: table.txt }),
+            })),
+          ),
+      ),
+    };
+
+    return RichText({
+      node_id: node_id,
+      file_id: file_id,
+      richText: JSON.parse(
+        await parseRichText({
+          nodeTableXml: txt,
+          otherTables,
+        }),
+      ),
+    });
+  };
   const getPNGThumbnailBase64 = async ({ file_id, node_id }, { offset }) => {
     const db = await sqlite.open(state.files.get(file_id).filePath);
     return db
       .all(ctbQuery.images({ node_id: node_id, offset }))
       .then(
-        nodes =>
-          nodes.map(({ anchor, png }) => {
+        nodes => {
+          let pngs = nodes.map(({ anchor, png }) => {
             return anchor
               ? null
               : imageThumbnail(png, state.pngThumbnailOptions);
-          })[0],
+          });
+          return offset ? pngs[0] : pngs;
+        },
       )
       .catch(console.error);
   };
 
   const getPNGFullBase64 = async ({ file_id, node_id }, { offset }) => {
     const db = await sqlite.open(state.files.get(file_id).filePath);
-    return db.all(ctbQuery.images({ node_id: node_id, offset: offset })).then(
-      nodes =>
-        nodes.map(({ png }) => {
+    return db
+      .all(ctbQuery.images({ node_id: node_id, offset: offset }))
+      .then(nodes => {
+        let pngs = nodes.map(({ png }) => {
           return bufferToPng(png);
-        })[0],
-    );
+        });
+        return offset ? pngs[0] : pngs;
+      });
   };
   return {
     getNodeMeta,
@@ -107,6 +148,7 @@ const createResolvers = ({ state }: { state: TState }) => {
     getPNGThumbnailBase64,
     getFiles,
     getNodeContent,
+    getHtml,
   };
 };
 

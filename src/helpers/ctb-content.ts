@@ -1,4 +1,3 @@
-import { TCt_node } from '../types/types';
 
 const rootNode = {
   node_id: 0,
@@ -9,11 +8,13 @@ const rootNode = {
   has_image: 0,
   has_codebox: 0,
   has_table: 0,
+  sequence: 0,
   ts_creation: 0,
   ts_lastsave: 0,
   child_nodes: [],
   has_txt: false,
 };
+type TCt_node = typeof rootNode
 
 const ctbQuery = {
   node_meta: ({ node_id }) => `
