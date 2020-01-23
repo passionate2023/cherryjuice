@@ -1,21 +1,12 @@
-import { Link as CtLink } from './link';
 import { Png } from './png';
 import { Code } from './code';
 import { Table } from './table';
+import { Element } from './element';
 import { escapeHtml } from '../ctb-interpreter/helpers/escape-html';
-type Props = {
-  has_txt: boolean;
-  file_id: string;
-};
-
-const createElement = (tag, style, children) =>
-  `<${tag} style="${Object.entries(style)
-    .map(([key, value]) => `${key}:${value}`)
-    .join(';')}">${children}</${tag}>`;
 
 const RichText = ({ richText, node_id, file_id }) => {
   return `
-    <article class="rtModule.richText">
+    <article>
       ${richText
         .map(
           inlineNodes =>
@@ -27,7 +18,7 @@ const RichText = ({ richText, node_id, file_id }) => {
                   ? ((node._ = escapeHtml(node._)), node)
                   : node,
               )
-              .map((node, i) =>
+              .map(node =>
                 typeof node === 'object'
                   ? node.type
                     ? node.type === 'tab'
@@ -58,24 +49,7 @@ const RichText = ({ richText, node_id, file_id }) => {
                       : node.type === 'table'
                       ? Table({ table: node.table })
                       : ''
-                    : node.tags.reduce(
-                        // @ts-ignore
-                        (acc, val) => {
-                          if (typeof val !== 'string') console.log('val', val);
-                          return typeof val === 'string'
-                            ? createElement(
-                                `${val}`,
-                                { ...node.$, display: 'inline' },
-                                acc,
-                              )
-                            : CtLink({
-                                target: val[1].target,
-                                href: val[1].href,
-                                text: node._,
-                              });
-                        },
-                        node._,
-                      )
+                    : Element({ node })
                   : node,
               )
               .join('')}
