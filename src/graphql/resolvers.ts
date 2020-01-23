@@ -105,28 +105,23 @@ const createResolvers = ({ state }: { state: TState }) => {
     return RichText({
       node_id: node_id,
       file_id: file_id,
-      richText: JSON.parse(
-        await parseRichText({
-          nodeTableXml: txt,
-          otherTables,
-        }),
-      ),
+      richText: await parseRichText({
+        nodeTableXml: txt,
+        otherTables,
+        stringify: false,
+      }),
     });
   };
   const getPNGThumbnailBase64 = async ({ file_id, node_id }, { offset }) => {
     const db = await sqlite.open(state.files.get(file_id).filePath);
     return db
       .all(ctbQuery.images({ node_id: node_id, offset }))
-      .then(
-        nodes => {
-          let pngs = nodes.map(({ anchor, png }) => {
-            return anchor
-              ? null
-              : imageThumbnail(png, state.pngThumbnailOptions);
-          });
-          return offset ? pngs[0] : pngs;
-        },
-      )
+      .then(nodes => {
+        let pngs = nodes.map(({ anchor, png }) => {
+          return anchor ? null : imageThumbnail(png, state.pngThumbnailOptions);
+        });
+        return offset ? pngs[0] : pngs;
+      })
       .catch(console.error);
   };
 

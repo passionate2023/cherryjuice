@@ -2,6 +2,7 @@ import { Link as CtLink } from './link';
 import { Png } from './png';
 import { Code } from './code';
 import { Table } from './table';
+import { escapeHtml } from '../ctb-interpreter/helpers/escape-html';
 type Props = {
   has_txt: boolean;
   file_id: string;
@@ -19,6 +20,13 @@ const RichText = ({ richText, node_id, file_id }) => {
         .map(
           inlineNodes =>
             `${inlineNodes
+              .map(node =>
+                typeof node === 'string'
+                  ? escapeHtml(node)
+                  : node._
+                  ? ((node._ = escapeHtml(node._)), node)
+                  : node,
+              )
               .map((node, i) =>
                 typeof node === 'object'
                   ? node.type
