@@ -10,7 +10,7 @@ type Props = {
 
 const Table = ({ table: { th, td } }) => {
   return `
-    <table class="modTable.table" >
+    <table class="rich-text__table" >
       <thead>
         ${th.map(head => `<th >${head}</th>`).join('')}
       </thead>
@@ -20,7 +20,7 @@ const Table = ({ table: { th, td } }) => {
             `<tr >
             ${row.map((definition, i) => `<td >${definition}</td>`).join('')}
           </tr>`,
-        )}
+        ).join('')}
       </tbody>
     </table>
   `;

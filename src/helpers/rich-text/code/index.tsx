@@ -21,7 +21,7 @@ const Code = ({
 }) => {
   return `
     <code
-      class="modCode.code"
+      class="rich-text__code"
       style="max-width: ${width_raw}${is_width_pix ? 'px' : '%'};
         min-height: ${height};
         width: ${width_raw}${is_width_pix ? 'px' : '%'};
