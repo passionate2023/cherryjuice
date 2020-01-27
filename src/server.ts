@@ -10,7 +10,7 @@ app.use(logger("dev")) ;
 app.use(cors()) ;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "../client/dist")));
-app.use(createRouterPNG({resolversState}))
+// app.use(express.static(path.join(__dirname, "../public")));
+// app.use(createRouterPNG({resolversState}))
 
 export { app };

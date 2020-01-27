@@ -17,10 +17,9 @@ type Props = {
 const Code = ({
   text,
   styles: { height, width },
-  other_attributes: { is_width_pix, width_raw }
+  other_attributes: { is_width_pix, width_raw },
 }) => {
-  return `
-    <code
+  return `<code
       class="rich-text__code"
       style="max-width: ${width_raw}${is_width_pix ? 'px' : '%'};
         min-height: ${height};
@@ -28,8 +27,7 @@ const Code = ({
         display: inline-block" 
     >
       ${text}
-    </code>
-    `;
+    </code>`;
 };
 
 export { Code };

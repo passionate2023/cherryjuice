@@ -47,7 +47,7 @@ function escapeHtml(string) {
         escape = '\u00A0 \u00A0 ';
         break;
       case 32: // <space>
-        escape = '\u00A0';
+        escape = str.charCodeAt(index + 1) === 32 ? '\u00A0' : ' ';
         break;
       case 34: // "
         escape = '&quot;';

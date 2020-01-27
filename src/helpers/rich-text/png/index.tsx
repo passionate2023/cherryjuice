@@ -7,15 +7,13 @@ type Props = {
 };
 
 const Png = ({ height, width, node_id, offset, file_id }) => {
-  return `
-    <div style=" width:${width}; height:${height} ; display: inline-block">
-      <img
-        data-query-params="${JSON.stringify({node_id,offset,file_id})}"
+  return `<div style=" width:${width}; height:${height} ; display: inline-block">
+      <img src=""
+        
         alt=""
         style=" width:${width}; height:${height} ;"
       />
-    </div>
-  `;
+    </div>`;
 };
 
 export { Png };
