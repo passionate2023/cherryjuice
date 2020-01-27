@@ -5,7 +5,7 @@ import * as path from 'path';
 import { scanFolder } from '../helpers/files';
 
 const config = {
-  folders: ['C:\\Users\\lpflo\\Desktop\\notes', '../../ctb'],
+  folders: ['C:\\Users\\lpflo\\Desktop\\notes', '../../../ctb'],
 };
 const resolversState = {
   pngThumbnailOptions: { percentage: 5, responseType: 'base64' },

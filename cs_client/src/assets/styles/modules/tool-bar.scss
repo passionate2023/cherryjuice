@@ -1,0 +1,25 @@
+@import '../vars/vars';
+.tool-bar {
+  grid-area: tool-bar;
+  background-color: floralwhite;
+  border-bottom: 2px solid white;
+  position: sticky;
+  max-height: $tool-bar-height;
+  display: flex;
+  align-items: center;
+}
+.tool-bar__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background-color: lightgrey;
+  }
+}
+.tool-bar__icon--enabled {
+  background-color: lightgrey;
+}

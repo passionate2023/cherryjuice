@@ -1,0 +1,18 @@
+@import '../vars/vars';
+.tree {
+  grid-area: tree;
+  border-right: white 3px solid;
+  overflow: auto;
+  z-index: 10;
+  height: calc(100vh - #{$info-bar-height+ $tool-bar-height});
+}
+.tree_root-list {
+  margin: 0 0 0 -40px;
+}
+.tree__resize-handle {
+  height: calc(100vh - #{$info-bar-height+ $tool-bar-height}) !important;
+  span > div {
+    min-width: 10px;
+
+  }
+}

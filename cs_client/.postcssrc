@@ -1,0 +1,9 @@
+{
+    "modules": true,
+    "plugins": {
+        "postcss-modules": {
+            globalModulePaths: ["global-scope.scss"]
+        },
+        "postcss-camel-case":{skipUnderscore: true,  globalModulePaths: ["global-scope.scss"]}
+    }
+}

@@ -1,0 +1,15 @@
+.table{
+  display: inline-block;
+  td,
+  th {
+    gap: 0;
+    border: 1px dotted gray;
+    text-align: center;
+    padding: 8px;
+    color: white;
+  }
+  td {
+    text-align: left;
+    height: 16px
+  }
+}

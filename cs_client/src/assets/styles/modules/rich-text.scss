@@ -1,0 +1,14 @@
+.rich-text {
+  grid-area: rich-text;
+  //border: red 2px solid;
+  font-size: 22px;
+  overflow: auto;
+  margin-top: 6px;
+  margin-left: 6px;
+  position: relative;
+
+}
+.rich-text__anchor {
+  width: 20px;
+  padding: 2px;
+}

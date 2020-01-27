@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "::sass-modules/*": ["./src/assets/styles/modules/*"],
+      "::types/*": ["./types/*"],
+      "::helpers/*": ["./src/helpers/*"],
+      "::graphql/*": ["./src/graphql/*"],
+      "::assets/*": ["./src/assets/*"],
+      "::shared-components/*": ["./src/components/shared-components/*"],
+      "::hooks/*": ["./src/hooks/*"],
+      "::app/*": ["./src/components/app/*"]
+    }
+  }
+}

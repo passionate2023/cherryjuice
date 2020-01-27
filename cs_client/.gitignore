@@ -1,0 +1,8 @@
+.cache
+dist
+node_modules
+yarn-error.log
+yarn.lock
+*.swp
+report*.json
+.idea
