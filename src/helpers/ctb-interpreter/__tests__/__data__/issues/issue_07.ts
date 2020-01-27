@@ -1,5 +1,6 @@
-const issue7 = {
-  description: `regression caused by latest commit: when a misc-node is the latest element in the page, it is not rendered
+const issue_07 = {
+  name: 'tailing image not rendered',
+  description: `regression caused by latest commit: when a misc-node is the last element in the page, it is not rendered
   `,
   txt: `
   <?xml version="1.0" ?><node><rich_text>promises can be chained together
@@ -35,37 +36,7 @@ the </rich_text><rich_text family="monospace" scale="small">.then</rich_text><ri
       col_max: (index + 1) * 100
     }))
   },
-  expected: {
-    full: [
-      ['promises can be chained together'],
-      ['>example'],
-      [
-        {
-          type: 'png',
-          $: { textAlign: 'left', height: '100px', width: '100px', tags: [] },
-          other_attributes: { offset: 42 }
-        }
-      ],
-      [
-        'the ',
-        {
-          _: '.then',
-          $: { backgroundColor: '#2B2B2B', tags: ['code', 'small'] }
-        },
-        ' on line 5 will "magically" wait for the promise from line 3'
-      ],
-      [],
-      ['>example2'],
-      [
-        {
-          type: 'png',
-          $: { textAlign: 'left', height: '200px', width: '200px', tags: [] },
-          other_attributes: { offset: 125 }
-        }
-      ]
-    ],
-    noOtherTables: []
-  }
+
 };
 
-export { issue7 };
+export { issue_07 };

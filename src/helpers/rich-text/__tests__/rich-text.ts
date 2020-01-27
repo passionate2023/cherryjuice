@@ -1,16 +1,18 @@
-import { parseRichText } from '../pipe';
-import { renderingIssues } from './__data__';
-
+import { RichText } from '../index';
+import { parseRichText } from '../../ctb-interpreter/pipe';
+import { renderingIssues } from '../../ctb-interpreter/__tests__/__data__';
 const renderingTestTemplate = async ({ txt, otherTables }) => {
-  const res = await parseRichText({
-    nodeTableXml: txt,
-    otherTables,
-    stringify: true,
+  const res = RichText({
+    richText: await parseRichText({
+      nodeTableXml: txt,
+      otherTables,
+      stringify: false,
+    }),
   });
-  expect(JSON.parse(res)).toMatchSnapshot();
+  expect(res).toMatchSnapshot();
 };
 
-describe('pipe snapshot tests', () => {
+describe('rich-text snapshot tests', () => {
   test(renderingIssues.issue_01.name, () => {
     renderingTestTemplate(renderingIssues.issue_01);
   });

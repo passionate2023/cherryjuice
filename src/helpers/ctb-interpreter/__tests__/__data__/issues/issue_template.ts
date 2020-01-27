@@ -8,7 +8,7 @@ const issue_template = {
       offset,
       justification: 'left',
       height: (index + 1) * 100,
-      width: (index + 1) * 100
+      width: (index + 1) * 100,
     })),
     codebox: [].map((offset, index) => ({
       offset,
@@ -19,19 +19,15 @@ const issue_template = {
       width: (index + 1) * 100,
       is_width_pix: 1,
       do_highl_bra: 1,
-      o_show_linenum: 1
+      o_show_linenum: 1,
     })),
     table: [].map((offset, index) => ({
       txt: 'table' + index,
       justification: 'left',
       col_min: (index + 1) * 100,
-      col_max: (index + 1) * 100
-    }))
+      col_max: (index + 1) * 100,
+    })),
   },
-  expected: {
-    full: [],
-    noOtherTables: []
-  }
 };
 
 export { issue_template };

@@ -4,7 +4,7 @@ import { Table } from './table';
 import { Element } from './element';
 import { escapeHtml } from '../ctb-interpreter/helpers/escape-html';
 
-const RichText = ({ richText, node_id, file_id }) => {
+const RichText = ({ richText}) => {
   const res = `<article>${richText
     .map(
       inlineNodes =>
@@ -32,11 +32,8 @@ const RichText = ({ richText, node_id, file_id }) => {
                       />`
                   : node.type === 'png'
                   ? Png({
-                      node_id: node_id,
-                      offset: node.other_attributes.offset,
                       height: node.$.height,
                       width: node.$.width,
-                      file_id: file_id,
                     })
                   : node.type === 'code'
                   ? Code({

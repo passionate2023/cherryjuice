@@ -1,4 +1,5 @@
-const issue8 = {
+const issue_08 = {
+  name: 'tailing image not rendered',
   description: `
   similar to issues 6 and 7
   fix: rewrote the insertOtherTables fn
@@ -32,24 +33,7 @@ const issue8 = {
       col_max: (index + 1) * 100
     }))
   },
-  expected: {
-    full: [
-      ['haha'],
-      [
-        {
-          type: 'png',
-          $: { textAlign: 'left', height: '100px', width: '100px', tags: [] },
-          other_attributes: { offset: 5 }
-        },
-        {
-          type: 'png',
-          $: { textAlign: 'left', height: '200px', width: '200px', tags: [] },
-          other_attributes: { offset: 6 }
-        }
-      ]
-    ],
-    noOtherTables: []
-  }
+
 };
 
-export { issue8 };
+export { issue_08 };

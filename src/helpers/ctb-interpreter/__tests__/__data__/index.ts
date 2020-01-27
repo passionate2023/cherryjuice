@@ -1,21 +1,21 @@
-import { bug1_offset_images } from './issues/bug1_offset_images';
-import { bug2_empty_newline_ignred } from './issues/bug2_empty_newline_ignred';
-import { issue3_monospace_not_fully_applied } from './issues/issue3_monospace_not_fully_applied';
-import { issue4_offset_images } from './issues/issue4_offset_images';
-import { issue5_offset_images_and_tables_and_code_box } from './issues/issue5_offset_images_and_tables_and_code_box';
-import { issue6 } from './issues/issue6';
-import { issue7 } from './issues/issue7';
-import { issue8 } from './issues/issue8';
+import { issue_01 } from './issues/issue_01';
+import { issue_02 } from './issues/issue_02';
+import { issue_03 } from './issues/issue_03';
+import { issue_04 } from './issues/issue_04';
+import { issue_05 } from './issues/issue_05';
+import { issue_06 } from './issues/issue_06';
+import { issue_07 } from './issues/issue_07';
+import { issue_08 } from './issues/issue_08';
 
-const renderingBus = {
-  bug1_offset_images,
-  bug2_empty_newline_ignred,
-  issue3_monospace_not_fully_applied,
-  issue4_offset_images,
-  issue5_offset_images_and_tables_and_code_box,
-  issue6,
-  issue7,
-  issue8
+const renderingIssues = {
+  issue_01,
+  issue_02,
+  issue_03,
+  issue_04,
+  issue_05,
+  issue_06,
+  issue_07,
+  issue_08,
 };
 
-export { renderingBus };
+export { renderingIssues };

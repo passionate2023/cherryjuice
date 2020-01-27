@@ -6,10 +6,9 @@ type Props = {
   file_id: string;
 };
 
-const Png = ({ height, width, node_id, offset, file_id }) => {
+const Png = ({ height, width }) => {
   return `<div style=" width:${width}; height:${height} ; display: inline-block">
       <img src=""
-        
         alt=""
         style=" width:${width}; height:${height} ;"
       />

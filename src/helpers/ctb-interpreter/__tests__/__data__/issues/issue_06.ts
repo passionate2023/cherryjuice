@@ -1,4 +1,5 @@
-const issue6 = {
+const issue_06 = {
+  name: 'adjacent images overlap',
   description: `
   two sibling images rendered as one, adjacent text is duplicated
   update: the issue was in insertOtherTables fn, swapping a <= with < fixed it
@@ -37,53 +38,7 @@ the instructor suggests that t</rich_text><rich_text foreground="#e6e6e6">here a
       col_max: (index + 1) * 100
     }))
   },
-  expected: {
-    full: [
-      [
-        '- we can think of callbacks ' +
-          'as a continuation, a secondary half that runs after a time-gap' +
-          ' that separates it from the first half'
-      ],
-      [
-        '"w',
-        {
-          _:
-            'hen we refer to functions as continuations, what we mean ' +
-            'is, we did the first half of our program now, and we wrap' +
-            ' the second half of our program up in a callback',
-          $: { color: '#e6e6e6', tags: [] }
-        },
-        '"'
-      ],
-      [],
-      [
-        '- the instructor suggests that callback hell doesnt actually' +
-          ' have to do with indentation, as we could rewrite a ' +
-          '"callback hell" without nesting'
-      ],
-      [
-        {
-          type: 'png',
-          $: { textAlign: 'left', height: '100px', width: '100px', tags: [] },
-          other_attributes: { offset: 440 }
-        },
-        {
-          type: 'png',
-          $: { textAlign: 'left', height: '200px', width: '200px', tags: [] },
-          other_attributes: { offset: 441 }
-        }
-      ],
-      [
-        'the instructor suggests that t',
-        {
-          _: 'here are two conceptually deficient',
-          $: { color: '#e6e6e6', tags: [] }
-        },
-        ' problems with callbacks'
-      ]
-    ],
-    noOtherTables: []
-  }
+
 };
 
-export { issue6 };
+export { issue_06 };
