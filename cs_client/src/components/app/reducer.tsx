@@ -38,14 +38,13 @@ const reducer = (state: TState, action) => {
     case actions.RESIZE_TREE:
       return { ...state, treeSize: action.value };
     case actions.SELECT_NODE:
-      // if (+state.selectedNode.id !== +action.value.node_id)
-      console.log('new ad', { action, state });
       (state.recentNodes.some(node => +node.id === +action.value.node_id)
         ? state.recentNodes.filter(node => +node.id !== +action.value.node_id)
         : state.recentNodes
       ).push({
         id: action.value.node_id,
-        name: action.value.name
+        name: action.value.name,
+        style: action.value.style,
       });
 
       return {
@@ -55,7 +54,8 @@ const reducer = (state: TState, action) => {
           name: `${action.value.name}`,
           is_richtxt: `${action.value.is_richtxt}`,
           ts_creation: `${action.value.ts_creation}`,
-          ts_lastsave: `${action.value.ts_lastsave}`
+          ts_lastsave: `${action.value.ts_lastsave}`,
+          style: JSON.parse(action.value.style)
         },
         recentNodes: [...state.recentNodes]
       };

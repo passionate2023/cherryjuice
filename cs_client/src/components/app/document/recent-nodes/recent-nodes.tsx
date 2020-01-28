@@ -5,8 +5,8 @@ import { useHistory } from 'react-router';
 import { appActions } from '::app/reducer';
 
 type Props = {
-  recentNodes: { id: string; name: string }[];
-  selectedNode: { id: number; name: string };
+  recentNodes: { id: string; name: string; style: any }[];
+  selectedNode: { id: number; name: string; style: any };
   dispatch: any;
 };
 const config = {
@@ -17,7 +17,9 @@ const RecentNodes: React.FC<Props> = ({
   selectedNode,
   dispatch
 }) => {
-  let recentNodesOther = recentNodes.filter(({ id }) => +id !== selectedNode.id);
+  let recentNodesOther = recentNodes.filter(
+    ({ id }) => +id !== selectedNode.id
+  );
   let lastN = recentNodesOther.slice(
     recentNodesOther.length > config.recentNodesN
       ? recentNodesOther.length - config.recentNodesN
@@ -27,21 +29,22 @@ const RecentNodes: React.FC<Props> = ({
   const goToNode = useCallback(e => {
     let node_id = e.target.dataset.id;
     let name = e.target.dataset.name;
-    dispatch({ type: appActions.SELECT_NODE, value: { node_id, name } });
-
+    let style = e.target.dataset.style;
+    dispatch({ type: appActions.SELECT_NODE, value: { node_id, name, style } });
     history.push(`/node-${node_id}`);
   }, []);
   return (
     <div className={modRecentNodes.recentNodes}>
       <div className={modRecentNodes.recentNodes__buttonsContainer}>
         {lastN.map(
-          ({ id, name }) =>
+          ({ id, name, style }) =>
             name &&
             +id !== selectedNode.id && (
               <button
                 className={modRecentNodes.recentNodes__button}
                 data-id={id}
                 data-name={name}
+                data-style={style}
                 onClick={goToNode}
                 key={id}
                 title={name}
@@ -52,7 +55,12 @@ const RecentNodes: React.FC<Props> = ({
             )
         )}
       </div>
-      <p className={modRecentNodes.recentNodes__title}>{selectedNode.name}</p>
+      <p
+        className={modRecentNodes.recentNodes__title}
+        style={selectedNode.style}
+      >
+        {selectedNode.name}
+      </p>
     </div>
   );
 };

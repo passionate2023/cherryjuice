@@ -1,4 +1,3 @@
-
 const rootNode = {
   node_id: 0,
   father_id: -1,
@@ -14,7 +13,7 @@ const rootNode = {
   child_nodes: [],
   has_txt: false,
 };
-type TCt_node = typeof rootNode
+type TCt_node = typeof rootNode;
 
 const ctbQuery = {
   node_meta: ({ node_id }) => `
@@ -53,7 +52,7 @@ const ctbQuery = {
 const nodeTitleStyle = ({ is_richtxt }) => {
   return JSON.stringify({
     color: nodeTitleHelpers.hasForground(is_richtxt)
-      ? nodeTitleHelpers.rgb_str_from_int24bit(is_richtxt)
+      ? nodeTitleHelpers.rgb_str_from_int24bit(is_richtxt >> 3 & 0xffffff)
       : '#ffffff',
     fontWeight: nodeTitleHelpers.isBold(is_richtxt) ? 'bold' : 'normal',
   });
@@ -68,6 +67,7 @@ const organizeData = async data => {
     if (parentNode) {
       parentNode.child_nodes.push(node.node_id);
     }
+    console.log('style', nodeTitleStyle({ is_richtxt: node.is_richtxt }));
 
     node.node_title_styles = nodeTitleStyle({ is_richtxt: node.is_richtxt });
     node.icon_id = nodeTitleHelpers.customIconId(node.is_ro);
@@ -106,8 +106,7 @@ const nodeTitleHelpers = {
     const r = (int24bit >> 16) & 0xff;
     const g = (int24bit >> 8) & 0xff;
     const b = int24bit & 0xff;
-    // todo: convert to hex
-    return `rgb(${r},${g},${b})`;
+    return `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
   },
 };
 

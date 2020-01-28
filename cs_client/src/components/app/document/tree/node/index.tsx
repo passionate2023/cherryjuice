@@ -29,7 +29,7 @@ const Node: React.FC<Props> = ({
   depth,
   dispatch,
   styles,
-  icon_id,
+  icon_id
 }) => {
   const { child_nodes, name, is_richtxt, ts_creation, ts_lastsave } = nodes.get(
     node_id
@@ -50,7 +50,14 @@ const Node: React.FC<Props> = ({
   const selectNode = useCallback(() => {
     dispatch({
       type: appActions.SELECT_NODE,
-      value: { node_id, name, is_richtxt, ts_creation, ts_lastsave }
+      value: {
+        node_id,
+        name,
+        style: styles,
+        is_richtxt,
+        ts_creation,
+        ts_lastsave
+      }
     });
     history.push(nodePath);
   }, []);
@@ -65,7 +72,14 @@ const Node: React.FC<Props> = ({
       componentRef?.current?.scrollIntoView();
       dispatch({
         type: appActions.SELECT_NODE,
-        value: { node_id, name, is_richtxt, ts_creation, ts_lastsave }
+        value: {
+          node_id,
+          name,
+          style: styles,
+          is_richtxt,
+          ts_creation,
+          ts_lastsave
+        }
       });
     }
   }, []);
@@ -85,7 +99,7 @@ const Node: React.FC<Props> = ({
         {
           <FontAwesomeIcon
             className={`${nodeMod.node__titleButton} ${
-              (child_nodes.length > 0 ? '' : nodeMod.node__titleButtonHidden)
+              child_nodes.length > 0 ? '' : nodeMod.node__titleButtonHidden
             }`}
             onClick={toggleChildren}
             icon={showChildren ? faMinus : faPlus}
