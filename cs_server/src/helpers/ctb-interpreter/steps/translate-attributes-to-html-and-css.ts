@@ -1,25 +1,30 @@
+const path = require('path');
 const preferences = { code: { 'background-color': '#2B2B2B' } };
 
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10],
   parseLink: c => {
-    let attributes = { href: '', target: '' };
+    let attributes = { href: '', target: '_blank',type:'' };
     if (c.startsWith('node')) {
       const [, id, anchor] = /node (\d+) (.+)/.exec(c);
       attributes.href = `node-${id}#${encodeURIComponent(anchor)}`;
-      attributes.target = 'node';
+      attributes.type = 'node';
     } else if (c.startsWith('webs')) {
       const [, url] = /webs (.+)/.exec(c);
       attributes.href = url;
-      attributes.target = '_blank';
+      attributes.type = 'web';
     } else if (c.startsWith('file')) {
       const [, url] = /file (.+)/.exec(c);
-      attributes.href = url;
-      attributes.target = 'file';
+      attributes.href = `file:///${path.resolve(
+        Buffer.from(url, 'base64').toString(),
+      )}`;
+      attributes.type = 'file';
     } else {
       const [, url] = /fold (.+)/.exec(c);
-      attributes.href = url;
-      attributes.target = 'folder';
+      attributes.href = `file:///${path.resolve(
+        Buffer.from(url, 'base64').toString(),
+      )}`;
+      attributes.type='folder';
     }
 
     return attributes;

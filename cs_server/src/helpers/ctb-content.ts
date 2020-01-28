@@ -67,7 +67,6 @@ const organizeData = async data => {
     if (parentNode) {
       parentNode.child_nodes.push(node.node_id);
     }
-    console.log('style', nodeTitleStyle({ is_richtxt: node.is_richtxt }));
 
     node.node_title_styles = nodeTitleStyle({ is_richtxt: node.is_richtxt });
     node.icon_id = nodeTitleHelpers.customIconId(node.is_ro);

@@ -18,6 +18,7 @@ const Element = ({ node }) =>
             CtLink({
               target: val[1].target,
               href: val[1].href,
+              type: val[1].type,
               text: node._,
             });
       }, node._)

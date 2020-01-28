@@ -42,7 +42,7 @@ const RichTextSsHtml: React.FC<Props> = ({ has_txt, file_id }) => {
   return html ? (
     <div
       ref={richTextRef}
-      contentEditable={true}
+      // contentEditable={true}
       className={rtModule.richText}
       dangerouslySetInnerHTML={{ __html: html}}
     />
