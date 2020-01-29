@@ -4,7 +4,7 @@ const preferences = { code: { 'background-color': '#2B2B2B' } };
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10],
   parseLink: c => {
-    let attributes = { href: '', target: '_blank',type:'' };
+    let attributes = { href: '', target: '_blank', type: '' };
     if (c.startsWith('node')) {
       const [, id, anchor] = /node (\d+) (.+)/.exec(c);
       attributes.href = `node-${id}#${encodeURIComponent(anchor)}`;
@@ -24,7 +24,7 @@ const utils = {
       attributes.href = `file:///${path.resolve(
         Buffer.from(url, 'base64').toString(),
       )}`;
-      attributes.type='folder';
+      attributes.type = 'folder';
     }
 
     return attributes;
@@ -33,6 +33,8 @@ const utils = {
 const createTranslator = (
   tags: (string | { href: any })[],
   styles: { [key: string]: string },
+  lineStyles: { [key: string]: string },
+  nodeType: string,
 ) => {
   return {
     foreground: c =>
@@ -45,7 +47,23 @@ const createTranslator = (
     style: () => tags.push('em'),
     scale: c => tags.push(c), // todo: complete this
     family: () => tags.push('code'),
-    justification: c => (styles['textAlign'] = c),
+    justification: c => {
+      console.log({ nodeType });
+      if (nodeType) {
+        if (c === 'right') {
+          styles['margin-left'] = 'auto';
+        }
+        if (c === 'center') {
+          styles['margin-right'] = 'auto';
+        }
+      } else {
+        styles['text-align'] = c;
+        styles['flex'] = '1';
+      }
+      if (c && c !== 'left') {
+        lineStyles['display'] = 'flex';
+      }
+    },
     width: c => (styles['width'] = `${c}px`),
     height: c => (styles['height'] = `${c}px`),
     // @ts-ignore
@@ -57,34 +75,45 @@ const whiteListedAttributes = {
   containsNewLine: true,
 };
 const translateAttributesToHtmlAndCss = xml =>
-  xml.map(node => {
-    if (node.$) {
-      const tags = [];
-      const styles = {};
-      const translator = createTranslator(tags, styles);
-      Object.entries(node.$).forEach(([key, value]) => {
-        try {
-          translator[key](value);
-        } catch {
-          if (!whiteListedAttributes[key])
-            throw new Error(
-              `Exception in the interpreter: translator[${key}] is not defined`,
-            );
-        }
-      });
-      // add default/preferred styles, such as monospace background
-      Object.entries(preferences).forEach(([tag, customStyles]) => {
-        if (tags.includes(tag)) {
-          Object.entries(customStyles).forEach(([customStyle, value]) => {
-            if (!styles[customStyle]) {
-              styles[customStyle] = value;
+  xml.map(inlineNodes => {
+    const lineStyles = {};
+    return {
+      nodes: inlineNodes.map(node => {
+        if (node.$) {
+          const tags = [];
+          const styles = {};
+          const translator = createTranslator(
+            tags,
+            styles,
+            lineStyles,
+            node.type,
+          );
+          Object.entries(node.$).forEach(([key, value]) => {
+            try {
+              translator[key](value);
+            } catch {
+              if (!whiteListedAttributes[key])
+                throw new Error(
+                  `Exception in the interpreter: translator[${key}] is not defined`,
+                );
             }
           });
+          // add default/preferred styles, such as monospace background
+          Object.entries(preferences).forEach(([tag, customStyles]) => {
+            if (tags.includes(tag)) {
+              Object.entries(customStyles).forEach(([customStyle, value]) => {
+                if (!styles[customStyle]) {
+                  styles[customStyle] = value;
+                }
+              });
+            }
+          });
+          node.$ = styles;
+          node.tags = tags;
         }
-      });
-      node.$ = styles;
-      node.tags = tags;
-    }
-    return node;
+        return node;
+      }),
+      styles: Object.keys(lineStyles).length ? lineStyles : undefined,
+    };
   });
 export { translateAttributesToHtmlAndCss };

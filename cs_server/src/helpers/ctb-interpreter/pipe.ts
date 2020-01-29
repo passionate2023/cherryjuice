@@ -16,9 +16,9 @@ const stringifierPipe = compose(
 const processingPipe = otherTables =>
   compose(
     tap('two'),
+    translateAttributesToHtmlAndCss,
     groupNodesByLine,
     flattenIntoLines,
-    translateAttributesToHtmlAndCss,
     insertOtherTables(otherTables),
     fixCharacters.restoreOrphanWhiteSpace,
   );

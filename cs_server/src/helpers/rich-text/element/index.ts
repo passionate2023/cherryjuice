@@ -1,6 +1,9 @@
 import { Link as CtLink } from '../link';
-const stringifyStyles = style =>
+const stringifyStyles = (style, onlyStylesThatStartWith = undefined) =>
   Object.entries(style)
+    .filter(([key]) =>
+      onlyStylesThatStartWith ? key.startsWith(onlyStylesThatStartWith) : true,
+    )
     .map(([key, value]) => `${key}:${value}`)
     .join(';') + ';';
 
@@ -20,8 +23,9 @@ const Element = ({ node }) =>
               href: val[1].href,
               type: val[1].type,
               text: node._,
+              style:node.$
             });
       }, node._)
     : createElement(`div`, node.$, node._);
 
-export { Element };
+export { Element, stringifyStyles };

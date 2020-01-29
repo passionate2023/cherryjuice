@@ -1,3 +1,5 @@
+import { stringifyStyles } from '../element';
+
 type Props = {
   styles: {
     justification: string;
@@ -16,15 +18,17 @@ type Props = {
 };
 const Code = ({
   text,
-  styles: { height, width },
+  styles,
   other_attributes: { is_width_pix, width_raw },
-}) => {
+}:Props) => {
   return `<code
       class="rich-text__code"
       style="max-width: ${width_raw}${is_width_pix ? 'px' : '%'};
-        min-height: ${height};
+        min-height: ${styles.height};
         width: ${width_raw}${is_width_pix ? 'px' : '%'};
-        display: inline-block" 
+        display: inline-block;
+        ${stringifyStyles(styles,'margin')} 
+        "
     >
       ${text}
     </code>`;

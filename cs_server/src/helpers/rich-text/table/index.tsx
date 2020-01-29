@@ -1,3 +1,5 @@
+import { stringifyStyles } from '../element';
+
 type Props = {
   table: { th: string[]; td: string[][] };
   styles: { justification: string };
@@ -8,9 +10,8 @@ type Props = {
   };
 };
 
-const Table = ({ table: { th, td } }) => {
-  return `
-    <table class="rich-text__table" >
+const Table = ({ table: { th, td } ,styles}) => {
+  return `<table class="rich-text__table" style="${stringifyStyles(styles,'margin')} }">
       <thead>
         ${th.map(head => `<th >${head}</th>`).join('')}
       </thead>
