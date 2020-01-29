@@ -12,10 +12,9 @@ import { Tab } from '::shared-components/tab';
 import anchorIcon from '::assets/icons/anchor.svg';
 import { useRouteMatch } from 'react-router';
 type Props = {
-  has_txt: boolean;
   file_id: string;
 };
-const RichText: React.FC<Props> = ({ has_txt, file_id }) => {
+const RichText: React.FC<Props> = ({  file_id }) => {
   const match = useRouteMatch();
   // @ts-ignore
   const node_id = Number(match.params?.node_id);

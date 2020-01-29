@@ -36,11 +36,8 @@ const App: React.FC<Props> = () => {
       console.error(e);
     }
   }, [state]);
-  useEffect(() => {
-    console.log('pathname', history.location.pathname);
-    if (state.selectedFile && history.location.pathname === '/')
-      history.push('/' + state.selectedFile);
-  }, [state.selectedFile]);
+  if (state.selectedFile && history.location.pathname === '/')
+    history.push('/' + state.selectedFile);
 
   return (
     <div
@@ -58,11 +55,11 @@ const App: React.FC<Props> = () => {
         serverSideHtml={state.serverSideHtml}
       />
 
-      {!state.selectedFile ? (
+      {!state.selectedFile && history.location.pathname === '/' ? (
         <p>no file selected</p>
       ) : (
         <Route
-          path={`/:file_id/`}
+          path={`/:file_id?/`}
           render={() => (
             <Document
               dispatch={dispatch}
@@ -72,6 +69,7 @@ const App: React.FC<Props> = () => {
               selectedNode={state.selectedNode}
               recentNodes={state.recentNodes}
               serverSideHtml={state.serverSideHtml}
+              selectedFile={state.selectedFile}
             />
           )}
         />

@@ -24,8 +24,9 @@ const createResolvers = ({ state }: { state: TState }) => {
     rootValue,
     { file_id, node_id },
   ): Promise<Ct_Node_Meta[]> => {
+    if (!state.files.get(file_id)) throw new Error('no such file');
     let nodes = await getNodes({
-      filePath: state.files.get(file_id).filePath,
+      filePath: state.files.get(file_id)?.filePath,
       node_id,
     });
     const { nodes: organizedNodes } = await organizeData(nodes);
@@ -103,7 +104,6 @@ const createResolvers = ({ state }: { state: TState }) => {
     };
 
     return RichText({
-      node_id: node_id,
       file_id: file_id,
       richText: await parseRichText({
         nodeTableXml: txt,

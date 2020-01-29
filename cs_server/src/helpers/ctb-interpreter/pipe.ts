@@ -32,7 +32,7 @@ const parseRichText = async ({
     ({ node: { rich_text } }) => rich_text,
   );
   const res = processingPipe(otherTables)(richText);
-  return stringify ? stringifierPipe(res) : res;
+  return stringify ? stringifierPipe(res) : res
 };
 
 export { parseRichText, processingPipe };

@@ -10,12 +10,11 @@ import { appActions } from '::app/reducer';
 type Props = {
   nodes: Map<number, Ct_Node_Meta>;
   treeRef: Ref<any>;
-  onResize: ()=>void;
+  onResize: () => void;
   dispatch: (action: { type: string; value?: any }) => void;
 };
 
 const Tree: React.FC<Props> = ({ nodes, treeRef, onResize, dispatch }) => {
-  // console.log('nodes', nodes.values());
 
   return (
     <Resizable
@@ -34,20 +33,21 @@ const Tree: React.FC<Props> = ({ nodes, treeRef, onResize, dispatch }) => {
       <div className={treeModule.tree}>
         <ErrorBoundary>
           <ul className={treeModule.tree_rootList}>
-            {nodes
-              .get(0)
-              .child_nodes.map(node_id => nodes.get(node_id))
-              .map(node => (
-                <Node
-                  key={node.node_id}
-                  node_id={node.node_id}
-                  nodes={nodes}
-                  depth={0}
-                  dispatch={dispatch}
-                  styles={node.node_title_styles}
-                  icon_id={node.icon_id}
-                />
-              ))}
+            {nodes &&
+              nodes
+                .get(0)
+                .child_nodes.map(node_id => nodes.get(node_id))
+                .map(node => (
+                  <Node
+                    key={node.node_id}
+                    node_id={node.node_id}
+                    nodes={nodes}
+                    depth={0}
+                    dispatch={dispatch}
+                    styles={node.node_title_styles}
+                    icon_id={node.icon_id}
+                  />
+                ))}
           </ul>
         </ErrorBoundary>
       </div>

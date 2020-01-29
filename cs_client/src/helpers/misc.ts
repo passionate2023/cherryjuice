@@ -1,19 +1,13 @@
-import { tryCatch } from 'ramda';
 
 const getSelectedNodeFromRoute = ({ pathname }) =>
   /(\d+)$/.test(pathname) ? +/(\d+)$/.exec(pathname)[1] : 0;
 
-const a = tryCatch(
-  savedState => JSON.parse(savedState),
-  () => {}
-);
+
+
 const getTreeStateFromLocalStorage = () => {
-  try {
-    const savedState = localStorage.getItem('treeState');
-    return JSON.parse(savedState);
-  } catch {
-    return {};
-  }
+  const savedState = localStorage.getItem('treeState');
+  if (savedState) return JSON.parse(savedState);
+  else return {};
 };
 
 const expandParents = ({ tree, id, nodes }) => {

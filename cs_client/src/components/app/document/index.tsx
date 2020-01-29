@@ -20,6 +20,7 @@ type Props = {
   recentNodes: any;
   selectedNode: any;
   serverSideHtml: boolean;
+  selectedFile: string;
 };
 
 const Document: React.FC<Props> = ({
@@ -29,6 +30,7 @@ const Document: React.FC<Props> = ({
   onResize,
   selectedNode,
   recentNodes,
+  selectedFile,
   serverSideHtml
 }) => {
   const history = useHistory();
@@ -36,7 +38,7 @@ const Document: React.FC<Props> = ({
   // @ts-ignore
   const { file_id, node_id } = match.params;
   const { loading, error, data } = useQuery(QUERY_CT_NODE_META, {
-    variables: { file_id }
+    variables: { file_id: file_id || '' }
   });
   const nodes: Map<number, Ct_Node_Meta> = useMemo(() => {
     if (data && data.ct_node_meta) {
@@ -44,8 +46,14 @@ const Document: React.FC<Props> = ({
     }
   }, [loading, file_id]);
   if (error) {
-    dispatch({ type: appActions.SELECT_FILE, value: undefined });
-    history.push('/');
+    if (file_id && file_id === selectedFile) {
+      dispatch({ type: appActions.SELECT_FILE, value: undefined });
+      history.push('/');
+    } else {
+      history.push('/' + selectedFile);
+    }
+  } else if (file_id !== selectedFile) {
+    dispatch({ type: appActions.SELECT_FILE, value: file_id });
   }
   return (
     <>
@@ -56,6 +64,7 @@ const Document: React.FC<Props> = ({
             recentNodes={recentNodes}
             selectedNode={selectedNode}
             dispatch={dispatch}
+            file_id={file_id}
           />
           {showTree && (
             <ErrorBoundary>
@@ -74,16 +83,15 @@ const Document: React.FC<Props> = ({
             render={props => {
               return serverSideHtml ? (
                 <ErrorBoundary>
-                  <RichTextSsHtml {...props} has_txt={true} file_id={file_id} />
+                  <RichTextSsHtml {...props} file_id={file_id} />
                 </ErrorBoundary>
               ) : (
                 <ErrorBoundary>
-                  <RichText {...props} has_txt={true} file_id={file_id} />
+                  <RichText {...props} file_id={file_id} />
                 </ErrorBoundary>
               );
             }}
           />
-
         </Fragment>
       )}
     </>

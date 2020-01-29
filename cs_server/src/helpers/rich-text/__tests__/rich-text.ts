@@ -7,7 +7,7 @@ const renderingTestTemplate = async ({ txt, otherTables }) => {
       nodeTableXml: txt,
       otherTables,
       stringify: false,
-    }),
+    })
   });
   expect(res).toMatchSnapshot();
 };

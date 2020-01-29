@@ -8,11 +8,10 @@ import { usePng } from '::hooks/use-png';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
 
 type Props = {
-  has_txt: boolean;
   file_id: string;
 };
 
-const RichTextSsHtml: React.FC<Props> = ({ has_txt, file_id }) => {
+const RichTextSsHtml: React.FC<Props> = ({  file_id }) => {
   const richTextRef = useRef<HTMLDivElement>();
   const match = useRouteMatch();
   // @ts-ignore

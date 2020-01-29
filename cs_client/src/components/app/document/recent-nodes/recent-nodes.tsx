@@ -8,6 +8,7 @@ type Props = {
   recentNodes: { id: string; name: string; style: any }[];
   selectedNode: { id: number; name: string; style: any };
   dispatch: any;
+  file_id: string;
 };
 const config = {
   recentNodesN: 4
@@ -15,7 +16,8 @@ const config = {
 const RecentNodes: React.FC<Props> = ({
   recentNodes,
   selectedNode,
-  dispatch
+  dispatch,
+  file_id
 }) => {
   let recentNodesOther = recentNodes.filter(
     ({ id }) => +id !== selectedNode.id
@@ -31,7 +33,7 @@ const RecentNodes: React.FC<Props> = ({
     let name = e.target.dataset.name;
     let style = e.target.dataset.style;
     dispatch({ type: appActions.SELECT_NODE, value: { node_id, name, style } });
-    history.push(`/node-${node_id}`);
+    history.push(`/${file_id}/node-${node_id}`);
   }, []);
   return (
     <div className={modRecentNodes.recentNodes}>

@@ -5,7 +5,8 @@ const selectedNode = getSelectedNodeFromRoute({ pathname: location.pathname });
 const recentNodes = JSON.parse(localStorage.getItem('recentNodes'));
 console.log({ recentNodes });
 const initialState = {
-  showTree: JSON.parse(localStorage.getItem('showTree')),
+  showTree:
+    JSON.parse(localStorage.getItem('showTree')) !== false,
   treeSize: JSON.parse(localStorage.getItem('treeSize')) || 250,
   selectedNode: {
     id: 0,
@@ -15,7 +16,8 @@ const initialState = {
     ts_lastsave: ''
   },
   selectedFile: localStorage.getItem('selectedFile'),
-  showFileSelect: !Boolean(localStorage.getItem('selectedFile')),
+  showFileSelect:
+    !Boolean(localStorage.getItem('selectedFile')) && location.pathname === '/',
   recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}
   serverSideHtml: true
 };
@@ -26,7 +28,7 @@ const actions = {
   RESIZE_TREE: 'resize-tree',
   SELECT_NODE: 'select-node',
   SELECT_FILE: 'select-file',
-  TOGGLE_SERVER_SIDE_HTML: 'ssr',
+  TOGGLE_SERVER_SIDE_HTML: 'ssr'
 };
 
 const reducer = (state: TState, action) => {
@@ -44,7 +46,7 @@ const reducer = (state: TState, action) => {
       ).push({
         id: action.value.node_id,
         name: action.value.name,
-        style: action.value.style,
+        style: action.value.style
       });
 
       return {
