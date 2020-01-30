@@ -36,7 +36,7 @@ const Document: React.FC<Props> = ({
   const history = useHistory();
   const match = useRouteMatch();
   // @ts-ignore
-  const { file_id, node_id } = match.params;
+  const { file_id } = match.params;
   const { loading, error, data } = useQuery(QUERY_CT_NODE_META, {
     variables: { file_id: file_id || '' }
   });

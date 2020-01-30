@@ -11,7 +11,7 @@ type Props = {
   file_id: string;
 };
 
-const RichTextSsHtml: React.FC<Props> = ({  file_id }) => {
+const RichTextSsHtml: React.FC<Props> = ({ file_id }) => {
   const richTextRef = useRef<HTMLDivElement>();
   const match = useRouteMatch();
   // @ts-ignore
@@ -43,10 +43,12 @@ const RichTextSsHtml: React.FC<Props> = ({  file_id }) => {
       ref={richTextRef}
       // contentEditable={true}
       className={rtModule.richText}
-      dangerouslySetInnerHTML={{ __html: html}}
+      dangerouslySetInnerHTML={{ __html: html }}
     />
   ) : (
-    <SpinnerCircle />
+    <div className={rtModule.richText}>
+      <SpinnerCircle />
+    </div>
   );
 };
 
