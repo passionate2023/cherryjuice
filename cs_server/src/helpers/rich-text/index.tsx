@@ -47,7 +47,11 @@ const RichText = ({ richText }) => {
                         text: node._,
                       })
                     : node.type === 'table'
-                    ? Table({ table: node.table, styles: node.$ })
+                    ? Table({
+                        table: node.table,
+                        styles: node.$,
+                        other_attributes: node.other_attributes,
+                      })
                     : ''
                   : Element({ node })
                 : node,

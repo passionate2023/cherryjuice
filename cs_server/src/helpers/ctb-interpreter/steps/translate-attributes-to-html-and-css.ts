@@ -18,12 +18,14 @@ const utils = {
       attributes.href = `file:///${path.resolve(
         Buffer.from(url, 'base64').toString(),
       )}`;
+      // attributes.href = `file:///${Buffer.from(url, 'base64').toString()}`;
       attributes.type = 'file';
     } else {
       const [, url] = /fold (.+)/.exec(c);
       attributes.href = `file:///${path.resolve(
         Buffer.from(url, 'base64').toString(),
       )}`;
+      // attributes.href = `file:///${Buffer.from(url, 'base64').toString()}`;
       attributes.type = 'folder';
     }
 
@@ -43,12 +45,9 @@ const createTranslator = (
       (styles['background-color'] = utils.rrrrggggbbbbbToRrggbb(c)),
     underline: () => (styles['text-decoration'] = 'underline'),
     strikethrough: () => (styles['text-decoration'] = 'line-through'),
-    weight: () => tags.push('strong'),
-    style: () => tags.push('em'),
-    scale: c => tags.push(c), // todo: complete this
-    family: () => tags.push('code'),
+    width: c => (styles['width'] = `${c}px`),
+    height: c => (styles['height'] = `${c}px`),
     justification: c => {
-      console.log({ nodeType });
       if (nodeType) {
         if (c === 'right') {
           styles['margin-left'] = 'auto';
@@ -64,11 +63,12 @@ const createTranslator = (
         lineStyles['display'] = 'flex';
       }
     },
-    width: c => (styles['width'] = `${c}px`),
-    height: c => (styles['height'] = `${c}px`),
+    weight: () => tags.push('strong'),
+    style: () => tags.push('em'),
+    scale: c => tags.push(c), // todo: complete this
+    family: () => tags.push('code'),
     // @ts-ignore
     link: c => tags.push(['a', utils.parseLink(c)]),
-    // @ts-ignore
   };
 };
 const whiteListedAttributes = {
@@ -94,7 +94,9 @@ const translateAttributesToHtmlAndCss = xml =>
             } catch {
               if (!whiteListedAttributes[key])
                 throw new Error(
-                  `Exception in the interpreter: translator[${key}] is not defined`,
+                  `Exception in the interpreter: translator[${key}] is not defined
+                  value: ${value}
+                  `,
                 );
             }
           });
@@ -116,4 +118,4 @@ const translateAttributesToHtmlAndCss = xml =>
       styles: Object.keys(lineStyles).length ? lineStyles : undefined,
     };
   });
-export { translateAttributesToHtmlAndCss };
+export { translateAttributesToHtmlAndCss, preferences as cssPreferences };

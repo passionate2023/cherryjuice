@@ -5,9 +5,10 @@ import { insertOtherTables } from './steps/insert-other-tables';
 import { parseXml } from './helpers';
 import { compose } from 'ramda';
 import { fixCharacters } from './steps/fix-characters';
-import { escapeHtml } from './helpers/escape-html';
 
-const tap = label => val => (console.log(label, val), val);
+const tap = label => val => (
+  console.log(label, JSON.stringify(val, null, 4)), val
+);
 const stringifierPipe = compose(
   fixCharacters.replaceTabCharacter,
   fixCharacters.replaceSpaceCharacter,
@@ -15,9 +16,9 @@ const stringifierPipe = compose(
 );
 const processingPipe = otherTables =>
   compose(
-    tap('two'),
     translateAttributesToHtmlAndCss,
     groupNodesByLine,
+    tap('inside-the-pipe'),
     flattenIntoLines,
     insertOtherTables(otherTables),
     fixCharacters.restoreOrphanWhiteSpace,
@@ -32,7 +33,7 @@ const parseRichText = async ({
     ({ node: { rich_text } }) => rich_text,
   );
   const res = processingPipe(otherTables)(richText);
-  return stringify ? stringifierPipe(res) : res
+  return stringify ? stringifierPipe(res) : res;
 };
 
 export { parseRichText, processingPipe };

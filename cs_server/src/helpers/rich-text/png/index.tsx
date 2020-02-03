@@ -16,13 +16,14 @@ type Props = {
   };
 };
 
-const Png = ({ styles }: Props) => {
-  return `<div style="${stringifyStyles(styles,'margin')} }">
-      <img src=""
+const Png = ({ styles, other_attributes: { offset } }: Props) => {
+  return `<img src=""
         alt=""
-        style=" width:${styles.width}; height:${styles.height} ;"
-      />
-    </div>`;
+        style=" width:${styles.width}; height:${
+    styles.height
+  } ;${stringifyStyles(styles, 'margin')} }"
+        data-offset="${offset}"
+      />`;
 };
 
 export { Png };
