@@ -9,11 +9,11 @@ import { fixCharacters } from './steps/fix-characters';
 const tap = label => val => (
   console.log(label, JSON.stringify(val, null, 4)), val
 );
-const stringifierPipe = compose(
-  fixCharacters.replaceTabCharacter,
-  fixCharacters.replaceSpaceCharacter,
-  JSON.stringify,
-);
+// const stringifierPipe = compose(
+//   fixCharacters.replaceTabCharacter,
+//   fixCharacters.replaceSpaceCharacter,
+//   JSON.stringify,
+// );
 const processingPipe = otherTables =>
   compose(
     translateAttributesToHtmlAndCss,
@@ -23,7 +23,7 @@ const processingPipe = otherTables =>
     insertOtherTables(otherTables),
     fixCharacters.restoreOrphanWhiteSpace,
   );
-const parseRichText = async ({
+const ctbToAbstractHtml = async ({
   nodeTableXml,
   otherTables = {},
   stringify = true,
@@ -32,8 +32,9 @@ const parseRichText = async ({
   let richText = await parseXml({ xml: nodeTableXml }).then(
     ({ node: { rich_text } }) => rich_text,
   );
-  const res = processingPipe(otherTables)(richText);
-  return stringify ? stringifierPipe(res) : res;
+  // const res = processingPipe(otherTables)(richText);
+  // return stringify ? stringifierPipe(res) : res;
+  return processingPipe(otherTables)(richText);
 };
 
-export { parseRichText, processingPipe };
+export { ctbToAbstractHtml, processingPipe };

@@ -33,7 +33,7 @@ const ct_node_meta = `
 `;
 const ct_node_content = `
   type Ct_node_content {
-    rich_txt: String
+    ${'' /*rich_txt: String*/}
     png_thumbnail_base64(offset: Int!): String
     png_full_base64(offset: Int!): String
      node_id: Int

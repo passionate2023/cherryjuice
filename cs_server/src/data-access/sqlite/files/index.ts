@@ -2,15 +2,13 @@ import * as path from 'path';
 import * as fs from 'fs';
 import slugify from 'slugify';
 import * as crypto from 'crypto';
-import { TCt_node, TFile } from '../types/types';
-import * as sqlite from 'sqlite';
-import { ctbQuery, rootNode } from './ctb-content';
+import { Ct_File } from '../../types/generated';
 
 const scanFolder: ({
   folders,
 }: {
   folders: string[];
-}) => Map<number, TFile> = ({ folders }) => {
+}) => Map<number, Ct_File> = ({ folders }) => {
   const res = [];
 
   const resolve = folderPath => {
@@ -44,33 +42,10 @@ const scanFolder: ({
   };
 
   folders.forEach(resolve);
-  const files: Map<number, TFile> = new Map(
+  const files: Map<number, Ct_File> = new Map(
     res.sort().map(node => [node.id, node]),
   );
   return files;
 };
 
-const getNodes = async ({ filePath, node_id }: {filePath: string, node_id: number}) => {
-  console.log({filePath, node_id});
-  const db = await sqlite.open(filePath);
-
-  const data: TCt_node[] = await db
-    .all(ctbQuery.node_meta({ node_id }))
-    .then(data =>
-      data.map(node => ({
-        ...node,
-        child_nodes: [],
-        // has_txt: node.txt.length > rootNode.txt.length,
-        // todo: find a way to check wether a node is mpty without quering its text
-        is_empty: false,
-      })),
-    );
-  if (!node_id) {
-    rootNode.child_nodes = [];
-    data.push(rootNode);
-  }
-
-  return data;
-};
-
-export { scanFolder, getNodes };
+export {scanFolder}

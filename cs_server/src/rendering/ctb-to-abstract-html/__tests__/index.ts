@@ -1,8 +1,8 @@
-import { parseRichText } from '../pipe';
+import { ctbToAbstractHtml } from '../index';
 import { renderingIssues } from './__data__';
 
 const renderingTestTemplate = async ({ txt, otherTables }) => {
-  const res = await parseRichText({
+  const res = await ctbToAbstractHtml({
     nodeTableXml: txt,
     otherTables,
     stringify: true,

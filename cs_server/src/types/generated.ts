@@ -23,7 +23,7 @@ export type Ct_File = {
 
 export type Ct_Node_Content = {
   __typename?: 'Ct_node_content';
-  rich_txt?: Maybe<Scalars['String']>;
+  html?: Maybe<Scalars['String']>;
   png_thumbnail_base64?: Maybe<Scalars['String']>;
   png_full_base64?: Maybe<Scalars['String']>;
 };

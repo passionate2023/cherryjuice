@@ -1,9 +1,9 @@
-import { RichText } from '../index';
-import { parseRichText } from '../../ctb-interpreter/pipe';
-import { renderingIssues } from '../../ctb-interpreter/__tests__/__data__';
+import { AbstractHtmlToHtml } from '../index';
+import {ctbToAbstractHtml} from '../../ctb-to-abstract-html';
+import { renderingIssues } from '../../ctb-to-abstract-html/__tests__/__data__';
 const renderingTestTemplate = async ({ txt, otherTables }) => {
-  const res = RichText({
-    richText: await parseRichText({
+  const res = AbstractHtmlToHtml({
+    richText: await ctbToAbstractHtml({
       nodeTableXml: txt,
       otherTables,
       stringify: false,

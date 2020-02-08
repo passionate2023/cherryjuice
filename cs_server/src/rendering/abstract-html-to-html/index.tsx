@@ -2,9 +2,9 @@ import { Png } from './png';
 import { Code } from './code';
 import { Table } from './table';
 import { Element, stringifyStyles } from './element';
-import { escapeHtml } from '../ctb-interpreter/helpers/escape-html';
+import { escapeHtml } from '../ctb-to-abstract-html/helpers/escape-html';
 
-const RichText = ({ richText }) => {
+const AbstractHtmlToHtml = ({ richText }) => {
   let res: string = '<article></article>';
   try {
     res = `<article>${richText
@@ -67,4 +67,4 @@ const RichText = ({ richText }) => {
   return res;
 };
 
-export { RichText };
+export { AbstractHtmlToHtml };
