@@ -2,7 +2,6 @@ import * as React from 'react';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Tree } from './tree';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
-import { RichText } from './rich-text';
 import { useQuery } from '@apollo/react-hooks';
 import { QUERY_CT_NODE_META } from '::graphql/queries';
 import { Ct_Node_Meta } from '::types/generated';
@@ -10,7 +9,7 @@ import { Fragment, Ref, useMemo } from 'react';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { appActions } from '::app/reducer';
-import { RichTextSsHtml } from '::app/document/rich-text-sshtml';
+import { RichText } from '::app/document/rich-text';
 
 type Props = {
   showTree: boolean;
@@ -19,7 +18,6 @@ type Props = {
   onResize: () => void;
   recentNodes: any;
   selectedNode: any;
-  serverSideHtml: boolean;
   selectedFile: string;
 };
 
@@ -30,8 +28,7 @@ const Document: React.FC<Props> = ({
   onResize,
   selectedNode,
   recentNodes,
-  selectedFile,
-  serverSideHtml
+  selectedFile
 }) => {
   const history = useHistory();
   const match = useRouteMatch();
@@ -81,11 +78,7 @@ const Document: React.FC<Props> = ({
             exact
             path={`/:file_id/node-:node_id/`}
             render={props => {
-              return serverSideHtml ? (
-                <ErrorBoundary>
-                  <RichTextSsHtml {...props} file_id={file_id} />
-                </ErrorBoundary>
-              ) : (
+              return (
                 <ErrorBoundary>
                   <RichText {...props} file_id={file_id} />
                 </ErrorBoundary>

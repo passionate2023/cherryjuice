@@ -1,5 +1,4 @@
 import { getSelectedNodeFromRoute } from '::helpers/misc';
-import { act } from 'react-dom/test-utils';
 
 const selectedNode = getSelectedNodeFromRoute({ pathname: location.pathname });
 const recentNodes = JSON.parse(localStorage.getItem('recentNodes'));
@@ -19,7 +18,6 @@ const initialState = {
   showFileSelect:
     !Boolean(localStorage.getItem('selectedFile')) && location.pathname === '/',
   recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}
-  serverSideHtml: true
 };
 export type TState = typeof initialState;
 const actions = {
@@ -28,7 +26,6 @@ const actions = {
   RESIZE_TREE: 'resize-tree',
   SELECT_NODE: 'select-node',
   SELECT_FILE: 'select-file',
-  TOGGLE_SERVER_SIDE_HTML: 'ssr'
 };
 
 const reducer = (state: TState, action) => {
@@ -69,8 +66,7 @@ const reducer = (state: TState, action) => {
         showTree: true,
         selectedNode: { id: -1, name: '' }
       };
-    case actions.TOGGLE_SERVER_SIDE_HTML:
-      return { ...state, serverSideHtml: !state.serverSideHtml };
+
     default:
       throw new Error('action not supported');
   }

@@ -52,7 +52,6 @@ const App: React.FC<Props> = () => {
       <ToolBar
         dispatch={dispatch}
         onResize={onResize}
-        serverSideHtml={state.serverSideHtml}
       />
 
       {!state.selectedFile && history.location.pathname === '/' ? (
@@ -68,7 +67,6 @@ const App: React.FC<Props> = () => {
               showTree={state.showTree}
               selectedNode={state.selectedNode}
               recentNodes={state.recentNodes}
-              serverSideHtml={state.serverSideHtml}
               selectedFile={state.selectedFile}
             />
           )}

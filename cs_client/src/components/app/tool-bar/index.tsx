@@ -8,7 +8,7 @@ import { faFolder, faServer } from '@fortawesome/free-solid-svg-icons';
 type Props = {
   dispatch: (action: { type: string; value?: any }) => void;
   onResize: () => void;
-  serverSideHtml: boolean;
+  // serverSideHtml: boolean;
 };
 
 const ToolbarButton: React.FC<{ onClick: any; enabled?: boolean }> = ({
@@ -26,7 +26,7 @@ const ToolbarButton: React.FC<{ onClick: any; enabled?: boolean }> = ({
   </div>
 );
 
-const ToolBar: React.FC<Props> = ({ dispatch, onResize, serverSideHtml }) => {
+const ToolBar: React.FC<Props> = ({ dispatch, onResize  }) => {
   return (
     <div className={toolbarMod.toolBar}>
       <ToolbarButton
@@ -53,14 +53,14 @@ const ToolBar: React.FC<Props> = ({ dispatch, onResize, serverSideHtml }) => {
       >
         <FontAwesomeIcon icon={faFolder} color={'grey'} />
       </ToolbarButton>
-      <ToolbarButton
-        onClick={() => {
-          dispatch({ type: appActions.TOGGLE_SERVER_SIDE_HTML });
-        }}
-        enabled={serverSideHtml}
-      >
-        <FontAwesomeIcon icon={faServer} color={'grey'} />
-      </ToolbarButton>
+      {/*<ToolbarButton*/}
+      {/*  onClick={() => {*/}
+      {/*    dispatch({ type: appActions.TOGGLE_SERVER_SIDE_HTML });*/}
+      {/*  }}*/}
+      {/*  enabled={serverSideHtml}*/}
+      {/*>*/}
+      {/*  <FontAwesomeIcon icon={faServer} color={'grey'} />*/}
+      {/*</ToolbarButton>*/}
     </div>
   );
 };
