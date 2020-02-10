@@ -1,4 +1,4 @@
-import { rootNode } from '../../../../rendering/ctb-to-abstract-html/helpers';
+import { rootNode } from '../../../../helpers/ctb';
 import { db } from '../index';
 import { Ct_Node_Meta } from '../../../../types/generated';
 

@@ -1,4 +1,4 @@
-import { abstractHtmlToCtb } from '../../rendering/abstract-html-to-ctb';
+import { aHtmlToCtb } from '../../rendering/mutate/ahtml-to-ctb';
 import { ctb } from '../../data-access/sqlite/db/ctb';
 
 const setNodeContent = async (
@@ -6,7 +6,7 @@ const setNodeContent = async (
   { file_id, node_id, abstract_html },
   { files },
 ) => {
-  const { xmlString, otherTables } = abstractHtmlToCtb(
+  const { xmlString, otherTables } = aHtmlToCtb(
     JSON.parse(abstract_html),
   );
   await ctb.write({

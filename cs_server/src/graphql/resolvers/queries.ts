@@ -1,13 +1,9 @@
 import imageThumbnail from 'image-thumbnail';
-import { ctbToAbstractHtml } from '../../rendering/ctb-to-abstract-html';
-import { abstractHtmlToHtml } from '../../rendering/abstract-html-to-html';
-import {
-  bufferToPng,
-  getPNGSize,
-  organizeData,
-} from '../../rendering/ctb-to-abstract-html/helpers';
+import { ctbToAHtml } from '../../rendering/query/ctb-to-ahtml';
+import { aHtmlToHtml } from '../../rendering/query/ahtml-to-html';
+import { bufferToPng, getPNGSize, organizeData } from '../../helpers/ctb';
 import { Ct_Node_Meta, Ct_File } from '../../types/generated';
-import { parseXml } from '../../rendering/ctb-to-abstract-html/helpers';
+import { parseXml } from '../../helpers/xml';
 import { ctb } from '../../data-access/sqlite/db/ctb';
 
 const getFiles = (_, { file_id }, { files }) => {
@@ -63,8 +59,8 @@ const getHtml = async ({ file_id, node_id, name, txt }, _, { files }) => {
       })),
     ),
   };
-  return abstractHtmlToHtml({
-    richText: await ctbToAbstractHtml({
+  return aHtmlToHtml({
+    richText: await ctbToAHtml({
       nodeTableXml: txt,
       otherTables,
       stringify: false,
