@@ -3,7 +3,8 @@ import cherries from '::assets/icons/cherries.svg';
 import * as React from 'react';
 import { appActions, TState } from '../reducer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faServer } from '@fortawesome/free-solid-svg-icons';
+import { faFolder, faSave } from '@fortawesome/free-solid-svg-icons';
+import { getPseudoHtml } from '::helpers/html-to-ctb';
 
 type Props = {
   dispatch: (action: { type: string; value?: any }) => void;
@@ -26,7 +27,7 @@ const ToolbarButton: React.FC<{ onClick: any; enabled?: boolean }> = ({
   </div>
 );
 
-const ToolBar: React.FC<Props> = ({ dispatch, onResize  }) => {
+const ToolBar: React.FC<Props> = ({ dispatch, onResize }) => {
   return (
     <div className={toolbarMod.toolBar}>
       <ToolbarButton
@@ -37,15 +38,7 @@ const ToolBar: React.FC<Props> = ({ dispatch, onResize  }) => {
       >
         <img src={cherries} alt="" style={{ width: 22 }} />
       </ToolbarButton>
-      {/*<div*/}
-      {/*  className={toolbarMod.toolBar__icon}*/}
-      {/*  onClick={() => {*/}
-      {/*    dispatch({ type: appActions.TOGGLE_TREE });*/}
-      {/*    setTimeout(onResize, 1000);*/}
-      {/*  }}*/}
-      {/*>*/}
-      {/*  <img src={cherries} alt="" style={{ width: 22 }} />*/}
-      {/*</div>*/}
+
       <ToolbarButton
         onClick={() => {
           dispatch({ type: appActions.TOGGLE_FILE_SELECT });
@@ -53,14 +46,16 @@ const ToolBar: React.FC<Props> = ({ dispatch, onResize  }) => {
       >
         <FontAwesomeIcon icon={faFolder} color={'grey'} />
       </ToolbarButton>
-      {/*<ToolbarButton*/}
-      {/*  onClick={() => {*/}
-      {/*    dispatch({ type: appActions.TOGGLE_SERVER_SIDE_HTML });*/}
-      {/*  }}*/}
-      {/*  enabled={serverSideHtml}*/}
-      {/*>*/}
-      {/*  <FontAwesomeIcon icon={faServer} color={'grey'} />*/}
-      {/*</ToolbarButton>*/}
+      <ToolbarButton
+        onClick={() => {
+          dispatch({
+            type: appActions.SAVE_DOCUMENT,
+            value: new Date().getTime()
+          });
+        }}
+      >
+        <FontAwesomeIcon icon={faSave} color={'grey'} />
+      </ToolbarButton>
     </div>
   );
 };

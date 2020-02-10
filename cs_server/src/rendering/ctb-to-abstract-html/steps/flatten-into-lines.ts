@@ -2,7 +2,6 @@ import { getLastArrElm, newLineCharacter } from '../helpers';
 
 const flattenIntoLines = xml => {
   // const logs = [];
-  console.log({ xml });
   const res = xml.reduce((acc, val, i) => {
     const text = typeof val === 'string' ? val : val._;
     // let log = { text, parts: undefined, pushed: undefined };

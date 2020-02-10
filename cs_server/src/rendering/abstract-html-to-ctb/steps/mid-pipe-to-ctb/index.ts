@@ -1,4 +1,4 @@
-import { newLineCharacter } from '../../../ctb-interpreter/helpers';
+import { newLineCharacter } from '../../../ctb-to-abstract-html/helpers';
 import { extractOtherTables } from './tables';
 import { objToXml } from '../../helpers';
 

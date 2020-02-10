@@ -1,6 +1,9 @@
 import { compose } from 'ramda';
-import { pseudoHtmlToMidPipe } from './steps/pseudo-html-to-mid-pipe';
+import { abstractHtmlToMidPipe } from './steps/abstract-html-to-mid-pipe';
 import { midPipeToCtb } from './steps/mid-pipe-to-ctb';
-const abstractHtmlToCtb = compose(midPipeToCtb, pseudoHtmlToMidPipe);
+const abstractHtmlToCtb = compose(
+  midPipeToCtb,
+  abstractHtmlToMidPipe,
+);
 
 export { abstractHtmlToCtb };

@@ -1,17 +1,22 @@
 import rtModule from '::sass-modules/rich-text.scss';
 import * as React from 'react';
 import { useRouteMatch } from 'react-router';
-import { useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { QUERY_CT_NODE_CONTENT } from '::graphql/queries';
 import { useRef } from 'react';
 import { usePng } from '::hooks/use-png';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
+import { MUTATE_CT_NODE_CONTENT } from '::graphql/mutations';
+import { getPseudoHtml } from '::helpers/html-to-ctb';
+import { appActions } from '::app/reducer';
 
 type Props = {
   file_id: string;
+  saveDocument: number;
+  dispatch: (action: { type: string; value?: any }) => void;
 };
 
-const RichText: React.FC<Props> = ({ file_id }) => {
+const RichText: React.FC<Props> = ({ file_id, saveDocument, dispatch }) => {
   const richTextRef = useRef<HTMLDivElement>();
   const match = useRouteMatch();
   // @ts-ignore
@@ -38,6 +43,22 @@ const RichText: React.FC<Props> = ({ file_id }) => {
       );
     }
   }
+
+  const [mutate] = useMutation(MUTATE_CT_NODE_CONTENT.html);
+  const saveQueuesRef = useRef({});
+  if (saveDocument && !saveQueuesRef.current[saveDocument]) {
+    saveQueuesRef.current[saveDocument] = true;
+    mutate({
+      variables: {
+        file_id: file_id || '',
+        node_id,
+        abstract_html: getPseudoHtml().abstractHtml
+      }
+    }).then(() => {
+      dispatch({ type: appActions.SAVE_DOCUMENT, value: false });
+    });
+  }
+
   return html ? (
     <div
       id={'rich-text'}

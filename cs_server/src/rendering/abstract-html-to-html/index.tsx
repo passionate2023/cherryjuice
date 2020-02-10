@@ -4,7 +4,7 @@ import { Table } from './table';
 import { Element, stringifyStyles } from './element';
 import { escapeHtml } from '../ctb-to-abstract-html/helpers/escape-html';
 
-const AbstractHtmlToHtml = ({ richText }) => {
+const abstractHtmlToHtml = ({ richText }) => {
   let res: string = '<article></article>';
   try {
     res = `<article>${richText
@@ -35,11 +35,10 @@ const AbstractHtmlToHtml = ({ richText }) => {
                         alt="icon"
                       />`
                     : node.type === 'png'
-                    ? (console.log('png', JSON.stringify(node)),
-                      Png({
+                    ? Png({
                         styles: node.$,
                         other_attributes: node.other_attributes,
-                      }))
+                      })
                     : node.type === 'code'
                     ? Code({
                         styles: node.$,
@@ -63,8 +62,7 @@ const AbstractHtmlToHtml = ({ richText }) => {
   } catch (e) {
     console.error(e);
   }
-  console.log({ res });
   return res;
 };
 
-export { AbstractHtmlToHtml };
+export { abstractHtmlToHtml };

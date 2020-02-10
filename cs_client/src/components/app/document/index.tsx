@@ -2,14 +2,15 @@ import * as React from 'react';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Tree } from './tree';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
 import { QUERY_CT_NODE_META } from '::graphql/queries';
 import { Ct_Node_Meta } from '::types/generated';
-import { Fragment, Ref, useMemo } from 'react';
+import { Fragment, Ref, useMemo, useRef } from 'react';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { appActions } from '::app/reducer';
 import { RichText } from '::app/document/rich-text';
+import { MUTATE_CT_NODE_CONTENT } from '::graphql/mutations';
 
 type Props = {
   showTree: boolean;
@@ -19,6 +20,7 @@ type Props = {
   recentNodes: any;
   selectedNode: any;
   selectedFile: string;
+  saveDocument: number;
 };
 
 const Document: React.FC<Props> = ({
@@ -28,7 +30,8 @@ const Document: React.FC<Props> = ({
   onResize,
   selectedNode,
   recentNodes,
-  selectedFile
+  selectedFile,
+  saveDocument
 }) => {
   const history = useHistory();
   const match = useRouteMatch();
@@ -37,6 +40,7 @@ const Document: React.FC<Props> = ({
   const { loading, error, data } = useQuery(QUERY_CT_NODE_META, {
     variables: { file_id: file_id || '' }
   });
+
   const nodes: Map<number, Ct_Node_Meta> = useMemo(() => {
     if (data && data.ct_node_meta) {
       return new Map(data.ct_node_meta.map(node => [node.node_id, node]));
@@ -80,7 +84,12 @@ const Document: React.FC<Props> = ({
             render={props => {
               return (
                 <ErrorBoundary>
-                  <RichText {...props} file_id={file_id} />
+                  <RichText
+                    {...props}
+                    file_id={file_id}
+                    saveDocument={saveDocument}
+                    dispatch={dispatch}
+                  />
                 </ErrorBoundary>
               );
             }}

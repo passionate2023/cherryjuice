@@ -95,5 +95,7 @@ export {
   organizeData,
   getPNGSize,
 };
-
-export { newLineCharacter, getLastArrElm, parseXml };
+const tap = label => val => (
+  console.log(label, JSON.stringify(val, null, 4)), val
+);
+export { newLineCharacter, getLastArrElm, parseXml, tap };

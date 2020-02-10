@@ -1,4 +1,4 @@
-import { ApolloServer, gql } from 'apollo-server-express';
+import { ApolloServer } from 'apollo-server-express';
 import {
   getNodeMeta,
   getPNGFullBase64,
@@ -6,7 +6,8 @@ import {
   getFiles,
   getNodeContent,
   getHtml,
-} from './resolvers';
+} from './resolvers/queries';
+import { setNodeContent } from './resolvers/mutations';
 import { typeDefs } from './types';
 import { scanFolder } from '../data-access/sqlite/files';
 
@@ -15,6 +16,9 @@ const resolvers = {
     ct_files: getFiles,
     ct_node_meta: getNodeMeta,
     ct_node_content: getNodeContent,
+  },
+  Mutation: {
+    ct_node_content: setNodeContent,
   },
   Ct_node_content: {
     html: getHtml,

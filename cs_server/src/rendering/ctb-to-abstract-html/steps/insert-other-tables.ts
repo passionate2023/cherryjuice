@@ -11,7 +11,7 @@ const adjustNode = ({ node, type }) => {
         $: {
           justification: node.justification,
           width: node.width,
-          height: node.height
+          height: node.height,
         },
         other_attributes: {
           width_raw: node.width,
@@ -19,8 +19,8 @@ const adjustNode = ({ node, type }) => {
           syntax: node.syntax,
           is_width_pix: node.is_width_pix,
           do_highl_bra: node.do_highl_bra,
-          o_show_linenum: node.o_show_linenum
-        }
+          o_show_linenum: node.o_show_linenum,
+        },
       };
     case 'image':
       // if (node.anchor) console.log('anchor!', node);
@@ -28,37 +28,37 @@ const adjustNode = ({ node, type }) => {
         ? {
             type: 'anchor',
             $: {
-              justification: node.justification
+              justification: node.justification,
             },
             other_attributes: {
               id: `#${node.anchor}`,
-              offset: node.offset
-            }
+              offset: node.offset,
+            },
           }
         : {
             type: 'png',
             $: {
               justification: node.justification,
               height: node.height,
-              width: node.width
+              width: node.width,
             },
             other_attributes: {
-              offset: node.offset
-            }
+              offset: node.offset,
+            },
           };
     case 'table':
       return {
         type: 'table',
         table: parseTable({ xmlTable: node.txt }),
         $: {
-          justification: node.justification
+          justification: node.justification,
         },
 
         other_attributes: {
           offset: node.offset,
           col_min_width: node.col_min,
-          col_max_width: node.col_max
-        }
+          col_max_width: node.col_max,
+        },
       };
   }
 };
@@ -92,20 +92,20 @@ const insertNode = ({
   nodeIndex,
   accumulatedLength,
   xml,
-  miscNode
+  miscNode,
 }) => {
   if (!nodeString) {
     xml.push(
       adjustNode({
         node: miscNode,
-        type: miscNode.tableName
-      })
+        type: miscNode.tableName,
+      }),
     );
   } else {
     const localOffset = miscNode.offset - accumulatedLength;
     const [firstHalf, secondHalf] = [
       nodeString.substring(0, localOffset),
-      nodeString.substring(localOffset)
+      nodeString.substring(localOffset),
     ];
 
     const toBeInserted = [];
@@ -113,8 +113,8 @@ const insertNode = ({
     toBeInserted.push(
       adjustNode({
         node: miscNode,
-        type: miscNode.tableName
-      })
+        type: miscNode.tableName,
+      }),
     );
     if (secondHalf) toBeInserted.push(secondHalf);
     xml.splice(nodeIndex, 1, ...toBeInserted);
@@ -124,21 +124,20 @@ const insertNode = ({
 const insertOtherTables = curry((otherTables, oldXml) => {
   // remove any empty nodes that ct uses for images/anchors/code...
   const xml = oldXml.filter(
-    node => node && (typeof node === 'string' || node._)
+    node => node && (typeof node === 'string' || node._),
   );
   let log = [];
-  console.log({ xml });
   Object.entries(otherTables)
-    // @ts-ignore
     .flatMap(([tableName, elements]) =>
-      elements.map(element => ({ ...element, tableName }))
+      // @ts-ignore
+      elements.map(element => ({ ...element, tableName })),
     )
     .sort((a, b) => a.offset - b.offset)
     .forEach(miscNode => {
       const {
         nodeString,
         nodeIndex,
-        accumulatedLength
+        accumulatedLength,
       } = getInsertionPosition({ xml, miscNodeOffset: miscNode.offset });
       insertNode({ miscNode, xml, nodeIndex, nodeString, accumulatedLength });
       // log.push([

@@ -1,8 +1,8 @@
-import { AbstractHtmlToHtml } from '../index';
+import { abstractHtmlToHtml } from '../index';
 import {ctbToAbstractHtml} from '../../ctb-to-abstract-html';
 import { renderingIssues } from '../../ctb-to-abstract-html/__tests__/__data__';
 const renderingTestTemplate = async ({ txt, otherTables }) => {
-  const res = AbstractHtmlToHtml({
+  const res = abstractHtmlToHtml({
     richText: await ctbToAbstractHtml({
       nodeTableXml: txt,
       otherTables,

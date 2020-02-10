@@ -4,8 +4,7 @@ const selectedNode = getSelectedNodeFromRoute({ pathname: location.pathname });
 const recentNodes = JSON.parse(localStorage.getItem('recentNodes'));
 console.log({ recentNodes });
 const initialState = {
-  showTree:
-    JSON.parse(localStorage.getItem('showTree')) !== false,
+  showTree: JSON.parse(localStorage.getItem('showTree')) !== false,
   treeSize: JSON.parse(localStorage.getItem('treeSize')) || 250,
   selectedNode: {
     id: 0,
@@ -18,6 +17,7 @@ const initialState = {
   showFileSelect:
     !Boolean(localStorage.getItem('selectedFile')) && location.pathname === '/',
   recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}
+  saveDocument: false
 };
 export type TState = typeof initialState;
 const actions = {
@@ -26,6 +26,7 @@ const actions = {
   RESIZE_TREE: 'resize-tree',
   SELECT_NODE: 'select-node',
   SELECT_FILE: 'select-file',
+  SAVE_DOCUMENT: 'save-document'
 };
 
 const reducer = (state: TState, action) => {
@@ -66,7 +67,11 @@ const reducer = (state: TState, action) => {
         showTree: true,
         selectedNode: { id: -1, name: '' }
       };
-
+    case actions.SAVE_DOCUMENT:
+      return {
+        ...state,
+        saveDocument: action.value
+      };
     default:
       throw new Error('action not supported');
   }
