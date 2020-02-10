@@ -3,8 +3,8 @@ import cherries from '::assets/icons/cherries.svg';
 import * as React from 'react';
 import { appActions, TState } from '../reducer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faSave } from '@fortawesome/free-solid-svg-icons';
-import { getPseudoHtml } from '::helpers/html-to-ctb';
+import { faFolder, faSave,  faRedo   } from '@fortawesome/free-solid-svg-icons';
+import { getAHtml } from '::helpers/html-to-ctb';
 
 type Props = {
   dispatch: (action: { type: string; value?: any }) => void;
@@ -55,6 +55,16 @@ const ToolBar: React.FC<Props> = ({ dispatch, onResize }) => {
         }}
       >
         <FontAwesomeIcon icon={faSave} color={'grey'} />
+      </ToolbarButton>
+      <ToolbarButton
+        onClick={() => {
+          dispatch({
+            type: appActions.RELOAD_DOCUMENT,
+            value: new Date().getTime()
+          });
+        }}
+      >
+        <FontAwesomeIcon icon={faRedo} color={'grey'} />
       </ToolbarButton>
     </div>
   );

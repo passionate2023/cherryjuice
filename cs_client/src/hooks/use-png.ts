@@ -18,6 +18,7 @@ const usePng = ({ node_id, offset, file_id }) => {
     {
       variables: { node_id, offset, file_id }
     }
+
   );
   // apollo caches previous fetch from unmounted instances of the component
   if (data_full?.ct_node_content[0]?.node_id === node_id) {

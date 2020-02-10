@@ -17,7 +17,8 @@ const initialState = {
   showFileSelect:
     !Boolean(localStorage.getItem('selectedFile')) && location.pathname === '/',
   recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}
-  saveDocument: false
+  saveDocument: 0,
+  reloadDocument: 0,
 };
 export type TState = typeof initialState;
 const actions = {
@@ -26,7 +27,8 @@ const actions = {
   RESIZE_TREE: 'resize-tree',
   SELECT_NODE: 'select-node',
   SELECT_FILE: 'select-file',
-  SAVE_DOCUMENT: 'save-document'
+  SAVE_DOCUMENT: 'save-document',
+  RELOAD_DOCUMENT: 'reload-document',
 };
 
 const reducer = (state: TState, action) => {
@@ -71,6 +73,11 @@ const reducer = (state: TState, action) => {
       return {
         ...state,
         saveDocument: action.value
+      };
+    case actions.RELOAD_DOCUMENT:
+      return {
+        ...state,
+        reloadDocument: action.value
       };
     default:
       throw new Error('action not supported');

@@ -4,7 +4,7 @@ const getStyles = el =>
     {}
   );
 
-const getPseudoHtml = () => {
+const getAHtml = () => {
   const state = { offset: 0 };
   const doc = Array.from(
     document.querySelector('#rich-text').childNodes
@@ -97,8 +97,8 @@ const getPseudoHtml = () => {
 };
 // clear();
 // console.time('extracting');
-// const { doc, res } = getPseudoHtml();
+// const { doc, res } = getAHtml();
 // console.timeEnd('extracting');
 // console.log(doc);
 // console.log(JSON.stringify(res, null, 4));
-export { getPseudoHtml };
+export { getAHtml };

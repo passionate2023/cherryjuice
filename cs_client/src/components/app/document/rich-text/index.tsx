@@ -1,29 +1,43 @@
 import rtModule from '::sass-modules/rich-text.scss';
 import * as React from 'react';
 import { useRouteMatch } from 'react-router';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/react-hooks';
 import { QUERY_CT_NODE_CONTENT } from '::graphql/queries';
 import { useRef } from 'react';
 import { usePng } from '::hooks/use-png';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
 import { MUTATE_CT_NODE_CONTENT } from '::graphql/mutations';
-import { getPseudoHtml } from '::helpers/html-to-ctb';
-import { appActions } from '::app/reducer';
+import { getAHtml } from '::helpers/html-to-ctb';
 
 type Props = {
   file_id: string;
   saveDocument: number;
+  reloadDocument: number;
   dispatch: (action: { type: string; value?: any }) => void;
 };
 
-const RichText: React.FC<Props> = ({ file_id, saveDocument, dispatch }) => {
+const RichText: React.FC<Props> = ({
+  file_id,
+  saveDocument,
+  dispatch,
+  reloadDocument
+}) => {
   const richTextRef = useRef<HTMLDivElement>();
   const match = useRouteMatch();
   // @ts-ignore
   const node_id = Number(match.params?.node_id);
-  const { loading, error, data } = useQuery(QUERY_CT_NODE_CONTENT.html, {
-    variables: { file_id, node_id: node_id }
-  });
+  const [fetch, { loading, error, data }] = useLazyQuery(
+    QUERY_CT_NODE_CONTENT.html,
+    {
+      variables: { file_id, node_id: node_id },
+      fetchPolicy: 'cache-and-network'
+    }
+  );
+  const firstFetchRef = useRef(true);
+  if (firstFetchRef.current) {
+    firstFetchRef.current = false;
+    fetch();
+  }
   let html;
   if (data && data.ct_node_content[0].node_id === node_id) {
     html = data.ct_node_content[0].html;
@@ -45,18 +59,20 @@ const RichText: React.FC<Props> = ({ file_id, saveDocument, dispatch }) => {
   }
 
   const [mutate] = useMutation(MUTATE_CT_NODE_CONTENT.html);
-  const saveQueuesRef = useRef({});
-  if (saveDocument && !saveQueuesRef.current[saveDocument]) {
-    saveQueuesRef.current[saveDocument] = true;
+  const toolbarQueuesRef = useRef({});
+  if (saveDocument && !toolbarQueuesRef.current[saveDocument]) {
+    toolbarQueuesRef.current[saveDocument] = true;
     mutate({
       variables: {
         file_id: file_id || '',
         node_id,
-        abstract_html: getPseudoHtml().abstractHtml
+        abstract_html: getAHtml().abstractHtml
       }
-    }).then(() => {
-      dispatch({ type: appActions.SAVE_DOCUMENT, value: false });
     });
+  }
+  if (reloadDocument && !toolbarQueuesRef.current[reloadDocument]) {
+    toolbarQueuesRef.current[reloadDocument] = true;
+    fetch();
   }
 
   return html ? (

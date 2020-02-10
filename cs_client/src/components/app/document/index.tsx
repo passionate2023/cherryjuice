@@ -21,6 +21,7 @@ type Props = {
   selectedNode: any;
   selectedFile: string;
   saveDocument: number;
+  reloadDocument: number;
 };
 
 const Document: React.FC<Props> = ({
@@ -31,7 +32,8 @@ const Document: React.FC<Props> = ({
   selectedNode,
   recentNodes,
   selectedFile,
-  saveDocument
+  saveDocument,
+  reloadDocument
 }) => {
   const history = useHistory();
   const match = useRouteMatch();
@@ -88,6 +90,7 @@ const Document: React.FC<Props> = ({
                     {...props}
                     file_id={file_id}
                     saveDocument={saveDocument}
+                    reloadDocument={reloadDocument}
                     dispatch={dispatch}
                   />
                 </ErrorBoundary>

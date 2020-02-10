@@ -69,6 +69,7 @@ const App: React.FC<Props> = () => {
               recentNodes={state.recentNodes}
               selectedFile={state.selectedFile}
               saveDocument={state.saveDocument}
+              reloadDocument={state.reloadDocument}
             />
           )}
         />
