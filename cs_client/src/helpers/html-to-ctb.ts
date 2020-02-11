@@ -7,9 +7,15 @@ const getStyles = el =>
 const getAHtml = () => {
   const state = { offset: 0 };
   const doc = Array.from(
+    document.querySelectorAll('#rich-text > article > div')
+    // @ts-ignore
+  ).flatMap(el => [
+    ...Array.from(el.childNodes),
+    document.createElement('br')
+  ]); /*Array.from(
     document.querySelector('#rich-text').childNodes
     // @ts-ignore
-  ).flatMap(el => [...Array.from(el.childNodes), document.createElement('br')]);
+  ).flatMap(el => [...Array.from(el.childNodes), document.createElement('br')]);*/
   doc.pop();
   const abstractHtml = doc.reduce((acc, el) => {
     if (el.nodeType === 3) {
