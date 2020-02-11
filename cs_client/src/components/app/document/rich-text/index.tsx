@@ -61,15 +61,17 @@ const RichText: React.FC<Props> = ({
   const [mutate] = useMutation(MUTATE_CT_NODE_CONTENT.html);
   const toolbarQueuesRef = useRef({});
   if (saveDocument && !toolbarQueuesRef.current[saveDocument]) {
+    console.log(saveDocument);
     toolbarQueuesRef.current[saveDocument] = true;
     const { abstractHtml, doc } = getAHtml();
-    mutate({
-      variables: {
-        file_id: file_id || '',
-        node_id,
-        abstract_html:abstractHtml
-      }
-    });
+    if (!(saveDocument + '').endsWith('_'))
+      mutate({
+        variables: {
+          file_id: file_id || '',
+          node_id,
+          abstract_html: abstractHtml
+        }
+      });
     console.log(html);
     console.log(doc);
     console.log(JSON.parse(abstractHtml));

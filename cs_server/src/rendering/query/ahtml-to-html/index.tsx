@@ -9,10 +9,10 @@ const aHtmlToHtml = ({ richText }) => {
   try {
     res = `<article>${richText
       .map(
-        (line) =>
-          `<div ${
-            line.styles ? `style=${stringifyStyles(line.styles)}` : ''
-          }>${line.nodes
+        line =>
+          `<div class="rich-text__line" style="${
+            line.styles ? `${stringifyStyles(line.styles)}` : ''
+          }">${line.nodes
             .map(node =>
               typeof node === 'string'
                 ? escapeHtml(node)

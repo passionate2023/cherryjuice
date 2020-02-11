@@ -3,7 +3,7 @@ import cherries from '::assets/icons/cherries.svg';
 import * as React from 'react';
 import { appActions, TState } from '../reducer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faSave,  faRedo   } from '@fortawesome/free-solid-svg-icons';
+import { faFolder, faSave, faRedo } from '@fortawesome/free-solid-svg-icons';
 import { getAHtml } from '::helpers/html-to-ctb';
 
 type Props = {
@@ -47,10 +47,12 @@ const ToolBar: React.FC<Props> = ({ dispatch, onResize }) => {
         <FontAwesomeIcon icon={faFolder} color={'grey'} />
       </ToolbarButton>
       <ToolbarButton
-        onClick={() => {
+        onClick={e => {
           dispatch({
             type: appActions.SAVE_DOCUMENT,
-            value: new Date().getTime()
+            value: e.shiftKey
+              ? new Date().getTime()
+              : new Date().getTime() + '_' // don't send to the server
           });
         }}
       >
