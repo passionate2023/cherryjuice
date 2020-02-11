@@ -16,9 +16,9 @@ const Table = ({
   other_attributes: { col_min_width, col_max_width },
 }) => {
   return `<table class="rich-text__table" 
-data-col_max_width="${col_max_width}"
-data-col_min_width="${col_min_width}"
-style="${stringifyStyles(styles, 'margin')} }">
+        data-col_max_width="${col_max_width}"
+        data-col_min_width="${col_min_width}"
+        style="${stringifyStyles(styles, 'margin')} }">
       <thead>
         ${th.map(head => `<th >${head}</th>`).join('')}
       </thead>
@@ -32,8 +32,7 @@ style="${stringifyStyles(styles, 'margin')} }">
           )
           .join('')}
       </tbody>
-    </table>
-  `;
+    </table>`;
 };
 
 export { Table };

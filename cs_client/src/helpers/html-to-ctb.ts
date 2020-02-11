@@ -10,6 +10,7 @@ const getAHtml = () => {
     document.querySelector('#rich-text').childNodes
     // @ts-ignore
   ).flatMap(el => [...Array.from(el.childNodes), document.createElement('br')]);
+  doc.pop();
   const abstractHtml = doc.reduce((acc, el) => {
     if (el.nodeType === 3) {
       acc.push(el.wholeText);

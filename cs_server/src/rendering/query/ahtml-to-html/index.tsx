@@ -9,7 +9,7 @@ const aHtmlToHtml = ({ richText }) => {
   try {
     res = `<article>${richText
       .map(
-        line =>
+        (line, i, lines) =>
           `${
             line.styles ? `<div style=${stringifyStyles(line.styles)}>` : ''
           }${line.nodes
@@ -55,10 +55,11 @@ const aHtmlToHtml = ({ richText }) => {
                   : Element({ node })
                 : node,
             )
-            .join('')}${line.styles ? '</div>' : '<br />'}`,
+            .join('')}${
+            line.styles ? '</div>' : i < lines.length - 1 ? '<br />' : ''
+          }`,
       )
-      .join('')}
-    </article>`;
+      .join('')}</article>`;
   } catch (e) {
     console.error(e);
   }

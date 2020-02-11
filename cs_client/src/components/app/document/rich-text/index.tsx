@@ -62,13 +62,17 @@ const RichText: React.FC<Props> = ({
   const toolbarQueuesRef = useRef({});
   if (saveDocument && !toolbarQueuesRef.current[saveDocument]) {
     toolbarQueuesRef.current[saveDocument] = true;
+    const { abstractHtml, doc } = getAHtml();
     mutate({
       variables: {
         file_id: file_id || '',
         node_id,
-        abstract_html: getAHtml().abstractHtml
+        abstract_html:abstractHtml
       }
     });
+    console.log(html);
+    console.log(doc);
+    console.log(JSON.parse(abstractHtml));
   }
   if (reloadDocument && !toolbarQueuesRef.current[reloadDocument]) {
     toolbarQueuesRef.current[reloadDocument] = true;
