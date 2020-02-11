@@ -7,9 +7,10 @@ import { faCheck, faSync } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from 'react-router';
 import { appActions } from '../../reducer';
 import { dateToFormattedString } from '::helpers/time';
-import {  QUERY_CT_FILES} from '::graphql/queries';
+import { QUERY_CT_FILES } from '::graphql/queries';
 import { Ct_File } from '::types/generated';
 import { Overlay } from '::shared-components/overlay';
+
 type Props = { selectedFile: string; dispatch: any };
 
 const SelectFile: React.FC<Props> = ({ selectedFile, dispatch }) => {

@@ -1,7 +1,6 @@
 import appModule from '::sass-modules/app.scss';
 import * as React from 'react';
-import { useEffect, useReducer, useRef } from 'react';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useReducer, useRef } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { ToolBar } from './tool-bar';
 import { SelectFile } from './menus/select-file';

@@ -1,6 +1,6 @@
 import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import { QUERY_CT_NODE_CONTENT } from '::graphql/queries';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 const usePng = ({ node_id, offset, file_id }) => {
   const thumbnail = offset

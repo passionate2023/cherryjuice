@@ -1,6 +1,7 @@
 import * as React from 'react';
 import modLinearProgress from '::sass-modules/linear-progress.scss';
 import { useSpinner } from '::hooks/use-spinner';
+
 type Props = {
   loading: boolean;
 };

@@ -1,16 +1,15 @@
 import * as React from 'react';
+import { Fragment, Ref, useMemo } from 'react';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Tree } from './tree';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
-import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import { QUERY_CT_NODE_META } from '::graphql/queries';
 import { Ct_Node_Meta } from '::types/generated';
-import { Fragment, Ref, useMemo, useRef } from 'react';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { appActions } from '::app/reducer';
 import { RichText } from '::app/document/rich-text';
-import { MUTATE_CT_NODE_CONTENT } from '::graphql/mutations';
 
 type Props = {
   showTree: boolean;
