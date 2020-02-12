@@ -19,7 +19,6 @@ type Props = {
 const RichText: React.FC<Props> = ({
   file_id,
   saveDocument,
-  dispatch,
   reloadDocument
 }) => {
   const richTextRef = useRef<HTMLDivElement>();
@@ -30,7 +29,7 @@ const RichText: React.FC<Props> = ({
     QUERY_CT_NODE_CONTENT.html,
     {
       variables: { file_id, node_id: node_id },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'network-only'
     }
   );
   const firstFetchRef = useRef(true);

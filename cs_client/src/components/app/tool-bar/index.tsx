@@ -1,4 +1,4 @@
-import toolbarMod from '::sass-modules/tool-bar.scss';
+import modToolbar from '::sass-modules/tool-bar.scss';
 import * as React from 'react';
 import { MainButtons } from '::app/tool-bar/groups/main-buttons';
 
@@ -10,7 +10,7 @@ type Props = {
 
 const ToolBar: React.FC<Props> = ({ dispatch, onResize }) => {
   return (
-    <div className={toolbarMod.toolBar}>
+    <div className={modToolbar.toolBar}>
       <MainButtons dispatch={dispatch} onResize={onResize} />
     </div>
   );

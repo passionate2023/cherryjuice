@@ -1,24 +1,49 @@
-import cherries from '::assets/icons/cherries.svg';
+import modToolbar from '::sass-modules/tool-bar.scss';
 import * as React from 'react';
-import { useCallback } from 'react';
-import { faFolder, faRedo, faSave } from '@fortawesome/free-solid-svg-icons';
-import { appActions } from '::app/reducer';
 import { ToolbarButton } from '::app/tool-bar/tool-bar-button';
 
-type Props = {
-  dispatch: (action: { type: string; value?: any }) => void;
-  onResize: () => void;
-};
+type Props = {};
 
+const FormattingButtons: React.FC<Props> = ({}) => {
 
-const FormattingButtons: React.FC<Props> = ({ dispatch  }) => {
+  const buttons = [
+    {
+      label: 'b',
+      execCommandArguments: ['bold'],
+    },
+    { label: 'i', execCommandArguments: ['italic'] },
+    {
+      label: 'a',
+      execCommandArguments: ['underline'],
+      style: { textDecoration: 'underline' }
+    },
+    {
+      label: 'a',
+      execCommandArguments: ['strikeThrough'],
+      style: { textDecoration: 'line-through' }
+    },
+    {
+      label: 'H1',
+      execCommandArguments: ['heading', null, 'h1']
+    },
+    {
+      label: 's',
+      execCommandArguments: ['decreaseFontSize']
+    }
+  ];
 
   return (
     <>
-      <ToolbarButton onClick={()=>undefined}>
-        <span>b</span>
-      </ToolbarButton>
-
+      {buttons.map(({ label, execCommandArguments, style }) => (
+        <ToolbarButton
+          key={label + execCommandArguments.join('')}
+          onClick={() => document.execCommand(...execCommandArguments)}
+        >
+          <span style={style} className={modToolbar.toolBar__letterIcon}>
+            {label}
+          </span>
+        </ToolbarButton>
+      ))}
     </>
   );
 };

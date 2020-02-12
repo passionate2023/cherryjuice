@@ -42,7 +42,8 @@ const createTranslator = (
     foreground: c =>
       (styles['color'] = c.length === 7 ? c : utils.rrrrggggbbbbbToRrggbb(c)),
     background: c =>
-      (styles['background-color'] = utils.rrrrggggbbbbbToRrggbb(c)),
+      (styles['background-color'] =
+        c.length === 7 ? c : utils.rrrrggggbbbbbToRrggbb(c)),
     underline: () => (styles['text-decoration'] = 'underline'),
     strikethrough: () => (styles['text-decoration'] = 'line-through'),
     width: c => (styles['width'] = `${c}px`),

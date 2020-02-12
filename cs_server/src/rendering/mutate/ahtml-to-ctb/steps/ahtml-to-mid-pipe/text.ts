@@ -29,9 +29,13 @@ const createTranslator = (styles: { [key: string]: string | number }) => {
       // br: () => undefined,
       em: () => (styles['style'] = 'italic'),
       code: () => (styles['family'] = 'monospace'),
-      small: () => (styles['scale'] = 'small'),
-      sub: () => (styles['scale'] = 'sub'),
-      sup: () => (styles['scale'] = 'sup'),
+      ...[
+        ...Array.from({ length: 6 }).map((_, i) => `h${i + 1}`),
+        ...['small', 'sub', 'sup'],
+      ].reduce(
+        (acc, tag) => ((acc[tag] = () => (styles['scale'] = tag)), acc),
+        {},
+      ),
     },
     otherTables: {
       img: () => undefined,
