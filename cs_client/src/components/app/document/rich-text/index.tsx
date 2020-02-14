@@ -62,7 +62,10 @@ const RichText: React.FC<Props> = ({
   if (saveDocument && !toolbarQueuesRef.current[saveDocument]) {
     console.log(saveDocument);
     toolbarQueuesRef.current[saveDocument] = true;
-    const { abstractHtml, doc } = getAHtml();
+    const containers = Array.from(
+      document.querySelectorAll('#rich-text > article > div')
+    );
+    const { abstractHtml, flatList } = getAHtml({ containers });
     if (!(saveDocument + '').endsWith('_'))
       mutate({
         variables: {
@@ -72,7 +75,7 @@ const RichText: React.FC<Props> = ({
         }
       });
     console.log(html);
-    console.log(doc);
+    console.log(flatList);
     console.log(JSON.parse(abstractHtml));
   }
   if (reloadDocument && !toolbarQueuesRef.current[reloadDocument]) {

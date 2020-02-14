@@ -1,49 +1,69 @@
 import modToolbar from '::sass-modules/tool-bar.scss';
 import * as React from 'react';
 import { ToolbarButton } from '::app/tool-bar/tool-bar-button';
+import { exekC } from '::helpers/exekC';
 
 type Props = {};
 
 const FormattingButtons: React.FC<Props> = ({}) => {
-
   const buttons = [
     {
-      label: 'b',
-      execCommandArguments: ['bold'],
+      button: {
+        label: 'b',
+        style: undefined
+      },
+      execCommandArguments: { tag: 'strong', style: undefined }
     },
-    { label: 'i', execCommandArguments: ['italic'] },
+    { button: { label: 'i' }, execCommandArguments: { tag: 'em' } },
+    ,
+    // {
+    //   button: {
+    //     label: 'a',
+    //     style: { textDecoration: 'underline' }
+    //   },
+    //   execCommandArguments: { style: 'text-decoration:underline;' }
+    // },
+    // {
+    //   button: {
+    //     label: 'a',
+    //     style: { textDecoration: 'line-through' }
+    //   },
+    //   execCommandArguments: { style: 'text-decoration:line-through;' }
+    // }
     {
-      label: 'a',
-      execCommandArguments: ['underline'],
-      style: { textDecoration: 'underline' }
-    },
-    {
-      label: 'a',
-      execCommandArguments: ['strikeThrough'],
-      style: { textDecoration: 'line-through' }
-    },
-    {
-      label: 'H1',
-      execCommandArguments: ['heading', null, 'h1']
-    },
-    {
-      label: 's',
-      execCommandArguments: ['decreaseFontSize']
+      button: {
+        label: 'h1'
+      },
+      execCommandArguments: { tag: 'h1' }
     }
+    // {
+    //   button: {
+    //     label: 's'
+    //   },
+    //   execCommandArguments: { tag: 'small' }
+    // }
   ];
 
   return (
     <>
-      {buttons.map(({ label, execCommandArguments, style }) => (
-        <ToolbarButton
-          key={label + execCommandArguments.join('')}
-          onClick={() => document.execCommand(...execCommandArguments)}
-        >
-          <span style={style} className={modToolbar.toolBar__letterIcon}>
-            {label}
-          </span>
-        </ToolbarButton>
-      ))}
+      {buttons.map(
+        (
+          {
+            button: { label, style: buttonStyle },
+            execCommandArguments: { tag, style }
+          },
+          i
+        ) => (
+          <ToolbarButton key={i} onClick={() => exekC({ tag })}>
+            <span
+              style={buttonStyle}
+              className={modToolbar.toolBar__letterIcon}
+            >
+              {label}
+            </span>
+          </ToolbarButton>
+        )
+      )}
     </>
   );
 };

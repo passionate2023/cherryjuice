@@ -18,34 +18,46 @@ type TProps = {
   containers: Node[];
   options?: {
     useObjForTextNodes?: boolean;
-    includeDatasetInTextElements?: boolean;
-    includeRefToEl?: boolean;
+    // includeDatasetInTextElements?: boolean;
+    // includeRefToEl?: boolean;
   };
 };
+
+const getAttributes = el =>
+  // @ts-ignore
+  Object.fromEntries(
+    Array.from(el.attributes).map(({ name, value }) => [name, value])
+  );
+
+const getTags = (list = []) => el => [
+  ...list,
+  [el.localName, getAttributes(el)],
+  // @ts-ignore
+  ...Array.from(el.children).flatMap(getTags(list))
+];
 
 const getAHtml = ({ containers, options = {} }: TProps) => {
   const flatList = getFlatList(containers);
   const state = { offset: 0 };
-  const abstractHtml = flatList.reduce((acc, el) => {
+  const abstractHtml = (flatList as any[]).reduce((
+    acc,
+    el, //: HTMLElement | HTMLTableElement | HTMLImageElement | HTMLAnchorElement
+    elIndex
+  ) => {
     console.log(el);
-    if (el.nodeType === 1 || el.nodeType === 3) {
+    if (el.nodeType === Node.ELEMENT_NODE || el.nodeType === Node.TEXT_NODE) {
       if (el.localName === 'br') {
         acc.push('\n');
         state.offset += 1;
       } else {
-        let res =
-          el.nodeType === 1
-            ? {
-                $: getStyles(el),
-                tags: [
-                  el.localName,
-                  ...Array.from(el.children).map(({ localName }) => localName)
-                ]
-              }
-            : {};
+        let commonAttributes = {
+          tags: getTags([])(el),
+          meta: { parentIndex: elIndex, parentTag: el.parentElement.localName }
+        };
+        console.log(commonAttributes);
         if (el.localName === 'code')
           acc.push({
-            ...res,
+            ...commonAttributes,
             type: 'code',
             _: el.innerText,
             other_attributes: {
@@ -60,8 +72,8 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
           if (el.dataset)
             // existing image
             acc.push({
+              ...commonAttributes,
               type: 'png',
-              ...res,
               other_attributes: {
                 offset: state.offset++
               }
@@ -69,8 +81,8 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
           // new image
           else
             acc.push({
+              ...commonAttributes,
               type: 'png',
-              ...res,
               src: el.src,
               other_attributes: {
                 offset: state.offset++
@@ -78,11 +90,10 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
             });
         else if (el.localName === 'table')
           acc.push({
+            ...commonAttributes,
             type: 'table',
-            ...res,
             thead: el.tHead.innerText,
             tbody: el.tBodies[0].innerText,
-            tags: ['table'],
             other_attributes: {
               offset: state.offset++,
               col_min_width: +el.dataset.col_min_width,
@@ -92,23 +103,20 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
         else if (el.localName === 'a') {
           state.offset += el.innerText.length;
           acc.push({
-            ...res,
+            ...commonAttributes,
             _: el.innerText,
             other_attributes: {
               type: el.dataset.type,
               href: el.href
             }
           });
-        } else if (el.nodeType === 3) {
+        } else if (el.nodeType === Node.TEXT_NODE) {
           state.offset += el.wholeText.length;
           console.log('pushing the element', el);
           if (options.useObjForTextNodes) {
             acc.push({
-              _: el.wholeText,
-              ...res,
-              ...(options.includeDatasetInTextElements && {
-                dataset: el.parentNode.dataset
-              })
+              ...commonAttributes,
+              _: el.wholeText
             });
           } else {
             acc.push(el.wholeText);
@@ -117,13 +125,7 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
           state.offset += el.textContent.length;
           acc.push({
             _: el.textContent,
-            ...res,
-            ...(options.includeDatasetInTextElements && {
-              dataset: el.dataset
-            }),
-            ...(options.includeRefToEl && {
-              el
-            })
+            ...commonAttributes
           });
         }
       }
