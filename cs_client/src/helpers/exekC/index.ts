@@ -3,7 +3,7 @@ import { Element } from '::helpers/exekC/ahtml-to-html/element';
 
 const cloneObj = ogObj => JSON.parse(JSON.stringify(ogObj));
 const splitSelected = ({
-  aHtmlAnchors: { startNode, endNode, midNodesText },
+  aHtmlAnchors: { startNode, endNode, midNodes },
   startOffset,
   endOffset
 }) => {
@@ -17,7 +17,10 @@ const splitSelected = ({
   );
   left._ = left._.substring(0, startOffset);
   selected._ = startText;
-  selected._ += midNodesText.join('').replace(/\n/g, ' ');
+  selected._ += midNodes
+    .map(val => (val._ ? val._ : val))
+    .join('')
+    .replace(/\n/g, ' ');
 
   const endText =
     aHtmlElHasAttribute(right.tags)('data-start') > -1
@@ -54,33 +57,33 @@ const applyTemporaryStamps = ({ startElement, endElement }) => {
   startElement.dataset.start = true;
   endElement.dataset.end = true;
 };
-const aHtmlElHasAttribute = tagTuples => key =>
+const aHtmlElHasAttribute = (tagTuples = []) => key =>
   tagTuples.findIndex(([tagName, attributes]) => attributes[key]);
 const getAHtmlAnchors = ({ abstractHtmlObj }) => {
-  const { startNode, endNode, midNodesText } = abstractHtmlObj.reduce(
+  const { startNode, endNode, midNodes } = abstractHtmlObj.reduce(
     (acc, val) => {
-      if (val.tags) {
-        const indexOfSelectionTarget_start = aHtmlElHasAttribute(val.tags)(
-          'data-start'
-        );
-        const indexOfSelectionTarget_end = aHtmlElHasAttribute(val.tags)(
-          'data-end'
-        );
-        if (indexOfSelectionTarget_start > -1) {
-          val.indexOfSelectionTarget_start = indexOfSelectionTarget_start;
-          acc.startNode = val;
-        }
-        if (indexOfSelectionTarget_end > -1) {
-          val.indexOfSelectionTarget_end = indexOfSelectionTarget_end;
-          acc.endNode = val;
-        }
-      } else if (acc.startNode && !acc.endNode)
-        acc.midNodesText.push(val._ ? val._ : val);
+      const indexOfSelectionTarget_start = aHtmlElHasAttribute(val.tags)(
+        'data-start'
+      );
+      const indexOfSelectionTarget_end = aHtmlElHasAttribute(val.tags)(
+        'data-end'
+      );
+      if (indexOfSelectionTarget_start > -1) {
+        val.indexOfSelectionTarget_start = indexOfSelectionTarget_start;
+        acc.startNode = val;
+      }
+      if (indexOfSelectionTarget_end > -1) {
+        val.indexOfSelectionTarget_end = indexOfSelectionTarget_end;
+        acc.endNode = val;
+      }
+      const isMidNode =
+        indexOfSelectionTarget_start === -1 && acc.startNode && !acc.endNode;
+      if (isMidNode) acc.midNodes.push(val);
       return acc;
     },
-    { startNode: undefined, endNode: undefined, midNodesText: [] }
+    { startNode: undefined, endNode: undefined, midNodes: [] }
   );
-  return { startNode, endNode, midNodesText };
+  return { startNode, endNode, midNodes };
 };
 
 const deleteTemporaryStamps = aHtmlElement =>
@@ -100,13 +103,15 @@ const extractSelection = () => {
   } = getSelectionAnchors();
   applyTemporaryStamps({ startElement, endElement });
   const rootElement = document.querySelector('#rich-text > article');
-  const aHtmlAnchors = getAHtmlAnchors(getSelectionAHtml({ rootElement }));
+  const { startNode, endNode, midNodes } = getAHtmlAnchors(
+    getSelectionAHtml({ rootElement })
+  );
   const { left, selected, right } = splitSelected({
-    aHtmlAnchors,
+    aHtmlAnchors: { startNode, midNodes, endNode },
     startOffset,
     endOffset
   });
-  return { selected, startElement, endElement, left, right };
+  return { selected, startElement, endElement, left, right, midNodes };
 };
 
 const applyTag = ({ tag, aHtmlElement }) => {
@@ -136,24 +141,25 @@ const getParent = ({ nestLevel, element }) =>
 const toNodes = html =>
   new DOMParser().parseFromString(html, 'text/html').body.childNodes[0];
 
+const deleteInBetween = ({ startElement, endElement }) => {
+  if (startElement.nextElementSibling !== endElement) {
+    startElement.nextElementSibling.remove();
+    deleteInBetween({ startElement, endElement });
+  }
+};
+
 const applyChangesToDom = ({
-  startElement,
-  endElement,
+  startElementRoot,
+  endElementRoot,
   left,
   right,
-  selected
+  selected,
+  midNodes
 }) => {
   const leftElement = Element({ node: left });
   const rightElement = Element({ node: right });
   const selectedElement = Element({ node: selected });
-  const startElementRoot = getParent({
-    nestLevel: left.indexOfSelectionTarget_start,
-    element: startElement
-  });
-  const endElementRoot = getParent({
-    nestLevel: right.indexOfSelectionTarget_end,
-    element: endElement
-  });
+
   const newStartElement = toNodes(leftElement);
   const newSelectedElement = toNodes(selectedElement);
   const newEndElement = toNodes(rightElement);
@@ -174,6 +180,7 @@ const exekC = ({ tag }: { tag: string }) => {
     left,
     right,
     selected,
+    midNodes,
     startElement,
     endElement
   } = extractSelection();
@@ -181,11 +188,25 @@ const exekC = ({ tag }: { tag: string }) => {
   deleteTemporaryStamps(right);
   deleteTemporaryStamps(selected);
   const modifiedSelected = applyTag({ tag, aHtmlElement: selected });
+  const startElementRoot = getParent({
+    nestLevel: left.indexOfSelectionTarget_start,
+    element: startElement
+  });
+  const endElementRoot = getParent({
+    nestLevel: right.indexOfSelectionTarget_end,
+    element: endElement
+  });
+  if (midNodes.length)
+    deleteInBetween({
+      startElement: startElementRoot,
+      endElement: endElementRoot
+    });
   applyChangesToDom({
-    startElement,
-    endElement,
+    startElementRoot,
+    endElementRoot,
     left,
     selected: modifiedSelected,
+    midNodes,
     right
   });
 };
