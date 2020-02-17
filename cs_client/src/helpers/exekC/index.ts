@@ -1,5 +1,6 @@
 import { getAHtml } from '::helpers/exekC/html-to-ahtml';
 import { Element } from '::helpers/exekC/ahtml-to-html/element';
+import { clone } from 'ramda';
 
 const cloneObj = ogObj => JSON.parse(JSON.stringify(ogObj));
 const splitSelected = ({
@@ -8,7 +9,11 @@ const splitSelected = ({
   endOffset
 }) => {
   const left = cloneObj(startNode);
-  const selected = cloneObj(startNode);
+  const selected = {
+    leftEdge: cloneObj(startNode),
+    rightEdge: cloneObj(endNode),
+    midNodes: cloneObj(midNodes)
+  };
   const right = cloneObj(endNode);
 
   const startText = left._.substring(
@@ -16,18 +21,18 @@ const splitSelected = ({
     aHtmlElHasAttribute(left.tags)('data-end') > -1 ? endOffset : undefined
   );
   left._ = left._.substring(0, startOffset);
-  selected._ = startText;
-  selected._ += midNodes
-    .map(val => (val._ ? val._ : val))
-    .join('')
-    .replace(/\n/g, ' ');
+  selected.leftEdge._ = startText;
+  // selected._ += midNodes
+  //   .map(val => (val._ ? val._ : val))
+  //   .join('')
+  //   .replace(/\n/g, ' ');
 
   const endText =
     aHtmlElHasAttribute(right.tags)('data-start') > -1
       ? ''
       : right._.substring(0, endOffset);
   right._ = right._.substring(endOffset);
-  selected._ += endText;
+  selected.rightEdge._ = endText;
   return { left, selected, right };
 };
 const getElementOfNode = node =>
@@ -174,29 +179,54 @@ const deleteInBetweenElements = ({
       currentElementIndex: currentElementIndex++
     });
 };
+
+const createNewElements = ({ left, right, selected }) => {
+  const newStartElement = toNodes(Element({ node: left }));
+  const newSelectedElements = [
+    selected.leftEdge,
+    ...selected.midNodes,
+    selected.rightEdge
+  ].reduce(
+    (acc, node) =>
+      node === '\n'
+        ? [...acc, []]
+        : (acc[acc.length - 1].push(toNodes(Element({ node }))), acc),
+    [[]]
+  );
+  const newEndElement = toNodes(Element({ node: right }));
+  return { newStartElement, newSelectedElements, newEndElement };
+};
+
 const applyChangesToDom = ({
   startElementRoot,
   endElementRoot,
-  left,
-  right,
-  selected,
-  midNodes
+  newStartElement,
+  newSelectedElements,
+  newEndElement
 }) => {
-  const leftElement = Element({ node: left });
-  const rightElement = Element({ node: right });
-  const selectedElement = Element({ node: selected });
-
-  const newStartElement = toNodes(leftElement);
-  const newSelectedElement = toNodes(selectedElement);
-  const newEndElement = toNodes(rightElement);
+  // const newStartElement = toNodes(Element({ node: left }));
+  // const newSelectedElement = [
+  //   selected.leftEdge,
+  //   ...selected.midNodes,
+  //   selected.rightEdge
+  // ].map(node => toNodes(node === '\n' ? '\n' : Element({ node })));
+  // const newEndElement = toNodes(Element({ node: right }));
+  //   newSelectedElements[0].push(newStartElement);
   if (endElementRoot === startElementRoot) {
     startElementRoot.replaceWith(
       newStartElement,
-      newSelectedElement,
+      ...newSelectedElements.flatMap(el => el),
       newEndElement
     );
   } else {
-    startElementRoot.replaceWith(newStartElement, newSelectedElement);
+    let currentLine = startElementRoot.parentElement;
+    const firstLine = newSelectedElements.shift();
+    startElementRoot.replaceWith(newStartElement, ...firstLine);
+    newSelectedElements.forEach(line => {
+      currentLine = currentLine.nextElementSibling;
+      currentLine.prepend(...line);
+    });
+
     endElementRoot.replaceWith(newEndElement);
   }
 };
@@ -206,14 +236,20 @@ const exekC = ({ tag }: { tag: string }) => {
     left,
     right,
     selected,
-    midNodes,
+    // midNodes,
     startElement,
     endElement
   } = extractSelection();
-  deleteTemporaryStamps(left);
-  deleteTemporaryStamps(right);
-  deleteTemporaryStamps(selected);
-  const modifiedSelected = applyTag({ tag, aHtmlElement: selected });
+  [left, right, selected.leftEdge, selected.rightEdge].forEach(
+    deleteTemporaryStamps
+  );
+  const modifiedSelected = {
+    leftEdge: applyTag({ tag, aHtmlElement: selected.leftEdge }),
+    rightEdge: applyTag({ tag, aHtmlElement: selected.rightEdge }),
+    midNodes: selected.midNodes.map(el =>
+      typeof el === 'object' ? applyTag({ tag, aHtmlElement: el }) : el
+    )
+  };
   const startElementRoot = getParent({
     nestLevel: left.indexOfSelectionTarget_start,
     element: startElement
@@ -222,11 +258,11 @@ const exekC = ({ tag }: { tag: string }) => {
     nestLevel: right.indexOfSelectionTarget_end,
     element: endElement
   });
-  const currentLine = startElementRoot.parentElement;
-  const arr = Array.from(currentLine.children);
-  const currentElementIndex = arr.indexOf(startElementRoot);
-  const oIndex = arr.indexOf(startElement);
-  if (midNodes.length)
+  // const currentLine = startElementRoot.parentElement;
+  // const arr = Array.from(currentLine.children);
+  // const currentElementIndex = arr.indexOf(startElementRoot);
+  // const oIndex = arr.indexOf(startElement);
+  if (modifiedSelected.midNodes.length)
     // deleteInBetween({
     //   startElement: startElementRoot,
     //   endElement: endElementRoot
@@ -237,7 +273,7 @@ const exekC = ({ tag }: { tag: string }) => {
     //   midNodes
     // });
     deleteInBetweenElements({
-      midNodes,
+      midNodes: JSON.parse(JSON.stringify(modifiedSelected.midNodes)),
       endElementRoot,
       currentLine: startElementRoot.parentElement,
       currentElementIndex:
@@ -245,13 +281,22 @@ const exekC = ({ tag }: { tag: string }) => {
           startElementRoot
         ) + 1
     });
+
+  const {
+    newStartElement,
+    newSelectedElements,
+    newEndElement
+  } = createNewElements({
+    left,
+    selected: modifiedSelected,
+    right
+  });
   applyChangesToDom({
     startElementRoot,
     endElementRoot,
-    left,
-    selected: modifiedSelected,
-    midNodes,
-    right
+    newStartElement,
+    newSelectedElements,
+    newEndElement
   });
 };
 
