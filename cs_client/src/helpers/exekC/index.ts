@@ -161,15 +161,15 @@ const deleteInBetweenElements = ({
   currentLine,
   currentElementIndex
 }) => {
-  const node = midNodes.shift();
+  let node = midNodes.shift();
   if (node === '\n') {
     currentLine = currentLine.nextElementSibling;
     currentElementIndex = 0;
-  }
-  const nextElementSibling = currentLine.children[currentElementIndex];
-
-  if (nextElementSibling !== endElementRoot) {
-    nextElementSibling.parentElement.removeChild(nextElementSibling);
+  } else {
+    const nextElementSibling = currentLine.children[currentElementIndex];
+    if (nextElementSibling !== endElementRoot) {
+      nextElementSibling.parentElement.removeChild(nextElementSibling);
+    }
   }
   if (midNodes.length)
     deleteInBetweenElements({
