@@ -147,7 +147,33 @@ const deleteInBetween = ({ startElement, endElement }) => {
     deleteInBetween({ startElement, endElement });
   }
 };
+const getFirstElementOfNextLine = element =>
+  element.parentElement.nextElementSibling.firstElementChild;
+const getNextLine = element => element.parentElement.nextElementSibling;
+const deleteInBetweenElements = ({
+  midNodes,
+  endElementRoot,
+  currentLine,
+  currentElementIndex
+}) => {
+  const node = midNodes.shift();
+  if (node === '\n') {
+    currentLine = currentLine.nextElementSibling;
+    currentElementIndex = 0;
+  }
+  const nextElementSibling = currentLine.children[currentElementIndex];
 
+  if (nextElementSibling !== endElementRoot) {
+    nextElementSibling.parentElement.removeChild(nextElementSibling);
+  }
+  if (midNodes.length)
+    deleteInBetweenElements({
+      midNodes,
+      endElementRoot,
+      currentLine,
+      currentElementIndex: currentElementIndex++
+    });
+};
 const applyChangesToDom = ({
   startElementRoot,
   endElementRoot,
@@ -196,10 +222,28 @@ const exekC = ({ tag }: { tag: string }) => {
     nestLevel: right.indexOfSelectionTarget_end,
     element: endElement
   });
+  const currentLine = startElementRoot.parentElement;
+  const arr = Array.from(currentLine.children);
+  const currentElementIndex = arr.indexOf(startElementRoot);
+  const oIndex = arr.indexOf(startElement);
   if (midNodes.length)
-    deleteInBetween({
-      startElement: startElementRoot,
-      endElement: endElementRoot
+    // deleteInBetween({
+    //   startElement: startElementRoot,
+    //   endElement: endElementRoot
+    // });
+    // deleteInBetweenElements({
+    //   startElement: startElementRoot,
+    //   endElement: endElementRoot,
+    //   midNodes
+    // });
+    deleteInBetweenElements({
+      midNodes,
+      endElementRoot,
+      currentLine: startElementRoot.parentElement,
+      currentElementIndex:
+        Array.from(startElementRoot.parentElement.children).indexOf(
+          startElementRoot
+        ) + 1
     });
   applyChangesToDom({
     startElementRoot,
