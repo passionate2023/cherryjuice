@@ -1,5 +1,5 @@
 import { Link as CtLink } from '../link';
-const stringifyStyles = (style, onlyStylesThatStartWith = undefined) =>
+const stringifyStyles = (style = {}, onlyStylesThatStartWith = undefined) =>
   Object.entries(style)
     .filter(([key]) =>
       onlyStylesThatStartWith ? key.startsWith(onlyStylesThatStartWith) : true

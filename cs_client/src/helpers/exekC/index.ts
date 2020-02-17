@@ -119,20 +119,22 @@ const extractSelection = () => {
   return { selected, startElement, endElement, left, right, midNodes };
 };
 
-const applyTag = ({ tag, aHtmlElement }) => {
-  const newAHtmlElement = { ...aHtmlElement };
+const applyTag = ({ tag, tagExists, aHtmlElement }) => {
+  const newAHtmlElement = cloneObj(aHtmlElement);
   if (tag) {
     const toBeDeleted = newAHtmlElement.tags.find(
       ([tagName]) => tagName === tag
     );
-    if (toBeDeleted) {
-      const indexOfTagToBeDeleted = newAHtmlElement.tags.indexOf(toBeDeleted);
-      newAHtmlElement.tags.splice(indexOfTagToBeDeleted, 1);
-      // merge styles of the item to be deleted with the top-level tag tag
-      newAHtmlElement.tags[0][1].style =
-        toBeDeleted[1].style + newAHtmlElement.tags[0][1].style;
+    if (tagExists) {
+      if (toBeDeleted) {
+        const indexOfTagToBeDeleted = newAHtmlElement.tags.indexOf(toBeDeleted);
+        newAHtmlElement.tags.splice(indexOfTagToBeDeleted, 1);
+        // merge styles of the item to be deleted with the top-level tag tag
+        newAHtmlElement.tags[0][1].style =
+          toBeDeleted[1].style + newAHtmlElement.tags[0][1].style;
+      }
     } else {
-      newAHtmlElement.tags.push([tag, {}]);
+      if (!toBeDeleted) newAHtmlElement.tags.push([tag, {}]);
     }
   }
   return newAHtmlElement;
@@ -243,11 +245,14 @@ const exekC = ({ tag }: { tag: string }) => {
   [left, right, selected.leftEdge, selected.rightEdge].forEach(
     deleteTemporaryStamps
   );
+  const tagExists = selected.leftEdge.tags.some(([tagName]) => tagName === tag);
   const modifiedSelected = {
-    leftEdge: applyTag({ tag, aHtmlElement: selected.leftEdge }),
-    rightEdge: applyTag({ tag, aHtmlElement: selected.rightEdge }),
+    leftEdge: applyTag({ tagExists, tag, aHtmlElement: selected.leftEdge }),
+    rightEdge: applyTag({ tagExists, tag, aHtmlElement: selected.rightEdge }),
     midNodes: selected.midNodes.map(el =>
-      typeof el === 'object' ? applyTag({ tag, aHtmlElement: el }) : el
+      typeof el === 'object'
+        ? applyTag({ tagExists, tag, aHtmlElement: el })
+        : el
     )
   };
   const startElementRoot = getParent({
