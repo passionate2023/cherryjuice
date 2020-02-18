@@ -36,6 +36,11 @@ const getTags = (list = []) => el => [
   ...Array.from(el.children).flatMap(getTags(list))
 ];
 
+const getParentAttributes = ({ parentElement }) =>
+  getTags([])(parentElement).map(([tagName, attributes]) => [
+    'span',
+    (delete attributes.class, attributes)
+  ]);
 const getAHtml = ({ containers, options = {} }: TProps) => {
   const flatList = getFlatList(containers);
   const state = { offset: 0 };
@@ -46,15 +51,15 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
   ) => {
     console.log(el);
     if (el.nodeType === Node.ELEMENT_NODE || el.nodeType === Node.TEXT_NODE) {
+      if (el.nodeType === Node.TEXT_NODE) {
+        console.log(getTags([])(el.parentElement));
+      }
       if (el.localName === 'br') {
         acc.push('\n');
         state.offset += 1;
       } else {
         let commonAttributes = {
-          tags:
-            el.nodeType === Node.ELEMENT_NODE
-              ? getTags([])(el)
-              : [['span', {}]],
+          tags: el.nodeType === Node.ELEMENT_NODE ? getTags([])(el) : [],
           meta: { parentIndex: elIndex, parentTag: el.parentElement.localName }
         };
         console.log(commonAttributes);
@@ -138,4 +143,4 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
   return { abstractHtml: JSON.stringify(abstractHtml), flatList };
 };
 
-export { getAHtml };
+export { getAHtml, getParentAttributes };

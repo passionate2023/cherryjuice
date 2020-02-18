@@ -1,7 +1,7 @@
 import modToolbar from '::sass-modules/tool-bar.scss';
 import * as React from 'react';
 import { ToolbarButton } from '::app/tool-bar/tool-bar-button';
-import { exekC } from '::helpers/exekC';
+import { execK } from '::helpers/execK';
 
 type Props = {};
 
@@ -23,25 +23,25 @@ const FormattingButtons: React.FC<Props> = ({}) => {
       },
       execCommandArguments: { style: 'text-decoration:underline;' }
     },
-    // {
-    //   button: {
-    //     label: 'a',
-    //     style: { textDecoration: 'line-through' }
-    //   },
-    //   execCommandArguments: { style: 'text-decoration:line-through;' }
-    // }
+    {
+      button: {
+        label: 'a',
+        style: { textDecoration: 'line-through' }
+      },
+      execCommandArguments: { style: 'text-decoration:line-through;' }
+    },
     {
       button: {
         label: 'h1'
       },
-      execCommandArguments: { tag: 'h1' }
+      execCommandArguments: { tagName: 'h1' }
+    },
+    {
+      button: {
+        label: 's'
+      },
+      execCommandArguments: { tagName: 'small' }
     }
-    // {
-    //   button: {
-    //     label: 's'
-    //   },
-    //   execCommandArguments: { tag: 'small' }
-    // }
   ];
 
   return (
@@ -54,7 +54,7 @@ const FormattingButtons: React.FC<Props> = ({}) => {
           },
           i
         ) => (
-          <ToolbarButton key={i} onClick={() => exekC({ tagName, style })}>
+          <ToolbarButton key={i} onClick={() => execK({ tagName, style })}>
             <span
               style={buttonStyle}
               className={modToolbar.toolBar__letterIcon}

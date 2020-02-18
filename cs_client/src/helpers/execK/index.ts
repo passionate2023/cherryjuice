@@ -1,6 +1,5 @@
-import { getAHtml } from '::helpers/exekC/html-to-ahtml';
-import { Element } from '::helpers/exekC/ahtml-to-html/element';
-import { clone } from 'ramda';
+import { getAHtml, getParentAttributes } from '::helpers/execK/html-to-ahtml';
+import { Element } from '::helpers/execK/ahtml-to-html/element';
 
 const cloneObj = ogObj => JSON.parse(JSON.stringify(ogObj));
 const splitSelected = ({
@@ -99,13 +98,37 @@ const deleteTemporaryStamps = aHtmlElement =>
     ),
     attributes)
   ]);
+
+const wrapChildrenInSpan = ({ parentElement }) => {
+  const aHtml = {
+    _: parentElement.firstChild.wholeText,
+    tags: getParentAttributes({ parentElement: parentElement })
+  };
+  const element = Element({ node: aHtml });
+  parentElement.firstChild.replaceWith(toNodes(element));
+};
+const pointSelectionAnchorToChild = ({ element }) => {
+  let newElement = element;
+  const isLineTheSelectionTarget = element.classList.contains(
+    'rich-text__line'
+  );
+  if (isLineTheSelectionTarget) {
+    if (element.firstChild.nodeType === Node.TEXT_NODE) {
+      wrapChildrenInSpan({ parentElement: element });
+    }
+    newElement = element.firstChild;
+  }
+  return newElement;
+};
 const extractSelection = () => {
-  const {
+  let {
     startElement,
     endElement,
     startOffset,
     endOffset
   } = getSelectionAnchors();
+  startElement = pointSelectionAnchorToChild({ element: startElement });
+  endElement = pointSelectionAnchorToChild({ element: endElement });
   applyTemporaryStamps({ startElement, endElement });
   const rootElement = document.querySelector('#rich-text > article');
   const { startNode, endNode, midNodes } = getAHtmlAnchors(
@@ -119,16 +142,16 @@ const extractSelection = () => {
   return { selected, startElement, endElement, left, right, midNodes };
 };
 
-type TApplyTag = {
+type TApplyCommand = {
   tag?: { tagName: string; tagExists: boolean };
-  style?: string;
+  style?: { style: string; styleExists: boolean };
   aHtmlElement: any;
 };
-const applyTag = ({
+const applyCommand = ({
   tag: { tagName, tagExists },
-  style,
+  style: { style, styleExists },
   aHtmlElement
-}: TApplyTag) => {
+}: TApplyCommand) => {
   const newAHtmlElement = cloneObj(aHtmlElement);
   if (tagName) {
     const toBeDeleted = newAHtmlElement.tags.find(([tag]) => tag === tagName);
@@ -146,10 +169,36 @@ const applyTag = ({
     }
   }
   if (style) {
-
-    newAHtmlElement.tags[0][1].style = newAHtmlElement.tags[0][1].style + style;
+    newAHtmlElement.tags = newAHtmlElement.tags.map(([tagName, attributes]) => [
+      tagName,
+      {
+        ...attributes,
+        style: applyStyles({
+          ogStyle: attributes.style,
+          styleToBeApplied: style,
+          styleExists
+        })
+      }
+    ]);
   }
   return newAHtmlElement;
+};
+
+const applyStyles = ({
+  ogStyle = '',
+  styleToBeApplied,
+  styleExists: styleExistsGlobally
+}: {
+  ogStyle: string;
+  styleToBeApplied: string;
+  styleExists: boolean;
+}) => {
+  if (styleExistsGlobally) {
+    ogStyle = ogStyle.replace(styleToBeApplied, '');
+  } else {
+    ogStyle += ogStyle.includes(styleToBeApplied) ? '' : styleToBeApplied;
+  }
+  return ogStyle;
 };
 
 const getParent = ({ nestLevel, element }) =>
@@ -245,7 +294,7 @@ const applyChangesToDom = ({
   }
 };
 
-const exekC = ({ tagName, style }: { tagName?: string; style?: string }) => {
+const execK = ({ tagName, style }: { tagName?: string; style?: string }) => {
   const {
     left,
     right,
@@ -259,22 +308,29 @@ const exekC = ({ tagName, style }: { tagName?: string; style?: string }) => {
   );
   const tagExists =
     tagName && selected.leftEdge.tags.some(([tag]) => tag === tagName);
+
+  const styleExists =
+    style &&
+    selected.leftEdge.tags.some(
+      ([_, { style: existingStyle }]) =>
+        existingStyle && existingStyle.includes(style)
+    );
   const modifiedSelected = {
-    leftEdge: applyTag({
+    leftEdge: applyCommand({
       tag: { tagName, tagExists },
-      style,
+      style: { style, styleExists },
       aHtmlElement: selected.leftEdge
     }),
-    rightEdge: applyTag({
+    rightEdge: applyCommand({
       tag: { tagName, tagExists },
-      style,
+      style: { style, styleExists },
       aHtmlElement: selected.rightEdge
     }),
     midNodes: selected.midNodes.map(el =>
       typeof el === 'object'
-        ? applyTag({
+        ? applyCommand({
             tag: { tagName, tagExists },
-            style,
+            style: { style, styleExists },
             aHtmlElement: el
           })
         : el
@@ -330,4 +386,4 @@ const exekC = ({ tagName, style }: { tagName?: string; style?: string }) => {
   });
 };
 
-export { exekC };
+export { execK };
