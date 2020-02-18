@@ -119,23 +119,35 @@ const extractSelection = () => {
   return { selected, startElement, endElement, left, right, midNodes };
 };
 
-const applyTag = ({ tag, tagExists, aHtmlElement }) => {
+type TApplyTag = {
+  tag?: { tagName: string; tagExists: boolean };
+  style?: string;
+  aHtmlElement: any;
+};
+const applyTag = ({
+  tag: { tagName, tagExists },
+  style,
+  aHtmlElement
+}: TApplyTag) => {
   const newAHtmlElement = cloneObj(aHtmlElement);
-  if (tag) {
-    const toBeDeleted = newAHtmlElement.tags.find(
-      ([tagName]) => tagName === tag
-    );
+  if (tagName) {
+    const toBeDeleted = newAHtmlElement.tags.find(([tag]) => tag === tagName);
     if (tagExists) {
       if (toBeDeleted) {
         const indexOfTagToBeDeleted = newAHtmlElement.tags.indexOf(toBeDeleted);
         newAHtmlElement.tags.splice(indexOfTagToBeDeleted, 1);
         // merge styles of the item to be deleted with the top-level tag tag
-        newAHtmlElement.tags[0][1].style =
-          toBeDeleted[1].style + newAHtmlElement.tags[0][1].style;
+        if (toBeDeleted[1].style)
+          newAHtmlElement.tags[0][1].style =
+            toBeDeleted[1].style + newAHtmlElement.tags[0][1].style;
       }
     } else {
-      if (!toBeDeleted) newAHtmlElement.tags.push([tag, {}]);
+      if (!toBeDeleted) newAHtmlElement.tags.push([tagName, {}]);
     }
+  }
+  if (style) {
+
+    newAHtmlElement.tags[0][1].style = newAHtmlElement.tags[0][1].style + style;
   }
   return newAHtmlElement;
 };
@@ -233,7 +245,7 @@ const applyChangesToDom = ({
   }
 };
 
-const exekC = ({ tag }: { tag: string }) => {
+const exekC = ({ tagName, style }: { tagName?: string; style?: string }) => {
   const {
     left,
     right,
@@ -245,13 +257,26 @@ const exekC = ({ tag }: { tag: string }) => {
   [left, right, selected.leftEdge, selected.rightEdge].forEach(
     deleteTemporaryStamps
   );
-  const tagExists = selected.leftEdge.tags.some(([tagName]) => tagName === tag);
+  const tagExists =
+    tagName && selected.leftEdge.tags.some(([tag]) => tag === tagName);
   const modifiedSelected = {
-    leftEdge: applyTag({ tagExists, tag, aHtmlElement: selected.leftEdge }),
-    rightEdge: applyTag({ tagExists, tag, aHtmlElement: selected.rightEdge }),
+    leftEdge: applyTag({
+      tag: { tagName, tagExists },
+      style,
+      aHtmlElement: selected.leftEdge
+    }),
+    rightEdge: applyTag({
+      tag: { tagName, tagExists },
+      style,
+      aHtmlElement: selected.rightEdge
+    }),
     midNodes: selected.midNodes.map(el =>
       typeof el === 'object'
-        ? applyTag({ tagExists, tag, aHtmlElement: el })
+        ? applyTag({
+            tag: { tagName, tagExists },
+            style,
+            aHtmlElement: el
+          })
         : el
     )
   };

@@ -12,17 +12,17 @@ const FormattingButtons: React.FC<Props> = ({}) => {
         label: 'b',
         style: undefined
       },
-      execCommandArguments: { tag: 'strong', style: undefined }
+      execCommandArguments: { tagName: 'strong', style: undefined }
     },
-    { button: { label: 'i' }, execCommandArguments: { tag: 'em' } },
+    { button: { label: 'i' }, execCommandArguments: { tagName: 'em' } },
     ,
-    // {
-    //   button: {
-    //     label: 'a',
-    //     style: { textDecoration: 'underline' }
-    //   },
-    //   execCommandArguments: { style: 'text-decoration:underline;' }
-    // },
+    {
+      button: {
+        label: 'a',
+        style: { textDecoration: 'underline' }
+      },
+      execCommandArguments: { style: 'text-decoration:underline;' }
+    },
     // {
     //   button: {
     //     label: 'a',
@@ -50,11 +50,11 @@ const FormattingButtons: React.FC<Props> = ({}) => {
         (
           {
             button: { label, style: buttonStyle },
-            execCommandArguments: { tag, style }
+            execCommandArguments: { tagName, style }
           },
           i
         ) => (
-          <ToolbarButton key={i} onClick={() => exekC({ tag })}>
+          <ToolbarButton key={i} onClick={() => exekC({ tagName, style })}>
             <span
               style={buttonStyle}
               className={modToolbar.toolBar__letterIcon}

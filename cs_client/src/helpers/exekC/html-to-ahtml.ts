@@ -51,7 +51,10 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
         state.offset += 1;
       } else {
         let commonAttributes = {
-          tags: getTags([])(el),
+          tags:
+            el.nodeType === Node.ELEMENT_NODE
+              ? getTags([])(el)
+              : [['span', {}]],
           meta: { parentIndex: elIndex, parentTag: el.parentElement.localName }
         };
         console.log(commonAttributes);
