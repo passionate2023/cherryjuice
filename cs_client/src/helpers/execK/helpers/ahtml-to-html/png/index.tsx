@@ -1,4 +1,5 @@
 import { stringifyStyles } from '../element';
+
 type Props = {
   styles: {
     'text-align': string;

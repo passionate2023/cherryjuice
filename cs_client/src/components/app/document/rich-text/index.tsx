@@ -56,7 +56,7 @@ const RichText: React.FC<Props> = ({
       );
     }
   }
-
+  console.log('all_png_base64', all_png_base64);
   const [mutate] = useMutation(MUTATE_CT_NODE_CONTENT.html);
   const toolbarQueuesRef = useRef({});
   if (saveDocument && !toolbarQueuesRef.current[saveDocument]) {
