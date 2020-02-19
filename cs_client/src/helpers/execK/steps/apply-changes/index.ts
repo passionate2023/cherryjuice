@@ -1,5 +1,6 @@
 import { toNodes } from '::helpers/execK/helpers';
 import { Element } from '::helpers/execK/helpers/ahtml-to-html/element';
+import { start } from 'repl';
 
 const getParent = ({ nestLevel, element }) =>
   nestLevel > 0
@@ -48,6 +49,14 @@ const createNewElements = ({ left, right, selected }) => {
   return { newStartElement, newSelectedElements, newEndElement };
 };
 
+type TFilterEmptyNodes = (arr: HTMLElement[]) => HTMLElement[];
+const filterEmptyNodes: TFilterEmptyNodes = arr =>
+  arr.filter(el => Boolean(el.innerText));
+
+type TReplaceElement = (el: HTMLElement) => (arr: HTMLElement[]) => void;
+const replaceElement: TReplaceElement = el => arr =>
+  el.replaceWith(...filterEmptyNodes(arr));
+
 const applyChangesToDom = ({
   startElementRoot,
   endElementRoot,
@@ -56,21 +65,20 @@ const applyChangesToDom = ({
   newEndElement
 }) => {
   if (endElementRoot === startElementRoot) {
-    startElementRoot.replaceWith(
+    replaceElement(startElementRoot)([
       newStartElement,
       ...newSelectedElements.flatMap(el => el),
       newEndElement
-    );
+    ]);
   } else {
     let currentLine = startElementRoot.parentElement;
     const firstLine = newSelectedElements.shift();
-    startElementRoot.replaceWith(newStartElement, ...firstLine);
+    replaceElement(startElementRoot)([newStartElement, ...firstLine]);
     newSelectedElements.forEach(line => {
       currentLine = currentLine.nextElementSibling;
-      currentLine.prepend(...line);
+      currentLine.prepend(...filterEmptyNodes(line));
     });
-
-    endElementRoot.replaceWith(newEndElement);
+    replaceElement(endElementRoot)([newEndElement]);
   }
 };
 

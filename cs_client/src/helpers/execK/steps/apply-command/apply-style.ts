@@ -1,15 +1,17 @@
 const calculateStyle = ({
   ogStyle = '',
   styleToBeApplied,
-  styleExists: styleExistsGlobally
+  styleExists: styleExistsGlobally,
+  tagIndex
 }: {
   ogStyle: string;
   styleToBeApplied: string;
   styleExists: boolean;
+  tagIndex: number;
 }) => {
   if (styleExistsGlobally) {
     ogStyle = ogStyle.replace(styleToBeApplied, '');
-  } else {
+  } else if (tagIndex === 0) {
     ogStyle += ogStyle.includes(styleToBeApplied) ? '' : styleToBeApplied;
   }
   return ogStyle;
@@ -17,17 +19,20 @@ const calculateStyle = ({
 
 type TApplyStyle = { aHtmlElement: any; style: string; styleExists: boolean };
 const applyStyle = ({ aHtmlElement, style, styleExists }: TApplyStyle) => {
-  aHtmlElement.tags = aHtmlElement.tags.map(([tagName, attributes]) => [
-    tagName,
-    {
-      ...attributes,
-      style: calculateStyle({
-        ogStyle: attributes.style,
-        styleToBeApplied: style,
-        styleExists
-      })
-    }
-  ]);
+  aHtmlElement.tags = aHtmlElement.tags.map(
+    ([tagName, attributes], tagIndex) => [
+      tagName,
+      {
+        ...attributes,
+        style: calculateStyle({
+          ogStyle: attributes.style,
+          styleToBeApplied: style,
+          styleExists,
+          tagIndex
+        })
+      }
+    ]
+  );
 };
 
 export { applyStyle };
