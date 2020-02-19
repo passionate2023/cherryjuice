@@ -62,10 +62,10 @@ const applyTemporaryStamps = ({ startElement, endElement }) => {
 };
 
 const splitSelected = ({
-                         aHtmlAnchors: { startNode, endNode, midNodes },
-                         startOffset,
-                         endOffset
-                       }) => {
+  aHtmlAnchors: { startNode, endNode, midNodes },
+  startOffset,
+  endOffset
+}) => {
   const left = cloneObj(startNode);
   const selected = {
     leftEdge: cloneObj(startNode),
@@ -129,8 +129,15 @@ const deleteTemporaryStamps = aHtmlElement =>
     (['data-start', 'data-end'].forEach(
       attribute => delete attributes[attribute]
     ),
-      attributes)
+    attributes)
   ]);
+
+const wrapTextNodesInSpan = arr =>
+  arr.map(val =>
+    typeof val === 'object' && !val.tags.length
+      ? (val.tags.push(['span', {}]), val)
+      : val
+  );
 
 const extractSelection = () => {
   let {
@@ -147,7 +154,11 @@ const extractSelection = () => {
     helpers.getSelectionAHtml({ rootElement })
   );
   const { left, selected, right } = splitSelected({
-    aHtmlAnchors: { startNode, midNodes, endNode },
+    aHtmlAnchors: {
+      startNode,
+      midNodes: wrapTextNodesInSpan(midNodes),
+      endNode
+    },
     startOffset,
     endOffset
   });

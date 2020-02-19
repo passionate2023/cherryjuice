@@ -8,9 +8,10 @@ const stringifyStyles = (style = {}, onlyStylesThatStartWith = undefined) =>
     .map(([key, value]) => `${key}:${value}`)
     .join(';') + ';';
 const createElement = (tag, attributes, children) =>
-  `<${tag} class="rich-text__text" ${Object.entries(attributes)
-    .map(([key, value]) => `${key}="${value}"`)
-    .join(' ')}>${children}</${tag}>`;
+  `<${tag} class="rich-text__text" ${attributes &&
+    Object.entries(attributes)
+      .map(([key, value]) => `${key}="${value}"`)
+      .join(' ')}>${children}</${tag}>`;
 
 const Element = ({ node }) =>
   node.tags.length
@@ -26,6 +27,6 @@ const Element = ({ node }) =>
             })
           : createElement(`${val[0]}`, val[1], acc);
       }, node._)
-    : createElement(`div`, node.$, node._);
+    : createElement(`span`, {}, node._);
 
 export { Element, stringifyStyles };

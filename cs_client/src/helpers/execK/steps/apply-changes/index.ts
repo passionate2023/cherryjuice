@@ -1,36 +1,13 @@
 import { toNodes } from '::helpers/execK/helpers';
 import { Element } from '::helpers/execK/helpers/ahtml-to-html/element';
 import { start } from 'repl';
+import { deleteInBetweenElements } from '::helpers/execK/steps/apply-changes/delete-in-between-elements';
 
 const getParent = ({ nestLevel, element }) =>
   nestLevel > 0
     ? getParent({ nestLevel: nestLevel - 1, element: element.parentElement })
     : element;
 
-const deleteInBetweenElements = ({
-  midNodes,
-  endElementRoot,
-  currentLine,
-  currentElementIndex
-}) => {
-  let node = midNodes.shift();
-  if (node === '\n') {
-    currentLine = currentLine.nextElementSibling;
-    currentElementIndex = 0;
-  } else {
-    const nextElementSibling = currentLine.children[currentElementIndex];
-    if (nextElementSibling !== endElementRoot) {
-      nextElementSibling.parentElement.removeChild(nextElementSibling);
-    }
-  }
-  if (midNodes.length)
-    deleteInBetweenElements({
-      midNodes,
-      endElementRoot,
-      currentLine,
-      currentElementIndex: currentElementIndex++
-    });
-};
 
 const createNewElements = ({ left, right, selected }) => {
   const newStartElement = toNodes(Element({ node: left }));
