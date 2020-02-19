@@ -101,6 +101,7 @@ const applyChanges = ({
     newSelectedElements,
     newEndElement
   });
+  return {newStartElement, newSelectedElements, newEndElement}
 };
 
 export { applyChanges };

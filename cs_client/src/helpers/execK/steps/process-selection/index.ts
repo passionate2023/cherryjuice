@@ -6,7 +6,6 @@ import { Element } from '::helpers/execK/helpers/ahtml-to-html/element';
 import { cloneObj, toNodes } from '::helpers/execK/helpers';
 
 const helpers = {
-  getElementOfNode: node => (node.nodeType === 3 ? node.parentElement : node),
   getSelectionAHtml: ({ rootElement }) => {
     const containers: Node[] = Array.from(rootElement.children);
     const { abstractHtml } = getAHtml({
@@ -30,16 +29,6 @@ const helpers = {
 
   aHtmlElHasAttribute: (tagTuples = []) => key =>
     tagTuples.findIndex(([tagName, attributes]) => attributes[key])
-};
-
-const getSelectionAnchors = () => {
-  const range = document.getSelection().getRangeAt(0);
-  return {
-    startElement: helpers.getElementOfNode(range.startContainer),
-    endElement: helpers.getElementOfNode(range.endContainer),
-    startOffset: range.startOffset,
-    endOffset: range.endOffset
-  };
 };
 
 const pointSelectionAnchorToChild = ({ element }) => {
@@ -139,19 +128,19 @@ const wrapTextNodesInSpan = arr =>
       : val
   );
 
-const extractSelection = () => {
-  let {
-    startElement,
-    endElement,
-    startOffset,
-    endOffset
-  } = getSelectionAnchors();
+const processSelection = ({
+  startElement,
+  endElement,
+  startOffset,
+  endOffset
+}) => {
   startElement = pointSelectionAnchorToChild({ element: startElement });
   endElement = pointSelectionAnchorToChild({ element: endElement });
   applyTemporaryStamps({ startElement, endElement });
-  const rootElement = document.querySelector('#rich-text > article');
   const { startNode, endNode, midNodes } = getAHtmlAnchors(
-    helpers.getSelectionAHtml({ rootElement })
+    helpers.getSelectionAHtml({
+      rootElement: document.querySelector('#rich-text > article')
+    })
   );
   const { left, selected, right } = splitSelected({
     aHtmlAnchors: {
@@ -166,7 +155,7 @@ const extractSelection = () => {
   [left, right, selected.leftEdge, selected.rightEdge].forEach(
     deleteTemporaryStamps
   );
-  return { selected, startElement, endElement, left, right, midNodes };
+  return { selected, left, right };
 };
 
-export { extractSelection };
+export { processSelection };

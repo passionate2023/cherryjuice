@@ -1,17 +1,18 @@
-import { extractSelection } from '::helpers/execK/steps/extract-selection';
+import { processSelection } from '::helpers/execK/steps/process-selection';
 import { applyCommand } from '::helpers/execK/steps/apply-command';
 import { applyChanges } from '::helpers/execK/steps/apply-changes';
-
+import { getSelection } from '::helpers/execK/steps/get-selection';
+import { restoreSelection } from '::helpers/execK/steps/restore-selection';
 
 const execK = ({ tagName, style }: { tagName?: string; style?: string }) => {
-  const {
-    left,
-    right,
-    selected,
-    // midNodes,
+  let { startElement, endElement, startOffset, endOffset } = getSelection();
+
+  const { left, right, selected } = processSelection({
     startElement,
-    endElement
-  } = extractSelection();
+    endElement,
+    startOffset,
+    endOffset
+  });
 
   const tagExists =
     tagName && selected.leftEdge.tags.some(([tag]) => tag === tagName);
@@ -43,7 +44,14 @@ const execK = ({ tagName, style }: { tagName?: string; style?: string }) => {
         : el
     )
   };
-  applyChanges({ left, right, startElement, endElement, modifiedSelected });
+  const { newStartElement, newSelectedElements, newEndElement } = applyChanges({
+    left,
+    right,
+    startElement,
+    endElement,
+    modifiedSelected
+  });
+  restoreSelection({ newStartElement, newSelectedElements, newEndElement ,startOffset, endOffset });
 };
 
 export { execK };
