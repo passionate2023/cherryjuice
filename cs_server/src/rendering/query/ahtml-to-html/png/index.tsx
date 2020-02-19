@@ -21,7 +21,7 @@ const Png = ({ styles, other_attributes: { offset } }: Props) => {
         alt=""
         style=" width:${styles.width}; height:${
     styles.height
-  } ;${stringifyStyles(styles, 'margin')} }"
+  } ;${stringifyStyles(styles, 'margin')} "
         data-offset="${offset}"
       />`;
 };
