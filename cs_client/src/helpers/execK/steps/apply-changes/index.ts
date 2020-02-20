@@ -1,4 +1,4 @@
-import { toNodes } from '::helpers/execK/helpers';
+import { cloneObj, toNodes } from '::helpers/execK/helpers';
 import { Element } from '::helpers/execK/helpers/ahtml-to-html/element';
 import { start } from 'repl';
 import { deleteInBetweenElements } from '::helpers/execK/steps/apply-changes/delete-in-between-elements';
@@ -7,7 +7,6 @@ const getParent = ({ nestLevel, element }) =>
   nestLevel > 0
     ? getParent({ nestLevel: nestLevel - 1, element: element.parentElement })
     : element;
-
 
 const createNewElements = ({ left, right, selected }) => {
   const newStartElement = toNodes(Element({ node: left }));
@@ -49,12 +48,14 @@ const applyChangesToDom = ({
     ]);
   } else {
     let currentLine = startElementRoot.parentElement;
-    const firstLine = newSelectedElements.shift();
+    const firstLine = newSelectedElements[0];
     replaceElement(startElementRoot)([newStartElement, ...firstLine]);
-    newSelectedElements.forEach(line => {
-      currentLine = currentLine.nextElementSibling;
-      currentLine.prepend(...filterEmptyNodes(line));
-    });
+    newSelectedElements
+      .filter((el, i) => i > 0)
+      .forEach(line => {
+        currentLine = currentLine.nextElementSibling;
+        currentLine.prepend(...filterEmptyNodes(line));
+      });
     replaceElement(endElementRoot)([newEndElement]);
   }
 };
@@ -101,7 +102,7 @@ const applyChanges = ({
     newSelectedElements,
     newEndElement
   });
-  return {newStartElement, newSelectedElements, newEndElement}
+  return { newStartElement, newSelectedElements, newEndElement };
 };
 
 export { applyChanges };

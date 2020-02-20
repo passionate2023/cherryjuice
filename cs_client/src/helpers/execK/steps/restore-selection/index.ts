@@ -1,30 +1,54 @@
 const setSelection = ({ startElement, endElement, startOffset, endOffset }) => {
   const range = document.createRange();
   range.setStart(startElement, startOffset);
-  range.setEnd(endElement, endOffset );
+  range.setEnd(endElement, endOffset);
   const sel = window.getSelection();
   sel.removeAllRanges();
   sel.addRange(range);
 };
 
 const getInnerTextLength = el => (el.innerText ? el.innerText.length : 0);
-const findNewRange = ({ oldStartOffset, oldEndOffset, modifiedSelection }) =>
+const findAbsoluteOffset = xs =>
+  xs.reduce(
+    (acc, val) => {
+      if (typeof val === 'string') {
+        acc.tl += Number(val.length);
+      } else {
+        if (acc.absoluteOffset[0] === -1) {
+          acc.absoluteOffset[0] = val[1] + acc.tl;
+        } else if (acc.absoluteOffset[1] === -1) {
+          acc.absoluteOffset[1] = val[1] + acc.tl;
+        }
+        acc.tl += Number(val[0].length);
+      }
+      return acc;
+    },
+    {
+      tl: 0,
+      absoluteOffset: [-1, -1]
+    }
+  );
+const findNewRange = ({
+  absoluteStartOffset,
+  absoluteEndOffset,
+  modifiedSelection
+}) =>
   modifiedSelection.reduce(
     (acc, val) => {
       const elInnerTextLength = getInnerTextLength(val);
       if (
         !acc.startElement &&
-        oldStartOffset < acc.currentOffset + elInnerTextLength
+        absoluteStartOffset < acc.currentOffset + elInnerTextLength
       ) {
         acc.startElement = val;
-        acc.startOffset = oldStartOffset - acc.currentOffset;
+        acc.startOffset = absoluteStartOffset - acc.currentOffset;
       }
       if (
         !acc.endElement &&
-        oldEndOffset <= acc.currentOffset + elInnerTextLength
+        absoluteEndOffset <= acc.currentOffset + elInnerTextLength
       ) {
         acc.endElement = val;
-        acc.endOffset = oldEndOffset - acc.currentOffset;
+        acc.endOffset = absoluteEndOffset - acc.currentOffset;
       }
       acc.currentOffset += elInnerTextLength;
       return acc;
@@ -43,12 +67,21 @@ const restoreSelection = ({
   newStartElement,
   newEndElement,
   newSelectedElements,
-  startOffset: oldStartOffset,
-  endOffset: oldEndOffset
+  ogSelection,
+  selected
 }) => {
+  const [absoluteStartOffset, absoluteEndOffset] =
+    ogSelection.startElement === ogSelection.endElement
+      ? [ogSelection.startOffset, ogSelection.endOffset]
+      : findAbsoluteOffset([
+          [ogSelection.startElement.innerText, ogSelection.startOffset],
+          ...selected.midNodes.filter(node => node._).map(node => node._),
+          [ogSelection.endElement.innerText, ogSelection.endOffset]
+        ]).absoluteOffset;
+
   const { startElement, endElement, startOffset, endOffset } = findNewRange({
-    oldStartOffset,
-    oldEndOffset,
+    absoluteStartOffset,
+    absoluteEndOffset,
     modifiedSelection: [
       newStartElement,
       ...newSelectedElements.flatMap(el => el),

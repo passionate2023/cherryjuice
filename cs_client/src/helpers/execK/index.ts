@@ -51,7 +51,14 @@ const execK = ({ tagName, style }: { tagName?: string; style?: string }) => {
     endElement,
     modifiedSelected
   });
-  restoreSelection({ newStartElement, newSelectedElements, newEndElement ,startOffset, endOffset });
+
+  restoreSelection({
+    newStartElement,
+    newSelectedElements,
+    newEndElement,
+    selected,
+    ogSelection: { startElement, endElement, startOffset, endOffset }
+  });
 };
 
 export { execK };
