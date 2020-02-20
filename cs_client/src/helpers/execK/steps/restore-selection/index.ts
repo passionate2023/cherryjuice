@@ -1,7 +1,9 @@
+import { start } from 'repl';
+
 const setSelection = ({ startElement, endElement, startOffset, endOffset }) => {
   const range = document.createRange();
-  range.setStart(startElement, startOffset);
-  range.setEnd(endElement, endOffset);
+  range.setStart(getDeepestChild(startElement), startOffset);
+  range.setEnd(getDeepestChild(endElement), endOffset);
   const sel = window.getSelection();
   sel.removeAllRanges();
   sel.addRange(range);
@@ -89,10 +91,10 @@ const restoreSelection = ({
     ]
   });
   setSelection({
-    startElement: getDeepestChild(startElement),
-    endElement: getDeepestChild(endElement),
+    startElement,
+    endElement,
     startOffset,
     endOffset
   });
 };
-export { restoreSelection };
+export { restoreSelection, setSelection };
