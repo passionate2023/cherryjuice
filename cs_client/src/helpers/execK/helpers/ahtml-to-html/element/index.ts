@@ -21,9 +21,9 @@ const Element = ({ node }) =>
               // todo use createElement for both both
               target: val[1].target,
               href: val[1].href,
-              type: val[1].type,
+              type: val[1]['data-type'],
               text: node._,
-              style: node.$
+              style: val[1].style
             })
           : createElement(`${val[0]}`, val[1], acc);
       }, node._)

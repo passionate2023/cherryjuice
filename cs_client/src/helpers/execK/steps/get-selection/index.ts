@@ -73,6 +73,7 @@ const createWordRange = () => {
 };
 const getElementOfNode = node =>
   node.nodeType === 3 ? node.parentElement : node;
+
 const getSelection = () => {
   const range = document.getSelection().getRangeAt(0);
   return {
