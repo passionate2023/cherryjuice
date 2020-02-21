@@ -24,7 +24,7 @@ const Element = ({ node }) =>
               type: val[1]['data-type'],
               text: node._,
               style: val[1].style
-            })
+            },acc)
           : createElement(`${val[0]}`, val[1], acc);
       }, node._)
     : createElement(`span`, {}, node._);
