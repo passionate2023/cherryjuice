@@ -33,6 +33,9 @@ type TReplaceElement = (el: HTMLElement) => (arr: HTMLElement[]) => void;
 const replaceElement: TReplaceElement = el => arr =>
   el.replaceWith(...filterEmptyNodes(arr));
 
+const isElementALineContainer = element =>
+  element.classList.contains('rich-text__line');
+
 const applyChangesToDom = ({
   startElementRoot,
   endElementRoot,
@@ -48,12 +51,16 @@ const applyChangesToDom = ({
     ]);
   } else {
     let currentLine = startElementRoot.parentElement;
+    if (!isElementALineContainer(currentLine))
+      throw Error('Element is not a line');
     const firstLine = newSelectedElements[0];
     replaceElement(startElementRoot)([newStartElement, ...firstLine]);
     newSelectedElements
       .filter((el, i) => i > 0)
       .forEach(line => {
         currentLine = currentLine.nextElementSibling;
+        if (!isElementALineContainer(currentLine))
+          throw Error('Element is not a line');
         currentLine.prepend(...filterEmptyNodes(line));
       });
     replaceElement(endElementRoot)([newEndElement]);

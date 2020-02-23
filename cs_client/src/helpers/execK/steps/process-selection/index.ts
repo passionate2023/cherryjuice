@@ -18,29 +18,36 @@ const helpers = {
     return { abstractHtmlObj };
   },
 
-  wrapChildrenInSpan: ({ parentElement }) => {
+  wrapChildrenInSpan: ({
+    parentElement,
+    childAccessor
+  }: {
+    parentElement: HTMLElement;
+    childAccessor: string;
+  }) => {
     const aHtml = {
-      _: parentElement.firstChild.wholeText,
+      _: parentElement[childAccessor].wholeText,
       tags: getParentAttributes({ parentElement: parentElement })
     };
     const element = Element({ node: aHtml });
-    parentElement.firstChild.replaceWith(toNodes(element));
+    parentElement[childAccessor].replaceWith(toNodes(element));
   },
 
   aHtmlElHasAttribute: (tagTuples = []) => key =>
     tagTuples.findIndex(([tagName, attributes]) => attributes[key])
 };
 
-const pointSelectionAnchorToChild = ({ element }) => {
+const pointSelectionAnchorToChild = ({ element, start }) => {
   let newElement = element;
   const isLineTheSelectionTarget = element.classList.contains(
     'rich-text__line'
   );
   if (isLineTheSelectionTarget) {
-    if (element.firstChild.nodeType === Node.TEXT_NODE) {
-      helpers.wrapChildrenInSpan({ parentElement: element });
+    const childAccessor = start ? 'firstChild' : 'lastChild';
+    if (element[childAccessor].nodeType === Node.TEXT_NODE) {
+      helpers.wrapChildrenInSpan({ parentElement: element, childAccessor });
     }
-    newElement = element.firstChild;
+    newElement = element[childAccessor];
   }
   return newElement;
 };
@@ -134,8 +141,14 @@ const processSelection = ({
   startOffset,
   endOffset
 }) => {
-  startElement = pointSelectionAnchorToChild({ element: startElement });
-  endElement = pointSelectionAnchorToChild({ element: endElement });
+  startElement = pointSelectionAnchorToChild({
+    element: startElement,
+    start: true
+  });
+  endElement = pointSelectionAnchorToChild({
+    element: endElement,
+    start: false
+  });
   applyTemporaryStamps({ startElement, endElement });
   const { startNode, endNode, midNodes } = getAHtmlAnchors(
     helpers.getSelectionAHtml({
@@ -155,7 +168,13 @@ const processSelection = ({
   [left, right, selected.leftEdge, selected.rightEdge].forEach(
     deleteTemporaryStamps
   );
-  return { selected, left, right };
+  return {
+    selected,
+    left,
+    right,
+    correctedStartElement: startElement,
+    correctedEndElement: endElement
+  };
 };
 
 export { processSelection };

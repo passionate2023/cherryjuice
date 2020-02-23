@@ -18,7 +18,13 @@ const execK = ({ tagName, style }: { tagName?: string; style?: string }) => {
 
   let { startElement, endElement, startOffset, endOffset } = getSelection();
 
-  const { left, right, selected } = processSelection({
+  const {
+    left,
+    right,
+    selected,
+    correctedStartElement,
+    correctedEndElement
+  } = processSelection({
     startElement,
     endElement,
     startOffset,
@@ -58,8 +64,8 @@ const execK = ({ tagName, style }: { tagName?: string; style?: string }) => {
   const { newStartElement, newSelectedElements, newEndElement } = applyChanges({
     left,
     right,
-    startElement,
-    endElement,
+    startElement: correctedStartElement,
+    endElement: correctedEndElement,
     modifiedSelected
   });
 
@@ -68,7 +74,12 @@ const execK = ({ tagName, style }: { tagName?: string; style?: string }) => {
     newSelectedElements,
     newEndElement,
     selected,
-    ogSelection: { startElement, endElement, startOffset, endOffset }
+    ogSelection: {
+      startElement: correctedStartElement,
+      endElement: correctedEndElement,
+      startOffset,
+      endOffset
+    }
   });
 };
 

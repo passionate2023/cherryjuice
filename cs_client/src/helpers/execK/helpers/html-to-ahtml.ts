@@ -1,4 +1,4 @@
-const getStyles = el =>
+const SEtStyles = el =>
   (el.style.cssText.match(/([\w\-]+)(?=:)/g) || []).reduce(
     (acc, key) => ({ ...acc, [key]: el.style[key] }),
     {}
@@ -23,24 +23,24 @@ type TProps = {
   };
 };
 
-const getAttributes = el =>
+const getAttributes = (ignoredAttributes: string[]) => el =>
   // @ts-ignore
   Object.fromEntries(
-    Array.from(el.attributes).map(({ name, value }) => [name, value])
+    Array.from(el.attributes)
+      .filter(({ name }) => !ignoredAttributes.includes(name))
+      .map(({ name, value }) => [name, value])
   );
 
 const getTags = (list = []) => el => [
   ...list,
-  [el.localName, getAttributes(el)],
+  [el.localName, getAttributes([])(el)],
   // @ts-ignore
   ...Array.from(el.children).flatMap(getTags(list))
 ];
 
-const getParentAttributes = ({ parentElement }) =>
-  getTags([])(parentElement).map(([tagName, attributes]) => [
-    'span',
-    (delete attributes.class, attributes)
-  ]);
+const getParentAttributes = ({ parentElement }) => [
+  ['span', getAttributes(['class'])(parentElement)]
+];
 const getAHtml = ({ containers, options = {} }: TProps) => {
   const flatList = getFlatList(containers);
   const state = { offset: 0 };
