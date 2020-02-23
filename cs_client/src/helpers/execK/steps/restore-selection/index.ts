@@ -14,8 +14,8 @@ const findAbsoluteOffset = xs =>
   xs.reduce(
     (acc, val) => {
       if (typeof val === 'string') {
-        acc.tl += Number(val.length);
-      } else {
+        acc.tl += /^\s+$/.test(val) ? 0 : Number(val.length);
+      } else if (!val.type) {
         if (acc.absoluteOffset[0] === -1) {
           acc.absoluteOffset[0] = val[1] + acc.tl;
         } else if (acc.absoluteOffset[1] === -1) {
@@ -65,6 +65,10 @@ const findNewRange = ({
   );
 const getDeepestChild = el =>
   el.firstChild ? getDeepestChild(el.firstChild) : el;
+
+const isTextElement = el =>
+  !['table', 'img', 'table'].includes(el.localName) && el.innerText;
+const isNotWhiteSpace = el => !/^\s+$/.test(el.innerText);
 const restoreSelection = ({
   newStartElement,
   newEndElement,
@@ -72,21 +76,25 @@ const restoreSelection = ({
   ogSelection,
   selected
 }) => {
+  const text = [
+    [ogSelection.startElement.innerText, ogSelection.startOffset],
+    ...selected.midNodes.filter(node => node._).map(node => node._),
+    [ogSelection.endElement.innerText, ogSelection.endOffset]
+  ];
   const [absoluteStartOffset, absoluteEndOffset] =
     ogSelection.startElement === ogSelection.endElement
       ? [ogSelection.startOffset, ogSelection.endOffset]
-      : findAbsoluteOffset([
-          [ogSelection.startElement.innerText, ogSelection.startOffset],
-          ...selected.midNodes.filter(node => node._).map(node => node._),
-          [ogSelection.endElement.innerText, ogSelection.endOffset]
-        ]).absoluteOffset;
+      : findAbsoluteOffset(text).absoluteOffset;
 
   const { startElement, endElement, startOffset, endOffset } = findNewRange({
     absoluteStartOffset,
     absoluteEndOffset,
     modifiedSelection: [
       newStartElement,
-      ...newSelectedElements.flatMap(el => el),
+      ...newSelectedElements
+        .flatMap(el => el)
+        .filter(isTextElement)
+        .filter(isNotWhiteSpace),
       newEndElement
     ]
   });

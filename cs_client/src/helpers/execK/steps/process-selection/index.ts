@@ -11,7 +11,8 @@ const helpers = {
     const { abstractHtml } = getAHtml({
       containers,
       options: {
-        useObjForTextNodes: true
+        useObjForTextNodes: true,
+        serializeNonTextElements: true
       }
     });
     const abstractHtmlObj: any[] = JSON.parse(abstractHtml);

@@ -18,6 +18,7 @@ type TProps = {
   containers: Node[];
   options?: {
     useObjForTextNodes?: boolean;
+    serializeNonTextElements?: boolean;
     // includeDatasetInTextElements?: boolean;
     // includeRefToEl?: boolean;
   };
@@ -34,8 +35,9 @@ const getAttributes = (ignoredAttributes: string[]) => el =>
 const getTags = (list = []) => el => [
   ...list,
   [el.localName, getAttributes([])(el)],
-  // @ts-ignore
-  ...Array.from(el.children).flatMap(getTags(list))
+  ...(el.localName === 'table'
+    ? []
+    : Array.from(el.children).flatMap(getTags(list)))
 ];
 
 const getParentAttributes = ({ parentElement }) => [
@@ -46,68 +48,93 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
   const state = { offset: 0 };
   const abstractHtml = (flatList as any[]).reduce((
     acc,
-    el, //: HTMLElement | HTMLTableElement | HTMLImageElement | HTMLAnchorElement
-    elIndex
+    el //: HTMLElement | HTMLTableElement | HTMLImageElement | HTMLAnchorElement
   ) => {
-    console.log(el);
     if (el.nodeType === Node.ELEMENT_NODE || el.nodeType === Node.TEXT_NODE) {
-      if (el.nodeType === Node.TEXT_NODE) {
-        console.log(getTags([])(el.parentElement));
-      }
       if (el.localName === 'br') {
         acc.push('\n');
         state.offset += 1;
       } else {
         let commonAttributes = {
-          tags: el.nodeType === Node.ELEMENT_NODE ? getTags([])(el) : [],
-          meta: { parentIndex: elIndex, parentTag: el.parentElement.localName }
+          tags: el.nodeType === Node.ELEMENT_NODE ? getTags([])(el) : []
         };
-        console.log(commonAttributes);
         if (el.localName === 'code')
-          acc.push({
-            ...commonAttributes,
-            type: 'code',
-            _: el.innerText,
-            other_attributes: {
-              offset: state.offset++,
-              do_highl_bra: +el.dataset.do_highl_bra,
-              is_width_pix: +el.dataset.is_width_pix,
-              width_raw: +el.dataset.width_raw,
-              syntax: el.dataset.syntax
-            }
-          });
+          acc.push(
+            options.serializeNonTextElements
+              ? {
+                  ...commonAttributes,
+                  type: 'code',
+                  outerHTML: el.outerHTML
+                }
+              : {
+                  ...commonAttributes,
+                  type: 'code',
+                  _: el.innerText,
+                  other_attributes: {
+                    offset: state.offset++,
+                    do_highl_bra: +el.dataset.do_highl_bra,
+                    is_width_pix: +el.dataset.is_width_pix,
+                    width_raw: +el.dataset.width_raw,
+                    syntax: el.dataset.syntax
+                  }
+                }
+          );
         else if (el.localName === 'img')
           if (el.dataset)
             // existing image
-            acc.push({
-              ...commonAttributes,
-              type: 'png',
-              other_attributes: {
-                offset: state.offset++
-              }
-            });
+            acc.push(
+              options.serializeNonTextElements
+                ? {
+                    ...commonAttributes,
+                    type: 'png',
+                    outerHTML: el.outerHTML
+                  }
+                : {
+                    ...commonAttributes,
+                    type: 'png',
+                    other_attributes: {
+                      offset: state.offset++
+                    }
+                  }
+            );
           // new image
           else
-            acc.push({
-              ...commonAttributes,
-              type: 'png',
-              src: el.src,
-              other_attributes: {
-                offset: state.offset++
-              }
-            });
+            acc.push(
+              options.serializeNonTextElements
+                ? {
+                    ...commonAttributes,
+                    type: 'png',
+                    outerHTML: el.outerHTML
+                  }
+                : {
+                    ...commonAttributes,
+                    type: 'png',
+                    src: el.src,
+                    other_attributes: {
+                      offset: state.offset++
+                    }
+                  }
+            );
         else if (el.localName === 'table')
-          acc.push({
-            ...commonAttributes,
-            type: 'table',
-            thead: el.tHead.innerText,
-            tbody: el.tBodies[0].innerText,
-            other_attributes: {
-              offset: state.offset++,
-              col_min_width: +el.dataset.col_min_width,
-              col_max_width: +el.dataset.col_max_width
-            }
-          });
+          acc.push(
+            options.serializeNonTextElements
+              ? {
+                  ...commonAttributes,
+                  type: 'table',
+                  outerHTML: el.outerHTML
+                }
+              : {
+                  ...commonAttributes,
+                  type: 'table',
+                  thead: el.tHead.innerText,
+                  tbody: el.tBodies[0].innerText,
+                  other_attributes: {
+                    offset: state.offset++,
+                    col_min_width: +el.dataset.col_min_width,
+                    col_max_width: +el.dataset.col_max_width
+                  }
+                }
+          );
         else if (el.localName === 'a') {
           state.offset += el.innerText.length;
           acc.push({

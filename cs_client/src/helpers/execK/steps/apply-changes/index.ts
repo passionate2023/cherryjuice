@@ -8,8 +8,11 @@ const getParent = ({ nestLevel, element }) =>
     ? getParent({ nestLevel: nestLevel - 1, element: element.parentElement })
     : element;
 
+const aHtmlToElement = ({ node }) =>
+  node.type ? node.outerHTML : Element({ node });
+
 const createNewElements = ({ left, right, selected }) => {
-  const newStartElement = toNodes(Element({ node: left }));
+  const newStartElement = toNodes(aHtmlToElement({ node: left }));
   const newSelectedElements = [
     selected.leftEdge,
     ...selected.midNodes,
@@ -18,10 +21,10 @@ const createNewElements = ({ left, right, selected }) => {
     (acc, node) =>
       node === '\n'
         ? [...acc, []]
-        : (acc[acc.length - 1].push(toNodes(Element({ node }))), acc),
+        : (acc[acc.length - 1].push(toNodes(aHtmlToElement({ node }))), acc),
     [[]]
   );
-  const newEndElement = toNodes(Element({ node: right }));
+  const newEndElement = toNodes(aHtmlToElement({ node: right }));
   return { newStartElement, newSelectedElements, newEndElement };
 };
 

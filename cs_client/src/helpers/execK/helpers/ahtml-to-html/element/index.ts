@@ -1,4 +1,5 @@
 import { Link as CtLink } from '../link';
+import { Table } from '::helpers/execK/helpers/ahtml-to-html/table';
 
 const stringifyStyles = (style = {}, onlyStylesThatStartWith = undefined) =>
   Object.entries(style)
