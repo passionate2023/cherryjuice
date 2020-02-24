@@ -8,20 +8,20 @@ const setSelection = ({ startElement, endElement, startOffset, endOffset }) => {
   sel.removeAllRanges();
   sel.addRange(range);
 };
-
+const getLength = (str: string) => Number(str.trim().length);
 const getInnerTextLength = el => (el.innerText ? el.innerText.length : 0);
 const findAbsoluteOffset = xs =>
   xs.reduce(
     (acc, val) => {
       if (typeof val === 'string') {
-        acc.tl += /^\s+$/.test(val) ? 0 : Number(val.length);
-      } else if (!val.type) {
+        acc.tl += getLength(val);
+      } else {
         if (acc.absoluteOffset[0] === -1) {
-          acc.absoluteOffset[0] = val[1] + acc.tl;
+          acc.absoluteOffset[0] = val.offset + acc.tl;
         } else if (acc.absoluteOffset[1] === -1) {
-          acc.absoluteOffset[1] = val[1] + acc.tl;
+          acc.absoluteOffset[1] = val.offset + acc.tl;
         }
-        acc.tl += Number(val[0].length);
+        acc.tl += getLength(val.innerText);
       }
       return acc;
     },
@@ -67,7 +67,7 @@ const getDeepestChild = el =>
   el.firstChild ? getDeepestChild(el.firstChild) : el;
 
 const isTextElement = el =>
-  !['table', 'img', 'table'].includes(el.localName) && el.innerText;
+  !['table', 'img', 'code'].includes(el.localName) && el.innerText;
 const isNotWhiteSpace = el => !/^\s+$/.test(el.innerText);
 const restoreSelection = ({
   newStartElement,
@@ -77,9 +77,15 @@ const restoreSelection = ({
   selected
 }) => {
   const text = [
-    [ogSelection.startElement.innerText, ogSelection.startOffset],
+    {
+      innerText: ogSelection.startElement.innerText,
+      offset: ogSelection.startOffset
+    },
     ...selected.midNodes.filter(node => node._).map(node => node._),
-    [ogSelection.endElement.innerText, ogSelection.endOffset]
+    {
+      innerText: ogSelection.endElement.innerText,
+      offset: ogSelection.endOffset
+    }
   ];
   const [absoluteStartOffset, absoluteEndOffset] =
     ogSelection.startElement === ogSelection.endElement
