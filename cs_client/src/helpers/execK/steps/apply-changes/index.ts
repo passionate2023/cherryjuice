@@ -91,7 +91,7 @@ const applyChanges = ({
       endElementRoot,
       currentLine: startElementRoot.parentElement,
       currentElementIndex:
-        Array.from(startElementRoot.parentElement.children).indexOf(
+        Array.from(startElementRoot.parentElement.childNodes).indexOf(
           startElementRoot
         ) + 1
     });

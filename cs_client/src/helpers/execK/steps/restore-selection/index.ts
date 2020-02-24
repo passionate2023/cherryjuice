@@ -8,20 +8,21 @@ const setSelection = ({ startElement, endElement, startOffset, endOffset }) => {
   sel.removeAllRanges();
   sel.addRange(range);
 };
-const getLength = (str: string) => Number(str.trim().length);
+const getLength = (str: string, nextStr: string | undefined) =>
+  Number((nextStr === '\n' && str !== '\n' ? str.trim() : str).length);
 const getInnerTextLength = el => (el.innerText ? el.innerText.length : 0);
 const findAbsoluteOffset = xs =>
   xs.reduce(
-    (acc, val) => {
+    (acc, val, i, arr) => {
       if (typeof val === 'string') {
-        acc.tl += getLength(val);
+        acc.tl += getLength(val, arr[i + 1]);
       } else {
         if (acc.absoluteOffset[0] === -1) {
           acc.absoluteOffset[0] = val.offset + acc.tl;
         } else if (acc.absoluteOffset[1] === -1) {
           acc.absoluteOffset[1] = val.offset + acc.tl;
         }
-        acc.tl += getLength(val.innerText);
+        acc.tl += getLength(val.innerText, arr[i + 1]);
       }
       return acc;
     },
