@@ -32,7 +32,14 @@ const execK = ({ tagName, style }: { tagName?: string; style?: string }) => {
   });
 
   const tagExists =
-    tagName && selected.leftEdge.tags.some(([tag]) => tag === tagName);
+    tagName &&
+    [
+      ...selected.leftEdge.tags,
+      ...selected.rightEdge.tags,
+      ...selected.midNodes.flatMap(el =>
+        typeof el === 'object' ? el.tags : []
+      )
+    ].some(([tag]) => tag === tagName);
 
   const styleExists =
     style &&
