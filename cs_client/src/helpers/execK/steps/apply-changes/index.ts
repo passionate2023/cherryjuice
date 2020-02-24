@@ -30,7 +30,7 @@ const createNewElements = ({ left, right, selected }) => {
 
 type TFilterEmptyNodes = (arr: HTMLElement[]) => HTMLElement[];
 const filterEmptyNodes: TFilterEmptyNodes = arr =>
-  arr.filter(el => Boolean(el.innerText));
+  arr.filter(el => Boolean(el.innerText) || Boolean(el.localName === 'img'));
 
 type TReplaceElement = (el: HTMLElement) => (arr: HTMLElement[]) => void;
 const replaceElement: TReplaceElement = el => arr =>
