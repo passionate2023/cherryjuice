@@ -9,7 +9,9 @@ const setSelection = ({ startElement, endElement, startOffset, endOffset }) => {
   sel.addRange(range);
 };
 const getLength = (str: string, nextStr: string | undefined) =>
-  Number((nextStr === '\n' && str !== '\n' ? str.trim() : str).length);
+  Number(
+    (/^(\s+|)$/.test(nextStr) || /^(\s+|)$/.test(str) ? str.trimEnd() : str).length
+  );
 const getInnerTextLength = el => (el.innerText ? el.innerText.length : 0);
 const findAbsoluteOffset = xs =>
   xs.reduce(
@@ -82,7 +84,9 @@ const restoreSelection = ({
       innerText: ogSelection.startElement.innerText,
       offset: ogSelection.startOffset
     },
-    ...selected.midNodes.filter(node => node._).map(node => node._),
+    ...selected.midNodes.map(node =>
+      typeof node === 'string' ? node : node._ || ''
+    ),
     {
       innerText: ogSelection.endElement.innerText,
       offset: ogSelection.endOffset
