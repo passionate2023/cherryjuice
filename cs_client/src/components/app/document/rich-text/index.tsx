@@ -49,7 +49,7 @@ const RichText: React.FC<Props> = ({
   });
   if (html && all_png_base64?.node_id === node_id && richTextRef.current) {
     let counter = 0;
-    while (all_png_base64.pngs.length && /<img src=""/.test(html)) {
+    while (all_png_base64.pngs[counter] && /<img src=""/.test(html)) {
       html = html.replace(
         /<img src=""/,
         `<img src="data:image/png;base64,${all_png_base64.pngs[counter++]}"`
@@ -82,19 +82,18 @@ const RichText: React.FC<Props> = ({
     toolbarQueuesRef.current[reloadDocument] = true;
     fetch();
   }
-
-  return html ? (
+  return (
     <div
       id={'rich-text'}
       ref={richTextRef}
-      contentEditable={true}
       className={rtModule.richText}
-      dangerouslySetInnerHTML={{ __html: html }}
+      {...(html
+        ? {
+            contentEditable: true,
+            dangerouslySetInnerHTML: { __html: html }
+          }
+        : { children: <SpinnerCircle /> })}
     />
-  ) : (
-    <div className={rtModule.richText}>
-      <SpinnerCircle />
-    </div>
   );
 };
 
