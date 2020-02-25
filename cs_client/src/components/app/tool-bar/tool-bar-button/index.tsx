@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 const ToolbarButton: React.FC<{
-  onClick: any;
+  onClick?: any;
   enabled?: boolean;
   fontAwesomeProps?: { icon: IconDefinition; color: string };
 }> = ({ onClick, children, enabled, fontAwesomeProps }) => (
@@ -12,7 +12,7 @@ const ToolbarButton: React.FC<{
     className={`${toolbarMod.toolBar__icon} ${
       enabled ? toolbarMod.toolBar__iconEnabled : ''
     }`}
-    onClick={onClick}
+    {...(onClick && { onClick })}
   >
     {fontAwesomeProps ? (
       <FontAwesomeIcon
