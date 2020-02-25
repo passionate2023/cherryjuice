@@ -53,7 +53,7 @@ const aHtmlToHtml = ({ richText }) => {
                       })
                     : ''
                   : Element({ node })
-                : node,
+                : `<span>${node}</span>`,
             )
             .join('')}${
             '</div>'

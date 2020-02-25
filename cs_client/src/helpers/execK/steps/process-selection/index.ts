@@ -4,6 +4,7 @@ import {
 } from '::helpers/execK/helpers/html-to-ahtml';
 import { Element } from '::helpers/execK/helpers/ahtml-to-html/element';
 import { cloneObj, toNodes } from '::helpers/execK/helpers';
+import { start } from 'repl';
 
 const helpers = {
   getSelectionAHtml: ({ rootElement }) => {
@@ -19,38 +20,8 @@ const helpers = {
     return { abstractHtmlObj };
   },
 
-  wrapChildrenInSpan: ({
-    parentElement,
-    childAccessor
-  }: {
-    parentElement: HTMLElement;
-    childAccessor: string;
-  }) => {
-    const aHtml = {
-      _: parentElement[childAccessor].wholeText,
-      tags: getParentAttributes({ parentElement: parentElement })
-    };
-    const element = Element({ node: aHtml });
-    parentElement[childAccessor].replaceWith(toNodes(element));
-  },
-
   aHtmlElHasAttribute: (tagTuples = []) => key =>
     tagTuples.findIndex(([tagName, attributes]) => attributes[key])
-};
-
-const pointSelectionAnchorToChild = ({ element, start }) => {
-  let newElement = element;
-  const isLineTheSelectionTarget = element.classList.contains(
-    'rich-text__line'
-  );
-  if (isLineTheSelectionTarget) {
-    const childAccessor = start ? 'firstChild' : 'lastChild';
-    if (element[childAccessor].nodeType === Node.TEXT_NODE) {
-      helpers.wrapChildrenInSpan({ parentElement: element, childAccessor });
-    }
-    newElement = element[childAccessor];
-  }
-  return newElement;
 };
 
 const applyTemporaryStamps = ({ startElement, endElement }) => {
@@ -142,14 +113,6 @@ const processSelection = ({
   startOffset,
   endOffset
 }) => {
-  startElement = pointSelectionAnchorToChild({
-    element: startElement,
-    start: true
-  });
-  endElement = pointSelectionAnchorToChild({
-    element: endElement,
-    start: false
-  });
   applyTemporaryStamps({ startElement, endElement });
   const { startNode, endNode, midNodes } = getAHtmlAnchors(
     helpers.getSelectionAHtml({
