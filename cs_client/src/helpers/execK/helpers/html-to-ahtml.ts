@@ -1,4 +1,4 @@
-const SEtStyles = el =>
+const getStyles = el =>
   (el.style.cssText.match(/([\w\-]+)(?=:)/g) || []).reduce(
     (acc, key) => ({ ...acc, [key]: el.style[key] }),
     {}
@@ -29,7 +29,10 @@ const getAttributes = (ignoredAttributes: string[]) => el =>
   Object.fromEntries(
     Array.from(el.attributes)
       .filter(({ name }) => !ignoredAttributes.includes(name))
-      .map(({ name, value }) => [name, value])
+      .map(({ name, value }) => [
+        name,
+        name === 'style' ? getStyles(el) : value
+      ])
   );
 
 const getTags = (list = []) => el => [

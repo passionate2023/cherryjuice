@@ -21,14 +21,18 @@ const buttons = [
       label: 'a',
       style: { textDecoration: 'underline' }
     },
-    execCommandArguments: { style: 'text-decoration:underline;' }
+    execCommandArguments: {
+      style: { property: 'text-decoration', value: 'underline' }
+    }
   },
   {
     button: {
       label: 'a',
       style: { textDecoration: 'line-through' }
     },
-    execCommandArguments: { style: 'text-decoration:line-through;' }
+    execCommandArguments: {
+      style: { property: 'text-decoration', value: 'line-through' }
+    }
   },
   ...['h1', 'h2', 'h3'].map(tagName => ({
     button: {

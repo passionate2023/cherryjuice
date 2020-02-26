@@ -10,7 +10,13 @@ import {
   setSelection
 } from '::helpers/execK/steps/restore-selection';
 
-const execK = ({ tagName, style }: { tagName?: string; style?: string }) => {
+const execK = ({
+  tagName,
+  style
+}: {
+  tagName?: string;
+  style?: { property: string; value: string };
+}) => {
   const selection = document.getSelection();
   if (selection.rangeCount === 0) return;
   const range = selection.getRangeAt(0);
@@ -31,21 +37,18 @@ const execK = ({ tagName, style }: { tagName?: string; style?: string }) => {
     endOffset
   });
 
-  const tagExists =
-    tagName &&
-    [
-      ...selected.leftEdge.tags,
-      ...selected.rightEdge.tags,
-      ...selected.midNodes.flatMap(el =>
-        typeof el === 'object' ? el.tags : []
-      )
-    ].some(([tag]) => tag === tagName);
+  const allTags = [
+    ...selected.leftEdge.tags,
+    ...selected.rightEdge.tags,
+    ...selected.midNodes.flatMap(el => (typeof el === 'object' ? el.tags : []))
+  ];
+  const tagExists = tagName && allTags.some(([tag]) => tag === tagName);
 
   const styleExists =
     style &&
-    selected.leftEdge.tags.some(
+    allTags.some(
       ([_, { style: existingStyle }]) =>
-        existingStyle && existingStyle.includes(style)
+        existingStyle && existingStyle[style.property]?.includes(style.value)
     );
   const modifiedSelected = {
     leftEdge: applyCommand({

@@ -4,7 +4,7 @@ import { applyTag } from '::helpers/execK/steps/apply-command/apply-tag';
 
 type TApplyCommand = {
   tag?: { tagName: string; tagExists: boolean };
-  style?: { style: string; styleExists: boolean };
+  style?: { style: { property: string; value: string }; styleExists: boolean };
   aHtmlElement: any;
 };
 const applyCommand = ({

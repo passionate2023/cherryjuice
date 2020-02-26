@@ -121,9 +121,6 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
             ...(options.includeDatasetInTextElements && {
               dataset: el.dataset
             }),
-            ...(options.includeRefToEl && {
-              el
-            })
           });
         }
       }

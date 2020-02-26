@@ -16,7 +16,9 @@ const ColorInput: React.FC<{ label: string; cssProperty: string }> = ({
           type="color"
           style={{ display: 'none' }}
           onChange={e => {
-            execK({ style: `${cssProperty}:${e.target.value}` });
+            execK({
+              style: { property: `${cssProperty}`, value: `${e.target.value}` }
+            });
           }}
         />
       </label>
