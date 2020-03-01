@@ -86,7 +86,15 @@ const tagsAndStyles = [
     },
     execCommandArguments: { tagName: 'code' },
     hotKey: { key: `m`, ctrlKey: true }
-  }
+  },
+  {
+    button: {
+      style: {},
+      label: 'c'
+    },
+    execCommandArguments: { tagName: 'span' },
+    hotKey: { key: `r`, altKey: true }
+  },
 ];
 
 const commands = { tagsAndStyles, colors };
