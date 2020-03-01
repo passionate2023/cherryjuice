@@ -50,7 +50,7 @@ const generateTestSamples = ({
       testName,
       tagName,
       remove: testName.includes('remove'),
-      exists: testName.includes('non-'),
+      exists: !testName.includes('non-'),
       excludedTagsInOutput
     }))
     .map(({ testName, tagName, exists, excludedTagsInOutput, remove }) => ({

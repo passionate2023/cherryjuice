@@ -11,6 +11,8 @@ const testTemplate = ({
 }: TTagTestSample) => {
   it(name, () => {
     const res = calculateTag({ cmd, tags });
+    console.log('* cmd', cmd);
+    console.log('* tags', tags);
     console.log('* expected', output.sort());
     console.log('* result', res.sort());
     expect(res.sort()).toEqual(output.sort());

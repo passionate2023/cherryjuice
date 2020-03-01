@@ -5,96 +5,48 @@ import { execK } from '::helpers/execK';
 import { ToolBar } from '::app/tool-bar';
 import { useState } from 'react';
 import { ColorInput } from '::app/tool-bar/groups/formatting-buttons/color-input';
+import { hotKeysManager } from '::helpers/hotkeys';
+import { commands } from '::helpers/hotkeys/commands';
 
 type Props = {};
-const buttons = [
-  {
-    button: {
-      label: 'b',
-      style: undefined
-    },
-    execCommandArguments: { tagName: 'strong', style: undefined }
-  },
-  { button: { label: 'i' }, execCommandArguments: { tagName: 'em' } },
-  {
-    button: {
-      label: 'a',
-      style: { textDecoration: 'underline' }
-    },
-    execCommandArguments: {
-      style: { property: 'text-decoration', value: 'underline' }
-    }
-  },
-  {
-    button: {
-      label: 'a',
-      style: { textDecoration: 'line-through' }
-    },
-    execCommandArguments: {
-      style: { property: 'text-decoration', value: 'line-through' }
-    }
-  },
-  ...['h1', 'h2', 'h3'].map(tagName => ({
-    button: {
-      label: tagName
-    },
-    execCommandArguments: { tagName }
-  })),
-  {
-    button: {
-      label: 'sm'
-    },
-    execCommandArguments: { tagName: 'small' }
-  },
-  {
-    button: {
-      label: 'sp'
-    },
-    execCommandArguments: { tagName: 'sup' }
-  },
-  {
-    button: {
-      label: 'sb'
-    },
-    execCommandArguments: { tagName: 'sub' }
-  },
-  {
-    button: {
-      label: 'm'
-    },
-    execCommandArguments: { tagName: 'code' }
-  }
-];
 
 const FormattingButtons: React.FC<Props> = ({}) => {
   return (
     <>
-      {[
-        ['fg', 'color'],
-        ['bg', 'background-color']
-      ].map(([label, cssProperty]) => (
-        <ColorInput key={label} {...{ label, cssProperty }} />
+      {commands.colors.map(({ label, cssProperty, inputId }) => (
+        <ColorInput key={label} {...{ label, cssProperty, inputId }} />
       ))}
-      {buttons.map(
-        (
-          {
-            button: { label, style: buttonStyle },
-            execCommandArguments: { tagName, style }
-          },
-          i
-        ) => (
-          <ToolbarButton key={i} onClick={() => execK({ tagName, style })}>
-            <span
-              style={buttonStyle}
-              className={modToolbar.toolBar__letterIcon}
-            >
-              {label}
-            </span>
-          </ToolbarButton>
-        )
-      )}
+      {commands.tagsAndStyles.map(({
+        button: { label, style: buttonStyle }, execCommandArguments }, i) => (
+        <ToolbarButton
+          key={i}
+          onClick={() =>
+            execK({
+              tagName: execCommandArguments.tagName,
+              // @ts-ignore
+              style: execCommandArguments?.style
+            })
+          }
+        >
+          <span style={buttonStyle} className={modToolbar.toolBar__letterIcon}>
+            {label}
+          </span>
+        </ToolbarButton>
+      ))}
     </>
   );
 };
+
+commands.tagsAndStyles.forEach(({ hotKey, execCommandArguments }) => {
+  hotKeysManager.createHotKey(hotKey, () => execK(execCommandArguments));
+});
+
+commands.colors.forEach(({ hotKey, inputId }) => {
+  hotKeysManager.createHotKey(hotKey, () => {
+    // @ts-ignore
+    document.querySelector(`#${inputId}`).click();
+  });
+});
+hotKeysManager.startListening();
 
 export { FormattingButtons };

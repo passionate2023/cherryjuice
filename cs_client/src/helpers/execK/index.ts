@@ -45,7 +45,7 @@ const execK = ({
   const tagExists = tagName && allTags.some(([tag]) => tag === tagName);
 
   const styleExists =
-    style &&
+    style.property &&
     allTags.some(
       ([_, { style: existingStyle }]) =>
         existingStyle && existingStyle[style.property]?.includes(style.value)
