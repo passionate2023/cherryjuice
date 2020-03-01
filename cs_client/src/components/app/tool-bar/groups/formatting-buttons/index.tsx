@@ -16,29 +16,39 @@ const FormattingButtons: React.FC<Props> = ({}) => {
       {commands.colors.map(({ label, cssProperty, inputId }) => (
         <ColorInput key={label} {...{ label, cssProperty, inputId }} />
       ))}
-      {commands.tagsAndStyles.map(({
-        button: { label, style: buttonStyle }, execCommandArguments }, i) => (
-        <ToolbarButton
-          key={i}
-          onClick={() =>
-            execK({
-              tagName: execCommandArguments.tagName,
-              // @ts-ignore
-              style: execCommandArguments?.style
-            })
-          }
-        >
-          <span style={buttonStyle} className={modToolbar.toolBar__letterIcon}>
-            {label}
-          </span>
-        </ToolbarButton>
-      ))}
+      {commands.tagsAndStyles.map(
+        (
+          { button: { label, style: buttonStyle }, execCommandArguments },
+          i
+        ) => (
+          <ToolbarButton
+            key={i}
+            onClick={() =>
+              execK({
+                tagName: execCommandArguments.tagName,
+                // @ts-ignore
+                style: execCommandArguments?.style,
+                // @ts-ignore
+                command: execCommandArguments?.command
+              })
+            }
+          >
+            <span
+              style={buttonStyle}
+              className={modToolbar.toolBar__letterIcon}
+            >
+              {label}
+            </span>
+          </ToolbarButton>
+        )
+      )}
     </>
   );
 };
 
 commands.tagsAndStyles.forEach(({ hotKey, execCommandArguments }) => {
-  hotKeysManager.createHotKey(hotKey, () => execK(execCommandArguments));
+  if (hotKey)
+    hotKeysManager.createHotKey(hotKey, () => execK(execCommandArguments));
 });
 
 commands.colors.forEach(({ hotKey, inputId }) => {

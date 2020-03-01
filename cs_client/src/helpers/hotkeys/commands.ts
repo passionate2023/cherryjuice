@@ -1,3 +1,5 @@
+import { ExecKCommand } from '::helpers/execK';
+
 const colors = [
   {
     label: 'fg',
@@ -92,9 +94,30 @@ const tagsAndStyles = [
       style: {},
       label: 'c'
     },
-    execCommandArguments: { tagName: 'span' },
+    execCommandArguments: { command: ExecKCommand.clear },
     hotKey: { key: `r`, altKey: true }
   },
+  {
+    button: {
+      style: {},
+      label: 'jl'
+    },
+    execCommandArguments: { command: ExecKCommand.justifyLeft }
+  },
+  {
+    button: {
+      style: {},
+      label: 'jc'
+    },
+    execCommandArguments: { command: ExecKCommand.justifyCenter }
+  },
+  {
+    button: {
+      style: {},
+      label: 'jr'
+    },
+    execCommandArguments: { command: ExecKCommand.justifyRight }
+  }
 ];
 
 const commands = { tagsAndStyles, colors };

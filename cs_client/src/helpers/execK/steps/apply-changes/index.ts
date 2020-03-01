@@ -39,14 +39,36 @@ const replaceElement: TReplaceElement = el => arr =>
 const isElementALineContainer = element =>
   element.classList.contains('rich-text__line');
 
+const applyLineStyle = ({ lineStyle, lineElement }) => {
+  Object.entries(lineStyle.line).forEach(([key, value]) => {
+    lineElement.style[key] = value;
+  });
+};
+const applyWrapperStyle = ({ lineStyle, startElementRoot }) => {
+  const wrapperElement = document.createElement('span');
+  Object.entries(lineStyle.wrapper).forEach(([key, value]) => {
+    wrapperElement.style[key] = value;
+  });
+  wrap(startElementRoot, wrapperElement);
+};
+
+// https://plainjs.com/javascript/manipulation/wrap-an-html-structure-around-an-element-28/
+function wrap(el, wrapper) {
+  el.parentNode.insertBefore(wrapper, el);
+  wrapper.appendChild(el);
+}
+
 const applyChangesToDom = ({
   startElementRoot,
   endElementRoot,
   newStartElement,
   newSelectedElements,
-  newEndElement
+  newEndElement,
+  lineStyle
 }) => {
   if (endElementRoot === startElementRoot) {
+    const parentElement = startElementRoot.parentElement;
+    applyLineStyle({ lineStyle, lineElement: parentElement });
     replaceElement(startElementRoot)([
       newStartElement,
       ...newSelectedElements.flatMap(el => el),
@@ -54,6 +76,7 @@ const applyChangesToDom = ({
     ]);
   } else {
     let currentLine = startElementRoot.parentElement;
+    applyLineStyle({ lineStyle, lineElement: currentLine });
     if (!isElementALineContainer(currentLine))
       throw Error('Element is not a line');
     const firstLine = newSelectedElements[0];
@@ -62,6 +85,7 @@ const applyChangesToDom = ({
       .filter((el, i) => i > 0)
       .forEach(line => {
         currentLine = currentLine.nextElementSibling;
+        applyLineStyle({ lineStyle, lineElement: currentLine });
         if (!isElementALineContainer(currentLine))
           throw Error('Element is not a line');
         currentLine.prepend(...filterEmptyNodes(line));
@@ -75,7 +99,8 @@ const applyChanges = ({
   startElement,
   right,
   endElement,
-  modifiedSelected
+  modifiedSelected,
+  lineStyle
 }) => {
   const startElementRoot = getParent({
     nestLevel: left.indexOfSelectionTarget_start,
@@ -110,7 +135,8 @@ const applyChanges = ({
     endElementRoot,
     newStartElement,
     newSelectedElements,
-    newEndElement
+    newEndElement,
+    lineStyle
   });
   return { newStartElement, newSelectedElements, newEndElement };
 };

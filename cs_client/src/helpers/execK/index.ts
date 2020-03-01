@@ -10,12 +10,21 @@ import {
   setSelection
 } from '::helpers/execK/steps/restore-selection';
 
+enum ExecKCommand {
+  clear = 'clear',
+  justifyLeft = 'left',
+  justifyCenter = 'center',
+  justifyRight = 'right'
+}
+
 const execK = ({
   tagName,
-  style
+  style,
+  command
 }: {
   tagName?: string;
   style?: { property: string; value: string };
+  command?: ExecKCommand;
 }) => {
   const selection = document.getSelection();
   if (selection.rangeCount === 0) return;
@@ -50,23 +59,30 @@ const execK = ({
       ([_, { style: existingStyle }]) =>
         existingStyle && existingStyle[style.property]?.includes(style.value)
     );
+  const lineStyle = { line: {}, wrapper: {} };
   const modifiedSelected = {
     leftEdge: applyCommand({
       tag: { tagName, tagExists },
       style: { style, styleExists },
-      aHtmlElement: selected.leftEdge
+      aHtmlElement: selected.leftEdge,
+      command,
+      lineStyle
     }),
     rightEdge: applyCommand({
       tag: { tagName, tagExists },
       style: { style, styleExists },
-      aHtmlElement: selected.rightEdge
+      aHtmlElement: selected.rightEdge,
+      command,
+      lineStyle
     }),
     midNodes: selected.midNodes.map(el =>
       typeof el === 'object'
         ? applyCommand({
             tag: { tagName, tagExists },
             style: { style, styleExists },
-            aHtmlElement: el
+            aHtmlElement: el,
+            command,
+            lineStyle
           })
         : el
     )
@@ -76,7 +92,8 @@ const execK = ({
     right,
     startElement: correctedStartElement,
     endElement: correctedEndElement,
-    modifiedSelected
+    modifiedSelected,
+    lineStyle
   });
 
   restoreSelection({
@@ -94,3 +111,4 @@ const execK = ({
 };
 
 export { execK };
+export { ExecKCommand };
