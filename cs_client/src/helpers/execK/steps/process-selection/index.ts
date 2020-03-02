@@ -1,32 +1,36 @@
-import {
-  getAHtml,
-  getParentAttributes
-} from '::helpers/execK/helpers/html-to-ahtml';
-import { Element } from '::helpers/execK/helpers/ahtml-to-html/element';
+import { getAHtml } from '::helpers/execK/helpers/html-to-ahtml';
 import { cloneObj, toNodes } from '::helpers/execK/helpers';
-import { start } from 'repl';
-
+const Stamps = {
+  start: 'selection-start',
+  end: 'selection-end'
+};
+const genStamps = () => {
+  Stamps.start = `selection-start-${new Date().getTime()}`;
+  Stamps.end = `selection-end-${new Date().getTime()}`;
+};
+const getSelectionAHtml = ({ rootElement }) => {
+  const containers: Node[] = Array.from(rootElement.children);
+  const { abstractHtml } = getAHtml({
+    containers,
+    options: {
+      useObjForTextNodes: true,
+      serializeNonTextElements: true
+    }
+  });
+  const abstractHtmlObj: any[] = JSON.parse(abstractHtml);
+  return { abstractHtmlObj };
+};
 const helpers = {
-  getSelectionAHtml: ({ rootElement }) => {
-    const containers: Node[] = Array.from(rootElement.children);
-    const { abstractHtml } = getAHtml({
-      containers,
-      options: {
-        useObjForTextNodes: true,
-        serializeNonTextElements: true
-      }
-    });
-    const abstractHtmlObj: any[] = JSON.parse(abstractHtml);
-    return { abstractHtmlObj };
-  },
-
   aHtmlElHasAttribute: (tagTuples = []) => key =>
     tagTuples.findIndex(([tagName, attributes]) => attributes[key])
 };
 
 const applyTemporaryStamps = ({ startElement, endElement }) => {
-  startElement.dataset.start = true;
-  endElement.dataset.end = true;
+  // startElement.dataset[Stamps.start] = true;
+  // endElement.dataset[Stamps.end] = true;
+  genStamps();
+  startElement.setAttribute(Stamps.start, true);
+  endElement.setAttribute(Stamps.end, true);
 };
 
 const splitSelected = ({
@@ -44,7 +48,7 @@ const splitSelected = ({
 
   const startText = left._.substring(
     startOffset,
-    helpers.aHtmlElHasAttribute(left.tags)('data-end') > -1
+    helpers.aHtmlElHasAttribute(left.tags)(Stamps.end) > -1
       ? endOffset
       : undefined
   );
@@ -56,7 +60,7 @@ const splitSelected = ({
   //   .replace(/\n/g, ' ');
 
   const endText =
-    helpers.aHtmlElHasAttribute(right.tags)('data-start') > -1
+    helpers.aHtmlElHasAttribute(right.tags)(Stamps.start) > -1
       ? ''
       : right._.substring(0, endOffset);
   right._ = right._.substring(endOffset);
@@ -69,9 +73,9 @@ const getAHtmlAnchors = ({ abstractHtmlObj }) => {
     (acc, val) => {
       const indexOfSelectionTarget_start = helpers.aHtmlElHasAttribute(
         val.tags
-      )('data-start');
+      )(Stamps.start);
       const indexOfSelectionTarget_end = helpers.aHtmlElHasAttribute(val.tags)(
-        'data-end'
+        Stamps.end
       );
       if (indexOfSelectionTarget_start > -1) {
         val.indexOfSelectionTarget_start = indexOfSelectionTarget_start;
@@ -94,51 +98,58 @@ const getAHtmlAnchors = ({ abstractHtmlObj }) => {
 const deleteTemporaryStamps = aHtmlElement =>
   aHtmlElement.tags.map(([tagName, attributes]) => [
     tagName,
-    (['data-start', 'data-end'].forEach(
+    ([Stamps.start, Stamps.end].forEach(
       attribute => delete attributes[attribute]
     ),
     attributes)
   ]);
 
-const wrapTextNodesInSpan = arr =>
-  arr.map(val =>
-    typeof val === 'object' && !val.tags.length
-      ? (val.tags.push(['span', {}]), val)
-      : val
-  );
+// const wrapTextNodesInSpan = arr =>
+//   arr.map(val =>
+//     typeof val === 'object' && !val.tags.length
+//       ? (val.tags.push(['span', {}]), val)
+//       : val
+//   );
 
-const processSelection = ({
-  startElement,
-  endElement,
-  startOffset,
-  endOffset
-}) => {
-  applyTemporaryStamps({ startElement, endElement });
-  const { startNode, endNode, midNodes } = getAHtmlAnchors(
-    helpers.getSelectionAHtml({
-      rootElement: document.querySelector('#rich-text > article')
-    })
-  );
-  const { left, selected, right } = splitSelected({
-    aHtmlAnchors: {
-      startNode,
-      midNodes: wrapTextNodesInSpan(midNodes),
-      endNode
-    },
-    startOffset,
-    endOffset
-  });
+// const processSelection = ({
+//   startElement,
+//   endElement,
+//   startOffset,
+//   endOffset
+// }) => {
+//   applyTemporaryStamps({ startElement, endElement });
+//   const { startNode, endNode, midNodes } = getAHtmlAnchors(
+//     getSelectionAHtml({
+//       rootElement: document.querySelector('#rich-text > article')
+//     })
+//   );
+//   const { left, selected, right } = splitSelected({
+//     aHtmlAnchors: {
+//       startNode,
+//       midNodes: wrapTextNodesInSpan(midNodes),
+//       endNode
+//     },
+//     startOffset,
+//     endOffset
+//   });
+//
+//   [left, right, selected.leftEdge, selected.rightEdge].forEach(
+//     deleteTemporaryStamps
+//   );
+//   return {
+//     selected,
+//     left,
+//     right,
+//     correctedStartElement: startElement,
+//     correctedEndElement: endElement
+//   };
+// };
 
-  [left, right, selected.leftEdge, selected.rightEdge].forEach(
-    deleteTemporaryStamps
-  );
-  return {
-    selected,
-    left,
-    right,
-    correctedStartElement: startElement,
-    correctedEndElement: endElement
-  };
+export {
+  getAHtmlAnchors,
+  deleteTemporaryStamps,
+  splitSelected,
+  getSelectionAHtml,
+  applyTemporaryStamps,
+  genStamps
 };
-
-export { processSelection };
