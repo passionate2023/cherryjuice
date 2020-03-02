@@ -92,14 +92,6 @@ const tagsAndStyles = [
   {
     button: {
       style: {},
-      label: 'c'
-    },
-    execCommandArguments: { command: ExecKCommand.clear },
-    hotKey: { key: `r`, altKey: true }
-  },
-  {
-    button: {
-      style: {},
       label: 'jl'
     },
     execCommandArguments: { command: ExecKCommand.justifyLeft }
@@ -117,6 +109,14 @@ const tagsAndStyles = [
       label: 'jr'
     },
     execCommandArguments: { command: ExecKCommand.justifyRight }
+  },
+  {
+    button: {
+      style: {},
+      label: 'c'
+    },
+    execCommandArguments: { command: ExecKCommand.clear },
+    hotKey: { key: `r`, altKey: true }
   }
 ];
 

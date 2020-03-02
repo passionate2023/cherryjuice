@@ -101,7 +101,6 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
           });
         } else if (el.nodeType === 3) {
           state.offset += el.wholeText.length;
-          console.log('pushing the element', el);
           if (options.useObjForTextNodes) {
             acc.push({
               _: el.wholeText,

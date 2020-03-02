@@ -1,4 +1,3 @@
-
 const setSelection = ({ startElement, endElement, startOffset, endOffset }) => {
   const range = document.createRange();
   range.setStart(getDeepestChild(startElement), startOffset);
@@ -9,7 +8,8 @@ const setSelection = ({ startElement, endElement, startOffset, endOffset }) => {
 };
 const getLength = (str: string, nextStr: string | undefined) =>
   Number(
-    (/^(\s+|)$/.test(nextStr) || /^(\s+|)$/.test(str) ? str.trimEnd() : str).length
+    (/^(\s+|)$/.test(nextStr) || /^(\s+|)$/.test(str) ? str.trimEnd() : str)
+      .length
   );
 const getInnerTextLength = el => (el.innerText ? el.innerText.length : 0);
 const findAbsoluteOffset = xs =>
@@ -69,7 +69,9 @@ const getDeepestChild = el =>
   el.firstChild ? getDeepestChild(el.firstChild) : el;
 
 const isTextElement = el =>
-  !['table', 'img', 'code'].includes(el.localName) && el.innerText;
+  !['table', 'img'].includes(el.localName) &&
+  !(el.localName === 'code' && el.classList.contains('rich-text__code')) &&
+  el.innerText;
 const isNotWhiteSpace = el => !/^\s+$/.test(el.innerText);
 const restoreSelection = ({
   newStartElement,

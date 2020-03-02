@@ -61,7 +61,7 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
         let commonAttributes = {
           tags: el.nodeType === Node.ELEMENT_NODE ? getTags([])(el) : []
         };
-        if (el.localName === 'code')
+        if (el.localName === 'code' && el.classList.contains('rich-text__code'))
           acc.push(
             options.serializeNonTextElements
               ? {
