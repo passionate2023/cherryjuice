@@ -7,14 +7,9 @@ import {
 } from '::helpers/execK/steps/process-selection';
 import { applyCommand } from '::helpers/execK/steps/apply-command';
 import { applyChanges } from '::helpers/execK/steps/apply-changes';
-import {
-  createWordRange,
-  getSelection
-} from '::helpers/execK/steps/get-selection';
-import {
-  restoreSelection,
-  setSelection
-} from '::helpers/execK/steps/restore-selection';
+import { getSelection } from '::helpers/execK/steps/get-selection';
+import { restoreSelection } from '::helpers/execK/steps/restore-selection';
+import { n45 } from '::helpers/execK/__tests__/__data__';
 
 enum ExecKCommand {
   clear = 'clear',
@@ -23,23 +18,23 @@ enum ExecKCommand {
   justifyRight = 'right'
 }
 
-const execK = ({
-  tagName,
-  style,
-  command
-}: {
-  tagName?: string;
-  style?: { property: string; value: string };
-  command?: ExecKCommand;
-}) => {
+const execK = (
+  {
+    tagName,
+    style,
+    command
+  }: {
+    tagName?: string;
+    style?: { property: string; value: string };
+    command?: ExecKCommand;
+  },
+  testSample
+) => {
   let ogHtml = document.querySelector('#rich-text > article').innerHTML;
   try {
-    const selection = document.getSelection();
-    if (selection.rangeCount === 0) return;
-    const range = selection.getRangeAt(0);
-    if (range.collapsed) setSelection(createWordRange());
-
-    let { startElement, endElement, startOffset, endOffset } = getSelection();
+    let { startElement, endElement, startOffset, endOffset } = testSample
+      ? testSample
+      : getSelection();
 
     applyTemporaryStamps({ startElement, endElement });
     const { startNode, endNode, midNodes } = getAHtmlAnchors(

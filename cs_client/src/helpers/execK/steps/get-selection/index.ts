@@ -1,3 +1,5 @@
+import { setSelection } from '::helpers/execK/steps/restore-selection';
+
 const getLineChildren = line => Array.from(line.childNodes);
 const getRootParent = el =>
   el.parentElement.classList.contains('rich-text__line')
@@ -76,13 +78,17 @@ const createWordRange = () => {
     startElement: line.childNodes[s],
     endElement: line.childNodes[e],
     startOffset: so, //startOffset - (s > 0 ? containerOffset : 0),
-    endOffset: eo, //endOffset - containerOffset,
+    endOffset: eo //endOffset - containerOffset,
   };
 };
 const getElementOfNode = node =>
   node.nodeType === 3 ? node.parentElement : node;
 
 const getSelection = () => {
+  const selection = document.getSelection();
+  if (selection.rangeCount === 0) throw new Error("can't find the cursor");
+  if (selection.getRangeAt(0).collapsed) setSelection(createWordRange());
+
   const range = document.getSelection().getRangeAt(0);
   return {
     startElement: getElementOfNode(range.startContainer),
@@ -92,4 +98,4 @@ const getSelection = () => {
   };
 };
 
-export { getSelection, createWordRange };
+export { getSelection };

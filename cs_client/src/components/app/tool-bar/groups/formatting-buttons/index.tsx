@@ -46,17 +46,6 @@ const FormattingButtons: React.FC<Props> = ({}) => {
   );
 };
 
-commands.tagsAndStyles.forEach(({ hotKey, execCommandArguments }) => {
-  if (hotKey)
-    hotKeysManager.createHotKey(hotKey, () => execK(execCommandArguments));
-});
 
-commands.colors.forEach(({ hotKey, inputId }) => {
-  hotKeysManager.createHotKey(hotKey, () => {
-    // @ts-ignore
-    document.querySelector(`#${inputId}`).click();
-  });
-});
-hotKeysManager.startListening();
 
 export { FormattingButtons };

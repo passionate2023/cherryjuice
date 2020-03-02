@@ -1,4 +1,3 @@
-import { start } from 'repl';
 
 const setSelection = ({ startElement, endElement, startOffset, endOffset }) => {
   const range = document.createRange();

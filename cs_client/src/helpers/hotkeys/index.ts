@@ -1,3 +1,7 @@
+import { commands } from '::helpers/hotkeys/commands';
+import { execK } from '::helpers/execK';
+import { createTestSample } from '::helpers/execK/__tests__/helpers/create-test-sample';
+
 type THotKey = {
   key?: string;
   code?: string;
@@ -58,5 +62,26 @@ const stopListening = () => {
 
 const hotKeysManager = { startListening, stopListening, createHotKey };
 
-export { hotKeysManager };
+const setupFormattingHotKeys = () => {
+  commands.tagsAndStyles.forEach(({ hotKey, execCommandArguments }) => {
+    if (hotKey)
+      hotKeysManager.createHotKey(hotKey, () => execK(execCommandArguments));
+  });
+
+  commands.colors.forEach(({ hotKey, inputId }) => {
+    hotKeysManager.createHotKey(hotKey, () => {
+      // @ts-ignore
+      document.querySelector(`#${inputId}`).click();
+    });
+  });
+};
+
+const setupDevHotKeys = () => {
+  hotKeysManager.createHotKey(
+    { key: '¤', ctrlKey: true, altKey: true },
+    createTestSample
+  );
+};
+
+export { hotKeysManager, setupDevHotKeys, setupFormattingHotKeys };
 export { THotKey };
