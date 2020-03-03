@@ -1,15 +1,8 @@
-import {
-  deleteTemporaryStamps,
-  getAHtmlAnchors,
-  splitSelected,
-  getSelectionAHtml,
-  applyTemporaryStamps
-} from '::helpers/execK/steps/process-selection';
 import { applyCommand } from '::helpers/execK/steps/apply-command';
 import { applyChanges } from '::helpers/execK/steps/apply-changes';
 import { getSelection } from '::helpers/execK/steps/get-selection';
 import { restoreSelection } from '::helpers/execK/steps/restore-selection';
-import { n45 } from '::helpers/execK/__tests__/__data__';
+import { splitSelectionIntoThree } from '::helpers/execK/steps/split-selection';
 
 enum ExecKCommand {
   clear = 'clear',
@@ -36,25 +29,12 @@ const execK = (
       ? testSample
       : getSelection();
 
-    applyTemporaryStamps({ startElement, endElement });
-    const { startNode, endNode, midNodes } = getAHtmlAnchors(
-      getSelectionAHtml({
-        rootElement: document.querySelector('#rich-text > article')
-      })
-    );
-    const { left, selected, right } = splitSelected({
-      aHtmlAnchors: {
-        startNode,
-        midNodes, //: wrapTextNodesInSpan(midNodes),
-        endNode
-      },
+    const { left, right, selected } = splitSelectionIntoThree({
+      startElement,
+      endElement,
       startOffset,
       endOffset
     });
-
-    [left, right, selected.leftEdge, selected.rightEdge].forEach(
-      deleteTemporaryStamps
-    );
 
     const allTags = [
       ...selected.leftEdge.tags,

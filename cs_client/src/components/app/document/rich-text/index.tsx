@@ -1,6 +1,6 @@
 import rtModule from '::sass-modules/rich-text.scss';
 import * as React from 'react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouteMatch } from 'react-router';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { QUERY_CT_NODE_CONTENT } from '::graphql/queries';
@@ -8,6 +8,7 @@ import { usePng } from '::hooks/use-png';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
 import { MUTATE_CT_NODE_CONTENT } from '::graphql/mutations';
 import { getAHtml } from '::helpers/html-to-ctb';
+import { setupClipboard } from '::helpers/clipboard';
 
 type Props = {
   file_id: string;
@@ -82,6 +83,9 @@ const RichText: React.FC<Props> = ({
     toolbarQueuesRef.current[reloadDocument] = true;
     fetch();
   }
+  useEffect(() => {
+    setupClipboard();
+  }, []);
   return (
     <div
       id={'rich-text'}

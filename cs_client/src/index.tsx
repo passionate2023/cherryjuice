@@ -21,3 +21,5 @@ render(
 setupFormattingHotKeys();
 setupDevHotKeys();
 hotKeysManager.startListening();
+
+

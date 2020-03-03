@@ -144,12 +144,31 @@ const deleteTemporaryStamps = aHtmlElement =>
 //     correctedEndElement: endElement
 //   };
 // };
+const splitSelectionIntoThree = ({
+  startElement,
+  endElement,
+  startOffset,
+  endOffset
+}) => {
+  applyTemporaryStamps({ startElement, endElement });
+  const { startNode, endNode, midNodes } = getAHtmlAnchors(
+    getSelectionAHtml({
+      rootElement: document.querySelector('#rich-text > article')
+    })
+  );
+  const { left, selected, right } = splitSelected({
+    aHtmlAnchors: {
+      startNode,
+      midNodes, //: wrapTextNodesInSpan(midNodes),
+      endNode
+    },
+    startOffset,
+    endOffset
+  });
 
-export {
-  getAHtmlAnchors,
-  deleteTemporaryStamps,
-  splitSelected,
-  getSelectionAHtml,
-  applyTemporaryStamps,
-  genStamps
+  [left, right, selected.leftEdge, selected.rightEdge].forEach(
+    deleteTemporaryStamps
+  );
+  return { left, selected, right };
 };
+export { splitSelectionIntoThree,getSelectionAHtml };

@@ -119,7 +119,6 @@ const tagsAndStyles = [
     hotKey: { key: `r`, altKey: true }
   }
 ];
-
 const commands = { tagsAndStyles, colors };
 
 export { commands };

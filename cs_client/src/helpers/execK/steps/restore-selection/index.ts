@@ -1,7 +1,11 @@
-const setSelection = ({ startElement, endElement, startOffset, endOffset }) => {
+const setSelection = (
+  { startElement, endElement, startOffset, endOffset },
+  collapsed?: boolean
+) => {
   const range = document.createRange();
   range.setStart(getDeepestChild(startElement), startOffset);
-  range.setEnd(getDeepestChild(endElement), endOffset);
+  if (collapsed) range.collapse(true);
+  else range.setEnd(getDeepestChild(endElement), endOffset);
   const sel = window.getSelection();
   sel.removeAllRanges();
   sel.addRange(range);

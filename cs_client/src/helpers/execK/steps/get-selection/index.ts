@@ -84,10 +84,11 @@ const createWordRange = () => {
 const getElementOfNode = node =>
   node.nodeType === 3 ? node.parentElement : node;
 
-const getSelection = () => {
+const getSelection = ({ collapsed }: { collapsed?: boolean } = {}) => {
   const selection = document.getSelection();
   if (selection.rangeCount === 0) throw new Error("can't find the cursor");
-  if (selection.getRangeAt(0).collapsed) setSelection(createWordRange());
+  if (selection.getRangeAt(0).collapsed && !collapsed)
+    setSelection(createWordRange());
 
   const range = document.getSelection().getRangeAt(0);
   return {
@@ -98,4 +99,4 @@ const getSelection = () => {
   };
 };
 
-export { getSelection };
+export { getSelection,getRootParent,getLineChildren };
