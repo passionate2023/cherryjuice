@@ -9,9 +9,9 @@ const genStamps = () => {
   Stamps.end = `selection-end-${new Date().getTime()}`;
 };
 const getSelectionAHtml = ({ rootElement }) => {
-  const containers: Node[] = Array.from(rootElement.children);
+  const lines: Node[] = Array.from(rootElement.children);
   const { abstractHtml } = getAHtml({
-    containers,
+     lines,
     options: {
       useObjForTextNodes: true,
       serializeNonTextElements: true

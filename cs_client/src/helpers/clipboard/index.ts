@@ -1,5 +1,6 @@
 import { getSelection } from '::helpers/execK/steps/get-selection';
 import {
+  getSelectionAHtml,
   splitSelectionIntoThree
 } from '::helpers/execK/steps/split-selection';
 import { applyChanges } from '::helpers/execK/steps/apply-changes';
@@ -13,6 +14,74 @@ const getPngBase64 = file =>
     };
     reader.readAsDataURL(file);
   });
+
+
+// :: clipData -> aHtml
+type TAHtml =
+  | { _: string; tags: [string, { [p: string]: string | object }][] }
+  | { type: 'png'; outerHTML: string };
+const processClipboard: { [p: string]: (str) => TAHtml[] } = {
+  image: src => [
+    {
+      type: 'png',
+      outerHTML: `<img src="${src}"/>`
+    }
+  ],
+  html: pastedData => {
+    debugger;
+    console.log(new DOMParser().parseFromString(pastedData, 'text/html'));
+    const node = new DOMParser().parseFromString(pastedData, 'text/html').body;
+    const { abstractHtmlObj } = getSelectionAHtml({
+      rootElement: node
+    });
+    return abstractHtmlObj;
+  },
+  text: str => [{ _: str, tags: [['span', {}]] }]
+};
+
+const putCursorAtTheEndOfPastedElement = ({ newEndElement }) => {
+  setSelection(
+    {
+      startElement: newEndElement,
+      endElement: newEndElement,
+      startOffset: 0,
+      endOffset: 0
+    },
+    true
+  );
+  const editableDiv = document.getElementById('rich-text');
+  editableDiv.focus();
+};
+
+const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
+  let { startElement, endElement, startOffset, endOffset } = getSelection({
+    collapsed: true
+  });
+
+  const { left, right } = splitSelectionIntoThree({
+    startElement,
+    endElement,
+    startOffset,
+    endOffset
+  });
+
+  const { newEndElement } = applyChanges(
+    {
+      left,
+      right,
+      startElement,
+      endElement,
+      modifiedSelected: {
+        leftEdge: { _: '', tags: [] },
+        rightEdge: { _: '', tags: [] },
+        midNodes: pastedData
+      },
+      lineStyle: { line: {} }
+    },
+    { skipDeletingInBetweenNodes: true, isAPaste: true }
+  );
+  putCursorAtTheEndOfPastedElement({ newEndElement });
+};
 
 const handlePaste = async e => {
   if (
@@ -30,7 +99,7 @@ const handlePaste = async e => {
       addNodeToDom({ pastedData: processClipboard.image(base64) });
     } else if (clipboardData.types.includes('text/html')) {
       const pastedData = e.clipboardData.getData('text/html');
-      console.log(pastedData);
+      addNodeToDom({ pastedData: processClipboard.html(pastedData) });
     } else if (clipboardData.types.includes('text/plain')) {
       const pastedData = e.clipboardData.getData('text/plain');
       addNodeToDom({ pastedData: processClipboard.text(pastedData) });
@@ -38,61 +107,6 @@ const handlePaste = async e => {
     }
   }
 };
-
-// :: clipData -> aHtml
-type TAHtml =
-  | { _: string; tags: [string, { [p: string]: string | object }][] }
-  | { type: 'png'; outerHTML: string };
-const processClipboard: { [p: string]: (str) => TAHtml } = {
-  image: src => ({
-    type: 'png',
-    outerHTML: `<img src="${src}"/>`
-  }),
-  html: str => ({}),
-  text: str => ({ _: str, tags: [['span', {}]] })
-};
-
-const putCursorAtTheEndOfPastedElement = ({ newEndElement }) => {
-  setSelection(
-    {
-      startElement: newEndElement,
-      endElement: newEndElement,
-      startOffset: 0,
-      endOffset: 0
-    },
-    true
-  );
-  const editableDiv = document.getElementById('rich-text');
-  editableDiv.focus();
-};
-
-const addNodeToDom = ({ pastedData }: { pastedData: TAHtml }) => {
-  let { startElement, endElement, startOffset, endOffset } = getSelection({
-    collapsed: true
-  });
-
-  const { left, right } = splitSelectionIntoThree({
-    startElement,
-    endElement,
-    startOffset,
-    endOffset
-  });
-
-  const { newEndElement } = applyChanges({
-    left,
-    right,
-    startElement,
-    endElement,
-    modifiedSelected: {
-      leftEdge: pastedData,
-      rightEdge: { _: '', tags: [] },
-      midNodes: []
-    },
-    lineStyle: { line: {} }
-  });
-  putCursorAtTheEndOfPastedElement({ newEndElement });
-};
-
 const setupClipboard = () => {
   const editableDiv = document.getElementById('rich-text');
   editableDiv.onpaste = handlePaste;

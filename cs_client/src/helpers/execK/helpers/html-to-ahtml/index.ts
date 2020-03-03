@@ -1,12 +1,15 @@
+import { escapeHtml } from '::helpers/escape-html';
+import { flattenAHtml } from '::helpers/execK/helpers/html-to-ahtml/steps/flatten-ahtml';
+
 const getStyles = el =>
   (el.style.cssText.match(/([\w\-]+)(?=:)/g) || []).reduce(
     (acc, key) => ({ ...acc, [key]: el.style[key] }),
     {}
   );
 
-const getFlatList = containers => {
+const flattenLines = lines => {
   // @ts-ignore
-  const flatList = containers.flatMap(el => [
+  const flatList = lines.flatMap(el => [
     ...Array.from(el.childNodes),
     document.createElement('br')
   ]);
@@ -15,7 +18,7 @@ const getFlatList = containers => {
 };
 
 type TProps = {
-  containers: Node[];
+  lines: Node[];
   options?: {
     useObjForTextNodes?: boolean;
     serializeNonTextElements?: boolean;
@@ -43,11 +46,11 @@ const getTags = (list = []) => el => [
     : Array.from(el.children).flatMap(getTags(list)))
 ];
 
-const getParentAttributes = ({ parentElement }) => [
-  ['span', getAttributes(['class'])(parentElement)]
-];
-const getAHtml = ({ containers, options = {} }: TProps) => {
-  const flatList = getFlatList(containers);
+// const getParentAttributes = ({ parentElement }) => [
+//   ['span', getAttributes(['class'])(parentElement)]
+// ];
+const getAHtml = ({ lines, options = {} }: TProps) => {
+  const flatList = flattenLines(lines);
   const state = { offset: 0 };
   const abstractHtml = (flatList as any[]).reduce((
     acc,
@@ -59,7 +62,10 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
         state.offset += 1;
       } else {
         let commonAttributes = {
-          tags: el.nodeType === Node.ELEMENT_NODE ? getTags([])(el) : []
+          tags:
+            el.nodeType === Node.ELEMENT_NODE
+              ? getTags([])(el) //.filter(([tagName]) => tagName !== 'br')
+              : []
         };
         if (el.localName === 'code' && el.classList.contains('rich-text__code'))
           acc.push(
@@ -154,17 +160,25 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
           if (options.useObjForTextNodes) {
             acc.push({
               ...commonAttributes,
-              _: el.wholeText
+              _: escapeHtml(el.wholeText)
             });
           } else {
-            acc.push(el.wholeText);
+            acc.push(escapeHtml(el.wholeText));
           }
         } else {
-          state.offset += el.textContent.length;
-          acc.push({
-            _: el.textContent,
-            ...commonAttributes
+          const { numberOfNewLines, newAcc } = flattenAHtml({
+            acc,
+            aHtml: {
+              _: escapeHtml(el.textContent),
+              ...commonAttributes
+            }
           });
+          acc = newAcc;
+          state.offset += el.textContent.length + numberOfNewLines;
+          // acc.push({
+          //   _: el.textContent,
+          //   ...commonAttributes
+          // });
         }
       }
     }
@@ -173,4 +187,4 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
   return { abstractHtml: JSON.stringify(abstractHtml), flatList };
 };
 
-export { getAHtml, getParentAttributes };
+export { getAHtml,  };

@@ -58,15 +58,18 @@ function wrap(el, wrapper) {
   wrapper.appendChild(el);
 }
 
-const applyChangesToDom = ({
-  startElementRoot,
-  endElementRoot,
-  newStartElement,
-  newSelectedElements,
-  newEndElement,
-  lineStyle
-}) => {
-  if (endElementRoot === startElementRoot) {
+const applyChangesToDom = (
+  {
+    startElementRoot,
+    endElementRoot,
+    newStartElement,
+    newSelectedElements,
+    newEndElement,
+    lineStyle
+  },
+  { isAPaste } = { isAPaste: false }
+) => {
+  if (endElementRoot === startElementRoot && !isAPaste) {
     const parentElement = startElementRoot.parentElement;
     applyLineStyle({ lineStyle, lineElement: parentElement });
     replaceElement(startElementRoot)([
@@ -84,24 +87,30 @@ const applyChangesToDom = ({
     newSelectedElements
       .filter((el, i) => i > 0)
       .forEach(line => {
+        if (isAPaste)
+          currentLine.insertAdjacentHTML(
+            'afterend',
+            '<div class="rich-text__line"></div>'
+          );
         currentLine = currentLine.nextElementSibling;
         applyLineStyle({ lineStyle, lineElement: currentLine });
         if (!isElementALineContainer(currentLine))
           throw Error('Element is not a line');
         currentLine.prepend(...filterEmptyNodes(line));
       });
-    replaceElement(endElementRoot)([newEndElement]);
+    if (isAPaste) {
+      currentLine.insertAdjacentElement('beforeend', newEndElement);
+    } else replaceElement(endElementRoot)([newEndElement]);
   }
 };
 
-const applyChanges = ({
-  left,
-  startElement,
-  right,
-  endElement,
-  modifiedSelected,
-  lineStyle
-}) => {
+const applyChanges = (
+  { left, startElement, right, endElement, modifiedSelected, lineStyle },
+  { skipDeletingInBetweenNodes, isAPaste } = {
+    skipDeletingInBetweenNodes: false,
+    isAPaste: false
+  }
+) => {
   const startElementRoot = getParent({
     nestLevel: left.indexOfSelectionTarget_start,
     element: startElement
@@ -110,7 +119,7 @@ const applyChanges = ({
     nestLevel: right.indexOfSelectionTarget_end,
     element: endElement
   });
-  if (modifiedSelected.midNodes.length)
+  if (modifiedSelected.midNodes.length && !skipDeletingInBetweenNodes)
     deleteInBetweenElements({
       midNodes: JSON.parse(JSON.stringify(modifiedSelected.midNodes)),
       endElementRoot,
@@ -130,14 +139,17 @@ const applyChanges = ({
     selected: modifiedSelected,
     right
   });
-  applyChangesToDom({
-    startElementRoot,
-    endElementRoot,
-    newStartElement,
-    newSelectedElements,
-    newEndElement,
-    lineStyle
-  });
+  applyChangesToDom(
+    {
+      startElementRoot,
+      endElementRoot,
+      newStartElement,
+      newSelectedElements,
+      newEndElement,
+      lineStyle
+    },
+    {  isAPaste }
+  );
   return { newStartElement, newSelectedElements, newEndElement };
 };
 
