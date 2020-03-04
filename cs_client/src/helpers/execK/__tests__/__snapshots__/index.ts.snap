@@ -130,8 +130,9 @@ exports[`execK snapshot tests node45 {"command":"center"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -257,8 +258,9 @@ exports[`execK snapshot tests node45 {"command":"clear"} 1`] = `
     </span>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -391,16 +393,18 @@ exports[`execK snapshot tests node45 {"command":"left"} 1`] = `
     </span>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       http:/
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -542,8 +546,9 @@ exports[`execK snapshot tests node45 {"command":"right"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -685,8 +690,9 @@ exports[`execK snapshot tests node45 {"style":{"property":"text-decoration","val
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -828,8 +834,9 @@ exports[`execK snapshot tests node45 {"style":{"property":"text-decoration","val
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -975,8 +982,9 @@ exports[`execK snapshot tests node45 {"tagName":"code"} 1`] = `
     </code>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <code
@@ -987,8 +995,9 @@ exports[`execK snapshot tests node45 {"tagName":"code"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -1134,8 +1143,9 @@ exports[`execK snapshot tests node45 {"tagName":"em"} 1`] = `
     </em>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <em
@@ -1146,8 +1156,9 @@ exports[`execK snapshot tests node45 {"tagName":"em"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -1293,8 +1304,9 @@ exports[`execK snapshot tests node45 {"tagName":"h1"} 1`] = `
     </h1>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <h1
@@ -1305,8 +1317,9 @@ exports[`execK snapshot tests node45 {"tagName":"h1"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -1452,8 +1465,9 @@ exports[`execK snapshot tests node45 {"tagName":"h2"} 1`] = `
     </h2>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <h2
@@ -1464,8 +1478,9 @@ exports[`execK snapshot tests node45 {"tagName":"h2"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -1611,8 +1626,9 @@ exports[`execK snapshot tests node45 {"tagName":"h3"} 1`] = `
     </h3>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <h3
@@ -1623,8 +1639,9 @@ exports[`execK snapshot tests node45 {"tagName":"h3"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -1770,8 +1787,9 @@ exports[`execK snapshot tests node45 {"tagName":"small"} 1`] = `
     </small>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <small
@@ -1782,8 +1800,9 @@ exports[`execK snapshot tests node45 {"tagName":"small"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -1929,8 +1948,9 @@ exports[`execK snapshot tests node45 {"tagName":"strong"} 1`] = `
     </strong>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <strong
@@ -1941,8 +1961,9 @@ exports[`execK snapshot tests node45 {"tagName":"strong"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -2088,8 +2109,9 @@ exports[`execK snapshot tests node45 {"tagName":"sub"} 1`] = `
     </sub>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <sub
@@ -2100,8 +2122,9 @@ exports[`execK snapshot tests node45 {"tagName":"sub"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -2247,8 +2270,9 @@ exports[`execK snapshot tests node45 {"tagName":"sup"} 1`] = `
     </sup>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <sup
@@ -2259,8 +2283,9 @@ exports[`execK snapshot tests node45 {"tagName":"sup"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       /google.com
@@ -4414,8 +4439,9 @@ exports[`execK snapshot tests node49 {"command":"center"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -4524,8 +4550,9 @@ exports[`execK snapshot tests node49 {"command":"clear"} 1`] = `
     </span>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -4562,8 +4589,9 @@ exports[`execK snapshot tests node49 {"command":"left"} 1`] = `
     </span>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       http://google.com
@@ -4658,16 +4686,18 @@ exports[`execK snapshot tests node49 {"command":"left"} 1`] = `
   >
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       http://google.co
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -4810,8 +4840,9 @@ exports[`execK snapshot tests node49 {"command":"right"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -4848,8 +4879,9 @@ exports[`execK snapshot tests node49 {"style":{"property":"text-decoration","val
     </span>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       http://google.com
@@ -4885,8 +4917,9 @@ exports[`execK snapshot tests node49 {"style":{"property":"text-decoration","val
     </div>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       http://google.
@@ -4897,8 +4930,9 @@ exports[`execK snapshot tests node49 {"style":{"property":"text-decoration","val
     >
       <a
         class="rich-text__link rich-text__link--web"
+        data-type="web"
         href="http://google.com"
-        style="data-type=\\"web\\""
+        style=""
         target="_blank"
       >
         co
@@ -4906,8 +4940,9 @@ exports[`execK snapshot tests node49 {"style":{"property":"text-decoration","val
     </strong>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -4941,16 +4976,18 @@ exports[`execK snapshot tests node49 {"style":{"property":"text-decoration","val
   >
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       http://google.co
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -5027,9 +5064,8 @@ exports[`execK snapshot tests node49 {"style":{"property":"text-decoration","val
       class="rich-text__link rich-text__link--web"
       data-type="web"
       href="http://google.com"
-      style="text-decoration:line-through"
+      style="text-decoration:line-through underline;"
       target="_blank"
-      underline;=""
     >
       http://google.
     </a>
@@ -5051,9 +5087,8 @@ exports[`execK snapshot tests node49 {"style":{"property":"text-decoration","val
       class="rich-text__link rich-text__link--web"
       data-type="web"
       href="http://google.com"
-      style="text-decoration:line-through"
+      style="text-decoration:line-through underline;"
       target="_blank"
-      underline;=""
     >
       m
     </a>
@@ -5095,8 +5130,9 @@ exports[`execK snapshot tests node49 {"style":{"property":"text-decoration","val
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -5131,8 +5167,9 @@ exports[`execK snapshot tests node49 {"tagName":"code"} 1`] = `
     </code>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <code
@@ -5261,8 +5298,9 @@ exports[`execK snapshot tests node49 {"tagName":"code"} 1`] = `
   >
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <code
@@ -5273,8 +5311,9 @@ exports[`execK snapshot tests node49 {"tagName":"code"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -5309,8 +5348,9 @@ exports[`execK snapshot tests node49 {"tagName":"em"} 1`] = `
     </em>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <em
@@ -5439,8 +5479,9 @@ exports[`execK snapshot tests node49 {"tagName":"em"} 1`] = `
   >
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <em
@@ -5451,8 +5492,9 @@ exports[`execK snapshot tests node49 {"tagName":"em"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -5487,8 +5529,9 @@ exports[`execK snapshot tests node49 {"tagName":"h1"} 1`] = `
     </h1>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <h1
@@ -5617,8 +5660,9 @@ exports[`execK snapshot tests node49 {"tagName":"h1"} 1`] = `
   >
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <h1
@@ -5629,8 +5673,9 @@ exports[`execK snapshot tests node49 {"tagName":"h1"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -5665,8 +5710,9 @@ exports[`execK snapshot tests node49 {"tagName":"h2"} 1`] = `
     </h2>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <h2
@@ -5795,8 +5841,9 @@ exports[`execK snapshot tests node49 {"tagName":"h2"} 1`] = `
   >
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <h2
@@ -5807,8 +5854,9 @@ exports[`execK snapshot tests node49 {"tagName":"h2"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -5843,8 +5891,9 @@ exports[`execK snapshot tests node49 {"tagName":"h3"} 1`] = `
     </h3>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <h3
@@ -5973,8 +6022,9 @@ exports[`execK snapshot tests node49 {"tagName":"h3"} 1`] = `
   >
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <h3
@@ -5985,8 +6035,9 @@ exports[`execK snapshot tests node49 {"tagName":"h3"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -6021,8 +6072,9 @@ exports[`execK snapshot tests node49 {"tagName":"small"} 1`] = `
     </small>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <small
@@ -6151,8 +6203,9 @@ exports[`execK snapshot tests node49 {"tagName":"small"} 1`] = `
   >
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <small
@@ -6163,8 +6216,9 @@ exports[`execK snapshot tests node49 {"tagName":"small"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -6200,8 +6254,9 @@ exports[`execK snapshot tests node49 {"tagName":"strong"} 1`] = `
     </span>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       http://google.com
@@ -6289,16 +6344,18 @@ exports[`execK snapshot tests node49 {"tagName":"strong"} 1`] = `
   >
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       http://google.co
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -6333,8 +6390,9 @@ exports[`execK snapshot tests node49 {"tagName":"sub"} 1`] = `
     </sub>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <sub
@@ -6463,8 +6521,9 @@ exports[`execK snapshot tests node49 {"tagName":"sub"} 1`] = `
   >
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <sub
@@ -6475,8 +6534,9 @@ exports[`execK snapshot tests node49 {"tagName":"sub"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -6511,8 +6571,9 @@ exports[`execK snapshot tests node49 {"tagName":"sup"} 1`] = `
     </sup>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <sup
@@ -6641,8 +6702,9 @@ exports[`execK snapshot tests node49 {"tagName":"sup"} 1`] = `
   >
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <sup
@@ -6653,8 +6715,9 @@ exports[`execK snapshot tests node49 {"tagName":"sup"} 1`] = `
     </a>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       m
@@ -6794,8 +6857,9 @@ exports[`execK snapshot tests node55 {"command":"left"} 1`] = `
     </span>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       http://google.com
@@ -7015,8 +7079,9 @@ exports[`execK snapshot tests node55 {"tagName":"code"} 1`] = `
     </code>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <code
@@ -7075,8 +7140,9 @@ exports[`execK snapshot tests node55 {"tagName":"em"} 1`] = `
     </em>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <em
@@ -7135,8 +7201,9 @@ exports[`execK snapshot tests node55 {"tagName":"h1"} 1`] = `
     </h1>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <h1
@@ -7195,8 +7262,9 @@ exports[`execK snapshot tests node55 {"tagName":"h2"} 1`] = `
     </h2>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <h2
@@ -7255,8 +7323,9 @@ exports[`execK snapshot tests node55 {"tagName":"h3"} 1`] = `
     </h3>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <h3
@@ -7315,8 +7384,9 @@ exports[`execK snapshot tests node55 {"tagName":"small"} 1`] = `
     </small>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <small
@@ -7375,8 +7445,9 @@ exports[`execK snapshot tests node55 {"tagName":"strong"} 1`] = `
     </strong>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <strong
@@ -7435,8 +7506,9 @@ exports[`execK snapshot tests node55 {"tagName":"sub"} 1`] = `
     </sub>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <sub
@@ -7495,8 +7567,9 @@ exports[`execK snapshot tests node55 {"tagName":"sup"} 1`] = `
     </sup>
     <a
       class="rich-text__link rich-text__link--web"
+      data-type="web"
       href="http://google.com"
-      style="data-type=\\"web\\""
+      style=""
       target="_blank"
     >
       <sup

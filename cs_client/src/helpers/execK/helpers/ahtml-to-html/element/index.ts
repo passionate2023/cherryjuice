@@ -9,6 +9,7 @@ const stringifyStyles = (style = {}, onlyStylesThatStartWith = undefined) =>
       )
       .map(([key, value]) => `${key}:${value}`)
       .join(';') + ';'
+      .replace('"','\"')
   )
     .replace(/;\s*;/g, ';')
     .replace(/^;$/, '');
@@ -17,7 +18,7 @@ const createElement = (tag, attributes, children) =>
     Object.entries(attributes)
       .map(
         ([key, value]) =>
-          `${key}="${key === 'style' ? stringifyStyles(value) : value}"`
+          `${key}='${key === 'style' ? stringifyStyles(value) : value}'`
       )
       .join(' ')}>${children}</${tag}>`;
 

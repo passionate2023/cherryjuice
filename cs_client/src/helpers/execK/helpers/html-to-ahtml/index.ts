@@ -1,5 +1,6 @@
 import { escapeHtml } from '::helpers/escape-html';
 import { flattenAHtml } from '::helpers/execK/helpers/html-to-ahtml/steps/flatten-ahtml';
+import { flattenLines } from '::helpers/execK/helpers/html-to-ahtml/steps/flatten-lines';
 
 const getStyles = el =>
   (el.style.cssText.match(/([\w\-]+)(?=:)/g) || []).reduce(
@@ -7,15 +8,7 @@ const getStyles = el =>
     {}
   );
 
-const flattenLines = lines => {
-  // @ts-ignore
-  const flatList = lines.flatMap(el => [
-    ...(el.childNodes.length ? Array.from(el.childNodes) : [el]),
-    document.createElement('br')
-  ]);
-  flatList.pop();
-  return flatList;
-};
+
 
 type TProps = {
   lines: Node[];
