@@ -64,7 +64,7 @@ const RichText: React.FC<Props> = ({
     console.log(saveDocument);
     toolbarQueuesRef.current[saveDocument] = true;
     const containers = Array.from(
-      document.querySelectorAll('#rich-text > article > div')
+      document.querySelectorAll('#rich-text > div')
     );
     const { abstractHtml, flatList } = getAHtml({ containers });
     if (!(saveDocument + '').endsWith('_'))

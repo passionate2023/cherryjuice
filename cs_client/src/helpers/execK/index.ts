@@ -23,7 +23,7 @@ const execK = (
   },
   testSample
 ) => {
-  let ogHtml = document.querySelector('#rich-text > article').innerHTML;
+  let ogHtml = document.querySelector('#rich-text ').innerHTML;
   try {
     let { startElement, endElement, startOffset, endOffset } = testSample
       ? testSample
@@ -106,7 +106,7 @@ const execK = (
     });
   } catch (e) {
     console.error(e);
-    document.querySelector('#rich-text > article').innerHTML = ogHtml;
+    document.querySelector('#rich-text ').innerHTML = ogHtml;
   }
 };
 

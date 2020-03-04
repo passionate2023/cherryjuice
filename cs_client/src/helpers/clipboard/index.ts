@@ -64,12 +64,18 @@ const putCursorAtTheEndOfPastedElement = ({ newEndElement }) => {
 };
 
 const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
-  let ogHtml = document.querySelector('#rich-text > article').innerHTML;
+  let ogHtml = document.querySelector('#rich-text ').innerHTML;
   try {
     let { startElement, endElement, startOffset, endOffset } = getSelection({
       collapsed: true
     });
-
+    const isRootTheTarget = startElement.id === 'rich-text';
+    if (isRootTheTarget) {
+      const span = document.createElement('span');
+      span.classList.add('rich-text__line');
+      startElement.insertAdjacentElement('afterbegin', span);
+      startElement = endElement = span;
+    }
     const { left, right } = splitSelectionIntoThree({
       startElement,
       endElement,
@@ -95,7 +101,7 @@ const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
     putCursorAtTheEndOfPastedElement({ newEndElement });
   } catch (e) {
     console.error(e);
-    document.querySelector('#rich-text > article').innerHTML = ogHtml;
+    document.querySelector('#rich-text ').innerHTML = ogHtml;
   }
 };
 

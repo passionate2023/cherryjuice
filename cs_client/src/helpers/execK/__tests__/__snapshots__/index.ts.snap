@@ -1,7 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`execK snapshot tests node45 {"command":"center"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -136,11 +140,15 @@ exports[`execK snapshot tests node45 {"command":"center"} 1`] = `
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"command":"clear"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -259,11 +267,15 @@ exports[`execK snapshot tests node45 {"command":"clear"} 1`] = `
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"command":"left"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -397,11 +409,15 @@ exports[`execK snapshot tests node45 {"command":"left"} 1`] = `
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"command":"right"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -536,11 +552,15 @@ exports[`execK snapshot tests node45 {"command":"right"} 1`] = `
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"style":{"property":"text-decoration","value":"line-through"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -675,11 +695,15 @@ exports[`execK snapshot tests node45 {"style":{"property":"text-decoration","val
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"style":{"property":"text-decoration","value":"underline"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -814,11 +838,15 @@ exports[`execK snapshot tests node45 {"style":{"property":"text-decoration","val
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"tagName":"code"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -969,11 +997,15 @@ exports[`execK snapshot tests node45 {"tagName":"code"} 1`] = `
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"tagName":"em"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -1124,11 +1156,15 @@ exports[`execK snapshot tests node45 {"tagName":"em"} 1`] = `
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"tagName":"h1"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -1279,11 +1315,15 @@ exports[`execK snapshot tests node45 {"tagName":"h1"} 1`] = `
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"tagName":"h2"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -1434,11 +1474,15 @@ exports[`execK snapshot tests node45 {"tagName":"h2"} 1`] = `
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"tagName":"h3"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -1589,11 +1633,15 @@ exports[`execK snapshot tests node45 {"tagName":"h3"} 1`] = `
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"tagName":"small"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -1744,11 +1792,15 @@ exports[`execK snapshot tests node45 {"tagName":"small"} 1`] = `
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"tagName":"strong"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -1899,11 +1951,15 @@ exports[`execK snapshot tests node45 {"tagName":"strong"} 1`] = `
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"tagName":"sub"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -2054,11 +2110,15 @@ exports[`execK snapshot tests node45 {"tagName":"sub"} 1`] = `
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node45 {"tagName":"sup"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -2209,11 +2269,15 @@ exports[`execK snapshot tests node45 {"tagName":"sup"} 1`] = `
        text
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"command":"center"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -2265,11 +2329,15 @@ exports[`execK snapshot tests node46 {"command":"center"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"command":"clear"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -2315,11 +2383,15 @@ exports[`execK snapshot tests node46 {"command":"clear"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"command":"left"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -2371,11 +2443,15 @@ exports[`execK snapshot tests node46 {"command":"left"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"command":"right"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -2427,11 +2503,15 @@ exports[`execK snapshot tests node46 {"command":"right"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"style":{"property":"text-decoration","value":"line-through"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -2483,11 +2563,15 @@ exports[`execK snapshot tests node46 {"style":{"property":"text-decoration","val
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"style":{"property":"text-decoration","value":"underline"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -2539,11 +2623,15 @@ exports[`execK snapshot tests node46 {"style":{"property":"text-decoration","val
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"tagName":"code"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -2606,11 +2694,15 @@ exports[`execK snapshot tests node46 {"tagName":"code"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"tagName":"em"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -2673,11 +2765,15 @@ exports[`execK snapshot tests node46 {"tagName":"em"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"tagName":"h1"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -2740,11 +2836,15 @@ exports[`execK snapshot tests node46 {"tagName":"h1"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"tagName":"h2"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -2807,11 +2907,15 @@ exports[`execK snapshot tests node46 {"tagName":"h2"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"tagName":"h3"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -2874,11 +2978,15 @@ exports[`execK snapshot tests node46 {"tagName":"h3"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"tagName":"small"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -2941,11 +3049,15 @@ exports[`execK snapshot tests node46 {"tagName":"small"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"tagName":"strong"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3008,11 +3120,15 @@ exports[`execK snapshot tests node46 {"tagName":"strong"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"tagName":"sub"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3075,11 +3191,15 @@ exports[`execK snapshot tests node46 {"tagName":"sub"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node46 {"tagName":"sup"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3142,11 +3262,15 @@ exports[`execK snapshot tests node46 {"tagName":"sup"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"command":"center"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -3202,11 +3326,15 @@ exports[`execK snapshot tests node48 {"command":"center"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"command":"clear"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3257,11 +3385,15 @@ exports[`execK snapshot tests node48 {"command":"clear"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"command":"left"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3317,11 +3449,15 @@ exports[`execK snapshot tests node48 {"command":"left"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"command":"right"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -3377,11 +3513,15 @@ exports[`execK snapshot tests node48 {"command":"right"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"style":{"property":"text-decoration","value":"line-through"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3437,11 +3577,15 @@ exports[`execK snapshot tests node48 {"style":{"property":"text-decoration","val
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"style":{"property":"text-decoration","value":"underline"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3497,11 +3641,15 @@ exports[`execK snapshot tests node48 {"style":{"property":"text-decoration","val
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"tagName":"code"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3564,11 +3712,15 @@ exports[`execK snapshot tests node48 {"tagName":"code"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"tagName":"em"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3631,11 +3783,15 @@ exports[`execK snapshot tests node48 {"tagName":"em"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"tagName":"h1"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3698,11 +3854,15 @@ exports[`execK snapshot tests node48 {"tagName":"h1"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"tagName":"h2"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3765,11 +3925,15 @@ exports[`execK snapshot tests node48 {"tagName":"h2"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"tagName":"h3"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3832,11 +3996,15 @@ exports[`execK snapshot tests node48 {"tagName":"h3"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"tagName":"small"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3899,11 +4067,15 @@ exports[`execK snapshot tests node48 {"tagName":"small"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"tagName":"strong"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -3966,11 +4138,15 @@ exports[`execK snapshot tests node48 {"tagName":"strong"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"tagName":"sub"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -4033,11 +4209,15 @@ exports[`execK snapshot tests node48 {"tagName":"sub"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node48 {"tagName":"sup"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -4100,11 +4280,15 @@ exports[`execK snapshot tests node48 {"tagName":"sup"} 1`] = `
       xt
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"command":"center"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -4240,11 +4424,15 @@ exports[`execK snapshot tests node49 {"command":"center"} 1`] = `
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"command":"clear"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -4346,11 +4534,15 @@ exports[`execK snapshot tests node49 {"command":"clear"} 1`] = `
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"command":"left"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -4484,11 +4676,15 @@ exports[`execK snapshot tests node49 {"command":"left"} 1`] = `
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"command":"right"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -4624,11 +4820,15 @@ exports[`execK snapshot tests node49 {"command":"right"} 1`] = `
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"style":{"property":"text-decoration","value":"line-through"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -4759,11 +4959,15 @@ exports[`execK snapshot tests node49 {"style":{"property":"text-decoration","val
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"style":{"property":"text-decoration","value":"underline"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -4901,11 +5105,15 @@ exports[`execK snapshot tests node49 {"style":{"property":"text-decoration","val
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"tagName":"code"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -5075,11 +5283,15 @@ exports[`execK snapshot tests node49 {"tagName":"code"} 1`] = `
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"tagName":"em"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -5249,11 +5461,15 @@ exports[`execK snapshot tests node49 {"tagName":"em"} 1`] = `
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"tagName":"h1"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -5423,11 +5639,15 @@ exports[`execK snapshot tests node49 {"tagName":"h1"} 1`] = `
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"tagName":"h2"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -5597,11 +5817,15 @@ exports[`execK snapshot tests node49 {"tagName":"h2"} 1`] = `
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"tagName":"h3"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -5771,11 +5995,15 @@ exports[`execK snapshot tests node49 {"tagName":"h3"} 1`] = `
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"tagName":"small"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -5945,11 +6173,15 @@ exports[`execK snapshot tests node49 {"tagName":"small"} 1`] = `
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"tagName":"strong"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -6075,11 +6307,15 @@ exports[`execK snapshot tests node49 {"tagName":"strong"} 1`] = `
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"tagName":"sub"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -6249,11 +6485,15 @@ exports[`execK snapshot tests node49 {"tagName":"sub"} 1`] = `
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node49 {"tagName":"sup"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -6423,11 +6663,15 @@ exports[`execK snapshot tests node49 {"tagName":"sup"} 1`] = `
        dz
     </span>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"command":"center"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -6475,11 +6719,15 @@ exports[`execK snapshot tests node55 {"command":"center"} 1`] = `
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"command":"clear"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -6518,11 +6766,15 @@ exports[`execK snapshot tests node55 {"command":"clear"} 1`] = `
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"command":"left"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -6569,11 +6821,15 @@ exports[`execK snapshot tests node55 {"command":"left"} 1`] = `
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"command":"right"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -6621,11 +6877,15 @@ exports[`execK snapshot tests node55 {"command":"right"} 1`] = `
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"style":{"property":"text-decoration","value":"line-through"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -6673,11 +6933,15 @@ exports[`execK snapshot tests node55 {"style":{"property":"text-decoration","val
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"style":{"property":"text-decoration","value":"underline"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -6725,11 +6989,15 @@ exports[`execK snapshot tests node55 {"style":{"property":"text-decoration","val
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"tagName":"code"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -6781,11 +7049,15 @@ exports[`execK snapshot tests node55 {"tagName":"code"} 1`] = `
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"tagName":"em"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -6837,11 +7109,15 @@ exports[`execK snapshot tests node55 {"tagName":"em"} 1`] = `
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"tagName":"h1"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -6893,11 +7169,15 @@ exports[`execK snapshot tests node55 {"tagName":"h1"} 1`] = `
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"tagName":"h2"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -6949,11 +7229,15 @@ exports[`execK snapshot tests node55 {"tagName":"h2"} 1`] = `
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"tagName":"h3"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -7005,11 +7289,15 @@ exports[`execK snapshot tests node55 {"tagName":"h3"} 1`] = `
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"tagName":"small"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -7061,11 +7349,15 @@ exports[`execK snapshot tests node55 {"tagName":"small"} 1`] = `
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"tagName":"strong"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -7117,11 +7409,15 @@ exports[`execK snapshot tests node55 {"tagName":"strong"} 1`] = `
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"tagName":"sub"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -7173,11 +7469,15 @@ exports[`execK snapshot tests node55 {"tagName":"sub"} 1`] = `
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node55 {"tagName":"sup"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -7229,11 +7529,15 @@ exports[`execK snapshot tests node55 {"tagName":"sup"} 1`] = `
       ext
     </div>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"command":"center"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -7465,11 +7769,15 @@ exports[`execK snapshot tests node56 {"command":"center"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"command":"clear"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -7650,11 +7958,15 @@ exports[`execK snapshot tests node56 {"command":"clear"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"command":"left"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -7886,11 +8198,15 @@ exports[`execK snapshot tests node56 {"command":"left"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"command":"right"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -8122,11 +8438,15 @@ exports[`execK snapshot tests node56 {"command":"right"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"style":{"property":"text-decoration","value":"line-through"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -8358,11 +8678,15 @@ exports[`execK snapshot tests node56 {"style":{"property":"text-decoration","val
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"style":{"property":"text-decoration","value":"underline"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -8594,11 +8918,15 @@ exports[`execK snapshot tests node56 {"style":{"property":"text-decoration","val
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"tagName":"code"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -8859,11 +9187,15 @@ exports[`execK snapshot tests node56 {"tagName":"code"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"tagName":"em"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -9066,11 +9398,15 @@ exports[`execK snapshot tests node56 {"tagName":"em"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"tagName":"h1"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -9311,11 +9647,15 @@ exports[`execK snapshot tests node56 {"tagName":"h1"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"tagName":"h2"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -9556,11 +9896,15 @@ exports[`execK snapshot tests node56 {"tagName":"h2"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"tagName":"h3"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -9801,11 +10145,15 @@ exports[`execK snapshot tests node56 {"tagName":"h3"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"tagName":"small"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -10008,11 +10356,15 @@ exports[`execK snapshot tests node56 {"tagName":"small"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"tagName":"strong"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -10225,11 +10577,15 @@ exports[`execK snapshot tests node56 {"tagName":"strong"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"tagName":"sub"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -10470,11 +10826,15 @@ exports[`execK snapshot tests node56 {"tagName":"sub"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node56 {"tagName":"sup"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -10715,11 +11075,15 @@ exports[`execK snapshot tests node56 {"tagName":"sup"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"command":"center"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -10914,11 +11278,15 @@ exports[`execK snapshot tests node68 {"command":"center"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"command":"clear"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -11096,11 +11464,15 @@ exports[`execK snapshot tests node68 {"command":"clear"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"command":"left"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -11295,11 +11667,15 @@ exports[`execK snapshot tests node68 {"command":"left"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"command":"right"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -11494,11 +11870,15 @@ exports[`execK snapshot tests node68 {"command":"right"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"style":{"property":"text-decoration","value":"line-through"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -11693,11 +12073,15 @@ exports[`execK snapshot tests node68 {"style":{"property":"text-decoration","val
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"style":{"property":"text-decoration","value":"underline"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -11892,11 +12276,15 @@ exports[`execK snapshot tests node68 {"style":{"property":"text-decoration","val
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"tagName":"code"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -12089,11 +12477,15 @@ exports[`execK snapshot tests node68 {"tagName":"code"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"tagName":"em"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -12338,11 +12730,15 @@ exports[`execK snapshot tests node68 {"tagName":"em"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"tagName":"h1"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -12587,11 +12983,15 @@ exports[`execK snapshot tests node68 {"tagName":"h1"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"tagName":"h2"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -12836,11 +13236,15 @@ exports[`execK snapshot tests node68 {"tagName":"h2"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"tagName":"h3"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -13085,11 +13489,15 @@ exports[`execK snapshot tests node68 {"tagName":"h3"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"tagName":"small"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -13334,11 +13742,15 @@ exports[`execK snapshot tests node68 {"tagName":"small"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"tagName":"strong"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -13531,11 +13943,15 @@ exports[`execK snapshot tests node68 {"tagName":"strong"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"tagName":"sub"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -13780,11 +14196,15 @@ exports[`execK snapshot tests node68 {"tagName":"sub"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node68 {"tagName":"sup"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -14029,11 +14449,15 @@ exports[`execK snapshot tests node68 {"tagName":"sup"} 1`] = `
     class="rich-text__line"
     style=""
   />
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"command":"center"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -14461,11 +14885,15 @@ exports[`execK snapshot tests node71 {"command":"center"} 1`] = `
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"command":"clear"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -14675,11 +15103,15 @@ exports[`execK snapshot tests node71 {"command":"clear"} 1`] = `
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"command":"left"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -15107,11 +15539,15 @@ exports[`execK snapshot tests node71 {"command":"left"} 1`] = `
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"command":"right"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style="display: flex;"
@@ -15539,11 +15975,15 @@ exports[`execK snapshot tests node71 {"command":"right"} 1`] = `
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"style":{"property":"text-decoration","value":"line-through"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -15971,11 +16411,15 @@ exports[`execK snapshot tests node71 {"style":{"property":"text-decoration","val
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"style":{"property":"text-decoration","value":"underline"}} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -16403,11 +16847,15 @@ exports[`execK snapshot tests node71 {"style":{"property":"text-decoration","val
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"tagName":"code"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -16929,11 +17377,15 @@ exports[`execK snapshot tests node71 {"tagName":"code"} 1`] = `
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"tagName":"em"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -17244,11 +17696,15 @@ exports[`execK snapshot tests node71 {"tagName":"em"} 1`] = `
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"tagName":"h1"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -17654,11 +18110,15 @@ exports[`execK snapshot tests node71 {"tagName":"h1"} 1`] = `
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"tagName":"h2"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -18064,11 +18524,15 @@ exports[`execK snapshot tests node71 {"tagName":"h2"} 1`] = `
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"tagName":"h3"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -18474,11 +18938,15 @@ exports[`execK snapshot tests node71 {"tagName":"h3"} 1`] = `
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"tagName":"small"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -18788,11 +19256,15 @@ exports[`execK snapshot tests node71 {"tagName":"small"} 1`] = `
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"tagName":"strong"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -19143,11 +19615,15 @@ exports[`execK snapshot tests node71 {"tagName":"strong"} 1`] = `
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"tagName":"sub"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -19553,11 +20029,15 @@ exports[`execK snapshot tests node71 {"tagName":"sub"} 1`] = `
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;
 
 exports[`execK snapshot tests node71 {"tagName":"sup"} 1`] = `
-<article>
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
   <div
     class="rich-text__line"
     style=""
@@ -19963,5 +20443,5 @@ exports[`execK snapshot tests node71 {"tagName":"sup"} 1`] = `
       </em>
     </strong>
   </div>
-</article>
+</div>
 `;

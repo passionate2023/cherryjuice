@@ -7,7 +7,7 @@ import { escapeHtml } from '../../../helpers/escape-html';
 const aHtmlToHtml = ({ richText }) => {
   let res: string = '<article></article>';
   try {
-    res = `<article>${richText
+    res = `${richText
       .map(
         line =>
           `<div class="rich-text__line" style="${
@@ -60,7 +60,7 @@ const aHtmlToHtml = ({ richText }) => {
             // line.styles ? '</div>' : i < lines.length - 1 ? '<br />' : ''
           }`,
       )
-      .join('')}</article>`;
+      .join('')}`;
   } catch (e) {
     console.error(e);
   }

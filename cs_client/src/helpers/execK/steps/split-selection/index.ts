@@ -154,7 +154,7 @@ const splitSelectionIntoThree = ({
   applyTemporaryStamps({ startElement, endElement });
   const { startNode, endNode, midNodes } = getAHtmlAnchors(
     getSelectionAHtml({
-      rootElement: document.querySelector('#rich-text > article')
+      rootElement: document.querySelector('#rich-text ')
     })
   );
   const { left, selected, right } = splitSelected({

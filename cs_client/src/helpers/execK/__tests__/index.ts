@@ -25,7 +25,7 @@ const test = (
     const startElement = document.querySelector('[start-element="true"]');
     const endElement = document.querySelector('[end-element="true"]');
     execK(cmd, { endOffset, startOffset, startElement, endElement });
-    const res = document.querySelector('#rich-text > article');
+    const res = document.querySelector('#rich-text');
     expect(res).toMatchSnapshot();
   });
 };
