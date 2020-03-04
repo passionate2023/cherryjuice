@@ -40,7 +40,6 @@ function escapeHtml(string) {
   var html = '';
   var index = 0;
   var lastIndex = 0;
-  debugger;
   for (index = match.index; index < str.length; index++) {
     switch (str.charCodeAt(index)) {
       case 9: // <tab>

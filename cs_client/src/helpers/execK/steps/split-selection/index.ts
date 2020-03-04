@@ -68,7 +68,7 @@ const splitSelected = ({
 };
 
 const getAHtmlAnchors = ({ abstractHtmlObj }) => {
-  const { startNode, endNode, midNodes } = abstractHtmlObj.reduce(
+  let { startNode, endNode, midNodes } = abstractHtmlObj.reduce(
     (acc, val) => {
       const indexOfSelectionTarget_start = helpers.aHtmlElHasAttribute(
         val.tags
@@ -91,6 +91,8 @@ const getAHtmlAnchors = ({ abstractHtmlObj }) => {
     },
     { startNode: undefined, endNode: undefined, midNodes: [] }
   );
+  if (startNode === undefined) startNode = { _: '', tags: [] };
+  if (endNode === undefined) endNode = { _: '', tags: [] };
   return { startNode, endNode, midNodes };
 };
 

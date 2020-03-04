@@ -80,8 +80,15 @@ const applyChangesToDom = (
   } else {
     let currentLine = startElementRoot.parentElement;
     applyLineStyle({ lineStyle, lineElement: currentLine });
-    if (!isElementALineContainer(currentLine))
-      throw Error('Element is not a line');
+    if (!isElementALineContainer(currentLine)) {
+      const emptyDocument =
+        isAPaste && isElementALineContainer(startElementRoot);
+      if (emptyDocument) {
+        currentLine = startElementRoot;
+        startElementRoot = document.createElement('span');
+        currentLine.insertAdjacentElement('afterBegin', startElementRoot);
+      } else throw Error('Element is not a line');
+    }
     const firstLine = newSelectedElements[0];
     replaceElement(startElementRoot)([newStartElement, ...firstLine]);
     newSelectedElements
@@ -148,7 +155,7 @@ const applyChanges = (
       newEndElement,
       lineStyle
     },
-    {  isAPaste }
+    { isAPaste }
   );
   return { newStartElement, newSelectedElements, newEndElement };
 };

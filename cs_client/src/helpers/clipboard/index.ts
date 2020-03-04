@@ -36,7 +36,6 @@ const processClipboard: { [p: string]: (str) => TAHtml[] } = {
     }
   ],
   html: pastedData => {
-    debugger;
     console.log(new DOMParser().parseFromString(pastedData, 'text/html'));
     const node = new DOMParser().parseFromString(
       cleanHtml(pastedData),
@@ -65,33 +64,39 @@ const putCursorAtTheEndOfPastedElement = ({ newEndElement }) => {
 };
 
 const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
-  let { startElement, endElement, startOffset, endOffset } = getSelection({
-    collapsed: true
-  });
+  let ogHtml = document.querySelector('#rich-text > article').innerHTML;
+  try {
+    let { startElement, endElement, startOffset, endOffset } = getSelection({
+      collapsed: true
+    });
 
-  const { left, right } = splitSelectionIntoThree({
-    startElement,
-    endElement,
-    startOffset,
-    endOffset
-  });
-
-  const { newEndElement } = applyChanges(
-    {
-      left,
-      right,
+    const { left, right } = splitSelectionIntoThree({
       startElement,
       endElement,
-      modifiedSelected: {
-        leftEdge: { _: '', tags: [] },
-        rightEdge: { _: '', tags: [] },
-        midNodes: pastedData
+      startOffset,
+      endOffset
+    });
+
+    const { newEndElement } = applyChanges(
+      {
+        left,
+        right,
+        startElement,
+        endElement,
+        modifiedSelected: {
+          leftEdge: { _: '', tags: [] },
+          rightEdge: { _: '', tags: [] },
+          midNodes: pastedData
+        },
+        lineStyle: { line: {} }
       },
-      lineStyle: { line: {} }
-    },
-    { skipDeletingInBetweenNodes: true, isAPaste: true }
-  );
-  putCursorAtTheEndOfPastedElement({ newEndElement });
+      { skipDeletingInBetweenNodes: true, isAPaste: true }
+    );
+    putCursorAtTheEndOfPastedElement({ newEndElement });
+  } catch (e) {
+    console.error(e);
+    document.querySelector('#rich-text > article').innerHTML = ogHtml;
+  }
 };
 
 const handlePaste = async e => {
