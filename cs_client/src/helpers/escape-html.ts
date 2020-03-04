@@ -13,7 +13,7 @@
  * @private
  */
 
-var matchHtmlRegExp = /["'&<> \t]/;
+var matchHtmlRegExp = /[ \t]/; // /["'&<> \t]/;
 
 /**
  * Module exports.
@@ -40,7 +40,7 @@ function escapeHtml(string) {
   var html = '';
   var index = 0;
   var lastIndex = 0;
-
+  debugger;
   for (index = match.index; index < str.length; index++) {
     switch (str.charCodeAt(index)) {
       case 9: // <tab>
@@ -49,21 +49,21 @@ function escapeHtml(string) {
       case 32: // <space>
         escape = str.charCodeAt(index + 1) === 32 ? '\u00A0' : ' ';
         break;
-      case 34: // "
-        escape = '&quot;';
-        break;
-      case 38: // &
-        escape = '&amp;';
-        break;
-      case 39: // '
-        escape = '&#39;';
-        break;
-      case 60: // <
-        escape = '&lt;';
-        break;
-      case 62: // >
-        escape = '&gt;';
-        break;
+      // case 34: // "
+      //   escape = '&quot;';
+      //   break;
+      // case 38: // &
+      //   escape = '&amp;';
+      //   break;
+      // case 39: // '
+      //   escape = '&#39;';
+      //   break;
+      // case 60: // <
+      //   escape = '&lt;';
+      //   break;
+      // case 62: // >
+      //   escape = '&gt;';
+      //   break;
       default:
         continue;
     }
