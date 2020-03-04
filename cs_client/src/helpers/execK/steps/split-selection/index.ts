@@ -9,16 +9,15 @@ const genStamps = () => {
   Stamps.end = `selection-end-${new Date().getTime()}`;
 };
 const getSelectionAHtml = ({ rootElement }) => {
-  const lines: Node[] = Array.from(rootElement.children);
+  const lines: Node[] = Array.from(rootElement.childNodes);
   const { abstractHtml } = getAHtml({
-     lines,
+    lines,
     options: {
       useObjForTextNodes: true,
       serializeNonTextElements: true
     }
   });
-  const abstractHtmlObj: any[] = JSON.parse(abstractHtml);
-  return { abstractHtmlObj };
+  return { abstractHtmlObj: abstractHtml };
 };
 const helpers = {
   aHtmlElHasAttribute: (tagTuples = []) => key =>
@@ -171,4 +170,4 @@ const splitSelectionIntoThree = ({
   );
   return { left, selected, right };
 };
-export { splitSelectionIntoThree,getSelectionAHtml };
+export { splitSelectionIntoThree, getSelectionAHtml };

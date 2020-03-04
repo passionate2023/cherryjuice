@@ -10,7 +10,7 @@ const getStyles = el =>
 const flattenLines = lines => {
   // @ts-ignore
   const flatList = lines.flatMap(el => [
-    ...Array.from(el.childNodes),
+    ...(el.childNodes.length ? Array.from(el.childNodes) : [el]),
     document.createElement('br')
   ]);
   flatList.pop();
@@ -184,7 +184,7 @@ const getAHtml = ({ lines, options = {} }: TProps) => {
     }
     return acc;
   }, []);
-  return { abstractHtml: JSON.stringify(abstractHtml), flatList };
+  return { abstractHtml, flatList };
 };
 
-export { getAHtml,  };
+export { getAHtml };

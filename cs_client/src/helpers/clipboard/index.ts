@@ -15,6 +15,14 @@ const getPngBase64 = file =>
     reader.readAsDataURL(file);
   });
 
+const cleanHtml = html => {
+  if (html.startsWith('<HTML><HEAD></HEAD><BODY><!--StartFragment-->'))
+    html = html.replace(
+      /(<HTML><HEAD><\/HEAD><BODY><!--StartFragment-->|<!--EndFragment--><\/BODY><\/HTML>)/g,
+      ''
+    );
+  return html;
+};
 
 // :: clipData -> aHtml
 type TAHtml =
@@ -30,7 +38,10 @@ const processClipboard: { [p: string]: (str) => TAHtml[] } = {
   html: pastedData => {
     debugger;
     console.log(new DOMParser().parseFromString(pastedData, 'text/html'));
-    const node = new DOMParser().parseFromString(pastedData, 'text/html').body;
+    const node = new DOMParser().parseFromString(
+      cleanHtml(pastedData),
+      'text/html'
+    ).body;
     const { abstractHtmlObj } = getSelectionAHtml({
       rootElement: node
     });
