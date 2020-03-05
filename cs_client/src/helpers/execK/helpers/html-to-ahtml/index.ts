@@ -8,8 +8,6 @@ const getStyles = el =>
     {}
   );
 
-
-
 type TProps = {
   lines: Node[];
   options?: {
@@ -38,6 +36,17 @@ const getTags = (list = []) => el => [
     ? []
     : Array.from(el.children).flatMap(getTags(list)))
 ];
+
+// const x = (str, acc) =>
+//   str.indexOf('\n') !== -1 && str.length > 1
+//     ? x(str.replace('\n', ''), [...acc, '\n'])
+//     : [str, acc];
+
+// const replaceNewLineCharacterWithBreakLine = (aHtml, acc) => {
+//   const [str, newAcc] = x(aHtml._, acc);
+//   aHtml._ = str;
+//   return newAcc;
+// };
 
 // const getParentAttributes = ({ parentElement }) => [
 //   ['span', getAttributes(['class'])(parentElement)]
@@ -174,6 +183,9 @@ const getAHtml = ({ lines, options = {} }: TProps) => {
           // });
         }
       }
+      // const insertedAHtml = acc[acc.length - 1];
+      // if (insertedAHtml._)
+      //   acc = replaceNewLineCharacterWithBreakLine(insertedAHtml, acc);
     }
     return acc;
   }, []);

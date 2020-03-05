@@ -48,6 +48,9 @@ function escapeHtml(string) {
       case 32: // <space>
         escape = str.charCodeAt(index + 1) === 32 ? '\u00A0' : ' ';
         break;
+      case 10: // <\n>
+        escape = '';
+        break;
       // case 34: // "
       //   escape = '&quot;';
       //   break;

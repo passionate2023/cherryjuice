@@ -5,6 +5,7 @@ import {
 } from '::helpers/execK/steps/split-selection';
 import { applyChanges } from '::helpers/execK/steps/apply-changes';
 import { setSelection } from '::helpers/execK/steps/restore-selection';
+import { optimizeAHtml } from '::helpers/clipboard/optimize-ahtml';
 
 const getPngBase64 = file =>
   new Promise(resolve => {
@@ -44,7 +45,7 @@ const processClipboard: { [p: string]: (str) => TAHtml[] } = {
     const { abstractHtmlObj } = getSelectionAHtml({
       rootElement: node
     });
-    return abstractHtmlObj;
+    return optimizeAHtml({ aHtml: abstractHtmlObj });
   },
   text: str => [{ _: str, tags: [['span', {}]] }]
 };
