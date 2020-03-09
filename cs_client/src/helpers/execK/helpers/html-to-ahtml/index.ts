@@ -1,6 +1,5 @@
 import { escapeHtml } from '::helpers/escape-html';
 import { flattenAHtml } from '::helpers/execK/helpers/html-to-ahtml/steps/flatten-ahtml';
-import { flattenLines } from '::helpers/execK/helpers/html-to-ahtml/steps/flatten-lines';
 
 const getStyles = el =>
   (el.style.cssText.match(/([\w\-]+)(?=:)/g) || []).reduce(
@@ -9,12 +8,10 @@ const getStyles = el =>
   );
 
 type TProps = {
-  lines: Node[];
+  DDOEs: Node[];
   options?: {
     useObjForTextNodes?: boolean;
     serializeNonTextElements?: boolean;
-    // includeDatasetInTextElements?: boolean;
-    // includeRefToEl?: boolean;
   };
 };
 
@@ -37,22 +34,36 @@ const getTags = (list = []) => el => [
     : Array.from(el.children).flatMap(getTags(list)))
 ];
 
-// const x = (str, acc) =>
-//   str.indexOf('\n') !== -1 && str.length > 1
-//     ? x(str.replace('\n', ''), [...acc, '\n'])
-//     : [str, acc];
+const flattenDDOEs = ({ DDOEs }) => {
+  const wb = document.createElement('div');
+  wb.style.visibility = 'hidden';
+  document.body.appendChild(wb);
+  const isBlock = el => {
+    wb.appendChild(el);
+    const block = window.getComputedStyle(el).display;
+    wb.removeChild(el);
+    return block === 'block' || el.localName === 'br';
+  };
+  const flat = [];
+  DDOEs.forEach(DDOE => {
+    Array.from(DDOE.childNodes).forEach(child => {
+      // const DDOEClone = DDOE.cloneNode();
+      // DDOEClone.innerHTML =
+      //   child.nodeType === Node.TEXT_NODE ? child.wholeText : child.outerHTML;
+      // flat.push(DDOEClone);
+      flat.push(child);
+    });
+    if (isBlock(DDOE)) flat.push(document.createElement('br'));
+  });
+  document.body.removeChild(wb);
+  return flat;
+};
 
-// const replaceNewLineCharacterWithBreakLine = (aHtml, acc) => {
-//   const [str, newAcc] = x(aHtml._, acc);
-//   aHtml._ = str;
-//   return newAcc;
-// };
-
-// const getParentAttributes = ({ parentElement }) => [
-//   ['span', getAttributes(['class'])(parentElement)]
-// ];
-const getAHtml = ({ lines, options = {} }: TProps) => {
-  const flatList = flattenLines(lines);
+const getAHtml = ({
+  DDOEs,
+  options = {}
+}: TProps) => {
+  const flatList = flattenDDOEs({ DDOEs }); //DDOEs.flatMap(DDOE => Array.from(DDOE.childNodes));
   const state = { offset: 0 };
   const abstractHtml = (flatList as any[]).reduce((
     acc,
@@ -189,7 +200,7 @@ const getAHtml = ({ lines, options = {} }: TProps) => {
     }
     return acc;
   }, []);
-  return { abstractHtml, flatList };
+  return { abstractHtml };
 };
 
 export { getAHtml };

@@ -37,5 +37,48 @@ const applyCommand = ({
   }
   return newAHtmlElement;
 };
+const applyCmd = ({ selected, tagName, style, command }) => {
+  const allTags = [
+    ...selected.leftEdge.tags,
+    ...selected.rightEdge.tags,
+    ...selected.midNodes.flatMap(el => (typeof el === 'object' ? el.tags : []))
+  ];
+  const tagExists = tagName && allTags.some(([tag]) => tag === tagName);
 
-export { applyCommand };
+  const styleExists =
+    style?.property &&
+    allTags.some(
+      ([_, { style: existingStyle }]) =>
+        existingStyle && existingStyle[style.property]?.includes(style.value)
+    );
+  const lineStyle = { line: {}, wrapper: {} };
+  const modifiedSelected = {
+    leftEdge: applyCommand({
+      tag: { tagName, tagExists },
+      style: { style, styleExists },
+      aHtmlElement: selected.leftEdge,
+      command,
+      lineStyle
+    }),
+    rightEdge: applyCommand({
+      tag: { tagName, tagExists },
+      style: { style, styleExists },
+      aHtmlElement: selected.rightEdge,
+      command,
+      lineStyle
+    }),
+    midNodes: selected.midNodes.map(el =>
+      typeof el === 'object'
+        ? applyCommand({
+            tag: { tagName, tagExists },
+            style: { style, styleExists },
+            aHtmlElement: el,
+            command,
+            lineStyle
+          })
+        : el
+    )
+  };
+  return { modifiedSelected };
+};
+export { applyCmd };

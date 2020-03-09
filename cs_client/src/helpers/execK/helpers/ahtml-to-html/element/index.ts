@@ -1,5 +1,4 @@
 import { Link as CtLink } from '../link';
-import { Table } from '::helpers/execK/helpers/ahtml-to-html/table';
 
 const stringifyStyles = (style = {}, onlyStylesThatStartWith = undefined) =>
   (
@@ -8,17 +7,17 @@ const stringifyStyles = (style = {}, onlyStylesThatStartWith = undefined) =>
         onlyStylesThatStartWith ? key.startsWith(onlyStylesThatStartWith) : true
       )
       .map(([key, value]) => `${key}:${value}`)
-      .join(';') + ';'
-      .replace('"','\"')
+      .join(';') + ';'.replace('"', '"')
   )
     .replace(/;\s*;/g, ';')
     .replace(/^;$/, '');
 const createElement = (tag, attributes, children) =>
-  `<${tag} class="rich-text__text" ${attributes &&
+  `<${tag} ${attributes &&
     Object.entries(attributes)
-      .map(
-        ([key, value]) =>
-          `${key}='${key === 'style' ? stringifyStyles(value) : value}'`
+      .map(([key, value]) =>
+        key === 'style' && Object.keys(value).length === 0
+          ? ''
+          : `${key}='${key === 'style' ? stringifyStyles(value) : value}'`
       )
       .join(' ')}>${children}</${tag}>`;
 

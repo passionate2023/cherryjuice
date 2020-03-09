@@ -1,11 +1,12 @@
 import { getSelection } from '::helpers/execK/steps/get-selection';
-import {
-  getSelectionAHtml,
-  splitSelectionIntoThree
-} from '::helpers/execK/steps/split-selection';
-import { applyChanges } from '::helpers/execK/steps/apply-changes';
+// import {
+//   getSelectionAHtml,
+//   splitSelectionIntoThree
+// } from '::helpers/execK/steps/pipe1/split-selection';
+// import { applyChanges } from '::helpers/execK/steps/apply-changes';
 import { setSelection } from '::helpers/execK/steps/restore-selection';
 import { optimizeAHtml } from '::helpers/clipboard/optimize-ahtml';
+import { getAHtml } from '::helpers/execK/helpers/html-to-ahtml';
 
 const getPngBase64 = file =>
   new Promise(resolve => {
@@ -42,10 +43,14 @@ const processClipboard: { [p: string]: (str) => TAHtml[] } = {
       cleanHtml(pastedData),
       'text/html'
     ).body;
-    const { abstractHtmlObj } = getSelectionAHtml({
-      rootElement: node
+    const { abstractHtml } = getAHtml({
+      lines: Array.from(node.childNodes),
+      options: {
+        useObjForTextNodes: true,
+        serializeNonTextElements: true
+      }
     });
-    return optimizeAHtml({ aHtml: abstractHtmlObj });
+    return optimizeAHtml({ aHtml: abstractHtml });
   },
   text: str => [{ _: str, tags: [['span', {}]] }]
 };
@@ -97,7 +102,7 @@ const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
         },
         lineStyle: { line: {} }
       },
-      { skipDeletingInBetweenNodes: true, isAPaste: true }
+      { isAPaste: true }
     );
     putCursorAtTheEndOfPastedElement({ newEndElement });
   } catch (e) {

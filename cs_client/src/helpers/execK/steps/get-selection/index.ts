@@ -2,11 +2,11 @@ import { setSelection } from '::helpers/execK/steps/restore-selection';
 
 const getLineChildren = line => Array.from(line.childNodes);
 const getRootParent = el =>
-  el.parentElement.classList.contains('rich-text__line')
+  el.parentElement.parentElement.getAttribute('id')==='rich-text'
     ? el
     : getRootParent(el.parentElement);
 const getLineDiv = el =>
-  el.parentElement.classList.contains('rich-text__line')
+  el.parentElement.parentElement.getAttribute('id')==='rich-text'
     ? el.parentElement
     : getLineDiv(el.parentElement);
 const mapNodesToText = xs =>
