@@ -77,10 +77,13 @@ const isTextElement = el =>
   !(el.localName === 'code' && el.classList.contains('rich-text__code')) &&
   el.innerText;
 const isNotWhiteSpace = el => !/^\s+$/.test(el.innerText);
+
 const restoreSelection = ({
-  newStartElement,
-  newEndElement,
-  newSelectedElements,
+  modifiedSelection: {
+    childrenElementsOfStartDDOE,
+    childrenElementsOfEndDDOE,
+    adjacentElementsOfStartDDOE
+  },
   ogSelection,
   selected
 }) => {
@@ -102,17 +105,20 @@ const restoreSelection = ({
       ? [ogSelection.startOffset, ogSelection.endOffset]
       : findAbsoluteOffset(text).absoluteOffset;
 
+  const a = childrenElementsOfStartDDOE.shift();
+  const b = childrenElementsOfEndDDOE.pop();
+  const m = [
+    ...childrenElementsOfStartDDOE,
+    ...adjacentElementsOfStartDDOE.flatMap(ddoe => Array.from(ddoe.childNodes)),
+    ...childrenElementsOfEndDDOE
+  ]
+    .flatMap(el => el)
+    .filter(isTextElement)
+    .filter(isNotWhiteSpace);
   const { startElement, endElement, startOffset, endOffset } = findNewRange({
     absoluteStartOffset,
     absoluteEndOffset,
-    modifiedSelection: [
-      newStartElement,
-      ...newSelectedElements
-        .flatMap(el => el)
-        .filter(isTextElement)
-        .filter(isNotWhiteSpace),
-      newEndElement
-    ]
+    modifiedSelection: [a, ...m, b]
   });
   setSelection({
     startElement,

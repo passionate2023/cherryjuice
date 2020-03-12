@@ -11,9 +11,8 @@ const pipe3 = (
     modifiedSelected.leftEdge,
     ...modifiedSelected.midNodes
   ];
-  const rightAHtmls = [modifiedSelected.rightEdge, right];
-
   const leftOversFromRightAHtml = [];
+  const rightAHtmls = [modifiedSelected.rightEdge, right];
 
   const leftAHtmlsHasLeftOversFromAHtml =
     leftAHtmls[leftAHtmls.length - 1] !== '\n' && startDDOE !== endDDOE;
@@ -33,23 +32,33 @@ const pipe3 = (
         : (acc[acc.length - 1].push(Element({ node })), acc),
     [[]]
   );
-  const childrenOfStartDDOE = leftAHtmlsMultiLine.shift();
-  const adjacentToStartDDOE: string = leftAHtmlsMultiLine
-    // .filter(DDOEs => DDOEs.length)
-    .reduce((acc, DDOEs) => {
+  const childrenOfStartDDOE: string[] = leftAHtmlsMultiLine.shift();
+  const adjacentToStartDDOE: string[] = leftAHtmlsMultiLine.reduce(
+    (acc, DDOEs) => {
       const startDDOEShell = startDDOE.cloneNode();
       startDDOEShell.innerHTML = DDOEs.join('');
       acc.push(startDDOEShell.outerHTML);
       return acc;
-    }, [])
-    .join('');
-  replaceElement(startAnchor)(childrenOfStartDDOE.map(toNodes));
-  startDDOE.insertAdjacentHTML('afterend', adjacentToStartDDOE);
+    },
+    []
+  );
 
-  const rightElements = [...leftOversFromRightAHtml, ...rightAHtmls]
-    .map(node => Element({ node }))
-    .map(toNodes);
-  replaceElement(endAnchor)(rightElements);
+  const childrenElementsOfStartDDOE = childrenOfStartDDOE.map(toNodes);
+  const adjacentElementsOfStartDDOE = adjacentToStartDDOE.map(toNodes);
+  const childrenElementsOfEndDDOE = [
+    ...leftOversFromRightAHtml,
+    ...rightAHtmls
+  ].map(node => toNodes(Element({ node })));
+
+  replaceElement(startAnchor)(childrenElementsOfStartDDOE);
+  startDDOE.after(...adjacentElementsOfStartDDOE);
+  replaceElement(endAnchor)(childrenElementsOfEndDDOE);
+
+  return {
+    childrenElementsOfStartDDOE,
+    adjacentElementsOfStartDDOE,
+    childrenElementsOfEndDDOE
+  };
 };
 
 export { pipe3 };

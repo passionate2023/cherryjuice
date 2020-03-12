@@ -2,6 +2,7 @@ import { applyCmd } from '::helpers/execK/steps/apply-command';
 import { getSelection } from '::helpers/execK/steps/get-selection';
 import { pipe1 } from '::helpers/execK/steps//pipe1';
 import { pipe3 } from '::helpers/execK/steps/pipe3';
+import { restoreSelection } from '::helpers/execK/steps/restore-selection';
 
 enum ExecKCommand {
   clear = 'clear',
@@ -48,11 +49,23 @@ const execK = (
       style,
       command
     });
-    pipe3(
+    const {
+      childrenElementsOfStartDDOE,
+      childrenElementsOfEndDDOE,
+      adjacentElementsOfStartDDOE
+    } = pipe3(
       { left, right, modifiedSelected },
       { startDDOE, endDDOE, endAnchor, startAnchor }
     );
-
+    restoreSelection({
+      modifiedSelection: {
+        childrenElementsOfStartDDOE,
+        childrenElementsOfEndDDOE,
+        adjacentElementsOfStartDDOE
+      },
+      selected,
+      ogSelection: { startElement, endElement, startOffset, endOffset }
+    });
   } catch (e) {
     console.error(e);
     document.querySelector('#rich-text ').innerHTML = ogHtml;
