@@ -3,7 +3,8 @@ import {
   getSelectedDDOEs,
   getIndexOfSelectionSubDDOEs,
   getIsolatedDDOESelection,
-  deletedIsolatedSelection
+  deletedIsolatedSelection,
+  guardAgainstSubDDOEIsTextNode
 } from '::helpers/execK/steps/pipe1/ddoes';
 import { getAHtml } from '::helpers/execK/helpers/html-to-ahtml';
 import {
@@ -19,13 +20,22 @@ const pipe1 = ({
   startOffset,
   endOffset
 }) => {
+  const startDDOE = getDDOE(selectionStartElement);
+  const endDDOE = getDDOE(selectionEndElement);
+
+  const adjustedSelection = guardAgainstSubDDOEIsTextNode({
+    selectionEndElement,
+    selectionStartElement,
+    startDDOE,
+    endDDOE
+  });
+  selectionStartElement = adjustedSelection.selectionStartElement;
+  selectionEndElement = adjustedSelection.selectionEndElement;
+
   applyTemporaryStamps({
     startElement: selectionStartElement,
     endElement: selectionEndElement
   });
-  const startDDOE = getDDOE(selectionStartElement);
-  const endDDOE = getDDOE(selectionEndElement);
-
   const { selectedDDOEs } = getSelectedDDOEs({ startDDOE, endDDOE });
   const {
     indexOfEndSubDDOE,
@@ -74,7 +84,8 @@ const pipe1 = ({
     startDDOE,
     endDDOE,
     startAnchor,
-    endAnchor
+    endAnchor,
+    adjustedSelection
   };
 };
 

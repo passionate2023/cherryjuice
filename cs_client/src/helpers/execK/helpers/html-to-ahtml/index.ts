@@ -34,18 +34,21 @@ const getTags = (list = []) => el => [
     : Array.from(el.children).flatMap(getTags(list)))
 ];
 
-const flattenDDOEs = ({ DDOEs }) => {
+const isBlock = (() => {
   const wb = document.createElement('div');
-  wb.style.visibility = 'hidden';
   document.body.appendChild(wb);
-  const isBlock = el => {
+  wb.style.visibility = 'hidden';
+  return el => {
     wb.appendChild(el);
     const block = window.getComputedStyle(el).display;
     wb.removeChild(el);
     return block === 'block' || el.localName === 'br';
   };
+})();
+const flattenDDOEs = ({ DDOEs }) => {
   const flat = [];
   DDOEs.forEach(DDOE => {
+    if (isBlock(DDOE)) flat.push(document.createElement('br'));
     Array.from(DDOE.childNodes).forEach(child => {
       // const DDOEClone = DDOE.cloneNode();
       // DDOEClone.innerHTML =
@@ -53,16 +56,11 @@ const flattenDDOEs = ({ DDOEs }) => {
       // flat.push(DDOEClone);
       flat.push(child);
     });
-    if (isBlock(DDOE)) flat.push(document.createElement('br'));
   });
-  document.body.removeChild(wb);
   return flat;
 };
 
-const getAHtml = ({
-  DDOEs,
-  options = {}
-}: TProps) => {
+const getAHtml = ({ DDOEs, options = {} }: TProps) => {
   const flatList = flattenDDOEs({ DDOEs }); //DDOEs.flatMap(DDOE => Array.from(DDOE.childNodes));
   const state = { offset: 0 };
   const abstractHtml = (flatList as any[]).reduce((

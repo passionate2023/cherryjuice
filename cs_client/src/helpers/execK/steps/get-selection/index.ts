@@ -2,11 +2,11 @@ import { setSelection } from '::helpers/execK/steps/restore-selection';
 
 const getLineChildren = line => Array.from(line.childNodes);
 const getRootParent = el =>
-  el.parentElement.parentElement.getAttribute('id')==='rich-text'
+  el.parentElement.parentElement.getAttribute('id') === 'rich-text'
     ? el
     : getRootParent(el.parentElement);
 const getLineDiv = el =>
-  el.parentElement.parentElement.getAttribute('id')==='rich-text'
+  el.parentElement.parentElement.getAttribute('id') === 'rich-text'
     ? el.parentElement
     : getLineDiv(el.parentElement);
 const mapNodesToText = xs =>
@@ -81,8 +81,7 @@ const createWordRange = () => {
     endOffset: eo //endOffset - containerOffset,
   };
 };
-const getElementOfNode = node =>
-  node.nodeType === 3 ? node.parentElement : node;
+
 
 const getSelection = ({ collapsed }: { collapsed?: boolean } = {}) => {
   const selection = document.getSelection();
@@ -92,11 +91,11 @@ const getSelection = ({ collapsed }: { collapsed?: boolean } = {}) => {
 
   const range = document.getSelection().getRangeAt(0);
   return {
-    startElement: getElementOfNode(range.startContainer),
-    endElement: getElementOfNode(range.endContainer),
+    startElement: range.startContainer,
+    endElement: range.endContainer,
     startOffset: range.startOffset,
     endOffset: range.endOffset
   };
 };
 
-export { getSelection,getRootParent,getLineChildren };
+export { getSelection, getRootParent, getLineChildren };

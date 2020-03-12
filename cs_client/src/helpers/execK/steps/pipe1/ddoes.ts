@@ -91,8 +91,48 @@ const deletedIsolatedSelection = ({
   });
   return { startAnchor, endAnchor };
 };
+const guardAgainstSubDDOEIsTextNode = ({
+  selectionStartElement,
+  selectionEndElement,
+  startDDOE,
+  endDDOE
+}) => {
+  const subStartSubDDOEIsTextNode =
+    startDDOE === selectionStartElement.parentElement &&
+    selectionStartElement.nodeType === 3;
+  const subEndSubDDOEIsTextNode =
+    endDDOE === selectionEndElement.parentElement &&
+    selectionEndElement.nodeType === 3;
+  const startSelectionEqualsEndSelection =
+    selectionStartElement === selectionEndElement;
+
+  if (subStartSubDDOEIsTextNode) {
+    const spanElement = document.createElement('span');
+    spanElement.innerHTML = selectionStartElement.wholeText;
+    selectionStartElement.parentElement.replaceChild(
+      spanElement,
+      selectionStartElement
+    );
+    selectionStartElement = spanElement;
+  } else selectionStartElement = selectionStartElement.parentElement;
+  if (subEndSubDDOEIsTextNode) {
+    if (startSelectionEqualsEndSelection) {
+      selectionEndElement = selectionStartElement;
+    } else {
+      const spanElement = document.createElement('span');
+      spanElement.innerHTML = selectionEndElement.wholeText;
+      selectionEndElement.parentElement.replaceChild(
+        spanElement,
+        selectionEndElement
+      );
+      selectionEndElement = spanElement;
+    }
+  } else selectionEndElement = selectionEndElement.parentElement;
+  return { selectionStartElement, selectionEndElement };
+};
 
 export {
+  guardAgainstSubDDOEIsTextNode,
   getDDOE,
   getSelectedDDOEs,
   getIndexOfSelectionSubDDOEs,

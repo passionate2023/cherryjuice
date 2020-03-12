@@ -36,13 +36,16 @@ const execK = (
       left,
       right,
       startDDOE,
-      endDDOE
+      endDDOE,
+      adjustedSelection
     } = pipe1({
       selectionStartElement: startElement,
       selectionEndElement: endElement,
       startOffset,
       endOffset
     });
+    startElement = adjustedSelection.selectionStartElement;
+    endElement = adjustedSelection.selectionEndElement;
     const { modifiedSelected } = applyCmd({
       selected,
       tagName,
