@@ -49,7 +49,10 @@ const pipe1 = ({
     indexOfEndSubDDOE
   });
 
-  const { abstractHtml } = getAHtml({ DDOEs: isolatedSelection });
+  const { abstractHtml } = getAHtml({
+    DDOEs: isolatedSelection,
+    options: { useObjForTextNodes: true, serializeNonTextElements: true }
+  });
   const { startNode, endNode, midNodes } = getAHtmlAnchors({ abstractHtml });
   const { left, selected, right } = splitSelected({
     aHtmlAnchors: {

@@ -1,4 +1,4 @@
-import { Element } from '::helpers/execK/helpers/ahtml-to-html/element';
+import { aHtmlToElement } from '::helpers/execK/helpers/ahtml-to-html/element';
 import { toNodes } from '::helpers/execK/helpers';
 import { replaceElement } from '::helpers/execK/steps/pipe3/helpers';
 
@@ -29,7 +29,7 @@ const pipe3 = (
         ? indexOfNode === leftAHtmls.length - 1
           ? acc
           : [...acc, []]
-        : (acc[acc.length - 1].push(Element({ node })), acc),
+        : (acc[acc.length - 1].push(aHtmlToElement({ node })), acc),
     [[]]
   );
   const childrenOfStartDDOE: string[] = leftAHtmlsMultiLine.shift();
@@ -48,7 +48,7 @@ const pipe3 = (
   const childrenElementsOfEndDDOE = [
     ...leftOversFromRightAHtml,
     ...rightAHtmls
-  ].map(node => toNodes(Element({ node })));
+  ].map(node => toNodes(aHtmlToElement({ node })));
 
   replaceElement(startAnchor)(childrenElementsOfStartDDOE);
   startDDOE.after(...adjacentElementsOfStartDDOE);

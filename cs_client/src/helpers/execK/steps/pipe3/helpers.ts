@@ -5,8 +5,7 @@ const getParent = ({ nestLevel, element }) =>
     ? getParent({ nestLevel: nestLevel - 1, element: element.parentElement })
     : element;
 
-const aHtmlToElement = ({ node }) =>
-  node.type ? node.outerHTML : Element({ node });
+
 
 type TFilterEmptyNodes = (arr: HTMLElement[]) => HTMLElement[];
 const filterEmptyNodes: TFilterEmptyNodes = arr =>
@@ -23,4 +22,4 @@ const replaceElement: TReplaceElement = el => arr =>
   // @ts-ignore
   el.replaceWith(...filterEmptyNodes(arr));
 
-export { replaceElement };
+export { replaceElement, };

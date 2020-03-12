@@ -40,4 +40,6 @@ const Element = ({ node }) =>
       }, node._)
     : createElement(`span`, {}, node._);
 
-export { Element, stringifyStyles };
+const aHtmlToElement = ({ node }) =>
+  node.type ? node.outerHTML : Element({ node });
+export { Element, stringifyStyles, aHtmlToElement };

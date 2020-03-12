@@ -41,7 +41,9 @@ const applyCmd = ({ selected, tagName, style, command }) => {
   const allTags = [
     ...selected.leftEdge.tags,
     ...selected.rightEdge.tags,
-    ...selected.midNodes.flatMap(el => (typeof el === 'object' ? el.tags : []))
+    ...selected.midNodes.flatMap(el =>
+      typeof el === 'object' && !el.type ? el.tags : []
+    )
   ];
   const tagExists = tagName && allTags.some(([tag]) => tag === tagName);
 
