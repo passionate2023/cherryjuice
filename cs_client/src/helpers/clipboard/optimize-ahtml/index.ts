@@ -29,7 +29,8 @@ const stylePropertiesToKeep = [
   'text-align',
   'background-color',
   'background',
-  'text-decoration-style'
+  'text-decoration-style',
+  'text-decoration'
 ];
 const styleValuesToIgnore = ['inherit', 'initial', 'left', 'start'];
 const headers = Array.from({ length: 6 }).map((_, i) => `h${i + 1}`);
@@ -72,12 +73,16 @@ const collapseTags = val => {
   return val;
 };
 
-const cleanStyleAndRenameTags = val => {
+const cleanStyleAndRenameTags = (
+  options = { keepClassAttribute: false }
+) => val => {
   if (val.tags)
     val.tags = val.tags.map(([tagName, attributes]) => {
       return [
         tagsToRename[tagName] ? tagsToRename[tagName] : tagName,
         {
+          ...(attributes.class &&
+            options.keepClassAttribute && { class: attributes.class }),
           ...(attributes.href && { href: attributes.href }),
           ...(attributes.src && { src: attributes.src }),
           ...(attributes.style && {
@@ -126,10 +131,22 @@ const addEmptyLineBeforeHeader = (acc, val) => {
   return acc;
 };
 
-const optimizeAHtml = ({ aHtml }) => {
+const optimizeAHtml = (
+  { aHtml },
+  options = { addEmptyLineBeforeHeader: true, keepClassAttribute: false }
+) => {
   return cloneObj(aHtml)
-    .reduce(addEmptyLineBeforeHeader, [])
-    .map(cleanStyleAndRenameTags)
+    .reduce(
+      options.addEmptyLineBeforeHeader
+        ? addEmptyLineBeforeHeader
+        : (acc, val) => (acc.push(val), acc),
+      []
+    )
+    .map(
+      cleanStyleAndRenameTags({
+        keepClassAttribute: options.keepClassAttribute
+      })
+    )
     .map(transformStyles)
     .map(collapseTags);
 };

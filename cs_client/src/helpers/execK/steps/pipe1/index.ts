@@ -14,6 +14,7 @@ import {
   getAHtmlAnchors,
   splitSelected
 } from '::helpers/execK/steps/pipe1/split-selection';
+import { optimizeAHtml } from '::helpers/clipboard/optimize-ahtml';
 
 const pipe1 = ({
   selectionStartElement,
@@ -24,7 +25,6 @@ const pipe1 = ({
   let startDDOE = getDDOE(selectionStartElement);
   let endDDOE = getDDOE(selectionEndElement);
 
-
   const adjustedSelection = guardAgainstSubDDOEIsTextNode({
     selectionEndElement,
     selectionStartElement,
@@ -34,7 +34,12 @@ const pipe1 = ({
   selectionStartElement = adjustedSelection.selectionStartElement;
   selectionEndElement = adjustedSelection.selectionEndElement;
 
-  const neutralDDOEs = guardAgainstDDOETagIsNotNeutral({ startDDOE, endDDOE ,selectionStartElement, selectionEndElement});
+  const neutralDDOEs = guardAgainstDDOETagIsNotNeutral({
+    startDDOE,
+    endDDOE,
+    selectionStartElement,
+    selectionEndElement
+  });
   startDDOE = neutralDDOEs.startDDOE;
   endDDOE = neutralDDOEs.endDDOE;
   selectionStartElement = neutralDDOEs.selectionStartElement;
@@ -71,8 +76,11 @@ const pipe1 = ({
     DDOEs: isolatedSelection,
     options: { useObjForTextNodes: true, serializeNonTextElements: true }
   });
-  const { startNode, endNode, midNodes } = getAHtmlAnchors({ abstractHtml });
-  const { left, selected, right } = splitSelected({
+
+  const { startNode, endNode, midNodes } = getAHtmlAnchors({
+    abstractHtml
+  });
+  let { left, selected, right } = splitSelected({
     aHtmlAnchors: {
       startNode,
       midNodes, //: wrapTextNodesInSpan(midNodes),
@@ -81,10 +89,14 @@ const pipe1 = ({
     startOffset,
     endOffset
   });
-
-  [left, right, selected.leftEdge, selected.rightEdge].forEach(
-    deleteTemporaryStampsFromAHtml
+  [left, selected.leftEdge, selected.rightEdge, right] = optimizeAHtml(
+    { aHtml: [left, selected.leftEdge, selected.rightEdge, right] },
+    { addEmptyLineBeforeHeader: false, keepClassAttribute: true }
   );
+  debugger;
+  // [left, right, selected.leftEdge, selected.rightEdge].forEach(
+  //   deleteTemporaryStampsFromAHtml
+  // );
   return {
     left,
     right,
