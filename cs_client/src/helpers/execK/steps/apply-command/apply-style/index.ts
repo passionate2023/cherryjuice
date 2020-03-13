@@ -28,7 +28,7 @@ type TApplyStyle = {
 const applyStyle = ({
   aHtmlElement,
   style: { property, value },
-  styleExists
+  styleExists,
 }: TApplyStyle) => {
   aHtmlElement.tags = aHtmlElement.tags.map(
     ([tagName, attributes], tagIndex) => [
@@ -44,10 +44,10 @@ const applyStyle = ({
         style: calculateStyle({
           ogStyle: attributes.style || {},
           cmd: { property, value, remove: styleExists },
-          topLevelElement: tagIndex === 0
-        })
-      }
-    ]
+          topLevelElement: tagIndex === aHtmlElement.tags.length - 1,
+        }),
+      },
+    ],
   );
 };
 

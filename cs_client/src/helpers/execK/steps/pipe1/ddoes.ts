@@ -1,10 +1,10 @@
 import {
   sizeTags,
-  styleTags
+  styleTags,
 } from '::helpers/execK/steps/apply-command/apply-tag/calculate-tag';
 import {
   applyTemporaryStamps,
-  deleteTemporaryStamps
+  deleteTemporaryStamps,
 } from '::helpers/execK/steps/pipe1/split-selection';
 
 const getDDOE = el =>
@@ -29,14 +29,14 @@ const getIndexOfSelectionSubDDOEs = ({
   startDDOE,
   endDDOE,
   selectionStartElement,
-  selectionEndElement
+  selectionEndElement,
 }) => {
   const indexOfStartSubDDOE = Array.from(startDDOE.childNodes).findIndex(
-    child => getSubDDOE(selectionStartElement) === child
+    child => getSubDDOE(selectionStartElement) === child,
   );
 
   const indexOfEndSubDDOE = Array.from(endDDOE.childNodes).findIndex(
-    child => getSubDDOE(selectionEndElement) === child
+    child => getSubDDOE(selectionEndElement) === child,
   );
   return { indexOfStartSubDDOE, indexOfEndSubDDOE };
 };
@@ -44,7 +44,7 @@ const getIndexOfSelectionSubDDOEs = ({
 const getIsolatedDDOESelection = ({
   indexOfStartSubDDOE,
   indexOfEndSubDDOE,
-  selectedDDOEs
+  selectedDDOEs,
 }) => {
   const isolatedSelection = [];
   selectedDDOEs.forEach((DDOE, DDOEIndex) => {
@@ -68,7 +68,7 @@ const getIsolatedDDOESelection = ({
 const deletedIsolatedSelection = ({
   indexOfStartSubDDOE,
   indexOfEndSubDDOE,
-  selectedDDOEs
+  selectedDDOEs,
 }) => {
   let startAnchor, endAnchor;
   selectedDDOEs.forEach((DDOE: Element, DDOEIndex) => {
@@ -105,7 +105,7 @@ const guardAgainstDDOETagIsNotNeutral = ({
   startDDOE,
   endDDOE,
   selectionStartElement,
-  selectionEndElement
+  selectionEndElement,
 }) => {
   const startDDOEIsNotNeutral =
     styleTags.includes(startDDOE.localName) ||
@@ -118,7 +118,7 @@ const guardAgainstDDOETagIsNotNeutral = ({
   if (startDDOEIsNotNeutral || endDDOEIsNotNeutral) {
     const { start, end } = applyTemporaryStamps({
       startElement: selectionStartElement,
-      endElement: selectionEndElement
+      endElement: selectionEndElement,
     });
     if (startDDOEIsNotNeutral) {
       const spanElement = document.createElement('span');
@@ -140,7 +140,7 @@ const guardAgainstDDOETagIsNotNeutral = ({
     selectionEndElement = endDDOE.querySelector(`[${end}]`);
     deleteTemporaryStamps({
       startElement: selectionStartElement,
-      endElement: selectionEndElement
+      endElement: selectionEndElement,
     });
   }
   return { startDDOE, endDDOE, selectionStartElement, selectionEndElement };
@@ -149,7 +149,7 @@ const guardAgainstSubDDOEIsTextNode = ({
   selectionStartElement,
   selectionEndElement,
   startDDOE,
-  endDDOE
+  endDDOE,
 }) => {
   const subStartSubDDOEIsTextNode =
     startDDOE === selectionStartElement.parentElement &&
@@ -165,7 +165,7 @@ const guardAgainstSubDDOEIsTextNode = ({
     spanElement.innerHTML = selectionStartElement.wholeText;
     selectionStartElement.parentElement.replaceChild(
       spanElement,
-      selectionStartElement
+      selectionStartElement,
     );
     selectionStartElement = spanElement;
   } else selectionStartElement = selectionStartElement.parentElement;
@@ -177,7 +177,7 @@ const guardAgainstSubDDOEIsTextNode = ({
       spanElement.innerHTML = selectionEndElement.wholeText;
       selectionEndElement.parentElement.replaceChild(
         spanElement,
-        selectionEndElement
+        selectionEndElement,
       );
       selectionEndElement = spanElement;
     }
@@ -185,12 +185,47 @@ const guardAgainstSubDDOEIsTextNode = ({
   return { selectionStartElement, selectionEndElement };
 };
 
+const guardAgainstEditorIsDDOE = ({
+  selectionStartElement,
+  selectionEndElement,
+}) => {
+  const editor = document.querySelector('#rich-text');
+  const editorIsStartDDOE = selectionStartElement.parentElement === editor;
+  const editorIsEndDDOE = selectionEndElement.parentElement === editor;
+  const selectionStartEqualsEndElement =
+    selectionStartElement === selectionEndElement;
+  if (editorIsStartDDOE) {
+    const spanElement = document.createElement('span');
+    spanElement.innerHTML = `<span>${selectionStartElement.wholeText}</span>`;
+    selectionStartElement.parentElement.replaceChild(
+      spanElement,
+      selectionStartElement,
+    );
+    selectionStartElement = spanElement.firstChild;
+  }
+  if (editorIsEndDDOE) {
+    if (selectionStartEqualsEndElement)
+      selectionEndElement = selectionStartElement;
+    else {
+      const spanElement = document.createElement('span');
+      spanElement.innerHTML = `<span>${selectionEndElement.wholeText}</span>`;
+      selectionEndElement.parentElement.replaceChild(
+        spanElement,
+        selectionEndElement,
+      );
+      selectionEndElement = spanElement.firstChild;
+    }
+  }
+  return { selectionEndElement, selectionStartElement };
+};
+
 export {
-  guardAgainstSubDDOEIsTextNode,
   getDDOE,
   getSelectedDDOEs,
   getIndexOfSelectionSubDDOEs,
   getIsolatedDDOESelection,
+  guardAgainstSubDDOEIsTextNode,
   deletedIsolatedSelection,
-  guardAgainstDDOETagIsNotNeutral
+  guardAgainstDDOETagIsNotNeutral,
+  guardAgainstEditorIsDDOE,
 };

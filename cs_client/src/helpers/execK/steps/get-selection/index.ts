@@ -1,4 +1,5 @@
 import { setSelection } from '::helpers/execK/steps/restore-selection';
+import { guardAgainstEditorIsDDOE } from '::helpers/execK/steps/pipe1/ddoes';
 
 const getLineChildren = line => Array.from(line.childNodes);
 const getRootParent = el =>
@@ -11,7 +12,7 @@ const getLineDiv = el =>
     : getLineDiv(el.parentElement);
 const mapNodesToText = xs =>
   xs.map(el =>
-    el.nodeType === 1 ? el.innerText : el.nodeType === 3 ? el.wholeText : ''
+    el.nodeType === 1 ? el.innerText : el.nodeType === 3 ? el.wholeText : '',
   );
 const mapTextToLength = xs => xs.map(str => str.length);
 const findAnchors = ({ line, startOffset, endOffset }) => {
@@ -37,22 +38,22 @@ const findAnchors = ({ line, startOffset, endOffset }) => {
       s: -1,
       e: -1,
       so: 0,
-      eo: 0
-    }
+      eo: 0,
+    },
   );
 };
 
-const createWordRange = () => {
-  const range = window.getSelection().getRangeAt(0);
-  const { startOffset: caretOffset, startContainer } = range;
-  const line = getLineDiv(startContainer);
+const createWordRange = ({ startElement, startOffset: caretOffset }) => {
+  // const range = window.getSelection().getRangeAt(0);
+  // const { startOffset: caretOffset, startContainer: startElement } = range;
+  const line = getLineDiv(startElement);
   const lineChildren = getLineChildren(line);
   const text = line.innerText;
-  const parentElement = getRootParent(startContainer);
+  const parentElement = getRootParent(startElement);
   const parentElementIndex = lineChildren.indexOf(parentElement);
   const containerOffset = mapTextToLength(mapNodesToText(lineChildren)).reduce(
     (acc, val, i) => (i < parentElementIndex ? acc + val : acc),
-    0
+    0,
   );
   // @ts-ignore
   const lh = text.substring(0, containerOffset + caretOffset);
@@ -71,30 +72,41 @@ const createWordRange = () => {
   const { s, e, so, eo } = findAnchors({
     line,
     startOffset,
-    endOffset
+    endOffset,
   });
 
   return {
     startElement: line.childNodes[s],
     endElement: line.childNodes[e],
     startOffset: so, //startOffset - (s > 0 ? containerOffset : 0),
-    endOffset: eo //endOffset - containerOffset,
+    endOffset: eo, //endOffset - containerOffset,
   };
 };
-
 
 const getSelection = ({ collapsed }: { collapsed?: boolean } = {}) => {
   const selection = document.getSelection();
   if (selection.rangeCount === 0) throw new Error("can't find the cursor");
-  if (selection.getRangeAt(0).collapsed && !collapsed)
-    setSelection(createWordRange());
+  {
+    const { startContainer, endContainer, startOffset } = selection.getRangeAt(
+      0,
+    );
+    const { selectionStartElement } = guardAgainstEditorIsDDOE({
+      selectionStartElement: startContainer,
+      selectionEndElement: endContainer,
+    });
+
+    if (selection.getRangeAt(0).collapsed && !collapsed)
+      setSelection(
+        createWordRange({ startElement: selectionStartElement, startOffset }),
+      );
+  }
 
   const range = document.getSelection().getRangeAt(0);
   return {
     startElement: range.startContainer,
     endElement: range.endContainer,
     startOffset: range.startOffset,
-    endOffset: range.endOffset
+    endOffset: range.endOffset,
   };
 };
 

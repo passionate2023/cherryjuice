@@ -31,6 +31,46 @@ const testSamples = [
       ['h1', { baz: 'span', foo: { h1: '1', div: '1' }, bar: 'h1' }],
     ],
   },
+  {
+    meta: {
+      name:
+        'should merge object attributes, and concatenate their conflicting strings',
+    },
+    input: {
+      tags: [
+        ['div', { foo: { div: '1' } }],
+        [
+          'span',
+          {
+            baz: 'span',
+            foo: { h1: '2' },
+            style: { 'text-decoration': '2', bg: '2' },
+          },
+        ],
+        [
+          'h1',
+          {
+            bar: 'h1',
+            foo: { h1: '1' },
+            style: { 'text-decoration': '1', bg: '1' },
+          },
+        ],
+      ],
+    },
+    output: [
+      ['div', {}],
+      ['span', {}],
+      [
+        'h1',
+        {
+          baz: 'span',
+          foo: { h1: '1', div: '1' },
+          bar: 'h1',
+          style: { 'text-decoration': '2 1', bg: '1' },
+        },
+      ],
+    ],
+  },
 ];
 
 const testTemplate = ({ meta: { name }, input: { tags }, output }) => {

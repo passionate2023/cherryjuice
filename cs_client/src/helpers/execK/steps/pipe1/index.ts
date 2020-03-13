@@ -5,14 +5,14 @@ import {
   getIsolatedDDOESelection,
   deletedIsolatedSelection,
   guardAgainstSubDDOEIsTextNode,
-  guardAgainstDDOETagIsNotNeutral
+  guardAgainstDDOETagIsNotNeutral,
 } from '::helpers/execK/steps/pipe1/ddoes';
 import { getAHtml } from '::helpers/execK/helpers/html-to-ahtml';
 import {
   applyTemporaryStamps,
   deleteTemporaryStampsFromAHtml,
   getAHtmlAnchors,
-  splitSelected
+  splitSelected,
 } from '::helpers/execK/steps/pipe1/split-selection';
 import { optimizeAHtml } from '::helpers/clipboard/optimize-ahtml';
 
@@ -20,16 +20,16 @@ const pipe1 = ({
   selectionStartElement,
   selectionEndElement,
   startOffset,
-  endOffset
+  endOffset,
 }) => {
   let startDDOE = getDDOE(selectionStartElement);
   let endDDOE = getDDOE(selectionEndElement);
-
+  debugger;
   const adjustedSelection = guardAgainstSubDDOEIsTextNode({
     selectionEndElement,
     selectionStartElement,
     startDDOE,
-    endDDOE
+    endDDOE,
   });
   selectionStartElement = adjustedSelection.selectionStartElement;
   selectionEndElement = adjustedSelection.selectionEndElement;
@@ -38,7 +38,7 @@ const pipe1 = ({
     startDDOE,
     endDDOE,
     selectionStartElement,
-    selectionEndElement
+    selectionEndElement,
   });
   startDDOE = neutralDDOEs.startDDOE;
   endDDOE = neutralDDOEs.endDDOE;
@@ -47,51 +47,51 @@ const pipe1 = ({
 
   applyTemporaryStamps({
     startElement: selectionStartElement,
-    endElement: selectionEndElement
+    endElement: selectionEndElement,
   });
   const { selectedDDOEs } = getSelectedDDOEs({ startDDOE, endDDOE });
   const {
     indexOfEndSubDDOE,
-    indexOfStartSubDDOE
+    indexOfStartSubDDOE,
   } = getIndexOfSelectionSubDDOEs({
     endDDOE,
     startDDOE,
     selectionEndElement,
-    selectionStartElement
+    selectionStartElement,
   });
 
   const { isolatedSelection } = getIsolatedDDOESelection({
     selectedDDOEs,
     indexOfEndSubDDOE,
-    indexOfStartSubDDOE
+    indexOfStartSubDDOE,
   });
 
   const { startAnchor, endAnchor } = deletedIsolatedSelection({
     selectedDDOEs,
     indexOfStartSubDDOE,
-    indexOfEndSubDDOE
+    indexOfEndSubDDOE,
   });
 
   const { abstractHtml } = getAHtml({
     DDOEs: isolatedSelection,
-    options: { useObjForTextNodes: true, serializeNonTextElements: true }
+    options: { useObjForTextNodes: true, serializeNonTextElements: true },
   });
 
   const { startNode, endNode, midNodes } = getAHtmlAnchors({
-    abstractHtml
+    abstractHtml,
   });
   let { left, selected, right } = splitSelected({
     aHtmlAnchors: {
       startNode,
       midNodes, //: wrapTextNodesInSpan(midNodes),
-      endNode
+      endNode,
     },
     startOffset,
-    endOffset
+    endOffset,
   });
   [left, selected.leftEdge, selected.rightEdge, right] = optimizeAHtml(
     { aHtml: [left, selected.leftEdge, selected.rightEdge, right] },
-    { addEmptyLineBeforeHeader: false, keepClassAttribute: true }
+    { addEmptyLineBeforeHeader: false, keepClassAttribute: true },
   );
   debugger;
   // [left, right, selected.leftEdge, selected.rightEdge].forEach(
@@ -105,7 +105,7 @@ const pipe1 = ({
     endDDOE,
     startAnchor,
     endAnchor,
-    adjustedSelection
+    adjustedSelection,
   };
 };
 
