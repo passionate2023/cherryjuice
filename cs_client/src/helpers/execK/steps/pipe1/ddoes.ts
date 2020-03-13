@@ -1,3 +1,12 @@
+import {
+  sizeTags,
+  styleTags
+} from '::helpers/execK/steps/apply-command/apply-tag/calculate-tag';
+import {
+  applyTemporaryStamps,
+  deleteTemporaryStamps
+} from '::helpers/execK/steps/pipe1/split-selection';
+
 const getDDOE = el =>
   el.parentElement.getAttribute('id') === 'rich-text'
     ? el
@@ -91,6 +100,51 @@ const deletedIsolatedSelection = ({
   });
   return { startAnchor, endAnchor };
 };
+
+const guardAgainstDDOETagIsNotNeutral = ({
+  startDDOE,
+  endDDOE,
+  selectionStartElement,
+  selectionEndElement
+}) => {
+  const startDDOEIsNotNeutral =
+    styleTags.includes(startDDOE.localName) ||
+    sizeTags.includes(startDDOE.localName);
+  const endDDOEIsNotNeutral =
+    styleTags.includes(endDDOE.localName) ||
+    sizeTags.includes(endDDOE.localName);
+  const startDDOEEqualsEndDDOE = startDDOE === endDDOE;
+
+  if (startDDOEIsNotNeutral || endDDOEIsNotNeutral) {
+    const { start, end } = applyTemporaryStamps({
+      startElement: selectionStartElement,
+      endElement: selectionEndElement
+    });
+    if (startDDOEIsNotNeutral) {
+      const spanElement = document.createElement('span');
+      spanElement.innerHTML = startDDOE.outerHTML;
+      startDDOE.parentElement.replaceChild(spanElement, startDDOE);
+      startDDOE = spanElement;
+    }
+    if (endDDOEIsNotNeutral) {
+      if (startDDOEEqualsEndDDOE) {
+        endDDOE = startDDOE;
+      } else {
+        const spanElement = document.createElement('span');
+        spanElement.innerHTML = endDDOE.outerHTML;
+        endDDOE.parentElement.replaceChild(spanElement, endDDOE);
+        endDDOE = spanElement;
+      }
+    }
+    selectionStartElement = startDDOE.querySelector(`[${start}]`);
+    selectionEndElement = endDDOE.querySelector(`[${end}]`);
+    deleteTemporaryStamps({
+      startElement: selectionStartElement,
+      endElement: selectionEndElement
+    });
+  }
+  return { startDDOE, endDDOE, selectionStartElement, selectionEndElement };
+};
 const guardAgainstSubDDOEIsTextNode = ({
   selectionStartElement,
   selectionEndElement,
@@ -137,5 +191,6 @@ export {
   getSelectedDDOEs,
   getIndexOfSelectionSubDDOEs,
   getIsolatedDDOESelection,
-  deletedIsolatedSelection
+  deletedIsolatedSelection,
+  guardAgainstDDOETagIsNotNeutral
 };

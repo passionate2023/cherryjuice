@@ -4,12 +4,13 @@ import {
   getIndexOfSelectionSubDDOEs,
   getIsolatedDDOESelection,
   deletedIsolatedSelection,
-  guardAgainstSubDDOEIsTextNode
+  guardAgainstSubDDOEIsTextNode,
+  guardAgainstDDOETagIsNotNeutral
 } from '::helpers/execK/steps/pipe1/ddoes';
 import { getAHtml } from '::helpers/execK/helpers/html-to-ahtml';
 import {
   applyTemporaryStamps,
-  deleteTemporaryStamps,
+  deleteTemporaryStampsFromAHtml,
   getAHtmlAnchors,
   splitSelected
 } from '::helpers/execK/steps/pipe1/split-selection';
@@ -20,8 +21,9 @@ const pipe1 = ({
   startOffset,
   endOffset
 }) => {
-  const startDDOE = getDDOE(selectionStartElement);
-  const endDDOE = getDDOE(selectionEndElement);
+  let startDDOE = getDDOE(selectionStartElement);
+  let endDDOE = getDDOE(selectionEndElement);
+
 
   const adjustedSelection = guardAgainstSubDDOEIsTextNode({
     selectionEndElement,
@@ -31,6 +33,12 @@ const pipe1 = ({
   });
   selectionStartElement = adjustedSelection.selectionStartElement;
   selectionEndElement = adjustedSelection.selectionEndElement;
+
+  const neutralDDOEs = guardAgainstDDOETagIsNotNeutral({ startDDOE, endDDOE ,selectionStartElement, selectionEndElement});
+  startDDOE = neutralDDOEs.startDDOE;
+  endDDOE = neutralDDOEs.endDDOE;
+  selectionStartElement = neutralDDOEs.selectionStartElement;
+  selectionEndElement = neutralDDOEs.selectionEndElement;
 
   applyTemporaryStamps({
     startElement: selectionStartElement,
@@ -75,7 +83,7 @@ const pipe1 = ({
   });
 
   [left, right, selected.leftEdge, selected.rightEdge].forEach(
-    deleteTemporaryStamps
+    deleteTemporaryStampsFromAHtml
   );
   return {
     left,

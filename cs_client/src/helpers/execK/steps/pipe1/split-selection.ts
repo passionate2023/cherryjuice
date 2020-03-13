@@ -1,23 +1,39 @@
 import { cloneObj } from '::helpers/execK/helpers';
 const Stamps = {
   start: 'selection-start',
-  end: 'selection-end'
-};
-const genStamps = () => {
-  Stamps.start = `selection-start-${new Date().getTime()}`;
-  Stamps.end = `selection-end-${new Date().getTime()}`;
+  end: 'selection-end',
+  genStamps: () => {
+    Stamps.start = `selection-start-${new Date().getTime()}`;
+    Stamps.end = `selection-end-${new Date().getTime()}`;
+  }
 };
 const helpers = {
   aHtmlElHasAttribute: (tagTuples = []) => key =>
     tagTuples.findIndex(([tagName, attributes]) => attributes[key])
 };
 
-const applyTemporaryStamps = ({ startElement, endElement }) => {
-  genStamps();
-  startElement.setAttribute(Stamps.start, true);
-  endElement.setAttribute(Stamps.end, true);
+const applyTemporaryStamps = ({
+  startElement,
+  endElement
+}: {
+  startElement?: Element;
+  endElement?: Element;
+}) => {
+  Stamps.genStamps();
+  startElement && startElement.setAttribute(Stamps.start, 'true');
+  endElement && endElement.setAttribute(Stamps.end, 'true');
+  return { start: Stamps.start, end: Stamps.end };
 };
-
+const deleteTemporaryStamps = ({
+  startElement,
+  endElement
+}: {
+  startElement?: Element;
+  endElement?: Element;
+}) => {
+  startElement && startElement.removeAttribute(Stamps.start);
+  endElement && endElement.removeAttribute(Stamps.end);
+};
 const splitSelected = ({
   aHtmlAnchors: { startNode, endNode, midNodes },
   startOffset,
@@ -83,7 +99,7 @@ const getAHtmlAnchors = ({ abstractHtml }) => {
   return { startNode, endNode, midNodes };
 };
 
-const deleteTemporaryStamps = aHtmlElement =>
+const deleteTemporaryStampsFromAHtml = aHtmlElement =>
   aHtmlElement.tags.map(([tagName, attributes]) => [
     tagName,
     ([Stamps.start, Stamps.end].forEach(
@@ -95,6 +111,7 @@ const deleteTemporaryStamps = aHtmlElement =>
 export {
   applyTemporaryStamps,
   deleteTemporaryStamps,
+  deleteTemporaryStampsFromAHtml,
   getAHtmlAnchors,
   splitSelected
 };
