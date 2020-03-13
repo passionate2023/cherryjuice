@@ -5,119 +5,123 @@ const colors = [
     label: 'fg',
     cssProperty: 'color',
     hotKey: { key: ' ', ctrlKey: true, shiftKey: true },
-    inputId: 'fg-color-input'
+    inputId: 'fg-color-input',
   },
   {
     label: 'bg',
     cssProperty: 'background-color',
     hotKey: { key: ' ', ctrlKey: true, altKey: true },
-    inputId: 'bg-color-input'
-  }
+    inputId: 'bg-color-input',
+  },
 ];
 
 const tagsAndStyles = [
   {
     button: {
       style: {},
-      label: 'b'
+      label: 'b',
     },
     execCommandArguments: { tagName: 'strong', style: undefined },
-    hotKey: { key: 'b', ctrlKey: true }
+    hotKey: { key: 'b', ctrlKey: true },
   },
   {
     button: { style: {}, label: 'i' },
     execCommandArguments: { tagName: 'em' },
-    hotKey: { key: 'i', ctrlKey: true }
+    hotKey: { key: 'i', ctrlKey: true },
   },
   {
     button: {
       label: 'a',
-      style: { textDecoration: 'underline' }
+      style: { textDecoration: 'underline' },
     },
     execCommandArguments: {
-      style: { property: 'text-decoration', value: 'underline' }
+      style: { property: 'text-decoration', value: 'underline' },
     },
-    hotKey: { key: ' ', ctrlKey: true }
+    hotKey: { key: ' ', ctrlKey: true },
   },
   {
     button: {
       label: 'a',
-      style: { textDecoration: 'line-through' }
+      style: { textDecoration: 'line-through' },
     },
     execCommandArguments: {
-      style: { property: 'text-decoration', value: 'line-through' }
+      style: { property: 'text-decoration', value: 'line-through' },
     },
-    hotKey: { key: 'e', ctrlKey: true }
+    hotKey: { key: 'e', ctrlKey: true },
   },
   ...['h1', 'h2', 'h3'].map((tagName, i) => ({
     button: {
       style: {},
-      label: tagName
+      label: tagName,
     },
     execCommandArguments: { tagName },
-    hotKey: { code: `Digit${i + 1}`, ctrlKey: true }
+    hotKey: { code: `Digit${i + 1}`, ctrlKey: true },
   })),
   {
     button: {
       style: {},
-      label: 'sm'
+      label: 'sm',
     },
     execCommandArguments: { tagName: 'small' },
-    hotKey: { code: `Digit${0}`, ctrlKey: true }
+    hotKey: { code: `Digit${0}`, ctrlKey: true },
   },
   {
     button: {
       style: {},
-      label: 'sp'
+      label: 'sp',
     },
     execCommandArguments: { tagName: 'sup' },
-    hotKey: { key: `ArrowUp`, ctrlKey: true }
+    hotKey: { key: `ArrowUp`, ctrlKey: true },
   },
   {
     button: {
       style: {},
-      label: 'sb'
+      label: 'sb',
     },
     execCommandArguments: { tagName: 'sub' },
-    hotKey: { key: `ArrowDown`, ctrlKey: true }
+    hotKey: { key: `ArrowDown`, ctrlKey: true },
   },
   {
     button: {
       style: {},
-      label: 'm'
+      label: 'm',
     },
-    execCommandArguments: { tagName: 'code' },
-    hotKey: { key: `m`, ctrlKey: true }
-  },
-  {
-    button: {
-      style: {},
-      label: 'jl'
+    execCommandArguments: {
+      tagName: 'code',
+
+      // style: { property: 'font-family', value: 'monospace' },
     },
-    execCommandArguments: { command: ExecKCommand.justifyLeft }
+    hotKey: { key: `m`, ctrlKey: true },
   },
   {
     button: {
       style: {},
-      label: 'jc'
+      label: 'jl',
     },
-    execCommandArguments: { command: ExecKCommand.justifyCenter }
+    execCommandArguments: { command: ExecKCommand.justifyLeft },
   },
   {
     button: {
       style: {},
-      label: 'jr'
+      label: 'jc',
     },
-    execCommandArguments: { command: ExecKCommand.justifyRight }
+    execCommandArguments: { command: ExecKCommand.justifyCenter },
   },
   {
     button: {
       style: {},
-      label: 'c'
+      label: 'jr',
+    },
+    execCommandArguments: { command: ExecKCommand.justifyRight },
+  },
+  {
+    button: {
+      style: {},
+      label: 'c',
     },
     execCommandArguments: { command: ExecKCommand.clear },
-    hotKey: { key: `r`, altKey: true }
-  }
+    hotKey: { key: `r`, altKey: true },
+  },
 ];
 const commands = { tagsAndStyles, colors };
 

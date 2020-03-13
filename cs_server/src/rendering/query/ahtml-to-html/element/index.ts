@@ -26,6 +26,6 @@ const Element = ({ node }) =>
               style:node.$
             });
       }, node._)
-    : createElement(`div`, node.$, node._);
+    : createElement(`span`, node.$, node._);
 
 export { Element, stringifyStyles };

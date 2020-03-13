@@ -10,7 +10,7 @@ const aHtmlToHtml = ({ richText }) => {
     res = `${richText
       .map(
         line =>
-          `<div class="rich-text__line" style="${
+          `<span class="rich-text__line" style="${
             line.styles ? `${stringifyStyles(line.styles)}` : ''
           }">${line.nodes
             .map(node =>
@@ -56,7 +56,7 @@ const aHtmlToHtml = ({ richText }) => {
                 : `<span>${node}</span>`,
             )
             .join('')}${
-            '</div>'
+            '</span>'
             // line.styles ? '</div>' : i < lines.length - 1 ? '<br />' : ''
           }`,
       )

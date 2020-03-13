@@ -5,8 +5,10 @@ import { removeFormatting } from '::helpers/execK/steps/apply-command/remove-for
 import { ExecKCommand } from '::helpers/execK';
 import {
   justify,
-  TLineStyle
+  TLineStyle,
 } from '::helpers/execK/steps/apply-command/justify';
+import { hoistAHtmlProperties } from '::helpers/execK/steps/apply-command/hoist-properties';
+import { optimizeAHtml } from '::helpers/clipboard/optimize-ahtml';
 
 type TApplyCommand = {
   tag?: { tagName: string; tagExists: boolean };
@@ -20,9 +22,9 @@ const applyCommand = ({
   style: { style, styleExists },
   aHtmlElement,
   command,
-  lineStyle
+  lineStyle,
 }: TApplyCommand) => {
-  const newAHtmlElement = cloneObj(aHtmlElement);
+  let newAHtmlElement = cloneObj(aHtmlElement);
   if (command) {
     if (command === ExecKCommand.clear)
       removeFormatting({ aHtmlElement: newAHtmlElement });
@@ -34,6 +36,8 @@ const applyCommand = ({
     if (style) {
       applyStyle({ aHtmlElement: newAHtmlElement, styleExists, style });
     }
+    debugger;
+    newAHtmlElement.tags = hoistAHtmlProperties({ tags: newAHtmlElement.tags });
   }
   return newAHtmlElement;
 };
@@ -42,8 +46,8 @@ const applyCmd = ({ selected, tagName, style, command }) => {
     ...selected.leftEdge.tags,
     ...selected.rightEdge.tags,
     ...selected.midNodes.flatMap(el =>
-      typeof el === 'object' && !el.type ? el.tags : []
-    )
+      typeof el === 'object' && !el.type ? el.tags : [],
+    ),
   ];
   const tagExists = tagName && allTags.some(([tag]) => tag === tagName);
 
@@ -51,7 +55,7 @@ const applyCmd = ({ selected, tagName, style, command }) => {
     style?.property &&
     allTags.some(
       ([_, { style: existingStyle }]) =>
-        existingStyle && existingStyle[style.property]?.includes(style.value)
+        existingStyle && existingStyle[style.property]?.includes(style.value),
     );
   const lineStyle = { line: {}, wrapper: {} };
   const modifiedSelected = {
@@ -60,14 +64,14 @@ const applyCmd = ({ selected, tagName, style, command }) => {
       style: { style, styleExists },
       aHtmlElement: selected.leftEdge,
       command,
-      lineStyle
+      lineStyle,
     }),
     rightEdge: applyCommand({
       tag: { tagName, tagExists },
       style: { style, styleExists },
       aHtmlElement: selected.rightEdge,
       command,
-      lineStyle
+      lineStyle,
     }),
     midNodes: selected.midNodes.map(el =>
       typeof el === 'object'
@@ -76,10 +80,10 @@ const applyCmd = ({ selected, tagName, style, command }) => {
             style: { style, styleExists },
             aHtmlElement: el,
             command,
-            lineStyle
+            lineStyle,
           })
-        : el
-    )
+        : el,
+    ),
   };
   return { modifiedSelected };
 };

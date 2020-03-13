@@ -13,10 +13,18 @@ h6 {
   font-weight: normal;
 }
 code {
-  font-size: 18px;
+  //font-size: 18px;
   //font-weight: 400;
 }
 small {
   font-size: 22px;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  display: inline;
+}

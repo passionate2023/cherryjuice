@@ -2,6 +2,7 @@ import { cloneObj } from '../../execK/helpers';
 
 const tagsToRename = {
   p: 'span',
+  div: 'span',
   pre: 'span',
   var: 'span',
   dt: 'span',
