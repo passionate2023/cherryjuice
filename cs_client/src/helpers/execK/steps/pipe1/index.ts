@@ -10,7 +10,6 @@ import {
 import { getAHtml } from '::helpers/execK/helpers/html-to-ahtml';
 import {
   applyTemporaryStamps,
-  deleteTemporaryStampsFromAHtml,
   getAHtmlAnchors,
   splitSelected,
 } from '::helpers/execK/steps/pipe1/split-selection';
@@ -24,7 +23,7 @@ const pipe1 = ({
 }) => {
   let startDDOE = getDDOE(selectionStartElement);
   let endDDOE = getDDOE(selectionEndElement);
-  debugger;
+
   const adjustedSelection = guardAgainstSubDDOEIsTextNode({
     selectionEndElement,
     selectionStartElement,
@@ -93,10 +92,6 @@ const pipe1 = ({
     { aHtml: [left, selected.leftEdge, selected.rightEdge, right] },
     { addEmptyLineBeforeHeader: false, keepClassAttribute: true },
   );
-  debugger;
-  // [left, right, selected.leftEdge, selected.rightEdge].forEach(
-  //   deleteTemporaryStampsFromAHtml
-  // );
   return {
     left,
     right,

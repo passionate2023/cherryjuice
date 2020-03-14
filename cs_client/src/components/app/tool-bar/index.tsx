@@ -5,7 +5,6 @@ import { FormattingButtons } from '::app/tool-bar/groups/formatting-buttons';
 
 type Props = {
   dispatch: (action: { type: string; value?: any }) => void;
-  r;
   onResize: () => void;
 };
 

@@ -8,27 +8,26 @@ enum ExecKCommand {
   clear = 'clear',
   justifyLeft = 'left',
   justifyCenter = 'center',
-  justifyRight = 'right'
+  justifyRight = 'right',
 }
 
 const execK = (
   {
     tagName,
     style,
-    command
+    command,
   }: {
     tagName?: string;
     style?: { property: string; value: string };
     command?: ExecKCommand;
   },
-  testSample
+  testSample,
 ) => {
   const editor = document.querySelector('#rich-text ');
-  let ogHtml = editor.innerHTML;
+  const ogHtml = editor.innerHTML;
   try {
-    let { startElement, endElement, startOffset, endOffset } = testSample
-      ? testSample
-      : getSelection();
+    let { startElement, endElement, startOffset, endOffset } =
+      testSample || getSelection();
     const {
       startAnchor,
       endAnchor,
@@ -37,12 +36,12 @@ const execK = (
       right,
       startDDOE,
       endDDOE,
-      adjustedSelection
+      adjustedSelection,
     } = pipe1({
       selectionStartElement: startElement,
       selectionEndElement: endElement,
       startOffset,
-      endOffset
+      endOffset,
     });
     startElement = adjustedSelection.selectionStartElement;
     endElement = adjustedSelection.selectionEndElement;
@@ -50,28 +49,28 @@ const execK = (
       selected,
       tagName,
       style,
-      command
+      command,
     });
     const {
       childrenElementsOfStartDDOE,
       childrenElementsOfEndDDOE,
-      adjacentElementsOfStartDDOE
+      adjacentElementsOfStartDDOE,
     } = pipe3(
       { left, right, modifiedSelected },
-      { startDDOE, endDDOE, endAnchor, startAnchor }
+      { startDDOE, endDDOE, endAnchor, startAnchor },
     );
     restoreSelection({
       modifiedSelection: {
         childrenElementsOfStartDDOE,
         childrenElementsOfEndDDOE,
-        adjacentElementsOfStartDDOE
+        adjacentElementsOfStartDDOE,
       },
       selected,
-      ogSelection: { startElement, endElement, startOffset, endOffset }
+      ogSelection: { startElement, endElement, startOffset, endOffset },
     });
   } catch (e) {
-    console.error(e);
     document.querySelector('#rich-text ').innerHTML = ogHtml;
+    throw e;
   }
 };
 
