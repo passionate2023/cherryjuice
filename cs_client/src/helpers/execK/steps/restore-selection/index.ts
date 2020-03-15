@@ -1,6 +1,6 @@
-const setSelection = (
+const setTextSelection = (
   { startElement, endElement, startOffset, endOffset },
-  collapsed?: boolean
+  collapsed?: boolean,
 ) => {
   const range = document.createRange();
   range.setStart(getDeepestChild(startElement), startOffset);
@@ -13,7 +13,7 @@ const setSelection = (
 const getLength = (str: string, nextStr: string | undefined) =>
   Number(
     (/^(\s+|)$/.test(nextStr) || /^(\s+|)$/.test(str) ? str.trimEnd() : str)
-      .length
+      .length,
   );
 const getInnerTextLength = el => (el.innerText ? el.innerText.length : 0);
 const findAbsoluteOffset = xs =>
@@ -33,13 +33,13 @@ const findAbsoluteOffset = xs =>
     },
     {
       tl: 0,
-      absoluteOffset: [-1, -1]
-    }
+      absoluteOffset: [-1, -1],
+    },
   );
 const findNewRange = ({
   absoluteStartOffset,
   absoluteEndOffset,
-  modifiedSelection
+  modifiedSelection,
 }) =>
   modifiedSelection.reduce(
     (acc, val) => {
@@ -66,8 +66,8 @@ const findNewRange = ({
       endElement: undefined,
       startOffset: -1,
       endOffset: -1,
-      currentOffset: 0
-    }
+      currentOffset: 0,
+    },
   );
 const getDeepestChild = el =>
   el.firstChild ? getDeepestChild(el.firstChild) : el;
@@ -82,23 +82,23 @@ const restoreSelection = ({
   modifiedSelection: {
     childrenElementsOfStartDDOE,
     childrenElementsOfEndDDOE,
-    adjacentElementsOfStartDDOE
+    adjacentElementsOfStartDDOE,
   },
   ogSelection,
-  selected
+  selected,
 }) => {
   const text = [
     {
       innerText: ogSelection.startElement.innerText,
-      offset: ogSelection.startOffset
+      offset: ogSelection.startOffset,
     },
     ...selected.midNodes.map(node =>
-      typeof node === 'string' ? node : node._ || ''
+      typeof node === 'string' ? node : node._ || '',
     ),
     {
       innerText: ogSelection.endElement.innerText,
-      offset: ogSelection.endOffset
-    }
+      offset: ogSelection.endOffset,
+    },
   ];
   const [absoluteStartOffset, absoluteEndOffset] =
     ogSelection.startElement === ogSelection.endElement
@@ -110,7 +110,7 @@ const restoreSelection = ({
   const m = [
     ...childrenElementsOfStartDDOE,
     ...adjacentElementsOfStartDDOE.flatMap(ddoe => Array.from(ddoe.childNodes)),
-    ...childrenElementsOfEndDDOE
+    ...childrenElementsOfEndDDOE,
   ]
     .flatMap(el => el)
     .filter(isTextElement)
@@ -118,13 +118,13 @@ const restoreSelection = ({
   const { startElement, endElement, startOffset, endOffset } = findNewRange({
     absoluteStartOffset,
     absoluteEndOffset,
-    modifiedSelection: [a, ...m, b]
+    modifiedSelection: [a, ...m, b],
   });
-  setSelection({
+  setTextSelection({
     startElement,
     endElement,
     startOffset,
-    endOffset
+    endOffset,
   });
 };
-export { restoreSelection, setSelection };
+export { restoreSelection, setTextSelection };

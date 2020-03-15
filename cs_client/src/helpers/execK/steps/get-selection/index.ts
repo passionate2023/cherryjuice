@@ -1,4 +1,4 @@
-import { setSelection } from '::helpers/execK/steps/restore-selection';
+import { setTextSelection } from '::helpers/execK/steps/restore-selection';
 import { guardAgainstEditorIsDDOE } from '::helpers/execK/steps/pipe1/ddoes';
 
 const getLineChildren = line => Array.from(line.childNodes);
@@ -44,8 +44,6 @@ const findAnchors = ({ line, startOffset, endOffset }) => {
 };
 
 const createWordRange = ({ startElement, startOffset: caretOffset }) => {
-  // const range = window.getSelection().getRangeAt(0);
-  // const { startOffset: caretOffset, startContainer: startElement } = range;
   const line = getLineDiv(startElement);
   const lineChildren = getLineChildren(line);
   const text = line.innerText;
@@ -96,7 +94,7 @@ const getSelection = ({ collapsed }: { collapsed?: boolean } = {}) => {
     });
 
     if (selection.getRangeAt(0).collapsed && !collapsed)
-      setSelection(
+      setTextSelection(
         createWordRange({ startElement: selectionStartElement, startOffset }),
       );
   }

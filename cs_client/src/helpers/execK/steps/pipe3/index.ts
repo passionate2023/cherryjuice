@@ -4,12 +4,12 @@ import { replaceElement } from '::helpers/execK/steps/pipe3/helpers';
 
 const pipe3 = (
   { left, right, modifiedSelected },
-  { startDDOE, endDDOE, startAnchor, endAnchor }
+  { startDDOE, endDDOE, startAnchor, endAnchor },
 ) => {
   const leftAHtmls = [
     left,
     modifiedSelected.leftEdge,
-    ...modifiedSelected.midNodes
+    ...modifiedSelected.midNodes,
   ];
   const leftOversFromRightAHtml = [];
   const rightAHtmls = [modifiedSelected.rightEdge, right];
@@ -19,7 +19,7 @@ const pipe3 = (
   if (leftAHtmlsHasLeftOversFromAHtml) {
     const lastIndexOfNewLineElement = leftAHtmls.lastIndexOf('\n');
     leftOversFromRightAHtml.push(
-      ...leftAHtmls.splice(lastIndexOfNewLineElement + 1)
+      ...leftAHtmls.splice(lastIndexOfNewLineElement + 1),
     );
   }
 
@@ -30,7 +30,7 @@ const pipe3 = (
           ? acc
           : [...acc, []]
         : (acc[acc.length - 1].push(aHtmlToElement({ node })), acc),
-    [[]]
+    [[]],
   );
   const childrenOfStartDDOE: string[] = leftAHtmlsMultiLine.shift();
   const adjacentToStartDDOE: string[] = leftAHtmlsMultiLine.reduce(
@@ -40,14 +40,14 @@ const pipe3 = (
       acc.push(startDDOEShell.outerHTML);
       return acc;
     },
-    []
+    [],
   );
 
   const childrenElementsOfStartDDOE = childrenOfStartDDOE.map(toNodes);
   const adjacentElementsOfStartDDOE = adjacentToStartDDOE.map(toNodes);
   const childrenElementsOfEndDDOE = [
     ...leftOversFromRightAHtml,
-    ...rightAHtmls
+    ...rightAHtmls,
   ].map(node => toNodes(aHtmlToElement({ node })));
 
   replaceElement(startAnchor)(childrenElementsOfStartDDOE);
@@ -57,7 +57,7 @@ const pipe3 = (
   return {
     childrenElementsOfStartDDOE,
     adjacentElementsOfStartDDOE,
-    childrenElementsOfEndDDOE
+    childrenElementsOfEndDDOE,
   };
 };
 

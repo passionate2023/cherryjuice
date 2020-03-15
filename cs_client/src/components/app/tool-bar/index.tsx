@@ -12,7 +12,7 @@ const ToolBar: React.FC<Props> = ({ dispatch, onResize }) => {
   return (
     <div className={modToolbar.toolBar}>
       <MainButtons dispatch={dispatch} onResize={onResize} />
-      <FormattingButtons/>
+      <FormattingButtons />
     </div>
   );
 };
