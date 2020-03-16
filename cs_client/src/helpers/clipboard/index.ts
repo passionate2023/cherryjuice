@@ -51,7 +51,9 @@ const processClipboard: { [p: string]: (str) => TAHtml[] } = {
           ? child
           : child.nodeType === Node.TEXT_NODE
           ? (child as Text).wholeText === '\n'
-            ? toNodes(`<br>`)
+            ? acc.length
+              ? toNodes(`<br>`)
+              : undefined
             : wrapNodeInSpan(child as Text)
           : undefined;
       if (res) acc.push(res);
@@ -111,43 +113,26 @@ const putCursorAtTheEndOfPastedElement = ({ newEndElement }) => {
 const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
   const ogHtml = document.querySelector('#rich-text ').innerHTML;
   try {
-    // const range = document.getSelection().getRangeAt(0);
-    // const {
-    //   startContainer,
-    //   endContainer,
-    //   startOffset: ogStartOffset,
-    //   collapsed,
-    // } = range;
-    // const pastingAtBeginningOfLine =
-    //   startContainer === endContainer && ogStartOffset === 0 && collapsed;
     let childrenElementsOfStartDDOE = [];
-    // if (pastingAtBeginningOfLine && 3 > 4) {
-    //   childrenElementsOfStartDDOE = [...pastedData].map(node =>
-    //     toNodes(node === '\n' ? `<br>` : aHtmlToElement({ node })),
-    //   );
-    //   replaceElement(startContainer)(childrenElementsOfStartDDOE);
-    // } else
-    {
-      const selection = getSelection({ collapsed: true });
-      const { startElement, endElement, startOffset, endOffset } = selection;
-      const { startAnchor, endAnchor, left, right } = pipe1({
-        selectionStartElement: startElement,
-        selectionEndElement: endElement,
-        startOffset,
-        endOffset,
-      });
-      childrenElementsOfStartDDOE = [
-        left,
-        // selected.leftEdge,
-        ...pastedData,
-      ].map(node => toNodes(node === '\n' ? `<br>` : aHtmlToElement({ node })));
-      const childrenElementsOfEndDDOE = [right].map(node =>
-        toNodes(aHtmlToElement({ node })),
-      );
+    const selection = getSelection({ collapsed: true });
+    const { startElement, endElement, startOffset, endOffset } = selection;
+    const { startAnchor, endAnchor, left, right } = pipe1({
+      selectionStartElement: startElement,
+      selectionEndElement: endElement,
+      startOffset,
+      endOffset,
+    });
+    childrenElementsOfStartDDOE = [
+      left,
+      // selected.leftEdge,
+      ...pastedData,
+    ].map(node => toNodes(node === '\n' ? `<br>` : aHtmlToElement({ node })));
+    const childrenElementsOfEndDDOE = [right].map(node =>
+      toNodes(aHtmlToElement({ node })),
+    );
 
-      replaceElement(startAnchor)(childrenElementsOfStartDDOE);
-      replaceElement(endAnchor)(childrenElementsOfEndDDOE);
-    }
+    replaceElement(startAnchor)(childrenElementsOfStartDDOE);
+    replaceElement(endAnchor)(childrenElementsOfEndDDOE);
 
     const newEndElement =
       childrenElementsOfStartDDOE[childrenElementsOfStartDDOE.length - 1];

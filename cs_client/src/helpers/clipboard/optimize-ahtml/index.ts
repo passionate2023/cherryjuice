@@ -1,18 +1,26 @@
 import { cloneObj } from '../../execK/helpers';
+import {
+  sizeTags,
+  styleTags,
+} from '::helpers/execK/steps/apply-command/apply-tag/calculate-tag';
+
+const tagsWhiteList = ['a', 'span', 'img', 'table', ...styleTags, ...sizeTags];
 
 const tagsToRename = {
-  p: 'span',
-  div: 'span',
-  pre: 'span',
-  var: 'span',
-  dt: 'span',
-  dl: 'span',
-  dd: 'span'
+  // p: 'span',
+  // div: 'span',
+  // pre: 'span',
+  // var: 'span',
+  // dt: 'span',
+  // dl: 'span',
+  // dd: 'span'
+  i: 'em',
+  b: 'strong',
 };
 const stylePropertiesToRename = {
   'text-decoration-style': {
     propertyName: 'text-decoration',
-    valueTransformer: v => v
+    valueTransformer: v => v,
   },
   background: {
     propertyName: 'background-color',
@@ -20,8 +28,8 @@ const stylePropertiesToRename = {
       const el = document.createElement('span');
       el.style.background = v;
       return el.style['background-color'];
-    }
-  }
+    },
+  },
 };
 const stylePropertiesToKeep = [
   'color',
@@ -31,7 +39,7 @@ const stylePropertiesToKeep = [
   'background-color',
   'background',
   'text-decoration-style',
-  'text-decoration'
+  'text-decoration',
 ];
 const styleValuesToIgnore = ['inherit', 'initial', 'left', 'start'];
 const headers = Array.from({ length: 6 }).map((_, i) => `h${i + 1}`);
@@ -65,7 +73,7 @@ const collapseTags = val => {
         const stylesOfCollapsedTag = val[1].style;
         acc[previousTagWithSameName][1].style = {
           ...styleOfPreviousTag,
-          ...stylesOfCollapsedTag
+          ...stylesOfCollapsedTag,
         };
       } else acc.push(val);
       return acc;
@@ -75,12 +83,16 @@ const collapseTags = val => {
 };
 
 const cleanStyleAndRenameTags = (
-  options = { keepClassAttribute: false }
+  options = { keepClassAttribute: false },
 ) => val => {
   if (val.tags)
     val.tags = val.tags.map(([tagName, attributes]) => {
       return [
-        tagsToRename[tagName] ? tagsToRename[tagName] : tagName,
+        tagsToRename[tagName]
+          ? tagsToRename[tagName]
+          : tagsWhiteList.includes(tagName)
+          ? tagName
+          : 'span',
         {
           ...(attributes.class &&
             options.keepClassAttribute && { class: attributes.class }),
@@ -97,15 +109,15 @@ const cleanStyleAndRenameTags = (
                     ? (acc[
                         stylePropertiesToRename[styleName].propertyName
                       ] = stylePropertiesToRename[styleName].valueTransformer(
-                        styleValue
+                        styleValue,
                       ))
                     : (acc[styleName] = styleValue);
                 return acc;
               },
-              {}
-            )
-          })
-        }
+              {},
+            ),
+          }),
+        },
       ];
     });
   return val;
@@ -122,6 +134,7 @@ const addEmptyLineBeforeHeader = (acc, val) => {
   if (isHeader) {
     acc.push('\n', val);
   } else if (isDefinitionDefinition) {
+    // eslint-disable-next-line no-useless-escape
     val._ = `\&nbsp; &nbsp; ${val._ || ''}`;
     acc.push('\n', val);
   } else if (isDefinitionTitle) {
@@ -134,19 +147,19 @@ const addEmptyLineBeforeHeader = (acc, val) => {
 
 const optimizeAHtml = (
   { aHtml },
-  options = { addEmptyLineBeforeHeader: true, keepClassAttribute: false }
+  options = { addEmptyLineBeforeHeader: true, keepClassAttribute: false },
 ) => {
   return cloneObj(aHtml)
     .reduce(
       options.addEmptyLineBeforeHeader
         ? addEmptyLineBeforeHeader
         : (acc, val) => (acc.push(val), acc),
-      []
+      [],
     )
     .map(
       cleanStyleAndRenameTags({
-        keepClassAttribute: options.keepClassAttribute
-      })
+        keepClassAttribute: options.keepClassAttribute,
+      }),
     )
     .map(transformStyles)
     .map(collapseTags);
