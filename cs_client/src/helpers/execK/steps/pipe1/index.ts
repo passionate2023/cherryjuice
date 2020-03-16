@@ -4,8 +4,6 @@ import {
   getIndexOfSelectionSubDDOEs,
   getIsolatedDDOESelection,
   deletedIsolatedSelection,
-  guardAgainstSubDDOEIsTextNode,
-  guardAgainstDDOETagIsNotNeutral,
 } from '::helpers/execK/steps/pipe1/ddoes';
 import { getAHtml } from '::helpers/execK/helpers/html-to-ahtml';
 import {
@@ -14,6 +12,10 @@ import {
   splitSelected,
 } from '::helpers/execK/steps/pipe1/split-selection';
 import { optimizeAHtml } from '::helpers/clipboard/optimize-ahtml';
+import {
+  guardAgainstDDOETagIsNotNeutral,
+  guardAgainstSubDDOEIsTextNode,
+} from '::helpers/execK/steps/pipe1/guards';
 
 const pipe1 = ({
   selectionStartElement,

@@ -1,5 +1,9 @@
 import { setTextSelection } from '::helpers/execK/steps/restore-selection';
-import { guardAgainstEditorIsDDOE } from '::helpers/execK/steps/pipe1/ddoes';
+import {
+  guardAgainstEditorIsDDOE,
+  guardAgainstEditorIsSelectionTarget,
+  guardAgainstSelectionTargetIsImage,
+} from '::helpers/execK/steps/pipe1/guards';
 
 const getLineChildren = line => Array.from(line.childNodes);
 const getRootParent = el =>
@@ -84,28 +88,45 @@ const createWordRange = ({ startElement, startOffset: caretOffset }) => {
 const getSelection = ({ collapsed }: { collapsed?: boolean } = {}) => {
   const selection = document.getSelection();
   if (selection.rangeCount === 0) throw new Error("can't find the cursor");
-  {
-    const { startContainer, endContainer, startOffset } = selection.getRangeAt(
-      0,
+  const {
+    startContainer,
+    endContainer,
+    startOffset,
+    endOffset,
+  } = selection.getRangeAt(0);
+
+  const adjustedSelection = guardAgainstEditorIsDDOE(
+    guardAgainstSelectionTargetIsImage(
+      guardAgainstEditorIsSelectionTarget({
+        selectionStartElement: startContainer,
+        selectionEndElement: endContainer,
+        startOffset,
+        endOffset,
+      }),
+    ),
+  );
+
+  if (selection.getRangeAt(0).collapsed && !collapsed) {
+    setTextSelection(
+      createWordRange({
+        startElement: adjustedSelection.selectionStartElement,
+        startOffset,
+      }),
     );
-    const { selectionStartElement } = guardAgainstEditorIsDDOE({
-      selectionStartElement: startContainer,
-      selectionEndElement: endContainer,
-    });
-
-    if (selection.getRangeAt(0).collapsed && !collapsed)
-      setTextSelection(
-        createWordRange({ startElement: selectionStartElement, startOffset }),
-      );
-  }
-
-  const range = document.getSelection().getRangeAt(0);
-  return {
-    startElement: range.startContainer,
-    endElement: range.endContainer,
-    startOffset: range.startOffset,
-    endOffset: range.endOffset,
-  };
+    const range = document.getSelection().getRangeAt(0);
+    return {
+      startElement: range.startContainer,
+      endElement: range.endContainer,
+      startOffset: range.startOffset,
+      endOffset: range.endOffset,
+    };
+  } else
+    return {
+      startElement: adjustedSelection.selectionStartElement,
+      endElement: adjustedSelection.selectionEndElement,
+      startOffset: adjustedSelection.startOffset,
+      endOffset: adjustedSelection.endOffset,
+    };
 };
 
 export { getSelection, getRootParent, getLineChildren };

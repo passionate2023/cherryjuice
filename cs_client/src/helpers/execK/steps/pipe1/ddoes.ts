@@ -1,12 +1,3 @@
-import {
-  sizeTags,
-  styleTags,
-} from '::helpers/execK/steps/apply-command/apply-tag/calculate-tag';
-import {
-  applyTemporaryStamps,
-  deleteTemporaryStamps,
-} from '::helpers/execK/steps/pipe1/split-selection';
-
 const getDDOE = el =>
   el.parentElement.getAttribute('id') === 'rich-text'
     ? el
@@ -101,131 +92,10 @@ const deletedIsolatedSelection = ({
   return { startAnchor, endAnchor };
 };
 
-const guardAgainstDDOETagIsNotNeutral = ({
-  startDDOE,
-  endDDOE,
-  selectionStartElement,
-  selectionEndElement,
-}) => {
-  const startDDOEIsNotNeutral =
-    styleTags.includes(startDDOE.localName) ||
-    sizeTags.includes(startDDOE.localName);
-  const endDDOEIsNotNeutral =
-    styleTags.includes(endDDOE.localName) ||
-    sizeTags.includes(endDDOE.localName);
-  const startDDOEEqualsEndDDOE = startDDOE === endDDOE;
-
-  if (startDDOEIsNotNeutral || endDDOEIsNotNeutral) {
-    const { start, end } = applyTemporaryStamps({
-      startElement: selectionStartElement,
-      endElement: selectionEndElement,
-    });
-    if (startDDOEIsNotNeutral) {
-      const spanElement = document.createElement('span');
-      spanElement.innerHTML = startDDOE.outerHTML;
-      startDDOE.parentElement.replaceChild(spanElement, startDDOE);
-      startDDOE = spanElement;
-    }
-    if (endDDOEIsNotNeutral) {
-      if (startDDOEEqualsEndDDOE) {
-        endDDOE = startDDOE;
-      } else {
-        const spanElement = document.createElement('span');
-        spanElement.innerHTML = endDDOE.outerHTML;
-        endDDOE.parentElement.replaceChild(spanElement, endDDOE);
-        endDDOE = spanElement;
-      }
-    }
-    selectionStartElement = startDDOE.querySelector(`[${start}]`);
-    selectionEndElement = endDDOE.querySelector(`[${end}]`);
-    deleteTemporaryStamps({
-      startElement: selectionStartElement,
-      endElement: selectionEndElement,
-    });
-  }
-  return { startDDOE, endDDOE, selectionStartElement, selectionEndElement };
-};
-const guardAgainstSubDDOEIsTextNode = ({
-  selectionStartElement,
-  selectionEndElement,
-  startDDOE,
-  endDDOE,
-}) => {
-  const subStartSubDDOEIsTextNode =
-    startDDOE === selectionStartElement.parentElement &&
-    selectionStartElement.nodeType === 3;
-  const subEndSubDDOEIsTextNode =
-    endDDOE === selectionEndElement.parentElement &&
-    selectionEndElement.nodeType === 3;
-  const startSelectionEqualsEndSelection =
-    selectionStartElement === selectionEndElement;
-
-  if (subStartSubDDOEIsTextNode) {
-    const spanElement = document.createElement('span');
-    spanElement.innerHTML = selectionStartElement.wholeText;
-    selectionStartElement.parentElement.replaceChild(
-      spanElement,
-      selectionStartElement,
-    );
-    selectionStartElement = spanElement;
-  } else selectionStartElement = selectionStartElement.parentElement;
-  if (subEndSubDDOEIsTextNode) {
-    if (startSelectionEqualsEndSelection) {
-      selectionEndElement = selectionStartElement;
-    } else {
-      const spanElement = document.createElement('span');
-      spanElement.innerHTML = selectionEndElement.wholeText;
-      selectionEndElement.parentElement.replaceChild(
-        spanElement,
-        selectionEndElement,
-      );
-      selectionEndElement = spanElement;
-    }
-  } else selectionEndElement = selectionEndElement.parentElement;
-  return { selectionStartElement, selectionEndElement };
-};
-
-const guardAgainstEditorIsDDOE = ({
-  selectionStartElement,
-  selectionEndElement,
-}) => {
-  const editor = document.querySelector('#rich-text');
-  const editorIsStartDDOE = selectionStartElement.parentElement === editor;
-  const editorIsEndDDOE = selectionEndElement.parentElement === editor;
-  const selectionStartEqualsEndElement =
-    selectionStartElement === selectionEndElement;
-  if (editorIsStartDDOE) {
-    const spanElement = document.createElement('span');
-    spanElement.innerHTML = `<span>${selectionStartElement.wholeText}</span>`;
-    selectionStartElement.parentElement.replaceChild(
-      spanElement,
-      selectionStartElement,
-    );
-    selectionStartElement = spanElement.firstChild;
-  }
-  if (editorIsEndDDOE) {
-    if (selectionStartEqualsEndElement)
-      selectionEndElement = selectionStartElement;
-    else {
-      const spanElement = document.createElement('span');
-      spanElement.innerHTML = `<span>${selectionEndElement.wholeText}</span>`;
-      selectionEndElement.parentElement.replaceChild(
-        spanElement,
-        selectionEndElement,
-      );
-      selectionEndElement = spanElement.firstChild;
-    }
-  }
-  return { selectionEndElement, selectionStartElement };
-};
-
 export {
   getDDOE,
   getSelectedDDOEs,
   getIndexOfSelectionSubDDOEs,
   getIsolatedDDOESelection,
-  guardAgainstSubDDOEIsTextNode,
   deletedIsolatedSelection,
-  guardAgainstDDOETagIsNotNeutral,
-  guardAgainstEditorIsDDOE,
 };

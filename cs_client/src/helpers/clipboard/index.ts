@@ -111,20 +111,25 @@ const putCursorAtTheEndOfPastedElement = ({ newEndElement }) => {
 const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
   const ogHtml = document.querySelector('#rich-text ').innerHTML;
   try {
-    const range = document.getSelection().getRangeAt(0);
-    const { startContainer, endContainer, startOffset, collapsed } = range;
-    const pastingAtBeginningOfLine =
-      startContainer === endContainer && startOffset === 0 && collapsed;
+    // const range = document.getSelection().getRangeAt(0);
+    // const {
+    //   startContainer,
+    //   endContainer,
+    //   startOffset: ogStartOffset,
+    //   collapsed,
+    // } = range;
+    // const pastingAtBeginningOfLine =
+    //   startContainer === endContainer && ogStartOffset === 0 && collapsed;
     let childrenElementsOfStartDDOE = [];
-    if (pastingAtBeginningOfLine) {
-      childrenElementsOfStartDDOE = [...pastedData].map(node =>
-        toNodes(node === '\n' ? `<br>` : aHtmlToElement({ node })),
-      );
-      replaceElement(startContainer)(childrenElementsOfStartDDOE);
-    } else {
-      let { startElement, endElement, startOffset, endOffset } = getSelection({
-        collapsed: true,
-      });
+    // if (pastingAtBeginningOfLine && 3 > 4) {
+    //   childrenElementsOfStartDDOE = [...pastedData].map(node =>
+    //     toNodes(node === '\n' ? `<br>` : aHtmlToElement({ node })),
+    //   );
+    //   replaceElement(startContainer)(childrenElementsOfStartDDOE);
+    // } else
+    {
+      const selection = getSelection({ collapsed: true });
+      const { startElement, endElement, startOffset, endOffset } = selection;
       const { startAnchor, endAnchor, left, right } = pipe1({
         selectionStartElement: startElement,
         selectionEndElement: endElement,
