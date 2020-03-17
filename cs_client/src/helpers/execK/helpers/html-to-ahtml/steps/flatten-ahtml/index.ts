@@ -2,7 +2,7 @@ import { cloneObj } from '::helpers/execK/helpers';
 
 const flattenAHtml = ({
   acc,
-  aHtml
+  aHtml,
 }: {
   acc: any[];
   aHtml: { tags: any[]; _: string };
@@ -10,11 +10,12 @@ const flattenAHtml = ({
   const newAcc = cloneObj(acc);
   const chunks = aHtml.tags.reduce(
     (acc, val) => {
-      if (val[0] === 'br') acc.push([]);
-      else acc[acc.length - 1].push(val);
+      if (val[0] === 'br') {
+        if (aHtml._) acc.push([]);
+      } else acc[acc.length - 1].push(val);
       return acc;
     },
-    [[]]
+    [[]],
   );
   chunks.forEach((chunk, i) => {
     newAcc.push({ ...(i === 0 ? { ...aHtml } : { _: '' }), tags: chunk });

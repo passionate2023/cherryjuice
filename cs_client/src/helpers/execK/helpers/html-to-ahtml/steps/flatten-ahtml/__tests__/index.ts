@@ -2,6 +2,7 @@ import { flattenAHtml } from '::helpers/execK/helpers/html-to-ahtml/steps/flatte
 
 const testSamples = [
   {
+    meta: { name: 'sub-ddoe has br and has text' },
     input: {
       acc: [{ tags: [['img']] }],
       current: {
@@ -10,9 +11,9 @@ const testSamples = [
           ['span', { foo: 'span', bam: 'span' }],
           ['p', { foo: 'p' }],
           ['br'],
-          ['a', { foo: 'a' }]
-        ]
-      }
+          ['a', { foo: 'a' }],
+        ],
+      },
     },
     output: [
       { tags: [['img']] },
@@ -20,24 +21,52 @@ const testSamples = [
         _: 'hello',
         tags: [
           ['span', { foo: 'span', bam: 'span' }],
-          ['p', { foo: 'p' }]
-        ]
+          ['p', { foo: 'p' }],
+        ],
       },
       '\n',
       {
         _: '',
-        tags: [['a', { foo: 'a' }]]
-      }
-    ]
-  }
+        tags: [['a', { foo: 'a' }]],
+      },
+    ],
+  },
+  {
+    meta: { name: 'sub-ddoe has br but has no text' },
+    input: {
+      acc: [{ tags: [['img']] }],
+      current: {
+        _: '',
+        tags: [
+          ['span', { foo: 'span', bam: 'span' }],
+          ['p', { foo: 'p' }],
+          ['br'],
+          ['a', { foo: 'a' }],
+        ],
+      },
+    },
+    output: [
+      { tags: [['img']] },
+      {
+        _: '',
+        tags: [
+          ['span', { foo: 'span', bam: 'span' }],
+          ['p', { foo: 'p' }],
+          ['a', { foo: 'a' }],
+        ],
+      },
+    ],
+  },
 ];
 
 describe('html-to-aHtml', () => {
-  testSamples.forEach(({ input: { acc, current }, output }, i) => {
-    it('should push br to acc - ' + i, () => {
-      const res = flattenAHtml({ acc, aHtml: current });
-      console.log(res);
-      expect(res).toEqual(output);
-    });
-  });
+  testSamples.forEach(
+    ({ meta: { name }, input: { acc, current }, output }, i) => {
+      it(name, () => {
+        const {newAcc} = flattenAHtml({ acc, aHtml: current });
+        console.log(newAcc);
+        expect(newAcc).toEqual(output);
+      });
+    },
+  );
 });

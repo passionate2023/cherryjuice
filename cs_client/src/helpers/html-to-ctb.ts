@@ -23,7 +23,7 @@ type TProps = {
   };
 };
 
-const getAHtml = ({ containers, options = {} }: TProps) => {
+const getAHtml__legacy = ({ containers, options = {} }: TProps) => {
   const flatList = getFlatList(containers);
   const state = { offset: 0 };
   const abstractHtml = flatList.reduce((acc, el) => {
@@ -129,4 +129,4 @@ const getAHtml = ({ containers, options = {} }: TProps) => {
   return { abstractHtml: JSON.stringify(abstractHtml), flatList };
 };
 
-export { getAHtml };
+export { getAHtml__legacy };

@@ -7,7 +7,7 @@ import { QUERY_CT_NODE_CONTENT } from '::graphql/queries';
 import { usePng } from '::hooks/use-png';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
 import { MUTATE_CT_NODE_CONTENT } from '::graphql/mutations';
-import { getAHtml } from '::helpers/html-to-ctb';
+import { getAHtml__legacy } from '::helpers/html-to-ctb';
 import { setupClipboard } from '::helpers/clipboard';
 
 type Props = {
@@ -66,7 +66,7 @@ const RichText: React.FC<Props> = ({
     const containers = Array.from(
       document.querySelectorAll('#rich-text > div')
     );
-    const { abstractHtml, flatList } = getAHtml({ containers });
+    const { abstractHtml, flatList } = getAHtml__legacy({ containers });
     if (!(saveDocument + '').endsWith('_'))
       mutate({
         variables: {

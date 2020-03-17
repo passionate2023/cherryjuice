@@ -4,4 +4,15 @@ const toNodes: (string) => Element = html =>
 
 const cloneObj = ogObj => JSON.parse(JSON.stringify(ogObj));
 
-export { toNodes, cloneObj };
+const nonTextualElements = ['img', 'table'];
+const isElementNonTextual = node => nonTextualElements.includes(node.localName);
+const getInnerText = node => {
+  if (node.nodeType === Node.TEXT_NODE) {
+    return node.wholeText;
+  }
+  if (node.nodeType === Node.ELEMENT_NODE) {
+    return isElementNonTextual(node) ? '' : node.innerText;
+  }
+  return '';
+};
+export { toNodes, cloneObj, getInnerText, isElementNonTextual };

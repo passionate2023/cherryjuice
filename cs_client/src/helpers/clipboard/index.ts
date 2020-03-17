@@ -3,7 +3,7 @@ import { setTextSelection } from '::helpers/execK/steps/restore-selection';
 import { optimizeAHtml } from '::helpers/clipboard/optimize-ahtml';
 import { getAHtml } from '::helpers/execK/helpers/html-to-ahtml';
 import { pipe1 } from '::helpers/execK/steps/pipe1';
-import { toNodes } from '::helpers/execK/helpers';
+import { getInnerText, isElementNonTextual, toNodes } from '::helpers/execK/helpers';
 import { aHtmlToElement } from '::helpers/execK/helpers/ahtml-to-html/element';
 import { replaceElement } from '::helpers/execK/steps/pipe3/helpers';
 
@@ -71,20 +71,10 @@ const processClipboard: { [p: string]: (str) => TAHtml[] } = {
   },
   text: str => [{ _: str, tags: [['span', {}]] }],
 };
-const nonTextualElements = ['img', 'table'];
-const getInnerText = node => {
-  if (node.nodeType === Node.TEXT_NODE) {
-    return node.wholeText;
-  }
-  if (node.nodeType === Node.ELEMENT_NODE) {
-    return nonTextualElements.includes(node.localName) ? '' : node.innerText;
-  }
-  return '';
-};
+
+
 const putCursorAtTheEndOfPastedElement = ({ newEndElement }) => {
-  const elementIsNonTextual = nonTextualElements.includes(
-    newEndElement.localName,
-  );
+  const elementIsNonTextual =isElementNonTextual(newEndElement)
   if (!elementIsNonTextual) {
     const innerText = getInnerText(newEndElement);
     setTextSelection(
