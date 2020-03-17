@@ -9,6 +9,7 @@ import { SpinnerCircle } from '::shared-components/spinner-circle';
 import { MUTATE_CT_NODE_CONTENT } from '::graphql/mutations';
 import { getAHtml__legacy } from '::helpers/html-to-ctb';
 import { setupClipboard } from '::helpers/clipboard';
+import { setupKeyboardEvents } from '::helpers/typing';
 
 type Props = {
   file_id: string;
@@ -20,7 +21,7 @@ type Props = {
 const RichText: React.FC<Props> = ({
   file_id,
   saveDocument,
-  reloadDocument
+  reloadDocument,
 }) => {
   const richTextRef = useRef<HTMLDivElement>();
   const match = useRouteMatch();
@@ -30,8 +31,8 @@ const RichText: React.FC<Props> = ({
     QUERY_CT_NODE_CONTENT.html,
     {
       variables: { file_id, node_id: node_id },
-      fetchPolicy: 'network-only'
-    }
+      fetchPolicy: 'network-only',
+    },
   );
   const firstFetchRef = useRef(true);
   if (firstFetchRef.current) {
@@ -46,14 +47,14 @@ const RichText: React.FC<Props> = ({
   const all_png_base64 = usePng({
     file_id,
     node_id,
-    offset: undefined
+    offset: undefined,
   });
   if (html && all_png_base64?.node_id === node_id && richTextRef.current) {
     let counter = 0;
     while (all_png_base64.pngs[counter] && /<img src=""/.test(html)) {
       html = html.replace(
         /<img src=""/,
-        `<img src="data:image/png;base64,${all_png_base64.pngs[counter++]}"`
+        `<img src="data:image/png;base64,${all_png_base64.pngs[counter++]}"`,
       );
     }
   }
@@ -64,7 +65,7 @@ const RichText: React.FC<Props> = ({
     console.log(saveDocument);
     toolbarQueuesRef.current[saveDocument] = true;
     const containers = Array.from(
-      document.querySelectorAll('#rich-text > div')
+      document.querySelectorAll('#rich-text > div'),
     );
     const { abstractHtml, flatList } = getAHtml__legacy({ containers });
     if (!(saveDocument + '').endsWith('_'))
@@ -72,8 +73,8 @@ const RichText: React.FC<Props> = ({
         variables: {
           file_id: file_id || '',
           node_id,
-          abstract_html: abstractHtml
-        }
+          abstract_html: abstractHtml,
+        },
       });
     console.log(html);
     console.log(flatList);
@@ -85,6 +86,7 @@ const RichText: React.FC<Props> = ({
   }
   useEffect(() => {
     setupClipboard();
+    setupKeyboardEvents();
   }, []);
   return (
     <div
@@ -94,7 +96,7 @@ const RichText: React.FC<Props> = ({
       {...(html
         ? {
             contentEditable: true,
-            dangerouslySetInnerHTML: { __html: html }
+            dangerouslySetInnerHTML: { __html: html },
           }
         : { children: <SpinnerCircle /> })}
     />

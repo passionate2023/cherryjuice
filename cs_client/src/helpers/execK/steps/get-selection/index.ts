@@ -85,7 +85,9 @@ const createWordRange = ({ startElement, startOffset: caretOffset }) => {
   };
 };
 
-const getSelection = ({ collapsed }: { collapsed?: boolean } = {}) => {
+const getSelection = ({
+  selectAdjacentWordIfNoneIsSelected,
+}: { selectAdjacentWordIfNoneIsSelected?: boolean } = {}) => {
   const selection = document.getSelection();
   if (selection.rangeCount === 0) throw new Error("can't find the cursor");
   const {
@@ -93,6 +95,7 @@ const getSelection = ({ collapsed }: { collapsed?: boolean } = {}) => {
     endContainer,
     startOffset,
     endOffset,
+    collapsed,
   } = selection.getRangeAt(0);
 
   const adjustedSelection = guardAgainstEditorIsDDOE(
@@ -106,7 +109,7 @@ const getSelection = ({ collapsed }: { collapsed?: boolean } = {}) => {
     ),
   );
 
-  if (selection.getRangeAt(0).collapsed && !collapsed) {
+  if (selection.getRangeAt(0).collapsed && selectAdjacentWordIfNoneIsSelected) {
     setTextSelection(
       createWordRange({
         startElement: adjustedSelection.selectionStartElement,
@@ -119,6 +122,7 @@ const getSelection = ({ collapsed }: { collapsed?: boolean } = {}) => {
       endElement: range.endContainer,
       startOffset: range.startOffset,
       endOffset: range.endOffset,
+      collapsed: range.collapsed,
     };
   } else
     return {
@@ -126,6 +130,7 @@ const getSelection = ({ collapsed }: { collapsed?: boolean } = {}) => {
       endElement: adjustedSelection.selectionEndElement,
       startOffset: adjustedSelection.startOffset,
       endOffset: adjustedSelection.endOffset,
+      collapsed,
     };
 };
 

@@ -7,19 +7,16 @@ import { client } from './graphql/apollo';
 import {
   hotKeysManager,
   setupDevHotKeys,
-  setupFormattingHotKeys
+  setupFormattingHotKeys,
 } from '::helpers/hotkeys';
-
 render(
   <ApolloProvider client={client}>
     <Router>
       <App />
     </Router>
   </ApolloProvider>,
-  document.querySelector('#app')
+  document.querySelector('#app'),
 );
 setupFormattingHotKeys();
 setupDevHotKeys();
 hotKeysManager.startListening();
-
-

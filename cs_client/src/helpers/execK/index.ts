@@ -68,6 +68,7 @@ const execK = (
       selected,
       ogSelection: { startElement, endElement, startOffset, endOffset },
     });
+    debugger;
   } catch (e) {
     document.querySelector('#rich-text ').innerHTML = ogHtml;
     throw e;

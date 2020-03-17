@@ -3,7 +3,11 @@ import { setTextSelection } from '::helpers/execK/steps/restore-selection';
 import { optimizeAHtml } from '::helpers/clipboard/optimize-ahtml';
 import { getAHtml } from '::helpers/execK/helpers/html-to-ahtml';
 import { pipe1 } from '::helpers/execK/steps/pipe1';
-import { getInnerText, isElementNonTextual, toNodes } from '::helpers/execK/helpers';
+import {
+  getInnerText,
+  isElementNonTextual,
+  toNodes,
+} from '::helpers/execK/helpers';
 import { aHtmlToElement } from '::helpers/execK/helpers/ahtml-to-html/element';
 import { replaceElement } from '::helpers/execK/steps/pipe3/helpers';
 
@@ -72,9 +76,8 @@ const processClipboard: { [p: string]: (str) => TAHtml[] } = {
   text: str => [{ _: str, tags: [['span', {}]] }],
 };
 
-
 const putCursorAtTheEndOfPastedElement = ({ newEndElement }) => {
-  const elementIsNonTextual =isElementNonTextual(newEndElement)
+  const elementIsNonTextual = isElementNonTextual(newEndElement);
   if (!elementIsNonTextual) {
     const innerText = getInnerText(newEndElement);
     setTextSelection(
@@ -104,7 +107,7 @@ const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
   const ogHtml = document.querySelector('#rich-text ').innerHTML;
   try {
     let childrenElementsOfStartDDOE = [];
-    const selection = getSelection({ collapsed: true });
+    const selection = getSelection({ selectAdjacentWordIfNoneIsSelected: false });
     const { startElement, endElement, startOffset, endOffset } = selection;
     const { startAnchor, endAnchor, left, right } = pipe1({
       selectionStartElement: startElement,

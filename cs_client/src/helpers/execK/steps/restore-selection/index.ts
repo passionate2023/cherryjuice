@@ -127,4 +127,4 @@ const restoreSelection = ({
     endOffset,
   });
 };
-export { restoreSelection, setTextSelection };
+export { restoreSelection, setTextSelection,getDeepestChild };

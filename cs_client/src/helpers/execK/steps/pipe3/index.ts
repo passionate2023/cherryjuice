@@ -49,7 +49,7 @@ const pipe3 = (
     ...leftOversFromRightAHtml,
     ...rightAHtmls,
   ].map(node => toNodes(aHtmlToElement({ node })));
-
+  debugger;
   replaceElement(startAnchor)(childrenElementsOfStartDDOE);
   startDDOE.after(...adjacentElementsOfStartDDOE);
   replaceElement(endAnchor)(childrenElementsOfEndDDOE);
