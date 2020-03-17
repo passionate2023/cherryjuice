@@ -105,26 +105,49 @@ const guardAgainstEditorIsDDOE = ({
   const selectionStartEqualsEndElement =
     selectionStartElement === selectionEndElement;
   if (editorIsStartDDOE) {
+    const selectionElementIsTextNode =
+      selectionStartElement.nodeType === Node.TEXT_NODE;
     const spanElement = document.createElement('span');
-    spanElement.innerHTML = `<span>${selectionStartElement.wholeText ||
-      ''}</span>`;
-    selectionStartElement.parentElement.replaceChild(
-      spanElement,
-      selectionStartElement,
-    );
-    selectionStartElement = spanElement.firstChild;
+    if (selectionElementIsTextNode) {
+      spanElement.innerHTML = `<span>${selectionStartElement.wholeText ||
+        ''}</span>`;
+      selectionStartElement.parentElement.replaceChild(
+        spanElement,
+        selectionStartElement,
+      );
+      selectionStartElement = spanElement.firstChild;
+    } else {
+      if (selectionStartElement.children.length) {
+        selectionStartElement = selectionStartElement.children[0];
+      } else {
+        selectionStartElement.appendChild(spanElement);
+        selectionStartElement = spanElement;
+      }
+    }
   }
   if (editorIsEndDDOE) {
     if (selectionStartEqualsEndElement)
       selectionEndElement = selectionStartElement;
     else {
+      const selectionElementIsTextNode =
+        selectionEndElement.nodeType === Node.TEXT_NODE;
       const spanElement = document.createElement('span');
-      spanElement.innerHTML = `<span>${selectionEndElement.wholeText}</span>`;
-      selectionEndElement.parentElement.replaceChild(
-        spanElement,
-        selectionEndElement,
-      );
-      selectionEndElement = spanElement.firstChild;
+      if (selectionElementIsTextNode) {
+        spanElement.innerHTML = `<span>${selectionEndElement.wholeText ||
+          ''}</span>`;
+        selectionEndElement.parentElement.replaceChild(
+          spanElement,
+          selectionEndElement,
+        );
+        selectionEndElement = spanElement.firstChild;
+      } else {
+        if (selectionEndElement.children.length) {
+          selectionEndElement = selectionEndElement.children[0];
+        } else {
+          selectionEndElement.appendChild(spanElement);
+          selectionEndElement = spanElement;
+        }
+      }
     }
   }
   return { selectionEndElement, selectionStartElement, startOffset, endOffset };
@@ -164,9 +187,9 @@ const guardAgainstSelectionTargetIsImage = ({
       selectionEndElement = selectionStartElement;
     } else {
       const spanElement = document.createElement('span');
-      selectionStartElement.insertBefore(
+      selectionEndElement.insertBefore(
         spanElement,
-        selectionStartElement.childNodes[endOffset],
+        selectionEndElement.childNodes[endOffset],
       );
       selectionEndElement = spanElement;
     }
