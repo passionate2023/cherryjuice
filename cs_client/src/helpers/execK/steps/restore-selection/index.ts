@@ -3,9 +3,9 @@ const setTextSelection = (
   collapsed?: boolean,
 ) => {
   const range = document.createRange();
-  range.setStart(getDeepestChild(startElement), startOffset);
+  range.setStart(getDeepestFirstChild(startElement), startOffset);
   if (collapsed) range.collapse(true);
-  else range.setEnd(getDeepestChild(endElement), endOffset);
+  else range.setEnd(getDeepestFirstChild(endElement), endOffset);
   const sel = window.getSelection();
   sel.removeAllRanges();
   sel.addRange(range);
@@ -69,8 +69,8 @@ const findNewRange = ({
       currentOffset: 0,
     },
   );
-const getDeepestChild = el =>
-  el.firstChild ? getDeepestChild(el.firstChild) : el;
+const getDeepestFirstChild = el =>
+  el.firstChild ? getDeepestFirstChild(el.firstChild) : el;
 
 const isTextElement = el =>
   !['table', 'img'].includes(el.localName) &&
@@ -127,4 +127,4 @@ const restoreSelection = ({
     endOffset,
   });
 };
-export { restoreSelection, setTextSelection,getDeepestChild };
+export { restoreSelection, setTextSelection, getDeepestFirstChild };

@@ -18,21 +18,46 @@ const negativeIndent = (texts: string[]): string => {
   } else return str;
 };
 
-const getTextOfNodesThatStartWithSpace = (ddoe: Element): string[] => {
-  const res = [];
-  let foundFirstNonSpaceSubDDOE = false;
-  Array.from(ddoe.childNodes).forEach(subDDOE => {
-    if (foundFirstNonSpaceSubDDOE) return;
-    const text = getInnerText(subDDOE);
-    const textStartsWithSpace = /^[\s]/.test(text);
-    if (textStartsWithSpace) {
-      res.push(text);
-      subDDOE.remove();
-    } else {
-      foundFirstNonSpaceSubDDOE = true;
+const deleteSubDDOEsThatStartWithSpaceAndGetTheirText = (
+  ddoe: Element,
+  {
+    deleteFirstSubDDOEThatHasWords,
+  }: { deleteFirstSubDDOEThatHasWords: boolean },
+): {
+  textOfNodes: string[];
+  firstSubDDOEThatISNotFullOfSpaces: Element;
+  firstSubDDOEStartsWithSpace: boolean;
+} => {
+  const textOfNodes = [];
+  let firstSubDDOEThatISNotFullOfSpaces;
+  let firstSubDDOEStartsWithSpace = false;
+  let firstSubDDOEThatHasNoText;
+  Array.from(ddoe.childNodes).forEach((subDDOE, i) => {
+    if (!firstSubDDOEThatISNotFullOfSpaces && !firstSubDDOEThatHasNoText) {
+      const text = getInnerText(subDDOE);
+      if (!text) {
+        firstSubDDOEThatHasNoText = subDDOE;
+      } else {
+        const textStartsWithSpace = /^[\s]/.test(text);
+        const textHasWords = /[^\s]+/.test(text);
+        if (textStartsWithSpace) {
+          textOfNodes.push(text);
+        }
+        if (textHasWords) {
+          firstSubDDOEThatISNotFullOfSpaces = subDDOE;
+          firstSubDDOEStartsWithSpace = textStartsWithSpace;
+        }
+        if (textStartsWithSpace) {
+          if (!textHasWords || deleteFirstSubDDOEThatHasWords) subDDOE.remove();
+        }
+      }
     }
   });
-  return res;
+  return {
+    textOfNodes,
+    firstSubDDOEThatISNotFullOfSpaces,
+    firstSubDDOEStartsWithSpace,
+  };
 };
 
-export { negativeIndent, getTextOfNodesThatStartWithSpace };
+export { negativeIndent, deleteSubDDOEsThatStartWithSpaceAndGetTheirText };

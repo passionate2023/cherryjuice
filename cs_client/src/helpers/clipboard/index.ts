@@ -107,7 +107,9 @@ const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
   const ogHtml = document.querySelector('#rich-text ').innerHTML;
   try {
     let childrenElementsOfStartDDOE = [];
-    const selection = getSelection({ selectAdjacentWordIfNoneIsSelected: false });
+    const selection = getSelection({
+      selectAdjacentWordIfNoneIsSelected: false,
+    });
     const { startElement, endElement, startOffset, endOffset } = selection;
     const { startAnchor, endAnchor, left, right } = pipe1({
       selectionStartElement: startElement,

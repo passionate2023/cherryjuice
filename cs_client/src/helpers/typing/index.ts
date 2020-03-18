@@ -1,9 +1,11 @@
 import { getDDOE } from '::helpers/execK/steps/pipe1/ddoes';
 import { getSelection } from '::helpers/execK/steps/get-selection';
 import {
-  getTextOfNodesThatStartWithSpace,
+  deleteSubDDOEsThatStartWithSpaceAndGetTheirText,
   negativeIndent,
 } from '::helpers/typing/negative-indent';
+import { getDeepestFirstChild } from '::helpers/execK/steps/restore-selection';
+import { getInnerText } from '::helpers/execK/helpers';
 
 const getAllElementsUntilElement = (list, endElement) => {
   const nextSibling = list[list.length - 1].nextElementSibling;
@@ -31,18 +33,45 @@ const setupKeyboardEvents = () => {
         DDOEs.push(endDDOE);
         if (positiveIndent) {
           DDOEs.forEach(ddoe => {
-            ddoe.insertAdjacentHTML(
-              'afterbegin',
-              '<span>\u00A0 \u00A0 </span>',
-            );
+            const deepestFirstChild = getDeepestFirstChild(ddoe);
+            if (deepestFirstChild.insertData)
+              deepestFirstChild.insertData(0, '\u00A0 \u00A0 ');
+            else {
+              deepestFirstChild.insertAdjacentHTML(
+                'beforebegin',
+                '<span>\u00A0 \u00A0 </span>',
+              );
+            }
           });
         } else {
           DDOEs.forEach(ddoe => {
-            const nodes = getTextOfNodesThatStartWithSpace(ddoe);
-            const str = negativeIndent(nodes);
-            if (str) {
-              ddoe.insertAdjacentHTML('afterbegin', `<span>${str}</span>`);
+            const {
+              textOfNodes,
+              firstSubDDOEThatISNotFullOfSpaces,
+              firstSubDDOEStartsWithSpace,
+            } = deleteSubDDOEsThatStartWithSpaceAndGetTheirText(ddoe, {
+              deleteFirstSubDDOEThatHasWords: false,
+            });
+            const str = negativeIndent(textOfNodes);
+            if (firstSubDDOEThatISNotFullOfSpaces) {
+              const deepestFirstChild = getDeepestFirstChild(
+                firstSubDDOEThatISNotFullOfSpaces,
+              );
+              if (firstSubDDOEStartsWithSpace)
+                deepestFirstChild.replaceData(
+                  0,
+                  deepestFirstChild.wholeText.length,
+                  str,
+                );
+              else deepestFirstChild.insertData(0, str);
+            } else if (str) {
+              const deepestFirstChild = getDeepestFirstChild(ddoe);
+              deepestFirstChild.insertAdjacentHTML(
+                'beforebegin',
+                `<span>${str}</span`,
+              );
             }
+
           });
         }
       }
@@ -51,4 +80,3 @@ const setupKeyboardEvents = () => {
 };
 
 export { setupKeyboardEvents };
-
