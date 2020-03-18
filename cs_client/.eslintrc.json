@@ -24,11 +24,12 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "no-console": "warn",
+    "no-console": "error",
+    "no-debugger": "error",
+    "prefer-const": "warn",
+    "@typescript-eslint/ban-ts-ignore": "warn",
     "no-extra-semi": "off",
     "comma-dangle": "off",
-    "semi": "off",
-    "prefer-const": "warn",
-    "@typescript-eslint/ban-ts-ignore": "warn"
+    "semi": "off"
   }
 }

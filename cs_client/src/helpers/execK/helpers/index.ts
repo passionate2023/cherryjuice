@@ -15,4 +15,39 @@ const getInnerText = node => {
   }
   return '';
 };
-export { toNodes, cloneObj, getInnerText, isElementNonTextual };
+
+const moveCursor = (
+  { startElement, offset },
+  { endOffset, endElement } = { endElement: undefined, endOffset: -1 },
+) => {
+  const range = document.createRange();
+  range.setStart(startElement, offset);
+  if (!endElement) range.collapse(true);
+  else {
+    range.setEnd(endElement, endOffset);
+  }
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+};
+
+const getAllElementsUntilElement = (
+  list,
+  endElement,
+  startElement = undefined,
+) => {
+  const nextSibling = (list[list.length - 1] || startElement)
+    .nextElementSibling;
+  if (nextSibling !== endElement) {
+    list.push(nextSibling);
+    getAllElementsUntilElement(list, endElement);
+  }
+};
+export {
+  toNodes,
+  cloneObj,
+  getInnerText,
+  isElementNonTextual,
+  moveCursor,
+  getAllElementsUntilElement,
+};

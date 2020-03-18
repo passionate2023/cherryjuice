@@ -6,6 +6,7 @@ import { pipe1 } from '::helpers/execK/steps/pipe1';
 import {
   getInnerText,
   isElementNonTextual,
+  moveCursor,
   toNodes,
 } from '::helpers/execK/helpers';
 import { aHtmlToElement } from '::helpers/execK/helpers/ahtml-to-html/element';
@@ -92,12 +93,7 @@ const putCursorAtTheEndOfPastedElement = ({ newEndElement }) => {
   } else {
     const parent = newEndElement.parentElement;
     const offset = Array.from(parent.childNodes).indexOf(newEndElement) + 1;
-    const range = document.createRange();
-    range.setStart(parent, offset);
-    range.collapse(true);
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
+    moveCursor({ startElement: parent, offset });
   }
   const editableDiv = document.getElementById('rich-text');
   editableDiv.focus();
@@ -160,7 +156,6 @@ const handlePaste = async e => {
     } else if (clipboardData.types.includes('text/plain')) {
       const pastedData = e.clipboardData.getData('text/plain');
       addNodeToDom({ pastedData: processClipboard.text(pastedData) });
-      console.log(pastedData);
     }
   }
 };

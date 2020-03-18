@@ -10,11 +10,11 @@ const negativeIndent = (texts: string[]): string => {
     const spaces = regex[1];
     const remainingStr = str.replace(spaces, '');
 
-    const newSpaces = spaces
-      .replace(/ {1,4}/, '')
+    const newSpaces = spaces.replace(/ {1,4}/, '');
+
+    return (newSpaces + remainingStr || '')
       .replace(/ {2}/g, '\u00A0 ')
       .replace(/\t/g, '\u00A0 \u00A0 ');
-    return newSpaces + remainingStr || '';
   } else return str;
 };
 

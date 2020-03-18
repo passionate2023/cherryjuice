@@ -27,7 +27,7 @@ const execK = (
   const ogHtml = editor.innerHTML;
   try {
     let { startElement, endElement, startOffset, endOffset } =
-      testSample || getSelection();
+      testSample || getSelection({ selectAdjacentWordIfNoneIsSelected: true });
     const {
       startAnchor,
       endAnchor,
@@ -68,7 +68,6 @@ const execK = (
       selected,
       ogSelection: { startElement, endElement, startOffset, endOffset },
     });
-    debugger;
   } catch (e) {
     document.querySelector('#rich-text ').innerHTML = ogHtml;
     throw e;

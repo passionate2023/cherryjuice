@@ -113,7 +113,7 @@ const getSelection = ({
     setTextSelection(
       createWordRange({
         startElement: adjustedSelection.selectionStartElement,
-        startOffset,
+        startOffset: adjustedSelection.startOffset,
       }),
     );
     const range = document.getSelection().getRangeAt(0);
