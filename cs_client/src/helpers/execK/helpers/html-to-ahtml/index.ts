@@ -1,6 +1,10 @@
 import { escapeHtml } from '::helpers/escape-html';
 import { flattenAHtml } from '::helpers/execK/helpers/html-to-ahtml/steps/flatten-ahtml';
 import { elementHasText } from '::helpers/execK/helpers';
+import {
+  isPresentationalTable,
+  splitTableByRow,
+} from '::helpers/clipboard/parse-table';
 
 const getStyles = el =>
   (el.style.cssText.match(/([\w-]+)(?=:)/g) || []).reduce(
@@ -135,27 +139,36 @@ const getAHtml = ({ DDOEs, options = {} }: TProps) => {
                     },
                   },
             );
-        else if (el.localName === 'table')
-          acc.push(
-            options.serializeNonTextElements
-              ? {
-                  ...commonAttributes,
-                  type: 'table',
-                  outerHTML: el.outerHTML,
-                }
-              : {
-                  ...commonAttributes,
-                  type: 'table',
-                  thead: el.tHead.innerText,
-                  tbody: el.tBodies[0].innerText,
-                  other_attributes: {
-                    offset: state.offset++,
-                    col_min_width: +el.dataset.col_min_width,
-                    col_max_width: +el.dataset.col_max_width,
+        else if (el.localName === 'table') {
+          const tableOuterHTML: string = el.outerHTML;
+          if (isPresentationalTable({ table: tableOuterHTML }))
+            acc.push(
+              ...getAHtml({
+                DDOEs: splitTableByRow({ table: tableOuterHTML }),
+                options,
+              }).abstractHtml,
+            );
+          else
+            acc.push(
+              options.serializeNonTextElements
+                ? {
+                    ...commonAttributes,
+                    type: 'table',
+                    outerHTML: tableOuterHTML,
+                  }
+                : {
+                    ...commonAttributes,
+                    type: 'table',
+                    thead: el.tHead.innerText,
+                    tbody: el.tBodies[0].innerText,
+                    other_attributes: {
+                      offset: state.offset++,
+                      col_min_width: +el.dataset.col_min_width,
+                      col_max_width: +el.dataset.col_max_width,
+                    },
                   },
-                },
-          );
-        else if (el.localName === 'a') {
+            );
+        } else if (el.localName === 'a') {
           state.offset += el.innerText.length;
           acc.push({
             ...commonAttributes,

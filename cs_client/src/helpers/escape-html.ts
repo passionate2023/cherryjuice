@@ -13,7 +13,7 @@
  * @private
  */
 
-var matchHtmlRegExp = /[ \t]/; // /["'&<> \t]/;
+const matchHtmlRegExp = /[ \t]/; // /["'&<> \t]/;
 
 /**
  * Module exports.
@@ -29,17 +29,17 @@ var matchHtmlRegExp = /[ \t]/; // /["'&<> \t]/;
  */
 
 function escapeHtml(string) {
-  var str = '' + string;
-  var match = matchHtmlRegExp.exec(str);
+  const str = '' + string;
+  const match = matchHtmlRegExp.exec(str);
 
   if (!match) {
     return str;
   }
 
-  var escape;
-  var html = '';
-  var index = 0;
-  var lastIndex = 0;
+  let escape;
+  let html = '';
+  let index = 0;
+  let lastIndex = 0;
   for (index = match.index; index < str.length; index++) {
     switch (str.charCodeAt(index)) {
       case 9: // <tab>
@@ -60,12 +60,12 @@ function escapeHtml(string) {
       // case 39: // '
       //   escape = '&#39;';
       //   break;
-      // case 60: // <
-      //   escape = '&lt;';
-      //   break;
-      // case 62: // >
-      //   escape = '&gt;';
-      //   break;
+      case 60: // <
+        escape = '&lt;';
+        break;
+      case 62: // >
+        escape = '&gt;';
+        break;
       default:
         continue;
     }
