@@ -172,7 +172,7 @@ const guardAgainstSelectionTargetIsImage = ({
     selectionEndElement.nodeType === Node.ELEMENT_NODE &&
     selectionEndElement.childNodes[endOffset - 1]?.localName === 'img';
   const startSelectionEqualsEndSelection =
-    selectionStartElement === selectionEndElement;
+    selectionStartElement === selectionEndElement && startOffset === endOffset;
   if (selectionStartIsBeforeImage || selectionStartIsAfterImage) {
     const spanElement = document.createElement('span');
     selectionStartElement.insertBefore(
@@ -189,7 +189,7 @@ const guardAgainstSelectionTargetIsImage = ({
       const spanElement = document.createElement('span');
       selectionEndElement.insertBefore(
         spanElement,
-        selectionEndElement.childNodes[endOffset],
+        selectionEndElement.childNodes[endOffset + 1],
       );
       selectionEndElement = spanElement;
     }

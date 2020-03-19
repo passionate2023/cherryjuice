@@ -3,7 +3,7 @@ import {
   deleteSubDDOEsThatStartWithSpaceAndGetTheirText,
   negativeIndent,
 } from '::helpers/typing/indentation/helpers/negative-indent';
-import { elementHasText,  } from '::helpers/execK/helpers';
+import { elementHasText } from '::helpers/execK/helpers';
 
 const removeATabFromTheStartOfTheLine = ddoe => {
   const {
