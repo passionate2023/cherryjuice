@@ -21,7 +21,7 @@ const execK = (
     style?: { property: string; value: string };
     command?: ExecKCommand;
   },
-  testSample,
+  testSample = undefined,
 ) => {
   const editor = document.querySelector('#rich-text ');
   const ogHtml = editor.innerHTML;

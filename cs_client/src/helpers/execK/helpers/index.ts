@@ -15,7 +15,8 @@ const getInnerText = node => {
   }
   return '';
 };
-
+const elementHasText = el =>
+  getInnerText(el).length || /(img)/.test(el.innerHTML);
 const moveCursor = (
   { startElement, offset },
   { endOffset, endElement } = { endElement: undefined, endOffset: -1 },
@@ -50,4 +51,5 @@ export {
   isElementNonTextual,
   moveCursor,
   getAllElementsUntilElement,
+  elementHasText,
 };

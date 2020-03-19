@@ -9,8 +9,11 @@ import {
   moveCursor,
   toNodes,
 } from '::helpers/execK/helpers';
-import { aHtmlToElement } from '::helpers/execK/helpers/ahtml-to-html/element';
-import { replaceElement } from '::helpers/execK/steps/pipe3/helpers';
+import {
+  splitAHtmlsToMultipleLines,
+  writeChangesToDom,
+} from '::helpers/execK/steps/pipe3';
+import { getDDOE } from '::helpers/execK/steps/pipe1/ddoes';
 
 const getPngBase64 = file =>
   new Promise(resolve => {
@@ -102,28 +105,39 @@ const putCursorAtTheEndOfPastedElement = ({ newEndElement }) => {
 const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
   const ogHtml = document.querySelector('#rich-text ').innerHTML;
   try {
-    let childrenElementsOfStartDDOE = [];
     const selection = getSelection({
       selectAdjacentWordIfNoneIsSelected: false,
     });
     const { startElement, endElement, startOffset, endOffset } = selection;
-    const { startAnchor, endAnchor, left, right } = pipe1({
+    let { startAnchor, endAnchor, left, right } = pipe1({
       selectionStartElement: startElement,
       selectionEndElement: endElement,
       startOffset,
       endOffset,
     });
-    childrenElementsOfStartDDOE = [
-      left,
-      // selected.leftEdge,
-      ...pastedData,
-    ].map(node => toNodes(node === '\n' ? `<br>` : aHtmlToElement({ node })));
-    const childrenElementsOfEndDDOE = [right].map(node =>
-      toNodes(aHtmlToElement({ node })),
-    );
 
-    replaceElement(startAnchor)(childrenElementsOfStartDDOE);
-    replaceElement(endAnchor)(childrenElementsOfEndDDOE);
+    const leftAHtmlsMultiLine = splitAHtmlsToMultipleLines({
+      aHtmls: [left, ...pastedData],
+    });
+    const startDDOE = getDDOE(startAnchor);
+    const endDDOE = getDDOE(endAnchor);
+    const pastedDataIsMultiLine = leftAHtmlsMultiLine.length > 1;
+    const startElementIsSameAsEndElement = startDDOE === endDDOE;
+    if (startElementIsSameAsEndElement && pastedDataIsMultiLine) {
+      const startDDOEShell = startDDOE.cloneNode();
+      startDDOEShell.innerHTML = endAnchor.outerHTML;
+      (endAnchor as Node).parentElement.removeChild(endAnchor);
+      startDDOE.after(startDDOEShell);
+      endAnchor = startDDOEShell.firstChild;
+    }
+    const { childrenElementsOfStartDDOE } = writeChangesToDom(
+      {
+        childrenOfStartDDDE: leftAHtmlsMultiLine.shift(),
+        midDDOEs: leftAHtmlsMultiLine,
+        childrenOfEndDDDE: [right],
+      },
+      { startAnchor, endAnchor },
+    );
 
     const newEndElement =
       childrenElementsOfStartDDOE[childrenElementsOfStartDDOE.length - 1];

@@ -26,8 +26,10 @@
   "rules": {
     "no-console": "error",
     "no-debugger": "error",
+    "no-unused-vars": "error",
     "prefer-const": "warn",
     "@typescript-eslint/ban-ts-ignore": "warn",
+    "react/prop-types": "off",
     "no-extra-semi": "off",
     "comma-dangle": "off",
     "semi": "off"

@@ -1,9 +1,9 @@
 import { escapeHtml } from '::helpers/escape-html';
 import { flattenAHtml } from '::helpers/execK/helpers/html-to-ahtml/steps/flatten-ahtml';
-import { getInnerText } from '::helpers/execK/helpers';
+import { elementHasText } from '::helpers/execK/helpers';
 
 const getStyles = el =>
-  (el.style.cssText.match(/([\w\-]+)(?=:)/g) || []).reduce(
+  (el.style.cssText.match(/([\w-]+)(?=:)/g) || []).reduce(
     (acc, key) => ({ ...acc, [key]: el.style[key] }),
     {},
   );
@@ -51,7 +51,7 @@ const flattenDDOEs = ({ DDOEs }) => {
   DDOEs.forEach(DDOE => {
     if (isBlock(DDOE)) flat.push(document.createElement('br'));
     const DDOEHasNoTextAndHasOnlyABreakLine =
-      DDOE.childNodes.length === 1 && !getInnerText(DDOE);
+      DDOE.childNodes.length === 1 && !elementHasText(DDOE);
     if (!DDOEHasNoTextAndHasOnlyABreakLine)
       Array.from(DDOE.childNodes).forEach(child => {
         flat.push(child);
@@ -197,7 +197,6 @@ const getAHtml = ({ DDOEs, options = {} }: TProps) => {
     }
     return acc;
   }, []);
-  debugger;
   return { abstractHtml };
 };
 

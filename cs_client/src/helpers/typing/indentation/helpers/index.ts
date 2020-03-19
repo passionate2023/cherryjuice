@@ -3,7 +3,7 @@ import {
   deleteSubDDOEsThatStartWithSpaceAndGetTheirText,
   negativeIndent,
 } from '::helpers/typing/indentation/helpers/negative-indent';
-import { getInnerText } from '::helpers/execK/helpers';
+import { elementHasText,  } from '::helpers/execK/helpers';
 
 const removeATabFromTheStartOfTheLine = ddoe => {
   const {
@@ -29,8 +29,8 @@ const removeATabFromTheStartOfTheLine = ddoe => {
 };
 
 const addATabToTheStartOfTheLine = ddoe => {
-  const ddoeIsNotEmpty =
-    getInnerText(ddoe).length || /(img)/.test(ddoe.innerHTML);
+  const ddoeIsNotEmpty = elementHasText(ddoe);
+
   if (ddoeIsNotEmpty) {
     const deepestFirstChild = getDeepestFirstChild(ddoe);
     if (deepestFirstChild.insertData)
