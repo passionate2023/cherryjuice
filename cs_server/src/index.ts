@@ -1,13 +1,10 @@
 import * as http from 'http';
 import { app } from './server';
-import { applyApollo } from './graphql/';
-import { db } from './data-access/sqlite/db';
 
 /**
  * Get port from environment and store in Express.
  */
 const port = process.env.PORT || '3000';
-applyApollo(app);
 app.set('port', port);
 
 /**

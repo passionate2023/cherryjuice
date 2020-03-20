@@ -36,7 +36,7 @@ const server = new ApolloServer({
   context: {
     pngThumbnailOptions: { percentage: 5, responseType: 'base64' },
     files: scanFolder({
-      folders: ['C:\\Users\\lpflo\\Desktop\\notes', '../../../ctb'],
+      folders: ( process.env.ctbFolders|| '' ).split(' '),
     }),
   },
 });

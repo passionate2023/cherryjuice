@@ -46,7 +46,7 @@ const headers = Array.from({ length: 6 }).map((_, i) => `h${i + 1}`);
 
 const transformStyles = val => {
   if (val.tags)
-    val.tags = val.tags.reduce((acc, val, ) => {
+    val.tags = val.tags.reduce((acc, val) => {
       acc.push(val);
       if (val[1].style) {
         if (val[1].style['font-weight']) {
@@ -66,7 +66,7 @@ const transformStyles = val => {
 
 const collapseTags = val => {
   if (val.tags)
-    val.tags = val.tags.reduce((acc, val, ) => {
+    val.tags = val.tags.reduce((acc, val) => {
       const previousTagWithSameName = acc.findIndex(tag => tag[0] === val[0]); //acc[i - 1] && acc[i - 1][0] === val[0];
       if (previousTagWithSameName !== -1) {
         const styleOfPreviousTag = acc[previousTagWithSameName][1].style || {};
