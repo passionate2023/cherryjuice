@@ -3,22 +3,23 @@ import { testSamples, TTestSample } from '::helpers/execK/__tests__/__data__';
 import { commands } from '::helpers/hotkeys/commands';
 
 beforeAll(() => {
+  // @ts-ignore
   Object.defineProperty(global.Element.prototype, 'innerText', {
     get() {
       return this.textContent;
     },
-    configurable: true // make it so that it doesn't blow chunks on re-running tests with things like --watch
+    configurable: true, // make it so that it doesn't blow chunks on re-running tests with things like --watch
   });
 });
 
 jest.mock('../steps/restore-selection', () => {
   return {
-    restoreSelection: jest.fn(() => {})
+    restoreSelection: jest.fn(() => undefined),
   };
 });
 const test = (
   { meta: { name }, input: { endOffset, startOffset, outerHTML } }: TTestSample,
-  cmd
+  cmd,
 ) => {
   it(name + ' ' + JSON.stringify(cmd), () => {
     document.body.innerHTML = outerHTML;

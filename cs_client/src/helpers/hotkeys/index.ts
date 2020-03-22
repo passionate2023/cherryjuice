@@ -1,6 +1,6 @@
 import { commands } from '::helpers/hotkeys/commands';
 import { execK } from '::helpers/execK';
-import { createTestSample } from '::helpers/execK/__tests__/helpers/create-test-sample';
+import { createTestSample } from '::helpers/execK/__tests__/__helpers__/create-test-sample';
 
 type THotKey = {
   key?: string;
@@ -17,7 +17,7 @@ const helpers = {
     ctrlKey: Boolean(hotKey.ctrlKey),
     shiftKey: Boolean(hotKey.shiftKey),
     altKey: Boolean(hotKey.altKey),
-    metaKey: Boolean(hotKey.metaKey)
+    metaKey: Boolean(hotKey.metaKey),
   }),
   hotKeyMatches: (e: KeyboardEvent | THotKey, b: THotKey) =>
     (b.key ? b.key === e.key : b.code === e.code) &&
@@ -25,20 +25,20 @@ const helpers = {
     b.ctrlKey === e.ctrlKey &&
     b.shiftKey === e.shiftKey &&
     b.altKey === e.altKey &&
-    b.metaKey === e.metaKey
+    b.metaKey === e.metaKey,
 };
 const hotKeys: { callback: Function; hotKey: THotKey }[] = [];
 const createHotKey = (hotKey: THotKey, callback: Function) => {
   hotKey = helpers.nameMe(hotKey);
   const existingHotKeyIndex = hotKeys.findIndex(hk =>
-    helpers.hotKeyMatches(hk.hotKey, hotKey)
+    helpers.hotKeyMatches(hk.hotKey, hotKey),
   );
   if (existingHotKeyIndex >= 0)
     hotKeys[existingHotKeyIndex].callback = callback;
   else
     hotKeys.push({
       hotKey,
-      callback
+      callback,
     });
 };
 
@@ -79,7 +79,7 @@ const setupFormattingHotKeys = () => {
 const setupDevHotKeys = () => {
   hotKeysManager.createHotKey(
     { key: '¤', ctrlKey: true, altKey: true },
-    createTestSample
+    createTestSample,
   );
 };
 

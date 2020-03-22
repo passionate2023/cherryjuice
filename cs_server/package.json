@@ -19,16 +19,25 @@
     "jest": "^25.1.0",
     "jsdom": "^16.1.0",
     "nodemon": "^1.19.1",
-    "source-map-support": "^0.5.16"
+    "source-map-support": "^0.5.16",
+    "ts-jest": "^25.2.1",
+    "eslint": "^6.8.0",
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1"
   },
   "dependencies": {
     "apollo-server-express": "^2.9.3",
     "cors": "^2.8.5",
     "express": "~4.16.1",
     "image-thumbnail": "^1.0.6",
+    "morgan": "~1.9.1",
     "ramda": "^0.26.1",
     "slugify": "^1.3.6",
-    "morgan": "~1.9.1",
     "xml2js": "^0.4.22"
   },
   "devDependencies": {
@@ -42,7 +51,6 @@
     "sqlite": "^3.0.3",
     "typescript": "^3.7.5"
   },
-  "main": "parcel.config.js",
   "keywords": [
     "express",
     "react",

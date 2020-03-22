@@ -5,9 +5,8 @@ const renderingTestTemplate = async ({ txt, otherTables }) => {
   const res = await ctbToAHtml({
     nodeTableXml: txt,
     otherTables,
-    stringify: true,
   });
-  expect(JSON.parse(res)).toMatchSnapshot();
+  expect(res).toMatchSnapshot();
 };
 
 describe('pipe snapshot tests', () => {

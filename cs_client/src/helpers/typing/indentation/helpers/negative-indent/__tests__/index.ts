@@ -1,4 +1,4 @@
-import { negativeIndent } from '::helpers/typing/negative-indent';
+import { negativeIndent } from '::helpers/typing/indentation/helpers/negative-indent';
 
 const testSamples = [
   {
@@ -17,7 +17,7 @@ const testSamples = [
 ];
 
 describe('negative indent', () => {
-  testSamples.forEach(({ input: { texts }, output }, i) => {
+  testSamples.forEach(({ input: { texts }, output }) => {
     it(JSON.stringify(texts), () => {
       const trimmedText = negativeIndent(texts);
       expect(trimmedText).toEqual(output);

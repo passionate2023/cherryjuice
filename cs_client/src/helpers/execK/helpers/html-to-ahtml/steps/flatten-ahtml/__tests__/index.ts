@@ -60,13 +60,10 @@ const testSamples = [
 ];
 
 describe('html-to-aHtml', () => {
-  testSamples.forEach(
-    ({ meta: { name }, input: { acc, current }, output }, i) => {
-      it(name, () => {
-        const { newAcc } = flattenAHtml({ acc, aHtml: current });
-        console.log(newAcc);
-        expect(newAcc).toEqual(output);
-      });
-    },
-  );
+  testSamples.forEach(({ meta: { name }, input: { acc, current }, output }) => {
+    it(name, () => {
+      const { newAcc } = flattenAHtml({ acc, aHtml: current });
+      expect(newAcc).toEqual(output);
+    });
+  });
 });

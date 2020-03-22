@@ -58,7 +58,6 @@ describe('test table', () => {
   test('simple table', () => {
     const { input, output } = testData.test1;
     const res = parseTable({ xmlTable: input });
-    console.log(res)
     expect(res).toEqual(output);
   });
 });

@@ -40,6 +40,7 @@ const stylePropertiesToKeep = [
   'background',
   'text-decoration-style',
   'text-decoration',
+  'display',
 ];
 const styleValuesToIgnore = ['inherit', 'initial', 'left', 'start'];
 const headers = Array.from({ length: 6 }).map((_, i) => `h${i + 1}`);
@@ -99,6 +100,9 @@ const cleanStyleAndRenameTags = (
           ...(attributes.href && { href: attributes.href }),
           ...(attributes.src && { src: attributes.src }),
           ...(attributes.target && { target: attributes.target }),
+          ...(attributes['data-type'] && {
+            ['data-type']: attributes['data-type'],
+          }),
           ...(attributes.style && {
             style: Object.entries(attributes.style).reduce(
               (acc, [styleName, styleValue]) => {

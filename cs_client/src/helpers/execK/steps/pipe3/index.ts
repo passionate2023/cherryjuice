@@ -23,11 +23,25 @@ const aHtmlsToElements = (
     toNodes(aHtmlToElement({ node })),
   ),
 });
+
+const applyLineStyle = ({ lineStyle, startDDOE, endDDOE, midDDOEs }) => {
+  [startDDOE, ...midDDOEs, endDDOE].forEach(element => {
+    Object.entries(lineStyle.line).forEach(([propertyName, propertyValue]) => {
+      if (propertyValue) {
+        element.style[propertyName] = element.style[propertyName]
+          ? `${element.style[propertyName]} ${propertyValue}`
+          : propertyValue;
+      }
+    });
+  });
+};
+
 const writeChangesToDom = (
-  { childrenOfStartDDDE, midDDOEs, childrenOfEndDDDE },
+  { childrenOfStartDDDE, midDDOEs, childrenOfEndDDDE, lineStyle = {} },
   { startAnchor, endAnchor },
 ) => {
   const startDDOE = getDDOE(startAnchor);
+  const endDDOE = getDDOE(endAnchor);
   const {
     adjacentElementsOfStartDDOE,
     childrenElementsOfEndDDOE,
@@ -44,6 +58,12 @@ const writeChangesToDom = (
   replaceElement(startAnchor)(childrenElementsOfStartDDOE);
   startDDOE.after(...adjacentElementsOfStartDDOE);
   replaceElement(endAnchor)(childrenElementsOfEndDDOE);
+  applyLineStyle({
+    lineStyle,
+    startDDOE,
+    endDDOE,
+    midDDOEs: adjacentElementsOfStartDDOE,
+  });
   return {
     childrenElementsOfStartDDOE,
     adjacentElementsOfStartDDOE,
@@ -64,7 +84,7 @@ const splitAHtmlsToMultipleLines = ({ aHtmls }) => {
 };
 
 const pipe3 = (
-  { left, right, modifiedSelected },
+  { left, right, modifiedSelected, lineStyle },
   { startDDOE, endDDOE, startAnchor, endAnchor },
 ) => {
   const leftAHtmls = [
@@ -90,6 +110,7 @@ const pipe3 = (
 
   return writeChangesToDom(
     {
+      lineStyle,
       childrenOfStartDDDE: leftAHtmlsMultiLine.shift(),
       midDDOEs: leftAHtmlsMultiLine,
       childrenOfEndDDDE: [...leftOversFromRightAHtml, ...rightAHtmls],

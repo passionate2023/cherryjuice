@@ -7,7 +7,7 @@ const testSamples = [
   ...underline,
   ...lineThrough,
   ...color,
-  ...backgroundColor
+  ...backgroundColor,
 ];
 type TStyleSample = typeof testSamples[0];
 

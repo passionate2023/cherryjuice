@@ -24,7 +24,6 @@ const processingPipe = otherTables =>
 const ctbToAHtml = async ({
   nodeTableXml,
   otherTables = {},
-  stringify = true,
 }) => {
   nodeTableXml = fixCharacters.flagOrphanWhiteSpace(nodeTableXml);
   let richText = await parseXml({ xml: nodeTableXml }).then(

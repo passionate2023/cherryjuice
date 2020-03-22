@@ -1,4 +1,5 @@
 const getStyles = el =>
+  // eslint-disable-next-line no-useless-escape
   (el.style.cssText.match(/([\w\-]+)(?=:)/g) || []).reduce(
     (acc, key) => ({ ...acc, [key]: el.style[key] }),
     {},
@@ -27,7 +28,6 @@ const getAHtml__legacy = ({ containers, options = {} }: TProps) => {
   const flatList = getFlatList(containers);
   const state = { offset: 0 };
   const abstractHtml = flatList.reduce((acc, el) => {
-    console.log(el);
     if (el.nodeType === 1 || el.nodeType === 3) {
       if (el.localName === 'br') {
         acc.push('\n');

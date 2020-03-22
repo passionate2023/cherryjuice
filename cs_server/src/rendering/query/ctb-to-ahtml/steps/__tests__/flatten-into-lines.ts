@@ -446,38 +446,32 @@ describe('it should split by newline character', () => {
   it('test1', () => {
     const { input, output } = testData.test1;
     const res = flattenIntoLines(input);
-    console.log(res);
     expect(res).toEqual(output);
   });
   it('test2', () => {
     const { input, output } = testData.test2;
     const res = flattenIntoLines(input);
-    console.log(res);
     expect(res).toEqual(output);
   });
 
   it('test3 (advanced)', () => {
     const { input, output } = testData.test3;
     const res = flattenIntoLines(input);
-    console.log(res);
     expect(res).toEqual(output);
   });
   it('test4 (advanced)', () => {
     const { input, output } = testData.test4;
     const res = flattenIntoLines(input);
-    console.log(res);
     expect(res).toEqual(output);
   });
   it('test5 (advanced)', () => {
     const { input, output } = testData.test5;
     const res = flattenIntoLines(input);
-    console.log('res', res);
     expect(res).toEqual(output);
   });
   it('test6 (advanced)', () => {
     const { input, output } = testData.test6;
     const res = flattenIntoLines(input);
-    console.log('res', res);
     expect(res).toEqual(output);
   });
 });

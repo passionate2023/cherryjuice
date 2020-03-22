@@ -18,7 +18,6 @@
 // };
 
 import { calculateStyle } from '::helpers/execK/steps/apply-command/apply-style/calculate-style';
-import { stringifyStyles } from '::helpers/execK/helpers/ahtml-to-html/element';
 
 type TApplyStyle = {
   aHtmlElement: any;

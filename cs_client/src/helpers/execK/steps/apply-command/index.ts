@@ -8,7 +8,6 @@ import {
   TLineStyle,
 } from '::helpers/execK/steps/apply-command/justify';
 import { hoistAHtmlProperties } from '::helpers/execK/steps/apply-command/hoist-properties';
-import { optimizeAHtml } from '::helpers/clipboard/optimize-ahtml';
 
 type TApplyCommand = {
   tag?: { tagName: string; tagExists: boolean };
@@ -36,7 +35,6 @@ const applyCommand = ({
     if (style) {
       applyStyle({ aHtmlElement: newAHtmlElement, styleExists, style });
     }
-    debugger;
     newAHtmlElement.tags = hoistAHtmlProperties({ tags: newAHtmlElement.tags });
   }
   return newAHtmlElement;
@@ -54,10 +52,10 @@ const applyCmd = ({ selected, tagName, style, command }) => {
   const styleExists =
     style?.property &&
     allTags.some(
-      ([_, { style: existingStyle }]) =>
+      ([, { style: existingStyle }]) =>
         existingStyle && existingStyle[style.property]?.includes(style.value),
     );
-  const lineStyle = { line: {}, wrapper: {} };
+  const lineStyle = { line: {} };
   const modifiedSelected = {
     leftEdge: applyCommand({
       tag: { tagName, tagExists },
@@ -85,6 +83,6 @@ const applyCmd = ({ selected, tagName, style, command }) => {
         : el,
     ),
   };
-  return { modifiedSelected };
+  return { modifiedSelected, lineStyle };
 };
 export { applyCmd };

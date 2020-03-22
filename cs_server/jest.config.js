@@ -4,7 +4,7 @@ const { compilerOptions } = require('./tsconfig');
 module.exports = {
   roots: ['<rootDir>/src'],
   preset: 'ts-jest',
-  testEnvironment: 'jsdom',
+  // testEnvironment: 'jsdom',
 
   // jest.config.js
   // In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
@@ -14,8 +14,8 @@ module.exports = {
       diagnostics: false,
     },
   },
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: '<rootDir>/',
-  }),
+  // moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+  //   prefix: '<rootDir>/',
+  // }),
   testPathIgnorePatterns: ['/node_modules/', '/__data__/', '__helpers__'],
 };

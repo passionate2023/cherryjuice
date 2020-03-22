@@ -21,6 +21,6 @@ const testXmlString = ({ midPipe, ctbXmlString, name }) => {
     expect(xmlString).toEqual(ctbXmlString);
   });
 };
-describe('midPipeToPseudoCtb - compare xml string', () => {
+describe.skip('midPipeToPseudoCtb - compare xml string', () => {
   testXmlString(sample_02);
 });

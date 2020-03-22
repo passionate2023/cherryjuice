@@ -1,8 +1,9 @@
 import * as fs from 'fs';
 
-
+const allowConsoleLogs = process.env.NODE_ENV === 'development';
 const tap = label => val => (
-  console.log(label, JSON.stringify(val, null, 4)), val
+  // eslint-disable-next-line no-console
+  allowConsoleLogs && console.log(label, JSON.stringify(val, null, 4)), val
 );
 
 const writeEffect = name => {
@@ -23,4 +24,5 @@ const writeEffect = name => {
     }
   };
 };
-export {  tap, writeEffect };
+
+export { tap, writeEffect };

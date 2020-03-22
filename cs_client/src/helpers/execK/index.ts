@@ -45,7 +45,7 @@ const execK = (
     });
     startElement = adjustedSelection.selectionStartElement;
     endElement = adjustedSelection.selectionEndElement;
-    const { modifiedSelected } = applyCmd({
+    const { modifiedSelected, lineStyle } = applyCmd({
       selected,
       tagName,
       style,
@@ -56,7 +56,7 @@ const execK = (
       childrenElementsOfEndDDOE,
       adjacentElementsOfStartDDOE,
     } = pipe3(
-      { left, right, modifiedSelected },
+      { left, right, modifiedSelected, lineStyle },
       { startDDOE, endDDOE, endAnchor, startAnchor },
     );
     restoreSelection({

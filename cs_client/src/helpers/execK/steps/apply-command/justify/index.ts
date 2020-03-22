@@ -1,12 +1,12 @@
 import { ExecKCommand } from '::helpers/execK';
 type TLineStyle = {
   line: { [p: string]: string };
-  wrapper: { [p: string]: string };
+  // wrapper: { [p: string]: string };
 };
 const justify = ({
   aHtmlElement,
   command,
-  lineStyle
+  lineStyle,
 }: {
   aHtmlElement: any;
   command: ExecKCommand;

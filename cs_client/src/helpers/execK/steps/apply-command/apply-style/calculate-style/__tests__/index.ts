@@ -1,16 +1,16 @@
 import {
   testSamples,
-  TStyleSample
+  TStyleSample,
 } from '::helpers/execK/steps/apply-command/apply-style/calculate-style/__tests__/__data__';
 import { calculateStyle } from '::helpers/execK/steps/apply-command/apply-style/calculate-style';
 
 const testStyle = ({
   input: { cmd, ogStyle },
   output,
-  meta: { name }
+  meta: { name },
 }: TStyleSample) => {
   it(name, () => {
-    const res = calculateStyle({ cmd, ogStyle });
+    const res = calculateStyle({ cmd, ogStyle, topLevelElement: true });
     expect(res).toEqual(output);
   });
 };

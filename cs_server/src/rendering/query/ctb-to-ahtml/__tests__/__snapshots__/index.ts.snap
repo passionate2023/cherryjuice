@@ -6,6 +6,7 @@ Array [
     "nodes": Array [
       "- we can think of callbacks as a continuation, a secondary half that runs after a time-gap that separates it from the first half",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -19,14 +20,17 @@ Array [
       },
       "\\"",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       "- the instructor suggests that callback hell doesnt actually have to do with indentation, as we could rewrite a \\"callback hell\\" without nesting",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -53,6 +57,7 @@ Array [
         "type": "png",
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -66,6 +71,7 @@ Array [
       },
       " problems with callbacks",
     ],
+    "styles": undefined,
   },
 ]
 `;
@@ -76,47 +82,59 @@ Array [
     "nodes": Array [
       "the instructor suggests",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       "generators will solve",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       "if a yield",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       "instead ",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       "yield > pause > then > it.next",
     ],
+    "styles": undefined,
   },
 ]
 `;
@@ -180,6 +198,7 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -228,6 +247,7 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
 ]
 `;
@@ -236,6 +256,7 @@ exports[`pipe snapshot tests offset images 1`] = `
 Array [
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -311,6 +332,7 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -422,6 +444,7 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -533,12 +556,15 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -554,17 +580,21 @@ Array [
         "type": "png",
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       "example2",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -580,11 +610,13 @@ Array [
         "type": "png",
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       "(run is equivalent to it.next)",
     ],
+    "styles": undefined,
   },
 ]
 `;
@@ -618,6 +650,7 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -693,9 +726,11 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -711,17 +746,21 @@ Array [
         "type": "png",
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       "example2",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -737,11 +776,13 @@ Array [
         "type": "png",
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       "(run is equivalent to it.next)",
     ],
+    "styles": undefined,
   },
 ]
 `;
@@ -776,6 +817,7 @@ Array [
         "tags": Array [],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -822,22 +864,27 @@ Array [
         "type": "table",
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       ">regex functions",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       "a) regex.test returns a boolean if the pattern matches",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -901,9 +948,11 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1051,6 +1100,7 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1198,14 +1248,17 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       "b) regex.exec returns a regexArray",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1269,9 +1322,11 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1335,6 +1390,7 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1469,6 +1525,7 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1485,9 +1542,11 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1515,6 +1574,7 @@ Array [
       },
       " method is stateful: ",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1530,14 +1590,17 @@ Array [
         "type": "png",
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       ">string functions",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1553,6 +1616,7 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1600,12 +1664,15 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1621,6 +1688,7 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1642,6 +1710,7 @@ Array [
         "type": "code",
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1663,6 +1732,7 @@ Array [
         "type": "code",
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1678,16 +1748,19 @@ Array [
         "type": "png",
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       "*",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       ">my react alternative",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1703,11 +1776,13 @@ Array [
         "type": "png",
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       "- full code",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1724,6 +1799,7 @@ Array [
         ],
       },
     ],
+    "styles": undefined,
   },
 ]
 `;
@@ -1734,11 +1810,13 @@ Array [
     "nodes": Array [
       "promises can be chained together",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       ">example",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1754,6 +1832,7 @@ Array [
         "type": "png",
       },
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1770,14 +1849,17 @@ Array [
       },
       " on line 5 will \\"magically\\" wait for the promise from line 3",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
       ">example2",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1793,6 +1875,7 @@ Array [
         "type": "png",
       },
     ],
+    "styles": undefined,
   },
 ]
 `;
@@ -1803,6 +1886,7 @@ Array [
     "nodes": Array [
       "haha",
     ],
+    "styles": undefined,
   },
   Object {
     "nodes": Array [
@@ -1829,6 +1913,7 @@ Array [
         "type": "png",
       },
     ],
+    "styles": undefined,
   },
 ]
 `;

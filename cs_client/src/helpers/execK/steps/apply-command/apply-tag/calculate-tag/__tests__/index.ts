@@ -1,21 +1,17 @@
 import { calculateTag } from '::helpers/execK/steps/apply-command/apply-tag/calculate-tag';
 import {
   genericTests,
-  TTagTestSample
+  TTagTestSample,
 } from '::helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__';
 import { specificTests } from '::helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__/specific';
 
 const testTemplate = ({
   input: { cmd, tags },
   output,
-  meta: { name }
+  meta: { name },
 }: TTagTestSample) => {
   it(name + ' ' + JSON.stringify(cmd), () => {
     const res = calculateTag({ cmd, tags });
-    console.log('* cmd', cmd);
-    console.log('* tags', tags);
-    console.log('* expected', output.sort());
-    console.log('* result', res.sort());
     expect(res.sort()).toEqual(output.sort());
   });
 };

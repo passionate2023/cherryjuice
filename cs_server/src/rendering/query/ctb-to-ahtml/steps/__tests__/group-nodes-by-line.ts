@@ -1,5 +1,6 @@
-import { groupNodesByLine } from '../steps/group-nodes-by-line';
-import { flattenIntoLines } from '../steps/flatten-into-lines';
+import { groupNodesByLine } from '../group-nodes-by-line';
+import { flattenIntoLines } from '../flatten-into-lines';
+
 const testData = {
   test1: {
     input: [
@@ -241,22 +242,19 @@ describe('it should put nodes into arrays', () => {
     const { input, output } = testData.test1;
     const seprated = flattenIntoLines(input);
     const res = groupNodesByLine(seprated);
-    console.log(res);
     expect(res).toEqual(output);
   });
   it('test2', () => {
     const { input, output } = testData.test2;
     const seprated = flattenIntoLines(input);
     const res = groupNodesByLine(seprated);
-    console.log(res);
     expect(res).toEqual(output);
   });
-  it('test3', () => {
-    const { input } = testData.test3;
+  it.skip('test3', () => {
+    const { input, } = testData.test3;
     const seprated = flattenIntoLines(input);
     const res = groupNodesByLine(seprated);
     console.log(res);
     // expect(res).toEqual(output);
-    return true;
   });
 });

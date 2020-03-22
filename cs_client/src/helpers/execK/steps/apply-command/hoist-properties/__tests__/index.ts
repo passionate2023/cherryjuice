@@ -71,6 +71,32 @@ const testSamples = [
       ],
     ],
   },
+  {
+    meta: {
+      name:
+        'should move all attributes to the lowest tag and ignore attributes of whitelisted tags except the style attribute',
+    },
+    input: {
+      tags: [
+        ['div', { foo: 'div' }],
+        ['a', { foo: 'a', style: 'a' }],
+        ['span', { baz: 'span' }],
+        ['img', { foo: 'img' }],
+        ['code', { foo: 'code', class: 'rich-text__code' }],
+        ['table', { foo: 'table' }],
+        ['h1', { bar: 'h1', foo: 'h1' }],
+      ],
+    },
+    output: [
+      ['div', {}],
+      ['a', { foo: 'a' }],
+      ['span', {}],
+      ['img', { foo: 'img' }],
+      ['code', { foo: 'code', class: 'rich-text__code' }],
+      ['table', { foo: 'table' }],
+      ['h1', { baz: 'span', foo: 'h1', bar: 'h1', style: 'a' }],
+    ],
+  },
 ];
 
 const testTemplate = ({ meta: { name }, input: { tags }, output }) => {

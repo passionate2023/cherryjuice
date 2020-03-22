@@ -27,6 +27,7 @@ const createTestSample = () => {
   
   export { n${getNodeId()} }
   `;
+  // eslint-disable-next-line no-console
   console.info('a test sample was copied to the clipboard');
   copyToClipboard(test);
 };
