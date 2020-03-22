@@ -1,6 +1,6 @@
 import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import { QUERY_CT_NODE_CONTENT } from '::graphql/queries';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 const usePng = ({ node_id, offset, file_id }) => {
   const thumbnail = offset
@@ -18,6 +18,7 @@ const usePng = ({ node_id, offset, file_id }) => {
     {
       variables: { node_id, offset, file_id }
     }
+
   );
   // apollo caches previous fetch from unmounted instances of the component
   if (data_full?.ct_node_content[0]?.node_id === node_id) {

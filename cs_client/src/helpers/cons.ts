@@ -46,6 +46,7 @@ import leaf from '::assets/icons/leaf.svg';
 import xml from '::assets/icons/xml.svg';
 import c from '::assets/icons/c.svg';
 import cpp from '::assets/icons/cpp.svg';
+
 const cherries = {
   0: cherry_red,
   1: cherry_blue,

@@ -1,10 +1,10 @@
 import treeModule from '::sass-modules/tree.scss';
 import * as React from 'react';
+import { Ref } from 'react';
 import { Node } from './node';
 import { Ct_Node_Meta } from '::types/generated';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Resizable } from 're-resizable';
-import { Ref } from 'react';
 import { appActions } from '::app/reducer';
 
 type Props = {

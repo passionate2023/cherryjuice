@@ -21,17 +21,17 @@ const QUERY_CT_NODE_META = gql`
 `;
 
 const QUERY_CT_NODE_CONTENT = {
-  rich_txt: gql`
-    query ct_node_rt_png_meta(
-      $file_id: String!
-      $node_id: Int!
-    ) {
-      ct_node_content(file_id: $file_id, node_id: $node_id) {
-        rich_txt
-        node_id
-      }
-    }
-  `,
+  // rich_txt: gql`
+  //   query ct_node_rt_png_meta(
+  //     $file_id: String!
+  //     $node_id: Int!
+  //   ) {
+  //     ct_node_content(file_id: $file_id, node_id: $node_id) {
+  //       rich_txt
+  //       node_id
+  //     }
+  //   }
+  // `,
   png_full_base64: gql`
     query ct_node_rt_png_meta(
       $file_id: String!

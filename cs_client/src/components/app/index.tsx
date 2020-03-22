@@ -1,7 +1,6 @@
 import appModule from '::sass-modules/app.scss';
 import * as React from 'react';
-import { useEffect, useReducer, useRef } from 'react';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useReducer, useRef } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { ToolBar } from './tool-bar';
 import { SelectFile } from './menus/select-file';
@@ -52,7 +51,6 @@ const App: React.FC<Props> = () => {
       <ToolBar
         dispatch={dispatch}
         onResize={onResize}
-        serverSideHtml={state.serverSideHtml}
       />
 
       {!state.selectedFile && history.location.pathname === '/' ? (
@@ -68,8 +66,9 @@ const App: React.FC<Props> = () => {
               showTree={state.showTree}
               selectedNode={state.selectedNode}
               recentNodes={state.recentNodes}
-              serverSideHtml={state.serverSideHtml}
               selectedFile={state.selectedFile}
+              saveDocument={state.saveDocument}
+              reloadDocument={state.reloadDocument}
             />
           )}
         />

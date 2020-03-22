@@ -1,6 +1,5 @@
 import modInfoBar from '::sass-modules/info-bar.scss';
 import * as React from 'react';
-import {} from '::types/generated';
 import { formatTime } from '::helpers/time';
 
 const defaultProps = { is_richtxt: '', ts_creation: '', ts_lastsave: '' };

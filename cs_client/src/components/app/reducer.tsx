@@ -1,12 +1,10 @@
 import { getSelectedNodeFromRoute } from '::helpers/misc';
-import { act } from 'react-dom/test-utils';
 
 const selectedNode = getSelectedNodeFromRoute({ pathname: location.pathname });
 const recentNodes = JSON.parse(localStorage.getItem('recentNodes'));
 console.log({ recentNodes });
 const initialState = {
-  showTree:
-    JSON.parse(localStorage.getItem('showTree')) !== false,
+  showTree: JSON.parse(localStorage.getItem('showTree')) !== false,
   treeSize: JSON.parse(localStorage.getItem('treeSize')) || 250,
   selectedNode: {
     id: 0,
@@ -19,7 +17,8 @@ const initialState = {
   showFileSelect:
     !Boolean(localStorage.getItem('selectedFile')) && location.pathname === '/',
   recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}
-  serverSideHtml: true
+  saveDocument: 0,
+  reloadDocument: 0,
 };
 export type TState = typeof initialState;
 const actions = {
@@ -28,7 +27,8 @@ const actions = {
   RESIZE_TREE: 'resize-tree',
   SELECT_NODE: 'select-node',
   SELECT_FILE: 'select-file',
-  TOGGLE_SERVER_SIDE_HTML: 'ssr'
+  SAVE_DOCUMENT: 'save-document',
+  RELOAD_DOCUMENT: 'reload-document',
 };
 
 const reducer = (state: TState, action) => {
@@ -69,8 +69,16 @@ const reducer = (state: TState, action) => {
         showTree: true,
         selectedNode: { id: -1, name: '' }
       };
-    case actions.TOGGLE_SERVER_SIDE_HTML:
-      return { ...state, serverSideHtml: !state.serverSideHtml };
+    case actions.SAVE_DOCUMENT:
+      return {
+        ...state,
+        saveDocument: action.value
+      };
+    case actions.RELOAD_DOCUMENT:
+      return {
+        ...state,
+        reloadDocument: action.value
+      };
     default:
       throw new Error('action not supported');
   }

@@ -1,13 +1,14 @@
 import nodeMod from '::sass-modules/node.scss';
 import { Ct_Node_Meta } from '::types/generated';
 import * as React from 'react';
-import { Ref, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { appActions } from '::app/reducer';
 import { getTreeStateFromLocalStorage } from '::helpers/misc';
 import { Icon } from './icon';
+
 type Props = {
   node_id: number;
   nodes?: Map<number, Ct_Node_Meta>;
