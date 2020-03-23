@@ -62,10 +62,12 @@ const stopListening = () => {
 
 const hotKeysManager = { startListening, stopListening, createHotKey };
 
-const setupFormattingHotKeys = () => {
+const setupFormattingHotKeys = ({ dispatch }) => {
   commands.tagsAndStyles.forEach(({ hotKey, execCommandArguments }) => {
     if (hotKey)
-      hotKeysManager.createHotKey(hotKey, () => execK(execCommandArguments));
+      hotKeysManager.createHotKey(hotKey, () =>
+        execK({ ...execCommandArguments, dispatch }),
+      );
   });
 
   commands.colors.forEach(({ hotKey, inputId }) => {

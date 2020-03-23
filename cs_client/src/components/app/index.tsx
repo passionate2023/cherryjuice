@@ -7,6 +7,8 @@ import { SelectFile } from './menus/select-file';
 import { InfoBar } from './info-bar';
 import { Document } from './document';
 import { appInitialState, appReducer } from './reducer';
+import { ErrorBoundary } from '::shared-components/error-boundary';
+import { ErrorModal } from '::shared-components/error-modal';
 
 type Props = {};
 
@@ -44,14 +46,15 @@ const App: React.FC<Props> = () => {
       ref={appRef}
       style={{
         ...{
-          gridTemplateColumns: `${!state.showTree ? '0' : state.treeSize}px 1fr`
-        }
+          gridTemplateColumns: `${
+            !state.showTree ? '0' : state.treeSize
+          }px 1fr`,
+        },
       }}
     >
-      <ToolBar
-        dispatch={dispatch}
-        onResize={onResize}
-      />
+      <ErrorBoundary dispatch={dispatch}>
+        <ToolBar dispatch={dispatch} onResize={onResize} />
+      </ErrorBoundary>
 
       {!state.selectedFile && history.location.pathname === '/' ? (
         <p>no file selected</p>
@@ -77,6 +80,7 @@ const App: React.FC<Props> = () => {
       {state.showFileSelect && (
         <SelectFile selectedFile={state.selectedFile} dispatch={dispatch} />
       )}
+      {state.error && <ErrorModal error={state.error} dispatch={dispatch} />}
     </div>
   );
 };

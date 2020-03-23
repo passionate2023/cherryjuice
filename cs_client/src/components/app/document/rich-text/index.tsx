@@ -10,6 +10,7 @@ import { MUTATE_CT_NODE_CONTENT } from '::graphql/mutations';
 import { getAHtml__legacy } from '::helpers/html-to-ctb';
 import { setupClipboard } from '::helpers/clipboard';
 import { setupKeyboardEvents } from '::helpers/typing';
+import { setupFormattingHotKeys } from '::helpers/hotkeys';
 
 type Props = {
   file_id: string;
@@ -22,18 +23,17 @@ const RichText: React.FC<Props> = ({
   file_id,
   saveDocument,
   reloadDocument,
+  dispatch,
 }) => {
   const richTextRef = useRef<HTMLDivElement>();
   const match = useRouteMatch();
+  console.log('testing eslit-staged')
   // @ts-ignore
   const node_id = Number(match.params?.node_id);
-  const [fetch, { loading, error, data }] = useLazyQuery(
-    QUERY_CT_NODE_CONTENT.html,
-    {
-      variables: { file_id, node_id: node_id },
-      fetchPolicy: 'network-only',
-    },
-  );
+  const [fetch, { data }] = useLazyQuery(QUERY_CT_NODE_CONTENT.html, {
+    variables: { file_id, node_id: node_id },
+    fetchPolicy: 'network-only',
+  });
   const firstFetchRef = useRef(true);
   if (firstFetchRef.current) {
     firstFetchRef.current = false;
@@ -58,16 +58,14 @@ const RichText: React.FC<Props> = ({
       );
     }
   }
-  console.log('all_png_base64', all_png_base64);
   const [mutate] = useMutation(MUTATE_CT_NODE_CONTENT.html);
   const toolbarQueuesRef = useRef({});
   if (saveDocument && !toolbarQueuesRef.current[saveDocument]) {
-    console.log(saveDocument);
     toolbarQueuesRef.current[saveDocument] = true;
     const containers = Array.from(
       document.querySelectorAll('#rich-text > div'),
     );
-    const { abstractHtml, flatList } = getAHtml__legacy({ containers });
+    const { abstractHtml,  } = getAHtml__legacy({ containers });
     if (!(saveDocument + '').endsWith('_'))
       mutate({
         variables: {
@@ -76,17 +74,16 @@ const RichText: React.FC<Props> = ({
           abstract_html: abstractHtml,
         },
       });
-    console.log(html);
-    console.log(flatList);
-    console.log(JSON.parse(abstractHtml));
   }
   if (reloadDocument && !toolbarQueuesRef.current[reloadDocument]) {
     toolbarQueuesRef.current[reloadDocument] = true;
     fetch();
   }
+
   useEffect(() => {
-    setupClipboard();
-    setupKeyboardEvents();
+    setupClipboard({ dispatch });
+    setupKeyboardEvents({ dispatch });
+    setupFormattingHotKeys({ dispatch });
   }, []);
   return (
     <div

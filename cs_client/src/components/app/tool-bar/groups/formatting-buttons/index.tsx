@@ -2,24 +2,28 @@ import modToolbar from '::sass-modules/tool-bar.scss';
 import * as React from 'react';
 import { ToolbarButton } from '::app/tool-bar/tool-bar-button';
 import { execK } from '::helpers/execK';
-import { ToolBar } from '::app/tool-bar';
-import { useState } from 'react';
 import { ColorInput } from '::app/tool-bar/groups/formatting-buttons/color-input';
-import { hotKeysManager } from '::helpers/hotkeys';
 import { commands } from '::helpers/hotkeys/commands';
+import { TDispatchAppReducer } from '::types/react';
 
-type Props = {};
+type Props = {
+  dispatch: TDispatchAppReducer;
+};
 
-const FormattingButtons: React.FC<Props> = ({}) => {
+const FormattingButtons: React.FC<Props> = ({ dispatch }) => {
   return (
     <>
       {commands.colors.map(({ label, cssProperty, inputId }) => (
-        <ColorInput key={label} {...{ label, cssProperty, inputId }} />
+        <ColorInput
+          key={label}
+          {...{ label, cssProperty, inputId }}
+          dispatch={dispatch}
+        />
       ))}
       {commands.tagsAndStyles.map(
         (
           { button: { label, style: buttonStyle }, execCommandArguments },
-          i
+          i,
         ) => (
           <ToolbarButton
             key={i}
@@ -29,7 +33,8 @@ const FormattingButtons: React.FC<Props> = ({}) => {
                 // @ts-ignore
                 style: execCommandArguments?.style,
                 // @ts-ignore
-                command: execCommandArguments?.command
+                command: execCommandArguments?.command,
+                dispatch,
               })
             }
           >
@@ -40,12 +45,10 @@ const FormattingButtons: React.FC<Props> = ({}) => {
               {label}
             </span>
           </ToolbarButton>
-        )
+        ),
       )}
     </>
   );
 };
-
-
 
 export { FormattingButtons };

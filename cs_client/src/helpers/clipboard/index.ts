@@ -14,6 +14,7 @@ import {
   writeChangesToDom,
 } from '::helpers/execK/steps/pipe3';
 import { getDDOE } from '::helpers/execK/steps/pipe1/ddoes';
+import { appActions } from '::app/reducer';
 
 const getPngBase64 = file =>
   new Promise(resolve => {
@@ -173,9 +174,13 @@ const handlePaste = async e => {
     }
   }
 };
-const setupClipboard = () => {
+const setupClipboard = ({ dispatch }) => {
   const editableDiv = document.getElementById('rich-text');
-  editableDiv.onpaste = handlePaste;
+  editableDiv.onpaste = e => {
+    handlePaste(e).catch(error => {
+      dispatch({ type: appActions.SET_ERROR, value: error });
+    });
+  };
 };
 
 export { setupClipboard };

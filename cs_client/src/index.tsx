@@ -7,7 +7,6 @@ import { client } from './graphql/apollo';
 import {
   hotKeysManager,
   setupDevHotKeys,
-  setupFormattingHotKeys,
 } from '::helpers/hotkeys';
 render(
   <ApolloProvider client={client}>
@@ -17,6 +16,6 @@ render(
   </ApolloProvider>,
   document.querySelector('#app'),
 );
-setupFormattingHotKeys();
+
 setupDevHotKeys();
 hotKeysManager.startListening();

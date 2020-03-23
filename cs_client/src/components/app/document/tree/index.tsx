@@ -15,7 +15,6 @@ type Props = {
 };
 
 const Tree: React.FC<Props> = ({ nodes, treeRef, onResize, dispatch }) => {
-
   return (
     <Resizable
       ref={treeRef}
@@ -25,13 +24,13 @@ const Tree: React.FC<Props> = ({ nodes, treeRef, onResize, dispatch }) => {
         dispatch({
           type: appActions.RESIZE_TREE,
           // @ts-ignore
-          value: treeRef.current.size.width
+          value: treeRef.current.size.width,
         })
       }
       className={treeModule.tree__resizeHandle}
     >
       <div className={treeModule.tree}>
-        <ErrorBoundary>
+        <ErrorBoundary dispatch={dispatch}>
           <ul className={treeModule.tree_rootList}>
             {nodes &&
               nodes

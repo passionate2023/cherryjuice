@@ -37,7 +37,12 @@ const applyLineStyle = ({ lineStyle, startDDOE, endDDOE, midDDOEs }) => {
 };
 
 const writeChangesToDom = (
-  { childrenOfStartDDDE, midDDOEs, childrenOfEndDDDE, lineStyle = {} },
+  {
+    childrenOfStartDDDE,
+    midDDOEs,
+    childrenOfEndDDDE,
+    lineStyle = { line: {} },
+  },
   { startAnchor, endAnchor },
 ) => {
   const startDDOE = getDDOE(startAnchor);

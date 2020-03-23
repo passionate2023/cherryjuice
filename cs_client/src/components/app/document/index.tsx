@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Fragment, Ref, useMemo } from 'react';
+import { Fragment, Ref, useEffect, useMemo } from 'react';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Tree } from './tree';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
@@ -10,6 +10,9 @@ import { LinearProgress } from '::shared-components/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { appActions } from '::app/reducer';
 import { RichText } from '::app/document/rich-text';
+import { setupFormattingHotKeys } from '::helpers/hotkeys';
+import { setupClipboard } from '::helpers/clipboard';
+import { setupKeyboardEvents } from '::helpers/typing';
 
 type Props = {
   showTree: boolean;
@@ -32,14 +35,14 @@ const Document: React.FC<Props> = ({
   recentNodes,
   selectedFile,
   saveDocument,
-  reloadDocument
+  reloadDocument,
 }) => {
   const history = useHistory();
   const match = useRouteMatch();
   // @ts-ignore
   const { file_id } = match.params;
   const { loading, error, data } = useQuery(QUERY_CT_NODE_META, {
-    variables: { file_id: file_id || '' }
+    variables: { file_id: file_id || '' },
   });
 
   const nodes: Map<number, Ct_Node_Meta> = useMemo(() => {
@@ -57,6 +60,7 @@ const Document: React.FC<Props> = ({
   } else if (file_id !== selectedFile) {
     dispatch({ type: appActions.SELECT_FILE, value: file_id });
   }
+
   return (
     <>
       <LinearProgress loading={loading} />
@@ -69,7 +73,7 @@ const Document: React.FC<Props> = ({
             file_id={file_id}
           />
           {showTree && (
-            <ErrorBoundary>
+            <ErrorBoundary dispatch={dispatch}>
               <Tree
                 nodes={nodes}
                 treeRef={treeRef}
@@ -84,7 +88,7 @@ const Document: React.FC<Props> = ({
             path={`/:file_id/node-:node_id/`}
             render={props => {
               return (
-                <ErrorBoundary>
+                <ErrorBoundary dispatch={dispatch}>
                   <RichText
                     {...props}
                     file_id={file_id}

@@ -1,8 +1,3 @@
-import { getSelectedNodeFromRoute } from '::helpers/misc';
-
-const selectedNode = getSelectedNodeFromRoute({ pathname: location.pathname });
-const recentNodes = JSON.parse(localStorage.getItem('recentNodes'));
-console.log({ recentNodes });
 const initialState = {
   showTree: JSON.parse(localStorage.getItem('showTree')) !== false,
   treeSize: JSON.parse(localStorage.getItem('treeSize')) || 250,
@@ -11,14 +6,15 @@ const initialState = {
     name: '',
     is_richtxt: false,
     ts_creation: '',
-    ts_lastsave: ''
+    ts_lastsave: '',
   },
   selectedFile: localStorage.getItem('selectedFile'),
   showFileSelect:
-    !Boolean(localStorage.getItem('selectedFile')) && location.pathname === '/',
+    !localStorage.getItem('selectedFile') && location.pathname === '/',
   recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}
   saveDocument: 0,
   reloadDocument: 0,
+  error: undefined,
 };
 export type TState = typeof initialState;
 const actions = {
@@ -29,6 +25,7 @@ const actions = {
   SELECT_FILE: 'select-file',
   SAVE_DOCUMENT: 'save-document',
   RELOAD_DOCUMENT: 'reload-document',
+  SET_ERROR: 'set-error',
 };
 
 const reducer = (state: TState, action) => {
@@ -46,7 +43,7 @@ const reducer = (state: TState, action) => {
       ).push({
         id: action.value.node_id,
         name: action.value.name,
-        style: action.value.style
+        style: action.value.style,
       });
 
       return {
@@ -57,9 +54,9 @@ const reducer = (state: TState, action) => {
           is_richtxt: `${action.value.is_richtxt}`,
           ts_creation: `${action.value.ts_creation}`,
           ts_lastsave: `${action.value.ts_lastsave}`,
-          style: JSON.parse(action.value.style)
+          style: JSON.parse(action.value.style),
         },
-        recentNodes: [...state.recentNodes]
+        recentNodes: [...state.recentNodes],
       };
     case actions.SELECT_FILE:
       return {
@@ -67,17 +64,22 @@ const reducer = (state: TState, action) => {
         selectedFile: action.value,
         showFileSelect: !action.value,
         showTree: true,
-        selectedNode: { id: -1, name: '' }
+        selectedNode: { id: -1, name: '' },
       };
     case actions.SAVE_DOCUMENT:
       return {
         ...state,
-        saveDocument: action.value
+        saveDocument: action.value,
       };
     case actions.RELOAD_DOCUMENT:
       return {
         ...state,
-        reloadDocument: action.value
+        reloadDocument: action.value,
+      };
+    case actions.SET_ERROR:
+      return {
+        ...state,
+        error: action.value,
       };
     default:
       throw new Error('action not supported');
@@ -87,5 +89,5 @@ const reducer = (state: TState, action) => {
 export {
   initialState as appInitialState,
   reducer as appReducer,
-  actions as appActions
+  actions as appActions,
 };

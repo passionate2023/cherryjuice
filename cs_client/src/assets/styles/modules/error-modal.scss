@@ -1,0 +1,48 @@
+$height: 250px;
+$width: $height * 1.3;
+.error-modal {
+  height: $height;
+  width: $width;
+  background-color: white;
+  left: calc(100vw / 2 - #{$width/2});
+  top: calc(100vh / 2 - #{$height/1.5});
+  margin-top: auto;
+  position: absolute;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #3e3d3d;
+  font-family: 'Roboto', sans-serif;
+  border-radius: 5%;
+  overflow: hidden;
+  text-align: center;
+  z-index: 10;
+}
+
+.error-modal__icon {
+  font-size: 40px;
+  margin-bottom: 20px;
+  margin-top: 30px;
+}
+.error-modal__body {
+  flex: 1;
+}
+.error-modal__header {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 20px;
+}
+.error-modal__message {
+  font-size: 22px;
+}
+.errorModal__dismiss-button {
+  flex: 1;
+  width: 100%;
+  max-height: 20%;
+  background-color: #ff304f;
+  border: none;
+  color: white;
+  font-size: 18px;
+}

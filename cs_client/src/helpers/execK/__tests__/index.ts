@@ -17,6 +17,7 @@ jest.mock('../steps/restore-selection', () => {
     restoreSelection: jest.fn(() => undefined),
   };
 });
+
 const test = (
   { meta: { name }, input: { endOffset, startOffset, outerHTML } }: TTestSample,
   cmd,
@@ -25,7 +26,11 @@ const test = (
     document.body.innerHTML = outerHTML;
     const startElement = document.querySelector('[start-element="true"]');
     const endElement = document.querySelector('[end-element="true"]');
-    execK(cmd, { endOffset, startOffset, startElement, endElement });
+    execK({
+      ...cmd,
+      testSample: { endOffset, startOffset, startElement, endElement },
+
+    }, );
     const res = document.querySelector('#rich-text');
     expect(res).toMatchSnapshot();
   });
