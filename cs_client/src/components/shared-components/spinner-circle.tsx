@@ -1,4 +1,4 @@
-import modSpinnerCircle from '::sass-modules/spinner-circle.scss';
+import modSpinnerCircle from '::sass-modules/shared-components/spinner-circle.scss';
 import * as React from 'react';
 import { useSpinner } from '::hooks/use-spinner';
 

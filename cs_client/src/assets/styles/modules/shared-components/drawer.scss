@@ -1,0 +1,98 @@
+@import '../../vars/vars';
+@import '../../mixins/breakpoints';
+.drawer {
+  height: 100%;
+  @include respond-to('md') {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: 1fr;
+  }
+}
+$navigation-width: 200px;
+.drawer__navigation {
+  border-right: $dialog-border;
+  min-width: 180px;
+  overflow-y: auto;
+  padding-top: 8px;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  position: absolute;
+  background-color: white;
+  left: -500px;
+  min-height: calc(100% - 10px - 8px);
+  width: $navigation-width;
+  z-index: 7;
+  box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2),
+    0px 20px 24px 2px rgba(0, 0, 0, 0.14);
+  @include respond-to('md') {
+    position: initial;
+    box-shadow: none;
+  }
+  transition: left 0.3s ease;
+}
+
+.drawer__navigation--visible {
+  left: 0;
+}
+.drawer__navigation__list {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+  width: $navigation-width;
+  height: 100%;
+}
+.drawer__navigation__list__item {
+  padding: 15px 10px;
+  margin-bottom: 5px;
+  color: black;
+  font-family: 'Roboto Light', sans-serif;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  &:hover {
+    background-color: $primary-lighter;
+  }
+}
+.drawer__navigation__list__item--active {
+  background-color: $primary-light;
+  color: $primary;
+}
+.drawer__navigation__scrim {
+  @include respond-to('md') {
+    display: none;
+  }
+  opacity: 0;
+  background-color: black;
+  position: absolute;
+  z-index: 3;
+  height: 100%;
+  width: 100%;
+  left: -100%;
+  transition: opacity 0.3s ease;
+  transition-delay: 0.2s;
+}
+.drawer__navigation__scrim--visible {
+  left: 0;
+  opacity: 0.2;
+}
+
+.drawer__content {
+  padding: 10px 30px;
+}
+
+.drawer__drawer-toggle {
+  @include respond-to('md') {
+    display: none;
+  }
+  //margin-left: 14px;
+  margin-right: 5px;
+  width: 40px;
+  height: 40px;
+}
+.drawer__drawer-toggle__circle {
+  //font-size: 17px;
+  //border-radius: 50% !important;
+  //max-width: 36px;
+}

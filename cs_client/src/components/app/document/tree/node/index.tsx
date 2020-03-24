@@ -1,4 +1,4 @@
-import nodeMod from '::sass-modules/node.scss';
+import nodeMod from '::sass-modules/tree/node.scss';
 import { Ct_Node_Meta } from '::types/generated';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -30,10 +30,10 @@ const Node: React.FC<Props> = ({
   depth,
   dispatch,
   styles,
-  icon_id
+  icon_id,
 }) => {
   const { child_nodes, name, is_richtxt, ts_creation, ts_lastsave } = nodes.get(
-    node_id
+    node_id,
   );
 
   // misc hooks
@@ -44,7 +44,7 @@ const Node: React.FC<Props> = ({
   const nodePath = `/${file_id}/node-${node_id}`;
   // state and ref hook
   const [showChildren, setShowChildren] = useState(
-    () => getTreeStateFromLocalStorage()[node_id]
+    () => getTreeStateFromLocalStorage()[node_id],
   );
   const componentRef = useRef();
   // callback hooks
@@ -57,8 +57,8 @@ const Node: React.FC<Props> = ({
         style: styles,
         is_richtxt,
         ts_creation,
-        ts_lastsave
-      }
+        ts_lastsave,
+      },
     });
     history.push(nodePath);
   }, []);
@@ -79,8 +79,8 @@ const Node: React.FC<Props> = ({
           style: styles,
           is_richtxt,
           ts_creation,
-          ts_lastsave
-        }
+          ts_lastsave,
+        },
       });
     }
   }, []);

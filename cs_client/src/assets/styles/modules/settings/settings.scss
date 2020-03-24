@@ -1,0 +1,40 @@
+@import '../../mixins/breakpoints';
+@import '../../vars/vars';
+.settings {
+  position: absolute;
+  min-width: 100vw;
+}
+
+.settings__screen {
+  margin-left: 5px;
+  color: black;
+
+}
+
+.settings__setting-element {
+  display: flex;
+  justify-content: space-between;
+  @media screen and (max-width: $breakpoint) {
+    flex-direction: column;
+  }
+  @media screen and (max-width: $breakpoint) {
+    margin-bottom: 20px;
+  }
+  margin-bottom: 15px;
+  @include respond-to('md') {
+    margin-top: 15px;
+  }
+}
+
+.settings__setting-element__name {
+  margin-bottom: 5px;
+  @include respond-to('md') {
+    margin-bottom: 0;
+  }
+  color: grey;
+}
+.settings__setting-element__value {
+  @include respond-to('md') {
+    margin-left: auto;
+  }
+}

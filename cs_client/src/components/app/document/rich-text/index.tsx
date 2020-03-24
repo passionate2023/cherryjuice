@@ -1,4 +1,4 @@
-import rtModule from '::sass-modules/rich-text.scss';
+import rtModule from '::sass-modules/document/rich-text.scss';
 import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import { useRouteMatch } from 'react-router';
@@ -27,7 +27,6 @@ const RichText: React.FC<Props> = ({
 }) => {
   const richTextRef = useRef<HTMLDivElement>();
   const match = useRouteMatch();
-  console.log('testing eslit-staged')
   // @ts-ignore
   const node_id = Number(match.params?.node_id);
   const [fetch, { data }] = useLazyQuery(QUERY_CT_NODE_CONTENT.html, {
@@ -65,7 +64,7 @@ const RichText: React.FC<Props> = ({
     const containers = Array.from(
       document.querySelectorAll('#rich-text > div'),
     );
-    const { abstractHtml,  } = getAHtml__legacy({ containers });
+    const { abstractHtml } = getAHtml__legacy({ containers });
     if (!(saveDocument + '').endsWith('_'))
       mutate({
         variables: {

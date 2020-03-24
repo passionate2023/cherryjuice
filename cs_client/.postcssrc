@@ -2,8 +2,8 @@
     "modules": true,
     "plugins": {
         "postcss-modules": {
-            globalModulePaths: ["global-scope.scss"]
+            globalModulePaths: ["global-classes.scss","material-ui.scss"]
         },
-        "postcss-camel-case":{skipUnderscore: true,  globalModulePaths: ["global-scope.scss"]}
+        "postcss-camel-case":{skipUnderscore: true,  globalModulePaths: ["global-classes.scss","material-ui.scss"]}
     }
 }

@@ -1,4 +1,4 @@
-import modIcons from '::sass-modules/node.scss';
+import modIcons from '::sass-modules/tree/node.scss';
 import { cherries, custom_icons } from '::helpers/cons';
 
 import * as React from 'react';

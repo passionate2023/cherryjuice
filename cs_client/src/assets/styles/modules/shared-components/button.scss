@@ -1,0 +1,36 @@
+@import '../../vars/vars';
+.button {
+  user-select: none;
+  border: none;
+  height: 25px;
+  background-color: transparent;
+  color: $primary-dark;
+  &:hover {
+    //background-color: $primary-light;
+  }
+  &:active {
+    background-color: $primary-light;
+    color: $primary-dark;
+  }
+  &:disabled {
+    opacity: 0.5;
+  }
+  transition: background-color 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1.25px;
+}
+
+.button--circle {
+  width: 25px;
+  border-radius: 50%;
+}
+.button--square {
+  min-height: 25px;
+  //width: 50px;
+  padding: 5px;
+  margin: 2px;
+}
+.button--pressed {
+  background-color: $primary;
+  color: white;
+}

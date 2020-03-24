@@ -24,7 +24,13 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@fortawesome/react-fontawesome": "^0.1.8",
-    "@material/linear-progress": "^4.0.0",
+    "@material/button": "^5.1.0",
+    "@material/dialog": "^5.1.0",
+    "@material/drawer": "^5.1.0",
+    "@material/linear-progress": "^5.1.0",
+    "@material/tab": "^5.1.0",
+    "@material/tab-bar": "^5.1.0",
+    "@material/textfield": "^5.1.0",
     "apollo-boost": "^0.4.4",
     "graphql": "^14.5.7",
     "graphql-tag": "^2.10.1",
@@ -48,12 +54,12 @@
     "@types/react-router": "^5.1.3",
     "@types/react-router-dom": "^5.1.3",
     "@types/testing-library__cypress": "^5.0.3",
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
     "commitizen": "^4.0.3",
     "cypress": "^4.2.0",
     "cz-conventional-changelog": "^3.1.0",
     "eslint": "^6.8.0",
-    "@typescript-eslint/eslint-plugin": "^2.23.0",
-    "@typescript-eslint/parser": "^2.23.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-node": "^11.0.0",
@@ -91,7 +97,7 @@
   },
   "sass": {
     "includePaths": [
-      "./node_modules"
+      "./node_modules/"
     ]
   },
   "config": {

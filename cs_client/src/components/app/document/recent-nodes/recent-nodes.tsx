@@ -1,4 +1,4 @@
-import modRecentNodes from '::sass-modules/recent-nodes.scss';
+import modRecentNodes from '::sass-modules/document/recent-nodes.scss';
 import * as React from 'react';
 import { useCallback } from 'react';
 import { useHistory } from 'react-router';
@@ -11,21 +11,21 @@ type Props = {
   file_id: string;
 };
 const config = {
-  recentNodesN: 4
+  recentNodesN: 4,
 };
 const RecentNodes: React.FC<Props> = ({
   recentNodes,
   selectedNode,
   dispatch,
-  file_id
+  file_id,
 }) => {
   let recentNodesOther = recentNodes.filter(
-    ({ id }) => +id !== selectedNode.id
+    ({ id }) => +id !== selectedNode.id,
   );
   let lastN = recentNodesOther.slice(
     recentNodesOther.length > config.recentNodesN
       ? recentNodesOther.length - config.recentNodesN
-      : 0
+      : 0,
   );
   const history = useHistory();
   const goToNode = useCallback(e => {
@@ -54,7 +54,7 @@ const RecentNodes: React.FC<Props> = ({
                 {name.substring(0, 10)}
                 {`${name.length > 10 ? '...' : ''}`}
               </button>
-            )
+            ),
         )}
       </div>
       <p

@@ -1,18 +1,15 @@
 import * as React from 'react';
-import { Fragment, Ref, useEffect, useMemo } from 'react';
+import { Fragment, Ref, useMemo } from 'react';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Tree } from './tree';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 import { QUERY_CT_NODE_META } from '::graphql/queries';
 import { Ct_Node_Meta } from '::types/generated';
-import { LinearProgress } from '::shared-components/linear-progress';
+import { LinearProgress } from '::shared-components/material/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { appActions } from '::app/reducer';
 import { RichText } from '::app/document/rich-text';
-import { setupFormattingHotKeys } from '::helpers/hotkeys';
-import { setupClipboard } from '::helpers/clipboard';
-import { setupKeyboardEvents } from '::helpers/typing';
 
 type Props = {
   showTree: boolean;

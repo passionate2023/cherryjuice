@@ -1,10 +1,10 @@
-import modErrorModal from '::sass-modules/error-modal.scss';
+import modErrorModal from '::sass-modules/shared-components/error-modal.scss';
 import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { appActions } from '::app/reducer';
-import { Overlay } from '::shared-components/overlay';
+import { Scrim } from '::shared-components/scrim';
 type Props = {
   error: Error;
   dispatch: Function;
@@ -20,7 +20,7 @@ const ErrorModal: React.FC<Props> = ({ error, dispatch }) => {
   });
   return (
     <>
-      <Overlay />
+      <Scrim />
       <div className={modErrorModal.errorModal}>
         <FontAwesomeIcon
           className={`${modErrorModal.errorModal__icon}`}

@@ -1,4 +1,4 @@
-import modSelectFIle from '::sass-modules/select-file.scss';
+import modSelectFIle from '::sass-modules/select-file/select-file.scss';
 import * as React from 'react';
 import { useCallback, useRef, useState } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
@@ -9,7 +9,7 @@ import { appActions } from '../../reducer';
 import { dateToFormattedString } from '::helpers/time';
 import { QUERY_CT_FILES } from '::graphql/queries';
 import { Ct_File } from '::types/generated';
-import { Overlay } from '::shared-components/overlay';
+import { Scrim } from '::shared-components/scrim';
 
 type Props = { selectedFile: string; dispatch: any };
 
@@ -17,8 +17,8 @@ const SelectFile: React.FC<Props> = ({ selectedFile, dispatch }) => {
   const history = useHistory();
   const [selected, setSelected] = useState({ id: '', path: '' });
 
-  const [fetch, { loading, data }] = useLazyQuery(QUERY_CT_FILES, {
-    fetchPolicy: 'network-only'
+  const [fetch, { data }] = useLazyQuery(QUERY_CT_FILES, {
+    fetchPolicy: 'network-only',
   });
 
   const firstFetch = useRef(false);
@@ -27,24 +27,22 @@ const SelectFile: React.FC<Props> = ({ selectedFile, dispatch }) => {
     fetch();
   }
   let files: Ct_File[];
-  let filesMap: { [key: string]: Ct_File[] };
   if (data) {
     files = data.ct_files;
   }
 
-  console.log({ data });
   const onSelect = useCallback(
     e => {
       let selectedId = e.target.parentElement.dataset.id;
       let selectedPath = e.target.parentElement.dataset.path;
       setSelected({ id: selectedId, path: selectedPath });
     },
-    [selectedFile]
+    [selectedFile],
   );
   // @ts-ignore
   return (
     <>
-      <Overlay/>
+      <Scrim />
       <div className={modSelectFIle.selectFile}>
         <div className={modSelectFIle.selectFile__table}>
           <table>
@@ -56,14 +54,7 @@ const SelectFile: React.FC<Props> = ({ selectedFile, dispatch }) => {
               </tr>
               {data &&
                 files.map(
-                  ({
-                    name,
-                    size,
-                    fileContentModification,
-                    fileCreation,
-                    id,
-                    filePath
-                  }) => (
+                  ({ name, size, fileContentModification, id, filePath }) => (
                     <tr
                       className={`${modSelectFIle.selectFile__file} ${
                         selected.id === id
@@ -84,11 +75,11 @@ const SelectFile: React.FC<Props> = ({ selectedFile, dispatch }) => {
                       <td>{size / 1024}kb</td>
                       <td>
                         {dateToFormattedString(
-                          new Date(fileContentModification)
+                          new Date(fileContentModification),
                         )}
                       </td>
                     </tr>
-                  )
+                  ),
                 )}
             </tbody>
           </table>
@@ -107,7 +98,7 @@ const SelectFile: React.FC<Props> = ({ selectedFile, dispatch }) => {
               history.push('/');
               return dispatch({
                 type: appActions.SELECT_FILE,
-                value: selected.id
+                value: selected.id,
               });
             }}
             disabled={selected.id === selectedFile || !selected.id}

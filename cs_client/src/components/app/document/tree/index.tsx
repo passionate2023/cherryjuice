@@ -1,4 +1,4 @@
-import treeModule from '::sass-modules/tree.scss';
+import treeModule from '::sass-modules/tree/tree.scss';
 import * as React from 'react';
 import { Ref } from 'react';
 import { Node } from './node';

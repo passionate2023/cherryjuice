@@ -9,6 +9,8 @@ import { Document } from './document';
 import { appInitialState, appReducer } from './reducer';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { ErrorModal } from '::shared-components/error-modal';
+import { Settings } from '::app/menus/settings';
+import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 
 type Props = {};
 
@@ -27,19 +29,21 @@ const App: React.FC<Props> = () => {
   }, []);
 
   useEffect(() => {
-    try {
-      Object.entries(state).forEach(([key, value]) => {
-        let toBeWritten =
-          typeof value === 'object' ? JSON.stringify(value) : value;
-        if (value !== undefined) localStorage.setItem(key, toBeWritten);
-      });
-    } catch (e) {
-      console.error(e);
-    }
+    Object.entries(state).forEach(([key, value]) => {
+      let toBeWritten =
+        typeof value === 'object' ? JSON.stringify(value) : value;
+      if (value !== undefined) localStorage.setItem(key, toBeWritten);
+    });
   }, [state]);
   if (state.selectedFile && history.location.pathname === '/')
     history.push('/' + state.selectedFile);
 
+  useEffect(() => {
+    cssVariables.setVH();
+    window.addEventListener('resize', () => {
+      cssVariables.setVH();
+    });
+  }, []);
   return (
     <div
       className={appModule.app}
@@ -77,9 +81,10 @@ const App: React.FC<Props> = () => {
         />
       )}
       <InfoBar node={state.selectedNode} />
-      {state.showFileSelect && (
+      {false && state.showFileSelect && (
         <SelectFile selectedFile={state.selectedFile} dispatch={dispatch} />
       )}
+      {state.showSettings && <Settings dispatch={dispatch} />}
       {state.error && <ErrorModal error={state.error} dispatch={dispatch} />}
     </div>
   );

@@ -15,6 +15,7 @@ const initialState = {
   saveDocument: 0,
   reloadDocument: 0,
   error: undefined,
+  showSettings: true,
 };
 export type TState = typeof initialState;
 const actions = {
@@ -26,6 +27,7 @@ const actions = {
   SAVE_DOCUMENT: 'save-document',
   RELOAD_DOCUMENT: 'reload-document',
   SET_ERROR: 'set-error',
+  TOGGLE_SETTINGS: 'TOGGLE_SETTINGS',
 };
 
 const reducer = (state: TState, action) => {
@@ -81,6 +83,8 @@ const reducer = (state: TState, action) => {
         ...state,
         error: action.value,
       };
+    case actions.TOGGLE_SETTINGS:
+      return { ...state, showSettings: !state.showSettings };
     default:
       throw new Error('action not supported');
   }
