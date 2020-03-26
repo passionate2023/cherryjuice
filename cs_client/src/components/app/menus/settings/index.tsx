@@ -1,4 +1,3 @@
-import modSettings from '::sass-modules/settings/settings.scss';
 import * as React from 'react';
 import { TDispatchAppReducer } from '::types/react';
 import { useCallback, useState } from 'react';
@@ -6,6 +5,8 @@ import { Dialog } from '::shared-components/material/dialog';
 import { Drawer } from '::shared-components/material/drawer';
 import { screens } from '::app/menus/settings/screens';
 import { appActions } from '::app/reducer';
+import { DrawerToggle } from '::shared-components/material/drawer/drawer-toggle';
+import { ErrorBoundary } from '::shared-components/error-boundary';
 type Props = {
   dispatch: TDispatchAppReducer;
 };
@@ -20,21 +21,23 @@ const Settings: React.FC<Props> = ({ dispatch }) => {
   );
 
   return (
-    <div className={modSettings.settings}>
-      <Dialog
-        dialogTitle={'Settings'}
-        onButton1={cancel}
-        onOverlay={cancel}
-        button1={'Cancel'}
-        button2={'Apply'}
-      >
+    <Dialog
+      menuButton={<DrawerToggle />}
+      dialogTitle={'Settings'}
+      onCloseDialog={cancel}
+      dialogFooterButtons={[
+        { label: 'Cancel', onClick: cancel, disabled: false },
+        { label: 'Apply', onClick: cancel, disabled: true },
+      ]}
+    >
+      <ErrorBoundary dispatch={dispatch}>
         <Drawer
           screens={screens}
           selectedScreenTitle={selectedTabTitle}
           setSelectedScreenTitle={setSelectedTabTitle}
         />
-      </Dialog>
-    </div>
+      </ErrorBoundary>
+    </Dialog>
   );
 };
 

@@ -19,6 +19,7 @@ export type Ct_File = {
   slug?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   filePath?: Maybe<Scalars['String']>;
+  fileFolder?: Maybe<Scalars['String']>;
 };
 
 export type Ct_Node_Content = {

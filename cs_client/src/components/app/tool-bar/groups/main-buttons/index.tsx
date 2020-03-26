@@ -60,13 +60,13 @@ const MainButtons: React.FC<Props> = ({ dispatch, onResize }) => {
         onClick={toggleSettings}
         fontAwesomeProps={{ icon: faCogs, color: 'grey' }}
       ></ToolbarButton>
-      <ToolbarButton onClick={toggleTree}>
-        <img src={cherries} alt="" style={{ width: 22 }} />
-      </ToolbarButton>
       <ToolbarButton
         onClick={toggleFileSelect}
         fontAwesomeProps={{ icon: faFolder, color: 'grey' }}
       />
+      <ToolbarButton onClick={toggleTree}>
+        <img src={cherries} alt="" style={{ width: 22 }} />
+      </ToolbarButton>
       <ToolbarButton
         onClick={saveDocument}
         fontAwesomeProps={{ icon: faSave, color: 'grey' }}

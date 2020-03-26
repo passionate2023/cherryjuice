@@ -35,6 +35,8 @@ const keyEventToValidShortcut = (data: string) => {
 
   const isArrowKey = /Arrow.{2,5}/.test(data);
   if (isArrowKey) return data;
+
+  return '';
 };
 
 const KeyboardKey = ({ initialValue }) => {
@@ -43,7 +45,10 @@ const KeyboardKey = ({ initialValue }) => {
     <TextInput
       topLevelClassName={modKeyboardShortcut.keyboardShortcut__field}
       value={value}
-      onKeyUp={e => setValue(keyEventToValidShortcut(e.nativeEvent.key))}
+      onKeyUp={e => {
+        setValue(keyEventToValidShortcut(e.nativeEvent.key) || value);
+      }}
+      onChange={() => undefined}
     />
   );
 };

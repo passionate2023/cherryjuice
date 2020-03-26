@@ -15,7 +15,7 @@ const initialState = {
   saveDocument: 0,
   reloadDocument: 0,
   error: undefined,
-  showSettings: true,
+  showSettings: false,
 };
 export type TState = typeof initialState;
 const actions = {

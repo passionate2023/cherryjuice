@@ -2,35 +2,41 @@
 .button {
   user-select: none;
   border: none;
-  height: 25px;
   background-color: transparent;
   color: $primary-dark;
+  transition: background-color 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1.25px;
+  cursor: pointer;
   &:hover {
-    //background-color: $primary-light;
+    background-color: $primary-lighter;
+    color: $primary-dark;
   }
   &:active {
     background-color: $primary-light;
     color: $primary-dark;
+    box-shadow: $box-shadow1;
   }
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.3;
   }
-  transition: background-color 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1.25px;
 }
 
 .button--circle {
+  height: 25px;
   width: 25px;
   border-radius: 50%;
 }
 .button--square {
-  min-height: 25px;
+  //height: 0;
+  //min-height: 25px;
   //width: 50px;
-  padding: 5px;
   margin: 2px;
+  border-radius: 5px;
+  padding: 10px 10px;
 }
 .button--pressed {
-  background-color: $primary;
-  color: white;
+  background-color: $primary !important;
+  color: white !important;
+  box-shadow: $box-shadow1;
 }

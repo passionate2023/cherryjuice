@@ -5,6 +5,8 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useRef } from 'react';
 import { appActions } from '::app/reducer';
 import { Scrim } from '::shared-components/scrim';
+import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
+import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 type Props = {
   error: Error;
   dispatch: Function;
@@ -16,11 +18,15 @@ const ErrorModal: React.FC<Props> = ({ error, dispatch }) => {
   }, []);
   const focusAnchor = useRef<HTMLButtonElement>();
   useEffect(() => {
-    focusAnchor.current.focus();
+    if (focusAnchor.current) focusAnchor.current.focus();
+  });
+  useModalKeyboardEvents({
+    onCloseModal: dismissError,
+    modalSelector: `.${modErrorModal.errorModal}`,
   });
   return (
     <>
-      <Scrim />
+      <Scrim onClick={dismissError} />
       <div className={modErrorModal.errorModal}>
         <FontAwesomeIcon
           className={`${modErrorModal.errorModal__icon}`}
@@ -35,16 +41,15 @@ const ErrorModal: React.FC<Props> = ({ error, dispatch }) => {
             {error?.message || ''}
           </span>
         </span>
-        <button
+        <ButtonSquare
           className={`${modErrorModal.errorModal__dismissButton}`}
           onClick={dismissError}
-          ref={focusAnchor}
+          myref={focusAnchor}
         >
           Dismiss
-        </button>
-      </div>{' '}
+        </ButtonSquare>
+      </div>
     </>
   );
 };
-
 export { ErrorModal };

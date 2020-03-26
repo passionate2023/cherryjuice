@@ -36,6 +36,7 @@ const scanFolder: ({
             .update(file)
             .digest('hex'),
           filePath: lePath,
+		  fileFolder: fullFolderPath
         });
       }
     });

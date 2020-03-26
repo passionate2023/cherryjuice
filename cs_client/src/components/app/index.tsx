@@ -81,7 +81,7 @@ const App: React.FC<Props> = () => {
         />
       )}
       <InfoBar node={state.selectedNode} />
-      {false && state.showFileSelect && (
+      {state.showFileSelect && (
         <SelectFile selectedFile={state.selectedFile} dispatch={dispatch} />
       )}
       {state.showSettings && <Settings dispatch={dispatch} />}

@@ -5,26 +5,45 @@ import { DialogFooter } from '::shared-components/material/dialog/dialog-footer'
 import { DialogHeader } from '::shared-components/material/dialog/dialog-header';
 import { DialogBody } from '::shared-components/material/dialog/dialog-body';
 import { Scrim } from '::shared-components/scrim';
+import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 
 const Dialog: React.FC<{
-  dialogTitle: string;
-  button1: string;
-  button2: string;
-  onButton1: EventHandler<any>;
-  onOverlay: EventHandler<any>;
-}> = ({ onOverlay, children, dialogTitle, button1, button2, onButton1 }) => (
-  <>
-    <Scrim onClick={onOverlay} />
-    <div className={`${modDialog.dialog}`}>
-      <DialogHeader dialogTitle={dialogTitle} onButton1={onButton1} />
-      <DialogBody dialogBodyElements={children} />
-      <DialogFooter
-        button1Label={button1}
-        button2Label={button2}
-        onButton1={onButton1}
-      />
+  menuButton?: JSX.Element;
+  dialogTitle?: string;
+  onCloseDialog: EventHandler<any>;
+  dialogFooterButtons: {
+    label: string | JSX.Element;
+    disabled: boolean;
+    onClick: EventHandler<any>;
+  }[];
+}> = ({
+  children,
+  menuButton,
+  dialogTitle,
+  onCloseDialog,
+  dialogFooterButtons,
+}) => {
+  useModalKeyboardEvents({
+    onCloseModal: onCloseDialog,
+    modalSelector: `.${modDialog.dialog__container}`,
+  });
+
+  return (
+    <div className={modDialog.dialog__container}>
+      <Scrim onClick={onCloseDialog} />
+      <div className={`${modDialog.dialog}`}>
+        {dialogTitle && (
+          <DialogHeader
+            menuButton={menuButton}
+            dialogTitle={dialogTitle}
+            onCloseDialog={onCloseDialog}
+          />
+        )}
+        <DialogBody dialogBodyElements={children} />
+        <DialogFooter dialogFooterButtons={dialogFooterButtons} />
+      </div>
     </div>
-  </>
-);
+  );
+};
 
 export { Dialog };

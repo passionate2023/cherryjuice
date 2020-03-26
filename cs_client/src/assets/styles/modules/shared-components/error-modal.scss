@@ -1,7 +1,8 @@
 $height: 250px;
-$width: $height * 1.3;
+$width: $height * 1.4;
+//$width: 95vw;
 .error-modal {
-  height: $height;
+  //height: $height;
   width: $width;
   background-color: white;
   left: calc(100vw / 2 - #{$width/2});
@@ -15,16 +16,16 @@ $width: $height * 1.3;
   align-items: center;
   color: #3e3d3d;
   font-family: 'Roboto', sans-serif;
-  border-radius: 5%;
   overflow: hidden;
   text-align: center;
   z-index: 10;
+  border-radius: 5px;
 }
 
 .error-modal__icon {
   font-size: 40px;
   margin-bottom: 20px;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 .error-modal__body {
   flex: 1;
@@ -35,14 +36,19 @@ $width: $height * 1.3;
   margin-bottom: 20px;
 }
 .error-modal__message {
-  font-size: 22px;
+  font-size: 16px;
+  padding: 5px 10px;
+  opacity: 0.8;
 }
 .errorModal__dismiss-button {
-  flex: 1;
-  width: 100%;
-  max-height: 20%;
-  background-color: #ff304f;
-  border: none;
-  color: white;
-  font-size: 18px;
+  //flex: 1;
+  //width: 100%;
+  //max-height: 20%;
+  //background-color: #ff304f;
+  //border: none;
+  //color: white;
+  //font-size: 18px;
+  align-self: flex-end;
+  margin-right: 5px;
+  margin-top: 10px;
 }

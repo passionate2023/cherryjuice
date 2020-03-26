@@ -1,62 +1,53 @@
-@mixin size() {
-  $modal_width: 800px;
-  $modal_height: 400px;
-  width: $modal_width;
-  height: $modal_height;
-
-  left: calc(100vw / 2 - #{$modal_width} / 2);
-  top: calc(100vh / 2 - #{$modal_height} / 2);
-  @media only screen and (max-width: 480px) {
-    $modal_width: 330px;
-    $modal_height: 400px;
-    width: $modal_width;
-    height: $modal_height;
-    left: calc(100vw / 2 - #{$modal_width} / 2);
-    top: calc(100vh / 2 - #{$modal_height} / 2);
-  }
-}
-
+@import '../../vars/vars';
 .selectFile {
-  z-index: 11;
-  @include size;
-  background-color: whitesmoke;
-  position: absolute;
-  display: flex;
-  flex-direction: column;
+  padding: 10px;
+  background-color: $grey-light;
 }
-.selectFile__table {
-
-  flex: 8;
-  border-collapse: collapse;
-  max-height: 500px;
-  overflow: auto;
-  table {
-    width: 100%;
-  }
-  td,
-  th {
-    border-bottom: 1px dotted gray;
-    text-align: center;
-    padding: 8px;
-    color: black;
-  }
-  td {
-    border-right: dotted 1px black;
-    text-align: left;
-  }
-  tr:nth-child(even) {
-    background-color: #dddddd;
-  }
-}
-
 .selectFile__file {
   cursor: pointer;
+  display: block;
+  background-color: $grey-light;
+  color: black;
+  margin-top: 5px;
+  padding: 10px 20px;
+  max-width: 100%;
+  &:active {
+    background-color: $primary-light;
+  }
+  transition: background-color 0.3s ease;
 
 }
-
+.selectFile__file__name {
+  display: block;
+  margin-bottom: 2px;
+  padding: 5px;
+  overflow: auto;
+  font-size: 14px;
+}
+.selectFile__file__name__tick {
+  position: absolute;
+  margin-right: 5px;
+}
+.selectFile__file__details {
+  font-family: monospace;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: grey;
+  padding: 5px;
+}
+.selectFile__file--selected-candidate {
+  background-color: $primary-light;
+  span {
+    color: black;
+  }
+}
 .selectFile__file--selected {
-  background-color: cornflowerblue;
+  background-color: $primary;
   color: white;
+  span {
+    color: white;
+  }
 }
 .selectFile__info-bar {
   margin-top: 5px;
@@ -71,24 +62,29 @@
   }
 }
 
-.selectFile__buttons {
-  margin-top: auto;
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  button {
-    margin: 2px;
-    padding: 10px;
-    width: 80px;
-    height: 38px;
-    text-align: center;
-  }
-
-  padding: 10px;
-  background-color: lightgrey;
-}
-
 .selectFile__buttons__refresh {
   margin-right: auto !important;
   margin-left: 10px;
+}
+
+.selectFile__file-folder {
+  margin-bottom: 10px;
+  box-shadow: $box-shadow2;
+  padding: 3px;
+  background-color: white;
+}
+.selectFile__file-folder__files {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+.selectFile__file-folder__name {
+  width: 90%;
+  padding: 10px 10px 0px;
+  display: block;
+  overflow: auto;
+  margin-bottom: - 5px;
+  color: black;
+  font-family: monospace;
+  opacity: 0.8;
 }

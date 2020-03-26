@@ -11,6 +11,7 @@ const ct_file = `
     slug: String
     id: String
     filePath: String
+	fileFolder: String
   }
 `;
 

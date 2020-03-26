@@ -2,8 +2,14 @@ $tool-bar-height: 30px;
 $info-bar-height: 18px;
 $breakpoint: 850px;
 $primary: #790604;
-$primary-mid: rgba(#790604, .5);
-$primary-light: rgba(#790604, .2);
-$primary-lighter: rgba(#790604, .1);
+$primary-mid: rgba(#790604, 0.5);
+$primary-light: rgba(#790604, 0.2);
+$primary-lighter: rgba(#790604, 0.1);
+$primary-lightest: rgba(#790604, 0.05);
 $primary-dark: #3b0503;
 $dialog-border: 0.5px $primary-light solid;
+$box-shadow1: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+  0 1px 5px 0 rgba(0, 0, 0, 0.12);
+$box-shadow2: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.14);
+$grey-light: rgba(grey, 0.05);
+$grey-lighter: rgba(#c9c9c9, 0.02);

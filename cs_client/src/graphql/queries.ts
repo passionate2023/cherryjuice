@@ -58,10 +58,7 @@ const QUERY_CT_NODE_CONTENT = {
     }
   `,
   html: gql`
-    query ct_node_rt_png_meta(
-      $file_id: String!
-      $node_id: Int!
-    ) {
+    query ct_node_rt_png_meta($file_id: String!, $node_id: Int!) {
       ct_node_content(file_id: $file_id, node_id: $node_id) {
         html
         node_id
@@ -69,10 +66,7 @@ const QUERY_CT_NODE_CONTENT = {
     }
   `,
   all_png_full_base64: gql`
-    query ct_node_rt_png_meta(
-      $file_id: String!
-      $node_id: Int!
-    ) {
+    query ct_node_rt_png_meta($file_id: String!, $node_id: Int!) {
       ct_node_content(file_id: $file_id, node_id: $node_id) {
         all_png_full_base64
         node_id
@@ -80,10 +74,7 @@ const QUERY_CT_NODE_CONTENT = {
     }
   `,
   all_png_thumbnail_base64: gql`
-    query ct_node_rt_png_meta(
-      $file_id: String!
-      $node_id: Int!
-    ) {
+    query ct_node_rt_png_meta($file_id: String!, $node_id: Int!) {
       ct_node_content(file_id: $file_id, node_id: $node_id) {
         all_png_thumbnail_base64
         node_id
@@ -103,9 +94,8 @@ const QUERY_CT_FILES = gql`
       slug
       id
       filePath
+      fileFolder
     }
   }
 `;
-export {
-  QUERY_CT_FILES, QUERY_CT_NODE_META, QUERY_CT_NODE_CONTENT
-};
+export { QUERY_CT_FILES, QUERY_CT_NODE_META, QUERY_CT_NODE_CONTENT };
