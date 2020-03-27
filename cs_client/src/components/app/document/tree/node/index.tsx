@@ -3,11 +3,10 @@ import { Ct_Node_Meta } from '::types/generated';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { appActions } from '::app/reducer';
 import { getTreeStateFromLocalStorage } from '::helpers/misc';
-import { Icon } from './icon';
+import { Icon as OgIcon } from './icon';
+import { Icon, Icons } from '::shared-components/icon';
 
 type Props = {
   node_id: number;
@@ -98,16 +97,15 @@ const Node: React.FC<Props> = ({
     <>
       <div className={`${nodeMod.node}`} ref={componentRef}>
         {
-          <FontAwesomeIcon
+          <Icon
             className={`${nodeMod.node__titleButton} ${
               child_nodes.length > 0 ? '' : nodeMod.node__titleButtonHidden
             }`}
             onClick={toggleChildren}
-            icon={showChildren ? faMinus : faPlus}
-            color={'black'}
+            name={showChildren ? Icons.material.remove : Icons.material.add}
           />
         }
-        <Icon icon_id={+icon_id} depth={depth} />
+        <OgIcon icon_id={+icon_id} depth={depth} />
         <div
           className={nodeMod.node__title}
           onClick={selectNode}

@@ -10,7 +10,12 @@
       "::assets/*": ["./src/assets/*"],
       "::shared-components/*": ["./src/components/shared-components/*"],
       "::hooks/*": ["./src/hooks/*"],
-      "::app/*": ["./src/components/app/*"]
-    }
+      "::app/*": ["./src/components/app/*"],
+      "::lazy-components/*": ["./src/components/lazy-components/*"]
+    },
+	   "target": "esnext",
+        "sourceMap": true,
+        "module": "es6"
+		,"optionalChaining":true
   }
 }

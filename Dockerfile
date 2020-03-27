@@ -2,16 +2,20 @@ from node as cs
 workdir /server
 copy ./cs_server/ .
 run npm i -g parcel-bundler\
-    && npm link parcel-bundler\
-    && yarn install --ignore-optional\
-    && yarn build
+    && npm link parcel-bundler
+run yarn install --ignore-optional
+
 
 workdir /client
-copy ./cs_client .
+copy ./cs_client/ .
 run chmod +x scripts/patch-postcss-camel-case/copy.sh\
     && chmod +x scripts/copy-static-assets.sh
-run yarn install --ignore-optional\
-    && yarn build
+run yarn install --ignore-optional
+
+workdir /client
+run yarn build
+workdir /server
+run yarn build
 
 from node:slim
 label maintainer ycnmhd

@@ -1,12 +1,11 @@
 import modErrorModal from '::sass-modules/shared-components/error-modal.scss';
 import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useRef } from 'react';
 import { appActions } from '::app/reducer';
 import { Scrim } from '::shared-components/scrim';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
+import { Icon, Icons } from '::shared-components/icon';
 type Props = {
   error: Error;
   dispatch: Function;
@@ -28,11 +27,7 @@ const ErrorModal: React.FC<Props> = ({ error, dispatch }) => {
     <>
       <Scrim onClick={dismissError} />
       <div className={modErrorModal.errorModal}>
-        <FontAwesomeIcon
-          className={`${modErrorModal.errorModal__icon}`}
-          icon={faExclamationTriangle}
-          color={'#ff304f'}
-        />
+        <Icon name={Icons.material.warning} className={`${modErrorModal.errorModal__icon}`} extraLarge={true}/>
         <span className={modErrorModal.errorModal__body}>
           <span className={`${modErrorModal.errorModal__header}`}>
             Something went wrong

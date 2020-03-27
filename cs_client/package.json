@@ -6,7 +6,7 @@
     "prewatch:liveserver": "yarn run copy-static-assets",
     "watch:liveserver": "parcel -p 1236 watch src/assets/index.html ",
     "prebuild": "yarn run copy-static-assets",
-    "build": "parcel build src/assets/index.html --no-source-maps",
+    "build": "parcel build src/assets/index.html --no-source-maps --no-cache",
     "postinstall": "cd ./scripts/patch-postcss-camel-case/ && ./copy.sh",
     "cypress:open": "yarn cypress open",
     "watch:server": "cd ../cs_server/ && yarn run watch:server ",
@@ -21,21 +21,11 @@
   "license": "MIT",
   "dependencies": {
     "@apollo/react-hooks": "^3.1.1",
-    "@fortawesome/fontawesome-svg-core": "^1.2.26",
-    "@fortawesome/free-solid-svg-icons": "^5.12.0",
-    "@fortawesome/react-fontawesome": "^0.1.8",
-    "@material/button": "^5.1.0",
-    "@material/dialog": "^5.1.0",
-    "@material/drawer": "^5.1.0",
     "@material/linear-progress": "^5.1.0",
-    "@material/tab": "^5.1.0",
-    "@material/tab-bar": "^5.1.0",
-    "@material/textfield": "^5.1.0",
     "apollo-boost": "^0.4.4",
     "graphql": "^14.5.7",
     "graphql-tag": "^2.10.1",
     "npm-run-all": "^4.1.5",
-    "ramda": "^0.26.1",
     "re-resizable": "^6.1.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
@@ -48,7 +38,6 @@
     "@testing-library/cypress": "^5.3.0",
     "@types/jest": "^25.1.3",
     "@types/node": "^12.7.5",
-    "@types/ramda": "^0.26.38",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-router": "^5.1.3",
@@ -72,7 +61,14 @@
     "ts-jest": "^25.2.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0-0",
+    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
+    "@babel/plugin-syntax-optional-chaining": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-typescript": "^7.9.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "cssnano": "^4.1.10",
+    "parcel-plugin-bundle-visualiser": "^1.2.0",
     "postcss-camel-case": "^1.0.1",
     "postcss-exclude-files": "^1.0.15",
     "postcss-modules": "^1.4.1",
@@ -93,7 +89,8 @@
     "::assets": "./src/assets/",
     "::shared-components": "./src/components/shared-components/",
     "::hooks": "./src/hooks/",
-    "::app": "./src/components/app/"
+    "::app": "./src/components/app/",
+    "::lazy-components": "./src/components/lazy-components/"
   },
   "sass": {
     "includePaths": [

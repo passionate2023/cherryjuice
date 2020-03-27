@@ -104,3 +104,4 @@ const Document: React.FC<Props> = ({
 };
 
 export { Document };
+export default Document

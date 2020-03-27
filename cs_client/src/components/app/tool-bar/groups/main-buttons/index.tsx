@@ -1,14 +1,9 @@
 import cherries from '::assets/icons/cherries.svg';
 import * as React from 'react';
 import { useCallback } from 'react';
-import {
-  faFolder,
-  faRedo,
-  faSave,
-  faCogs,
-} from '@fortawesome/free-solid-svg-icons';
 import { appActions } from '::app/reducer';
 import { ToolbarButton } from '::app/tool-bar/tool-bar-button';
+import { Icon, Icons } from '::shared-components/icon';
 
 type Props = {
   dispatch: (action: { type: string; value?: any }) => void;
@@ -56,25 +51,21 @@ const MainButtons: React.FC<Props> = ({ dispatch, onResize }) => {
   } = useMainCallbacks({ dispatch, onResize });
   return (
     <>
-      <ToolbarButton
-        onClick={toggleSettings}
-        fontAwesomeProps={{ icon: faCogs, color: 'grey' }}
-      ></ToolbarButton>
-      <ToolbarButton
-        onClick={toggleFileSelect}
-        fontAwesomeProps={{ icon: faFolder, color: 'grey' }}
-      />
+      <ToolbarButton onClick={toggleSettings}>
+        <Icon name={Icons.material.settings} small={true} />
+      </ToolbarButton>
+      <ToolbarButton onClick={toggleFileSelect}>
+        <Icon name={Icons.material.folder} small={true} />
+      </ToolbarButton>
       <ToolbarButton onClick={toggleTree}>
         <img src={cherries} alt="" style={{ width: 22 }} />
       </ToolbarButton>
-      <ToolbarButton
-        onClick={saveDocument}
-        fontAwesomeProps={{ icon: faSave, color: 'grey' }}
-      />
-      <ToolbarButton
-        onClick={reloadDocument}
-        fontAwesomeProps={{ icon: faRedo, color: 'grey' }}
-      />
+      <ToolbarButton onClick={saveDocument}>
+        <Icon name={Icons.material.save} small={true} />
+      </ToolbarButton>
+      <ToolbarButton onClick={reloadDocument}>
+        <Icon name={Icons.material.refresh} />
+      </ToolbarButton>
     </>
   );
 };

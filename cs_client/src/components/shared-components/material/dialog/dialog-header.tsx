@@ -2,8 +2,7 @@ import { modDialog } from '::sass-modules/index';
 import * as React from 'react';
 import { CircleButton } from '::shared-components/buttons/circle-button';
 import { EventHandler } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Icon, Icons } from '::shared-components/icon';
 
 type Props = {
   dialogTitle: string;
@@ -25,7 +24,7 @@ const DialogHeader: React.FC<Props> = ({
         className={modDialog.dialog__header__exitButton}
         onClick={onCloseDialog}
       >
-        <FontAwesomeIcon icon={faTimes} color={'#3b0503'} />
+        <Icon name={Icons.material.close} small={true}/>
       </CircleButton>
     </div>
   );

@@ -1,11 +1,23 @@
 import appModule from '::sass-modules/app.scss';
 import * as React from 'react';
-import { useCallback, useEffect, useReducer, useRef } from 'react';
+import { useCallback, useEffect, useReducer, useRef, Suspense } from 'react';
 import { Route, useHistory } from 'react-router-dom';
-import { ToolBar } from './tool-bar';
+// import { ToolBar } from './tool-bar';
+const ToolBar = React.lazy(() => import('./tool-bar'));
 import { SelectFile } from './menus/select-file';
 import { InfoBar } from './info-bar';
-import { Document } from './document';
+// import { Document } from './document';
+// import { Document } from '::lazy-components/index';
+const Document = React.lazy(() => import('../app/document'));
+// const Document = React.lazy(
+//   () =>
+//     new Promise((resolve, reject) => {
+//       import('../lazy-components/document')
+//         .then(result => resolve(result.default ? result : { default: result }))
+//         .catch(reject);
+//     }),
+// );
+// const Document = React.lazy(() => import('../lazy-components/document'));
 import { appInitialState, appReducer } from './reducer';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { ErrorModal } from '::shared-components/error-modal';
@@ -57,7 +69,9 @@ const App: React.FC<Props> = () => {
       }}
     >
       <ErrorBoundary dispatch={dispatch}>
-        <ToolBar dispatch={dispatch} onResize={onResize} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <ToolBar dispatch={dispatch} onResize={onResize} />
+        </Suspense>
       </ErrorBoundary>
 
       {!state.selectedFile && history.location.pathname === '/' ? (
@@ -66,17 +80,19 @@ const App: React.FC<Props> = () => {
         <Route
           path={`/:file_id?/`}
           render={() => (
-            <Document
-              dispatch={dispatch}
-              onResize={onResize}
-              treeRef={treeRef}
-              showTree={state.showTree}
-              selectedNode={state.selectedNode}
-              recentNodes={state.recentNodes}
-              selectedFile={state.selectedFile}
-              saveDocument={state.saveDocument}
-              reloadDocument={state.reloadDocument}
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Document
+                dispatch={dispatch}
+                onResize={onResize}
+                treeRef={treeRef}
+                showTree={state.showTree}
+                selectedNode={state.selectedNode}
+                recentNodes={state.recentNodes}
+                selectedFile={state.selectedFile}
+                saveDocument={state.saveDocument}
+                reloadDocument={state.reloadDocument}
+              />
+            </Suspense>
           )}
         />
       )}

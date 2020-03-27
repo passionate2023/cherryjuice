@@ -1,6 +1,6 @@
 @import '../../vars/vars';
 @import '../../mixins/breakpoints';
-.dialog__container{
+.dialog__container {
   position: absolute;
   min-width: 100vw;
 }
@@ -20,7 +20,6 @@
     height: 94vh;
     margin: 2vh auto;
   }
-
 }
 
 .dialog__header {
@@ -49,6 +48,9 @@
   opacity: 0.5;
   @include respond-to('md') {
     margin-right: 0px;
+  }
+  img {
+    width: 0.6875em;
   }
 }
 .dialog__header__sub-title {

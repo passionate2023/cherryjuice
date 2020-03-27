@@ -52,8 +52,12 @@ const typeDefs = gql`
     ct_node_meta(file_id: String!, node_id: Int): [Ct_node_meta]
     ct_node_content(file_id: String!, node_id: Int!): [Ct_node_content]
   }
-   type Mutation {
-    ct_node_content(file_id: String!, node_id: Int!,abstract_html: String!): String
-  } 
+  type Mutation {
+    ct_node_content(
+      file_id: String!
+      node_id: Int!
+      abstract_html: String!
+    ): String
+  }
 `;
 export { typeDefs };

@@ -36,7 +36,7 @@ const scanFolder: ({
             .update(file)
             .digest('hex'),
           filePath: lePath,
-		  fileFolder: fullFolderPath
+          fileFolder: fullFolderPath,
         });
       }
     });
@@ -49,4 +49,4 @@ const scanFolder: ({
   return files;
 };
 
-export {scanFolder}
+export { scanFolder };

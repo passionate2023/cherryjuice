@@ -2,8 +2,6 @@ import { modSelectFile } from '::sass-modules/index';
 import * as React from 'react';
 import { useCallback, useRef, useState } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSync } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from 'react-router';
 import { appActions } from '../../reducer';
 import { dateToFormattedString } from '::helpers/time';
@@ -11,6 +9,7 @@ import { QUERY_CT_FILES } from '::graphql/queries';
 import { Ct_File } from '::types/generated';
 import { Dialog } from '::shared-components/material/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
+import { Icon, Icons } from '::shared-components/icon';
 
 const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
   data,
@@ -149,7 +148,7 @@ const SelectFile = ({ dispatch, selectedFile }) => {
       disabled: selected.id === selectedFile || !selected.id,
     },
     {
-      label: <FontAwesomeIcon icon={faSync} color={'dimgray'} />,
+      label: <Icon name={Icons.material.refresh}/>,
       onClick: fetch,
       disabled: false,
     },
