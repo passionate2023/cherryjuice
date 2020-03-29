@@ -24,7 +24,7 @@ const DialogHeader: React.FC<Props> = ({
         className={modDialog.dialog__header__exitButton}
         onClick={onCloseDialog}
       >
-        <Icon name={Icons.material.close} small={true}/>
+        <Icon name={Icons.material.close} small={true} />
       </CircleButton>
     </div>
   );

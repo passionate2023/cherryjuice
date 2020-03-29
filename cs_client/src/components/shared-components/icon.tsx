@@ -13,7 +13,75 @@ const Icons = {
     save: 'save',
     settings: 'settings',
   },
-  cherrytree: {},
+  cherrytree: {
+    cherries: {
+      0: 'cherry_red',
+      1: 'cherry_blue',
+      2: 'cherry_orange',
+      3: 'cherry_cyan',
+      4: 'cherry_orange_dark',
+      5: 'cherry_sherbert',
+      6: 'cherry_yellow',
+      7: 'cherry_green',
+      8: 'cherry_purple',
+      9: 'cherry_black',
+      10: 'cherry_gray',
+      11: 'cherry_gray',
+    },
+    custom_icons: {
+      1: 'circle_green',
+      2: 'circle_yellow',
+      3: 'circle_red',
+      4: 'circle_grey',
+      5: 'add',
+      6: 'remove',
+      7: 'done',
+      8: 'cancel',
+      9: 'edit_delete',
+      10: 'warning',
+      11: 'star',
+      12: 'information',
+      13: 'help_contents',
+      14: 'home',
+      15: 'index',
+      16: 'mail',
+      17: 'html',
+      18: 'notes',
+      19: 'timestamp',
+      20: 'calendar',
+      21: 'terminal',
+      22: 'terminal_red',
+      23: 'python',
+      24: 'java',
+      25: 'node_bullet',
+      26: 'node_no_icon',
+      27: 'cherry_black',
+      28: 'cherry_blue',
+      29: 'cherry_cyan',
+      30: 'cherry_green',
+      31: 'cherry_gray',
+      32: 'cherry_orange',
+      33: 'cherry_orange_dark',
+      34: 'cherry_purple',
+      35: 'cherry_red',
+      36: 'cherry_sherbert',
+      37: 'cherry_yellow',
+      38: 'code',
+      39: 'find',
+      40: 'locked',
+      41: 'unlocked',
+      42: 'people',
+      43: 'urgent',
+      44: 'folder',
+      45: 'leaf',
+      46: 'xml',
+      47: 'c',
+      48: 'cpp',
+    },
+    additionalIcons: {
+      cherries: 'cherries',
+    },
+  },
 };
 
 const getIconCategory = name =>
@@ -29,10 +97,21 @@ const getIconPath = ({
   small?: boolean;
   large?: boolean;
   extraLarge?: boolean;
-}) =>
-  `/icons/${getIconCategory(name)}/${
-    small ? '18' : large ? '36' : extraLarge ? '48' : '24'
-  }/${name}.svg`;
+}) => {
+  const category = getIconCategory(name);
+  const size =
+    category === 'material'
+      ? small
+        ? '18'
+        : large
+        ? '36'
+        : extraLarge
+        ? '48'
+        : '24'
+      : '';
+
+  return `/icons/${category}/${size ? `${size}/` : ''}${name}.svg`;
+};
 
 const Icon = ({
   name,
@@ -41,6 +120,7 @@ const Icon = ({
   extraLarge,
   className,
   onClick,
+  style,
 }: {
   name: string;
   small?: boolean;
@@ -48,12 +128,14 @@ const Icon = ({
   extraLarge?: boolean;
   className?: string;
   onClick?: EventHandler<any>;
+  style?: React.CSSProperties;
 }) => (
   <img
     src={getIconPath({ name, small, large, extraLarge })}
     alt={name}
     {...(className && { className })}
     {...(onClick && { onClick })}
+    {...(style && { style })}
   />
 );
 

@@ -1,11 +1,11 @@
 import nodeMod from '::sass-modules/tree/node.scss';
+import modIcons from '::sass-modules/tree/node.scss';
 import { Ct_Node_Meta } from '::types/generated';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { appActions } from '::app/reducer';
 import { getTreeStateFromLocalStorage } from '::helpers/misc';
-import { Icon as OgIcon } from './icon';
 import { Icon, Icons } from '::shared-components/icon';
 
 type Props = {
@@ -105,7 +105,14 @@ const Node: React.FC<Props> = ({
             name={showChildren ? Icons.material.remove : Icons.material.add}
           />
         }
-        <OgIcon icon_id={+icon_id} depth={depth} />
+        <Icon
+          name={
+            +icon_id
+              ? Icons.cherrytree.custom_icons[icon_id]
+              : Icons.cherrytree.cherries[depth >= 11 ? 11 : depth]
+          }
+          className={modIcons.node__titleCherry}
+        />
         <div
           className={nodeMod.node__title}
           onClick={selectNode}

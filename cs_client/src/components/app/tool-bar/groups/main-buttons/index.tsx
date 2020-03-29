@@ -1,4 +1,3 @@
-import cherries from '::assets/icons/cherries.svg';
 import * as React from 'react';
 import { useCallback } from 'react';
 import { appActions } from '::app/reducer';
@@ -58,7 +57,11 @@ const MainButtons: React.FC<Props> = ({ dispatch, onResize }) => {
         <Icon name={Icons.material.folder} small={true} />
       </ToolbarButton>
       <ToolbarButton onClick={toggleTree}>
-        <img src={cherries} alt="" style={{ width: 22 }} />
+        {/*<img src={cherries} alt="" style={{ width: 22 }} />*/}
+        <Icon
+          name={Icons.cherrytree.additionalIcons.cherries}
+          style={{ width: 22 }}
+        />
       </ToolbarButton>
       <ToolbarButton onClick={saveDocument}>
         <Icon name={Icons.material.save} small={true} />

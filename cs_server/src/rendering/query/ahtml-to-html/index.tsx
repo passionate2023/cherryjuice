@@ -5,7 +5,7 @@ import { Element, stringifyStyles } from './element';
 import { escapeHtml } from '../../../helpers/escape-html';
 
 const aHtmlToHtml = ({ richText }) => {
-  let res: string = '<article></article>';
+  let res = '<article></article>';
   try {
     res = `${richText
       .map(
@@ -31,7 +31,7 @@ const aHtmlToHtml = ({ richText }) => {
                     ? `<img
                         id="${node.other_attributes.id}"
                         class="rich-text__anchor"
-                        src="/icons/anchor.svg"
+                        src="/icons/cherrytree/anchor.svg"
                         alt="icon"
                       />`
                     : node.type === 'png'
@@ -62,6 +62,7 @@ const aHtmlToHtml = ({ richText }) => {
       )
       .join('')}`;
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
   }
   return res;

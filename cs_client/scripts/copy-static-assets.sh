@@ -1,1 +1,1 @@
-mkdir -p dist/icons && cp src/assets/icons/anchor.svg dist/icons
+mkdir -p dist/icons && cp -r src/assets/icons/ dist/

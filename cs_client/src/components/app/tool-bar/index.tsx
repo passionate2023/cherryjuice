@@ -18,4 +18,4 @@ const ToolBar: React.FC<Props> = ({ dispatch, onResize }) => {
 };
 
 // export { ToolBar };
-export default ToolBar
+export default ToolBar;

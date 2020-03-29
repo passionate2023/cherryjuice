@@ -148,7 +148,7 @@ const SelectFile = ({ dispatch, selectedFile }) => {
       disabled: selected.id === selectedFile || !selected.id,
     },
     {
-      label: <Icon name={Icons.material.refresh}/>,
+      label: <Icon name={Icons.material.refresh} />,
       onClick: fetch,
       disabled: false,
     },

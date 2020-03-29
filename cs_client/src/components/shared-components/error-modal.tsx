@@ -27,7 +27,11 @@ const ErrorModal: React.FC<Props> = ({ error, dispatch }) => {
     <>
       <Scrim onClick={dismissError} />
       <div className={modErrorModal.errorModal}>
-        <Icon name={Icons.material.warning} className={`${modErrorModal.errorModal__icon}`} extraLarge={true}/>
+        <Icon
+          name={Icons.material.warning}
+          className={`${modErrorModal.errorModal__icon}`}
+          extraLarge={true}
+        />
         <span className={modErrorModal.errorModal__body}>
           <span className={`${modErrorModal.errorModal__header}`}>
             Something went wrong
