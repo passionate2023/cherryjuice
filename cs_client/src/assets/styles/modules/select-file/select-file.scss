@@ -2,6 +2,7 @@
 .selectFile {
   padding: 10px;
   background-color: $grey-light;
+  min-height: calc(100% - 20px);
 }
 .selectFile__file {
   cursor: pointer;

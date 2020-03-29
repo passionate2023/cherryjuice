@@ -41,4 +41,5 @@ const Settings: React.FC<Props> = ({ dispatch }) => {
   );
 };
 
-export { Settings };
+// export { Settings };
+export default Settings;

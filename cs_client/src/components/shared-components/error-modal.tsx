@@ -2,7 +2,7 @@ import modErrorModal from '::sass-modules/shared-components/error-modal.scss';
 import * as React from 'react';
 import { useCallback, useEffect, useRef } from 'react';
 import { appActions } from '::app/reducer';
-import { Scrim } from '::shared-components/scrim';
+import { Scrim } from '::shared-components/material/scrim';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { Icon, Icons } from '::shared-components/icon';
@@ -51,4 +51,5 @@ const ErrorModal: React.FC<Props> = ({ error, dispatch }) => {
     </>
   );
 };
-export { ErrorModal };
+// export { ErrorModal };
+export default ErrorModal;

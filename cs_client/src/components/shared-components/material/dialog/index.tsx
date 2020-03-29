@@ -4,7 +4,7 @@ import { EventHandler } from 'react';
 import { DialogFooter } from '::shared-components/material/dialog/dialog-footer';
 import { DialogHeader } from '::shared-components/material/dialog/dialog-header';
 import { DialogBody } from '::shared-components/material/dialog/dialog-body';
-import { Scrim } from '::shared-components/scrim';
+import { Scrim } from '::shared-components/material/scrim';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 
 const Dialog: React.FC<{

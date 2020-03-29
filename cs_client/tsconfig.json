@@ -13,9 +13,10 @@
       "::app/*": ["./src/components/app/*"],
       "::lazy-components/*": ["./src/components/lazy-components/*"]
     },
-	   "target": "esnext",
-        "sourceMap": true,
-        "module": "es6"
-		,"optionalChaining":true
+    "target": "esnext",
+    "sourceMap": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node"
   }
 }

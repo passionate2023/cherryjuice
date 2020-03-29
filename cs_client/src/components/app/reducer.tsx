@@ -8,7 +8,10 @@ const initialState = {
     ts_creation: '',
     ts_lastsave: '',
   },
-  selectedFile: localStorage.getItem('selectedFile'),
+  selectedFile:
+    [localStorage.getItem('selectedFile')].filter(
+      value => Boolean(value) && value !== 'null',
+    )[0] || '',
   showFileSelect:
     !localStorage.getItem('selectedFile') && location.pathname === '/',
   recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}

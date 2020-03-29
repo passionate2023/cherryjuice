@@ -23,4 +23,5 @@ const InfoBar: React.FC<Props> = ({ node }) => {
   );
 };
 
-export { InfoBar };
+// export { InfoBar };
+export default InfoBar;
