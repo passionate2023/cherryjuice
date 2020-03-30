@@ -33,12 +33,14 @@ const Body = ({
                 dispatch={dispatch}
                 onResize={onResize}
                 treeRef={treeRef}
-                showTree={state.showTree}
-                selectedNode={state.selectedNode}
-                recentNodes={state.recentNodes}
-                selectedFile={state.selectedFile}
-                saveDocument={state.saveDocument}
-                reloadDocument={state.reloadDocument}
+                state={state}
+                // showTree={state.showTree}
+                // selectedNode={state.selectedNode}
+                // recentNodes={state.recentNodes}
+                // selectedFile={state.selectedFile}
+                // saveDocument={state.saveDocument}
+                // reloadDocument={state.reloadDocument}
+                // contentEditable={state.contentEditable}
               />
             </Suspense>
           )}

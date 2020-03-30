@@ -1,0 +1,2 @@
+![build and deploy next](https://github.com/ycnmhd/cherryscript/workflows/build%20and%20deploy%20next/badge.svg)
+![build and deploy master](https://github.com/ycnmhd/cherryscript/workflows/build%20and%20deploy%20master/badge.svg)

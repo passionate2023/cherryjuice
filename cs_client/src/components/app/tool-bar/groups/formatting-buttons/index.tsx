@@ -1,10 +1,10 @@
-import modToolbar from '::sass-modules/tool-bar.scss';
 import * as React from 'react';
 import { ToolbarButton } from '::app/tool-bar/tool-bar-button';
 import { execK } from '::helpers/execK';
 import { ColorInput } from '::app/tool-bar/groups/formatting-buttons/color-input';
 import { commands } from '::helpers/hotkeys/commands';
 import { TDispatchAppReducer } from '::types/react';
+import { modToolbar } from '../../../../../assets/styles/modules';
 
 type Props = {
   dispatch: TDispatchAppReducer;
@@ -12,7 +12,11 @@ type Props = {
 
 const FormattingButtons: React.FC<Props> = ({ dispatch }) => {
   return (
-    <>
+    <div
+      className={
+        modToolbar.toolBar__groupFormatting + ' ' + modToolbar.toolBar__group
+      }
+    >
       {commands.colors.map(({ label, cssProperty, inputId }) => (
         <ColorInput
           key={label}
@@ -47,7 +51,7 @@ const FormattingButtons: React.FC<Props> = ({ dispatch }) => {
           </ToolbarButton>
         ),
       )}
-    </>
+    </div>
   );
 };
 

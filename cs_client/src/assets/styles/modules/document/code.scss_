@@ -1,5 +1,0 @@
-.code{
-  border: solid 1px bisque;
-  background-color: darkslateblue;
-  overflow: auto;
-}

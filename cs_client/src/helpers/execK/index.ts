@@ -26,9 +26,10 @@ const execK = ({
   testSample?: any;
   dispatch?: TDispatchAppReducer;
 }) => {
-  const editor = document.querySelector('#rich-text ');
+  const editor: HTMLDivElement = document.querySelector('#rich-text ');
   const ogHtml = editor.innerHTML;
   try {
+    if (editor.contentEditable !== 'true') throw Error('Editing is disabled');
     let { startElement, endElement, startOffset, endOffset } =
       testSample || getSelection({ selectAdjacentWordIfNoneIsSelected: true });
     const {

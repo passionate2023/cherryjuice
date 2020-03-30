@@ -16,6 +16,7 @@ type Props = {
   file_id: string;
   saveDocument: number;
   reloadDocument: number;
+  contentEditable: boolean;
   dispatch: (action: { type: string; value?: any }) => void;
 };
 
@@ -24,6 +25,7 @@ const RichText: React.FC<Props> = ({
   saveDocument,
   reloadDocument,
   dispatch,
+  contentEditable,
 }) => {
   const richTextRef = useRef<HTMLDivElement>();
   const match = useRouteMatch();
@@ -91,7 +93,7 @@ const RichText: React.FC<Props> = ({
       className={rtModule.richText}
       {...(html
         ? {
-            contentEditable: true,
+            contentEditable: contentEditable,
             dangerouslySetInnerHTML: { __html: html },
           }
         : { children: <SpinnerCircle /> })}

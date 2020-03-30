@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { appActions } from '::app/reducer';
 import { ToolbarButton } from '::app/tool-bar/tool-bar-button';
 import { Icon, Icons } from '::shared-components/icon';
+import { modToolbar } from '../../../../../assets/styles/modules';
 
 type Props = {
   dispatch: (action: { type: string; value?: any }) => void;
@@ -49,7 +50,7 @@ const MainButtons: React.FC<Props> = ({ dispatch, onResize }) => {
     toggleSettings,
   } = useMainCallbacks({ dispatch, onResize });
   return (
-    <>
+    <div className={modToolbar.toolBar__group}>
       <ToolbarButton onClick={toggleSettings}>
         <Icon name={Icons.material.settings} small={true} />
       </ToolbarButton>
@@ -67,9 +68,9 @@ const MainButtons: React.FC<Props> = ({ dispatch, onResize }) => {
         <Icon name={Icons.material.save} small={true} />
       </ToolbarButton>
       <ToolbarButton onClick={reloadDocument}>
-        <Icon name={Icons.material.refresh} />
+        <Icon name={Icons.material.refresh} small={true} />
       </ToolbarButton>
-    </>
+    </div>
   );
 };
 

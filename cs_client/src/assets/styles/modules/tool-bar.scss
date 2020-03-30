@@ -1,25 +1,86 @@
 @import '../vars/vars';
+@import '../mixins/breakpoints';
 .tool-bar {
+  // size
+  max-width: var(--vw);
+  min-height: $tool-bar-height;
+  @include respond-to('md') {
+    min-height: $tool-bar-height-md;
+  }
+  // position
   grid-area: tool-bar;
-  background-color: floralwhite;
-  border-bottom: 2px solid white;
-  position: sticky;
-  max-height: $tool-bar-height;
+  // children
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  // style
+  background-color: $toolbar-bg-light;
   user-select: none;
+}
+.tool-bar__group {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  height: $tool-bar-height;
+  @include respond-to($md-up) {
+    height: $tool-bar-height-md;
+  }
+}
+.tool-bar__group--mobile-buttons {
+  @include respond-to($md-up) {
+    display: none;
+  }
+}
+.tool-bar__group--formatting {
+  @include respond-to($md-down) {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  // size
+  @include respond-to($md-down) {
+    height: $tool-bar-height * 2;
+    min-width: calc(100vw - 20px);
+  }
+  // position
+  @include respond-to($md-down) {
+    left: 10px;
+    right: 10px;
+    position: absolute;
+    top: $tool-bar-height + 10px;
+    z-index: 5;
+  }
+  // children
+  @include respond-to($md-down) {
+    padding: 3px 10px;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: center;
+  }
+  // style
+  @include respond-to($md-down) {
+    border-radius: 5px;
+    box-shadow: $box-shadow1;
+    opacity: 0.95;
+    background-color: $toolbar-bg-light;
+  }
 }
 .tool-bar__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 35px;
-  height: 100%;
+  width: $tool-bar-height;
+  height: $tool-bar-height;
+  @include respond-to($md-up) {
+    height: $tool-bar-height-md;
+    width: $tool-bar-height-md;
+  }
   cursor: pointer;
 
   &:hover {
     background-color: lightgrey;
   }
+  transition: $bg-transition-1;
 }
 .tool-bar__icon--enabled {
   background-color: lightgrey;

@@ -10,30 +10,32 @@ import { LinearProgress } from '::shared-components/material/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { appActions } from '::app/reducer';
 import { RichText } from '::app/document/rich-text';
+import { TState } from '../reducer';
+import { TDispatchAppReducer } from '../../../../types/react';
 
 type Props = {
-  showTree: boolean;
+  // showTree: boolean;
   treeRef: Ref<React.FC>;
-  dispatch: (action: { type: string; value?: any }) => void;
+  dispatch: TDispatchAppReducer;
   onResize: () => void;
-  recentNodes: any;
-  selectedNode: any;
-  selectedFile: string;
-  saveDocument: number;
-  reloadDocument: number;
+  // recentNodes: any;
+  // selectedNode: any;
+  // selectedFile: string;
+  // saveDocument: number;
+  // reloadDocument: number;
+  // contentEditable: boolean;
+  state: TState;
 };
 
-const Document: React.FC<Props> = ({
-  showTree,
-  treeRef,
-  dispatch,
-  onResize,
-  selectedNode,
-  recentNodes,
-  selectedFile,
-  saveDocument,
-  reloadDocument,
-}) => {
+const Document: React.FC<Props> = ({ treeRef, dispatch, onResize, state }) => {
+  const {
+    showTree,
+    saveDocument,
+    reloadDocument,
+    selectedFile,
+    contentEditable,
+    isOnMobile,
+  } = state;
   const history = useHistory();
   const match = useRouteMatch();
   // @ts-ignore
@@ -63,12 +65,7 @@ const Document: React.FC<Props> = ({
       <LinearProgress loading={loading} />
       {nodes && (
         <Fragment>
-          <RecentNodes
-            recentNodes={recentNodes}
-            selectedNode={selectedNode}
-            dispatch={dispatch}
-            file_id={file_id}
-          />
+          {<RecentNodes state={state} dispatch={dispatch} file_id={file_id} />}
           {showTree && (
             <ErrorBoundary dispatch={dispatch}>
               <Tree
@@ -92,6 +89,7 @@ const Document: React.FC<Props> = ({
                     saveDocument={saveDocument}
                     reloadDocument={reloadDocument}
                     dispatch={dispatch}
+                    contentEditable={contentEditable || !isOnMobile}
                   />
                 </ErrorBoundary>
               );

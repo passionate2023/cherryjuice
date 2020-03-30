@@ -1,4 +1,4 @@
 export type TDispatchAppReducer = (action: {
-  type: string;
+  type: number;
   value?: any;
 }) => void;

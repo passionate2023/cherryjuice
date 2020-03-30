@@ -1,15 +1,19 @@
 // https://css-tricks.com/snippets/sass/mixin-manage-breakpoints/
+$md-up: 'md';
+$md-down: 'md-down';
 $breakpoints: (
-  //'small':  767px,
-  //'medium': 992px,
-  //'large':  1200px
-    'md': 850px
+  'md': (
+    min-width: 850px,
+  ),
+  'md-down': (
+    max-width: 850px,
+  ),
 ) !default;
 @mixin respond-to($breakpoint) {
   // If the key exists in the map
   @if map-has-key($breakpoints, $breakpoint) {
     // Prints a media query based on the value
-    @media (min-width: map-get($breakpoints, $breakpoint)) {
+    @media #{inspect(map-get($breakpoints, $breakpoint))} {
       @content;
     }
   }

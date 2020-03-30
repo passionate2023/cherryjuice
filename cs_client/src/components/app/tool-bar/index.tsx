@@ -1,21 +1,31 @@
-import modToolbar from '::sass-modules/tool-bar.scss';
 import * as React from 'react';
 import { MainButtons } from '::app/tool-bar/groups/main-buttons';
 import { FormattingButtons } from '::app/tool-bar/groups/formatting-buttons';
+import { modToolbar } from '::sass-modules/index.ts';
+import { MobileButtons } from './groups/mobile-buttons';
 
 type Props = {
   dispatch: (action: { type: string; value?: any }) => void;
   onResize: () => void;
+  showFormattingButtons: boolean;
+  isOnMobile: boolean;
 };
 
-const ToolBar: React.FC<Props> = ({ dispatch, onResize }) => {
+const ToolBar: React.FC<Props> = ({
+  dispatch,
+  onResize,
+  showFormattingButtons,
+  isOnMobile,
+}) => {
   return (
     <div className={modToolbar.toolBar}>
       <MainButtons dispatch={dispatch} onResize={onResize} />
-      <FormattingButtons dispatch={dispatch} />
+      <MobileButtons dispatch={dispatch} />
+      {(!isOnMobile || showFormattingButtons) && (
+        <FormattingButtons dispatch={dispatch} />
+      )}
     </div>
   );
 };
 
-// export { ToolBar };
 export default ToolBar;

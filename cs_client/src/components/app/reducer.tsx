@@ -19,20 +19,55 @@ const initialState = {
   reloadDocument: 0,
   error: undefined,
   showSettings: false,
+  showFormattingButtons: false,
+  showRecentNodes: false,
+  contentEditable: false,
+  isOnMobile: false,
+  showInfoBar: false,
 };
-export type TState = typeof initialState;
-const actions = {
-  TOGGLE_TREE: 'toggle-tree',
-  TOGGLE_FILE_SELECT: 'show-select-file',
-  RESIZE_TREE: 'resize-tree',
-  SELECT_NODE: 'select-node',
-  SELECT_FILE: 'select-file',
-  SAVE_DOCUMENT: 'save-document',
-  RELOAD_DOCUMENT: 'reload-document',
-  SET_ERROR: 'set-error',
-  TOGGLE_SETTINGS: 'TOGGLE_SETTINGS',
+export type TState = typeof initialState & {
+  recentNodes: { id: string; name: string; style: any }[];
+  selectedNode: { id: string; name: string; style: any };
 };
-
+enum actions {
+  TOGGLE_TREE,
+  TOGGLE_FILE_SELECT,
+  TOGGLE_SETTINGS,
+  TOGGLE_FORMATTING_BUTTONS,
+  TOGGLE_CONTENT_EDITABLE,
+  TOGGLE_RECENT_NODES_BAR,
+  TOGGLE_INFO_BAR,
+  RESIZE_TREE,
+  SELECT_NODE,
+  SELECT_FILE,
+  SAVE_DOCUMENT,
+  RELOAD_DOCUMENT,
+  SET_ERROR,
+  SET_IS_ON_MOBILE,
+}
+const createActionCreators = () => {
+  const state = {
+    dispatch: undefined,
+  };
+  return {
+    setDispatch: newDispatch => (state.dispatch = newDispatch),
+    toggleFormattingButtons: (): void => {
+      state.dispatch({ type: actions.TOGGLE_FORMATTING_BUTTONS });
+    },
+    toggleContentEditable: (): void => {
+      state.dispatch({ type: actions.TOGGLE_CONTENT_EDITABLE });
+    },
+    toggleRecentBar: (): void => {
+      state.dispatch({ type: actions.TOGGLE_RECENT_NODES_BAR });
+    },
+    toggleInfoBar: (): void => {
+      state.dispatch({ type: actions.TOGGLE_INFO_BAR });
+    },
+    setIsOnMobile: (isOnMobile: boolean): void => {
+      state.dispatch({ type: actions.SET_IS_ON_MOBILE, value: isOnMobile });
+    },
+  };
+};
 const reducer = (state: TState, action) => {
   switch (action.type) {
     case actions.TOGGLE_TREE:
@@ -88,13 +123,32 @@ const reducer = (state: TState, action) => {
       };
     case actions.TOGGLE_SETTINGS:
       return { ...state, showSettings: !state.showSettings };
+    case actions.TOGGLE_RECENT_NODES_BAR:
+      return {
+        ...state,
+        showRecentNodes: !state.showRecentNodes,
+        showFormattingButtons: false,
+      };
+    case actions.TOGGLE_FORMATTING_BUTTONS:
+      return {
+        ...state,
+        showFormattingButtons: !state.showFormattingButtons,
+        showRecentNodes: false,
+      };
+    case actions.TOGGLE_CONTENT_EDITABLE:
+      return { ...state, contentEditable: !state.contentEditable };
+    case actions.TOGGLE_INFO_BAR:
+      return { ...state, showInfoBar: !state.showInfoBar };
+    case actions.SET_IS_ON_MOBILE:
+      return { ...state, isOnMobile: action.value };
     default:
       throw new Error('action not supported');
   }
 };
-
+const appActionCreators = createActionCreators();
 export {
   initialState as appInitialState,
   reducer as appReducer,
   actions as appActions,
+  appActionCreators,
 };

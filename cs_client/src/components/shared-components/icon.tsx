@@ -12,6 +12,10 @@ const Icons = {
     folder: 'folder',
     save: 'save',
     settings: 'settings',
+    format: 'format',
+    edit: 'edit',
+    history: 'history',
+    info: 'info',
   },
   cherrytree: {
     cherries: {

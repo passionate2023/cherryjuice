@@ -1,21 +1,84 @@
-.recentNodes {
+@import '../../mixins/breakpoints';
+@import '../../vars/vars';
+$node-height: calc(#{$title-and-recent-bar-height-md} - 5px);
+$node-width: 100px;
+$node-left-margin: calc(
+  calc(#{$title-and-recent-bar-height-md} - #{$node-height} + 1px) / 2
+);
+.title-and-recent-nodes {
+  // position
   grid-area: recent-nodes;
+  //display
+  display: flex;
+  // children
+  align-items: center;
+  padding: 2px;
+  // style
   background-color: black;
   color: white;
+}
+$recent-nodes-width: $node-width * 2+ 10px;
+.title-and-recent-nodes__recent-nodes__place-holder {
+  align-self: center;
+  text-align: center;
+  width: 100%;
+  margin-top: -6px;
+}
+.title-and-recent-nodes__recent-nodes {
+  // size
+  display: flex;
+  //flex: 4;
+  @include respond-to($md-down) {
+    width: $recent-nodes-width;
+    max-width: 80vw;
+    left: calc(calc(100vw - #{$recent-nodes-width}) / 2);
+    z-index: 2;
+    top: $tool-bar-height + 10px;
+    height: $title-and-recent-bar-height-md * 2;
+    flex-wrap: wrap;
+  }
+  // children
+  align-items: center;
+  @include respond-to($md-down) {
+    align-items: flex-start;
+    padding-top: 6px;
+  }
+  // position
+  @include respond-to($md-down) {
+    position: absolute;
+  }
+  // style
+  @include respond-to($md-down) {
+    background-color: $toolbar-bg-light;
+    color: black;
+    border-radius: 5px;
+    box-shadow: $box-shadow1;
+    opacity: 0.95;
+  }
+}
+.title-and-recent-nodes__recent-nodes__node {
+  // size
+  min-width: $node-width;
+  max-width: $node-width;
+  height: $node-height;
+  // position
+  //margin-top: 2px;
+  margin-left: $node-left-margin;
+  // style
+  font-size: 12px;
+  background-color: $toolbar-bg-light;
+  border: none;
+  @include respond-to($md-down) {
+    box-shadow: $box-shadow2;
+  }
+}
+.title-and-recent-nodes__title {
+  flex: 4;
+  overflow: auto;
+  height: 100%;
+  padding: 3px;
   display: flex;
   align-items: center;
-}
-.recentNodes__buttons-container {
-  height: 100%;
-  flex: 4;
-}
-.recentNodes__button {
-  min-width: 100px;
-  height: 100%;
-  margin-top: 2px;
-  margin-left: 2px;
-  font-size: 12px;
-}
-.recentNodes__title {
-  flex: 6;
+  justify-content: center;
+  text-align: center;
 }

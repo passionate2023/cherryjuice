@@ -95,7 +95,8 @@
   },
   "sass": {
     "includePaths": [
-      "./node_modules/"
+      "./node_modules/",
+      "./src/assets/styles"
     ]
   },
   "config": {

@@ -3,7 +3,7 @@ import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import * as React from 'react';
 import { useCallback, useEffect, useReducer, useRef, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
-import { appInitialState, appReducer } from './reducer';
+import { appActionCreators, appInitialState, appReducer } from './reducer';
 
 // eager
 import { ErrorBoundary } from '::shared-components/error-boundary';
@@ -26,15 +26,35 @@ const useSaveStateToLocalStorage = state => {
     });
   }, [state]);
 };
-const useSetCssVariables = () => {
+const updateBreakpointState = ({ breakpoint, callback }) => {
+  let previousState = undefined;
+  return () => {
+    const newState = window.innerWidth <= breakpoint;
+    if (previousState != newState) {
+      previousState = newState;
+      callback(newState);
+    }
+  };
+};
+const useOnWindowResize = (
+  callbacks = [
+    updateBreakpointState({
+      breakpoint: 850,
+      callback: appActionCreators.setIsOnMobile,
+    }),
+    cssVariables.setVH,
+    cssVariables.setVW,
+  ],
+) => {
   useEffect(() => {
-    cssVariables.setVH();
-    window.addEventListener('resize', () => {
-      cssVariables.setVH();
-    });
+    const handle = () => {
+      callbacks.forEach(callback => callback());
+    };
+    handle();
+    window.addEventListener('resize', handle);
+    return () => window.removeEventListener('resize', handle);
   }, []);
 };
-
 const useHandleRouting = state => {
   const history = useHistory();
   if (history.location.hash) {
@@ -47,7 +67,9 @@ const useHandleRouting = state => {
 
 const App: React.FC<Props> = () => {
   const [state, dispatch] = useReducer(appReducer, appInitialState);
-
+  useEffect(() => {
+    appActionCreators.setDispatch(dispatch);
+  }, [dispatch]);
   const appRef = useRef<HTMLDivElement>();
   const treeRef = useRef<HTMLDivElement & { size: { width: number } }>();
 
@@ -57,7 +79,7 @@ const App: React.FC<Props> = () => {
         treeRef.current.size.width}px 1fr`;
   }, []);
 
-  useSetCssVariables();
+  useOnWindowResize();
   useSaveStateToLocalStorage(state);
   useHandleRouting(state);
   return (
@@ -74,7 +96,12 @@ const App: React.FC<Props> = () => {
     >
       <ErrorBoundary dispatch={dispatch}>
         <Suspense fallback={<Void />}>
-          <ToolBar dispatch={dispatch} onResize={onResize} />
+          <ToolBar
+            showFormattingButtons={state.showFormattingButtons}
+            isOnMobile={state.isOnMobile}
+            dispatch={dispatch}
+            onResize={onResize}
+          />
         </Suspense>
       </ErrorBoundary>
 
@@ -87,7 +114,7 @@ const App: React.FC<Props> = () => {
         />
       </Suspense>
       <Suspense fallback={<Void />}>
-        <InfoBar node={state.selectedNode} />
+        <InfoBar state={state} node={state.selectedNode} />
       </Suspense>
       {state.showSettings && (
         <Suspense fallback={<Void />}>
