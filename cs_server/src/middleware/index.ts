@@ -8,9 +8,14 @@ const addSTSHeader = (req, res, next) => {
   );
   return next();
 };
-
+const redirectToHTTPS = (req, res, next) => {
+  if (req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect(301, ['https://', req.get('Host'), req.url].join(''));
+  }
+  return next();
+};
 const ignoreClientSideRouting = express.Router().get('*', (req, res) => {
-  res.redirect('/');
+  res.redirect('/#' + req.originalUrl.substr(1));
 });
 
 const sendGzipezdJavascript = express
@@ -24,4 +29,9 @@ const sendGzipezdJavascript = express
     next();
   });
 
-export { addSTSHeader, ignoreClientSideRouting, sendGzipezdJavascript };
+export {
+  addSTSHeader,
+  ignoreClientSideRouting,
+  sendGzipezdJavascript,
+  redirectToHTTPS,
+};

@@ -39,7 +39,7 @@ jobs:
     - name: chmod scripts
       run: |
         chmod +x cs_client/scripts/patch-postcss-camel-case/copy.sh
-        chmod +x cs_client/scripts/copy-static-assets.sh
+        chmod +x cs_client/scripts/cp-assets.sh
 
     - name: install client dependencies
       run: cd cs_client && yarn install --ignore-optional && yarn add jest ts-jest

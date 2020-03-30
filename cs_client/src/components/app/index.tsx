@@ -17,36 +17,49 @@ import { InfoBar } from '::lazy-components/index';
 
 type Props = {};
 
-const App: React.FC<Props> = () => {
-  const history = useHistory();
-  const [state, dispatch] = useReducer(appReducer, appInitialState);
-
-  const appRef = useRef();
-  const treeRef = useRef();
-
-  const onResize = useCallback(() => {
-    // @ts-ignore
-    appRef.current.style.gridTemplateColumns = `${treeRef.current &&
-      // @ts-ignore
-      treeRef.current.size.width}px 1fr`;
-  }, []);
-
+const useSaveStateToLocalStorage = state => {
   useEffect(() => {
     Object.entries(state).forEach(([key, value]) => {
-      let toBeWritten =
-        typeof value === 'object' ? JSON.stringify(value) : value;
+      const toBeWritten =
+        typeof value === 'object' ? JSON.stringify(value) : (value as string);
       if (value !== undefined) localStorage.setItem(key, toBeWritten);
     });
   }, [state]);
-  if (state.selectedFile && history.location.pathname === '/')
-    history.push('/' + state.selectedFile);
-
+};
+const useSetCssVariables = () => {
   useEffect(() => {
     cssVariables.setVH();
     window.addEventListener('resize', () => {
       cssVariables.setVH();
     });
   }, []);
+};
+
+const useHandleRouting = state => {
+  const history = useHistory();
+  if (history.location.hash) {
+    history.push('/' + history.location.hash.substr(1));
+  } else if (state.selectedFile) {
+    if (history.location.pathname === '/')
+      history.push('/' + state.selectedFile);
+  }
+};
+
+const App: React.FC<Props> = () => {
+  const [state, dispatch] = useReducer(appReducer, appInitialState);
+
+  const appRef = useRef<HTMLDivElement>();
+  const treeRef = useRef<HTMLDivElement & { size: { width: number } }>();
+
+  const onResize = useCallback(() => {
+    if (appRef.current && treeRef.current)
+      appRef.current.style.gridTemplateColumns = `${treeRef.current &&
+        treeRef.current.size.width}px 1fr`;
+  }, []);
+
+  useSetCssVariables();
+  useSaveStateToLocalStorage(state);
+  useHandleRouting(state);
   return (
     <div
       className={appModule.app}

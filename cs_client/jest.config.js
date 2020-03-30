@@ -1,6 +1,6 @@
 /*eslint @typescript-eslint/no-var-requires:0*/
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
-const { compilerOptions } = require('./tsconfig');
+const tsconfig = require('./tsconfig');
 module.exports = {
   roots: ['<rootDir>/src'],
   preset: 'ts-jest',
@@ -12,9 +12,14 @@ module.exports = {
   globals: {
     'ts-jest': {
       diagnostics: false,
+      tsConfig: {
+        ...tsconfig.compilerOptions,
+        target: 'es6',
+      },
+      babelConfig: false,
     },
   },
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
     prefix: '<rootDir>/',
   }),
   testPathIgnorePatterns: ['/node_modules/', '/__data__/', '__helpers__'],
