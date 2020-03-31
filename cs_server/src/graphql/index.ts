@@ -36,7 +36,8 @@ const server = new ApolloServer({
   context: {
     pngThumbnailOptions: { percentage: 5, responseType: 'base64' },
     files: scanFolder({
-      folders: ( process.env.ctbFolders|| '' ).split(' '),
+      folders: (process.env.ctbFolders || '').split(' '),
+      userID: 'user0',
     }),
   },
 });

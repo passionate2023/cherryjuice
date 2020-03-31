@@ -2,7 +2,7 @@ import rtModule from '::sass-modules/document/rich-text.scss';
 import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import { useRouteMatch } from 'react-router';
-import {  useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { QUERY_CT_NODE_CONTENT } from '::graphql/queries';
 import { usePng } from '::hooks/use-png';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
