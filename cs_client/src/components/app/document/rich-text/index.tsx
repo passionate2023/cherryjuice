@@ -2,7 +2,7 @@ import rtModule from '::sass-modules/document/rich-text.scss';
 import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import { useRouteMatch } from 'react-router';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import {  useMutation } from '@apollo/react-hooks';
 import { QUERY_CT_NODE_CONTENT } from '::graphql/queries';
 import { usePng } from '::hooks/use-png';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
@@ -11,6 +11,7 @@ import { getAHtml__legacy } from '::helpers/html-to-ctb';
 import { setupClipboard } from '::helpers/clipboard';
 import { setupKeyboardEvents } from '::helpers/typing';
 import { setupFormattingHotKeys } from '::helpers/hotkeys';
+import { useReloadQuery } from '../../../../hooks/use-reload-query';
 
 type Props = {
   file_id: string;
@@ -31,15 +32,17 @@ const RichText: React.FC<Props> = ({
   const match = useRouteMatch();
   // @ts-ignore
   const node_id = Number(match.params?.node_id);
-  const [fetch, { data }] = useLazyQuery(QUERY_CT_NODE_CONTENT.html, {
-    variables: { file_id, node_id: node_id },
-    fetchPolicy: 'network-only',
-  });
-  const firstFetchRef = useRef(true);
-  if (firstFetchRef.current) {
-    firstFetchRef.current = false;
-    fetch();
-  }
+  const toolbarQueuesRef = useRef({});
+  const { data } = useReloadQuery(
+    {
+      reloadRequestID: reloadDocument,
+    },
+    {
+      query: QUERY_CT_NODE_CONTENT.html,
+      queryVariables: { file_id, node_id: node_id },
+    },
+  );
+
   let html;
   if (data && data.ct_node_content[0].node_id === node_id) {
     html = data.ct_node_content[0].html;
@@ -60,7 +63,7 @@ const RichText: React.FC<Props> = ({
     }
   }
   const [mutate] = useMutation(MUTATE_CT_NODE_CONTENT.html);
-  const toolbarQueuesRef = useRef({});
+
   if (saveDocument && !toolbarQueuesRef.current[saveDocument]) {
     toolbarQueuesRef.current[saveDocument] = true;
     const containers = Array.from(
@@ -76,16 +79,13 @@ const RichText: React.FC<Props> = ({
         },
       });
   }
-  if (reloadDocument && !toolbarQueuesRef.current[reloadDocument]) {
-    toolbarQueuesRef.current[reloadDocument] = true;
-    fetch();
-  }
 
   useEffect(() => {
     setupClipboard({ dispatch });
     setupKeyboardEvents({ dispatch });
     setupFormattingHotKeys({ dispatch });
   }, []);
+
   return (
     <div
       id={'rich-text'}

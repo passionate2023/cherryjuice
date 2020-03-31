@@ -69,7 +69,7 @@ const Node: React.FC<Props> = ({
   useEffect(() => {
     if (location.pathname === nodePath) {
       // @ts-ignore
-      // componentRef?.current?.scrollIntoView();
+      componentRef?.current?.scrollIntoView();
       dispatch({
         type: appActions.SELECT_NODE,
         value: {

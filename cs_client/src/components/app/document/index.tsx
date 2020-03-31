@@ -3,7 +3,6 @@ import { Fragment, Ref, useMemo } from 'react';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Tree } from './tree';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
 import { QUERY_CT_NODE_META } from '::graphql/queries';
 import { Ct_Node_Meta } from '::types/generated';
 import { LinearProgress } from '::shared-components/material/linear-progress';
@@ -12,6 +11,7 @@ import { appActions } from '::app/reducer';
 import { RichText } from '::app/document/rich-text';
 import { TState } from '../reducer';
 import { TDispatchAppReducer } from '../../../../types/react';
+import { useReloadQuery } from '../../../hooks/use-reload-query';
 
 type Props = {
   // showTree: boolean;
@@ -40,10 +40,18 @@ const Document: React.FC<Props> = ({ treeRef, dispatch, onResize, state }) => {
   const match = useRouteMatch();
   // @ts-ignore
   const { file_id } = match.params;
-  const { loading, error, data } = useQuery(QUERY_CT_NODE_META, {
-    variables: { file_id: file_id || '' },
-  });
-
+  // const { loading, error, data } = useQuery(QUERY_CT_NODE_META, {
+  //   variables: { file_id: file_id || '' },
+  // });
+  const { data, error, loading } = useReloadQuery(
+    {
+      reloadRequestID: reloadDocument,
+    },
+    {
+      query: QUERY_CT_NODE_META,
+      queryVariables: { file_id: file_id || '' },
+    },
+  );
   const nodes: Map<number, Ct_Node_Meta> = useMemo(() => {
     if (data && data.ct_node_meta) {
       return new Map(data.ct_node_meta.map(node => [node.node_id, node]));
