@@ -7,6 +7,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 import { appActions } from '::app/reducer';
 import { getTreeStateFromLocalStorage } from '::helpers/misc';
 import { Icon, Icons } from '::shared-components/icon';
+import { modToolbar } from '../../../../../assets/styles/modules';
 
 type Props = {
   node_id: number;
@@ -70,6 +71,8 @@ const Node: React.FC<Props> = ({
     if (location.pathname === nodePath) {
       // @ts-ignore
       componentRef?.current?.scrollIntoView();
+      const toolbar = document.querySelector('.' + modToolbar.toolBar);
+      toolbar.scrollIntoView();
       dispatch({
         type: appActions.SELECT_NODE,
         value: {

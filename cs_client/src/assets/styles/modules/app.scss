@@ -1,5 +1,6 @@
 @import '../mixins/breakpoints';
 @import '../vars/vars';
+
 .app {
   // size
   width: var(--vw);
@@ -13,9 +14,11 @@
     'info-bar info-bar';
   grid-template-columns: 250px 1fr;
   grid-template-rows: $tool-bar-height $title-and-recent-bar-height 1fr $info-bar-height;
+
   @include respond-to('md') {
     grid-template-rows: $tool-bar-height-md $title-and-recent-bar-height-md 1fr $info-bar-height-md;
   }
+
   overflow: hidden;
   // style
   color: white;
