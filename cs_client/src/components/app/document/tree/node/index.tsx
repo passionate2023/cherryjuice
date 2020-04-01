@@ -61,7 +61,7 @@ const Node: React.FC<Props> = ({
       },
     });
     history.push(nodePath);
-  }, []);
+  }, [nodePath]);
   const toggleChildren = useCallback(() => {
     setShowChildren(!showChildren);
   }, [showChildren]);

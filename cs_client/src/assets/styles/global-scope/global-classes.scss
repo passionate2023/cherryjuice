@@ -18,10 +18,6 @@
     height: 16px;
   }
 }
-.rich-text__link {
-  cursor: pointer;
-}
-
 .rich-text {
   grid-area: rich-text;
   //border: red 2px solid;
@@ -39,15 +35,16 @@
   display: inline;
 }
 .rich-text__link {
+  cursor: pointer !important;
   text-decoration: none;
-  color: #0089ff;
+  color: #0089ff !important;
 }
 .rich-text__link--file,
 .rich-text__link--folder {
   color: grey;
 }
 .rich-text__link--node {
-  color: green;
+  color: green !important;
 }
 .rich-text__line {
   min-height: 27px;

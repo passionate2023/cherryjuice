@@ -1,4 +1,4 @@
-const path = require('path');
+import path from 'path';
 const preferences = { code: { 'background-color': '#2B2B2B' } };
 
 const utils = {
@@ -6,8 +6,10 @@ const utils = {
   parseLink: c => {
     let attributes = { href: '', target: '_blank', type: '' };
     if (c.startsWith('node')) {
-      const [, id, anchor] = /node (\d+) (.+)/.exec(c);
-      attributes.href = `node-${id}#${encodeURIComponent(anchor)}`;
+      const [, id, anchor] = /node (\d+) *(.+)?/.exec(c);
+      attributes.href = `node-${id}${
+        anchor ? `#${encodeURIComponent(anchor)}` : ''
+      }`;
       attributes.type = 'node';
     } else if (c.startsWith('webs')) {
       const [, url] = /webs (.+)/.exec(c);

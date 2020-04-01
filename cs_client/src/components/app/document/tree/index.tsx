@@ -14,7 +14,12 @@ type Props = {
   dispatch: (action: { type: string; value?: any }) => void;
 };
 
-const Tree: React.FC<Props> = ({ nodes, treeRef, onResize, dispatch }) => {
+const Tree: React.FC<Props> = ({
+  nodes,
+  treeRef,
+  onResize,
+  dispatch,
+}) => {
   return (
     <Resizable
       ref={treeRef}
