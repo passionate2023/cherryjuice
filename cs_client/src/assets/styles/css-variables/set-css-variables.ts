@@ -6,6 +6,16 @@ const cssVariables = {
   setVW: () => {
     root.style.setProperty('--vw', window.innerWidth + 'px');
   },
+
+  setOverlayWidth: (x: number) => {
+    root.style.setProperty('--overlay-width', `${x}px`);
+  },
+  setOverlayLeft: (x: number) => {
+    root.style.setProperty('--overlay-left', `-${x}px`);
+  },
+  setTreeWidth: (x: number) => {
+    root.style.setProperty('--tree-width', `${x}px`);
+  },
 };
 
 export { cssVariables };

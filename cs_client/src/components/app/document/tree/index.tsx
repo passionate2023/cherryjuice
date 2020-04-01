@@ -1,41 +1,57 @@
 import treeModule from '::sass-modules/tree/tree.scss';
 import * as React from 'react';
-import { Ref } from 'react';
+import { Ref, useEffect } from 'react';
 import { Node } from './node';
 import { Ct_Node_Meta } from '::types/generated';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Resizable } from 're-resizable';
-import { appActions } from '::app/reducer';
+import { nodeOverlay } from './node/helpers/node-overlay';
+import { cssVariables } from '../../../../assets/styles/css-variables/set-css-variables';
+import { appActionCreators } from '../../reducer';
 
 type Props = {
   nodes: Map<number, Ct_Node_Meta>;
   treeRef: Ref<any>;
-  onResize: () => void;
   dispatch: (action: { type: string; value?: any }) => void;
 };
-
-const Tree: React.FC<Props> = ({
-  nodes,
-  treeRef,
-  onResize,
-  dispatch,
-}) => {
+const createTreeHelper = () => {
+  const state: { tree: HTMLDivElement } = {
+    tree: undefined,
+  };
+  return {
+    init: () => (state.tree = document.querySelector('.' + treeModule.tree)),
+    updateTreeSizeCssVariable: () => {
+      cssVariables.setTreeWidth(state.tree.offsetWidth);
+    },
+    getTreeWidth: () => state.tree.offsetWidth,
+  };
+};
+const treeHelper = createTreeHelper();
+const onResizeStop = () => {
+  appActionCreators.setTreeWidth(treeHelper.getTreeWidth());
+  treeHelper.updateTreeSizeCssVariable();
+  nodeOverlay.updateWidth();
+};
+const onResize = () => {
+  treeHelper.updateTreeSizeCssVariable();
+  nodeOverlay.updateWidth();
+};
+const onStart = () => {
+  treeHelper.init();
+  nodeOverlay.init();
+  nodeOverlay.updateWidth();
+};
+const Tree: React.FC<Props> = ({ nodes, dispatch }) => {
+  useEffect(onStart, []);
   return (
     <Resizable
-      ref={treeRef}
       enable={{ right: true }}
       onResize={onResize}
-      onResizeStop={() =>
-        dispatch({
-          type: appActions.RESIZE_TREE,
-          // @ts-ignore
-          value: treeRef.current.size.width,
-        })
-      }
+      onResizeStop={onResizeStop}
       className={treeModule.tree__resizeHandle}
     >
       <div className={treeModule.tree}>
-        <ErrorBoundary dispatch={dispatch}>
+        <ErrorBoundary>
           <ul className={treeModule.tree_rootList}>
             {nodes &&
               nodes

@@ -1,3 +1,4 @@
+@import '../../vars/vars';
 .node {
   //background-color: #727070;
   display: flex;
@@ -7,19 +8,18 @@
   position: relative;
   //margin-left: -5px;
   margin-left: 5px;
+  width: max-content;
+  max-width: $max-node-width;
 }
-.node__title-overlay{
-  width: calc(100% + 550px);
+.node__title-overlay {
+  min-width: var(--overlay-width);
   height: 100%;
   position: absolute;
-  left: -300px;
+  left: var(--overlay-left);
   background-color: #287eed;
-
 }
 
-
 .node__title {
- min-width: 350px;
   padding: 7px 7px 7px 6px;
   text-decoration: none;
   font-family: Verdana N, sans-serif;
@@ -43,7 +43,7 @@
   cursor: pointer;
   z-index: 1;
 }
-.node__title-button--hidden{
+.node__title-button--hidden {
   visibility: hidden;
 }
 .node__title-cherry {

@@ -12,12 +12,12 @@ const Body = ({
   state,
   treeRef,
   dispatch,
-  onResize,
+  // onResize,
 }: {
   state;
   treeRef;
   dispatch;
-  onResize;
+  // onResize;
 }) => {
   const history = useHistory();
   return (
@@ -31,7 +31,7 @@ const Body = ({
             <Suspense fallback={<Void />}>
               <Document
                 dispatch={dispatch}
-                onResize={onResize}
+                // onResize={onResize}
                 treeRef={treeRef}
                 state={state}
                 // showTree={state.showTree}

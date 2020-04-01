@@ -7,10 +7,10 @@ import { modToolbar } from '../../../../../assets/styles/modules';
 
 type Props = {
   dispatch: (action: { type: string; value?: any }) => void;
-  onResize: () => void;
+  // onResize: () => void;
 };
 
-const useMainCallbacks = ({ dispatch, onResize }) => {
+const useMainCallbacks = ({ dispatch }) => {
   const toggleSettings = useCallback(() => {
     dispatch({ type: appActions.TOGGLE_SETTINGS });
   }, []);
@@ -19,7 +19,7 @@ const useMainCallbacks = ({ dispatch, onResize }) => {
   }, []);
   const toggleTree = useCallback(() => {
     dispatch({ type: appActions.TOGGLE_TREE });
-    setTimeout(onResize, 1000);
+    // setTimeout(onResize, 1000);
   }, []);
   const saveDocument = useCallback(e => {
     dispatch({
@@ -41,14 +41,14 @@ const useMainCallbacks = ({ dispatch, onResize }) => {
     toggleSettings,
   };
 };
-const MainButtons: React.FC<Props> = ({ dispatch, onResize }) => {
+const MainButtons: React.FC<Props> = ({ dispatch }) => {
   const {
     toggleFileSelect,
     toggleTree,
     saveDocument,
     reloadDocument,
     toggleSettings,
-  } = useMainCallbacks({ dispatch, onResize });
+  } = useMainCallbacks({ dispatch });
   return (
     <div className={modToolbar.toolBar__group}>
       <ToolbarButton onClick={toggleSettings}>

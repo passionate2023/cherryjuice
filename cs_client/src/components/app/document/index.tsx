@@ -18,7 +18,7 @@ type Props = {
   // showTree: boolean;
   treeRef: Ref<React.FC>;
   dispatch: TDispatchAppReducer;
-  onResize: () => void;
+  // onResize: () => void;
   // recentNodes: any;
   // selectedNode: any;
   // selectedFile: string;
@@ -28,7 +28,7 @@ type Props = {
   state: TState;
 };
 
-const Document: React.FC<Props> = ({ treeRef, dispatch, onResize, state }) => {
+const Document: React.FC<Props> = ({ treeRef, dispatch,  state }) => {
   const {
     showTree,
     saveDocument,
@@ -82,11 +82,11 @@ const Document: React.FC<Props> = ({ treeRef, dispatch, onResize, state }) => {
         <Fragment>
           {<RecentNodes state={state} dispatch={dispatch} file_id={file_id} />}
           {showTree && (
-            <ErrorBoundary dispatch={dispatch}>
+            <ErrorBoundary>
               <Tree
                 nodes={nodes}
                 treeRef={treeRef}
-                onResize={onResize}
+                // onResize={onResize}
                 dispatch={dispatch}
               />
             </ErrorBoundary>
@@ -97,7 +97,7 @@ const Document: React.FC<Props> = ({ treeRef, dispatch, onResize, state }) => {
             path={`/:file_id/node-:node_id/`}
             render={props => {
               return (
-                <ErrorBoundary dispatch={dispatch}>
+                <ErrorBoundary >
                   <RichText
                     {...props}
                     file_id={file_id}

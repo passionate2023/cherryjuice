@@ -6,20 +6,18 @@ import { MobileButtons } from './groups/mobile-buttons';
 
 type Props = {
   dispatch: (action: { type: string; value?: any }) => void;
-  onResize: () => void;
   showFormattingButtons: boolean;
   isOnMobile: boolean;
 };
 
 const ToolBar: React.FC<Props> = ({
   dispatch,
-  onResize,
   showFormattingButtons,
   isOnMobile,
 }) => {
   return (
     <div className={modToolbar.toolBar}>
-      <MainButtons dispatch={dispatch} onResize={onResize} />
+      <MainButtons dispatch={dispatch}  />
       <MobileButtons dispatch={dispatch} />
       {(!isOnMobile || showFormattingButtons) && (
         <FormattingButtons dispatch={dispatch} />

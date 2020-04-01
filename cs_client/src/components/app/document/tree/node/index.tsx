@@ -8,6 +8,7 @@ import { appActions } from '::app/reducer';
 import { getTreeStateFromLocalStorage } from '::helpers/misc';
 import { Icon, Icons } from '::shared-components/icon';
 import { modToolbar } from '../../../../../assets/styles/modules';
+import { nodeOverlay } from './helpers/node-overlay';
 
 type Props = {
   node_id: number;
@@ -24,6 +25,7 @@ const collapseAll = (ids: number[], treeState: any, nodes: any) => {
     collapseAll(nodes.get(id).child_nodes, treeState, nodes);
   });
 };
+
 const Node: React.FC<Props> = ({
   node_id,
   nodes,
@@ -49,6 +51,8 @@ const Node: React.FC<Props> = ({
   const componentRef = useRef();
   // callback hooks
   const selectNode = useCallback(() => {
+    nodeOverlay.updateWidth();
+    nodeOverlay.updateLeft(componentRef);
     dispatch({
       type: appActions.SELECT_NODE,
       value: {
@@ -69,6 +73,7 @@ const Node: React.FC<Props> = ({
   // use-effect hooks
   useEffect(() => {
     if (location.pathname === nodePath) {
+    nodeOverlay.updateLeft(componentRef);
       // @ts-ignore
       componentRef?.current?.scrollIntoView();
       // --
@@ -96,6 +101,7 @@ const Node: React.FC<Props> = ({
       collapseAll(child_nodes, treeState, nodes);
     }
     localStorage.setItem('treeState', JSON.stringify(treeState));
+    nodeOverlay.updateWidth();
   }, [showChildren]);
   // console.log('treeRef', nodeMod.node__titleButtonHidden,child_nodes);
   // @ts-ignore

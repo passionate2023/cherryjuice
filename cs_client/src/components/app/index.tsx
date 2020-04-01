@@ -1,7 +1,7 @@
 import appModule from '::sass-modules/app.scss';
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import * as React from 'react';
-import { useCallback, useEffect, useReducer, useRef, Suspense } from 'react';
+import { useEffect, useReducer, useRef, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
 import { appActionCreators, appInitialState, appReducer } from './reducer';
 
@@ -73,12 +73,6 @@ const App: React.FC<Props> = () => {
   const appRef = useRef<HTMLDivElement>();
   const treeRef = useRef<HTMLDivElement & { size: { width: number } }>();
 
-  const onResize = useCallback(() => {
-    if (appRef.current && treeRef.current)
-      appRef.current.style.gridTemplateColumns = `${treeRef.current &&
-        treeRef.current.size.width}px 1fr`;
-  }, []);
-
   useOnWindowResize();
   useSaveStateToLocalStorage(state);
   useHandleRouting(state);
@@ -89,18 +83,18 @@ const App: React.FC<Props> = () => {
       style={{
         ...{
           gridTemplateColumns: `${
-            !state.showTree ? '0' : state.treeSize
-          }px 1fr`,
+            !state.showTree ? '0' : 'var(--tree-width) 1fr'
+          }`,
         },
       }}
     >
-      <ErrorBoundary dispatch={dispatch}>
+      <ErrorBoundary>
         <Suspense fallback={<Void />}>
           <ToolBar
             showFormattingButtons={state.showFormattingButtons}
             isOnMobile={state.isOnMobile}
             dispatch={dispatch}
-            onResize={onResize}
+            // onResize={onResize}
           />
         </Suspense>
       </ErrorBoundary>
@@ -108,7 +102,7 @@ const App: React.FC<Props> = () => {
       <Suspense fallback={<Void />}>
         <Body
           dispatch={dispatch}
-          onResize={onResize}
+          // onResize={onResize}
           treeRef={treeRef}
           state={state}
         />

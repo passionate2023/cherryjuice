@@ -1,11 +1,7 @@
 import * as React from 'react';
-import { TDispatchAppReducer } from '::types/react';
-import { appActions } from '::app/reducer';
+import { appActionCreators } from '../app/reducer';
 
-class ErrorBoundary extends React.Component<
-  { dispatch: TDispatchAppReducer },
-  { error?: Error }
-> {
+class ErrorBoundary extends React.Component<{},{ error?: Error }> {
   constructor(props) {
     super(props);
     this.state = { error: undefined };
@@ -17,10 +13,7 @@ class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error) {
-    this.props.dispatch({
-      type: appActions.SET_ERROR,
-      value: error,
-    });
+    appActionCreators.throwError(error);
     // You can also log the error to an error reporting service
     // console.log('componentDidCatch', { error, errorInfo });
   }

@@ -78,6 +78,12 @@ const createActionCreators = () => {
         value: new Date().getTime(),
       });
     },
+    setTreeWidth: (width: number) => {
+      state.dispatch({
+        type: actions.RESIZE_TREE,
+        value: width,
+      });
+    },
   };
 };
 const reducer = (state: TState, action) => {
