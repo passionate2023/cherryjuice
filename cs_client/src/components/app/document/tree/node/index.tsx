@@ -71,8 +71,11 @@ const Node: React.FC<Props> = ({
     if (location.pathname === nodePath) {
       // @ts-ignore
       componentRef?.current?.scrollIntoView();
+      // --
+      // on mobile, scrolling the node into view causes toolbar to get invisible
       const toolbar = document.querySelector('.' + modToolbar.toolBar);
       toolbar.scrollIntoView();
+      // --
       dispatch({
         type: appActions.SELECT_NODE,
         value: {

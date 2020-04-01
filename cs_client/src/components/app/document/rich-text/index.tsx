@@ -1,4 +1,3 @@
-import rtModule from '::sass-modules/document/rich-text.scss';
 import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import { useRouteMatch } from 'react-router';
@@ -12,6 +11,9 @@ import { setupClipboard } from '::helpers/clipboard';
 import { setupKeyboardEvents } from '::helpers/typing';
 import { setupFormattingHotKeys } from '::helpers/hotkeys';
 import { useReloadQuery } from '../../../../hooks/use-reload-query';
+
+import { modRichText } from '../../../../assets/styles/modules';
+import { useQueryTimeout } from '../../../../hooks/use-query-timeout';
 
 type Props = {
   file_id: string;
@@ -33,16 +35,21 @@ const RichText: React.FC<Props> = ({
   // @ts-ignore
   const node_id = Number(match.params?.node_id);
   const toolbarQueuesRef = useRef({});
-  const { data } = useReloadQuery(
+  const queryVariables = { file_id, node_id: node_id };
+  let { data, error } = useReloadQuery(
     {
       reloadRequestID: reloadDocument,
     },
     {
       query: QUERY_CT_NODE_CONTENT.html,
-      queryVariables: { file_id, node_id: node_id },
+      queryVariables,
     },
   );
-
+  useQueryTimeout({
+    queryData: data,
+    queryError: error,
+    queryVariables,
+  });
   let html;
   if (data && data.ct_node_content[0].node_id === node_id) {
     html = data.ct_node_content[0].html;
@@ -90,13 +97,21 @@ const RichText: React.FC<Props> = ({
     <div
       id={'rich-text'}
       ref={richTextRef}
-      className={rtModule.richText}
+      className={modRichText.richText}
       {...(html
         ? {
             contentEditable: contentEditable,
             dangerouslySetInnerHTML: { __html: html },
           }
-        : { children: <SpinnerCircle /> })}
+        : {
+            children: error ? (
+              <span className={modRichText.richText__error}>
+                could not fetch the node
+              </span>
+            ) : (
+              <SpinnerCircle />
+            ),
+          })}
     />
   );
 };

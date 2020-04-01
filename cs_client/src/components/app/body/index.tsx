@@ -47,7 +47,11 @@ const Body = ({
         />
       )}
       {state.showFileSelect && (
-        <SelectFile selectedFile={state.selectedFile} dispatch={dispatch} />
+        <SelectFile
+          selectedFile={state.selectedFile}
+          dispatch={dispatch}
+          reloadFiles={state.reloadFiles}
+        />
       )}
     </ApolloProvider>
   );

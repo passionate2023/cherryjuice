@@ -1,15 +1,17 @@
 import { modSelectFile } from '::sass-modules/index';
 import * as React from 'react';
-import { useCallback, useRef, useState } from 'react';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router';
-import { appActions } from '../../reducer';
+import { appActionCreators, appActions } from '../../reducer';
 import { dateToFormattedString } from '::helpers/time';
 import { QUERY_CT_FILES } from '::graphql/queries';
 import { Ct_File } from '::types/generated';
 import { Dialog } from '::shared-components/material/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Icon, Icons } from '::shared-components/icon';
+import { useReloadQuery } from '../../../../hooks/use-reload-query';
+import { useQueryTimeout } from '../../../../hooks/use-query-timeout';
+import { SpinnerCircle } from '../../../shared-components/spinner-circle';
 
 const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
   data,
@@ -81,16 +83,16 @@ const Folder = ({
   </div>
 );
 
-const Files = ({ selected, setSelected, selectedFile }) => {
-  const [fetch, { data }] = useLazyQuery(QUERY_CT_FILES, {
-    fetchPolicy: 'network-only',
-  });
-
-  const firstFetch = useRef(false);
-  if (!firstFetch.current) {
-    firstFetch.current = true;
-    fetch();
-  }
+const Files = ({ selected, setSelected, selectedFile, data, loading }) => {
+  // const [fetch, { data }] = useLazyQuery(QUERY_CT_FILES, {
+  //   fetchPolicy: 'network-only',
+  // });
+  //
+  // const firstFetch = useRef(false);
+  // if (!firstFetch.current) {
+  //   firstFetch.current = true;
+  //   fetch();
+  // }
   // let files: Ct_File[];
   let filesPerFolders: [string, Ct_File[]][];
   if (data) {
@@ -106,7 +108,10 @@ const Files = ({ selected, setSelected, selectedFile }) => {
 
   return (
     <div className={modSelectFile.selectFile}>
-      {filesPerFolders &&
+      {loading ? (
+        <SpinnerCircle />
+      ) : (
+        filesPerFolders &&
         filesPerFolders.map(([folder, files]) => (
           <Folder
             key={folder}
@@ -117,12 +122,13 @@ const Files = ({ selected, setSelected, selectedFile }) => {
             folder={folder}
             files={files}
           />
-        ))}
+        ))
+      )}
     </div>
   );
 };
 
-const SelectFile = ({ dispatch, selectedFile }) => {
+const SelectFile = ({ dispatch, selectedFile, reloadFiles }) => {
   const [selected, setSelected] = useState({ id: '', path: '' });
   const history = useHistory();
   const close = useCallback(
@@ -131,11 +137,26 @@ const SelectFile = ({ dispatch, selectedFile }) => {
   );
   const open = () => {
     history.push('/');
-    return dispatch({
+    dispatch({
       type: appActions.SELECT_FILE,
       value: selected.id,
     });
   };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const { data, loading, error } = useReloadQuery(
+    {
+      reloadRequestID: reloadFiles,
+    },
+    {
+      query: QUERY_CT_FILES,
+      queryVariables: undefined,
+    },
+  );
+  useQueryTimeout({
+    queryData: data,
+    queryError: error,
+    queryVariables: reloadFiles,
+  });
   const buttons = [
     {
       label: 'cancel',
@@ -149,7 +170,7 @@ const SelectFile = ({ dispatch, selectedFile }) => {
     },
     {
       label: <Icon name={Icons.material.refresh} />,
-      onClick: fetch,
+      onClick: appActionCreators.setReloadFiles,
       disabled: false,
     },
   ];
@@ -164,6 +185,8 @@ const SelectFile = ({ dispatch, selectedFile }) => {
           setSelected={setSelected}
           selectedFile={selectedFile}
           selected={selected}
+          data={data}
+          loading={loading}
         />
       </ErrorBoundary>
     </Dialog>

@@ -6,9 +6,13 @@
   margin-top: 6px;
   margin-left: 6px;
   position: relative;
-
 }
 .rich-text__anchor {
   width: 20px;
   padding: 2px;
+}
+
+.rich-text__error {
+  color: #808080;
+  padding: 10px;
 }

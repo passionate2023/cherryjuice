@@ -29,7 +29,7 @@ const execK = ({
   const editor: HTMLDivElement = document.querySelector('#rich-text ');
   const ogHtml = editor.innerHTML;
   try {
-    if (editor.contentEditable !== 'true') throw Error('Editing is disabled');
+    if (editor.contentEditable !== 'true' && !testSample) throw Error('Editing is disabled');
     let { startElement, endElement, startOffset, endOffset } =
       testSample || getSelection({ selectAdjacentWordIfNoneIsSelected: true });
     const {

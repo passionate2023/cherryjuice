@@ -6,6 +6,7 @@ import modSelectFile from '::sass-modules/select-file/select-file.scss';
 import modRecentNodes from './document/recent-nodes.scss';
 import modInfoBar from './document/info-bar.scss';
 import modToolbar from './tool-bar.scss';
+import modRichText from './document/rich-text.scss';
 export {
   modDrawer,
   modDialog,
@@ -15,4 +16,5 @@ export {
   modToolbar,
   modRecentNodes,
   modInfoBar,
+  modRichText,
 };

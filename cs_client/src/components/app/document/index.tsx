@@ -12,6 +12,7 @@ import { RichText } from '::app/document/rich-text';
 import { TState } from '../reducer';
 import { TDispatchAppReducer } from '../../../../types/react';
 import { useReloadQuery } from '../../../hooks/use-reload-query';
+import { useQueryTimeout } from '../../../hooks/use-query-timeout';
 
 type Props = {
   // showTree: boolean;
@@ -43,15 +44,21 @@ const Document: React.FC<Props> = ({ treeRef, dispatch, onResize, state }) => {
   // const { loading, error, data } = useQuery(QUERY_CT_NODE_META, {
   //   variables: { file_id: file_id || '' },
   // });
+  const queryVariables = { file_id: file_id || '' };
   const { data, error, loading } = useReloadQuery(
     {
       reloadRequestID: reloadDocument,
     },
     {
       query: QUERY_CT_NODE_META,
-      queryVariables: { file_id: file_id || '' },
+      queryVariables,
     },
   );
+  useQueryTimeout({
+    queryData: data,
+    queryError: error,
+    queryVariables,
+  });
   const nodes: Map<number, Ct_Node_Meta> = useMemo(() => {
     if (data && data.ct_node_meta) {
       return new Map(data.ct_node_meta.map(node => [node.node_id, node]));

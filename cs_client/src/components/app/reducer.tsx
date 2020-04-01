@@ -17,6 +17,7 @@ const initialState = {
   recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}
   saveDocument: 0,
   reloadDocument: 0,
+  reloadFiles: 0,
   error: undefined,
   showSettings: false,
   showFormattingButtons: false,
@@ -42,12 +43,14 @@ enum actions {
   SELECT_FILE,
   SAVE_DOCUMENT,
   RELOAD_DOCUMENT,
+  RELOAD_FILES,
   SET_ERROR,
   SET_IS_ON_MOBILE,
 }
 const createActionCreators = () => {
   const state = {
-    dispatch: undefined,
+    // eslint-disable-next-line no-unused-vars
+    dispatch: props => Error('dispatcher not set'),
   };
   return {
     setDispatch: newDispatch => (state.dispatch = newDispatch),
@@ -65,6 +68,15 @@ const createActionCreators = () => {
     },
     setIsOnMobile: (isOnMobile: boolean): void => {
       state.dispatch({ type: actions.SET_IS_ON_MOBILE, value: isOnMobile });
+    },
+    throwError: (error: Error): void => {
+      state.dispatch({ type: actions.SET_ERROR, value: error });
+    },
+    setReloadFiles: (): void => {
+      state.dispatch({
+        type: actions.RELOAD_FILES,
+        value: new Date().getTime(),
+      });
     },
   };
 };
@@ -116,7 +128,13 @@ const reducer = (state: TState, action) => {
         ...state,
         reloadDocument: action.value,
       };
+    case actions.RELOAD_FILES:
+      return {
+        ...state,
+        reloadFiles: action.value,
+      };
     case actions.SET_ERROR:
+      // if (state.error === action.value) return state;
       return {
         ...state,
         error: action.value,
