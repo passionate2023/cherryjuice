@@ -19,8 +19,14 @@ type Props = {
 const Code = ({
   text,
   styles,
-  other_attributes: { is_width_pix, width_raw,do_highl_bra,syntax,do_show_linenum },
-}:Props) => {
+  other_attributes: {
+    is_width_pix,
+    width_raw,
+    do_highl_bra,
+    syntax,
+    do_show_linenum,
+  },
+}: Props) => {
   return `<code
       class="rich-text__code"
       data-do_highl_bra="${do_highl_bra}" 
@@ -33,11 +39,11 @@ const Code = ({
         min-height: ${styles.height};
         width: ${width_raw}${is_width_pix ? 'px' : '%'};
         display: inline-block;
-        ${stringifyStyles(styles,'margin')} 
+        ${stringifyStyles(styles, 'margin')} 
         "
     >
       ${text}
-    </code>`;
+    </code><span>&#8203;</span>`;
 };
 
 export { Code };

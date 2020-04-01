@@ -88,6 +88,7 @@ const singleLineIndentation = ({
   }
 };
 const handleIndentation = e => {
+  e.preventDefault();
   const {
     collapsed,
     startElement,
