@@ -28,7 +28,7 @@ type Props = {
   state: TState;
 };
 
-const Document: React.FC<Props> = ({ treeRef, dispatch,  state }) => {
+const Document: React.FC<Props> = ({ treeRef, dispatch, state }) => {
   const {
     showTree,
     saveDocument,
@@ -97,7 +97,7 @@ const Document: React.FC<Props> = ({ treeRef, dispatch,  state }) => {
             path={`/:file_id/node-:node_id/`}
             render={props => {
               return (
-                <ErrorBoundary >
+                <ErrorBoundary>
                   <RichText
                     {...props}
                     file_id={file_id}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { appActionCreators } from '../app/reducer';
 
-class ErrorBoundary extends React.Component<{},{ error?: Error }> {
+class ErrorBoundary extends React.Component<{}, { error?: Error }> {
   constructor(props) {
     super(props);
     this.state = { error: undefined };

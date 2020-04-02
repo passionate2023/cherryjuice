@@ -73,7 +73,7 @@ const Node: React.FC<Props> = ({
   // use-effect hooks
   useEffect(() => {
     if (location.pathname === nodePath) {
-    nodeOverlay.updateLeft(componentRef);
+      nodeOverlay.updateLeft(componentRef);
       // @ts-ignore
       componentRef?.current?.scrollIntoView();
       // --
@@ -107,7 +107,11 @@ const Node: React.FC<Props> = ({
   // @ts-ignore
   return (
     <>
-      <div className={`${nodeMod.node}`} ref={componentRef}>
+      <div
+        className={`${nodeMod.node}`}
+        ref={componentRef}
+        onClick={selectNode}
+      >
         {
           <Icon
             className={`${nodeMod.node__titleButton} ${
@@ -115,6 +119,7 @@ const Node: React.FC<Props> = ({
             }`}
             onClick={toggleChildren}
             name={showChildren ? Icons.material.remove : Icons.material.add}
+            style={{marginLeft: depth*20}}
           />
         }
         <Icon
@@ -127,7 +132,7 @@ const Node: React.FC<Props> = ({
         />
         <div
           className={nodeMod.node__title}
-          onClick={selectNode}
+          // onClick={selectNode}
           style={{ ...(styles && JSON.parse(styles)) }}
         >
           {name}

@@ -12,8 +12,8 @@ const Body = ({
   state,
   treeRef,
   dispatch,
-  // onResize,
-}: {
+}: // onResize,
+{
   state;
   treeRef;
   dispatch;

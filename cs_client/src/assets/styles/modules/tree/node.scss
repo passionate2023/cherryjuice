@@ -7,8 +7,9 @@
   //max-width: 400px;
   position: relative;
   //margin-left: -5px;
-  margin-left: 5px;
-  width: max-content;
+  //margin-left: 5px;
+  min-width: max-content;
+  flex: 1;
   max-width: $max-node-width;
 }
 .node__title-overlay {
@@ -42,6 +43,7 @@
   font-size: 8px;
   cursor: pointer;
   z-index: 1;
+  margin-left: 5px;
 }
 .node__title-button--hidden {
   visibility: hidden;
@@ -52,5 +54,5 @@
   z-index: 1;
 }
 .node__list {
-  margin-left: -20px;
+  padding-left: 0;
 }

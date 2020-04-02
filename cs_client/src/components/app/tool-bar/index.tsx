@@ -17,7 +17,7 @@ const ToolBar: React.FC<Props> = ({
 }) => {
   return (
     <div className={modToolbar.toolBar}>
-      <MainButtons dispatch={dispatch}  />
+      <MainButtons dispatch={dispatch} />
       <MobileButtons dispatch={dispatch} />
       {(!isOnMobile || showFormattingButtons) && (
         <FormattingButtons dispatch={dispatch} />
