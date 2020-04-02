@@ -39,7 +39,7 @@
   }
   // size
   @include respond-to($md-down) {
-    height: $tool-bar-height * 2;
+    height: 100px;
     min-width: calc(100vw - 20px);
   }
   // position

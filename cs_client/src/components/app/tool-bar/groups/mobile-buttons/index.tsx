@@ -17,7 +17,7 @@ const MobileButtons: React.FC<Props> = () => {
       ].join(' ')}
     >
       <ToolbarButton onClick={appActionCreators.toggleFormattingButtons}>
-        <Icon name={Icons.material.format} small={true} />
+        <Icon name={Icons.material['justify-left']} small={true} />
       </ToolbarButton>
       <ToolbarButton onClick={appActionCreators.toggleContentEditable}>
         <Icon name={Icons.material.edit} small={true} />

@@ -5,6 +5,7 @@ import { ColorInput } from '::app/tool-bar/groups/formatting-buttons/color-input
 import { commands } from '::helpers/hotkeys/commands';
 import { TDispatchAppReducer } from '::types/react';
 import { modToolbar } from '../../../../../assets/styles/modules';
+import { Icon } from '../../../../shared-components/icon';
 
 type Props = {
   dispatch: TDispatchAppReducer;
@@ -17,16 +18,17 @@ const FormattingButtons: React.FC<Props> = ({ dispatch }) => {
         modToolbar.toolBar__groupFormatting + ' ' + modToolbar.toolBar__group
       }
     >
-      {commands.colors.map(({ label, cssProperty, inputId }) => (
+      {commands.colors.map(({ icon, label, cssProperty, inputId }) => (
         <ColorInput
           key={label}
+          icon={icon}
           {...{ label, cssProperty, inputId }}
           dispatch={dispatch}
         />
       ))}
       {commands.tagsAndStyles.map(
         (
-          { button: { label, style: buttonStyle }, execCommandArguments },
+          { icon, execCommandArguments },
           i,
         ) => (
           <ToolbarButton
@@ -42,12 +44,13 @@ const FormattingButtons: React.FC<Props> = ({ dispatch }) => {
               })
             }
           >
-            <span
-              style={buttonStyle}
-              className={modToolbar.toolBar__letterIcon}
-            >
-              {label}
-            </span>
+            {/*<span*/}
+            {/*  style={buttonStyle}*/}
+            {/*  className={modToolbar.toolBar__letterIcon}*/}
+            {/*>*/}
+            {/*  {label}*/}
+            {/*</span>*/}
+            <Icon name={icon} small={true} />
           </ToolbarButton>
         ),
       )}

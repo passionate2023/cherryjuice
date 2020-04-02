@@ -57,18 +57,18 @@ const MainButtons: React.FC<Props> = ({ dispatch }) => {
       <ToolbarButton onClick={toggleFileSelect}>
         <Icon name={Icons.material.folder} small={true} />
       </ToolbarButton>
+      <ToolbarButton onClick={saveDocument}>
+        <Icon name={Icons.material.save} small={true} />
+      </ToolbarButton>
+      <ToolbarButton onClick={reloadDocument}>
+        <Icon name={Icons.material.refresh} small={true} />
+      </ToolbarButton>
       <ToolbarButton onClick={toggleTree}>
         {/*<img src={cherries} alt="" style={{ width: 22 }} />*/}
         <Icon
           name={Icons.cherrytree.additionalIcons.cherries}
           style={{ width: 22 }}
         />
-      </ToolbarButton>
-      <ToolbarButton onClick={saveDocument}>
-        <Icon name={Icons.material.save} small={true} />
-      </ToolbarButton>
-      <ToolbarButton onClick={reloadDocument}>
-        <Icon name={Icons.material.refresh} small={true} />
       </ToolbarButton>
     </div>
   );
