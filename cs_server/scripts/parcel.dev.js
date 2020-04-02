@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const importGlobal = require('import-global');
 const Bundler = importGlobal('parcel-bundler');
 const chalk = require('chalk');
-let debug = require('debug');
-const { exec } = require('child_process');
+const childProcess = require('child_process');
 
 // Bundler options
 const options = {
@@ -20,34 +20,70 @@ const options = {
   bundleNodeModules: false, // By default, package.json dependencies are not included when using 'node' or 'electron' with 'target' option above. Set to true to adds them to the bundle, false by default
   logLevel: 3, // 5 = save everything to a file, 4 = like 3, but with timestamps and additionally log http requests to dev server, 3 = log info, warnings & errors, 2 = log warnings & errors, 1 = log errors
   sourceMaps: true, // Enable or disable sourcemaps, defaults to enabled (minified builds currently always create sourcemaps)
-  autoInstall: true // Enable or disable auto install of missing dependencies found during bundling
+  autoInstall: true, // Enable or disable auto install of missing dependencies found during bundling
   /*hmr: true, // Enable or disable HMR while watching
       hmrPort: 0, // The port the HMR socket runs on, defaults to a random free port (0 in node.js resolves to a random free port)
       hmrHostname: '', // A hostname for hot module reload, default to ''
       detailedReport: false, // Prints a detailed report of the bundles, assets, filesizes and times, defaults to false, reports are only printed if watch is disabled
       */
 };
-
-const helpers = {
-  createDebug: name => (debug.enable(name), debug(name))
+const entryFiles = './src/index.ts';
+const console = {
+  parcel: {
+    log: data =>
+      process.stdout.write(
+        chalk.bgBlue.black('✨parcel') + chalk.bgGreen.black(data) + '\n',
+      ),
+    error: data =>
+      process.stdout.write(
+        chalk.bgBlue.black('🚨parcel') + chalk.bgRed.black(data) + '\n',
+      ),
+  },
+  process: {
+    log: data => process.stdout.write(chalk.black(data)),
+    error: data => process.stdout.write(chalk.redBright(data)),
+  },
 };
+const helpers = {
+  killPreviousProcess: child => {
+    child.stdout.removeAllListeners('data');
+    child.stderr.removeAllListeners('data');
+    child.removeAllListeners('exit');
+    child.kill();
+  },
+  startNewProcess: (state, bundle) => {
+    state.child = childProcess.spawn('node', [bundle.name]);
+    state.child.stdout.on('data', console.process.log);
+    state.child.stderr.on('data', console.process.error);
 
-
-const run = () => {
-  const debugParcel = helpers.createDebug('parcel');
-  const entryFiles = './src/index.ts';
-  const outFile = './dist/index.js';
+    state.child.on('exit', code => {
+      console.parcel.error(`Child process exited with code ${code}`);
+      console.parcel.error(`waiting for changes to restart\n`);
+      state.child = null;
+    });
+  },
+};
+const run = ({ entryFiles, options }) => {
   const bundler = new Bundler(entryFiles, options);
 
-  bundler
-    .bundle()
-    .then(() => {
-      debugParcel(chalk.bgGreen.black('restarting the app'));
-      const process = exec(`nodemon ${outFile} --watch ${outFile}`);
-      process.stdout.on('data', helpers.createDebug('server'));
-  
-    })
-    .catch(error => debugParcel(chalk.bgRed.black(error)));
-};
+  const state = {
+    bundle: null,
+    child: null,
+  };
 
-run();
+  bundler.on('bundled', compiledBundle => {
+    state.bundle = compiledBundle;
+  });
+
+  bundler.on('buildEnd', () => {
+    if (state.bundle !== null) {
+      if (state.child) helpers.killPreviousProcess(state.child);
+      console.parcel.log(chalk.bgGreen.black('starting the app'), true);
+      helpers.startNewProcess(state, state.bundle);
+    }
+    state.bundle = null;
+  });
+
+  bundler.bundle();
+};
+run({ entryFiles, options });
