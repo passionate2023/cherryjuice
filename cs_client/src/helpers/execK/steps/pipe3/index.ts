@@ -26,13 +26,22 @@ const aHtmlsToElements = (
 
 const applyLineStyle = ({ lineStyle, startDDOE, endDDOE, midDDOEs }) => {
   [startDDOE, ...midDDOEs, endDDOE].forEach(element => {
-    Object.entries(lineStyle.line).forEach(([propertyName, propertyValue]) => {
-      if (propertyValue) {
-        element.style[propertyName] = element.style[propertyName]
-          ? `${element.style[propertyName]} ${propertyValue}`
-          : propertyValue;
-      }
-    });
+    if (lineStyle.deleteAll) {
+      element.style = {};
+    } else {
+      Object.entries(lineStyle.line).forEach(
+        ([propertyName, propertyValue]) => {
+          // const elementHasProperty = element.style[propertyName];
+          if (propertyValue) {
+            element.style[
+              propertyName
+            ] = /*elementHasProperty ? 
+        `${element.style[propertyName]} ${propertyValue}`
+          :*/ propertyValue;
+          }
+        },
+      );
+    }
   });
 };
 

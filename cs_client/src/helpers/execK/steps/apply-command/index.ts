@@ -26,7 +26,7 @@ const applyCommand = ({
   let newAHtmlElement = cloneObj(aHtmlElement);
   if (command) {
     if (command === ExecKCommand.clear)
-      removeFormatting({ aHtmlElement: newAHtmlElement });
+      removeFormatting({ aHtmlElement: newAHtmlElement, lineStyle });
     else justify({ aHtmlElement: newAHtmlElement, command, lineStyle });
   } else {
     if (tagName) {

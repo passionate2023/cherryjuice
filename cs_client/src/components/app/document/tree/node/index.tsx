@@ -50,22 +50,26 @@ const Node: React.FC<Props> = ({
   );
   const componentRef = useRef();
   // callback hooks
-  const selectNode = useCallback(() => {
-    nodeOverlay.updateWidth();
-    nodeOverlay.updateLeft(componentRef);
-    dispatch({
-      type: appActions.SELECT_NODE,
-      value: {
-        node_id,
-        name,
-        style: styles,
-        is_richtxt,
-        ts_creation,
-        ts_lastsave,
-      },
-    });
-    history.push(nodePath);
-  }, [nodePath]);
+  const selectNode = useCallback(
+    e => {
+      if (e.target.classList.contains(nodeMod.node__titleButton)) return;
+      nodeOverlay.updateWidth();
+      nodeOverlay.updateLeft(componentRef);
+      dispatch({
+        type: appActions.SELECT_NODE,
+        value: {
+          node_id,
+          name,
+          style: styles,
+          is_richtxt,
+          ts_creation,
+          ts_lastsave,
+        },
+      });
+      history.push(nodePath);
+    },
+    [nodePath],
+  );
   const toggleChildren = useCallback(() => {
     setShowChildren(!showChildren);
   }, [showChildren]);
@@ -112,6 +116,7 @@ const Node: React.FC<Props> = ({
         ref={componentRef}
         onClick={selectNode}
       >
+        <div style={{ marginLeft: depth * 20 }} />
         {
           <Icon
             className={`${nodeMod.node__titleButton} ${
@@ -119,7 +124,6 @@ const Node: React.FC<Props> = ({
             }`}
             onClick={toggleChildren}
             name={showChildren ? Icons.material.remove : Icons.material.add}
-            style={{marginLeft: depth*20}}
           />
         }
         <Icon

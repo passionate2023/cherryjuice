@@ -3,6 +3,11 @@ type TLineStyle = {
   line: { [p: string]: string };
   // wrapper: { [p: string]: string };
 };
+const justificationMap = {
+  right: 'flex-end',
+  center: 'center',
+  fill: 'space-between',
+};
 const justify = ({
   aHtmlElement,
   command,
@@ -13,25 +18,12 @@ const justify = ({
   lineStyle: TLineStyle;
 }) => {
   if (!aHtmlElement.tags[0][1].style) aHtmlElement.tags[0][1].style = {};
-  if (aHtmlElement.nodeType) {
-    // if (command === ExecKCommand.justifyRight) {
-    //   aHtmlElement.tags[0][1].style['margin-left'] = 'auto';
-    // }
-    // if (command === ExecKCommand.justifyCenter) {
-    //   aHtmlElement.tags[0][1].style['margin-right'] = 'auto';
-    // }
+  if (!(command && command !== ExecKCommand.justifyLeft)) {
+    lineStyle.line['display'] = 'block';
+    lineStyle.line['justify-content'] = 'flex-start';
   } else {
-    aHtmlElement.tags[0][1].style['text-align'] = command;
-    aHtmlElement.tags[0][1].style['flex'] = '1';
-    // lineStyle.wrapper['flex'] = '1';
-    // lineStyle.wrapper['text-align'] = command;
-  }
-  if (command && command !== ExecKCommand.justifyLeft) {
     lineStyle.line['display'] = 'flex';
-  } else {
-    delete aHtmlElement.tags[0][1].style['text-align'];
-    delete aHtmlElement.tags[0][1].style['flex'];
-    lineStyle.line['display'] = '';
+    lineStyle.line['justify-content'] = justificationMap[command];
   }
 };
 

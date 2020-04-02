@@ -46,7 +46,9 @@
 .rich-text__link--node {
   color: green !important;
 }
+
 .rich-text__line {
   min-height: 27px;
   display: block;
+  align-items: flex-end;
 }

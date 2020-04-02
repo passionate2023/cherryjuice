@@ -34,11 +34,15 @@ const utils = {
     return attributes;
   },
 };
+const justificationMap = {
+  right: 'flex-end',
+  center: 'center',
+  fill: 'space-between',
+};
 const createTranslator = (
   tags: (string | { href: any })[],
   styles: { [key: string]: string },
   lineStyles: { [key: string]: string },
-  nodeType: string,
 ) => {
   return {
     foreground: c =>
@@ -51,20 +55,26 @@ const createTranslator = (
     width: c => (styles['width'] = `${c}px`),
     height: c => (styles['height'] = `${c}px`),
     justification: c => {
-      if (nodeType) {
-        if (c === 'right') {
-          styles['margin-left'] = 'auto';
+      // if (nodeType) {
+      //   if (c === 'right') {
+      //     styles['margin-left'] = 'auto';
+      //   }
+      //   if (c === 'center') {
+      //     styles['margin-right'] = 'auto';
+      //   }
+      // } else {
+      //   styles['text-align'] = c;
+      //   styles['flex'] = '1';
+      // }
+      // if (c && c !== 'left') {
+      //   lineStyles['display'] = 'flex';
+      // }
+
+      if (c)
+        if (c !== 'left') {
+          lineStyles['display'] = 'flex';
+          lineStyles['justify-content'] = justificationMap[c];
         }
-        if (c === 'center') {
-          styles['margin-right'] = 'auto';
-        }
-      } else {
-        styles['text-align'] = c;
-        styles['flex'] = '1';
-      }
-      if (c && c !== 'left') {
-        lineStyles['display'] = 'flex';
-      }
     },
     weight: () => tags.push('strong'),
     style: () => tags.push('em'),
@@ -85,12 +95,7 @@ const translateAttributesToHtmlAndCss = xml =>
         if (node.$) {
           const tags = [];
           const styles = {};
-          const translator = createTranslator(
-            tags,
-            styles,
-            lineStyles,
-            node.type,
-          );
+          const translator = createTranslator(tags, styles, lineStyles);
           Object.entries(node.$).forEach(([key, value]) => {
             try {
               translator[key](value);

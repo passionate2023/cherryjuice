@@ -72,13 +72,17 @@ const run = ({ entryFiles, options }) => {
   };
 
   bundler.on('bundled', compiledBundle => {
+    console.parcel.log(chalk.bgGreen.black('bundling'));
     state.bundle = compiledBundle;
   });
-
+  bundler.on('buildError', error => {
+    console.parcel.error(error);
+    console.parcel.error(`waiting for changes to restart\n`);
+  });
   bundler.on('buildEnd', () => {
     if (state.bundle !== null) {
       if (state.child) helpers.killPreviousProcess(state.child);
-      console.parcel.log(chalk.bgGreen.black('starting the app'), true);
+      console.parcel.log(chalk.bgGreen.black('starting the app'));
       helpers.startNewProcess(state, state.bundle);
     }
     state.bundle = null;
