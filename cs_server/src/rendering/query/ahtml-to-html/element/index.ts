@@ -17,7 +17,7 @@ const createElement = (tag, attributes, children) =>
       .map(([key, value]) =>
         key === 'style' && Object.keys(value).length === 0
           ? ''
-          : `${key}='${key === 'style' ? stringifyStyles(value) : value}'`,
+          : `${key}="${key === 'style' ? stringifyStyles(value) : value}"`,
       )
       .join(' ')}>${children}</${tag}>`;
 const Element = ({ node }) =>
@@ -26,7 +26,7 @@ const Element = ({ node }) =>
         return typeof val === 'string'
           ? createElement(
               `${val}`,
-              i === arr.length - 1 && { style: node.$ },
+              i === arr.length - 1 ? { style: node.$ }:{},
               acc,
             )
           : // render links

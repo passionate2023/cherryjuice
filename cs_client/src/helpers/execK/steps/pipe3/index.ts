@@ -28,6 +28,12 @@ const applyLineStyle = ({ lineStyle, startDDOE, endDDOE, midDDOEs }) => {
   [startDDOE, ...midDDOEs, endDDOE].forEach(element => {
     if (lineStyle.deleteAll) {
       element.style = {};
+    } else if (lineStyle.delete.length) {
+      lineStyle.delete.forEach(propertyName => {
+        element.style[propertyName] = '';
+      });
+      if (element.getAttribute('style') === '')
+        element.removeAttribute('style');
     } else {
       Object.entries(lineStyle.line).forEach(
         ([propertyName, propertyValue]) => {

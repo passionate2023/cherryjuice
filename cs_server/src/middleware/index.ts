@@ -18,12 +18,12 @@ const ignoreClientSideRouting = express.Router().get('*', (req, res) => {
   res.redirect('/#' + req.originalUrl.substr(1));
 });
 
-const sendGzipezdJavascript = express
+const sendCompressedJavascript = express
   .Router()
   .get('*.js', function(req, res, next) {
     if (req.url.indexOf('sw.js') === -1) {
-      req.url = req.url + '.gz';
-      res.set('Content-Encoding', 'gzip');
+      req.url = req.url + '.br';
+      res.set('Content-Encoding', 'br');
       res.set('Content-Type', 'application/javascript');
     }
     next();
@@ -32,6 +32,6 @@ const sendGzipezdJavascript = express
 export {
   addSTSHeader,
   ignoreClientSideRouting,
-  sendGzipezdJavascript,
+  sendCompressedJavascript,
   redirectToHTTPS,
 };

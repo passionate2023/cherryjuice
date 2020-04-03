@@ -1,5 +1,5 @@
 import { useTimeout } from './use-timeout';
-import { appActionCreators } from '../components/app/reducer';
+import { appActionCreators } from '::app/reducer';
 import { useEffect } from 'react';
 
 const useQueryTimeout = (

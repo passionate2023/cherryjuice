@@ -6,7 +6,7 @@ import {
   addSTSHeader,
   ignoreClientSideRouting,
   redirectToHTTPS,
-  sendGzipezdJavascript,
+  sendCompressedJavascript,
 } from './middleware';
 import { applyApollo } from './graphql';
 
@@ -19,7 +19,7 @@ applyApollo(app);
 if (process.env.NODE_ENV === 'production') {
   app.use(addSTSHeader);
   app.use(redirectToHTTPS);
-  app.use(sendGzipezdJavascript);
+  app.use(sendCompressedJavascript);
 }
 app.use(
   express.static(

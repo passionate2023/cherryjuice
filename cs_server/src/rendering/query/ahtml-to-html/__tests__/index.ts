@@ -7,7 +7,6 @@ const renderingTestTemplate = async ({ txt, otherTables }) => {
     richText: await ctbToAHtml({
       nodeTableXml: txt,
       otherTables,
-      stringify: false,
     }),
   });
   expect(res).toMatchSnapshot();

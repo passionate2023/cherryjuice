@@ -1,7 +1,8 @@
 import { ExecKCommand } from '::helpers/execK';
 type TLineStyle = {
   line: { [p: string]: string };
-  // wrapper: { [p: string]: string };
+  delete: string[];
+  deleteAll: boolean;
 };
 const justificationMap = {
   right: 'flex-end',
@@ -18,9 +19,9 @@ const justify = ({
   lineStyle: TLineStyle;
 }) => {
   if (!aHtmlElement.tags[0][1].style) aHtmlElement.tags[0][1].style = {};
-  if (!(command && command !== ExecKCommand.justifyLeft)) {
-    lineStyle.line['display'] = 'block';
-    lineStyle.line['justify-content'] = 'flex-start';
+  if (command === ExecKCommand.justifyLeft) {
+    lineStyle.delete.push('display');
+    lineStyle.delete.push('justify-content');
   } else {
     lineStyle.line['display'] = 'flex';
     lineStyle.line['justify-content'] = justificationMap[command];

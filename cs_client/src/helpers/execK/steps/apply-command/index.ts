@@ -55,7 +55,7 @@ const applyCmd = ({ selected, tagName, style, command }) => {
       ([, { style: existingStyle }]) =>
         existingStyle && existingStyle[style.property]?.includes(style.value),
     );
-  const lineStyle = { line: {} };
+  const lineStyle = { line: {}, deleteAll: false, delete: [] };
   const modifiedSelected = {
     leftEdge: applyCommand({
       tag: { tagName, tagExists },
