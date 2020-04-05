@@ -1,19 +1,18 @@
 import modErrorModal from '::sass-modules/shared-components/error-modal.scss';
 import * as React from 'react';
 import { useCallback, useEffect, useRef } from 'react';
-import { appActions } from '::app/reducer';
-import { Scrim } from '::shared-components/material/scrim';
+import { appActionCreators } from '::app/reducer';
+import { Scrim } from '::shared-components/scrim';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { Icon, Icons } from '::shared-components/icon';
 type Props = {
   error: Error;
-  dispatch: Function;
 };
 
-const ErrorModal: React.FC<Props> = ({ error, dispatch }) => {
+const ErrorModal: React.FC<Props> = ({ error }) => {
   const dismissError = useCallback(() => {
-    dispatch({ type: appActions.SET_ERROR, value: undefined });
+    appActionCreators.throwError(undefined);
   }, []);
   const focusAnchor = useRef<HTMLButtonElement>();
   useEffect(() => {

@@ -146,14 +146,13 @@ const tagsAndStyles = [
 ];
 const misc = [
   {
-    tagName: undefined,
     icon: Icons.material['clear-format'],
     name: 'remove style',
     button: {
       style: {},
       label: 'c',
     },
-    execCommandArguments: { command: ExecKCommand.clear },
+    execCommandArguments: { command: ExecKCommand.clear, tagName: undefined },
     hotKey: { key: `r`, altKey: true },
   },
 ];

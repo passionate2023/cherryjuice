@@ -1,8 +1,8 @@
 import { handleIndentation } from '::helpers/typing/indentation';
-import { appActions } from '::app/reducer';
+import { appActionCreators } from '::app/reducer';
 import { handleBackSpace } from './backspace';
 
-const setupKeyboardEvents = ({ dispatch }) => {
+const setupKeyboardEvents = () => {
   const editor = document.querySelector('#rich-text');
   editor.onkeydown = e => {
     try {
@@ -12,7 +12,9 @@ const setupKeyboardEvents = ({ dispatch }) => {
         handleBackSpace(e);
       }
     } catch (error) {
-      dispatch({ type: appActions.SET_ERROR, value: error });
+      appActionCreators.throwError(error);
+      // eslint-disable-next-line no-console
+      if (process.env.NODE_ENV === 'development') console.error(error);
     }
   };
 };

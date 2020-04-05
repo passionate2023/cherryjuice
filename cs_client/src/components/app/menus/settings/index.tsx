@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { TDispatchAppReducer } from '::types/react';
 import { useCallback, useState } from 'react';
-import { Dialog } from '::shared-components/material/dialog';
-import { Drawer } from '::shared-components/material/drawer';
+import { Dialog } from '::shared-components/dialog';
+import { Drawer } from '::shared-components/drawer';
 import { screens } from '::app/menus/settings/screens';
 import { appActions } from '::app/reducer';
-import { DrawerToggle } from '::shared-components/material/drawer/drawer-toggle';
+import { DrawerToggle } from '::shared-components/drawer/drawer-toggle';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 type Props = {
   dispatch: TDispatchAppReducer;
@@ -30,7 +30,7 @@ const Settings: React.FC<Props> = ({ dispatch }) => {
         { label: 'Apply', onClick: cancel, disabled: true },
       ]}
     >
-      <ErrorBoundary dispatch={dispatch}>
+      <ErrorBoundary>
         <Drawer
           screens={screens}
           selectedScreenTitle={selectedTabTitle}

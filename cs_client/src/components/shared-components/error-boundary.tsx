@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { appActionCreators } from '../app/reducer';
+import { appActionCreators } from '::app/reducer';
 
 class ErrorBoundary extends React.Component<{}, { error?: Error }> {
   constructor(props) {

@@ -3,7 +3,7 @@ import modSettings from '::sass-modules/settings/settings.scss';
 import * as React from 'react';
 import { THotKey } from '::helpers/hotkeys';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
-import { TextInput } from '::shared-components/material/text-input';
+import { TextInput } from '::shared-components/text-input';
 import { modButton } from '::sass-modules/index';
 import { useState } from 'react';
 

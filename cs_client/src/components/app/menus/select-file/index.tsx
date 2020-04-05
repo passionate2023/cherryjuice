@@ -2,16 +2,16 @@ import { modSelectFile } from '::sass-modules/index';
 import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router';
-import { appActionCreators, appActions } from '../../reducer';
+import { appActionCreators } from '../../reducer';
 import { dateToFormattedString } from '::helpers/time';
 import { QUERY_CT_FILES } from '::graphql/queries';
 import { Ct_File } from '::types/generated';
-import { Dialog } from '::shared-components/material/dialog';
+import { Dialog } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Icon, Icons } from '::shared-components/icon';
-import { useReloadQuery } from '../../../../hooks/use-reload-query';
-import { useQueryTimeout } from '../../../../hooks/use-query-timeout';
-import { SpinnerCircle } from '../../../shared-components/spinner-circle';
+import { useReloadQuery } from '::hooks/use-reload-query';
+import { useQueryTimeout } from '::hooks/use-query-timeout';
+import { SpinnerCircle } from '::shared-components/spinner-circle';
 
 const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
   data,
@@ -128,19 +128,13 @@ const Files = ({ selected, setSelected, selectedFile, data, loading }) => {
   );
 };
 
-const SelectFile = ({ dispatch, selectedFile, reloadFiles }) => {
+const SelectFile = ({ selectedFile, reloadFiles }) => {
   const [selected, setSelected] = useState({ id: '', path: '' });
   const history = useHistory();
-  const close = useCallback(
-    () => dispatch({ type: appActions.TOGGLE_FILE_SELECT }),
-    [],
-  );
+  const close = appActionCreators.toggleFileSelect;
   const open = () => {
     history.push('/');
-    dispatch({
-      type: appActions.SELECT_FILE,
-      value: selected.id,
-    });
+    appActionCreators.selectFile(selected.id);
   };
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const { data, loading, error } = useReloadQuery(
@@ -180,7 +174,7 @@ const SelectFile = ({ dispatch, selectedFile, reloadFiles }) => {
       onCloseDialog={close}
       dialogFooterButtons={buttons}
     >
-      <ErrorBoundary dispatch={dispatch}>
+      <ErrorBoundary>
         <Files
           setSelected={setSelected}
           selectedFile={selectedFile}
@@ -192,4 +186,5 @@ const SelectFile = ({ dispatch, selectedFile, reloadFiles }) => {
     </Dialog>
   );
 };
-export { SelectFile };
+
+export default SelectFile;

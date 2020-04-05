@@ -1,5 +1,7 @@
 const initialState = {
-  showTree: JSON.parse(localStorage.getItem('showTree')) !== true,
+  showTree: [JSON.parse(localStorage.getItem('showTree'))].map(value =>
+    value === null ? true : value === true,
+  )[0],
   treeSize: JSON.parse(localStorage.getItem('treeSize')) || 250,
   selectedNode: {
     id: 0,
@@ -84,6 +86,37 @@ const createActionCreators = () => {
         value: width,
       });
     },
+    toggleSettings: () => {
+      state.dispatch({ type: actions.TOGGLE_SETTINGS });
+    },
+    toggleFileSelect: () => {
+      state.dispatch({ type: actions.TOGGLE_FILE_SELECT });
+    },
+    toggleTree: () => {
+      state.dispatch({ type: actions.TOGGLE_TREE });
+      // setTimeout(onResize, 1000);
+    },
+    saveDocument: e => {
+      state.dispatch({
+        type: actions.SAVE_DOCUMENT,
+        value: e.shiftKey ? new Date().getTime() : new Date().getTime() + '_', // don't send to the server
+      });
+    },
+    reloadDocument: () => {
+      state.dispatch({
+        type: actions.RELOAD_DOCUMENT,
+        value: new Date().getTime(),
+      });
+    },
+    selectFile: value => state.dispatch({ type: actions.SELECT_FILE, value }),
+    selectNode: (
+      { node_id, name, style },
+      { is_richtxt, ts_creation, ts_lastsave },
+    ) =>
+      state.dispatch({
+        type: actions.SELECT_NODE,
+        value: { node_id, name, style, is_richtxt, ts_creation, ts_lastsave },
+      }),
   };
 };
 const reducer = (state: TState, action) => {

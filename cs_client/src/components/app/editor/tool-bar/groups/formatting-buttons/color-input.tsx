@@ -1,0 +1,31 @@
+import * as React from 'react';
+import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
+import { execK } from '::helpers/execK';
+import { Icon } from '::shared-components/icon';
+
+const ColorInput: React.FC<{
+  label: string;
+  cssProperty: string;
+  inputId: string;
+  icon: string;
+}> = ({ icon, label, cssProperty, inputId }) => {
+  return (
+    <ToolbarButton>
+      <label htmlFor={label} style={{ cursor: 'pointer' }} id={inputId}>
+        <Icon name={icon} small={true} />
+        <input
+          id={label}
+          type="color"
+          style={{ display: 'none' }}
+          onChange={e => {
+            execK({
+              style: { property: `${cssProperty}`, value: `${e.target.value}` },
+            });
+          }}
+        />
+      </label>
+    </ToolbarButton>
+  );
+};
+
+export { ColorInput };

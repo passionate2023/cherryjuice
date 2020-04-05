@@ -62,17 +62,17 @@ const stopListening = () => {
 
 const hotKeysManager = { startListening, stopListening, createHotKey };
 
-const setupFormattingHotKeys = ({ dispatch }) => {
+const setupFormattingHotKeys = () => {
   commands.tagsAndStyles.forEach(({ hotKey, execCommandArguments }) => {
     if (hotKey)
       hotKeysManager.createHotKey(hotKey, () =>
-        execK({ ...execCommandArguments, dispatch }),
+        execK({ ...execCommandArguments }),
       );
   });
   commands.misc.forEach(({ hotKey, execCommandArguments }) => {
     if (hotKey)
       hotKeysManager.createHotKey(hotKey, () =>
-        execK({ ...execCommandArguments, dispatch }),
+        execK({ ...execCommandArguments }),
       );
   });
   commands.colors.forEach(({ hotKey, inputId }) => {

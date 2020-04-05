@@ -3,8 +3,7 @@ import { getSelection } from '::helpers/execK/steps/get-selection';
 import { pipe1 } from '::helpers/execK/steps//pipe1';
 import { pipe3 } from '::helpers/execK/steps/pipe3';
 import { restoreSelection } from '::helpers/execK/steps/restore-selection';
-import { TDispatchAppReducer } from '::types/react';
-import { appActions } from '::app/reducer';
+import { appActionCreators } from '::app/reducer';
 
 enum ExecKCommand {
   clear = 'clear',
@@ -18,18 +17,17 @@ const execK = ({
   style,
   command,
   testSample,
-  dispatch,
 }: {
   tagName?: string;
   style?: { property: string; value: string };
   command?: ExecKCommand;
   testSample?: any;
-  dispatch?: TDispatchAppReducer;
 }) => {
   const editor: HTMLDivElement = document.querySelector('#rich-text ');
   const ogHtml = editor.innerHTML;
   try {
-    if (editor.contentEditable !== 'true' && !testSample) throw Error('Editing is disabled');
+    if (editor.contentEditable !== 'true' && !testSample)
+      throw Error('Editing is disabled');
     let { startElement, endElement, startOffset, endOffset } =
       testSample || getSelection({ selectAdjacentWordIfNoneIsSelected: true });
     const {
@@ -74,11 +72,9 @@ const execK = ({
     });
   } catch (e) {
     document.querySelector('#rich-text ').innerHTML = ogHtml;
-    if (dispatch) {
-      dispatch({ type: appActions.SET_ERROR, value: e });
-    } else {
-      throw e;
-    }
+    appActionCreators.throwError(e);
+    // eslint-disable-next-line no-console
+    if (process.env.NODE_ENV === 'development') console.error(e);
   }
 };
 

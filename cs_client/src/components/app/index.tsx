@@ -1,20 +1,24 @@
 import appModule from '::sass-modules/app.scss';
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import * as React from 'react';
-import { useEffect, useReducer, useRef, Suspense } from 'react';
+import { useEffect, useReducer, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
 import { appActionCreators, appInitialState, appReducer } from './reducer';
 
 // eager
-import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Void } from '::shared-components/suspense-fallback/void';
+// import { ApolloProvider } from '@apollo/react-common';
+import { client } from '::graphql/apollo';
 // lazy
-import { ToolBar } from '::lazy-components/index';
-import { ErrorModal } from '::lazy-components/index';
-import { Settings } from '::lazy-components/index';
-import { Body } from '::lazy-components/index';
-import { InfoBar } from '::lazy-components/index';
-
+const ApolloProvider = React.lazy(() =>
+  import('@apollo/react-common').then(({ ApolloProvider }) => ({
+    default: ApolloProvider,
+  })),
+);
+const Editor = React.lazy(() => import('::app/editor'));
+const ErrorModal = React.lazy(() => import('::shared-components/error-modal'));
+const Settings = React.lazy(() => import('::app/menus/settings'));
+const SelectFile = React.lazy(() => import('::app/menus/select-file'));
 type Props = {};
 
 const useSaveStateToLocalStorage = state => {
@@ -70,57 +74,38 @@ const App: React.FC<Props> = () => {
   useEffect(() => {
     appActionCreators.setDispatch(dispatch);
   }, [dispatch]);
-  const appRef = useRef<HTMLDivElement>();
-  const treeRef = useRef<HTMLDivElement & { size: { width: number } }>();
 
   useOnWindowResize();
   useSaveStateToLocalStorage(state);
   useHandleRouting(state);
+  cssVariables.setTreeWidth(state.showTree ? state.treeSize : 0);
   return (
-    <div
-      className={appModule.app}
-      ref={appRef}
-      style={{
-        ...{
-          gridTemplateColumns: `${
-            !state.showTree ? '0' : 'var(--tree-width) 1fr'
-          }`,
-        },
-      }}
-    >
-      <ErrorBoundary>
-        <Suspense fallback={<Void />}>
-          <ToolBar
-            showFormattingButtons={state.showFormattingButtons}
-            contentEditable={state.contentEditable}
-            isOnMobile={state.isOnMobile}
-            dispatch={dispatch}
-            // onResize={onResize}
-          />
-        </Suspense>
-      </ErrorBoundary>
-
+    <div className={appModule.app}>
       <Suspense fallback={<Void />}>
-        <Body
-          dispatch={dispatch}
-          // onResize={onResize}
-          treeRef={treeRef}
-          state={state}
-        />
+        <ApolloProvider client={client}>
+          <Suspense fallback={<Void />}>
+            <Editor state={state} />
+          </Suspense>
+          {state.showFileSelect && (
+            <Suspense fallback={<Void />}>
+              <SelectFile
+                selectedFile={state.selectedFile}
+                reloadFiles={state.reloadFiles}
+              />
+            </Suspense>
+          )}
+          {state.showSettings && (
+            <Suspense fallback={<Void />}>
+              <Settings dispatch={dispatch} />
+            </Suspense>
+          )}
+          {state.error && (
+            <Suspense fallback={<Void />}>
+              <ErrorModal error={state.error} />
+            </Suspense>
+          )}
+        </ApolloProvider>
       </Suspense>
-      <Suspense fallback={<Void />}>
-        <InfoBar state={state} node={state.selectedNode} />
-      </Suspense>
-      {state.showSettings && (
-        <Suspense fallback={<Void />}>
-          <Settings dispatch={dispatch} />
-        </Suspense>
-      )}
-      {state.error && (
-        <Suspense fallback={<Void />}>
-          <ErrorModal error={state.error} dispatch={dispatch} />
-        </Suspense>
-      )}
     </div>
   );
 };

@@ -14,7 +14,7 @@ import {
   writeChangesToDom,
 } from '::helpers/execK/steps/pipe3';
 import { getDDOE } from '::helpers/execK/steps/pipe1/ddoes';
-import { appActions } from '::app/reducer';
+import { appActionCreators } from '::app/reducer';
 
 const getPngBase64 = file =>
   new Promise(resolve => {
@@ -174,13 +174,13 @@ const handlePaste = async e => {
     }
   }
 };
-const setupClipboard = ({ dispatch }) => {
+const setupClipboard = () => {
   const editableDiv = document.getElementById('rich-text');
   editableDiv.onpaste = e => {
     handlePaste(e).catch(error => {
       // eslint-disable-next-line no-console
-      if(process.env.NODE_ENV === 'development') console.error(error);
-      dispatch({ type: appActions.SET_ERROR, value: error });
+      if (process.env.NODE_ENV === 'development') console.error(error);
+      appActionCreators.throwError(error);
     });
   };
 };
