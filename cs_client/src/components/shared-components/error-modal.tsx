@@ -1,6 +1,6 @@
 import modErrorModal from '::sass-modules/shared-components/error-modal.scss';
 import * as React from 'react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback } from 'react';
 import { appActionCreators } from '::app/reducer';
 import { Scrim } from '::shared-components/scrim';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
@@ -14,10 +14,6 @@ const ErrorModal: React.FC<Props> = ({ error }) => {
   const dismissError = useCallback(() => {
     appActionCreators.throwError(undefined);
   }, []);
-  const focusAnchor = useRef<HTMLButtonElement>();
-  useEffect(() => {
-    if (focusAnchor.current) focusAnchor.current.focus();
-  });
   useModalKeyboardEvents({
     onCloseModal: dismissError,
     modalSelector: `.${modErrorModal.errorModal}`,
@@ -42,7 +38,7 @@ const ErrorModal: React.FC<Props> = ({ error }) => {
         <ButtonSquare
           className={`${modErrorModal.errorModal__dismissButton}`}
           onClick={dismissError}
-          myref={focusAnchor}
+          autoFocus={true}
         >
           Dismiss
         </ButtonSquare>

@@ -20,6 +20,7 @@ const DialogFooter: React.FC<Props> = ({ dialogFooterButtons }) => {
           className={''}
           onClick={onClick}
           disabled={disabled}
+          autoFocus={i === 0}
         >
           {label}
         </ButtonSquare>
