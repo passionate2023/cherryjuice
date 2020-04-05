@@ -1,5 +1,5 @@
 const initialState = {
-  showTree: JSON.parse(localStorage.getItem('showTree')) !== false,
+  showTree: JSON.parse(localStorage.getItem('showTree')) !== true,
   treeSize: JSON.parse(localStorage.getItem('treeSize')) || 250,
   selectedNode: {
     id: 0,

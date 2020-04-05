@@ -20,6 +20,8 @@ const Icons = {
     bold: 'bold',
     'clear-format': 'clear-format',
     foreground: 'foreground',
+    'lock-open': 'lock-open',
+    'lock-closed': 'lock-closed',
     h1: 'h1',
     h2: 'h2',
     h3: 'h3',

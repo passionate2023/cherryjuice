@@ -40,7 +40,7 @@ describe('execK snapshot tests', () => {
   const predicate = filter => ({ meta: { name } }) =>
     filter ? name === filter : name;
   testSamples.filter(predicate(undefined)).forEach(sample => {
-    commands.tagsAndStyles.forEach(({ execCommandArguments }) => {
+    [...commands.tagsAndStyles,...commands.misc].forEach(({ execCommandArguments }) => {
       test(sample, execCommandArguments);
     });
   });

@@ -178,6 +178,8 @@ const setupClipboard = ({ dispatch }) => {
   const editableDiv = document.getElementById('rich-text');
   editableDiv.onpaste = e => {
     handlePaste(e).catch(error => {
+      // eslint-disable-next-line no-console
+      if(process.env.NODE_ENV === 'development') console.error(error);
       dispatch({ type: appActions.SET_ERROR, value: error });
     });
   };

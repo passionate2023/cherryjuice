@@ -51,6 +51,13 @@ const MainButtons: React.FC<Props> = ({ dispatch }) => {
   } = useMainCallbacks({ dispatch });
   return (
     <div className={modToolbar.toolBar__group}>
+      <ToolbarButton onClick={toggleTree}>
+        {/*<img src={cherries} alt="" style={{ width: 22 }} />*/}
+        <Icon
+          name={Icons.cherrytree.additionalIcons.cherries}
+          style={{ width: 22 }}
+        />
+      </ToolbarButton>
       <ToolbarButton onClick={toggleSettings}>
         <Icon name={Icons.material.settings} small={true} />
       </ToolbarButton>
@@ -62,13 +69,6 @@ const MainButtons: React.FC<Props> = ({ dispatch }) => {
       </ToolbarButton>
       <ToolbarButton onClick={reloadDocument}>
         <Icon name={Icons.material.refresh} small={true} />
-      </ToolbarButton>
-      <ToolbarButton onClick={toggleTree}>
-        {/*<img src={cherries} alt="" style={{ width: 22 }} />*/}
-        <Icon
-          name={Icons.cherrytree.additionalIcons.cherries}
-          style={{ width: 22 }}
-        />
       </ToolbarButton>
     </div>
   );

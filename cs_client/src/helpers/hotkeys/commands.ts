@@ -143,7 +143,10 @@ const tagsAndStyles = [
     },
     execCommandArguments: { command: ExecKCommand.justifyRight },
   },
+];
+const misc = [
   {
+    tagName: undefined,
     icon: Icons.material['clear-format'],
     name: 'remove style',
     button: {
@@ -154,6 +157,6 @@ const tagsAndStyles = [
     hotKey: { key: `r`, altKey: true },
   },
 ];
-const commands = { tagsAndStyles, colors };
+const commands = { tagsAndStyles, colors, misc };
 
 export { commands };

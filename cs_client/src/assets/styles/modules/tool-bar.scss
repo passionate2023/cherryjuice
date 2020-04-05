@@ -92,3 +92,11 @@
   font-size: 18px;
   user-select: none;
 }
+
+.tool-bar__separator {
+  margin-left: -1px;
+  width: 1px;
+  background-color: grey;
+  height: 45%;
+  opacity: 0.6;
+}

@@ -56,7 +56,7 @@ const writeChangesToDom = (
     childrenOfStartDDDE,
     midDDOEs,
     childrenOfEndDDDE,
-    lineStyle = { line: {} },
+    lineStyle = { line: {}, delete: [], deleteAll: false },
   },
   { startAnchor, endAnchor },
 ) => {

@@ -69,7 +69,12 @@ const setupFormattingHotKeys = ({ dispatch }) => {
         execK({ ...execCommandArguments, dispatch }),
       );
   });
-
+  commands.misc.forEach(({ hotKey, execCommandArguments }) => {
+    if (hotKey)
+      hotKeysManager.createHotKey(hotKey, () =>
+        execK({ ...execCommandArguments, dispatch }),
+      );
+  });
   commands.colors.forEach(({ hotKey, inputId }) => {
     hotKeysManager.createHotKey(hotKey, () => {
       // @ts-ignore

@@ -18,14 +18,7 @@ const FormattingButtons: React.FC<Props> = ({ dispatch }) => {
         modToolbar.toolBar__groupFormatting + ' ' + modToolbar.toolBar__group
       }
     >
-      {commands.colors.map(({ icon, label, cssProperty, inputId }) => (
-        <ColorInput
-          key={label}
-          icon={icon}
-          {...{ label, cssProperty, inputId }}
-          dispatch={dispatch}
-        />
-      ))}
+
       {commands.tagsAndStyles.map(({ icon, execCommandArguments }, i) => (
         <ToolbarButton
           key={i}
@@ -40,12 +33,31 @@ const FormattingButtons: React.FC<Props> = ({ dispatch }) => {
             })
           }
         >
-          {/*<span*/}
-          {/*  style={buttonStyle}*/}
-          {/*  className={modToolbar.toolBar__letterIcon}*/}
-          {/*>*/}
-          {/*  {label}*/}
-          {/*</span>*/}
+          <Icon name={icon} small={true} />
+        </ToolbarButton>
+      ))}
+      {commands.colors.map(({ icon, label, cssProperty, inputId }) => (
+        <ColorInput
+          key={label}
+          icon={icon}
+          {...{ label, cssProperty, inputId }}
+          dispatch={dispatch}
+        />
+      ))}
+      {commands.misc.map(({ icon, execCommandArguments }, i) => (
+        <ToolbarButton
+          key={i}
+          onClick={() =>
+            execK({
+              tagName: execCommandArguments.tagName,
+              // @ts-ignore
+              style: execCommandArguments?.style,
+              // @ts-ignore
+              command: execCommandArguments?.command,
+              dispatch,
+            })
+          }
+        >
           <Icon name={icon} small={true} />
         </ToolbarButton>
       ))}

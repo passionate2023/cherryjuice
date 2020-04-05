@@ -6,7 +6,7 @@ import { KeyboardShortcut } from '::app/menus/settings/screens/keyboard-shortcut
 const keyboardShortcutsScreen = {
   'Keyboard Shortcuts': (
     <div className={modSettings.settings__screen}>
-      {[...commands.colors, ...commands.tagsAndStyles].map(
+      {[...commands.colors, ...commands.tagsAndStyles,...commands.misc].map(
         ({ name, hotKey }) =>
           hotKey && <KeyboardShortcut key={name} name={name} hotkey={hotKey} />,
       )}

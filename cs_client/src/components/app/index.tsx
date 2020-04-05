@@ -92,6 +92,7 @@ const App: React.FC<Props> = () => {
         <Suspense fallback={<Void />}>
           <ToolBar
             showFormattingButtons={state.showFormattingButtons}
+            contentEditable={state.contentEditable}
             isOnMobile={state.isOnMobile}
             dispatch={dispatch}
             // onResize={onResize}
