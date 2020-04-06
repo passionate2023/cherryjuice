@@ -61,12 +61,12 @@ const useOnWindowResize = (
 };
 const useHandleRouting = state => {
   const history = useHistory();
-  if (history.location.hash) {
-    history.push('/' + history.location.hash.substr(1));
-  } else if (state.selectedFile) {
-    if (history.location.pathname === '/')
-      history.push('/' + state.selectedFile);
-  }
+  useEffect(() => {
+    if (state.selectedFile) {
+      if (history.location.pathname === '/')
+        history.push('/' + state.selectedFile);
+    }
+  }, [state.selectedFile]);
 };
 
 const App: React.FC<Props> = () => {

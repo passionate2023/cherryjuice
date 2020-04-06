@@ -9,6 +9,7 @@ import { getTreeStateFromLocalStorage } from '::helpers/misc';
 import { Icon, Icons } from '::shared-components/icon';
 import { modToolbar } from '::sass-modules/index';
 import { nodeOverlay } from './helpers/node-overlay';
+import { scrollIntoToolbar } from '::helpers/ui';
 
 type Props = {
   node_id: number;
@@ -74,9 +75,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
       // @ts-ignore
       componentRef?.current?.scrollIntoView();
       // --
-      // on mobile, scrolling the node into view causes toolbar to get invisible
-      const toolbar = document.querySelector('.' + modToolbar.toolBar);
-      toolbar.scrollIntoView();
+      scrollIntoToolbar()
       // --
       appActionCreators.selectNode(
         {

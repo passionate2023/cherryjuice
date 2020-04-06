@@ -41,7 +41,8 @@
 }
 .rich-text__link--file,
 .rich-text__link--folder {
-  color: grey;
+  color: grey !important;
+  cursor: not-allowed !important;
 }
 .rich-text__link--node {
   color: green !important;

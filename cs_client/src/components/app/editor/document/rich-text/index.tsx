@@ -18,6 +18,8 @@ import { useReloadQuery } from '::hooks/use-reload-query';
 
 import { modRichText } from '::sass-modules/index';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
+import { useReactRouterForAnchors } from '::hooks/use-react-router-for-anchors';
+import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
 
 type Props = {
   file_id: string;
@@ -97,26 +99,30 @@ const RichText: React.FC<Props> = ({
     hotKeysManager.startListening();
   }, []);
 
+  useReactRouterForAnchors({ html });
+  useScrollToHashElement({ html });
   return (
-    <div
-      id={'rich-text'}
-      ref={richTextRef}
-      className={modRichText.richText}
-      {...(html
-        ? {
-            contentEditable: contentEditable,
-            dangerouslySetInnerHTML: { __html: html },
-          }
-        : {
-            children: error ? (
-              <span className={modRichText.richText__error}>
-                could not fetch the node
-              </span>
-            ) : (
-              <SpinnerCircle />
-            ),
-          })}
-    />
+    <>
+      <div
+        id={'rich-text'}
+        ref={richTextRef}
+        className={modRichText.richText}
+        {...(html
+          ? {
+              contentEditable: contentEditable,
+              dangerouslySetInnerHTML: { __html: html },
+            }
+          : {
+              children: error ? (
+                <span className={modRichText.richText__error}>
+                  could not fetch the node
+                </span>
+              ) : (
+                <SpinnerCircle />
+              ),
+            })}
+      />
+    </>
   );
 };
 

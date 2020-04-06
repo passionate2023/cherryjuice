@@ -21,17 +21,12 @@ if (process.env.NODE_ENV === 'production') {
   app.use(redirectToHTTPS);
   app.use(sendCompressedJavascript);
 }
-app.use(
-  express.static(
-    path.join(
-      __dirname,
-      process.env.NODE_ENV === 'production'
-        ? '../client'
-        : '../../cs_client/dist',
-    ),
-  ),
+const staticAssetsRootFolder = path.join(
+  __dirname,
+  process.env.NODE_ENV === 'production' ? '../client' : '../../cs_client/dist',
 );
-app.use(ignoreClientSideRouting);
+app.use(express.static(staticAssetsRootFolder));
+app.use(ignoreClientSideRouting({ staticAssetsRootFolder }));
 // app.use(createRouterPNG({resolversState}))
 
 export { app };
