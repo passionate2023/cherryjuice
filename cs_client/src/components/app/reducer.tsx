@@ -1,15 +1,17 @@
+const defaultSelectNode = {
+  id: -1,
+  name: '',
+  is_richtxt: '',
+  ts_creation: '',
+  ts_lastsave: '',
+  style: {},
+};
 const initialState = {
   showTree: [JSON.parse(localStorage.getItem('showTree'))].map(value =>
     value === null ? true : value === true,
   )[0],
   treeSize: JSON.parse(localStorage.getItem('treeSize')) || 250,
-  selectedNode: {
-    id: 0,
-    name: '',
-    is_richtxt: false,
-    ts_creation: '',
-    ts_lastsave: '',
-  },
+  selectedNode: defaultSelectNode,
   selectedFile:
     [localStorage.getItem('selectedFile')].filter(
       value => Boolean(value) && value !== 'null',
@@ -28,9 +30,17 @@ const initialState = {
   isOnMobile: false,
   showInfoBar: false,
 };
+export type TRecentNode = {
+  id: number;
+  name: string;
+  style?: Record<string, string | number>;
+  is_richtxt: string;
+  ts_creation: string;
+  ts_lastsave: string;
+};
 export type TState = typeof initialState & {
-  recentNodes: { id: string; name: string; style: any }[];
-  selectedNode: { id: string; name: string; style: any };
+  selectedNode: TRecentNode;
+  recentNodes: TRecentNode[];
 };
 enum actions {
   TOGGLE_TREE,
@@ -119,7 +129,7 @@ const createActionCreators = () => {
       }),
   };
 };
-const reducer = (state: TState, action) => {
+const reducer = (state: TState, action): TState => {
   switch (action.type) {
     case actions.TOGGLE_TREE:
       return { ...state, showTree: !state.showTree };
@@ -135,6 +145,9 @@ const reducer = (state: TState, action) => {
         id: action.value.node_id,
         name: action.value.name,
         style: action.value.style,
+        is_richtxt: `${action.value.is_richtxt}`,
+        ts_creation: `${action.value.ts_creation}`,
+        ts_lastsave: `${action.value.ts_lastsave}`,
       });
 
       return {
@@ -155,7 +168,7 @@ const reducer = (state: TState, action) => {
         selectedFile: action.value,
         showFileSelect: !action.value,
         showTree: true,
-        selectedNode: { id: -1, name: '' },
+        selectedNode: defaultSelectNode,
       };
     case actions.SAVE_DOCUMENT:
       return {

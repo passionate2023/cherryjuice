@@ -7,7 +7,6 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 import { appActionCreators } from '::app/reducer';
 import { getTreeStateFromLocalStorage } from '::helpers/misc';
 import { Icon, Icons } from '::shared-components/icon';
-import { modToolbar } from '::sass-modules/index';
 import { nodeOverlay } from './helpers/node-overlay';
 import { scrollIntoToolbar } from '::helpers/ui';
 
@@ -45,7 +44,8 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
   // callback hooks
   const selectNode = useCallback(
     e => {
-      if (e.target.classList.contains(nodeMod.node__titleButton)) return;
+      const eventIsTriggeredByCollapseButton =e.target.classList.contains(nodeMod.node__titleButton)
+      if (eventIsTriggeredByCollapseButton) return;
       nodeOverlay.updateWidth();
       nodeOverlay.updateLeft(componentRef);
       appActionCreators.selectNode(
