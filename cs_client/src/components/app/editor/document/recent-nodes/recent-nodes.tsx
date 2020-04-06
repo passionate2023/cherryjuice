@@ -16,17 +16,17 @@ const RecentNodes: React.FC<Props> = ({
   state: { recentNodes, selectedNode, isOnMobile, showRecentNodes },
   file_id,
 }) => {
-  let recentNodesOther = recentNodes.filter(
+  const recentNodesOther = recentNodes.filter(
     ({ id }) => +id !== selectedNode.id,
   );
-  let lastN: TRecentNode[] = recentNodesOther.slice(
+  const lastN: TRecentNode[] = recentNodesOther.slice(
     recentNodesOther.length > config.recentNodesN
       ? recentNodesOther.length - config.recentNodesN
       : 0,
   );
   const history = useHistory();
   const goToNode = useCallback(e => {
-    let node_id = e.target.dataset.id;
+    const node_id = e.target.dataset.id;
     history.push(`/${file_id}/node-${node_id}`);
   }, []);
   return (

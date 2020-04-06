@@ -1,3 +1,4 @@
+
 const defaultSelectNode = {
   id: -1,
   name: '',
@@ -138,17 +139,21 @@ const reducer = (state: TState, action): TState => {
     case actions.RESIZE_TREE:
       return { ...state, treeSize: action.value };
     case actions.SELECT_NODE:
-      (state.recentNodes.some(node => +node.id === +action.value.node_id)
-        ? state.recentNodes.filter(node => +node.id !== +action.value.node_id)
-        : state.recentNodes
-      ).push({
-        id: action.value.node_id,
-        name: action.value.name,
-        style: action.value.style,
-        is_richtxt: `${action.value.is_richtxt}`,
-        ts_creation: `${action.value.ts_creation}`,
-        ts_lastsave: `${action.value.ts_lastsave}`,
-      });
+      // const selectedNodeExistsInRecentNodes = state.recentNodes.some(
+      //   node => +node.id === +action.value.node_id,
+      // );
+      // const newRecentNodes = cloneObj(state.recentNodes);
+      // selectedNodeExistsInRecentNodes
+      //   ? state.recentNodes.filter(node => +node.id !== +action.value.node_id)
+      //   : state.recentNodes;
+      // newRecentNodes.push({
+      //   id: action.value.node_id,
+      //   name: action.value.name,
+      //   style: action.value.style,
+      //   is_richtxt: `${action.value.is_richtxt}`,
+      //   ts_creation: `${action.value.ts_creation}`,
+      //   ts_lastsave: `${action.value.ts_lastsave}`,
+      // });
 
       return {
         ...state,
@@ -160,7 +165,19 @@ const reducer = (state: TState, action): TState => {
           ts_lastsave: `${action.value.ts_lastsave}`,
           style: JSON.parse(action.value.style),
         },
-        recentNodes: [...state.recentNodes],
+        recentNodes: [
+          ...state.recentNodes.filter(
+            node => +node.id !== +action.value.node_id,
+          ),
+          {
+            id: action.value.node_id,
+            name: action.value.name,
+            style: action.value.style,
+            is_richtxt: `${action.value.is_richtxt}`,
+            ts_creation: `${action.value.ts_creation}`,
+            ts_lastsave: `${action.value.ts_lastsave}`,
+          },
+        ],
       };
     case actions.SELECT_FILE:
       return {
