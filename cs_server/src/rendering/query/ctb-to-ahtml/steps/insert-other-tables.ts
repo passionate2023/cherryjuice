@@ -2,7 +2,6 @@ import { parseTable } from './parse-table';
 import { curry } from 'ramda';
 
 const adjustNode = ({ node, type }) => {
-  // console.log('inside adjust-node', { node, type });
   switch (type) {
     case 'codebox':
       return {
@@ -23,7 +22,6 @@ const adjustNode = ({ node, type }) => {
         },
       };
     case 'image':
-      // if (node.anchor) console.log('anchor!', node);
       return node.anchor
         ? {
             type: 'anchor',
@@ -67,7 +65,7 @@ const getInsertionPosition = ({ xml, miscNodeOffset }) => {
   let accumulatedLength = 0;
   let nodeIndex = 0;
   let nodeString = undefined;
-
+  let nodeProperties = undefined;
   for (const node of xml) {
     let _nodeString, nodeLength;
     if (node.type) {
@@ -78,13 +76,14 @@ const getInsertionPosition = ({ xml, miscNodeOffset }) => {
     }
     if (miscNodeOffset < nodeLength + accumulatedLength) {
       nodeString = _nodeString;
+      if (typeof node === 'object') nodeProperties = node.$;
       break;
     } else {
       nodeIndex++;
       accumulatedLength += nodeLength;
     }
   }
-  return { nodeString, nodeIndex, accumulatedLength };
+  return { nodeString, nodeIndex, accumulatedLength, nodeProperties };
 };
 
 const insertNode = ({
@@ -93,6 +92,7 @@ const insertNode = ({
   accumulatedLength,
   xml,
   miscNode,
+  nodeProperties,
 }) => {
   if (!nodeString) {
     xml.push(
@@ -106,7 +106,9 @@ const insertNode = ({
     const [firstHalf, secondHalf] = [
       nodeString.substring(0, localOffset),
       nodeString.substring(localOffset),
-    ];
+    ].map(nodeString =>
+      nodeProperties ? { _: nodeString, $: nodeProperties } : nodeString,
+    );
 
     const toBeInserted = [];
     if (firstHalf) toBeInserted.push(firstHalf);
@@ -126,7 +128,6 @@ const insertOtherTables = curry((otherTables, oldXml) => {
   const xml = oldXml.filter(
     node => node && (typeof node === 'string' || node._),
   );
-  let log = [];
   Object.entries(otherTables)
     .flatMap(([tableName, elements]) =>
       // @ts-ignore
@@ -138,23 +139,18 @@ const insertOtherTables = curry((otherTables, oldXml) => {
         nodeString,
         nodeIndex,
         accumulatedLength,
+        nodeProperties,
       } = getInsertionPosition({ xml, miscNodeOffset: miscNode.offset });
-      insertNode({ miscNode, xml, nodeIndex, nodeString, accumulatedLength });
-      // log.push([
-      //   'inserting',
-      //   JSON.stringify({
-      //     accumulatedLength,
-      //     nodeIndex,
-      //     nodeString,
-      //     offset: miscNode.offset,
-      //     xml
-      //   })
-      // ]);
+      insertNode({
+        miscNode,
+        xml,
+        nodeIndex,
+        nodeString,
+        accumulatedLength,
+        nodeProperties,
+      });
     });
-  // console.log({ str: log });
   return xml;
 });
-// things to consider
-// a node adds 3 units to the total length
 
 export { insertOtherTables };
