@@ -20,12 +20,15 @@ import { modRichText } from '::sass-modules/index';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
 import { useReactRouterForAnchors } from '::hooks/use-react-router-for-anchors';
 import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
+import { appActionCreators } from '::app/reducer';
+import { Ct_Node_Meta } from '::types/generated';
 
 type Props = {
   file_id: string;
   saveDocument: number;
   reloadDocument: number;
   contentEditable: boolean;
+  nodes: Map<number, Ct_Node_Meta>;
 };
 
 const RichText: React.FC<Props> = ({
@@ -33,6 +36,7 @@ const RichText: React.FC<Props> = ({
   saveDocument,
   reloadDocument,
   contentEditable,
+  nodes,
 }) => {
   const richTextRef = useRef<HTMLDivElement>();
   const match = useRouteMatch();
@@ -101,6 +105,32 @@ const RichText: React.FC<Props> = ({
 
   useReactRouterForAnchors({ html });
   useScrollToHashElement({ html });
+
+  useEffect(() => {
+    const node = nodes?.get(node_id);
+    if (node) {
+      const {
+        name,
+        node_title_styles,
+        is_richtxt,
+        ts_creation,
+        ts_lastsave,
+      } = node;
+      appActionCreators.selectNode(
+        {
+          node_id,
+          name,
+          style: node_title_styles,
+        },
+        {
+          is_richtxt,
+          ts_creation,
+          ts_lastsave,
+        },
+      );
+    }
+  }, [node_id, nodes]);
+
   return (
     <>
       <div

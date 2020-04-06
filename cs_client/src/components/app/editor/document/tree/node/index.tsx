@@ -4,7 +4,6 @@ import { Ct_Node_Meta } from '::types/generated';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { appActionCreators } from '::app/reducer';
 import { getTreeStateFromLocalStorage } from '::helpers/misc';
 import { Icon, Icons } from '::shared-components/icon';
 import { nodeOverlay } from './helpers/node-overlay';
@@ -26,9 +25,7 @@ const collapseAll = (ids: number[], treeState: any, nodes: any) => {
 };
 
 const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
-  const { child_nodes, name, is_richtxt, ts_creation, ts_lastsave } = nodes.get(
-    node_id,
-  );
+  const { child_nodes, name } = nodes.get(node_id);
 
   // misc hooks
   const history = useHistory();
@@ -44,22 +41,12 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
   // callback hooks
   const selectNode = useCallback(
     e => {
-      const eventIsTriggeredByCollapseButton =e.target.classList.contains(nodeMod.node__titleButton)
+      const eventIsTriggeredByCollapseButton = e.target.classList.contains(
+        nodeMod.node__titleButton,
+      );
       if (eventIsTriggeredByCollapseButton) return;
       nodeOverlay.updateWidth();
       nodeOverlay.updateLeft(componentRef);
-      appActionCreators.selectNode(
-        {
-          node_id,
-          name,
-          style: styles,
-        },
-        {
-          is_richtxt,
-          ts_creation,
-          ts_lastsave,
-        },
-      );
       history.push(nodePath);
     },
     [nodePath],
@@ -75,20 +62,8 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
       // @ts-ignore
       componentRef?.current?.scrollIntoView();
       // --
-      scrollIntoToolbar()
+      scrollIntoToolbar();
       // --
-      appActionCreators.selectNode(
-        {
-          node_id,
-          name,
-          style: styles,
-        },
-        {
-          is_richtxt,
-          ts_creation,
-          ts_lastsave,
-        },
-      );
     }
   }, []);
   useEffect(() => {

@@ -81,6 +81,7 @@ const Document: React.FC<Props> = ({ state }) => {
                 <ErrorBoundary>
                   <RichText
                     {...props}
+                    nodes={nodes}
                     file_id={file_id}
                     saveDocument={saveDocument}
                     reloadDocument={reloadDocument}
