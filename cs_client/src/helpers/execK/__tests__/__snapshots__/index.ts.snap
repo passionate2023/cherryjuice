@@ -8,7 +8,7 @@ exports[`execK snapshot tests node45 {"command":"center"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
       te
@@ -25,11 +25,11 @@ exports[`execK snapshot tests node45 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <div
       class="rich-text__text"
@@ -43,11 +43,11 @@ exports[`execK snapshot tests node45 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <div
       class="rich-text__text"
@@ -67,11 +67,11 @@ exports[`execK snapshot tests node45 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
       text 
@@ -88,11 +88,11 @@ exports[`execK snapshot tests node45 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
       text 
@@ -207,6 +207,128 @@ exports[`execK snapshot tests node45 {"command":"clear"} 1`] = `
     <span>
       http:/
     </span>
+    <a
+      class="rich-text__link rich-text__link--web"
+      data-type="web"
+      href="http://google.com"
+      style=""
+      target="_blank"
+    >
+      /google.com
+    </a>
+    <span>
+       text
+    </span>
+  </div>
+</div>
+`;
+
+exports[`execK snapshot tests node45 {"command":"fill"} 1`] = `
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+      te
+    </span>
+    <span>
+      xt 
+    </span>
+    <div
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(42, 61, 44);"
+    >
+      some
+    </div>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  />
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <div
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(42, 61, 44);"
+    >
+      some
+    </div>
+    <span>
+       text
+    </span>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  />
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <div
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(42, 61, 44);"
+    >
+      some
+    </div>
+    <span>
+       text 
+    </span>
+    <div
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(42, 61, 44);"
+    >
+      some
+    </div>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  />
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+      text 
+    </span>
+    <div
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(42, 61, 44);"
+    >
+      some
+    </div>
+    <span>
+       text
+    </span>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  />
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+      text 
+    </span>
+    <a
+      class="rich-text__link rich-text__link--web"
+      data-type="web"
+      href="http://google.com"
+      style=""
+      target="_blank"
+    >
+      http:/
+    </a>
     <a
       class="rich-text__link rich-text__link--web"
       data-type="web"
@@ -344,7 +466,7 @@ exports[`execK snapshot tests node45 {"command":"right"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
       te
@@ -361,11 +483,11 @@ exports[`execK snapshot tests node45 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <div
       class="rich-text__text"
@@ -379,11 +501,11 @@ exports[`execK snapshot tests node45 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <div
       class="rich-text__text"
@@ -403,11 +525,11 @@ exports[`execK snapshot tests node45 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
       text 
@@ -424,11 +546,11 @@ exports[`execK snapshot tests node45 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
       text 
@@ -1940,7 +2062,7 @@ exports[`execK snapshot tests node46 {"command":"center"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span
       class="rich-text__text"
@@ -2029,6 +2151,59 @@ exports[`execK snapshot tests node46 {"command":"clear"} 1`] = `
 </div>
 `;
 
+exports[`execK snapshot tests node46 {"command":"fill"} 1`] = `
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(42, 61, 44);text-decoration:line-through;"
+    >
+      so
+    </span>
+    <span
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(42, 61, 44);text-decoration:line-through;"
+    >
+      me
+    </span>
+    <div
+      class="rich-text__text"
+      style="text-decoration:line-through;"
+    >
+       
+    </div>
+    <img
+      alt=""
+      data-offset="5"
+      src="data:image/png;base64,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"
+      style=" width:106px; height:70px ;; "
+    />
+    <span>
+       
+    </span>
+    <span
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(42, 61, 44);text-decoration:line-through;"
+    >
+      te
+    </span>
+    <span
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(42, 61, 44);text-decoration:line-through;"
+    >
+      xt
+    </span>
+  </div>
+</div>
+`;
+
 exports[`execK snapshot tests node46 {"command":"left"} 1`] = `
 <div
   class="_richText_8059a"
@@ -2089,7 +2264,7 @@ exports[`execK snapshot tests node46 {"command":"right"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span
       class="rich-text__text"
@@ -2726,7 +2901,7 @@ exports[`execK snapshot tests node48 {"command":"center"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span
       class="rich-text__text"
@@ -2746,7 +2921,7 @@ exports[`execK snapshot tests node48 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <img
       alt=""
@@ -2757,7 +2932,7 @@ exports[`execK snapshot tests node48 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span
       class="rich-text__text"
@@ -2814,6 +2989,63 @@ exports[`execK snapshot tests node48 {"command":"clear"} 1`] = `
     style=""
   >
     <span>
+      te
+    </span>
+    <span
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(42, 61, 44);"
+    >
+      xt
+    </span>
+  </div>
+</div>
+`;
+
+exports[`execK snapshot tests node48 {"command":"fill"} 1`] = `
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(42, 61, 44);"
+    >
+      so
+    </span>
+    <span
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(42, 61, 44);"
+    >
+      me
+    </span>
+    <span>
+       
+    </span>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <img
+      alt=""
+      data-offset="6"
+      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGoAAABGCAIAAACrLZaNAAAAA3NCSVQICAjb4U/gAAAGmUlEQVR4nO2bX2gTSRzHvzZLeypZ24fuQs2WNhzkYWOoqBDItkKLBKQvVwhSihxYODg4vIdSEBFEKEWQPlQEQWjhkKNIIH0JB6FQ8JpCQaWlJg+BIy0mKsmLdcWeDcndPezOZkzSzZ9NjSfzeZqdzux897fz+84vIQUYDAaDwWB8OY496noIIPbx5/u5VmsBnCfu3OgQtHb24N6t/WT1OVxgxj4s1DWlebR9ycW+PbhWC6gF5xV+esQGACis3lWDX3SDmfJ1hS+5f/un/VaLqAeWvJY4bPc5B09c9nOyYNOvs4X4y09/PMmZ5k37L49Oyvp42sUPc3dqvH52mfYAgG34RtdwhSWKD6RcOX5phNNXix38dt/8MLGmudLu4wIzXdNXO4qxAyDY5JGT0zN2xUxKbitWHN9jdDvb3YLRz51zkvZghxGXbOYfsxvXCvfjjH2CxA6A4O6YnjnhNJtiTXN5+JTrJOrlCNzE9XYTLdHNPGlyA4NEyQWOup9NPE36e46RzkLsWR7WEWxCuXKh4/JghbEGljSXJu+gfcJN2rGP9+7nkgCc7YFrJ/WYur8LOHOHnn2vC1noC3f3cEAe4M6dsdFD5LPtWMsB6BENZ8i/ODTBcg9+ytV88hZWH+8H1/IAp1wvPghRcgSaS3YfHd3VMHG6ZC4YMZYvvooKJHOxrN4UzrQ7QWVBLB/X/uDuUACgfYA8XvaluaXWTDb/Yk3TmY+GD4gQCKLpAWlFc8nuK0aXNuk6yL94WRjWdopg6wGSp22akvjmhy10yW5oORJ9zXXrU5qUuY1jQXPTC5fkszx5l9zAIJSz2gvKb60VXaa7h6PM5d+3rS6DG9d8eNncaH2fzMWyHZpRdp+167s9W3gDYO0gfpWTAeHM8ctZss1jB9H6F2kyDWsu2X3UMWQbvmYPOKnwOjnliv3ODB8wLQSA/FvDStycdswTdyNVgsDJxETim3V9VWFzXziKD0qNai7Vsvb3qp8ULgI3fMNeZn+Fqlqim/kJN33joru9yRTgpg+1/NZa1ft9hjBifzgCoMnfrzSoucz78sFbH1azpb31sXYQpy+puoRyGQC1Zm7yyad49VHWaExzpaMjH7z17t7dj6uxwmfTsoVs7OD3u/s1GCJVypfUJVSVgDoyN/egTE8229zzuumaGQwGg8FgMBgMBoPBYDAYDMb/i2PVhxwB4lRgdJzX2upSODiXqT7H4w0synxdU44e9gsrS3xVv+8TvcujsgQASMXDP2x8FRvMlNaELzMXXJhrycpNhiWvJTjXlN+jOHhJv1ZT6dTjrY2Qad6M+SdvOvTxtIsf5u7U+PTsQiRUpQcAJHn0uVxhCQOPyzvpkX36aumlPyPmh4l1zRDFqf4BReLBG+FqU8aLsQPASw755mhg3mUmJbSbNsb3dhrd4iWJN/qVfpG0XReNuKjv/zK7ca0oQ4FFhcQOAO8YHw1MiWZTmqC5c2Bcdkg8Ha7Kycv7FP+YiZbE7jpp+vpIpMV+hS8OkU4RjWJXL+lMpXa2TW5bK7zE8+Wd4wOm7/xINHMA0rPhSCgDQBzzDt3Ud7LjqlcMHXr27b1Sob98vssDbAOefkmihzj6xpAIAeg8ZThDdOfQBAtFFkI1n7ypePT2RmIb8Lj8iwrZJ0TJEWpW00vbW3MJ0iO2IRXfIk6XCW1sG6+o+CoqkFlJqUS0dEkElQXpdT1LHBddADDWRx5PTa00pxRRozsJLUzbia0lIgT8qe/NZlnWnIicD0ZW0D/l9y8HAsuByeejHG3SdbC9k0rJ2k7hezuBTGevrmT31108dzig5Uhir59kR5Myt3Gsaha980OU4QIWCpfMTpS8S1+fC64+HwBgfTdRdBm+y0OZy6t3rS6DLWl2zY8asVOXouFr4fD5Ba7h+j6zklLHNaPk++b13a6+2gOQeJpWfA6AlyYHVGIi6aeJ+hdpMhY0k1gDWI8G5/T+Nkjy0LxX9BTXED0u73wgsOw1LQSA7XeGlTh8uhLdKUiVwPscxETSu6F6HlSS+j3VR9VNUzT39rk0bR6RA8D75FFfmf2lqmpJ7K4rDh/VUXSKvfcpOOhDbX23zr3Hy4uTmqamfr/SsGbqr5JDWZzU/j/I0oe2xNM0fUmd8ZTLAKg1czMbj9PVR1mjUc2VtbWFZ+Pp1GfT1JSaXoqGb9dgiFQpX1KXUFUC6sjcUKRMj6ru1Da3RhrWHIqEZ+MqlZTqeut/1M5gMBgMBoPBYDAYDAaD8c3xH4Ohq/zPM2EjAAAAAElFTkSuQmCC"
+      style=" width:106px; height:70px ;; "
+    />
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(42, 61, 44);"
+    >
       te
     </span>
     <span
@@ -2888,7 +3120,7 @@ exports[`execK snapshot tests node48 {"command":"right"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span
       class="rich-text__text"
@@ -2908,7 +3140,7 @@ exports[`execK snapshot tests node48 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <img
       alt=""
@@ -2919,7 +3151,7 @@ exports[`execK snapshot tests node48 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span
       class="rich-text__text"
@@ -3558,7 +3790,7 @@ exports[`execK snapshot tests node49 {"command":"center"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
       sim
@@ -3587,7 +3819,7 @@ exports[`execK snapshot tests node49 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
       sim
@@ -3651,11 +3883,11 @@ exports[`execK snapshot tests node49 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <a
       class="rich-text__link rich-text__link--web"
@@ -3748,6 +3980,138 @@ exports[`execK snapshot tests node49 {"command":"clear"} 1`] = `
     <span>
       http://google.co
     </span>
+    <a
+      class="rich-text__link rich-text__link--web"
+      data-type="web"
+      href="http://google.com"
+      style=""
+      target="_blank"
+    >
+      m
+    </a>
+    <span>
+       dz
+    </span>
+  </div>
+</div>
+`;
+
+exports[`execK snapshot tests node49 {"command":"fill"} 1`] = `
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+      sim
+    </span>
+    <span>
+      ple text 
+    </span>
+    <a
+      class="rich-text__link rich-text__link--web"
+      data-type="web"
+      href="http://google.com"
+      style=""
+      target="_blank"
+    >
+      http://google.com
+    </a>
+    <span>
+       
+    </span>
+    <div
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(154, 17, 151);"
+    >
+      rich text
+    </div>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+      sim
+    </span>
+    <div
+      class="rich-text__text"
+      style="text-decoration:line-through;"
+    >
+      ple text 
+    </div>
+    <a
+      class="rich-text__link rich-text__link--web"
+      data-type="web"
+      href="http://google.com"
+      style="text-decoration:line-through;"
+      target="_blank"
+    >
+      http://google.
+    </a>
+    <strong
+      class="rich-text__text"
+      style="text-decoration:line-through;"
+    >
+      <a
+        class="rich-text__link rich-text__link--web"
+        data-type="web"
+        href="http://google.com"
+        style="text-decoration:line-through;"
+        target="_blank"
+      >
+        co
+      </a>
+    </strong>
+    <a
+      class="rich-text__link rich-text__link--web"
+      data-type="web"
+      href="http://google.com"
+      style="text-decoration:line-through;"
+      target="_blank"
+    >
+      m
+    </a>
+    <div
+      class="rich-text__text"
+      style="text-decoration:line-through;"
+    >
+       
+    </div>
+    <div
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(154, 17, 151);text-decoration:line-through;"
+    >
+      rich
+    </div>
+    <div
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(154, 17, 151);"
+    >
+       text
+    </div>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  />
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <a
+      class="rich-text__link rich-text__link--web"
+      data-type="web"
+      href="http://google.com"
+      style=""
+      target="_blank"
+    >
+      http://google.co
+    </a>
     <a
       class="rich-text__link rich-text__link--web"
       data-type="web"
@@ -3900,7 +4264,7 @@ exports[`execK snapshot tests node49 {"command":"right"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
       sim
@@ -3929,7 +4293,7 @@ exports[`execK snapshot tests node49 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
       sim
@@ -3993,11 +4357,11 @@ exports[`execK snapshot tests node49 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <a
       class="rich-text__link rich-text__link--web"
@@ -5669,7 +6033,7 @@ exports[`execK snapshot tests node55 {"command":"center"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
       si
@@ -5740,6 +6104,50 @@ exports[`execK snapshot tests node55 {"command":"clear"} 1`] = `
 </div>
 `;
 
+exports[`execK snapshot tests node55 {"command":"fill"} 1`] = `
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+      si
+    </span>
+    <span>
+      mple text 
+    </span>
+    <a
+      class="rich-text__link rich-text__link--web"
+      data-type="web"
+      href="http://google.com"
+      style=""
+      target="_blank"
+    >
+      http://google.com
+    </a>
+    <span>
+       
+    </span>
+    <span
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(154, 17, 151);"
+    >
+      rich t
+    </span>
+    <span
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(154, 17, 151);"
+    >
+      ext
+    </span>
+  </div>
+</div>
+`;
+
 exports[`execK snapshot tests node55 {"command":"left"} 1`] = `
 <div
   class="_richText_8059a"
@@ -5791,7 +6199,7 @@ exports[`execK snapshot tests node55 {"command":"right"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
       si
@@ -6336,7 +6744,7 @@ exports[`execK snapshot tests node56 {"command":"center"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
       1
@@ -6347,7 +6755,7 @@ exports[`execK snapshot tests node56 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
       this is the _8th line. the previous two lines was empty
@@ -6355,11 +6763,11 @@ exports[`execK snapshot tests node56 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
       2.
@@ -6367,7 +6775,7 @@ exports[`execK snapshot tests node56 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <div
       class="rich-text__text"
@@ -6393,11 +6801,11 @@ exports[`execK snapshot tests node56 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
       3.
@@ -6405,7 +6813,7 @@ exports[`execK snapshot tests node56 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <em
       class="rich-text__text"
@@ -6458,11 +6866,11 @@ exports[`execK snapshot tests node56 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <div
       class="rich-text__text"
@@ -6476,11 +6884,11 @@ exports[`execK snapshot tests node56 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
       some 
@@ -6494,11 +6902,11 @@ exports[`execK snapshot tests node56 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
       some 
@@ -6654,6 +7062,205 @@ exports[`execK snapshot tests node56 {"command":"clear"} 1`] = `
     <span>
       text
     </span>
+    <span>
+       so
+    </span>
+    <span>
+      me
+    </span>
+  </div>
+  <div
+    class="rich-text__line"
+    style=""
+  />
+  <div
+    class="rich-text__line"
+    style=""
+  />
+</div>
+`;
+
+exports[`execK snapshot tests node56 {"command":"fill"} 1`] = `
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+      1
+    </span>
+    <span>
+      .
+    </span>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+      this is the _8th line. the previous two lines was empty
+    </span>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  />
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+      2.
+    </span>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <div
+      class="rich-text__text"
+      style="color:rgb(233, 97, 199);"
+    >
+      this 
+    </div>
+    <div
+      class="rich-text__text"
+      style="color:rgb(233, 97, 199);text-decoration:underline;"
+    >
+      is
+    </div>
+    <div
+      class="rich-text__text"
+      style="text-decoration:underline;"
+    >
+       the 9th
+    </div>
+    <span>
+       line. the previous line was empty
+    </span>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  />
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+      3.
+    </span>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <em
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <small
+        class="rich-text__text"
+      >
+        blu
+      </small>
+    </em>
+    <em
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);text-decoration:underline;"
+    >
+      <small
+        class="rich-text__text"
+      >
+        e
+      </small>
+    </em>
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);text-decoration:underline;"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+           b
+        </small>
+      </em>
+    </strong>
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+          g
+        </small>
+      </em>
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  />
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <div
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(72, 72, 72);"
+    >
+      some
+    </div>
+    <span>
+       text
+    </span>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  />
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+      some 
+    </span>
+    <div
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(72, 72, 72);"
+    >
+      text
+    </div>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  />
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+      some 
+    </span>
+    <div
+      class="rich-text__text"
+      style="background-color:rgb(241, 200, 200);color:rgb(72, 72, 72);"
+    >
+      text
+    </div>
     <span>
        so
     </span>
@@ -6865,7 +7472,7 @@ exports[`execK snapshot tests node56 {"command":"right"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
       1
@@ -6876,7 +7483,7 @@ exports[`execK snapshot tests node56 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
       this is the _8th line. the previous two lines was empty
@@ -6884,11 +7491,11 @@ exports[`execK snapshot tests node56 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
       2.
@@ -6896,7 +7503,7 @@ exports[`execK snapshot tests node56 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <div
       class="rich-text__text"
@@ -6922,11 +7529,11 @@ exports[`execK snapshot tests node56 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
       3.
@@ -6934,7 +7541,7 @@ exports[`execK snapshot tests node56 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <em
       class="rich-text__text"
@@ -6987,11 +7594,11 @@ exports[`execK snapshot tests node56 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <div
       class="rich-text__text"
@@ -7005,11 +7612,11 @@ exports[`execK snapshot tests node56 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
       some 
@@ -7023,11 +7630,11 @@ exports[`execK snapshot tests node56 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
       some 
@@ -9198,7 +9805,7 @@ exports[`execK snapshot tests node68 {"command":"center"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span
       class="rich-text__text"
@@ -9221,7 +9828,7 @@ exports[`execK snapshot tests node68 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <strong
       class="rich-text__text"
@@ -9232,7 +9839,7 @@ exports[`execK snapshot tests node68 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <strong
       class="rich-text__text"
@@ -9242,7 +9849,7 @@ exports[`execK snapshot tests node68 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <strong
       class="rich-text__text"
@@ -9253,7 +9860,7 @@ exports[`execK snapshot tests node68 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <strong
       class="rich-text__text"
@@ -9270,11 +9877,11 @@ exports[`execK snapshot tests node68 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <div
       class="rich-text__text"
@@ -9285,7 +9892,7 @@ exports[`execK snapshot tests node68 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <div
       class="rich-text__text"
@@ -9302,7 +9909,7 @@ exports[`execK snapshot tests node68 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
        
@@ -9331,7 +9938,7 @@ exports[`execK snapshot tests node68 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <div
       class="rich-text__text"
@@ -9348,7 +9955,7 @@ exports[`execK snapshot tests node68 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span
       class="rich-text__text"
@@ -9508,6 +10115,198 @@ exports[`execK snapshot tests node68 {"command":"clear"} 1`] = `
     style=""
   >
     <span>
+      te
+    </span>
+    <span
+      class="rich-text__text"
+      style="color:rgb(99, 204, 99);"
+    >
+      xt
+    </span>
+  </div>
+  <div
+    class="rich-text__line"
+    style=""
+  />
+  <div
+    class="rich-text__line"
+    style=""
+  />
+  <div
+    class="rich-text__line"
+    style=""
+  />
+  <div
+    class="rich-text__line"
+    style=""
+  />
+</div>
+`;
+
+exports[`execK snapshot tests node68 {"command":"fill"} 1`] = `
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span
+      class="rich-text__text"
+      style="color:rgb(233, 97, 199);"
+    >
+      s
+    </span>
+    <span
+      class="rich-text__text"
+      style="color:rgb(233, 97, 199);"
+    >
+      o
+    </span>
+    <strong
+      class="rich-text__text"
+      style="color:rgb(233, 97, 199);"
+    >
+      me
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <strong
+      class="rich-text__text"
+      style="color:rgb(233, 97, 199);"
+    >
+      some
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <strong
+      class="rich-text__text"
+    >
+       
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <strong
+      class="rich-text__text"
+      style="color:rgb(99, 204, 99);"
+    >
+      text
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <strong
+      class="rich-text__text"
+      style="color:rgb(99, 204, 99);"
+    >
+      te
+    </strong>
+    <div
+      class="rich-text__text"
+      style="color:rgb(99, 204, 99);"
+    >
+      xt
+    </div>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  />
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <div
+      class="rich-text__text"
+      style="color:rgb(233, 97, 199);"
+    >
+      some
+    </div>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <div
+      class="rich-text__text"
+      style="color:rgb(233, 97, 199);"
+    >
+      so
+    </div>
+    <strong
+      class="rich-text__text"
+      style="color:rgb(233, 97, 199);"
+    >
+      me
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+       
+    </span>
+    <code
+      class="rich-text__code"
+      data-do_highl_bra="1"
+      data-do_show_linenum="undefined"
+      data-is_width_pix="1"
+      data-syntax="plain-text"
+      data-width_raw="400"
+      style="max-width: 400px;
+        min-height: 200px;
+        width: 400px;
+        display: inline-block;
+        ; 
+        "
+    >
+      
+      console.log('hello');
+    
+    </code>
+    <span>
+       
+    </span>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <div
+      class="rich-text__text"
+      style="color:rgb(99, 204, 99);"
+    >
+      te
+    </div>
+    <strong
+      class="rich-text__text"
+      style="color:rgb(99, 204, 99);"
+    >
+      xt
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span
+      class="rich-text__text"
+      style="color:rgb(99, 204, 99);"
+    >
       te
     </span>
     <span
@@ -9725,7 +10524,7 @@ exports[`execK snapshot tests node68 {"command":"right"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span
       class="rich-text__text"
@@ -9748,7 +10547,7 @@ exports[`execK snapshot tests node68 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <strong
       class="rich-text__text"
@@ -9759,7 +10558,7 @@ exports[`execK snapshot tests node68 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <strong
       class="rich-text__text"
@@ -9769,7 +10568,7 @@ exports[`execK snapshot tests node68 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <strong
       class="rich-text__text"
@@ -9780,7 +10579,7 @@ exports[`execK snapshot tests node68 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <strong
       class="rich-text__text"
@@ -9797,11 +10596,11 @@ exports[`execK snapshot tests node68 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <div
       class="rich-text__text"
@@ -9812,7 +10611,7 @@ exports[`execK snapshot tests node68 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <div
       class="rich-text__text"
@@ -9829,7 +10628,7 @@ exports[`execK snapshot tests node68 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
        
@@ -9858,7 +10657,7 @@ exports[`execK snapshot tests node68 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <div
       class="rich-text__text"
@@ -9875,7 +10674,7 @@ exports[`execK snapshot tests node68 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span
       class="rich-text__text"
@@ -12191,7 +12990,7 @@ exports[`execK snapshot tests node71 {"command":"center"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span
       class="rich-text__text"
@@ -12249,7 +13048,7 @@ exports[`execK snapshot tests node71 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <strong
       class="rich-text__text"
@@ -12292,7 +13091,7 @@ exports[`execK snapshot tests node71 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <strong
       class="rich-text__text"
@@ -12335,7 +13134,7 @@ exports[`execK snapshot tests node71 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <strong
       class="rich-text__text"
@@ -12378,7 +13177,7 @@ exports[`execK snapshot tests node71 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <strong
       class="rich-text__text"
@@ -12421,7 +13220,7 @@ exports[`execK snapshot tests node71 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <strong
       class="rich-text__text"
@@ -12464,7 +13263,7 @@ exports[`execK snapshot tests node71 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <strong
       class="rich-text__text"
@@ -12507,11 +13306,11 @@ exports[`execK snapshot tests node71 {"command":"center"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: center;"
+    style="text-align: center;"
   >
     <span>
       halo  
@@ -12703,6 +13502,393 @@ exports[`execK snapshot tests node71 {"command":"clear"} 1`] = `
     <span>
       red text with bl
     </span>
+    <em
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <small
+        class="rich-text__text"
+      >
+        ue
+      </small>
+    </em>
+    <strong
+      class="rich-text__text"
+      style="background-color:#72baff;color:#9b0505;"
+    >
+      <em
+        class="rich-text__text"
+        style=";"
+      >
+        <small
+          class="rich-text__text"
+          style=";"
+        >
+           bg
+        </small>
+      </em>
+    </strong>
+  </div>
+</div>
+`;
+
+exports[`execK snapshot tests node71 {"command":"fill"} 1`] = `
+<div
+  class="_richText_8059a"
+  contenteditable="true"
+  id="rich-text"
+>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span
+      class="rich-text__text"
+      style="color:rgb(99, 204, 99);"
+    >
+      te
+    </span>
+    <span
+      class="rich-text__text"
+      style="color:rgb(99, 204, 99);"
+    >
+      xt
+    </span>
+    <span>
+       
+    </span>
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+          bold 
+        </small>
+      </em>
+    </strong>
+    <em
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <small
+        class="rich-text__text"
+      >
+        red text with blue
+      </small>
+    </em>
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+           bg
+        </small>
+      </em>
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+          bold
+        </small>
+      </em>
+    </strong>
+    <em
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <small
+        class="rich-text__text"
+      >
+         red text with blue
+      </small>
+    </em>
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+           bg
+        </small>
+      </em>
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+          bold 
+        </small>
+      </em>
+    </strong>
+    <em
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <small
+        class="rich-text__text"
+      >
+        red text with blue
+      </small>
+    </em>
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+           bg
+        </small>
+      </em>
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+          bold 
+        </small>
+      </em>
+    </strong>
+    <em
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <small
+        class="rich-text__text"
+      >
+        red text with blue
+      </small>
+    </em>
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+           bg
+        </small>
+      </em>
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+          bold 
+        </small>
+      </em>
+    </strong>
+    <em
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <small
+        class="rich-text__text"
+      >
+        red text with blue
+      </small>
+    </em>
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+           bg
+        </small>
+      </em>
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+          bold 
+        </small>
+      </em>
+    </strong>
+    <em
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <small
+        class="rich-text__text"
+      >
+        red text with blue
+      </small>
+    </em>
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+           bg
+        </small>
+      </em>
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+          bold 
+        </small>
+      </em>
+    </strong>
+    <em
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <small
+        class="rich-text__text"
+      >
+        red text with blue
+      </small>
+    </em>
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+           bg
+        </small>
+      </em>
+    </strong>
+  </div>
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  />
+  <div
+    class="rich-text__line"
+    style="text-align: justify;"
+  >
+    <span>
+      halo  
+    </span>
+    <strong
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <em
+        class="rich-text__text"
+      >
+        <small
+          class="rich-text__text"
+        >
+          bold 
+        </small>
+      </em>
+    </strong>
+    <em
+      class="rich-text__text"
+      style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
+    >
+      <small
+        class="rich-text__text"
+      >
+        red text with bl
+      </small>
+    </em>
     <em
       class="rich-text__text"
       style="background-color:rgb(114, 186, 255);color:rgb(155, 5, 5);"
@@ -13119,7 +14305,7 @@ exports[`execK snapshot tests node71 {"command":"right"} 1`] = `
 >
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span
       class="rich-text__text"
@@ -13177,7 +14363,7 @@ exports[`execK snapshot tests node71 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <strong
       class="rich-text__text"
@@ -13220,7 +14406,7 @@ exports[`execK snapshot tests node71 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <strong
       class="rich-text__text"
@@ -13263,7 +14449,7 @@ exports[`execK snapshot tests node71 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <strong
       class="rich-text__text"
@@ -13306,7 +14492,7 @@ exports[`execK snapshot tests node71 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <strong
       class="rich-text__text"
@@ -13349,7 +14535,7 @@ exports[`execK snapshot tests node71 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <strong
       class="rich-text__text"
@@ -13392,7 +14578,7 @@ exports[`execK snapshot tests node71 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <strong
       class="rich-text__text"
@@ -13435,11 +14621,11 @@ exports[`execK snapshot tests node71 {"command":"right"} 1`] = `
   </div>
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   />
   <div
     class="rich-text__line"
-    style="display: flex; justify-content: flex-end;"
+    style="text-align: end;"
   >
     <span>
       halo  

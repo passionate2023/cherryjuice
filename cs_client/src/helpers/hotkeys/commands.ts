@@ -1,5 +1,5 @@
 import { ExecKCommand } from '::helpers/execK';
-import { Icons } from '../../components/shared-components/icon';
+import { Icons } from '::shared-components/icon';
 
 const colors = [
   {
@@ -142,6 +142,15 @@ const tagsAndStyles = [
       label: 'jr',
     },
     execCommandArguments: { command: ExecKCommand.justifyRight },
+  },
+  {
+    icon: Icons.material['justify-fill'],
+    name: 'justify fill',
+    button: {
+      style: {},
+      label: 'jf',
+    },
+    execCommandArguments: { command: ExecKCommand.justifyFill },
   },
 ];
 const misc = [

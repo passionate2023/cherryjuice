@@ -32,6 +32,7 @@ const Icons = {
     'justify-center': 'justify-center',
     'justify-left': 'justify-left',
     'justify-right': 'justify-right',
+    'justify-fill': 'justify-fill',
     mono: 'mono',
     small: 'small',
     strikethrough: 'strikethrough',

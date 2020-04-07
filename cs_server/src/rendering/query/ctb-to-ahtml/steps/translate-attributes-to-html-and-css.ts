@@ -35,9 +35,11 @@ const utils = {
   },
 };
 const justificationMap = {
-  right: 'flex-end',
-  center: 'center',
-  fill: 'space-between',
+  'text-align': {
+    right: 'end',
+    center: 'center',
+    fill: 'justify',
+  },
 };
 const createTranslator = (
   tags: (string | { href: any })[],
@@ -55,26 +57,11 @@ const createTranslator = (
     width: c => (styles['width'] = `${c}px`),
     height: c => (styles['height'] = `${c}px`),
     justification: c => {
-      // if (nodeType) {
-      //   if (c === 'right') {
-      //     styles['margin-left'] = 'auto';
-      //   }
-      //   if (c === 'center') {
-      //     styles['margin-right'] = 'auto';
-      //   }
-      // } else {
-      //   styles['text-align'] = c;
-      //   styles['flex'] = '1';
-      // }
-      // if (c && c !== 'left') {
-      //   lineStyles['display'] = 'flex';
-      // }
-
-      if (c)
+      if (c) {
         if (c !== 'left') {
-          lineStyles['display'] = 'flex';
-          lineStyles['justify-content'] = justificationMap[c];
+          lineStyles['text-align'] = justificationMap['text-align'][c];
         }
+      }
     },
     weight: () => tags.push('strong'),
     style: () => tags.push('em'),

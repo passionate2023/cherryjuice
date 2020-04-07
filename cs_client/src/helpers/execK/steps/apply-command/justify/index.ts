@@ -5,9 +5,11 @@ type TLineStyle = {
   deleteAll: boolean;
 };
 const justificationMap = {
-  right: 'flex-end',
-  center: 'center',
-  fill: 'space-between',
+  'text-align': {
+    right: 'end',
+    center: 'center',
+    fill: 'justify',
+  },
 };
 const justify = ({
   aHtmlElement,
@@ -20,11 +22,9 @@ const justify = ({
 }) => {
   if (!aHtmlElement.tags[0][1].style) aHtmlElement.tags[0][1].style = {};
   if (command === ExecKCommand.justifyLeft) {
-    lineStyle.delete.push('display');
-    lineStyle.delete.push('justify-content');
+    lineStyle.delete.push('text-align');
   } else {
-    lineStyle.line['display'] = 'flex';
-    lineStyle.line['justify-content'] = justificationMap[command];
+    lineStyle.line['text-align'] = justificationMap['text-align'][command];
   }
 };
 

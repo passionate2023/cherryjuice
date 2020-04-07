@@ -2,15 +2,20 @@ import { applyCmd } from '::helpers/execK/steps/apply-command';
 import { getSelection } from '::helpers/execK/steps/get-selection';
 import { pipe1 } from '::helpers/execK/steps//pipe1';
 import { pipe3 } from '::helpers/execK/steps/pipe3';
-import { restoreSelection } from '::helpers/execK/steps/restore-selection';
+import {
+  restoreSelection,
+} from '::helpers/execK/steps/restore-selection';
 import { appActionCreators } from '::app/reducer';
 
 enum ExecKCommand {
   clear = 'clear',
   justifyLeft = 'left',
+  justifyFill = 'fill',
   justifyCenter = 'center',
   justifyRight = 'right',
 }
+const isJustificationCommand = command =>
+  command && command != ExecKCommand.clear
 
 const execK = ({
   tagName,
@@ -61,15 +66,18 @@ const execK = ({
       { left, right, modifiedSelected, lineStyle },
       { startDDOE, endDDOE, endAnchor, startAnchor },
     );
-    restoreSelection({
-      modifiedSelection: {
-        childrenElementsOfStartDDOE,
-        childrenElementsOfEndDDOE,
-        adjacentElementsOfStartDDOE,
-      },
-      selected,
-      ogSelection: { startElement, endElement, startOffset, endOffset },
-    });
+    {
+      restoreSelection({
+        modifiedSelection: {
+          childrenElementsOfStartDDOE,
+          childrenElementsOfEndDDOE,
+          adjacentElementsOfStartDDOE,
+        },
+        selected,
+        ogSelection: { startElement, endElement, startOffset, endOffset },
+        options:{collapse:isJustificationCommand(command) }
+      });
+    }
   } catch (e) {
     document.querySelector('#rich-text ').innerHTML = ogHtml;
     appActionCreators.throwError(e);
