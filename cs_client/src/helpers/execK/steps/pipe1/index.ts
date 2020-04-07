@@ -73,7 +73,7 @@ const pipe1 = ({
     indexOfEndSubDDOE,
   });
 
-  const { abstractHtml } = getAHtml({
+  const { abstractHtml, selectionContainsLinks } = getAHtml({
     DDOEs: isolatedSelection,
     options: { useObjForTextNodes: true, serializeNonTextElements: true },
   });
@@ -103,6 +103,7 @@ const pipe1 = ({
     startAnchor,
     endAnchor,
     adjustedSelection,
+    selectionContainsLinks,
   };
 };
 

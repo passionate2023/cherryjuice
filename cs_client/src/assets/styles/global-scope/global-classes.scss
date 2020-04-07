@@ -1,3 +1,4 @@
+@import '../mixins/misc';
 .rich-text__code {
   border: solid 1px bisque;
   background-color: darkslateblue;
@@ -52,4 +53,22 @@
   min-height: 27px;
   display: block;
   align-items: flex-end;
+}
+
+.rich-text__image--link {
+  cursor: pointer;
+}
+
+.rich-text__image--link-web {
+  @include partial-border(#0089ff);
+}
+
+.rich-text__image--link-node {
+  @include partial-border(green);
+}
+
+.rich-text__image--link-folder,
+.rich-text__image--link-file {
+  @include partial-border(grey);
+  cursor: not-allowed !important;
 }

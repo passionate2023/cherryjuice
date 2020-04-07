@@ -47,13 +47,16 @@ const getHtml = async ({ file_id, node_id, txt }, _, { files }) => {
   });
   const otherTables = {
     codebox,
-    image: image.map(({ node_id, offset, justification, anchor, png }) => ({
-      node_id,
-      offset,
-      justification,
-      anchor,
-      ...getPNGSize(png),
-    })),
+    image: image.map(
+      ({ node_id, offset, justification, anchor, png, link }) => ({
+        node_id,
+        offset,
+        justification,
+        anchor,
+        link,
+        ...getPNGSize(png),
+      }),
+    ),
     table: await Promise.all(
       table.map(async table => ({
         ...table,

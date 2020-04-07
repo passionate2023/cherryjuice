@@ -25,6 +25,7 @@ const Document: React.FC<Props> = ({ state }) => {
     selectedFile,
     contentEditable,
     isOnMobile,
+    processLinks,
   } = state;
   const history = useHistory();
   const match = useRouteMatch();
@@ -86,6 +87,7 @@ const Document: React.FC<Props> = ({ state }) => {
                     saveDocument={saveDocument}
                     reloadDocument={reloadDocument}
                     contentEditable={contentEditable || !isOnMobile}
+                    processLinks={processLinks}
                   />
                 </ErrorBoundary>
               );

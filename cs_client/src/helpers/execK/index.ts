@@ -2,9 +2,7 @@ import { applyCmd } from '::helpers/execK/steps/apply-command';
 import { getSelection } from '::helpers/execK/steps/get-selection';
 import { pipe1 } from '::helpers/execK/steps//pipe1';
 import { pipe3 } from '::helpers/execK/steps/pipe3';
-import {
-  restoreSelection,
-} from '::helpers/execK/steps/restore-selection';
+import { restoreSelection } from '::helpers/execK/steps/restore-selection';
 import { appActionCreators } from '::app/reducer';
 
 enum ExecKCommand {
@@ -15,7 +13,7 @@ enum ExecKCommand {
   justifyRight = 'right',
 }
 const isJustificationCommand = command =>
-  command && command != ExecKCommand.clear
+  command && command != ExecKCommand.clear;
 
 const execK = ({
   tagName,
@@ -44,6 +42,7 @@ const execK = ({
       startDDOE,
       endDDOE,
       adjustedSelection,
+      selectionContainsLinks,
     } = pipe1({
       selectionStartElement: startElement,
       selectionEndElement: endElement,
@@ -75,8 +74,10 @@ const execK = ({
         },
         selected,
         ogSelection: { startElement, endElement, startOffset, endOffset },
-        options:{collapse:isJustificationCommand(command) }
+        options: { collapse: isJustificationCommand(command) },
       });
+      if (selectionContainsLinks)
+        appActionCreators.processLinks(new Date().getTime());
     }
   } catch (e) {
     document.querySelector('#rich-text ').innerHTML = ogHtml;

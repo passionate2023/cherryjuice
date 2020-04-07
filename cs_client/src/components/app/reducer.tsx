@@ -1,4 +1,3 @@
-
 const defaultSelectNode = {
   id: -1,
   name: '',
@@ -30,6 +29,7 @@ const initialState = {
   contentEditable: false,
   isOnMobile: false,
   showInfoBar: false,
+  processLinks: undefined,
 };
 export type TRecentNode = {
   id: number;
@@ -59,6 +59,7 @@ enum actions {
   RELOAD_FILES,
   SET_ERROR,
   SET_IS_ON_MOBILE,
+  PROCESS_LINKS,
 }
 const createActionCreators = () => {
   const state = {
@@ -128,6 +129,12 @@ const createActionCreators = () => {
         type: actions.SELECT_NODE,
         value: { node_id, name, style, is_richtxt, ts_creation, ts_lastsave },
       }),
+    processLinks(value: number) {
+      state.dispatch({
+        type: actions.PROCESS_LINKS,
+        value,
+      });
+    },
   };
 };
 const reducer = (state: TState, action): TState => {
@@ -228,6 +235,8 @@ const reducer = (state: TState, action): TState => {
       return { ...state, showInfoBar: !state.showInfoBar };
     case actions.SET_IS_ON_MOBILE:
       return { ...state, isOnMobile: action.value };
+    case actions.PROCESS_LINKS:
+      return { ...state, processLinks: action.value };
     default:
       throw new Error('action not supported');
   }

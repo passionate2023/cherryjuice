@@ -42,6 +42,7 @@ const adjustNode = ({ node, type }) => {
             },
             other_attributes: {
               offset: node.offset,
+              link: node.link,
             },
           };
     case 'table':

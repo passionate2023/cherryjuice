@@ -12,14 +12,6 @@ const getStyles = el =>
     {},
   );
 
-type TProps = {
-  DDOEs: Node[];
-  options?: {
-    useObjForTextNodes?: boolean;
-    serializeNonTextElements?: boolean;
-  };
-};
-
 const getAttributes = (ignoredAttributes: string[]) => el =>
   // @ts-ignore
   Object.fromEntries(
@@ -63,10 +55,17 @@ const flattenDDOEs = ({ DDOEs }) => {
   });
   return flat;
 };
-
+type TProps = {
+  DDOEs: Node[];
+  options?: {
+    useObjForTextNodes?: boolean;
+    serializeNonTextElements?: boolean;
+  };
+};
 const getAHtml = ({ DDOEs, options = {} }: TProps) => {
   const flatList = flattenDDOEs({ DDOEs }); //DDOEs.flatMap(DDOE => Array.from(DDOE.childNodes));
-  const state = { offset: 0 };
+  const state = { offset: 0, selectionContainsLinks: false };
+
   const abstractHtml = (flatList as any[]).reduce((
     acc,
     el, //: HTMLElement | HTMLTableElement | HTMLImageElement | HTMLAnchorElement
@@ -103,7 +102,8 @@ const getAHtml = ({ DDOEs, options = {} }: TProps) => {
                   },
                 },
           );
-        else if (el.localName === 'img')
+        else if (el.localName === 'img') {
+          if (el.dataset.href) state.selectionContainsLinks = true;
           if (el.dataset)
             // existing image
             acc.push(
@@ -139,7 +139,7 @@ const getAHtml = ({ DDOEs, options = {} }: TProps) => {
                     },
                   },
             );
-        else if (el.localName === 'table') {
+        } else if (el.localName === 'table') {
           const tableOuterHTML: string = el.outerHTML;
           if (isPresentationalTable({ table: tableOuterHTML }))
             acc.push(
@@ -169,6 +169,7 @@ const getAHtml = ({ DDOEs, options = {} }: TProps) => {
                   },
             );
         } else if (el.localName === 'a') {
+          state.selectionContainsLinks = true;
           state.offset += el.innerText.length;
           acc.push({
             ...commonAttributes,
@@ -210,7 +211,10 @@ const getAHtml = ({ DDOEs, options = {} }: TProps) => {
     }
     return acc;
   }, []);
-  return { abstractHtml };
+  return {
+    abstractHtml,
+    selectionContainsLinks: state.selectionContainsLinks,
+  };
 };
 
 export { getAHtml };

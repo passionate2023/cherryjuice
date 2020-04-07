@@ -29,6 +29,7 @@ type Props = {
   reloadDocument: number;
   contentEditable: boolean;
   nodes: Map<number, Ct_Node_Meta>;
+  processLinks: number;
 };
 
 const RichText: React.FC<Props> = ({
@@ -37,6 +38,7 @@ const RichText: React.FC<Props> = ({
   reloadDocument,
   contentEditable,
   nodes,
+  processLinks,
 }) => {
   const richTextRef = useRef<HTMLDivElement>();
   const match = useRouteMatch();
@@ -61,6 +63,7 @@ const RichText: React.FC<Props> = ({
   let html;
   if (data && data.ct_node_content[0].node_id === node_id) {
     html = data.ct_node_content[0].html;
+    processLinks = new Date().getTime();
   }
 
   const all_png_base64 = usePng({
@@ -76,6 +79,7 @@ const RichText: React.FC<Props> = ({
         `<img src="data:image/png;base64,${all_png_base64.pngs[counter++]}"`,
       );
     }
+    processLinks = new Date().getTime();
   }
   const [mutate] = useMutation(MUTATE_CT_NODE_CONTENT.html);
 
@@ -103,7 +107,7 @@ const RichText: React.FC<Props> = ({
     hotKeysManager.startListening();
   }, []);
 
-  useReactRouterForAnchors({ html });
+  useReactRouterForAnchors({ file_id, processLinks });
   useScrollToHashElement({ html });
 
   useEffect(() => {

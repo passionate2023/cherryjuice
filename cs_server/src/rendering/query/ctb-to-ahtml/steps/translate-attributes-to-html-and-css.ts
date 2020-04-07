@@ -113,4 +113,8 @@ const translateAttributesToHtmlAndCss = xml =>
       styles: Object.keys(lineStyles).length ? lineStyles : undefined,
     };
   });
-export { translateAttributesToHtmlAndCss, preferences as cssPreferences };
+export {
+  translateAttributesToHtmlAndCss,
+  preferences as cssPreferences,
+  utils as xmlAttributesToCssUtils,
+};

@@ -1,31 +1,49 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router';
 
 type Props = {
-  html: string;
+  file_id: string;
+  processLinks: number;
 };
 
-const useReactRouterForAnchors = ({ html }: Props) => {
+const getURL = ({ target, file_id }): URL => {
+  let url: URL;
+  if (target.localName === 'img') {
+    if (target.dataset.type === 'web') url = new URL(target.dataset.href);
+    else if (target.dataset.type === 'node')
+      url = new URL(`${location.origin}/${file_id}/${target.dataset.href}`);
+  } else {
+    url = new URL(target.href);
+  }
+  return url;
+};
+
+const useReactRouterForAnchors = ({ file_id, processLinks }: Props) => {
   const history = useHistory();
+  const requestIDs = useRef({});
   useEffect(() => {
-    if (html) {
+    if (processLinks && !requestIDs.current[processLinks]) {
       const editor = document.querySelector('#rich-text');
-      const anchors = Array.from(editor.querySelectorAll('a'));
+      const anchors = Array.from(editor.querySelectorAll('a,img[data-href]'));
       anchors.forEach(anchor => {
+        // @ts-ignore
         anchor.onclick = e => {
-          const target = e.target as HTMLAnchorElement;
-          const isLocalLink = target.host === location.host;
-          const isWebLink = !isLocalLink && target.protocol.startsWith('http');
-          if (isLocalLink) {
-            history.push(target.pathname + target.hash);
-            e.preventDefault();
-          } else if (isWebLink) {
-            window.open(target.href, '_blank');
+          let url = getURL({ file_id, target: e.target });
+          if (url) {
+            const isLocalLink = url.host === location.host;
+            const isWebLink = !isLocalLink && url.protocol.startsWith('http');
+            if (isLocalLink) {
+              history.push(url.pathname + url.hash);
+              e.preventDefault();
+            } else if (isWebLink) {
+              window.open(url.href, '_blank');
+            }
           }
         };
       });
+      requestIDs.current[processLinks] = true;
     }
-  }, [html]);
+  }, [processLinks]);
 };
 
 export { useReactRouterForAnchors };
