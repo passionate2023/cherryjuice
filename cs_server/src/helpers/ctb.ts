@@ -14,6 +14,20 @@ const rootNode = {
   has_txt: false,
 };
 type TCt_node = typeof rootNode;
+const nodeTitleHelpers = {
+  hasForground: is_richtxt => (is_richtxt >> 2) & 0x01,
+
+  isBold: is_richtxt => (is_richtxt >> 1) & 0x01,
+  customIconId: is_ro => is_ro >> 1,
+  rgb_str_from_int24bit: int24bit => {
+    const r = (int24bit >> 16) & 0xff;
+    const g = (int24bit >> 8) & 0xff;
+    const b = int24bit & 0xff;
+    return `#${r.toString(16).padStart(2, '0')}${g
+      .toString(16)
+      .padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+  },
+};
 
 const nodeTitleStyle = ({ is_richtxt }) => {
   return JSON.stringify({
@@ -61,18 +75,5 @@ const getPNGSize = buffer => {
 };
 const bufferToPng = buffer =>
   buffer ? new Buffer(buffer, 'binary').toString('base64') : undefined;
-
-const nodeTitleHelpers = {
-  hasForground: is_richtxt => (is_richtxt >> 2) & 0x01,
-
-  isBold: is_richtxt => (is_richtxt >> 1) & 0x01,
-  customIconId: is_ro => is_ro >> 1,
-  rgb_str_from_int24bit: int24bit => {
-    const r = (int24bit >> 16) & 0xff;
-    const g = (int24bit >> 8) & 0xff;
-    const b = int24bit & 0xff;
-    return `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
-  },
-};
 
 export { nodeTitleStyle, rootNode, bufferToPng, organizeData, getPNGSize };

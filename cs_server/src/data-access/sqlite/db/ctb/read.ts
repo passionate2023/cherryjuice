@@ -48,8 +48,6 @@ const getNodesMeta = async ({
       data.map(node => ({
         ...node,
         child_nodes: [],
-        // has_txt: node.txt.length > rootNode.txt.length,
-        // todo: find a way to check wether a node is mpty without quering its text
         is_empty: false,
       })),
     ),
