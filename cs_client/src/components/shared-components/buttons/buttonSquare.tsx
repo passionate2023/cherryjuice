@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { modButton } from '::sass-modules/index';
-import { EventHandler, Ref } from 'react';
+import { EventHandler, useEffect, useRef } from 'react';
 
 type Props = {
   className: string;
   onClick: EventHandler<undefined>;
   disabled?: boolean;
-  myref?: Ref<any>;
   autoFocus?: boolean;
+  lazyAutoFocus?: number;
 };
 
 const ButtonSquare: React.FC<Props> = ({
@@ -15,15 +15,22 @@ const ButtonSquare: React.FC<Props> = ({
   className,
   children,
   onClick,
-  myref,
   autoFocus,
+  lazyAutoFocus,
 }) => {
+  const ref = useRef<HTMLButtonElement>();
+  useEffect(() => {
+    if (lazyAutoFocus) {
+      const handle = setTimeout(() => ref.current.focus(), lazyAutoFocus);
+      return () => clearTimeout(handle);
+    }
+  }, []);
   return (
     <button
+      ref={ref}
       onClick={onClick}
       className={`${className} ${modButton.button} ${modButton.buttonSquare}`}
       disabled={disabled}
-      {...(myref && { ref: myref })}
       autoFocus={autoFocus}
     >
       {children}

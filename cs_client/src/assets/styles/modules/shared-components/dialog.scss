@@ -1,9 +1,5 @@
 @import '../../vars/vars';
 @import '../../mixins/breakpoints';
-.dialog__container {
-  position: absolute;
-  min-width: 100vw;
-}
 .dialog {
   z-index: 7;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -11,15 +7,16 @@
   background-color: white;
   display: flex;
   flex-direction: column;
-  position: relative;
+  position: absolute;
   height: var(--vh);
   width: 100vw;
   @include respond-to('md') {
     border-radius: 5px;
     width: 90vw;
     height: 94vh;
-    margin: 2vh auto;
+    margin: 2vh 5vw;
   }
+
 }
 
 .dialog__header {

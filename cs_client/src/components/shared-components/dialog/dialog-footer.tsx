@@ -4,6 +4,8 @@ import { EventHandler } from 'react';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
 
 type Props = {
+  lazyAutoFocus?: number;
+  isOnMobile: boolean;
   dialogFooterButtons: {
     label: string | JSX.Element;
     disabled: boolean;
@@ -11,7 +13,11 @@ type Props = {
   }[];
 };
 
-const DialogFooter: React.FC<Props> = ({ dialogFooterButtons }) => {
+const DialogFooter: React.FC<Props> = ({
+  dialogFooterButtons,
+  lazyAutoFocus = 400,
+  isOnMobile,
+}) => {
   return (
     <footer className={`${modDialog.dialog__footer}`}>
       {dialogFooterButtons.map(({ onClick, label, disabled }, i) => (
@@ -20,7 +26,7 @@ const DialogFooter: React.FC<Props> = ({ dialogFooterButtons }) => {
           className={''}
           onClick={onClick}
           disabled={disabled}
-          autoFocus={i === 0}
+          lazyAutoFocus={i === 0 && !isOnMobile ? lazyAutoFocus : 0}
         >
           {label}
         </ButtonSquare>

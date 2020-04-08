@@ -9,38 +9,43 @@ import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { Icon, Icons } from '::shared-components/icon';
 type Props = {
   error: Error;
-  dismissError: Function;
 };
-const ErrorModal = ({ error, dismissError }) => {
+const ErrorModal = ({ error, dismissError, style }) => {
   useModalKeyboardEvents({
     onCloseModal: dismissError,
     modalSelector: `.${modErrorModal.errorModal}`,
   });
   return (
-    <>
-      <div className={modErrorModal.errorModal}>
-        <Icon
-          name={Icons.material.warning}
-          className={`${modErrorModal.errorModal__icon}`}
-          extraLarge={true}
-        />
-        <span className={modErrorModal.errorModal__body}>
-          <span className={`${modErrorModal.errorModal__header}`}>
-            Something went wrong
-          </span>
-          <span className={`${modErrorModal.errorModal__message}`}>
-            {error?.message || ''}
-          </span>
+    <animated.div
+      className={modErrorModal.errorModal}
+      style={{
+        ...style,
+        transform: style.xy.interpolate(
+          (x, y) => `translate3d(${x}px,${y}px,0)`,
+        ),
+      }}
+    >
+      <Icon
+        name={Icons.material.warning}
+        className={`${modErrorModal.errorModal__icon}`}
+        extraLarge={true}
+      />
+      <span className={modErrorModal.errorModal__body}>
+        <span className={`${modErrorModal.errorModal__header}`}>
+          Something went wrong
         </span>
-        <ButtonSquare
-          className={`${modErrorModal.errorModal__dismissButton}`}
-          onClick={dismissError}
-          autoFocus={true}
-        >
-          Dismiss
-        </ButtonSquare>
-      </div>
-    </>
+        <span className={`${modErrorModal.errorModal__message}`}>
+          {error?.message || ''}
+        </span>
+      </span>
+      <ButtonSquare
+        className={`${modErrorModal.errorModal__dismissButton}`}
+        onClick={dismissError}
+        lazyAutoFocus={300}
+      >
+        Dismiss
+      </ButtonSquare>
+    </animated.div>
   );
 };
 const ErrorModalWrapper: React.FC<Props> = ({ error }) => {
@@ -50,33 +55,24 @@ const ErrorModalWrapper: React.FC<Props> = ({ error }) => {
     enter: { opacity: 1, xy: [0, 0] },
     leave: { opacity: 0, xy: [0, -5] },
   });
+
   const dismissError = useCallback(() => {
     appActionCreators.throwError(undefined);
   }, []);
   return (
     <>
-      {error && <Scrim onClick={dismissError} errorModal={true}/>}
-      {
-        <div className={modErrorModal.errorModal__wrapper}>
-          {transitions.map(({ key, item, props: style }) => (
-            <>
-              <animated.div
-                key={key}
-                style={{
-                  ...style,
-                  transform: style.xy.interpolate(
-                    (x, y) => `translate3d(${x}px,${y}px,0)`,
-                  ),
-                }}
-              >
-                {item && (
-                  <ErrorModal error={error} dismissError={dismissError} />
-                )}
-              </animated.div>
-            </>
-          ))}
-        </div>
-      }
+      {error && <Scrim onClick={dismissError} errorModal={true} />}
+      {transitions.map(
+        ({ key, item, props: style }) =>
+          item && (
+            <ErrorModal
+              key={key}
+              style={style}
+              error={error}
+              dismissError={dismissError}
+            />
+          ),
+      )}
     </>
   );
 };

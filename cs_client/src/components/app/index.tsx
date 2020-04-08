@@ -4,21 +4,16 @@ import * as React from 'react';
 import { useEffect, useReducer, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
 import { appActionCreators, appInitialState, appReducer } from './reducer';
-
-// eager
 import { Void } from '::shared-components/suspense-fallback/void';
-// import { ApolloProvider } from '@apollo/react-common';
 import { client } from '::graphql/apollo';
-// lazy
+const Menus = React.lazy(() => import('::app/menus'));
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
   })),
 );
 const Editor = React.lazy(() => import('::app/editor'));
-const ErrorModal = React.lazy(() => import('::shared-components/error-modal'));
-const Settings = React.lazy(() => import('::app/menus/settings'));
-const SelectFile = React.lazy(() => import('::app/menus/select-file'));
+
 type Props = {};
 
 const useSaveStateToLocalStorage = state => {
@@ -86,24 +81,9 @@ const App: React.FC<Props> = () => {
           <Suspense fallback={<Void />}>
             <Editor state={state} />
           </Suspense>
-          {state.showFileSelect && (
-            <Suspense fallback={<Void />}>
-              <SelectFile
-                selectedFile={state.selectedFile}
-                reloadFiles={state.reloadFiles}
-              />
-            </Suspense>
-          )}
-          {state.showSettings && (
-            <Suspense fallback={<Void />}>
-              <Settings dispatch={dispatch} />
-            </Suspense>
-          )}
-          {
-            <Suspense fallback={<Void />}>
-              <ErrorModal error={state.error} />
-            </Suspense>
-          }
+          <Suspense fallback={<Void />}>
+            <Menus state={state} dispatch={dispatch} />
+          </Suspense>
         </ApolloProvider>
       </Suspense>
     </div>
