@@ -1,8 +1,11 @@
 .body-scrim {
   position: absolute;
   background-color: black;
-  opacity: 0.5;
+  opacity: 0.4;
   height: 100vh;
   width: 100vw;
   z-index: 6;
+}
+.body-scrim--error-modal {
+  z-index: 10;
 }

@@ -5,7 +5,7 @@ import { DialogHeader } from '::shared-components/dialog/dialog-header';
 import { DialogBody } from '::shared-components/dialog/dialog-body';
 import { Scrim } from '::shared-components/scrim';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
-import { EventHandler } from 'react';
+import { EventHandler,  } from 'react';
 
 const Dialog: React.FC<{
   menuButton?: JSX.Element;

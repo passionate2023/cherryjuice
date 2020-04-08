@@ -99,11 +99,11 @@ const App: React.FC<Props> = () => {
               <Settings dispatch={dispatch} />
             </Suspense>
           )}
-          {state.error && (
+          {
             <Suspense fallback={<Void />}>
               <ErrorModal error={state.error} />
             </Suspense>
-          )}
+          }
         </ApolloProvider>
       </Suspense>
     </div>
