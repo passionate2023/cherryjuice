@@ -27,6 +27,7 @@ const FormattingButtons: React.FC<Props> = () => {
               command: execCommandArguments?.command,
             })
           }
+          className={modToolbar.toolBar__iconStrictWidth}
         >
           <Icon name={icon} small={true} />
         </ToolbarButton>
@@ -50,6 +51,7 @@ const FormattingButtons: React.FC<Props> = () => {
               command: execCommandArguments?.command,
             })
           }
+          className={modToolbar.toolBar__iconStrictWidth}
         >
           <Icon name={icon} small={true} />
         </ToolbarButton>

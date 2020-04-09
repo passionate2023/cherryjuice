@@ -74,6 +74,7 @@ const App: React.FC<Props> = () => {
   useSaveStateToLocalStorage(state);
   useHandleRouting(state);
   cssVariables.setTreeWidth(state.showTree ? state.treeSize : 0);
+  cssVariables.setFormattingBar(state.showFormattingButtons ? 40 : 0);
   return (
     <div className={appModule.app}>
       <Suspense fallback={<Void />}>

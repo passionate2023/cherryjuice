@@ -3,7 +3,7 @@
 .tree {
   // size
   grid-area: tree;
-  height: calc(var(--vh) - #{$info-bar-height+ $tool-bar-height});
+  height: calc(var(--vh) - #{$info-bar-height+ $tool-bar-height} - var(--formatting-bar));
   @include respond-to('md') {
     height: calc(var(--vh) - #{$info-bar-height-md+ $tool-bar-height-md});
   }

@@ -39,27 +39,24 @@
   }
   // size
   @include respond-to($md-down) {
-    height: 100px;
-    min-width: calc(100vw - 20px);
+    height: $tool-bar-height;
   }
   // position
   @include respond-to($md-down) {
-    left: 10px;
-    right: 10px;
-    position: absolute;
-    top: $tool-bar-height + 10px;
-    z-index: 5;
+    bottom: 0;
+    grid-area: formatting-bar;
   }
   // children
+  user-select: none;
   @include respond-to($md-down) {
     padding: 3px 10px;
-    flex-wrap: wrap;
     justify-content: start;
     align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
   // style
   @include respond-to($md-down) {
-    border-radius: 5px;
     box-shadow: $box-shadow1;
     opacity: 0.95;
     background-color: $toolbar-bg-light;
@@ -81,6 +78,11 @@
     background-color: lightgrey;
   }
   transition: $bg-transition-1;
+}
+.tool-bar__icon--strict-width {
+  @include respond-to($md-down) {
+    min-width: $tool-bar-height;
+  }
 }
 .tool-bar__icon--enabled {
   background-color: lightgrey;

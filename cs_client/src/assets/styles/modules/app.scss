@@ -11,11 +11,16 @@
     'tool-bar tool-bar '
     'tree recent-nodes '
     'tree rich-text '
-    'info-bar info-bar';
+    'formatting-bar formatting-bar';
   grid-template-columns: var(--tree-width) 1fr;
-  grid-template-rows: $tool-bar-height $title-and-recent-bar-height 1fr $info-bar-height;
+  grid-template-rows: $tool-bar-height $title-and-recent-bar-height 1fr var(--formatting-bar);
 
-  @include respond-to('md') {
+  @include respond-to($md-up) {
+    grid-template-areas:
+      'tool-bar tool-bar '
+      'tree recent-nodes '
+      'tree rich-text '
+      'info-bar info-bar';
     grid-template-rows: $tool-bar-height-md $title-and-recent-bar-height-md 1fr $info-bar-height-md;
   }
 

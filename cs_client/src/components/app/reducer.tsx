@@ -224,13 +224,11 @@ const reducer = (state: TState, action): TState => {
       return {
         ...state,
         showRecentNodes: !state.showRecentNodes,
-        showFormattingButtons: false,
       };
     case actions.TOGGLE_FORMATTING_BUTTONS:
       return {
         ...state,
         showFormattingButtons: !state.showFormattingButtons,
-        showRecentNodes: false,
       };
     case actions.TOGGLE_CONTENT_EDITABLE:
       return { ...state, contentEditable: !state.contentEditable };

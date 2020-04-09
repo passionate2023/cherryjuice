@@ -18,7 +18,7 @@
   @include respond-to($md-down) {
     left: 10px;
     position: absolute;
-    bottom: 10px;
+    bottom: calc(10px + var(--formatting-bar));
     z-index: 5;
   }
   @include respond-to($md-up) {
