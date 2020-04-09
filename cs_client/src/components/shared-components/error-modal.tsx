@@ -1,18 +1,23 @@
 import modErrorModal from '::sass-modules/shared-components/error-modal.scss';
 import * as React from 'react';
-import { useCallback } from 'react';
-import { useTransition, animated } from 'react-spring';
-import { appActionCreators } from '::app/reducer';
-import { Scrim } from '::shared-components/scrim';
+import { animated } from 'react-spring';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { Icon, Icons } from '::shared-components/icon';
-type Props = {
+import { TransitionWrapper } from '::shared-components/transition-wrapper';
+import { EventHandler } from 'react';
+
+export type ErrorModalProps = {
   error: Error;
+  onClose: EventHandler<undefined>;
 };
-const ErrorModal = ({ error, dismissError, style }) => {
+const ErrorModal: React.FC<ErrorModalProps & { style }> = ({
+  error,
+  onClose,
+  style,
+}) => {
   useModalKeyboardEvents({
-    onCloseModal: dismissError,
+    onCloseModal: onClose,
     modalSelector: `.${modErrorModal.errorModal}`,
   });
   return (
@@ -20,8 +25,8 @@ const ErrorModal = ({ error, dismissError, style }) => {
       className={modErrorModal.errorModal}
       style={{
         ...style,
-        transform: style.xy.interpolate(
-          (x, y) => `translate3d(${x}px,${y}px,0)`,
+        transform: style.xyz.interpolate(
+          (x, y, z) => `scale(${z}) translate3d(${x}px,${y}px,0)`,
         ),
       }}
     >
@@ -40,7 +45,7 @@ const ErrorModal = ({ error, dismissError, style }) => {
       </span>
       <ButtonSquare
         className={`${modErrorModal.errorModal__dismissButton}`}
-        onClick={dismissError}
+        onClick={onClose}
         lazyAutoFocus={300}
       >
         Dismiss
@@ -48,33 +53,26 @@ const ErrorModal = ({ error, dismissError, style }) => {
     </animated.div>
   );
 };
-const ErrorModalWrapper: React.FC<Props> = ({ error }) => {
-  // @ts-ignore
-  const transitions = useTransition(error, null, {
-    from: { opacity: 0, xy: [0, -25] },
-    enter: { opacity: 1, xy: [0, 0] },
-    leave: { opacity: 0, xy: [0, -5] },
-  });
 
-  const dismissError = useCallback(() => {
-    appActionCreators.throwError(undefined);
-  }, []);
+const ErrorModalWithTransition: React.FC<ErrorModalProps> = ({
+  error,
+  onClose,
+}) => {
   return (
-    <>
-      {error && <Scrim onClick={dismissError} errorModal={true} />}
-      {transitions.map(
-        ({ key, item, props: style }) =>
-          item && (
-            <ErrorModal
-              key={key}
-              style={style}
-              error={error}
-              dismissError={dismissError}
-            />
-          ),
-      )}
-    </>
+    <TransitionWrapper
+      Component={ErrorModal}
+      show={Boolean(error)}
+      transitionValues={{
+        from: { opacity: 0, xyz: [0, -25, 0.5] },
+        enter: { opacity: 1, xyz: [0, 0, 1] },
+        leave: { opacity: 0, xyz: [0, -25, 1] },
+      }}
+      componentProps={{
+        onClose,
+        error,
+      }}
+      scrimProps={{ errorModal: true }}
+    />
   );
 };
-
-export default ErrorModalWrapper;
+export default ErrorModalWithTransition;

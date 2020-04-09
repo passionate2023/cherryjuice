@@ -6,7 +6,7 @@ import { appActionCreators } from '../../reducer';
 import { dateToFormattedString } from '::helpers/time';
 import { QUERY_CT_FILES } from '::graphql/queries';
 import { Ct_File } from '::types/generated';
-import { DialogWrapper } from '::shared-components/dialog';
+import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Icon, Icons } from '::shared-components/icon';
 import { useReloadQuery } from '::hooks/use-reload-query';
@@ -128,7 +128,7 @@ const Files = ({ selected, setSelected, selectedFile, data, loading }) => {
   );
 };
 
-const SelectFile = ({ selectedFile, reloadFiles, showDialog ,isOnMobile}) => {
+const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
   const [selected, setSelected] = useState({ id: '', path: '' });
   const history = useHistory();
   const close = appActionCreators.toggleFileSelect;
@@ -169,12 +169,12 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog ,isOnMobile}) => {
     },
   ];
   return (
-    <DialogWrapper
+    <DialogWithTransition
       dialogTitle={'Select Document'}
-      onCloseDialog={close}
       dialogFooterButtons={buttons}
-      showDialog={showDialog}
       isOnMobile={isOnMobile}
+      show={showDialog}
+      onClose={close}
     >
       <ErrorBoundary>
         <Files
@@ -185,7 +185,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog ,isOnMobile}) => {
           loading={loading}
         />
       </ErrorBoundary>
-    </DialogWrapper>
+    </DialogWithTransition>
   );
 };
 

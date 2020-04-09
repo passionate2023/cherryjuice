@@ -86,6 +86,9 @@ const createActionCreators = () => {
     throwError: (error: Error): void => {
       state.dispatch({ type: actions.SET_ERROR, value: error });
     },
+    dismissError: (): void => {
+      state.dispatch({ type: actions.SET_ERROR, value: undefined });
+    },
     setReloadFiles: (): void => {
       state.dispatch({
         type: actions.RELOAD_FILES,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Suspense } from 'react';
 import { Void } from '::shared-components/suspense-fallback/void';
-import { TState } from '::app/reducer';
+import { appActionCreators, TState } from '::app/reducer';
 const ErrorModal = React.lazy(() => import('::shared-components/error-modal'));
 const Settings = React.lazy(() => import('::app/menus/settings'));
 const SelectFile = React.lazy(() => import('::app/menus/select-file'));
@@ -26,7 +26,10 @@ const Menus: React.FC<Props> = ({ state, dispatch }) => {
         />
       </Suspense>
       <Suspense fallback={<Void />}>
-        <ErrorModal error={state.error} />
+        <ErrorModal
+          error={state.error}
+          onClose={appActionCreators.dismissError}
+        />
       </Suspense>
     </>
   );

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { TDispatchAppReducer } from '::types/react';
 import { useCallback, useState } from 'react';
-import { DialogWrapper } from '::shared-components/dialog';
+import { DialogWithTransition } from '::shared-components/dialog';
 import { Drawer } from '::shared-components/drawer';
 import { screens } from '::app/menus/settings/screens';
 import { appActions } from '::app/reducer';
@@ -23,16 +23,16 @@ const Settings: React.FC<Props> = ({ dispatch, showDialog, isOnMobile }) => {
   );
 
   return (
-    <DialogWrapper
+    <DialogWithTransition
       menuButton={<DrawerToggle />}
       dialogTitle={'Settings'}
-      onCloseDialog={cancel}
       dialogFooterButtons={[
         { label: 'Cancel', onClick: cancel, disabled: false },
         { label: 'Apply', onClick: cancel, disabled: true },
       ]}
-      showDialog={showDialog}
       isOnMobile={isOnMobile}
+      onClose={cancel}
+      show={showDialog}
     >
       <ErrorBoundary>
         <Drawer
@@ -41,9 +41,8 @@ const Settings: React.FC<Props> = ({ dispatch, showDialog, isOnMobile }) => {
           setSelectedScreenTitle={setSelectedTabTitle}
         />
       </ErrorBoundary>
-    </DialogWrapper>
+    </DialogWithTransition>
   );
 };
 
-// export { Settings };
 export default Settings;
