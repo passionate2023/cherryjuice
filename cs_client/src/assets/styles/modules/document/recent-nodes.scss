@@ -60,6 +60,7 @@ $recent-nodes-width: $node-width * 2+ 10px;
   font-size: 12px;
   background-color: $toolbar-bg-light;
   border: none;
+  cursor: pointer;
 }
 .title-and-recent-nodes__title {
   flex: 4;

@@ -1,6 +1,9 @@
 import modDialog from '::sass-modules/shared-components/dialog.scss';
 import * as React from 'react';
-import { DialogFooter } from '::shared-components/dialog/dialog-footer';
+import {
+  DialogFooter,
+  TDialogFooterProps,
+} from '::shared-components/dialog/dialog-footer';
 import { DialogHeader } from '::shared-components/dialog/dialog-header';
 import { DialogBody } from '::shared-components/dialog/dialog-body';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
@@ -13,12 +16,7 @@ type TDialogProps = {
   dialogTitle?: string;
   onClose: EventHandler<any>;
   isOnMobile: boolean;
-  dialogFooterButtons: {
-    label: string | JSX.Element;
-    disabled: boolean;
-    onClick: EventHandler<any>;
-  }[];
-};
+} & TDialogFooterProps;
 
 const Dialog: React.FC<TDialogProps & {
   style;
@@ -27,7 +25,8 @@ const Dialog: React.FC<TDialogProps & {
   menuButton,
   dialogTitle,
   onClose,
-  dialogFooterButtons,
+  dialogFooterLeftButtons,
+  dialogFooterRightButtons,
   style,
   isOnMobile,
 }) => {
@@ -57,7 +56,8 @@ const Dialog: React.FC<TDialogProps & {
           )}
           <DialogBody dialogBodyElements={children} />
           <DialogFooter
-            dialogFooterButtons={dialogFooterButtons}
+            dialogFooterRightButtons={dialogFooterRightButtons}
+            dialogFooterLeftButtons={dialogFooterLeftButtons}
             isOnMobile={isOnMobile}
           />
         </animated.div>

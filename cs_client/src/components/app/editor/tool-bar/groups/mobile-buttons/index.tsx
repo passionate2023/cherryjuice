@@ -6,10 +6,18 @@ import { appActionCreators } from '::app/reducer';
 import { Separator } from '::app/editor/tool-bar/separator';
 
 type Props = {
+  showFormattingButtons: boolean;
   contentEditable: boolean;
+  showRecentNodes: boolean;
+  showInfoBar: boolean;
 };
 
-const MobileButtons: React.FC<Props> = ({ contentEditable }) => {
+const MobileButtons: React.FC<Props> = ({
+  showFormattingButtons,
+  contentEditable,
+  showRecentNodes,
+  showInfoBar,
+}) => {
   return (
     <div
       className={[
@@ -17,24 +25,29 @@ const MobileButtons: React.FC<Props> = ({ contentEditable }) => {
         modToolbar.toolBar__groupMobileButtons,
       ].join(' ')}
     >
-      <ToolbarButton onClick={appActionCreators.toggleContentEditable}>
-        <Icon
-          name={
-            contentEditable
-              ? Icons.material['lock-open']
-              : Icons.material['lock-closed']
-          }
-          small={true}
-        />
+      <ToolbarButton
+        onClick={appActionCreators.toggleContentEditable}
+        enabled={!contentEditable}
+      >
+        <Icon name={Icons.material['lock-closed']} small={true} />
       </ToolbarButton>
-      <ToolbarButton onClick={appActionCreators.toggleFormattingButtons}>
+      <ToolbarButton
+        onClick={appActionCreators.toggleFormattingButtons}
+        enabled={showFormattingButtons}
+      >
         <Icon name={Icons.material['justify-left']} small={true} />
       </ToolbarButton>
       <Separator />
-      <ToolbarButton onClick={appActionCreators.toggleRecentBar}>
+      <ToolbarButton
+        onClick={appActionCreators.toggleRecentBar}
+        enabled={showRecentNodes}
+      >
         <Icon name={Icons.material.history} small={true} />
       </ToolbarButton>
-      <ToolbarButton onClick={appActionCreators.toggleInfoBar}>
+      <ToolbarButton
+        onClick={appActionCreators.toggleInfoBar}
+        enabled={showInfoBar}
+      >
         <Icon name={Icons.material.info} small={true} />
       </ToolbarButton>
     </div>

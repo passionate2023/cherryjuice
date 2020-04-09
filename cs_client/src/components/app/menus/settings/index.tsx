@@ -26,10 +26,11 @@ const Settings: React.FC<Props> = ({ dispatch, showDialog, isOnMobile }) => {
     <DialogWithTransition
       menuButton={<DrawerToggle />}
       dialogTitle={'Settings'}
-      dialogFooterButtons={[
+      dialogFooterRightButtons={[
         { label: 'Cancel', onClick: cancel, disabled: false },
         { label: 'Apply', onClick: cancel, disabled: true },
       ]}
+      dialogFooterLeftButtons={[]}
       isOnMobile={isOnMobile}
       onClose={cancel}
       show={showDialog}

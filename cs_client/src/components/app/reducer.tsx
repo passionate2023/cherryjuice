@@ -123,7 +123,7 @@ const createActionCreators = () => {
         value: new Date().getTime(),
       });
     },
-    selectFile: value => state.dispatch({ type: actions.SELECT_FILE, value }),
+    selectFile: (fileId: string) => state.dispatch({ type: actions.SELECT_FILE, value: fileId }),
     selectNode: (
       { node_id, name, style },
       { is_richtxt, ts_creation, ts_lastsave },
@@ -193,7 +193,6 @@ const reducer = (state: TState, action): TState => {
       return {
         ...state,
         selectedFile: action.value,
-        showFileSelect: !action.value,
         showTree: true,
         selectedNode: defaultSelectNode,
       };

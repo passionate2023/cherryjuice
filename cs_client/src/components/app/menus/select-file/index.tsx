@@ -8,7 +8,6 @@ import { QUERY_CT_FILES } from '::graphql/queries';
 import { Ct_File } from '::types/generated';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
-import { Icon, Icons } from '::shared-components/icon';
 import { useReloadQuery } from '::hooks/use-reload-query';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
@@ -84,16 +83,6 @@ const Folder = ({
 );
 
 const Files = ({ selected, setSelected, selectedFile, data, loading }) => {
-  // const [fetch, { data }] = useLazyQuery(QUERY_CT_FILES, {
-  //   fetchPolicy: 'network-only',
-  // });
-  //
-  // const firstFetch = useRef(false);
-  // if (!firstFetch.current) {
-  //   firstFetch.current = true;
-  //   fetch();
-  // }
-  // let files: Ct_File[];
   let filesPerFolders: [string, Ct_File[]][];
   if (data) {
     filesPerFolders = [
@@ -151,7 +140,14 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
     queryError: error,
     queryVariables: reloadFiles,
   });
-  const buttons = [
+  const buttonsLeft = [
+    {
+      label: 'reload',
+      onClick: appActionCreators.setReloadFiles,
+      disabled: false,
+    },
+  ];
+  const buttonsRight = [
     {
       label: 'cancel',
       onClick: close,
@@ -162,16 +158,12 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
       onClick: open,
       disabled: selected.id === selectedFile || !selected.id,
     },
-    {
-      label: <Icon name={Icons.material.refresh} />,
-      onClick: appActionCreators.setReloadFiles,
-      disabled: false,
-    },
   ];
   return (
     <DialogWithTransition
       dialogTitle={'Select Document'}
-      dialogFooterButtons={buttons}
+      dialogFooterRightButtons={buttonsRight}
+      dialogFooterLeftButtons={buttonsLeft}
       isOnMobile={isOnMobile}
       show={showDialog}
       onClose={close}

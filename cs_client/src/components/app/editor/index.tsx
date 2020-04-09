@@ -19,6 +19,9 @@ const Editor: React.FC<{ state: TState }> = ({ state }) => {
             showFormattingButtons={state.showFormattingButtons}
             contentEditable={state.contentEditable}
             isOnMobile={state.isOnMobile}
+            showInfoBar={state.showInfoBar}
+            showRecentNodes={state.showRecentNodes}
+            showTree={state.showTree}
           />
         </Suspense>
       </ErrorBoundary>

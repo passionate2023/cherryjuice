@@ -4,12 +4,14 @@ import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { Icon, Icons } from '::shared-components/icon';
 import { modToolbar } from '::sass-modules/index';
 
-type Props = {};
+type Props = {
+  showTree: boolean;
+};
 
-const MainButtons: React.FC<Props> = () => {
+const MainButtons: React.FC<Props> = ({ showTree }) => {
   return (
     <div className={modToolbar.toolBar__group}>
-      <ToolbarButton onClick={appActionCreators.toggleTree}>
+      <ToolbarButton onClick={appActionCreators.toggleTree} enabled={showTree}>
         <Icon
           name={Icons.cherrytree.additionalIcons.cherries}
           style={{ width: 22 }}

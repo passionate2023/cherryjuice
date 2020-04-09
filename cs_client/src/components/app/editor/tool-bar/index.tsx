@@ -9,21 +9,34 @@ const FormattingButtons = React.lazy(() =>
   import('::app/editor/tool-bar/groups/formatting-buttons'),
 );
 type Props = {
-  showFormattingButtons: boolean;
   isOnMobile: boolean;
+  showFormattingButtons: boolean;
   contentEditable: boolean;
+  showRecentNodes: boolean;
+  showInfoBar: boolean;
+  showTree: boolean;
 };
 
 const ToolBar: React.FC<Props> = ({
-  showFormattingButtons,
   isOnMobile,
+  showFormattingButtons,
   contentEditable,
+  showRecentNodes,
+  showInfoBar,
+  showTree,
 }) => {
   return (
     <div className={modToolbar.toolBar}>
-      <MainButtons />
+      <MainButtons showTree={showTree} />
       <Separator />
-      <MobileButtons contentEditable={contentEditable} />
+      <MobileButtons
+        {...{
+          showFormattingButtons,
+          contentEditable,
+          showRecentNodes,
+          showInfoBar,
+        }}
+      />
       {!isOnMobile ? (
         <FormattingButtons />
       ) : (
