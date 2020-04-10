@@ -72,9 +72,9 @@ const AlertModalWithTransition: React.FC<ErrorModalProps> = ({
       transitionValues={{
         from: { opacity: 0, xyz: [0, -25, 0.5] },
         enter: { opacity: 1, xyz: [0, 0, 1] },
-        leave: { opacity: 0, xyz: [0, 750, 1] },
+        leave: { opacity: 0, xyz: [0, window.innerHeight * 0.5, 1] },
         config: {
-          tension: 275,
+          tension: 255,
           friction: 30,
         },
       }}

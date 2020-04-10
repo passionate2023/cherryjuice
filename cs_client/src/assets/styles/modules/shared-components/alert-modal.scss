@@ -19,7 +19,7 @@ $width: $height * 1.4;
   font-family: 'Roboto', sans-serif;
   overflow: hidden;
   text-align: center;
-  z-index: $ZI-error-modal;
+  z-index: $ZI-alert-modal;
   border-radius: 5px;
 }
 

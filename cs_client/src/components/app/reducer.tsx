@@ -48,6 +48,8 @@ export type TState = typeof initialState & {
 };
 enum actions {
   TOGGLE_TREE,
+  TOGGLE_TREE_ON,
+  TOGGLE_TREE_OFF,
   TOGGLE_FILE_SELECT,
   TOGGLE_SETTINGS,
   TOGGLE_FORMATTING_BUTTONS,
@@ -63,6 +65,7 @@ enum actions {
   SET_ALERT,
   SET_IS_ON_MOBILE,
   PROCESS_LINKS,
+  HIDE_POPUPS,
 }
 const createActionCreators = () => {
   const state = {
@@ -110,9 +113,17 @@ const createActionCreators = () => {
     toggleFileSelect: () => {
       state.dispatch({ type: actions.TOGGLE_FILE_SELECT });
     },
+    showTree: () => {
+      state.dispatch({ type: actions.TOGGLE_TREE_ON });
+    },
+    hideTree: () => {
+      state.dispatch({ type: actions.TOGGLE_TREE_OFF });
+    },
     toggleTree: () => {
       state.dispatch({ type: actions.TOGGLE_TREE });
-      // setTimeout(onResize, 1000);
+    },
+    hidePopups: () => {
+      state.dispatch({ type: actions.HIDE_POPUPS });
     },
     saveDocument: e => {
       state.dispatch({
@@ -154,27 +165,17 @@ const reducer = (
   switch (action.type) {
     case actions.TOGGLE_TREE:
       return { ...state, showTree: !state.showTree };
+    case actions.TOGGLE_TREE_ON:
+      return { ...state, showTree: true };
+    case actions.TOGGLE_TREE_OFF:
+      return { ...state, showTree: false };
     case actions.TOGGLE_FILE_SELECT:
       return { ...state, showFileSelect: !state.showFileSelect };
     case actions.RESIZE_TREE:
       return { ...state, treeSize: action.value };
+    case actions.HIDE_POPUPS:
+      return { ...state, ...(state.isOnMobile && { showInfoBar: false }) };
     case actions.SELECT_NODE:
-      // const selectedNodeExistsInRecentNodes = state.recentNodes.some(
-      //   node => +node.id === +action.value.node_id,
-      // );
-      // const newRecentNodes = cloneObj(state.recentNodes);
-      // selectedNodeExistsInRecentNodes
-      //   ? state.recentNodes.filter(node => +node.id !== +action.value.node_id)
-      //   : state.recentNodes;
-      // newRecentNodes.push({
-      //   id: action.value.node_id,
-      //   name: action.value.name,
-      //   style: action.value.style,
-      //   is_richtxt: `${action.value.is_richtxt}`,
-      //   ts_creation: `${action.value.ts_creation}`,
-      //   ts_lastsave: `${action.value.ts_lastsave}`,
-      // });
-
       return {
         ...state,
         selectedNode: {

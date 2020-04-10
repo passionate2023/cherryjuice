@@ -152,7 +152,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
   ];
   const buttonsRight = [
     {
-      label: 'cancel',
+      label: 'close',
       onClick: close,
       disabled: false,
     },

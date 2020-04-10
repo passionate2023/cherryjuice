@@ -13,15 +13,24 @@ const handleToggle = () => {
     drawerScrim.classList.toggle(modDrawer.drawer__navigation__scrimVisible);
   };
 };
-
+const noOpFn = () => undefined;
 // https://gist.github.com/SleepWalker/da5636b1abcbaff48c4d#gistcomment-2577818
 const setupHandleGesture = ({
-  onRight,
+  gestureZoneSelector,
+  onRight = noOpFn,
+  onLeft = noOpFn,
+  onTop = noOpFn,
+  onBottom = noOpFn,
+  onTap = noOpFn,
+  minimumLength = 0,
 }: {
   onRight?: Function;
   onLeft?: Function;
   onTop?: Function;
   onBottom?: Function;
+  onTap?: Function;
+  gestureZoneSelector: string;
+  minimumLength?: number;
 }) => {
   let pageWidth = window.innerWidth || document.body.clientWidth;
   let treshold = Math.max(1, Math.floor(0.01 * pageWidth));
@@ -31,36 +40,35 @@ const setupHandleGesture = ({
   let touchendY = 0;
 
   const limit = Math.tan(((45 * 1.5) / 180) * Math.PI);
-  const gestureZone = document.querySelector(`.${modDrawer.drawer}`);
+  const gestureZone = document.querySelector(`.${gestureZoneSelector}`);
   function handleGesture() {
     let x = touchendX - touchstartX;
     let y = touchendY - touchstartY;
     let xy = Math.abs(x / y);
     let yx = Math.abs(y / x);
     if (Math.abs(x) > treshold || Math.abs(y) > treshold) {
-      if (yx <= limit) {
+      if (yx <= limit && Math.abs(x) > minimumLength) {
         if (x < 0) {
-          // log('left');
+          onLeft();
         } else {
-          // log('right');
           onRight();
         }
       }
-      if (xy <= limit) {
+      if (xy <= limit && Math.abs(y) > minimumLength) {
         if (y < 0) {
-          // log('top');
+          onTop();
         } else {
-          // log('bottom');
+          onBottom();
         }
       }
     } else {
-      // log('tap');
+      onTap();
     }
   }
 
   gestureZone.addEventListener(
     'touchstart',
-    function(event) {
+    function(event: TouchEvent) {
       touchstartX = event.changedTouches[0].screenX;
       touchstartY = event.changedTouches[0].screenY;
     },
@@ -69,10 +77,10 @@ const setupHandleGesture = ({
 
   gestureZone.addEventListener(
     'touchend',
-    function(event) {
+    function(event: TouchEvent) {
       touchendX = event.changedTouches[0].screenX;
       touchendY = event.changedTouches[0].screenY;
-      handleGesture(event);
+      handleGesture();
     },
     false,
   );

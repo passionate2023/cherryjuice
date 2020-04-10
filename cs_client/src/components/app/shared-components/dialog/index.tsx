@@ -75,11 +75,11 @@ const DialogWithTransition: React.FC<TDialogProps & { show: boolean }> = ({
       Component={Dialog}
       show={show}
       transitionValues={{
-        from: { opacity: 0, xy: [0, 500] },
+        from: { opacity: 0, xy: [0, window.innerHeight * 0.7] },
         enter: { opacity: 1, xy: [0, 0] },
-        leave: { opacity: 0, xy: [0, 1000] },
+        leave: { opacity: 0.5, xy: [0, window.innerHeight * 1.1] },
         config: {
-          tension: 190,
+          tension: 170,
         },
       }}
       componentProps={props}

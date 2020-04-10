@@ -28,7 +28,7 @@ const RecentNodes: React.FC<Props> = ({
   const goToNode = useCallback(e => {
     const node_id = e.target.dataset.id;
     history.push(`/${file_id}/node-${node_id}`);
-  }, []);
+  }, [file_id]);
   return (
     <div className={modRecentNodes.titleAndRecentNodes}>
       {(!isOnMobile || showRecentNodes) && (

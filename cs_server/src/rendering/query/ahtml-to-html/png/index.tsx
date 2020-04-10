@@ -36,8 +36,7 @@ const Png = ({ styles, other_attributes: { offset, link } }: Props) => {
         style=" width:${styles.width}; height:${
     styles.height
   } ;${stringifyStyles(styles, 'margin')} "
-        data-offset="${offset}"
-        ${link ? addImageLinkProperties(link) : ''}
+        data-offset="${offset}"${link ? ` ${addImageLinkProperties(link)}` : ''}
       />`;
 };
 

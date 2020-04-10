@@ -15,9 +15,11 @@ const DrawerNavigation: React.FC<any> = ({
 }) => {
   useEffect(() => {
     updateSubTitle({ selectedScreenTitle });
-    setupHandleGesture({ onRight: handleToggle() });
+    setupHandleGesture({
+      onRight: handleToggle(),
+      gestureZoneSelector: modDrawer.drawer,
+    });
   }, [selectedScreenTitle]);
-
   return (
     <>
       <aside className={`${modDrawer.drawer__navigation}`}>

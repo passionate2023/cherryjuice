@@ -104,7 +104,7 @@ const FormattingButtonsWithTransition: React.FC<Props & { show: boolean }> = ({
   );
 };
 const formattingBarUnmountAnimationDelay = (): Promise<void> =>
-  new Promise(resolve => setTimeout(resolve, 200));
+  new Promise(resolve => setTimeout(resolve, 100))
 
 export {
   FormattingButtons,

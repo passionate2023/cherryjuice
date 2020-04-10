@@ -25,12 +25,12 @@ $grey-lighter: rgba(#c9c9c9, 0.02);
 // transitions
 $bg-transition-1: background-color 0.3s ease;
 // z-indices
-$ZI-error-modal: 10;
+$ZI-alert-modal: 10;
 $ZI-alert-modal-scrim: 10;
-$ZI-resize-bubble: 9;
 $ZI-dialog: 7;
 $ZI-drawer-navigation: 7;
 $ZI-scrim: 6;
+$ZI-resize-bubble: 5;
 $ZI-info-bar: 5;
 $ZI-linear-progress: 5;
 $ZI-drawer-navigation-scrim: 3;

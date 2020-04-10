@@ -92,6 +92,7 @@ const App: React.FC<Props> = () => {
   useSaveStateToLocalStorage(state);
   useHandleRouting(state);
   useUpdateCssVariables(state);
+
   return (
     <div className={appModule.app}>
       <Suspense fallback={<Void />}>

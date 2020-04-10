@@ -22,6 +22,7 @@ import { useReactRouterForAnchors } from '::hooks/use-react-router-for-anchors';
 import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
 import { appActionCreators } from '::app/reducer';
 import { Ct_Node_Meta } from '::types/generated';
+import { setupHandleGesture } from '::shared-components/drawer/drawer-navigation/helpers';
 
 type Props = {
   file_id: string;
@@ -137,7 +138,15 @@ const RichText: React.FC<Props> = ({
       );
     }
   }, [node_id, nodes]);
-
+  useEffect(() => {
+    setupHandleGesture({
+      onRight: appActionCreators.showTree,
+      onLeft: appActionCreators.hideTree,
+      onTap: appActionCreators.hidePopups,
+      gestureZoneSelector: modRichText.richText,
+      minimumLength: 170,
+    });
+  }, []);
   return (
     <>
       <div

@@ -38,6 +38,7 @@ const onStart = () => {
   treeHelper.init();
   nodeOverlay.init();
   nodeOverlay.updateWidth();
-  attachTreeResizeBubble(onResize);
+  const hasTouch = 'ontouchstart' in window || process.env.NODE_ENV === 'development';
+  if (hasTouch) attachTreeResizeBubble(onResize);
 };
 export { onStart, onResize, onResizeStop };
