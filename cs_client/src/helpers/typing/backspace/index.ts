@@ -1,7 +1,10 @@
+import { FormattingError } from '::types/errors';
+
 const codeBoxDelimiter = '\u200B';
 const isAboutToDeleteCodeBoxDelimiter = () => {
   const selection = document.getSelection();
-  if (selection.rangeCount === 0) throw new Error("can't find the cursor");
+  if (selection.rangeCount === 0)
+    throw new FormattingError('Could not find the cursor');
   const { endContainer } = selection.getRangeAt(0);
   const isAboutToDeleteCodeBoxSeparator =
     endContainer.nodeType === Node.TEXT_NODE &&

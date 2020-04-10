@@ -4,6 +4,8 @@ import { pipe1 } from '::helpers/execK/steps//pipe1';
 import { pipe3 } from '::helpers/execK/steps/pipe3';
 import { restoreSelection } from '::helpers/execK/steps/restore-selection';
 import { appActionCreators } from '::app/reducer';
+import { AlertType } from '::types/react';
+import { FormattingError } from '::types/errors';
 
 enum ExecKCommand {
   clear = 'clear',
@@ -30,7 +32,7 @@ const execK = ({
   const ogHtml = editor.innerHTML;
   try {
     if (editor.contentEditable !== 'true' && !testSample)
-      throw Error('Editing is disabled');
+      throw new FormattingError('Editing is disabled');
     let { startElement, endElement, startOffset, endOffset } =
       testSample || getSelection({ selectAdjacentWordIfNoneIsSelected: true });
     const {
@@ -81,9 +83,13 @@ const execK = ({
     }
   } catch (e) {
     document.querySelector('#rich-text ').innerHTML = ogHtml;
-    appActionCreators.throwError(e);
-    // eslint-disable-next-line no-console
-    if (process.env.NODE_ENV === 'development') console.error(e);
+    appActionCreators.setAlert({
+      title: 'Could not apply formatting',
+      description:
+        e instanceof FormattingError ? e.message : 'Please submit a bug report',
+      type: AlertType.Error,
+      error: e,
+    });
   }
 };
 

@@ -14,7 +14,7 @@ import { TransitionWrapper } from '::shared-components/transition-wrapper';
 type TDialogProps = {
   menuButton?: JSX.Element;
   dialogTitle?: string;
-  onClose: EventHandler<any>;
+  onClose: EventHandler<undefined>;
   isOnMobile: boolean;
 } & TDialogFooterProps;
 
@@ -71,15 +71,19 @@ const DialogWithTransition: React.FC<TDialogProps & { show: boolean }> = ({
   ...props
 }) => {
   return (
-    <TransitionWrapper
+    <TransitionWrapper<TDialogProps>
       Component={Dialog}
       show={show}
       transitionValues={{
         from: { opacity: 0, xy: [0, 500] },
         enter: { opacity: 1, xy: [0, 0] },
         leave: { opacity: 0, xy: [0, 1000] },
+        config: {
+          tension: 190,
+        },
       }}
       componentProps={props}
+      scrimProps={{ onClick: props.onClose }}
     />
   );
 };

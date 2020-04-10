@@ -55,11 +55,14 @@ const RichText: React.FC<Props> = ({
       queryVariables,
     },
   );
-  useQueryTimeout({
-    queryData: data,
-    queryError: error,
-    queryVariables,
-  });
+  useQueryTimeout(
+    {
+      queryData: data,
+      queryError: error,
+      queryVariables,
+    },
+    { resourceName: 'the node' },
+  );
   let html;
   if (data && data.ct_node_content[0].node_id === node_id) {
     html = data.ct_node_content[0].html;

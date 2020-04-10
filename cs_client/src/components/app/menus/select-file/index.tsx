@@ -135,11 +135,14 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
       queryVariables: undefined,
     },
   );
-  useQueryTimeout({
-    queryData: data,
-    queryError: error,
-    queryVariables: reloadFiles,
-  });
+  useQueryTimeout(
+    {
+      queryData: data,
+      queryError: error,
+      queryVariables: reloadFiles,
+    },
+    { resourceName: 'files' },
+  );
   const buttonsLeft = [
     {
       label: 'reload',

@@ -79,7 +79,7 @@
     "postcss-exclude-files": "^1.0.15",
     "postcss-modules": "^1.4.1",
     "sass": "^1.23.7",
-    "typescript": "^3.7.4"
+    "typescript": "^3.8.3"
   },
   "main": "src/index.ts",
   "keywords": [

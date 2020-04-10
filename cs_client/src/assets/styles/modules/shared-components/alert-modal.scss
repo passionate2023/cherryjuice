@@ -4,7 +4,7 @@
 
 $height: 250px;
 $width: $height * 1.4;
-.error-modal {
+.alert-modal {
   position: absolute;
   width: $width;
   background-color: white;
@@ -23,32 +23,25 @@ $width: $height * 1.4;
   border-radius: 5px;
 }
 
-.error-modal__icon {
+.alert-modal__icon {
   font-size: 40px;
   margin-bottom: 20px;
   margin-top: 20px;
 }
-.error-modal__body {
+.alert-modal__body {
   flex: 1;
 }
-.error-modal__header {
+.alert-modal__header {
   font-weight: 600;
   display: block;
   margin-bottom: 20px;
 }
-.error-modal__message {
+.alert-modal__message {
   font-size: 16px;
   padding: 5px 10px;
   opacity: 0.8;
 }
-.errorModal__dismiss-button {
-  //flex: 1;
-  //width: 100%;
-  //max-height: 20%;
-  //background-color: #ff304f;
-  //border: none;
-  //color: white;
-  //font-size: 18px;
+.alert-modal__dismiss-button {
   align-self: flex-end;
   margin-right: 5px;
   margin-top: 10px;

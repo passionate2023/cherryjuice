@@ -1,3 +1,5 @@
+import { TAlert } from '::types/react';
+
 const defaultSelectNode = {
   id: -1,
   name: '',
@@ -22,7 +24,7 @@ const initialState = {
   saveDocument: 0,
   reloadDocument: 0,
   reloadFiles: 0,
-  error: undefined,
+  alert: undefined,
   showSettings: false,
   showFormattingButtons: false,
   showRecentNodes: false,
@@ -42,6 +44,7 @@ export type TRecentNode = {
 export type TState = typeof initialState & {
   selectedNode: TRecentNode;
   recentNodes: TRecentNode[];
+  alert: TAlert;
 };
 enum actions {
   TOGGLE_TREE,
@@ -57,7 +60,7 @@ enum actions {
   SAVE_DOCUMENT,
   RELOAD_DOCUMENT,
   RELOAD_FILES,
-  SET_ERROR,
+  SET_ALERT,
   SET_IS_ON_MOBILE,
   PROCESS_LINKS,
 }
@@ -83,11 +86,11 @@ const createActionCreators = () => {
     setIsOnMobile: (isOnMobile: boolean): void => {
       state.dispatch({ type: actions.SET_IS_ON_MOBILE, value: isOnMobile });
     },
-    throwError: (error: Error): void => {
-      state.dispatch({ type: actions.SET_ERROR, value: error });
+    setAlert: (alert: TAlert): void => {
+      state.dispatch({ type: actions.SET_ALERT, value: alert });
     },
-    dismissError: (): void => {
-      state.dispatch({ type: actions.SET_ERROR, value: undefined });
+    clearAlert: (): void => {
+      state.dispatch({ type: actions.SET_ALERT, value: undefined });
     },
     setReloadFiles: (): void => {
       state.dispatch({
@@ -123,7 +126,8 @@ const createActionCreators = () => {
         value: new Date().getTime(),
       });
     },
-    selectFile: (fileId: string) => state.dispatch({ type: actions.SELECT_FILE, value: fileId }),
+    selectFile: (fileId: string) =>
+      state.dispatch({ type: actions.SELECT_FILE, value: fileId }),
     selectNode: (
       { node_id, name, style },
       { is_richtxt, ts_creation, ts_lastsave },
@@ -140,7 +144,13 @@ const createActionCreators = () => {
     },
   };
 };
-const reducer = (state: TState, action): TState => {
+const reducer = (
+  state: TState,
+  action: {
+    type: actions;
+    value: any;
+  },
+): TState => {
   switch (action.type) {
     case actions.TOGGLE_TREE:
       return { ...state, showTree: !state.showTree };
@@ -211,11 +221,13 @@ const reducer = (state: TState, action): TState => {
         ...state,
         reloadFiles: action.value,
       };
-    case actions.SET_ERROR:
-      // if (state.error === action.value) return state;
+    case actions.SET_ALERT:
+      if (action.value?.error && process.env.NODE_ENV === 'development')
+        // eslint-disable-next-line no-console
+        console.error(action.value.error);
       return {
         ...state,
-        error: action.value,
+        alert: action.value,
       };
     case actions.TOGGLE_SETTINGS:
       return { ...state, showSettings: !state.showSettings };

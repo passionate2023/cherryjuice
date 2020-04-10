@@ -1,33 +1,33 @@
 import * as React from 'react';
 import { useTransition } from 'react-spring';
-import { Scrim } from '::shared-components/scrim';
+import { Scrim, ScrimProps } from '::shared-components/scrim';
+import { EventHandler } from 'react';
 
-type TTransitionWrapperProps = {
-  componentProps: any & {
-    onClose: Function;
+type TTransitionWrapperProps<T> = {
+  componentProps: T & {
+    onClose: EventHandler<undefined>;
   };
-  scrimProps?: any;
-  transitionValues: any;
+  Component: React.FC<
+    T & {
+      onClose: EventHandler<undefined>;
+      style: any;
+    }
+  >;
   show: boolean;
-  Component: React.FC<any>;
+  transitionValues: any;
+  scrimProps: ScrimProps;
 };
-const TransitionWrapper: React.FC<TTransitionWrapperProps> = ({
+const TransitionWrapper = <T,>({
   componentProps,
   scrimProps,
   transitionValues,
   Component,
-  show
-}) => {
-  const transitions = useTransition(
-    show,
-    null,
-    transitionValues,
-  );
+  show,
+}: TTransitionWrapperProps<T>) => {
+  const transitions = useTransition(show, null, transitionValues);
   return (
     <>
-      {show && (
-        <Scrim onClick={componentProps.onClose} {...scrimProps} />
-      )}
+      {show && <Scrim {...scrimProps} />}
       {transitions.map(
         ({ key, item, props: style }) =>
           item && <Component {...componentProps} style={style} key={key} />,

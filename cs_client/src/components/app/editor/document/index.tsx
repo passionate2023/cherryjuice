@@ -41,11 +41,14 @@ const Document: React.FC<Props> = ({ state }) => {
       queryVariables,
     },
   );
-  useQueryTimeout({
-    queryData: data,
-    queryError: error,
-    queryVariables,
-  });
+  useQueryTimeout(
+    {
+      queryData: data,
+      queryError: error,
+      queryVariables,
+    },
+    { resourceName: 'the document' },
+  );
   const nodes: Map<number, Ct_Node_Meta> = useMemo(() => {
     if (data && data.ct_node_meta) {
       return new Map(data.ct_node_meta.map(node => [node.node_id, node]));

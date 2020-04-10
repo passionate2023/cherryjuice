@@ -13,21 +13,22 @@ $height: 65;
     transform: rotate(270deg);
   }
 }
+$spinner-color: #fffffffa;
 @keyframes colors {
   0% {
-    stroke: $primary;
+    stroke: $spinner-color;
   }
   25% {
-    stroke: $primary;
+    stroke: $spinner-color;
   }
   50% {
-    stroke: $primary;
+    stroke: $spinner-color;
   }
   75% {
-    stroke: $primary;
+    stroke: $spinner-color;
   }
   100% {
-    stroke: $primary;
+    stroke: $spinner-color;
   }
 }
 @keyframes dash {

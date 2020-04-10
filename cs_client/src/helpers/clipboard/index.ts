@@ -15,6 +15,7 @@ import {
 } from '::helpers/execK/steps/pipe3';
 import { getDDOE } from '::helpers/execK/steps/pipe1/ddoes';
 import { appActionCreators } from '::app/reducer';
+import { AlertType } from '::types/react';
 
 const getPngBase64 = file =>
   new Promise(resolve => {
@@ -178,9 +179,12 @@ const setupClipboard = () => {
   const editableDiv = document.getElementById('rich-text');
   editableDiv.onpaste = e => {
     handlePaste(e).catch(error => {
-      // eslint-disable-next-line no-console
-      if (process.env.NODE_ENV === 'development') console.error(error);
-      appActionCreators.throwError(error);
+      appActionCreators.setAlert({
+        title: 'Could not perform the paste',
+        description: 'Please submit a bug report',
+        error,
+        type: AlertType.Error,
+      });
     });
   };
 };

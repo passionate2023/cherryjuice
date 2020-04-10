@@ -2,16 +2,16 @@ import * as React from 'react';
 import modOverlay from '::sass-modules/shared-components/overlay.scss';
 import { EventHandler } from 'react';
 
-type Props = {
+export type ScrimProps = {
   onClick: EventHandler<undefined>;
-  errorModal?: boolean;
+  alertModal?: boolean;
 };
 
-const Scrim: React.FC<Props> = ({ onClick, errorModal }) => {
+const Scrim: React.FC<ScrimProps> = ({ onClick, alertModal }) => {
   return (
     <div
       className={`${modOverlay.bodyScrim} ${
-        errorModal ? modOverlay.bodyScrimErrorModal : ''
+        alertModal ? modOverlay.bodyScrimAlertModal : ''
       }`}
       onClick={onClick}
     />
