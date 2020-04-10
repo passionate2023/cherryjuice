@@ -5,9 +5,11 @@ import { MobileButtons } from './groups/mobile-buttons';
 import { Separator } from '::app/editor/tool-bar/separator';
 import { createPortal } from 'react-dom';
 import appModule from '::sass-modules/app.scss';
-const FormattingButtons = React.lazy(() =>
-  import('::app/editor/tool-bar/groups/formatting-buttons'),
-);
+import {
+  FormattingButtons,
+  FormattingButtonsWithTransition,
+} from './groups/formatting-buttons';
+
 type Props = {
   isOnMobile: boolean;
   showFormattingButtons: boolean;
@@ -40,9 +42,8 @@ const ToolBar: React.FC<Props> = ({
       {!isOnMobile ? (
         <FormattingButtons />
       ) : (
-        showFormattingButtons &&
         createPortal(
-          <FormattingButtons />,
+          <FormattingButtonsWithTransition show={showFormattingButtons} />,
           document.querySelector('.' + appModule.app),
         )
       )}

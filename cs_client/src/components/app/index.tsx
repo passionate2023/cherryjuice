@@ -3,9 +3,15 @@ import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import * as React from 'react';
 import { useEffect, useReducer, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
-import { appActionCreators, appInitialState, appReducer } from './reducer';
+import {
+  appActionCreators,
+  appInitialState,
+  appReducer,
+  TState,
+} from './reducer';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { client } from '::graphql/apollo';
+import { formattingBarUnmountAnimationDelay } from './editor/tool-bar/groups/formatting-buttons';
 const Menus = React.lazy(() => import('::app/menus'));
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
@@ -63,7 +69,19 @@ const useHandleRouting = state => {
     }
   }, [state.selectedFile]);
 };
-
+const useUpdateCssVariables = (state: TState) => {
+  useEffect(() => {
+    cssVariables.setTreeWidth(state.showTree ? state.treeSize : 0);
+    if (state.showFormattingButtons) {
+      cssVariables.setFormattingBar(40);
+    } else {
+      (async () => {
+        await formattingBarUnmountAnimationDelay();
+        cssVariables.setFormattingBar(0);
+      })();
+    }
+  }, [state.showFormattingButtons, state.showTree]);
+};
 const App: React.FC<Props> = () => {
   const [state, dispatch] = useReducer(appReducer, appInitialState);
   useEffect(() => {
@@ -73,8 +91,7 @@ const App: React.FC<Props> = () => {
   useOnWindowResize();
   useSaveStateToLocalStorage(state);
   useHandleRouting(state);
-  cssVariables.setTreeWidth(state.showTree ? state.treeSize : 0);
-  cssVariables.setFormattingBar(state.showFormattingButtons ? 40 : 0);
+  useUpdateCssVariables(state);
   return (
     <div className={appModule.app}>
       <Suspense fallback={<Void />}>
