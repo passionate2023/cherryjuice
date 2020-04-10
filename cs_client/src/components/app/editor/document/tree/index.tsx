@@ -5,40 +5,12 @@ import { Node } from './node';
 import { Ct_Node_Meta } from '::types/generated';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Resizable } from 're-resizable';
-import { nodeOverlay } from './node/helpers/node-overlay';
-import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
-import { appActionCreators } from '::app/reducer';
+import { onResize, onResizeStop, onStart } from './helpers';
 
 type Props = {
   nodes: Map<number, Ct_Node_Meta>;
 };
-const createTreeHelper = () => {
-  const state: { tree: HTMLDivElement } = {
-    tree: undefined,
-  };
-  return {
-    init: () => (state.tree = document.querySelector('.' + treeModule.tree)),
-    updateTreeSizeCssVariable: () => {
-      cssVariables.setTreeWidth(state.tree.offsetWidth);
-    },
-    getTreeWidth: () => state.tree.offsetWidth,
-  };
-};
-const treeHelper = createTreeHelper();
-const onResizeStop = () => {
-  appActionCreators.setTreeWidth(treeHelper.getTreeWidth());
-  treeHelper.updateTreeSizeCssVariable();
-  nodeOverlay.updateWidth();
-};
-const onResize = () => {
-  treeHelper.updateTreeSizeCssVariable();
-  nodeOverlay.updateWidth();
-};
-const onStart = () => {
-  treeHelper.init();
-  nodeOverlay.init();
-  nodeOverlay.updateWidth();
-};
+
 const Tree: React.FC<Props> = ({ nodes }) => {
   useEffect(onStart, []);
   return (
@@ -48,8 +20,8 @@ const Tree: React.FC<Props> = ({ nodes }) => {
       onResizeStop={onResizeStop}
       className={treeModule.tree__resizeHandle}
     >
-      <div className={treeModule.tree}>
-        <ErrorBoundary>
+      <ErrorBoundary>
+        <div className={treeModule.tree}>
           <ul className={treeModule.tree_rootList}>
             {nodes &&
               nodes
@@ -66,8 +38,8 @@ const Tree: React.FC<Props> = ({ nodes }) => {
                   />
                 ))}
           </ul>
-        </ErrorBoundary>
-      </div>
+        </div>
+      </ErrorBoundary>
     </Resizable>
   );
 };

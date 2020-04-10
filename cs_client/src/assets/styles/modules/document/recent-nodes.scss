@@ -31,7 +31,7 @@ $recent-nodes-width: $node-width * 2+ 10px;
   @include respond-to($md-down) {
     width: 100vw;
     left: 0;
-    z-index: 2;
+    z-index: $ZI-recent-nodes-bar;
     top: $tool-bar-height;
     height: $tool-bar-height;
     overflow-x: scroll;

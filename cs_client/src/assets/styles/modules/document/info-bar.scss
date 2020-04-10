@@ -19,7 +19,7 @@
     left: 10px;
     position: absolute;
     bottom: calc(10px + var(--formatting-bar));
-    z-index: 5;
+    z-index: $ZI-info-bar;
   }
   @include respond-to($md-up) {
     grid-area: info-bar;

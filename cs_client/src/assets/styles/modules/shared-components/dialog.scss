@@ -1,7 +1,7 @@
 @import '../../vars/vars';
 @import '../../mixins/breakpoints';
 .dialog {
-  z-index: 7;
+  z-index: $ZI-dialog;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   overflow: hidden;
   background-color: white;
@@ -19,7 +19,6 @@
 }
 
 .dialog__header {
-  z-index: 7;
   background-color: white;
   color: black;
   border-bottom: $dialog-border;
@@ -70,7 +69,6 @@
   justify-content: space-between;
   border-top: $dialog-border;
   padding: 10px;
-  z-index: 7;
   background-color: white;
   align-items: center;
 }
@@ -78,6 +76,5 @@
 .dialog__footer__left,
 .dialog__footer__right {
   display: flex;
-  //justify-content: flex-end;
   align-items: center;
 }
