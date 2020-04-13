@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
-    "jsx": "react"
+    "jsx": "react",
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "ESNext",
+    "module": "CommonJS"
   }
 }

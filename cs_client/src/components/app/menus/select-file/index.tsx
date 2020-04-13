@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import { appActionCreators } from '../../reducer';
 import { dateToFormattedString } from '::helpers/time';
 import { QUERY_CT_FILES } from '::graphql/queries';
-import { Ct_File } from '::types/generated';
+import {  DocumentMeta } from '::types/generated';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { useReloadQuery } from '::hooks/use-reload-query';
@@ -83,10 +83,10 @@ const Folder = ({
 );
 
 const Files = ({ selected, setSelected, selectedFile, data, loading }) => {
-  let filesPerFolders: [string, Ct_File[]][];
+  let filesPerFolders: [string, DocumentMeta[]][];
   if (data) {
     filesPerFolders = [
-      data.ct_files.reduce((acc, val) => {
+      data.document.reduce((acc, {document_meta: val}) => {
         if (acc[val.fileFolder]) acc[val.fileFolder].push(val);
         else acc[val.fileFolder] = [val];
 

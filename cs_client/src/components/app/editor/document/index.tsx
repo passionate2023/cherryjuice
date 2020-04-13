@@ -4,7 +4,7 @@ import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Tree } from './tree';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 import { QUERY_CT_NODE_META } from '::graphql/queries';
-import { Ct_Node_Meta } from '::types/generated';
+import { NodeMeta } from '::types/generated';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { appActionCreators } from '::app/reducer';
@@ -49,9 +49,9 @@ const Document: React.FC<Props> = ({ state }) => {
     },
     { resourceName: 'the document' },
   );
-  const nodes: Map<number, Ct_Node_Meta> = useMemo(() => {
-    if (data && data.ct_node_meta) {
-      return new Map(data.ct_node_meta.map(node => [node.node_id, node]));
+  const nodes: Map<number, NodeMeta> = useMemo(() => {
+    if (data?.document[0]?.node_meta) {
+      return new Map(data.document[0].node_meta.map(node => [node.node_id, node]));
     }
   }, [loading, file_id]);
   if (error) {

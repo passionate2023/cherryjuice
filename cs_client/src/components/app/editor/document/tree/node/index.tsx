@@ -1,6 +1,6 @@
 import nodeMod from '::sass-modules/tree/node.scss';
 import modIcons from '::sass-modules/tree/node.scss';
-import { Ct_Node_Meta } from '::types/generated';
+import { NodeMeta } from '::types/generated';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { scrollIntoToolbar } from '::helpers/ui';
 
 type Props = {
   node_id: number;
-  nodes?: Map<number, Ct_Node_Meta>;
+  nodes?: Map<number, NodeMeta>;
   depth: number;
   styles: string;
   icon_id: string;

@@ -21,7 +21,7 @@ import { useQueryTimeout } from '::hooks/use-query-timeout';
 import { useReactRouterForAnchors } from '::hooks/use-react-router-for-anchors';
 import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
 import { appActionCreators } from '::app/reducer';
-import { Ct_Node_Meta } from '::types/generated';
+import { NodeMeta } from '::types/generated';
 import { setupHandleGesture } from '::shared-components/drawer/drawer-navigation/helpers';
 
 type Props = {
@@ -29,7 +29,7 @@ type Props = {
   saveDocument: number;
   reloadDocument: number;
   contentEditable: boolean;
-  nodes: Map<number, Ct_Node_Meta>;
+  nodes: Map<number, NodeMeta>;
   processLinks: number;
 };
 
@@ -65,8 +65,8 @@ const RichText: React.FC<Props> = ({
     { resourceName: 'the node' },
   );
   let html;
-  if (data && data.ct_node_content[0].node_id === node_id) {
-    html = data.ct_node_content[0].html;
+  if (data && data.document[0].node_content[0].node_id === node_id) {
+    html = data.document[0].node_content[0].html;
     processLinks = new Date().getTime();
   }
 

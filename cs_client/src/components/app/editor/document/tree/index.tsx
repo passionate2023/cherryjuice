@@ -2,13 +2,13 @@ import treeModule from '::sass-modules/tree/tree.scss';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { Node } from './node';
-import { Ct_Node_Meta } from '::types/generated';
+import { NodeMeta } from '::types/generated';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Resizable } from 're-resizable';
 import { onResize, onResizeStop, onStart } from './helpers';
 
 type Props = {
-  nodes: Map<number, Ct_Node_Meta>;
+  nodes: Map<number, NodeMeta>;
 };
 
 const Tree: React.FC<Props> = ({ nodes }) => {
