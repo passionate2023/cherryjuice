@@ -5,6 +5,7 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
+import { ConfigModule } from '@nestjs/config';
 import { DocumentModule } from './document/document.module';
 import { NodeContentModule } from './document/node-content/node-content.module';
 import {
@@ -24,6 +25,7 @@ import express from 'express';
       include: [NodeContentModule, DocumentModule],
       autoSchemaFile: true,
     }),
+    ConfigModule.forRoot(),
   ],
 })
 export class AppModule implements NestModule {
@@ -38,7 +40,7 @@ export class AppModule implements NestModule {
     const staticAssetsRootFolder = path.join(
       __dirname,
       process.env.NODE_ENV === 'production'
-        ? '../client'
+        ? '../../client'
         : '../../cs_client/dist',
     );
     consumer

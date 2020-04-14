@@ -8,4 +8,5 @@ async function bootstrap() {
   // eslint-disable-next-line no-console
   console.log(`Listening on port ${port}`);
 }
-bootstrap();
+// eslint-disable-next-line no-console
+bootstrap().catch(console.error);

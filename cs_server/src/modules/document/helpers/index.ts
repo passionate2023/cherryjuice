@@ -95,7 +95,6 @@ const nodeTitleStyle = ({ is_richtxt }) => {
   });
 };
 
-
 const organizeData = async data => {
   const nodes: Map<number, NodeMeta> = new Map(
     data.map(node => [node.node_id, node]),
@@ -113,12 +112,11 @@ const organizeData = async data => {
 
   data.forEach(node => {
     node.child_nodes.sort(
+      // @ts-ignore
       (a, b) => nodes.get(a).sequence - nodes.get(b).sequence,
     );
   });
   return { nodes };
 };
-
-
 
 export { scanFolder, adaptFileID, organizeData };
