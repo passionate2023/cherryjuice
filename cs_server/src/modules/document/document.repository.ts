@@ -4,6 +4,7 @@ import { NodeMeta } from './modules/node-meta/node-meta.entity';
 import { adaptFileID, scanFolder } from './helpers';
 import { DocumentMeta } from './modules/document-meta/document-meta.entity';
 import { Database } from 'sqlite';
+import * as path from 'path';
 
 const queries = {
   read: {
@@ -36,7 +37,7 @@ export class DocumentRepository {
       file_id = adaptFileID(file_id, this.documents);
       const file = this.documents.get(file_id);
       if (file) {
-        this.sqlite.db = await sqlite.open(file.filePath);
+        this.sqlite.db = await sqlite.open(path.join(file.folder,file.name));
         this.sqlite.file_id = file_id;
       }
     }

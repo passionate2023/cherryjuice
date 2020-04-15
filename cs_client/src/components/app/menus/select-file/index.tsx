@@ -30,7 +30,7 @@ const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
   return (
     <div>
       {data &&
-        files.map(({ name, size, fileContentModification, id, filePath }) => (
+        files.map(({ name, size, updatedAt, id, folder }:DocumentMeta) => (
           <span
             className={`${modSelectFile.selectFile__file} ${
               selected.id === id
@@ -40,7 +40,7 @@ const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
               selectedFile === id ? modSelectFile.selectFile__fileSelected : ''
             }`}
             data-id={id}
-            data-path={filePath}
+            data-folder={folder}
             onClick={onSelect}
             key={id}
             tabIndex={0}
@@ -52,7 +52,7 @@ const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
             <span className={`${modSelectFile.selectFile__file__details} `}>
               <span>{size / 1024}kb</span>
               <span>
-                {dateToFormattedString(new Date(fileContentModification))}
+                {dateToFormattedString(new Date(updatedAt))}
               </span>
             </span>
           </span>
@@ -87,8 +87,8 @@ const Files = ({ selected, setSelected, selectedFile, data, loading }) => {
   if (data) {
     filesPerFolders = [
       data.document.reduce((acc, {document_meta: val}) => {
-        if (acc[val.fileFolder]) acc[val.fileFolder].push(val);
-        else acc[val.fileFolder] = [val];
+        if (acc[val.folder]) acc[val.folder].push(val);
+        else acc[val.folder] = [val];
 
         return acc;
       }, {}),

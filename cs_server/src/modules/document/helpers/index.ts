@@ -1,17 +1,22 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import slugify from 'slugify';
 import * as crypto from 'crypto';
 import * as shortHash from 'shorthash';
 import { DocumentMeta } from '../modules/document-meta/document-meta.entity';
 import { NodeMeta } from '../modules/node-meta/node-meta.entity';
+const createLegacyID = name =>
+  crypto
+    .createHash('md5')
+    .update(name)
+    .digest('hex');
+
 const legacyFileIDToNewID = ({
   legacyID,
   files,
 }: {
   legacyID: string;
   files: any[];
-}) => files.find(file => file.legacyID === legacyID)?.id;
+}) => files.find(file => createLegacyID(file.name) === legacyID)?.id;
 const adaptFileID = (file_id, files) =>
   file_id.length === 32
     ? legacyFileIDToNewID({
@@ -19,8 +24,17 @@ const adaptFileID = (file_id, files) =>
         files: Array.from(files.values()),
       })
     : file_id;
+
 const fileNames = {};
-const resolve = ({ folderPath, res, userID }) => {
+const resolve = ({
+  folderPath,
+  res,
+  userID,
+}: {
+  folderPath;
+  userID;
+  res: DocumentMeta[];
+}) => {
   const fullFolderPath = path.resolve(__dirname, folderPath);
   const dir = fs.readdirSync(fullFolderPath);
   dir.forEach(file => {
@@ -29,31 +43,21 @@ const resolve = ({ folderPath, res, userID }) => {
     if (stats.isDirectory()) {
       resolve({ folderPath: lePath, res, userID });
     } else if (file.endsWith('ctb')) {
-      const { size, birthtimeMs, mtimeMs, ctimeMs, atimeMs } = fs.statSync(
-        lePath,
-      );
+      const { size, birthtimeMs, mtimeMs } = fs.statSync(lePath);
       if (!fileNames[file]) fileNames[file] = 0;
       else fileNames[file]++;
       res.push({
         name: file,
         size,
-        fileCreation: birthtimeMs,
-        fileContentModification: mtimeMs,
-        fileAttributesModification: ctimeMs,
-        fileAccess: atimeMs,
-        slug: slugify(file.replace('.ctb', '')).substr(0, 30),
+        createdAt: birthtimeMs,
+        updatedAt: mtimeMs,
         id: shortHash.unique(
           crypto
             .createHash('md5')
             .update(userID + file + fileNames[file])
             .digest('hex'),
         ),
-        legacyID: crypto
-          .createHash('md5')
-          .update(file)
-          .digest('hex'),
-        filePath: lePath,
-        fileFolder: fullFolderPath,
+        folder: fullFolderPath,
       });
     }
   });

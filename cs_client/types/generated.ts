@@ -22,16 +22,12 @@ export type DocumentNode_ContentArgs = {
 
 export type DocumentMeta = {
   __typename?: 'DocumentMeta';
+  id: Scalars['String'];
   name: Scalars['String'];
   size: Scalars['Int'];
-  fileCreation: Scalars['Float'];
-  fileContentModification: Scalars['Float'];
-  fileAttributesModification: Scalars['Float'];
-  fileAccess: Scalars['Float'];
-  slug: Scalars['String'];
-  id: Scalars['String'];
-  filePath: Scalars['String'];
-  fileFolder: Scalars['String'];
+  createdAt: Scalars['Float'];
+  updatedAt: Scalars['Float'];
+  folder?: Maybe<Scalars['String']>;
 };
 
 export type NodeContent = {

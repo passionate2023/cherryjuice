@@ -1,7 +1,7 @@
 const newLineCharacter = '\n';
 const flattenIntoLines = xml => {
   // const logs = [];
-  const res = xml.reduce((acc, val, ) => {
+  const res = xml.reduce((acc, val) => {
     const text = typeof val === 'string' ? val : val._;
     // let log = { text, parts: undefined, pushed: undefined };
     if (

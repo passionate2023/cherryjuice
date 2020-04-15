@@ -68,10 +68,7 @@ const QUERY_CT_NODE_CONTENT = {
     }
   `,
   all_png_thumbnail: gql`
-      query node_content__all_png_thumb(
-      $file_id: String!
-      $node_id: Int!
-    ) {
+    query node_content__all_png_thumb($file_id: String!, $node_id: Int!) {
       document(file_id: $file_id) {
         node_content(node_id: $node_id) {
           png_thumbnail
@@ -86,15 +83,13 @@ const QUERY_CT_FILES = gql`
   query documents_meta($file_id: String) {
     document(file_id: $file_id) {
       document_meta {
+        id
         name
         size
-        fileCreation
-        fileContentModification
-        fileAccess
-        slug
-        id
-        filePath
-        fileFolder
+        size
+        createdAt
+        updatedAt
+        folder
       }
     }
   }

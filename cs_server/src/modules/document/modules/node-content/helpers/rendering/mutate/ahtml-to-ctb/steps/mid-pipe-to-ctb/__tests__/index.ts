@@ -1,5 +1,5 @@
 import { midPipeToCtb } from '../index';
-import {  sample_02 } from './__data__';
+import { sample_02 } from './__data__';
 
 // const builder = new Builder({
 //   renderOpts: { pretty: false, indent: '', newline: '' },
@@ -14,7 +14,7 @@ import {  sample_02 } from './__data__';
 // };
 const testXmlString = ({ midPipe, ctbXmlString, name }) => {
   test(`test xml string - ${name}`, async () => {
-    const { xmlString,  } = midPipeToCtb(midPipe);
+    const { xmlString } = midPipeToCtb(midPipe);
     // writeEffect('node_xml')(xmlString);
     // writeEffect('table_xml')(otherTables);
     expect(xmlString).toEqual(ctbXmlString);

@@ -3,32 +3,20 @@ import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class DocumentMeta {
   @Field()
+  id: string;
+
+  @Field()
   name: string;
 
   @Field(() => Int)
   size: number;
 
   @Field(() => Float)
-  fileCreation: number;
+  createdAt: number;
 
   @Field(() => Float)
-  fileContentModification: number;
+  updatedAt: number;
 
-  @Field(() => Float)
-  fileAttributesModification: number;
-
-  @Field(() => Float)
-  fileAccess: number;
-
-  @Field()
-  slug: string;
-
-  @Field()
-  id: string;
-
-  @Field()
-  filePath: string;
-
-  @Field()
-  fileFolder: string;
+  @Field({ nullable: true })
+  folder: string;
 }
