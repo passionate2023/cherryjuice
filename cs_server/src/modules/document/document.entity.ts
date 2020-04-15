@@ -1,16 +1,26 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { NodeMeta } from './modules/node-meta/node-meta.entity';
-import { NodeContent } from './modules/node-content/node-content.entity';
-import { DocumentMeta } from './modules/document-meta/document-meta.entity';
+import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
+import { Node } from './modules/node/entities/node.entity';
 
 @ObjectType()
 export class Document {
-  @Field(() => DocumentMeta)
-  document_meta: Promise<DocumentMeta>;
+  @Field()
+  id: string;
 
-  @Field(() => [NodeMeta])
-  node_meta: Promise<NodeMeta[]>;
+  @Field()
+  name: string;
 
-  @Field(() => [NodeContent])
-  node_content: Promise<NodeContent[]>;
+  @Field(() => Int)
+  size: number;
+
+  @Field(() => Float)
+  createdAt: number;
+
+  @Field(() => Float)
+  updatedAt: number;
+
+  @Field({ nullable: true })
+  folder: string;
+
+  @Field(() => [Node], { nullable: 'items' })
+  node: Node[];
 }

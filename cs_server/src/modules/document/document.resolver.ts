@@ -1,49 +1,43 @@
-import {
-  Args,
-  Int,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
+import { Args, Int, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { DocumentService } from './document.service';
 import { Document } from './document.entity';
-import { NodeMeta } from './modules/node-meta/node-meta.entity';
-import { NodeContentService } from './modules/node-content/node-content.service';
-import { NodeContent } from './modules/node-content/node-content.entity';
-import { DocumentMeta } from './modules/document-meta/document-meta.entity';
+import { Node } from './modules/node/entities/node.entity';
+import { NodeService } from './modules/node/node.service';
 
 @Resolver(() => Document)
 export class DocumentResolver {
   constructor(
-    private nodeContentService: NodeContentService,
+    private nodeService: NodeService,
     private documentService: DocumentService,
   ) {}
 
-  @Query(() => [Document])
+  @Query(() => [Document], { nullable: 'items' })
   async document(
     @Args('file_id', { nullable: true }) file_id: string | undefined,
-  ): Promise<[{ file_id: string }] | DocumentMeta[]> {
+  ): Promise<Document[]> {
     if (file_id) await this.documentService.open(file_id);
-    return file_id ? [{ file_id }] : this.documentService.getDocumentsMeta();
+    return file_id
+      ? [this.documentService.getDocumentMetaById(file_id)]
+      : this.documentService.getDocumentsMeta();
   }
 
-  @ResolveField(() => DocumentMeta)
-  document_meta(@Parent() parent): DocumentMeta {
-    return this.documentService.getDocumentMetaById(
-      parent.file_id || parent.id,
-    );
-  }
-
-  @ResolveField(() => [NodeMeta])
-  async node_meta(): Promise<NodeMeta[]> {
-    return this.documentService.getNodeMeta();
-  }
-
-  @ResolveField(() => [NodeContent])
-  async node_content(
-    @Args('node_id', { nullable: false, type: () => Int }) node_id: number,
+  // @ResolveField(() => [Node])
+  // async node_meta(): Promise<Node[]> {
+  //   return this.documentService.getNodeMeta();
+  // }
+  //
+  // @ResolveField(() => [Node])
+  // async node_content(
+  //   @Args('node_id', { nullable: false, type: () => Int }) node_id: number,
+  // ) {
+  //   return [{ node_id }];
+  // }
+  @ResolveField(() => [Node])
+  async node(
+    @Args('node_id', { nullable: true, type: () => Int }) node_id?: number,
   ) {
-    return [{ node_id }];
+    return node_id
+      ? this.nodeService.getNodeMetaById(node_id)
+      : this.nodeService.getNodesMeta();
   }
 }

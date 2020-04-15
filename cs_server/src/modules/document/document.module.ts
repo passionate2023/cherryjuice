@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { NodeContentModule } from './modules/node-content/node-content.module';
+import { NodeModule } from './modules/node/node.module';
 import { DocumentResolver } from './document.resolver';
 import { DocumentService } from './document.service';
 import { DocumentRepository } from './document.repository';
 
 @Module({
-  imports: [NodeContentModule],
+  imports: [NodeModule],
   providers: [DocumentResolver, DocumentService, DocumentRepository],
   exports: [DocumentRepository],
 })

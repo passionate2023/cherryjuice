@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import { appActionCreators } from '../../reducer';
 import { dateToFormattedString } from '::helpers/time';
 import { QUERY_CT_FILES } from '::graphql/queries';
-import {  DocumentMeta } from '::types/generated';
+import { DocumentMeta } from '::types/generated';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { useReloadQuery } from '::hooks/use-reload-query';
@@ -30,7 +30,7 @@ const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
   return (
     <div>
       {data &&
-        files.map(({ name, size, updatedAt, id, folder }:DocumentMeta) => (
+        files.map(({ name, size, updatedAt, id, folder }: DocumentMeta) => (
           <span
             className={`${modSelectFile.selectFile__file} ${
               selected.id === id
@@ -51,9 +51,7 @@ const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
 
             <span className={`${modSelectFile.selectFile__file__details} `}>
               <span>{size / 1024}kb</span>
-              <span>
-                {dateToFormattedString(new Date(updatedAt))}
-              </span>
+              <span>{dateToFormattedString(new Date(updatedAt))}</span>
             </span>
           </span>
         ))}
@@ -86,7 +84,7 @@ const Files = ({ selected, setSelected, selectedFile, data, loading }) => {
   let filesPerFolders: [string, DocumentMeta[]][];
   if (data) {
     filesPerFolders = [
-      data.document.reduce((acc, {document_meta: val}) => {
+      data.document.reduce((acc, { document_meta: val }) => {
         if (acc[val.folder]) acc[val.folder].push(val);
         else acc[val.folder] = [val];
 

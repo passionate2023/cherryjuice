@@ -1,14 +1,14 @@
-import imageThumbnail from 'image-thumbnail';
 import { parseXml } from './helpers/xml';
-import { bufferToPng, getPNGSize } from './helpers/ctb';
+import { getPNGSize } from './helpers/ctb';
 import { aHtmlToHtml } from './helpers/rendering/query/ahtml-to-html';
 import { ctbToAHtml } from './helpers/rendering/query/ctb-to-ahtml';
-import { NodeContentRepository } from './node-content.repository';
+import { NodeRepository } from './node.repository';
 import { Injectable } from '@nestjs/common';
+import { Node } from './entities/node.entity';
 
 @Injectable()
-export class NodeContentService {
-  constructor(private nodeContentRepository: NodeContentRepository) {}
+export class NodeService {
+  constructor(private nodeContentRepository: NodeRepository) {}
   async getHtml(node_id: string): Promise<string> {
     const { txt } = await this.nodeContentRepository.getNodeText(node_id);
     const {
@@ -45,36 +45,11 @@ export class NodeContentService {
     });
   }
 
-  async getPNGFullBase64({ node_id, offset }): Promise<string[]> {
-    return this.nodeContentRepository
-      .getNodeImages({
-        node_id,
-        offset,
-      })
-      .then(nodes => {
-        return nodes.map(({ png }) => {
-          return bufferToPng(png);
-        });
-      });
+  async getNodesMeta(): Promise<Node[]> {
+    return this.nodeContentRepository.getNodesMeta();
   }
-  async getPNGThumbnailBase64({ node_id, offset }): Promise<Promise<string>[]> {
-    return this.nodeContentRepository
-      .getNodeImages({
-        node_id,
-        offset,
-      })
-      .then(nodes =>
-        nodes.map(async ({ anchor, png }) =>
-          anchor
-            ? null
-            : (
-                await imageThumbnail(png, {
-                  percentage: 5,
-                  responseType: 'base64',
-                })
-              ).toString(),
-        ),
-      );
+  async getNodeMetaById(node_id: number): Promise<Node[]> {
+    return this.nodeContentRepository.getNodeMetaById(node_id);
   }
 
   // async setNodeHtml({ file_id, node_id, abstract_html }) {

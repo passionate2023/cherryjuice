@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { DocumentModule } from './document/document.module';
-import { NodeContentModule } from './document/modules/node-content/node-content.module';
 import {
   addSTSHeader,
   ignoreClientSideRouting,
@@ -15,13 +14,16 @@ import {
 } from '../middleware';
 import path from 'path';
 import express from 'express';
+import { NodeModule } from './document/modules/node/node.module';
+import { ImageModule } from './document/modules/node/modules/image/image.module';
 
 @Module({
   imports: [
     DocumentModule,
-    NodeContentModule,
+    NodeModule,
+    ImageModule,
     GraphQLModule.forRoot({
-      include: [NodeContentModule, DocumentModule],
+      include: [NodeModule, DocumentModule, ImageModule],
       autoSchemaFile: true,
     }),
   ],

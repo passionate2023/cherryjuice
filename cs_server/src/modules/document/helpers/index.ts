@@ -2,8 +2,9 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as crypto from 'crypto';
 import * as shortHash from 'shorthash';
-import { DocumentMeta } from '../modules/document-meta/document-meta.entity';
-import { NodeMeta } from '../modules/node-meta/node-meta.entity';
+import { Document } from '../document.entity';
+import { Node } from '../modules/node/entities/node.entity';
+
 const createLegacyID = name =>
   crypto
     .createHash('md5')
@@ -33,7 +34,7 @@ const resolve = ({
 }: {
   folderPath;
   userID;
-  res: DocumentMeta[];
+  res: Document[];
 }) => {
   const fullFolderPath = path.resolve(__dirname, folderPath);
   const dir = fs.readdirSync(fullFolderPath);
@@ -58,6 +59,7 @@ const resolve = ({
             .digest('hex'),
         ),
         folder: fullFolderPath,
+        node: [],
       });
     }
   });
@@ -68,7 +70,7 @@ const scanFolder: ({
 }: {
   folders: string[];
   userID: string;
-}) => Map<string, DocumentMeta> = ({ folders, userID }) => {
+}) => Map<string, Document> = ({ folders, userID }) => {
   const res = [];
 
   folders.forEach(folderPath => resolve({ folderPath, userID, res }));
@@ -99,8 +101,8 @@ const nodeTitleStyle = ({ is_richtxt }) => {
   });
 };
 
-const organizeData = async data => {
-  const nodes: Map<number, NodeMeta> = new Map(
+const organizeData = async (data): Promise<Map<number, Node>> => {
+  const nodes: Map<number, Node> = new Map(
     data.map(node => [node.node_id, node]),
   );
 
@@ -120,7 +122,7 @@ const organizeData = async data => {
       (a, b) => nodes.get(a).sequence - nodes.get(b).sequence,
     );
   });
-  return { nodes };
+  return nodes;
 };
 
 export { scanFolder, adaptFileID, organizeData };

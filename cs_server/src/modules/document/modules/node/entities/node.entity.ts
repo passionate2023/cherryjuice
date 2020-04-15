@@ -1,7 +1,8 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
+import { Image } from '../modules/image/entities/image.entity';
 
 @ObjectType()
-export class NodeMeta {
+export class Node {
   @Field(() => Int)
   node_id: number;
 
@@ -40,4 +41,10 @@ export class NodeMeta {
 
   @Field()
   icon_id: string;
+
+  @Field()
+  html: string;
+
+  @Field(() => [Image], { nullable: 'items' })
+  image: Image[];
 }
