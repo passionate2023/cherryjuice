@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "npm link parcel-bundler",
+    "watch:server": "node scripts/parcel.dev.js",
+    "watch:server-debug": "node scripts/parcel.dev.js --inspect",
+    "setup": "yarn global add parcel-bundler && yarn install ",
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "setup": "yarn",
     "start": "node dist/main.js",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch"

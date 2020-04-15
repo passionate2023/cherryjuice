@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { NodeContentModule } from './node-content/node-content.module';
+import { NodeContentModule } from './modules/node-content/node-content.module';
 import { DocumentResolver } from './document.resolver';
 import { DocumentService } from './document.service';
 import { DocumentRepository } from './document.repository';

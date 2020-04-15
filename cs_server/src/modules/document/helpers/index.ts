@@ -3,8 +3,8 @@ import * as fs from 'fs';
 import slugify from 'slugify';
 import * as crypto from 'crypto';
 import * as shortHash from 'shorthash';
-import { DocumentMeta } from '../document-meta/document-meta.entity';
-import { NodeMeta } from '../node-meta/node-meta.entity';
+import { DocumentMeta } from '../modules/document-meta/document-meta.entity';
+import { NodeMeta } from '../modules/node-meta/node-meta.entity';
 const legacyFileIDToNewID = ({
   legacyID,
   files,

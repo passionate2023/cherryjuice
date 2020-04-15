@@ -8,10 +8,10 @@ import {
 } from '@nestjs/graphql';
 import { DocumentService } from './document.service';
 import { Document } from './document.entity';
-import { NodeMeta } from './node-meta/node-meta.entity';
-import { NodeContentService } from './node-content/node-content.service';
-import { NodeContent } from './node-content/node-content.entity';
-import { DocumentMeta } from './document-meta/document-meta.entity';
+import { NodeMeta } from './modules/node-meta/node-meta.entity';
+import { NodeContentService } from './modules/node-content/node-content.service';
+import { NodeContent } from './modules/node-content/node-content.entity';
+import { DocumentMeta } from './modules/document-meta/document-meta.entity';
 
 @Resolver(() => Document)
 export class DocumentResolver {
@@ -44,6 +44,6 @@ export class DocumentResolver {
   async node_content(
     @Args('node_id', { nullable: false, type: () => Int }) node_id: number,
   ) {
-    return this.nodeContentService.getNode(String(node_id));
+    return [{ node_id }];
   }
 }

@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { DocumentMeta } from './document-meta/document-meta.entity';
+import { DocumentMeta } from './modules/document-meta/document-meta.entity';
 import { organizeData } from './helpers';
 import { DocumentRepository } from './document.repository';
-import { NodeMeta } from './node-meta/node-meta.entity';
+import { NodeMeta } from './modules/node-meta/node-meta.entity';
 
 @Injectable()
 export class DocumentService {

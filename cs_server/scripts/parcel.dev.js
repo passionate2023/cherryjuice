@@ -27,7 +27,7 @@ const options = {
       detailedReport: false, // Prints a detailed report of the bundles, assets, filesizes and times, defaults to false, reports are only printed if watch is disabled
       */
 };
-const entryFiles = './src/index.ts';
+const entryFiles = './src/main.ts';
 const console = {
   parcel: {
     log: data =>
@@ -51,8 +51,12 @@ const helpers = {
     child.removeAllListeners('exit');
     child.kill();
   },
+
   startNewProcess: (state, bundle) => {
-    state.child = childProcess.spawn('node', [bundle.name]);
+    state.child = childProcess.spawn(
+      'node',
+      [process.argv[2], bundle.name].filter(Boolean),
+    );
     state.child.stdout.on('data', console.process.log);
     state.child.stderr.on('data', console.process.error);
 

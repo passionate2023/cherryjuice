@@ -5,9 +5,8 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ConfigModule } from '@nestjs/config';
 import { DocumentModule } from './document/document.module';
-import { NodeContentModule } from './document/node-content/node-content.module';
+import { NodeContentModule } from './document/modules/node-content/node-content.module';
 import {
   addSTSHeader,
   ignoreClientSideRouting,
@@ -25,7 +24,6 @@ import express from 'express';
       include: [NodeContentModule, DocumentModule],
       autoSchemaFile: true,
     }),
-    ConfigModule.forRoot(),
   ],
 })
 export class AppModule implements NestModule {

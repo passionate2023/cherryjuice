@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as sqlite from 'sqlite';
-import { NodeMeta } from './node-meta/node-meta.entity';
+import { NodeMeta } from './modules/node-meta/node-meta.entity';
 import { adaptFileID, scanFolder } from './helpers';
-import { DocumentMeta } from './document-meta/document-meta.entity';
+import { DocumentMeta } from './modules/document-meta/document-meta.entity';
 import { Database } from 'sqlite';
 
 const queries = {
@@ -43,6 +43,9 @@ export class DocumentRepository {
   }
   async all(query: string): Promise<any[]> {
     return this.sqlite.db.all(query);
+  }
+  async get(query: string): Promise<any> {
+    return this.sqlite.db.get(query);
   }
 
   getDocumentsMeta(): DocumentMeta[] {

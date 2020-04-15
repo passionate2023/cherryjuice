@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { NodeMeta } from './node-meta/node-meta.entity';
-import { NodeContent } from './node-content/node-content.entity';
-import { DocumentMeta } from './document-meta/document-meta.entity';
+import { NodeMeta } from './modules/node-meta/node-meta.entity';
+import { NodeContent } from './modules/node-content/node-content.entity';
+import { DocumentMeta } from './modules/document-meta/document-meta.entity';
 
 @ObjectType()
 export class Document {
