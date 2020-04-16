@@ -1,5 +1,4 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
-import { Image } from '../modules/image/entities/image.entity';
 
 @ObjectType()
 export class Node {
@@ -45,6 +44,6 @@ export class Node {
   @Field()
   html: string;
 
-  @Field(() => [Image], { nullable: 'items' })
-  image: Image[];
+  @Field(() => [String], { nullable: 'items' })
+  image: string[];
 }

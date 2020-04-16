@@ -1,88 +1,69 @@
 import gql from 'graphql-tag';
-
-const QUERY_CT_NODE_META = gql`
-  query node_meta($file_id: String!) {
-    document(file_id: $file_id) {
-      node_meta {
-        node_id
-        father_id
-        name
-        child_nodes
-        is_empty
-        is_richtxt
-        has_image
-        has_codebox
-        has_table
-        ts_creation
-        ts_lastsave
-        node_title_styles
-        icon_id
-      }
-    }
-  }
-`;
-
-const QUERY_CT_NODE_CONTENT = {
-  png: gql`
-    query node_content__png($file_id: String!, $node_id: Int!, $offset: Int!) {
+import { NodeMeta, DocumentMeta, NodeImage, Node } from '::types/generated';
+const QUERY_NODE_META = {
+  path: (data): NodeMeta[] | undefined => data?.document[0]?.node,
+  query: gql`
+    query node_meta($file_id: String!) {
       document(file_id: $file_id) {
-        node_content(node_id: $node_id) {
-          png(offset: $offset)
+        node {
           node_id
-        }
-      }
-    }
-  `,
-  png_thumbnail: gql`
-    query node_content__png_thumb(
-      $file_id: String!
-      $node_id: Int!
-      $offset: Int!
-    ) {
-      document(file_id: $file_id) {
-        node_content(node_id: $node_id) {
-          png_thumbnail(offset: $offset)
-          node_id
-        }
-      }
-    }
-  `,
-  html: gql`
-    query node_content__html($file_id: String!, $node_id: Int!) {
-      document(file_id: $file_id) {
-        node_content(node_id: $node_id) {
-          html
-          node_id
-        }
-      }
-    }
-  `,
-  all_png: gql`
-    query node_content__all_png($file_id: String!, $node_id: Int!) {
-      document(file_id: $file_id) {
-        node_content(node_id: $node_id) {
-          png
-          node_id
-        }
-      }
-    }
-  `,
-  all_png_thumbnail: gql`
-    query node_content__all_png_thumb($file_id: String!, $node_id: Int!) {
-      document(file_id: $file_id) {
-        node_content(node_id: $node_id) {
-          png_thumbnail
-          node_id
+          father_id
+          name
+          child_nodes
+          is_empty
+          is_richtxt
+          has_image
+          has_codebox
+          has_table
+          ts_creation
+          ts_lastsave
+          node_title_styles
+          icon_id
         }
       }
     }
   `,
 };
 
-const QUERY_CT_FILES = gql`
-  query documents_meta($file_id: String) {
-    document(file_id: $file_id) {
-      document_meta {
+const QUERY_NODE_CONTENT = {
+  png: {
+    path: (data): NodeImage | undefined => data?.document[0]?.node[0],
+    query: gql`
+      query node_content__png(
+        $file_id: String!
+        $node_id: Int!
+        $offset: Int
+        $thumbnail: Boolean
+      ) {
+        document(file_id: $file_id) {
+          node(node_id: $node_id) {
+            node_id
+            image(offset: $offset, thumbnail: $thumbnail)
+          }
+        }
+      }
+    `,
+  },
+  html: {
+    path: (data): Pick<Node, 'html' | 'node_id'> => data?.document[0]?.node[0],
+    query: gql`
+      query node_content__html($file_id: String!, $node_id: Int!) {
+        document(file_id: $file_id) {
+          node(node_id: $node_id) {
+            html
+            node_id
+          }
+        }
+      }
+    `,
+  },
+};
+
+const QUERY_DOCUMENTS = {
+  path: (data): DocumentMeta[] => data.document,
+  query: gql`
+    query documents_meta($file_id: String) {
+      document(file_id: $file_id) {
         id
         name
         size
@@ -92,6 +73,6 @@ const QUERY_CT_FILES = gql`
         folder
       }
     }
-  }
-`;
-export { QUERY_CT_FILES, QUERY_CT_NODE_META, QUERY_CT_NODE_CONTENT };
+  `,
+};
+export { QUERY_DOCUMENTS, QUERY_NODE_META, QUERY_NODE_CONTENT };

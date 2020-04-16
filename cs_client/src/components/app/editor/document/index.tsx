@@ -3,8 +3,7 @@ import { Fragment, useMemo } from 'react';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Tree } from './tree';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
-import { QUERY_CT_NODE_META } from '::graphql/queries';
-import { NodeMeta } from '::types/generated';
+import { QUERY_NODE_META } from '::graphql/queries';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { appActionCreators } from '::app/reducer';
@@ -12,6 +11,7 @@ import { RichText } from '::app/editor/document/rich-text';
 import { TState } from '::app/reducer';
 import { useReloadQuery } from '::hooks/use-reload-query';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
+import { NodeMeta } from '::types/generated';
 
 type Props = {
   state: TState;
@@ -37,7 +37,7 @@ const Document: React.FC<Props> = ({ state }) => {
       reloadRequestID: reloadDocument,
     },
     {
-      query: QUERY_CT_NODE_META,
+      query: QUERY_NODE_META.query,
       queryVariables,
     },
   );
@@ -50,8 +50,9 @@ const Document: React.FC<Props> = ({ state }) => {
     { resourceName: 'the document' },
   );
   const nodes: Map<number, NodeMeta> = useMemo(() => {
-    if (data?.document[0]?.node_meta) {
-      return new Map(data.document[0].node_meta.map(node => [node.node_id, node]));
+    const nodes = QUERY_NODE_META.path(data);
+    if (nodes) {
+      return new Map(nodes.map(node => [node.node_id, node]));
     }
   }, [loading, file_id]);
   if (error) {

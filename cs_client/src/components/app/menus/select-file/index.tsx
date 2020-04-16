@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router';
 import { appActionCreators } from '../../reducer';
 import { dateToFormattedString } from '::helpers/time';
-import { QUERY_CT_FILES } from '::graphql/queries';
+import { QUERY_DOCUMENTS } from '::graphql/queries';
 import { DocumentMeta } from '::types/generated';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
@@ -84,7 +84,7 @@ const Files = ({ selected, setSelected, selectedFile, data, loading }) => {
   let filesPerFolders: [string, DocumentMeta[]][];
   if (data) {
     filesPerFolders = [
-      data.document.reduce((acc, { document_meta: val }) => {
+      QUERY_DOCUMENTS.path(data).reduce((acc, val) => {
         if (acc[val.folder]) acc[val.folder].push(val);
         else acc[val.folder] = [val];
 
@@ -129,7 +129,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
       reloadRequestID: reloadFiles,
     },
     {
-      query: QUERY_CT_FILES,
+      query: QUERY_DOCUMENTS.query,
       queryVariables: undefined,
     },
   );

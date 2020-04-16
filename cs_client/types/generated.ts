@@ -9,45 +9,31 @@ export type Scalars = {
   Float: number;
 };
 
-export type Document = {
-  __typename?: 'Document';
-  document_meta: DocumentMeta;
-  node_meta: Array<NodeMeta>;
-  node_content: Array<NodeContent>;
+export type DocumentNodeArgs = {
+  node_id?: Maybe<Scalars['Int']>;
 };
 
-export type DocumentNode_ContentArgs = {
-  node_id: Scalars['Int'];
+export type Image = {
+  __typename?: 'Image';
+  image: Scalars['String'];
 };
 
-export type DocumentMeta = {
-  __typename?: 'DocumentMeta';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  size: Scalars['Int'];
-  createdAt: Scalars['Float'];
-  updatedAt: Scalars['Float'];
-  folder?: Maybe<Scalars['String']>;
-};
-
-export type NodeContent = {
-  __typename?: 'NodeContent';
-  node_id: Scalars['Int'];
-  html: Scalars['String'];
-  png_thumbnail: Array<Scalars['String']>;
-  png: Array<Scalars['String']>;
-};
-
-export type NodeContentPng_ThumbnailArgs = {
+export type NodeImageArgs = {
+  thumbnail?: Maybe<Scalars['Boolean']>;
   offset?: Maybe<Scalars['Float']>;
 };
 
-export type NodeContentPngArgs = {
-  offset?: Maybe<Scalars['Float']>;
+export type Query = {
+  __typename?: 'Query';
+  document: Array<Maybe<Document>>;
 };
 
-export type NodeMeta = {
-  __typename?: 'NodeMeta';
+export type QueryDocumentArgs = {
+  file_id?: Maybe<Scalars['String']>;
+};
+
+export type Node = {
+  __typename?: 'Node';
   node_id: Scalars['Int'];
   name: Scalars['String'];
   father_id: Scalars['Int'];
@@ -61,13 +47,19 @@ export type NodeMeta = {
   ts_lastsave: Scalars['Float'];
   node_title_styles: Scalars['String'];
   icon_id: Scalars['String'];
+  html: Scalars['String'];
+  image: Array<Maybe<Image>>;
 };
-
-export type Query = {
-  __typename?: 'Query';
-  document: Array<Document>;
+export type NodeMeta = Omit<Node, 'html' | 'image'>;
+export type NodeImage = Pick<Node, 'node_id' | 'image'>;
+type Document = {
+  __typename?: 'Document';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  size: Scalars['Int'];
+  createdAt: Scalars['Float'];
+  updatedAt: Scalars['Float'];
+  folder?: Maybe<Scalars['String']>;
+  node: Array<Maybe<Node>>;
 };
-
-export type QueryDocumentArgs = {
-  file_id?: Maybe<Scalars['String']>;
-};
+export type DocumentMeta = Omit<Document, 'node'>;

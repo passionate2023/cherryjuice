@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import { useRouteMatch } from 'react-router';
 import { useMutation } from '@apollo/react-hooks';
-import { QUERY_CT_NODE_CONTENT } from '::graphql/queries';
+import { QUERY_NODE_CONTENT } from '::graphql/queries';
 import { usePng } from '::hooks/use-png';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
 import { MUTATE_CT_NODE_CONTENT } from '::graphql/mutations';
@@ -52,7 +52,7 @@ const RichText: React.FC<Props> = ({
       reloadRequestID: reloadDocument,
     },
     {
-      query: QUERY_CT_NODE_CONTENT.html,
+      query: QUERY_NODE_CONTENT.html.query,
       queryVariables,
     },
   );
@@ -64,9 +64,10 @@ const RichText: React.FC<Props> = ({
     },
     { resourceName: 'the node' },
   );
-  let html;
-  if (data && data.document[0].node_content[0].node_id === node_id) {
-    html = data.document[0].node_content[0].html;
+  let html, node;
+  node = QUERY_NODE_CONTENT.html.path(data);
+  if (node && node.node_id === node_id) {
+    html = node.html;
     processLinks = new Date().getTime();
   }
 
