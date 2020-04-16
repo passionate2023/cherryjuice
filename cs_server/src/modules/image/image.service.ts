@@ -1,11 +1,11 @@
 import imageThumbnail from 'image-thumbnail';
 import { Injectable } from '@nestjs/common';
-import { ImageRepository } from './image.repository';
-import { bufferToPng } from '../../helpers/ctb';
+import { ImageSqliteRepository } from './repositories/image.sqlite.repository';
+import { bufferToPng } from '../node/helpers/ctb';
 
 @Injectable()
 export class ImageService {
-  constructor(private imageRepository: ImageRepository) {}
+  constructor(private imageRepository: ImageSqliteRepository) {}
 
   async getPNGFullBase64({ node_id, offset }): Promise<string[]> {
     return this.imageRepository

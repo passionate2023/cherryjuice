@@ -1,47 +1,16 @@
-import { parseXml } from './helpers/xml';
-import { getPNGSize } from './helpers/ctb';
 import { aHtmlToHtml } from './helpers/rendering/query/ahtml-to-html';
-import { ctbToAHtml } from './helpers/rendering/query/ctb-to-ahtml';
-import { NodeRepository } from './node.repository';
+import { NodeSqliteRepository } from './repositories/node.sqlite.repository';
 import { Injectable } from '@nestjs/common';
 import { Node } from './entities/node.entity';
 
 @Injectable()
 export class NodeService {
-  constructor(private nodeContentRepository: NodeRepository) {}
+  constructor(private nodeContentRepository: NodeSqliteRepository) {}
   async getHtml(node_id: string): Promise<string> {
-    const { txt } = await this.nodeContentRepository.getNodeText(node_id);
-    const {
-      codebox,
-      table,
-      image,
-    } = await this.nodeContentRepository.getNodeImagesTablesCodeboxes({
-      node_id,
-    });
-    const otherTables = {
-      codebox,
-      image: image.map(
-        ({ node_id, offset, justification, anchor, png, link }) => ({
-          node_id,
-          offset,
-          justification,
-          anchor,
-          link,
-          ...getPNGSize(png),
-        }),
-      ),
-      table: await Promise.all(
-        table.map(async table => ({
-          ...table,
-          txt: await parseXml({ xml: table.txt }),
-        })),
-      ),
-    };
+    const ahtml = await this.nodeContentRepository.getAHtml(node_id);
+
     return aHtmlToHtml({
-      richText: await ctbToAHtml({
-        nodeTableXml: txt,
-        otherTables,
-      }),
+      richText: ahtml,
     });
   }
 

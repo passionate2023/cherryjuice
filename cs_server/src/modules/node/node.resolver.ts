@@ -1,7 +1,7 @@
 import { Args, Int, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { NodeService } from './node.service';
 import { Node } from './entities/node.entity';
-import { ImageService } from './modules/image/image.service';
+import { ImageService } from '../image/image.service';
 
 @Resolver(() => Node)
 export class NodeResolver {

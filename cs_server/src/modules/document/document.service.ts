@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { DocumentRepository } from './document.repository';
-import { Document } from './document.entity';
+import { DocumentSqliteRepository } from './repositories/document.sqlite.repository';
+import { Document } from './entities/document.entity';
 
 @Injectable()
 export class DocumentService {
-  constructor(private documentRepository: DocumentRepository) {}
+  constructor(private documentSqliteRepository: DocumentSqliteRepository) {}
 
   async open(file_id: string): Promise<void> {
-    await this.documentRepository.open(file_id);
+    await this.documentSqliteRepository.open(file_id);
   }
 
-  getDocumentsMeta(): Document[] {
-    return this.documentRepository.getDocumentsMeta();
+  async getDocumentsMeta(): Promise<Document[]> {
+    return this.documentSqliteRepository.getDocumentsMeta();
   }
-  getDocumentMetaById(file_id: string): Document {
-    return this.documentRepository.getDocumentMetaById(file_id);
+  async getDocumentMetaById(file_id: string): Promise<Document> {
+    return this.documentSqliteRepository.getDocumentMetaById(file_id);
   }
 }

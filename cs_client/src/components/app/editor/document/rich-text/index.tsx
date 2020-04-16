@@ -122,8 +122,8 @@ const RichText: React.FC<Props> = ({
         name,
         node_title_styles,
         is_richtxt,
-        ts_creation,
-        ts_lastsave,
+        createdAt,
+        updatedAt,
       } = node;
       appActionCreators.selectNode(
         {
@@ -133,8 +133,8 @@ const RichText: React.FC<Props> = ({
         },
         {
           is_richtxt,
-          ts_creation,
-          ts_lastsave,
+          createdAt,
+          updatedAt,
         },
       );
     }

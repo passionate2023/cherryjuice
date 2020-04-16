@@ -15,8 +15,8 @@ const QUERY_NODE_META = {
           has_image
           has_codebox
           has_table
-          ts_creation
-          ts_lastsave
+          createdAt
+          updatedAt
           node_title_styles
           icon_id
         }

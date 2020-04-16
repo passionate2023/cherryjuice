@@ -4,8 +4,8 @@ const defaultSelectNode = {
   id: -1,
   name: '',
   is_richtxt: '',
-  ts_creation: '',
-  ts_lastsave: '',
+  createdAt: '',
+  updatedAt: '',
   style: {},
 };
 const initialState = {
@@ -38,8 +38,8 @@ export type TRecentNode = {
   name: string;
   style?: Record<string, string | number>;
   is_richtxt: string;
-  ts_creation: string;
-  ts_lastsave: string;
+  createdAt: string;
+  updatedAt: string;
 };
 export type TState = typeof initialState & {
   selectedNode: TRecentNode;
@@ -141,11 +141,11 @@ const createActionCreators = () => {
       state.dispatch({ type: actions.SELECT_FILE, value: fileId }),
     selectNode: (
       { node_id, name, style },
-      { is_richtxt, ts_creation, ts_lastsave },
+      { is_richtxt, createdAt, updatedAt },
     ) =>
       state.dispatch({
         type: actions.SELECT_NODE,
-        value: { node_id, name, style, is_richtxt, ts_creation, ts_lastsave },
+        value: { node_id, name, style, is_richtxt, createdAt, updatedAt },
       }),
     processLinks(value: number) {
       state.dispatch({
@@ -182,8 +182,8 @@ const reducer = (
           id: +action.value.node_id,
           name: `${action.value.name}`,
           is_richtxt: `${action.value.is_richtxt}`,
-          ts_creation: `${action.value.ts_creation}`,
-          ts_lastsave: `${action.value.ts_lastsave}`,
+          createdAt: `${action.value.createdAt}`,
+          updatedAt: `${action.value.updatedAt}`,
           style: JSON.parse(action.value.style),
         },
         recentNodes: [
@@ -195,8 +195,8 @@ const reducer = (
             name: action.value.name,
             style: action.value.style,
             is_richtxt: `${action.value.is_richtxt}`,
-            ts_creation: `${action.value.ts_creation}`,
-            ts_lastsave: `${action.value.ts_lastsave}`,
+            createdAt: `${action.value.createdAt}`,
+            updatedAt: `${action.value.updatedAt}`,
           },
         ],
       };

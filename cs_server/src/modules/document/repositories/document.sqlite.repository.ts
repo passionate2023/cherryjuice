@@ -1,13 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as sqlite from 'sqlite';
-import { Document } from './document.entity';
-import { adaptFileID, scanFolder } from './helpers';
 import { Database } from 'sqlite';
+import { Document } from '../entities/document.entity';
+import { adaptFileID, scanFolder } from '../helpers';
 import * as path from 'path';
+import { IDocumentRepository } from '../interfaces/document.repository';
 
 @Injectable()
-export class DocumentRepository {
-  private logger = new Logger('DocumentRepository');
+export class DocumentSqliteRepository implements IDocumentRepository {
   private sqlite: { db: Database; file_id: string } = {
     db: undefined,
     file_id: undefined,
@@ -29,17 +29,18 @@ export class DocumentRepository {
       }
     }
   }
-  async all(query: string): Promise<any[]> {
+  async sqliteAll(query: string): Promise<any[]> {
     return this.sqlite.db.all(query);
   }
-  async get(query: string): Promise<any> {
+  async sqliteGet(query: string): Promise<any> {
     return this.sqlite.db.get(query);
   }
 
-  getDocumentsMeta(): Document[] {
+  async getDocumentsMeta(): Promise<Document[]> {
     return Array.from(this.documents.values());
   }
-  getDocumentMetaById(file_id: string): Document {
+
+  async getDocumentMetaById(file_id: string): Promise<Document> {
     file_id = adaptFileID(file_id, this.documents);
     return this.documents.get(file_id);
   }

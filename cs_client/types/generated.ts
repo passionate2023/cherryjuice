@@ -43,8 +43,8 @@ export type Node = {
   has_image: Scalars['Int'];
   has_codebox: Scalars['Int'];
   has_table: Scalars['Int'];
-  ts_creation: Scalars['Float'];
-  ts_lastsave: Scalars['Float'];
+  createdAt: Scalars['Float'];
+  updatedAt: Scalars['Float'];
   node_title_styles: Scalars['String'];
   icon_id: Scalars['String'];
   html: Scalars['String'];

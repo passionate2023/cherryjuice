@@ -14,8 +14,10 @@ import {
 } from '../middleware';
 import path from 'path';
 import express from 'express';
-import { NodeModule } from './document/modules/node/node.module';
-import { ImageModule } from './document/modules/node/modules/image/image.module';
+import { NodeModule } from './node/node.module';
+import { ImageModule } from './image/image.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfig } from '../config/typeorm.config';
 
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import { ImageModule } from './document/modules/node/modules/image/image.module'
       include: [NodeModule, DocumentModule, ImageModule],
       autoSchemaFile: true,
     }),
+    TypeOrmModule.forRoot(typeOrmConfig),
   ],
 })
 export class AppModule implements NestModule {

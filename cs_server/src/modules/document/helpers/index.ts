@@ -2,8 +2,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as crypto from 'crypto';
 import * as shortHash from 'shorthash';
-import { Document } from '../document.entity';
-import { Node } from '../modules/node/entities/node.entity';
+import { Document } from '../entities/document.entity';
+import { Node } from '../../node/entities/node.entity';
 
 const createLegacyID = name =>
   crypto
@@ -118,7 +118,6 @@ const organizeData = async (data): Promise<Map<number, Node>> => {
 
   data.forEach(node => {
     node.child_nodes.sort(
-      // @ts-ignore
       (a, b) => nodes.get(a).sequence - nodes.get(b).sequence,
     );
   });

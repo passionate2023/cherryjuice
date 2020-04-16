@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { NodeModule } from './modules/node/node.module';
+import { NodeModule } from '../node/node.module';
 import { DocumentResolver } from './document.resolver';
 import { DocumentService } from './document.service';
-import { DocumentRepository } from './document.repository';
+import { DocumentSqliteRepository } from './repositories/document.sqlite.repository';
 
 @Module({
   imports: [NodeModule],
-  providers: [DocumentResolver, DocumentService, DocumentRepository],
-  exports: [DocumentRepository],
+  providers: [DocumentResolver, DocumentService, DocumentSqliteRepository],
+  exports: [DocumentSqliteRepository],
 })
 export class DocumentModule {}

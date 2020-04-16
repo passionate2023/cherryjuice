@@ -1,6 +1,7 @@
-import { DocumentRepository } from '../../../../document.repository';
+import { DocumentSqliteRepository } from '../../document/repositories/document.sqlite.repository';
 import { Injectable } from '@nestjs/common';
-import { Image } from '../../../../helpers/copy-ctb/entities/Image';
+import { Image } from '../../document/helpers/copy-ctb/entities/Image';
+import { IImageRepository } from '../interfaces/image.repository';
 
 const queries = {
   read: {
@@ -37,11 +38,11 @@ const queries = {
 };
 
 @Injectable()
-export class ImageRepository {
-  constructor(private documentRepository: DocumentRepository) {}
+export class ImageSqliteRepository implements IImageRepository {
+  constructor(private documentSqliteRepository: DocumentSqliteRepository) {}
 
   async getNodeImages({ node_id, offset }): Promise<Image[]> {
-    return this.documentRepository.all(
+    return this.documentSqliteRepository.sqliteAll(
       queries.read.images({ node_id: node_id, offset }),
     );
   }
