@@ -34,7 +34,7 @@ const resolve = ({
 }: {
   folderPath;
   userID;
-  res: Document[];
+  res;
 }) => {
   const fullFolderPath = path.resolve(__dirname, folderPath);
   const dir = fs.readdirSync(fullFolderPath);
@@ -124,4 +124,9 @@ const organizeData = async (data): Promise<Map<number, Node>> => {
   return nodes;
 };
 
-export { scanFolder, adaptFileID, organizeData };
+const copyProperties = (FROM, TO, excludedProperties) => {
+  Object.entries(FROM).forEach(([key, value]) => {
+    if (!excludedProperties[key]) TO[key] = value;
+  });
+};
+export { scanFolder, adaptFileID, organizeData, copyProperties,  };

@@ -1,4 +1,11 @@
-import { Args, Int, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Int,
+  Mutation,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { DocumentService } from './document.service';
 import { Document } from './entities/document.entity';
 import { Node } from '../node/entities/node.entity';
@@ -28,5 +35,17 @@ export class DocumentResolver {
     return node_id
       ? this.nodeService.getNodeMetaById(node_id)
       : this.nodeService.getNodesMeta();
+  }
+
+  @Mutation(() => String)
+  async load_document(
+    @Args('file_id', { nullable: false }) file_id: string,
+  ): Promise<boolean> {
+    await this.documentService.saveDocument(file_id).catch(e => {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      return false;
+    });
+    return true;
   }
 }

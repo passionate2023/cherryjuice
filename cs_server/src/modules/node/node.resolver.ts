@@ -6,13 +6,13 @@ import { ImageService } from '../image/image.service';
 @Resolver(() => Node)
 export class NodeResolver {
   constructor(
-    private nodeService: NodeService,
-    private imageService: ImageService,
+    private nodeSqliteService: NodeService,
+    private imageSqliteService: ImageService,
   ) {}
 
   @ResolveField()
   async html(@Parent() { node_id }): Promise<string> {
-    return node_id === 0 ? '' : this.nodeService.getHtml(node_id);
+    return node_id === 0 ? '' : this.nodeSqliteService.getHtml(node_id);
   }
   @ResolveField()
   async image(
@@ -21,11 +21,11 @@ export class NodeResolver {
     @Args('thumbnail', { nullable: true }) thumbnail: boolean,
   ): Promise<Promise<string>[] | string[]> {
     return thumbnail
-      ? this.imageService.getPNGThumbnailBase64({
+      ? this.imageSqliteService.getPNGThumbnailBase64({
           node_id,
           offset,
         })
-      : this.imageService.getPNGFullBase64({
+      : this.imageSqliteService.getPNGFullBase64({
           node_id,
           offset,
         });

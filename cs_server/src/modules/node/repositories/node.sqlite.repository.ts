@@ -1,6 +1,9 @@
 import { DocumentSqliteRepository } from '../../document/repositories/document.sqlite.repository';
 import { Injectable } from '@nestjs/common';
-import { Image } from '../../document/helpers/copy-ctb/entities/Image';
+import {
+  Image as CTBImage,
+  Image,
+} from '../../document/helpers/copy-ctb/entities/Image';
 import { Grid } from '../../document/helpers/copy-ctb/entities/Grid';
 import { Codebox } from '../../document/helpers/copy-ctb/entities/Codebox';
 import { Node } from '../entities/node.entity';
@@ -78,7 +81,15 @@ export class NodeSqliteRepository implements INodeRepository {
     };
   }
 
-  async getNodeImages({ node_id, offset }): Promise<Image[]> {
+  async getNodeImages({
+    node_id,
+    offset,
+  }): Promise<
+    Pick<
+      CTBImage,
+      'node_id' | 'offset' | 'justification' | 'anchor' | 'png' | 'link'
+    >[]
+  > {
     return this.documentSqliteRepository.sqliteAll(
       queries.read.images({ node_id: node_id, offset }),
     );
@@ -91,7 +102,7 @@ export class NodeSqliteRepository implements INodeRepository {
         data.map(node => ({
           ...node,
           child_nodes: [],
-          is_empty: false,
+          is_empty: 0,
         })),
       );
 
@@ -109,7 +120,6 @@ export class NodeSqliteRepository implements INodeRepository {
       createdAt: 0,
       updatedAt: 0,
       child_nodes: [],
-      has_txt: false,
       is_empty: 0,
       node_title_styles: '',
       icon_id: '',
@@ -119,7 +129,10 @@ export class NodeSqliteRepository implements INodeRepository {
   }
 
   async getAHtml(node_id: string): Promise<{ nodes: any; styles: any }[]> {
-    const { txt } = await this.getNodeText(node_id);
+    const { txt } =
+      node_id === '0'
+        ? { txt: '<?xml version="1.0" ?><node><rich_text></rich_text></node>' }
+        : await this.getNodeText(node_id);
     const { codebox, table, image } = await this.getNodeImagesTablesCodeboxes({
       node_id,
     });

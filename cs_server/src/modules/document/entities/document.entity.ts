@@ -1,6 +1,7 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Node } from '../../node/entities/node.entity';
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -11,7 +12,7 @@ import {
 
 @Entity()
 @ObjectType()
-export class Document {
+export class Document extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   @Field()
   id: string;
@@ -35,11 +36,6 @@ export class Document {
   @Field({ nullable: true })
   folder: string;
 
-  @OneToMany(
-    () => Node,
-    node => node.document,
-    { eager: false },
-  )
   @Field(() => [Node], { nullable: 'items' })
   node: Node[];
 }

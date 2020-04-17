@@ -1,37 +1,65 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { Document } from '../../document/entities/document.entity';
-import { Image } from '../../image/entities/image.entity';
 
+@Unique(['node_id', 'documentId'])
 @Entity()
 @ObjectType()
-export class Node {
-  @PrimaryGeneratedColumn('increment')
+export class Node extends BaseEntity {
+  @ManyToOne(
+    () => Document,
+    document => document.node,
+    { primary: true },
+  )
+  document: Document;
+  @Field()
+  @Column()
+  documentId: string;
+
+  @Field()
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column('int2')
+  @Field()
+  father_id: number;
+
+  @Column()
   @Field(() => Int)
   node_id: number;
+
+  @Column('simple-array')
+  @Field(() => [Int])
+  child_nodes: number[];
+
+  @Column('int2') sequence: number;
 
   @Column('text')
   @Field()
   name: string;
 
-  @Column('int2')
-  @Field(() => Int)
-  father_id: number;
+  @CreateDateColumn({ type: 'timestamp' })
+  @Field(() => Float)
+  createdAt: Date;
 
-  @OneToMany(
-    () => Node,
-    node => node.node_id,
-  )
-  @Field(() => [Int])
-  child_nodes: number[];
+  @UpdateDateColumn({ type: 'timestamp' })
+  @Field(() => Float)
+  updatedAt: Date;
+
+  @Column()
+  @Field()
+  node_title_styles: string;
+
+  @Column() ahtml: string;
 
   @Column('int2')
   @Field(() => Int)
@@ -53,41 +81,13 @@ export class Node {
   @Field(() => Int)
   has_table: number;
 
-  @CreateDateColumn({ type: 'timestamp' })
-  @Field(() => Float)
-  createdAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamp' })
-  @Field(() => Float)
-  updatedAt: Date;
-
-  @Column()
-  @Field()
-  node_title_styles: string;
-
   @Column()
   @Field()
   icon_id: string;
 
-  @Column()
-  ahtml: string;
-
-  @Field()
-  html: string;
-
-  @OneToMany(
-    () => Image,
-    image => image.node_id,
-  )
   @Field(() => [String], { nullable: 'items' })
   image: string[];
 
-  @ManyToOne(
-    () => Document,
-    document => document.node,
-  )
-  document: string;
-
-  @Column('int2')
-  sequence: number;
+  @Field()
+  html: string;
 }

@@ -5,13 +5,9 @@ import { Image } from '../modules/image/entities/image.entity';
 
 const config: TypeOrmModuleOptions = {
   type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: 'oooo',
-  database: 'cs',
+  url: process.env.DATABASE_URL,
+  synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
   entities: [Document, Node, Image],
-  synchronize: true,
 };
 
 export { config as typeOrmConfig };

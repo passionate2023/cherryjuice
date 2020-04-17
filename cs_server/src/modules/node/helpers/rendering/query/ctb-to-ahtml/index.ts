@@ -5,7 +5,7 @@ import { insertOtherTables } from './steps/insert-other-tables';
 import { compose } from 'ramda';
 import { parseXml } from './steps/parse-xml';
 
-const processingPipe = otherTables =>
+const processingPipe: (otherTables) => (txtTable) => any[] = otherTables =>
   compose(
     translateAttributesToHtmlAndCss,
     groupNodesByLine,

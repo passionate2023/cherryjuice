@@ -41,7 +41,15 @@ const queries = {
 export class ImageSqliteRepository implements IImageRepository {
   constructor(private documentSqliteRepository: DocumentSqliteRepository) {}
 
-  async getNodeImages({ node_id, offset }): Promise<Image[]> {
+  async getNodeImages({
+    node_id,
+    offset,
+  }): Promise<
+    Pick<
+      Image,
+      'node_id' | 'offset' | 'justification' | 'anchor' | 'png' | 'link'
+    >[]
+  > {
     return this.documentSqliteRepository.sqliteAll(
       queries.read.images({ node_id: node_id, offset }),
     );

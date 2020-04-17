@@ -1,20 +1,20 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Node } from '../../node/entities/node.entity';
 
 @Entity()
-export class Image {
+export class Image extends BaseEntity{
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ManyToOne(
     () => Node,
-    node => node.image,
+    node => node.id,
   )
-  node_id: number;
+  nodeId: string;
 
   @Column({ type: 'bytea', nullable: false })
-  thumbnail: string;
+  thumbnail: Buffer;
 
   @Column({ type: 'bytea', nullable: false })
-  image: string;
+  image: Buffer;
 }

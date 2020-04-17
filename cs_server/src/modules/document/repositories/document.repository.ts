@@ -10,6 +10,7 @@ export class DocumentRepository extends Repository<Document>
   }
 
   async getDocumentsMeta(): Promise<Document[]> {
-    return this.find();
+    const queryBuilder = this.createQueryBuilder('document');
+    return queryBuilder.getMany();
   }
 }

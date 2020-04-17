@@ -1,8 +1,10 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { INodeRepository } from '../interfaces/node.repository';
 import { Node } from '../entities/node.entity';
-import { Image } from '../../image/entities/image.entity';
+import { Injectable } from '@nestjs/common';
+import { Image as CTBImage } from '../../document/helpers/copy-ctb/entities/Image';
 
+@Injectable()
 @EntityRepository(Node)
 export class NodeRepository extends Repository<Node>
   implements INodeRepository {
@@ -16,7 +18,12 @@ export class NodeRepository extends Repository<Node>
   }: {
     node_id: any;
     offset: any;
-  }): Promise<Image[]> {
+  }): Promise<
+    Pick<
+      CTBImage,
+      'node_id' | 'offset' | 'justification' | 'anchor' | 'png' | 'link'
+    >[]
+  > {
     return Promise.resolve([]);
   }
 
