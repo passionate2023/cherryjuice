@@ -3,15 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "npm link parcel-bundler",
-    "watch:server": "node scripts/parcel.dev.js",
-    "watch:server-debug": "node scripts/parcel.dev.js --inspect",
-    "setup": "yarn global add parcel-bundler && yarn install ",
+    "prewatch:server": "rimraf dist",
+    "watch:server": "tsnd --interval 500 src/main.ts",
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "start": "node dist/main.js",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch"
+    "start": "node dist/main.js"
   },
   "optionalDependencies": {
     "@types/jest": "^25.1.0",
@@ -26,8 +22,6 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^25.1.0",
-    "jsdom": "^16.1.0",
-    "source-map-support": "^0.5.16",
     "ts-jest": "^25.2.1"
   },
   "dependencies": {
@@ -48,7 +42,6 @@
     "graphql": "^15.0.0",
     "graphql-tools": "^4.0.7",
     "image-thumbnail": "^1.0.6",
-    "morgan": "~1.9.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "pg": "^8.0.0",
@@ -61,20 +54,16 @@
     "xml2js": "^0.4.22"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.5",
-    "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/preset-env": "^7.7.6",
-    "@babel/preset-typescript": "^7.7.4",
     "@nestjs/cli": "^7.1.2",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",
     "@types/express": "^4.17.1",
     "@types/node": "^13.11.1",
-    "chalk": "^2.4.2",
-    "import-global": "^0.1.0",
     "rimraf": "^3.0.2",
     "sqlite": "^3.0.3",
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.3",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "dotenv": "^8.2.0"
   },
   "keywords": [
     "express",
