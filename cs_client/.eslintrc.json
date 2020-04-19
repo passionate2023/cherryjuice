@@ -33,6 +33,7 @@
     "react/prop-types": "off",
     "no-extra-semi": "off",
     "comma-dangle": "off",
-    "semi": "off"
+    "semi": "off",
+    "linebreak-style": "error"
   }
 }
