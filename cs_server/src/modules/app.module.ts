@@ -18,6 +18,7 @@ import { NodeModule } from './node/node.module';
 import { ImageModule } from './image/image.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from '../config/typeorm.config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -27,8 +28,10 @@ import { typeOrmConfig } from '../config/typeorm.config';
     GraphQLModule.forRoot({
       include: [NodeModule, DocumentModule, ImageModule],
       autoSchemaFile: true,
+      context: ({ req }) => ({ req }),
     }),
     TypeOrmModule.forRoot(typeOrmConfig),
+    AuthModule,
   ],
 })
 export class AppModule implements NestModule {

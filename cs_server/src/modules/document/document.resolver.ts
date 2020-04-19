@@ -10,7 +10,10 @@ import { DocumentService } from './document.service';
 import { Document } from './entities/document.entity';
 import { Node } from '../node/entities/node.entity';
 import { NodeService } from '../node/node.service';
+import { GqlAuthGuard } from '../auth/graphql.guard';
+import { UseGuards } from '@nestjs/common';
 
+@UseGuards(GqlAuthGuard)
 @Resolver(() => Document)
 export class DocumentResolver {
   constructor(
