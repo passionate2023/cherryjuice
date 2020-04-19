@@ -11,6 +11,7 @@ import { ErrorBoundary } from '::shared-components/error-boundary';
 import { useReloadQuery } from '::hooks/use-reload-query';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
+import { UploadFile } from './buttons/upload-file';
 
 const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
   data,
@@ -147,6 +148,9 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
       onClick: appActionCreators.setReloadFiles,
       disabled: false,
     },
+    {
+      component: UploadFile,
+    },
   ];
   const buttonsRight = [
     {
@@ -163,8 +167,8 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
   return (
     <DialogWithTransition
       dialogTitle={'Select Document'}
-      dialogFooterRightButtons={buttonsRight}
       dialogFooterLeftButtons={buttonsLeft}
+      dialogFooterRightButtons={buttonsRight}
       isOnMobile={isOnMobile}
       show={showDialog}
       onClose={close}

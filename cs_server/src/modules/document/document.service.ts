@@ -3,10 +3,10 @@ import { DocumentSqliteRepository } from './repositories/document.sqlite.reposit
 import { Document } from './entities/document.entity';
 import { NodeService } from '../node/node.service';
 import { ImageService } from '../image/image.service';
-import { copyProperties } from './helpers';
 import { DocumentRepository } from './repositories/document.repository';
 import { IDocumentService } from './interfaces/document.service';
 import { InjectRepository } from '@nestjs/typeorm';
+import fs from 'fs';
 
 @Injectable()
 export class DocumentService implements IDocumentService {
@@ -22,6 +22,10 @@ export class DocumentService implements IDocumentService {
     await this.documentSqliteRepository.open(file_id);
   }
 
+  async openUploadedFile(filePath: string): Promise<void> {
+    await this.documentSqliteRepository.openUploadedFile(filePath);
+  }
+
   async getDocumentsMeta(): Promise<Document[]> {
     return this.documentSqliteRepository.getDocumentsMeta();
   }
@@ -30,11 +34,18 @@ export class DocumentService implements IDocumentService {
     return this.documentSqliteRepository.getDocumentMetaById(file_id);
   }
 
-  async saveDocument(file_id: string): Promise<void> {
-    await this.open(file_id);
-    const documentToBeSaved = await this.getDocumentMetaById(file_id);
+  async saveDocument({
+    fileName,
+    filePath,
+  }: {
+    fileName: string;
+    filePath: string;
+  }): Promise<void> {
+    const { size } = fs.statSync(filePath);
+    await this.openUploadedFile(filePath);
     const document = new Document();
-    copyProperties(documentToBeSaved, document, { id: true });
+    document.name = fileName;
+    document.size = size;
     await document.save();
     const { nodesWithImages } = await this.nodeSqliteService.saveNodes(
       document,

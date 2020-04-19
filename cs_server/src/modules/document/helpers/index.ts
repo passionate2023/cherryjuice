@@ -27,15 +27,7 @@ const adaptFileID = (file_id, files) =>
     : file_id;
 
 const fileNames = {};
-const resolve = ({
-  folderPath,
-  res,
-  userID,
-}: {
-  folderPath;
-  userID;
-  res;
-}) => {
+const resolve = ({ folderPath, res, userID }: { folderPath; userID; res }) => {
   const fullFolderPath = path.resolve(__dirname, folderPath);
   const dir = fs.readdirSync(fullFolderPath);
   dir.forEach(file => {
@@ -107,7 +99,7 @@ const organizeData = async (data): Promise<Map<number, Node>> => {
   );
 
   data.forEach(node => {
-    let parentNode = nodes.get(node.father_id);
+    const parentNode = nodes.get(node.father_id);
     if (parentNode) {
       parentNode.child_nodes.push(node.node_id);
     }
@@ -129,4 +121,4 @@ const copyProperties = (FROM, TO, excludedProperties) => {
     if (!excludedProperties[key]) TO[key] = value;
   });
 };
-export { scanFolder, adaptFileID, organizeData, copyProperties,  };
+export { scanFolder, adaptFileID, organizeData, copyProperties };

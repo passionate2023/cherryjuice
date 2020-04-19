@@ -36,6 +36,11 @@ export class DocumentSqliteRepository implements IDocumentRepository {
     return this.sqlite.db.get(query);
   }
 
+  async openUploadedFile(filePath: string): Promise<void> {
+    this.sqlite.db = await sqlite.open(filePath);
+    this.sqlite.file_id = undefined;
+  }
+
   async getDocumentsMeta(): Promise<Document[]> {
     return Array.from(this.documents.values());
   }

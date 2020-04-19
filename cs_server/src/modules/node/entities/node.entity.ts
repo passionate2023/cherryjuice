@@ -65,7 +65,7 @@ export class Node extends BaseEntity {
   @Field(() => Int)
   is_empty: number;
 
-  @Column('int2')
+  @Column('int8')
   @Field(() => Int)
   is_richtxt: number;
 

@@ -12,6 +12,8 @@ import { Node } from '../node/entities/node.entity';
 import { NodeService } from '../node/node.service';
 import { GqlAuthGuard } from '../auth/graphql.guard';
 import { UseGuards } from '@nestjs/common';
+import { createWriteStream } from 'fs';
+import { FileUpload, GraphQLUpload } from './helpers/graphql';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Document)
@@ -40,14 +42,25 @@ export class DocumentResolver {
       : this.nodeService.getNodesMeta();
   }
 
-  @Mutation(() => String)
-  async load_document(
-    @Args('file_id', { nullable: false }) file_id: string,
+  @Mutation(() => Boolean)
+  async uploadFile(
+    @Args({
+      name: 'file',
+      type: () => GraphQLUpload(['application/x-sqlite3']),
+    })
+    { createReadStream, filename }: FileUpload,
   ): Promise<boolean> {
-    await this.documentService.saveDocument(file_id).catch(e => {
-      // eslint-disable-next-line no-console
-      console.error(e);
-      return false;
+    const filePath = `${process.env.UPLOADS_PATH}${filename}`;
+    await new Promise((resolve, reject) =>
+      createReadStream()
+        .pipe(createWriteStream(filePath))
+        .on('finish', () => resolve(true))
+        .on('error', () => reject(false)),
+    );
+
+    await this.documentService.saveDocument({
+      fileName: filename,
+      filePath,
     });
     return true;
   }
