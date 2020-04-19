@@ -1,17 +1,19 @@
 import * as React from 'react';
 import { TDispatchAppReducer } from '::types/react';
 import { useCallback, useState } from 'react';
-import { Dialog } from '::shared-components/material/dialog';
-import { Drawer } from '::shared-components/material/drawer';
+import { DialogWithTransition } from '::shared-components/dialog';
+import { Drawer } from '::shared-components/drawer';
 import { screens } from '::app/menus/settings/screens';
 import { appActions } from '::app/reducer';
-import { DrawerToggle } from '::shared-components/material/drawer/drawer-toggle';
+import { DrawerToggle } from '::shared-components/drawer/drawer-toggle';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 type Props = {
   dispatch: TDispatchAppReducer;
+  showDialog: boolean;
+  isOnMobile: boolean;
 };
 
-const Settings: React.FC<Props> = ({ dispatch }) => {
+const Settings: React.FC<Props> = ({ dispatch, showDialog, isOnMobile }) => {
   const [selectedTabTitle, setSelectedTabTitle] = useState(
     'Keyboard Shortcuts',
   );
@@ -21,25 +23,27 @@ const Settings: React.FC<Props> = ({ dispatch }) => {
   );
 
   return (
-    <Dialog
+    <DialogWithTransition
       menuButton={<DrawerToggle />}
       dialogTitle={'Settings'}
-      onCloseDialog={cancel}
-      dialogFooterButtons={[
-        { label: 'Cancel', onClick: cancel, disabled: false },
+      dialogFooterRightButtons={[
+        { label: 'Close', onClick: cancel, disabled: false },
         { label: 'Apply', onClick: cancel, disabled: true },
       ]}
+      dialogFooterLeftButtons={[]}
+      isOnMobile={isOnMobile}
+      onClose={cancel}
+      show={showDialog}
     >
-      <ErrorBoundary dispatch={dispatch}>
+      <ErrorBoundary>
         <Drawer
           screens={screens}
           selectedScreenTitle={selectedTabTitle}
           setSelectedScreenTitle={setSelectedTabTitle}
         />
       </ErrorBoundary>
-    </Dialog>
+    </DialogWithTransition>
   );
 };
 
-// export { Settings };
 export default Settings;

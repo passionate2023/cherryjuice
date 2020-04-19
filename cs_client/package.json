@@ -30,7 +30,8 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-router": "^5.1.2",
-    "react-router-dom": "^5.1.2"
+    "react-router-dom": "^5.1.2",
+    "react-spring": "^8.0.27"
   },
   "optionalDependencies": {
     "@commitlint/cli": "^8.3.5",
@@ -58,11 +59,11 @@
     "husky": "3.1.0",
     "jest": "^25.1.0",
     "lint-staged": "8.2.1",
-    "ts-jest": "^25.2.1",
     "stylelint": "^13.2.1",
+    "stylelint-config-sass-guidelines": "^7.0.0",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-scss": "^3.16.0",
-    "stylelint-config-sass-guidelines": "^7.0.0"
+    "ts-jest": "^25.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-0",
@@ -78,7 +79,7 @@
     "postcss-exclude-files": "^1.0.15",
     "postcss-modules": "^1.4.1",
     "sass": "^1.23.7",
-    "typescript": "^3.7.4"
+    "typescript": "^3.8.3"
   },
   "main": "src/index.ts",
   "keywords": [
@@ -92,10 +93,9 @@
     "::helpers": "./src/helpers/",
     "::graphql": "./src/graphql/",
     "::assets": "./src/assets/",
-    "::shared-components": "./src/components/shared-components/",
+    "::shared-components": "./src/components/app/shared-components/",
     "::hooks": "./src/hooks/",
-    "::app": "./src/components/app/",
-    "::lazy-components": "./src/components/lazy-components/"
+    "::app": "./src/components/app/"
   },
   "sass": {
     "includePaths": [

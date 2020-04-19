@@ -1,8 +1,10 @@
 @import '../mixins/breakpoints';
+@import '../vars/vars';
 :root {
   --vh: 100vh;
   --vw: 100vw;
   --overlay-width: 0;
   --overlay-left: 0;
   --tree-width: 250px;
+  --formatting-bar: $tool-bar-height;
 }

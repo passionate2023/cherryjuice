@@ -2,16 +2,15 @@ import { modSelectFile } from '::sass-modules/index';
 import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router';
-import { appActionCreators, appActions } from '../../reducer';
+import { appActionCreators } from '../../reducer';
 import { dateToFormattedString } from '::helpers/time';
-import { QUERY_CT_FILES } from '::graphql/queries';
-import { Ct_File } from '::types/generated';
-import { Dialog } from '::shared-components/material/dialog';
+import { QUERY_DOCUMENTS } from '::graphql/queries';
+import { DocumentMeta } from '::types/generated';
+import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
-import { Icon, Icons } from '::shared-components/icon';
-import { useReloadQuery } from '../../../../hooks/use-reload-query';
-import { useQueryTimeout } from '../../../../hooks/use-query-timeout';
-import { SpinnerCircle } from '../../../shared-components/spinner-circle';
+import { useReloadQuery } from '::hooks/use-reload-query';
+import { useQueryTimeout } from '::hooks/use-query-timeout';
+import { SpinnerCircle } from '::shared-components/spinner-circle';
 
 const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
   data,
@@ -31,7 +30,7 @@ const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
   return (
     <div>
       {data &&
-        files.map(({ name, size, fileContentModification, id, filePath }) => (
+        files.map(({ name, size, updatedAt, id, folder }: DocumentMeta) => (
           <span
             className={`${modSelectFile.selectFile__file} ${
               selected.id === id
@@ -41,7 +40,7 @@ const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
               selectedFile === id ? modSelectFile.selectFile__fileSelected : ''
             }`}
             data-id={id}
-            data-path={filePath}
+            data-folder={folder}
             onClick={onSelect}
             key={id}
             tabIndex={0}
@@ -52,9 +51,7 @@ const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
 
             <span className={`${modSelectFile.selectFile__file__details} `}>
               <span>{size / 1024}kb</span>
-              <span>
-                {dateToFormattedString(new Date(fileContentModification))}
-              </span>
+              <span>{dateToFormattedString(new Date(updatedAt))}</span>
             </span>
           </span>
         ))}
@@ -84,22 +81,12 @@ const Folder = ({
 );
 
 const Files = ({ selected, setSelected, selectedFile, data, loading }) => {
-  // const [fetch, { data }] = useLazyQuery(QUERY_CT_FILES, {
-  //   fetchPolicy: 'network-only',
-  // });
-  //
-  // const firstFetch = useRef(false);
-  // if (!firstFetch.current) {
-  //   firstFetch.current = true;
-  //   fetch();
-  // }
-  // let files: Ct_File[];
-  let filesPerFolders: [string, Ct_File[]][];
+  let filesPerFolders: [string, DocumentMeta[]][];
   if (data) {
     filesPerFolders = [
-      data.ct_files.reduce((acc, val) => {
-        if (acc[val.fileFolder]) acc[val.fileFolder].push(val);
-        else acc[val.fileFolder] = [val];
+      QUERY_DOCUMENTS.path(data).reduce((acc, val) => {
+        if (acc[val.folder]) acc[val.folder].push(val);
+        else acc[val.folder] = [val];
 
         return acc;
       }, {}),
@@ -128,19 +115,13 @@ const Files = ({ selected, setSelected, selectedFile, data, loading }) => {
   );
 };
 
-const SelectFile = ({ dispatch, selectedFile, reloadFiles }) => {
+const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
   const [selected, setSelected] = useState({ id: '', path: '' });
   const history = useHistory();
-  const close = useCallback(
-    () => dispatch({ type: appActions.TOGGLE_FILE_SELECT }),
-    [],
-  );
+  const close = appActionCreators.toggleFileSelect;
   const open = () => {
     history.push('/');
-    dispatch({
-      type: appActions.SELECT_FILE,
-      value: selected.id,
-    });
+    appActionCreators.selectFile(selected.id);
   };
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const { data, loading, error } = useReloadQuery(
@@ -148,18 +129,28 @@ const SelectFile = ({ dispatch, selectedFile, reloadFiles }) => {
       reloadRequestID: reloadFiles,
     },
     {
-      query: QUERY_CT_FILES,
+      query: QUERY_DOCUMENTS.query,
       queryVariables: undefined,
     },
   );
-  useQueryTimeout({
-    queryData: data,
-    queryError: error,
-    queryVariables: reloadFiles,
-  });
-  const buttons = [
+  useQueryTimeout(
     {
-      label: 'cancel',
+      queryData: data,
+      queryError: error,
+      queryVariables: reloadFiles,
+    },
+    { resourceName: 'files' },
+  );
+  const buttonsLeft = [
+    {
+      label: 'reload',
+      onClick: appActionCreators.setReloadFiles,
+      disabled: false,
+    },
+  ];
+  const buttonsRight = [
+    {
+      label: 'close',
       onClick: close,
       disabled: false,
     },
@@ -168,19 +159,17 @@ const SelectFile = ({ dispatch, selectedFile, reloadFiles }) => {
       onClick: open,
       disabled: selected.id === selectedFile || !selected.id,
     },
-    {
-      label: <Icon name={Icons.material.refresh} />,
-      onClick: appActionCreators.setReloadFiles,
-      disabled: false,
-    },
   ];
   return (
-    <Dialog
+    <DialogWithTransition
       dialogTitle={'Select Document'}
-      onCloseDialog={close}
-      dialogFooterButtons={buttons}
+      dialogFooterRightButtons={buttonsRight}
+      dialogFooterLeftButtons={buttonsLeft}
+      isOnMobile={isOnMobile}
+      show={showDialog}
+      onClose={close}
     >
-      <ErrorBoundary dispatch={dispatch}>
+      <ErrorBoundary>
         <Files
           setSelected={setSelected}
           selectedFile={selectedFile}
@@ -189,7 +178,8 @@ const SelectFile = ({ dispatch, selectedFile, reloadFiles }) => {
           loading={loading}
         />
       </ErrorBoundary>
-    </Dialog>
+    </DialogWithTransition>
   );
 };
-export { SelectFile };
+
+export default SelectFile;

@@ -28,7 +28,8 @@
   text-align: left;
   font-weight: 400;
   font-size: 18px;
-  z-index: 1;
+  z-index: $ZI-node-elements;
+  min-height: 21px;
 }
 
 .node__title-button {
@@ -42,7 +43,7 @@
   font-style: normal;
   font-size: 8px;
   cursor: pointer;
-  z-index: 1;
+  z-index: $ZI-node-elements;
   margin-left: 5px;
 }
 .node__title-button--hidden {
@@ -51,7 +52,7 @@
 .node__title-cherry {
   min-width: 14px;
   width: 14px;
-  z-index: 1;
+  z-index: $ZI-node-elements;
 }
 .node__list {
   padding-left: 0;

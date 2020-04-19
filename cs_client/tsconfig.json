@@ -8,10 +8,9 @@
       "::helpers/*": ["./src/helpers/*"],
       "::graphql/*": ["./src/graphql/*"],
       "::assets/*": ["./src/assets/*"],
-      "::shared-components/*": ["./src/components/shared-components/*"],
+      "::shared-components/*": ["./src/components/app/shared-components/*"],
       "::hooks/*": ["./src/hooks/*"],
-      "::app/*": ["./src/components/app/*"],
-      "::lazy-components/*": ["./src/components/lazy-components/*"]
+      "::app/*": ["./src/components/app/*"]
     },
     "target": "esnext",
     "sourceMap": true,

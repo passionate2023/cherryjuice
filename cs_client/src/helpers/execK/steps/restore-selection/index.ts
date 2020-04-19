@@ -1,3 +1,5 @@
+const getDeepestFirstChild = el =>
+  el.firstChild ? getDeepestFirstChild(el.firstChild) : el;
 const setTextSelection = (
   { startElement, endElement, startOffset, endOffset },
   collapsed?: boolean,
@@ -69,8 +71,6 @@ const findNewRange = ({
       currentOffset: 0,
     },
   );
-const getDeepestFirstChild = el =>
-  el.firstChild ? getDeepestFirstChild(el.firstChild) : el;
 
 const isTextElement = el =>
   !['table', 'img'].includes(el.localName) &&
@@ -86,6 +86,7 @@ const restoreSelection = ({
   },
   ogSelection,
   selected,
+  options: { collapse },
 }) => {
   const text = [
     {
@@ -120,11 +121,14 @@ const restoreSelection = ({
     absoluteEndOffset,
     modifiedSelection: [a, ...m, b],
   });
-  setTextSelection({
-    startElement,
-    endElement,
-    startOffset,
-    endOffset,
-  });
+  setTextSelection(
+    {
+      startElement,
+      endElement,
+      startOffset,
+      endOffset,
+    },
+    collapse,
+  );
 };
 export { restoreSelection, setTextSelection, getDeepestFirstChild };

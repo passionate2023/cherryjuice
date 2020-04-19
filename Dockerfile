@@ -1,9 +1,8 @@
 from node as cs
 workdir /server
 copy ./cs_server/ .
-run npm i -g parcel-bundler\
-  && npm link parcel-bundler
-run yarn install --ignore-optional
+run npm i -g parcel-bundler
+run yarn install
 
 
 workdir /client
@@ -24,4 +23,4 @@ copy --from=cs /server/node_modules /cs/server/node_modules
 copy --from=cs /client/dist /cs/client
 copy ./ctb-samples /cs/ctb-samples
 
-entrypoint ["node","./cs/server/index.js"]
+entrypoint ["node","./cs/server/main.js"]

@@ -1,9 +1,10 @@
 import { handleIndentation } from '::helpers/typing/indentation';
-import { appActions } from '::app/reducer';
+import { appActionCreators } from '::app/reducer';
 import { handleBackSpace } from './backspace';
+import { AlertType } from '::types/react';
 
-const setupKeyboardEvents = ({ dispatch }) => {
-  const editor = document.querySelector('#rich-text');
+const setupKeyboardEvents = () => {
+  const editor: HTMLDivElement = document.querySelector('#rich-text');
   editor.onkeydown = e => {
     try {
       if (e.keyCode == 9) {
@@ -12,7 +13,15 @@ const setupKeyboardEvents = ({ dispatch }) => {
         handleBackSpace(e);
       }
     } catch (error) {
-      dispatch({ type: appActions.SET_ERROR, value: error });
+      appActionCreators.setAlert({
+        title:
+          e.keyCode == 9
+            ? 'Could not perform the indentation'
+            : 'Something went wrong',
+        description: 'Please submit a bug report',
+        type: AlertType.Error,
+        error,
+      });
     }
   };
 };

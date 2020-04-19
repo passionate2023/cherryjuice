@@ -1,19 +1,24 @@
 import appModule from '::sass-modules/app.scss';
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import * as React from 'react';
-import { useEffect, useReducer, useRef, Suspense } from 'react';
+import { useEffect, useReducer, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
-import { appActionCreators, appInitialState, appReducer } from './reducer';
-
-// eager
-import { ErrorBoundary } from '::shared-components/error-boundary';
+import {
+  appActionCreators,
+  appInitialState,
+  appReducer,
+  TState,
+} from './reducer';
 import { Void } from '::shared-components/suspense-fallback/void';
-// lazy
-import { ToolBar } from '::lazy-components/index';
-import { ErrorModal } from '::lazy-components/index';
-import { Settings } from '::lazy-components/index';
-import { Body } from '::lazy-components/index';
-import { InfoBar } from '::lazy-components/index';
+import { client } from '::graphql/apollo';
+import { formattingBarUnmountAnimationDelay } from './editor/tool-bar/groups/formatting-buttons';
+const Menus = React.lazy(() => import('::app/menus'));
+const ApolloProvider = React.lazy(() =>
+  import('@apollo/react-common').then(({ ApolloProvider }) => ({
+    default: ApolloProvider,
+  })),
+);
+const Editor = React.lazy(() => import('::app/editor'));
 
 type Props = {};
 
@@ -57,70 +62,49 @@ const useOnWindowResize = (
 };
 const useHandleRouting = state => {
   const history = useHistory();
-  if (history.location.hash) {
-    history.push('/' + history.location.hash.substr(1));
-  } else if (state.selectedFile) {
-    if (history.location.pathname === '/')
-      history.push('/' + state.selectedFile);
-  }
+  useEffect(() => {
+    if (state.selectedFile) {
+      if (history.location.pathname === '/')
+        history.push('/' + state.selectedFile);
+    }
+  }, [state.selectedFile]);
 };
-
+const useUpdateCssVariables = (state: TState) => {
+  useEffect(() => {
+    cssVariables.setTreeWidth(state.showTree ? state.treeSize : 0);
+    if (state.showFormattingButtons) {
+      cssVariables.setFormattingBar(40);
+    } else {
+      (async () => {
+        await formattingBarUnmountAnimationDelay();
+        cssVariables.setFormattingBar(0);
+      })();
+    }
+  }, [state.showFormattingButtons, state.showTree]);
+};
 const App: React.FC<Props> = () => {
   const [state, dispatch] = useReducer(appReducer, appInitialState);
   useEffect(() => {
     appActionCreators.setDispatch(dispatch);
   }, [dispatch]);
-  const appRef = useRef<HTMLDivElement>();
-  const treeRef = useRef<HTMLDivElement & { size: { width: number } }>();
 
   useOnWindowResize();
   useSaveStateToLocalStorage(state);
   useHandleRouting(state);
-  return (
-    <div
-      className={appModule.app}
-      ref={appRef}
-      style={{
-        ...{
-          gridTemplateColumns: `${
-            !state.showTree ? '0' : 'var(--tree-width) 1fr'
-          }`,
-        },
-      }}
-    >
-      <ErrorBoundary>
-        <Suspense fallback={<Void />}>
-          <ToolBar
-            showFormattingButtons={state.showFormattingButtons}
-            contentEditable={state.contentEditable}
-            isOnMobile={state.isOnMobile}
-            dispatch={dispatch}
-            // onResize={onResize}
-          />
-        </Suspense>
-      </ErrorBoundary>
+  useUpdateCssVariables(state);
 
+  return (
+    <div className={appModule.app}>
       <Suspense fallback={<Void />}>
-        <Body
-          dispatch={dispatch}
-          // onResize={onResize}
-          treeRef={treeRef}
-          state={state}
-        />
+        <ApolloProvider client={client}>
+          <Suspense fallback={<Void />}>
+            <Editor state={state} />
+          </Suspense>
+          <Suspense fallback={<Void />}>
+            <Menus state={state} dispatch={dispatch} />
+          </Suspense>
+        </ApolloProvider>
       </Suspense>
-      <Suspense fallback={<Void />}>
-        <InfoBar state={state} node={state.selectedNode} />
-      </Suspense>
-      {state.showSettings && (
-        <Suspense fallback={<Void />}>
-          <Settings dispatch={dispatch} />
-        </Suspense>
-      )}
-      {state.error && (
-        <Suspense fallback={<Void />}>
-          <ErrorModal error={state.error} dispatch={dispatch} />
-        </Suspense>
-      )}
     </div>
   );
 };

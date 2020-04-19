@@ -1,0 +1,48 @@
+@import '../../vars/vars';
+
+
+
+$height: 250px;
+$width: $height * 1.4;
+.alert-modal {
+  position: absolute;
+  width: $width;
+  background-color: white;
+  left: calc(100vw / 2 - #{$width/2});
+  top: calc(100vh / 2 - #{$height/1.9});
+  box-shadow: $box-shadow1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #3e3d3d;
+  font-family: 'Roboto', sans-serif;
+  overflow: hidden;
+  text-align: center;
+  z-index: $ZI-alert-modal;
+  border-radius: 5px;
+}
+
+.alert-modal__icon {
+  font-size: 40px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.alert-modal__body {
+  flex: 1;
+}
+.alert-modal__header {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 20px;
+}
+.alert-modal__message {
+  font-size: 16px;
+  padding: 5px 10px;
+  opacity: 0.8;
+}
+.alert-modal__dismiss-button {
+  align-self: flex-end;
+  margin-right: 5px;
+  margin-top: 10px;
+}

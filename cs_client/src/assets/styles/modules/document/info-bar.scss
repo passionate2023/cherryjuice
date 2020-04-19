@@ -18,8 +18,8 @@
   @include respond-to($md-down) {
     left: 10px;
     position: absolute;
-    bottom: 10px;
-    z-index: 5;
+    bottom: calc(10px + var(--formatting-bar));
+    z-index: $ZI-info-bar;
   }
   @include respond-to($md-up) {
     grid-area: info-bar;

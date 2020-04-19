@@ -1,8 +1,12 @@
+@import '../../vars/vars';
 .body-scrim {
   position: absolute;
   background-color: black;
-  opacity: 0.5;
+  opacity: 0.4;
   height: 100vh;
   width: 100vw;
-  z-index: 6;
+  z-index: $ZI-scrim;
+}
+.body-scrim--alert-modal {
+  z-index: $ZI-alert-modal-scrim;
 }

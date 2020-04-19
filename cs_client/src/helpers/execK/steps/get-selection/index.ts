@@ -4,6 +4,7 @@ import {
   guardAgainstEditorIsSelectionTarget,
   guardAgainstSelectionTargetIsImage,
 } from '::helpers/execK/steps/pipe1/guards';
+import { FormattingError } from '::types/errors';
 
 const getLineChildren = line => Array.from(line.childNodes);
 const getRootParent = el =>
@@ -66,7 +67,7 @@ const createWordRange = ({ startElement, startOffset: caretOffset }) => {
   let rw: any = /^[0-9_A-Za-z]+\b/.exec(rh);
   if (lw && !rw) rw = { 0: '', index: 0 };
   if (!lw && rw) lw = { 0: '', index: lh.length };
-  if (!lw && !rw) throw Error('No adjacent word');
+  if (!lw && !rw) throw new FormattingError('No adjacent word');
 
   const word = lw[0] + rw[0];
   const startOffset = lw['index'];
@@ -89,7 +90,8 @@ const getSelection = ({
   selectAdjacentWordIfNoneIsSelected,
 }: { selectAdjacentWordIfNoneIsSelected?: boolean } = {}) => {
   const selection = document.getSelection();
-  if (selection.rangeCount === 0) throw new Error("can't find the cursor");
+  if (selection.rangeCount === 0)
+    throw new FormattingError('Could not find the cursor');
   const {
     startContainer,
     endContainer,

@@ -16,6 +16,9 @@ const cssVariables = {
   setTreeWidth: (x: number) => {
     root.style.setProperty('--tree-width', `${x}px`);
   },
+  setFormattingBar: (x: number) => {
+    root.style.setProperty('--formatting-bar', `${x}px`);
+  },
 };
 
 export { cssVariables };

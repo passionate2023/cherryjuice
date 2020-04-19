@@ -1,17 +1,18 @@
 @import '../../vars/vars';
 @import '../../mixins/breakpoints';
-.tree {
-  // size
-  grid-area: tree;
-  height: calc(var(--vh) - #{$info-bar-height+ $tool-bar-height});
+@mixin tree-height() {
+  height: calc(
+    var(--vh) - #{$info-bar-height+ $tool-bar-height} - var(--formatting-bar)
+  );
   @include respond-to('md') {
     height: calc(var(--vh) - #{$info-bar-height-md+ $tool-bar-height-md});
   }
-  // position
-  //z-index: 10;
-  // children
+}
+.tree {
+  // size
+  grid-area: tree;
+  @include tree-height();
   overflow: auto;
-  // style
   border-right: white 3px solid;
 }
 .tree_root-list {
@@ -23,5 +24,22 @@
   height: calc(100vh - #{$info-bar-height+ $tool-bar-height}) !important;
   span > div {
     min-width: 10px;
+  }
+}
+$bubble-width: 35px;
+.tree__resizeHandle__bubble {
+  position: absolute;
+  left: -#{$bubble-width * 0.4};
+  top: 70%;
+  opacity: 0.3;
+  height: $bubble-width;
+  width: $bubble-width;
+  border-radius: 50%;
+  background-color: white;
+  cursor: grab;
+  z-index: $ZI-resize-bubble;
+
+  @include respond-to($md-up) {
+    display: none;
   }
 }

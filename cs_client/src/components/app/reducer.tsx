@@ -1,13 +1,19 @@
+import { TAlert } from '::types/react';
+
+const defaultSelectNode = {
+  id: -1,
+  name: '',
+  is_richtxt: '',
+  createdAt: '',
+  updatedAt: '',
+  style: {},
+};
 const initialState = {
-  showTree: JSON.parse(localStorage.getItem('showTree')) !== true,
+  showTree: [JSON.parse(localStorage.getItem('showTree'))].map(value =>
+    value === null ? true : value === true,
+  )[0],
   treeSize: JSON.parse(localStorage.getItem('treeSize')) || 250,
-  selectedNode: {
-    id: 0,
-    name: '',
-    is_richtxt: false,
-    ts_creation: '',
-    ts_lastsave: '',
-  },
+  selectedNode: defaultSelectNode,
   selectedFile:
     [localStorage.getItem('selectedFile')].filter(
       value => Boolean(value) && value !== 'null',
@@ -18,20 +24,32 @@ const initialState = {
   saveDocument: 0,
   reloadDocument: 0,
   reloadFiles: 0,
-  error: undefined,
+  alert: undefined,
   showSettings: false,
   showFormattingButtons: false,
   showRecentNodes: false,
   contentEditable: false,
   isOnMobile: false,
   showInfoBar: false,
+  processLinks: undefined,
+};
+export type TRecentNode = {
+  id: number;
+  name: string;
+  style?: Record<string, string | number>;
+  is_richtxt: string;
+  createdAt: string;
+  updatedAt: string;
 };
 export type TState = typeof initialState & {
-  recentNodes: { id: string; name: string; style: any }[];
-  selectedNode: { id: string; name: string; style: any };
+  selectedNode: TRecentNode;
+  recentNodes: TRecentNode[];
+  alert: TAlert;
 };
 enum actions {
   TOGGLE_TREE,
+  TOGGLE_TREE_ON,
+  TOGGLE_TREE_OFF,
   TOGGLE_FILE_SELECT,
   TOGGLE_SETTINGS,
   TOGGLE_FORMATTING_BUTTONS,
@@ -44,8 +62,10 @@ enum actions {
   SAVE_DOCUMENT,
   RELOAD_DOCUMENT,
   RELOAD_FILES,
-  SET_ERROR,
+  SET_ALERT,
   SET_IS_ON_MOBILE,
+  PROCESS_LINKS,
+  HIDE_POPUPS,
 }
 const createActionCreators = () => {
   const state = {
@@ -69,8 +89,11 @@ const createActionCreators = () => {
     setIsOnMobile: (isOnMobile: boolean): void => {
       state.dispatch({ type: actions.SET_IS_ON_MOBILE, value: isOnMobile });
     },
-    throwError: (error: Error): void => {
-      state.dispatch({ type: actions.SET_ERROR, value: error });
+    setAlert: (alert: TAlert): void => {
+      state.dispatch({ type: actions.SET_ALERT, value: alert });
+    },
+    clearAlert: (): void => {
+      state.dispatch({ type: actions.SET_ALERT, value: undefined });
     },
     setReloadFiles: (): void => {
       state.dispatch({
@@ -84,45 +107,105 @@ const createActionCreators = () => {
         value: width,
       });
     },
+    toggleSettings: () => {
+      state.dispatch({ type: actions.TOGGLE_SETTINGS });
+    },
+    toggleFileSelect: () => {
+      state.dispatch({ type: actions.TOGGLE_FILE_SELECT });
+    },
+    showTree: () => {
+      state.dispatch({ type: actions.TOGGLE_TREE_ON });
+    },
+    hideTree: () => {
+      state.dispatch({ type: actions.TOGGLE_TREE_OFF });
+    },
+    toggleTree: () => {
+      state.dispatch({ type: actions.TOGGLE_TREE });
+    },
+    hidePopups: () => {
+      state.dispatch({ type: actions.HIDE_POPUPS });
+    },
+    saveDocument: e => {
+      state.dispatch({
+        type: actions.SAVE_DOCUMENT,
+        value: e.shiftKey ? new Date().getTime() : new Date().getTime() + '_', // don't send to the server
+      });
+    },
+    reloadDocument: () => {
+      state.dispatch({
+        type: actions.RELOAD_DOCUMENT,
+        value: new Date().getTime(),
+      });
+    },
+    selectFile: (fileId: string) =>
+      state.dispatch({ type: actions.SELECT_FILE, value: fileId }),
+    selectNode: (
+      { node_id, name, style },
+      { is_richtxt, createdAt, updatedAt },
+    ) =>
+      state.dispatch({
+        type: actions.SELECT_NODE,
+        value: { node_id, name, style, is_richtxt, createdAt, updatedAt },
+      }),
+    processLinks(value: number) {
+      state.dispatch({
+        type: actions.PROCESS_LINKS,
+        value,
+      });
+    },
   };
 };
-const reducer = (state: TState, action) => {
+const reducer = (
+  state: TState,
+  action: {
+    type: actions;
+    value: any;
+  },
+): TState => {
   switch (action.type) {
     case actions.TOGGLE_TREE:
       return { ...state, showTree: !state.showTree };
+    case actions.TOGGLE_TREE_ON:
+      return { ...state, showTree: true };
+    case actions.TOGGLE_TREE_OFF:
+      return { ...state, showTree: false };
     case actions.TOGGLE_FILE_SELECT:
       return { ...state, showFileSelect: !state.showFileSelect };
     case actions.RESIZE_TREE:
       return { ...state, treeSize: action.value };
+    case actions.HIDE_POPUPS:
+      return { ...state, ...(state.isOnMobile && { showInfoBar: false }) };
     case actions.SELECT_NODE:
-      (state.recentNodes.some(node => +node.id === +action.value.node_id)
-        ? state.recentNodes.filter(node => +node.id !== +action.value.node_id)
-        : state.recentNodes
-      ).push({
-        id: action.value.node_id,
-        name: action.value.name,
-        style: action.value.style,
-      });
-
       return {
         ...state,
         selectedNode: {
           id: +action.value.node_id,
           name: `${action.value.name}`,
           is_richtxt: `${action.value.is_richtxt}`,
-          ts_creation: `${action.value.ts_creation}`,
-          ts_lastsave: `${action.value.ts_lastsave}`,
+          createdAt: `${action.value.createdAt}`,
+          updatedAt: `${action.value.updatedAt}`,
           style: JSON.parse(action.value.style),
         },
-        recentNodes: [...state.recentNodes],
+        recentNodes: [
+          ...state.recentNodes.filter(
+            node => +node.id !== +action.value.node_id,
+          ),
+          {
+            id: action.value.node_id,
+            name: action.value.name,
+            style: action.value.style,
+            is_richtxt: `${action.value.is_richtxt}`,
+            createdAt: `${action.value.createdAt}`,
+            updatedAt: `${action.value.updatedAt}`,
+          },
+        ],
       };
     case actions.SELECT_FILE:
       return {
         ...state,
         selectedFile: action.value,
-        showFileSelect: !action.value,
         showTree: true,
-        selectedNode: { id: -1, name: '' },
+        selectedNode: defaultSelectNode,
       };
     case actions.SAVE_DOCUMENT:
       return {
@@ -139,11 +222,13 @@ const reducer = (state: TState, action) => {
         ...state,
         reloadFiles: action.value,
       };
-    case actions.SET_ERROR:
-      // if (state.error === action.value) return state;
+    case actions.SET_ALERT:
+      if (action.value?.error && process.env.NODE_ENV === 'development')
+        // eslint-disable-next-line no-console
+        console.error(action.value.error);
       return {
         ...state,
-        error: action.value,
+        alert: action.value,
       };
     case actions.TOGGLE_SETTINGS:
       return { ...state, showSettings: !state.showSettings };
@@ -151,13 +236,11 @@ const reducer = (state: TState, action) => {
       return {
         ...state,
         showRecentNodes: !state.showRecentNodes,
-        showFormattingButtons: false,
       };
     case actions.TOGGLE_FORMATTING_BUTTONS:
       return {
         ...state,
         showFormattingButtons: !state.showFormattingButtons,
-        showRecentNodes: false,
       };
     case actions.TOGGLE_CONTENT_EDITABLE:
       return { ...state, contentEditable: !state.contentEditable };
@@ -165,6 +248,8 @@ const reducer = (state: TState, action) => {
       return { ...state, showInfoBar: !state.showInfoBar };
     case actions.SET_IS_ON_MOBILE:
       return { ...state, isOnMobile: action.value };
+    case actions.PROCESS_LINKS:
+      return { ...state, processLinks: action.value };
     default:
       throw new Error('action not supported');
   }

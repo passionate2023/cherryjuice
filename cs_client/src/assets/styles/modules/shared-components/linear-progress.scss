@@ -1,6 +1,5 @@
-
-.linearProgress{
+@import '../../vars/vars';
+.linearProgress {
   position: absolute;
-  z-index: 5;
+  z-index: $ZI-linear-progress;
 }
-

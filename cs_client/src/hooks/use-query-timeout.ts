@@ -1,10 +1,11 @@
 import { useTimeout } from './use-timeout';
 import { appActionCreators } from '::app/reducer';
 import { useEffect } from 'react';
+import { AlertType } from '::types/react';
 
 const useQueryTimeout = (
   { queryData, queryError, queryVariables },
-  timeout = 15000,
+  { timeout = 15000, resourceName = '' },
 ) => {
   let timeoutHasElapsed = false;
   const timer = useTimeout({
@@ -17,13 +18,21 @@ const useQueryTimeout = (
     timer.timeHasElapsed &&
     timer.id === JSON.stringify(queryVariables)
   ) {
-    appActionCreators.throwError(
-      new Error('Request has timed-out. please refresh'),
-    );
+    appActionCreators.setAlert({
+      title: `Fetching ${resourceName} is taking longer then expected`,
+      description: 'Please refresh the page',
+      type: AlertType.Information,
+    });
     timeoutHasElapsed = true;
   }
   useEffect(() => {
-    if (queryError) appActionCreators.throwError(queryError);
+    if (queryError)
+      appActionCreators.setAlert({
+        title: `Could not fetch ${resourceName}`,
+        description: 'Please refresh the page',
+        type: AlertType.Error,
+        error: queryError,
+      });
   }, [queryError]);
   return timeoutHasElapsed;
 };

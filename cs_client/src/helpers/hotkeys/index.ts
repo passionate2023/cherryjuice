@@ -27,8 +27,16 @@ const helpers = {
     b.altKey === e.altKey &&
     b.metaKey === e.metaKey,
 };
-const hotKeys: { callback: Function; hotKey: THotKey }[] = [];
-const createHotKey = (hotKey: THotKey, callback: Function) => {
+const hotKeys: {
+  callback: Function;
+  hotKey: THotKey;
+  richTextHasToBeOnFocus: boolean;
+}[] = [];
+const createHotKey = (
+  hotKey: THotKey,
+  callback: Function,
+  richTextHasToBeOnFocus = true,
+) => {
   hotKey = helpers.nameMe(hotKey);
   const existingHotKeyIndex = hotKeys.findIndex(hk =>
     helpers.hotKeyMatches(hk.hotKey, hotKey),
@@ -39,14 +47,20 @@ const createHotKey = (hotKey: THotKey, callback: Function) => {
     hotKeys.push({
       hotKey,
       callback,
+      richTextHasToBeOnFocus,
     });
 };
-
+const richTextIsOnFocus = e => e.target.getAttribute('id') === 'rich-text';
 const eventHandler = (e: KeyboardEvent) => {
-  for (const { hotKey, callback } of hotKeys) {
+  for (const { hotKey, callback, richTextHasToBeOnFocus } of hotKeys) {
     if (helpers.hotKeyMatches(e, hotKey)) {
-      e.preventDefault();
-      callback();
+      if (
+        !richTextHasToBeOnFocus ||
+        (richTextIsOnFocus(e) && richTextHasToBeOnFocus)
+      ) {
+        e.preventDefault();
+        callback();
+      }
       break;
     }
   }
@@ -62,17 +76,17 @@ const stopListening = () => {
 
 const hotKeysManager = { startListening, stopListening, createHotKey };
 
-const setupFormattingHotKeys = ({ dispatch }) => {
+const setupFormattingHotKeys = () => {
   commands.tagsAndStyles.forEach(({ hotKey, execCommandArguments }) => {
     if (hotKey)
       hotKeysManager.createHotKey(hotKey, () =>
-        execK({ ...execCommandArguments, dispatch }),
+        execK({ ...execCommandArguments }),
       );
   });
   commands.misc.forEach(({ hotKey, execCommandArguments }) => {
     if (hotKey)
       hotKeysManager.createHotKey(hotKey, () =>
-        execK({ ...execCommandArguments, dispatch }),
+        execK({ ...execCommandArguments }),
       );
   });
   commands.colors.forEach(({ hotKey, inputId }) => {
