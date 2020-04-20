@@ -43,12 +43,10 @@ export class AppModule implements NestModule {
         .forRoutes({ path: '*.js', method: RequestMethod.GET });
       consumer.apply(addSTSHeader, redirectToHTTPS).forRoutes('*');
     }
-    const staticAssetsRootFolder = path.join(
-      __dirname,
+    const staticAssetsRootFolder =
       process.env.NODE_ENV === 'production'
-        ? '../../client'
-        : '../../cs_client/dist',
-    );
+        ? path.join(__dirname, '../../client')
+        : path.join(process.cwd(), '../cs_client/dist');
     consumer
       .apply(
         express.static(staticAssetsRootFolder),

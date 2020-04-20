@@ -59,7 +59,7 @@ export class Node extends BaseEntity {
   @Field()
   node_title_styles: string;
 
-  @Column() ahtml: string;
+  @Column({ select: false }) ahtml: string;
 
   @Column('int2')
   @Field(() => Int)

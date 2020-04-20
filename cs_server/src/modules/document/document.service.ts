@@ -6,7 +6,9 @@ import { ImageService } from '../image/image.service';
 import { DocumentRepository } from './repositories/document.repository';
 import { IDocumentService } from './interfaces/document.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import fs from 'fs';
+import { User } from '../auth/entities/user.entity';
+import { debug } from '../shared';
+
 
 @Injectable()
 export class DocumentService implements IDocumentService {
@@ -14,42 +16,46 @@ export class DocumentService implements IDocumentService {
     private documentSqliteRepository: DocumentSqliteRepository,
     @InjectRepository(DocumentRepository)
     private documentRepository: DocumentRepository,
-    private nodeSqliteService: NodeService,
-    private imageSqliteService: ImageService,
+    private nodeService: NodeService,
+    private imageService: ImageService,
   ) {}
 
-  async open(file_id: string): Promise<void> {
-    await this.documentSqliteRepository.open(file_id);
+  async openLocalSqliteFile(file_id: string): Promise<void> {
+    await this.documentSqliteRepository.openLocalSqliteFile(file_id);
   }
 
   async openUploadedFile(filePath: string): Promise<void> {
     await this.documentSqliteRepository.openUploadedFile(filePath);
   }
 
-  async getDocumentsMeta(): Promise<Document[]> {
-    return this.documentSqliteRepository.getDocumentsMeta();
+  async getDocumentsMeta(user: User): Promise<Document[]> {
+    if (debug.loadSqliteDocuments)
+      return this.documentSqliteRepository.getDocumentsMeta();
+    return this.documentRepository.getDocumentsMeta(user);
   }
 
-  async getDocumentMetaById(file_id: string): Promise<Document> {
-    return this.documentSqliteRepository.getDocumentMetaById(file_id);
+  async getDocumentMetaById(user: User, file_id: string): Promise<Document> {
+    if (debug.loadSqliteDocuments)
+      return this.documentSqliteRepository.getDocumentMetaById(user, file_id);
+    return this.documentRepository.getDocumentMetaById(user, file_id);
   }
 
   async saveDocument({
     fileName,
     filePath,
+    user,
   }: {
     fileName: string;
     filePath: string;
+    user: User;
   }): Promise<void> {
-    const { size } = fs.statSync(filePath);
     await this.openUploadedFile(filePath);
-    const document = new Document();
-    document.name = fileName;
-    document.size = size;
-    await document.save();
-    const { nodesWithImages } = await this.nodeSqliteService.saveNodes(
-      document,
-    );
-    await this.imageSqliteService.saveImages(nodesWithImages);
+    const document = await this.documentRepository.createDocument({
+      fileName,
+      filePath,
+      user,
+    });
+    const { nodesWithImages } = await this.nodeService.saveNodes(document);
+    await this.imageService.saveImages(nodesWithImages);
   }
 }

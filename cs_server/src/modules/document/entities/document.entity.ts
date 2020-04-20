@@ -5,17 +5,33 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
+  ManyToOne,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-
+import { randomUUID10 } from '../../shared';
+import { User } from '../../auth/entities/user.entity';
 @Entity()
 @ObjectType()
 export class Document extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  constructor(user: User, name: string, size: number) {
+    super();
+    this.id = randomUUID10();
+    this.name = name;
+    this.user = user;
+    this.size = size;
+  }
+  @PrimaryColumn()
   @Field()
   id: string;
+
+  @ManyToOne(
+    () => User,
+    user => user.id,
+  )
+  user: User;
+  @Column()
+  userId: string;
 
   @Column('text', { nullable: false })
   @Field()

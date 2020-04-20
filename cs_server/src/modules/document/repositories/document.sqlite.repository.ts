@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import * as sqlite from 'sqlite';
+import * as path from 'path';
 import { Database } from 'sqlite';
 import { Document } from '../entities/document.entity';
 import { adaptFileID, scanFolder } from '../helpers';
-import * as path from 'path';
 import { IDocumentRepository } from '../interfaces/document.repository';
+import { User } from '../../auth/entities/user.entity';
 
 @Injectable()
 export class DocumentSqliteRepository implements IDocumentRepository {
@@ -19,7 +20,7 @@ export class DocumentSqliteRepository implements IDocumentRepository {
       userID: 'user0',
     });
   }
-  async open(file_id: string): Promise<void> {
+  async openLocalSqliteFile(file_id: string): Promise<void> {
     if (file_id !== this.sqlite.file_id) {
       file_id = adaptFileID(file_id, this.documents);
       const file = this.documents.get(file_id);
@@ -45,7 +46,7 @@ export class DocumentSqliteRepository implements IDocumentRepository {
     return Array.from(this.documents.values());
   }
 
-  async getDocumentMetaById(file_id: string): Promise<Document> {
+  async getDocumentMetaById(user: User, file_id: string): Promise<Document> {
     file_id = adaptFileID(file_id, this.documents);
     return this.documents.get(file_id);
   }

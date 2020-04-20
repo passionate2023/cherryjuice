@@ -1,4 +1,4 @@
-from node as cs
+from node:12.2.0 as cs
 workdir /server
 copy ./cs_server/ .
 run npm i -g parcel-bundler
@@ -16,7 +16,7 @@ run yarn build
 workdir /server
 run yarn build
 
-from node:slim
+from node:12.2.0-slim
 label maintainer ycnmhd
 copy --from=cs /server/dist /cs/server
 copy --from=cs /server/node_modules /cs/server/node_modules

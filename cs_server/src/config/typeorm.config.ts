@@ -9,6 +9,7 @@ const config: TypeOrmModuleOptions = {
   url: process.env.DATABASE_URL,
   synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
   entities: [Document, Node, Image, User],
+  keepConnectionAlive: true,
 };
 
 export { config as typeOrmConfig };

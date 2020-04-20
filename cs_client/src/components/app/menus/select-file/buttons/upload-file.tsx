@@ -4,12 +4,15 @@ import gql from 'graphql-tag';
 
 const MUTATION = gql`
   mutation($file: Upload!) {
-    uploadFile(file: $file)
+    document {
+      upload(file: $file)
+    }
   }
 `;
 
 const UploadFile: React.FC<{}> = () => {
-  const [mutate] = useMutation(MUTATION);
+  // eslint-disable-next-line no-unused-vars
+  const [mutate,{loading,called,error,data}] = useMutation(MUTATION);
 
   const onChange = ({
     target: {

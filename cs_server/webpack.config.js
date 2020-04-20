@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const NodemonPlugin = require('nodemon-webpack-plugin');
 const StartServerPlugin = require('start-server-webpack-plugin');
 
 module.exports = {
@@ -21,13 +21,13 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: [ 'ts-loader'],
         exclude: /node_modules/,
       },
-      {
-        test: /\.node$/,
-        use: 'node-loader',
-      },
+      // {
+      //   test: /\.node$/,
+      //   use: 'node-loader',
+      // },
     ],
   },
   resolve: {
