@@ -23,7 +23,7 @@ const UploadFile: React.FC<{}> = () => {
     if (validity.valid) mutate({ variables: { file } });
   };
 
-  return <input type="file" required onChange={onChange} />;
+  return <input type="file" required onChange={onChange} style={{width: 100}}/>;
 };
 
 export { UploadFile };

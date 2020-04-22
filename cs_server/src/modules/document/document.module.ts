@@ -7,6 +7,7 @@ import { DocumentRepository } from './repositories/document.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DocumentMutationsResolver } from './document.mutations.resolver';
 import { DocumentQueriesResolver } from './document.queries.resolver';
+import { UploadsService } from './uploads.service';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { DocumentQueriesResolver } from './document.queries.resolver';
     DocumentMutationsResolver,
     DocumentService,
     DocumentSqliteRepository,
+    UploadsService
   ],
   exports: [DocumentSqliteRepository],
 })

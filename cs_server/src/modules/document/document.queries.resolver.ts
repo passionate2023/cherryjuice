@@ -10,7 +10,7 @@ import { DocumentService } from './document.service';
 import { Document } from './entities/document.entity';
 import { Node } from '../node/entities/node.entity';
 import { NodeService } from '../node/node.service';
-import { GqlAuthGuard } from '../auth/graphql.guard';
+import { GqlAuthGuard } from '../auth/guards/graphql.guard';
 import { UseGuards } from '@nestjs/common';
 import { GetUserGql } from '../auth/decorators/get-user.decorator';
 import { User } from '../auth/entities/user.entity';

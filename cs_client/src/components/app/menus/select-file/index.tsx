@@ -12,6 +12,7 @@ import { useReloadQuery } from '::hooks/use-reload-query';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
 import { UploadFile } from './buttons/upload-file';
+import { GoogleDrivePicker } from './buttons/google-picker';
 
 const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
   data,
@@ -150,6 +151,9 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
     },
     {
       component: UploadFile,
+    },
+    {
+      component:GoogleDrivePicker
     },
   ];
   const buttonsRight = [

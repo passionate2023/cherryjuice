@@ -16,3 +16,10 @@ declare module '*.svg' {
   const data: any;
   export default data;
 }
+
+export {}
+declare global {
+  interface Window {
+    google: any;
+  }
+}

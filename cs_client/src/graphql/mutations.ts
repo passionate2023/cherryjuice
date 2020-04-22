@@ -13,6 +13,17 @@ const MUTATE_CT_NODE_CONTENT = {
         abstract_html: $abstract_html
       )
     }
-  `
+  `,
 };
-export { MUTATE_CT_NODE_CONTENT };
+
+const UPLOAD_DOCUMENT = {
+  grdrive: gql`
+    mutation($file: UploadLinkInputType!) {
+      document {
+        uploadLink(file: $file)
+      }
+    }
+  `,
+};
+
+export { MUTATE_CT_NODE_CONTENT,UPLOAD_DOCUMENT };
