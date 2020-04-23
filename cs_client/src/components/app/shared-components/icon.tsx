@@ -44,6 +44,11 @@ const Icons = {
     'google-drive': 'google-drive',
     delete: 'delete',
   },
+  misc: {
+    'google-g': 'google-g',
+    lock: 'lock',
+    person: 'person',
+  },
   cherrytree: {
     cherries: {
       0: 'cherry_red',
@@ -116,7 +121,7 @@ const Icons = {
 };
 
 const getIconCategory = name =>
-  Icons.material[name] ? 'material' : 'cherrytree';
+  Icons.material[name] ? 'material' : Icons.misc[name] ? 'misc' : 'cherrytree';
 
 const getIconPath = ({
   name,

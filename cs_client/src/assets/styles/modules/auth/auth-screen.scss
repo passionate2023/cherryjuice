@@ -1,0 +1,10 @@
+@import '../../vars/vars';
+.auth-screen {
+  background-color: $primary-dark3;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Roboto, sans-serif;
+}
