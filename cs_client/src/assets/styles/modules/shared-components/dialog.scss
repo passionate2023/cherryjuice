@@ -34,19 +34,22 @@
     }
   }
 }
-.dialog__header__title {
-}
-.dialog__header__exit-button {
+
+.dialog__header__buttons {
   justify-self: flex-end;
+  margin-left: auto;
+  align-items: center;
+}
+
+.dialog__header__file-button {
+  margin-right: 5px;
+}
+
+.dialog__header__exit-button {
   margin-left: auto;
   margin-right: 5px;
   opacity: 0.5;
-  @include respond-to('md') {
-    margin-right: 0px;
-  }
-  img {
-    width: 0.6875em;
-  }
+  margin-top: 7px;
 }
 .dialog__header__sub-title {
   @include respond-to('md') {

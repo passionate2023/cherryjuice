@@ -23,7 +23,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     done: Function,
   ): Promise<void> {
     try {
-
       // eslint-disable-next-line no-console
       console.log(profile);
 

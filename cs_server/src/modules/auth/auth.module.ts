@@ -23,7 +23,7 @@ import { GoogleStrategy } from './strategies/google.strategy';
     TypeOrmModule.forFeature([UserRepository]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy,GoogleStrategy],
+  providers: [AuthService, JwtStrategy, GoogleStrategy],
   exports: [PassportModule, JwtStrategy, AuthService],
 })
 export class AuthModule {}

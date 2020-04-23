@@ -18,7 +18,7 @@ export class Node extends BaseEntity {
   @ManyToOne(
     () => Document,
     document => document.node,
-    { primary: true },
+    { primary: true, onDelete: 'CASCADE' },
   )
   document: Document;
   @Field()

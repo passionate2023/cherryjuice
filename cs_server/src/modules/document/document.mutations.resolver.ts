@@ -7,12 +7,13 @@ import { FileUpload, GraphQLUpload } from './helpers/graphql';
 import { GetUserGql } from '../auth/decorators/get-user.decorator';
 import { User } from '../auth/entities/user.entity';
 import { createWriteStream } from 'fs';
-import { DocumentUpload } from './entities/document-upload.entity';
+import { DocumentMutation } from './entities/document-mutation.entity';
 import { UploadLinkInputType } from './input-types/upload-link.input-type';
 import { UploadsService } from './uploads.service';
+import { DeleteDocumentInputType } from './input-types/delete-document.input-type';
 
 @UseGuards(GqlAuthGuard)
-@Resolver(() => DocumentUpload)
+@Resolver(() => DocumentMutation)
 export class DocumentMutationsResolver {
   constructor(
     private nodeService: NodeService,
@@ -20,7 +21,7 @@ export class DocumentMutationsResolver {
     private uploadsService: UploadsService,
   ) {}
 
-  @Mutation(() => DocumentUpload)
+  @Mutation(() => DocumentMutation)
   document(): {} {
     return {};
   }
@@ -78,5 +79,18 @@ export class DocumentMutationsResolver {
       });
     }
     return true;
+  }
+
+  @ResolveField(() => String)
+  async deleteDocument(
+    @Args({
+      name: 'documents',
+      type: () => DeleteDocumentInputType,
+    })
+    { IDs }: DeleteDocumentInputType,
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    const deleteResult = await this.documentService.deleteDocuments(IDs, user);
+    return JSON.stringify(deleteResult);
   }
 }

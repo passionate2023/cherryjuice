@@ -1,10 +1,13 @@
-import modDialog from '::sass-modules/shared-components/dialog.scss';
+import { modDialog } from '::sass-modules/index';
 import * as React from 'react';
 import {
   DialogFooter,
   TDialogFooterProps,
 } from '::shared-components/dialog/dialog-footer';
-import { DialogHeader } from '::shared-components/dialog/dialog-header';
+import {
+  DialogHeader,
+  DialogHeaderProps,
+} from '::shared-components/dialog/dialog-header';
 import { DialogBody } from '::shared-components/dialog/dialog-body';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { EventHandler } from 'react';
@@ -16,7 +19,8 @@ type TDialogProps = {
   dialogTitle?: string;
   onClose: EventHandler<undefined>;
   isOnMobile: boolean;
-} & TDialogFooterProps;
+} & TDialogFooterProps &
+  DialogHeaderProps;
 
 const Dialog: React.FC<TDialogProps & {
   style;
@@ -29,6 +33,7 @@ const Dialog: React.FC<TDialogProps & {
   dialogFooterRightButtons,
   style,
   isOnMobile,
+  rightHeaderButtons,
 }) => {
   useModalKeyboardEvents({
     onCloseModal: onClose,
@@ -51,7 +56,8 @@ const Dialog: React.FC<TDialogProps & {
             <DialogHeader
               menuButton={menuButton}
               dialogTitle={dialogTitle}
-              onCloseDialog={onClose}
+              onClose={onClose}
+              rightHeaderButtons={rightHeaderButtons}
             />
           )}
           <DialogBody dialogBodyElements={children} />

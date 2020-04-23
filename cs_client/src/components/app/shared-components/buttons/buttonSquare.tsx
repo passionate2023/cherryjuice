@@ -3,7 +3,7 @@ import { modButton } from '::sass-modules/index';
 import { EventHandler, useEffect, useRef } from 'react';
 
 type Props = {
-  className: string;
+  className?: string;
   onClick: EventHandler<undefined>;
   disabled?: boolean;
   autoFocus?: boolean;
@@ -29,7 +29,9 @@ const ButtonSquare: React.FC<Props> = ({
     <button
       ref={ref}
       onClick={onClick}
-      className={`${className} ${modButton.button} ${modButton.buttonSquare}`}
+      className={`${className || ''} ${modButton.button} ${
+        modButton.buttonSquare
+      }`}
       disabled={disabled}
       autoFocus={autoFocus}
     >

@@ -7,6 +7,9 @@ import modRecentNodes from './document/recent-nodes.scss';
 import modInfoBar from './document/info-bar.scss';
 import modToolbar from './tool-bar.scss';
 import modRichText from './document/rich-text.scss';
+import modAlertModal from './shared-components/alert-modal.scss';
+import modImportDocument from './import-document.scss';
+import modDialog from './shared-components/dialog.scss';
 export {
   modDrawer,
   modDialog,
@@ -17,4 +20,7 @@ export {
   modRecentNodes,
   modInfoBar,
   modRichText,
+  modAlertModal,
+  modImportDocument,
+  modDialog,
 };

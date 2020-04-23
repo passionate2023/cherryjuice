@@ -15,6 +15,7 @@ export class Image extends BaseEntity {
   @ManyToOne(
     () => Node,
     node => node.id,
+    { onDelete: 'CASCADE' },
   )
   node: Node;
   @Column()

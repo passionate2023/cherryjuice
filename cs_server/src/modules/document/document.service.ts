@@ -8,7 +8,7 @@ import { IDocumentService } from './interfaces/document.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../auth/entities/user.entity';
 import { debug } from '../shared';
-
+import { DeleteResult } from 'typeorm';
 
 @Injectable()
 export class DocumentService implements IDocumentService {
@@ -57,5 +57,9 @@ export class DocumentService implements IDocumentService {
     });
     const { nodesWithImages } = await this.nodeService.saveNodes(document);
     await this.imageService.saveImages(nodesWithImages);
+  }
+
+  async deleteDocuments(IDs: string[], user: User): Promise<DeleteResult> {
+    return await this.documentRepository.deleteDocuments(IDs, user);
   }
 }

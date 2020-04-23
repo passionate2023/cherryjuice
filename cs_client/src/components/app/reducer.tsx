@@ -32,6 +32,7 @@ const initialState = {
   isOnMobile: false,
   showInfoBar: false,
   processLinks: undefined,
+  showImportDocuments: false,
 };
 export type TRecentNode = {
   id: number;
@@ -66,6 +67,7 @@ enum actions {
   SET_IS_ON_MOBILE,
   PROCESS_LINKS,
   HIDE_POPUPS,
+  TOGGLE_SHOW_IMPORT_FILES,
 }
 const createActionCreators = () => {
   const state = {
@@ -85,6 +87,9 @@ const createActionCreators = () => {
     },
     toggleInfoBar: (): void => {
       state.dispatch({ type: actions.TOGGLE_INFO_BAR });
+    },
+    toggleShowImportDocuments: (): void => {
+      state.dispatch({ type: actions.TOGGLE_SHOW_IMPORT_FILES });
     },
     setIsOnMobile: (isOnMobile: boolean): void => {
       state.dispatch({ type: actions.SET_IS_ON_MOBILE, value: isOnMobile });
@@ -169,6 +174,11 @@ const reducer = (
       return { ...state, showTree: true };
     case actions.TOGGLE_TREE_OFF:
       return { ...state, showTree: false };
+    case actions.TOGGLE_SHOW_IMPORT_FILES:
+      return {
+        ...state,
+        showImportDocuments: !state.showImportDocuments,
+      };
     case actions.TOGGLE_FILE_SELECT:
       return { ...state, showFileSelect: !state.showFileSelect };
     case actions.RESIZE_TREE:
@@ -229,6 +239,7 @@ const reducer = (
       return {
         ...state,
         alert: action.value,
+        showImportDocuments: false,
       };
     case actions.TOGGLE_SETTINGS:
       return { ...state, showSettings: !state.showSettings };

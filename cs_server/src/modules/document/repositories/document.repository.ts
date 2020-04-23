@@ -1,5 +1,5 @@
 import { IDocumentRepository } from '../interfaces/document.repository';
-import { EntityRepository, Repository } from 'typeorm';
+import { DeleteResult, EntityRepository, Repository } from 'typeorm';
 import { Document } from '../entities/document.entity';
 import fs from 'fs';
 import { User } from '../../auth/entities/user.entity';
@@ -35,5 +35,14 @@ export class DocumentRepository extends Repository<Document>
     const document = new Document(user, fileName, size);
     await document.save();
     return document;
+  }
+
+  async deleteDocuments(IDs: string[], user: User): Promise<DeleteResult> {
+    const queryBuilder = this.createQueryBuilder();
+    return await queryBuilder
+      .delete()
+      .where('userId = :userId', { userId: user.id })
+      .andWhereInIds(IDs)
+      .execute();
   }
 }

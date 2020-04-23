@@ -7,9 +7,8 @@ import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 import { SignInCredentialsDto } from './dto/sign-in-credentials.dto';
 import { sign } from 'jsonwebtoken';
 
-export enum Provider
-{
-  GOOGLE = 'google'
+export enum Provider {
+  GOOGLE = 'google',
 }
 
 @Injectable()
@@ -28,10 +27,11 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  async validateOAuthLogin(thirdPartyId: string, provider: Provider): Promise<string>
-  {
-    try
-    {
+  async validateOAuthLogin(
+    thirdPartyId: string,
+    provider: Provider,
+  ): Promise<string> {
+    try {
       // You can add some registration logic here,
       // to register the user using their thirdPartyId (in this case their googleId)
       // let user: IUser = await this.usersService.findOneByThirdPartyId(thirdPartyId, provider);
@@ -41,14 +41,14 @@ export class AuthService {
 
       const payload = {
         thirdPartyId,
-        provider
-      }
+        provider,
+      };
 
-      const jwt: string = sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 });
+      const jwt: string = sign(payload, process.env.JWT_SECRET, {
+        expiresIn: 3600,
+      });
       return jwt;
-    }
-    catch (err)
-    {
+    } catch (err) {
       throw new InternalServerErrorException('validateOAuthLogin', err.message);
     }
   }

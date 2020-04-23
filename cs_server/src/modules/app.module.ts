@@ -52,7 +52,7 @@ export class AppModule implements NestModule {
         express.static(staticAssetsRootFolder),
         ignoreClientSideRouting({ staticAssetsRootFolder }),
       )
-      .exclude('/graphql','/auth/')
+      .exclude('/graphql', '/auth/')
       .forRoutes({ path: '*', method: RequestMethod.GET });
   }
 }

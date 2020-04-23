@@ -17,7 +17,7 @@ export class UploadsService {
     });
     const drive = google.drive({ version: 'v3', auth: oAuth2Client });
 
-    const downloadedFiles: string[] = []
+    const downloadedFiles: string[] = [];
     for (const fileId of fileIds) {
       const fileName = await drive.files
         .get({ fileId })
@@ -36,7 +36,7 @@ export class UploadsService {
               // @ts-ignore
               .on('end', () => {
                 // console.log('Done downloading file.');
-                downloadedFiles.push(fileName)
+                downloadedFiles.push(fileName);
                 resolve(filePath);
               })
               .on('error', err => {
@@ -56,6 +56,6 @@ export class UploadsService {
           });
         });
     }
-    return downloadedFiles
+    return downloadedFiles;
   }
 }

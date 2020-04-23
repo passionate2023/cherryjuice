@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "npm link parcel-bundler",
+    "watch:server:fast": "node scripts/parcel.dev.js",
     "watch:server": "webpack --progress",
-    "vatch:server": "tsnd --interval 500 src/main.ts",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "start": "node dist/main.js"

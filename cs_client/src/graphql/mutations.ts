@@ -16,7 +16,7 @@ const MUTATE_CT_NODE_CONTENT = {
   `,
 };
 
-const UPLOAD_DOCUMENT = {
+const DOCUMENT_MUTATION = {
   grdrive: gql`
     mutation($file: UploadLinkInputType!) {
       document {
@@ -24,6 +24,13 @@ const UPLOAD_DOCUMENT = {
       }
     }
   `,
+  deleteDocument: gql`
+    mutation deleteDocument($documents: DeleteDocumentInputType!) {
+      document {
+        deleteDocument(documents: $documents)
+      }
+    }
+  `,
 };
 
-export { MUTATE_CT_NODE_CONTENT,UPLOAD_DOCUMENT };
+export { MUTATE_CT_NODE_CONTENT, DOCUMENT_MUTATION };

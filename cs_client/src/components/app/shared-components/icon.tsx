@@ -40,6 +40,9 @@ const Icons = {
     sub: 'sub',
     sup: 'sup',
     underline: 'underline',
+    storage: 'storage',
+    'google-drive': 'google-drive',
+    delete: 'delete',
   },
   cherrytree: {
     cherries: {

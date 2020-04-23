@@ -20,7 +20,7 @@ import { UploadsService } from './uploads.service';
     DocumentMutationsResolver,
     DocumentService,
     DocumentSqliteRepository,
-    UploadsService
+    UploadsService,
   ],
   exports: [DocumentSqliteRepository],
 })

@@ -28,6 +28,7 @@ export class Document extends BaseEntity {
   @ManyToOne(
     () => User,
     user => user.id,
+    { onDelete: 'CASCADE' },
   )
   user: User;
   @Column()

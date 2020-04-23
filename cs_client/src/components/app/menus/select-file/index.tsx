@@ -1,121 +1,19 @@
-import { modSelectFile } from '::sass-modules/index';
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { appActionCreators } from '../../reducer';
-import { dateToFormattedString } from '::helpers/time';
 import { QUERY_DOCUMENTS } from '::graphql/queries';
-import { DocumentMeta } from '::types/generated';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { useReloadQuery } from '::hooks/use-reload-query';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
-import { SpinnerCircle } from '::shared-components/spinner-circle';
-import { UploadFile } from './buttons/upload-file';
-import { GoogleDrivePicker } from './buttons/google-picker';
-
-const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
-  data,
-  files,
-  selected,
-  setSelected,
-  selectedFile,
-}) => {
-  const onSelect = useCallback(
-    e => {
-      let selectedId = e.target.parentElement.dataset.id;
-      let selectedPath = e.target.parentElement.dataset.path;
-      setSelected({ id: selectedId, path: selectedPath });
-    },
-    [selectedFile],
-  );
-  return (
-    <div>
-      {data &&
-        files.map(({ name, size, updatedAt, id, folder }: DocumentMeta) => (
-          <span
-            className={`${modSelectFile.selectFile__file} ${
-              selected.id === id
-                ? modSelectFile.selectFile__fileSelectedCandidate
-                : ''
-            } ${
-              selectedFile === id ? modSelectFile.selectFile__fileSelected : ''
-            }`}
-            data-id={id}
-            data-folder={folder}
-            onClick={onSelect}
-            key={id}
-            tabIndex={0}
-          >
-            <span className={`${modSelectFile.selectFile__file__name} `}>
-              {name}
-            </span>
-
-            <span className={`${modSelectFile.selectFile__file__details} `}>
-              <span>{size / 1024}kb</span>
-              <span>{dateToFormattedString(new Date(updatedAt))}</span>
-            </span>
-          </span>
-        ))}
-    </div>
-  );
-};
-const Folder = ({
-  folder,
-  files,
-  selected,
-  selectedFile,
-  setSelected,
-  data,
-}) => (
-  <div className={modSelectFile.selectFile__fileFolder}>
-    <span className={modSelectFile.selectFile__fileFolder__name}>{folder}</span>
-    <span className={modSelectFile.selectFile__fileFolder__files}>
-      <Lines
-        selected={selected}
-        selectedFile={selectedFile}
-        data={data}
-        files={files}
-        setSelected={setSelected}
-      />
-    </span>
-  </div>
-);
-
-const Files = ({ selected, setSelected, selectedFile, data, loading }) => {
-  let filesPerFolders: [string, DocumentMeta[]][];
-  if (data) {
-    filesPerFolders = [
-      QUERY_DOCUMENTS.path(data).reduce((acc, val) => {
-        if (acc[val.folder]) acc[val.folder].push(val);
-        else acc[val.folder] = [val];
-
-        return acc;
-      }, {}),
-    ].map(Object.entries)[0];
-  }
-
-  return (
-    <div className={modSelectFile.selectFile}>
-      {loading ? (
-        <SpinnerCircle />
-      ) : (
-        filesPerFolders &&
-        filesPerFolders.map(([folder, files]) => (
-          <Folder
-            key={folder}
-            selected={selected}
-            selectedFile={selectedFile}
-            setSelected={setSelected}
-            data={data}
-            folder={folder}
-            files={files}
-          />
-        ))
-      )}
-    </div>
-  );
-};
+import { DocumentList } from './documents-list/document-list';
+import { CircleButton } from '::shared-components/buttons/circle-button';
+import { modDialog } from '::sass-modules/index';
+import { Icons, Icon } from '::shared-components/icon';
+import { useMutation } from '@apollo/react-hooks';
+import { DOCUMENT_MUTATION } from '::graphql/mutations';
+import { AlertType } from '::types/react';
 
 const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
   const [selected, setSelected] = useState({ id: '', path: '' });
@@ -150,10 +48,9 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
       disabled: false,
     },
     {
-      component: UploadFile,
-    },
-    {
-      component:GoogleDrivePicker
+      label: 'import',
+      onClick: appActionCreators.toggleShowImportDocuments,
+      disabled: false,
     },
   ];
   const buttonsRight = [
@@ -168,6 +65,36 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
       disabled: selected.id === selectedFile || !selected.id,
     },
   ];
+  const [
+    deleteDocumentMutation,
+    { loading: deleteLoading, error: deleteError },
+  ] = useMutation(DOCUMENT_MUTATION.deleteDocument);
+  const deleteDocument = useCallback(() => {
+    deleteDocumentMutation({
+      variables: { documents: { IDs: [selected.id] } },
+    });
+  }, [selected.id]);
+  const rightHeaderButtons = [
+    <>
+      {(deleteLoading || selected.id) && (
+        <CircleButton
+          className={modDialog.dialog__header__fileButton}
+          onClick={deleteDocument}
+        >
+          <Icon name={Icons.material.delete} small={true} />
+        </CircleButton>
+      )}
+    </>,
+  ];
+  useEffect(() => {
+    if (deleteError)
+      appActionCreators.setAlert({
+        title: `Could not delete document`,
+        description: 'Please refresh the page',
+        type: AlertType.Error,
+        error: deleteError,
+      });
+  }, [deleteError]);
   return (
     <DialogWithTransition
       dialogTitle={'Select Document'}
@@ -176,9 +103,10 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
       isOnMobile={isOnMobile}
       show={showDialog}
       onClose={close}
+      rightHeaderButtons={rightHeaderButtons}
     >
       <ErrorBoundary>
-        <Files
+        <DocumentList
           setSelected={setSelected}
           selectedFile={selectedFile}
           selected={selected}
