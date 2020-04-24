@@ -6,7 +6,7 @@ import { ImageService } from '../image/image.service';
 import { DocumentRepository } from './repositories/document.repository';
 import { IDocumentService } from './interfaces/document.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../auth/entities/user.entity';
+import { User } from '../user/entities/user.entity';
 import { debug } from '../shared';
 import { DeleteResult } from 'typeorm';
 

@@ -1,11 +1,11 @@
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '../auth/guards/graphql.guard';
+import { GqlAuthGuard } from '../user/guards/graphql.guard';
 import { Args, Mutation, ResolveField, Resolver } from '@nestjs/graphql';
 import { NodeService } from '../node/node.service';
 import { DocumentService } from './document.service';
 import { FileUpload, GraphQLUpload } from './helpers/graphql';
-import { GetUserGql } from '../auth/decorators/get-user.decorator';
-import { User } from '../auth/entities/user.entity';
+import { GetUserGql } from '../user/decorators/get-user.decorator';
+import { User } from '../user/entities/user.entity';
 import { createWriteStream } from 'fs';
 import { DocumentMutation } from './entities/document-mutation.entity';
 import { UploadLinkInputType } from './input-types/upload-link.input-type';

@@ -1,30 +1,33 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './repositories/user.repository';
-import { SignUpCredentialsDto } from './dto/sign-up-credentials.dto';
+import { SignUpCredentials } from './dto/sign-up-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
-import { SignInCredentialsDto } from './dto/sign-in-credentials.dto';
+import { SignInCredentials } from './dto/sign-in-credentials.dto';
 import { sign } from 'jsonwebtoken';
+import { AuthUser } from './entities/auth.user';
 
 export enum Provider {
   GOOGLE = 'google',
 }
 
 @Injectable()
-export class AuthService {
+export class UserService {
   constructor(
     @InjectRepository(UserRepository) private userRepository: UserRepository,
     private jwtService: JwtService,
   ) {}
-  async signUp(authCredentialsDto: SignUpCredentialsDto): Promise<void> {
-    return this.userRepository.signUp(authCredentialsDto);
-  }
-  async signIn(authCredentialsDto: SignInCredentialsDto): Promise<string> {
-    const payload: JwtPayloadInterface = await this.userRepository.validateUserPassword(
+  async signUp(authCredentialsDto: SignUpCredentials): Promise<AuthUser> {
+    const { user, payload } = await this.userRepository.signUp(
       authCredentialsDto,
     );
-    return this.jwtService.sign(payload);
+    return { token: this.jwtService.sign(payload), user };
+  }
+  async signIn(authCredentialsDto: SignInCredentials): Promise<AuthUser> {
+    const { user, payload } = await this.userRepository.validateUserPassword(
+      authCredentialsDto,
+    );
+    return { token: this.jwtService.sign(payload), user };
   }
 
   async validateOAuthLogin(

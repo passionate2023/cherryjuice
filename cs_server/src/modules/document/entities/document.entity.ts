@@ -10,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { randomUUID10 } from '../../shared';
-import { User } from '../../auth/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 @Entity()
 @ObjectType()
 export class Document extends BaseEntity {

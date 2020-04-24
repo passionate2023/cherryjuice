@@ -18,7 +18,7 @@ import { NodeModule } from './node/node.module';
 import { ImageModule } from './image/image.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from '../config/typeorm.config';
-import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -26,12 +26,12 @@ import { AuthModule } from './auth/auth.module';
     NodeModule,
     ImageModule,
     GraphQLModule.forRoot({
-      include: [NodeModule, DocumentModule, ImageModule],
+      include: [NodeModule, DocumentModule, ImageModule, UserModule],
       autoSchemaFile: true,
       context: ({ req }) => ({ req }),
     }),
     TypeOrmModule.forRoot(typeOrmConfig),
-    AuthModule,
+    UserModule,
   ],
 })
 export class AppModule implements NestModule {
@@ -52,7 +52,7 @@ export class AppModule implements NestModule {
         express.static(staticAssetsRootFolder),
         ignoreClientSideRouting({ staticAssetsRootFolder }),
       )
-      .exclude('/graphql', '/auth/')
+      .exclude('/graphql', '/user/')
       .forRoutes({ path: '*', method: RequestMethod.GET });
   }
 }

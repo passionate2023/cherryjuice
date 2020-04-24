@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
-import { Document } from '../../document/entities/document.entity';
 
 @ObjectType()
 @Unique(['username'])
@@ -52,9 +51,6 @@ class User extends BaseEntity {
 
   @Column()
   salt: string;
-
-  @Field(() => [Document])
-  documents: Document[];
 
   async validatePassword(password: string): Promise<boolean> {
     const hash = await this.hashPassword(password, this.salt);

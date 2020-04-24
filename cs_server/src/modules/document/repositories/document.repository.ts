@@ -2,7 +2,7 @@ import { IDocumentRepository } from '../interfaces/document.repository';
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
 import { Document } from '../entities/document.entity';
 import fs from 'fs';
-import { User } from '../../auth/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 
 @EntityRepository(Document)
 export class DocumentRepository extends Repository<Document>

@@ -5,7 +5,7 @@ import { Database } from 'sqlite';
 import { Document } from '../entities/document.entity';
 import { adaptFileID, scanFolder } from '../helpers';
 import { IDocumentRepository } from '../interfaces/document.repository';
-import { User } from '../../auth/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Injectable()
 export class DocumentSqliteRepository implements IDocumentRepository {

@@ -8,20 +8,20 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { SignUpCredentialsDto } from './dto/sign-up-credentials.dto';
-import { AuthService } from './auth.service';
-import { SignInCredentialsDto } from './dto/sign-in-credentials.dto';
+import { SignUpCredentials } from './dto/sign-up-credentials.dto';
+import { UserService } from './user.service';
+import { SignInCredentials } from './dto/sign-in-credentials.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
-export class AuthController {
-  constructor(private authService: AuthService) {}
+export class UserController {
+  constructor(private authService: UserService) {}
   @Post('/signup')
-  async signUp(@Body(ValidationPipe) authCredentialsDto: SignUpCredentialsDto) {
+  async signUp(@Body(ValidationPipe) authCredentialsDto: SignUpCredentials) {
     await this.authService.signUp(authCredentialsDto);
   }
   @Post('/signin')
-  async signIn(@Body() authCredentialsDto: SignInCredentialsDto) {
+  async signIn(@Body() authCredentialsDto: SignInCredentials) {
     return await this.authService.signIn(authCredentialsDto);
   }
 

@@ -6,6 +6,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { Field, InputType } from '@nestjs/graphql';
 
 const regex = {
   password: {
@@ -23,31 +24,37 @@ const regex = {
   },
 };
 
-export class SignUpCredentialsDto {
+@InputType()
+export class SignUpCredentials {
+  @Field()
   @IsString()
   @IsNotEmpty()
   @MaxLength(30)
   @Matches(regex.name.pattern, { message: regex.name.description })
   firstName: string;
 
+  @Field()
   @IsString()
   @IsNotEmpty()
   @MaxLength(30)
   @Matches(regex.name.pattern, { message: regex.name.description })
   lastName: string;
 
+  @Field()
   @IsString()
   @MinLength(4)
   @MaxLength(20)
   @Matches(regex.username.pattern, { message: regex.username.description })
   username: string;
 
+  @Field()
   @IsString()
   @MinLength(8)
   @MaxLength(20)
   @Matches(regex.password.pattern, { message: regex.password.description })
   password: string;
 
+  @Field()
   @IsEmail()
   email: string;
 }

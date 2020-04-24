@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from './repositories/user.repository';
 import { JwtModule } from '@nestjs/jwt';
@@ -8,6 +8,7 @@ import { PassportModule } from '@nestjs/passport';
 import { jwtConfig } from '../../config/jwt.config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
+import { UserMutationsResolver } from './user.mutations.resolver';
 
 @Module({
   imports: [
@@ -22,8 +23,8 @@ import { GoogleStrategy } from './strategies/google.strategy';
     }),
     TypeOrmModule.forFeature([UserRepository]),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, GoogleStrategy],
-  exports: [PassportModule, JwtStrategy, AuthService],
+  controllers: [UserController],
+  providers: [UserService, JwtStrategy, GoogleStrategy, UserMutationsResolver],
+  exports: [PassportModule, JwtStrategy, UserService],
 })
-export class AuthModule {}
+export class UserModule {}

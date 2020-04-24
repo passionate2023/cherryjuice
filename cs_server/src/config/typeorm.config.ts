@@ -2,7 +2,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Document } from '../modules/document/entities/document.entity';
 import { Node } from '../modules/node/entities/node.entity';
 import { Image } from '../modules/image/entities/image.entity';
-import { User } from '../modules/auth/entities/user.entity';
+import { User } from '../modules/user/entities/user.entity';
 
 const config: TypeOrmModuleOptions = {
   type: 'postgres',
