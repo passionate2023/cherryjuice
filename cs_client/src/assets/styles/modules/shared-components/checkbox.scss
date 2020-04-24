@@ -32,6 +32,7 @@
   background-color: #eee;
 }
 
+
 /* On mouse-over, add a grey background color */
 .container:hover input ~ .checkmark {
   background-color: #ccc;
@@ -67,3 +68,4 @@
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+

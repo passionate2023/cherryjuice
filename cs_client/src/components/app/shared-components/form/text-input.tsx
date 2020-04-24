@@ -1,0 +1,48 @@
+import * as React from 'react';
+import { modLogin } from '::sass-modules/index';
+import { Icon } from '::shared-components/icon';
+import { useRef } from 'react';
+import { patternToString, TPattern } from '::app/auth/helpers/form-validation';
+import { useCustomValidityMessage } from '::hooks/use-custom-validation-message';
+
+export type TextInputProps = {
+  label: string;
+  type?: string;
+  icon?: string;
+  ariaLabel?: string;
+  minLength?: number;
+  patterns?: TPattern[];
+  required?: boolean;
+};
+
+const TextInput: React.FC<TextInputProps> = ({
+  label,
+  icon,
+  ariaLabel,
+  patterns = [],
+  type = 'text',
+  minLength = 0,
+  required,
+}) => {
+  const inputRef = useRef<HTMLInputElement>();
+  useCustomValidityMessage({ inputRef, patterns });
+  return (
+    <span className={modLogin.login__form__input}>
+      {icon && (
+        <Icon name={icon} className={modLogin.login__form__input__icon} />
+      )}
+      <input
+        className={modLogin.login__form__input__input}
+        ref={inputRef}
+        type={type}
+        placeholder={label}
+        aria-label={ariaLabel}
+        pattern={patternToString(patterns)}
+        minLength={minLength}
+        required={required}
+      />
+    </span>
+  );
+};
+
+export { TextInput };

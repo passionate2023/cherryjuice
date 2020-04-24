@@ -12,6 +12,7 @@ import modImportDocument from './import-document.scss';
 import modDialog from './shared-components/dialog.scss';
 import modAuthScreen from './auth/auth-screen.scss';
 import modLogin from './auth/login.scss';
+import modGoogleOauth from '::sass-modules/shared-components/google-oauth-button.scss';
 export {
   modDrawer,
   modDialog,
@@ -27,4 +28,5 @@ export {
   modDialog,
   modAuthScreen,
   modLogin,
+  modGoogleOauth
 };
