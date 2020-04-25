@@ -92,7 +92,7 @@ class UserRepository extends Repository<User> {
         },
       ],
     });
-    if (!user) throw new InternalServerErrorException();
+    if (!user) throw new InternalServerErrorException('Invalid credentials');
     return user;
   }
 }

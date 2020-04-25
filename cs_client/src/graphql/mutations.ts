@@ -1,20 +1,21 @@
 import gql from 'graphql-tag';
+import { AuthUser } from '::types/graphql/generated';
 
-const MUTATE_CT_NODE_CONTENT = {
-  html: gql`
-    mutation ct_node_html(
-      $file_id: String!
-      $node_id: Int!
-      $abstract_html: String!
-    ) {
-      ct_node_content(
-        file_id: $file_id
-        node_id: $node_id
-        abstract_html: $abstract_html
-      )
-    }
-  `,
-};
+// const MUTATE_CT_NODE_CONTENT = {
+//   html: gql`
+//     mutation ct_node_html(
+//       $file_id: String!
+//       $node_id: Int!
+//       $abstract_html: String!
+//     ) {
+//       ct_node_content(
+//         file_id: $file_id
+//         node_id: $node_id
+//         abstract_html: $abstract_html
+//       )
+//     }
+//   `,
+// };
 
 const DOCUMENT_MUTATION = {
   grdrive: gql`
@@ -33,4 +34,38 @@ const DOCUMENT_MUTATION = {
   `,
 };
 
-export { MUTATE_CT_NODE_CONTENT, DOCUMENT_MUTATION };
+const USER_MUTATION = {
+  signIn: {
+    path: (data): AuthUser | undefined => data?.user?.signIn,
+    query: gql`
+      mutation signin($input: SignInCredentials!) {
+        user {
+          signIn(credentials: $input) {
+            token
+            user {
+              email
+              firstName
+            }
+          }
+        }
+      }
+    `,
+  },
+  signUp: {
+    query: gql`
+      mutation signup($input: SignUpCredentials!) {
+        user {
+          signUp(credentials: $input) {
+            token
+            user {
+              email
+              firstName
+            }
+          }
+        }
+      }
+    `,
+  },
+};
+
+export { DOCUMENT_MUTATION, USER_MUTATION };

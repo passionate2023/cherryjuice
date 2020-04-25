@@ -1,0 +1,95 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type AuthUser {
+    token: String!
+    user: User!
+}
+
+type Document {
+    createdAt: Float!
+    folder: String
+    id: String!
+    name: String!
+    node(node_id: Int): [Node]!
+    size: Int!
+    updatedAt: Float!
+}
+
+type DocumentMutation {
+    deleteDocument(documents: DeleteDocumentInputType!): String!
+    uploadFile(file: Upload!): Boolean!
+    uploadLink(file: UploadLinkInputType!): Boolean!
+}
+
+type Mutation {
+    document: DocumentMutation!
+    user: UserMutation!
+}
+
+type Node {
+    child_nodes: [Int!]!
+    createdAt: Float!
+    documentId: String!
+    father_id: Float!
+    has_codebox: Int!
+    has_image: Int!
+    has_table: Int!
+    html: String!
+    icon_id: String!
+    id: String!
+    image(offset: Int, thumbnail: Boolean): [String]!
+    is_empty: Int!
+    is_richtxt: Int!
+    name: String!
+    node_id: Int!
+    node_title_styles: String!
+    updatedAt: Float!
+}
+
+type Query {
+    document(file_id: String): [Document]!
+}
+
+type User {
+    email: String!
+    firstName: String!
+    id: String!
+    lastName: String!
+    username: String!
+}
+
+type UserMutation {
+    signIn(credentials: SignInCredentials!): AuthUser!
+    signUp(credentials: SignUpCredentials!): AuthUser!
+}
+
+input DeleteDocumentInputType {
+    IDs: [String!]!
+}
+
+input SignInCredentials {
+    emailOrUsername: String!
+    password: String!
+}
+
+input SignUpCredentials {
+    email: String!
+    firstName: String!
+    lastName: String!
+    password: String!
+    username: String!
+}
+
+input UploadLinkInputType {
+    IDs: [String!]!
+    access_token: String!
+}
+
+
+"The `Upload` scalar type represents a file upload."
+scalar Upload

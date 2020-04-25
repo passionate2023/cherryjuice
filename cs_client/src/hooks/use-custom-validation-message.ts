@@ -9,7 +9,7 @@ const useCustomValidityMessage = ({
   patterns: TPattern[];
 }) => {
   useEffect(() => {
-    const validate = value => {
+    const validatePattern = value => {
       let valid = true;
       for (const { pattern, description } of patterns) {
         if (!new RegExp(pattern).test(value)) {
@@ -20,9 +20,13 @@ const useCustomValidityMessage = ({
       }
       return valid;
     };
-    inputRef.current.oninvalid = e => {
-      e.target.setCustomValidity('');
-      if (!e.target.validity.valid) validate(e.target.value);
+    inputRef.current.oninvalid = ({ target }: { target: HTMLInputElement }) => {
+      const validity = target.validity;
+      if (!validity.valid) {
+        if (validity.patternMismatch && !validity.valueMissing) {
+          validatePattern(target.value);
+        }
+      }
     };
     inputRef.current.oninput = e => {
       e.target.setCustomValidity('');

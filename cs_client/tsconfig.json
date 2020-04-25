@@ -10,7 +10,8 @@
       "::assets/*": ["./src/assets/*"],
       "::shared-components/*": ["./src/components/app/shared-components/*"],
       "::hooks/*": ["./src/hooks/*"],
-      "::app/*": ["./src/components/app/*"]
+      "::app/*": ["./src/components/app/*"],
+      "::auth/*": ["./src/components/auth/*"]
     },
     "target": "esnext",
     "sourceMap": true,

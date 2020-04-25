@@ -1,5 +1,4 @@
 import modDrawer from '::sass-modules/shared-components/drawer.scss';
-import modDialog from '::sass-modules/shared-components/dialog.scss';
 import modButton from '::sass-modules/shared-components/button.scss';
 import modTextInput from '::sass-modules/shared-components/text-input.scss';
 import modSelectFile from '::sass-modules/select-file/select-file.scss';
@@ -13,6 +12,7 @@ import modDialog from './shared-components/dialog.scss';
 import modAuthScreen from './auth/auth-screen.scss';
 import modLogin from './auth/login.scss';
 import modGoogleOauth from '::sass-modules/shared-components/google-oauth-button.scss';
+import modAuthBanner from './auth/banner.scss';
 export {
   modDrawer,
   modDialog,
@@ -25,8 +25,8 @@ export {
   modRichText,
   modAlertModal,
   modImportDocument,
-  modDialog,
   modAuthScreen,
   modLogin,
-  modGoogleOauth
+  modGoogleOauth,
+  modAuthBanner,
 };

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Fragment, useMemo } from 'react';
+import { Fragment, useEffect, useMemo } from 'react';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Tree } from './tree';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
@@ -55,16 +55,24 @@ const Document: React.FC<Props> = ({ state }) => {
       return new Map(nodes.map(node => [node.node_id, node]));
     }
   }, [loading, file_id]);
-  if (error) {
-    if (file_id && file_id === selectedFile) {
-      appActionCreators.selectFile(undefined);
-      history.push('/');
+  useEffect(() => {
+    if (error) {
+      if (file_id && file_id === selectedFile) {
+        appActionCreators.selectFile(undefined);
+        history.push('/');
+      } else {
+        history.push('/' + selectedFile);
+      }
     } else {
-      history.push('/' + selectedFile);
+      if (selectedFile && !file_id) history.push('/' + selectedFile);
+      else if (
+        file_id !== selectedFile &&
+        !/(login.*|signup.*)/.test(file_id)
+      ) {
+        appActionCreators.selectFile(file_id);
+      }
     }
-  } else if (file_id !== selectedFile) {
-    appActionCreators.selectFile(file_id);
-  }
+  }, [error, file_id]);
 
   return (
     <>

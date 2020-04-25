@@ -1,0 +1,23 @@
+.banner {
+  margin-top: -70px;
+  background-color: rgba(white, 0.2);
+  width: 400px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  opacity: 0;
+  transition: opacity 200ms linear;
+}
+.banner__text {
+  color: white;
+}
+
+.banner__icon {
+}
+
+.banner--visible {
+  opacity: 1;
+}

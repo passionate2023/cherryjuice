@@ -10,6 +10,8 @@ $input-width: 260px;
   }
 }
 .login__card {
+  position: relative;
+  overflow: hidden;
   background-color: white;
   filter: none;
   width: 400px;
@@ -22,6 +24,9 @@ $input-width: 260px;
   @include respond-to($md-down) {
     margin: 2%;
   }
+}
+.login__card--loading{
+  filter: brightness(0.5);
 }
 
 .login__form {

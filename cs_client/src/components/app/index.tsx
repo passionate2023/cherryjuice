@@ -2,7 +2,7 @@ import appModule from '::sass-modules/app.scss';
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import * as React from 'react';
 import { useEffect, useReducer, Suspense } from 'react';
-import {  useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   appActionCreators,
   appInitialState,
@@ -10,15 +10,10 @@ import {
   TState,
 } from './reducer';
 import { Void } from '::shared-components/suspense-fallback/void';
-import { client } from '::graphql/apollo';
 import { formattingBarUnmountAnimationDelay } from './editor/tool-bar/groups/formatting-buttons';
 
 const Menus = React.lazy(() => import('::app/menus'));
-const ApolloProvider = React.lazy(() =>
-  import('@apollo/react-common').then(({ ApolloProvider }) => ({
-    default: ApolloProvider,
-  })),
-);
+
 const Editor = React.lazy(() => import('::app/editor'));
 
 type Props = {};
@@ -97,14 +92,10 @@ const App: React.FC<Props> = () => {
   return (
     <div className={appModule.app}>
       <Suspense fallback={<Void />}>
-        <ApolloProvider client={client}>
-          <Suspense fallback={<Void />}>
-            <Editor state={state} />
-          </Suspense>
-          <Suspense fallback={<Void />}>
-            <Menus state={state} dispatch={dispatch} />
-          </Suspense>
-        </ApolloProvider>
+        <Editor state={state} />
+      </Suspense>
+      <Suspense fallback={<Void />}>
+        <Menus state={state} dispatch={dispatch} />
       </Suspense>
     </div>
   );

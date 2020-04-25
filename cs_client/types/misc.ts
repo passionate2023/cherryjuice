@@ -1,0 +1,1 @@
+export type Function<T, U> = (a: T) => U;

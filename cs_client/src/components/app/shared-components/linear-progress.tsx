@@ -4,10 +4,14 @@ import { useSpinner } from '::hooks/use-spinner';
 
 type Props = {
   loading: boolean;
+  showAfter?: number;
 };
 
-const LinearProgress: React.FC<Props> = ({ loading = true }) => {
-  const show = useSpinner({ showAfter: 350 });
+const LinearProgress: React.FC<Props> = ({
+  loading = true,
+  showAfter = 350,
+}) => {
+  const show = useSpinner({ showAfter });
 
   return (
     <>
