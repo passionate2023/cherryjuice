@@ -1,3 +1,6 @@
+@import '../../vars/vars';
+@import '../../mixins/breakpoints';
+@import '../../mixins/form';
 .banner {
   margin-top: -70px;
   background-color: rgba(white, 0.2);
@@ -10,9 +13,20 @@
   margin-bottom: 20px;
   opacity: 0;
   transition: opacity 200ms linear;
+  z-index: 1;
+  position: absolute;
+  top: 16%;
+  max-width: 90%;
+  @include respond-to($md-down) {
+    background-color: rgba($primary, 0.1);
+  }
+  @include form-element-size()
 }
 .banner__text {
   color: white;
+  @include respond-to($md-down) {
+    color: rgba($primary-dark2, 0.8);
+  }
 }
 
 .banner__icon {

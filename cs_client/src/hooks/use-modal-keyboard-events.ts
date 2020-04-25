@@ -18,7 +18,6 @@ const createFocusTrapper = ({
             'button:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])',
     ),
   );
-  console.log(focusableEls);
   const firstFocusableEl = focusableEls.find(
     el => window.getComputedStyle(el).display !== 'none',
   );
@@ -40,7 +39,6 @@ const createFocusTrapper = ({
           e.preventDefault();
         }
       }
-      console.log(e.target);
     }
   };
 };

@@ -10,8 +10,21 @@ const patterns: { [k: string]: TPattern } = {
       'username should be numeric and should not start or end with ._',
   },
   email: {
-    pattern: '^(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$',
+    // https://stackoverflow.com/a/201447/6549728
+    // eslint-disable-next-line no-useless-escape
+    pattern: "^\S+@\S+\.\S+$",
     description: 'invalid email',
+  },
+  name: {
+    // https://stackoverflow.com/a/45871742/6549728
+    // eslint-disable-next-line no-useless-escape
+    pattern: "^[w'-,.][^0-9_!¡?÷?¿\\+=@#$%ˆ&*(){}|~<>;:[]]{2,}$",
+    description: 'only letters',
+  },
+  password: {
+    // eslint-disable-next-line no-useless-escape
+    pattern: "((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$",
+    description: `password must have at least: 1 upper case letter, 1 lower case letter, 1 number or special character`,
   },
 };
 

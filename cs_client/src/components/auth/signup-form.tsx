@@ -1,12 +1,9 @@
 /* eslint-disable no-console */
 import * as React from 'react';
 import { modLogin } from '::sass-modules/index';
-import { Checkbox } from '::shared-components/checkbox';
-import { GoogleOauthButton } from '::shared-components/buttons/google-oauth-button';
 import { Icons } from '::shared-components/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { TextInput, TextInputProps } from '::shared-components/form/text-input';
-import { FormSeparator } from '::shared-components/form/form-separator';
 import { patterns } from '::auth/helpers/form-validation';
 import { useMutation } from '@apollo/react-hooks';
 import { USER_MUTATION } from '::graphql/mutations';
@@ -17,22 +14,51 @@ import { LinearProgress } from '::shared-components/linear-progress';
 import { Banner } from '::auth/banner';
 import { Link } from 'react-router-dom';
 
+
 const inputs: TextInputProps[] = [
+  {
+    label: 'first name',
+    icon: Icons.misc['person-circle'],
+    patterns: [patterns.name],
+    minLength: 2,
+    required: true,
+    variableName: 'firstName',
+    inputRef: createRef(),
+  },
+  {
+    label: 'last name',
+    icon: Icons.misc['person-circle'],
+    patterns: [patterns.name],
+    minLength: 2,
+    required: true,
+    variableName: 'lastName',
+    inputRef: createRef(),
+  },
   {
     label: 'username',
     icon: Icons.misc.username,
-    patterns: [patterns.userName, patterns.email],
+    patterns: [patterns.userName],
     minLength: 4,
     required: true,
-    variableName: 'emailOrUsername',
+    variableName: 'username',
+    inputRef: createRef(),
+  },
+  {
+    label: 'email',
+    icon: Icons.misc.email,
+    type: 'email',
+    required: true,
+    variableName: 'email',
     inputRef: createRef(),
   },
   {
     inputRef: createRef(),
     variableName: 'password',
+    patterns: [patterns.password],
     label: 'password',
     type: 'password',
     icon: Icons.misc.lock,
+    minLength: 8,
     required: true,
   },
 ];
@@ -41,17 +67,17 @@ type Props = {
   setSession: Function;
   session: AuthUser;
 };
-const LoginForm: React.FC<Props> = ({ setSession }) => {
+const SignUpForm: React.FC<Props> = ({ setSession }) => {
   useModalKeyboardEvents({
     modalSelector: '.' + modLogin.login__card,
     onCloseModal: () => undefined,
-    focusableElementsSelector: ['a', 'input[type="submit"]', '#google-btn'],
+    focusableElementsSelector: ['a', 'input[type="submit"]'],
   });
   const [mutate, { loading, error, data }] = useMutation(
-    USER_MUTATION.signIn.query,
+    USER_MUTATION.signUp.query,
   );
   const formRef = useRef<HTMLFormElement>();
-  const login = e => {
+  const signUp = e => {
     if (formRef.current.checkValidity()) {
       e.preventDefault();
       const variables = Object.fromEntries(
@@ -69,44 +95,35 @@ const LoginForm: React.FC<Props> = ({ setSession }) => {
   };
 
   useEffect(() => {
-    const session = USER_MUTATION.signIn.path(data);
+    const session = USER_MUTATION.signUp.path(data);
     if (session?.token) setSession(session);
   }, [data]);
 
   return (
     <AuthScreen>
-      <div className={modLogin.login__card}>
-        <Banner message={error?.graphQLErrors[0]?.message} />
+      <Banner message={error?.graphQLErrors[0]?.message} />
+      <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
-          <GoogleOauthButton
-            onClick={() => console.log('redirecting to google')}
-          />
-          <FormSeparator text={'or'} />
           {inputs.map(inputProps => (
             <TextInput {...inputProps} key={inputProps.variableName} />
           ))}
-          <span className={modLogin.login__form__rememberMe}>
-            <Checkbox className={modLogin.login__form__rememberMe__checkbox} />{' '}
-            <span className={modLogin.login__form__rememberMe__text}>
-              Stay signed
-            </span>
-          </span>
 
           <input
             type={'submit'}
-            value={'Login'}
+            value={'Sign up'}
             className={`${modLogin.login__form__input__input} ${modLogin.login__form__inputSubmit}`}
-            onClick={login}
+            onClick={signUp}
             disabled={loading}
+            style={{ marginTop: 20 }}
           />
           <span className={modLogin.login__form__createAccount}>
-            or{' '}
+            already a member?{' '}
             <Link
-              to="/signup"
+              to="/login"
               className={modLogin.login__form__createAccount__icon}
             >
-              create an account
+              log in
             </Link>
           </span>
         </form>
@@ -115,4 +132,4 @@ const LoginForm: React.FC<Props> = ({ setSession }) => {
   );
 };
 
-export { LoginForm };
+export { SignUpForm };

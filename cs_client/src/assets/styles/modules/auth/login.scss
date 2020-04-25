@@ -1,31 +1,30 @@
 @import '../../vars/vars';
-$input-width: 260px;
-@mixin form-element-size {
-  max-width: $input-width;
-  min-width: $input-width;
-  box-sizing: border-box;
-  @include respond-to($md-down) {
-    max-width: $input-width * 1.2;
-    min-width: $input-width * 1.2;
-  }
-}
+@import '../../mixins/form';
+
 .login__card {
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
   background-color: white;
   filter: none;
   width: 400px;
-  height: 400px;
+  min-height: 400px;
+  height: 65%;
   border-radius: 10px;
   box-shadow: $box-shadow1;
   display: flex;
   flex-direction: column;
   align-items: center;
   @include respond-to($md-down) {
-    margin: 2%;
+    width: 95%;
+    height: 92%;
   }
 }
-.login__card--loading{
+.login__card--sign-up {
+  @include respond-to($md-up) {
+    height: 70%;
+  }
+}
+.login__card--loading {
   filter: brightness(0.5);
 }
 
@@ -72,6 +71,9 @@ $input-width: 260px;
   cursor: pointer;
   font-size: 1.2rem;
 }
+.login__form__input--submit:disabled {
+  filter: opacity(0.5);
+}
 .login__form__remember-me {
   display: flex;
   align-items: center;
@@ -89,8 +91,7 @@ $input-width: 260px;
   transform: scale(0.6);
   margin-top: 8px;
 }
-.login__form__remember-me__checkbox:focus{
-
+.login__form__remember-me__checkbox:focus {
 }
 .login__form__remember-me__text {
   padding: 2px 0;
@@ -110,7 +111,7 @@ $input-width: 260px;
 
 .login__separator__line {
   height: 0px;
-  width: calc(#{$input-width} * 0.35);
+  width: calc(#{$form-input-width} * 0.35);
   margin: 5px;
   border-bottom: 1px solid rgba($primary-dark2, 0.4);
 }

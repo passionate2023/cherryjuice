@@ -7,7 +7,7 @@ import { createUploadLink } from 'apollo-upload-client';
 const cache = new InMemoryCache();
 
 const request = operation => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('cs.user.token');
   operation.setContext({
     headers: {
       authorization: token ? `Bearer ${token}` : '',

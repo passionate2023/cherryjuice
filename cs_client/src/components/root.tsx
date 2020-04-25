@@ -6,6 +6,7 @@ import { Route, useHistory } from 'react-router';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { App } from '::app/index';
 import { AuthUser } from '::types/graphql/generated';
+import { SignUpForm } from '::auth/signup-form';
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
@@ -32,10 +33,13 @@ const Root: React.FC<Props> = () => {
   const [session, setSession] = useState(getSavedSession);
   const history = useHistory();
   useEffect(() => {
+    const isOnLoginOrSignUp = /(^\/login|^\/signup)/.test(
+      history.location.pathname,
+    );
     if (!session.token) {
-      history.push('/login');
+      if (!isOnLoginOrSignUp) history.push('/login');
     } else {
-      history.push('/');
+      if (isOnLoginOrSignUp) history.push('/');
       setSavedSession(session);
     }
   }, [session]);
@@ -46,6 +50,12 @@ const Root: React.FC<Props> = () => {
         <Route
           path={'/login'}
           render={() => <LoginForm setSession={setSession} session={session} />}
+        />{' '}
+        <Route
+          path={'/signup'}
+          render={() => (
+            <SignUpForm setSession={setSession} session={session} />
+          )}
         />
       </ApolloProvider>
     </Suspense>

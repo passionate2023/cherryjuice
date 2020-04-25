@@ -45,9 +45,12 @@ const Icons = {
     delete: 'delete',
   },
   misc: {
+    email: 'email',
     'google-g': 'google-g',
     lock: 'lock',
     person: 'person',
+    'person-circle': 'person-circle',
+    username: 'username',
   },
   cherrytree: {
     cherries: {

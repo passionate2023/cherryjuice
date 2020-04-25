@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { QUERY_NODE_CONTENT } from '::graphql/queries';
 import { usePng } from '::hooks/use-png';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
-import { MUTATE_CT_NODE_CONTENT } from '::graphql/mutations';
+import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { getAHtml__legacy } from '::helpers/html-to-ctb';
 import { setupClipboard } from '::helpers/clipboard';
 import { setupKeyboardEvents } from '::helpers/typing';
@@ -47,7 +47,7 @@ const RichText: React.FC<Props> = ({
   const node_id = Number(match.params?.node_id);
   const toolbarQueuesRef = useRef({});
   const queryVariables = { file_id, node_id: node_id };
-  let { data, error } = useReloadQuery(
+  const { data, error } = useReloadQuery(
     {
       reloadRequestID: reloadDocument,
     },
@@ -86,7 +86,7 @@ const RichText: React.FC<Props> = ({
     }
     processLinks = new Date().getTime();
   }
-  const [mutate] = useMutation(MUTATE_CT_NODE_CONTENT.html);
+  const [mutate] = useMutation(DOCUMENT_MUTATION.html);
 
   if (saveDocument && !toolbarQueuesRef.current[saveDocument]) {
     toolbarQueuesRef.current[saveDocument] = true;

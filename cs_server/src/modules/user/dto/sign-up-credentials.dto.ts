@@ -19,8 +19,8 @@ const regex = {
       'username: only a-zA-Z0-9._ allowed, no _ or . at teh beginning, no __ or _. or ._ or .. inside,  no _ or . at the end',
   },
   name: {
-    pattern: /^[a-zA-Z\s]+$/,
-    description: 'name: only a-zA-Z\\s',
+    pattern: /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/,
+    description: 'only letters',
   },
 };
 

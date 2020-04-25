@@ -127,7 +127,7 @@ const googlePickerHelpers = ({
       doAuth({
         callback: response => {
           if (response.access_token) {
-            saveToken(response);
+            saveToken();
             createPicker(response.access_token);
           } else {
             onAuthFailed(response);
@@ -149,7 +149,7 @@ const googlePickerDefaultProps = {
   disabled: false,
   clientId:
     '622784255409-3gl2p283pqkqnhvr65cghrbdpigvsifk.apps.googleusercontent.com', //process.env.OAUTH_GOOGLE_CLIENT_ID,
-  developerKey: 'AIzaSyDBGrwe51vtHuMbDG1Jbpa', // process.env.OAUTH_GOOGLE_DEVELOPER_KEY,
+  developerKey: 'AIzaSyDBGrwe51vtHuMbDG1Jbpa-8i13nXja62w', // process.env.OAUTH_GOOGLE_DEVELOPER_KEY,
   scope: [
     'https://www.googleapis.com/auth/drive.metadata.readonly',
     'https://www.googleapis.com/auth/drive.readonly',

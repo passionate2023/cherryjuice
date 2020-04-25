@@ -1,8 +1,8 @@
 // a fork of https://github.com/sdoomz/react-google-picker/blob/master/src/react-google-picker.js
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { GooglePickerResult } from '::types/google';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
 import { useMutation } from '@apollo/react-hooks';
@@ -16,17 +16,17 @@ type Props = {};
 
 const GoogleDrivePicker: React.FC<Props> = () => {
   const [mutate] = useMutation(DOCUMENT_MUTATION.grdrive);
-  const [token, setToken] = useState('');
+  const tokenRef = useRef('');
 
   const onFileSelect = useCallback(
     (res: GooglePickerResult) => {
       if (res.action === 'picked') {
         const IDs = res.docs.map(({ id }) => id);
-        if (IDs.length && token) {
+        if (IDs.length && tokenRef.current) {
           mutate({
             variables: {
               file: {
-                access_token: token,
+                access_token: tokenRef.current,
                 IDs,
               },
             },
@@ -34,7 +34,7 @@ const GoogleDrivePicker: React.FC<Props> = () => {
         }
       }
     },
-    [token],
+    [tokenRef.current],
   );
   const onAuthFailed = error =>
     appActionCreators.setAlert({
@@ -43,11 +43,14 @@ const GoogleDrivePicker: React.FC<Props> = () => {
       description: error.message,
       title: 'could not upload files',
     });
+  const onAuthenticate = useCallback(token => {
+    tokenRef.current = token;
+  }, []);
   const { isGoogleReady, onApiLoad, onChoose } = useMemo(
     () =>
       googlePickerHelpers({
         ...googlePickerDefaultProps,
-        onAuthenticate: setToken,
+        onAuthenticate,
         onChange: onFileSelect,
         onAuthFailed,
       }),

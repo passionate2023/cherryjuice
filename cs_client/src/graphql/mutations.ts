@@ -1,21 +1,6 @@
 import gql from 'graphql-tag';
 import { AuthUser } from '::types/graphql/generated';
 
-// const MUTATE_CT_NODE_CONTENT = {
-//   html: gql`
-//     mutation ct_node_html(
-//       $file_id: String!
-//       $node_id: Int!
-//       $abstract_html: String!
-//     ) {
-//       ct_node_content(
-//         file_id: $file_id
-//         node_id: $node_id
-//         abstract_html: $abstract_html
-//       )
-//     }
-//   `,
-// };
 
 const DOCUMENT_MUTATION = {
   grdrive: gql`
@@ -30,6 +15,19 @@ const DOCUMENT_MUTATION = {
       document {
         deleteDocument(documents: $documents)
       }
+    }
+  `,
+  html: gql`
+    mutation ct_node_html(
+      $file_id: String!
+      $node_id: Int!
+      $abstract_html: String!
+    ) {
+      ct_node_content(
+        file_id: $file_id
+        node_id: $node_id
+        abstract_html: $abstract_html
+      )
     }
   `,
 };
@@ -52,6 +50,7 @@ const USER_MUTATION = {
     `,
   },
   signUp: {
+    path: (data): AuthUser | undefined => data?.user?.signUp,
     query: gql`
       mutation signup($input: SignUpCredentials!) {
         user {
