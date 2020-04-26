@@ -10,7 +10,7 @@
   }
   z-index: $ZI-user-popup;
   height: 300px;
-  width: 350px;
+  width: 270px;
   max-width: 80vw;
   border-radius: $BR_popup;
   display: flex;
@@ -40,8 +40,8 @@
 }
 .user__info__picture {
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   margin-bottom: 15px;
 }
 .user__info__name {

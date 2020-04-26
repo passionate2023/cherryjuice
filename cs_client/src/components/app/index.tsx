@@ -1,4 +1,3 @@
-
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import * as React from 'react';
 import { useEffect, useReducer, Suspense } from 'react';

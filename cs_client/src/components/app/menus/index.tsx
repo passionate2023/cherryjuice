@@ -12,8 +12,6 @@ const Settings = React.lazy(() => import('::app/menus/settings'));
 const SelectFile = React.lazy(() => import('::app/menus/select-file'));
 type Props = { state: TState; dispatch: any; session: AuthUser };
 
-
-
 const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
   return (
     <>

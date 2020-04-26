@@ -43,8 +43,10 @@ const Root: React.FC<Props> = () => {
     if (!session.token) {
       if (!isOnLoginOrSignUp) history.push('/login');
     } else {
-      if (isOnLoginOrSignUp) history.push('/');
-      setSavedSession(session);
+      if (isOnLoginOrSignUp) {
+        setSavedSession(session);
+        history.push('/');
+      }
     }
   }, [session]);
   return (

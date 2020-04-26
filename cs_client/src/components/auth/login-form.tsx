@@ -4,7 +4,7 @@ import { createRef, useEffect, useRef } from 'react';
 import { modLogin } from '::sass-modules/index';
 import { Checkbox } from '::shared-components/checkbox';
 import { GoogleOauthButton } from '::shared-components/buttons/google-oauth-button';
-import {  Icons } from '::shared-components/icon';
+import { Icons } from '::shared-components/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { TextInput, TextInputProps } from '::shared-components/form/text-input';
 import { FormSeparator } from '::shared-components/form/form-separator';
