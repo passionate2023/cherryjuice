@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { NodeMeta, DocumentMeta, NodeImage, Node } from '::types/generated';
+import { AuthUser } from '::types/graphql/generated';
 const QUERY_NODE_META = {
   path: (data): NodeMeta[] | undefined => data?.document[0]?.node,
   query: gql`
@@ -75,4 +76,22 @@ const QUERY_DOCUMENTS = {
     }
   `,
 };
-export { QUERY_DOCUMENTS, QUERY_NODE_META, QUERY_NODE_CONTENT };
+
+const QUERY_USER = {
+  path: (data): AuthUser => data.user,
+  query: gql`
+    query user {
+      user {
+        user {
+          username
+          email
+          lastName
+          firstName
+          id
+        }
+        token
+      }
+    }
+  `,
+};
+export { QUERY_DOCUMENTS, QUERY_NODE_META, QUERY_NODE_CONTENT, QUERY_USER };

@@ -73,6 +73,10 @@ const LoginForm: React.FC<Props> = ({ setSession }) => {
     if (session?.token) setSession(session);
   }, [data]);
 
+  useEffect(() => {
+    inputs[0].inputRef.current.value = 'ycnmhd';
+    inputs[1].inputRef.current.value = 'Apassword0';
+  }, []);
   return (
     <AuthScreen>
       <div className={modLogin.login__card}>

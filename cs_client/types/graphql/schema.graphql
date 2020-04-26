@@ -53,6 +53,7 @@ type Node {
 
 type Query {
     document(file_id: String): [Document]!
+    user: AuthUser!
 }
 
 type User {

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { client } from '::graphql/apollo';
+import { authState, client } from '::graphql/apollo';
 import { LoginForm } from '::auth/login-form';
 import { useState, Suspense, useEffect } from 'react';
 import { Route, useHistory } from 'react-router';
 import { Void } from '::shared-components/suspense-fallback/void';
-import { App } from '::app/index';
+import { App } from '::root/app';
 import { AuthUser } from '::types/graphql/generated';
 import { SignUpForm } from '::auth/signup-form';
 import { RootContext } from './root-context';
@@ -31,30 +31,40 @@ const setSavedSession = ({ token, user }: AuthUser) => {
   localStorage.setItem('cs.user.token', token);
   localStorage.setItem('cs.user.user', JSON.stringify(user));
 };
-
-const Root: React.FC<Props> = () => {
-  useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
-  const [session, setSession] = useState(getSavedSession);
+const useProtectedRoutes = ({ session }) => {
   const history = useHistory();
   useEffect(() => {
     const isOnLoginOrSignUp = /(^\/login|^\/signup)/.test(
       history.location.pathname,
     );
     if (!session.token) {
+      localStorage.removeItem('cs.user.token');
+      localStorage.removeItem('cs.user.user');
       if (!isOnLoginOrSignUp) history.push('/login');
     } else {
       if (isOnLoginOrSignUp) {
-        setSavedSession(session);
         history.push('/');
       }
+      authState.token = session.token;
+      setSavedSession(session);
     }
   }, [session]);
+};
+
+const Root: React.FC<Props> = () => {
+  useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
+  const [session, setSession] = useState(getSavedSession);
+
+  useProtectedRoutes({ session });
   return (
     <RootContext.Provider value={{ session, setSession }}>
       <Suspense fallback={<Void />}>
         <ApolloProvider client={client}>
           {session.token && (
-            <Route path={'/'} render={() => <App session={session} />} />
+            <Route
+              path={'/'}
+              render={() => <App session={session} setSession={setSession} />}
+            />
           )}
           <Route
             path={'/login'}

@@ -13,20 +13,30 @@ import { SignInCredentials } from '../dto/sign-in-credentials.dto';
 const hashPassword = (password: string, salt: string): Promise<string> => {
   return bcrypt.hash(password, salt);
 };
+const deleteSensitiveFields = (user: User): User => {
+  let _user = new User(
+    user.username,
+    user.email,
+    user.lastName,
+    user.firstName,
+  );
+  _user.id = user.id;
+  return _user;
+};
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
-  private static deleteSensitiveFields(user: User): User {
-    let _user = new User(
-      user.username,
-      user.email,
-      user.lastName,
-      user.firstName,
-    );
-    _user.id = user.id;
-    return _user;
-  }
-
+  static getAuthUser = (
+    user: User,
+  ): {
+    user: User;
+    payload: JwtPayloadInterface;
+  } => {
+    return {
+      payload: { username: user.username },
+      user: deleteSensitiveFields(user),
+    };
+  };
   async signUp({
     username,
     password,
@@ -52,10 +62,7 @@ class UserRepository extends Repository<User> {
       }
     }
 
-    return {
-      payload: { username: user.username },
-      user: UserRepository.deleteSensitiveFields(user),
-    };
+    return UserRepository.getAuthUser(user);
   }
 
   async validateUserPassword({
@@ -73,10 +80,7 @@ class UserRepository extends Repository<User> {
     if (!(hash && hash === user.password)) {
       throw new UnauthorizedException('invalid credentials');
     }
-    return {
-      payload: { username: user.username },
-      user: UserRepository.deleteSensitiveFields(user),
-    };
+    return UserRepository.getAuthUser(user);
   }
 
   async getUser({

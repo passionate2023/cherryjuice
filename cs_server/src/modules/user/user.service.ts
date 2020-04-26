@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SignInCredentials } from './dto/sign-in-credentials.dto';
 import { sign } from 'jsonwebtoken';
 import { AuthUser } from './entities/auth.user';
+import { User } from './entities/user.entity';
 
 export enum Provider {
   GOOGLE = 'google',
@@ -27,6 +28,11 @@ export class UserService {
     const { user, payload } = await this.userRepository.validateUserPassword(
       authCredentialsDto,
     );
+    return { token: this.jwtService.sign(payload), user };
+  }
+
+  async getAuthUser(user_: User): Promise<AuthUser> {
+    const { user, payload } = await UserRepository.getAuthUser(user_);
     return { token: this.jwtService.sign(payload), user };
   }
 

@@ -27,8 +27,6 @@ const User: React.FC<Props & { style }> = ({ onClose, style }) => {
   const history = useHistory();
   const { session, setSession } = useContext(RootContext);
   const signOut = useCallback(() => {
-    localStorage.removeItem('cs.user.token');
-    localStorage.removeItem('cs.user.user');
     setSession({ token: '', user: undefined });
     history.push('/login');
   }, []);

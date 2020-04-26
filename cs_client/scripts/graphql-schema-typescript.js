@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires,no-console */
 const { generateTypeScriptTypes } = require('graphql-schema-typescript');
 const fs = require('fs');
 const path = require('path');
-const schema = fs.readFileSync('../schema.graphql', 'utf8');
+const schema = fs.readFileSync('../types/graphql/schema.graphql', 'utf8');
 
 generateTypeScriptTypes(
   schema,

@@ -8,8 +8,8 @@ type Props = {
 const Checkbox: React.FC<Props> = ({ className }) => {
   return (
     <label className={modCheckbox.container + ' ' + className}>
-      <input type="checkbox" checked={true}/>
-      <span className={modCheckbox.checkmark}></span>
+      <input type="checkbox" defaultChecked={true} />
+      <span className={modCheckbox.checkmark} />
     </label>
   );
 };
