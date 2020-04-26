@@ -16,6 +16,7 @@ import { AuthUser } from '::types/graphql/generated';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { Banner } from '::auth/banner';
 import { Link } from 'react-router-dom';
+import { setStorage } from '::auth/helpers/auth-state';
 
 const inputs: TextInputProps[] = [
   {
@@ -40,6 +41,12 @@ const inputs: TextInputProps[] = [
 type Props = {
   setSession: Function;
   session: AuthUser;
+};
+const useDefaultValues = () => {
+  useEffect(() => {
+    inputs[0].inputRef.current.value = 'ycnmhd';
+    inputs[1].inputRef.current.value = 'Apassword0';
+  }, []);
 };
 const LoginForm: React.FC<Props> = ({ setSession }) => {
   useModalKeyboardEvents({
@@ -68,15 +75,16 @@ const LoginForm: React.FC<Props> = ({ setSession }) => {
     }
   };
 
+  const staySignedRef = useRef<HTMLInputElement>();
   useEffect(() => {
     const session = USER_MUTATION.signIn.path(data);
-    if (session?.token) setSession(session);
+    if (session?.token) {
+      setStorage(staySignedRef.current.checked);
+      setSession(session);
+    }
   }, [data]);
 
-  useEffect(() => {
-    inputs[0].inputRef.current.value = 'ycnmhd';
-    inputs[1].inputRef.current.value = 'Apassword0';
-  }, []);
+  useDefaultValues();
   return (
     <AuthScreen>
       <div className={modLogin.login__card}>
@@ -91,9 +99,12 @@ const LoginForm: React.FC<Props> = ({ setSession }) => {
             <TextInput {...inputProps} key={inputProps.variableName} />
           ))}
           <span className={modLogin.login__form__rememberMe}>
-            <Checkbox className={modLogin.login__form__rememberMe__checkbox} />{' '}
+            <Checkbox
+              className={modLogin.login__form__rememberMe__checkbox}
+              myRef={staySignedRef}
+            />{' '}
             <span className={modLogin.login__form__rememberMe__text}>
-              Stay signed
+              Keep me logged-in
             </span>
           </span>
 
