@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 import { AuthUser } from '::types/graphql/generated';
 
-
 const DOCUMENT_MUTATION = {
   grdrive: gql`
     mutation($file: UploadLinkInputType!) {
@@ -43,6 +42,7 @@ const USER_MUTATION = {
             user {
               email
               firstName
+              lastName
             }
           }
         }

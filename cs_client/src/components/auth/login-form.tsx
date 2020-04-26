@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 import * as React from 'react';
+import { createRef, useEffect, useRef } from 'react';
 import { modLogin } from '::sass-modules/index';
 import { Checkbox } from '::shared-components/checkbox';
 import { GoogleOauthButton } from '::shared-components/buttons/google-oauth-button';
-import { Icons } from '::shared-components/icon';
+import {  Icons } from '::shared-components/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { TextInput, TextInputProps } from '::shared-components/form/text-input';
 import { FormSeparator } from '::shared-components/form/form-separator';
@@ -11,7 +12,6 @@ import { patterns } from '::auth/helpers/form-validation';
 import { useMutation } from '@apollo/react-hooks';
 import { USER_MUTATION } from '::graphql/mutations';
 import { AuthScreen } from '::auth/auth-screen';
-import { createRef, useEffect, useRef } from 'react';
 import { AuthUser } from '::types/graphql/generated';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { Banner } from '::auth/banner';

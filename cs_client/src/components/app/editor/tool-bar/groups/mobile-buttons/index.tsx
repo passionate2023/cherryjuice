@@ -14,7 +14,6 @@ type Props = {
 
 const MobileButtons: React.FC<Props> = ({
   showFormattingButtons,
-  contentEditable,
   showRecentNodes,
   showInfoBar,
 }) => {
@@ -25,12 +24,6 @@ const MobileButtons: React.FC<Props> = ({
         modToolbar.toolBar__groupMobileButtons,
       ].join(' ')}
     >
-      <ToolbarButton
-        onClick={appActionCreators.toggleContentEditable}
-        enabled={!contentEditable}
-      >
-        <Icon name={Icons.material['lock-closed']} small={true} />
-      </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.toggleFormattingButtons}
         enabled={showFormattingButtons}

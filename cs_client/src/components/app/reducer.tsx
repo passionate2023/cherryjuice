@@ -33,6 +33,7 @@ const initialState = {
   showInfoBar: false,
   processLinks: undefined,
   showImportDocuments: false,
+  showUserPopup: false,
 };
 export type TRecentNode = {
   id: number;
@@ -68,6 +69,7 @@ enum actions {
   PROCESS_LINKS,
   HIDE_POPUPS,
   TOGGLE_SHOW_IMPORT_FILES,
+  TOGGLE_USER_POPUP,
 }
 const createActionCreators = () => {
   const state = {
@@ -90,6 +92,9 @@ const createActionCreators = () => {
     },
     toggleShowImportDocuments: (): void => {
       state.dispatch({ type: actions.TOGGLE_SHOW_IMPORT_FILES });
+    },
+    toggleUserPopup: (): void => {
+      state.dispatch({ type: actions.TOGGLE_USER_POPUP });
     },
     setIsOnMobile: (isOnMobile: boolean): void => {
       state.dispatch({ type: actions.SET_IS_ON_MOBILE, value: isOnMobile });
@@ -174,6 +179,8 @@ const reducer = (
       return { ...state, showTree: true };
     case actions.TOGGLE_TREE_OFF:
       return { ...state, showTree: false };
+    case actions.TOGGLE_USER_POPUP:
+      return { ...state, showUserPopup: !state.showUserPopup };
     case actions.TOGGLE_SHOW_IMPORT_FILES:
       return {
         ...state,
@@ -252,6 +259,7 @@ const reducer = (
       return {
         ...state,
         showFormattingButtons: !state.showFormattingButtons,
+        contentEditable: !state.showFormattingButtons,
       };
     case actions.TOGGLE_CONTENT_EDITABLE:
       return { ...state, contentEditable: !state.contentEditable };

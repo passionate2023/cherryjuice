@@ -1,8 +1,8 @@
 @import '../../vars/vars';
 .auth-screen {
   background-color: $primary-dark3;
-  width: 100vw;
-  height: 100vh;
+  width: var(--vw);
+  height: var(--vh);
   display: flex;
   flex-direction: column;
   align-items: center;

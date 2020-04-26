@@ -1,0 +1,56 @@
+@import '../../vars/colors';
+@import '../../vars/border-radius';
+@import '../../vars/vars';
+.user__card {
+  position: absolute;
+  right: 0px;
+  top: $tool-bar-height-md;
+  @include respond-to($md-down) {
+    top: $tool-bar-height;
+  }
+  z-index: $ZI-user-popup;
+  height: 300px;
+  width: 350px;
+  max-width: 80vw;
+  border-radius: $BR_popup;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: $dark-grey;
+  color: white;
+}
+.user__info {
+  flex: 1;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(lightgrey, 0.2);
+  width: 100%;
+}
+.user__actions {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.user__info__picture {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 15px;
+}
+.user__info__name {
+  text-transform: capitalize;
+  font-size: 1.2rem;
+}
+
+.user__info__email {
+  text-transform: lowercase;
+}
+.user__actions__sign-out {
+}

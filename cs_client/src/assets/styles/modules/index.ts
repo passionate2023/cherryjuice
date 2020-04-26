@@ -13,7 +13,10 @@ import modAuthScreen from './auth/auth-screen.scss';
 import modLogin from './auth/login.scss';
 import modGoogleOauth from '::sass-modules/shared-components/google-oauth-button.scss';
 import modAuthBanner from './auth/banner.scss';
+import modUserPopup from './user/user-popup.scss';
+import appModule from '::sass-modules/app.scss';
 export {
+  appModule,
   modDrawer,
   modDialog,
   modButton,
@@ -29,4 +32,5 @@ export {
   modLogin,
   modGoogleOauth,
   modAuthBanner,
+  modUserPopup,
 };

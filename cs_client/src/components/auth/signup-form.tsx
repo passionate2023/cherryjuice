@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import * as React from 'react';
 import { modLogin } from '::sass-modules/index';
-import { Icons } from '::shared-components/icon';
+import { ICON_COLOR, Icons } from '::shared-components/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { TextInput, TextInputProps } from '::shared-components/form/text-input';
 import { patterns } from '::auth/helpers/form-validation';
@@ -14,11 +14,10 @@ import { LinearProgress } from '::shared-components/linear-progress';
 import { Banner } from '::auth/banner';
 import { Link } from 'react-router-dom';
 
-
 const inputs: TextInputProps[] = [
   {
     label: 'first name',
-    icon: Icons.misc['person-circle'],
+    icon: [Icons.misc['person-circle'], ICON_COLOR.black],
     patterns: [patterns.name],
     minLength: 2,
     required: true,
@@ -27,7 +26,7 @@ const inputs: TextInputProps[] = [
   },
   {
     label: 'last name',
-    icon: Icons.misc['person-circle'],
+    icon: [Icons.misc['person-circle'], ICON_COLOR.black],
     patterns: [patterns.name],
     minLength: 2,
     required: true,

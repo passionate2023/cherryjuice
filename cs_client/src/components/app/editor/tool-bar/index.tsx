@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { MainButtons } from '::app/editor/tool-bar/groups/main-buttons';
-import { modToolbar } from '::sass-modules/index.ts';
+import { appModule,  modToolbar } from '::sass-modules/index.ts';
 import { MobileButtons } from './groups/mobile-buttons';
 import { Separator } from '::app/editor/tool-bar/separator';
 import { createPortal } from 'react-dom';
-import appModule from '::sass-modules/app.scss';
 import {
   FormattingButtons,
   FormattingButtonsWithTransition,
 } from './groups/formatting-buttons';
+import { NavBar } from '::app/editor/tool-bar/groups/nav-bar/nav-bar';
 
 type Props = {
   isOnMobile: boolean;
@@ -47,6 +47,8 @@ const ToolBar: React.FC<Props> = ({
           document.querySelector('.' + appModule.app),
         )
       )}
+      <Separator />
+      <NavBar showUserPopup={false} />
     </div>
   );
 };

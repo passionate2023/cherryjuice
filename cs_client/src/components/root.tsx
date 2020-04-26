@@ -7,6 +7,9 @@ import { Void } from '::shared-components/suspense-fallback/void';
 import { App } from '::app/index';
 import { AuthUser } from '::types/graphql/generated';
 import { SignUpForm } from '::auth/signup-form';
+import { RootContext } from './root-context';
+import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
+import { useOnWindowResize } from '::hooks/use-on-window-resize';
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
@@ -30,6 +33,7 @@ const setSavedSession = ({ token, user }: AuthUser) => {
 };
 
 const Root: React.FC<Props> = () => {
+  useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
   const [session, setSession] = useState(getSavedSession);
   const history = useHistory();
   useEffect(() => {
@@ -44,21 +48,27 @@ const Root: React.FC<Props> = () => {
     }
   }, [session]);
   return (
-    <Suspense fallback={<Void />}>
-      <ApolloProvider client={client}>
-        {session.token && <Route path={'/'} component={App} />}
-        <Route
-          path={'/login'}
-          render={() => <LoginForm setSession={setSession} session={session} />}
-        />{' '}
-        <Route
-          path={'/signup'}
-          render={() => (
-            <SignUpForm setSession={setSession} session={session} />
+    <RootContext.Provider value={{ session, setSession }}>
+      <Suspense fallback={<Void />}>
+        <ApolloProvider client={client}>
+          {session.token && (
+            <Route path={'/'} render={() => <App session={session} />} />
           )}
-        />
-      </ApolloProvider>
-    </Suspense>
+          <Route
+            path={'/login'}
+            render={() => (
+              <LoginForm setSession={setSession} session={session} />
+            )}
+          />{' '}
+          <Route
+            path={'/signup'}
+            render={() => (
+              <SignUpForm setSession={setSession} session={session} />
+            )}
+          />
+        </ApolloProvider>
+      </Suspense>
+    </RootContext.Provider>
   );
 };
 

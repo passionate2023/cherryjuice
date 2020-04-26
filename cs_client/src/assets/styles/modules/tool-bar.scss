@@ -26,6 +26,9 @@
     height: $tool-bar-height-md;
   }
 }
+.tool-bar__group--nav-bar {
+  margin-left: auto;
+}
 .tool-bar__group--mobile-buttons {
   @include respond-to($md-up) {
     display: none;
