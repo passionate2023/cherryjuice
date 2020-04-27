@@ -1,6 +1,8 @@
 import gql from 'graphql-tag';
 import { NodeMeta, DocumentMeta, NodeImage, Node } from '::types/generated';
 import { AuthUser } from '::types/graphql/generated';
+import { FRAGMENT_USER } from '::graphql/fragments';
+
 const QUERY_NODE_META = {
   path: (data): NodeMeta[] | undefined => data?.document[0]?.node,
   query: gql`
@@ -83,15 +85,12 @@ const QUERY_USER = {
     query user {
       user {
         user {
-          username
-          email
-          lastName
-          firstName
-          id
+          ...UserInfo
         }
         token
       }
     }
+    ${FRAGMENT_USER.userInfo}
   `,
 };
 export { QUERY_DOCUMENTS, QUERY_NODE_META, QUERY_NODE_CONTENT, QUERY_USER };

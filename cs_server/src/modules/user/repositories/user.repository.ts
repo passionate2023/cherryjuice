@@ -9,11 +9,12 @@ import {
 import * as bcrypt from 'bcrypt';
 import { JwtPayloadInterface } from '../interfaces/jwt-payload.interface';
 import { SignInCredentials } from '../dto/sign-in-credentials.dto';
+import { OauthJson } from '../user.service';
 
 const hashPassword = (password: string, salt: string): Promise<string> => {
   return bcrypt.hash(password, salt);
 };
-const deleteSensitiveFields = (user: User): User => {
+const pickNonSensitiveFields = (user: User): User => {
   let _user = new User(
     user.username,
     user.email,
@@ -21,6 +22,7 @@ const deleteSensitiveFields = (user: User): User => {
     user.firstName,
   );
   _user.id = user.id;
+  _user.picture = user.picture;
   return _user;
 };
 
@@ -34,7 +36,7 @@ class UserRepository extends Repository<User> {
   } => {
     return {
       payload: { username: user.username },
-      user: deleteSensitiveFields(user),
+      user: pickNonSensitiveFields(user),
     };
   };
   async signUp({
@@ -98,6 +100,54 @@ class UserRepository extends Repository<User> {
     });
     if (!user) throw new InternalServerErrorException('Invalid credentials');
     return user;
+  }
+
+  async findOneByThirdPartyId(
+    thirdPartyId: string,
+    thirdParty: string,
+  ): Promise<User | undefined> {
+    return await this.findOne({
+      where: [
+        { thirdPartyId },
+        {
+          thirdParty,
+        },
+      ],
+    });
+  }
+
+  async registerOAuthUser(
+    thirdPartyId: string,
+    provider: string,
+    {
+      sub,
+      email,
+      picture,
+      given_name: firstName,
+      family_name: lastName,
+      email_verified,
+    }: OauthJson,
+  ): Promise<{ user: User; payload: JwtPayloadInterface }> {
+    const userName = /(^.*)@/.exec(email)[1];
+    const user = new User(userName, email, lastName, firstName);
+    user.salt = '';
+    user.password = '';
+    user.thirdPartyId = sub;
+    user.thirdParty = provider;
+    user.email_verified = email_verified;
+    user.picture = picture;
+
+    try {
+      await user.save();
+    } catch (e) {
+      if (e.code === '23505') {
+        throw new ConflictException(e.detail);
+      } else {
+        throw new InternalServerErrorException('database error');
+      }
+    }
+
+    return UserRepository.getAuthUser(user);
   }
 }
 

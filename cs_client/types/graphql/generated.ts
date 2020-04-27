@@ -53,9 +53,12 @@ export interface AuthUser {
 
 export interface User {
   email: string;
+  email_verified: boolean;
   firstName: string;
   id: string;
   lastName: string;
+  picture?: string;
+  thirdPartyId?: string;
   username: string;
 }
 
@@ -302,13 +305,20 @@ export interface AuthUserToUserResolver<TParent = any, TResult = any> {
 
 export interface UserTypeResolver<TParent = any> {
   email?: UserToEmailResolver<TParent>;
+  email_verified?: UserToEmail_verifiedResolver<TParent>;
   firstName?: UserToFirstNameResolver<TParent>;
   id?: UserToIdResolver<TParent>;
   lastName?: UserToLastNameResolver<TParent>;
+  picture?: UserToPictureResolver<TParent>;
+  thirdPartyId?: UserToThirdPartyIdResolver<TParent>;
   username?: UserToUsernameResolver<TParent>;
 }
 
 export interface UserToEmailResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserToEmail_verifiedResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -321,6 +331,14 @@ export interface UserToIdResolver<TParent = any, TResult = any> {
 }
 
 export interface UserToLastNameResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserToPictureResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserToThirdPartyIdResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 

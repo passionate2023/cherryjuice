@@ -52,6 +52,21 @@ class User extends BaseEntity {
   @Column()
   salt: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  thirdPartyId: string;
+
+  @Column({ nullable: true })
+  thirdParty: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  picture: string;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  email_verified: boolean;
+
   async validatePassword(password: string): Promise<boolean> {
     const hash = await this.hashPassword(password, this.salt);
     return hash === this.password;

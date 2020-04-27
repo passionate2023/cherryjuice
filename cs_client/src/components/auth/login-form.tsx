@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import * as React from 'react';
 import { createRef, useEffect, useRef } from 'react';
 import { modLogin } from '::sass-modules/index';
@@ -17,6 +16,8 @@ import { LinearProgress } from '::shared-components/linear-progress';
 import { Banner } from '::auth/banner';
 import { Link } from 'react-router-dom';
 import { setStorage } from '::auth/helpers/auth-state';
+import { openConsentWindow } from '::auth/helpers/oauth';
+import { useDefaultValues } from '::hooks/use-default-form-values';
 
 const inputs: TextInputProps[] = [
   {
@@ -42,12 +43,7 @@ type Props = {
   setSession: Function;
   session: AuthUser;
 };
-const useDefaultValues = () => {
-  useEffect(() => {
-    inputs[0].inputRef.current.value = 'ycnmhd';
-    inputs[1].inputRef.current.value = 'Apassword0';
-  }, []);
-};
+
 const LoginForm: React.FC<Props> = ({ setSession }) => {
   useModalKeyboardEvents({
     modalSelector: '.' + modLogin.login__card,
@@ -64,6 +60,7 @@ const LoginForm: React.FC<Props> = ({ setSession }) => {
       const variables = Object.fromEntries(
         inputs.map(({ variableName, inputRef }) => [
           variableName,
+          // @ts-ignore
           inputRef?.current.value,
         ]),
       );
@@ -84,7 +81,7 @@ const LoginForm: React.FC<Props> = ({ setSession }) => {
     }
   }, [data]);
 
-  useDefaultValues();
+  useDefaultValues(inputs);
   return (
     <AuthScreen>
       <div className={modLogin.login__card}>
@@ -92,7 +89,10 @@ const LoginForm: React.FC<Props> = ({ setSession }) => {
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
           <GoogleOauthButton
-            onClick={() => console.log('redirecting to google')}
+            onClick={openConsentWindow({
+              url: (process.env.graphqlAPI || '') + '/auth/google/callback',
+              onAuth: setSession,
+            })}
           />
           <FormSeparator text={'or'} />
           {inputs.map(inputProps => (

@@ -58,9 +58,12 @@ type Query {
 
 type User {
     email: String!
+    email_verified: Boolean!
     firstName: String!
     id: String!
     lastName: String!
+    picture: String
+    thirdPartyId: String
     username: String!
 }
 

@@ -47,7 +47,7 @@ const useHandleRouting = state => {
   useEffect(() => {
     if (state.selectedFile) {
       if (history.location.pathname === '/')
-        history.push('/' + state.selectedFile);
+        history.push('/document/' + state.selectedFile);
     }
   }, [state.selectedFile]);
 };

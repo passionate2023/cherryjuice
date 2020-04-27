@@ -1,4 +1,4 @@
-import person from '::assets/icons/material/large/person.svg';
+import person from '::assets/icons/material/large/person-circle.svg';
 import * as React from 'react';
 import { modToolbar, modUserPopup } from '::sass-modules/index';
 import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
@@ -30,12 +30,12 @@ const User: React.FC<Props & { style }> = ({ onClose, style }) => {
     setSession({ token: '', user: undefined });
     history.push('/login');
   }, []);
-  const { picture = person, email, firstName, lastName } = session.user;
+  const { picture, email, firstName, lastName } = session.user;
   return (
     <animated.div className={modUserPopup.user__card} style={style}>
       <div className={modUserPopup.user__info}>
         <img
-          src={picture}
+          src={picture || person}
           alt="profile-picture"
           className={modUserPopup.user__info__picture}
         />

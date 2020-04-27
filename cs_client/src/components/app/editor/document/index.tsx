@@ -88,7 +88,7 @@ const Document: React.FC<Props> = ({ state }) => {
 
           <Route
             exact
-            path={`/:file_id/node-:node_id/`}
+            path={`/document/:file_id/node/:node_id/`}
             render={props => {
               return (
                 <ErrorBoundary>

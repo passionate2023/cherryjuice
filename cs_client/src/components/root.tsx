@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {  client } from '::graphql/apollo';
+import { client } from '::graphql/apollo';
 import { LoginForm } from '::auth/login-form';
 import { useState, Suspense, useEffect } from 'react';
 import { Route, useHistory } from 'react-router';
@@ -16,7 +16,6 @@ const ApolloProvider = React.lazy(() =>
   })),
 );
 type Props = {};
-
 
 const useProtectedRoutes = ({ session }) => {
   const history = useHistory();

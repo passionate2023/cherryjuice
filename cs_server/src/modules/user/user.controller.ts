@@ -4,7 +4,6 @@ import {
   Get,
   Post,
   Req,
-  Res,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -12,6 +11,7 @@ import { SignUpCredentials } from './dto/sign-up-credentials.dto';
 import { UserService } from './user.service';
 import { SignInCredentials } from './dto/sign-in-credentials.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { User } from './entities/user.entity';
 
 @Controller('auth')
 export class UserController {
@@ -25,12 +25,18 @@ export class UserController {
     return await this.authService.signIn(authCredentialsDto);
   }
 
-
-  @Get('/google/callback')
+  @Get('google/callback')
   @UseGuards(AuthGuard('google'))
-  googleLoginCallback(@Req() req, @Res() res) {
-    const jwt: string = req.user.jwt;
-    if (jwt) res.redirect(process.env.OAUTH_REDIRECT_URL + jwt);
-    else res.redirect(process.env.OAUTH_REDIRECT_URL);
+  googleLoginCallback(@Req() req) {
+    const token: string = req.user.token;
+    const user: User = req.user.user;
+    if (token) {
+      return `<html><body><script>window.opener.postMessage(${JSON.stringify({
+        token,
+        user,
+      })}, '/');window.close()</script></body></html>`;
+    } else {
+      return 'There was a problem signing in...';
+    }
   }
 }

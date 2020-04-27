@@ -8,7 +8,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { DocumentModule } from './document/document.module';
 import {
   addSTSHeader,
-  ignoreClientSideRouting,
   redirectToHTTPS,
   sendCompressedJavascript,
 } from '../middleware';
@@ -19,10 +18,10 @@ import { ImageModule } from './image/image.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from '../config/typeorm.config';
 import { UserModule } from './user/user.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
-    DocumentModule,
     NodeModule,
     ImageModule,
     GraphQLModule.forRoot({
@@ -32,7 +31,9 @@ import { UserModule } from './user/user.module';
     }),
     TypeOrmModule.forRoot(typeOrmConfig),
     UserModule,
+    DocumentModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
@@ -48,11 +49,7 @@ export class AppModule implements NestModule {
         ? path.join(__dirname, '../../client')
         : path.join(process.cwd(), '../cs_client/dist');
     consumer
-      .apply(
-        express.static(staticAssetsRootFolder),
-        ignoreClientSideRouting({ staticAssetsRootFolder }),
-      )
-      .exclude('/graphql', '/user/')
+      .apply(express.static(staticAssetsRootFolder))
       .forRoutes({ path: '*', method: RequestMethod.GET });
   }
 }

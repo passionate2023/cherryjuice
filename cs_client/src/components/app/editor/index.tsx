@@ -29,7 +29,7 @@ const Editor: React.FC<{ state: TState }> = ({ state }) => {
         <p>No selected document</p>
       ) : (
         <Route
-          path={`/:file_id?/`}
+          path={`/document/:file_id?/`}
           render={() => (
             <Suspense fallback={<Void />}>
               <Document state={state} />

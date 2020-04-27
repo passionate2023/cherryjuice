@@ -3,12 +3,19 @@ import { appActionCreators } from '::app/reducer';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { Icon, Icons } from '::shared-components/icon';
 import { modToolbar } from '::sass-modules/index';
+import { useContext } from 'react';
+import { RootContext } from '::root/root-context';
 
 type Props = {
   showUserPopup: boolean;
 };
 
 const NavBar: React.FC<Props> = ({ showUserPopup }) => {
+  const {
+    session: {
+      user: { picture: userPicture },
+    },
+  } = useContext(RootContext);
   return (
     <div
       className={
@@ -25,7 +32,15 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
         onClick={appActionCreators.toggleUserPopup}
         enabled={showUserPopup}
       >
-        <Icon name={Icons.misc['person-circle']} />
+        {userPicture ? (
+          <img
+            src={userPicture}
+            alt="user profiel picture"
+            className={modToolbar.toolBar__groupNavBar__profilePicture}
+          />
+        ) : (
+          <Icon name={Icons.misc['person-circle']} />
+        )}
       </ToolbarButton>
     </div>
   );

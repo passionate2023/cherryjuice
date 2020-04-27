@@ -1,6 +1,4 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-import * as path from 'path';
-
 const addSTSHeader = (req, res, next) => {
   res.set(
     'Strict-Transport-Security',
@@ -14,14 +12,6 @@ const redirectToHTTPS = (req, res, next) => {
   }
   return next();
 };
-const ignoreClientSideRouting = ({ staticAssetsRootFolder }) => {
-  const assets = {
-    ['index.html']: path.join(staticAssetsRootFolder, '/index.html'),
-  };
-  return (req, res) => {
-    res.sendFile(assets['index.html']);
-  };
-};
 
 const sendCompressedJavascript = (req, res, next) => {
   if (req.url.indexOf('sw.js') === -1) {
@@ -32,9 +22,4 @@ const sendCompressedJavascript = (req, res, next) => {
   next();
 };
 
-export {
-  addSTSHeader,
-  ignoreClientSideRouting,
-  sendCompressedJavascript,
-  redirectToHTTPS,
-};
+export { addSTSHeader, sendCompressedJavascript, redirectToHTTPS };

@@ -14,7 +14,7 @@ import { UserQueriesResolver } from './user.queries.resolver';
 @Module({
   imports: [
     PassportModule.register({
-      defaultStrategy: 'jwt',
+      defaultStrategy: ['jwt', 'google'],
     }),
     JwtModule.register({
       secret: jwtConfig.secret,
@@ -32,6 +32,6 @@ import { UserQueriesResolver } from './user.queries.resolver';
     UserMutationsResolver,
     UserQueriesResolver,
   ],
-  exports: [PassportModule, JwtStrategy, UserService],
+  exports: [PassportModule, JwtStrategy, UserService, GoogleStrategy],
 })
 export class UserModule {}

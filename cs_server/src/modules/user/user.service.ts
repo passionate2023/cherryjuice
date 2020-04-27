@@ -4,14 +4,20 @@ import { UserRepository } from './repositories/user.repository';
 import { SignUpCredentials } from './dto/sign-up-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import { SignInCredentials } from './dto/sign-in-credentials.dto';
-import { sign } from 'jsonwebtoken';
 import { AuthUser } from './entities/auth.user';
 import { User } from './entities/user.entity';
+import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 
-export enum Provider {
-  GOOGLE = 'google',
-}
-
+export type OauthJson = {
+  sub: string;
+  name: string;
+  given_name: string;
+  family_name: string;
+  picture: string;
+  email: string;
+  email_verified: boolean;
+  locale: string;
+};
 @Injectable()
 export class UserService {
   constructor(
@@ -36,27 +42,23 @@ export class UserService {
     return { token: this.jwtService.sign(payload), user };
   }
 
-  async validateOAuthLogin(
+  async oauthLogin(
     thirdPartyId: string,
-    provider: Provider,
-  ): Promise<string> {
+    provider: string,
+    _json: OauthJson,
+  ): Promise<{ user: User; payload: JwtPayloadInterface }> {
     try {
-      // You can add some registration logic here,
-      // to register the user using their thirdPartyId (in this case their googleId)
-      // let user: IUser = await this.usersService.findOneByThirdPartyId(thirdPartyId, provider);
-
-      // if (!user)
-      // user = await this.usersService.registerOAuthUser(thirdPartyId, provider);
-
-      const payload = {
+      const existingUser = await this.userRepository.findOneByThirdPartyId(
         thirdPartyId,
         provider,
-      };
-
-      const jwt: string = sign(payload, process.env.JWT_SECRET, {
-        expiresIn: 3600,
-      });
-      return jwt;
+      );
+      return !existingUser
+        ? await this.userRepository.registerOAuthUser(
+            thirdPartyId,
+            provider,
+            _json,
+          )
+        : await UserRepository.getAuthUser(existingUser);
     } catch (err) {
       throw new InternalServerErrorException('validateOAuthLogin', err.message);
     }

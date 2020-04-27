@@ -1,22 +1,16 @@
 import * as React from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
 import { useRef } from 'react';
 import { modImportDocument } from '::sass-modules/index';
 import { Icon, Icons } from '::shared-components/icon';
-
-const MUTATION = gql`
-  mutation($file: Upload!) {
-    document {
-      upload(file: $file)
-    }
-  }
-`;
+import { DOCUMENT_MUTATION } from '::graphql/mutations';
 
 const UploadFile: React.FC<{}> = () => {
   // eslint-disable-next-line no-unused-vars
-  const [mutate, { loading, called, error, data }] = useMutation(MUTATION);
+  const [mutate, { loading, called, error, data }] = useMutation(
+    DOCUMENT_MUTATION.file,
+  );
 
   const onChange = ({
     target: {

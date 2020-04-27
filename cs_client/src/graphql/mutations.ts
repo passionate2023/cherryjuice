@@ -1,7 +1,15 @@
 import gql from 'graphql-tag';
 import { AuthUser } from '::types/graphql/generated';
+import { FRAGMENT_USER } from '::graphql/fragments';
 
 const DOCUMENT_MUTATION = {
+  file: gql`
+    mutation($file: Upload!) {
+      document {
+        uploadFile(file: $file)
+      }
+    }
+  `,
   grdrive: gql`
     mutation($file: UploadLinkInputType!) {
       document {
@@ -40,13 +48,12 @@ const USER_MUTATION = {
           signIn(credentials: $input) {
             token
             user {
-              email
-              firstName
-              lastName
+              ...UserInfo
             }
           }
         }
       }
+      ${FRAGMENT_USER.userInfo}
     `,
   },
   signUp: {
@@ -57,12 +64,12 @@ const USER_MUTATION = {
           signUp(credentials: $input) {
             token
             user {
-              email
-              firstName
+              ...UserInfo
             }
           }
         }
       }
+      ${FRAGMENT_USER.userInfo}
     `,
   },
 };

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Icon, Icons } from '::shared-components/icon';
 import { modGoogleOauth } from '::sass-modules/index';
-import { EventHandler, useEffect } from 'react';
 import { useOnKeyPress } from '::hooks/use-on-key-up';
-type Props = { signIn?: boolean; onClick: EventHandler<any> };
+import { EventHandler } from 'react';
 
-const GoogleOauthButton: React.FC<Props> = ({ signIn = true, onClick }) => {
+type Props = { signIn?: boolean; onClick: EventHandler<any> };
+const GoogleOauthButton: React.FC<Props> = ({ onClick, signIn = true }) => {
   useOnKeyPress({
     elementSelector: '.' + modGoogleOauth.googleBtn,
     onClick,
