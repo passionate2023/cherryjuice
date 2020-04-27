@@ -15,9 +15,10 @@ import { AuthUser } from '::types/graphql/generated';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { Banner } from '::auth/banner';
 import { Link } from 'react-router-dom';
-import { setStorage } from '::auth/helpers/auth-state';
 import { openConsentWindow } from '::auth/helpers/oauth';
 import { useDefaultValues } from '::hooks/use-default-form-values';
+import { localSessionManager } from '::auth/helpers/auth-state';
+import { rootActionCreators } from '::root/root.reducer';
 
 const inputs: TextInputProps[] = [
   {
@@ -40,11 +41,10 @@ const inputs: TextInputProps[] = [
 ];
 
 type Props = {
-  setSession: Function;
   session: AuthUser;
 };
 
-const LoginForm: React.FC<Props> = ({ setSession }) => {
+const LoginForm: React.FC<Props> = () => {
   useModalKeyboardEvents({
     modalSelector: '.' + modLogin.login__card,
     onCloseModal: () => undefined,
@@ -76,8 +76,8 @@ const LoginForm: React.FC<Props> = ({ setSession }) => {
   useEffect(() => {
     const session = USER_MUTATION.signIn.path(data);
     if (session?.token) {
-      setStorage(staySignedRef.current.checked);
-      setSession(session);
+      localSessionManager.setStorageType(staySignedRef.current.checked);
+      rootActionCreators.setSession(session);
     }
   }, [data]);
 
@@ -91,7 +91,7 @@ const LoginForm: React.FC<Props> = ({ setSession }) => {
           <GoogleOauthButton
             onClick={openConsentWindow({
               url: (process.env.graphqlAPI || '') + '/auth/google/callback',
-              onAuth: setSession,
+              onAuth: rootActionCreators.setSession,
             })}
           />
           <FormSeparator text={'or'} />

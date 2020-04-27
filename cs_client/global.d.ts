@@ -17,9 +17,4 @@ declare module '*.svg' {
   export default data;
 }
 
-export {};
-declare global {
-  interface Window {
-    google: any;
-  }
-}
+

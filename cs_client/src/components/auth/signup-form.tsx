@@ -13,6 +13,7 @@ import { AuthUser } from '::types/graphql/generated';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { Banner } from '::auth/banner';
 import { Link } from 'react-router-dom';
+import { rootActionCreators } from '::root/root.reducer';
 
 const inputs: TextInputProps[] = [
   {
@@ -63,10 +64,9 @@ const inputs: TextInputProps[] = [
 ];
 
 type Props = {
-  setSession: Function;
   session: AuthUser;
 };
-const SignUpForm: React.FC<Props> = ({ setSession }) => {
+const SignUpForm: React.FC<Props> = () => {
   useModalKeyboardEvents({
     modalSelector: '.' + modLogin.login__card,
     onCloseModal: () => undefined,
@@ -82,6 +82,7 @@ const SignUpForm: React.FC<Props> = ({ setSession }) => {
       const variables = Object.fromEntries(
         inputs.map(({ variableName, inputRef }) => [
           variableName,
+          // @ts-ignore
           inputRef?.current.value,
         ]),
       );
@@ -95,7 +96,7 @@ const SignUpForm: React.FC<Props> = ({ setSession }) => {
 
   useEffect(() => {
     const session = USER_MUTATION.signUp.path(data);
-    if (session?.token) setSession(session);
+    if (session?.token) rootActionCreators.setSession(session);
   }, [data]);
 
   return (

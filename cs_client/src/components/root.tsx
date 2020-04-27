@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { client } from '::graphql/apollo';
 import { LoginForm } from '::auth/login-form';
-import { useState, Suspense, useEffect } from 'react';
+import {  Suspense, useEffect, useReducer } from 'react';
 import { Route, useHistory } from 'react-router';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { App } from '::root/app';
@@ -9,7 +9,15 @@ import { SignUpForm } from '::auth/signup-form';
 import { RootContext } from './root-context';
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import { useOnWindowResize } from '::hooks/use-on-window-resize';
-import { getSavedSession, saveSession } from '::auth/helpers/auth-state';
+import {
+  localSessionManager,
+  inMemoryTokenManager,
+} from '::auth/helpers/auth-state';
+import {
+  rootActionCreators,
+  rootInitialState,
+  rootReducer,
+} from '::root/root.reducer';
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
@@ -24,45 +32,42 @@ const useProtectedRoutes = ({ session }) => {
       history.location.pathname,
     );
     if (!session.token) {
-      localStorage.removeItem('cs.user.token');
-      localStorage.removeItem('cs.user.user');
       if (!isOnLoginOrSignUp) history.push('/login');
+      inMemoryTokenManager.clear();
+      localSessionManager.clear();
+      client.clearStore();
     } else {
       if (isOnLoginOrSignUp) {
         history.push('/');
+        localSessionManager.set(session);
       }
-
-      saveSession(session);
     }
   }, [session]);
 };
 
 const Root: React.FC<Props> = () => {
   useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
-  const [session, setSession] = useState(getSavedSession);
+  const [state, dispatch] = useReducer(rootReducer, rootInitialState);
+  useEffect(() => {
+    rootActionCreators.setDispatch(dispatch);
+  }, [dispatch]);
 
-  useProtectedRoutes({ session });
+  inMemoryTokenManager.set(state.session.token);
+  useProtectedRoutes({ session: state.session });
   return (
-    <RootContext.Provider value={{ session, setSession }}>
+    <RootContext.Provider value={{ session: state.session }}>
       <Suspense fallback={<Void />}>
         <ApolloProvider client={client}>
-          {session.token && (
-            <Route
-              path={'/'}
-              render={() => <App session={session} setSession={setSession} />}
-            />
+          {state.session.token && (
+            <Route path={'/'} render={() => <App session={state.session} />} />
           )}
           <Route
             path={'/login'}
-            render={() => (
-              <LoginForm setSession={setSession} session={session} />
-            )}
+            render={() => <LoginForm session={state.session} />}
           />{' '}
           <Route
             path={'/signup'}
-            render={() => (
-              <SignUpForm setSession={setSession} session={session} />
-            )}
+            render={() => <SignUpForm session={state.session} />}
           />
         </ApolloProvider>
       </Suspense>

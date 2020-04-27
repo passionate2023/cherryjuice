@@ -1,8 +1,8 @@
 import { createContext } from 'react';
+import { AuthUser } from '::types/graphql/generated';
 
-const RootContext = createContext({
+const RootContext = createContext<{ session: AuthUser }>({
   session: undefined,
-  setSession: undefined,
 });
 
 export { RootContext };

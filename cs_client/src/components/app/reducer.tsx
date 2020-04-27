@@ -77,7 +77,7 @@ const createActionCreators = () => {
     dispatch: props => Error('dispatcher not set'),
   };
   return {
-    setDispatch: newDispatch => (state.dispatch = newDispatch),
+    setDispatch: (dispatch): void => (state.dispatch = dispatch),
     toggleFormattingButtons: (): void => {
       state.dispatch({ type: actions.TOGGLE_FORMATTING_BUTTONS });
     },

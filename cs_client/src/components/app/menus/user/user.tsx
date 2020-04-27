@@ -8,6 +8,7 @@ import { animated } from 'react-spring';
 import { useHistory } from 'react-router';
 import { useCallback, useContext } from 'react';
 import { RootContext } from '::root/root-context';
+import { rootActionCreators } from '::root/root.reducer';
 type Props = {
   firstName: string;
   lastName: string;
@@ -25,9 +26,9 @@ const User: React.FC<Props & { style }> = ({ onClose, style }) => {
     cb: onClose,
   });
   const history = useHistory();
-  const { session, setSession } = useContext(RootContext);
+  const { session } = useContext(RootContext);
   const signOut = useCallback(() => {
-    setSession({ token: '', user: undefined });
+    rootActionCreators.setSession({ token: '', user: undefined });
     history.push('/login');
   }, []);
   const { picture, email, firstName, lastName } = session.user;

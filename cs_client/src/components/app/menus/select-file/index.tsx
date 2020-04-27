@@ -75,16 +75,15 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
     });
   }, [selected.id]);
   const rightHeaderButtons = [
-    <>
-      {(deleteLoading || selected.id) && (
-        <CircleButton
-          className={modDialog.dialog__header__fileButton}
-          onClick={deleteDocument}
-        >
-          <Icon name={Icons.material.delete} small={true} />
-        </CircleButton>
-      )}
-    </>,
+    (deleteLoading || selected.id) && (
+      <CircleButton
+        key={Icons.material.delete}
+        className={modDialog.dialog__header__fileButton}
+        onClick={deleteDocument}
+      >
+        <Icon name={Icons.material.delete} small={true} />
+      </CircleButton>
+    ),
   ];
   useEffect(() => {
     if (deleteError)

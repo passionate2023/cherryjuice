@@ -2,13 +2,13 @@ import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createUploadLink } from 'apollo-upload-client';
 import { setContext } from 'apollo-link-context';
-import { getToken } from '::auth/helpers/auth-state';
+import { inMemoryTokenManager } from '::auth/helpers/auth-state';
 
 const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: getToken(),
+      authorization: inMemoryTokenManager.getHeader(),
     },
   };
 });

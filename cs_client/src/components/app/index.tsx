@@ -15,12 +15,13 @@ import { useOnWindowResize } from '::hooks/use-on-window-resize';
 import { appModule } from '::sass-modules/index';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { QUERY_USER } from '::graphql/queries';
+import { rootActionCreators } from '::root/root.reducer';
 
 const Menus = React.lazy(() => import('::app/menus'));
 
 const Editor = React.lazy(() => import('::app/editor'));
 
-type Props = { session: AuthUser; setSession: Function };
+type Props = { session: AuthUser };
 
 const useSaveStateToLocalStorage = state => {
   useEffect(() => {
@@ -65,7 +66,7 @@ const useUpdateCssVariables = (state: TState) => {
   }, [state.showFormattingButtons, state.showTree]);
 };
 
-const useRefreshToken = ({ token, setSession }) => {
+const useRefreshToken = ({ token }) => {
   const [fetch, { data, error }] = useLazyQuery(QUERY_USER.query, {
     fetchPolicy: 'network-only',
   });
@@ -77,13 +78,14 @@ const useRefreshToken = ({ token, setSession }) => {
       const session = QUERY_USER.path(data);
 
       if (session.token) {
-        setSession(session);
+        rootActionCreators.setSession(session);
       }
-    } else if (error) setSession({ user: undefined, token: '' });
+    } else if (error)
+      rootActionCreators.setSession({ user: undefined, token: '' });
   }, [data, error]);
 };
 
-const App: React.FC<Props> = ({ session, setSession }) => {
+const App: React.FC<Props> = ({ session }) => {
   const [state, dispatch] = useReducer(appReducer, appInitialState);
   useEffect(() => {
     appActionCreators.setDispatch(dispatch);
@@ -98,7 +100,7 @@ const App: React.FC<Props> = ({ session, setSession }) => {
   useSaveStateToLocalStorage(state);
   useHandleRouting(state);
   useUpdateCssVariables(state);
-  useRefreshToken({ token: session.token, setSession });
+  useRefreshToken({ token: session.token });
   return (
     <div className={appModule.app}>
       <Suspense fallback={<Void />}>
