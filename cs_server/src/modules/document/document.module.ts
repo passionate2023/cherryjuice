@@ -7,7 +7,8 @@ import { DocumentRepository } from './repositories/document.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DocumentMutationsResolver } from './document.mutations.resolver';
 import { DocumentQueriesResolver } from './document.queries.resolver';
-import { UploadsService } from './uploads.service';
+import { DocumentSubscriptionsResolver } from './document.subscriptions.resolver';
+import { ImportsService } from './imports.service';
 
 @Module({
   imports: [
@@ -18,9 +19,10 @@ import { UploadsService } from './uploads.service';
   providers: [
     DocumentQueriesResolver,
     DocumentMutationsResolver,
+    DocumentSubscriptionsResolver,
+    ImportsService,
     DocumentService,
     DocumentSqliteRepository,
-    UploadsService,
   ],
   exports: [DocumentSqliteRepository],
 })

@@ -27,7 +27,14 @@ import { AppController } from './app.controller';
     GraphQLModule.forRoot({
       include: [NodeModule, DocumentModule, ImageModule, UserModule],
       autoSchemaFile: true,
-      context: ({ req }) => ({ req }),
+      context: ({ req, connection }) => {
+        if (connection) {
+          return { req: { headers: connection.context } };
+        }
+        // queries and mutations
+        return { req };
+      },
+      installSubscriptionHandlers: true,
     }),
     TypeOrmModule.forRoot(typeOrmConfig),
     UserModule,

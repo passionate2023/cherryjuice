@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { client } from '::graphql/apollo';
 import { LoginForm } from '::auth/login-form';
-import {  Suspense, useEffect, useReducer } from 'react';
+import { Suspense, useEffect, useReducer } from 'react';
 import { Route, useHistory } from 'react-router';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { App } from '::root/app';

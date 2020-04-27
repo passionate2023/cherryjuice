@@ -25,14 +25,16 @@ export class DocumentRepository extends Repository<Document>
   async createDocument({
     fileName,
     filePath,
+    id,
     user,
   }: {
     fileName: string;
     filePath: string;
+    id: string;
     user: User;
   }): Promise<Document> {
     const { size } = fs.statSync(filePath);
-    const document = new Document(user, fileName, size);
+    const document = new Document(user, fileName, size, id);
     await document.save();
     return document;
   }

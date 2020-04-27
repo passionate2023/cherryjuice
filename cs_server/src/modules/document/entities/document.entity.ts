@@ -9,14 +9,13 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { randomUUID10 } from '../../shared';
 import { User } from '../../user/entities/user.entity';
 @Entity()
 @ObjectType()
 export class Document extends BaseEntity {
-  constructor(user: User, name: string, size: number) {
+  constructor(user: User, name: string, size: number, id: string) {
     super();
-    this.id = randomUUID10();
+    this.id = id;
     this.name = name;
     this.user = user;
     this.size = size;

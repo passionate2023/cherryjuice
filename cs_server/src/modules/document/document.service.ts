@@ -43,10 +43,12 @@ export class DocumentService implements IDocumentService {
   async saveDocument({
     fileName,
     filePath,
+    id,
     user,
   }: {
     fileName: string;
     filePath: string;
+    id: string;
     user: User;
   }): Promise<void> {
     await this.openUploadedFile(filePath);
@@ -54,6 +56,7 @@ export class DocumentService implements IDocumentService {
       fileName,
       filePath,
       user,
+      id,
     });
     const { nodesWithImages } = await this.nodeService.saveNodes(document);
     await this.imageService.saveImages(nodesWithImages);
