@@ -1,9 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { randomUUID10 } from '../shared';
 import { createGDriveDownloadTask } from './helpers/uploads';
 import { NodeService } from '../node/node.service';
 import { DocumentService } from './document.service';
-import { PubSub } from 'graphql-subscriptions';
 import { User } from '../user/entities/user.entity';
 import { createWriteStream } from 'fs';
 import { FileUpload } from './helpers/graphql';
@@ -13,7 +12,6 @@ export class ImportsService {
   constructor(
     private nodeService: NodeService,
     private documentService: DocumentService,
-    @Inject('PUB_SUB') private pubSub: PubSub,
   ) {}
 
   async importDocumentsFromGDrive(
@@ -23,25 +21,29 @@ export class ImportsService {
   ): Promise<void> {
     for (const gDriveFileId of gDriveFileIDs) {
       const documentID = randomUUID10();
-      let fileName = '';
+      let document;
       try {
-        DocumentSubscription.dispatch.importPreparing(documentID, fileName);
+        document = await this.documentService.createDocument({
+          fileName: '',
+          size: 0,
+          user,
+          id: documentID,
+        });
         const download = await createGDriveDownloadTask({
           access_token,
           fileId: gDriveFileId,
         });
-        fileName = download.fileName;
+        document.name = download.fileName;
+        await DocumentSubscription.dispatch.importPreparing(document);
+
         await download.start();
-        DocumentSubscription.dispatch.importStarted(documentID, fileName);
+        await DocumentSubscription.dispatch.importStarted(document);
         await this.documentService.saveDocument({
-          id: documentID,
-          user,
-          fileName: fileName,
-          filePath: '/uploads/' + fileName,
+          document,
         });
-        DocumentSubscription.dispatch.importFinished(documentID, fileName);
+        await DocumentSubscription.dispatch.importFinished(document);
       } catch (e) {
-        DocumentSubscription.dispatch.importFailed(documentID, fileName);
+        await DocumentSubscription.dispatch.importFailed(document);
       }
     }
   }
@@ -51,8 +53,15 @@ export class ImportsService {
     user: User,
   ): Promise<void> {
     const documentID = randomUUID10();
+    let document;
     try {
-      DocumentSubscription.dispatch.importPreparing(documentID, filename);
+      document = await this.documentService.createDocument({
+        fileName: filename,
+        size: 0,
+        user,
+        id: documentID,
+      });
+      await DocumentSubscription.dispatch.importPreparing(document);
       const filePath = `${process.env.UPLOADS_PATH}${filename}`;
       await new Promise((resolve, reject) =>
         createReadStream()
@@ -60,16 +69,15 @@ export class ImportsService {
           .on('finish', () => resolve(true))
           .on('error', () => reject(false)),
       );
-      DocumentSubscription.dispatch.importStarted(documentID, filename);
+      await DocumentSubscription.dispatch.importStarted(document);
       await this.documentService.saveDocument({
-        id: documentID,
-        user,
-        fileName: filename,
-        filePath,
+        document,
       });
-      DocumentSubscription.dispatch.importFinished(documentID, filename);
+      await DocumentSubscription.dispatch.importFinished(document);
     } catch (e) {
-      DocumentSubscription.dispatch.importFailed(documentID, filename);
+      await DocumentSubscription.dispatch.importFailed(document);
+      await this.documentService.deleteDocuments([document.id], user);
+      throw e;
     }
   }
 }

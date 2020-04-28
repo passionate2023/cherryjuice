@@ -90,7 +90,9 @@ const LoginForm: React.FC<Props> = () => {
         <form className={modLogin.login__form} ref={formRef}>
           <GoogleOauthButton
             onClick={openConsentWindow({
-              url: (process.env.graphqlAPI || '') + '/auth/google/callback',
+              url:
+                (`http://${process.env.graphqlAPI}` || '') +
+                '/auth/google/callback',
               onAuth: rootActionCreators.setSession,
             })}
           />

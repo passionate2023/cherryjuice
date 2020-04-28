@@ -1,4 +1,4 @@
-import {  UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
 import { Args, Mutation, ResolveField, Resolver } from '@nestjs/graphql';
 import { NodeService } from '../node/node.service';
@@ -26,15 +26,15 @@ export class DocumentMutationsResolver {
   }
 
   @ResolveField(() => Boolean)
-  uploadFile(
+  async uploadFile(
     @Args({
       name: 'file',
       type: () => GraphQLUpload(['application/x-sqlite3']),
     })
     file: FileUpload,
     @GetUserGql() user: User,
-  ): boolean {
-    this.importsService.importFromGraphqlClient(file, user);
+  ): Promise<boolean> {
+    await this.importsService.importFromGraphqlClient(file, user);
     return true;
   }
 

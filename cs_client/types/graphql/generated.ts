@@ -23,6 +23,7 @@ export interface Document {
   name: string;
   node: Array<Node | null>;
   size: number;
+  status?: string;
   updatedAt: number;
 }
 
@@ -105,6 +106,23 @@ export interface SignUpCredentials {
   username: string;
 }
 
+export interface Subscription {
+  document: DocumentSubscription;
+}
+
+export interface DocumentSubscription {
+  documentId: string;
+  documentName: string;
+  eventType: DOCUMENT_SUBSCRIPTIONS;
+}
+
+export enum DOCUMENT_SUBSCRIPTIONS {
+  DOCUMENT_IMPORT_FAILED = 'DOCUMENT_IMPORT_FAILED',
+  DOCUMENT_IMPORT_FINISHED = 'DOCUMENT_IMPORT_FINISHED',
+  DOCUMENT_IMPORT_PREPARING = 'DOCUMENT_IMPORT_PREPARING',
+  DOCUMENT_IMPORT_STARTED = 'DOCUMENT_IMPORT_STARTED',
+}
+
 /*********************************
  *                               *
  *         TYPE RESOLVERS        *
@@ -125,6 +143,8 @@ export interface Resolver {
   DocumentMutation?: DocumentMutationTypeResolver;
   Upload?: GraphQLScalarType;
   UserMutation?: UserMutationTypeResolver;
+  Subscription?: SubscriptionTypeResolver;
+  DocumentSubscription?: DocumentSubscriptionTypeResolver;
 }
 export interface QueryTypeResolver<TParent = any> {
   document?: QueryToDocumentResolver<TParent>;
@@ -154,6 +174,7 @@ export interface DocumentTypeResolver<TParent = any> {
   name?: DocumentToNameResolver<TParent>;
   node?: DocumentToNodeResolver<TParent>;
   size?: DocumentToSizeResolver<TParent>;
+  status?: DocumentToStatusResolver<TParent>;
   updatedAt?: DocumentToUpdatedAtResolver<TParent>;
 }
 
@@ -186,6 +207,10 @@ export interface DocumentToNodeResolver<TParent = any, TResult = any> {
 }
 
 export interface DocumentToSizeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentToStatusResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -437,4 +462,53 @@ export interface UserMutationToSignUpResolver<TParent = any, TResult = any> {
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
+}
+
+export interface SubscriptionTypeResolver<TParent = any> {
+  document?: SubscriptionToDocumentResolver<TParent>;
+}
+
+export interface SubscriptionToDocumentArgs {
+  userId: string;
+}
+export interface SubscriptionToDocumentResolver<TParent = any, TResult = any> {
+  resolve?: (
+    parent: TParent,
+    args: SubscriptionToDocumentArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ) => TResult;
+  subscribe: (
+    parent: TParent,
+    args: SubscriptionToDocumentArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ) => AsyncIterator<TResult>;
+}
+
+export interface DocumentSubscriptionTypeResolver<TParent = any> {
+  documentId?: DocumentSubscriptionToDocumentIdResolver<TParent>;
+  documentName?: DocumentSubscriptionToDocumentNameResolver<TParent>;
+  eventType?: DocumentSubscriptionToEventTypeResolver<TParent>;
+}
+
+export interface DocumentSubscriptionToDocumentIdResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentSubscriptionToDocumentNameResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentSubscriptionToEventTypeResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }

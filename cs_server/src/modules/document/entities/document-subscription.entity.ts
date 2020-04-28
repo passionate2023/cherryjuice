@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { pubSub, SUBSCRIPTIONS } from '../../shared/subscriptions';
+import { Document } from './document.entity';
 
 export enum DOCUMENT_SUBSCRIPTIONS {
   DOCUMENT_IMPORT_FINISHED = 'DOCUMENT_IMPORT_FINISHED',
@@ -13,6 +14,8 @@ registerEnumType(DOCUMENT_SUBSCRIPTIONS, {
 
 @ObjectType()
 export class DocumentSubscription {
+  userId: string;
+
   @Field(() => DOCUMENT_SUBSCRIPTIONS)
   eventType: DOCUMENT_SUBSCRIPTIONS;
 
@@ -21,39 +24,48 @@ export class DocumentSubscription {
 
   @Field(() => ID)
   documentName: string;
-
+  static async publish(
+    eventType: DOCUMENT_SUBSCRIPTIONS,
+    document: Document,
+  ): Promise<void> {
+    const payload: { document: DocumentSubscription } = {
+      document: {
+        documentId: document.id,
+        eventType,
+        documentName: document.name,
+        userId: document.userId,
+      },
+    };
+    await pubSub.publish(SUBSCRIPTIONS.DOCUMENT, payload);
+    if (eventType === DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED)
+      document.status = null;
+    else document.status = eventType;
+    await document.save();
+  }
   static dispatch = {
-    importPreparing(documentId: string, documentName: string): void {
-      const document: DocumentSubscription = {
-        documentId,
-        eventType: DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PREPARING,
-        documentName,
-      };
-      pubSub.publish(SUBSCRIPTIONS.DOCUMENT, { document });
+    async importPreparing(document: Document): Promise<void> {
+      await DocumentSubscription.publish(
+        DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PREPARING,
+        document,
+      );
     },
-    importStarted: (documentId: string, documentName: string): void => {
-      const document: DocumentSubscription = {
-        documentId,
-        eventType: DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_STARTED,
-        documentName,
-      };
-      pubSub.publish(SUBSCRIPTIONS.DOCUMENT, { document });
+    async importStarted(document: Document): Promise<void> {
+      await DocumentSubscription.publish(
+        DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_STARTED,
+        document,
+      );
     },
-    importFinished(documentId: string, documentName: string): void {
-      const document: DocumentSubscription = {
-        documentId,
-        eventType: DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED,
-        documentName,
-      };
-      pubSub.publish(SUBSCRIPTIONS.DOCUMENT, { document });
+    async importFinished(document: Document): Promise<void> {
+      await DocumentSubscription.publish(
+        DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED,
+        document,
+      );
     },
-    importFailed(documentId: string, documentName: string): void {
-      const document: DocumentSubscription = {
-        documentId,
-        eventType: DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FAILED,
-        documentName,
-      };
-      pubSub.publish(SUBSCRIPTIONS.DOCUMENT, { document });
+    async importFailed(document: Document): Promise<void> {
+      await DocumentSubscription.publish(
+        DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FAILED,
+        document,
+      );
     },
   };
 }

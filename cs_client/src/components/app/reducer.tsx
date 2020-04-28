@@ -185,9 +185,14 @@ const reducer = (
       return {
         ...state,
         showImportDocuments: !state.showImportDocuments,
+        showFileSelect: false,
       };
     case actions.TOGGLE_FILE_SELECT:
-      return { ...state, showFileSelect: !state.showFileSelect };
+      return {
+        ...state,
+        showFileSelect: !state.showFileSelect,
+        reloadFiles: new Date().getTime(),
+      };
     case actions.RESIZE_TREE:
       return { ...state, treeSize: action.value };
     case actions.HIDE_POPUPS:

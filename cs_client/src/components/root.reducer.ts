@@ -1,10 +1,8 @@
 import { AuthUser } from '::types/graphql/generated';
+import { localSessionManager } from '::auth/helpers/auth-state';
 
 const initialState = {
-  session: {
-    token: '',
-    user: undefined,
-  },
+  session: localSessionManager.get(),
 };
 
 type TRootState = typeof initialState & { session: AuthUser };

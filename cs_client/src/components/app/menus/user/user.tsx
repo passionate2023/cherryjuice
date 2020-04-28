@@ -13,7 +13,7 @@ type Props = {
   firstName: string;
   lastName: string;
   email: string;
-  picture: string;
+  picture?: string;
   onClose: Function;
 };
 

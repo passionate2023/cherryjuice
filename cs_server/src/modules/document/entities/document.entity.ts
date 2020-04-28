@@ -54,4 +54,8 @@ export class Document extends BaseEntity {
 
   @Field(() => [Node], { nullable: 'items' })
   node: Node[];
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  status: string;
 }

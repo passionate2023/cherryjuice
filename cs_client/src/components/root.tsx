@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { client } from '::graphql/apollo';
+import { useClient } from '::graphql/apollo';
 import { LoginForm } from '::auth/login-form';
 import { Suspense, useEffect, useReducer } from 'react';
 import { Route, useHistory } from 'react-router';
@@ -9,10 +9,7 @@ import { SignUpForm } from '::auth/signup-form';
 import { RootContext } from './root-context';
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import { useOnWindowResize } from '::hooks/use-on-window-resize';
-import {
-  localSessionManager,
-  inMemoryTokenManager,
-} from '::auth/helpers/auth-state';
+import { localSessionManager } from '::auth/helpers/auth-state';
 import {
   rootActionCreators,
   rootInitialState,
@@ -33,9 +30,7 @@ const useProtectedRoutes = ({ session }) => {
     );
     if (!session.token) {
       if (!isOnLoginOrSignUp) history.push('/login');
-      inMemoryTokenManager.clear();
       localSessionManager.clear();
-      client.clearStore();
     } else {
       if (isOnLoginOrSignUp) {
         history.push('/');
@@ -51,13 +46,12 @@ const Root: React.FC<Props> = () => {
   useEffect(() => {
     rootActionCreators.setDispatch(dispatch);
   }, [dispatch]);
-
-  inMemoryTokenManager.set(state.session.token);
+  const apolloClient = useClient(state.session.token);
   useProtectedRoutes({ session: state.session });
   return (
     <RootContext.Provider value={{ session: state.session }}>
       <Suspense fallback={<Void />}>
-        <ApolloProvider client={client}>
+        <ApolloProvider client={apolloClient}>
           {state.session.token && (
             <Route path={'/'} render={() => <App session={state.session} />} />
           )}

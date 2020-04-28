@@ -74,12 +74,9 @@ const useRefreshToken = ({ token }) => {
     if (token) fetch();
   }, []);
   useEffect(() => {
-    if (data) {
-      const session = QUERY_USER.path(data);
-
-      if (session.token) {
-        rootActionCreators.setSession(session);
-      }
+    const session = QUERY_USER.path(data);
+    if (session) {
+      rootActionCreators.setSession(session);
     } else if (error)
       rootActionCreators.setSession({ user: undefined, token: '' });
   }, [data, error]);

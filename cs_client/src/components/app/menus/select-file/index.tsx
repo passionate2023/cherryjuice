@@ -24,12 +24,12 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
     appActionCreators.selectFile(selected.id);
   };
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const { data, loading, error } = useReloadQuery(
+  const { data, loading, error, manualFetch } = useReloadQuery(
     {
       reloadRequestID: reloadFiles,
     },
     {
-      query: QUERY_DOCUMENTS.query,
+      query: QUERY_DOCUMENTS.documentMeta.query,
       queryVariables: undefined,
     },
   );
@@ -68,7 +68,9 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
   const [
     deleteDocumentMutation,
     { loading: deleteLoading, error: deleteError },
-  ] = useMutation(DOCUMENT_MUTATION.deleteDocument);
+  ] = useMutation(DOCUMENT_MUTATION.deleteDocument, {
+    onCompleted: manualFetch,
+  });
   const deleteDocument = useCallback(() => {
     deleteDocumentMutation({
       variables: { documents: { IDs: [selected.id] } },

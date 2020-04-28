@@ -16,7 +16,7 @@ const useReloadQuery = ({ reloadRequestID }, { query, queryVariables }) => {
     reloadQueuesRef.current[reloadRequestID] = true;
     fetch();
   }
-  return { data, error, loading };
+  return { data, error, loading, manualFetch: fetch };
 };
 
 export { useReloadQuery };

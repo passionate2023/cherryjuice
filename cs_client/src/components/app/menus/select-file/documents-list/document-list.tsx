@@ -15,7 +15,7 @@ const DocumentList = ({
   let filesPerFolders: [string, DocumentMeta[]][];
   if (data) {
     filesPerFolders = [
-      QUERY_DOCUMENTS.path(data).reduce((acc, val) => {
+      QUERY_DOCUMENTS.documentMeta.path(data).reduce((acc, val) => {
         if (acc[val.folder]) acc[val.folder].push(val);
         else acc[val.folder] = [val];
 
@@ -36,7 +36,7 @@ const DocumentList = ({
             selected={selected}
             selectedFile={selectedFile}
             setSelected={setSelected}
-           folder={'Default group'}
+            folder={'Default group'}
             files={files}
           />
         ))

@@ -3,6 +3,7 @@
 schema {
     query: Query
     mutation: Mutation
+    subscription: Subscription
 }
 
 type AuthUser {
@@ -17,6 +18,7 @@ type Document {
     name: String!
     node(node_id: Int): [Node]!
     size: Int!
+    status: String
     updatedAt: Float!
 }
 
@@ -24,6 +26,12 @@ type DocumentMutation {
     deleteDocument(documents: DeleteDocumentInputType!): String!
     uploadFile(file: Upload!): Boolean!
     uploadLink(file: UploadLinkInputType!): Boolean!
+}
+
+type DocumentSubscription {
+    documentId: ID!
+    documentName: ID!
+    eventType: DOCUMENT_SUBSCRIPTIONS!
 }
 
 type Mutation {
@@ -56,6 +64,10 @@ type Query {
     user: AuthUser!
 }
 
+type Subscription {
+    document(userId: String!): DocumentSubscription!
+}
+
 type User {
     email: String!
     email_verified: Boolean!
@@ -70,6 +82,13 @@ type User {
 type UserMutation {
     signIn(credentials: SignInCredentials!): AuthUser!
     signUp(credentials: SignUpCredentials!): AuthUser!
+}
+
+enum DOCUMENT_SUBSCRIPTIONS {
+    DOCUMENT_IMPORT_FAILED
+    DOCUMENT_IMPORT_FINISHED
+    DOCUMENT_IMPORT_PREPARING
+    DOCUMENT_IMPORT_STARTED
 }
 
 input DeleteDocumentInputType {

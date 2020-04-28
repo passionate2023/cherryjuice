@@ -39,12 +39,14 @@ const inMemoryTokenManager = (() => {
     authState.token = '';
   };
   const getHeader = () => (authState.token ? `Bearer ${authState.token}` : '');
+  const getToken = () => authState.token;
   const set = token => {
     authState.token = token;
   };
   return {
     clear,
     getHeader,
+    getToken,
     set,
   };
 })();

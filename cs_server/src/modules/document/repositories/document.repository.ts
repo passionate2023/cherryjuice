@@ -1,7 +1,6 @@
-import { IDocumentRepository } from '../interfaces/document.repository';
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
+import { IDocumentRepository } from '../interfaces/document.repository';
 import { Document } from '../entities/document.entity';
-import fs from 'fs';
 import { User } from '../../user/entities/user.entity';
 
 @EntityRepository(Document)
@@ -24,16 +23,15 @@ export class DocumentRepository extends Repository<Document>
 
   async createDocument({
     fileName,
-    filePath,
+    size,
     id,
     user,
   }: {
     fileName: string;
-    filePath: string;
+    size: number;
     id: string;
     user: User;
   }): Promise<Document> {
-    const { size } = fs.statSync(filePath);
     const document = new Document(user, fileName, size, id);
     await document.save();
     return document;

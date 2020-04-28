@@ -1,4 +1,4 @@
-import { Resolver, Subscription } from '@nestjs/graphql';
+import { Args, Resolver, Subscription } from '@nestjs/graphql';
 import { Document } from './entities/document.entity';
 
 import { Injectable, UseGuards } from '@nestjs/common';
@@ -10,8 +10,12 @@ import { pubSub, SUBSCRIPTIONS } from '../shared/subscriptions';
 @Injectable()
 @Resolver(() => Document)
 export class DocumentSubscriptionsResolver {
-  @Subscription(() => DocumentSubscription)
-  document() {
+  @Subscription(() => DocumentSubscription, {
+    filter: (payload, variables) =>
+      payload.document.userId === variables.userId,
+  })
+  // eslint-disable-next-line no-unused-vars
+  document(@Args('userId') user: string) {
     return pubSub.asyncIterator(SUBSCRIPTIONS.DOCUMENT);
   }
 }

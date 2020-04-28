@@ -5,6 +5,9 @@ import { appActionCreators, TState } from '::app/reducer';
 import { AuthUser } from '::types/graphql/generated';
 const AlertModal = React.lazy(() => import('./alert-modal/alert-modal'));
 const UserPopup = React.lazy(() => import('./user/user'));
+const ImportProgress = React.lazy(() =>
+  import('./import-progress/import-progress'),
+);
 const ImportDocuments = React.lazy(() =>
   import('./import-documents/import-documents'),
 );
@@ -49,6 +52,9 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
           onClose={appActionCreators.toggleUserPopup}
           show={state.showUserPopup}
         />
+      </Suspense>
+      <Suspense fallback={<Void />}>
+        <ImportProgress />
       </Suspense>
     </>
   );

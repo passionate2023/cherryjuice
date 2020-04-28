@@ -15,6 +15,7 @@ import modGoogleOauth from '::sass-modules/shared-components/google-oauth-button
 import modAuthBanner from './auth/banner.scss';
 import modUserPopup from './user/user-popup.scss';
 import appModule from '::sass-modules/app.scss';
+import modImportProgress from '::sass-modules/select-file/import-progress.scss';
 export {
   appModule,
   modDrawer,
@@ -33,4 +34,5 @@ export {
   modGoogleOauth,
   modAuthBanner,
   modUserPopup,
+  modImportProgress,
 };
