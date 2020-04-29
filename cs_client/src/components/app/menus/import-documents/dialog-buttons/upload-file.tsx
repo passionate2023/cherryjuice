@@ -15,10 +15,10 @@ const UploadFile: React.FC<{}> = () => {
   const onChange = ({
     target: {
       validity,
-      files: [file],
+      files,
     },
   }) => {
-    if (validity.valid) mutate({ variables: { file } });
+    if (validity.valid) mutate({ variables: { files } });
   };
   const inputRef = useRef<HTMLInputElement>();
   return (
@@ -37,6 +37,7 @@ const UploadFile: React.FC<{}> = () => {
       <input
         type="file"
         required
+        multiple
         onChange={onChange}
         style={{ visibility: 'hidden', width: 0, height: 0 }}
         ref={inputRef}

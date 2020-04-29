@@ -4,9 +4,10 @@ import { FRAGMENT_USER } from '::graphql/fragments';
 
 const DOCUMENT_MUTATION = {
   file: gql`
-    mutation($file: Upload!) {
+    mutation($files: [Upload!]!) {
       document {
-        uploadFile(file: $file)
+          
+        uploadFile(files: $files)
       }
     }
   `,

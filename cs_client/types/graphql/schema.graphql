@@ -24,7 +24,7 @@ type Document {
 
 type DocumentMutation {
     deleteDocument(documents: DeleteDocumentInputType!): String!
-    uploadFile(file: Upload!): Boolean!
+    uploadFile(files: [Upload!]!): Boolean!
     uploadLink(file: UploadLinkInputType!): Boolean!
 }
 

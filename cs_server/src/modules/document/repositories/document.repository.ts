@@ -1,4 +1,9 @@
-import { DeleteResult, EntityRepository, Repository, UpdateResult } from 'typeorm';
+import {
+  DeleteResult,
+  EntityRepository,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { IDocumentRepository } from '../interfaces/document.repository';
 import { Document } from '../entities/document.entity';
 import { User } from '../../user/entities/user.entity';

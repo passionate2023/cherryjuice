@@ -25,7 +25,7 @@ export class NodeService {
     });
   }
 
-  async getNodesMeta(documentId: string, ): Promise<Node[]> {
+  async getNodesMeta(documentId: string): Promise<Node[]> {
     if (debug.loadSqliteDocuments)
       return this.nodeSqliteRepository.getNodesMeta();
     return this.nodeRepository.getNodesMeta(documentId);

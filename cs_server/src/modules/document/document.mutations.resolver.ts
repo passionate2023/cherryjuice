@@ -28,13 +28,13 @@ export class DocumentMutationsResolver {
   @ResolveField(() => Boolean)
   async uploadFile(
     @Args({
-      name: 'file',
-      type: () => GraphQLUpload(['application/x-sqlite3']),
+      name: 'files',
+      type: () => [GraphQLUpload(['application/x-sqlite3'])],
     })
-    file: FileUpload,
+    files: FileUpload[],
     @GetUserGql() user: User,
   ): Promise<boolean> {
-    await this.importsService.importFromGraphqlClient(file, user);
+    await this.importsService.importFromGraphqlClient(files, user);
     return true;
   }
 

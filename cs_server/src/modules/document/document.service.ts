@@ -22,7 +22,6 @@ export class DocumentService implements IDocumentService {
     await this.documentSqliteRepository.openLocalSqliteFile(file_id);
   }
 
-
   async getDocumentsMeta(user: User): Promise<Document[]> {
     if (debug.loadSqliteDocuments)
       return this.documentSqliteRepository.getDocumentsMeta();

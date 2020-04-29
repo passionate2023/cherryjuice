@@ -1,13 +1,14 @@
 import { google } from 'googleapis';
-import fs from 'fs';
+import fs, { createWriteStream } from 'fs';
+import { FileUpload } from '../../document/helpers/graphql';
 
-const createGDriveDownloadTask = async ({
-  access_token,
-  fileId,
-}: {
-  fileId: string;
-  access_token: string;
-}): Promise<{ fileName: string; start: () => Promise<string> }> => {
+type TDownloadTask = Promise<{ fileName: any; start: () => Promise<boolean> }>;
+type TDownloadTaskProps = FileUpload | string;
+type TDownloadTaskCreator = (meta: TDownloadTaskProps) => TDownloadTask;
+
+const createGDriveDownloadTask = (
+  access_token: string,
+): TDownloadTaskCreator => async (fileId: string): TDownloadTask => {
   const oAuth2Client = new google.auth.OAuth2();
   oAuth2Client.setCredentials({
     access_token,
@@ -52,4 +53,22 @@ const createGDriveDownloadTask = async ({
   };
 };
 
-export { createGDriveDownloadTask };
+const createGqlDownloadTask: TDownloadTaskCreator = async (
+  file: FileUpload,
+): TDownloadTask => {
+  const { createReadStream, filename } = await file;
+  const filePath = `${process.env.UPLOADS_PATH}${filename}`;
+  return {
+    fileName: filename,
+    start: async (): Promise<boolean> =>
+      await new Promise((resolve, reject) =>
+        createReadStream()
+          .pipe(createWriteStream(filePath))
+          .on('finish', () => resolve(true))
+          .on('error', () => reject(false)),
+      ),
+  };
+};
+
+export { createGDriveDownloadTask, createGqlDownloadTask };
+export { TDownloadTask, TDownloadTaskCreator, TDownloadTaskProps };

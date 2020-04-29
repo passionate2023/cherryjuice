@@ -1,9 +1,14 @@
 import imageThumbnail from 'image-thumbnail';
 import { Injectable } from '@nestjs/common';
 import { randomUUID10 } from '../shared';
-import { createGDriveDownloadTask } from './helpers/io';
+import {
+  createGDriveDownloadTask,
+  createGqlDownloadTask,
+  TDownloadTaskCreator,
+  TDownloadTaskProps,
+} from './helpers/io';
 import { User } from '../user/entities/user.entity';
-import fs, { createWriteStream } from 'fs';
+import fs from 'fs';
 import { ImageService } from '../image/image.service';
 import { Node } from '../node/entities/node.entity';
 import { NodeSqliteRepository } from '../node/repositories/node.sqlite.repository';
@@ -79,27 +84,50 @@ export class ImportsService {
     }
   }
   async importDocumentsFromGDrive(
-    gDriveFileIDs: string[],
+    meta: string[],
     user: User,
     access_token: string,
   ): Promise<void> {
-    for (const gDriveFileId of gDriveFileIDs) {
-      const documentID = randomUUID10();
-      let document;
+    await this.importDocument(
+      meta,
+      user,
+      createGDriveDownloadTask(access_token),
+    );
+  }
+
+  async importFromGraphqlClient(
+    files: FileUpload[],
+    user: User,
+  ): Promise<void> {
+    await this.importDocument(files, user, createGqlDownloadTask);
+  }
+
+  async importDocument(
+    meta: TDownloadTaskProps[],
+    user: User,
+    taskCreator: TDownloadTaskCreator,
+  ): Promise<void> {
+    const documents: { document: Document; download: any }[] = [];
+    let document;
+    for (const file of meta) {
       try {
         document = await this.documentService.createDocument({
           fileName: '',
           size: 0,
           user,
-          id: documentID,
+          id: randomUUID10(),
         });
-        const download = await createGDriveDownloadTask({
-          access_token,
-          fileId: gDriveFileId,
-        });
+        const download = await taskCreator(file);
         document.name = download.fileName;
+        documents.push({ document, download });
         await importThreshold.preparing(document);
-
+      } catch (e) {
+        await importThreshold.failed(document);
+        throw e;
+      }
+    }
+    for (const { document, download } of documents) {
+      try {
         await download.start();
         await importThreshold.started(document);
         await this.saveDocument({
@@ -108,40 +136,8 @@ export class ImportsService {
         await importThreshold.finished(document);
       } catch (e) {
         await importThreshold.failed(document);
+        throw e;
       }
-    }
-  }
-
-  async importFromGraphqlClient(
-    { filename, createReadStream }: FileUpload,
-    user: User,
-  ): Promise<void> {
-    const documentID = randomUUID10();
-    let document;
-    try {
-      document = await this.documentService.createDocument({
-        fileName: filename,
-        size: 0,
-        user,
-        id: documentID,
-      });
-      await importThreshold.preparing(document);
-      const filePath = `${process.env.UPLOADS_PATH}${filename}`;
-      await new Promise((resolve, reject) =>
-        createReadStream()
-          .pipe(createWriteStream(filePath))
-          .on('finish', () => resolve(true))
-          .on('error', () => reject(false)),
-      );
-      await importThreshold.started(document);
-      await this.saveDocument({
-        document,
-      });
-      await importThreshold.finished(document);
-    } catch (e) {
-      await importThreshold.failed(document);
-      await this.documentService.deleteDocuments([document.id], user);
-      throw e;
     }
   }
 }
