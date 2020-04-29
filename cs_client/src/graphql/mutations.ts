@@ -6,7 +6,6 @@ const DOCUMENT_MUTATION = {
   file: gql`
     mutation($files: [Upload!]!) {
       document {
-          
         uploadFile(files: $files)
       }
     }

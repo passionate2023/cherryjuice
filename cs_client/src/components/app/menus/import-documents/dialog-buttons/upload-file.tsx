@@ -12,12 +12,7 @@ const UploadFile: React.FC<{}> = () => {
     DOCUMENT_MUTATION.file,
   );
 
-  const onChange = ({
-    target: {
-      validity,
-      files,
-    },
-  }) => {
+  const onChange = ({ target: { validity, files } }) => {
     if (validity.valid) mutate({ variables: { files } });
   };
   const inputRef = useRef<HTMLInputElement>();

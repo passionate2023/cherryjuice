@@ -32,7 +32,7 @@ const createGDriveDownloadTask = (
               // @ts-ignore
               .on('end', () => {
                 // console.log('Done downloading file.');
-                resolve(filePath);
+                resolve(true);
               })
               .on('error', err => {
                 // console.error('Error downloading file.');
