@@ -1,14 +1,22 @@
 import { google } from 'googleapis';
-import fs, { createWriteStream } from 'fs';
+import { createWriteStream } from 'fs';
 import { FileUpload } from '../../document/helpers/graphql';
+import crypto from 'crypto';
+import { Readable } from 'stream';
 
-type TDownloadTask = Promise<{ fileName: any; start: () => Promise<boolean> }>;
+type TDownloadResult = { hash: string };
+type TDownloadTask = {
+  fileName: string;
+  readStream: Readable;
+};
 type TDownloadTaskProps = FileUpload | string;
-type TDownloadTaskCreator = (meta: TDownloadTaskProps) => TDownloadTask;
+type TDownloadTaskCreator = (
+  meta: TDownloadTaskProps,
+) => Promise<TDownloadTask>;
 
 const createGDriveDownloadTask = (
   access_token: string,
-): TDownloadTaskCreator => async (fileId: string): TDownloadTask => {
+): TDownloadTaskCreator => async (fileId: string): Promise<TDownloadTask> => {
   const oAuth2Client = new google.auth.OAuth2();
   oAuth2Client.setCredentials({
     access_token,
@@ -18,57 +26,45 @@ const createGDriveDownloadTask = (
 
   return {
     fileName,
-    start: async () =>
-      await drive.files
-        .get({ fileId, alt: 'media' }, { responseType: 'stream' })
-        .then(res => {
-          return new Promise((resolve, reject) => {
-            const filePath = '/uploads/' + fileName;
-            // console.log(`writing to ${filePath}`);
-            const dest = fs.createWriteStream(filePath);
-            let progress = 0;
-
-            res.data
-              // @ts-ignore
-              .on('end', () => {
-                // console.log('Done downloading file.');
-                resolve(true);
-              })
-              .on('error', err => {
-                // console.error('Error downloading file.');
-                reject(err);
-              })
-              .on('data', d => {
-                progress += d.length;
-                if (process.stdout.isTTY) {
-                  // @ts-ignore
-                  process.stdout.clearLine();
-                  process.stdout.cursorTo(0);
-                  process.stdout.write(`Downloaded ${progress} bytes`);
-                }
-              })
-              .pipe(dest);
-          });
-        }),
+    readStream: (
+      await drive.files.get(
+        { fileId, alt: 'media' },
+        { responseType: 'stream' },
+      )
+    ).data as Readable,
   };
 };
+const download = async ({
+  readStream,
+  fileName,
+}: TDownloadTask): Promise<TDownloadResult> => {
+  const writeStream = createWriteStream('/uploads/' + fileName);
+  const hash = crypto.createHash('sha1');
+  hash.setEncoding('hex');
+  return new Promise((resolve, reject) => {
+    readStream
+      .pipe(writeStream)
+      .on('finish', () => {
+        writeStream.end();
+        resolve({ hash: hash.digest('hex') });
+      })
+      .on('error', () => reject({ hash: '' }));
 
+    readStream.on('data', chunk => {
+      hash.update(chunk);
+    });
+  });
+};
 const createGqlDownloadTask: TDownloadTaskCreator = async (
   file: FileUpload,
-): TDownloadTask => {
+): Promise<TDownloadTask> => {
   const { createReadStream, filename } = await file;
-  const filePath = `${process.env.UPLOADS_PATH}${filename}`;
+
   return {
     fileName: filename,
-    start: async (): Promise<boolean> =>
-      await new Promise((resolve, reject) =>
-        createReadStream()
-          .pipe(createWriteStream(filePath))
-          .on('finish', () => resolve(true))
-          .on('error', () => reject(false)),
-      ),
+    readStream: createReadStream(),
   };
 };
 
-export { createGDriveDownloadTask, createGqlDownloadTask };
+export { createGDriveDownloadTask, createGqlDownloadTask, download };
 export { TDownloadTask, TDownloadTaskCreator, TDownloadTaskProps };

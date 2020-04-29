@@ -7,41 +7,46 @@ import {
   pubSub,
   SUBSCRIPTIONS,
 } from '../../shared/subscriptions/subscriptions';
+import { DocumentDTO } from '../imports.service';
 
 const publishGraphqlMessage = async (
   eventType: DOCUMENT_SUBSCRIPTIONS,
-  document: Document,
+  document: Document | DocumentDTO,
 ): Promise<void> => {
   const payload: { document: DocumentSubscription } = {
     document: {
       documentId: document.id,
       eventType,
       documentName: document.name,
-      userId: document.userId,
+      userId: document instanceof Document ? document.userId : document.user.id,
     },
   };
   await pubSub.publish(SUBSCRIPTIONS.DOCUMENT, payload);
 };
 const updateDocumentStatus = async (
   event: DOCUMENT_SUBSCRIPTIONS,
-  document: Document,
+  document: Document | DocumentDTO,
 ): Promise<void> => {
-  if (event === DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED)
-    document.status = null;
-  else document.status = event;
-  await document.save();
+  if (document instanceof Document) {
+    if (event === DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED)
+      document.status = null;
+    else document.status = event;
+    await document.save();
+  }
 };
-const createThreshold = (
-  eventType: DOCUMENT_SUBSCRIPTIONS,
-) => async document => {
+const createThreshold = (eventType: DOCUMENT_SUBSCRIPTIONS) => async (
+  document: Document | DocumentDTO,
+) => {
   await publishGraphqlMessage(eventType, document);
   await updateDocumentStatus(eventType, document);
 };
 const importThreshold = {
+  pending: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PENDING),
   preparing: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PREPARING),
   started: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_STARTED),
   finished: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED),
   failed: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FAILED),
+  duplicate: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_DUPLICATE),
 };
 
 export { importThreshold };

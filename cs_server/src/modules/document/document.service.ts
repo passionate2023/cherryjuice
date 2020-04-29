@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { debug } from '../shared';
 import { DeleteResult } from 'typeorm';
+import { DocumentDTO } from '../imports/imports.service';
 
 @Injectable()
 export class DocumentService implements IDocumentService {
@@ -34,25 +35,15 @@ export class DocumentService implements IDocumentService {
     return this.documentRepository.getDocumentMetaById(user, file_id);
   }
 
-  async createDocument({
-    fileName,
-    size,
-    id,
-    user,
-  }: {
-    fileName: string;
-    size: number;
-    id: string;
-    user: User;
-  }): Promise<Document> {
-    return await this.documentRepository.createDocument({
-      fileName,
-      size,
-      user,
-      id,
-    });
+  async createDocument(documentDTO: DocumentDTO): Promise<Document> {
+    return await this.documentRepository.createDocument(documentDTO);
   }
   async deleteDocuments(IDs: string[], user: User): Promise<DeleteResult> {
     return await this.documentRepository.deleteDocuments(IDs, user);
+  }
+  async findDocumentByHash(hash: string, user: User): Promise<Document> {
+    return await this.documentRepository.findOne({
+      where: { userId: user.id, hash },
+    });
   }
 }

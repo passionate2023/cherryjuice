@@ -14,6 +14,7 @@ type AuthUser {
 type Document {
     createdAt: Float!
     folder: String
+    hash: String!
     id: String!
     name: String!
     node(node_id: Int): [Node]!
@@ -85,8 +86,10 @@ type UserMutation {
 }
 
 enum DOCUMENT_SUBSCRIPTIONS {
+    DOCUMENT_IMPORT_DUPLICATE
     DOCUMENT_IMPORT_FAILED
     DOCUMENT_IMPORT_FINISHED
+    DOCUMENT_IMPORT_PENDING
     DOCUMENT_IMPORT_PREPARING
     DOCUMENT_IMPORT_STARTED
 }

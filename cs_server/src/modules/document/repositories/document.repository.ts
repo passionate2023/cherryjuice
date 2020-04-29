@@ -8,6 +8,7 @@ import { IDocumentRepository } from '../interfaces/document.repository';
 import { Document } from '../entities/document.entity';
 import { User } from '../../user/entities/user.entity';
 import { DOCUMENT_SUBSCRIPTIONS } from '../entities/document-subscription.entity';
+import { DocumentDTO } from '../../imports/imports.service';
 
 @EntityRepository(Document)
 export class DocumentRepository extends Repository<Document>
@@ -28,17 +29,12 @@ export class DocumentRepository extends Repository<Document>
   }
 
   async createDocument({
-    fileName,
+    name,
     size,
     id,
     user,
-  }: {
-    fileName: string;
-    size: number;
-    id: string;
-    user: User;
-  }): Promise<Document> {
-    const document = new Document(user, fileName, size, id);
+  }: DocumentDTO): Promise<Document> {
+    const document = new Document(user, name, size, id);
     await document.save();
     return document;
   }

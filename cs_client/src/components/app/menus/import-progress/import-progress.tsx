@@ -32,12 +32,10 @@ const ImportProgress: React.FC<Props> = () => {
     const unfinishedImports = Object.fromEntries(
       Object.entries(activeImports).filter(
         ([, documentProps]) =>
-          !(
-            documentProps.eventType ===
-              DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED ||
-            documentProps.eventType ===
-              DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FAILED
-          ),
+          documentProps.eventType ===
+            DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_STARTED ||
+          documentProps.eventType ===
+            DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PREPARING,
       ),
     );
     setActiveImports(unfinishedImports);

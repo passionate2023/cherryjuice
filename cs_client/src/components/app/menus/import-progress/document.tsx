@@ -9,6 +9,8 @@ type TDocumentProps = {
 };
 const mapStatus = (value: DOCUMENT_SUBSCRIPTIONS) => {
   switch (value) {
+    case DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PENDING:
+      return 'pending';
     case DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PREPARING:
       return 'preparing';
     case DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_STARTED:
@@ -17,6 +19,8 @@ const mapStatus = (value: DOCUMENT_SUBSCRIPTIONS) => {
       return 'finished';
     case DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FAILED:
       return 'failed';
+    case DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_DUPLICATE:
+      return 'duplicate';
   }
 };
 const cropNampe = (name: string) =>

@@ -4,6 +4,8 @@ import { randomUUID10 } from '../shared';
 import {
   createGDriveDownloadTask,
   createGqlDownloadTask,
+  download,
+  TDownloadTask,
   TDownloadTaskCreator,
   TDownloadTaskProps,
 } from './helpers/io';
@@ -20,6 +22,12 @@ import { FileUpload } from '../document/helpers/graphql';
 import { Image } from '../image/entities/image.entity';
 import { ImageSqliteRepository } from '../image/repositories/image.sqlite.repository';
 import { importThreshold } from './helpers/thresholds';
+export type DocumentDTO = {
+  name: string;
+  size: number;
+  user: User;
+  id: string;
+};
 @Injectable()
 export class ImportsService {
   constructor(
@@ -52,8 +60,10 @@ export class ImportsService {
   }
   private async saveDocument({
     document,
+    hash,
   }: {
     document: Document;
+    hash: string;
   }): Promise<void> {
     const filePath = '/uploads/' + document.name;
     await this.openUploadedFile(filePath);
@@ -61,6 +71,7 @@ export class ImportsService {
     await this.saveImages(nodesWithImages);
     const { size } = fs.statSync(filePath);
     document.size = size;
+    document.hash = hash;
     await document.save();
   }
   async saveImages(nodes: Node[]): Promise<void> {
@@ -107,33 +118,51 @@ export class ImportsService {
     user: User,
     taskCreator: TDownloadTaskCreator,
   ): Promise<void> {
-    const documents: { document: Document; download: any }[] = [];
-    let document;
+    const documents: {
+      document: Document;
+      downloadTask: TDownloadTask;
+    }[] = [];
+
     for (const file of meta) {
+      let document;
       try {
+        const downloadTask = await taskCreator(file);
         document = await this.documentService.createDocument({
-          fileName: '',
+          name: downloadTask.fileName,
           size: 0,
           user,
           id: randomUUID10(),
         });
-        const download = await taskCreator(file);
-        document.name = download.fileName;
-        documents.push({ document, download });
-        await importThreshold.preparing(document);
+
+        documents.push({
+          document,
+          downloadTask,
+        });
+        await importThreshold.pending(document);
       } catch (e) {
         await importThreshold.failed(document);
         throw e;
       }
     }
-    for (const { document, download } of documents) {
+    for (const { document, downloadTask } of documents) {
       try {
-        await download.start();
-        await importThreshold.started(document);
-        await this.saveDocument({
-          document,
-        });
-        await importThreshold.finished(document);
+        await importThreshold.preparing(document);
+        const { hash } = await download(downloadTask);
+        const documentWithSameHash = await this.documentService.findDocumentByHash(
+          hash,
+          user,
+        );
+        if (documentWithSameHash) {
+          await importThreshold.duplicate(document);
+          await this.documentService.deleteDocuments([document.id], user);
+        } else {
+          await importThreshold.started(document);
+          await this.saveDocument({
+            document,
+            hash,
+          });
+          await importThreshold.finished(document);
+        }
       } catch (e) {
         await importThreshold.failed(document);
         throw e;

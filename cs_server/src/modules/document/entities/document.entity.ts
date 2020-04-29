@@ -7,9 +7,12 @@ import {
   Entity,
   ManyToOne,
   PrimaryColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
+
+@Unique(['hash'])
 @Entity()
 @ObjectType()
 export class Document extends BaseEntity {
@@ -48,6 +51,10 @@ export class Document extends BaseEntity {
   @UpdateDateColumn({ type: 'timestamp' })
   @Field(() => Float)
   updatedAt: number;
+
+  @Column({ nullable: true })
+  @Field()
+  hash: string;
 
   @Field({ nullable: true })
   folder: string;
