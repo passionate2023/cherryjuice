@@ -14,9 +14,10 @@ export class DocumentService implements IDocumentService {
     private documentSqliteRepository: DocumentSqliteRepository,
     @InjectRepository(DocumentRepository)
     private documentRepository: DocumentRepository,
-
   ) {}
-
+  async onModuleInit(): Promise<void> {
+    await this.documentRepository.markUnfinishedImportsAsFailed();
+  }
   async openLocalSqliteFile(file_id: string): Promise<void> {
     await this.documentSqliteRepository.openLocalSqliteFile(file_id);
   }

@@ -24,6 +24,6 @@ import { ImportsModule } from '../imports/imports.module';
     DocumentService,
     DocumentSqliteRepository,
   ],
-  exports: [DocumentSqliteRepository,DocumentService],
+  exports: [DocumentSqliteRepository, DocumentService],
 })
 export class DocumentModule {}

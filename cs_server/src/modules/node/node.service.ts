@@ -5,7 +5,6 @@ import { Node } from './entities/node.entity';
 import { NodeRepository } from './repositories/node.repository';
 import { debug } from '../shared';
 
-
 @Injectable()
 export class NodeService {
   constructor(

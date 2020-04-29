@@ -1,9 +1,12 @@
 import { Document } from '../../document/entities/document.entity';
 import {
   DOCUMENT_SUBSCRIPTIONS,
-  DocumentSubscription
+  DocumentSubscription,
 } from '../../document/entities/document-subscription.entity';
-import { pubSub, SUBSCRIPTIONS } from '../../shared/subscriptions/subscriptions';
+import {
+  pubSub,
+  SUBSCRIPTIONS,
+} from '../../shared/subscriptions/subscriptions';
 
 const publishGraphqlMessage = async (
   eventType: DOCUMENT_SUBSCRIPTIONS,
@@ -35,15 +38,9 @@ const createThreshold = (
   await updateDocumentStatus(eventType, document);
 };
 const importThreshold = {
-  preparing: createThreshold(
-    DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PREPARING,
-  ),
-  started: createThreshold(
-    DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_STARTED,
-  ),
-  finished: createThreshold(
-    DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED,
-  ),
+  preparing: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PREPARING),
+  started: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_STARTED),
+  finished: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED),
   failed: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FAILED),
 };
 

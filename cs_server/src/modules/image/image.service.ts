@@ -80,12 +80,9 @@ export class ImageService {
         thumbnail: true,
       })
       .then(nodes => {
-
         return nodes.map(({ thumbnail }) => {
           return bufferToPng(thumbnail);
         });
       });
   }
-
-
 }

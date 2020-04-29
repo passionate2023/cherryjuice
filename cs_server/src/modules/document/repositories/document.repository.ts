@@ -1,7 +1,8 @@
-import { DeleteResult, EntityRepository, Repository } from 'typeorm';
+import { DeleteResult, EntityRepository, Repository, UpdateResult } from 'typeorm';
 import { IDocumentRepository } from '../interfaces/document.repository';
 import { Document } from '../entities/document.entity';
 import { User } from '../../user/entities/user.entity';
+import { DOCUMENT_SUBSCRIPTIONS } from '../entities/document-subscription.entity';
 
 @EntityRepository(Document)
 export class DocumentRepository extends Repository<Document>
@@ -43,6 +44,15 @@ export class DocumentRepository extends Repository<Document>
       .delete()
       .where('userId = :userId', { userId: user.id })
       .andWhereInIds(IDs)
+      .execute();
+  }
+
+  async markUnfinishedImportsAsFailed(): Promise<UpdateResult> {
+    const queryBuilder = this.createQueryBuilder('document');
+    return await queryBuilder
+      .update(Document)
+      .set({ status: DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FAILED })
+      .where('document.status is not null')
       .execute();
   }
 }
