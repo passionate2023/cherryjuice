@@ -1,15 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { DocumentSqliteRepository } from './repositories/document.sqlite.repository';
 import { Document } from './entities/document.entity';
-import { NodeService } from '../node/node.service';
-import { ImageService } from '../image/image.service';
 import { DocumentRepository } from './repositories/document.repository';
 import { IDocumentService } from './interfaces/document.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { debug } from '../shared';
 import { DeleteResult } from 'typeorm';
-import fs from 'fs';
 
 @Injectable()
 export class DocumentService implements IDocumentService {
@@ -17,17 +14,13 @@ export class DocumentService implements IDocumentService {
     private documentSqliteRepository: DocumentSqliteRepository,
     @InjectRepository(DocumentRepository)
     private documentRepository: DocumentRepository,
-    private nodeService: NodeService,
-    private imageService: ImageService,
+
   ) {}
 
   async openLocalSqliteFile(file_id: string): Promise<void> {
     await this.documentSqliteRepository.openLocalSqliteFile(file_id);
   }
 
-  async openUploadedFile(filePath: string): Promise<void> {
-    await this.documentSqliteRepository.openUploadedFile(filePath);
-  }
 
   async getDocumentsMeta(user: User): Promise<Document[]> {
     if (debug.loadSqliteDocuments)
@@ -59,16 +52,6 @@ export class DocumentService implements IDocumentService {
       id,
     });
   }
-  async saveDocument({ document }: { document: Document }): Promise<void> {
-    const filePath = '/uploads/' + document.name;
-    await this.openUploadedFile(filePath);
-    const { nodesWithImages } = await this.nodeService.saveNodes(document);
-    await this.imageService.saveImages(nodesWithImages);
-    const { size } = fs.statSync(filePath);
-    document.size = size;
-    await document.save();
-  }
-
   async deleteDocuments(IDs: string[], user: User): Promise<DeleteResult> {
     return await this.documentRepository.deleteDocuments(IDs, user);
   }

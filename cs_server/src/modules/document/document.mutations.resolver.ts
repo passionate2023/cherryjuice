@@ -9,7 +9,7 @@ import { User } from '../user/entities/user.entity';
 import { DocumentMutation } from './entities/document-mutation.entity';
 import { UploadLinkInputType } from './input-types/upload-link.input-type';
 import { DeleteDocumentInputType } from './input-types/delete-document.input-type';
-import { ImportsService } from './imports.service';
+import { ImportsService } from '../imports/imports.service';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => DocumentMutation)

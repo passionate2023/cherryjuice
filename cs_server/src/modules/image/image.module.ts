@@ -6,11 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ImageRepository } from './repositories/image.repository';
 
 @Module({
-  providers: [ImageSqliteRepository,ImageService],
+  providers: [ImageSqliteRepository, ImageService],
   imports: [
     forwardRef(() => DocumentModule),
     TypeOrmModule.forFeature([ImageRepository]),
   ],
-  exports: [ImageService],
+  exports: [ImageService, ImageSqliteRepository],
 })
 export class ImageModule {}

@@ -8,22 +8,22 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DocumentMutationsResolver } from './document.mutations.resolver';
 import { DocumentQueriesResolver } from './document.queries.resolver';
 import { DocumentSubscriptionsResolver } from './document.subscriptions.resolver';
-import { ImportsService } from './imports.service';
+import { ImportsModule } from '../imports/imports.module';
 
 @Module({
   imports: [
     NodeModule,
     ImageModule,
     TypeOrmModule.forFeature([DocumentRepository]),
+    ImportsModule,
   ],
   providers: [
     DocumentQueriesResolver,
     DocumentMutationsResolver,
     DocumentSubscriptionsResolver,
-    ImportsService,
     DocumentService,
     DocumentSqliteRepository,
   ],
-  exports: [DocumentSqliteRepository],
+  exports: [DocumentSqliteRepository,DocumentService],
 })
 export class DocumentModule {}

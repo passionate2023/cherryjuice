@@ -2,8 +2,6 @@ import { aHtmlToHtml } from './helpers/rendering/query/ahtml-to-html';
 import { NodeSqliteRepository } from './repositories/node.sqlite.repository';
 import { Injectable } from '@nestjs/common';
 import { Node } from './entities/node.entity';
-import { Document } from '../document/entities/document.entity';
-import { copyProperties } from '../document/helpers';
 import { NodeRepository } from './repositories/node.repository';
 import { debug } from '../shared';
 
@@ -38,22 +36,5 @@ export class NodeService {
     if (debug.loadSqliteDocuments)
       return this.nodeSqliteRepository.getNodeMetaById(node_id);
     return this.nodeRepository.getNodeMetaById(node_id, documentId);
-  }
-
-  async saveNodes(newDocument: Document): Promise<{ nodesWithImages: Node[] }> {
-
-    const nodes = await this.nodeSqliteRepository.getNodesMeta();
-    const nodesWithImages = [];
-    for (const nodeToBeSaved of nodes) {
-      nodeToBeSaved.ahtml = JSON.stringify(
-        await this.nodeSqliteRepository.getAHtml(String(nodeToBeSaved.node_id)),
-      );
-      const node = new Node();
-      copyProperties(nodeToBeSaved, node, {});
-      node.document = newDocument;
-      await node.save();
-      if (node.has_image) nodesWithImages.push(node);
-    }
-    return { nodesWithImages };
   }
 }

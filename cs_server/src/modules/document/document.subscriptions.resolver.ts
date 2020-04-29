@@ -4,7 +4,7 @@ import { Document } from './entities/document.entity';
 import { Injectable, UseGuards } from '@nestjs/common';
 import { DocumentSubscription } from './entities/document-subscription.entity';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
-import { pubSub, SUBSCRIPTIONS } from '../shared/subscriptions';
+import { pubSub, SUBSCRIPTIONS } from '../shared/subscriptions/subscriptions';
 
 @UseGuards(GqlAuthGuard)
 @Injectable()

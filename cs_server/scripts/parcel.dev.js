@@ -79,7 +79,9 @@ const run = ({ entryFiles, options }) => {
     state.bundle = compiledBundle;
   });
   bundler.on('buildError', error => {
-    console.parcel.error(error);
+    console.parcel.error(
+      typeof error === 'string' ? error : JSON.stringify(error),
+    );
     console.parcel.error(`waiting for changes to restart\n`);
   });
   bundler.on('buildEnd', () => {
