@@ -29,6 +29,7 @@ const inputs: TextInputProps[] = [
     required: true,
     variableName: 'emailOrUsername',
     inputRef: createRef(),
+    idPrefix: 'login',
   },
   {
     inputRef: createRef(),
@@ -37,6 +38,7 @@ const inputs: TextInputProps[] = [
     type: 'password',
     icon: Icons.misc.lock,
     required: true,
+    idPrefix: 'login',
   },
 ];
 

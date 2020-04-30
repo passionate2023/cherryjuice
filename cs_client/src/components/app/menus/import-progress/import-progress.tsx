@@ -33,6 +33,8 @@ const ImportProgress: React.FC<Props> = () => {
       Object.entries(activeImports).filter(
         ([, documentProps]) =>
           documentProps.eventType ===
+            DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PENDING ||
+          documentProps.eventType ===
             DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_STARTED ||
           documentProps.eventType ===
             DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PREPARING,

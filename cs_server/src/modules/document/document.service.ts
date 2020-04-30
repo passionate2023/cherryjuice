@@ -8,6 +8,7 @@ import { User } from '../user/entities/user.entity';
 import { debug } from '../shared';
 import { DeleteResult } from 'typeorm';
 import { DocumentDTO } from '../imports/imports.service';
+import { importThreshold } from '../imports/helpers/thresholds';
 
 @Injectable()
 export class DocumentService implements IDocumentService {
@@ -39,7 +40,14 @@ export class DocumentService implements IDocumentService {
     return await this.documentRepository.createDocument(documentDTO);
   }
   async deleteDocuments(IDs: string[], user: User): Promise<DeleteResult> {
-    return await this.documentRepository.deleteDocuments(IDs, user);
+    const deleteResult = await this.documentRepository.deleteDocuments(
+      IDs,
+      user,
+    );
+    IDs.forEach(id => {
+      importThreshold.deleted({ id, name: '', size: 0, user });
+    });
+    return deleteResult;
   }
   async findDocumentByHash(hash: string, user: User): Promise<Document> {
     return await this.documentRepository.findOne({

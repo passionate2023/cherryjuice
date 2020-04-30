@@ -3,6 +3,7 @@ import { RootContext } from '::root/root-context';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 import { QUERY_DOCUMENTS } from '::graphql/queries';
 import { SUBSCRIPTION_DOCUMENT } from '::graphql/subscriptions';
+import { DOCUMENT_SUBSCRIPTIONS } from '::types/graphql/generated';
 
 const useData = ({ activeImports, setActiveImports }) => {
   const { session } = useContext(RootContext);
@@ -34,11 +35,15 @@ const useData = ({ activeImports, setActiveImports }) => {
   );
   useEffect(() => {
     const document = SUBSCRIPTION_DOCUMENT.path(subscriptionData);
-    if (document)
-      setActiveImports({
+    if (document) {
+      const newState = {
         ...activeImports,
         [document.documentId]: document,
-      });
+      };
+      if (document.eventType === DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_DELETED)
+        delete newState[document.documentId];
+      setActiveImports(newState);
+    }
   }, [subscriptionData]);
 };
 

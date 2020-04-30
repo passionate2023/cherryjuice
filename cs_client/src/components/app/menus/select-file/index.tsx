@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { appActionCreators } from '../../reducer';
 import { QUERY_DOCUMENTS } from '::graphql/queries';
@@ -11,9 +11,7 @@ import { DocumentList } from './documents-list/document-list';
 import { CircleButton } from '::shared-components/buttons/circle-button';
 import { modDialog } from '::sass-modules/index';
 import { Icons, Icon } from '::shared-components/icon';
-import { useMutation } from '@apollo/react-hooks';
-import { DOCUMENT_MUTATION } from '::graphql/mutations';
-import { AlertType } from '::types/react';
+import { useDeleteFile } from '::hooks/graphql/delete-file';
 
 const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
   const [selected, setSelected] = useState({ id: '', path: '' });
@@ -65,17 +63,11 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
       disabled: selected.id === selectedFile || !selected.id,
     },
   ];
-  const [
-    deleteDocumentMutation,
-    { loading: deleteLoading, error: deleteError },
-  ] = useMutation(DOCUMENT_MUTATION.deleteDocument, {
-    onCompleted: manualFetch,
-  });
-  const deleteDocument = useCallback(() => {
-    deleteDocumentMutation({
-      variables: { documents: { IDs: [selected.id] } },
-    });
-  }, [selected.id]);
+
+  const { deleteDocument, deleteLoading } = useDeleteFile(
+    [selected.id],
+    manualFetch,
+  );
   const rightHeaderButtons = [
     (deleteLoading || selected.id) && (
       <CircleButton
@@ -87,15 +79,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
       </CircleButton>
     ),
   ];
-  useEffect(() => {
-    if (deleteError)
-      appActionCreators.setAlert({
-        title: `Could not delete document`,
-        description: 'Please refresh the page',
-        type: AlertType.Error,
-        error: deleteError,
-      });
-  }, [deleteError]);
+
   return (
     <DialogWithTransition
       dialogTitle={'Select Document'}

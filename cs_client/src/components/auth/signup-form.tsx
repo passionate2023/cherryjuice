@@ -24,6 +24,7 @@ const inputs: TextInputProps[] = [
     required: true,
     variableName: 'firstName',
     inputRef: createRef(),
+    idPrefix: 'sign-up',
   },
   {
     label: 'last name',
@@ -33,6 +34,7 @@ const inputs: TextInputProps[] = [
     required: true,
     variableName: 'lastName',
     inputRef: createRef(),
+    idPrefix: 'sign-up',
   },
   {
     label: 'username',
@@ -42,6 +44,7 @@ const inputs: TextInputProps[] = [
     required: true,
     variableName: 'username',
     inputRef: createRef(),
+    idPrefix: 'sign-up',
   },
   {
     label: 'email',
@@ -50,6 +53,7 @@ const inputs: TextInputProps[] = [
     required: true,
     variableName: 'email',
     inputRef: createRef(),
+    idPrefix: 'sign-up',
   },
   {
     inputRef: createRef(),
@@ -60,6 +64,7 @@ const inputs: TextInputProps[] = [
     icon: Icons.misc.lock,
     minLength: 8,
     required: true,
+    idPrefix: 'sign-up',
   },
 ];
 

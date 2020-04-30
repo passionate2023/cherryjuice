@@ -34,11 +34,15 @@ const updateDocumentStatus = async (
     await document.save();
   }
 };
+const EVENTS_TO_NOT_PERSIST = {
+  [DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_DELETED]: true,
+};
 const createThreshold = (eventType: DOCUMENT_SUBSCRIPTIONS) => async (
   document: Document | DocumentDTO,
-) => {
+): Promise<void> => {
   await publishGraphqlMessage(eventType, document);
-  await updateDocumentStatus(eventType, document);
+  if (!EVENTS_TO_NOT_PERSIST[eventType])
+    await updateDocumentStatus(eventType, document);
 };
 const importThreshold = {
   pending: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PENDING),
@@ -47,6 +51,7 @@ const importThreshold = {
   finished: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED),
   failed: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FAILED),
   duplicate: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_DUPLICATE),
+  deleted: createThreshold(DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_DELETED),
 };
 
 export { importThreshold };

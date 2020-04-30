@@ -47,7 +47,7 @@ const deleteFile = (fileName: string): void => {
   }
 };
 
-const cleanUploadsFolder = () => {
+const cleanUploadsFolder = (): void => {
   const files = fs.readdirSync(UPLOADS_FOLDER);
   for (const fileName of files) {
     deleteFile(fileName);
@@ -62,6 +62,11 @@ const download = async ({
   const hash = crypto.createHash('sha1');
   hash.setEncoding('hex');
   return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      writeStream.end();
+      readStream.destroy();
+      reject({ hash: '' });
+    }, 60 * 1000 * 2);
     readStream
       .pipe(writeStream)
       .on('finish', () => {

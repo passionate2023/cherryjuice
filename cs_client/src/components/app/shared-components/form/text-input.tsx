@@ -15,6 +15,8 @@ export type TextInputProps = {
   minLength?: number;
   patterns?: TPattern[];
   required?: boolean;
+  autoComplete?: boolean;
+  idPrefix: string;
 };
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -26,6 +28,8 @@ const TextInput: React.FC<TextInputProps> = ({
   minLength = 0,
   required,
   inputRef,
+  autoComplete,
+  idPrefix,
 }) => {
   useCustomValidityMessage({ inputRef, patterns });
   return (
@@ -42,10 +46,12 @@ const TextInput: React.FC<TextInputProps> = ({
         ref={inputRef}
         type={type}
         placeholder={label}
-        aria-label={ariaLabel}
         pattern={patternToString(patterns)}
         minLength={minLength}
         required={required}
+        autoComplete={Boolean(autoComplete).toString()}
+        aria-label={ariaLabel || label}
+        id={`${idPrefix}-${label.replace(' ', '-')}`}
       />
     </span>
   );
