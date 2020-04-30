@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useCallback } from 'react';
 import { modSelectFile } from '::sass-modules/index';
 import { DocumentMeta } from '::types/generated';
 import { Document } from './document';
@@ -7,18 +6,10 @@ import { Document } from './document';
 const DocumentGroup = ({
   folder,
   files,
-  selected,
+  selectedIDs,
   selectedFile,
-  setSelected,
+  onSelect,
 }) => {
-  const onSelect = useCallback(
-    e => {
-      let selectedId = e.target.parentElement.dataset.id;
-      let selectedPath = e.target.parentElement.dataset.path;
-      setSelected({ id: selectedId, path: selectedPath });
-    },
-    [selectedFile],
-  );
   return (
     <div className={modSelectFile.selectFile__fileFolder}>
       <span className={modSelectFile.selectFile__fileFolder__name}>
@@ -30,9 +21,8 @@ const DocumentGroup = ({
             {...fileProps}
             key={fileProps.id}
             onSelect={onSelect}
-            selected={selected}
+            selectedIDs={selectedIDs}
             selectedFile={selectedFile}
-            folder={'Default group'}
           />
         ))}
       </span>

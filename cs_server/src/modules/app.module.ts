@@ -2,7 +2,8 @@ import {
   MiddlewareConsumer,
   Module,
   NestModule,
-  RequestMethod, ValidationPipe,
+  RequestMethod,
+  ValidationPipe,
 } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { DocumentModule } from './document/document.module';

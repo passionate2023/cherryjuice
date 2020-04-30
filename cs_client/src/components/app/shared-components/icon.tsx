@@ -47,6 +47,10 @@ const Icons = {
     storage: 'storage',
     'google-drive': 'google-drive',
     delete: 'delete',
+    'delete-sweep': 'delete-sweep',
+    clear: 'clear',
+    cancel: 'cancel',
+    document: 'document',
   },
   misc: {
     email: 'email',

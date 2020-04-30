@@ -16,4 +16,4 @@ const useProperErrorMessage = (error: ApolloError): string => {
   return message;
 };
 
-export {useProperErrorMessage}
+export { useProperErrorMessage };

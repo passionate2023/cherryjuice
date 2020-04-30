@@ -6,8 +6,8 @@ import { DocumentGroup } from './document-group';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
 
 const DocumentList = ({
-  selected,
-  setSelected,
+  selectedIDs,
+  onSelect,
   selectedFile,
   data,
   loading,
@@ -33,9 +33,9 @@ const DocumentList = ({
         filesPerFolders.map(([folder, files]) => (
           <DocumentGroup
             key={folder}
-            selected={selected}
+            selectedIDs={selectedIDs}
             selectedFile={selectedFile}
-            setSelected={setSelected}
+            onSelect={onSelect}
             folder={'Default group'}
             files={files}
           />

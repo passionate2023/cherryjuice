@@ -18,7 +18,7 @@ const useDeleteFile = (IDs: string[], onCompleted?: (data: any) => void) => {
     deleteDocumentMutation({
       variables: { documents: { IDs } },
     });
-  }, IDs);
+  }, [IDs]);
   useEffect(() => {
     if (deleteError)
       appActionCreators.setAlert({

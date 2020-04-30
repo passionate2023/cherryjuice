@@ -2,11 +2,11 @@ import * as React from 'react';
 import { modSelectFile } from '::sass-modules/index';
 import { dateToFormattedString } from '::helpers/time';
 import { EventHandler } from 'react';
+import { useMouseHold } from '::hooks/dom/mouse-hold';
 type Props = {
-  selected: { id: string };
+  selectedIDs: string[];
   id: string;
   selectedFile: string;
-  folder: string;
   name: string;
   size: number;
   updatedAt: number;
@@ -15,24 +15,27 @@ type Props = {
 
 const Document: React.FC<Props> = ({
   size,
-  folder,
   id,
   name,
-  selected,
+  selectedIDs,
   selectedFile,
   updatedAt,
   onSelect,
 }) => {
+  const mouseHoldHandlers = useMouseHold({
+    onMouseHold: onSelect,
+    callbackProps: { id, holding: true },
+    minHoldDuration: 750,
+  });
   return (
-    <span
+    <div
+      {...mouseHoldHandlers}
       className={`${modSelectFile.selectFile__file} ${
-        selected.id === id
+        selectedIDs.includes(id)
           ? modSelectFile.selectFile__fileSelectedCandidate
           : ''
       } ${selectedFile === id ? modSelectFile.selectFile__fileSelected : ''}`}
-      data-id={id}
-      data-folder={folder}
-      onClick={onSelect}
+      onClick={() => onSelect({ id })}
       key={id}
       tabIndex={0}
     >
@@ -42,7 +45,7 @@ const Document: React.FC<Props> = ({
         <span>{size / 1024}kb</span>
         <span>{dateToFormattedString(new Date(updatedAt))}</span>
       </span>
-    </span>
+    </div>
   );
 };
 

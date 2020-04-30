@@ -12,33 +12,9 @@ import { CircleButton } from '::shared-components/buttons/circle-button';
 import { modDialog } from '::sass-modules/index';
 import { Icons, Icon } from '::shared-components/icon';
 import { useDeleteFile } from '::hooks/graphql/delete-file';
+import { useRef } from 'react';
 
-const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
-  const [selected, setSelected] = useState({ id: '', path: '' });
-  const history = useHistory();
-  const close = appActionCreators.toggleFileSelect;
-  const open = () => {
-    history.push('/');
-    appActionCreators.selectFile(selected.id);
-  };
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const { data, loading, error, manualFetch } = useReloadQuery(
-    {
-      reloadRequestID: reloadFiles,
-    },
-    {
-      query: QUERY_DOCUMENTS.documentMeta.query,
-      queryVariables: undefined,
-    },
-  );
-  useQueryTimeout(
-    {
-      queryData: data,
-      queryError: error,
-      queryVariables: reloadFiles,
-    },
-    { resourceName: 'files' },
-  );
+const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
   const buttonsLeft = [
     {
       label: 'reload',
@@ -60,26 +36,97 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
     {
       label: 'open',
       onClick: open,
-      disabled: selected.id === selectedFile || !selected.id,
+      disabled: selectedIDs[0] === selectedFile || selectedIDs.length !== 1,
     },
   ];
+  return { buttonsLeft, buttonsRight };
+};
 
-  const { deleteDocument, deleteLoading } = useDeleteFile(
-    [selected.id],
-    manualFetch,
+const useData = ({ reloadFiles }) => {
+  const { data, loading, error, manualFetch } = useReloadQuery(
+    {
+      reloadRequestID: reloadFiles,
+    },
+    {
+      query: QUERY_DOCUMENTS.documentMeta.query,
+      queryVariables: undefined,
+    },
   );
-  const rightHeaderButtons = [
-    (deleteLoading || selected.id) && (
-      <CircleButton
-        key={Icons.material.delete}
-        className={modDialog.dialog__header__fileButton}
-        onClick={deleteDocument}
-      >
-        <Icon name={Icons.material.delete} small={true} />
-      </CircleButton>
-    ),
-  ];
+  useQueryTimeout(
+    {
+      queryData: data,
+      queryError: error,
+      queryVariables: reloadFiles,
+    },
+    { resourceName: 'files' },
+  );
+  return { data, loading, manualFetch };
+};
 
+const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
+  const [selectedIDs, setSelectedIDs] = useState([]);
+  const history = useHistory();
+  const close = appActionCreators.toggleFileSelect;
+  const open = () => {
+    history.push('/');
+    appActionCreators.selectFile(selectedIDs[0]);
+  };
+  const { buttonsLeft, buttonsRight } = createButtons({
+    selectedIDs,
+    selectedFile,
+    close,
+    open,
+  });
+
+  const { loading, data, manualFetch } = useData({ reloadFiles });
+  const { deleteDocument } = useDeleteFile(selectedIDs, manualFetch);
+  const holdingRef = useRef(false);
+  const rightHeaderButtons = [
+    <>
+      {holdingRef.current && (
+        <CircleButton
+          key={Icons.material.clear}
+          className={modDialog.dialog__header__fileButton}
+          onClick={() => {
+            setSelectedIDs([selectedIDs.pop()]);
+            holdingRef.current = false;
+          }}
+        >
+          <Icon name={Icons.material.cancel} small={true} />
+        </CircleButton>
+      )}
+      {!!selectedIDs.length && (
+        <CircleButton
+          key={Icons.material.delete}
+          className={modDialog.dialog__header__fileButton}
+          onClick={deleteDocument}
+        >
+          <Icon
+            name={
+              selectedIDs.length > 1
+                ? Icons.material['delete-sweep']
+                : Icons.material.delete
+            }
+            small={true}
+          />
+        </CircleButton>
+      )}
+    </>,
+  ];
+  const onSelect = ({ id, holding }) => {
+    const unselectElement = selectedIDs.includes(id);
+    const clickDuringHolding = !holding && holdingRef.current;
+    if (holding) {
+      setSelectedIDs(selectedIDs => [...selectedIDs, id]);
+      holdingRef.current = true;
+    } else if (clickDuringHolding) {
+      if (unselectElement)
+        setSelectedIDs(selectedIDs => [...selectedIDs.filter(x => x !== id)]);
+      else setSelectedIDs(selectedIDs => [...selectedIDs, id]);
+    } else {
+      setSelectedIDs([id]);
+    }
+  };
   return (
     <DialogWithTransition
       dialogTitle={'Select Document'}
@@ -92,9 +139,9 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
     >
       <ErrorBoundary>
         <DocumentList
-          setSelected={setSelected}
+          onSelect={onSelect}
+          selectedIDs={selectedIDs}
           selectedFile={selectedFile}
-          selected={selected}
           data={data}
           loading={loading}
         />
