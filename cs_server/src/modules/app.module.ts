@@ -2,7 +2,7 @@ import {
   MiddlewareConsumer,
   Module,
   NestModule,
-  RequestMethod,
+  RequestMethod, ValidationPipe,
 } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { DocumentModule } from './document/document.module';
@@ -19,6 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from '../config/typeorm.config';
 import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -39,6 +40,12 @@ import { AppController } from './app.controller';
     TypeOrmModule.forRoot(typeOrmConfig),
     UserModule,
     DocumentModule,
+  ],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
   ],
   controllers: [AppController],
 })

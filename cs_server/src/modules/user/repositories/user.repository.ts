@@ -58,9 +58,9 @@ class UserRepository extends Repository<User> {
       await user.save();
     } catch (e) {
       if (e.code === '23505') {
-        throw new ConflictException(e.detail);
+        throw new ConflictException('Username or email exists');
       } else {
-        throw new InternalServerErrorException('database error');
+        throw new InternalServerErrorException('Database error');
       }
     }
 
@@ -77,10 +77,15 @@ class UserRepository extends Repository<User> {
     let hash: string;
     const user = await this.getUser({ emailOrUsername });
     if (user) {
+      if (!user.salt && user.thirdParty) {
+        throw new UnauthorizedException(
+          `Please use ${user.thirdParty} to login`,
+        );
+      }
       hash = await hashPassword(password, user.salt);
     }
     if (!(hash && hash === user.password)) {
-      throw new UnauthorizedException('invalid credentials');
+      throw new UnauthorizedException('Invalid credentials');
     }
     return UserRepository.getAuthUser(user);
   }
@@ -143,7 +148,7 @@ class UserRepository extends Repository<User> {
       if (e.code === '23505') {
         throw new ConflictException(e.detail);
       } else {
-        throw new InternalServerErrorException('database error');
+        throw new InternalServerErrorException('Database error');
       }
     }
 

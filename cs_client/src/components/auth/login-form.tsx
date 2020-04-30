@@ -86,8 +86,8 @@ const LoginForm: React.FC<Props> = () => {
   useDefaultValues(inputs);
   return (
     <AuthScreen>
+      <Banner error={error} />
       <div className={modLogin.login__card}>
-        <Banner message={error?.graphQLErrors[0]?.message} />
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
           <GoogleOauthButton

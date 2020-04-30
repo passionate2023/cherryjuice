@@ -10,7 +10,7 @@ import { Field, InputType } from '@nestjs/graphql';
 
 const regex = {
   password: {
-    pattern: /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+    pattern: /^((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
     description: `password: at least 1 upper case letter, at least 1 lower case letter, at least 1 number or special character`,
   },
   username: {
@@ -18,9 +18,13 @@ const regex = {
     description:
       'username: only a-zA-Z0-9._ allowed, no _ or . at teh beginning, no __ or _. or ._ or .. inside,  no _ or . at the end',
   },
-  name: {
+  firstName: {
     pattern: /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/,
-    description: 'only letters',
+    description: 'first-name: only letters',
+  },
+  lastName: {
+    pattern: /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/,
+    description: 'last-name: only letters',
   },
 };
 
@@ -30,14 +34,14 @@ export class SignUpCredentials {
   @IsString()
   @IsNotEmpty()
   @MaxLength(30)
-  @Matches(regex.name.pattern, { message: regex.name.description })
+  @Matches(regex.firstName.pattern, { message: regex.firstName.description })
   firstName: string;
 
   @Field()
   @IsString()
   @IsNotEmpty()
   @MaxLength(30)
-  @Matches(regex.name.pattern, { message: regex.name.description })
+  @Matches(regex.lastName.pattern, { message: regex.lastName.description })
   lastName: string;
 
   @Field()

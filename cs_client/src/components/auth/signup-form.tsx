@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import * as React from 'react';
-import { modLogin } from '::sass-modules/index';
+import { modAuthBanner, modLogin } from '::sass-modules/index';
 import { ICON_COLOR, Icons } from '::shared-components/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { TextInput, TextInputProps } from '::shared-components/form/text-input';
@@ -14,6 +14,7 @@ import { LinearProgress } from '::shared-components/linear-progress';
 import { Banner } from '::auth/banner';
 import { Link } from 'react-router-dom';
 import { rootActionCreators } from '::root/root.reducer';
+import { useDefaultValues } from '::hooks/use-default-form-values';
 
 const inputs: TextInputProps[] = [
   {
@@ -103,10 +104,10 @@ const SignUpForm: React.FC<Props> = () => {
     const session = USER_MUTATION.signUp.path(data);
     if (session?.token) rootActionCreators.setSession(session);
   }, [data]);
-
+  useDefaultValues(inputs);
   return (
     <AuthScreen>
-      <Banner message={error?.graphQLErrors[0]?.message} />
+      <Banner error={error} className={modAuthBanner.bannerSignUp} />
       <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
