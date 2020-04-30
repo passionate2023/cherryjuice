@@ -50,4 +50,8 @@ export class DocumentSqliteRepository implements IDocumentRepository {
     file_id = adaptFileID(file_id, this.documents);
     return this.documents.get(file_id);
   }
+
+  async closeUploadedFile(): Promise<void> {
+    await this.sqlite.db?.close();
+  }
 }

@@ -3,7 +3,10 @@ import { createWriteStream } from 'fs';
 import { FileUpload } from '../../document/helpers/graphql';
 import crypto from 'crypto';
 import { Readable } from 'stream';
+import * as fs from 'fs';
+import { Logger } from '@nestjs/common';
 
+const logger = new Logger('io');
 type TDownloadResult = { hash: string };
 type TDownloadTask = {
   fileName: string;
@@ -34,11 +37,28 @@ const createGDriveDownloadTask = (
     ).data as Readable,
   };
 };
+const UPLOADS_FOLDER = '/uploads/';
+const uploadsFolder = (fileName: string): string => UPLOADS_FOLDER + fileName;
+const deleteFile = (fileName: string): void => {
+  try {
+    fs.unlinkSync(uploadsFolder(fileName));
+  } catch (e) {
+    logger.error(e);
+  }
+};
+
+const cleanUploadsFolder = () => {
+  const files = fs.readdirSync(UPLOADS_FOLDER);
+  for (const fileName of files) {
+    deleteFile(fileName);
+  }
+};
+
 const download = async ({
   readStream,
   fileName,
 }: TDownloadTask): Promise<TDownloadResult> => {
-  const writeStream = createWriteStream('/uploads/' + fileName);
+  const writeStream = createWriteStream(uploadsFolder(fileName));
   const hash = crypto.createHash('sha1');
   hash.setEncoding('hex');
   return new Promise((resolve, reject) => {
@@ -48,7 +68,10 @@ const download = async ({
         writeStream.end();
         resolve({ hash: hash.digest('hex') });
       })
-      .on('error', () => reject({ hash: '' }));
+      .on('error', () => {
+        writeStream.end();
+        reject({ hash: '' });
+      });
 
     readStream.on('data', chunk => {
       hash.update(chunk);
@@ -66,5 +89,10 @@ const createGqlDownloadTask: TDownloadTaskCreator = async (
   };
 };
 
-export { createGDriveDownloadTask, createGqlDownloadTask, download };
+export {
+  createGDriveDownloadTask,
+  createGqlDownloadTask,
+  download,
+  cleanUploadsFolder,
+};
 export { TDownloadTask, TDownloadTaskCreator, TDownloadTaskProps };

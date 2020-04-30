@@ -4,6 +4,7 @@ import { randomUUID10 } from '../shared';
 import {
   createGDriveDownloadTask,
   createGqlDownloadTask,
+  cleanUploadsFolder,
   download,
   TDownloadTask,
   TDownloadTaskCreator,
@@ -38,8 +39,15 @@ export class ImportsService {
     private imageSqliteRepository: ImageSqliteRepository,
   ) {}
 
+  onModuleInit(): void {
+    cleanUploadsFolder();
+  }
+
   async openUploadedFile(filePath: string): Promise<void> {
     await this.documentSqliteRepository.openUploadedFile(filePath);
+  }
+  async closeUploadedFile(): Promise<void> {
+    await this.documentSqliteRepository.closeUploadedFile();
   }
   private async saveNodes(
     newDocument: Document,
@@ -167,6 +175,8 @@ export class ImportsService {
         await importThreshold.failed(document);
         throw e;
       }
+      await this.closeUploadedFile();
+      cleanUploadsFolder();
     }
   }
 }
