@@ -176,7 +176,7 @@ export class ImportsService {
         throw e;
       }
       await this.closeUploadedFile();
-      cleanUploadsFolder();
     }
+    cleanUploadsFolder();
   }
 }

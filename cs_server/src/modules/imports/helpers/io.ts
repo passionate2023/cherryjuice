@@ -54,32 +54,44 @@ const cleanUploadsFolder = (): void => {
   }
 };
 
-const download = async ({
-  readStream,
-  fileName,
-}: TDownloadTask): Promise<TDownloadResult> => {
+const download = async (
+  { readStream, fileName }: TDownloadTask,
+  timeout = 3000,
+): Promise<TDownloadResult> => {
   const writeStream = createWriteStream(uploadsFolder(fileName));
   const hash = crypto.createHash('sha1');
   hash.setEncoding('hex');
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      writeStream.end();
-      readStream.destroy();
-      reject({ hash: '' });
-    }, 60 * 1000 * 2);
+  const state = {
+    numberOfChunks: 0,
+    lastNumberOfChunks: 0,
+  };
+  return new Promise<TDownloadResult>((resolve, reject) => {
+    const intervalHandle = setInterval(() => {
+      if (state.numberOfChunks > state.lastNumberOfChunks) {
+        state.lastNumberOfChunks = state.numberOfChunks;
+      } else {
+        clearInterval(intervalHandle);
+        writeStream.end();
+        readStream.destroy();
+        reject({ hash: '' });
+      }
+    }, timeout);
     readStream
       .pipe(writeStream)
       .on('finish', () => {
+        clearInterval(intervalHandle);
         writeStream.end();
         resolve({ hash: hash.digest('hex') });
       })
       .on('error', () => {
+        clearInterval(intervalHandle);
         writeStream.end();
         reject({ hash: '' });
       });
 
     readStream.on('data', chunk => {
       hash.update(chunk);
+      state.numberOfChunks++;
     });
   });
 };
