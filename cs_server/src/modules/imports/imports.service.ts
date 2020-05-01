@@ -155,7 +155,7 @@ export class ImportsService {
     for (const { document, downloadTask } of documents) {
       try {
         await importThreshold.preparing(document);
-        const { hash } = await download(downloadTask);
+        const { hash } = await download(downloadTask, document);
         const documentWithSameHash = await this.documentService.findDocumentByHash(
           hash,
           user,

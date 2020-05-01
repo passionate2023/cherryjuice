@@ -51,6 +51,7 @@ const Icons = {
     clear: 'clear',
     cancel: 'cancel',
     document: 'document',
+    stop: 'stop',
   },
   misc: {
     email: 'email',

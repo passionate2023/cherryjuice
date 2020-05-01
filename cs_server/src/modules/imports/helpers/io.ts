@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import { Readable } from 'stream';
 import * as fs from 'fs';
 import { Logger } from '@nestjs/common';
+import { Document } from '../../document/entities/document.entity';
 
 const logger = new Logger('io');
 type TDownloadResult = { hash: string };
@@ -56,6 +57,7 @@ const cleanUploadsFolder = (): void => {
 
 const download = async (
   { readStream, fileName }: TDownloadTask,
+  document: Document,
   timeout = 3000,
 ): Promise<TDownloadResult> => {
   const writeStream = createWriteStream(uploadsFolder(fileName));
@@ -66,14 +68,21 @@ const download = async (
     lastNumberOfChunks: 0,
   };
   return new Promise<TDownloadResult>((resolve, reject) => {
-    const intervalHandle = setInterval(() => {
-      if (state.numberOfChunks > state.lastNumberOfChunks) {
-        state.lastNumberOfChunks = state.numberOfChunks;
-      } else {
+    const intervalHandle = setInterval(async () => {
+      const isDocumentDeleted = await document
+        .reload()
+        .then(() => false)
+        .catch(() => true);
+      if (
+        isDocumentDeleted ||
+        state.numberOfChunks <= state.lastNumberOfChunks
+      ) {
         clearInterval(intervalHandle);
         writeStream.end();
         readStream.destroy();
         reject({ hash: '' });
+      } else {
+        state.lastNumberOfChunks = state.numberOfChunks;
       }
     }, timeout);
     readStream

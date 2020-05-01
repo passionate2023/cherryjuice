@@ -18,7 +18,7 @@ const mapDocuments = (activeImports: TActiveImports): TDocumentProps[] =>
     key: document.documentId,
     name: document.documentName,
     id: document.documentId,
-    status: document.eventType,
+    eventType: document.eventType,
   }));
 
 const ImportProgress: React.FC<Props> = () => {
@@ -58,7 +58,11 @@ const ImportProgress: React.FC<Props> = () => {
       <div className={modImportProgress.importProgress__header__buttons} />
       <div className={modImportProgress.importProgress__documents}>
         {documents.map(document => (
-          <Document key={document.id} {...document} />
+          <Document
+            key={document.id}
+            {...document}
+            clearFinishedDocuments={clearFinishedDocuments}
+          />
         ))}
       </div>
     </div>
