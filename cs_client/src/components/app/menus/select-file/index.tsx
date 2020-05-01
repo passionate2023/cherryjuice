@@ -79,40 +79,42 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
   });
 
   const { loading, data, manualFetch } = useData({ reloadFiles });
-  const { deleteDocument } = useDeleteFile(selectedIDs, manualFetch);
+  const documentsMeta = QUERY_DOCUMENTS.documentMeta.path(data);
+  const { deleteDocument } = useDeleteFile({
+    IDs: selectedIDs,
+    onCompleted: () => {
+      manualFetch();
+      if (selectedIDs.includes(selectedFile)) {
+        history.push('/');
+        appActionCreators.selectFile('');
+      }
+    },
+  });
   const holdingRef = useRef(false);
   const rightHeaderButtons = [
-    <>
-      {holdingRef.current && (
-        <CircleButton
-          key={Icons.material.clear}
-          className={modDialog.dialog__header__fileButton}
-          onClick={() => {
-            setSelectedIDs([selectedIDs.pop()]);
-            holdingRef.current = false;
-          }}
-        >
-          <Icon name={Icons.material.cancel} small={true} />
-        </CircleButton>
-      )}
-      {!!selectedIDs.length && (
-        <CircleButton
-          key={Icons.material.delete}
-          className={modDialog.dialog__header__fileButton}
-          onClick={deleteDocument}
-        >
-          <Icon
-            name={
-              selectedIDs.length > 1
-                ? Icons.material['delete-sweep']
-                : Icons.material.delete
-            }
-            small={true}
-          />
-        </CircleButton>
-      )}
-    </>,
-  ];
+    documentsMeta.length && holdingRef.current && (
+      <CircleButton
+        key={Icons.material.clear}
+        className={modDialog.dialog__header__fileButton}
+        onClick={() => {
+          setSelectedIDs([selectedIDs.pop()]);
+          holdingRef.current = false;
+        }}
+      >
+        <Icon name={Icons.material.cancel} small={true} />
+      </CircleButton>
+    ),
+    documentsMeta.length && holdingRef.current && (
+      <CircleButton
+        disabled={!selectedIDs.length}
+        key={Icons.material.delete}
+        className={modDialog.dialog__header__fileButton}
+        onClick={deleteDocument}
+      >
+        <Icon name={Icons.material['delete']} small={true} />
+      </CircleButton>
+    ),
+  ].filter(Boolean);
   const onSelect = ({ id, holding }) => {
     const unselectElement = selectedIDs.includes(id);
     const clickDuringHolding = !holding && holdingRef.current;
@@ -142,7 +144,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
           onSelect={onSelect}
           selectedIDs={selectedIDs}
           selectedFile={selectedFile}
-          data={data}
+          documentsMeta={documentsMeta}
           loading={loading}
         />
       </ErrorBoundary>

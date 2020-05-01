@@ -1,5 +1,5 @@
 // a fork of https://github.com/sdoomz/react-google-picker/blob/master/src/react-google-picker.js
-import React, { useMemo, useRef } from 'react';
+import React, { useContext, useMemo, useRef } from 'react';
 import { GooglePickerResult } from '::types/google';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { useCallback } from 'react';
@@ -11,6 +11,7 @@ import { useLoadGoogleSDK } from '::hooks/use-google-sdk';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
 import { modImportDocument } from '::sass-modules/index';
 import { Icons, Icon } from '::shared-components/icon';
+import { RootContext } from '::root/root-context';
 
 type Props = {};
 
@@ -36,6 +37,7 @@ const GoogleDrivePicker: React.FC<Props> = () => {
     },
     [tokenRef.current],
   );
+  const { secrets } = useContext(RootContext);
   const onAuthFailed = error =>
     appActionCreators.setAlert({
       error,
@@ -53,6 +55,8 @@ const GoogleDrivePicker: React.FC<Props> = () => {
         onAuthenticate,
         onChange: onFileSelect,
         onAuthFailed,
+        clientId: secrets.google_client_id,
+        developerKey: secrets.google_api_key,
       }),
     [],
   );

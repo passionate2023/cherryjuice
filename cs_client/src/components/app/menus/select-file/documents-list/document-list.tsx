@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { QUERY_DOCUMENTS } from '::graphql/queries';
 import { DocumentMeta } from '::types/generated';
 import { modSelectFile } from '::sass-modules/index';
 import { DocumentGroup } from './document-group';
@@ -9,27 +8,23 @@ const DocumentList = ({
   selectedIDs,
   onSelect,
   selectedFile,
-  data,
+  documentsMeta,
   loading,
 }) => {
-  let filesPerFolders: [string, DocumentMeta[]][];
-  if (data) {
-    filesPerFolders = [
-      QUERY_DOCUMENTS.documentMeta.path(data).reduce((acc, val) => {
-        if (acc[val.folder]) acc[val.folder].push(val);
-        else acc[val.folder] = [val];
+  const filesPerFolders: [string, DocumentMeta[]][] = [
+    documentsMeta.reduce((acc, val) => {
+      if (acc[val.folder]) acc[val.folder].push(val);
+      else acc[val.folder] = [val];
 
-        return acc;
-      }, {}),
-    ].map(Object.entries)[0];
-  }
+      return acc;
+    }, {}),
+  ].map(Object.entries)[0];
 
   return (
     <div className={modSelectFile.selectFile}>
       {loading ? (
         <SpinnerCircle />
       ) : (
-        filesPerFolders &&
         filesPerFolders.map(([folder, files]) => (
           <DocumentGroup
             key={folder}

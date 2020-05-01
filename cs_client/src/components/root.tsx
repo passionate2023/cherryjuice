@@ -49,7 +49,7 @@ const Root: React.FC<Props> = () => {
   const apolloClient = useClient(state.session.token);
   useProtectedRoutes({ session: state.session });
   return (
-    <RootContext.Provider value={{ session: state.session }}>
+    <RootContext.Provider value={state}>
       <Suspense fallback={<Void />}>
         <ApolloProvider client={apolloClient}>
           {state.session.token && (

@@ -1,8 +1,9 @@
 import { createContext } from 'react';
-import { AuthUser } from '::types/graphql/generated';
+import { TRootState } from '::root/root.reducer';
 
-const RootContext = createContext<{ session: AuthUser }>({
+const RootContext = createContext<TRootState>({
   session: undefined,
+  secrets: undefined,
 });
 
 export { RootContext };

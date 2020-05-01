@@ -5,6 +5,7 @@ import { GetUserGql } from './decorators/get-user.decorator';
 import { User } from './entities/user.entity';
 import { AuthUser } from './entities/auth.user';
 import { UserService } from './user.service';
+import { Secrets } from './entities/secrets';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => AuthUser)
@@ -14,5 +15,9 @@ export class UserQueriesResolver {
   @Query(() => AuthUser)
   async user(@GetUserGql() user: User): Promise<AuthUser> {
     return this.userService.getAuthUser(user);
+  }
+  @Query(() => Secrets)
+  secrets(): Secrets {
+    return this.userService.getSecrets();
   }
 }

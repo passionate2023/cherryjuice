@@ -9,17 +9,23 @@ import { Document } from '../entities/document.entity';
 import { User } from '../../user/entities/user.entity';
 import { DOCUMENT_SUBSCRIPTIONS } from '../entities/document-subscription.entity';
 import { DocumentDTO } from '../../imports/imports.service';
+import { NotFoundException } from '@nestjs/common';
 
 @EntityRepository(Document)
 export class DocumentRepository extends Repository<Document>
   implements IDocumentRepository {
   async getDocumentMetaById(user: User, file_id: string): Promise<Document> {
-    return this.findOne({
+    const document = await this.findOne({
       where: {
         id: file_id,
         userId: user.id,
       },
     });
+    if (!document)
+      throw new NotFoundException(
+        `document ${file_id} does not exist in your library`,
+      );
+    return document;
   }
 
   async getDocumentsMeta(user: User): Promise<Document[]> {

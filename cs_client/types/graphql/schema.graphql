@@ -62,7 +62,13 @@ type Node {
 
 type Query {
     document(file_id: String): [Document]!
+    secrets: Secrets!
     user: AuthUser!
+}
+
+type Secrets {
+    google_api_key: String!
+    google_client_id: String!
 }
 
 type Subscription {

@@ -4,7 +4,13 @@ import { useCallback, useEffect } from 'react';
 import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
 
-const useDeleteFile = (IDs: string[], onCompleted?: (data: any) => void) => {
+const useDeleteFile = ({
+  IDs,
+  onCompleted,
+}: {
+  IDs: string[];
+  onCompleted?: (data: any) => void;
+}) => {
   const [
     deleteDocumentMutation,
     { loading: deleteLoading, error: deleteError },

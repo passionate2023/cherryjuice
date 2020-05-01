@@ -76,9 +76,15 @@ const useRefreshToken = ({ token }) => {
   useEffect(() => {
     const session = QUERY_USER.path(data);
     if (session) {
-      rootActionCreators.setSession(session);
-    } else if (error)
+      rootActionCreators.setSession(session.session);
+      rootActionCreators.setSecrets(session.secrets);
+    } else if (error) {
       rootActionCreators.setSession({ user: undefined, token: '' });
+      rootActionCreators.setSecrets({
+        google_api_key: undefined,
+        google_client_id: undefined,
+      });
+    }
   }, [data, error]);
 };
 

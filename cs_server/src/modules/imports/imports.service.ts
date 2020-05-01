@@ -162,7 +162,9 @@ export class ImportsService {
         );
         if (documentWithSameHash) {
           await importThreshold.duplicate(document);
-          await this.documentService.deleteDocuments([document.id], user);
+          await this.documentService.deleteDocuments([document.id], user, {
+            notifySubscribers: false,
+          });
         } else {
           await importThreshold.started(document);
           await this.saveDocument({

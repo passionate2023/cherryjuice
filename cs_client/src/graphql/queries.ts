@@ -1,6 +1,10 @@
 import gql from 'graphql-tag';
 import { NodeMeta, DocumentMeta, NodeImage, Node } from '::types/generated';
-import { AuthUser, DOCUMENT_SUBSCRIPTIONS } from '::types/graphql/generated';
+import {
+  AuthUser,
+  DOCUMENT_SUBSCRIPTIONS,
+  Secrets,
+} from '::types/graphql/generated';
 import { FRAGMENT_USER } from '::graphql/fragments';
 
 const QUERY_NODE_META = {
@@ -64,7 +68,7 @@ const QUERY_NODE_CONTENT = {
 
 const QUERY_DOCUMENTS = {
   documentMeta: {
-    path: (data): DocumentMeta[] => data.document,
+    path: (data): DocumentMeta[] => data?.document || [],
     query: gql`
       query documents_meta($file_id: String) {
         document(file_id: $file_id) {
@@ -97,14 +101,18 @@ const QUERY_DOCUMENTS = {
 };
 
 const QUERY_USER = {
-  path: (data): AuthUser => data?.user,
+  path: (data): { session: AuthUser; secrets: Secrets } => data,
   query: gql`
     query user {
-      user {
+      session: user {
         user {
           ...UserInfo
         }
         token
+      }
+      secrets {
+        google_api_key
+        google_client_id
       }
     }
     ${FRAGMENT_USER.userInfo}

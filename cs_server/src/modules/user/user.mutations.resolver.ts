@@ -1,5 +1,4 @@
 import { Args, Mutation, ResolveField, Resolver } from '@nestjs/graphql';
-import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 import { AuthUser } from './entities/auth.user';
 import { UserMutation } from './entities/user.mutation.entity';
@@ -18,14 +17,14 @@ export class UserMutationsResolver {
   async signIn(
     @Args({ name: 'credentials', type: () => SignInCredentials })
     signInInput: SignInCredentials,
-  ): Promise<{ user: User; token: string }> {
+  ): Promise<AuthUser> {
     return this.userService.signIn(signInInput);
   }
   @ResolveField(() => AuthUser)
   async signUp(
     @Args({ name: 'credentials', type: () => SignUpCredentials })
     signInInput: SignUpCredentials,
-  ): Promise<{ user: User; token: string }> {
+  ): Promise<AuthUser> {
     return this.userService.signUp(signInInput);
   }
 }

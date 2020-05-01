@@ -31,7 +31,7 @@ const mapStatus = (value: DOCUMENT_SUBSCRIPTIONS) => {
 const cropNampe = (name: string) =>
   name.length < 19 ? name : `${name.substring(0, 18)}...`;
 const Document: React.FC<TDocumentProps> = ({ name, status, id }) => {
-  const { deleteDocument } = useDeleteFile([id]);
+  const { deleteDocument } = useDeleteFile({ IDs: [id] });
   const history = useHistory();
   const open = () => {
     history.push('/');

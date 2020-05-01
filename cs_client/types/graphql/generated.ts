@@ -13,6 +13,7 @@ import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
  *******************************/
 export interface Query {
   document: Array<Document | null>;
+  secrets: Secrets;
   user: AuthUser;
 }
 
@@ -46,6 +47,11 @@ export interface Node {
   node_id: number;
   node_title_styles: string;
   updatedAt: number;
+}
+
+export interface Secrets {
+  google_api_key: string;
+  google_client_id: string;
 }
 
 export interface AuthUser {
@@ -141,6 +147,7 @@ export interface Resolver {
   Query?: QueryTypeResolver;
   Document?: DocumentTypeResolver;
   Node?: NodeTypeResolver;
+  Secrets?: SecretsTypeResolver;
   AuthUser?: AuthUserTypeResolver;
   User?: UserTypeResolver;
   Mutation?: MutationTypeResolver;
@@ -152,6 +159,7 @@ export interface Resolver {
 }
 export interface QueryTypeResolver<TParent = any> {
   document?: QueryToDocumentResolver<TParent>;
+  secrets?: QueryToSecretsResolver<TParent>;
   user?: QueryToUserResolver<TParent>;
 }
 
@@ -165,6 +173,10 @@ export interface QueryToDocumentResolver<TParent = any, TResult = any> {
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
+}
+
+export interface QueryToSecretsResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface QueryToUserResolver<TParent = any, TResult = any> {
@@ -321,6 +333,22 @@ export interface NodeToNode_title_stylesResolver<TParent = any, TResult = any> {
 }
 
 export interface NodeToUpdatedAtResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface SecretsTypeResolver<TParent = any> {
+  google_api_key?: SecretsToGoogle_api_keyResolver<TParent>;
+  google_client_id?: SecretsToGoogle_client_idResolver<TParent>;
+}
+
+export interface SecretsToGoogle_api_keyResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface SecretsToGoogle_client_idResolver<
+  TParent = any,
+  TResult = any
+> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 

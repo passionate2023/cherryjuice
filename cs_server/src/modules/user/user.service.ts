@@ -7,6 +7,7 @@ import { SignInCredentials } from './dto/sign-in-credentials.dto';
 import { AuthUser } from './entities/auth.user';
 import { User } from './entities/user.entity';
 import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
+import { Secrets } from './entities/secrets';
 
 export type OauthJson = {
   sub: string;
@@ -34,14 +35,25 @@ export class UserService {
     const { user, payload } = await this.userRepository.validateUserPassword(
       authCredentialsDto,
     );
-    return { token: this.jwtService.sign(payload), user };
+    return {
+      token: this.jwtService.sign(payload),
+      user,
+    };
   }
 
   async getAuthUser(user_: User): Promise<AuthUser> {
     const { user, payload } = await UserRepository.getAuthUser(user_);
-    return { token: this.jwtService.sign(payload), user };
+    return {
+      token: this.jwtService.sign(payload),
+      user,
+    };
   }
-
+  getSecrets(): Secrets {
+    return {
+      google_api_key: process.env.OAUTH_GOOGLE_DEVELOPER_KEY,
+      google_client_id: process.env.OAUTH_GOOGLE_CLIENT_ID,
+    };
+  }
   async oauthLogin(
     thirdPartyId: string,
     provider: string,

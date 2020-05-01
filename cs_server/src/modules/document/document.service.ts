@@ -39,14 +39,19 @@ export class DocumentService implements IDocumentService {
   async createDocument(documentDTO: DocumentDTO): Promise<Document> {
     return await this.documentRepository.createDocument(documentDTO);
   }
-  async deleteDocuments(IDs: string[], user: User): Promise<DeleteResult> {
+  async deleteDocuments(
+    IDs: string[],
+    user: User,
+    { notifySubscribers } = { notifySubscribers: true },
+  ): Promise<DeleteResult> {
     const deleteResult = await this.documentRepository.deleteDocuments(
       IDs,
       user,
     );
-    IDs.forEach(id => {
-      importThreshold.deleted({ id, name: '', size: 0, user });
-    });
+    if (notifySubscribers)
+      IDs.forEach(id => {
+        importThreshold.deleted({ id, name: '', size: 0, user });
+      });
     return deleteResult;
   }
   async findDocumentByHash(hash: string, user: User): Promise<Document> {
