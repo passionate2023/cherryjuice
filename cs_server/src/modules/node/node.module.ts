@@ -9,7 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   providers: [NodeService, NodeResolver, NodeSqliteRepository],
-  exports: [NodeService],
+  exports: [NodeService, NodeSqliteRepository],
   imports: [
     forwardRef(() => DocumentModule),
     ImageModule,

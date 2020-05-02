@@ -3,6 +3,7 @@ import modDialog from '::sass-modules/shared-components/dialog.scss';
 import { EventHandler } from 'react';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
 export type TDialogFooterButton = {
+  component?: () => React.Component;
   label: string | JSX.Element;
   disabled: boolean;
   onClick: EventHandler<any>;
@@ -23,16 +24,21 @@ const DialogFooter: React.FC<TDialogFooterProps> = ({
   return (
     <footer className={`${modDialog.dialog__footer}`}>
       <div>
-        {dialogFooterLeftButtons.map(({ onClick, label, disabled }, i) => (
-          <ButtonSquare
-            key={i}
-            className={''}
-            onClick={onClick}
-            disabled={disabled}
-          >
-            {label}
-          </ButtonSquare>
-        ))}
+        {dialogFooterLeftButtons.map(
+          ({ component, onClick, label, disabled }, i) =>
+            component ? (
+              component()
+            ) : (
+              <ButtonSquare
+                key={i}
+                className={''}
+                onClick={onClick}
+                disabled={disabled}
+              >
+                {label}
+              </ButtonSquare>
+            ),
+        )}
       </div>
       <div>
         {dialogFooterRightButtons.map(({ onClick, label, disabled }, i) => (

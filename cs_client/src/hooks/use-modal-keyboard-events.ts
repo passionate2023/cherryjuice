@@ -1,12 +1,21 @@
 import { useEffect } from 'react';
 
 const KEYCODE_TAB = 9;
-const createFocusTrapper = ({ element }) => {
+const createFocusTrapper = ({
+  element,
+  focusableElementsSelector = [],
+}: {
+  element: HTMLElement;
+  focusableElementsSelector?: string[];
+}) => {
   // https://hiddedevries.nl/en/blog/2017-01-29-using-javascript-to-trap-focus-in-an-element
   const focusableEls: Element[] = Array.from(
     element.querySelectorAll(
       // 'a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])',
-      'button:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])',
+      (focusableElementsSelector.length
+        ? focusableElementsSelector.join(', ') + ', '
+        : '' )+
+            'button:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])',
     ),
   );
   const firstFocusableEl = focusableEls.find(
@@ -17,7 +26,8 @@ const createFocusTrapper = ({ element }) => {
     .find(el => window.getComputedStyle(el).display !== 'none');
   return ({ e }) => {
     const isTabPressed = e.key === 'Tab' || e.keyCode === KEYCODE_TAB;
-    if (isTabPressed)
+    if (isTabPressed){
+
       if (e.shiftKey) {
         /* shift + tab */ if (document.activeElement === firstFocusableEl) {
           lastFocusableEl.focus();
@@ -29,10 +39,15 @@ const createFocusTrapper = ({ element }) => {
           e.preventDefault();
         }
       }
+    }
   };
 };
 
-const setupKeyboardShortcuts = ({ onCloseDialog, selector }) => {
+const setupKeyboardShortcuts = ({
+  onCloseDialog,
+  selector,
+  focusableElementsSelector,
+}) => {
   const handleEscape = ({ e }) => {
     if (e.key === 'Escape') {
       onCloseDialog();
@@ -40,6 +55,7 @@ const setupKeyboardShortcuts = ({ onCloseDialog, selector }) => {
   };
   const trapFocus = createFocusTrapper({
     element: document.querySelector(selector),
+    focusableElementsSelector,
   });
   const eventHandler = e => {
     handleEscape({ e });
@@ -49,13 +65,18 @@ const setupKeyboardShortcuts = ({ onCloseDialog, selector }) => {
   return () => document.removeEventListener('keydown', eventHandler);
 };
 
-const useModalKeyboardEvents = ({ modalSelector, onCloseModal }) => {
+const useModalKeyboardEvents = ({
+  modalSelector,
+  onCloseModal,
+  focusableElementsSelector = [],
+}) => {
   useEffect(() => {
     const cleanEventHandlers = [];
     cleanEventHandlers.push(
       setupKeyboardShortcuts({
         onCloseDialog: onCloseModal,
         selector: modalSelector,
+        focusableElementsSelector,
       }),
     );
     return () => cleanEventHandlers.forEach(cleanCallBack => cleanCallBack());

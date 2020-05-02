@@ -15,6 +15,9 @@ $primary-light: rgba(#790604, 0.2);
 $primary-lighter: rgba(#790604, 0.1);
 $primary-lightest: rgba(#790604, 0.05);
 $primary-dark: #3b0503;
+$primary-dark1: #330101;
+$primary-dark2: #270101;
+$primary-dark3: #180101;
 $toolbar-bg-light: #f7f3ec;
 $dialog-border: 0.5px $primary-light solid;
 $box-shadow1: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
@@ -33,6 +36,11 @@ $ZI-scrim: 6;
 $ZI-resize-bubble: 5;
 $ZI-info-bar: 5;
 $ZI-linear-progress: 5;
+$ZI-user-popup: 4;
+$ZI-import-progress: 4;
 $ZI-drawer-navigation-scrim: 3;
 $ZI-recent-nodes-bar: 2;
 $ZI-node-elements: 1;
+
+//sizes
+$form-input-width: 260px;

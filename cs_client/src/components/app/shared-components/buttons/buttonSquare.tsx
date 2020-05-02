@@ -3,10 +3,11 @@ import { modButton } from '::sass-modules/index';
 import { EventHandler, useEffect, useRef } from 'react';
 
 type Props = {
-  className: string;
+  className?: string;
   onClick: EventHandler<undefined>;
   disabled?: boolean;
   autoFocus?: boolean;
+  dark?: boolean;
   lazyAutoFocus?: number;
 };
 
@@ -17,6 +18,7 @@ const ButtonSquare: React.FC<Props> = ({
   onClick,
   autoFocus,
   lazyAutoFocus,
+  dark,
 }) => {
   const ref = useRef<HTMLButtonElement>();
   useEffect(() => {
@@ -29,7 +31,9 @@ const ButtonSquare: React.FC<Props> = ({
     <button
       ref={ref}
       onClick={onClick}
-      className={`${className} ${modButton.button} ${modButton.buttonSquare}`}
+      className={`${className || ''} ${modButton.button} ${
+        modButton.buttonSquare
+      } ${dark ? modButton.buttonDark : ''}`}
       disabled={disabled}
       autoFocus={autoFocus}
     >

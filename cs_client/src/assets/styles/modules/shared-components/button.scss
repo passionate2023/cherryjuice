@@ -1,10 +1,11 @@
 @import '../../vars/vars';
+@import '../../vars/colors';
 .button {
   user-select: none;
   border: none;
   background-color: transparent;
   color: $primary-dark;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, filter 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 1.25px;
   cursor: pointer;
@@ -23,9 +24,12 @@
 }
 
 .button--circle {
-  min-height: 25px;
-  min-width: 25px;
+  min-height: 30px;
+  min-width: 30px;
   border-radius: 50%;
+  img {
+    margin-bottom: -2px;
+  }
 }
 .button--square {
   //height: 0;
@@ -34,6 +38,22 @@
   margin: 2px;
   border-radius: 5px;
   padding: 10px 10px;
+}
+.button--dark {
+  color: white;
+  background-color: $dark-grey;
+  filter: brightness(0.85);
+  &:hover {
+    filter: brightness(1.1);
+    background-color: $dark-grey;
+    color: white;
+  }
+  &:active {
+    filter: brightness(1.2);
+    background-color: $dark-grey;
+    color: white;
+    box-shadow: $box-shadow1;
+  }
 }
 .button--pressed {
   background-color: $primary !important;

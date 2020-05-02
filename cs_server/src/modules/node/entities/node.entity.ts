@@ -18,7 +18,7 @@ export class Node extends BaseEntity {
   @ManyToOne(
     () => Document,
     document => document.node,
-    { primary: true },
+    { primary: true, onDelete: 'CASCADE' },
   )
   document: Document;
   @Field()
@@ -59,13 +59,13 @@ export class Node extends BaseEntity {
   @Field()
   node_title_styles: string;
 
-  @Column() ahtml: string;
+  @Column({ select: false }) ahtml: string;
 
   @Column('int2')
   @Field(() => Int)
   is_empty: number;
 
-  @Column('int2')
+  @Column('int8')
   @Field(() => Int)
   is_richtxt: number;
 

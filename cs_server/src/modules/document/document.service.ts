@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { DocumentSqliteRepository } from './repositories/document.sqlite.repository';
 import { Document } from './entities/document.entity';
-import { NodeService } from '../node/node.service';
-import { ImageService } from '../image/image.service';
-import { copyProperties } from './helpers';
 import { DocumentRepository } from './repositories/document.repository';
 import { IDocumentService } from './interfaces/document.service';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../user/entities/user.entity';
+import { debug } from '../shared';
+import { DeleteResult } from 'typeorm';
+import { DocumentDTO } from '../imports/imports.service';
+import { importThreshold } from '../imports/helpers/thresholds';
 
 @Injectable()
 export class DocumentService implements IDocumentService {
@@ -14,31 +16,47 @@ export class DocumentService implements IDocumentService {
     private documentSqliteRepository: DocumentSqliteRepository,
     @InjectRepository(DocumentRepository)
     private documentRepository: DocumentRepository,
-    private nodeSqliteService: NodeService,
-    private imageSqliteService: ImageService,
   ) {}
-
-  async open(file_id: string): Promise<void> {
-    await this.documentSqliteRepository.open(file_id);
+  async onModuleInit(): Promise<void> {
+    await this.documentRepository.markUnfinishedImportsAsFailed();
+  }
+  async openLocalSqliteFile(file_id: string): Promise<void> {
+    await this.documentSqliteRepository.openLocalSqliteFile(file_id);
   }
 
-  async getDocumentsMeta(): Promise<Document[]> {
-    return this.documentSqliteRepository.getDocumentsMeta();
+  async getDocumentsMeta(user: User): Promise<Document[]> {
+    if (debug.loadSqliteDocuments)
+      return this.documentSqliteRepository.getDocumentsMeta();
+    return this.documentRepository.getDocumentsMeta(user);
   }
 
-  async getDocumentMetaById(file_id: string): Promise<Document> {
-    return this.documentSqliteRepository.getDocumentMetaById(file_id);
+  async getDocumentMetaById(user: User, file_id: string): Promise<Document> {
+    if (debug.loadSqliteDocuments)
+      return this.documentSqliteRepository.getDocumentMetaById(user, file_id);
+    return this.documentRepository.getDocumentMetaById(user, file_id);
   }
 
-  async saveDocument(file_id: string): Promise<void> {
-    await this.open(file_id);
-    const documentToBeSaved = await this.getDocumentMetaById(file_id);
-    const document = new Document();
-    copyProperties(documentToBeSaved, document, { id: true });
-    await document.save();
-    const { nodesWithImages } = await this.nodeSqliteService.saveNodes(
-      document,
+  async createDocument(documentDTO: DocumentDTO): Promise<Document> {
+    return await this.documentRepository.createDocument(documentDTO);
+  }
+  async deleteDocuments(
+    IDs: string[],
+    user: User,
+    { notifySubscribers } = { notifySubscribers: true },
+  ): Promise<DeleteResult> {
+    const deleteResult = await this.documentRepository.deleteDocuments(
+      IDs,
+      user,
     );
-    await this.imageSqliteService.saveImages(nodesWithImages);
+    if (notifySubscribers)
+      IDs.forEach(id => {
+        importThreshold.deleted({ id, name: '', size: 0, user });
+      });
+    return deleteResult;
+  }
+  async findDocumentByHash(hash: string, user: User): Promise<Document> {
+    return await this.documentRepository.findOne({
+      where: { userId: user.id, hash },
+    });
   }
 }

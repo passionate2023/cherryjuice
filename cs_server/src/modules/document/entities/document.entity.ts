@@ -5,17 +5,36 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
+  ManyToOne,
+  PrimaryColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from '../../user/entities/user.entity';
 
+@Unique(['hash'])
 @Entity()
 @ObjectType()
 export class Document extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  constructor(user: User, name: string, size: number, id: string) {
+    super();
+    this.id = id;
+    this.name = name;
+    this.user = user;
+    this.size = size;
+  }
+  @PrimaryColumn()
   @Field()
   id: string;
+
+  @ManyToOne(
+    () => User,
+    user => user.id,
+    { onDelete: 'CASCADE' },
+  )
+  user: User;
+  @Column()
+  userId: string;
 
   @Column('text', { nullable: false })
   @Field()
@@ -33,9 +52,17 @@ export class Document extends BaseEntity {
   @Field(() => Float)
   updatedAt: number;
 
+  @Column({ nullable: true })
+  @Field()
+  hash: string;
+
   @Field({ nullable: true })
   folder: string;
 
   @Field(() => [Node], { nullable: 'items' })
   node: Node[];
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  status: string;
 }

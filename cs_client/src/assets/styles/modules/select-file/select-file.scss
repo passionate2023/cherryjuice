@@ -3,6 +3,7 @@
   padding: 10px;
   background-color: $grey-light;
   min-height: calc(100% - 20px);
+  user-select: none;
 }
 .selectFile__file {
   cursor: pointer;
@@ -16,7 +17,6 @@
     background-color: $primary-light;
   }
   transition: background-color 0.3s ease;
-
 }
 .selectFile__file__name {
   display: block;
@@ -84,7 +84,7 @@
   padding: 10px 10px 0px;
   display: block;
   overflow: auto;
-  margin-bottom: - 5px;
+  margin-bottom: -5px;
   color: black;
   font-family: monospace;
   opacity: 0.8;

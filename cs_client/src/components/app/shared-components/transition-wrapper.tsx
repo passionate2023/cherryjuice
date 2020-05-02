@@ -14,11 +14,11 @@ type TTransitionWrapperProps<T> = {
   scrimProps?: ScrimProps;
 };
 const TransitionWrapper = <T,>({
-  componentProps,
-  scrimProps,
+  show,
   transitionValues,
   Component,
-  show,
+  componentProps,
+  scrimProps,
 }: TTransitionWrapperProps<T>) => {
   const transitions = useTransition(show, null, transitionValues);
   return (

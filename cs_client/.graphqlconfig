@@ -1,0 +1,16 @@
+{
+  "name": "cherryscript server",
+  "schemaPath": "types/graphql/schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "http://localhost:1230/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL"
+        },
+        "introspect": false
+
+      }
+    }
+  }
+}

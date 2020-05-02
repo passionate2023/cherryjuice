@@ -32,6 +32,8 @@ const initialState = {
   isOnMobile: false,
   showInfoBar: false,
   processLinks: undefined,
+  showImportDocuments: false,
+  showUserPopup: false,
 };
 export type TRecentNode = {
   id: number;
@@ -66,6 +68,8 @@ enum actions {
   SET_IS_ON_MOBILE,
   PROCESS_LINKS,
   HIDE_POPUPS,
+  TOGGLE_SHOW_IMPORT_FILES,
+  TOGGLE_USER_POPUP,
 }
 const createActionCreators = () => {
   const state = {
@@ -73,7 +77,7 @@ const createActionCreators = () => {
     dispatch: props => Error('dispatcher not set'),
   };
   return {
-    setDispatch: newDispatch => (state.dispatch = newDispatch),
+    setDispatch: (dispatch): void => (state.dispatch = dispatch),
     toggleFormattingButtons: (): void => {
       state.dispatch({ type: actions.TOGGLE_FORMATTING_BUTTONS });
     },
@@ -85,6 +89,12 @@ const createActionCreators = () => {
     },
     toggleInfoBar: (): void => {
       state.dispatch({ type: actions.TOGGLE_INFO_BAR });
+    },
+    toggleShowImportDocuments: (): void => {
+      state.dispatch({ type: actions.TOGGLE_SHOW_IMPORT_FILES });
+    },
+    toggleUserPopup: (): void => {
+      state.dispatch({ type: actions.TOGGLE_USER_POPUP });
     },
     setIsOnMobile: (isOnMobile: boolean): void => {
       state.dispatch({ type: actions.SET_IS_ON_MOBILE, value: isOnMobile });
@@ -169,8 +179,20 @@ const reducer = (
       return { ...state, showTree: true };
     case actions.TOGGLE_TREE_OFF:
       return { ...state, showTree: false };
+    case actions.TOGGLE_USER_POPUP:
+      return { ...state, showUserPopup: !state.showUserPopup };
+    case actions.TOGGLE_SHOW_IMPORT_FILES:
+      return {
+        ...state,
+        showImportDocuments: !state.showImportDocuments,
+        showFileSelect: false,
+      };
     case actions.TOGGLE_FILE_SELECT:
-      return { ...state, showFileSelect: !state.showFileSelect };
+      return {
+        ...state,
+        showFileSelect: !state.showFileSelect,
+        reloadFiles: new Date().getTime(),
+      };
     case actions.RESIZE_TREE:
       return { ...state, treeSize: action.value };
     case actions.HIDE_POPUPS:
@@ -229,6 +251,7 @@ const reducer = (
       return {
         ...state,
         alert: action.value,
+        showImportDocuments: false,
       };
     case actions.TOGGLE_SETTINGS:
       return { ...state, showSettings: !state.showSettings };
@@ -241,6 +264,7 @@ const reducer = (
       return {
         ...state,
         showFormattingButtons: !state.showFormattingButtons,
+        contentEditable: !state.showFormattingButtons,
       };
     case actions.TOGGLE_CONTENT_EDITABLE:
       return { ...state, contentEditable: !state.contentEditable };

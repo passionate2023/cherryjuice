@@ -32,7 +32,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
   const match = useRouteMatch();
   //@ts-ignore
   const { file_id } = match.params;
-  const nodePath = `/${file_id}/node-${node_id}`;
+  const nodePath = `/document/${file_id}/node/${node_id}`;
   // state and ref hook
   const [showChildren, setShowChildren] = useState(
     () => getTreeStateFromLocalStorage()[node_id],

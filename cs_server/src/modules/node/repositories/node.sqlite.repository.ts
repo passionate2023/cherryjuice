@@ -1,9 +1,6 @@
 import { DocumentSqliteRepository } from '../../document/repositories/document.sqlite.repository';
 import { Injectable } from '@nestjs/common';
-import {
-  Image as CTBImage,
-  Image,
-} from '../../document/helpers/copy-ctb/entities/Image';
+import { Image } from '../../document/helpers/copy-ctb/entities/Image';
 import { Grid } from '../../document/helpers/copy-ctb/entities/Grid';
 import { Codebox } from '../../document/helpers/copy-ctb/entities/Codebox';
 import { Node } from '../entities/node.entity';
@@ -81,20 +78,6 @@ export class NodeSqliteRepository implements INodeRepository {
     };
   }
 
-  async getNodeImages({
-    node_id,
-    offset,
-  }): Promise<
-    Pick<
-      CTBImage,
-      'node_id' | 'offset' | 'justification' | 'anchor' | 'png' | 'link'
-    >[]
-  > {
-    return this.documentSqliteRepository.sqliteAll(
-      queries.read.images({ node_id: node_id, offset }),
-    );
-  }
-
   private async getNodesMetaMap(node_id?: number): Promise<Map<number, Node>> {
     const data: Node[] = await this.documentSqliteRepository
       .sqliteAll(queries.read.node_meta(node_id))
@@ -166,20 +149,22 @@ export class NodeSqliteRepository implements INodeRepository {
     return Array.from(nodes.values());
   }
 
-  async getNodeMetaById(node_id: number): Promise<Node[]> {
+  async getNodeMetaById(node_id: string): Promise<Node[]> {
     const nodes = await this.getNodesMetaMap();
-    return [nodes.get(node_id)];
+    return [nodes.get(+node_id)];
   }
 
-  // async write({ table, tuples, node_id, file_id }): Promise<void> {
-  // return db
-  //   .open(file_id)
-  //   .then(db =>
-  //     Promise.all(
-  //       tuples.map(([column, value]) =>
-  //         db.run(queries.write.column({ table, column, node_id, value })),
-  //       ),
-  //     ),
+  // async getNodeImages({
+  //   node_id,
+  //   offset,
+  // }): Promise<
+  //   Pick<
+  //     CTBImage,
+  //     'node_id' | 'offset' | 'justification' | 'anchor' | 'png' | 'link'
+  //   >[]
+  // > {
+  //   return this.documentSqliteRepository.sqliteAll(
+  //     queries.read.images({ node_id: node_id, offset }),
   //   );
   // }
 }

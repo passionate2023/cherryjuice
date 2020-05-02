@@ -3,12 +3,12 @@ import {
   Module,
   NestModule,
   RequestMethod,
+  ValidationPipe,
 } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { DocumentModule } from './document/document.module';
 import {
   addSTSHeader,
-  ignoreClientSideRouting,
   redirectToHTTPS,
   sendCompressedJavascript,
 } from '../middleware';
@@ -18,18 +18,37 @@ import { NodeModule } from './node/node.module';
 import { ImageModule } from './image/image.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from '../config/typeorm.config';
+import { UserModule } from './user/user.module';
+import { AppController } from './app.controller';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
-    DocumentModule,
     NodeModule,
     ImageModule,
     GraphQLModule.forRoot({
-      include: [NodeModule, DocumentModule, ImageModule],
+      include: [NodeModule, DocumentModule, ImageModule, UserModule],
       autoSchemaFile: true,
+      context: ({ req, connection }) => {
+        if (connection) {
+          return { req: { headers: connection.context } };
+        }
+        // queries and mutations
+        return { req };
+      },
+      installSubscriptionHandlers: true,
     }),
     TypeOrmModule.forRoot(typeOrmConfig),
+    UserModule,
+    DocumentModule,
   ],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+  ],
+  controllers: [AppController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
@@ -40,18 +59,12 @@ export class AppModule implements NestModule {
         .forRoutes({ path: '*.js', method: RequestMethod.GET });
       consumer.apply(addSTSHeader, redirectToHTTPS).forRoutes('*');
     }
-    const staticAssetsRootFolder = path.join(
-      __dirname,
+    const staticAssetsRootFolder =
       process.env.NODE_ENV === 'production'
-        ? '../../client'
-        : '../../cs_client/dist',
-    );
+        ? path.join(__dirname, '../../client')
+        : path.join(process.cwd(), '../cs_client/dist');
     consumer
-      .apply(
-        express.static(staticAssetsRootFolder),
-        ignoreClientSideRouting({ staticAssetsRootFolder }),
-      )
-      .exclude('/graphql')
+      .apply(express.static(staticAssetsRootFolder))
       .forRoutes({ path: '*', method: RequestMethod.GET });
   }
 }

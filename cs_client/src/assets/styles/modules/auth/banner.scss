@@ -1,0 +1,49 @@
+@import '../../vars/vars';
+@import '../../mixins/breakpoints';
+@import '../../mixins/form';
+.banner {
+  position: absolute;
+  //margin-top: -80px;
+  top: 50px;
+  @include respond-to($md-down) {
+    margin-top: -10px;
+  }
+  width: 400px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 90%;
+  margin-bottom: 20px;
+  z-index: 1;
+
+  @include respond-to($md-down) {
+    background-color: rgba($primary, 0.1);
+  }
+  @include form-element-size();
+
+  opacity: 0;
+  border-radius: 10px;
+  background-color: rgba(white, 0.2);
+  transition: opacity 200ms linear;
+}
+.banner__text {
+  color: white;
+  @include respond-to($md-down) {
+    color: rgba($primary-dark2, 0.8);
+  }
+}
+
+.banner__icon {
+}
+
+.banner--visible {
+  opacity: 1;
+}
+.banner--sign-up {
+  //top: 6%
+
+  @include respond-to($md-up) {
+    margin-top: -17px;
+  }
+}

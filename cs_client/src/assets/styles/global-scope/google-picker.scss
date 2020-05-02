@@ -1,0 +1,12 @@
+@import '../mixins/breakpoints';
+.picker-dialog-frame {
+  @include respond-to($md-down) {
+    height: var(--vh) !important;
+  }
+}
+body > div.picker.shr-q-shr-r.picker-dialog {
+  @include respond-to($md-down) {
+    height: var(--vh) !important;
+    top: 0 !important;
+  }
+}

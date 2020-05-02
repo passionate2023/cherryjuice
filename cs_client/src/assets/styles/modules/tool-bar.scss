@@ -26,6 +26,13 @@
     height: $tool-bar-height-md;
   }
 }
+.tool-bar__group--nav-bar {
+  margin-left: auto;
+}
+.tool-bar__group--nav-bar__profile-picture {
+  width: 18px;
+  border-radius: 50%;
+}
 .tool-bar__group--mobile-buttons {
   @include respond-to($md-up) {
     display: none;

@@ -4,10 +4,10 @@ const preferences = { code: { 'background-color': '#2B2B2B' } };
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10],
   parseLink: c => {
-    let attributes = { href: '', target: '_blank', type: '' };
+    const attributes = { href: '', target: '_blank', type: '' };
     if (c.startsWith('node')) {
       const [, id, anchor] = /node (\d+) *(.+)?/.exec(c);
-      attributes.href = `node-${id}${
+      attributes.href = `${id}${
         anchor ? `#${encodeURIComponent(anchor)}` : ''
       }`;
       attributes.type = 'node';

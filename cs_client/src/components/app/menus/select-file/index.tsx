@@ -1,150 +1,29 @@
-import { modSelectFile } from '::sass-modules/index';
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { appActionCreators } from '../../reducer';
-import { dateToFormattedString } from '::helpers/time';
 import { QUERY_DOCUMENTS } from '::graphql/queries';
-import { DocumentMeta } from '::types/generated';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { useReloadQuery } from '::hooks/use-reload-query';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
-import { SpinnerCircle } from '::shared-components/spinner-circle';
+import { DocumentList } from './documents-list/document-list';
+import { CircleButton } from '::shared-components/buttons/circle-button';
+import { modDialog } from '::sass-modules/index';
+import { Icons, Icon } from '::shared-components/icon';
+import { useDeleteFile } from '::hooks/graphql/delete-file';
+import { useRef } from 'react';
 
-const Lines: React.FC<{ data; files; selected; setSelected; selectedFile }> = ({
-  data,
-  files,
-  selected,
-  setSelected,
-  selectedFile,
-}) => {
-  const onSelect = useCallback(
-    e => {
-      let selectedId = e.target.parentElement.dataset.id;
-      let selectedPath = e.target.parentElement.dataset.path;
-      setSelected({ id: selectedId, path: selectedPath });
-    },
-    [selectedFile],
-  );
-  return (
-    <div>
-      {data &&
-        files.map(({ name, size, updatedAt, id, folder }: DocumentMeta) => (
-          <span
-            className={`${modSelectFile.selectFile__file} ${
-              selected.id === id
-                ? modSelectFile.selectFile__fileSelectedCandidate
-                : ''
-            } ${
-              selectedFile === id ? modSelectFile.selectFile__fileSelected : ''
-            }`}
-            data-id={id}
-            data-folder={folder}
-            onClick={onSelect}
-            key={id}
-            tabIndex={0}
-          >
-            <span className={`${modSelectFile.selectFile__file__name} `}>
-              {name}
-            </span>
-
-            <span className={`${modSelectFile.selectFile__file__details} `}>
-              <span>{size / 1024}kb</span>
-              <span>{dateToFormattedString(new Date(updatedAt))}</span>
-            </span>
-          </span>
-        ))}
-    </div>
-  );
-};
-const Folder = ({
-  folder,
-  files,
-  selected,
-  selectedFile,
-  setSelected,
-  data,
-}) => (
-  <div className={modSelectFile.selectFile__fileFolder}>
-    <span className={modSelectFile.selectFile__fileFolder__name}>{folder}</span>
-    <span className={modSelectFile.selectFile__fileFolder__files}>
-      <Lines
-        selected={selected}
-        selectedFile={selectedFile}
-        data={data}
-        files={files}
-        setSelected={setSelected}
-      />
-    </span>
-  </div>
-);
-
-const Files = ({ selected, setSelected, selectedFile, data, loading }) => {
-  let filesPerFolders: [string, DocumentMeta[]][];
-  if (data) {
-    filesPerFolders = [
-      QUERY_DOCUMENTS.path(data).reduce((acc, val) => {
-        if (acc[val.folder]) acc[val.folder].push(val);
-        else acc[val.folder] = [val];
-
-        return acc;
-      }, {}),
-    ].map(Object.entries)[0];
-  }
-
-  return (
-    <div className={modSelectFile.selectFile}>
-      {loading ? (
-        <SpinnerCircle />
-      ) : (
-        filesPerFolders &&
-        filesPerFolders.map(([folder, files]) => (
-          <Folder
-            key={folder}
-            selected={selected}
-            selectedFile={selectedFile}
-            setSelected={setSelected}
-            data={data}
-            folder={folder}
-            files={files}
-          />
-        ))
-      )}
-    </div>
-  );
-};
-
-const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
-  const [selected, setSelected] = useState({ id: '', path: '' });
-  const history = useHistory();
-  const close = appActionCreators.toggleFileSelect;
-  const open = () => {
-    history.push('/');
-    appActionCreators.selectFile(selected.id);
-  };
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const { data, loading, error } = useReloadQuery(
-    {
-      reloadRequestID: reloadFiles,
-    },
-    {
-      query: QUERY_DOCUMENTS.query,
-      queryVariables: undefined,
-    },
-  );
-  useQueryTimeout(
-    {
-      queryData: data,
-      queryError: error,
-      queryVariables: reloadFiles,
-    },
-    { resourceName: 'files' },
-  );
+const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
   const buttonsLeft = [
     {
       label: 'reload',
       onClick: appActionCreators.setReloadFiles,
+      disabled: false,
+    },
+    {
+      label: 'import',
+      onClick: appActionCreators.toggleShowImportDocuments,
       disabled: false,
     },
   ];
@@ -157,24 +36,115 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
     {
       label: 'open',
       onClick: open,
-      disabled: selected.id === selectedFile || !selected.id,
+      disabled: selectedIDs[0] === selectedFile || selectedIDs.length !== 1,
     },
   ];
+  return { buttonsLeft, buttonsRight };
+};
+
+const useData = ({ reloadFiles }) => {
+  const { data, loading, error, manualFetch } = useReloadQuery(
+    {
+      reloadRequestID: reloadFiles,
+    },
+    {
+      query: QUERY_DOCUMENTS.documentMeta.query,
+      queryVariables: undefined,
+    },
+  );
+  useQueryTimeout(
+    {
+      queryData: data,
+      queryError: error,
+      queryVariables: reloadFiles,
+    },
+    { resourceName: 'files' },
+  );
+  return { data, loading, manualFetch };
+};
+
+const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
+  const [selectedIDs, setSelectedIDs] = useState([]);
+  const history = useHistory();
+  const close = appActionCreators.toggleFileSelect;
+  const open = () => {
+    history.push('/');
+    appActionCreators.selectFile(selectedIDs[0]);
+  };
+  const { buttonsLeft, buttonsRight } = createButtons({
+    selectedIDs,
+    selectedFile,
+    close,
+    open,
+  });
+
+  const { loading, data, manualFetch } = useData({ reloadFiles });
+  const documentsMeta = QUERY_DOCUMENTS.documentMeta.path(data);
+  const { deleteDocument } = useDeleteFile({
+    IDs: selectedIDs,
+    onCompleted: () => {
+      manualFetch();
+      if (selectedIDs.includes(selectedFile)) {
+        history.push('/');
+        appActionCreators.selectFile('');
+      }
+    },
+  });
+  const holdingRef = useRef(false);
+  const rightHeaderButtons = [
+    documentsMeta.length && holdingRef.current && (
+      <CircleButton
+        key={Icons.material.clear}
+        className={modDialog.dialog__header__fileButton}
+        onClick={() => {
+          setSelectedIDs([selectedIDs.pop()]);
+          holdingRef.current = false;
+        }}
+      >
+        <Icon name={Icons.material.cancel} small={true} />
+      </CircleButton>
+    ),
+    documentsMeta.length && holdingRef.current && (
+      <CircleButton
+        disabled={!selectedIDs.length}
+        key={Icons.material.delete}
+        className={modDialog.dialog__header__fileButton}
+        onClick={deleteDocument}
+      >
+        <Icon name={Icons.material['delete']} small={true} />
+      </CircleButton>
+    ),
+  ].filter(Boolean);
+  const onSelect = ({ id, holding }) => {
+    const unselectElement = selectedIDs.includes(id);
+    const clickDuringHolding = !holding && holdingRef.current;
+    if (holding) {
+      setSelectedIDs(selectedIDs => [...selectedIDs, id]);
+      holdingRef.current = true;
+    } else if (clickDuringHolding) {
+      if (unselectElement)
+        setSelectedIDs(selectedIDs => [...selectedIDs.filter(x => x !== id)]);
+      else setSelectedIDs(selectedIDs => [...selectedIDs, id]);
+    } else {
+      setSelectedIDs([id]);
+    }
+  };
   return (
     <DialogWithTransition
       dialogTitle={'Select Document'}
-      dialogFooterRightButtons={buttonsRight}
       dialogFooterLeftButtons={buttonsLeft}
+      dialogFooterRightButtons={buttonsRight}
       isOnMobile={isOnMobile}
       show={showDialog}
       onClose={close}
+      rightHeaderButtons={rightHeaderButtons}
     >
       <ErrorBoundary>
-        <Files
-          setSelected={setSelected}
+        <DocumentList
+          onSelect={onSelect}
+          selectedIDs={selectedIDs}
           selectedFile={selectedFile}
-          selected={selected}
-          data={data}
+          documentsMeta={documentsMeta}
           loading={loading}
         />
       </ErrorBoundary>
