@@ -19,7 +19,7 @@ import { useDefaultValues } from '::hooks/use-default-form-values';
 const inputs: TextInputProps[] = [
   {
     label: 'first name',
-    icon: [Icons.misc['person-circle'], ICON_COLOR.black],
+    icon: [Icons.material['person-circle'], ICON_COLOR.black],
     patterns: [patterns.name],
     minLength: 2,
     required: true,
@@ -29,7 +29,7 @@ const inputs: TextInputProps[] = [
   },
   {
     label: 'last name',
-    icon: [Icons.misc['person-circle'], ICON_COLOR.black],
+    icon: [Icons.material['person-circle'], ICON_COLOR.black],
     patterns: [patterns.name],
     minLength: 2,
     required: true,
@@ -39,7 +39,7 @@ const inputs: TextInputProps[] = [
   },
   {
     label: 'username',
-    icon: Icons.misc.username,
+    icon: [Icons.material.username, ICON_COLOR.black],
     patterns: [patterns.userName],
     minLength: 4,
     required: true,
@@ -49,7 +49,7 @@ const inputs: TextInputProps[] = [
   },
   {
     label: 'email',
-    icon: Icons.misc.email,
+    icon: [Icons.material.email, ICON_COLOR.black],
     type: 'email',
     required: true,
     variableName: 'email',
@@ -62,7 +62,7 @@ const inputs: TextInputProps[] = [
     patterns: [patterns.password],
     label: 'password',
     type: 'password',
-    icon: Icons.misc.lock,
+    icon: [Icons.material.lock, ICON_COLOR.black],
     minLength: 8,
     required: true,
     idPrefix: 'sign-up',

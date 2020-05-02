@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-module.exports = {
+module.exports = ({ production } = { production: false }) => ({
   entry: {
     index: './src/index.tsx',
   },
@@ -52,16 +52,14 @@ module.exports = {
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
-            options: { importLoaders: 2, modules: true, esModule: true },
-            // options: { modules: true },
-          },
-
-          {
-            loader: 'postcss-loader',
             options: {
-              config: {
-                path: paths.postCssConfig,
+              localsConvention: 'dashes',
+              importLoaders: 2,
+              modules: {
+                localIdentName:
+                  production ? '[hash:base64]' : '[local]',
               },
+              esModule: true,
             },
           },
           'sass-loader',
@@ -101,4 +99,4 @@ module.exports = {
     }),
     new CopyPlugin([{ from: paths.icons, to: paths.iconsDist }]),
   ],
-};
+});

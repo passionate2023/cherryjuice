@@ -26,7 +26,7 @@ const Buttons = () => (
         }
         className={modToolbar.toolBar__iconStrictWidth}
       >
-        <Icon name={icon} small={true} />
+        <Icon name={icon}  />
       </ToolbarButton>
     ))}
     {commands.colors.map(({ icon, label, cssProperty, inputId }) => (
@@ -50,7 +50,7 @@ const Buttons = () => (
         }
         className={modToolbar.toolBar__iconStrictWidth}
       >
-        <Icon name={icon} small={true} />
+        <Icon name={icon}  />
       </ToolbarButton>
     ))}
   </>

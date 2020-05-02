@@ -4,7 +4,13 @@ import { EventHandler } from 'react';
 enum ICON_COLOR {
   black = 'black',
 }
-
+export enum ICON_SIZE {
+  _18 = 18,
+  _24 = 24,
+  _36 = 24,
+  _48 = 48,
+  _145 = 145,
+}
 const Icons = {
   material: {
     add: 'add',
@@ -52,14 +58,14 @@ const Icons = {
     cancel: 'cancel',
     document: 'document',
     stop: 'stop',
-  },
-  misc: {
-    email: 'email',
-    'google-g': 'google-g',
-    lock: 'lock',
     person: 'person',
     'person-circle': 'person-circle',
+    lock: 'lock',
     username: 'username',
+    email: 'email',
+  },
+  misc: {
+    'google-g': 'google-g',
   },
   cherrytree: {
     cherries: {
@@ -137,29 +143,15 @@ const getIconCategory = name =>
 
 const getIconPath = ({
   name,
-  small,
-  large,
-  extraLarge,
+  size,
   color,
 }: {
   name: string;
-  small?: boolean;
-  large?: boolean;
-  extraLarge?: boolean;
+  size?: ICON_SIZE;
   color?: ICON_COLOR;
 }) => {
   const category = getIconCategory(name);
-  const size =
-    category === 'material'
-      ? small
-        ? '18'
-        : large
-        ? '36'
-        : extraLarge
-        ? '48'
-        : '24'
-      : '';
-
+  if (!size && category === 'material') size = 18;
   return `/icons/${category}/${size ? `${size}/` : ''}${name}${
     color ? '-' + color : ''
   }.svg`;
@@ -167,9 +159,7 @@ const getIconPath = ({
 
 const Icon = ({
   name,
-  small,
-  large,
-  extraLarge,
+  size,
   className,
   onClick,
   style,
@@ -177,15 +167,13 @@ const Icon = ({
 }: {
   color?: ICON_COLOR;
   name: string;
-  small?: boolean;
-  large?: boolean;
-  extraLarge?: boolean;
+  size?: ICON_SIZE;
   className?: string;
   onClick?: EventHandler<any>;
   style?: React.CSSProperties;
 }) => (
   <img
-    src={getIconPath({ name, small, large, extraLarge, color })}
+    src={getIconPath({ name, size, color })}
     alt={name}
     {...(className && { className })}
     {...(onClick && { onClick })}

@@ -1,14 +1,10 @@
 from node:12.2.0 as cs
 workdir /server
 copy ./cs_server/ .
-run npm i -g parcel-bundler
 run yarn install
-
 
 workdir /client
 copy ./cs_client/ .
-run chmod +x scripts/patch-postcss-camel-case/copy.sh\
-    && chmod +x scripts/cp-assets.sh
 run yarn install --ignore-optional
 
 workdir /client

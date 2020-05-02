@@ -1,14 +1,15 @@
-import person from '::assets/icons/material/large/person-circle.svg';
 import * as React from 'react';
+import { useCallback, useContext } from 'react';
 import { modToolbar, modUserPopup } from '::sass-modules/index';
 import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
 import { TransitionWrapper } from '::shared-components/transition-wrapper';
 import { animated } from 'react-spring';
 import { useHistory } from 'react-router';
-import { useCallback, useContext } from 'react';
 import { RootContext } from '::root/root-context';
 import { rootActionCreators } from '::root/root.reducer';
+import { Icon, ICON_SIZE, Icons } from '::shared-components/icon';
+
 type Props = {
   firstName: string;
   lastName: string;
@@ -35,11 +36,20 @@ const User: React.FC<Props & { style }> = ({ onClose, style }) => {
   return (
     <animated.div className={modUserPopup.user__card} style={style}>
       <div className={modUserPopup.user__info}>
-        <img
-          src={picture || person}
-          alt="profile-picture"
-          className={modUserPopup.user__info__picture}
-        />
+        {picture ? (
+          <img
+            src={picture}
+            alt="profile-picture"
+            className={modUserPopup.user__info__picture}
+          />
+        ) : (
+          <Icon
+            name={Icons.material['person-circle']}
+            size={ICON_SIZE._145}
+            className={modUserPopup.user__info__picture}
+          />
+        )}
+
         <span className={modUserPopup.user__info__name}>
           {firstName} {lastName}
         </span>

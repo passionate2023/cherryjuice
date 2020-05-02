@@ -23,10 +23,10 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
       }
     >
       <ToolbarButton onClick={appActionCreators.toggleFileSelect}>
-        <Icon name={Icons.material.folder} small={true} />
+        <Icon name={Icons.material.folder}  />
       </ToolbarButton>
       <ToolbarButton onClick={appActionCreators.toggleSettings}>
-        <Icon name={Icons.material.settings} small={true} />
+        <Icon name={Icons.material.settings}  />
       </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.toggleUserPopup}
@@ -35,11 +35,11 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
         {userPicture ? (
           <img
             src={userPicture}
-            alt="user profiel picture"
+            alt="user profile picture"
             className={modToolbar.toolBar__groupNavBar__profilePicture}
           />
         ) : (
-          <Icon name={Icons.misc['person-circle']} />
+          <Icon name={Icons.material['person-circle']} />
         )}
       </ToolbarButton>
     </div>

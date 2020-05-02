@@ -34,12 +34,6 @@ jobs:
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
-    
-    # Runs a single command using the runners shell
-    - name: chmod scripts
-      run: |
-        chmod +x cs_client/scripts/patch-postcss-camel-case/copy.sh
-        chmod +x cs_client/scripts/cp-assets.sh
 
     - name: install client dependencies
       run: cd cs_client && yarn install --ignore-optional && yarn add jest ts-jest

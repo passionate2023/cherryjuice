@@ -1,8 +1,8 @@
 import { modAlertModal } from '::sass-modules/index';
 import * as React from 'react';
-import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
-import { Icon, Icons } from '::shared-components/icon';
 import { EventHandler } from 'react';
+import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
+import { Icon, ICON_SIZE, Icons } from '::shared-components/icon';
 import { TAlert } from '::types/react';
 import { usePrevPropIfNewPropIsUndefined } from '::hooks/use-prev-prop-if-new-prop-is-undefined';
 import { ModalWithTransition } from '::shared-components/modal/modal';
@@ -20,7 +20,7 @@ const Alert = ({ alert, onClose }) => {
       <Icon
         name={Icons.material[alert.type]}
         className={`${modAlertModal.alertModal__icon}`}
-        extraLarge={true}
+        size={ICON_SIZE._48}
       />
       <span className={modAlertModal.alertModal__body}>
         <span className={`${modAlertModal.alertModal__header}`}>

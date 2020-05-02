@@ -19,10 +19,10 @@ const MainButtons: React.FC<Props> = ({ showTree }) => {
       </ToolbarButton>
 
       <ToolbarButton onClick={appActionCreators.saveDocument}>
-        <Icon name={Icons.material.save} small={true} />
+        <Icon name={Icons.material.save}  />
       </ToolbarButton>
       <ToolbarButton onClick={appActionCreators.reloadDocument}>
-        <Icon name={Icons.material.refresh} small={true} />
+        <Icon name={Icons.material.refresh}  />
       </ToolbarButton>
     </div>
   );

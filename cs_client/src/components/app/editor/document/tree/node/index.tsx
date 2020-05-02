@@ -5,7 +5,7 @@ import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { getTreeStateFromLocalStorage } from '::helpers/misc';
-import { Icon, Icons } from '::shared-components/icon';
+import { Icon, ICON_SIZE, Icons } from '::shared-components/icon';
 import { nodeOverlay } from './helpers/node-overlay';
 import { scrollIntoToolbar } from '::helpers/ui';
 
@@ -92,6 +92,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
             }`}
             onClick={toggleChildren}
             name={showChildren ? Icons.material.remove : Icons.material.add}
+            size={ICON_SIZE._24}
           />
         }
         <Icon

@@ -101,7 +101,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
           holdingRef.current = false;
         }}
       >
-        <Icon name={Icons.material.cancel} small={true} />
+        <Icon name={Icons.material.cancel}  />
       </CircleButton>
     ),
     documentsMeta.length && holdingRef.current && (
@@ -111,7 +111,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
         className={modDialog.dialog__header__fileButton}
         onClick={deleteDocument}
       >
-        <Icon name={Icons.material['delete']} small={true} />
+        <Icon name={Icons.material['delete']}  />
       </CircleButton>
     ),
   ].filter(Boolean);

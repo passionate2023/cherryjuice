@@ -61,7 +61,7 @@ const ActionButton = ({ eventType, deleteDocument, clear, open }) => {
       className={modImportProgress.importProgress__document__button}
       onClick={props.onClick}
     >
-      <Icon name={props.iconName} small={true} />
+      <Icon name={props.iconName}  />
     </CircleButton>
   );
 };
