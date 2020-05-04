@@ -3,7 +3,7 @@ import { modDrawer } from '::sass-modules/index';
 import { DrawerNavigationElement } from '::shared-components/drawer/drawer-navigation/drawer-navigation-element';
 import {
   handleToggle,
-  setupHandleGesture,
+  setupGesturesHandler,
   updateSubTitle,
 } from '::shared-components/drawer/drawer-navigation/helpers';
 import { useEffect } from 'react';
@@ -15,7 +15,7 @@ const DrawerNavigation: React.FC<any> = ({
 }) => {
   useEffect(() => {
     updateSubTitle({ selectedScreenTitle });
-    setupHandleGesture({
+    setupGesturesHandler({
       onRight: handleToggle(),
       gestureZoneSelector: modDrawer.drawer,
     });

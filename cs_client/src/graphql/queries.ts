@@ -39,13 +39,12 @@ const QUERY_NODE_CONTENT = {
       query node_content__png(
         $file_id: String!
         $node_id: Int!
-        $offset: Int
         $thumbnail: Boolean
       ) {
         document(file_id: $file_id) {
           node(node_id: $node_id) {
             node_id
-            image(offset: $offset, thumbnail: $thumbnail)
+            image(thumbnail: $thumbnail)
           }
         }
       }

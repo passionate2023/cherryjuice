@@ -18,15 +18,16 @@ export class Image extends BaseEntity {
     { onDelete: 'CASCADE' },
   )
   node: Node;
+
   @Column()
   nodeId: string;
+
+  @Column('int8')
+  offset: number;
 
   @Column({ type: 'bytea', nullable: false })
   thumbnail: Buffer;
 
   @Column({ type: 'bytea', nullable: false })
   image: Buffer;
-
-  @Column('int8')
-  offset: number;
 }

@@ -2,17 +2,17 @@ import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import { QUERY_NODE_CONTENT } from '::graphql/queries';
 import { useRef } from 'react';
 
-const usePng = ({ node_id, offset, file_id }) => {
+const usePng = ({ node_id, file_id }) => {
   const png = useRef(undefined);
   const startFetchingFull = useRef(false);
 
   const { data: data_thumbnail } = useQuery(QUERY_NODE_CONTENT.png.query, {
-    variables: { node_id, offset, file_id, thumbnail: true },
+    variables: { node_id, file_id, thumbnail: true },
   });
   const [fetch, { data: data_full }] = useLazyQuery(
     QUERY_NODE_CONTENT.png.query,
     {
-      variables: { node_id, offset, file_id, thumbnail: false },
+      variables: { node_id, file_id, thumbnail: false },
     },
   );
   // apollo caches previous fetch from unmounted instances of the component

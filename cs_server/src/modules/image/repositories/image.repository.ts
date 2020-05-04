@@ -8,7 +8,6 @@ export class ImageRepository extends Repository<Image> {
     thumbnail,
   }: {
     nodeId: string;
-    offset: number;
     thumbnail: boolean;
   }): Promise<Image[]> {
     return this.createQueryBuilder('image')

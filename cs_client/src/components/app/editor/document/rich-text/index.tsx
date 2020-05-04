@@ -1,32 +1,26 @@
 import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import { useRouteMatch } from 'react-router';
-import { useMutation } from '@apollo/react-hooks';
-import { QUERY_NODE_CONTENT } from '::graphql/queries';
-import { usePng } from '::hooks/use-png';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
-import { DOCUMENT_MUTATION } from '::graphql/mutations';
-import { getAHtml__legacy } from '::helpers/html-to-ctb';
-import { setupClipboard } from '::helpers/clipboard';
-import { setupKeyboardEvents } from '::helpers/typing';
+import { setupClipboard } from '::helpers/editing/clipboard';
+import { setupKeyboardEvents } from '::helpers/editing/typing';
 import {
   hotKeysManager,
   setupDevHotKeys,
   setupFormattingHotKeys,
 } from '::helpers/hotkeys';
-import { useReloadQuery } from '::hooks/use-reload-query';
 
 import { modRichText } from '::sass-modules/index';
-import { useQueryTimeout } from '::hooks/use-query-timeout';
-import { useReactRouterForAnchors } from '::hooks/use-react-router-for-anchors';
+import { useReactRouterForAnchors } from '::app/editor/document/rich-text/hooks/react-router-for-anchors';
 import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
 import { appActionCreators } from '::app/reducer';
 import { NodeMeta } from '::types/generated';
-import { setupHandleGesture } from '::shared-components/drawer/drawer-navigation/helpers';
+import { setupGesturesHandler } from '::shared-components/drawer/drawer-navigation/helpers';
+import { useGetNodeContent } from '::app/editor/document/rich-text/hooks/get-node-content';
+import { useSetCurrentNode } from '::app/editor/document/rich-text/hooks/set-current-node';
 
 type Props = {
   file_id: string;
-  saveDocument: number;
   reloadDocument: number;
   contentEditable: boolean;
   nodes: Map<number, NodeMeta>;
@@ -35,7 +29,6 @@ type Props = {
 
 const RichText: React.FC<Props> = ({
   file_id,
-  saveDocument,
   reloadDocument,
   contentEditable,
   nodes,
@@ -45,64 +38,6 @@ const RichText: React.FC<Props> = ({
   const match = useRouteMatch();
   // @ts-ignore
   const node_id = Number(match.params?.node_id);
-  const toolbarQueuesRef = useRef({});
-  const queryVariables = { file_id, node_id: node_id };
-  const { data, error } = useReloadQuery(
-    {
-      reloadRequestID: reloadDocument,
-    },
-    {
-      query: QUERY_NODE_CONTENT.html.query,
-      queryVariables,
-    },
-  );
-  useQueryTimeout(
-    {
-      queryData: data,
-      queryError: error,
-      queryVariables,
-    },
-    { resourceName: 'the node' },
-  );
-  let html, node;
-  node = QUERY_NODE_CONTENT.html.path(data);
-  if (node && node.node_id === node_id) {
-    html = node.html;
-    processLinks = new Date().getTime();
-  }
-
-  const all_png_base64 = usePng({
-    file_id,
-    node_id,
-    offset: undefined,
-  });
-  if (html && all_png_base64?.node_id === node_id && richTextRef.current) {
-    let counter = 0;
-    while (all_png_base64.pngs[counter] && /<img src=""/.test(html)) {
-      html = html.replace(
-        /<img src=""/,
-        `<img src="data:image/png;base64,${all_png_base64.pngs[counter++]}"`,
-      );
-    }
-    processLinks = new Date().getTime();
-  }
-  const [mutate] = useMutation(DOCUMENT_MUTATION.html);
-
-  if (saveDocument && !toolbarQueuesRef.current[saveDocument]) {
-    toolbarQueuesRef.current[saveDocument] = true;
-    const containers = Array.from(
-      document.querySelectorAll('#rich-text > div'),
-    );
-    const { abstractHtml } = getAHtml__legacy({ containers });
-    if (!(saveDocument + '').endsWith('_'))
-      mutate({
-        variables: {
-          file_id: file_id || '',
-          node_id,
-          abstract_html: abstractHtml,
-        },
-      });
-  }
 
   useEffect(() => {
     setupClipboard();
@@ -112,35 +47,21 @@ const RichText: React.FC<Props> = ({
     hotKeysManager.startListening();
   }, []);
 
+  const nodeContent = useGetNodeContent(
+    node_id,
+    reloadDocument,
+    file_id,
+    processLinks,
+    richTextRef,
+  );
+  const { html } = nodeContent;
+  processLinks = nodeContent.processLinks;
   useReactRouterForAnchors({ file_id, processLinks });
   useScrollToHashElement({ html });
+  useSetCurrentNode(node_id, nodes);
 
   useEffect(() => {
-    const node = nodes?.get(node_id);
-    if (node) {
-      const {
-        name,
-        node_title_styles,
-        is_richtxt,
-        createdAt,
-        updatedAt,
-      } = node;
-      appActionCreators.selectNode(
-        {
-          node_id,
-          name,
-          style: node_title_styles,
-        },
-        {
-          is_richtxt,
-          createdAt,
-          updatedAt,
-        },
-      );
-    }
-  }, [node_id, nodes]);
-  useEffect(() => {
-    setupHandleGesture({
+    setupGesturesHandler({
       onRight: appActionCreators.showTree,
       onLeft: appActionCreators.hideTree,
       onTap: appActionCreators.hidePopups,
@@ -148,6 +69,7 @@ const RichText: React.FC<Props> = ({
       minimumLength: 170,
     });
   }, []);
+
   return (
     <>
       <div
@@ -160,7 +82,7 @@ const RichText: React.FC<Props> = ({
               dangerouslySetInnerHTML: { __html: html },
             }
           : {
-              children: error ? (
+              children: nodeContent.error ? (
                 <span className={modRichText.richText__error}>
                   could not fetch the node
                 </span>

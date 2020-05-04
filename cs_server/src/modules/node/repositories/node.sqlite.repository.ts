@@ -111,7 +111,7 @@ export class NodeSqliteRepository implements INodeRepository {
     return organizeData(data);
   }
 
-  async getAHtml(node_id: string): Promise<{ nodes: any; styles: any }[]> {
+  async getAHtml(node_id: string): Promise<{ nodes: any; style: any }[]> {
     const { txt } =
       node_id === '0'
         ? { txt: '<?xml version="1.0" ?><node><rich_text></rich_text></node>' }

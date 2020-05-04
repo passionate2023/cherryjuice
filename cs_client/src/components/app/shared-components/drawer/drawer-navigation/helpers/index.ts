@@ -15,7 +15,7 @@ const handleToggle = () => {
 };
 const noOpFn = () => undefined;
 // https://gist.github.com/SleepWalker/da5636b1abcbaff48c4d#gistcomment-2577818
-const setupHandleGesture = ({
+const setupGesturesHandler = ({
   gestureZoneSelector,
   onRight = noOpFn,
   onLeft = noOpFn,
@@ -91,4 +91,4 @@ const updateSubTitle = ({ selectedScreenTitle }) => {
   );
   subTitleElement.innerHTML = selectedScreenTitle;
 };
-export { handleToggle, setupHandleGesture, updateSubTitle };
+export { handleToggle, setupGesturesHandler, updateSubTitle };

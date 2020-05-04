@@ -12,6 +12,7 @@ import { TState } from '::app/reducer';
 import { useReloadQuery } from '::hooks/use-reload-query';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
 import { NodeMeta } from '::types/generated';
+import { useSaveDocument } from '::app/editor/document/hooks/save-document';
 
 type Props = {
   state: TState;
@@ -73,7 +74,7 @@ const Document: React.FC<Props> = ({ state }) => {
       }
     }
   }, [error, file_id]);
-
+  useSaveDocument(saveDocument);
   return (
     <>
       <LinearProgress loading={loading} />
@@ -96,7 +97,6 @@ const Document: React.FC<Props> = ({ state }) => {
                     {...props}
                     nodes={nodes}
                     file_id={file_id}
-                    saveDocument={saveDocument}
                     reloadDocument={reloadDocument}
                     contentEditable={contentEditable || !isOnMobile}
                     processLinks={processLinks}

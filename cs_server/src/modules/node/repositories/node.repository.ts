@@ -10,7 +10,7 @@ export class NodeRepository extends Repository<Node>
   getAHtml(
     node_id: string,
     documentId: string,
-  ): Promise<{ nodes: any; styles: any }[]> {
+  ): Promise<{ nodes: any; style: any }[]> {
     return this.createQueryBuilder('node')
       .select('node.ahtml')
       .where('node.documentId = :documentId', { documentId })

@@ -1,9 +1,9 @@
-import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid';
 
 const randomUUID10 = () => nanoid(10);
 
 const debug = {
-  loadSqliteDocuments: false,
+  loadSqliteDocuments: process.env.LOAD_SQLITE_DOCUMENTS || true,
 };
 
 export { randomUUID10, debug };

@@ -35,7 +35,6 @@ export class ImageService {
     return this.imageRepository
       .getNodeImages({
         nodeId,
-        offset,
         thumbnail: false,
       })
       .then(nodes => {
@@ -76,7 +75,6 @@ export class ImageService {
     return this.imageRepository
       .getNodeImages({
         nodeId,
-        offset,
         thumbnail: true,
       })
       .then(nodes => {
