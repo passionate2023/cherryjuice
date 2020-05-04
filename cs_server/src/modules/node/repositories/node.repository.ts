@@ -2,6 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { INodeRepository } from '../interfaces/node.repository';
 import { Node } from '../entities/node.entity';
 import { Injectable } from '@nestjs/common';
+import { SaveAhtmlDto } from '../dto/save-ahtml.dto';
 
 @Injectable()
 @EntityRepository(Node)
@@ -32,5 +33,19 @@ export class NodeRepository extends Repository<Node>
     return await this.createQueryBuilder('node')
       .where('node.documentId = :documentId', { documentId })
       .getMany();
+  }
+
+  async saveAHtml({
+    user,
+    ahtml,
+    node_id,
+    documentId,
+  }: SaveAhtmlDto): Promise<string> {
+    const res = await this.createQueryBuilder('node')
+      .update()
+      .set({ ahtml })
+      .where({ node_id, userId: user.id, documentId })
+      .execute();
+    return JSON.stringify(res);
   }
 }

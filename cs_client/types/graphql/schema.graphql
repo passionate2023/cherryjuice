@@ -25,6 +25,7 @@ type Document {
 
 type DocumentMutation {
     deleteDocument(documents: DeleteDocumentInputType!): String!
+    node(node_id: String!): NodeMutation!
     uploadFile(files: [Upload!]!): Boolean!
     uploadLink(file: UploadLinkInputType!): Boolean!
 }
@@ -36,7 +37,7 @@ type DocumentSubscription {
 }
 
 type Mutation {
-    document: DocumentMutation!
+    document(file_id: String): DocumentMutation!
     user: UserMutation!
 }
 
@@ -58,6 +59,10 @@ type Node {
     node_id: Int!
     node_title_styles: String!
     updatedAt: Float!
+}
+
+type NodeMutation {
+    saveAHtml(ahtml: String!): String!
 }
 
 type Query {

@@ -21,7 +21,7 @@ const initialState = {
   showFileSelect:
     !localStorage.getItem('selectedFile') && location.pathname === '/',
   recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}
-  saveDocument: 0,
+  saveDocument: '',
   reloadDocument: 0,
   reloadFiles: 0,
   alert: undefined,

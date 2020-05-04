@@ -74,7 +74,8 @@ const Document: React.FC<Props> = ({ state }) => {
       }
     }
   }, [error, file_id]);
-  useSaveDocument(saveDocument);
+
+  useSaveDocument(saveDocument, file_id, String(state.selectedNode.id));
   return (
     <>
       <LinearProgress loading={loading} />

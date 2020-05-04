@@ -13,6 +13,7 @@ const QUERY_NODE_META = {
     query node_meta($file_id: String!) {
       document(file_id: $file_id) {
         node {
+          id
           node_id
           father_id
           name

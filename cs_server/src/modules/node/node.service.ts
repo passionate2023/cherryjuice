@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { Node } from './entities/node.entity';
 import { NodeRepository } from './repositories/node.repository';
 import { debug } from '../shared';
+import { SaveAhtmlDto } from './dto/save-ahtml.dto';
 
 @Injectable()
 export class NodeService {
@@ -31,5 +32,8 @@ export class NodeService {
     if (debug.loadSqliteDocuments)
       return this.nodeSqliteRepository.getNodeMetaById(node_id);
     return this.nodeRepository.getNodeMetaById(node_id, documentId);
+  }
+  async saveAHtml(args: SaveAhtmlDto): Promise<string> {
+    return await this.nodeRepository.saveAHtml(args);
   }
 }

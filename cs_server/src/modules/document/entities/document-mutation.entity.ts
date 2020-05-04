@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { NodeMutation } from '../../node/entities/node-mutation.entity';
 
 @ObjectType()
 export class DocumentMutation {
@@ -10,4 +11,7 @@ export class DocumentMutation {
 
   @Field()
   deleteDocument: string;
+
+  @Field()
+  node: NodeMutation;
 }

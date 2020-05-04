@@ -3,12 +3,21 @@ import { getAHtml } from '::helpers/rendering/html-to-ahtml';
 import { useMutation } from '@apollo/react-hooks';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 
-const useSaveDocument = saveDocument => {
+const useSaveDocument = (
+  saveDocumentCommandID: string,
+  file_id: string,
+  node_id: string,
+) => {
   const toolbarQueuesRef = useRef({});
   // eslint-disable-next-line no-unused-vars
-  const [mutate] = useMutation(DOCUMENT_MUTATION.html);
-  if (saveDocument && !toolbarQueuesRef.current[saveDocument]) {
-    toolbarQueuesRef.current[saveDocument] = true;
+  const [mutate, { error, loading, data }] = useMutation(
+    DOCUMENT_MUTATION.ahtml,
+  );
+  if (
+    saveDocumentCommandID &&
+    !toolbarQueuesRef.current[saveDocumentCommandID]
+  ) {
+    toolbarQueuesRef.current[saveDocumentCommandID] = true;
     const DDOEs = Array.from(document.querySelector('#rich-text').childNodes);
     const { abstractHtml, DDOEsAHtml } = getAHtml({
       DDOEs,
@@ -23,14 +32,14 @@ const useSaveDocument = saveDocument => {
     //   richText: aHtml,
     // });
     // document.querySelector('#rich-text').innerHTML = html;
-    //   if (!(saveDocument + '').endsWith('_'))
-    //     mutate({
-    //       variables: {
-    //         file_id: file_id || '',
-    //         node_id,
-    //         abstract_html: abstractHtml,
-    //       },
-    //     });
+    if (!(saveDocumentCommandID + '').endsWith('_'))
+      mutate({
+        variables: {
+          file_id: file_id,
+          node_id,
+          ahtml: JSON.stringify(aHtml),
+        },
+      });
   }
 };
 

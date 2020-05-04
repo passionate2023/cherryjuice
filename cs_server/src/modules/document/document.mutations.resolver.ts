@@ -1,6 +1,12 @@
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
-import { Args, Mutation, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { NodeService } from '../node/node.service';
 import { DocumentService } from './document.service';
 import { FileUpload, GraphQLUpload } from './helpers/graphql';
@@ -10,6 +16,7 @@ import { DocumentMutation } from './entities/document-mutation.entity';
 import { UploadLinkInputType } from './input-types/upload-link.input-type';
 import { DeleteDocumentInputType } from './input-types/delete-document.input-type';
 import { ImportsService } from '../imports/imports.service';
+import { NodeMutation } from '../node/entities/node-mutation.entity';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => DocumentMutation)
@@ -21,8 +28,8 @@ export class DocumentMutationsResolver {
   ) {}
 
   @Mutation(() => DocumentMutation)
-  document(): {} {
-    return {};
+  document(@Args('file_id', { nullable: true }) file_id?: string): {} {
+    return { id: file_id };
   }
 
   @ResolveField(() => Boolean)
@@ -62,5 +69,9 @@ export class DocumentMutationsResolver {
   ): Promise<string> {
     const deleteResult = await this.documentService.deleteDocuments(IDs, user);
     return JSON.stringify(deleteResult);
+  }
+  @ResolveField(() => [NodeMutation])
+  async node(@Parent() parent, @Args('node_id') node_id: string) {
+    return { node_id, documentId: parent.id };
   }
 }
