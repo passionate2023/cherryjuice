@@ -86,9 +86,8 @@ export class ImportsService {
     for (const node of nodes) {
       const images = await this.imageSqliteRepository.getNodeImages({
         node_id: node.node_id,
-        offset: undefined,
       });
-      for (const { png, offset } of images) {
+      for (const { png,  } of images) {
         if (png) {
           const image = new Image();
           image.image = png;
@@ -96,7 +95,6 @@ export class ImportsService {
             percentage: 5,
           });
           image.nodeId = node.id;
-          image.offset = offset;
           await image.save();
         }
       }

@@ -14,7 +14,6 @@ export class ImageService {
 
   async getPNGFullBase64({
     node_id,
-    offset,
     nodeId,
   }: {
     node_id: number;
@@ -25,7 +24,6 @@ export class ImageService {
       return this.imageSqliteRepository
         .getNodeImages({
           node_id,
-          offset,
         })
         .then(nodes => {
           return nodes.map(({ png }) => {
@@ -46,18 +44,15 @@ export class ImageService {
 
   async getPNGThumbnailBase64({
     node_id,
-    offset,
     nodeId,
   }: {
     node_id: number;
-    offset?: number;
     nodeId: string;
   }): Promise<Promise<string>[] | string[]> {
     if (debug.loadSqliteDocuments)
       return this.imageSqliteRepository
         .getNodeImages({
           node_id,
-          offset,
         })
         .then(nodes =>
           nodes.map(async ({ anchor, png }) =>

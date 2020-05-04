@@ -51,7 +51,7 @@ type Node {
     html: String!
     icon_id: String!
     id: String!
-    image(offset: Int, thumbnail: Boolean): [String]!
+    image(thumbnail: Boolean): [String]!
     is_empty: Int!
     is_richtxt: Int!
     name: String!

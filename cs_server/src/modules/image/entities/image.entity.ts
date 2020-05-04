@@ -22,9 +22,6 @@ export class Image extends BaseEntity {
   @Column()
   nodeId: string;
 
-  @Column('int8')
-  offset: number;
-
   @Column({ type: 'bytea', nullable: false })
   thumbnail: Buffer;
 
