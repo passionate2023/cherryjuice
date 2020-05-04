@@ -202,11 +202,11 @@ const n78 = {
                 '-webkit-text-stroke-width': '0px',
                 'background-color': 'rgb(255, 255, 255)',
                 'text-decoration-style': 'initial',
-                'text-decoration-color': 'initial'
-              }
-            }
-          ]
-        ]
+                'text-decoration-color': 'initial',
+              },
+            },
+          ],
+        ],
       },
       '\n',
       {
@@ -249,15 +249,15 @@ const n78 = {
                 '-webkit-text-stroke-width': '0px',
                 'background-color': 'rgb(255, 255, 255)',
                 'text-decoration-style': 'initial',
-                'text-decoration-color': 'initial'
-              }
-            }
-          ]
-        ]
+                'text-decoration-color': 'initial',
+              },
+            },
+          ],
+        ],
       },
       '\n',
-      { tags: [], _: '\n\n' }
-    ]
+      { tags: [], _: '\n\n' },
+    ],
   },
   output: [
     {
@@ -289,13 +289,13 @@ const n78 = {
               // widows: '2',
               // 'word-spacing': '0px',
               // '-webkit-text-stroke-width': '0px',
-              'background-color': 'rgb(255, 255, 255)'
+              'background-color': 'rgb(255, 255, 255)',
               // 'text-decoration': 'initial',
               // 'text-decoration-color': 'initial'
-            }
-          }
-        ]
-      ]
+            },
+          },
+        ],
+      ],
     },
     '\n',
     '\n',
@@ -336,17 +336,17 @@ const n78 = {
               // widows: '2',
               // 'word-spacing': '0px',
               // '-webkit-text-stroke-width': '0px',
-              'background-color': 'rgb(255, 255, 255)'
+              'background-color': 'rgb(255, 255, 255)',
               // 'text-decoration': 'initial',
               // 'text-decoration-color': 'initial'
-            }
-          }
-        ]
-      ]
+            },
+          },
+        ],
+      ],
     },
     '\n',
-    { tags: [], _: '\n\n' }
-  ]
+    { tags: [], _: '\n\n' },
+  ],
 };
 
 export { n78 };

@@ -2,21 +2,19 @@
 import { Element, stringifyStyles } from './element';
 import { objects } from './objects/objects';
 
-const aHtmlToHtml = ({
-  richText,
-}: {
-  richText: { nodes: Record<string, any>[]; style: Record<string, any>[] }[];
-}) => {
+const aHtmlToHtml = (
+  ahtml: { nodes: Record<string, any>[]; style: Record<string, any>[] }[],
+) => {
   let res = '<article></article>';
   try {
-    res = `${richText
+    res = `${ahtml
       .map(
         line =>
-          `<span class="rich-text__line" ${
+          `<span class="rich-text__line"${
             line.style ? `style="${stringifyStyles(line.style)}"` : ''
           }>${line.nodes
             .map(node =>
-              node.type ? objects[node.type](node) : Element({ node }),
+              node.type ? objects[node.type](node) : Element( node ),
             )
             .join('')}${'</span>'}`,
       )

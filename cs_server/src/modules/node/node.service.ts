@@ -15,14 +15,10 @@ export class NodeService {
   async getHtml(node_id: string, documentId: string): Promise<string> {
     if (debug.loadSqliteDocuments) {
       const ahtml = await this.nodeSqliteRepository.getAHtml(node_id);
-      return aHtmlToHtml({
-        richText: ahtml,
-      });
+      return aHtmlToHtml(ahtml);
     }
     const ahtml = await this.nodeRepository.getAHtml(node_id, documentId);
-    return aHtmlToHtml({
-      richText: ahtml,
-    });
+    return aHtmlToHtml(ahtml);
   }
 
   async getNodesMeta(documentId: string): Promise<Node[]> {

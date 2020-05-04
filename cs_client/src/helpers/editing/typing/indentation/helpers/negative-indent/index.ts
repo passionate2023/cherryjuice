@@ -32,7 +32,7 @@ const deleteSubDDOEsThatStartWithSpaceAndGetTheirText = (
   let firstSubDDOEThatISNotFullOfSpaces;
   let firstSubDDOEStartsWithSpace = false;
   let firstSubDDOEThatHasNoText;
-  Array.from(ddoe.childNodes).forEach((subDDOE, ) => {
+  Array.from(ddoe.childNodes).forEach(subDDOE => {
     if (!firstSubDDOEThatISNotFullOfSpaces && !firstSubDDOEThatHasNoText) {
       const text = getInnerText(subDDOE);
       if (!text) {

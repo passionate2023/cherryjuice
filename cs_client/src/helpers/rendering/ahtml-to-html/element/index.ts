@@ -14,21 +14,22 @@ const stringifyStyles = (style = {}, onlyStylesThatStartWith = undefined) =>
     .replace(/;\s*;/g, ';')
     .replace(/^;$/, '');
 
-const createElement = (tag, attributes, children) =>
-  `<${tag} ${attributes &&
-    Object.entries(attributes)
-      .map(([key, value]) =>
-        key === 'style' && Object.keys(value).length === 0
-          ? ''
-          : `${key}='${key === 'style' ? stringifyStyles(value) : value}'`,
-      )
-      .join(' ')}>${children}</${tag}>`;
+const createElement = (tag, attributes, children) => {
+  const attributesPairs = Object.entries(attributes).map(([key, value]) =>
+    key === 'style' && Object.keys(value).length === 0
+      ? ''
+      : `${key}="${key === 'style' ? stringifyStyles(value) : value}"`,
+  );
+  return `<${tag}${`${`${
+    attributesPairs.length ? ' ' : ''
+  }${attributesPairs.join(' ')}`}`}>${children}</${tag}>`;
+};
 
-const Element = ({ node }) =>
+const Element = node =>
   node?.tags?.length
     ? node.tags.reduceRight((acc, [tagName, attributes]) => {
-        return createElement(`${tagName}`, attributes, acc);
-      }, escapeHtml(node._))
+      return createElement(`${tagName}`, attributes, acc);
+    }, escapeHtml(node._))
     : createElement(`span`, {}, escapeHtml(node._ || node));
 
 export { Element, stringifyStyles };

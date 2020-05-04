@@ -7,20 +7,20 @@ const aHtmlsToElements = (
   { startDDOE },
 ) => ({
   childrenElementsOfStartDDOE: childrenOfStartDDDE.map(node =>
-    toNodes(aHtmlToElement({ node })),
+    toNodes(aHtmlToElement(node)),
   ),
   adjacentElementsOfStartDDOE: midDDOEs
     .reduce((acc, DDOEs) => {
       const startDDOEShell = startDDOE.cloneNode();
-      startDDOEShell.innerHTML = DDOEs.map(node =>
-        aHtmlToElement({ node }),
-      ).join('');
+      startDDOEShell.innerHTML = DDOEs.map(node => aHtmlToElement(node)).join(
+        '',
+      );
       acc.push(startDDOEShell.outerHTML);
       return acc;
     }, [])
     .map(toNodes),
   childrenElementsOfEndDDOE: childrenOfEndDDDE.map(node =>
-    toNodes(aHtmlToElement({ node })),
+    toNodes(aHtmlToElement(node)),
   ),
 });
 

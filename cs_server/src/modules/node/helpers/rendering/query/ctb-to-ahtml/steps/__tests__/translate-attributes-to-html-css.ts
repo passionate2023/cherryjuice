@@ -69,11 +69,19 @@ const testData = {
       style: 'italic',
     },
     output: {
-      $: {
-        color: '#c792ea',
-        'background-color': '#2B2B2B',
-      },
-      tags: ['code', 'small', 'em'],
+      tags: [
+        [
+          'code',
+          {
+            style: {
+              'background-color': '#2B2B2B',
+              color: '#c792ea',
+            },
+          },
+        ],
+        ['small', {}],
+        ['em', {}],
+      ],
     },
   },
 };

@@ -6,72 +6,92 @@ Array [
     "nodes": Array [
       "- we can think of callbacks as a continuation, a secondary half that runs after a time-gap that separates it from the first half",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "\\"w",
       Object {
-        "$": Object {
-          "color": "#e6e6e6",
-        },
         "_": "hen we refer to functions as continuations, what we mean is, we did the first half of our program now, and we wrap the second half of our program up in a callback",
-        "tags": Array [],
+        "tags": Array [
+          Array [
+            "span",
+            Object {
+              "style": Object {
+                "color": "#e6e6e6",
+              },
+            },
+          ],
+        ],
       },
       "\\"",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "- the instructor suggests that callback hell doesnt actually have to do with indentation, as we could rewrite a \\"callback hell\\" without nesting",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
         "$": Object {
-          "height": "100px",
-          "width": "100px",
+          "height": 100,
+          "justification": "left",
+          "width": 100,
         },
         "other_attributes": Object {
           "offset": 440,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "100px",
+          "width": "100px",
+        },
         "type": "png",
       },
       Object {
         "$": Object {
-          "height": "200px",
-          "width": "200px",
+          "height": 200,
+          "justification": "left",
+          "width": 200,
         },
         "other_attributes": Object {
           "offset": 441,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "200px",
+          "width": "200px",
+        },
         "type": "png",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "the instructor suggests that t",
       Object {
-        "$": Object {
-          "color": "#e6e6e6",
-        },
         "_": "here are two conceptually deficient",
-        "tags": Array [],
+        "tags": Array [
+          Array [
+            "span",
+            Object {
+              "style": Object {
+                "color": "#e6e6e6",
+              },
+            },
+          ],
+        ],
       },
       " problems with callbacks",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
 ]
 `;
@@ -82,59 +102,59 @@ Array [
     "nodes": Array [
       "the instructor suggests",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "generators will solve",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "if a yield",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "instead ",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "yield > pause > then > it.next",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
 ]
 `;
@@ -144,110 +164,173 @@ Array [
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": "i ",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": "a ",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c792ea",
-        },
         "_": "f ",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c792ea",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c3e88d",
-        },
         "_": "''",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c3e88d",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": ";",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": "import * ",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c792ea",
-        },
         "_": "f ",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c792ea",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c3e88d",
-        },
         "_": "''",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c3e88d",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": ";",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
 ]
 `;
@@ -256,367 +339,615 @@ exports[`pipe snapshot tests offset images 1`] = `
 Array [
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c792ea",
-        },
         "_": "let ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c792ea",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": "it ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": "= ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#82aaff",
-        },
         "_": "gen",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#82aaff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#f78c6c",
-        },
         "_": "()",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": ";",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#9a1197",
-          "color": "#c792ea",
-        },
         "_": "console",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#9a1197",
+                "color": "#c792ea",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#9a1197",
-          "color": "#89ddff",
-        },
         "_": ".",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#9a1197",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#9a1197",
-          "color": "#82aaff",
-        },
         "_": "log",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#9a1197",
+                "color": "#82aaff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#9a1197",
-          "color": "#f78c6c",
-        },
         "_": "(",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#9a1197",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#9a1197",
-        },
         "_": "it",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#9a1197",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#9a1197",
-          "color": "#89ddff",
-        },
         "_": ".",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#9a1197",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#9a1197",
-          "color": "#82aaff",
-        },
         "_": "next",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#9a1197",
+                "color": "#82aaff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#9a1197",
-          "color": "#f78c6c",
-        },
         "_": "())",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#9a1197",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#9a1197",
-          "color": "#89ddff",
-        },
         "_": ";",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#9a1197",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#c792ea",
-        },
         "_": "console",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#c792ea",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#89ddff",
-        },
         "_": ".",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#82aaff",
-        },
         "_": "log",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#82aaff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#f78c6c",
-        },
         "_": "(",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-        },
         "_": "it",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#89ddff",
-        },
         "_": ".",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#82aaff",
-        },
         "_": "next",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#82aaff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#f78c6c",
-        },
         "_": "(5))",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#89ddff",
-        },
         "_": ";",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
         "$": Object {
-          "height": "100px",
-          "width": "100px",
+          "height": 100,
+          "justification": "left",
+          "width": 100,
         },
         "other_attributes": Object {
           "offset": 68,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "100px",
+          "width": "100px",
+        },
         "type": "png",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "example2",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
         "$": Object {
-          "height": "200px",
-          "width": "200px",
+          "height": 200,
+          "justification": "left",
+          "width": 200,
         },
         "other_attributes": Object {
           "offset": 81,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "200px",
+          "width": "200px",
+        },
         "type": "png",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "(run is equivalent to it.next)",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
 ]
 `;
@@ -626,163 +957,251 @@ Array [
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#89ddff",
-        },
         "_": " ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#ffffff",
-        },
         "_": " 5",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#ffffff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#89ddff",
-        },
         "_": "  ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#c792ea",
-        },
         "_": "let ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#c792ea",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-        },
         "_": "y ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#89ddff",
-        },
         "_": "= ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#f78c6c",
-        },
         "_": "0 ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#498b49",
-          "color": "#89ddff",
-        },
         "_": "+ ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#498b49",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
         "$": Object {
-          "height": "100px",
-          "width": "100px",
+          "height": 100,
+          "justification": "left",
+          "width": 100,
         },
         "other_attributes": Object {
           "offset": 20,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "100px",
+          "width": "100px",
+        },
         "type": "png",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "example2",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
         "$": Object {
-          "height": "200px",
-          "width": "200px",
+          "height": 200,
+          "justification": "left",
+          "width": 200,
         },
         "other_attributes": Object {
           "offset": 33,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "200px",
+          "width": "200px",
+        },
         "type": "png",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "(run is equivalent to it.next)",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
 ]
 `;
@@ -793,41 +1212,60 @@ Array [
     "nodes": Array [
       "- fr",
       Object {
-        "$": Object {
-          "color": "#ffffff",
-        },
         "_": " and ",
-        "tags": Array [],
-      },
-      Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#ffffff",
-        },
-        "_": "split",
         "tags": Array [
-          "code",
+          Array [
+            "span",
+            Object {
+              "style": Object {
+                "color": "#ffffff",
+              },
+            },
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "color": "#ffffff",
-        },
+        "_": "split",
+        "tags": Array [
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#ffffff",
+              },
+            },
+          ],
+        ],
+      },
+      Object {
         "_": ".",
-        "tags": Array [],
+        "tags": Array [
+          Array [
+            "span",
+            Object {
+              "style": Object {
+                "color": "#ffffff",
+              },
+            },
+          ],
+        ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {},
+        "$": Object {
+          "justification": "left",
+        },
         "other_attributes": Object {
           "col_max_width": 100,
           "col_min_width": 100,
           "offset": 16,
         },
+        "style": Object {},
         "table": Object {
           "td": Array [
             Array [
@@ -860,842 +1298,1404 @@ Array [
             "age",
           ],
         },
-        "tags": Array [],
         "type": "table",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       ">regex functions",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "a) regex.test returns a boolean if the pattern matches",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c792ea",
-        },
         "_": "let ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c792ea",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": "str ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": "= ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c3e88d",
-        },
         "_": "\`Is this This?\`",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c3e88d",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": ";",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c792ea",
-        },
         "_": "console",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c792ea",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": ".",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#82aaff",
-        },
         "_": "log",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#82aaff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#f78c6c",
-        },
         "_": "(",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c3e88d",
-        },
         "_": "/isd/g",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c3e88d",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": ".",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#82aaff",
-        },
         "_": "test",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#82aaff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#f78c6c",
-        },
         "_": "(",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": "str",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#f78c6c",
-        },
         "_": "))",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": "; ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#546e7a",
-        },
         "_": "// false",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#546e7a",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c792ea",
-        },
         "_": "console",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c792ea",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": ".",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#82aaff",
-        },
         "_": "log",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#82aaff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#f78c6c",
-        },
         "_": "(",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c3e88d",
-        },
         "_": "/is/g",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c3e88d",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": ".",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#82aaff",
-        },
         "_": "test",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#82aaff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#f78c6c",
-        },
         "_": "(",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": "str",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#f78c6c",
-        },
         "_": "))",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": "; ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#546e7a",
-        },
         "_": "// true",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#546e7a",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "b) regex.exec returns a regexArray",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c792ea",
-        },
         "_": "let ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c792ea",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": "str ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": "= ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c3e88d",
-        },
         "_": "\`Is this This?\`",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c3e88d",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": ";",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c792ea",
-        },
         "_": "let ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c792ea",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": "regex ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": "= ",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c3e88d",
-        },
         "_": "/is/g",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c3e88d",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": ";",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#c792ea",
-        },
         "_": "console",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#c792ea",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": ".",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#82aaff",
-        },
         "_": "log",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#82aaff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#f78c6c",
-        },
         "_": "(",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": "regex",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": ".",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#82aaff",
-        },
         "_": "exec",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#82aaff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#f78c6c",
-        },
         "_": "(",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": "str",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#f78c6c",
-        },
         "_": "))",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#f78c6c",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": ";",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#546e7a",
-        },
         "_": "// [ 'is', index: 5, input: 'Is this This?', groups: undefined ]",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#546e7a",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "unlike ",
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": "test",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
       ", the ",
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": "exec",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
       " method is stateful: ",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
         "$": Object {
-          "height": "100px",
-          "width": "100px",
+          "height": 100,
+          "justification": "left",
+          "width": 100,
         },
         "other_attributes": Object {
           "offset": 420,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "100px",
+          "width": "100px",
+        },
         "type": "png",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       ">string functions",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "a) ",
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": "str.match",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "color": "#c792ea",
-        },
         "_": "let ",
         "tags": Array [
-          "em",
+          Array [
+            "em",
+            Object {
+              "style": Object {
+                "color": "#c792ea",
+              },
+            },
+          ],
         ],
       },
       Object {
-        "$": Object {},
         "_": "str ",
         "tags": Array [
-          "em",
+          Array [
+            "em",
+            Object {
+              "style": Object {},
+            },
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "color": "#89ddff",
-        },
         "_": "= ",
         "tags": Array [
-          "em",
+          Array [
+            "em",
+            Object {
+              "style": Object {
+                "color": "#89ddff",
+              },
+            },
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "color": "#c3e88d",
-        },
         "_": "\`Is this This?\`",
         "tags": Array [
-          "em",
+          Array [
+            "em",
+            Object {
+              "style": Object {
+                "color": "#c3e88d",
+              },
+            },
+          ],
         ],
       },
       Object {
-        "$": Object {
-          "color": "#89ddff",
-        },
         "_": ";",
         "tags": Array [
-          "em",
+          Array [
+            "em",
+            Object {
+              "style": Object {
+                "color": "#89ddff",
+              },
+            },
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       ">basic regex playground using ",
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": "str.replace",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
         "$": Object {
-          "height": "100px",
-          "width": "100px",
+          "height": 100,
+          "justification": "left",
+          "width": 100,
         },
         "_": "codebox0",
         "other_attributes": Object {
@@ -1706,18 +2706,22 @@ Array [
           "syntax": "js",
           "width_raw": 100,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "100px",
+          "width": "100px",
+        },
         "type": "code",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
         "$": Object {
-          "height": "200px",
-          "width": "200px",
+          "height": 200,
+          "justification": "left",
+          "width": 200,
         },
         "_": "codebox1",
         "other_attributes": Object {
@@ -1728,78 +2732,99 @@ Array [
           "syntax": "js",
           "width_raw": 200,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "200px",
+          "width": "200px",
+        },
         "type": "code",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
         "$": Object {
-          "height": "200px",
-          "width": "200px",
+          "height": 200,
+          "justification": "left",
+          "width": 200,
         },
         "other_attributes": Object {
           "offset": 529,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "200px",
+          "width": "200px",
+        },
         "type": "png",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "*",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       ">my react alternative",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
         "$": Object {
-          "height": "300px",
-          "width": "300px",
+          "height": 300,
+          "justification": "left",
+          "width": 300,
         },
         "other_attributes": Object {
           "offset": 555,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "300px",
+          "width": "300px",
+        },
         "type": "png",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "- full code",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-          "color": "#89ddff",
-        },
         "_": "i",
         "tags": Array [
-          "code",
-          "small",
-          "em",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+                "color": "#89ddff",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
+          Array [
+            "em",
+            Object {},
+          ],
         ],
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
 ]
 `;
@@ -1810,72 +2835,87 @@ Array [
     "nodes": Array [
       "promises can be chained together",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       ">example",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
         "$": Object {
-          "height": "100px",
-          "width": "100px",
+          "height": 100,
+          "justification": "left",
+          "width": 100,
         },
         "other_attributes": Object {
           "offset": 42,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "100px",
+          "width": "100px",
+        },
         "type": "png",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       "the ",
       Object {
-        "$": Object {
-          "background-color": "#2B2B2B",
-        },
         "_": ".then",
         "tags": Array [
-          "code",
-          "small",
+          Array [
+            "code",
+            Object {
+              "style": Object {
+                "background-color": "#2B2B2B",
+              },
+            },
+          ],
+          Array [
+            "small",
+            Object {},
+          ],
         ],
       },
       " on line 5 will \\"magically\\" wait for the promise from line 3",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       ">example2",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
         "$": Object {
-          "height": "200px",
-          "width": "200px",
+          "height": 200,
+          "justification": "left",
+          "width": 200,
         },
         "other_attributes": Object {
           "offset": 125,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "200px",
+          "width": "200px",
+        },
         "type": "png",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
 ]
 `;
@@ -1886,34 +2926,42 @@ Array [
     "nodes": Array [
       "haha",
     ],
-    "styles": undefined,
+    "style": undefined,
   },
   Object {
     "nodes": Array [
       Object {
         "$": Object {
-          "height": "100px",
-          "width": "100px",
+          "height": 100,
+          "justification": "left",
+          "width": 100,
         },
         "other_attributes": Object {
           "offset": 5,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "100px",
+          "width": "100px",
+        },
         "type": "png",
       },
       Object {
         "$": Object {
-          "height": "200px",
-          "width": "200px",
+          "height": 200,
+          "justification": "left",
+          "width": 200,
         },
         "other_attributes": Object {
           "offset": 6,
         },
-        "tags": Array [],
+        "style": Object {
+          "height": "200px",
+          "width": "200px",
+        },
         "type": "png",
       },
     ],
-    "styles": undefined,
+    "style": undefined,
   },
 ]
 `;
