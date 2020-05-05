@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { getAHtml } from '::helpers/rendering/html-to-ahtml';
 import { useMutation } from '@apollo/react-hooks';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
+import { appActionCreators } from '::app/reducer';
 const useSaveDocument = (
   saveDocumentCommandID: string,
   imageIDs: string[] = [],
@@ -28,12 +29,20 @@ const useSaveDocument = (
       style: ddoe.style,
       nodes: abstractHtml[i],
     }));
+    const deletedImages = imageIDs.filter(id => !currentImageIDs.has(id));
     mutate({
       variables: {
         file_id: file_id,
         node_id,
         ahtml: JSON.stringify(aHtml),
-        deletedImages: imageIDs.filter(id => !currentImageIDs.has(id)),
+        deletedImages,
+      },
+      update: store => {
+        deletedImages.forEach(id => {
+          // @ts-ignore
+          store.data.delete(`Image:${id}`);
+        });
+        appActionCreators.reloadDocument();
       },
     });
   }

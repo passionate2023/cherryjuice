@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { NodeMeta, DocumentMeta,  Node } from '::types/generated';
+import { NodeMeta, DocumentMeta, Node } from '::types/generated';
 import {
   AuthUser,
   DOCUMENT_SUBSCRIPTIONS,

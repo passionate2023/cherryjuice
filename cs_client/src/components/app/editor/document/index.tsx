@@ -44,7 +44,7 @@ const Document: React.FC<Props> = ({ state }) => {
     reloadDocument,
   );
 
-  const { loading: savingInProgress, data: savingResult } = useSaveDocument(
+  const { loading: savingInProgress } = useSaveDocument(
     saveDocument,
     documentState.nodes[state.selectedNode.id]?.imageIDs,
     file_id,
@@ -73,10 +73,7 @@ const Document: React.FC<Props> = ({ state }) => {
                     {...props}
                     nodes={nodes}
                     file_id={file_id}
-                    reloadRequestIDs={[
-                      String(reloadDocument),
-                      savingResult ? saveDocument : undefined,
-                    ].filter(Boolean)}
+                    reloadRequestIDs={[String(reloadDocument)]}
                     contentEditable={contentEditable || !isOnMobile}
                     processLinks={processLinks}
                   />

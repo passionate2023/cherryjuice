@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "npm link parcel-bundler",
+    "postinstall": "npm link parcel-bundler && cd src/modules/node/helpers/rendering/query/ahtml-to-html && npm link",
     "watch:server:parcel": "node scripts/parcel.dev.js",
     "watch:server": "webpack --progress",
     "prebuild": "rimraf dist",
