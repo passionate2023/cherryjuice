@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { getAHtml } from '::helpers/rendering/html-to-ahtml';
 import { useMutation } from '@apollo/react-hooks';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
-
+import { aHtmlToHtml } from '@cs/ahtml-to-html';
 const useSaveDocument = (
   saveDocumentCommandID: string,
   file_id: string,
@@ -28,10 +28,8 @@ const useSaveDocument = (
       style: ddoe.style,
       nodes: abstractHtml[i],
     }));
-    // const html = aHtmlToHtml({
-    //   richText: aHtml,
-    // });
-    // document.querySelector('#rich-text').innerHTML = html;
+    const html = aHtmlToHtml(aHtml);
+    document.querySelector('#rich-text').innerHTML = html;
     if (!(saveDocumentCommandID + '').endsWith('_'))
       mutate({
         variables: {

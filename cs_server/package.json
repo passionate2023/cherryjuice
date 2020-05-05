@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "postinstall": "npm link parcel-bundler",
-    "watch:server:fast": "node scripts/parcel.dev.js",
+    "watch:server:parcel": "node scripts/parcel.dev.js",
     "watch:server": "webpack --progress",
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -61,6 +61,7 @@
     "xml2js": "^0.4.22"
   },
   "devDependencies": {
+    "@babel/runtime": "^7.9.6",
     "@nestjs/cli": "^7.1.2",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",

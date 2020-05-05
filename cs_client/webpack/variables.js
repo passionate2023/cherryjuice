@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
+const fs = require('fs');
+
 module.exports = {
   alias: {
     '::sass-modules': path.resolve(__dirname, '../src/assets/styles/modules/'),
@@ -33,5 +35,10 @@ module.exports = {
     iconsDist: path.resolve(__dirname, '../dist/icons/'),
     icons: path.resolve(__dirname, '../src/assets/icons'),
     env: path.join(__dirname, '../.env'),
+    src: [
+      path.resolve(__dirname, '../src'),
+      path.resolve(__dirname, '../types'),
+      fs.realpathSync('node_modules/@cs/ahtml-to-html'),
+    ],
   },
 };

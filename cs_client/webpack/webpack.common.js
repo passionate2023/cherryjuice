@@ -34,10 +34,17 @@ module.exports = ({ production } = { production: false }) => ({
         use: [
           {
             loader: 'babel-loader',
-            options: { babelrc: true },
+            options: {
+              presets: ['@babel/env', '@babel/react', '@babel/typescript'],
+              plugins: [
+                '@babel/plugin-proposal-optional-chaining',
+                '@babel/plugin-proposal-class-properties',
+                ['@babel/plugin-transform-runtime', { regenerator: true,runtime: true }],
+              ],
+            },
           },
         ],
-        exclude: /node_modules/,
+        include: paths.src,
       },
       {
         test: /\.(graphql|gql|svg)$/,
@@ -56,8 +63,7 @@ module.exports = ({ production } = { production: false }) => ({
               localsConvention: 'dashes',
               importLoaders: 2,
               modules: {
-                localIdentName:
-                  production ? '[hash:base64]' : '[local]',
+                localIdentName: production ? '[hash:base64]' : '[local]',
               },
               esModule: true,
             },

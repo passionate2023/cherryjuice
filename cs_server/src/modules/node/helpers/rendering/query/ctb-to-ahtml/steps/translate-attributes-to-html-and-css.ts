@@ -1,43 +1,9 @@
-import path from 'path';
+import { parseLink } from '../../ahtml-to-html/helpers/ctb';
 const preferences = { code: { 'background-color': '#2B2B2B' } };
 
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10],
-  parseLink: c => {
-    const attributes = {
-      href: '',
-      target: '_blank',
-      'data-type': '',
-      class: '',
-    };
-    if (c.startsWith('node')) {
-      const [, id, anchor] = /node (\d+) *(.+)?/.exec(c);
-      attributes.href = `${id}${
-        anchor ? `#${encodeURIComponent(anchor)}` : ''
-      }`;
-      attributes['data-type'] = 'node';
-    } else if (c.startsWith('webs')) {
-      const [, url] = /webs (.+)/.exec(c);
-      attributes.href = url;
-      attributes['data-type'] = 'web';
-    } else if (c.startsWith('file')) {
-      const [, url] = /file (.+)/.exec(c);
-      attributes.href = `file:///${path.resolve(
-        Buffer.from(url, 'base64').toString(),
-      )}`;
-      // attributes.href = `file:///${Buffer.from(url, 'base64').toString()}`;
-      attributes['data-type'] = 'file';
-    } else {
-      const [, url] = /fold (.+)/.exec(c);
-      attributes.href = `file:///${path.resolve(
-        Buffer.from(url, 'base64').toString(),
-      )}`;
-      // attributes.href = `file:///${Buffer.from(url, 'base64').toString()}`;
-      attributes['data-type'] = 'folder';
-    }
-    attributes.class = `rich-text__link rich-text__link${`--${attributes['data-type']}`}`;
-    return attributes;
-  },
+  parseLink
 };
 const justificationMap = {
   'text-align': {

@@ -1,5 +1,4 @@
-import { xmlAttributesToCssUtils } from '../../../ctb-to-ahtml/steps/translate-attributes-to-html-and-css';
-
+import { parseLink } from '../../helpers/ctb';
 type Props = {
   style: {
     'text-align': string;
@@ -16,11 +15,7 @@ type Props = {
   };
 };
 const addImageLinkProperties = (link: string) => {
-  const {
-    'data-type': dataType,
-    href,
-    target,
-  } = xmlAttributesToCssUtils.parseLink(link);
+  const { 'data-type': dataType, href, target } = parseLink(link);
   return [
     'class="rich-text__image--link rich-text__image--link-' + dataType + '"',
     'role="link"',

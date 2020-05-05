@@ -1,4 +1,4 @@
-import { escapeHtml } from '../../../../../html';
+import { escapeHtml } from '../../helpers/escape-html';
 
 type Props = {
   table: { th: string[]; td: string[][] };
