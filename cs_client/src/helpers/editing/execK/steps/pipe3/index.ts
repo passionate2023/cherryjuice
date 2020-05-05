@@ -1,7 +1,9 @@
-import { aHtmlToElement } from '::helpers/rendering/ahtml-to-html/helpers';
 import { toNodes } from '::helpers/editing/execK/helpers';
 import { replaceElement } from '::helpers/editing/execK/steps/pipe3/helpers';
 import { getDDOE } from '::helpers/editing/execK/steps/pipe1/ddoes';
+import { Element } from '@cs/ahtml-to-html';
+const aHtmlToElement = node => (node.type ? node.outerHTML : Element(node));
+
 const aHtmlsToElements = (
   { childrenOfStartDDDE, midDDOEs, childrenOfEndDDDE },
   { startDDOE },

@@ -17,8 +17,8 @@ const extractImage = (acc, el, commonAttributes, options, state) => {
               }),
             },
             style: {
-              width: /(^\d+)/.exec(el.style.width)[1],
-              height: /(^\d+)/.exec(el.style.height)[1],
+              width: el.style.width,
+              height: el.style.height,
             },
           },
     );

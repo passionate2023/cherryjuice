@@ -135,10 +135,10 @@ const createActionCreators = () => {
     hidePopups: () => {
       state.dispatch({ type: actions.HIDE_POPUPS });
     },
-    saveDocument: e => {
+    saveDocument: () => {
       state.dispatch({
         type: actions.SAVE_DOCUMENT,
-        value: e.shiftKey ? new Date().getTime() : new Date().getTime() + '_', // don't send to the server
+        value: new Date().getTime(),
       });
     },
     reloadDocument: () => {

@@ -1,27 +1,19 @@
+import { modRichText } from '::sass-modules/index';
 import * as React from 'react';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useRouteMatch } from 'react-router';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
-import { setupClipboard } from '::helpers/editing/clipboard';
-import { setupKeyboardEvents } from '::helpers/editing/typing';
-import {
-  hotKeysManager,
-  setupDevHotKeys,
-  setupFormattingHotKeys,
-} from '::helpers/hotkeys';
-
-import { modRichText } from '::sass-modules/index';
 import { useReactRouterForAnchors } from '::app/editor/document/rich-text/hooks/react-router-for-anchors';
 import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
-import { appActionCreators } from '::app/reducer';
 import { NodeMeta } from '::types/generated';
-import { setupGesturesHandler } from '::shared-components/drawer/drawer-navigation/helpers';
-import { useGetNodeContent } from '::app/editor/document/rich-text/hooks/get-node-content';
+import { useGetNodeHtml } from '::app/editor/document/rich-text/hooks/get-node-html';
 import { useSetCurrentNode } from '::app/editor/document/rich-text/hooks/set-current-node';
+import { useSetupStuff } from '::app/editor/document/rich-text/hooks/setup-stuff';
+import { useGetNodeImages } from '::app/editor/document/rich-text/hooks/get-node-images';
 
 type Props = {
   file_id: string;
-  reloadDocument: number;
+  reloadRequestIDs: string[];
   contentEditable: boolean;
   nodes: Map<number, NodeMeta>;
   processLinks: number;
@@ -29,7 +21,7 @@ type Props = {
 
 const RichText: React.FC<Props> = ({
   file_id,
-  reloadDocument,
+  reloadRequestIDs,
   contentEditable,
   nodes,
   processLinks,
@@ -39,37 +31,34 @@ const RichText: React.FC<Props> = ({
   // @ts-ignore
   const node_id = Number(match.params?.node_id);
 
-  useEffect(() => {
-    setupClipboard();
-    setupKeyboardEvents();
-    setupFormattingHotKeys();
-    setupDevHotKeys();
-    hotKeysManager.startListening();
-  }, []);
-
-  const nodeContent = useGetNodeContent(
+  const {
+    html: htmlWithoutImages,
+    error: htmlError,
+    processLinks: processLinksDueToHtmlChange,
+  } = useGetNodeHtml({
     node_id,
-    reloadDocument,
+    reloadRequestIDs,
     file_id,
-    processLinks,
+  });
+  const {
+    processLinks: processLinksDueToImagesChange,
+    html,
+  } = useGetNodeImages({
+    html: htmlWithoutImages,
+    file_id,
+    node_id,
     richTextRef,
-  );
-  const { html } = nodeContent;
-  processLinks = nodeContent.processLinks;
-  useReactRouterForAnchors({ file_id, processLinks });
+  });
+  useReactRouterForAnchors({
+    file_id,
+    processLinks:
+      processLinksDueToHtmlChange ||
+      processLinksDueToImagesChange ||
+      processLinks,
+  });
   useScrollToHashElement({ html });
   useSetCurrentNode(node_id, nodes);
-
-  useEffect(() => {
-    setupGesturesHandler({
-      onRight: appActionCreators.showTree,
-      onLeft: appActionCreators.hideTree,
-      onTap: appActionCreators.hidePopups,
-      gestureZoneSelector: modRichText.richText,
-      minimumLength: 170,
-    });
-  }, []);
-
+  useSetupStuff();
   return (
     <>
       <div
@@ -82,7 +71,7 @@ const RichText: React.FC<Props> = ({
               dangerouslySetInnerHTML: { __html: html },
             }
           : {
-              children: nodeContent.error ? (
+              children: htmlError ? (
                 <span className={modRichText.richText__error}>
                   could not fetch the node
                 </span>

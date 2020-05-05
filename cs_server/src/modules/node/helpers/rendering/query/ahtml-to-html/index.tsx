@@ -5,24 +5,25 @@ import { objects } from './objects/objects';
 const aHtmlToHtml = (
   ahtml: { nodes: Record<string, any>[]; style: Record<string, any>[] }[],
 ) => {
-  let res = '<article></article>';
-  try {
-    res = `${ahtml
-      .map(
-        line =>
-          `<span class="rich-text__line"${
-            line.style ? `style="${stringifyStyles(line.style)}"` : ''
-          }>${line.nodes
-            .map(node =>
-              node.type ? objects[node.type](node) : Element( node ),
-            )
-            .join('')}${'</span>'}`,
-      )
-      .join('')}`;
-  } catch (e) {
-    console.error(e);
-  }
+  let res = '<span class="rich-text__line"></span>';
+  if (ahtml.length)
+    try {
+      res = `${ahtml
+        .map(
+          line =>
+            `<span class="rich-text__line"${
+              line.style ? `style="${stringifyStyles(line.style)}"` : ''
+            }>${line.nodes
+              .map(node =>
+                node.type ? objects[node.type](node) : Element(node),
+              )
+              .join('')}${'</span>'}`,
+        )
+        .join('')}`;
+    } catch (e) {
+      console.error(e);
+    }
   return res;
 };
 
-export { aHtmlToHtml };
+export { aHtmlToHtml, Element };

@@ -7,6 +7,8 @@ import { split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import { useRef } from 'react';
 
+if (process.env.NODE_ENV === 'development')
+  localStorage.setItem('graphqlAPIHost', 'localhost:1230');
 const host = localStorage.getItem('graphqlAPIHost') || location.host;
 const secure = location.protocol === 'https:';
 

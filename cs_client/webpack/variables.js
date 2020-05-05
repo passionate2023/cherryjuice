@@ -34,7 +34,7 @@ module.exports = {
     dist: path.resolve(__dirname, '../dist'),
     iconsDist: path.resolve(__dirname, '../dist/icons/'),
     icons: path.resolve(__dirname, '../src/assets/icons'),
-    env: path.join(__dirname, '../.env'),
+    env: undefined /*path.join(__dirname, '../.env')*/,
     src: [
       path.resolve(__dirname, '../src'),
       path.resolve(__dirname, '../types'),

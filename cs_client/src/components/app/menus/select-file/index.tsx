@@ -42,10 +42,10 @@ const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
   return { buttonsLeft, buttonsRight };
 };
 
-const useData = ({ reloadFiles }) => {
+const useData = ({ reloadFiles }: { reloadFiles: number }) => {
   const { data, loading, error, manualFetch } = useReloadQuery(
     {
-      reloadRequestID: reloadFiles,
+      reloadRequestIDs: [reloadFiles],
     },
     {
       query: QUERY_DOCUMENTS.documentMeta.query,
@@ -101,7 +101,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
           holdingRef.current = false;
         }}
       >
-        <Icon name={Icons.material.cancel}  />
+        <Icon name={Icons.material.cancel} />
       </CircleButton>
     ),
     documentsMeta.length && holdingRef.current && (
@@ -111,7 +111,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
         className={modDialog.dialog__header__fileButton}
         onClick={deleteDocument}
       >
-        <Icon name={Icons.material['delete']}  />
+        <Icon name={Icons.material['delete']} />
       </CircleButton>
     ),
   ].filter(Boolean);

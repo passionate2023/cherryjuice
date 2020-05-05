@@ -39,7 +39,10 @@ module.exports = ({ production } = { production: false }) => ({
               plugins: [
                 '@babel/plugin-proposal-optional-chaining',
                 '@babel/plugin-proposal-class-properties',
-                ['@babel/plugin-transform-runtime', { regenerator: true,runtime: true }],
+                [
+                  '@babel/plugin-transform-runtime',
+                  { regenerator: true, runtime: true },
+                ],
               ],
             },
           },

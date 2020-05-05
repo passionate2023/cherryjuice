@@ -1,6 +1,7 @@
 import { commands } from '::helpers/hotkeys/commands';
 import { execK } from '::helpers/editing/execK';
 import { createTestSample } from '::helpers/editing/execK/__tests__/__helpers__/create-test-sample';
+import { appActionCreators } from '::app/reducer';
 
 type THotKey = {
   key?: string;
@@ -95,6 +96,11 @@ const setupFormattingHotKeys = () => {
       document.querySelector(`#${inputId}`).click();
     });
   });
+
+  hotKeysManager.createHotKey(
+    { key: 's', ctrlKey: true },
+    appActionCreators.saveDocument,
+  );
 };
 
 const setupDevHotKeys = () => {

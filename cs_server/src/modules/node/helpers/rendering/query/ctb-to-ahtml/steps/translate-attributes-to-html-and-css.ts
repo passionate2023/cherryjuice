@@ -3,7 +3,7 @@ const preferences = { code: { 'background-color': '#2B2B2B' } };
 
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10],
-  parseLink
+  parseLink,
 };
 const justificationMap = {
   'text-align': {
