@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Document } from '../../document/entities/document.entity';
+import { Image } from '../../image/entities/image.entity';
 
 @Unique(['node_id', 'documentId'])
 @Entity()
@@ -85,8 +86,8 @@ export class Node extends BaseEntity {
   @Field()
   icon_id: string;
 
-  @Field(() => [String], { nullable: 'items' })
-  image: string[];
+  @Field(() => [Image], { nullable: 'items' })
+  image: Image[];
 
   @Field()
   html: string;

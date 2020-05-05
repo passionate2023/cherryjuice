@@ -4,6 +4,8 @@ import { ImageSqliteRepository } from './repositories/image.sqlite.repository';
 import { bufferToPng } from '../node/helpers/ctb';
 import { debug } from '../shared';
 import { ImageRepository } from './repositories/image.repository';
+import { Image } from './entities/image.entity';
+import { DeleteResult } from 'typeorm';
 
 @Injectable()
 export class ImageService {
@@ -17,9 +19,8 @@ export class ImageService {
     nodeId,
   }: {
     node_id: number;
-    offset?: number;
     nodeId: string;
-  }): Promise<string[]> {
+  }): Promise<Image[]> {
     if (debug.loadSqliteDocuments)
       return this.imageSqliteRepository
         .getNodeImages({
@@ -27,7 +28,10 @@ export class ImageService {
         })
         .then(nodes => {
           return nodes.map(({ png }) => {
-            return bufferToPng(png);
+            const image = new Image();
+            image.base64 = bufferToPng(png);
+            image.id = new Date().getTime() + '';
+            return image;
           });
         });
     return this.imageRepository
@@ -36,8 +40,9 @@ export class ImageService {
         thumbnail: false,
       })
       .then(nodes => {
-        return nodes.map(({ image }) => {
-          return bufferToPng(image);
+        return nodes.map(image => {
+          image.base64 = bufferToPng(image.image);
+          return image;
         });
       });
   }
@@ -48,7 +53,7 @@ export class ImageService {
   }: {
     node_id: number;
     nodeId: string;
-  }): Promise<Promise<string>[] | string[]> {
+  }): Promise<Promise<Image>[] | Image[]> {
     if (debug.loadSqliteDocuments)
       return this.imageSqliteRepository
         .getNodeImages({
@@ -58,12 +63,17 @@ export class ImageService {
           nodes.map(async ({ anchor, png }) =>
             anchor
               ? null
-              : (
-                  await imageThumbnail(png, {
-                    percentage: 5,
-                    responseType: 'base64',
-                  })
-                ).toString(),
+              : (async () => {
+                  const image = new Image();
+                  image.base64 = (
+                    await imageThumbnail(png, {
+                      percentage: 5,
+                      responseType: 'base64',
+                    })
+                  ).toString();
+                  image.id = new Date().getTime() + '';
+                  return image;
+                })(),
           ),
         );
 
@@ -72,10 +82,15 @@ export class ImageService {
         nodeId,
         thumbnail: true,
       })
-      .then(nodes => {
-        return nodes.map(({ thumbnail }) => {
-          return bufferToPng(thumbnail);
-        });
-      });
+      .then(nodes =>
+        nodes.map(image => {
+          image.base64 = bufferToPng(image.thumbnail);
+          return image;
+        }),
+      );
+  }
+
+  async deleteImages(IDs: string[]): Promise<DeleteResult> {
+    return await this.imageRepository.deleteImages(IDs);
   }
 }

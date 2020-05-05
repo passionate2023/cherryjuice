@@ -1,6 +1,7 @@
 const extractImage = (acc, el, commonAttributes, options, state) => {
-  if (el.dataset.href) state.selectionContainsLinks = true;
-  if (el.dataset)
+  if (el.dataset) {
+    if (el.dataset.href) state.selectionContainsLinks = true;
+    if (el.dataset.id) state.imageIDs.add(el.dataset.id);
     // existing image
     acc.push(
       options.serializeNonTextElements
@@ -22,6 +23,7 @@ const extractImage = (acc, el, commonAttributes, options, state) => {
             },
           },
     );
+  }
   // new image
   else {
     throw new Error('saving pasted images is not implemented yet');

@@ -6,9 +6,12 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Node } from '../../node/entities/node.entity';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @Entity()
+@ObjectType()
 export class Image extends BaseEntity {
+  @Field()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -27,4 +30,7 @@ export class Image extends BaseEntity {
 
   @Column({ type: 'bytea', nullable: false })
   image: Buffer;
+
+  @Field()
+  base64: string;
 }

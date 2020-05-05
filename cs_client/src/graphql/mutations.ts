@@ -25,10 +25,15 @@ const DOCUMENT_MUTATION = {
     }
   `,
   ahtml: gql`
-    mutation saveAhtml($file_id: String!, $node_id: String!, $ahtml: String!) {
+    mutation saveAhtml(
+      $file_id: String!
+      $node_id: String!
+      $ahtml: String!
+      $deletedImages: [String]!
+    ) {
       document(file_id: $file_id) {
         node(node_id: $node_id) {
-          saveAHtml(ahtml: $ahtml)
+          saveAHtml(ahtml: $ahtml, deletedImages: $deletedImages)
         }
       }
     }

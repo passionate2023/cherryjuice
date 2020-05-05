@@ -1,8 +1,9 @@
 import gql from 'graphql-tag';
-import { NodeMeta, DocumentMeta, NodeImage, Node } from '::types/generated';
+import { NodeMeta, DocumentMeta,  Node } from '::types/generated';
 import {
   AuthUser,
   DOCUMENT_SUBSCRIPTIONS,
+  Image,
   Secrets,
 } from '::types/graphql/generated';
 import { FRAGMENT_USER } from '::graphql/fragments';
@@ -35,7 +36,8 @@ const QUERY_NODE_META = {
 
 const QUERY_NODE_CONTENT = {
   png: {
-    path: (data): NodeImage | undefined => data?.document[0]?.node[0],
+    path: (data): { node_id: number; image: Image[] } | undefined =>
+      data?.document[0]?.node[0],
     query: gql`
       query node_content__png(
         $file_id: String!
@@ -45,7 +47,10 @@ const QUERY_NODE_CONTENT = {
         document(file_id: $file_id) {
           node(node_id: $node_id) {
             node_id
-            image(thumbnail: $thumbnail)
+            image(thumbnail: $thumbnail) {
+              base64
+              id
+            }
           }
         }
       }

@@ -5,10 +5,12 @@ import { Node } from './entities/node.entity';
 import { NodeRepository } from './repositories/node.repository';
 import { debug } from '../shared';
 import { SaveAhtmlDto } from './dto/save-ahtml.dto';
+import { ImageService } from '../image/image.service';
 
 @Injectable()
 export class NodeService {
   constructor(
+    private imageService: ImageService,
     private nodeRepository: NodeRepository,
     private nodeSqliteRepository: NodeSqliteRepository,
   ) {}
@@ -34,6 +36,8 @@ export class NodeService {
     return this.nodeRepository.getNodeMetaById(node_id, documentId);
   }
   async saveAHtml(args: SaveAhtmlDto): Promise<string> {
+    if (args.deletedImages.length)
+      await this.imageService.deleteImages(args.deletedImages);
     return await this.nodeRepository.saveAHtml(args);
   }
 }

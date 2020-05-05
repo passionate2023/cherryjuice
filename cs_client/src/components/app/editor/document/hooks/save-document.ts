@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 const useSaveDocument = (
   saveDocumentCommandID: string,
+  imageIDs: string[] = [],
   file_id: string,
   node_id: string,
 ) => {
@@ -18,7 +19,7 @@ const useSaveDocument = (
   ) {
     toolbarQueuesRef.current[saveDocumentCommandID] = true;
     const DDOEs = Array.from(document.querySelector('#rich-text').childNodes);
-    const { abstractHtml, DDOEsAHtml } = getAHtml({
+    const { abstractHtml, DDOEsAHtml, imageIDs: currentImageIDs } = getAHtml({
       DDOEs,
       options: { reduceLines: true, useObjForTextNodes: true },
     });
@@ -32,6 +33,7 @@ const useSaveDocument = (
         file_id: file_id,
         node_id,
         ahtml: JSON.stringify(aHtml),
+        deletedImages: imageIDs.filter(id => !currentImageIDs.has(id)),
       },
     });
   }

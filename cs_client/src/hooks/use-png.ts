@@ -1,9 +1,14 @@
 import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import { QUERY_NODE_CONTENT } from '::graphql/queries';
 import { useRef } from 'react';
-
-const usePng = ({ node_id, file_id }) => {
-  const png = useRef(undefined);
+import { Image } from '::types/graphql/generated';
+type TPng = {
+  node_id: number;
+  pngs: Image[];
+  full: boolean;
+};
+const usePng = ({ node_id, file_id }): TPng => {
+  const png = useRef<TPng>(undefined);
   const startFetchingFull = useRef(false);
 
   const { data: data_thumbnail } = useQuery(QUERY_NODE_CONTENT.png.query, {
@@ -33,7 +38,6 @@ const usePng = ({ node_id, file_id }) => {
         full: false,
       };
     }
-    // fetch the full res when the browser scrolls to the image
     if (png.current && !startFetchingFull.current) {
       fetch();
       startFetchingFull.current = true;

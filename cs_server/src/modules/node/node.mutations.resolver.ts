@@ -16,9 +16,17 @@ export class NodeMutationsResolver {
   async saveAHtml(
     @Parent() { node_id, documentId }: { node_id: string; documentId: string },
     @Args('ahtml') ahtml: string,
+    @Args({ name: 'deletedImages', type: () => [String], nullable: 'items' })
+    deletedImages: string[],
     @GetUserGql() user: User,
   ): Promise<string> {
-    await this.nodeService.saveAHtml({ user, node_id, ahtml, documentId });
+    await this.nodeService.saveAHtml({
+      user,
+      node_id,
+      ahtml,
+      documentId,
+      deletedImages,
+    });
     return '';
   }
 }

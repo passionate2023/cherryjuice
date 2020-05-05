@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useReducer } from 'react';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Tree } from './tree';
 import { Route, useRouteMatch } from 'react-router-dom';
@@ -9,6 +9,9 @@ import { RichText } from '::app/editor/document/rich-text';
 import { TState } from '::app/reducer';
 import { useSaveDocument } from '::app/editor/document/hooks/save-document';
 import { useGetDocumentMeta } from '::app/editor/document/hooks/get-document-meta';
+import { documentReducer } from '::app/editor/document/reducer/reducer';
+import { documentInitialState } from '::app/editor/document/reducer/initial-state';
+import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 
 type Props = {
   state: TState;
@@ -24,7 +27,13 @@ const Document: React.FC<Props> = ({ state }) => {
     isOnMobile,
     processLinks,
   } = state;
-
+  const [documentState, dispatch] = useReducer(
+    documentReducer,
+    documentInitialState,
+  );
+  useEffect(() => {
+    documentActionCreators.setDispatch(dispatch);
+  }, []);
   const match = useRouteMatch();
   // @ts-ignore
   const { file_id } = match.params;
@@ -37,6 +46,7 @@ const Document: React.FC<Props> = ({ state }) => {
 
   const { loading: savingInProgress, data: savingResult } = useSaveDocument(
     saveDocument,
+    documentState.nodes[state.selectedNode.id]?.imageIDs,
     file_id,
     String(state.selectedNode.id),
   );

@@ -5,4 +5,5 @@ export class SaveAhtmlDto {
   ahtml: string;
   node_id: string;
   documentId: string;
+  deletedImages: string[];
 }

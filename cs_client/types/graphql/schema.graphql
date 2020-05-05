@@ -36,6 +36,11 @@ type DocumentSubscription {
     eventType: DOCUMENT_SUBSCRIPTIONS!
 }
 
+type Image {
+    base64: String!
+    id: String!
+}
+
 type Mutation {
     document(file_id: String): DocumentMutation!
     user: UserMutation!
@@ -52,7 +57,7 @@ type Node {
     html: String!
     icon_id: String!
     id: String!
-    image(thumbnail: Boolean): [String]!
+    image(thumbnail: Boolean): [Image]!
     is_empty: Int!
     is_richtxt: Int!
     name: String!
@@ -62,7 +67,7 @@ type Node {
 }
 
 type NodeMutation {
-    saveAHtml(ahtml: String!): String!
+    saveAHtml(ahtml: String!, deletedImages: [String]!): String!
 }
 
 type Query {

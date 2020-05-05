@@ -40,13 +40,18 @@ export interface Node {
   html: string;
   icon_id: string;
   id: string;
-  image: Array<string | null>;
+  image: Array<Image | null>;
   is_empty: number;
   is_richtxt: number;
   name: string;
   node_id: number;
   node_title_styles: string;
   updatedAt: number;
+}
+
+export interface Image {
+  base64: string;
+  id: string;
 }
 
 export interface Secrets {
@@ -152,6 +157,7 @@ export interface Resolver {
   Query?: QueryTypeResolver;
   Document?: DocumentTypeResolver;
   Node?: NodeTypeResolver;
+  Image?: ImageTypeResolver;
   Secrets?: SecretsTypeResolver;
   AuthUser?: AuthUserTypeResolver;
   User?: UserTypeResolver;
@@ -341,6 +347,19 @@ export interface NodeToUpdatedAtResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface ImageTypeResolver<TParent = any> {
+  base64?: ImageToBase64Resolver<TParent>;
+  id?: ImageToIdResolver<TParent>;
+}
+
+export interface ImageToBase64Resolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface ImageToIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface SecretsTypeResolver<TParent = any> {
   google_api_key?: SecretsToGoogle_api_keyResolver<TParent>;
   google_client_id?: SecretsToGoogle_client_idResolver<TParent>;
@@ -504,6 +523,7 @@ export interface NodeMutationTypeResolver<TParent = any> {
 
 export interface NodeMutationToSaveAHtmlArgs {
   ahtml: string;
+  deletedImages: Array<string | null>;
 }
 export interface NodeMutationToSaveAHtmlResolver<TParent = any, TResult = any> {
   (

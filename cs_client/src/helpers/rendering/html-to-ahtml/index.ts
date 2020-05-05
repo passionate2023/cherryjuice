@@ -20,7 +20,10 @@ type TProps = {
 };
 const getAHtml = ({ DDOEs, options = {} }: TProps) => {
   const { DDOEsChildren, DDOEsAHtml } = flattenDDOEs({ DDOEs });
-  const state = { /*offset: 0,*/ selectionContainsLinks: false };
+  const state = {
+    /*offset: 0,*/ selectionContainsLinks: false,
+    imageIDs: new Set(),
+  };
 
   const abstractHtml = (DDOEsChildren as any[]).reduce((acc, el) => {
     if (el.nodeType === Node.ELEMENT_NODE || el.nodeType === Node.TEXT_NODE) {
@@ -53,6 +56,7 @@ const getAHtml = ({ DDOEs, options = {} }: TProps) => {
       ? reduceIntoLines(abstractHtml)
       : abstractHtml,
     selectionContainsLinks: state.selectionContainsLinks,
+    imageIDs: state.imageIDs,
   };
 };
 

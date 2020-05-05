@@ -101,6 +101,10 @@ const setupFormattingHotKeys = () => {
     { key: 's', ctrlKey: true },
     appActionCreators.saveDocument,
   );
+  hotKeysManager.createHotKey(
+    { key: 'r', ctrlKey: true },
+    appActionCreators.reloadDocument,
+  );
 };
 
 const setupDevHotKeys = () => {
