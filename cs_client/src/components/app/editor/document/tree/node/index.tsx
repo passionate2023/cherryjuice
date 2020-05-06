@@ -1,6 +1,6 @@
 import nodeMod from '::sass-modules/tree/node.scss';
 import modIcons from '::sass-modules/tree/node.scss';
-import { NodeMeta } from '::types/generated';
+import { NodeMeta } from '::types/graphql/adapters';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
@@ -8,6 +8,11 @@ import { getTreeStateFromLocalStorage } from '::helpers/misc';
 import { Icon, ICON_SIZE, Icons } from '::shared-components/icon';
 import { nodeOverlay } from './helpers/node-overlay';
 import { scrollIntoToolbar } from '::helpers/ui';
+import {
+  updateCache,
+} from '::app/editor/document/tree/node/helpers/apollo-cache';
+import { useContext } from 'react';
+import { RootContext } from '::root/root-context';
 
 type Props = {
   node_id: number;
@@ -39,6 +44,9 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
   );
   const componentRef = useRef();
   // callback hooks
+  const {
+    apolloClient: { cache },
+  } = useContext(RootContext);
   const selectNode = useCallback(
     e => {
       const eventIsTriggeredByCollapseButton = e.target.classList.contains(
@@ -47,6 +55,8 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
       if (eventIsTriggeredByCollapseButton) return;
       nodeOverlay.updateWidth();
       nodeOverlay.updateLeft(componentRef);
+
+      updateCache(cache);
       history.push(nodePath);
     },
     [nodePath],

@@ -46,11 +46,9 @@ const updateBreakpointState = ({ breakpoint, callback }) => {
 const useHandleRouting = state => {
   const history = useHistory();
   useEffect(() => {
-    if (state.selectedFile) {
-      if (history.location.pathname === '/')
-        history.push('/document/' + state.selectedFile);
-    }
-  }, [state.selectedFile]);
+    if (history.location.pathname === '/')
+      if (state.selectedFile) history.push('/document/' + state.selectedFile);
+  }, [state.selectedFile, history.location.pathname]);
 };
 const useUpdateCssVariables = (state: TState) => {
   useEffect(() => {

@@ -8,7 +8,7 @@ const useReloadQuery = (
   const reloadQueuesRef = useRef({});
   const [fetch, { data, loading, error }] = useLazyQuery(query, {
     variables: queryVariables,
-    fetchPolicy: 'network-only',
+    // fetchPolicy: 'network-only',
   });
   const firstFetchRef = useRef(true);
   if (firstFetchRef.current) {

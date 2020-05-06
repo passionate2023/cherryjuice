@@ -18,10 +18,10 @@ const Header: React.FC<Props> = ({
   clearFinishedDocuments,
 }) => {
   const inactiveImports = documents.filter(
-    ({ status }) =>
-      status === DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_DUPLICATE ||
-      status === DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED ||
-      status === DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FAILED,
+    ({ eventType }) =>
+      eventType === DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_DUPLICATE ||
+      eventType === DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED ||
+      eventType === DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FAILED,
   ).length;
   const ongoingImports = documents.length - inactiveImports;
   const header = collapsed

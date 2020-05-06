@@ -1,6 +1,7 @@
 import { TAlert } from '::types/react';
 
 const defaultSelectNode = {
+  nodeId: '',
   id: -1,
   name: '',
   is_richtxt: '',
@@ -36,6 +37,7 @@ const initialState = {
   showUserPopup: false,
 };
 export type TRecentNode = {
+  nodeId: string;
   id: number;
   name: string;
   style?: Record<string, string | number>;
@@ -150,12 +152,12 @@ const createActionCreators = () => {
     selectFile: (fileId: string) =>
       state.dispatch({ type: actions.SELECT_FILE, value: fileId }),
     selectNode: (
-      { node_id, name, style },
+      { node_id, name, style, nodeId },
       { is_richtxt, createdAt, updatedAt },
     ) =>
       state.dispatch({
         type: actions.SELECT_NODE,
-        value: { node_id, name, style, is_richtxt, createdAt, updatedAt },
+        value: { node_id, name, style, is_richtxt, createdAt, updatedAt, nodeId },
       }),
     processLinks(value: number) {
       state.dispatch({
@@ -201,6 +203,7 @@ const reducer = (
       return {
         ...state,
         selectedNode: {
+          nodeId: action.value.nodeId,
           id: +action.value.node_id,
           name: `${action.value.name}`,
           is_richtxt: `${action.value.is_richtxt}`,
@@ -213,6 +216,7 @@ const reducer = (
             node => +node.id !== +action.value.node_id,
           ),
           {
+            nodeId: action.value.nodeId,
             id: action.value.node_id,
             name: action.value.name,
             style: action.value.style,

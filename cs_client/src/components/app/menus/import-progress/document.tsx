@@ -11,7 +11,6 @@ type TDocumentProps = {
   name: string;
   id: string;
   eventType: DOCUMENT_SUBSCRIPTIONS;
-  clearFinishedDocuments: Function;
 };
 const mapEventType = (value: DOCUMENT_SUBSCRIPTIONS) => {
   switch (value) {
@@ -61,18 +60,15 @@ const ActionButton = ({ eventType, deleteDocument, clear, open }) => {
       className={modImportProgress.importProgress__document__button}
       onClick={props.onClick}
     >
-      <Icon name={props.iconName}  />
+      <Icon name={props.iconName} />
     </CircleButton>
   );
 };
 const cropNampe = (name: string) =>
   name.length < 19 ? name : `${name.substring(0, 18)}...`;
-const Document: React.FC<TDocumentProps> = ({
-  name,
-  eventType,
-  id,
-  clearFinishedDocuments,
-}) => {
+const Document: React.FC<TDocumentProps & {
+  clearFinishedDocuments: Function;
+}> = ({ name, eventType, id, clearFinishedDocuments }) => {
   const { deleteDocument } = useDeleteFile({ IDs: [id] });
   const history = useHistory();
   const open = () => {

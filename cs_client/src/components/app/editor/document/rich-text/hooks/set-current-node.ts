@@ -11,12 +11,14 @@ const useSetCurrentNode = (node_id, nodes) => {
         is_richtxt,
         createdAt,
         updatedAt,
+        id,
       } = node;
       appActionCreators.selectNode(
         {
           node_id,
           name,
           style: node_title_styles,
+          nodeId: id,
         },
         {
           is_richtxt,

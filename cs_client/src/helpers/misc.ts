@@ -4,13 +4,13 @@ const getTreeStateFromLocalStorage = () => {
   else return {};
 };
 
-const expandParents = ({ tree, id, nodes }) => {
-  const node = nodes.get(id);
+const expandParents = ({ tree, node_id, nodes }) => {
+  const node = nodes.get(node_id);
   if (node) {
     const { father_id } = node;
     if (father_id > -1) {
       tree[father_id] = true;
-      expandParents({ tree, id: father_id, nodes });
+      expandParents({ tree, node_id: father_id, nodes });
     }
   }
 };

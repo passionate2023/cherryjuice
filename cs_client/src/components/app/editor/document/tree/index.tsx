@@ -2,7 +2,7 @@ import treeModule from '::sass-modules/tree/tree.scss';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { Node } from './node';
-import { NodeMeta } from '::types/generated';
+import { NodeMeta } from '::types/graphql/adapters';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Resizable } from 're-resizable';
 import { onResize, onResizeStop, onStart } from './helpers';

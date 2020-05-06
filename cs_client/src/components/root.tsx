@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useClient } from '::graphql/apollo';
+import { useApolloClient } from '::graphql/apollo';
 import { LoginForm } from '::auth/login-form';
 import { Suspense, useEffect, useReducer } from 'react';
 import { Route, useHistory } from 'react-router';
@@ -32,10 +32,8 @@ const useProtectedRoutes = ({ session }) => {
       if (!isOnLoginOrSignUp) history.push('/login');
       localSessionManager.clear();
     } else {
-      if (isOnLoginOrSignUp) {
-        history.push('/');
-        localSessionManager.set(session);
-      }
+      if (isOnLoginOrSignUp) history.push('/');
+      localSessionManager.set(session);
     }
   }, [session]);
 };
@@ -45,25 +43,30 @@ const Root: React.FC<Props> = () => {
   const [state, dispatch] = useReducer(rootReducer, rootInitialState);
   useEffect(() => {
     rootActionCreators.setDispatch(dispatch);
-  }, [dispatch]);
-  const apolloClient = useClient(state.session.token);
+  }, []);
+  useApolloClient(state.session);
   useProtectedRoutes({ session: state.session });
   return (
     <RootContext.Provider value={state}>
       <Suspense fallback={<Void />}>
-        <ApolloProvider client={apolloClient}>
-          {state.session.token && (
-            <Route path={'/'} render={() => <App session={state.session} />} />
-          )}
-          <Route
-            path={'/login'}
-            render={() => <LoginForm session={state.session} />}
-          />{' '}
-          <Route
-            path={'/signup'}
-            render={() => <SignUpForm session={state.session} />}
-          />
-        </ApolloProvider>
+        {state.apolloClient && (
+          <ApolloProvider client={state.apolloClient}>
+            {state.session.token && (
+              <Route
+                path={'/'}
+                render={() => <App session={state.session} />}
+              />
+            )}
+            <Route
+              path={'/login'}
+              render={() => <LoginForm session={state.session} />}
+            />{' '}
+            <Route
+              path={'/signup'}
+              render={() => <SignUpForm session={state.session} />}
+            />
+          </ApolloProvider>
+        )}
       </Suspense>
     </RootContext.Provider>
   );

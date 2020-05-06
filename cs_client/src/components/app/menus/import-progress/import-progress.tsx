@@ -2,7 +2,7 @@ import { modImportProgress } from '::sass-modules/index';
 import * as React from 'react';
 import { useState } from 'react';
 import { Header } from './header';
-import { Document, TDocumentProps } from './document';
+import { Document,  } from './document';
 import {
   DOCUMENT_SUBSCRIPTIONS,
   DocumentSubscription,
@@ -13,7 +13,7 @@ type Props = {};
 type TActiveImports = {
   [id: string]: DocumentSubscription;
 };
-const mapDocuments = (activeImports: TActiveImports): TDocumentProps[] =>
+const mapDocuments = (activeImports: TActiveImports) =>
   Object.values(activeImports).map(document => ({
     key: document.documentId,
     name: document.documentName,

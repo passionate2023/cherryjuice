@@ -45,7 +45,9 @@ const QUERY_NODE_CONTENT = {
         $thumbnail: Boolean
       ) {
         document(file_id: $file_id) {
+          id
           node(node_id: $node_id) {
+            id
             node_id
             image(thumbnail: $thumbnail) {
               base64
@@ -61,7 +63,9 @@ const QUERY_NODE_CONTENT = {
     query: gql`
       query node_content__html($file_id: String!, $node_id: Int!) {
         document(file_id: $file_id) {
+          id
           node(node_id: $node_id) {
+            id
             html
             node_id
           }
