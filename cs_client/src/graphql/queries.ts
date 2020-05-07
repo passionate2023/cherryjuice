@@ -36,7 +36,7 @@ const QUERY_NODE_META = {
 
 const QUERY_NODE_CONTENT = {
   png: {
-    path: (data): { node_id: number; image: Image[] } | undefined =>
+    path: (data): { node_id: number; image: Image[]; id: string } | undefined =>
       data?.document[0]?.node[0],
     query: gql`
       query node_content__png(

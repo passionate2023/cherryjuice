@@ -1,6 +1,7 @@
 type TState = {
   nodes: {
     [nodeId: string]: {
+      fetchedImageIDs: string[];
       edited: boolean;
     };
   };

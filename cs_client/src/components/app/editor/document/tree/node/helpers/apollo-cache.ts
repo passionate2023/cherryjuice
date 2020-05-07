@@ -36,18 +36,59 @@ const getEditorContentWithoutImages = () => {
     html,
     id,
     node_id,
-    imageIDs: imageAttributesTempContainer.map(({ dataId }) => dataId),
+    imageIDs: Object.fromEntries(
+      imageAttributesTempContainer.map(({ dataId }) => [dataId, true]),
+    ),
   };
 };
+const getNodeImageIDsFromCache = ({ cache, nodeId }): string[] => {
+  return cache.data.get('Node:' + nodeId)[
+    // eslint-disable-next-line no-unexpected-multiline
+    'image({"thumbnail":true})'
+  ].map(({ id }) => /:(.+)$/.exec(id)[1]);
+};
 
-const updateCache = cache => {
-  const { html, id } = getEditorContentWithoutImages();
+const updatedCachedHtml = (cache, nodeId, html) => {
+  const node = cache.data.get('Node:' + nodeId);
   // @ts-ignore
-  cache.data.set('Node:' + id, {
+  cache.data.set('Node:' + nodeId, {
     // @ts-ignore
-    ...cache.data.get('Node:' + id),
+    ...node,
     html,
   });
 };
-
-export { updateCache };
+const updateCachedImages = (cache, nodeId, deletedImages: string[]) => {
+  const node = cache.data.get('Node:' + nodeId);
+  const deleted = Object.fromEntries(
+    deletedImages.map(id => ['Image:' + id, true]),
+  );
+  cache.data.set('Node:' + nodeId, {
+    // @ts-ignore
+    ...node,
+    'image({"thumbnail":true})': node['image({"thumbnail":true})'].filter(
+      ({ id }) => !deleted[id],
+    ),
+    'image({"thumbnail":false})': node['image({"thumbnail":false})'].filter(
+      ({ id }) => !deleted[id],
+    ),
+  });
+  deletedImages.forEach(id => {
+    cache.data.delete('Image:' + id);
+  });
+};
+const updateCacheAfterSwitchingNode = cache => {
+  const { html, id, imageIDs: imageIDsInDom } = getEditorContentWithoutImages();
+  if (id) {
+    const imageIDsInCache = getNodeImageIDsFromCache({ cache, nodeId: id });
+    const deletedImages = imageIDsInCache.filter(id => !imageIDsInDom[id]);
+    updatedCachedHtml(cache, id, html);
+    if (deletedImages.length) updateCachedImages(cache, id, deletedImages);
+  }
+};
+export {
+  updateCacheAfterSwitchingNode,
+  getNodeImageIDsFromCache,
+  updateCachedImages,
+  updatedCachedHtml,
+  getEditorContentWithoutImages,
+};

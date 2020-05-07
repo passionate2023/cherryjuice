@@ -27,7 +27,7 @@ const Document: React.FC<Props> = ({ state }) => {
     isOnMobile,
     processLinks,
   } = state;
-  const [, dispatch] = useReducer(
+  const [documentState, dispatch] = useReducer(
     documentReducer,
     documentInitialState,
   );
@@ -48,7 +48,8 @@ const Document: React.FC<Props> = ({ state }) => {
     saveDocument,
     file_id,
     String(state.selectedNode.id),
-    String(state.selectedNode.nodeId),
+    state.selectedNode.nodeId,
+    documentState.nodes[state.selectedNode.nodeId]?.fetchedImageIDs,
   );
 
   return (

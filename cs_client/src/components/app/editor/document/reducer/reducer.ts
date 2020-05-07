@@ -9,6 +9,16 @@ const reducer = (
   },
 ): TDocumentState => {
   switch (action.type) {
+    case documentActions.SET_FETCHED_IMAGE_IDS:
+      return {
+        ...state,
+        nodes: {
+          ...state.nodes,
+          [action.value.nodeId]: {
+            fetchedImageIDs: action.value.fetchedImageIDs,
+          },
+        },
+      };
     default:
       throw new Error('action not supported');
   }

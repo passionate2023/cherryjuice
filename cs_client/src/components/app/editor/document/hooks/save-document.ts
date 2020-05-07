@@ -1,19 +1,17 @@
-import { useContext, useRef } from 'react';
+import { useRef } from 'react';
 import { getAHtml } from '::helpers/rendering/html-to-ahtml';
 import { useMutation } from '@apollo/react-hooks';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { appActionCreators } from '::app/reducer';
-import { RootContext } from '::root/root-context';
+import { updateCachedImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 const useSaveDocument = (
   saveDocumentCommandID: string,
   file_id: string,
   node_id: string,
   nodeId: string,
+  fetchedImageIDs: string[] = [],
 ) => {
   const toolbarQueuesRef = useRef({});
-  const {
-    apolloClient: { cache },
-  } = useContext(RootContext);
   // eslint-disable-next-line no-unused-vars
   const [mutate, { error, loading, data }] = useMutation(
     DOCUMENT_MUTATION.ahtml,
@@ -34,11 +32,7 @@ const useSaveDocument = (
       nodes: abstractHtml[i],
     }));
     // @ts-ignore
-    const existingImageIDs = cache.data
-      .get('Node:' + nodeId)
-      // eslint-disable-next-line no-unexpected-multiline
-      ['image({"thumbnail":true})'].map(({ id }) => /:(.+)$/.exec(id)[1]);
-    const deletedImages = existingImageIDs.filter(
+    const deletedImages = fetchedImageIDs.filter(
       id => !currentImageIDs.has(id),
     );
     mutate({
@@ -49,10 +43,7 @@ const useSaveDocument = (
         deletedImages,
       },
       update: store => {
-        deletedImages.forEach(id => {
-          // @ts-ignore
-          store.data.delete(`Image:${id}`);
-        });
+        updateCachedImages(store, nodeId, deletedImages);
         appActionCreators.reloadDocument();
       },
     });

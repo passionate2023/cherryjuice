@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { Image } from '::types/graphql/generated';
 type TPng = {
   node_id: number;
+  nodeId: string;
   pngs: Image[];
   full: boolean;
 };
@@ -25,6 +26,7 @@ const usePng = ({ node_id, file_id }): TPng => {
   if (pngs_full?.node_id === node_id) {
     png.current = {
       node_id,
+      nodeId: pngs_full.id,
       pngs: pngs_full.image,
       full: true,
     };
@@ -34,6 +36,7 @@ const usePng = ({ node_id, file_id }): TPng => {
     if (pngs_thumbnail?.node_id === node_id) {
       png.current = {
         node_id,
+        nodeId: pngs_thumbnail.id,
         pngs: pngs_thumbnail.image,
         full: false,
       };
