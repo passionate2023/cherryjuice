@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { NodeMeta, DocumentMeta, Node } from '::types/generated';
+import { DocumentMeta, Node } from '::types/generated';
 import {
   AuthUser,
   DOCUMENT_SUBSCRIPTIONS,
@@ -7,6 +7,7 @@ import {
   Secrets,
 } from '::types/graphql/generated';
 import { FRAGMENT_USER } from '::graphql/fragments';
+import { NodeMeta } from '::types/graphql/adapters';
 
 const QUERY_NODE_META = {
   path: (data): NodeMeta[] | undefined => data?.document[0]?.node,
@@ -15,6 +16,7 @@ const QUERY_NODE_META = {
       document(file_id: $file_id) {
         node {
           id
+          documentId
           node_id
           father_id
           name

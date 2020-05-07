@@ -8,7 +8,7 @@ import { getTreeStateFromLocalStorage } from '::helpers/misc';
 import { Icon, ICON_SIZE, Icons } from '::shared-components/icon';
 import { nodeOverlay } from './helpers/node-overlay';
 import { scrollIntoToolbar } from '::helpers/ui';
-import { updateCacheAfterSwitchingNode } from '::app/editor/document/tree/node/helpers/apollo-cache';
+import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { useContext } from 'react';
 import { RootContext } from '::root/root-context';
 
@@ -54,7 +54,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
       nodeOverlay.updateWidth();
       nodeOverlay.updateLeft(componentRef);
 
-      updateCacheAfterSwitchingNode(cache);
+      updateCachedHtmlAndImages(cache);
       history.push(nodePath);
     },
     [nodePath],

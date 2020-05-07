@@ -1,7 +1,7 @@
 import { useReloadQuery } from '::hooks/use-reload-query';
 import { QUERY_NODE_META } from '::graphql/queries';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
-import { NodeMeta } from '::types/generated';
+import { NodeMeta } from '::types/graphql/adapters';
 import { useEffect, useMemo } from 'react';
 import { appActionCreators } from '::app/reducer';
 import { useHistory } from 'react-router-dom';

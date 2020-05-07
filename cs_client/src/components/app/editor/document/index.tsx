@@ -44,17 +44,15 @@ const Document: React.FC<Props> = ({ state }) => {
     reloadDocument,
   );
 
-  const { loading: savingInProgress } = useSaveDocument(
-    saveDocument,
+   useSaveDocument({
+    saveDocumentCommandID: saveDocument,
     file_id,
-    String(state.selectedNode.id),
-    state.selectedNode.nodeId,
-    documentState.nodes[state.selectedNode.nodeId]?.fetchedImageIDs,
-  );
+    nodes:documentState.nodes
+  });
 
   return (
     <>
-      <LinearProgress loading={fetchingDocumentMeta || savingInProgress} />
+      <LinearProgress loading={fetchingDocumentMeta } />
       {nodes && (
         <Fragment>
           {<RecentNodes state={state} file_id={file_id} />}

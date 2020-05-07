@@ -1,6 +1,11 @@
-const toNodes: (string) => Element = html =>
+const toNodes: (string: string, single: boolean) => Element | Element[] = (
+  html,
+  single = true,
+) =>
   // https://stackoverflow.com/a/42448876
-  new DOMParser().parseFromString(html, 'text/html').body.children[0];
+  [new DOMParser().parseFromString(html, 'text/html')].map(({ body }) =>
+    single ? body.children[0] : Array.from(body.children),
+  )[0];
 
 const cloneObj = ogObj => JSON.parse(JSON.stringify(ogObj));
 

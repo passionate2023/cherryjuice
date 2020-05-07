@@ -17,8 +17,8 @@ const setImageAttributes = (images, attributes) => {
   });
 };
 const getEditorContentWithoutImages = () => {
-  let html, id, node_id;
-  const editor = document.querySelector('#rich-text');
+  let html, id, node_id, edited;
+  const editor: HTMLDivElement = document.querySelector('#rich-text');
   let imageAttributesTempContainer: any[] = [];
   if (editor) {
     const images = Array.from(
@@ -26,9 +26,8 @@ const getEditorContentWithoutImages = () => {
     ) as HTMLImageElement[];
     imageAttributesTempContainer = unsetImagesAttributes(images);
     html = editor.innerHTML;
-    // @ts-ignore
     id = editor.dataset.id;
-    // @ts-ignore
+    edited = editor.dataset.edited;
     node_id = editor.dataset.node_id;
     setImageAttributes(images, imageAttributesTempContainer);
   }
@@ -36,6 +35,7 @@ const getEditorContentWithoutImages = () => {
     html,
     id,
     node_id,
+    edited,
     imageIDs: Object.fromEntries(
       imageAttributesTempContainer.map(({ dataId }) => [dataId, true]),
     ),
@@ -76,17 +76,24 @@ const updateCachedImages = (cache, nodeId, deletedImages: string[]) => {
     cache.data.delete('Image:' + id);
   });
 };
-const updateCacheAfterSwitchingNode = cache => {
-  const { html, id, imageIDs: imageIDsInDom } = getEditorContentWithoutImages();
-  if (id) {
+const updateCachedHtmlAndImages = (cache):{deletedImageIDs: string[]} => {
+  const {
+    html,
+    id,
+    edited,
+    imageIDs: imageIDsInDom,
+  } = getEditorContentWithoutImages();
+  let deletedImageIDs = [];
+  if (edited) {
     const imageIDsInCache = getNodeImageIDsFromCache({ cache, nodeId: id });
-    const deletedImages = imageIDsInCache.filter(id => !imageIDsInDom[id]);
+    deletedImageIDs = imageIDsInCache.filter(id => !imageIDsInDom[id]);
     updatedCachedHtml(cache, id, html);
-    if (deletedImages.length) updateCachedImages(cache, id, deletedImages);
+    if (deletedImageIDs.length) updateCachedImages(cache, id, deletedImageIDs);
   }
+  return {deletedImageIDs};
 };
 export {
-  updateCacheAfterSwitchingNode,
+  updateCachedHtmlAndImages,
   getNodeImageIDsFromCache,
   updateCachedImages,
   updatedCachedHtml,

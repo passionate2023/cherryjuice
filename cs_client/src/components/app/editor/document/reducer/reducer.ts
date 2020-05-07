@@ -19,9 +19,21 @@ const reducer = (
           },
         },
       };
+    case documentActions.SET_NODE_HAS_CHANGED:
+      return {
+        ...state,
+        nodes: {
+          ...state.nodes,
+          [action.value.nodeId]: {
+            ...state.nodes[action.value.nodeId],
+            edited: true,
+          },
+        },
+      };
     default:
       throw new Error('action not supported');
   }
 };
 
 export { reducer as documentReducer };
+export {TDocumentState}

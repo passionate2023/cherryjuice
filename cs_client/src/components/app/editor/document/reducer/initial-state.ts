@@ -1,14 +1,16 @@
+type TEditedNode = {
+  fetchedImageIDs: string[];
+  edited: boolean;
+};
+type TEditedNodes = {
+  [nodeId: string]: TEditedNode;
+};
 type TState = {
-  nodes: {
-    [nodeId: string]: {
-      fetchedImageIDs: string[];
-      edited: boolean;
-    };
-  };
+  nodes: TEditedNodes;
 };
 const state: TState = {
   nodes: {},
 };
 
 export { state as documentInitialState };
-export { TState as TDocumentState };
+export { TEditedNode, TEditedNodes, TState as TDocumentState };

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import { TRecentNode } from '::app/reducer';
 import { modRecentNodes } from '::sass-modules/index';
 import { TState } from '::app/reducer';
-import { updateCacheAfterSwitchingNode } from '::app/editor/document/tree/node/helpers/apollo-cache';
+import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { useContext } from 'react';
 import { RootContext } from '::root/root-context';
 
@@ -33,7 +33,7 @@ const RecentNodes: React.FC<Props> = ({
   const history = useHistory();
   const goToNode = useCallback(
     e => {
-      updateCacheAfterSwitchingNode(cache);
+      updateCachedHtmlAndImages(cache);
       const node_id = e.target.dataset.id;
       history.push(`/document/${file_id}/node/${node_id}`);
     },

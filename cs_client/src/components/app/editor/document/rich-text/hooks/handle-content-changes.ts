@@ -1,7 +1,14 @@
 import { useMutationObserver } from '::hooks/dom/mutation-observer';
-import { useCallback } from 'react';
+import { MutableRefObject, useCallback } from 'react';
+import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 
-const useHandleContentChanges = ({ node_id, ref }) => {
+const useHandleContentChanges = ({
+  nodeId,
+  ref,
+}: {
+  nodeId: string;
+  ref: MutableRefObject<HTMLDivElement>;
+}) => {
   useMutationObserver(
     ref,
     useCallback(
@@ -15,10 +22,12 @@ const useHandleContentChanges = ({ node_id, ref }) => {
             ),
         );
         if (userMutations.length) {
+          documentActionCreators.setNodeHasChanged(nodeId);
+          ref.current.setAttribute('data-edited', String(new Date().getTime()));
           observer.disconnect();
         }
       },
-      [node_id],
+      [nodeId],
     ),
   );
 };

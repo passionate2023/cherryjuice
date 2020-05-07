@@ -32,7 +32,7 @@ const ContentEditable = ({
     processLinks: processLinks,
   });
   const ref = useRef();
-  useHandleContentChanges({ node_id, ref });
+  useHandleContentChanges({ nodeId, ref });
   return (
     <div
       ref={ref}
