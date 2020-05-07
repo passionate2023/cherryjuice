@@ -8,7 +8,7 @@ const useGetNodeHtml = ({
   reloadRequestIDs,
   file_id,
 }): {
-  html: { node_id: number; htmlRaw: string; htmlWithImages: string };
+  html: { node_id: number; htmlRaw: string };
   processLinks: number;
   error: ApolloError;
 } => {
@@ -34,7 +34,7 @@ const useGetNodeHtml = ({
     },
     { resourceName: 'the node' },
   );
-  const html = { node_id, htmlRaw: '', htmlWithImages: '' };
+  const html = { node_id, htmlRaw: '' };
 
   const node = QUERY_NODE_CONTENT.html.path(data);
   if (node && node.node_id === node_id) {

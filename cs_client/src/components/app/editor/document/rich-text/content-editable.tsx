@@ -1,10 +1,9 @@
-import { default as React, Ref } from 'react';
+import { default as React } from 'react';
 import { useSetupStuff } from '::app/editor/document/rich-text/hooks/setup-stuff';
 import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
 import { useReactRouterForAnchors } from '::app/editor/document/rich-text/hooks/react-router-for-anchors';
 import { modRichText } from '::sass-modules/index';
 import { useAttachImagesToHtml } from '::app/editor/document/rich-text/hooks/get-node-images';
-
 const ContentEditable = ({
   contentEditable,
   html,
@@ -12,36 +11,31 @@ const ContentEditable = ({
   file_id,
   node_id,
   processLinks,
-  myRef,
 }: {
   contentEditable;
-  html: { htmlRaw: string; htmlWithImages: string; node_id: number };
+  html: { htmlRaw: string; node_id: number };
   nodeId;
   file_id;
   node_id;
   processLinks;
-  myRef: Ref<HTMLDivElement>;
 }) => {
   useSetupStuff();
-  useScrollToHashElement({ html: html.htmlWithImages });
+  useScrollToHashElement({ html: html.htmlRaw });
 
-  const { processLinks: processLinksDueToImagesChange } = useAttachImagesToHtml(
-    {
-      html,
-      file_id,
-      richTextRef: myRef,
-    },
-  );
+  useAttachImagesToHtml({
+    node_id,
+    file_id,
+  });
   useReactRouterForAnchors({
     file_id,
-    processLinks: [...processLinks, processLinksDueToImagesChange],
+    processLinks: processLinks,
   });
   return (
     <div
-      ref={myRef}
+      key={node_id}
       className={modRichText.richText}
       contentEditable={contentEditable}
-      dangerouslySetInnerHTML={{ __html: html.htmlWithImages || html.htmlRaw }}
+      dangerouslySetInnerHTML={{ __html: html.htmlRaw }}
       data-id={nodeId}
       data-node_id={node_id}
       id={'rich-text'}

@@ -25,7 +25,7 @@ const useReactRouterForAnchors = ({ file_id, processLinks }: Props) => {
   const history = useHistory();
   const isNotProcessed = useIsNotProcessed(processLinks);
   useEffect(() => {
-    if (isNotProcessed) {
+    if (!isNotProcessed) {
       const editor = document.querySelector('#rich-text');
       const anchors = Array.from(editor.querySelectorAll('a,img[data-href]'));
       anchors.forEach(anchor => {

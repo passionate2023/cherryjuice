@@ -2,35 +2,27 @@ import { usePng } from '::hooks/use-png';
 import { useEffect } from 'react';
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 
-const useAttachImagesToHtml = ({
-  html,
-  file_id,
-  richTextRef,
-}: {
-  html: { htmlRaw: string; node_id: number; htmlWithImages: string };
-  file_id;
-  richTextRef;
-}) => {
-  let processLinks;
+const useAttachImagesToHtml = ({ file_id, node_id }: { file_id; node_id }) => {
   const all_png_base64 = usePng({
     file_id,
-    node_id: html.node_id,
+    node_id: node_id,
   });
-  if (
-    html.htmlRaw &&
-    all_png_base64?.node_id === html.node_id &&
-    richTextRef.current
-  ) {
-    let counter = 0;
-    while (all_png_base64.pngs[counter] && /<img src=""/.test(html.htmlRaw)) {
-      const image = all_png_base64.pngs[counter++];
-      html.htmlWithImages = html.htmlRaw.replace(
-        /<img src=""/,
-        `<img data-id="${image.id}" src="data:image/png;base64,${image.base64}"`,
+  useEffect(() => {
+    if (all_png_base64?.pngs?.length && all_png_base64?.node_id === node_id) {
+      const editor = document.querySelector('#rich-text');
+      const images = Array.from(
+        editor.querySelectorAll('img.rich-text__image'),
       );
+
+      images.forEach((img, i) => {
+        img.setAttribute(
+          'src',
+          `data:image/png;base64,${all_png_base64.pngs[i].base64}`,
+        );
+        img.setAttribute('data-id', all_png_base64.pngs[i].id);
+      });
     }
-    processLinks = new Date().getTime();
-  }
+  }, [all_png_base64?.pngs]);
 
   useEffect(() => {
     if (all_png_base64?.pngs)
@@ -39,8 +31,6 @@ const useAttachImagesToHtml = ({
         all_png_base64.pngs.map(({ id }) => id),
       );
   }, [all_png_base64?.pngs]);
-
-  return { processLinks, html };
 };
 
 export { useAttachImagesToHtml };

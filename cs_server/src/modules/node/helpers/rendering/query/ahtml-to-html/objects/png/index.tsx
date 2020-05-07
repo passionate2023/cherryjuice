@@ -17,7 +17,9 @@ type Props = {
 const addImageLinkProperties = (link: string) => {
   const { 'data-type': dataType, href, target } = parseLink(link);
   return [
-    'class="rich-text__image--link rich-text__image--link-' + dataType + '"',
+    'class="rich-text__image rich-text__image--link rich-text__image--link-' +
+      dataType +
+      '"',
     'role="link"',
     `data-type="${dataType}"`,
     `data-href="${href}"`,
@@ -33,7 +35,9 @@ const Png = ({
   return `<img src=""
         alt=""
         style="width:${width}; height:${height};"
-        ${link ? ` ${addImageLinkProperties(link)}` : ''}
+        ${
+          link ? ` ${addImageLinkProperties(link)}` : 'class="rich-text__image"'
+        }
       />`;
 };
 

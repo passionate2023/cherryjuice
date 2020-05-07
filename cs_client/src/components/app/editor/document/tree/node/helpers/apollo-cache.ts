@@ -20,7 +20,9 @@ const getEditorContentWithoutImages = () => {
   let html, id, node_id;
   const editor = document.querySelector('#rich-text');
   if (editor) {
-    const images = Array.from(editor.querySelectorAll('img'));
+    const images = Array.from(
+      editor.querySelectorAll('img.rich-text__image'),
+    ) as HTMLImageElement[];
     const imageAttributesTempContainer = unsetImagesAttributes(images);
     html = editor.innerHTML;
     // @ts-ignore

@@ -6,7 +6,6 @@ import { NodeMeta } from '::types/graphql/adapters';
 import { useGetNodeHtml } from '::app/editor/document/rich-text/hooks/get-node-html';
 import { useSetCurrentNode } from '::app/editor/document/rich-text/hooks/set-current-node';
 import { ContentEditable } from '::app/editor/document/rich-text/content-editable';
-import { useRef,  } from 'react';
 
 type Props = {
   file_id: string;
@@ -23,7 +22,6 @@ const RichText: React.FC<Props> = ({
   nodes,
   processLinks,
 }) => {
-  const richTextRef = useRef<HTMLDivElement>();
   const match = useRouteMatch();
   // @ts-ignore
   const node_id = Number(match.params?.node_id);
@@ -44,7 +42,6 @@ const RichText: React.FC<Props> = ({
     <div className={modRichText.richText__container}>
       {html?.htmlRaw ? (
         <ContentEditable
-          myRef={richTextRef}
           contentEditable={contentEditable}
           html={html}
           nodeId={nodes.get(node_id)?.id}
