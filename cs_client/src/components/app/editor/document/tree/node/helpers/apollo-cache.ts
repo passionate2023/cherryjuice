@@ -19,11 +19,12 @@ const setImageAttributes = (images, attributes) => {
 const getEditorContentWithoutImages = () => {
   let html, id, node_id;
   const editor = document.querySelector('#rich-text');
+  let imageAttributesTempContainer: any[] = [];
   if (editor) {
     const images = Array.from(
       editor.querySelectorAll('img.rich-text__image'),
     ) as HTMLImageElement[];
-    const imageAttributesTempContainer = unsetImagesAttributes(images);
+    imageAttributesTempContainer = unsetImagesAttributes(images);
     html = editor.innerHTML;
     // @ts-ignore
     id = editor.dataset.id;
@@ -31,7 +32,12 @@ const getEditorContentWithoutImages = () => {
     node_id = editor.dataset.node_id;
     setImageAttributes(images, imageAttributesTempContainer);
   }
-  return { html, id, node_id };
+  return {
+    html,
+    id,
+    node_id,
+    imageIDs: imageAttributesTempContainer.map(({ dataId }) => dataId),
+  };
 };
 
 const updateCache = cache => {

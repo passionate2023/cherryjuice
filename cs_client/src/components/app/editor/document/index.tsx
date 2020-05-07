@@ -27,7 +27,7 @@ const Document: React.FC<Props> = ({ state }) => {
     isOnMobile,
     processLinks,
   } = state;
-  const [documentState, dispatch] = useReducer(
+  const [, dispatch] = useReducer(
     documentReducer,
     documentInitialState,
   );
@@ -46,9 +46,9 @@ const Document: React.FC<Props> = ({ state }) => {
 
   const { loading: savingInProgress } = useSaveDocument(
     saveDocument,
-    documentState.nodes[state.selectedNode.id]?.imageIDs,
     file_id,
     String(state.selectedNode.id),
+    String(state.selectedNode.nodeId),
   );
 
   return (

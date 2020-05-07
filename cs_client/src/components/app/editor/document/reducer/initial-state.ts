@@ -1,7 +1,7 @@
 type TState = {
   nodes: {
-    [node_id: string]: {
-      imageIDs: string[];
+    [nodeId: string]: {
+      edited: boolean;
     };
   };
 };

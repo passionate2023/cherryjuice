@@ -1,6 +1,5 @@
 import { usePng } from '::hooks/use-png';
 import { useEffect } from 'react';
-import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 
 const useAttachImagesToHtml = ({ file_id, node_id }: { file_id; node_id }) => {
   const all_png_base64 = usePng({
@@ -22,14 +21,6 @@ const useAttachImagesToHtml = ({ file_id, node_id }: { file_id; node_id }) => {
         img.setAttribute('data-id', all_png_base64.pngs[i].id);
       });
     }
-  }, [all_png_base64?.pngs]);
-
-  useEffect(() => {
-    if (all_png_base64?.pngs)
-      documentActionCreators.setImageIDs(
-        String(all_png_base64.node_id),
-        all_png_base64.pngs.map(({ id }) => id),
-      );
   }, [all_png_base64?.pngs]);
 };
 

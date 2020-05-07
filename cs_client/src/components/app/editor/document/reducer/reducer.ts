@@ -9,13 +9,6 @@ const reducer = (
   },
 ): TDocumentState => {
   switch (action.type) {
-    case documentActions.SET_IMAGE_IDS:
-      return {
-        ...state,
-        nodes: {
-          [action.value.node_id]: { imageIDs: action.value.imageIDs },
-        },
-      };
     default:
       throw new Error('action not supported');
   }

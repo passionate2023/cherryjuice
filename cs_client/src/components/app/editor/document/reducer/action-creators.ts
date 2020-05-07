@@ -1,6 +1,4 @@
-enum actions {
-  SET_IMAGE_IDS,
-}
+enum actions {}
 
 const actionCreators = (() => {
   const state = {
@@ -9,11 +7,6 @@ const actionCreators = (() => {
   };
   return {
     setDispatch: (dispatch): void => (state.dispatch = dispatch),
-    setImageIDs: (node_id: string, imageIDs: string[]) =>
-      state.dispatch({
-        type: actions.SET_IMAGE_IDS,
-        value: { node_id, imageIDs },
-      }),
   };
 })();
 
