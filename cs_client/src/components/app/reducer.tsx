@@ -157,7 +157,15 @@ const createActionCreators = () => {
     ) =>
       state.dispatch({
         type: actions.SELECT_NODE,
-        value: { node_id, name, style, is_richtxt, createdAt, updatedAt, nodeId },
+        value: {
+          node_id,
+          name,
+          style,
+          is_richtxt,
+          createdAt,
+          updatedAt,
+          nodeId,
+        },
       }),
     processLinks(value: number) {
       state.dispatch({

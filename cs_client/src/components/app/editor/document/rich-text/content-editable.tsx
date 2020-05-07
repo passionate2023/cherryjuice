@@ -1,8 +1,9 @@
-import { default as React, Ref,   } from 'react';
+import { default as React, Ref } from 'react';
 import { useSetupStuff } from '::app/editor/document/rich-text/hooks/setup-stuff';
 import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
 import { useReactRouterForAnchors } from '::app/editor/document/rich-text/hooks/react-router-for-anchors';
 import { modRichText } from '::sass-modules/index';
+import { useAttachImagesToHtml } from '::app/editor/document/rich-text/hooks/get-node-images';
 
 const ContentEditable = ({
   contentEditable,
@@ -22,10 +23,18 @@ const ContentEditable = ({
   myRef: Ref<HTMLDivElement>;
 }) => {
   useSetupStuff();
-  useScrollToHashElement({ html: html.htmlRaw });
+  useScrollToHashElement({ html: html.htmlWithImages });
+
+  const { processLinks: processLinksDueToImagesChange } = useAttachImagesToHtml(
+    {
+      html,
+      file_id,
+      richTextRef: myRef,
+    },
+  );
   useReactRouterForAnchors({
     file_id,
-    processLinks: processLinks,
+    processLinks: [...processLinks, processLinksDueToImagesChange],
   });
   return (
     <div

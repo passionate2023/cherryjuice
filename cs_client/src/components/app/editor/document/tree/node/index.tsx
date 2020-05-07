@@ -8,9 +8,7 @@ import { getTreeStateFromLocalStorage } from '::helpers/misc';
 import { Icon, ICON_SIZE, Icons } from '::shared-components/icon';
 import { nodeOverlay } from './helpers/node-overlay';
 import { scrollIntoToolbar } from '::helpers/ui';
-import {
-  updateCache,
-} from '::app/editor/document/tree/node/helpers/apollo-cache';
+import { updateCache } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { useContext } from 'react';
 import { RootContext } from '::root/root-context';
 

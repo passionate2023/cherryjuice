@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router';
+import { useIsNotProcessed } from '::hooks/misc/isnot-processed';
 
 type Props = {
   file_id: string;
-  processLinks: number;
+  processLinks: (number | string)[];
 };
 
 const getURL = ({ target, file_id }): URL => {
@@ -22,9 +23,9 @@ const getURL = ({ target, file_id }): URL => {
 
 const useReactRouterForAnchors = ({ file_id, processLinks }: Props) => {
   const history = useHistory();
-  const requestIDs = useRef({});
+  const isNotProcessed = useIsNotProcessed(processLinks);
   useEffect(() => {
-    if (processLinks && !requestIDs.current[processLinks]) {
+    if (isNotProcessed) {
       const editor = document.querySelector('#rich-text');
       const anchors = Array.from(editor.querySelectorAll('a,img[data-href]'));
       anchors.forEach(anchor => {
@@ -43,7 +44,6 @@ const useReactRouterForAnchors = ({ file_id, processLinks }: Props) => {
           }
         };
       });
-      requestIDs.current[processLinks] = true;
     }
   }, [processLinks]);
 };

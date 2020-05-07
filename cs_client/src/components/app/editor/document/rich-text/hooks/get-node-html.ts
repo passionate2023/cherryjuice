@@ -34,9 +34,9 @@ const useGetNodeHtml = ({
     },
     { resourceName: 'the node' },
   );
-  let html = { node_id, htmlRaw: '', htmlWithImages: '' },
-    node;
-  node = QUERY_NODE_CONTENT.html.path(data);
+  const html = { node_id, htmlRaw: '', htmlWithImages: '' };
+
+  const node = QUERY_NODE_CONTENT.html.path(data);
   if (node && node.node_id === node_id) {
     html.htmlRaw = node.html;
     processLinks = new Date().getTime();

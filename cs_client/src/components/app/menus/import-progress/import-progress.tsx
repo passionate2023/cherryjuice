@@ -2,7 +2,7 @@ import { modImportProgress } from '::sass-modules/index';
 import * as React from 'react';
 import { useState } from 'react';
 import { Header } from './header';
-import { Document,  } from './document';
+import { Document } from './document';
 import {
   DOCUMENT_SUBSCRIPTIONS,
   DocumentSubscription,

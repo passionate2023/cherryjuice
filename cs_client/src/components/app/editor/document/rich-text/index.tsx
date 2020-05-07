@@ -6,8 +6,7 @@ import { NodeMeta } from '::types/graphql/adapters';
 import { useGetNodeHtml } from '::app/editor/document/rich-text/hooks/get-node-html';
 import { useSetCurrentNode } from '::app/editor/document/rich-text/hooks/set-current-node';
 import { ContentEditable } from '::app/editor/document/rich-text/content-editable';
-import { useAttachImagesToHtml } from '::app/editor/document/rich-text/hooks/get-node-images';
-import { useRef } from 'react';
+import { useRef,  } from 'react';
 
 type Props = {
   file_id: string;
@@ -38,18 +37,12 @@ const RichText: React.FC<Props> = ({
     reloadRequestIDs,
     file_id,
   });
-  const { processLinks: processLinksDueToImagesChange } = useAttachImagesToHtml(
-    {
-      html,
-      file_id,
-      richTextRef,
-    },
-  );
+
   useSetCurrentNode(node_id, nodes);
 
   return (
     <div className={modRichText.richText__container}>
-      {html?.htmlRaw  ? (
+      {html?.htmlRaw ? (
         <ContentEditable
           myRef={richTextRef}
           contentEditable={contentEditable}
@@ -57,11 +50,7 @@ const RichText: React.FC<Props> = ({
           nodeId={nodes.get(node_id)?.id}
           file_id={file_id}
           node_id={node_id}
-          processLinks={
-            processLinksDueToImagesChange ||
-            processLinksDueToHtmlChange ||
-            processLinks
-          }
+          processLinks={[processLinksDueToHtmlChange, processLinks]}
         />
       ) : htmlError ? (
         <span className={modRichText.richText__error}>

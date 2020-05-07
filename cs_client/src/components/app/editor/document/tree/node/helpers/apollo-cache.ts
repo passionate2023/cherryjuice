@@ -16,7 +16,7 @@ const setImageAttributes = (images, attributes) => {
     img.setAttribute('data-id', attributes[i].dataId);
   });
 };
- const getEditorContentWithoutImages = () => {
+const getEditorContentWithoutImages = () => {
   let html, id, node_id;
   const editor = document.querySelector('#rich-text');
   if (editor) {
@@ -33,13 +33,13 @@ const setImageAttributes = (images, attributes) => {
 };
 
 const updateCache = cache => {
-  const { html, id,  } = getEditorContentWithoutImages();
+  const { html, id } = getEditorContentWithoutImages();
   // @ts-ignore
   cache.data.set('Node:' + id, {
     // @ts-ignore
     ...cache.data.get('Node:' + id),
     html,
   });
-}
+};
 
-export {updateCache}
+export { updateCache };

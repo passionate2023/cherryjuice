@@ -5,7 +5,7 @@ import { setContext } from 'apollo-link-context';
 import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
-import { useEffect,  } from 'react';
+import { useEffect } from 'react';
 import { rootActionCreators } from '::root/root.reducer';
 import { AuthUser } from '::types/graphql/generated';
 
