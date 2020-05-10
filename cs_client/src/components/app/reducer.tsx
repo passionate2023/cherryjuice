@@ -1,20 +1,20 @@
 import { TAlert } from '::types/react';
-
-const defaultSelectNode = {
-  nodeId: '',
-  id: -1,
-  name: '',
-  is_richtxt: '',
-  createdAt: '',
-  updatedAt: '',
-  style: {},
+export type TNodeMeta = {
+  name: string;
+  style: { color: string; fontWeight: 'normal' | 'bold' };
+  icon_id: string;
+  nodeId: string;
+  id: number;
+  is_richtxt: string;
+  createdAt: string;
+  updatedAt: string;
 };
 const initialState = {
   showTree: [JSON.parse(localStorage.getItem('showTree'))].map(value =>
     value === null ? true : value === true,
   )[0],
   treeSize: JSON.parse(localStorage.getItem('treeSize')) || 250,
-  selectedNode: defaultSelectNode,
+  selectedNode: undefined,
   selectedFile:
     [localStorage.getItem('selectedFile')].filter(
       value => Boolean(value) && value !== 'null',
@@ -35,19 +35,12 @@ const initialState = {
   processLinks: undefined,
   showImportDocuments: false,
   showUserPopup: false,
+  showNodeMeta: false,
 };
-export type TRecentNode = {
-  nodeId: string;
-  id: number;
-  name: string;
-  style?: Record<string, string | number>;
-  is_richtxt: string;
-  createdAt: string;
-  updatedAt: string;
-};
+
 export type TState = typeof initialState & {
-  selectedNode: TRecentNode;
-  recentNodes: TRecentNode[];
+  selectedNode: TNodeMeta;
+  recentNodes: TNodeMeta[];
   alert: TAlert;
 };
 enum actions {
@@ -72,6 +65,7 @@ enum actions {
   HIDE_POPUPS,
   TOGGLE_SHOW_IMPORT_FILES,
   TOGGLE_USER_POPUP,
+  TOGGLE_NODE_META,
 }
 const createActionCreators = () => {
   const state = {
@@ -152,25 +146,32 @@ const createActionCreators = () => {
     selectFile: (fileId: string) =>
       state.dispatch({ type: actions.SELECT_FILE, value: fileId }),
     selectNode: (
-      { node_id, name, style, nodeId },
-      { is_richtxt, createdAt, updatedAt },
+      nodeMeta: TNodeMeta,
+      // { node_id, name, style, nodeId },
+      // { is_richtxt, createdAt, updatedAt },
     ) =>
       state.dispatch({
         type: actions.SELECT_NODE,
-        value: {
-          node_id,
-          name,
-          style,
-          is_richtxt,
-          createdAt,
-          updatedAt,
-          nodeId,
-        },
+        value: nodeMeta,
+        //   {
+        //   node_id,
+        //   name,
+        //   style,
+        //   is_richtxt,
+        //   createdAt,
+        //   updatedAt,
+        //   nodeId,
+        // },
       }),
     processLinks(value: number) {
       state.dispatch({
         type: actions.PROCESS_LINKS,
         value,
+      });
+    },
+    toggleNodeMeta() {
+      state.dispatch({
+        type: actions.TOGGLE_NODE_META,
       });
     },
   };
@@ -210,28 +211,10 @@ const reducer = (
     case actions.SELECT_NODE:
       return {
         ...state,
-        selectedNode: {
-          nodeId: action.value.nodeId,
-          id: +action.value.node_id,
-          name: `${action.value.name}`,
-          is_richtxt: `${action.value.is_richtxt}`,
-          createdAt: `${action.value.createdAt}`,
-          updatedAt: `${action.value.updatedAt}`,
-          style: JSON.parse(action.value.style),
-        },
+        selectedNode: action.value,
         recentNodes: [
-          ...state.recentNodes.filter(
-            node => +node.id !== +action.value.node_id,
-          ),
-          {
-            nodeId: action.value.nodeId,
-            id: action.value.node_id,
-            name: action.value.name,
-            style: action.value.style,
-            is_richtxt: `${action.value.is_richtxt}`,
-            createdAt: `${action.value.createdAt}`,
-            updatedAt: `${action.value.updatedAt}`,
-          },
+          ...state.recentNodes.filter(node => +node.id !== +action.value.id),
+          action.value,
         ],
       };
     case actions.SELECT_FILE:
@@ -239,7 +222,7 @@ const reducer = (
         ...state,
         selectedFile: action.value,
         showTree: true,
-        selectedNode: defaultSelectNode,
+        selectedNode: undefined,
       };
     case actions.SAVE_DOCUMENT:
       return {
@@ -286,6 +269,8 @@ const reducer = (
       return { ...state, isOnMobile: action.value };
     case actions.PROCESS_LINKS:
       return { ...state, processLinks: action.value };
+    case actions.TOGGLE_NODE_META:
+      return { ...state, showNodeMeta: !state.showNodeMeta };
     default:
       throw new Error('action not supported');
   }

@@ -2,14 +2,17 @@ import { useReloadQuery } from '::hooks/use-reload-query';
 import { QUERY_NODE_META } from '::graphql/queries';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
 import { NodeMeta } from '::types/graphql/adapters';
-import { useEffect, useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { appActionCreators } from '::app/reducer';
 import { useHistory } from 'react-router-dom';
+import { TEditedNodes } from '::app/editor/document/reducer/initial-state';
+import { RootContext } from '::root/root-context';
 
 const useGetDocumentMeta = (
   file_id: string,
   selectedFile: string,
   reloadRequestID: number,
+  localChanges: TEditedNodes,
 ) => {
   const history = useHistory();
   const queryVariables = { file_id: file_id || '' };
@@ -30,12 +33,26 @@ const useGetDocumentMeta = (
     },
     { resourceName: 'the document' },
   );
+  const {
+    apolloClient: { cache },
+  } = useContext(RootContext);
+
   const nodes: Map<number, NodeMeta> = useMemo(() => {
-    const nodes = QUERY_NODE_META.path(data);
-    if (nodes) {
-      return new Map(nodes.map(node => [node.node_id, node]));
+    let nodes,
+      nodesArray = QUERY_NODE_META.path(data);
+    if (nodesArray) {
+      nodes = new Map(nodesArray.map(node => [node.node_id, node]));
+      Object.entries(localChanges).forEach(([nodeId, { edited }]) => {
+        if (edited?.meta) {
+          // @ts-ignore
+          const node = cache.data.get('Node:' + nodeId);
+          nodes.set(node.node_id, node);
+        }
+      });
     }
-  }, [loading, file_id]);
+    return nodes;
+  }, [loading, file_id, localChanges]);
+
   useEffect(() => {
     if (error) {
       if (file_id && file_id === selectedFile) {

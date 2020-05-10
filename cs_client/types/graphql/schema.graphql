@@ -67,6 +67,7 @@ type Node {
 }
 
 type NodeMutation {
+    meta(meta: NodeMetaIt!): String!
     saveAHtml(ahtml: String!, deletedImages: [String]!): String!
 }
 
@@ -113,6 +114,17 @@ enum DOCUMENT_SUBSCRIPTIONS {
 
 input DeleteDocumentInputType {
     IDs: [String!]!
+}
+
+input NodeMetaIt {
+    child_nodes: [Int]
+    father_id: Float
+    icon_id: String
+    is_richtxt: Int
+    name: String
+    node_title_styles: String
+    sequence: Float
+    read_only: Boolean
 }
 
 input SignInCredentials {

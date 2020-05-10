@@ -57,6 +57,17 @@ const updatedCachedHtml = (cache, nodeId, html) => {
     html,
   });
 };
+const updatedCachedMeta = ({cache, nodeId, meta}) => {
+  // @ts-ignore
+  const node = cache.data.get('Node:' + nodeId);
+  // @ts-ignore
+  cache.data.set('Node:' + nodeId, {
+    // @ts-ignore
+    ...node,
+    ...meta,
+  });
+};
+
 const updateCachedImages = (cache, nodeId, deletedImages: string[]) => {
   const node = cache.data.get('Node:' + nodeId);
   const deleted = Object.fromEntries(
@@ -76,7 +87,7 @@ const updateCachedImages = (cache, nodeId, deletedImages: string[]) => {
     cache.data.delete('Image:' + id);
   });
 };
-const updateCachedHtmlAndImages = (cache):{deletedImageIDs: string[]} => {
+const updateCachedHtmlAndImages = (cache): { deletedImageIDs: string[] } => {
   const {
     html,
     id,
@@ -90,7 +101,7 @@ const updateCachedHtmlAndImages = (cache):{deletedImageIDs: string[]} => {
     updatedCachedHtml(cache, id, html);
     if (deletedImageIDs.length) updateCachedImages(cache, id, deletedImageIDs);
   }
-  return {deletedImageIDs};
+  return { deletedImageIDs };
 };
 export {
   updateCachedHtmlAndImages,
@@ -98,4 +109,5 @@ export {
   updateCachedImages,
   updatedCachedHtml,
   getEditorContentWithoutImages,
+  updatedCachedMeta
 };

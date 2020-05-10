@@ -39,7 +39,8 @@ const queries = {
   SELECT 
     n.node_id, n.name, n.is_ro, 
     n.is_richtxt, n.has_image, n.has_codebox,
-    n.has_table,n.ts_creation as createdAt,n.ts_lastsave as updatedAt, c.father_id,c.sequence 
+    n.has_table,n.ts_creation as createdAt,n.ts_lastsave as updatedAt, 
+    c.father_id,c.sequence, n.is_ro as read_only
    FROM node as n INNER JOIN children AS c
    on n.node_id = c.node_id
    ${node_id ? `where n.node_id = ${node_id}` : ''}`,
@@ -106,6 +107,7 @@ export class NodeSqliteRepository implements INodeRepository {
       is_empty: 0,
       node_title_styles: '',
       icon_id: '',
+      read_only: 0,
     } as unknown);
 
     return organizeData(data);

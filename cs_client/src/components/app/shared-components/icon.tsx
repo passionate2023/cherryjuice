@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { EventHandler } from 'react';
+enum ICON_GROUP {
+  cherrytree = 'cherrytree',
+  material = 'material',
+}
 
 enum ICON_COLOR {
   black = 'black',
 }
-export enum ICON_SIZE {
+enum ICON_SIZE {
   _18 = 18,
   _24 = 24,
   _36 = 24,
@@ -83,15 +87,15 @@ const Icons = {
       11: 'cherry_grey',
     },
     custom_icons: {
-      1: 'circle_green',
-      2: 'circle_yellow',
-      3: 'circle_red',
-      4: 'circle_grey',
+      1: 'circle-green',
+      2: 'circle-yellow',
+      3: 'circle-red',
+      4: 'circle-grey',
       5: 'add',
       6: 'remove',
       7: 'done',
       8: 'cancel',
-      9: 'edit_delete',
+      9: 'edit-delete',
       10: 'warning',
       11: 'star',
       12: 'information',
@@ -113,7 +117,7 @@ const Icons = {
       28: 'cherry_blue',
       29: 'cherry_cyan',
       30: 'cherry_green',
-      31: 'cherry_gray',
+      31: 'cherry_grey',
       32: 'cherry_orange',
       33: 'cherry_orange_dark',
       34: 'cherry_purple',
@@ -138,21 +142,23 @@ const Icons = {
   },
 };
 
-const getIconCategory = name =>
+const getIconGroup = name =>
   Icons.material[name] ? 'material' : Icons.misc[name] ? 'misc' : 'cherrytree';
 
 const getIconPath = ({
   name,
   size,
   color,
+  group
 }: {
   name: string;
   size?: ICON_SIZE;
   color?: ICON_COLOR;
+  group?: ICON_GROUP;
 }) => {
-  const category = getIconCategory(name);
-  if (!size && category === 'material') size = 18;
-  return `/icons/${category}/${size ? `${size}/` : ''}${name}${
+  const folder = group ||getIconGroup(name);
+  if (!size && folder === 'material') size = 18;
+  return `/icons/${folder}/${size ? `${size}/` : ''}${name}${
     color ? '-' + color : ''
   }.svg`;
 };
@@ -164,6 +170,7 @@ const Icon = ({
   onClick,
   style,
   color,
+  group,
 }: {
   color?: ICON_COLOR;
   name: string;
@@ -171,9 +178,10 @@ const Icon = ({
   className?: string;
   onClick?: EventHandler<any>;
   style?: React.CSSProperties;
+  group?: ICON_GROUP;
 }) => (
   <img
-    src={getIconPath({ name, size, color })}
+    src={getIconPath({ name, size, color, group })}
     alt={name}
     {...(className && { className })}
     {...(onClick && { onClick })}
@@ -182,4 +190,4 @@ const Icon = ({
 );
 
 export { Icon, Icons };
-export { ICON_COLOR };
+export { ICON_COLOR, ICON_GROUP, ICON_SIZE };

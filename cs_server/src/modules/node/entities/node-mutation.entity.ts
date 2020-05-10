@@ -4,4 +4,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 export class NodeMutation {
   @Field()
   saveAHtml: string;
+
+  @Field()
+  meta: string;
 }

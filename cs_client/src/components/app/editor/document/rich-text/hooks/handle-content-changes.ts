@@ -22,7 +22,7 @@ const useHandleContentChanges = ({
             ),
         );
         if (userMutations.length) {
-          documentActionCreators.setNodeHasChanged(nodeId);
+          documentActionCreators.setNodeContentHasChanged(nodeId);
           ref.current.setAttribute('data-edited', String(new Date().getTime()));
           observer.disconnect();
         }

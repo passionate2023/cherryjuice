@@ -13,6 +13,7 @@ const ImportDocuments = React.lazy(() =>
 );
 const Settings = React.lazy(() => import('::app/menus/settings'));
 const SelectFile = React.lazy(() => import('::app/menus/select-file'));
+const NodeMeta = React.lazy(() => import('::app/menus/node-meta/node-meta'));
 type Props = { state: TState; dispatch: any; session: AuthUser };
 
 const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
@@ -55,6 +56,16 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
       </Suspense>
       <Suspense fallback={<Void />}>
         <ImportProgress />
+      </Suspense>
+      <Suspense fallback={<Void />}>
+        {state.selectedNode && (
+          <NodeMeta
+            showDialog={state.showNodeMeta}
+            isOnMobile={state.isOnMobile}
+            onClose={appActionCreators.toggleNodeMeta}
+            nodeId={state.selectedNode.nodeId}
+          />
+        )}
       </Suspense>
     </>
   );

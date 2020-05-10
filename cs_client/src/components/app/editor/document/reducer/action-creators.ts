@@ -1,6 +1,7 @@
 enum actions {
   SET_FETCHED_IMAGE_IDS,
-  SET_NODE_HAS_CHANGED,
+  SET_NODE_CONTENT_HAS_CHANGED,
+  SET_NODE_META_HAS_CHANGED,
 }
 
 const actionCreators = (() => {
@@ -15,10 +16,15 @@ const actionCreators = (() => {
         type: actions.SET_FETCHED_IMAGE_IDS,
         value: { nodeId, fetchedImageIDs },
       }),
-    setNodeHasChanged: (nodeId: string) =>
+    setNodeContentHasChanged: (nodeId: string) =>
       state.dispatch({
-        type: actions.SET_NODE_HAS_CHANGED,
+        type: actions.SET_NODE_CONTENT_HAS_CHANGED,
         value: { nodeId },
+      }),
+    setNodeMetaHasChanged: (nodeId: string, changedKeys: string[]) =>
+      state.dispatch({
+        type: actions.SET_NODE_META_HAS_CHANGED,
+        value: { nodeId, changedKeys },
       }),
   };
 })();

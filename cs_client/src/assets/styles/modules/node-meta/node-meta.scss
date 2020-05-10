@@ -1,0 +1,40 @@
+@import '../../vars/vars';
+.node-meta {
+  box-sizing: border-box;
+  padding: 2% 5% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.node-meta__input {
+  padding: 5px 10px;
+  height: 25px;
+  width: calc(100% - 10px * 2);
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #00000014;
+}
+.node-meta__input__label {
+  margin-right: 10px;
+  color: black;
+}
+.node-meta__input__text-input {
+  flex: 1;
+  border-bottom: none;
+  height: 100%;
+  margin-right: 0;
+}
+.node-meta__input__checkbox {
+  width: 15px;
+  margin-right: 20px;
+}
+.node-meta__input__color-input {
+  width: 20px;
+  padding: 2px;
+  border: none;
+}
+.node-meta__input--disabled {
+  filter: grayscale(1);
+  opacity: 0.3;
+}

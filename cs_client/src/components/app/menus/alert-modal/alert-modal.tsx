@@ -8,7 +8,6 @@ import { usePrevPropIfNewPropIsUndefined } from '::hooks/use-prev-prop-if-new-pr
 import { ModalWithTransition } from '::shared-components/modal/modal';
 
 export type Props = {
-  show: boolean;
   onClose: EventHandler<undefined>;
   alert: TAlert;
 };
@@ -41,7 +40,11 @@ const Alert = ({ alert, onClose }) => {
   );
 };
 
-const AlertModal: React.FC<Props> = ({ onClose, show, alert }) => {
+const AlertModal: React.FC<Props & { show: boolean }> = ({
+  onClose,
+  show,
+  alert,
+}) => {
   return (
     <ModalWithTransition show={show} onClose={onClose}>
       <Alert onClose={onClose} alert={alert} />

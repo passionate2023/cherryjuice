@@ -19,6 +19,8 @@ type TDialogProps = {
   dialogTitle?: string;
   onClose: EventHandler<undefined>;
   isOnMobile: boolean;
+  small: boolean;
+  lazyAutoFocus?: number;
 } & TDialogFooterProps &
   DialogHeaderProps;
 
@@ -34,6 +36,8 @@ const Dialog: React.FC<TDialogProps & {
   style,
   isOnMobile,
   rightHeaderButtons,
+  small,
+                      lazyAutoFocus
 }) => {
   useModalKeyboardEvents({
     onCloseModal: onClose,
@@ -44,7 +48,9 @@ const Dialog: React.FC<TDialogProps & {
     <>
       {
         <animated.div
-          className={`${modDialog.dialog}`}
+          className={`${modDialog.dialog} ${
+            small ? modDialog.dialogSmall : ''
+          }`}
           style={{
             ...style,
             transform: style.xy.interpolate(
@@ -65,6 +71,7 @@ const Dialog: React.FC<TDialogProps & {
             dialogFooterRightButtons={dialogFooterRightButtons}
             dialogFooterLeftButtons={dialogFooterLeftButtons}
             isOnMobile={isOnMobile}
+            lazyAutoFocus={lazyAutoFocus}
           />
         </animated.div>
       }

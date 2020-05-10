@@ -17,7 +17,11 @@ const MainButtons: React.FC<Props> = ({ showTree }) => {
           style={{ width: 22 }}
         />
       </ToolbarButton>
-
+      <ToolbarButton onClick={appActionCreators.toggleNodeMeta}>
+        <Icon
+          name={Icons.material.edit}
+        />
+      </ToolbarButton>
       <ToolbarButton onClick={appActionCreators.saveDocument}>
         <Icon name={Icons.material.save}  />
       </ToolbarButton>

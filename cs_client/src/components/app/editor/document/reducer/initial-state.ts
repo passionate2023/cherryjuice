@@ -1,6 +1,9 @@
 type TEditedNode = {
   fetchedImageIDs: string[];
-  edited: boolean;
+  edited: {
+    content: boolean;
+    meta: string[];
+  };
 };
 type TEditedNodes = {
   [nodeId: string]: TEditedNode;

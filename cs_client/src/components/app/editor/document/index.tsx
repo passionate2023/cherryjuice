@@ -42,20 +42,22 @@ const Document: React.FC<Props> = ({ state }) => {
     file_id,
     selectedFile,
     reloadDocument,
+    documentState.nodes
   );
 
-   useSaveDocument({
+  useSaveDocument({
     saveDocumentCommandID: saveDocument,
-    file_id,
-    nodes:documentState.nodes
+    nodes: documentState.nodes,
   });
 
   return (
     <>
-      <LinearProgress loading={fetchingDocumentMeta } />
+      <LinearProgress loading={fetchingDocumentMeta} />
       {nodes && (
         <Fragment>
-          {<RecentNodes state={state} file_id={file_id} />}
+          {state.selectedNode && (
+            <RecentNodes state={state} file_id={file_id} />
+          )}
           {showTree && (
             <ErrorBoundary>
               <Tree nodes={nodes} />

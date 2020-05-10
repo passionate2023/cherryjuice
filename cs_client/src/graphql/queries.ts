@@ -14,6 +14,7 @@ const QUERY_NODE_META = {
   query: gql`
     query node_meta($file_id: String!) {
       document(file_id: $file_id) {
+        id
         node {
           id
           documentId

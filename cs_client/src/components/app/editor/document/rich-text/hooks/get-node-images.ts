@@ -24,7 +24,7 @@ const useAttachImagesToHtml = ({ file_id, node_id }: { file_id; node_id }) => {
     }
   }, [all_png_base64?.pngs]);
   useEffect(() => {
-    if (all_png_base64?.pngs)
+    if (all_png_base64?.pngs?.length)
       documentActionCreators.setFetchedImageIDs(
         all_png_base64.nodeId,
         all_png_base64.pngs.map(({ id }) => id),

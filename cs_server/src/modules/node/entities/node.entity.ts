@@ -91,4 +91,8 @@ export class Node extends BaseEntity {
 
   @Field()
   html: string;
+
+  @Column('int2', { default: 0 })
+  @Field(() => Int)
+  read_only: number;
 }

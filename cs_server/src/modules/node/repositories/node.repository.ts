@@ -3,6 +3,7 @@ import { INodeRepository } from '../interfaces/node.repository';
 import { Node } from '../entities/node.entity';
 import { Injectable } from '@nestjs/common';
 import { SaveAhtmlDto } from '../dto/save-ahtml.dto';
+import { NodeMetaDto } from '../dto/node-meta.dto';
 
 @Injectable()
 @EntityRepository(Node)
@@ -44,6 +45,15 @@ export class NodeRepository extends Repository<Node>
     const res = await this.createQueryBuilder('node')
       .update()
       .set({ ahtml })
+      .where({ node_id, userId: user.id, documentId })
+      .execute();
+    return JSON.stringify(res);
+  }
+
+  async setMeta({ user, documentId, node_id, meta }: NodeMetaDto) {
+    const res = await this.createQueryBuilder('node')
+      .update()
+      .set(meta)
       .where({ node_id, userId: user.id, documentId })
       .execute();
     return JSON.stringify(res);

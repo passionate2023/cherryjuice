@@ -5,6 +5,7 @@ import { NodeService } from './node.service';
 import { GetUserGql } from '../user/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
+import { NodeMetaIt } from './dto/node-meta.it';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => NodeMutation)
@@ -28,5 +29,13 @@ export class NodeMutationsResolver {
       deletedImages,
     });
     return '';
+  }
+  @ResolveField()
+  async meta(
+    @Args({ name: 'meta', type: () => NodeMetaIt }) meta: NodeMetaIt,
+    @Parent() { node_id, documentId }: { node_id: string; documentId: string },
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    return await this.nodeService.setMeta({ user, node_id, documentId, meta });
   }
 }

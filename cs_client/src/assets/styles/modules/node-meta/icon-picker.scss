@@ -1,0 +1,35 @@
+@import '../../vars/vars';
+.icon-picker {
+  position: relative;
+  display: inline;
+}
+.iconPicker__icon__list--hidden {
+  visibility: hidden;
+}
+.iconPicker__icon__list {
+  position: absolute;
+  width: 225px;
+  //height: 75px;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  top: 25px;
+  left: -130px;
+  padding: 5px 10px;
+  background-color: #f5f5f5;
+  box-shadow: $box-shadow1;
+}
+.icon-picker__icon {
+  width: 20px;
+  height: 20px;
+  padding: 3px;
+  cursor: pointer;
+  background-color: #f5f5f5;
+  margin-left: auto;
+}
+
+.icon-picker__icon--selected {
+  background-color: lightgrey;
+  //border: 1px solid #5d5d5d;
+  transition: background-color 200ms linear;
+}

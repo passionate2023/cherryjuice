@@ -10,14 +10,22 @@
   position: absolute;
   height: var(--vh);
   width: 100vw;
-  @include respond-to('md') {
+  @include respond-to($md-up) {
     border-radius: 5px;
     width: 90vw;
     height: 94vh;
     margin: 2vh 5vw;
   }
 }
-
+$small-dialog-width: 350px;
+.dialog--small {
+  @include respond-to($md-up) {
+    height: 500px;
+    width: $small-dialog-width;
+    margin-left: calc(100vw / 2 - #{$small-dialog-width}/ 2);
+    margin-top: calc(100vh / 2 - 500px / 2);
+  }
+}
 .dialog__header {
   max-height: 32px;
   background-color: white;

@@ -19,14 +19,36 @@ const reducer = (
           },
         },
       };
-    case documentActions.SET_NODE_HAS_CHANGED:
+    case documentActions.SET_NODE_CONTENT_HAS_CHANGED:
       return {
         ...state,
         nodes: {
           ...state.nodes,
           [action.value.nodeId]: {
             ...state.nodes[action.value.nodeId],
-            edited: true,
+            edited: {
+              ...state.nodes[action.value.nodeId]?.edited,
+              content: true,
+            },
+          },
+        },
+      };
+    case documentActions.SET_NODE_META_HAS_CHANGED:
+      return {
+        ...state,
+        nodes: {
+          ...state.nodes,
+          [action.value.nodeId]: {
+            ...state.nodes[action.value.nodeId],
+            edited: {
+              ...state.nodes[action.value.nodeId]?.edited,
+              meta: Array.from(
+                new Set([
+                  ...(state.nodes[action.value.nodeId]?.edited?.meta || []),
+                  ...action.value.changedKeys,
+                ]),
+              ),
+            },
           },
         },
       };
@@ -36,4 +58,4 @@ const reducer = (
 };
 
 export { reducer as documentReducer };
-export {TDocumentState}
+export { TDocumentState };

@@ -6,6 +6,7 @@ import { NodeRepository } from './repositories/node.repository';
 import { debug } from '../shared';
 import { SaveAhtmlDto } from './dto/save-ahtml.dto';
 import { ImageService } from '../image/image.service';
+import { NodeMetaDto } from './dto/node-meta.dto';
 
 @Injectable()
 export class NodeService {
@@ -39,5 +40,9 @@ export class NodeService {
     if (args.deletedImages.length)
       await this.imageService.deleteImages(args.deletedImages);
     return await this.nodeRepository.saveAHtml(args);
+  }
+
+  async setMeta(args: NodeMetaDto): Promise<string> {
+   return await this.nodeRepository.setMeta(args);
   }
 }
