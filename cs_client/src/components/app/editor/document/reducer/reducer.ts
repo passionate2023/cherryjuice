@@ -1,5 +1,8 @@
 import { TDocumentState } from '::app/editor/document/reducer/initial-state';
-import { documentActions } from '::app/editor/document/reducer/action-creators';
+import {
+  documentActions,
+  localChanges,
+} from '::app/editor/document/reducer/action-creators';
 
 const reducer = (
   state: TDocumentState,
@@ -50,6 +53,31 @@ const reducer = (
               ),
             },
           },
+        },
+      };
+    case documentActions.CREATE_NEW_NODE:
+      return {
+        ...state,
+        nodes: {
+          ...state.nodes,
+          [action.value.nodeId]: {
+            new: true,
+          },
+        },
+      };
+    case documentActions.CLEAR_LOCAL_CHANGES:
+      return {
+        ...state,
+        nodes: {
+          ...[state.nodes].map(nodes => {
+            if (action.value.level === localChanges.META)
+              delete nodes[action.value.nodeId]?.edited?.meta;
+            else if (action.value.level === localChanges.CONTENT)
+              delete nodes[action.value.nodeId]?.edited?.content;
+            else if (action.value.level === localChanges.IS_NEW)
+              delete nodes[action.value.nodeId]?.new;
+            return nodes;
+          })[0],
         },
       };
     default:

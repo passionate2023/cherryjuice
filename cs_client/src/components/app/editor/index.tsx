@@ -22,6 +22,7 @@ const Editor: React.FC<{ state: TState }> = ({ state }) => {
             showInfoBar={state.showInfoBar}
             showRecentNodes={state.showRecentNodes}
             showTree={state.showTree}
+            selectedNodeId={state.selectedNode?.nodeId}
           />
         </Suspense>
       </ErrorBoundary>

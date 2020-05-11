@@ -62,7 +62,8 @@ export class ImportsService {
       copyProperties(nodeToBeSaved, node, {});
       node.document = newDocument;
       await node.save();
-      if (node.has_image) nodesWithImages.push(node);
+      // @ts-ignore
+      if (nodeToBeSaved.has_image) nodesWithImages.push(node);
     }
     return { nodesWithImages };
   }
@@ -87,7 +88,7 @@ export class ImportsService {
       const images = await this.imageSqliteRepository.getNodeImages({
         node_id: node.node_id,
       });
-      for (const { png,  } of images) {
+      for (const { png } of images) {
         if (png) {
           const image = new Image();
           image.image = png;

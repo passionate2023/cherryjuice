@@ -7,11 +7,12 @@ import { LinearProgress } from '::shared-components/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { RichText } from '::app/editor/document/rich-text';
 import { TState } from '::app/reducer';
-import { useSaveDocument } from '::app/editor/document/hooks/save-document';
+import { useSaveDocument } from '::app/editor/document/hooks/save-document/save-document';
 import { useGetDocumentMeta } from '::app/editor/document/hooks/get-document-meta';
 import { documentReducer } from '::app/editor/document/reducer/reducer';
 import { documentInitialState } from '::app/editor/document/reducer/initial-state';
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
+import { DocumentContext } from './reducer/context';
 
 type Props = {
   state: TState;
@@ -42,7 +43,7 @@ const Document: React.FC<Props> = ({ state }) => {
     file_id,
     selectedFile,
     reloadDocument,
-    documentState.nodes
+    documentState.nodes,
   );
 
   useSaveDocument({
@@ -51,7 +52,7 @@ const Document: React.FC<Props> = ({ state }) => {
   });
 
   return (
-    <>
+    <DocumentContext.Provider value={documentState}>
       <LinearProgress loading={fetchingDocumentMeta} />
       {nodes && (
         <Fragment>
@@ -84,7 +85,7 @@ const Document: React.FC<Props> = ({ state }) => {
           />
         </Fragment>
       )}
-    </>
+    </DocumentContext.Provider>
   );
 };
 

@@ -4,9 +4,7 @@ import { Icon, ICON_GROUP, Icons } from '::shared-components/icon';
 import { useState } from 'react';
 import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
 
-const icons = [
-  ...Object.entries(Icons.cherrytree.custom_icons),
-];
+const icons = [...Object.entries(Icons.cherrytree.custom_icons)];
 
 const IconsList = ({
   selectedIcon,
@@ -34,7 +32,9 @@ const IconsList = ({
           name={iconName}
           key={i}
           className={`${modIconPicker.iconPicker__icon} ${
-            selectedIcon === iconId ? modIconPicker.iconPicker__iconSelected : ''
+            selectedIcon === iconId
+              ? modIconPicker.iconPicker__iconSelected
+              : ''
           }`}
           group={ICON_GROUP.cherrytree}
           onClick={() => {

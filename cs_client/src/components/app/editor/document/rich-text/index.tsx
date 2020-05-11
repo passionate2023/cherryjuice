@@ -34,6 +34,7 @@ const RichText: React.FC<Props> = ({
     node_id,
     reloadRequestIDs,
     file_id,
+    nodeId: nodes?.get(node_id)?.id,
   });
 
   useSetCurrentNode(node_id, nodes);

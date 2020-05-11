@@ -24,9 +24,6 @@ const QUERY_NODE_META = {
           child_nodes
           is_empty
           is_richtxt
-          has_image
-          has_codebox
-          has_table
           createdAt
           updatedAt
           node_title_styles

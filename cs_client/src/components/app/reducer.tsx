@@ -1,4 +1,8 @@
 import { TAlert } from '::types/react';
+enum NodeMetaPopup {
+  EDIT = 1,
+  CREATE,
+}
 export type TNodeMeta = {
   name: string;
   style: { color: string; fontWeight: 'normal' | 'bold' };
@@ -35,13 +39,15 @@ const initialState = {
   processLinks: undefined,
   showImportDocuments: false,
   showUserPopup: false,
-  showNodeMeta: false,
+  showNodeMeta: undefined,
+  highest_node_id: -1,
 };
 
 export type TState = typeof initialState & {
   selectedNode: TNodeMeta;
   recentNodes: TNodeMeta[];
   alert: TAlert;
+  showNodeMeta: NodeMetaPopup;
 };
 enum actions {
   TOGGLE_TREE,
@@ -65,7 +71,9 @@ enum actions {
   HIDE_POPUPS,
   TOGGLE_SHOW_IMPORT_FILES,
   TOGGLE_USER_POPUP,
-  TOGGLE_NODE_META,
+  SHOW_NODE_META,
+  HIDE_NODE_META,
+  SET_HIGHEST_NODE_ID,
 }
 const createActionCreators = () => {
   const state = {
@@ -145,23 +153,10 @@ const createActionCreators = () => {
     },
     selectFile: (fileId: string) =>
       state.dispatch({ type: actions.SELECT_FILE, value: fileId }),
-    selectNode: (
-      nodeMeta: TNodeMeta,
-      // { node_id, name, style, nodeId },
-      // { is_richtxt, createdAt, updatedAt },
-    ) =>
+    selectNode: (nodeMeta: TNodeMeta) =>
       state.dispatch({
         type: actions.SELECT_NODE,
         value: nodeMeta,
-        //   {
-        //   node_id,
-        //   name,
-        //   style,
-        //   is_richtxt,
-        //   createdAt,
-        //   updatedAt,
-        //   nodeId,
-        // },
       }),
     processLinks(value: number) {
       state.dispatch({
@@ -169,11 +164,28 @@ const createActionCreators = () => {
         value,
       });
     },
-    toggleNodeMeta() {
+    showNodeMetaEdit() {
       state.dispatch({
-        type: actions.TOGGLE_NODE_META,
+        type: actions.SHOW_NODE_META,
+        value: NodeMetaPopup.EDIT,
       });
     },
+    showNodeMetaCreate() {
+      state.dispatch({
+        type: actions.SHOW_NODE_META,
+        value: NodeMetaPopup.CREATE,
+      });
+    },
+    hideNodeMeta() {
+      state.dispatch({
+        type: actions.HIDE_NODE_META,
+      });
+    },
+    setHighestNodeId: (highest_node_id: number) =>
+      state.dispatch({
+        type: actions.SET_HIGHEST_NODE_ID,
+        value: { highest_node_id },
+      }),
   };
 };
 const reducer = (
@@ -269,8 +281,15 @@ const reducer = (
       return { ...state, isOnMobile: action.value };
     case actions.PROCESS_LINKS:
       return { ...state, processLinks: action.value };
-    case actions.TOGGLE_NODE_META:
-      return { ...state, showNodeMeta: !state.showNodeMeta };
+    case actions.SHOW_NODE_META:
+      return { ...state, showNodeMeta: action.value };
+    case actions.HIDE_NODE_META:
+      return { ...state, showNodeMeta: undefined };
+    case actions.SET_HIGHEST_NODE_ID:
+      return {
+        ...state,
+        highest_node_id: action.value.highest_node_id,
+      };
     default:
       throw new Error('action not supported');
   }
@@ -282,3 +301,5 @@ export {
   actions as appActions,
   appActionCreators,
 };
+
+export { NodeMetaPopup };

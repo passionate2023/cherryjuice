@@ -37,7 +37,7 @@ const Dialog: React.FC<TDialogProps & {
   isOnMobile,
   rightHeaderButtons,
   small,
-                      lazyAutoFocus
+  lazyAutoFocus,
 }) => {
   useModalKeyboardEvents({
     onCloseModal: onClose,

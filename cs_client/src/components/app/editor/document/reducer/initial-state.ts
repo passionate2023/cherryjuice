@@ -4,6 +4,7 @@ type TEditedNode = {
     content: boolean;
     meta: string[];
   };
+  new: boolean;
 };
 type TEditedNodes = {
   [nodeId: string]: TEditedNode;

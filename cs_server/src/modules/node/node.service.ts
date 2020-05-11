@@ -7,6 +7,7 @@ import { debug } from '../shared';
 import { SaveAhtmlDto } from './dto/save-ahtml.dto';
 import { ImageService } from '../image/image.service';
 import { NodeMetaDto } from './dto/node-meta.dto';
+import { CreateNodeDto } from './dto/create-node.dto';
 
 @Injectable()
 export class NodeService {
@@ -43,6 +44,9 @@ export class NodeService {
   }
 
   async setMeta(args: NodeMetaDto): Promise<string> {
-   return await this.nodeRepository.setMeta(args);
+    return await this.nodeRepository.setMeta(args);
+  }
+  async createNode(args: CreateNodeDto): Promise<string> {
+    return await this.nodeRepository.createNode(args);
   }
 }

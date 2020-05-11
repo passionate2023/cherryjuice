@@ -57,7 +57,7 @@ const updatedCachedHtml = (cache, nodeId, html) => {
     html,
   });
 };
-const updatedCachedMeta = ({cache, nodeId, meta}) => {
+const updatedCachedMeta = ({ cache, nodeId, meta }) => {
   // @ts-ignore
   const node = cache.data.get('Node:' + nodeId);
   // @ts-ignore
@@ -109,5 +109,5 @@ export {
   updateCachedImages,
   updatedCachedHtml,
   getEditorContentWithoutImages,
-  updatedCachedMeta
+  updatedCachedMeta,
 };

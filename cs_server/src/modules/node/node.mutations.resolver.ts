@@ -6,6 +6,7 @@ import { GetUserGql } from '../user/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
 import { NodeMetaIt } from './dto/node-meta.it';
+import { CreateNodeIt } from './dto/create-node.it';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => NodeMutation)
@@ -37,5 +38,18 @@ export class NodeMutationsResolver {
     @GetUserGql() user: User,
   ): Promise<string> {
     return await this.nodeService.setMeta({ user, node_id, documentId, meta });
+  }
+  @ResolveField()
+  async createNode(
+    @Args({ name: 'meta', type: () => CreateNodeIt }) meta: CreateNodeIt,
+    @Parent() { node_id, documentId }: { node_id: string; documentId: string },
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    return await this.nodeService.createNode({
+      user,
+      node_id,
+      documentId,
+      meta,
+    });
   }
 }

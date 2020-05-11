@@ -4,6 +4,8 @@ import { Node } from '../entities/node.entity';
 import { Injectable } from '@nestjs/common';
 import { SaveAhtmlDto } from '../dto/save-ahtml.dto';
 import { NodeMetaDto } from '../dto/node-meta.dto';
+import { CreateNodeDto } from '../dto/create-node.dto';
+import { copyProperties } from '../../document/helpers';
 
 @Injectable()
 @EntityRepository(Node)
@@ -57,5 +59,19 @@ export class NodeRepository extends Repository<Node>
       .where({ node_id, userId: user.id, documentId })
       .execute();
     return JSON.stringify(res);
+  }
+
+  async createNode({ meta, documentId }: CreateNodeDto) {
+    const node = new Node();
+    copyProperties(meta, node, {});
+    node.documentId = documentId;
+    await node.save();
+
+    const parentNode = (
+      await this.getNodeMetaById(String(node.father_id), documentId)
+    )[0];
+    parentNode.child_nodes.push(node.node_id);
+    await parentNode.save();
+    return node.id;
   }
 }

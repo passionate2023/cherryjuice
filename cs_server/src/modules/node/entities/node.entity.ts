@@ -42,8 +42,6 @@ export class Node extends BaseEntity {
   @Field(() => [Int])
   child_nodes: number[];
 
-  @Column('int2') sequence: number;
-
   @Column('text')
   @Field()
   name: string;
@@ -56,31 +54,19 @@ export class Node extends BaseEntity {
   @Field(() => Float)
   updatedAt: Date;
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   node_title_styles: string;
 
-  @Column({ select: false }) ahtml: string;
+  @Column({ select: false, default: '[]' }) ahtml: string;
 
-  @Column('int2')
+  @Column('int2', { default: 0 })
   @Field(() => Int)
   is_empty: number;
 
-  @Column('int8')
+  @Column('int8', { default: 1 })
   @Field(() => Int)
   is_richtxt: number;
-
-  @Column('int2')
-  @Field(() => Int)
-  has_image: number;
-
-  @Column('int2')
-  @Field(() => Int)
-  has_codebox: number;
-
-  @Column('int2')
-  @Field(() => Int)
-  has_table: number;
 
   @Column()
   @Field()

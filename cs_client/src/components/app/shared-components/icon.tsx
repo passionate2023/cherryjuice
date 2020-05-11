@@ -149,14 +149,14 @@ const getIconPath = ({
   name,
   size,
   color,
-  group
+  group,
 }: {
   name: string;
   size?: ICON_SIZE;
   color?: ICON_COLOR;
   group?: ICON_GROUP;
 }) => {
-  const folder = group ||getIconGroup(name);
+  const folder = group || getIconGroup(name);
   if (!size && folder === 'material') size = 18;
   return `/icons/${folder}/${size ? `${size}/` : ''}${name}${
     color ? '-' + color : ''

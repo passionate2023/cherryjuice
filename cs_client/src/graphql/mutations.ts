@@ -39,11 +39,7 @@ const DOCUMENT_MUTATION = {
     }
   `,
   meta: gql`
-    mutation saveAhtml(
-      $file_id: String!
-      $node_id: String!
-      $meta: NodeMetaIt!
-    ) {
+    mutation meta($file_id: String!, $node_id: String!, $meta: NodeMetaIt!) {
       document(file_id: $file_id) {
         node(node_id: $node_id) {
           meta(meta: $meta)
@@ -51,6 +47,22 @@ const DOCUMENT_MUTATION = {
       }
     }
   `,
+  createNode: {
+    path: (data): string => data?.document?.node?.createNode,
+    query: gql`
+      mutation createNode(
+        $file_id: String!
+        $node_id: String!
+        $meta: CreateNodeIt!
+      ) {
+        document(file_id: $file_id) {
+          node(node_id: $node_id) {
+            createNode(meta: $meta)
+          }
+        }
+      }
+    `,
+  },
 };
 
 const USER_MUTATION = {

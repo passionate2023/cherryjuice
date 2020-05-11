@@ -36,22 +36,42 @@ const useGetDocumentMeta = (
   const {
     apolloClient: { cache },
   } = useContext(RootContext);
-
-  const nodes: Map<number, NodeMeta> = useMemo(() => {
-    let nodes,
-      nodesArray = QUERY_NODE_META.path(data);
-    if (nodesArray) {
+  const nodes = useMemo(() => {
+    let nodes: Map<number, NodeMeta>;
+    const nodesArray = QUERY_NODE_META.path(data) || [];
+    if (nodesArray.length) {
       nodes = new Map(nodesArray.map(node => [node.node_id, node]));
-      Object.entries(localChanges).forEach(([nodeId, { edited }]) => {
-        if (edited?.meta) {
-          // @ts-ignore
-          const node = cache.data.get('Node:' + nodeId);
-          nodes.set(node.node_id, node);
-        }
-      });
+      Object.entries(localChanges).forEach(
+        ([nodeId, { edited, new: isNew }]) => {
+          if (edited?.meta) {
+            // @ts-ignore
+            const node = cache.data.get('Node:' + nodeId);
+            nodes.set(node.node_id, node);
+          }
+          if (isNew) {
+            // @ts-ignore
+            const node = cache.data.get('Node:' + nodeId);
+            const fatherNode = nodes.get(node.father_id);
+            if (!fatherNode.child_nodes.includes(node.node_id)) {
+              fatherNode.child_nodes.push(node.node_id);
+            }
+            nodes.set(node.node_id, node);
+          }
+        },
+      );
     }
     return nodes;
   }, [loading, file_id, localChanges]);
+
+  useEffect(() => {
+    if (nodes) {
+      const SET_HIGHEST_NODE_ID = Array.from(nodes.keys())
+        .sort()
+        .pop();
+
+      appActionCreators.setHighestNodeId(SET_HIGHEST_NODE_ID);
+    }
+  }, [nodes]);
 
   useEffect(() => {
     if (error) {

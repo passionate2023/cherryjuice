@@ -5,12 +5,13 @@ const ToolbarButton: React.FC<{
   onClick?: any;
   enabled?: boolean;
   className?: string;
-}> = ({ onClick, children, enabled, className }) => (
+  disabled?: boolean;
+}> = ({ onClick, children, enabled, className, disabled }) => (
   <div
     className={`${toolbarMod.toolBar__icon} ${
       enabled ? toolbarMod.toolBar__iconEnabled : ''
     } ${className ? className : ''}`}
-    {...(onClick && { onClick })}
+    {...(!disabled && onClick && { onClick })}
   >
     {children && children}
   </div>

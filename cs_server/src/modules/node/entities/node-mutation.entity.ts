@@ -7,4 +7,7 @@ export class NodeMutation {
 
   @Field()
   meta: string;
+
+  @Field()
+  createNode: string;
 }

@@ -10,7 +10,7 @@ import { rootActionCreators } from '::root/root.reducer';
 import { AuthUser } from '::types/graphql/generated';
 
 if (process.env.NODE_ENV === 'development')
-  localStorage.setItem('graphqlAPIHost', '192.168.1.4:1230');
+  localStorage.setItem('graphqlAPIHost', 'localhost:1230');
 const host = localStorage.getItem('graphqlAPIHost') || location.host;
 const secure = location.protocol === 'https:';
 

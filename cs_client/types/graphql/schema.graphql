@@ -51,9 +51,6 @@ type Node {
     createdAt: Float!
     documentId: String!
     father_id: Float!
-    has_codebox: Int!
-    has_image: Int!
-    has_table: Int!
     html: String!
     icon_id: String!
     id: String!
@@ -62,11 +59,13 @@ type Node {
     is_richtxt: Int!
     name: String!
     node_id: Int!
-    node_title_styles: String!
+    node_title_styles: String
+    read_only: Int!
     updatedAt: Float!
 }
 
 type NodeMutation {
+    createNode(meta: CreateNodeIt!): String!
     meta(meta: NodeMetaIt!): String!
     saveAHtml(ahtml: String!, deletedImages: [String]!): String!
 }
@@ -112,6 +111,19 @@ enum DOCUMENT_SUBSCRIPTIONS {
     DOCUMENT_IMPORT_STARTED
 }
 
+input CreateNodeIt {
+    child_nodes: [Int!]!
+    createdAt: Float!
+    documentId: String!
+    father_id: Float!
+    icon_id: String!
+    name: String!
+    node_id: Int!
+    node_title_styles: String
+    read_only: Int!
+    updatedAt: Float!
+}
+
 input DeleteDocumentInputType {
     IDs: [String!]!
 }
@@ -123,8 +135,8 @@ input NodeMetaIt {
     is_richtxt: Int
     name: String
     node_title_styles: String
+    read_only: Int
     sequence: Float
-    read_only: Boolean
 }
 
 input SignInCredentials {

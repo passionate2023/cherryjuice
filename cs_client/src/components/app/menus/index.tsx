@@ -58,14 +58,14 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
         <ImportProgress />
       </Suspense>
       <Suspense fallback={<Void />}>
-        {state.selectedNode && (
+        {
           <NodeMeta
             showDialog={state.showNodeMeta}
             isOnMobile={state.isOnMobile}
-            onClose={appActionCreators.toggleNodeMeta}
-            nodeId={state.selectedNode.nodeId}
+            onClose={appActionCreators.hideNodeMeta}
+            nodeId={state.selectedNode?.nodeId}
           />
-        )}
+        }
       </Suspense>
     </>
   );

@@ -110,6 +110,7 @@ const organizeData = async (data): Promise<Map<number, Node>> => {
 
   data.forEach(node => {
     node.child_nodes.sort(
+      // @ts-ignore
       (a, b) => nodes.get(a).sequence - nodes.get(b).sequence,
     );
   });

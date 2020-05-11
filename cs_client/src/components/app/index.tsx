@@ -16,6 +16,7 @@ import { appModule } from '::sass-modules/index';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { QUERY_USER } from '::graphql/queries';
 import { rootActionCreators } from '::root/root.reducer';
+import { AppContext } from './context';
 
 const Menus = React.lazy(() => import('::app/menus'));
 
@@ -103,14 +104,16 @@ const App: React.FC<Props> = ({ session }) => {
   useUpdateCssVariables(state);
   useRefreshToken({ token: session.token });
   return (
-    <div className={appModule.app}>
-      <Suspense fallback={<Void />}>
-        <Editor state={state} />
-      </Suspense>
-      <Suspense fallback={<Void />}>
-        <Menus state={state} dispatch={dispatch} session={session} />
-      </Suspense>
-    </div>
+    <AppContext.Provider value={state}>
+      <div className={appModule.app}>
+        <Suspense fallback={<Void />}>
+          <Editor state={state} />
+        </Suspense>
+        <Suspense fallback={<Void />}>
+          <Menus state={state} dispatch={dispatch} session={session} />
+        </Suspense>
+      </div>
+    </AppContext.Provider>
   );
 };
 
