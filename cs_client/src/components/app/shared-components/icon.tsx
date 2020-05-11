@@ -138,6 +138,8 @@ const Icons = {
     },
     additionalIcons: {
       cherries: 'cherries',
+      'tree-subnode-add':'tree-subnode-add',
+      'tree-node-add':'tree-node-add'
     },
   },
 };

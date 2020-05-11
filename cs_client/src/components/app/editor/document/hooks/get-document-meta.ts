@@ -54,8 +54,11 @@ const useGetDocumentMeta = (
             const fatherNode = nodes.get(node.father_id);
             if (!fatherNode.child_nodes.includes(node.node_id)) {
               const position =
-                fatherNode.child_nodes.indexOf(node.previous_sibling_node_id) +
-                1;
+                node.previous_sibling_node_id === -1
+                  ? 0
+                  : fatherNode.child_nodes.indexOf(
+                      node.previous_sibling_node_id,
+                    ) + 1;
               fatherNode.child_nodes.splice(position, 0, node.node_id);
               delete node.previous_sibling_node_id;
               // @ts-ignore

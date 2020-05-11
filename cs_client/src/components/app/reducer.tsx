@@ -1,7 +1,8 @@
 import { TAlert } from '::types/react';
 enum NodeMetaPopup {
   EDIT = 1,
-  CREATE,
+  CREATE_SIBLING,
+  CREATE_CHILD,
 }
 export type TNodeMeta = {
   name: string;
@@ -170,10 +171,16 @@ const createActionCreators = () => {
         value: NodeMetaPopup.EDIT,
       });
     },
-    showNodeMetaCreate() {
+    showNodeMetaCreateChild() {
       state.dispatch({
         type: actions.SHOW_NODE_META,
-        value: NodeMetaPopup.CREATE,
+        value: NodeMetaPopup.CREATE_CHILD,
+      });
+    },
+    showNodeMetaCreateSibling() {
+      state.dispatch({
+        type: actions.SHOW_NODE_META,
+        value: NodeMetaPopup.CREATE_SIBLING,
       });
     },
     hideNodeMeta() {

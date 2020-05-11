@@ -24,8 +24,17 @@ const MainButtons: React.FC<Props> = ({ showTree, selectedNodeId }) => {
       >
         <Icon name={Icons.material.edit} />
       </ToolbarButton>
-      <ToolbarButton onClick={appActionCreators.showNodeMetaCreate}>
-        <Icon name={Icons.material.document} />
+      <ToolbarButton onClick={appActionCreators.showNodeMetaCreateSibling}>
+        <Icon
+          name={Icons.cherrytree.additionalIcons['tree-node-add']}
+          style={{ width: 22 }}
+        />
+      </ToolbarButton>
+      <ToolbarButton onClick={appActionCreators.showNodeMetaCreateChild}>
+        <Icon
+          name={Icons.cherrytree.additionalIcons['tree-subnode-add']}
+          style={{ width: 22 }}
+        />
       </ToolbarButton>
       <ToolbarButton onClick={appActionCreators.saveDocument}>
         <Icon name={Icons.material.save} />

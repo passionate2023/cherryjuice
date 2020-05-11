@@ -27,7 +27,9 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
     selectedNode,
   } = useContext(AppContext);
   let node;
-  const newNode = showDialog === NodeMetaPopup.CREATE;
+  const newNode =
+    showDialog === NodeMetaPopup.CREATE_SIBLING ||
+    showDialog === NodeMetaPopup.CREATE_CHILD;
   if (newNode) {
     // @ts-ignore
     const _selectedNode = cache.data.get('Node:' + selectedNode.nodeId);
@@ -35,8 +37,14 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
     node = createNode({
       documentId,
       highest_node_id,
-      father_id: _selectedNode.father_id,
-      previous_sibling_node_id: _selectedNode.node_id
+      father_id:
+        showDialog === NodeMetaPopup.CREATE_SIBLING
+          ? _selectedNode.father_id
+          : _selectedNode.node_id,
+      previous_sibling_node_id:
+        showDialog === NodeMetaPopup.CREATE_SIBLING
+          ? _selectedNode.node_id
+          : -1,
     });
   } else {
     // @ts-ignore
