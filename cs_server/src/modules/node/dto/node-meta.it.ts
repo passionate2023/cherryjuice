@@ -25,4 +25,6 @@ export class NodeMetaIt {
   @Field(() => Int, { nullable: true })
   read_only: number;
 
+  @Field(() => Int, { nullable: true })
+  position: number;
 }

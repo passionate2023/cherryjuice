@@ -12,7 +12,8 @@ const adapt = ({
   node_title_styles,
   read_only,
   updatedAt,
-}: NodeCached): CreateNodeIt => ({
+  position,
+}: NodeCached & { position }): CreateNodeIt => ({
   child_nodes,
   createdAt,
   documentId,
@@ -23,11 +24,14 @@ const adapt = ({
   node_title_styles,
   read_only,
   updatedAt,
+  position,
 });
 
 const mutateCreateNode = async ({ cache, nodeId, mutate }) =>
   await new Promise((res, rej) => {
-    const node: NodeCached = cache.data.get('Node:' + nodeId);
+    const node: NodeCached & { position: number } = cache.data.get(
+      'Node:' + nodeId,
+    );
     const meta: CreateNodeIt = adapt(node);
     mutate({
       variables: {

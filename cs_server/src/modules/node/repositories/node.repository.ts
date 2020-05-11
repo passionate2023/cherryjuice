@@ -70,7 +70,7 @@ export class NodeRepository extends Repository<Node>
     const parentNode = (
       await this.getNodeMetaById(String(node.father_id), documentId)
     )[0];
-    parentNode.child_nodes.push(node.node_id);
+    parentNode.child_nodes.splice(meta.position,0,node.node_id)
     await parentNode.save();
     return node.id;
   }

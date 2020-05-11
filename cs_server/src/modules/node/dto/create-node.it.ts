@@ -31,4 +31,7 @@ export class CreateNodeIt {
 
   @Field(() => Int)
   read_only: number;
+
+  @Field(() => Int, { nullable: true })
+  position: number;
 }

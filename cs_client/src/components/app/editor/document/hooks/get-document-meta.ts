@@ -53,7 +53,13 @@ const useGetDocumentMeta = (
             const node = cache.data.get('Node:' + nodeId);
             const fatherNode = nodes.get(node.father_id);
             if (!fatherNode.child_nodes.includes(node.node_id)) {
-              fatherNode.child_nodes.push(node.node_id);
+              const position =
+                fatherNode.child_nodes.indexOf(node.previous_sibling_node_id) +
+                1;
+              fatherNode.child_nodes.splice(position, 0, node.node_id);
+              delete node.previous_sibling_node_id;
+              // @ts-ignore
+              cache.data.set('Node:' + nodeId, { ...node, position });
             }
             nodes.set(node.node_id, node);
           }
@@ -66,7 +72,7 @@ const useGetDocumentMeta = (
   useEffect(() => {
     if (nodes) {
       const SET_HIGHEST_NODE_ID = Array.from(nodes.keys())
-        .sort()
+        .sort((a, b) => a - b)
         .pop();
 
       appActionCreators.setHighestNodeId(SET_HIGHEST_NODE_ID);

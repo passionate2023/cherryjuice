@@ -15,13 +15,15 @@ const defaultNode = {
 const createNode = ({
   highest_node_id,
   documentId,
-  father_id = 0,
+  father_id,
+  previous_sibling_node_id,
 }: {
   highest_node_id: number;
   documentId: string;
   meta?: NodeMetaIt;
   father_id: number;
-}): NodeNew => {
+  previous_sibling_node_id: number;
+}): NodeNew & { previous_sibling_node_id: number } => {
   const node_id = highest_node_id + 1;
   return {
     ...defaultNode,
@@ -31,6 +33,7 @@ const createNode = ({
     father_id,
     createdAt: new Date().getTime(),
     updatedAt: new Date().getTime(),
+    previous_sibling_node_id,
   };
 };
 

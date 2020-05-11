@@ -13,6 +13,7 @@ type TNodeMetaModalProps = {
   nodeId: string;
   onClose: EventHandler<any>;
 };
+
 const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
   showDialog: NodeMetaPopup;
   isOnMobile: boolean;
@@ -20,11 +21,23 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
   const {
     apolloClient: { cache },
   } = useContext(RootContext);
-  const { selectedFile: documentId, highest_node_id } = useContext(AppContext);
+  const {
+    selectedFile: documentId,
+    highest_node_id,
+    selectedNode,
+  } = useContext(AppContext);
   let node;
-  let newNode = showDialog === NodeMetaPopup.CREATE;
+  const newNode = showDialog === NodeMetaPopup.CREATE;
   if (newNode) {
-    node = createNode({ documentId, highest_node_id, father_id: 0 });
+    // @ts-ignore
+    const _selectedNode = cache.data.get('Node:' + selectedNode.nodeId);
+
+    node = createNode({
+      documentId,
+      highest_node_id,
+      father_id: _selectedNode.father_id,
+      previous_sibling_node_id: _selectedNode.node_id
+    });
   } else {
     // @ts-ignore
     node = cache.data.get('Node:' + nodeId);
