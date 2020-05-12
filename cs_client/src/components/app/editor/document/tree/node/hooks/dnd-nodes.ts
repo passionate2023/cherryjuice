@@ -88,7 +88,16 @@ const calculateDroppingPosition = (e): number => {
   }
   return position;
 };
-
+const getFatherIdChain = (
+  nodes: Map<number, NodeMeta>,
+  node_id: number,
+  father_id_chain: number[] = [],
+) => {
+  const father_id = nodes.get(node_id).father_id;
+  return father_id === 0
+    ? [...father_id_chain, 0]
+    : getFatherIdChain(nodes, father_id, [...father_id_chain, father_id]);
+};
 type Props = {
   node_id: number;
   nodes?: Map<number, NodeMeta>;
@@ -98,7 +107,7 @@ type Props = {
   afterDrop?: Function;
 };
 const useDnDNodes = ({
-  node_id,
+  node_id: target_node_id,
   componentRef,
   nodes,
   cache,
@@ -125,7 +134,7 @@ const useDnDNodes = ({
   const { setId, moveNode } = useMemo(
     () => ({
       setId: e => {
-        e.dataTransfer.setData('text/plain', String(node_id));
+        e.dataTransfer.setData('text/plain', String(target_node_id));
       },
       moveNode: e => {
         e.preventDefault();
@@ -139,11 +148,17 @@ const useDnDNodes = ({
           removeClass(e, nodeTitle);
         } else removeClass(e);
         const dropped_node_id = e.dataTransfer.getData('text/plain');
-        if (dropped_node_id !== '' + node_id) {
+        if (dropped_node_id !== '' + target_node_id) {
           const droppedNode = nodes.get(Number(dropped_node_id));
           const fatherOfDroppedNode = nodes.get(droppedNode.father_id);
-          const targetNode = nodes.get(node_id);
-          if (droppedNode.child_nodes.includes(targetNode.node_id))
+          const targetNode = nodes.get(target_node_id);
+          const father_id_chain = new Set(
+            target_node_id === 0 ? [0] : getFatherIdChain(nodes, target_node_id),
+          );
+          const fatherDroppedToChild = droppedNode.child_nodes.some(
+            child_node => father_id_chain.has(child_node),
+          );
+          if (fatherDroppedToChild)
             appActionCreators.setAlert({
               title: 'forbidden operation',
               type: AlertType.Information,
@@ -168,12 +183,12 @@ const useDnDNodes = ({
               fatherOfDroppedNode,
               droppedNode,
             });
-            if (afterDrop) afterDrop();
+            if (afterDrop) afterDrop({ e, node_id: droppedNode.node_id });
           }
         }
       },
     }),
-    [node_id, nodes],
+    [target_node_id, nodes],
   );
 
   return {

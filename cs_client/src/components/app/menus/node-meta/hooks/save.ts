@@ -31,7 +31,7 @@ const calculateDiff = ({
     : customIconValue.current.value;
   const res: { [k: string]: any } = {};
   if (newNode) {
-    res.name = nameInput.current.value;
+    res.name = nameInput.current.value || '?';
     res.node_title_styles = newStyle;
     res.icon_id = newIconId;
     res.read_only = isReadOnlyInput.current.checked ? 1 : 0;

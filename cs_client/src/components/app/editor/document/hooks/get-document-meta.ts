@@ -60,7 +60,7 @@ const useGetDocumentMeta = (
             if (!fatherNode.child_nodes.includes(node.node_id)) {
               const position =
                 node.previous_sibling_node_id === -1
-                  ? 0
+                  ? Infinity
                   : fatherNode.child_nodes.indexOf(
                       node.previous_sibling_node_id,
                     ) + 1;

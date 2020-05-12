@@ -49,7 +49,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
     apolloClient: { cache },
   } = useContext(RootContext);
   const selectNode = useCallback(
-    e => {
+    (e, path = nodePath) => {
       const eventIsTriggeredByCollapseButton = e.target.classList.contains(
         nodeMod.node__titleButton,
       );
@@ -58,7 +58,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
       nodeOverlay.updateLeft(componentRef);
 
       updateCachedHtmlAndImages(cache);
-      history.push(nodePath);
+      history.push(path);
     },
     [nodePath],
   );
@@ -93,7 +93,10 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
     componentRef: titleRef,
     nodes,
     node_id,
-    afterDrop: () =>setShowChildren(true)
+    afterDrop: ({ e, node_id }) => {
+      selectNode(e, `/document/${file_id}/node/${node_id}`);
+      setShowChildren(true);
+    },
   });
   const listDndProps = useDnDNodes({
     cache,
@@ -139,9 +142,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
           {name}
         </div>
         {location.pathname === nodePath && (
-          <div
-            className={nodeMod.node__titleOverlay}
-          />
+          <div className={nodeMod.node__titleOverlay} />
         )}
       </div>
       {showChildren && (
