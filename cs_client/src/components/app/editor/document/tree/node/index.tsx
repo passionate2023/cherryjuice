@@ -42,6 +42,8 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
     () => getTreeStateFromLocalStorage()[node_id],
   );
   const componentRef = useRef();
+  const listRef = useRef();
+  const titleRef = useRef();
   // callback hooks
   const {
     apolloClient: { cache },
@@ -86,14 +88,27 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
   }, [showChildren]);
   // console.log('treeRef', nodeMod.node__titleButtonHidden,child_nodes);
   // @ts-ignore
-  const dndProps = useDnDNodes({ cache, componentRef, nodes, node_id });
+  const nodeDndProps = useDnDNodes({
+    cache,
+    componentRef: titleRef,
+    nodes,
+    node_id,
+  });
+  const listDndProps = useDnDNodes({
+    cache,
+    componentRef: listRef,
+    nodes,
+    node_id,
+    draggable: false,
+  });
   return (
     <>
       <div
         className={`${nodeMod.node}`}
         ref={componentRef}
         onClick={selectNode}
-        {...dndProps}
+        draggable={true}
+        onDragStart={nodeDndProps.onDragStart}
       >
         <div style={{ marginLeft: depth * 20 }} />
         {
@@ -116,8 +131,9 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
         />
         <div
           className={nodeMod.node__title}
-          // onClick={selectNode}
           style={{ ...(styles && JSON.parse(styles)) }}
+          ref={titleRef}
+          {...nodeDndProps}
         >
           {name}
         </div>
@@ -129,7 +145,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
         )}
       </div>
       {showChildren && (
-        <ul className={nodeMod.node__list}>
+        <ul className={nodeMod.node__list} {...listDndProps} ref={listRef}>
           {child_nodes
             .map(node_id => nodes.get(node_id))
             .map(node => (

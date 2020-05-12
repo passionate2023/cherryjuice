@@ -80,10 +80,12 @@ const useDnDNodes = ({
   const { addClass, removeClass } = useMemo(() => {
     const addClass = e => {
       e.preventDefault();
+      e.stopPropagation();
       componentRef.current.classList.add(nodeMod.nodeDragHover);
     };
     const removeClass = e => {
       e.preventDefault();
+      e.stopPropagation();
       componentRef.current.classList.remove(nodeMod.nodeDragHover);
     };
     return { addClass, removeClass };
@@ -133,7 +135,7 @@ const useDnDNodes = ({
 
   return {
     draggable,
-    onDragStart: draggable && setId,
+    onDragStart: draggable ? setId : undefined,
     onDrop: moveNode,
     onDragEnter: addClass,
     onDragOver: addClass,
