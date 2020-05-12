@@ -18,6 +18,8 @@ import appModule from '::sass-modules/app.scss';
 import modImportProgress from '::sass-modules/select-file/import-progress.scss';
 import modNodeMeta from './node-meta/node-meta.scss';
 import modIconPicker from './node-meta/icon-picker.scss';
+import modTreeNode from './tree/node.scss';
+import modTree from './tree/tree.scss';
 export {
   appModule,
   modDrawer,
@@ -39,4 +41,6 @@ export {
   modImportProgress,
   modNodeMeta,
   modIconPicker,
+  modTreeNode,
+  modTree,
 };

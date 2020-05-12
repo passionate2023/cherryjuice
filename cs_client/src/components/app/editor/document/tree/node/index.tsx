@@ -93,6 +93,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
     componentRef: titleRef,
     nodes,
     node_id,
+    afterDrop: () =>setShowChildren(true)
   });
   const listDndProps = useDnDNodes({
     cache,
@@ -140,12 +141,20 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
         {location.pathname === nodePath && (
           <div
             className={nodeMod.node__titleOverlay}
-            // style={{ width: treeRef?.current?.size?.width + 220 }}
           />
         )}
       </div>
       {showChildren && (
-        <ul className={nodeMod.node__list} {...listDndProps} ref={listRef}>
+        <ul
+          className={nodeMod.node__list}
+          {...{
+            ...nodeDndProps,
+            onDrop: listDndProps.onDrop,
+            draggable: listDndProps.draggable,
+            onDragStart: listDndProps.onDragStart,
+          }}
+          ref={listRef}
+        >
           {child_nodes
             .map(node_id => nodes.get(node_id))
             .map(node => (

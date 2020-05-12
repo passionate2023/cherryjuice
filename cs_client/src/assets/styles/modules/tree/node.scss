@@ -13,13 +13,6 @@
   max-width: $max-node-width;
 }
 
-ul.node--drag-hover {
-  border: 1px dotted white;
-}
-div.node--drag-hover {
-  border: 1px dotted white;
-}
-
 .node__title-overlay {
   min-width: var(--overlay-width);
   height: 100%;
@@ -64,4 +57,24 @@ div.node--drag-hover {
 }
 .node__list {
   padding-left: 0;
+}
+
+div.node--drag-hover {
+  outline: 1px dotted #e7e7e7;
+}
+
+div.node[data-dragged='true'] + ul {
+  background-color: #ffffff55;
+}
+ul.node--drag-hover {
+  background-color: #ffffff55;
+}
+
+.drop-hint {
+  height: 2px;
+  background-color: white;
+  opacity: 0.5;
+  width: 80%;
+  position: absolute;
+  left: 10%;
 }

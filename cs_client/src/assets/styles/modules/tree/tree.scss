@@ -17,8 +17,9 @@
 }
 .tree_root-list {
   margin: 0 0 0 -40px;
-  display: flex;
   flex-direction: column;
+  min-height: 100%;
+  height: auto;
 }
 .tree__resize-handle {
   height: calc(100vh - #{$info-bar-height+ $tool-bar-height}) !important;
