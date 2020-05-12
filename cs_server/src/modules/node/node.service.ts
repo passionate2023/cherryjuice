@@ -35,7 +35,7 @@ export class NodeService {
   async getNodeMetaById(node_id: string, documentId: string): Promise<Node[]> {
     if (debug.loadSqliteDocuments)
       return this.nodeSqliteRepository.getNodeMetaById(node_id);
-    return this.nodeRepository.getNodeMetaById(node_id, documentId);
+    return [await this.nodeRepository.getNodeMetaById(node_id, documentId)];
   }
   async saveAHtml(args: SaveAhtmlDto): Promise<string> {
     if (args.deletedImages.length)

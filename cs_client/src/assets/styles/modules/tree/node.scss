@@ -12,6 +12,11 @@
   flex: 1;
   max-width: $max-node-width;
 }
+
+.node--drag-hover {
+  border: 1px dotted white;
+}
+
 .node__title-overlay {
   min-width: var(--overlay-width);
   height: 100%;

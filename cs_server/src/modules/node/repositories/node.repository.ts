@@ -1,5 +1,4 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { INodeRepository } from '../interfaces/node.repository';
 import { Node } from '../entities/node.entity';
 import { Injectable } from '@nestjs/common';
 import { SaveAhtmlDto } from '../dto/save-ahtml.dto';
@@ -9,8 +8,7 @@ import { copyProperties } from '../../document/helpers';
 
 @Injectable()
 @EntityRepository(Node)
-export class NodeRepository extends Repository<Node>
-  implements INodeRepository {
+export class NodeRepository extends Repository<Node> {
   getAHtml(
     node_id: string,
     documentId: string,
@@ -23,13 +21,14 @@ export class NodeRepository extends Repository<Node>
       .then(node => JSON.parse(node.ahtml));
   }
 
-  async getNodeMetaById(node_id: string, documentId: string): Promise<Node[]> {
-    return [
-      await this.createQueryBuilder('node')
-        .where('node.node_id = :node_id', { node_id })
-        .andWhere('node.documentId = :documentId', { documentId })
-        .getOne(),
-    ];
+  async getNodeMetaById(
+    node_id: string | number,
+    documentId: string,
+  ): Promise<Node> {
+    return await this.createQueryBuilder('node')
+      .where('node.node_id = :node_id', { node_id })
+      .andWhere('node.documentId = :documentId', { documentId })
+      .getOne();
   }
 
   async getNodesMeta(documentId: string): Promise<Node[]> {
@@ -67,9 +66,7 @@ export class NodeRepository extends Repository<Node>
     node.documentId = documentId;
     await node.save();
 
-    const parentNode = (
-      await this.getNodeMetaById(String(node.father_id), documentId)
-    )[0];
+    const parentNode = await this.getNodeMetaById(node.father_id, documentId);
     parentNode.child_nodes.splice(meta.position, 0, node.node_id);
     await parentNode.save();
     return node.id;

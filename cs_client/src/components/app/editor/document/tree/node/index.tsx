@@ -11,6 +11,7 @@ import { scrollIntoToolbar } from '::helpers/ui';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { useContext } from 'react';
 import { RootContext } from '::root/root-context';
+import { useDnDNodes } from '::app/editor/document/tree/node/hooks/dnd-nodes';
 
 type Props = {
   node_id: number;
@@ -85,12 +86,14 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
   }, [showChildren]);
   // console.log('treeRef', nodeMod.node__titleButtonHidden,child_nodes);
   // @ts-ignore
+  const dndProps = useDnDNodes({ cache, componentRef, nodes, node_id });
   return (
     <>
       <div
         className={`${nodeMod.node}`}
         ref={componentRef}
         onClick={selectNode}
+        {...dndProps}
       >
         <div style={{ marginLeft: depth * 20 }} />
         {

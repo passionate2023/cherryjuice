@@ -46,7 +46,12 @@ const useGetDocumentMeta = (
           if (edited?.meta) {
             // @ts-ignore
             const node = cache.data.get('Node:' + nodeId);
-            nodes.set(node.node_id, node);
+            nodes.set(node.node_id, {
+              ...node,
+              child_nodes: Array.isArray(node.child_nodes)
+                ? node.child_nodes
+                : node.child_nodes.json,
+            });
           }
           if (isNew) {
             // @ts-ignore
@@ -64,7 +69,12 @@ const useGetDocumentMeta = (
               // @ts-ignore
               cache.data.set('Node:' + nodeId, { ...node, position });
             }
-            nodes.set(node.node_id, node);
+            nodes.set(node.node_id, {
+              ...node,
+              child_nodes: Array.isArray(node.child_nodes)
+                ? node.child_nodes
+                : node.child_nodes.json,
+            });
           }
         },
       );
