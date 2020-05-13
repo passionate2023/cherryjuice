@@ -5,16 +5,17 @@ type TEditedNode = {
     meta: string[];
   };
   new: boolean;
+  deleted: boolean;
 };
 type TEditedNodes = {
   [nodeId: string]: TEditedNode;
 };
-type TState = {
+type TDocumentState = {
   nodes: TEditedNodes;
 };
-const state: TState = {
+const state: TDocumentState = {
   nodes: {},
 };
 
 export { state as documentInitialState };
-export { TEditedNode, TEditedNodes, TState as TDocumentState };
+export { TEditedNode, TEditedNodes, TDocumentState };

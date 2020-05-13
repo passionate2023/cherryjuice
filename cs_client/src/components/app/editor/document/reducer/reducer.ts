@@ -76,8 +76,20 @@ const reducer = (
               delete nodes[action.value.nodeId]?.edited?.content;
             else if (action.value.level === localChanges.IS_NEW)
               delete nodes[action.value.nodeId]?.new;
+            else if (action.value.level === localChanges.DELETED)
+              delete nodes[action.value.nodeId]?.deleted;
             return nodes;
           })[0],
+        },
+      };
+    case documentActions.DELETE_NODE:
+      return {
+        ...state,
+        nodes: {
+          ...state.nodes,
+          [action.value.nodeId]: {
+            deleted: true,
+          },
         },
       };
     default:

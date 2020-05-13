@@ -51,6 +51,7 @@ const switchParent = ({
     ? targetNode.child_nodes.push(Number(droppedNode.node_id))
     : targetNode.child_nodes.splice(position, 0, Number(droppedNode.node_id));
   droppedNode.father_id = targetNode.node_id;
+  droppedNode.fatherId = targetNode.id;
   droppedNode.position = targetNode.child_nodes.length - 1;
 };
 
@@ -63,7 +64,10 @@ const notifyLocalStore = ({
   fatherOfDroppedNode: NodeMeta;
   targetNode: NodeMeta;
 }) => {
-  documentActionCreators.setNodeMetaHasChanged(droppedNode.id, ['father_id']);
+  documentActionCreators.setNodeMetaHasChanged(droppedNode.id, [
+    'father_id',
+    'fatherId',
+  ]);
   documentActionCreators.setNodeMetaHasChanged(targetNode.id, ['child_nodes']);
   documentActionCreators.setNodeMetaHasChanged(fatherOfDroppedNode.id, [
     'child_nodes',
@@ -153,7 +157,9 @@ const useDnDNodes = ({
           const fatherOfDroppedNode = nodes.get(droppedNode.father_id);
           const targetNode = nodes.get(target_node_id);
           const father_id_chain = new Set(
-            target_node_id === 0 ? [0] : getFatherIdChain(nodes, target_node_id),
+            target_node_id === 0
+              ? [0]
+              : getFatherIdChain(nodes, target_node_id),
           );
           const fatherDroppedToChild = droppedNode.child_nodes.some(
             child_node => father_id_chain.has(child_node),
@@ -161,7 +167,7 @@ const useDnDNodes = ({
           if (fatherDroppedToChild)
             appActionCreators.setAlert({
               title: 'forbidden operation',
-              type: AlertType.Information,
+              type: AlertType.Warning,
               description: "a child node can't be a target",
             });
           else {

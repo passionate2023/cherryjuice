@@ -122,4 +122,11 @@ const copyProperties = (FROM, TO, excludedProperties) => {
     if (!excludedProperties[key]) TO[key] = value;
   });
 };
-export { scanFolder, adaptFileID, organizeData, copyProperties };
+export {
+  scanFolder,
+  adaptFileID,
+  organizeData,
+  copyProperties,
+  nodeTitleStyle,
+  nodeTitleHelpers,
+};

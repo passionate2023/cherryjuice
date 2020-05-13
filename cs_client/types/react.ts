@@ -5,7 +5,7 @@ export type TDispatchAppReducer = (action: {
 
 export enum AlertType {
   Error = 'alert-error',
-  Information = 'alert-information',
+  Warning = 'alert-warning',
 }
 export type TAlert = {
   type: AlertType;

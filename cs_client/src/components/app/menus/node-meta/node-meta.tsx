@@ -37,6 +37,10 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
     node = createNode({
       documentId,
       highest_node_id,
+      fatherId:
+        showDialog === NodeMetaPopup.CREATE_SIBLING
+          ? _selectedNode.fatherId
+          : _selectedNode.id,
       father_id:
         showDialog === NodeMetaPopup.CREATE_SIBLING
           ? _selectedNode.father_id

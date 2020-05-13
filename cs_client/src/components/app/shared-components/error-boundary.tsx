@@ -15,7 +15,7 @@ class ErrorBoundary extends React.Component<{}, { error?: Error }> {
 
   componentDidCatch(error) {
     appActionCreators.setAlert({
-      title: 'Some thing went wrong',
+      title: 'Something went wrong',
       description: 'Please refresh the page',
       type: AlertType.Error,
       error,

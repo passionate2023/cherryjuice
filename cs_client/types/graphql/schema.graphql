@@ -50,6 +50,7 @@ type Node {
     child_nodes: [Int!]!
     createdAt: Float!
     documentId: String!
+    fatherId: String
     father_id: Float!
     html: String!
     icon_id: String!
@@ -66,6 +67,7 @@ type Node {
 
 type NodeMutation {
     createNode(meta: CreateNodeIt!): String!
+    deleteNode: String!
     meta(meta: NodeMetaIt!): String!
     saveAHtml(ahtml: String!, deletedImages: [String]!): String!
 }
@@ -131,6 +133,7 @@ input DeleteDocumentInputType {
 
 input NodeMetaIt {
     child_nodes: [Int]
+    fatherId: String
     father_id: Float
     icon_id: String
     is_richtxt: Int

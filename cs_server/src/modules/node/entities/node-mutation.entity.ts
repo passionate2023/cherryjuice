@@ -10,4 +10,7 @@ export class NodeMutation {
 
   @Field()
   createNode: string;
+
+  @Field()
+  deleteNode: string;
 }

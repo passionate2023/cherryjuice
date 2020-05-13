@@ -1,10 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Node } from '../entities/node.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable,  } from '@nestjs/common';
 import { SaveAhtmlDto } from '../dto/save-ahtml.dto';
 import { NodeMetaDto } from '../dto/node-meta.dto';
 import { CreateNodeDto } from '../dto/create-node.dto';
 import { copyProperties } from '../../document/helpers';
+import { DeleteNodeDto } from '../dto/delete-node.dto';
 
 @Injectable()
 @EntityRepository(Node)
@@ -57,6 +58,14 @@ export class NodeRepository extends Repository<Node> {
       .set(meta)
       .where({ node_id, userId: user.id, documentId })
       .execute();
+
+    if (meta.father_id) {
+      const parentNode = await this.getNodeMetaById(meta.father_id, documentId);
+      const node = await this.getNodeMetaById(node_id, documentId);
+      node.father = parentNode;
+      await node.save();
+    }
+
     return JSON.stringify(res);
   }
 
@@ -64,11 +73,25 @@ export class NodeRepository extends Repository<Node> {
     const node = new Node();
     copyProperties(meta, node, {});
     node.documentId = documentId;
-    await node.save();
 
     const parentNode = await this.getNodeMetaById(node.father_id, documentId);
     parentNode.child_nodes.splice(meta.position, 0, node.node_id);
+    node.father = parentNode;
+
     await parentNode.save();
+    await node.save();
     return node.id;
+  }
+
+  async deleteNode({
+    documentId,
+    node_id,
+    user,
+  }: DeleteNodeDto): Promise<string> {
+    return await this.createQueryBuilder('node')
+      .delete()
+      .where({ node_id, userId: user.id, documentId })
+      .execute()
+      .then(res => JSON.stringify(res));
   }
 }

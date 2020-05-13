@@ -20,6 +20,7 @@ const QUERY_NODE_META = {
           documentId
           node_id
           father_id
+          fatherId
           name
           child_nodes
           is_empty

@@ -1,12 +1,13 @@
 import { useReloadQuery } from '::hooks/use-reload-query';
 import { QUERY_NODE_META } from '::graphql/queries';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
-import { NodeMeta } from '::types/graphql/adapters';
+import { NodeCached, NodeMeta } from '::types/graphql/adapters';
 import { useContext, useEffect, useMemo } from 'react';
 import { appActionCreators } from '::app/reducer';
 import { useHistory } from 'react-router-dom';
 import { TEditedNodes } from '::app/editor/document/reducer/initial-state';
 import { RootContext } from '::root/root-context';
+import { apolloCache } from '::graphql/cache-helpers';
 
 const useGetDocumentMeta = (
   file_id: string,
@@ -42,7 +43,7 @@ const useGetDocumentMeta = (
     if (nodesArray.length) {
       nodes = new Map(nodesArray.map(node => [node.node_id, node]));
       Object.entries(localChanges).forEach(
-        ([nodeId, { edited, new: isNew }]) => {
+        ([nodeId, { edited, new: isNew, deleted }]) => {
           if (edited?.meta) {
             // @ts-ignore
             const node = cache.data.get('Node:' + nodeId);
@@ -53,28 +54,37 @@ const useGetDocumentMeta = (
                 : node.child_nodes.json,
             });
           }
-          if (isNew) {
-            // @ts-ignore
-            const node = cache.data.get('Node:' + nodeId);
+          if (isNew || deleted) {
+            const node = apolloCache.getNode(nodeId) as NodeCached & {
+              previous_sibling_node_id;
+            };
             const fatherNode = nodes.get(node.father_id);
-            if (!fatherNode.child_nodes.includes(node.node_id)) {
-              const position =
-                node.previous_sibling_node_id === -1
-                  ? Infinity
-                  : fatherNode.child_nodes.indexOf(
-                      node.previous_sibling_node_id,
-                    ) + 1;
-              fatherNode.child_nodes.splice(position, 0, node.node_id);
-              delete node.previous_sibling_node_id;
+            if (isNew) {
               // @ts-ignore
-              cache.data.set('Node:' + nodeId, { ...node, position });
+              if (!fatherNode.child_nodes.includes(node.node_id)) {
+                const position =
+                  node.previous_sibling_node_id === -1
+                    ? Infinity
+                    : fatherNode.child_nodes.indexOf(
+                        node.previous_sibling_node_id,
+                      ) + 1;
+                fatherNode.child_nodes.splice(position, 0, node.node_id);
+                delete node.previous_sibling_node_id;
+                // @ts-ignore
+                apolloCache.setNode(nodeId, { ...node, position });
+              }
+              nodes.set(node.node_id, node);
+            } else if (deleted) {
+              if (fatherNode.child_nodes.includes(node.node_id)) {
+                const nodeIndexInParentNodeChildNodes = fatherNode.child_nodes.indexOf(
+                  node.node_id,
+                );
+                fatherNode.child_nodes.splice(
+                  nodeIndexInParentNodeChildNodes,
+                  1,
+                );
+              }
             }
-            nodes.set(node.node_id, {
-              ...node,
-              child_nodes: Array.isArray(node.child_nodes)
-                ? node.child_nodes
-                : node.child_nodes.json,
-            });
           }
         },
       );

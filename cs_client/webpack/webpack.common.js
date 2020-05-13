@@ -4,108 +4,112 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-module.exports = ({ production } = { production: false }) => ({
-  entry: {
-    index: './src/index.tsx',
-  },
-  output: {
-    path: paths.dist,
-    filename: '[name].js',
-    publicPath: '/',
-  },
-  resolve: {
-    extensions: [
-      '*',
-      '.mjs',
-      '.json',
-      '.gql',
-      '.graphql',
-      '.tsx',
-      '.ts',
-      '.js',
-      '.scss',
-    ],
-    alias,
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(js|ts|tsx)$/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/env', '@babel/react', '@babel/typescript'],
-              plugins: [
-                '@babel/plugin-proposal-optional-chaining',
-                '@babel/plugin-proposal-class-properties',
-                [
-                  '@babel/plugin-transform-runtime',
-                  { regenerator: true, runtime: true },
-                ],
-              ],
-            },
-          },
-        ],
-        include: paths.src,
-      },
-      {
-        test: /\.(graphql|gql|svg)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'raw-loader',
-        },
-      },
-      {
-        test: /\.(s[ac]|c)ss$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              localsConvention: 'dashes',
-              importLoaders: 2,
-              modules: {
-                localIdentName: production ? '[hash:base64]' : '[local]',
-              },
-              esModule: true,
-            },
-          },
-          'sass-loader',
-        ],
-        exclude: globalStyles,
-      },
-      {
-        test: /\.(s[ac]|c)ss$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          {
-            loader: 'sass-loader',
-            options: {
-              sassOptions: {
-                includePaths: ['node_modules'],
-              },
-            },
-          },
-        ],
-        include: globalStyles,
-      },
-    ],
-  },
+module.exports = ({ production } = { production: false }) => {
+  const styleLoader = production ? MiniCssExtractPlugin.loader : 'style-loader';
 
-  target: 'web',
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
+  return {
+    entry: {
+      index: './src/index.tsx',
     },
-  },
-  plugins: [
-    new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin(),
-    new HtmlWebpackPlugin({
-      template: 'src/assets/index.html',
-    }),
-    new CopyPlugin([{ from: paths.icons, to: paths.iconsDist }]),
-  ],
-});
+    output: {
+      path: paths.dist,
+      filename: '[name].js',
+      publicPath: '/',
+    },
+    resolve: {
+      extensions: [
+        '*',
+        '.mjs',
+        '.json',
+        '.gql',
+        '.graphql',
+        '.tsx',
+        '.ts',
+        '.js',
+        '.scss',
+      ],
+      alias,
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(js|ts|tsx)$/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/env', '@babel/react', '@babel/typescript'],
+                plugins: [
+                  '@babel/plugin-proposal-optional-chaining',
+                  '@babel/plugin-proposal-class-properties',
+                  [
+                    '@babel/plugin-transform-runtime',
+                    { regenerator: true, runtime: true },
+                  ],
+                ],
+              },
+            },
+          ],
+          include: paths.src,
+        },
+        {
+          test: /\.(graphql|gql|svg)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'raw-loader',
+          },
+        },
+        {
+          test: /\.(s[ac]|c)ss$/i,
+          use: [
+            styleLoader,
+            {
+              loader: 'css-loader',
+              options: {
+                localsConvention: 'dashes',
+                importLoaders: 2,
+                modules: {
+                  localIdentName: production ? '[hash:base64]' : '[local]',
+                },
+                esModule: true,
+              },
+            },
+            'sass-loader',
+          ],
+          exclude: globalStyles,
+        },
+        {
+          test: /\.(s[ac]|c)ss$/i,
+          use: [
+            styleLoader,
+            'css-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                sassOptions: {
+                  includePaths: ['node_modules'],
+                },
+              },
+            },
+          ],
+          include: globalStyles,
+        },
+      ],
+    },
+
+    target: 'web',
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+      },
+    },
+    plugins: [
+      new CleanWebpackPlugin(),
+      production && new MiniCssExtractPlugin(),
+      new HtmlWebpackPlugin({
+        template: 'src/assets/index.html',
+      }),
+      new CopyPlugin([{ from: paths.icons, to: paths.iconsDist }]),
+    ].filter(Boolean),
+  };
+};

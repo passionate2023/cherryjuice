@@ -42,6 +42,7 @@ const initialState = {
   showUserPopup: false,
   showNodeMeta: undefined,
   highest_node_id: -1,
+  showDeleteDocumentModal: false,
 };
 
 export type TState = typeof initialState & {
@@ -75,6 +76,7 @@ enum actions {
   SHOW_NODE_META,
   HIDE_NODE_META,
   SET_HIGHEST_NODE_ID,
+  TOGGLE_DELETE_DOCUMENT,
 }
 const createActionCreators = () => {
   const state = {
@@ -193,6 +195,10 @@ const createActionCreators = () => {
         type: actions.SET_HIGHEST_NODE_ID,
         value: { highest_node_id },
       }),
+    toggleDeleteDocumentModal: () =>
+      state.dispatch({
+        type: actions.TOGGLE_DELETE_DOCUMENT,
+      }),
   };
 };
 const reducer = (
@@ -211,6 +217,11 @@ const reducer = (
       return { ...state, showTree: false };
     case actions.TOGGLE_USER_POPUP:
       return { ...state, showUserPopup: !state.showUserPopup };
+    case actions.TOGGLE_DELETE_DOCUMENT:
+      return {
+        ...state,
+        showDeleteDocumentModal: !state.showDeleteDocumentModal,
+      };
     case actions.TOGGLE_SHOW_IMPORT_FILES:
       return {
         ...state,

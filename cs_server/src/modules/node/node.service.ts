@@ -8,6 +8,7 @@ import { SaveAhtmlDto } from './dto/save-ahtml.dto';
 import { ImageService } from '../image/image.service';
 import { NodeMetaDto } from './dto/node-meta.dto';
 import { CreateNodeDto } from './dto/create-node.dto';
+import { DeleteNodeDto } from './dto/delete-node.dto';
 
 @Injectable()
 export class NodeService {
@@ -48,5 +49,8 @@ export class NodeService {
   }
   async createNode(args: CreateNodeDto): Promise<string> {
     return await this.nodeRepository.createNode(args);
+  }
+  async deleteNode(args: DeleteNodeDto): Promise<string> {
+    return await this.nodeRepository.deleteNode(args);
   }
 }

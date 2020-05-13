@@ -63,6 +63,18 @@ const DOCUMENT_MUTATION = {
       }
     `,
   },
+  deleteNode: {
+    path: (data): string => data?.document?.node?.deleteNode,
+    query: gql`
+      mutation deleteNode($file_id: String!, $node_id: String!) {
+        document(file_id: $file_id) {
+          node(node_id: $node_id) {
+            deleteNode
+          }
+        }
+      }
+    `,
+  },
 };
 
 const USER_MUTATION = {

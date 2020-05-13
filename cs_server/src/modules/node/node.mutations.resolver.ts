@@ -52,4 +52,16 @@ export class NodeMutationsResolver {
       meta,
     });
   }
+
+  @ResolveField()
+  async deleteNode(
+    @Parent() { node_id, documentId }: { node_id: string; documentId: string },
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    return await this.nodeService.deleteNode({
+      user,
+      node_id,
+      documentId,
+    });
+  }
 }

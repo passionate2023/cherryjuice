@@ -24,6 +24,12 @@ const MainButtons: React.FC<Props> = ({ showTree, selectedNodeId }) => {
       >
         <Icon name={Icons.material.edit} />
       </ToolbarButton>
+      <ToolbarButton
+        onClick={appActionCreators.toggleDeleteDocumentModal}
+        disabled={!selectedNodeId}
+      >
+        <Icon name={Icons.material.delete} />
+      </ToolbarButton>
       <ToolbarButton onClick={appActionCreators.showNodeMetaCreateSibling}>
         <Icon
           name={Icons.cherrytree.additionalIcons['tree-node-add']}

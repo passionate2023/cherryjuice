@@ -8,6 +8,7 @@ import { getMainDefinition } from 'apollo-utilities';
 import { useEffect } from 'react';
 import { rootActionCreators } from '::root/root.reducer';
 import { AuthUser } from '::types/graphql/generated';
+import { apolloCache } from '::graphql/cache-helpers';
 
 if (process.env.NODE_ENV === 'development')
   localStorage.setItem('graphqlAPIHost', 'localhost:1230');
@@ -56,6 +57,7 @@ const useApolloClient = (session: AuthUser) => {
         httpLink,
       ),
     });
+    apolloCache.__setCache(client.cache);
     rootActionCreators.setApolloClient(client);
   }, [session?.user?.id]);
 };

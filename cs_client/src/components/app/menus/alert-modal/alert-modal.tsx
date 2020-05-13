@@ -2,8 +2,7 @@ import { modAlertModal } from '::sass-modules/index';
 import * as React from 'react';
 import { EventHandler } from 'react';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
-import { Icon, ICON_SIZE, Icons } from '::shared-components/icon';
-import { TAlert } from '::types/react';
+import { AlertType, TAlert } from '::types/react';
 import { usePrevPropIfNewPropIsUndefined } from '::hooks/use-prev-prop-if-new-prop-is-undefined';
 import { ModalWithTransition } from '::shared-components/modal/modal';
 
@@ -12,17 +11,22 @@ export type Props = {
   alert: TAlert;
 };
 
-const Alert = ({ alert, onClose }) => {
+const headerVariant = {
+  [AlertType.Error]: modAlertModal.alertModal__headerDanger,
+  [AlertType.Warning]: modAlertModal.alertModal__headerWarning,
+};
+
+const Alert = ({ alert, onClose }: Props) => {
   alert = usePrevPropIfNewPropIsUndefined(alert);
+
   return (
     <>
-      <Icon
-        name={Icons.material[alert.type]}
-        className={`${modAlertModal.alertModal__icon}`}
-        size={ICON_SIZE._48}
-      />
       <span className={modAlertModal.alertModal__body}>
-        <span className={`${modAlertModal.alertModal__header}`}>
+        <span
+          className={`${modAlertModal.alertModal__header} ${headerVariant[
+            alert?.type
+          ] || ''}`}
+        >
           {alert?.title}
         </span>
         <span className={`${modAlertModal.alertModal__message}`}>

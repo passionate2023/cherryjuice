@@ -27,4 +27,7 @@ export class NodeMetaIt {
 
   @Field(() => Int, { nullable: true })
   position: number;
+
+  @Field({ nullable: true })
+  fatherId: string;
 }

@@ -20,6 +20,7 @@ import modNodeMeta from './node-meta/node-meta.scss';
 import modIconPicker from './node-meta/icon-picker.scss';
 import modTreeNode from './tree/node.scss';
 import modTree from './tree/tree.scss';
+import modDeleteDocument from './delete-document.scss';
 export {
   appModule,
   modDrawer,
@@ -43,4 +44,5 @@ export {
   modIconPicker,
   modTreeNode,
   modTree,
+  modDeleteDocument,
 };

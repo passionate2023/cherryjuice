@@ -21,25 +21,21 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: [ 'ts-loader'],
+        use: ['ts-loader'],
         exclude: /node_modules/,
       },
-      // {
-      //   test: /\.node$/,
-      //   use: 'node-loader',
-      // },
     ],
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    filename: 'server.js',
+    filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new webpack.HotModuleReplacementPlugin(),
-    new StartServerPlugin({ name: 'server.js' }),
+    new StartServerPlugin({ name: 'main.js' }),
   ],
 };

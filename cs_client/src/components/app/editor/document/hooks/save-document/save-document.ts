@@ -12,6 +12,7 @@ import {
   documentActionCreators,
   localChanges,
 } from '::app/editor/document/reducer/action-creators';
+import { mutateDeleteNode } from '::app/editor/document/hooks/save-document/delete-node';
 
 const useSaveDocument = async ({
   saveDocumentCommandID,
@@ -24,6 +25,7 @@ const useSaveDocument = async ({
   const [mutateContent] = useMutation(DOCUMENT_MUTATION.ahtml);
   const [mutateMeta] = useMutation(DOCUMENT_MUTATION.meta);
   const [mutateCreate] = useMutation(DOCUMENT_MUTATION.createNode.query);
+  const [deleteNodeMutation] = useMutation(DOCUMENT_MUTATION.deleteNode.query);
   const {
     apolloClient: { cache },
   } = useContext(RootContext);
@@ -34,8 +36,19 @@ const useSaveDocument = async ({
   ) {
     toolbarQueuesRef.current[saveDocumentCommandID] = true;
 
+    const deletedNodes = Object.entries(nodes)
+      .filter(([, { deleted, new: isNew }]) => deleted && !isNew)
+      .map(([nodeId]) => nodeId);
+    for (const nodeId of deletedNodes) {
+      await mutateDeleteNode({
+        nodeId,
+        cache,
+        mutate: deleteNodeMutation,
+      });
+      documentActionCreators.clearLocalChanges(nodeId, localChanges.DELETED);
+    }
     const newNodes = Object.entries(nodes)
-      .filter(([, attributes]) => attributes.new)
+      .filter(([, attributes]) => attributes.new && !attributes.deleted)
       .map(([nodeId]) => nodeId);
     for (const nodeId of newNodes) {
       const data = await mutateCreateNode({
@@ -43,26 +56,30 @@ const useSaveDocument = async ({
         cache,
         mutate: mutateCreate,
       });
-      const permanantNodeId = DOCUMENT_MUTATION.createNode.path(data);
-      if (permanantNodeId) {
+      const permanentNodeId = DOCUMENT_MUTATION.createNode.path(data);
+      if (permanentNodeId) {
         // @ts-ignore
         const node: NodeCached = cache.data.get('Node:' + nodeId);
-        node.id = permanantNodeId;
+        node.id = permanentNodeId;
         // @ts-ignore
         cache.data.delete('Node:' + nodeId);
         // @ts-ignore
-        cache.data.set('Node:' + permanantNodeId, node);
-        nodes[permanantNodeId] = nodes[nodeId];
+        cache.data.set('Node:' + permanentNodeId, node);
+        nodes[permanentNodeId] = nodes[nodeId];
         delete nodes[nodeId];
       }
       documentActionCreators.clearLocalChanges(nodeId, localChanges.IS_NEW);
     }
     const editedNodeContent = Object.entries(nodes)
-      .filter(([, attributes]) => attributes.edited?.content)
+      .filter(([, { deleted, edited }]) => edited?.content && !deleted)
       .map(([nodeId]) => nodeId);
+
     const editedNodeMeta = Object.entries(nodes)
       .filter(
-        ([, attributes]) => attributes.edited?.meta?.length && !attributes.new,
+        ([, attributes]) =>
+          attributes.edited?.meta?.length &&
+          !attributes.new &&
+          !attributes.deleted,
       )
       .map(([nodeId, attributes]) => [nodeId, attributes.edited.meta]);
     for (const [nodeId, editedAttributes] of editedNodeMeta) {

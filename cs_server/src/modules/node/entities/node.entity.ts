@@ -26,6 +26,18 @@ export class Node extends BaseEntity {
   @Column()
   documentId: string;
 
+  @ManyToOne(
+    () => Node,
+    node => node.children,
+    { nullable: true, onDelete: 'CASCADE' },
+  )
+  father: Node;
+  children: Node[];
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  fatherId: string;
+
   @Field()
   @PrimaryGeneratedColumn('uuid')
   id: string;

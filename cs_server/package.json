@@ -6,6 +6,7 @@
     "postinstall": "npm link parcel-bundler && cd src/modules/node/helpers/rendering/query/ahtml-to-html && npm link",
     "watch:server:parcel": "node scripts/parcel.dev.js",
     "watch:server": "webpack --progress",
+    "watch:server:nest": "nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "start": "node dist/main.js"

@@ -33,6 +33,7 @@ export interface Node {
   child_nodes: Array<number>;
   createdAt: number;
   documentId: string;
+  fatherId?: string;
   father_id: number;
   html: string;
   icon_id: string;
@@ -91,6 +92,7 @@ export interface DeleteDocumentInputType {
 
 export interface NodeMutation {
   createNode: string;
+  deleteNode: string;
   meta: string;
   saveAHtml: string;
 }
@@ -111,6 +113,7 @@ export interface CreateNodeIt {
 
 export interface NodeMetaIt {
   child_nodes?: Array<number | null>;
+  fatherId?: string;
   father_id?: number;
   icon_id?: string;
   is_richtxt?: number;
@@ -281,6 +284,7 @@ export interface NodeTypeResolver<TParent = any> {
   child_nodes?: NodeToChild_nodesResolver<TParent>;
   createdAt?: NodeToCreatedAtResolver<TParent>;
   documentId?: NodeToDocumentIdResolver<TParent>;
+  fatherId?: NodeToFatherIdResolver<TParent>;
   father_id?: NodeToFather_idResolver<TParent>;
   html?: NodeToHtmlResolver<TParent>;
   icon_id?: NodeToIcon_idResolver<TParent>;
@@ -304,6 +308,10 @@ export interface NodeToCreatedAtResolver<TParent = any, TResult = any> {
 }
 
 export interface NodeToDocumentIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeToFatherIdResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -535,6 +543,7 @@ export interface DocumentMutationToUploadLinkResolver<
 
 export interface NodeMutationTypeResolver<TParent = any> {
   createNode?: NodeMutationToCreateNodeResolver<TParent>;
+  deleteNode?: NodeMutationToDeleteNodeResolver<TParent>;
   meta?: NodeMutationToMetaResolver<TParent>;
   saveAHtml?: NodeMutationToSaveAHtmlResolver<TParent>;
 }
@@ -552,6 +561,13 @@ export interface NodeMutationToCreateNodeResolver<
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
+}
+
+export interface NodeMutationToDeleteNodeResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface NodeMutationToMetaArgs {

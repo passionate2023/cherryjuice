@@ -14,6 +14,9 @@ const ImportDocuments = React.lazy(() =>
 const Settings = React.lazy(() => import('::app/menus/settings'));
 const SelectFile = React.lazy(() => import('::app/menus/select-file'));
 const NodeMeta = React.lazy(() => import('::app/menus/node-meta/node-meta'));
+const DeleteDocument = React.lazy(() =>
+  import('::app/menus/modals/delete-document/delete-document'),
+);
 type Props = { state: TState; dispatch: any; session: AuthUser };
 
 const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
@@ -58,14 +61,19 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
         <ImportProgress />
       </Suspense>
       <Suspense fallback={<Void />}>
-        {
-          <NodeMeta
-            showDialog={state.showNodeMeta}
-            isOnMobile={state.isOnMobile}
-            onClose={appActionCreators.hideNodeMeta}
-            nodeId={state.selectedNode?.nodeId}
-          />
-        }
+        <NodeMeta
+          showDialog={state.showNodeMeta}
+          isOnMobile={state.isOnMobile}
+          onClose={appActionCreators.hideNodeMeta}
+          nodeId={state.selectedNode?.nodeId}
+        />
+      </Suspense>
+      <Suspense fallback={<Void />}>
+        <DeleteDocument
+          onClose={appActionCreators.toggleDeleteDocumentModal}
+          show={state.showDeleteDocumentModal}
+          nodeId={state.selectedNode?.nodeId}
+        />
       </Suspense>
     </>
   );
