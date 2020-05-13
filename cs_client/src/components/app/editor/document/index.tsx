@@ -39,12 +39,12 @@ const Document: React.FC<Props> = ({ state }) => {
   // @ts-ignore
   const { file_id } = match.params;
 
-  const { nodes, loading: fetchingDocumentMeta } = useGetDocumentMeta(
+  const { nodes, loading: fetchingDocumentMeta } = useGetDocumentMeta({
     file_id,
     selectedFile,
-    reloadDocument,
-    documentState.nodes,
-  );
+    reloadRequestID: reloadDocument,
+    localChanges: documentState.nodes,
+  });
 
   useSaveDocument({
     saveDocumentCommandID: saveDocument,

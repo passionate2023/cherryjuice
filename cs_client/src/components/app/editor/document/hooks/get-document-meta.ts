@@ -9,12 +9,18 @@ import { TEditedNodes } from '::app/editor/document/reducer/initial-state';
 import { RootContext } from '::root/root-context';
 import { apolloCache } from '::graphql/cache-helpers';
 
-const useGetDocumentMeta = (
-  file_id: string,
-  selectedFile: string,
-  reloadRequestID: number,
-  localChanges: TEditedNodes,
-) => {
+type Props = {
+  file_id: string;
+  selectedFile: string;
+  reloadRequestID: number;
+  localChanges: TEditedNodes;
+};
+const useGetDocumentMeta = ({
+  file_id,
+  selectedFile,
+  localChanges,
+  reloadRequestID,
+}: Props) => {
   const history = useHistory();
   const queryVariables = { file_id: file_id || '' };
   const { data, error, loading } = useReloadQuery(

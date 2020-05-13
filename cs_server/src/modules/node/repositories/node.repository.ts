@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Node } from '../entities/node.entity';
-import { Injectable,  } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { SaveAhtmlDto } from '../dto/save-ahtml.dto';
 import { NodeMetaDto } from '../dto/node-meta.dto';
 import { CreateNodeDto } from '../dto/create-node.dto';
