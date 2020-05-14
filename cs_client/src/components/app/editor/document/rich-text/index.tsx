@@ -1,11 +1,12 @@
 import { modRichText } from '::sass-modules/index';
 import * as React from 'react';
-import { useRouteMatch } from 'react-router';
+import { useHistory, useRouteMatch } from 'react-router';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
 import { NodeMeta } from '::types/graphql/adapters';
 import { useGetNodeHtml } from '::app/editor/document/rich-text/hooks/get-node-html';
 import { useSetCurrentNode } from '::app/editor/document/rich-text/hooks/set-current-node';
 import { ContentEditable } from '::app/editor/document/rich-text/content-editable';
+import { useEffect } from 'react';
 
 type Props = {
   file_id: string;
@@ -23,6 +24,7 @@ const RichText: React.FC<Props> = ({
   processLinks,
 }) => {
   const match = useRouteMatch();
+  const history = useHistory();
   // @ts-ignore
   const node_id = Number(match.params?.node_id);
 
@@ -38,6 +40,12 @@ const RichText: React.FC<Props> = ({
   });
 
   useSetCurrentNode(node_id, nodes);
+
+  useEffect(() => {
+    if (htmlError) {
+      history.push('/document/' + file_id);
+    }
+  }, [htmlError]);
 
   return (
     <div className={modRichText.richText__container}>

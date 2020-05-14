@@ -5,7 +5,7 @@ import { AlertType } from '::types/react';
 
 const useQueryTimeout = (
   { queryData, queryError, queryVariables },
-  { timeout = 15000, resourceName = '' },
+  { timeout = 15000, resourceName = '', showErrorAlert = false },
 ) => {
   let timeoutHasElapsed = false;
   const timer = useTimeout({
@@ -26,13 +26,13 @@ const useQueryTimeout = (
     timeoutHasElapsed = true;
   }
   useEffect(() => {
-    // if (queryError)
-    //   appActionCreators.setAlert({
-    //     title: `Could not fetch ${resourceName}`,
-    //     description: 'Please refresh the page',
-    //     type: AlertType.Error,
-    //     error: queryError,
-    //   });
+    if (queryError && showErrorAlert)
+      appActionCreators.setAlert({
+        title: `Could not fetch ${resourceName}`,
+        description: 'Please refresh the page',
+        type: AlertType.Error,
+        error: queryError,
+      });
   }, [queryError]);
   return timeoutHasElapsed;
 };

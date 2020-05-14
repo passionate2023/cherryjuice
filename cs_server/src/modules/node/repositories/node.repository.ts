@@ -26,10 +26,17 @@ export class NodeRepository extends Repository<Node> {
     node_id: string | number,
     documentId: string,
   ): Promise<Node> {
-    return await this.createQueryBuilder('node')
-      .where('node.node_id = :node_id', { node_id })
-      .andWhere('node.documentId = :documentId', { documentId })
-      .getOne();
+    return this.findOneOrFail({
+      where: {
+        node_id,
+        documentId,
+      },
+    });
+    // return await this.createQueryBuilder('node')
+    //   .where('node.node_id = :node_id', { node_id })
+    //   .andWhere('node.documentId = :documentId', { documentId })
+    //   .getOne()
+    //   .then(node => node? node  || new NotF);
   }
 
   async getNodesMeta(documentId: string): Promise<Node[]> {
