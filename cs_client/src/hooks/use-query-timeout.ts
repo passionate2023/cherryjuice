@@ -21,18 +21,18 @@ const useQueryTimeout = (
     appActionCreators.setAlert({
       title: `Fetching ${resourceName} is taking longer then expected`,
       description: 'Please refresh the page',
-      type: AlertType.Information,
+      type: AlertType.Warning,
     });
     timeoutHasElapsed = true;
   }
   useEffect(() => {
-    if (queryError)
-      appActionCreators.setAlert({
-        title: `Could not fetch ${resourceName}`,
-        description: 'Please refresh the page',
-        type: AlertType.Error,
-        error: queryError,
-      });
+    // if (queryError)
+    //   appActionCreators.setAlert({
+    //     title: `Could not fetch ${resourceName}`,
+    //     description: 'Please refresh the page',
+    //     type: AlertType.Error,
+    //     error: queryError,
+    //   });
   }, [queryError]);
   return timeoutHasElapsed;
 };

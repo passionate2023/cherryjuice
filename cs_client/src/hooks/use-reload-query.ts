@@ -31,7 +31,7 @@ const useReloadQuery = (
   if (isNotProcessed) {
     fetch();
   }
-  return { data, error, loading, manualFetch: fetch };
+  return { data, error, loading };
 };
 
 export { useReloadQuery };

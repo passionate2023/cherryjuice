@@ -66,7 +66,7 @@ enum actions {
   SELECT_FILE,
   SAVE_DOCUMENT,
   RELOAD_DOCUMENT,
-  RELOAD_FILES,
+  RELOAD_DOCUMENT_LIST,
   SET_ALERT,
   SET_IS_ON_MOBILE,
   PROCESS_LINKS,
@@ -112,9 +112,9 @@ const createActionCreators = () => {
     clearAlert: (): void => {
       state.dispatch({ type: actions.SET_ALERT, value: undefined });
     },
-    setReloadFiles: (): void => {
+    reloadDocumentList: (): void => {
       state.dispatch({
-        type: actions.RELOAD_FILES,
+        type: actions.RELOAD_DOCUMENT_LIST,
         value: new Date().getTime(),
       });
     },
@@ -264,7 +264,7 @@ const reducer = (
         ...state,
         reloadDocument: action.value,
       };
-    case actions.RELOAD_FILES:
+    case actions.RELOAD_DOCUMENT_LIST:
       return {
         ...state,
         reloadFiles: action.value,
