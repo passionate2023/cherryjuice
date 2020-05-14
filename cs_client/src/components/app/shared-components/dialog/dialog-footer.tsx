@@ -7,9 +7,9 @@ export type TDialogFooterButton = {
   label: string | JSX.Element;
   disabled: boolean;
   onClick: EventHandler<any>;
+  lazyAutoFocus?: number;
 };
 export type TDialogFooterProps = {
-  lazyAutoFocus?: number;
   isOnMobile: boolean;
   dialogFooterLeftButtons: TDialogFooterButton[];
   dialogFooterRightButtons: TDialogFooterButton[];
@@ -18,7 +18,6 @@ export type TDialogFooterProps = {
 const DialogFooter: React.FC<TDialogFooterProps> = ({
   dialogFooterRightButtons,
   dialogFooterLeftButtons,
-  lazyAutoFocus = 400,
   isOnMobile,
 }) => {
   return (
@@ -41,17 +40,19 @@ const DialogFooter: React.FC<TDialogFooterProps> = ({
         )}
       </div>
       <div>
-        {dialogFooterRightButtons.map(({ onClick, label, disabled }, i) => (
-          <ButtonSquare
-            key={i}
-            className={''}
-            onClick={onClick}
-            disabled={disabled}
-            lazyAutoFocus={i === 0 && !isOnMobile ? lazyAutoFocus : 0}
-          >
-            {label}
-          </ButtonSquare>
-        ))}
+        {dialogFooterRightButtons.map(
+          ({ onClick, label, disabled, lazyAutoFocus }, i) => (
+            <ButtonSquare
+              key={i}
+              className={''}
+              onClick={onClick}
+              disabled={disabled}
+              lazyAutoFocus={!isOnMobile ? lazyAutoFocus : 0}
+            >
+              {label}
+            </ButtonSquare>
+          ),
+        )}
       </div>
     </footer>
   );

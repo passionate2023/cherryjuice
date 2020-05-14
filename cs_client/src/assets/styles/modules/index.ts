@@ -21,6 +21,7 @@ import modIconPicker from './node-meta/icon-picker.scss';
 import modTreeNode from './tree/node.scss';
 import modTree from './tree/tree.scss';
 import modDeleteDocument from './delete-document.scss';
+import modSnackbar from './shared-components/snackbar.scss';
 export {
   appModule,
   modDrawer,
@@ -45,4 +46,5 @@ export {
   modTreeNode,
   modTree,
   modDeleteDocument,
+  modSnackbar
 };

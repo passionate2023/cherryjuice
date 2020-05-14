@@ -4,7 +4,8 @@ import { Void } from '::shared-components/suspense-fallback/void';
 import { appActionCreators, TState } from '::app/reducer';
 import { AuthUser } from '::types/graphql/generated';
 import ReloadDocument from '::app/menus/modals/reload-document/reload-document';
-const AlertModal = React.lazy(() => import('./alert-modal/alert-modal'));
+import { Snackbar } from '::shared-components/snackbar/snackbar';
+const AlertModal = React.lazy(() => import('./modals/alert-modal/alert-modal'));
 const UserPopup = React.lazy(() => import('./user/user'));
 const ImportProgress = React.lazy(() =>
   import('./import-progress/import-progress'),
@@ -82,6 +83,12 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
         <ReloadDocument
           onClose={appActionCreators.hideReloadConfirmationModal}
           show={state.showReloadConfirmationModal}
+        />
+      </Suspense>
+      <Suspense fallback={<Void />}>
+        <Snackbar
+          onClose={appActionCreators.clearSnackbarMessage}
+          message={state.snackbarMessage}
         />
       </Suspense>
     </>

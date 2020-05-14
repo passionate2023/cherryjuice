@@ -57,4 +57,4 @@ const constructTree = ({
   return nodes;
 };
 
-export {constructTree}
+export { constructTree };

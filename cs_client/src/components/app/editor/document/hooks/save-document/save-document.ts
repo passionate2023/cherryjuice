@@ -13,6 +13,7 @@ import {
   localChanges,
 } from '::app/editor/document/reducer/action-creators';
 import { mutateDeleteNode } from '::app/editor/document/hooks/save-document/delete-node';
+import { SnackbarMessages } from '::shared-components/snackbar/snackbar-messages';
 
 const useSaveDocument = async ({
   saveDocumentCommandID,
@@ -102,7 +103,10 @@ const useSaveDocument = async ({
       );
     }
 
-    if (editedNodeContent.length) appActionCreators.reloadDocument();
+    if (editedNodeContent.length) {
+      appActionCreators.reloadDocument();
+      appActionCreators.setSnackbarMessage(SnackbarMessages.documentSaved);
+    }
   }
 };
 

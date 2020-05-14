@@ -1,9 +1,10 @@
 import { modAlertModal, modDeleteDocument } from '::sass-modules/index';
 import { EventHandler, default as React } from 'react';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
-import { ModalWithTransition } from '::shared-components/modal/modal';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
 import { AlertType, TAlert } from '::types/react';
+import { ComponentWithTransition } from '::shared-components/transitions/component-with-transition';
+import { transitions } from '::shared-components/transitions/transitions';
 
 const headerVariant = {
   [AlertType.Error]: modAlertModal.alertModal__headerDanger,
@@ -39,7 +40,12 @@ const ConfirmationModal = ({
   alert,
   buttons,
 }: ConfirmationModalProps) => (
-  <ModalWithTransition show={show} onClose={onClose}>
+  <ComponentWithTransition
+    show={show}
+    onClose={onClose}
+    transitionValues={transitions.t1}
+    className={modAlertModal.alertModal}
+  >
     <ModalBody {...alert} />
     <div className={modDeleteDocument.deleteDocument__buttons}>
       {buttons.map(({ onClick, label, disabled }, i) => (
@@ -54,7 +60,7 @@ const ConfirmationModal = ({
         </ButtonSquare>
       ))}
     </div>
-  </ModalWithTransition>
+  </ComponentWithTransition>
 );
 
 export { ConfirmationModal };

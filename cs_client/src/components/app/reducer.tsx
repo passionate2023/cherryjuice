@@ -47,6 +47,7 @@ const initialState = {
   rootNode: undefined,
   showReloadConfirmationModal: false,
   documentHasUnsavedChanges: false,
+  snackbarMessage: undefined,
 };
 
 export type TState = typeof initialState & {
@@ -57,6 +58,7 @@ export type TState = typeof initialState & {
   showNodeMeta: NodeMetaPopup;
 };
 enum actions {
+  setSnackbarMessage,
   hideReloadConfirmationModal,
   TOGGLE_TREE,
   TOGGLE_TREE_ON,
@@ -231,6 +233,18 @@ const createActionCreators = () => {
         value: documentHasUnsavedChanges,
       });
     },
+    setSnackbarMessage: (snackbarMessage: string) => {
+      state.dispatch({
+        type: actions.setSnackbarMessage,
+        value: snackbarMessage,
+      });
+    },
+    clearSnackbarMessage: () => {
+      state.dispatch({
+        type: actions.setSnackbarMessage,
+        value: undefined,
+      });
+    },
   };
 };
 const reducer = (
@@ -349,6 +363,11 @@ const reducer = (
       return {
         ...state,
         documentHasUnsavedChanges: action.value,
+      };
+    case actions.setSnackbarMessage:
+      return {
+        ...state,
+        snackbarMessage: action.value,
       };
     default:
       throw new Error('action not supported');

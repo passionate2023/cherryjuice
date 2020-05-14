@@ -5,27 +5,37 @@ import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { animated } from 'react-spring';
 import { TransitionWrapper } from '::shared-components/transition-wrapper';
 
-type TModalWithTransition = {
+type ComponentWithTransitionProps = {
   onClose: EventHandler<undefined>;
   show: boolean;
+  transitionValues: any;
+  enableModalKeyboardEvents?: boolean;
+  useScrim?: boolean;
+  className?: string;
 };
-type TModalWrapper = TModalWithTransition & {
+type ComponentWrapperProps = Pick<
+  ComponentWithTransitionProps,
+  'onClose' | 'enableModalKeyboardEvents' | 'useScrim' | 'className'
+> & {
   children: ReactNode;
 };
 
-const ModalWrapper: React.FC<TModalWrapper & { style }> = ({
+const ComponentWrapper: React.FC<ComponentWrapperProps & { style }> = ({
   children,
   onClose,
   style,
+  enableModalKeyboardEvents,
+  className,
 }) => {
   useModalKeyboardEvents({
     onCloseModal: onClose,
     modalSelector: `.${modAlertModal.alertModal}`,
+    enabled: enableModalKeyboardEvents,
   });
   return (
     <>
       <animated.div
-        className={modAlertModal.alertModal}
+        className={className}
         style={{
           ...style,
           transform: style.xyz.interpolate(
@@ -39,32 +49,29 @@ const ModalWrapper: React.FC<TModalWrapper & { style }> = ({
   );
 };
 
-const ModalWithTransition: React.FC<TModalWithTransition> = ({
+const ComponentWithTransition: React.FC<ComponentWithTransitionProps> = ({
   onClose,
   show,
   children,
+  transitionValues,
+  enableModalKeyboardEvents = true,
+  useScrim = true,
+  className = '',
 }) => {
   return (
-    <TransitionWrapper<TModalWrapper>
-      Component={ModalWrapper}
+    <TransitionWrapper<ComponentWrapperProps>
+      Component={ComponentWrapper}
       show={show}
-      transitionValues={{
-        from: { opacity: 0, xyz: [0, -25, 0.5] },
-        enter: { opacity: 1, xyz: [0, 0, 1] },
-        leave: { opacity: 0, xyz: [0, window.innerHeight * 0.5, 1] },
-        config: {
-          tension: 255,
-          friction: 30,
-        },
-      }}
+      transitionValues={transitionValues}
       componentProps={{
         onClose,
         children,
-        show,
+        enableModalKeyboardEvents,
+        className,
       }}
-      scrimProps={{ alertModal: true, onClick: onClose }}
+      scrimProps={useScrim ? { alertModal: true, onClick: onClose } : undefined}
     />
   );
 };
 
-export { ModalWithTransition };
+export { ComponentWithTransition };

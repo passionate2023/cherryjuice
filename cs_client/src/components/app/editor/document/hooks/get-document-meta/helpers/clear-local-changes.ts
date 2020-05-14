@@ -1,5 +1,5 @@
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
-import {  TEditedNodes } from '::app/editor/document/reducer/initial-state';
+import { TEditedNodes } from '::app/editor/document/reducer/initial-state';
 import { apolloCache } from '::graphql/cache-helpers';
 
 const clearLocalChanges = (localChanges: TEditedNodes) => {

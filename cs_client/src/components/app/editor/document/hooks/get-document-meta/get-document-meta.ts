@@ -55,7 +55,6 @@ const useGetDocumentMeta = ({
 
   useEffect(() => {
     if (data) {
-
       clearLocalChanges(localChanges);
     }
   }, [reloadRequestID, data]);
