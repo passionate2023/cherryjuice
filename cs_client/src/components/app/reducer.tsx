@@ -1,4 +1,5 @@
 import { TAlert } from '::types/react';
+import { NodeMeta } from '::types/graphql/adapters';
 enum NodeMetaPopup {
   EDIT = 1,
   CREATE_SIBLING,
@@ -43,10 +44,12 @@ const initialState = {
   showNodeMeta: undefined,
   highest_node_id: -1,
   showDeleteDocumentModal: false,
+  rootNode: undefined,
 };
 
 export type TState = typeof initialState & {
   selectedNode: TNodeMeta;
+  rootNode: NodeMeta;
   recentNodes: TNodeMeta[];
   alert: TAlert;
   showNodeMeta: NodeMetaPopup;
@@ -77,6 +80,7 @@ enum actions {
   HIDE_NODE_META,
   SET_HIGHEST_NODE_ID,
   TOGGLE_DELETE_DOCUMENT,
+  SET_ROOT_NODE,
 }
 const createActionCreators = () => {
   const state = {
@@ -199,6 +203,11 @@ const createActionCreators = () => {
       state.dispatch({
         type: actions.TOGGLE_DELETE_DOCUMENT,
       }),
+    setRootNode: (node: NodeMeta) =>
+      state.dispatch({
+        type: actions.SET_ROOT_NODE,
+        value: { node },
+      }),
   };
 };
 const reducer = (
@@ -308,6 +317,8 @@ const reducer = (
         ...state,
         highest_node_id: action.value.highest_node_id,
       };
+    case actions.SET_ROOT_NODE:
+      return { ...state, rootNode: action.value.node };
     default:
       throw new Error('action not supported');
   }

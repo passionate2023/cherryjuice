@@ -7,6 +7,7 @@ import { useGetNodeHtml } from '::app/editor/document/rich-text/hooks/get-node-h
 import { useSetCurrentNode } from '::app/editor/document/rich-text/hooks/set-current-node';
 import { ContentEditable } from '::app/editor/document/rich-text/content-editable';
 import { useEffect } from 'react';
+import { TEditedNodes } from '::app/editor/document/reducer/initial-state';
 
 type Props = {
   file_id: string;
@@ -14,6 +15,7 @@ type Props = {
   contentEditable: boolean;
   nodes: Map<number, NodeMeta>;
   processLinks: number;
+  localChanges: TEditedNodes;
 };
 
 const RichText: React.FC<Props> = ({
@@ -22,12 +24,13 @@ const RichText: React.FC<Props> = ({
   contentEditable,
   nodes,
   processLinks,
+  localChanges,
 }) => {
   const match = useRouteMatch();
   const history = useHistory();
   // @ts-ignore
   const node_id = Number(match.params?.node_id);
-
+  const nodeId = nodes?.get(node_id)?.id;
   const {
     html,
     error: htmlError,
@@ -36,13 +39,14 @@ const RichText: React.FC<Props> = ({
     node_id,
     reloadRequestIDs,
     file_id,
-    nodeId: nodes?.get(node_id)?.id,
+    nodeId,
   });
 
   useSetCurrentNode(node_id, nodes);
 
   useEffect(() => {
-    if (htmlError) {
+    const nodeIsNew = localChanges[nodeId]?.new;
+    if (htmlError && !nodeIsNew) {
       history.push('/document/' + file_id);
     }
   }, [htmlError]);
@@ -58,12 +62,8 @@ const RichText: React.FC<Props> = ({
           node_id={node_id}
           processLinks={[processLinksDueToHtmlChange, processLinks]}
         />
-      ) : htmlError ? (
-        <span className={modRichText.richText__error}>
-          could not fetch the node
-        </span>
       ) : (
-        <SpinnerCircle />
+        !htmlError && <SpinnerCircle />
       )}
     </div>
   );

@@ -70,11 +70,13 @@ const useGetDocumentMeta = ({
               if (!fatherNode.child_nodes.includes(node.node_id)) {
                 const position =
                   node.previous_sibling_node_id === -1
-                    ? Infinity
+                    ? -1
                     : fatherNode.child_nodes.indexOf(
                         node.previous_sibling_node_id,
                       ) + 1;
-                fatherNode.child_nodes.splice(position, 0, node.node_id);
+                position === -1
+                  ? fatherNode.child_nodes.push(node.node_id)
+                  : fatherNode.child_nodes.splice(position, 0, node.node_id);
                 delete node.previous_sibling_node_id;
                 // @ts-ignore
                 apolloCache.setNode(nodeId, { ...node, position });
@@ -105,6 +107,8 @@ const useGetDocumentMeta = ({
         .pop();
 
       appActionCreators.setHighestNodeId(SET_HIGHEST_NODE_ID);
+
+      appActionCreators.setRootNode(nodes.get(0));
     }
   }, [nodes]);
 

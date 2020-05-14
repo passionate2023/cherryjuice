@@ -21,34 +21,27 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
   const {
     apolloClient: { cache },
   } = useContext(RootContext);
-  const {
-    selectedFile: documentId,
-    highest_node_id,
-    selectedNode,
-  } = useContext(AppContext);
+  const { selectedFile: documentId, highest_node_id } = useContext(AppContext);
+
   let node;
   const newNode =
     showDialog === NodeMetaPopup.CREATE_SIBLING ||
     showDialog === NodeMetaPopup.CREATE_CHILD;
   if (newNode) {
     // @ts-ignore
-    const _selectedNode = cache.data.get('Node:' + selectedNode.nodeId);
+    const _selectedNode = cache.data.get('Node:' + nodeId);
 
+    const selectedNodeIsASibling =
+      showDialog === NodeMetaPopup.CREATE_SIBLING &&
+      _selectedNode.father_id !== -1;
     node = createNode({
       documentId,
       highest_node_id,
-      fatherId:
-        showDialog === NodeMetaPopup.CREATE_SIBLING
-          ? _selectedNode.fatherId
-          : _selectedNode.id,
-      father_id:
-        showDialog === NodeMetaPopup.CREATE_SIBLING
-          ? _selectedNode.father_id
-          : _selectedNode.node_id,
-      previous_sibling_node_id:
-        showDialog === NodeMetaPopup.CREATE_SIBLING
-          ? _selectedNode.node_id
-          : -1,
+      fatherId: selectedNodeIsASibling ? _selectedNode.fatherId : _selectedNode.id,
+      father_id: selectedNodeIsASibling
+        ? _selectedNode.father_id
+        : _selectedNode.node_id,
+      previous_sibling_node_id: selectedNodeIsASibling ? _selectedNode.node_id : -1,
     });
   } else {
     // @ts-ignore

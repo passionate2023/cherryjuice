@@ -82,7 +82,9 @@ export class NodeRepository extends Repository<Node> {
     node.documentId = documentId;
 
     const parentNode = await this.getNodeMetaById(node.father_id, documentId);
-    parentNode.child_nodes.splice(meta.position, 0, node.node_id);
+    meta.position === -1
+      ? parentNode.child_nodes.push(node.node_id)
+      : parentNode.child_nodes.splice(meta.position, 0, node.node_id);
     node.father = parentNode;
 
     await parentNode.save();
