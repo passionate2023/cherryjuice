@@ -1,3 +1,5 @@
+import { apolloCache } from '::graphql/cache-helpers';
+
 const unsetImagesAttributes = (images: HTMLImageElement[]) => {
   const imageAttributesTempContainer = [];
   images.forEach(img => {
@@ -41,53 +43,47 @@ const getEditorContentWithoutImages = () => {
     ),
   };
 };
-const getNodeImageIDsFromCache = ({ cache, nodeId }): string[] => {
-  return cache.data.get('Node:' + nodeId)[
+const getNodeImageIDsFromCache = ({ nodeId }): string[] => {
+  return apolloCache.getNode(nodeId)[
     // eslint-disable-next-line no-unexpected-multiline
     'image({"thumbnail":true})'
   ].map(({ id }) => /:(.+)$/.exec(id)[1]);
 };
 
-const updatedCachedHtml = (cache, nodeId, html) => {
-  const node = cache.data.get('Node:' + nodeId);
-  // @ts-ignore
-  cache.data.set('Node:' + nodeId, {
-    // @ts-ignore
-    ...node,
-    html,
-  });
+const updatedCachedHtml = ({ nodeId, html }) => {
+  const node = apolloCache.getNode(nodeId);
+  apolloCache.setNode(nodeId, { ...node, html });
 };
-const updatedCachedMeta = ({ cache, nodeId, meta }) => {
-  // @ts-ignore
-  const node = cache.data.get('Node:' + nodeId);
-  // @ts-ignore
-  cache.data.set('Node:' + nodeId, {
-    // @ts-ignore
-    ...node,
-    ...meta,
-  });
+const updatedCachedMeta = ({ nodeId, meta }) => {
+  const node = apolloCache.getNode(nodeId);
+  apolloCache.setNode(nodeId, { ...node, ...meta });
 };
 
-const updateCachedImages = (cache, nodeId, deletedImages: string[]) => {
-  const node = cache.data.get('Node:' + nodeId);
+const updateCachedImages = ({
+  nodeId,
+  deletedImages,
+}: {
+  nodeId;
+  deletedImages: string[];
+}) => {
+  const node = apolloCache.getNode(nodeId);
   const deleted = Object.fromEntries(
     deletedImages.map(id => ['Image:' + id, true]),
   );
-  cache.data.set('Node:' + nodeId, {
-    // @ts-ignore
+  apolloCache.setNode(nodeId, {
     ...node,
+    // @ts-ignore
     'image({"thumbnail":true})': node['image({"thumbnail":true})'].filter(
       ({ id }) => !deleted[id],
     ),
+    // @ts-ignore
     'image({"thumbnail":false})': node['image({"thumbnail":false})'].filter(
       ({ id }) => !deleted[id],
     ),
   });
-  deletedImages.forEach(id => {
-    cache.data.delete('Image:' + id);
-  });
+  deletedImages.forEach(apolloCache.deleteImage);
 };
-const updateCachedHtmlAndImages = (cache): { deletedImageIDs: string[] } => {
+const updateCachedHtmlAndImages = (): { deletedImageIDs: string[] } => {
   const {
     html,
     id,
@@ -96,10 +92,11 @@ const updateCachedHtmlAndImages = (cache): { deletedImageIDs: string[] } => {
   } = getEditorContentWithoutImages();
   let deletedImageIDs = [];
   if (edited) {
-    const imageIDsInCache = getNodeImageIDsFromCache({ cache, nodeId: id });
+    const imageIDsInCache = getNodeImageIDsFromCache({ nodeId: id });
     deletedImageIDs = imageIDsInCache.filter(id => !imageIDsInDom[id]);
-    updatedCachedHtml(cache, id, html);
-    if (deletedImageIDs.length) updateCachedImages(cache, id, deletedImageIDs);
+    updatedCachedHtml({ nodeId: id, html });
+    if (deletedImageIDs.length)
+      updateCachedImages({ nodeId: id, deletedImages: deletedImageIDs });
   }
   return { deletedImageIDs };
 };

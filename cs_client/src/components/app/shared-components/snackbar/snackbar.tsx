@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {  modSnackbar } from '::sass-modules/index';
+import { modSnackbar } from '::sass-modules/index';
 import { Icon, Icons } from '::shared-components/icon';
 import { CircleButton } from '::shared-components/buttons/circle-button';
 import { ComponentWithTransition } from '::shared-components/transitions/component-with-transition';

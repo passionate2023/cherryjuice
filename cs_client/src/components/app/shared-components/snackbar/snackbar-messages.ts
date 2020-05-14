@@ -1,5 +1,5 @@
-enum SnackbarMessages  {
-  documentSaved='Document saved'
+enum SnackbarMessages {
+  documentSaved = 'Document saved',
 }
 
-export {SnackbarMessages}
+export { SnackbarMessages };

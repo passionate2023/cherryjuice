@@ -5,8 +5,6 @@ import { TNodeMeta } from '::app/reducer';
 import { modRecentNodes } from '::sass-modules/index';
 import { TState } from '::app/reducer';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { useContext } from 'react';
-import { RootContext } from '::root/root-context';
 
 type Props = {
   state: TState;
@@ -27,13 +25,11 @@ const RecentNodes: React.FC<Props> = ({
       ? recentNodesOther.length - config.recentNodesN
       : 0,
   );
-  const {
-    apolloClient: { cache },
-  } = useContext(RootContext);
+
   const history = useHistory();
   const goToNode = useCallback(
     e => {
-      updateCachedHtmlAndImages(cache);
+      updateCachedHtmlAndImages();
       const node_id = e.target.dataset.id;
       history.push(`/document/${file_id}/node/${node_id}`);
     },

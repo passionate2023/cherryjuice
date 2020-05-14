@@ -46,5 +46,5 @@ export {
   modTreeNode,
   modTree,
   modDeleteDocument,
-  modSnackbar
+  modSnackbar,
 };

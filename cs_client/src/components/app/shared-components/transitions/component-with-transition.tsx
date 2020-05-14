@@ -56,7 +56,7 @@ const ComponentWithTransition: React.FC<ComponentWithTransitionProps> = ({
   transitionValues,
   enableModalKeyboardEvents = true,
   useScrim = true,
-  className = '',
+  className,
 }) => {
   return (
     <TransitionWrapper<ComponentWrapperProps>

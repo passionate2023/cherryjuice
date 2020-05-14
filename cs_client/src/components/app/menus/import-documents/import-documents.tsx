@@ -1,4 +1,4 @@
-import { modImportDocument } from '::sass-modules/index';
+import { modAlertModal, modImportDocument } from '::sass-modules/index';
 import { UploadFile } from './dialog-buttons/upload-file';
 import { GoogleDrivePicker } from './dialog-buttons/google-drive-picker/google-drive-picker';
 import * as React from 'react';
@@ -17,6 +17,7 @@ const ImportDocuments: React.FC<Props> = ({ onClose, show }) => {
       show={show}
       onClose={onClose}
       transitionValues={transitions.t1}
+      className={modAlertModal.alertModal}
     >
       <div className={modImportDocument.importDocument}>
         <span className={modImportDocument.importDocument__title}>

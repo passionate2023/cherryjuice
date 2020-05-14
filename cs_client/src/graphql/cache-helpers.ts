@@ -17,6 +17,9 @@ const apolloCache = (() => {
     deleteNode: (nodeId: string): void => {
       state.cache.data.delete('Node:' + nodeId);
     },
+    deleteImage: (imageId: string): void => {
+      state.cache.data.delete('Image:' + imageId);
+    },
     setDocument: (documentId: string, document: Document): void =>
       state.cache?.data.set('Document:' + documentId, document),
     getDocument: (documentId: string): void =>

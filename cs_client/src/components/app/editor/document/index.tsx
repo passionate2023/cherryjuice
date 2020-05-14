@@ -28,6 +28,7 @@ const Document: React.FC<Props> = ({ state }) => {
     contentEditable,
     isOnMobile,
     processLinks,
+    documentHasUnsavedChanges,
   } = state;
   const [documentState, dispatch] = useReducer(
     documentReducer,
@@ -50,6 +51,7 @@ const Document: React.FC<Props> = ({ state }) => {
   useSaveDocument({
     saveDocumentCommandID: saveDocument,
     nodes: documentState.nodes,
+    documentHasUnsavedChanges,
   });
 
   useTrackDocumentChanges({ documentState });
