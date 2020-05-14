@@ -12,11 +12,9 @@ type TEditedNodes = {
 };
 type TDocumentState = {
   nodes: TEditedNodes;
-  documentHasUnsavedNodes: boolean;
 };
 const state: TDocumentState = {
   nodes: {},
-  documentHasUnsavedNodes: false,
 };
 
 export { state as documentInitialState };

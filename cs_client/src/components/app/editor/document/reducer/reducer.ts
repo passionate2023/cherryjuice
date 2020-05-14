@@ -3,7 +3,6 @@ import {
   documentActions,
   localChanges,
 } from '::app/editor/document/reducer/action-creators';
-import { nodeHasUnsavedChanges } from '::app/editor/document/reducer/helpers';
 
 const reducer = (
   state: TDocumentState,
@@ -103,11 +102,7 @@ const reducer = (
     default:
       throw new Error('action not supported');
   }
-  if (Object.values(newState.nodes).some(nodeHasUnsavedChanges))
-    newState.documentHasUnsavedNodes = true;
-  else {
-    newState.documentHasUnsavedNodes = false;
-  }
+
   return newState;
 };
 

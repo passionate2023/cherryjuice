@@ -17,6 +17,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { QUERY_USER } from '::graphql/queries';
 import { rootActionCreators } from '::root/root.reducer';
 import { AppContext } from './context';
+import { useDocumentEditedIndicator } from '::app/hooks/document-edited-indicator';
 
 const Menus = React.lazy(() => import('::app/menus'));
 
@@ -99,6 +100,7 @@ const App: React.FC<Props> = ({ session }) => {
       callback: appActionCreators.setIsOnMobile,
     }),
   ]);
+  useDocumentEditedIndicator(state)
   useSaveStateToLocalStorage(state);
   useHandleRouting(state);
   useUpdateCssVariables(state);

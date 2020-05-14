@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { appActionCreators, TState } from '::app/reducer';
 import { AuthUser } from '::types/graphql/generated';
+import ReloadDocument from '::app/menus/modals/reload-document/reload-document';
 const AlertModal = React.lazy(() => import('./alert-modal/alert-modal'));
 const UserPopup = React.lazy(() => import('./user/user'));
 const ImportProgress = React.lazy(() =>
@@ -14,8 +15,8 @@ const ImportDocuments = React.lazy(() =>
 const Settings = React.lazy(() => import('::app/menus/settings'));
 const SelectFile = React.lazy(() => import('::app/menus/select-file'));
 const NodeMeta = React.lazy(() => import('::app/menus/node-meta/node-meta'));
-const DeleteDocument = React.lazy(() =>
-  import('::app/menus/modals/delete-document/delete-document'),
+const DeleteNode = React.lazy(() =>
+  import('::app/menus/modals/delete-node/delete-node'),
 );
 type Props = { state: TState; dispatch: any; session: AuthUser };
 
@@ -71,10 +72,16 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
         />
       </Suspense>
       <Suspense fallback={<Void />}>
-        <DeleteDocument
+        <DeleteNode
           onClose={appActionCreators.toggleDeleteDocumentModal}
           show={state.showDeleteDocumentModal}
           nodeId={state.selectedNode?.nodeId}
+        />
+      </Suspense>
+      <Suspense fallback={<Void />}>
+        <ReloadDocument
+          onClose={appActionCreators.hideReloadConfirmationModal}
+          show={state.showReloadConfirmationModal}
         />
       </Suspense>
     </>

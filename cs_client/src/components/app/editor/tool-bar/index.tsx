@@ -18,6 +18,7 @@ type Props = {
   showInfoBar: boolean;
   showTree: boolean;
   selectedNodeId: string;
+  documentHasUnsavedChanges: boolean;
 };
 
 const ToolBar: React.FC<Props> = ({
@@ -28,10 +29,15 @@ const ToolBar: React.FC<Props> = ({
   showInfoBar,
   showTree,
   selectedNodeId,
+                                    documentHasUnsavedChanges,
 }) => {
   return (
     <div className={modToolbar.toolBar}>
-      <MainButtons showTree={showTree} selectedNodeId={selectedNodeId} />
+      <MainButtons
+        showTree={showTree}
+        selectedNodeId={selectedNodeId}
+        documentHasUnsavedChanges={documentHasUnsavedChanges}
+      />
       <Separator />
       <MobileButtons
         {...{

@@ -23,6 +23,7 @@ const Editor: React.FC<{ state: TState }> = ({ state }) => {
             showRecentNodes={state.showRecentNodes}
             showTree={state.showTree}
             selectedNodeId={state.selectedNode?.nodeId}
+            documentHasUnsavedChanges={state.documentHasUnsavedChanges}
           />
         </Suspense>
       </ErrorBoundary>

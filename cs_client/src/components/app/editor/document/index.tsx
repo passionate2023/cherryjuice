@@ -13,7 +13,7 @@ import { documentReducer } from '::app/editor/document/reducer/reducer';
 import { documentInitialState } from '::app/editor/document/reducer/initial-state';
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 import { DocumentContext } from './reducer/context';
-import { useDocumentEditedIndicator } from '::app/editor/document/hooks/document-edited-indicator';
+import { useTrackDocumentChanges } from '::app/editor/document/hooks/track-document-changes';
 
 type Props = {
   state: TState;
@@ -52,7 +52,7 @@ const Document: React.FC<Props> = ({ state }) => {
     nodes: documentState.nodes,
   });
 
-  useDocumentEditedIndicator({ documentState });
+  useTrackDocumentChanges({ documentState });
   return (
     <DocumentContext.Provider value={documentState}>
       <LinearProgress loading={fetchingDocumentMeta} />

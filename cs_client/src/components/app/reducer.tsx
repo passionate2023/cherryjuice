@@ -45,6 +45,8 @@ const initialState = {
   highest_node_id: -1,
   showDeleteDocumentModal: false,
   rootNode: undefined,
+  showReloadConfirmationModal: false,
+  documentHasUnsavedChanges: false,
 };
 
 export type TState = typeof initialState & {
@@ -55,6 +57,7 @@ export type TState = typeof initialState & {
   showNodeMeta: NodeMetaPopup;
 };
 enum actions {
+  hideReloadConfirmationModal,
   TOGGLE_TREE,
   TOGGLE_TREE_ON,
   TOGGLE_TREE_OFF,
@@ -81,6 +84,8 @@ enum actions {
   SET_HIGHEST_NODE_ID,
   TOGGLE_DELETE_DOCUMENT,
   SET_ROOT_NODE,
+  showReloadConfirmationModal,
+  documentHasUnsavedChanges,
 }
 const createActionCreators = () => {
   const state = {
@@ -208,6 +213,24 @@ const createActionCreators = () => {
         type: actions.SET_ROOT_NODE,
         value: { node },
       }),
+    showReloadConfirmationModal: () => {
+      state.dispatch({
+        type: actions.showReloadConfirmationModal,
+        value: true,
+      });
+    },
+    hideReloadConfirmationModal: () => {
+      state.dispatch({
+        type: actions.showReloadConfirmationModal,
+        value: false,
+      });
+    },
+    documentHasUnsavedChanges: (documentHasUnsavedChanges: boolean) => {
+      state.dispatch({
+        type: actions.documentHasUnsavedChanges,
+        value: documentHasUnsavedChanges,
+      });
+    },
   };
 };
 const reducer = (
@@ -272,6 +295,7 @@ const reducer = (
       return {
         ...state,
         reloadDocument: action.value,
+        showReloadConfirmationModal: false,
       };
     case actions.RELOAD_DOCUMENT_LIST:
       return {
@@ -319,6 +343,13 @@ const reducer = (
       };
     case actions.SET_ROOT_NODE:
       return { ...state, rootNode: action.value.node };
+    case actions.showReloadConfirmationModal:
+      return { ...state, showReloadConfirmationModal: action.value };
+    case actions.documentHasUnsavedChanges:
+      return {
+        ...state,
+        documentHasUnsavedChanges: action.value,
+      };
     default:
       throw new Error('action not supported');
   }

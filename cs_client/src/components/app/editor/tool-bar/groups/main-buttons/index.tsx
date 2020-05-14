@@ -6,10 +6,11 @@ import { modToolbar } from '::sass-modules/index';
 
 type Props = {
   showTree: boolean;
+  documentHasUnsavedChanges: boolean;
   selectedNodeId;
 };
 
-const MainButtons: React.FC<Props> = ({ showTree, selectedNodeId }) => {
+const MainButtons: React.FC<Props> = ({ showTree, selectedNodeId,documentHasUnsavedChanges }) => {
   return (
     <div className={modToolbar.toolBar__group}>
       <ToolbarButton onClick={appActionCreators.toggleTree} enabled={showTree}>
@@ -45,7 +46,13 @@ const MainButtons: React.FC<Props> = ({ showTree, selectedNodeId }) => {
       <ToolbarButton onClick={appActionCreators.saveDocument}>
         <Icon name={Icons.material.save} />
       </ToolbarButton>
-      <ToolbarButton onClick={appActionCreators.reloadDocument}>
+      <ToolbarButton
+        onClick={
+          documentHasUnsavedChanges
+            ? appActionCreators.showReloadConfirmationModal
+            : appActionCreators.reloadDocument
+        }
+      >
         <Icon name={Icons.material.refresh} />
       </ToolbarButton>
     </div>
