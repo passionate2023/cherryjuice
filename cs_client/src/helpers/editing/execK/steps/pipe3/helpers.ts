@@ -1,5 +1,3 @@
-import { Element } from '::helpers/rendering/ahtml-to-html/element';
-
 // const getParent = ({ nestLevel, element }) =>
 //   nestLevel > 0
 //     ? getParent({ nestLevel: nestLevel - 1, element: element.parentElement })

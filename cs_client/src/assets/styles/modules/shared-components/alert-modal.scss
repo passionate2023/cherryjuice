@@ -2,8 +2,9 @@
 @import '../../vars/colors';
 
 $height: 250px;
-$width: $height * 1.3;
+$width: $height * 1.35;
 .alert-modal {
+  box-sizing: border-box;
   position: absolute;
   width: $width;
   background-color: white;

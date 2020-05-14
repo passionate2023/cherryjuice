@@ -30,6 +30,10 @@ const Element = node =>
     ? node.tags.reduceRight((acc, [tagName, attributes]) => {
         return createElement(`${tagName}`, attributes, acc);
       }, escapeHtml(node._))
-    : createElement(`span`, {}, escapeHtml(node._ || node));
+    : createElement(
+        `span`,
+        {},
+        escapeHtml(typeof node === 'string' ? node : node._),
+      );
 
 export { Element, stringifyStyles };

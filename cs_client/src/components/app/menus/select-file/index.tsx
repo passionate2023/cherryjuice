@@ -43,7 +43,7 @@ const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
 };
 
 const useData = ({ reloadFiles }: { reloadFiles: number }) => {
-  const { data, loading, error,  } = useReloadQuery(
+  const { data, loading, error } = useReloadQuery(
     {
       reloadRequestIDs: [reloadFiles],
     },
@@ -60,7 +60,7 @@ const useData = ({ reloadFiles }: { reloadFiles: number }) => {
     },
     { resourceName: 'files' },
   );
-  return { data, loading,  };
+  return { data, loading };
 };
 
 const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
@@ -78,12 +78,12 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
     open,
   });
 
-  const { loading, data,  } = useData({ reloadFiles });
+  const { loading, data } = useData({ reloadFiles });
   const documentsMeta = QUERY_DOCUMENTS.documentMeta.path(data);
   const { deleteDocument } = useDeleteFile({
     IDs: selectedIDs,
     onCompleted: () => {
-     appActionCreators.reloadDocumentList()
+      appActionCreators.reloadDocumentList();
       if (selectedIDs.includes(selectedFile)) {
         history.push('/');
         appActionCreators.selectFile('');

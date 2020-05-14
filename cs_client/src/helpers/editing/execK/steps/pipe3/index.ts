@@ -76,7 +76,6 @@ const writeChangesToDom = (
     },
     { startDDOE },
   );
-
   replaceElement(startAnchor)(childrenElementsOfStartDDOE);
   startDDOE.after(...adjacentElementsOfStartDDOE);
   replaceElement(endAnchor)(childrenElementsOfEndDDOE);

@@ -1,4 +1,4 @@
-const toNodes: (string: string, single: boolean) => Element | Element[] = (
+const toNodes: (string: string, single?: boolean) => Element | Element[] = (
   html,
   single = true,
 ) =>
