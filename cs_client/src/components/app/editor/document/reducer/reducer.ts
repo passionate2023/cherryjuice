@@ -3,6 +3,7 @@ import {
   documentActions,
   localChanges,
 } from '::app/editor/document/reducer/action-creators';
+import { nodeHasUnsavedChanges } from '::app/editor/document/reducer/helpers';
 
 const reducer = (
   state: TDocumentState,
@@ -11,9 +12,10 @@ const reducer = (
     value: any;
   },
 ): TDocumentState => {
+  let newState = state;
   switch (action.type) {
     case documentActions.SET_FETCHED_IMAGE_IDS:
-      return {
+      newState = {
         ...state,
         nodes: {
           ...state.nodes,
@@ -22,8 +24,9 @@ const reducer = (
           },
         },
       };
+      break;
     case documentActions.SET_NODE_CONTENT_HAS_CHANGED:
-      return {
+      newState = {
         ...state,
         nodes: {
           ...state.nodes,
@@ -36,8 +39,9 @@ const reducer = (
           },
         },
       };
+      break;
     case documentActions.SET_NODE_META_HAS_CHANGED:
-      return {
+      newState = {
         ...state,
         nodes: {
           ...state.nodes,
@@ -55,8 +59,9 @@ const reducer = (
           },
         },
       };
+      break;
     case documentActions.CREATE_NEW_NODE:
-      return {
+      newState = {
         ...state,
         nodes: {
           ...state.nodes,
@@ -65,8 +70,9 @@ const reducer = (
           },
         },
       };
+      break;
     case documentActions.CLEAR_LOCAL_CHANGES:
-      return {
+      newState = {
         ...state,
         nodes: {
           ...[state.nodes].map(nodes => {
@@ -82,8 +88,9 @@ const reducer = (
           })[0],
         },
       };
+      break;
     case documentActions.DELETE_NODE:
-      return {
+      newState = {
         ...state,
         nodes: {
           ...state.nodes,
@@ -92,9 +99,16 @@ const reducer = (
           },
         },
       };
+      break;
     default:
       throw new Error('action not supported');
   }
+  if (Object.values(newState.nodes).some(nodeHasUnsavedChanges))
+    newState.documentHasUnsavedNodes = true;
+  else {
+    newState.documentHasUnsavedNodes = false;
+  }
+  return newState;
 };
 
 export { reducer as documentReducer };

@@ -66,9 +66,7 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
           isOnMobile={state.isOnMobile}
           onClose={appActionCreators.hideNodeMeta}
           nodeId={
-            state.selectedNode
-              ? state.selectedNode.nodeId
-              : state.rootNode?.id
+            state.selectedNode ? state.selectedNode.nodeId : state.rootNode?.id
           }
         />
       </Suspense>

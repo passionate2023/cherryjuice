@@ -37,11 +37,15 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
     node = createNode({
       documentId,
       highest_node_id,
-      fatherId: selectedNodeIsASibling ? _selectedNode.fatherId : _selectedNode.id,
+      fatherId: selectedNodeIsASibling
+        ? _selectedNode.fatherId
+        : _selectedNode.id,
       father_id: selectedNodeIsASibling
         ? _selectedNode.father_id
         : _selectedNode.node_id,
-      previous_sibling_node_id: selectedNodeIsASibling ? _selectedNode.node_id : -1,
+      previous_sibling_node_id: selectedNodeIsASibling
+        ? _selectedNode.node_id
+        : -1,
     });
   } else {
     // @ts-ignore
