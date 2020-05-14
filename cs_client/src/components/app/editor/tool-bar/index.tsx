@@ -29,7 +29,7 @@ const ToolBar: React.FC<Props> = ({
   showInfoBar,
   showTree,
   selectedNodeId,
-                                    documentHasUnsavedChanges,
+  documentHasUnsavedChanges,
 }) => {
   return (
     <div className={modToolbar.toolBar}>

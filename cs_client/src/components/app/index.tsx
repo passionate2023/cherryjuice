@@ -100,7 +100,7 @@ const App: React.FC<Props> = ({ session }) => {
       callback: appActionCreators.setIsOnMobile,
     }),
   ]);
-  useDocumentEditedIndicator(state)
+  useDocumentEditedIndicator(state);
   useSaveStateToLocalStorage(state);
   useHandleRouting(state);
   useUpdateCssVariables(state);

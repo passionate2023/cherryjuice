@@ -10,7 +10,11 @@ type Props = {
   selectedNodeId;
 };
 
-const MainButtons: React.FC<Props> = ({ showTree, selectedNodeId,documentHasUnsavedChanges }) => {
+const MainButtons: React.FC<Props> = ({
+  showTree,
+  selectedNodeId,
+  documentHasUnsavedChanges,
+}) => {
   return (
     <div className={modToolbar.toolBar__group}>
       <ToolbarButton onClick={appActionCreators.toggleTree} enabled={showTree}>

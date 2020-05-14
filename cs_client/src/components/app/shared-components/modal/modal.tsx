@@ -60,6 +60,7 @@ const ModalWithTransition: React.FC<TModalWithTransition> = ({
       componentProps={{
         onClose,
         children,
+        show,
       }}
       scrimProps={{ alertModal: true, onClick: onClose }}
     />

@@ -1,4 +1,5 @@
 enum actions {
+  clearAllLocalChanges,
   SET_FETCHED_IMAGE_IDS,
   SET_NODE_CONTENT_HAS_CHANGED,
   SET_NODE_META_HAS_CHANGED,
@@ -44,10 +45,15 @@ const actionCreators = (() => {
         type: actions.CLEAR_LOCAL_CHANGES,
         value: { nodeId, level },
       }),
-    setNodeDeleted(nodeId: string) {
+    setNodeDeleted: (nodeId: string) => {
       state.dispatch({
         type: actions.DELETE_NODE,
         value: { nodeId },
+      });
+    },
+    clearAllLocalChanges: () => {
+      state.dispatch({
+        type: actions.clearAllLocalChanges,
       });
     },
   };

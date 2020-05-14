@@ -1,4 +1,7 @@
-import { TDocumentState } from '::app/editor/document/reducer/initial-state';
+import {
+  documentInitialState,
+  TDocumentState,
+} from '::app/editor/document/reducer/initial-state';
 import {
   documentActions,
   localChanges,
@@ -13,6 +16,9 @@ const reducer = (
 ): TDocumentState => {
   let newState = state;
   switch (action.type) {
+    case documentActions.clearAllLocalChanges:
+      newState = documentInitialState;
+      break;
     case documentActions.SET_FETCHED_IMAGE_IDS:
       newState = {
         ...state,
