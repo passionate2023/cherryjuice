@@ -58,7 +58,7 @@ const Document: React.FC<Props> = ({ state }) => {
   useEffect(() => {
     if (history.location.pathname.endsWith(file_id))
       appActionCreators.selectNode(undefined);
-  }, [reloadDocument]);
+  }, [history.location.pathname]);
   return (
     <DocumentContext.Provider value={documentState}>
       <LinearProgress loading={fetchingDocumentMeta} />

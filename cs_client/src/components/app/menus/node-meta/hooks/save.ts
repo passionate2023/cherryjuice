@@ -1,102 +1,96 @@
-import * as React from 'react';
 import { updatedCachedMeta } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 import { appActionCreators } from '::app/reducer';
 import { NodeCached } from '::types/graphql/adapters';
 import { useHistory } from 'react-router-dom';
+import { TNodeMetaState } from '::app/menus/node-meta/reducer/reducer';
+import { apolloCache } from '::graphql/cache-helpers';
 
 const calculateDiff = ({
-  newNode,
-  meta,
-  refs: {
-    nameInput,
-    isBoldInput,
-    customColorValueInput,
-    customIconValue,
-    isReadOnlyInput,
-    hasCustomColorInput,
-    hasCustomIconInput,
-  },
+  isNewNode,
+  node,
+  state,
+}: {
+  isNewNode: boolean;
+  node: NodeCached;
+  state: TNodeMetaState;
 }) => {
-  const { name, node_title_styles, icon_id, read_only } = meta;
+  const { name, node_title_styles, icon_id, read_only } = node;
   const style = JSON.parse(node_title_styles);
   const newStyle = JSON.stringify({
-    color: hasCustomColorInput.current.checked
-      ? customColorValueInput.current.value
-      : '#ffffff',
-    fontWeight: isBoldInput.current.checked ? 'bold' : 'normal',
+    color: state.hasCustomColor ? state.customColor : '#ffffff',
+    fontWeight: state.isBold ? 'bold' : 'normal',
   });
-  const newIconId = !hasCustomIconInput.current.checked
+  const newIconId = !state.hasCustomIcon
     ? '0'
-    : customIconValue.current.value;
-  const res: { [k: string]: any } = {};
-  if (newNode) {
-    res.name = nameInput.current.value || '?';
-    res.node_title_styles = newStyle;
-    res.icon_id = newIconId;
-    res.read_only = isReadOnlyInput.current.checked ? 1 : 0;
-    return {
-      ...meta,
-      ...res,
+    : state.customIcon === '0'
+    ? '1'
+    : state.customIcon;
+  let res: NodeCached;
+  if (isNewNode) {
+    res = {
+      ...node,
+      name: state.name || '?',
+      node_title_styles: newStyle,
+      icon_id: newIconId,
+      read_only: state.isReadOnly ? 1 : 0,
+      child_nodes: [...node.child_nodes],
     };
   } else {
-    if (nameInput.current.value !== name) res.name = nameInput.current.value;
+    res = node;
+    if (state.name !== name) res.name = state.name;
     if (newStyle !== JSON.stringify(style)) res.node_title_styles = newStyle;
     if (newIconId !== icon_id) res.icon_id = newIconId;
-    if (isReadOnlyInput.current.checked !== Boolean(read_only))
-      res.read_only = isReadOnlyInput.current.checked ? 1 : 0;
-    return res;
+    if (state.isReadOnly !== Boolean(read_only))
+      res.read_only = state.isReadOnly ? 1 : 0;
   }
+  return res;
 };
 
-const useSave = (cache, nodeId: string, meta: NodeCached, newNode: boolean) => {
+type UseSaveProps = {
+  nodeId: string;
+  node: NodeCached;
+  newNode: boolean;
+  state: TNodeMetaState;
+};
+const useSave = ({ node, newNode, nodeId, state }: UseSaveProps) => {
   const history = useHistory();
-  const [
-    nameInput,
-    isBoldInput,
-    customColorValueInput,
-    customIconValue,
-    isReadOnlyInput,
-    hasCustomColorInput,
-    hasCustomIconInput,
-  ] = Array.from({
-    length: 7,
-  }).map(() => React.createRef<HTMLInputElement>());
 
   const onSave = () => {
     const res = calculateDiff({
-      newNode,
-      meta,
-      refs: {
-        nameInput,
-        isBoldInput,
-        customColorValueInput,
-        customIconValue,
-        isReadOnlyInput,
-        hasCustomColorInput,
-        hasCustomIconInput,
-      },
+      isNewNode: newNode,
+      node,
+      state,
     });
-    if (Object.keys(res)) updatedCachedMeta({  nodeId, meta: res });
-    newNode
-      ? documentActionCreators.createNewNode(nodeId)
-      : documentActionCreators.setNodeMetaHasChanged(nodeId, Object.keys(res));
+    if (newNode) {
+      apolloCache.setNode(res.id, res);
+      const fatherNode = apolloCache.getNode(res.fatherId);
+      const position =
+        res.previous_sibling_node_id === -1
+          ? -1
+          : fatherNode.child_nodes.indexOf(res.previous_sibling_node_id) + 1;
+      position === -1
+        ? fatherNode.child_nodes.push(res.node_id)
+        : fatherNode.child_nodes.splice(position, 0, res.node_id);
+      delete res.previous_sibling_node_id;
+      apolloCache.setNode(res.id, { ...res, position });
+      apolloCache.setNode(fatherNode.id, fatherNode);
 
-    const nodePath = `/document/${meta.documentId}/node/${meta.node_id}`;
+      documentActionCreators.createNewNode(res.id);
+      documentActionCreators.setNodeMetaHasChanged(node.fatherId, [
+        'child_nodes',
+      ]);
+    } else {
+      if (Object.keys(res)) updatedCachedMeta({ nodeId, meta: res });
+      documentActionCreators.setNodeMetaHasChanged(nodeId, Object.keys(res));
+    }
+
+    const nodePath = `/document/${node.documentId}/node/${node.node_id}`;
     history.push(nodePath);
     appActionCreators.hideNodeMeta();
   };
   return {
     onSave,
-    refs: {
-      nameInput,
-      isBoldInput,
-      customColorValueInput,
-      customIconValue,
-      isReadOnlyInput,
-      hasCustomColorInput,
-      hasCustomIconInput,
-    },
   };
 };
 

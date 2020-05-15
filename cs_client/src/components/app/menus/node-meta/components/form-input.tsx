@@ -1,26 +1,24 @@
 import * as React from 'react';
-import { MutableRefObject, useState } from 'react';
 import { modNodeMeta, modTextInput } from '::sass-modules/index';
 
 type Props = {
   type: 'checkbox' | 'text';
   label: string;
-  defaultValue: string | boolean;
-  inputRef?: MutableRefObject<HTMLInputElement>;
+  onChange: Function;
+  value;
   additionalInput?: ({ disabled: boolean }) => JSX.Element;
 };
 
 const FormInput: React.FC<Props> = ({
   type,
   label,
-  defaultValue,
-  inputRef,
+  onChange,
+  value,
   additionalInput,
 }) => {
   const inputName = label.replace(/[^A-Za-z]/g, '-').toLowerCase();
-  const [value, setValue] = useState(defaultValue);
-  const onChangeCheckbox = e => setValue(e.target.checked);
-  const onChangeText = e => setValue(e.target.value);
+  const onChangeCheckbox = e => onChange(e.target.checked);
+  const onChangeText = e => onChange(e.target.value);
 
   return (
     <label htmlFor={inputName} className={modNodeMeta.nodeMeta__input}>
@@ -33,13 +31,10 @@ const FormInput: React.FC<Props> = ({
         }`}
         type={type}
         name={inputName}
-        // @ts-ignore
-        value={value}
-        onChange={type === 'checkbox' ? onChangeCheckbox : onChangeText}
-        {...(type === 'checkbox' && {
-          defaultChecked: defaultValue as boolean,
-        })}
-        ref={inputRef}
+        {...{
+          onChange: type === 'checkbox' ? onChangeCheckbox : onChangeText,
+          [type === 'checkbox' ? 'checked' : 'value']: value,
+        }}
       />
       {additionalInput ? additionalInput({ disabled: !value }) : <></>}
     </label>

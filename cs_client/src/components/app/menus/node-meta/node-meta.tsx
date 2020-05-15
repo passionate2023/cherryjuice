@@ -1,13 +1,17 @@
 import * as React from 'react';
-import { EventHandler, useContext } from 'react';
+import { EventHandler, useContext, useEffect, useReducer } from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
-import { RootContext } from '::root/root-context';
 import { Form } from './components/form';
 import { useSave } from '::app/menus/node-meta/hooks/save';
 import { NodeMetaPopup } from '::app/reducer';
-import { createNode } from '::app/menus/node-meta/helpers/create-node';
 import { AppContext } from '::app/context';
+import {
+  nodeMetaActionCreators,
+  nodeMetaInitialState,
+  nodeMetaReducer,
+} from '::app/menus/node-meta/reducer/reducer';
+import { getNode } from '::app/menus/node-meta/helpers/get-node';
 
 type TNodeMetaModalProps = {
   nodeId: string;
@@ -18,45 +22,24 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
   showDialog: NodeMetaPopup;
   isOnMobile: boolean;
 }> = ({ showDialog, isOnMobile, nodeId, onClose }) => {
-  const {
-    apolloClient: { cache },
-  } = useContext(RootContext);
   const { selectedFile: documentId, highest_node_id } = useContext(AppContext);
+  const { node, isNewNode } = getNode({
+    documentId,
+    showDialog,
+    nodeId,
+    highest_node_id,
+  });
+  const [state, dispatch] = useReducer(nodeMetaReducer, nodeMetaInitialState);
+  useEffect(() => {
+    nodeMetaActionCreators.__setDispatch(dispatch);
+  }, []);
 
-  let node;
-  const newNode =
-    showDialog === NodeMetaPopup.CREATE_SIBLING ||
-    showDialog === NodeMetaPopup.CREATE_CHILD;
-  if (newNode) {
-    // @ts-ignore
-    const _selectedNode = cache.data.get('Node:' + nodeId);
+  useEffect(() => {
+    if (showDialog === NodeMetaPopup.EDIT) nodeMetaActionCreators.reset(node);
+    else nodeMetaActionCreators.reset(undefined);
+  }, [nodeId, showDialog]);
 
-    const selectedNodeIsASibling =
-      showDialog === NodeMetaPopup.CREATE_SIBLING &&
-      _selectedNode.father_id !== -1;
-    node = createNode({
-      documentId,
-      highest_node_id,
-      fatherId: selectedNodeIsASibling
-        ? _selectedNode.fatherId
-        : _selectedNode.id,
-      father_id: selectedNodeIsASibling
-        ? _selectedNode.father_id
-        : _selectedNode.node_id,
-      previous_sibling_node_id: selectedNodeIsASibling
-        ? _selectedNode.node_id
-        : -1,
-    });
-  } else {
-    // @ts-ignore
-    node = cache.data.get('Node:' + nodeId);
-  }
-  const { onSave, refs } = useSave(
-    cache,
-    newNode ? node.id : nodeId,
-    node,
-    newNode,
-  );
+  const { onSave } = useSave({nodeId, node, newNode:isNewNode, state});
   const buttonsRight = [
     {
       label: 'dismiss',
@@ -82,7 +65,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
       small={true}
     >
       <ErrorBoundary>
-        <Form node={node} refs={refs} />
+        <Form state={state} />
       </ErrorBoundary>
     </DialogWithTransition>
   );

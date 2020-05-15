@@ -65,8 +65,8 @@ const saveNewNodes = async ({ nodes, mutate }: SaveOperationProps) => {
     if (permanentNodeId) {
       const node: NodeCached = apolloCache.getNode(nodeId);
       node.id = permanentNodeId;
-      apolloCache.deleteNode(nodeId);
       apolloCache.setNode(permanentNodeId, node);
+      apolloCache.deleteNode(nodeId);
       nodes[permanentNodeId] = nodes[nodeId];
       delete nodes[nodeId];
     }

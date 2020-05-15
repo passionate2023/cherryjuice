@@ -33,6 +33,7 @@ const Snackbar: React.FC<Props> = ({
       show={Boolean(message)}
       enableModalKeyboardEvents={false}
       transitionValues={transitions.t2}
+      className={modSnackbar.snackbar__container}
     >
       <div className={modSnackbar.snackbar}>
         <span className={modSnackbar.snackbar__message}>{message}</span>

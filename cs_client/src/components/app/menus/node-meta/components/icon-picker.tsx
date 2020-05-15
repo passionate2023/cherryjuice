@@ -21,6 +21,7 @@ const IconsList = ({
     ],
     isVisible: showList,
   });
+
   return (
     <div
       className={`${modIconPicker.iconPicker__icon__list} ${
@@ -47,25 +48,19 @@ const IconsList = ({
   );
 };
 
-type Props = { selectedIcon: string; disabled: boolean; inputRef };
+type Props = { value: string; disabled: boolean; onChange };
 
 const IconPicker: React.FC<Props> = ({
-  selectedIcon: defaultSelectedIcon,
+  value: selectedIcon,
   disabled,
-  inputRef,
+  onChange: setSelectedIcon,
 }) => {
-  const [selectedIcon, setSelectedIcon] = useState(defaultSelectedIcon);
   const [showList, setShowList] = useState(false);
-  inputRef.current = { value: selectedIcon };
-
+  const value = selectedIcon === '0' ? '1' : selectedIcon;
   return (
     <div className={modIconPicker.iconPicker}>
       <Icon
-        name={
-          Icons.cherrytree.custom_icons[
-            selectedIcon === '0' ? '1' : selectedIcon
-          ]
-        }
+        name={Icons.cherrytree.custom_icons[value]}
         className={`${modIconPicker.iconPicker__icon} ${
           disabled ? modNodeMeta.nodeMeta__inputDisabled : ''
         }`}
