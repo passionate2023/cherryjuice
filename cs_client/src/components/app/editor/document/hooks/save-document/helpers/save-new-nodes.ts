@@ -20,6 +20,7 @@ const adapt = ({
   read_only,
   updatedAt,
   position,
+  fatherId,
 }: NodeCached & { position }): CreateNodeIt => ({
   child_nodes,
   createdAt,
@@ -32,6 +33,7 @@ const adapt = ({
   read_only,
   updatedAt,
   position,
+  fatherId,
 });
 
 const mutateCreateNode = async ({ nodeId, mutate }) =>
@@ -52,7 +54,7 @@ const mutateCreateNode = async ({ nodeId, mutate }) =>
     }).catch(rej);
   });
 
-const saveNewNodes = async ({ nodes, mutate }: SaveOperationProps) => {
+const saveNewNodes = async ({ nodes, mutate, state }: SaveOperationProps) => {
   const newNodes = Object.entries(nodes)
     .filter(([, attributes]) => attributes.new && !attributes.deleted)
     .map(([nodeId]) => nodeId);
@@ -69,6 +71,9 @@ const saveNewNodes = async ({ nodes, mutate }: SaveOperationProps) => {
       apolloCache.deleteNode(nodeId);
       nodes[permanentNodeId] = nodes[nodeId];
       delete nodes[nodeId];
+      node.child_nodes.forEach(node_id => {
+        state.newFatherIds[node_id] = permanentNodeId;
+      });
     }
     documentActionCreators.clearLocalChanges(nodeId, localChanges.IS_NEW);
   }

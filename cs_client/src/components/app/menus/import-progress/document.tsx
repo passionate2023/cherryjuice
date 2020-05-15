@@ -17,7 +17,7 @@ const mapEventType = (value: DOCUMENT_SUBSCRIPTIONS) => {
     case DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PENDING:
       return 'pending';
     case DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_PREPARING:
-      return 'preparing';
+      return 'uploading';
     case DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_STARTED:
       return 'importing';
     case DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED:

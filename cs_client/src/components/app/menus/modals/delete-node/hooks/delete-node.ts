@@ -25,6 +25,7 @@ const useDeleteNode = (nodeId: string, node: NodeCached) => {
     updateFatherNode(node, fatherNode);
     notifyLocalStore(node, fatherNode);
     appActionCreators.toggleDeleteDocumentModal();
+    appActionCreators.removeNodeFromRecentNodes(nodeId);
     const nodePath = `/document/${fatherNode.documentId}/`;
     history.push(nodePath);
   }, [nodeId]);

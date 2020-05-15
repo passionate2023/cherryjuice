@@ -8,6 +8,9 @@ export class CreateNodeIt {
   @Field()
   father_id: number;
 
+  @Field()
+  fatherId: string;
+
   @Field(() => Int)
   node_id: number;
 

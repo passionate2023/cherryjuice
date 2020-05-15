@@ -19,6 +19,7 @@ const Form: React.FC<Props> = ({ state }) => {
         value={state.name}
         type={'text'}
         label={'Node name'}
+        lazyAutoFocus={400}
       />
       <FormInput
         onChange={nodeMetaActionCreators.setIsBold}

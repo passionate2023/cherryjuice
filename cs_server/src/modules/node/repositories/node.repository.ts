@@ -32,11 +32,6 @@ export class NodeRepository extends Repository<Node> {
         documentId,
       },
     });
-    // return await this.createQueryBuilder('node')
-    //   .where('node.node_id = :node_id', { node_id })
-    //   .andWhere('node.documentId = :documentId', { documentId })
-    //   .getOne()
-    //   .then(node => node? node  || new NotF);
   }
 
   async getNodesMeta(documentId: string): Promise<Node[]> {
@@ -66,13 +61,6 @@ export class NodeRepository extends Repository<Node> {
       .where({ node_id, userId: user.id, documentId })
       .execute();
 
-    if (meta.father_id) {
-      const parentNode = await this.getNodeMetaById(meta.father_id, documentId);
-      const node = await this.getNodeMetaById(node_id, documentId);
-      node.father = parentNode;
-      await node.save();
-    }
-
     return JSON.stringify(res);
   }
 
@@ -82,13 +70,9 @@ export class NodeRepository extends Repository<Node> {
     node.documentId = documentId;
 
     const parentNode = await this.getNodeMetaById(node.father_id, documentId);
-    meta.position === -1
-      ? parentNode.child_nodes.push(node.node_id)
-      : parentNode.child_nodes.splice(meta.position, 0, node.node_id);
     node.father = parentNode;
-
-    await parentNode.save();
     await node.save();
+
     return node.id;
   }
 

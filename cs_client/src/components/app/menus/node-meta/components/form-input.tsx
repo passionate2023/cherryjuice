@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { modNodeMeta, modTextInput } from '::sass-modules/index';
+import { useEffect, useRef } from 'react';
 
 type Props = {
   type: 'checkbox' | 'text';
@@ -7,6 +8,7 @@ type Props = {
   onChange: Function;
   value;
   additionalInput?: ({ disabled: boolean }) => JSX.Element;
+  lazyAutoFocus?: number;
 };
 
 const FormInput: React.FC<Props> = ({
@@ -15,10 +17,16 @@ const FormInput: React.FC<Props> = ({
   onChange,
   value,
   additionalInput,
+  lazyAutoFocus,
 }) => {
   const inputName = label.replace(/[^A-Za-z]/g, '-').toLowerCase();
   const onChangeCheckbox = e => onChange(e.target.checked);
   const onChangeText = e => onChange(e.target.value);
+
+  const inputRef = useRef<HTMLInputElement>();
+  useEffect(() => {
+    if (lazyAutoFocus) inputRef.current.focus();
+  }, []);
 
   return (
     <label htmlFor={inputName} className={modNodeMeta.nodeMeta__input}>
@@ -29,6 +37,7 @@ const FormInput: React.FC<Props> = ({
             ? modNodeMeta.nodeMeta__input__textInput
             : modNodeMeta.nodeMeta__input__checkbox
         }`}
+        ref={inputRef}
         type={type}
         name={inputName}
         {...{

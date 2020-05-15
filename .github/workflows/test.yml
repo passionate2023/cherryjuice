@@ -35,12 +35,15 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
 
+    - name: install server dependencies
+      run: cd cs_server && yarn install --ignore-optional --ignore-scripts && yarn add jest ts-jest --ignore-scripts
+
+    - name: link dependencies
+      run: cd cs_server && sudo yarn run postinstall
+
     - name: install client dependencies
       run: cd cs_client && yarn install --ignore-optional && yarn add jest ts-jest
 
-    - name: install server dependencies
-      run: cd cs_server && yarn install --ignore-optional && yarn add jest ts-jest
-  
     - name: run jest tests
       run:  cd cs_client && yarn run test
   

@@ -38,7 +38,6 @@ $width: $height * 1.35;
   width: 90%;
 }
 .alert-modal__header {
-  font-weight: 600;
   display: block;
   margin-top: 0.5rem;
   margin-bottom: 1rem;
@@ -55,7 +54,7 @@ $width: $height * 1.35;
 .alert-modal__message {
   font-size: 16px;
   padding: 5px 0px;
-  opacity: 0.8;
+  opacity: 0.7;
 }
 .alert-modal__dismiss-button {
   align-self: flex-end;

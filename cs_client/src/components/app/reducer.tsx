@@ -88,6 +88,7 @@ enum actions {
   SET_ROOT_NODE,
   showReloadConfirmationModal,
   documentHasUnsavedChanges,
+  removeNodeFromRecentNodes,
 }
 const createActionCreators = () => {
   const state = {
@@ -245,6 +246,12 @@ const createActionCreators = () => {
         value: undefined,
       });
     },
+    removeNodeFromRecentNodes: (nodeId: string) => {
+      state.dispatch({
+        type: actions.removeNodeFromRecentNodes,
+        value: nodeId,
+      });
+    },
   };
 };
 const reducer = (
@@ -372,6 +379,13 @@ const reducer = (
       return {
         ...state,
         snackbarMessage: action.value,
+      };
+    case actions.removeNodeFromRecentNodes:
+      return {
+        ...state,
+        recentNodes: state.recentNodes.filter(
+          ({ nodeId }) => nodeId !== action.value,
+        ),
       };
     default:
       throw new Error('action not supported');

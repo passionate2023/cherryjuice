@@ -26,7 +26,7 @@ const calculateDiff = ({
     : state.customIcon === '0'
     ? '1'
     : state.customIcon;
-  let res: NodeCached;
+  let res;
   if (isNewNode) {
     res = {
       ...node,
@@ -37,7 +37,7 @@ const calculateDiff = ({
       child_nodes: [...node.child_nodes],
     };
   } else {
-    res = node;
+    res = {};
     if (state.name !== name) res.name = state.name;
     if (newStyle !== JSON.stringify(style)) res.node_title_styles = newStyle;
     if (newIconId !== icon_id) res.icon_id = newIconId;
@@ -52,8 +52,15 @@ type UseSaveProps = {
   node: NodeCached;
   newNode: boolean;
   state: TNodeMetaState;
+  previous_sibling_node_id: number;
 };
-const useSave = ({ node, newNode, nodeId, state }: UseSaveProps) => {
+const useSave = ({
+  node,
+  newNode,
+  nodeId,
+  state,
+  previous_sibling_node_id,
+}: UseSaveProps) => {
   const history = useHistory();
 
   const onSave = () => {
@@ -66,14 +73,14 @@ const useSave = ({ node, newNode, nodeId, state }: UseSaveProps) => {
       apolloCache.setNode(res.id, res);
       const fatherNode = apolloCache.getNode(res.fatherId);
       const position =
-        res.previous_sibling_node_id === -1
+        previous_sibling_node_id === -1
           ? -1
-          : fatherNode.child_nodes.indexOf(res.previous_sibling_node_id) + 1;
-      position === -1
-        ? fatherNode.child_nodes.push(res.node_id)
-        : fatherNode.child_nodes.splice(position, 0, res.node_id);
-      delete res.previous_sibling_node_id;
-      apolloCache.setNode(res.id, { ...res, position });
+          : fatherNode.child_nodes.indexOf(previous_sibling_node_id) + 1;
+      if (!fatherNode.child_nodes.includes(res.node_id))
+        position === -1
+          ? fatherNode.child_nodes.push(res.node_id)
+          : fatherNode.child_nodes.splice(position, 0, res.node_id);
+      apolloCache.setNode(res.id, res);
       apolloCache.setNode(fatherNode.id, fatherNode);
 
       documentActionCreators.createNewNode(res.id);

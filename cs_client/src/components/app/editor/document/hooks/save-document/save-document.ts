@@ -7,7 +7,10 @@ import { useIsNotProcessed } from '::hooks/misc/isnot-processed';
 import { AlertType } from '::types/react';
 import { saveNodesMeta } from '::app/editor/document/hooks/save-document/helpers/save-nodes-meta';
 import { saveNewNodes } from '::app/editor/document/hooks/save-document/helpers/save-new-nodes';
-import { saveDeletedNodes } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
+import {
+  saveDeletedNodes,
+  SaveOperationState,
+} from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
 import { saveNodesContent } from '::app/editor/document/hooks/save-document/helpers/save-nodes-content';
 
 type SaveDocumentProps = {
@@ -28,10 +31,13 @@ const useSaveDocument = async ({
   const isNotProcessed = useIsNotProcessed([saveDocumentCommandID]);
   if (isNotProcessed && documentHasUnsavedChanges) {
     try {
-      await saveDeletedNodes({ mutate: deleteNodeMutation, nodes });
-      await saveNewNodes({ mutate: mutateCreate, nodes });
-      await saveNodesMeta({ mutate: mutateMeta, nodes });
-      await saveNodesContent({ mutate: mutateContent, nodes });
+      const state: SaveOperationState = {
+        newFatherIds: {},
+      };
+      await saveDeletedNodes({ mutate: deleteNodeMutation, nodes, state });
+      await saveNewNodes({ mutate: mutateCreate, nodes, state });
+      await saveNodesMeta({ mutate: mutateMeta, nodes, state });
+      await saveNodesContent({ mutate: mutateContent, nodes, state });
       appActionCreators.reloadDocument();
       appActionCreators.setSnackbarMessage(SnackbarMessages.documentSaved);
     } catch (e) {

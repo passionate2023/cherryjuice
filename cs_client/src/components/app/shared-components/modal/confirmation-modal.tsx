@@ -1,4 +1,4 @@
-import { modAlertModal, modDeleteDocument } from '::sass-modules/index';
+import { modAlertModal, modDeleteNode } from '::sass-modules/index';
 import { EventHandler, default as React } from 'react';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
@@ -47,7 +47,7 @@ const ConfirmationModal = ({
     className={modAlertModal.alertModal}
   >
     <ModalBody {...alert} />
-    <div className={modDeleteDocument.deleteDocument__buttons}>
+    <div className={modDeleteNode.deleteDocument__buttons}>
       {buttons.map(({ onClick, label, disabled }, i) => (
         <ButtonSquare
           key={i}

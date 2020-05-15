@@ -117,6 +117,7 @@ input CreateNodeIt {
     child_nodes: [Int!]!
     createdAt: Float!
     documentId: String!
+    fatherId: String!
     father_id: Float!
     icon_id: String!
     name: String!

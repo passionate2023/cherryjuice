@@ -15,7 +15,7 @@ export type Props = {
 
 const DeleteNode: React.FC<Props> = ({ onClose, show, nodeId }) => {
   const node: NodeCached = useMemo(() => apolloCache.getNode(nodeId), [nodeId]);
-  const deleteDocument = useDeleteNode(nodeId, node);
+  const deleteNode = useDeleteNode(nodeId, node);
 
   const buttons: TDialogFooterButton[] = [
     {
@@ -25,7 +25,7 @@ const DeleteNode: React.FC<Props> = ({ onClose, show, nodeId }) => {
     },
     {
       label: 'Delete',
-      onClick: deleteDocument,
+      onClick: deleteNode,
       disabled: false,
     },
   ];

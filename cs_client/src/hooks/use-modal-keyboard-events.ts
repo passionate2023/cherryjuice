@@ -43,13 +43,19 @@ const createFocusTrapper = ({
 };
 
 const setupKeyboardShortcuts = ({
-  onCloseDialog,
+  onCloseModal,
+  onConfirmModal,
   selector,
   focusableElementsSelector,
 }) => {
   const handleEscape = ({ e }) => {
     if (e.key === 'Escape') {
-      onCloseDialog();
+      onCloseModal();
+    }
+  };
+  const handleEnterKey = ({ e }) => {
+    if (e.key === 'Enter') {
+      onConfirmModal();
     }
   };
   const trapFocus = createFocusTrapper({
@@ -58,6 +64,7 @@ const setupKeyboardShortcuts = ({
   });
   const eventHandler = e => {
     handleEscape({ e });
+    handleEnterKey({ e });
     trapFocus({ e });
   };
   document.addEventListener('keydown', eventHandler);
@@ -67,6 +74,7 @@ const setupKeyboardShortcuts = ({
 const useModalKeyboardEvents = ({
   modalSelector,
   onCloseModal,
+  onConfirmModal = () => undefined,
   focusableElementsSelector = [],
   enabled = true,
 }) => {
@@ -75,9 +83,10 @@ const useModalKeyboardEvents = ({
     if (enabled) {
       cleanEventHandlers.push(
         setupKeyboardShortcuts({
-          onCloseDialog: onCloseModal,
+          onCloseModal,
           selector: modalSelector,
           focusableElementsSelector,
+          onConfirmModal,
         }),
       );
     }

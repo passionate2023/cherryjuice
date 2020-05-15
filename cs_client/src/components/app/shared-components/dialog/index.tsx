@@ -18,6 +18,7 @@ type TDialogProps = {
   menuButton?: JSX.Element;
   dialogTitle?: string;
   onClose: EventHandler<undefined>;
+  onConfirm?: EventHandler<undefined>;
   isOnMobile: boolean;
   small?: boolean;
 } & TDialogFooterProps &
@@ -30,6 +31,7 @@ const Dialog: React.FC<TDialogProps & {
   menuButton,
   dialogTitle,
   onClose,
+  onConfirm,
   dialogFooterLeftButtons,
   dialogFooterRightButtons,
   style,
@@ -40,6 +42,7 @@ const Dialog: React.FC<TDialogProps & {
   useModalKeyboardEvents({
     onCloseModal: onClose,
     modalSelector: `.${modDialog.dialog}`,
+    onConfirmModal:onConfirm
   });
 
   return (

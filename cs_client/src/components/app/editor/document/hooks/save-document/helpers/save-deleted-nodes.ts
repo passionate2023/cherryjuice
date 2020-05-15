@@ -22,10 +22,15 @@ const mutateDeleteNode = async ({ nodeId, mutate }: { nodeId; mutate }) =>
       },
     }).catch(rej);
   });
-
+type SaveOperationState = {
+  newFatherIds: {
+    [node_id: string]: string;
+  };
+};
 type SaveOperationProps = {
   mutate: Function;
   nodes: TEditedNodes;
+  state: SaveOperationState;
 };
 const saveDeletedNodes = async ({ mutate, nodes }: SaveOperationProps) => {
   const deletedNodes = Object.entries(nodes)
@@ -41,4 +46,4 @@ const saveDeletedNodes = async ({ mutate, nodes }: SaveOperationProps) => {
 };
 
 export { saveDeletedNodes };
-export { SaveOperationProps };
+export { SaveOperationProps, SaveOperationState };

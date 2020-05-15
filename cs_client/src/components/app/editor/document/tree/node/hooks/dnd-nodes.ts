@@ -7,14 +7,8 @@ import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
 import { modTree } from '::sass-modules/index';
 
-const updateCache = ({
-  cache,
-  fatherOfDroppedNode,
-  targetNode,
-  droppedNode,
-}) => {
+const updateCache = ({ fatherOfDroppedNode, targetNode, droppedNode }) => {
   updatedCachedMeta({
-    cache,
     nodeId: droppedNode.id,
     meta: {
       position: targetNode.child_nodes.length - 1,
@@ -22,14 +16,12 @@ const updateCache = ({
     },
   });
   updatedCachedMeta({
-    cache,
     nodeId: fatherOfDroppedNode.id,
     meta: {
       child_nodes: fatherOfDroppedNode.child_nodes,
     },
   });
   updatedCachedMeta({
-    cache,
     nodeId: targetNode.id,
     meta: {
       child_nodes: targetNode.child_nodes,
@@ -47,9 +39,10 @@ const switchParent = ({
     Number(droppedNode.node_id),
   );
   fatherOfDroppedNode.child_nodes.splice(ogIndexOfDroppedNode, 1);
-  position === -1
-    ? targetNode.child_nodes.push(Number(droppedNode.node_id))
-    : targetNode.child_nodes.splice(position, 0, Number(droppedNode.node_id));
+  if (!targetNode.child_nodes.includes(Number(droppedNode.node_id)))
+    position === -1
+      ? targetNode.child_nodes.push(Number(droppedNode.node_id))
+      : targetNode.child_nodes.splice(position, 0, Number(droppedNode.node_id));
   droppedNode.father_id = targetNode.node_id;
   droppedNode.fatherId = targetNode.id;
   droppedNode.position = targetNode.child_nodes.length - 1;
@@ -114,7 +107,6 @@ const useDnDNodes = ({
   node_id: target_node_id,
   componentRef,
   nodes,
-  cache,
   draggable = true,
   afterDrop,
 }: Props) => {
@@ -182,7 +174,6 @@ const useDnDNodes = ({
               targetNode,
               fatherOfDroppedNode,
               droppedNode,
-              cache,
             });
             notifyLocalStore({
               targetNode,
