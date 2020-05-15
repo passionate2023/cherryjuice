@@ -167,10 +167,10 @@ const createActionCreators = () => {
     },
     selectFile: (fileId: string) =>
       state.dispatch({ type: actions.SELECT_FILE, value: fileId }),
-    selectNode: (nodeMeta: TNodeMeta) =>
+    selectNode: (node: TNodeMeta) =>
       state.dispatch({
         type: actions.SELECT_NODE,
-        value: nodeMeta,
+        value: node,
       }),
     processLinks(value: number) {
       state.dispatch({
@@ -288,10 +288,14 @@ const reducer = (
       return {
         ...state,
         selectedNode: action.value,
-        recentNodes: [
-          ...state.recentNodes.filter(node => +node.id !== +action.value.id),
-          action.value,
-        ],
+        recentNodes: action.value
+          ? [
+              ...state.recentNodes.filter(
+                node => +node.id !== +action.value.id,
+              ),
+              action.value,
+            ]
+          : state.recentNodes,
       };
     case actions.SELECT_FILE:
       return {

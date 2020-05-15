@@ -17,14 +17,14 @@ const constructTree = ({
     nodes = new Map(nodesArray.map(node => [node.node_id, node]));
     Object.entries(localChanges).forEach(
       ([nodeId, { edited, new: isNew, deleted }]) => {
+        const node = apolloCache.getNode(nodeId) as NodeCached & {
+          previous_sibling_node_id;
+        };
+        if (!node) return;
         if (edited?.meta) {
-          const node = apolloCache.getNode(nodeId);
           nodes.set(node.node_id, node);
         }
         if (isNew || deleted) {
-          const node = apolloCache.getNode(nodeId) as NodeCached & {
-            previous_sibling_node_id;
-          };
           const fatherNode = nodes.get(node.father_id);
           if (isNew) {
             if (!fatherNode.child_nodes.includes(node.node_id)) {

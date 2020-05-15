@@ -26,6 +26,11 @@ const useGetDocumentMeta = ({
   const { data, error, loading } = useReloadQuery(
     {
       reloadRequestIDs: [reloadRequestID],
+      reset: true,
+      beforeReset: () => {
+        history.push(`/document/${file_id}`);
+        clearLocalChanges(localChanges);
+      },
     },
     {
       query: QUERY_NODE_META.query,
@@ -42,27 +47,18 @@ const useGetDocumentMeta = ({
   );
 
   const nodes = useMemo(() => constructTree({ data, localChanges }), [
-    loading,
-    file_id,
+    data,
     localChanges,
   ]);
 
   useEffect(() => {
-    if (nodes) {
-      setHighestNodeId(nodes);
-    }
+    if (nodes) setHighestNodeId(nodes);
   }, [nodes]);
-
-  useEffect(() => {
-    if (data) {
-      clearLocalChanges(localChanges);
-    }
-  }, [reloadRequestID, data]);
 
   useEffect(() => {
     handleErrors({ history, file_id, selectedFile, error });
   }, [error, file_id]);
-  return { nodes, loading };
+  return { nodes: !loading && nodes, loading };
 };
 
 export { useGetDocumentMeta };

@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Fragment, useEffect, useReducer } from 'react';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Tree } from './tree';
-import { Route, useRouteMatch } from 'react-router-dom';
+import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { RichText } from '::app/editor/document/rich-text';
-import { TState } from '::app/reducer';
+import { appActionCreators, TState } from '::app/reducer';
 import { useSaveDocument } from '::app/editor/document/hooks/save-document/save-document';
 import { useGetDocumentMeta } from '::app/editor/document/hooks/get-document-meta/get-document-meta';
 import { documentReducer } from '::app/editor/document/reducer/reducer';
@@ -37,8 +37,8 @@ const Document: React.FC<Props> = ({ state }) => {
   useEffect(() => {
     documentActionCreators.setDispatch(dispatch);
   }, []);
-  const match = useRouteMatch();
-  // @ts-ignore
+  const history = useHistory();
+  const match = useRouteMatch<{ file_id: string }>();
   const { file_id } = match.params;
 
   const { nodes, loading: fetchingDocumentMeta } = useGetDocumentMeta({
@@ -55,6 +55,10 @@ const Document: React.FC<Props> = ({ state }) => {
   });
 
   useTrackDocumentChanges({ documentState });
+  useEffect(() => {
+    if (history.location.pathname.endsWith(file_id))
+      appActionCreators.selectNode(undefined);
+  }, [reloadDocument]);
   return (
     <DocumentContext.Provider value={documentState}>
       <LinearProgress loading={fetchingDocumentMeta} />

@@ -77,7 +77,7 @@ const useSave = (cache, nodeId: string, meta: NodeCached, newNode: boolean) => {
         hasCustomIconInput,
       },
     });
-    if (Object.keys(res)) updatedCachedMeta({ cache, nodeId, meta: res });
+    if (Object.keys(res)) updatedCachedMeta({  nodeId, meta: res });
     newNode
       ? documentActionCreators.createNewNode(nodeId)
       : documentActionCreators.setNodeMetaHasChanged(nodeId, Object.keys(res));

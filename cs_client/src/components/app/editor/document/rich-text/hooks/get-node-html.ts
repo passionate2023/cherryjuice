@@ -4,7 +4,7 @@ import { useQueryTimeout } from '::hooks/use-query-timeout';
 import { ApolloError } from 'apollo-client';
 import { useContext } from 'react';
 import { DocumentContext } from '::app/editor/document/reducer/context';
-import { RootContext } from '::root/root-context';
+import { apolloCache } from '::graphql/cache-helpers';
 
 const useGetNodeHtml = ({
   node_id,
@@ -32,16 +32,13 @@ const useGetNodeHtml = ({
   );
   const html = { node_id, htmlRaw: '' };
   const { nodes } = useContext(DocumentContext);
-  const {
-    apolloClient: { cache },
-  } = useContext(RootContext);
   const isNewNode = nodeId && nodes[nodeId]?.new;
   if (isNewNode) {
-    // @ts-ignore
-    const node = cache.data.get('Node:' + nodeId);
-    data = {
-      document: [{ node: [{ html: node.html, node_id: node.node_id }] }],
-    };
+    const node = apolloCache.getNode(nodeId);
+    if (node)
+      data = {
+        document: [{ node: [{ html: node.html, node_id: node.node_id }] }],
+      };
   }
   useQueryTimeout(
     {

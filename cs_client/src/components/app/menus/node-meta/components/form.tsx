@@ -19,7 +19,12 @@ type Props = {
 };
 
 const Form: React.FC<Props> = ({
-  node: { node_title_styles, icon_id, read_only, name },
+  node: { node_title_styles, icon_id, read_only, name } = {
+    node_title_styles: '{"color":"#ffffff","fontWeight":"bold"}',
+    icon_id: '0',
+    read_only: 0,
+    name: '',
+  },
   refs: {
     nameInput,
     isBoldInput,

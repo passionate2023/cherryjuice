@@ -7,6 +7,7 @@ const apolloCache = (() => {
   };
   return {
     __setCache: cache => (state.cache = cache),
+    reset: async () => await state.cache.reset(),
     getNode: (nodeId: string): NodeCached => {
       const node = state.cache?.data.get('Node:' + nodeId);
       if (node?.child_nodes.json) node.child_nodes = node.child_nodes.json;
