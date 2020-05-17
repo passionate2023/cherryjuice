@@ -5,7 +5,7 @@ import { AlertType } from '::types/react';
 
 const useQueryTimeout = (
   { queryData, queryError, queryVariables },
-  { timeout = 15000, resourceName = '' },
+  { timeout = 15000, resourceName = '', showErrorAlert = false },
 ) => {
   let timeoutHasElapsed = false;
   const timer = useTimeout({
@@ -21,12 +21,12 @@ const useQueryTimeout = (
     appActionCreators.setAlert({
       title: `Fetching ${resourceName} is taking longer then expected`,
       description: 'Please refresh the page',
-      type: AlertType.Information,
+      type: AlertType.Warning,
     });
     timeoutHasElapsed = true;
   }
   useEffect(() => {
-    if (queryError)
+    if (queryError && showErrorAlert)
       appActionCreators.setAlert({
         title: `Could not fetch ${resourceName}`,
         description: 'Please refresh the page',

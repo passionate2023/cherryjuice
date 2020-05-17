@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
-import { execK } from '::helpers/execK';
+import { execK } from '::helpers/editing/execK';
 import { ColorInput } from '::app/editor/tool-bar/groups/formatting-buttons/color-input';
 import { commands } from '::helpers/hotkeys/commands';
 import { modToolbar } from '::sass-modules/index';
@@ -26,7 +26,7 @@ const Buttons = () => (
         }
         className={modToolbar.toolBar__iconStrictWidth}
       >
-        <Icon name={icon} small={true} />
+        <Icon name={icon} />
       </ToolbarButton>
     ))}
     {commands.colors.map(({ icon, label, cssProperty, inputId }) => (
@@ -50,7 +50,7 @@ const Buttons = () => (
         }
         className={modToolbar.toolBar__iconStrictWidth}
       >
-        <Icon name={icon} small={true} />
+        <Icon name={icon} />
       </ToolbarButton>
     ))}
   </>
@@ -104,7 +104,7 @@ const FormattingButtonsWithTransition: React.FC<Props & { show: boolean }> = ({
   );
 };
 const formattingBarUnmountAnimationDelay = (): Promise<void> =>
-  new Promise(resolve => setTimeout(resolve, 100))
+  new Promise(resolve => setTimeout(resolve, 100));
 
 export {
   FormattingButtons,

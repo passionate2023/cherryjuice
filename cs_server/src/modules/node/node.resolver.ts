@@ -1,7 +1,8 @@
-import { Args, Int, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { NodeService } from './node.service';
 import { Node } from './entities/node.entity';
 import { ImageService } from '../image/image.service';
+import { Image } from '../image/entities/image.entity';
 
 @Resolver(() => Node)
 export class NodeResolver {
@@ -14,23 +15,19 @@ export class NodeResolver {
   async html(@Parent() { node_id, documentId }): Promise<string> {
     return node_id === 0 ? '' : this.nodeService.getHtml(node_id, documentId);
   }
-  @ResolveField()
+  @ResolveField(() => [Image])
   async image(
     @Parent() { node_id, id: nodeId },
-    @Args('offset', { nullable: true, type: () => Int }) offset: number,
     @Args('thumbnail', { nullable: true }) thumbnail: boolean,
-  ): Promise<Promise<string>[] | string[]> {
+  ): Promise<Promise<Image>[] | Image[]> {
     return thumbnail
       ? this.imageService.getPNGThumbnailBase64({
           node_id,
-          offset,
           nodeId,
         })
       : this.imageService.getPNGFullBase64({
           node_id,
-          offset,
           nodeId,
         });
   }
 }
-

@@ -1,13 +1,17 @@
 import nodeMod from '::sass-modules/tree/node.scss';
 import modIcons from '::sass-modules/tree/node.scss';
-import { NodeMeta } from '::types/generated';
+import { NodeMeta } from '::types/graphql/adapters';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { getTreeStateFromLocalStorage } from '::helpers/misc';
-import { Icon, Icons } from '::shared-components/icon';
+import { Icon, ICON_SIZE, Icons } from '::shared-components/icon';
 import { nodeOverlay } from './helpers/node-overlay';
 import { scrollIntoToolbar } from '::helpers/ui';
+import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
+import { useContext } from 'react';
+import { RootContext } from '::root/root-context';
+import { useDnDNodes } from '::app/editor/document/tree/node/hooks/dnd-nodes';
 
 type Props = {
   node_id: number;
@@ -38,16 +42,23 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
     () => getTreeStateFromLocalStorage()[node_id],
   );
   const componentRef = useRef();
+  const listRef = useRef();
+  const titleRef = useRef();
   // callback hooks
+  const {
+    apolloClient: { cache },
+  } = useContext(RootContext);
   const selectNode = useCallback(
-    e => {
+    (e, path = nodePath) => {
       const eventIsTriggeredByCollapseButton = e.target.classList.contains(
         nodeMod.node__titleButton,
       );
       if (eventIsTriggeredByCollapseButton) return;
       nodeOverlay.updateWidth();
       nodeOverlay.updateLeft(componentRef);
-      history.push(nodePath);
+
+      updateCachedHtmlAndImages(cache);
+      history.push(path);
     },
     [nodePath],
   );
@@ -77,12 +88,31 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
   }, [showChildren]);
   // console.log('treeRef', nodeMod.node__titleButtonHidden,child_nodes);
   // @ts-ignore
+  const nodeDndProps = useDnDNodes({
+    cache,
+    componentRef: titleRef,
+    nodes,
+    node_id,
+    afterDrop: ({ e, node_id }) => {
+      selectNode(e, `/document/${file_id}/node/${node_id}`);
+      setShowChildren(true);
+    },
+  });
+  const listDndProps = useDnDNodes({
+    cache,
+    componentRef: listRef,
+    nodes,
+    node_id,
+    draggable: false,
+  });
   return (
     <>
       <div
         className={`${nodeMod.node}`}
         ref={componentRef}
         onClick={selectNode}
+        draggable={true}
+        onDragStart={nodeDndProps.onDragStart}
       >
         <div style={{ marginLeft: depth * 20 }} />
         {
@@ -92,6 +122,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
             }`}
             onClick={toggleChildren}
             name={showChildren ? Icons.material.remove : Icons.material.add}
+            size={ICON_SIZE._24}
           />
         }
         <Icon
@@ -104,20 +135,27 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
         />
         <div
           className={nodeMod.node__title}
-          // onClick={selectNode}
           style={{ ...(styles && JSON.parse(styles)) }}
+          ref={titleRef}
+          {...nodeDndProps}
         >
           {name}
         </div>
         {location.pathname === nodePath && (
-          <div
-            className={nodeMod.node__titleOverlay}
-            // style={{ width: treeRef?.current?.size?.width + 220 }}
-          />
+          <div className={nodeMod.node__titleOverlay} />
         )}
       </div>
       {showChildren && (
-        <ul className={nodeMod.node__list}>
+        <ul
+          className={nodeMod.node__list}
+          {...{
+            ...nodeDndProps,
+            onDrop: listDndProps.onDrop,
+            draggable: listDndProps.draggable,
+            onDragStart: listDndProps.onDragStart,
+          }}
+          ref={listRef}
+        >
           {child_nodes
             .map(node_id => nodes.get(node_id))
             .map(node => (

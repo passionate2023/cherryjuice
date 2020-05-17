@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Document } from '../../document/entities/document.entity';
+import { Image } from '../../image/entities/image.entity';
 
 @Unique(['node_id', 'documentId'])
 @Entity()
@@ -24,6 +25,18 @@ export class Node extends BaseEntity {
   @Field()
   @Column()
   documentId: string;
+
+  @ManyToOne(
+    () => Node,
+    node => node.children,
+    { nullable: true, onDelete: 'CASCADE' },
+  )
+  father: Node;
+  children: Node[];
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  fatherId: string;
 
   @Field()
   @PrimaryGeneratedColumn('uuid')
@@ -41,8 +54,6 @@ export class Node extends BaseEntity {
   @Field(() => [Int])
   child_nodes: number[];
 
-  @Column('int2') sequence: number;
-
   @Column('text')
   @Field()
   name: string;
@@ -55,39 +66,31 @@ export class Node extends BaseEntity {
   @Field(() => Float)
   updatedAt: Date;
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   node_title_styles: string;
 
-  @Column({ select: false }) ahtml: string;
+  @Column({ select: false, default: '[]' }) ahtml: string;
 
-  @Column('int2')
+  @Column('int2', { default: 0 })
   @Field(() => Int)
   is_empty: number;
 
-  @Column('int8')
+  @Column('int8', { default: 1 })
   @Field(() => Int)
   is_richtxt: number;
-
-  @Column('int2')
-  @Field(() => Int)
-  has_image: number;
-
-  @Column('int2')
-  @Field(() => Int)
-  has_codebox: number;
-
-  @Column('int2')
-  @Field(() => Int)
-  has_table: number;
 
   @Column()
   @Field()
   icon_id: string;
 
-  @Field(() => [String], { nullable: 'items' })
-  image: string[];
+  @Field(() => [Image], { nullable: 'items' })
+  image: Image[];
 
   @Field()
   html: string;
+
+  @Column('int2', { default: 0 })
+  @Field(() => Int)
+  read_only: number;
 }

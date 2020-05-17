@@ -12,7 +12,8 @@
   // children
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   // style
   background-color: $toolbar-bg-light;
   user-select: none;
@@ -20,7 +21,7 @@
 .tool-bar__group {
   display: flex;
   align-items: center;
-  overflow-x: auto;
+  //overflow-x: auto;
   height: $tool-bar-height;
   @include respond-to($md-up) {
     height: $tool-bar-height-md;

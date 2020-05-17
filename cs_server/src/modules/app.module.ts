@@ -22,6 +22,10 @@ import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
 import { APP_PIPE } from '@nestjs/core';
 
+const staticAssetsRootFolder =
+  process.env.NODE_ENV === 'production'
+    ? path.join(__dirname, '../../client')
+    : path.join(process.cwd(), '../cs_client/dist');
 @Module({
   imports: [
     NodeModule,
@@ -53,16 +57,17 @@ import { APP_PIPE } from '@nestjs/core';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
     if (process.env.NODE_ENV === 'production') {
+      consumer.apply(addSTSHeader, redirectToHTTPS).forRoutes('*');
       consumer
         .apply(sendCompressedJavascript)
         .exclude('/graphql')
-        .forRoutes({ path: '*.js', method: RequestMethod.GET });
-      consumer.apply(addSTSHeader, redirectToHTTPS).forRoutes('*');
+        .forRoutes(
+          ...['js', 'css', 'svg'].map(extension => ({
+            path: '*.' + extension,
+            method: RequestMethod.GET,
+          })),
+        );
     }
-    const staticAssetsRootFolder =
-      process.env.NODE_ENV === 'production'
-        ? path.join(__dirname, '../../client')
-        : path.join(process.cwd(), '../cs_client/dist');
     consumer
       .apply(express.static(staticAssetsRootFolder))
       .forRoutes({ path: '*', method: RequestMethod.GET });

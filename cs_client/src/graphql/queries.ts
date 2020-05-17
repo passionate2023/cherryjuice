@@ -1,27 +1,30 @@
 import gql from 'graphql-tag';
-import { NodeMeta, DocumentMeta, NodeImage, Node } from '::types/generated';
+import { DocumentMeta, Node } from '::types/generated';
 import {
   AuthUser,
   DOCUMENT_SUBSCRIPTIONS,
+  Image,
   Secrets,
 } from '::types/graphql/generated';
 import { FRAGMENT_USER } from '::graphql/fragments';
+import { NodeMeta } from '::types/graphql/adapters';
 
 const QUERY_NODE_META = {
   path: (data): NodeMeta[] | undefined => data?.document[0]?.node,
   query: gql`
     query node_meta($file_id: String!) {
       document(file_id: $file_id) {
+        id
         node {
+          id
+          documentId
           node_id
           father_id
+          fatherId
           name
           child_nodes
           is_empty
           is_richtxt
-          has_image
-          has_codebox
-          has_table
           createdAt
           updatedAt
           node_title_styles
@@ -34,18 +37,23 @@ const QUERY_NODE_META = {
 
 const QUERY_NODE_CONTENT = {
   png: {
-    path: (data): NodeImage | undefined => data?.document[0]?.node[0],
+    path: (data): { node_id: number; image: Image[]; id: string } | undefined =>
+      data?.document[0]?.node[0],
     query: gql`
       query node_content__png(
         $file_id: String!
         $node_id: Int!
-        $offset: Int
         $thumbnail: Boolean
       ) {
         document(file_id: $file_id) {
+          id
           node(node_id: $node_id) {
+            id
             node_id
-            image(offset: $offset, thumbnail: $thumbnail)
+            image(thumbnail: $thumbnail) {
+              base64
+              id
+            }
           }
         }
       }
@@ -56,7 +64,9 @@ const QUERY_NODE_CONTENT = {
     query: gql`
       query node_content__html($file_id: String!, $node_id: Int!) {
         document(file_id: $file_id) {
+          id
           node(node_id: $node_id) {
+            id
             html
             node_id
           }

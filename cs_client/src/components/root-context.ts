@@ -1,9 +1,6 @@
 import { createContext } from 'react';
-import { TRootState } from '::root/root.reducer';
+import { rootInitialState, TRootState } from '::root/root.reducer';
 
-const RootContext = createContext<TRootState>({
-  session: undefined,
-  secrets: undefined,
-});
+const RootContext = createContext<TRootState>(rootInitialState);
 
 export { RootContext };

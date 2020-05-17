@@ -1,9 +1,14 @@
 import { AuthUser, Secrets } from '::types/graphql/generated';
 import { localSessionManager } from '::auth/helpers/auth-state';
-
-const initialState: { session: AuthUser; secrets: Secrets } = {
+import { ApolloClient } from 'apollo-client';
+const initialState: {
+  session: AuthUser;
+  secrets: Secrets;
+  apolloClient: ApolloClient<any>;
+} = {
   session: localSessionManager.get(),
   secrets: undefined,
+  apolloClient: undefined,
 };
 
 type TRootState = typeof initialState & { session: AuthUser };
@@ -11,6 +16,7 @@ type TRootState = typeof initialState & { session: AuthUser };
 enum actions {
   SET_SESSION,
   SET_SECRETS,
+  SET_APOLLO_CLIENT,
 }
 
 const createActionCreators = () => {
@@ -24,6 +30,9 @@ const createActionCreators = () => {
       state.dispatch({ type: actions.SET_SESSION, value: session }),
     setSecrets: (secrets: Secrets) =>
       state.dispatch({ type: actions.SET_SECRETS, value: secrets }),
+    setApolloClient: (client: ApolloClient<any>) => {
+      state.dispatch({ type: actions.SET_APOLLO_CLIENT, value: client });
+    },
   };
 };
 
@@ -39,6 +48,8 @@ const reducer = (
       return { ...state, session: action.value };
     case actions.SET_SECRETS:
       return { ...state, secrets: action.value };
+    case actions.SET_APOLLO_CLIENT:
+      return { ...state, apolloClient: action.value };
     default:
       throw new Error('action not supported');
   }

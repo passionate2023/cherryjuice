@@ -24,19 +24,57 @@ const DOCUMENT_MUTATION = {
       }
     }
   `,
-  html: gql`
-    mutation ct_node_html(
+  ahtml: gql`
+    mutation saveAhtml(
       $file_id: String!
-      $node_id: Int!
-      $abstract_html: String!
+      $node_id: String!
+      $ahtml: String!
+      $deletedImages: [String]!
     ) {
-      ct_node_content(
-        file_id: $file_id
-        node_id: $node_id
-        abstract_html: $abstract_html
-      )
+      document(file_id: $file_id) {
+        node(node_id: $node_id) {
+          saveAHtml(ahtml: $ahtml, deletedImages: $deletedImages)
+        }
+      }
     }
   `,
+  meta: gql`
+    mutation meta($file_id: String!, $node_id: String!, $meta: NodeMetaIt!) {
+      document(file_id: $file_id) {
+        node(node_id: $node_id) {
+          meta(meta: $meta)
+        }
+      }
+    }
+  `,
+  createNode: {
+    path: (data): string => data?.document?.node?.createNode,
+    query: gql`
+      mutation createNode(
+        $file_id: String!
+        $node_id: String!
+        $meta: CreateNodeIt!
+      ) {
+        document(file_id: $file_id) {
+          node(node_id: $node_id) {
+            createNode(meta: $meta)
+          }
+        }
+      }
+    `,
+  },
+  deleteNode: {
+    path: (data): string => data?.document?.node?.deleteNode,
+    query: gql`
+      mutation deleteNode($file_id: String!, $node_id: String!) {
+        document(file_id: $file_id) {
+          node(node_id: $node_id) {
+            deleteNode
+          }
+        }
+      }
+    `,
+  },
 };
 
 const USER_MUTATION = {

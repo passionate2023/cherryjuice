@@ -1,4 +1,4 @@
-import { ExecKCommand } from '::helpers/execK';
+import { ExecKCommand } from '::helpers/editing/execK';
 import { Icons } from '::shared-components/icon';
 
 const colors = [

@@ -1,19 +1,26 @@
 import { TAlert } from '::types/react';
-
-const defaultSelectNode = {
-  id: -1,
-  name: '',
-  is_richtxt: '',
-  createdAt: '',
-  updatedAt: '',
-  style: {},
+import { NodeMeta } from '::types/graphql/adapters';
+enum NodeMetaPopup {
+  EDIT = 1,
+  CREATE_SIBLING,
+  CREATE_CHILD,
+}
+export type TNodeMeta = {
+  name: string;
+  style: { color: string; fontWeight: 'normal' | 'bold' };
+  icon_id: string;
+  nodeId: string;
+  id: number;
+  is_richtxt: string;
+  createdAt: string;
+  updatedAt: string;
 };
 const initialState = {
   showTree: [JSON.parse(localStorage.getItem('showTree'))].map(value =>
     value === null ? true : value === true,
   )[0],
   treeSize: JSON.parse(localStorage.getItem('treeSize')) || 250,
-  selectedNode: defaultSelectNode,
+  selectedNode: undefined,
   selectedFile:
     [localStorage.getItem('selectedFile')].filter(
       value => Boolean(value) && value !== 'null',
@@ -21,7 +28,7 @@ const initialState = {
   showFileSelect:
     !localStorage.getItem('selectedFile') && location.pathname === '/',
   recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}
-  saveDocument: 0,
+  saveDocument: '',
   reloadDocument: 0,
   reloadFiles: 0,
   alert: undefined,
@@ -34,21 +41,25 @@ const initialState = {
   processLinks: undefined,
   showImportDocuments: false,
   showUserPopup: false,
+  showNodeMeta: undefined,
+  highest_node_id: -1,
+  showDeleteDocumentModal: false,
+  rootNode: undefined,
+  showReloadConfirmationModal: false,
+  documentHasUnsavedChanges: false,
+  snackbarMessage: undefined,
 };
-export type TRecentNode = {
-  id: number;
-  name: string;
-  style?: Record<string, string | number>;
-  is_richtxt: string;
-  createdAt: string;
-  updatedAt: string;
-};
+
 export type TState = typeof initialState & {
-  selectedNode: TRecentNode;
-  recentNodes: TRecentNode[];
+  selectedNode: TNodeMeta;
+  rootNode: NodeMeta;
+  recentNodes: TNodeMeta[];
   alert: TAlert;
+  showNodeMeta: NodeMetaPopup;
 };
 enum actions {
+  setSnackbarMessage,
+  hideReloadConfirmationModal,
   TOGGLE_TREE,
   TOGGLE_TREE_ON,
   TOGGLE_TREE_OFF,
@@ -63,13 +74,21 @@ enum actions {
   SELECT_FILE,
   SAVE_DOCUMENT,
   RELOAD_DOCUMENT,
-  RELOAD_FILES,
+  RELOAD_DOCUMENT_LIST,
   SET_ALERT,
   SET_IS_ON_MOBILE,
   PROCESS_LINKS,
   HIDE_POPUPS,
   TOGGLE_SHOW_IMPORT_FILES,
   TOGGLE_USER_POPUP,
+  SHOW_NODE_META,
+  HIDE_NODE_META,
+  SET_HIGHEST_NODE_ID,
+  TOGGLE_DELETE_DOCUMENT,
+  SET_ROOT_NODE,
+  showReloadConfirmationModal,
+  documentHasUnsavedChanges,
+  removeNodeFromRecentNodes,
 }
 const createActionCreators = () => {
   const state = {
@@ -105,9 +124,9 @@ const createActionCreators = () => {
     clearAlert: (): void => {
       state.dispatch({ type: actions.SET_ALERT, value: undefined });
     },
-    setReloadFiles: (): void => {
+    reloadDocumentList: (): void => {
       state.dispatch({
-        type: actions.RELOAD_FILES,
+        type: actions.RELOAD_DOCUMENT_LIST,
         value: new Date().getTime(),
       });
     },
@@ -135,10 +154,10 @@ const createActionCreators = () => {
     hidePopups: () => {
       state.dispatch({ type: actions.HIDE_POPUPS });
     },
-    saveDocument: e => {
+    saveDocument: () => {
       state.dispatch({
         type: actions.SAVE_DOCUMENT,
-        value: e.shiftKey ? new Date().getTime() : new Date().getTime() + '_', // don't send to the server
+        value: new Date().getTime(),
       });
     },
     reloadDocument: () => {
@@ -149,18 +168,88 @@ const createActionCreators = () => {
     },
     selectFile: (fileId: string) =>
       state.dispatch({ type: actions.SELECT_FILE, value: fileId }),
-    selectNode: (
-      { node_id, name, style },
-      { is_richtxt, createdAt, updatedAt },
-    ) =>
+    selectNode: (node: TNodeMeta) =>
       state.dispatch({
         type: actions.SELECT_NODE,
-        value: { node_id, name, style, is_richtxt, createdAt, updatedAt },
+        value: node,
       }),
     processLinks(value: number) {
       state.dispatch({
         type: actions.PROCESS_LINKS,
         value,
+      });
+    },
+    showNodeMetaEdit() {
+      state.dispatch({
+        type: actions.SHOW_NODE_META,
+        value: NodeMetaPopup.EDIT,
+      });
+    },
+    showNodeMetaCreateChild() {
+      state.dispatch({
+        type: actions.SHOW_NODE_META,
+        value: NodeMetaPopup.CREATE_CHILD,
+      });
+    },
+    showNodeMetaCreateSibling() {
+      state.dispatch({
+        type: actions.SHOW_NODE_META,
+        value: NodeMetaPopup.CREATE_SIBLING,
+      });
+    },
+    hideNodeMeta() {
+      state.dispatch({
+        type: actions.HIDE_NODE_META,
+      });
+    },
+    setHighestNodeId: (highest_node_id: number) =>
+      state.dispatch({
+        type: actions.SET_HIGHEST_NODE_ID,
+        value: { highest_node_id },
+      }),
+    toggleDeleteDocumentModal: () =>
+      state.dispatch({
+        type: actions.TOGGLE_DELETE_DOCUMENT,
+      }),
+    setRootNode: (node: NodeMeta) =>
+      state.dispatch({
+        type: actions.SET_ROOT_NODE,
+        value: { node },
+      }),
+    showReloadConfirmationModal: () => {
+      state.dispatch({
+        type: actions.showReloadConfirmationModal,
+        value: true,
+      });
+    },
+    hideReloadConfirmationModal: () => {
+      state.dispatch({
+        type: actions.showReloadConfirmationModal,
+        value: false,
+      });
+    },
+    documentHasUnsavedChanges: (documentHasUnsavedChanges: boolean) => {
+      state.dispatch({
+        type: actions.documentHasUnsavedChanges,
+        value: documentHasUnsavedChanges,
+      });
+    },
+    setSnackbarMessage: (snackbarMessage: string) => {
+      state.dispatch({
+        type: actions.setSnackbarMessage,
+        value: snackbarMessage,
+      });
+    },
+    clearSnackbarMessage: () => {
+      state.dispatch({
+        type: actions.setSnackbarMessage,
+        value: undefined,
+      });
+    },
+    removeNodeFromRecentNodes: (nodeId: string) => {
+      state.dispatch({
+        type: actions.removeNodeFromRecentNodes,
+        value: nodeId,
       });
     },
   };
@@ -181,6 +270,11 @@ const reducer = (
       return { ...state, showTree: false };
     case actions.TOGGLE_USER_POPUP:
       return { ...state, showUserPopup: !state.showUserPopup };
+    case actions.TOGGLE_DELETE_DOCUMENT:
+      return {
+        ...state,
+        showDeleteDocumentModal: !state.showDeleteDocumentModal,
+      };
     case actions.TOGGLE_SHOW_IMPORT_FILES:
       return {
         ...state,
@@ -200,34 +294,22 @@ const reducer = (
     case actions.SELECT_NODE:
       return {
         ...state,
-        selectedNode: {
-          id: +action.value.node_id,
-          name: `${action.value.name}`,
-          is_richtxt: `${action.value.is_richtxt}`,
-          createdAt: `${action.value.createdAt}`,
-          updatedAt: `${action.value.updatedAt}`,
-          style: JSON.parse(action.value.style),
-        },
-        recentNodes: [
-          ...state.recentNodes.filter(
-            node => +node.id !== +action.value.node_id,
-          ),
-          {
-            id: action.value.node_id,
-            name: action.value.name,
-            style: action.value.style,
-            is_richtxt: `${action.value.is_richtxt}`,
-            createdAt: `${action.value.createdAt}`,
-            updatedAt: `${action.value.updatedAt}`,
-          },
-        ],
+        selectedNode: action.value,
+        recentNodes: action.value
+          ? [
+              ...state.recentNodes.filter(
+                node => +node.id !== +action.value.id,
+              ),
+              action.value,
+            ]
+          : state.recentNodes,
       };
     case actions.SELECT_FILE:
       return {
         ...state,
         selectedFile: action.value,
         showTree: true,
-        selectedNode: defaultSelectNode,
+        selectedNode: undefined,
       };
     case actions.SAVE_DOCUMENT:
       return {
@@ -238,8 +320,9 @@ const reducer = (
       return {
         ...state,
         reloadDocument: action.value,
+        showReloadConfirmationModal: false,
       };
-    case actions.RELOAD_FILES:
+    case actions.RELOAD_DOCUMENT_LIST:
       return {
         ...state,
         reloadFiles: action.value,
@@ -274,6 +357,36 @@ const reducer = (
       return { ...state, isOnMobile: action.value };
     case actions.PROCESS_LINKS:
       return { ...state, processLinks: action.value };
+    case actions.SHOW_NODE_META:
+      return { ...state, showNodeMeta: action.value };
+    case actions.HIDE_NODE_META:
+      return { ...state, showNodeMeta: undefined };
+    case actions.SET_HIGHEST_NODE_ID:
+      return {
+        ...state,
+        highest_node_id: action.value.highest_node_id,
+      };
+    case actions.SET_ROOT_NODE:
+      return { ...state, rootNode: action.value.node };
+    case actions.showReloadConfirmationModal:
+      return { ...state, showReloadConfirmationModal: action.value };
+    case actions.documentHasUnsavedChanges:
+      return {
+        ...state,
+        documentHasUnsavedChanges: action.value,
+      };
+    case actions.setSnackbarMessage:
+      return {
+        ...state,
+        snackbarMessage: action.value,
+      };
+    case actions.removeNodeFromRecentNodes:
+      return {
+        ...state,
+        recentNodes: state.recentNodes.filter(
+          ({ nodeId }) => nodeId !== action.value,
+        ),
+      };
     default:
       throw new Error('action not supported');
   }
@@ -285,3 +398,5 @@ export {
   actions as appActions,
   appActionCreators,
 };
+
+export { NodeMetaPopup };

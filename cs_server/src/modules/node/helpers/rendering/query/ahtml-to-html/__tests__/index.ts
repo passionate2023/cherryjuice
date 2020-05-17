@@ -3,12 +3,12 @@ import { ctbToAHtml } from '../../ctb-to-ahtml';
 import { renderingIssues } from '../../ctb-to-ahtml/__tests__/__data__';
 
 const renderingTestTemplate = async ({ txt, otherTables }) => {
-  const res = aHtmlToHtml({
-    richText: await ctbToAHtml({
+  const res = aHtmlToHtml(
+    await ctbToAHtml({
       nodeTableXml: txt,
       otherTables,
     }),
-  });
+  );
   expect(res).toMatchSnapshot();
 };
 

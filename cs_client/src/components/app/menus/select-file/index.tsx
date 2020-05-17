@@ -18,7 +18,7 @@ const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
   const buttonsLeft = [
     {
       label: 'reload',
-      onClick: appActionCreators.setReloadFiles,
+      onClick: appActionCreators.reloadDocumentList,
       disabled: false,
     },
     {
@@ -42,10 +42,10 @@ const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
   return { buttonsLeft, buttonsRight };
 };
 
-const useData = ({ reloadFiles }) => {
-  const { data, loading, error, manualFetch } = useReloadQuery(
+const useData = ({ reloadFiles }: { reloadFiles: number }) => {
+  const { data, loading, error } = useReloadQuery(
     {
-      reloadRequestID: reloadFiles,
+      reloadRequestIDs: [reloadFiles],
     },
     {
       query: QUERY_DOCUMENTS.documentMeta.query,
@@ -60,7 +60,7 @@ const useData = ({ reloadFiles }) => {
     },
     { resourceName: 'files' },
   );
-  return { data, loading, manualFetch };
+  return { data, loading };
 };
 
 const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
@@ -78,12 +78,12 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
     open,
   });
 
-  const { loading, data, manualFetch } = useData({ reloadFiles });
+  const { loading, data } = useData({ reloadFiles });
   const documentsMeta = QUERY_DOCUMENTS.documentMeta.path(data);
   const { deleteDocument } = useDeleteFile({
     IDs: selectedIDs,
     onCompleted: () => {
-      manualFetch();
+      appActionCreators.reloadDocumentList();
       if (selectedIDs.includes(selectedFile)) {
         history.push('/');
         appActionCreators.selectFile('');
@@ -101,7 +101,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
           holdingRef.current = false;
         }}
       >
-        <Icon name={Icons.material.cancel} small={true} />
+        <Icon name={Icons.material.cancel} />
       </CircleButton>
     ),
     documentsMeta.length && holdingRef.current && (
@@ -111,7 +111,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
         className={modDialog.dialog__header__fileButton}
         onClick={deleteDocument}
       >
-        <Icon name={Icons.material['delete']} small={true} />
+        <Icon name={Icons.material['delete']} />
       </CircleButton>
     ),
   ].filter(Boolean);

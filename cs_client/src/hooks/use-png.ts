@@ -1,18 +1,24 @@
 import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import { QUERY_NODE_CONTENT } from '::graphql/queries';
 import { useRef } from 'react';
-
-const usePng = ({ node_id, offset, file_id }) => {
-  const png = useRef(undefined);
+import { Image } from '::types/graphql/generated';
+type TPng = {
+  node_id: number;
+  nodeId: string;
+  pngs: Image[];
+  full: boolean;
+};
+const usePng = ({ node_id, file_id }): TPng => {
+  const png = useRef<TPng>(undefined);
   const startFetchingFull = useRef(false);
 
   const { data: data_thumbnail } = useQuery(QUERY_NODE_CONTENT.png.query, {
-    variables: { node_id, offset, file_id, thumbnail: true },
+    variables: { node_id, file_id, thumbnail: true },
   });
   const [fetch, { data: data_full }] = useLazyQuery(
     QUERY_NODE_CONTENT.png.query,
     {
-      variables: { node_id, offset, file_id, thumbnail: false },
+      variables: { node_id, file_id, thumbnail: false },
     },
   );
   // apollo caches previous fetch from unmounted instances of the component
@@ -20,6 +26,7 @@ const usePng = ({ node_id, offset, file_id }) => {
   if (pngs_full?.node_id === node_id) {
     png.current = {
       node_id,
+      nodeId: pngs_full.id,
       pngs: pngs_full.image,
       full: true,
     };
@@ -29,11 +36,11 @@ const usePng = ({ node_id, offset, file_id }) => {
     if (pngs_thumbnail?.node_id === node_id) {
       png.current = {
         node_id,
+        nodeId: pngs_thumbnail.id,
         pngs: pngs_thumbnail.image,
         full: false,
       };
     }
-    // fetch the full res when the browser scrolls to the image
     if (png.current && !startFetchingFull.current) {
       fetch();
       startFetchingFull.current = true;

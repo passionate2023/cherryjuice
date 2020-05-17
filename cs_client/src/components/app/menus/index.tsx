@@ -3,7 +3,9 @@ import { Suspense } from 'react';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { appActionCreators, TState } from '::app/reducer';
 import { AuthUser } from '::types/graphql/generated';
-const AlertModal = React.lazy(() => import('./alert-modal/alert-modal'));
+import ReloadDocument from '::app/menus/modals/reload-document/reload-document';
+import { Snackbar } from '::shared-components/snackbar/snackbar';
+const AlertModal = React.lazy(() => import('./modals/alert-modal/alert-modal'));
 const UserPopup = React.lazy(() => import('./user/user'));
 const ImportProgress = React.lazy(() =>
   import('./import-progress/import-progress'),
@@ -13,6 +15,10 @@ const ImportDocuments = React.lazy(() =>
 );
 const Settings = React.lazy(() => import('::app/menus/settings'));
 const SelectFile = React.lazy(() => import('::app/menus/select-file'));
+const NodeMeta = React.lazy(() => import('::app/menus/node-meta/node-meta'));
+const DeleteNode = React.lazy(() =>
+  import('::app/menus/modals/delete-node/delete-node'),
+);
 type Props = { state: TState; dispatch: any; session: AuthUser };
 
 const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
@@ -55,6 +61,35 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
       </Suspense>
       <Suspense fallback={<Void />}>
         <ImportProgress />
+      </Suspense>
+      <Suspense fallback={<Void />}>
+        <NodeMeta
+          showDialog={state.showNodeMeta}
+          isOnMobile={state.isOnMobile}
+          onClose={appActionCreators.hideNodeMeta}
+          nodeId={
+            state.selectedNode ? state.selectedNode.nodeId : state.rootNode?.id
+          }
+        />
+      </Suspense>
+      <Suspense fallback={<Void />}>
+        <DeleteNode
+          onClose={appActionCreators.toggleDeleteDocumentModal}
+          show={state.showDeleteDocumentModal}
+          nodeId={state.selectedNode?.nodeId}
+        />
+      </Suspense>
+      <Suspense fallback={<Void />}>
+        <ReloadDocument
+          onClose={appActionCreators.hideReloadConfirmationModal}
+          show={state.showReloadConfirmationModal}
+        />
+      </Suspense>
+      <Suspense fallback={<Void />}>
+        <Snackbar
+          onClose={appActionCreators.clearSnackbarMessage}
+          message={state.snackbarMessage}
+        />
       </Suspense>
     </>
   );

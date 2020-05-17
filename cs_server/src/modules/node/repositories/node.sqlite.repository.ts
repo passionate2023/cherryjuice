@@ -5,7 +5,6 @@ import { Grid } from '../../document/helpers/copy-ctb/entities/Grid';
 import { Codebox } from '../../document/helpers/copy-ctb/entities/Codebox';
 import { Node } from '../entities/node.entity';
 import { organizeData } from '../../document/helpers';
-import { INodeRepository } from '../interfaces/node.repository';
 import { getPNGSize } from '../helpers/ctb';
 import { parseXml } from '../helpers/xml';
 import { ctbToAHtml } from '../helpers/rendering/query/ctb-to-ahtml';
@@ -39,7 +38,8 @@ const queries = {
   SELECT 
     n.node_id, n.name, n.is_ro, 
     n.is_richtxt, n.has_image, n.has_codebox,
-    n.has_table,n.ts_creation as createdAt,n.ts_lastsave as updatedAt, c.father_id,c.sequence 
+    n.has_table,n.ts_creation as createdAt,n.ts_lastsave as updatedAt, 
+    c.father_id,c.sequence, n.is_ro as read_only
    FROM node as n INNER JOIN children AS c
    on n.node_id = c.node_id
    ${node_id ? `where n.node_id = ${node_id}` : ''}`,
@@ -53,7 +53,7 @@ const queries = {
 };
 
 @Injectable()
-export class NodeSqliteRepository implements INodeRepository {
+export class NodeSqliteRepository {
   constructor(private documentSqliteRepository: DocumentSqliteRepository) {}
 
   private async getNodeText(node_id: string): Promise<{ txt: string }> {
@@ -78,7 +78,7 @@ export class NodeSqliteRepository implements INodeRepository {
     };
   }
 
-  private async getNodesMetaMap(node_id?: number): Promise<Map<number, Node>> {
+  async getNodesMetaRaw(node_id?: number): Promise<Node[]> {
     const data: Node[] = await this.documentSqliteRepository
       .sqliteAll(queries.read.node_meta(node_id))
       .then(data =>
@@ -106,12 +106,13 @@ export class NodeSqliteRepository implements INodeRepository {
       is_empty: 0,
       node_title_styles: '',
       icon_id: '',
+      read_only: 0,
     } as unknown);
 
-    return organizeData(data);
+    return data;
   }
 
-  async getAHtml(node_id: string): Promise<{ nodes: any; styles: any }[]> {
+  async getAHtml(node_id: string): Promise<{ nodes: any; style: any }[]> {
     const { txt } =
       node_id === '0'
         ? { txt: '<?xml version="1.0" ?><node><rich_text></rich_text></node>' }
@@ -144,14 +145,18 @@ export class NodeSqliteRepository implements INodeRepository {
     });
   }
 
-  async getNodesMeta(): Promise<Node[]> {
-    const nodes = await this.getNodesMetaMap();
-    return Array.from(nodes.values());
+  async getNodesMeta(process = true): Promise<Node[]> {
+    const nodes = await this.getNodesMetaRaw();
+    if (process) {
+      const nodesMap = await organizeData(nodes);
+      return Array.from(nodesMap.values());
+    } else return await this.getNodesMetaRaw();
   }
 
   async getNodeMetaById(node_id: string): Promise<Node[]> {
-    const nodes = await this.getNodesMetaMap();
-    return [nodes.get(+node_id)];
+    const nodes = await this.getNodesMetaRaw();
+    const nodesMap = await organizeData(nodes);
+    return [nodesMap.get(+node_id)];
   }
 
   // async getNodeImages({

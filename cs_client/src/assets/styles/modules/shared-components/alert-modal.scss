@@ -1,10 +1,10 @@
 @import '../../vars/vars';
-
-
+@import '../../vars/colors';
 
 $height: 250px;
-$width: $height * 1.3;
+$width: $height * 1.35;
 .alert-modal {
+  box-sizing: border-box;
   position: absolute;
   width: $width;
   background-color: white;
@@ -21,25 +21,40 @@ $width: $height * 1.3;
   text-align: center;
   z-index: $ZI-alert-modal;
   border-radius: 10px;
+  padding: 10px;
 }
 
 .alert-modal__icon {
-  font-size: 40px;
-  margin-bottom: 20px;
-  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  height: 30px;
+  display: none;
 }
 .alert-modal__body {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 90%;
 }
 .alert-modal__header {
-  font-weight: 600;
   display: block;
-  margin-bottom: 20px;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  text-align: start;
+}
+
+
+.alert-modal__header--danger {
+  color: $COLOR_DANGER;
+}
+.alert-modal__header--warning {
+  color: $COLOR_WARNING;
 }
 .alert-modal__message {
   font-size: 16px;
-  padding: 5px 10px;
-  opacity: 0.8;
+  padding: 5px 0px;
+  opacity: 0.7;
 }
 .alert-modal__dismiss-button {
   align-self: flex-end;

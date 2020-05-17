@@ -17,6 +17,8 @@ type Props = {
   showRecentNodes: boolean;
   showInfoBar: boolean;
   showTree: boolean;
+  selectedNodeId: string;
+  documentHasUnsavedChanges: boolean;
 };
 
 const ToolBar: React.FC<Props> = ({
@@ -26,10 +28,16 @@ const ToolBar: React.FC<Props> = ({
   showRecentNodes,
   showInfoBar,
   showTree,
+  selectedNodeId,
+  documentHasUnsavedChanges,
 }) => {
   return (
     <div className={modToolbar.toolBar}>
-      <MainButtons showTree={showTree} />
+      <MainButtons
+        showTree={showTree}
+        selectedNodeId={selectedNodeId}
+        documentHasUnsavedChanges={documentHasUnsavedChanges}
+      />
       <Separator />
       <MobileButtons
         {...{
@@ -40,13 +48,12 @@ const ToolBar: React.FC<Props> = ({
         }}
       />
       {isOnMobile ? (
-
         createPortal(
-          <FormattingButtonsWithTransition show={showFormattingButtons}/>,
-          document.querySelector('.' + appModule.app)
+          <FormattingButtonsWithTransition show={showFormattingButtons} />,
+          document.querySelector('.' + appModule.app),
         )
       ) : (
-        <FormattingButtons/>
+        <FormattingButtons />
       )}
       {isOnMobile && <Separator />}
       <NavBar showUserPopup={false} />

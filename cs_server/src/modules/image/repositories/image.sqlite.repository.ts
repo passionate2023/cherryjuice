@@ -43,15 +43,14 @@ export class ImageSqliteRepository implements IImageRepository {
 
   async getNodeImages({
     node_id,
-    offset,
   }): Promise<
     Pick<
       Image,
-      'node_id' | 'offset' | 'justification' | 'anchor' | 'png' | 'link'
+      'node_id' |  'justification' | 'anchor' | 'png' | 'link'
     >[]
   > {
     return this.documentSqliteRepository.sqliteAll(
-      queries.read.images({ node_id: node_id, offset }),
+      queries.read.images({ node_id: node_id, offset: undefined }),
     );
   }
 }

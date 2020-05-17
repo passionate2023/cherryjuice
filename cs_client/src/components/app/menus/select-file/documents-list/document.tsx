@@ -25,7 +25,7 @@ const Document: React.FC<Props> = ({
   const mouseHoldHandlers = useMouseHold({
     onMouseHold: onSelect,
     callbackProps: { id, holding: true },
-    minHoldDuration: 750,
+    minHoldDuration: 500,
   });
   return (
     <div

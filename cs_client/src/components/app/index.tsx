@@ -16,6 +16,8 @@ import { appModule } from '::sass-modules/index';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { QUERY_USER } from '::graphql/queries';
 import { rootActionCreators } from '::root/root.reducer';
+import { AppContext } from './context';
+import { useDocumentEditedIndicator } from '::app/hooks/document-edited-indicator';
 
 const Menus = React.lazy(() => import('::app/menus'));
 
@@ -46,11 +48,9 @@ const updateBreakpointState = ({ breakpoint, callback }) => {
 const useHandleRouting = state => {
   const history = useHistory();
   useEffect(() => {
-    if (state.selectedFile) {
-      if (history.location.pathname === '/')
-        history.push('/document/' + state.selectedFile);
-    }
-  }, [state.selectedFile]);
+    if (history.location.pathname === '/')
+      if (state.selectedFile) history.push('/document/' + state.selectedFile);
+  }, [state.selectedFile, history.location.pathname]);
 };
 const useUpdateCssVariables = (state: TState) => {
   useEffect(() => {
@@ -100,19 +100,22 @@ const App: React.FC<Props> = ({ session }) => {
       callback: appActionCreators.setIsOnMobile,
     }),
   ]);
+  useDocumentEditedIndicator(state);
   useSaveStateToLocalStorage(state);
   useHandleRouting(state);
   useUpdateCssVariables(state);
   useRefreshToken({ token: session.token });
   return (
-    <div className={appModule.app}>
-      <Suspense fallback={<Void />}>
-        <Editor state={state} />
-      </Suspense>
-      <Suspense fallback={<Void />}>
-        <Menus state={state} dispatch={dispatch} session={session} />
-      </Suspense>
-    </div>
+    <AppContext.Provider value={state}>
+      <div className={appModule.app}>
+        <Suspense fallback={<Void />}>
+          <Editor state={state} />
+        </Suspense>
+        <Suspense fallback={<Void />}>
+          <Menus state={state} dispatch={dispatch} session={session} />
+        </Suspense>
+      </div>
+    </AppContext.Provider>
   );
 };
 

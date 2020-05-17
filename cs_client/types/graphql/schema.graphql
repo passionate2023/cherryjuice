@@ -25,6 +25,7 @@ type Document {
 
 type DocumentMutation {
     deleteDocument(documents: DeleteDocumentInputType!): String!
+    node(node_id: String!): NodeMutation!
     uploadFile(files: [Upload!]!): Boolean!
     uploadLink(file: UploadLinkInputType!): Boolean!
 }
@@ -35,8 +36,13 @@ type DocumentSubscription {
     eventType: DOCUMENT_SUBSCRIPTIONS!
 }
 
+type Image {
+    base64: String!
+    id: String!
+}
+
 type Mutation {
-    document: DocumentMutation!
+    document(file_id: String): DocumentMutation!
     user: UserMutation!
 }
 
@@ -44,20 +50,26 @@ type Node {
     child_nodes: [Int!]!
     createdAt: Float!
     documentId: String!
+    fatherId: String
     father_id: Float!
-    has_codebox: Int!
-    has_image: Int!
-    has_table: Int!
     html: String!
     icon_id: String!
     id: String!
-    image(offset: Int, thumbnail: Boolean): [String]!
+    image(thumbnail: Boolean): [Image]!
     is_empty: Int!
     is_richtxt: Int!
     name: String!
     node_id: Int!
-    node_title_styles: String!
+    node_title_styles: String
+    read_only: Int!
     updatedAt: Float!
+}
+
+type NodeMutation {
+    createNode(meta: CreateNodeIt!): String!
+    deleteNode: String!
+    meta(meta: NodeMetaIt!): String!
+    saveAHtml(ahtml: String!, deletedImages: [String]!): String!
 }
 
 type Query {
@@ -101,8 +113,36 @@ enum DOCUMENT_SUBSCRIPTIONS {
     DOCUMENT_IMPORT_STARTED
 }
 
+input CreateNodeIt {
+    child_nodes: [Int!]!
+    createdAt: Float!
+    documentId: String!
+    fatherId: String!
+    father_id: Float!
+    icon_id: String!
+    name: String!
+    node_id: Int!
+    node_title_styles: String
+    position: Int
+    read_only: Int!
+    updatedAt: Float!
+}
+
 input DeleteDocumentInputType {
     IDs: [String!]!
+}
+
+input NodeMetaIt {
+    child_nodes: [Int]
+    fatherId: String
+    father_id: Float
+    icon_id: String
+    is_richtxt: Int
+    name: String
+    node_title_styles: String
+    position: Int
+    read_only: Int
+    sequence: Float
 }
 
 input SignInCredentials {

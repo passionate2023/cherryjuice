@@ -5,25 +5,27 @@ import { setContext } from 'apollo-link-context';
 import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
-import { useRef } from 'react';
+import { useEffect } from 'react';
+import { rootActionCreators } from '::root/root.reducer';
+import { AuthUser } from '::types/graphql/generated';
+import { apolloCache } from '::graphql/cache-helpers';
 
-const host = process.env.graphqlAPI || location.host;
+if (process.env.NODE_ENV === 'development')
+  localStorage.setItem('graphqlAPIHost', 'localhost:1230');
+const host = localStorage.getItem('graphqlAPIHost') || location.host;
 const secure = location.protocol === 'https:';
 
 const uri = {
   http: `http${secure ? 's' : ''}://${host}/graphql`,
   ws: `ws${secure ? 's' : ''}://${host}/graphql`,
 };
-const useClient = (token: string) => {
-  const tokenRef = useRef<string>('');
-  const clientRef = useRef<ApolloClient<any>>();
-  if (tokenRef.current !== token) {
-    tokenRef.current = token;
+const useApolloClient = (session: AuthUser) => {
+  useEffect(() => {
     const authLink = setContext((_, { headers }) => {
       return {
         headers: {
           ...headers,
-          authorization: `Bearer ${token}`,
+          authorization: `Bearer ${session.token}`,
         },
       };
     });
@@ -36,7 +38,7 @@ const useClient = (token: string) => {
       options: {
         reconnect: true,
         connectionParams: {
-          authorization: `Bearer ${token}`,
+          authorization: `Bearer ${session.token}`,
         },
       },
     });
@@ -55,8 +57,8 @@ const useClient = (token: string) => {
         httpLink,
       ),
     });
-    clientRef.current = client;
-  }
-  return clientRef.current;
+    apolloCache.__setCache(client.cache);
+    rootActionCreators.setApolloClient(client);
+  }, [session?.user?.id]);
 };
-export { useClient };
+export { useApolloClient };

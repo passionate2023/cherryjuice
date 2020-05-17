@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
-import { execK } from '::helpers/execK';
+import { execK } from '::helpers/editing/execK';
 import { Icon } from '::shared-components/icon';
 import { modToolbar } from '::sass-modules/index';
 
@@ -13,7 +13,7 @@ const ColorInput: React.FC<{
   return (
     <ToolbarButton className={modToolbar.toolBar__iconStrictWidth}>
       <label htmlFor={label} style={{ cursor: 'pointer' }} id={inputId}>
-        <Icon name={icon} small={true} />
+        <Icon name={icon} />
         <input
           id={label}
           type="color"

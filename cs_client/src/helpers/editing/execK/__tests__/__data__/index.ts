@@ -1,0 +1,11 @@
+import { n45 } from '::helpers/editing/execK/__tests__/__data__/samples/45';
+import { n68 } from '::helpers/editing/execK/__tests__/__data__/samples/68';
+import { n71 } from '::helpers/editing/execK/__tests__/__data__/samples/71';
+import { n55 } from '::helpers/editing/execK/__tests__/__data__/samples/55';
+import { n56 } from '::helpers/editing/execK/__tests__/__data__/samples/56';
+import { n49 } from '::helpers/editing/execK/__tests__/__data__/samples/49';
+import { n48 } from '::helpers/editing/execK/__tests__/__data__/samples/48';
+import { n46 } from '::helpers/editing/execK/__tests__/__data__/samples/46';
+const testSamples = [n45, n46, n48, n49, n55, n56, n68, n71];
+export { testSamples };
+export type TTestSample = typeof testSamples[0];

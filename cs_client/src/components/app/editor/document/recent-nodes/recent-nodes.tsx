@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useCallback } from 'react';
 import { useHistory } from 'react-router';
-import { TRecentNode } from '::app/reducer';
+import { TNodeMeta } from '::app/reducer';
 import { modRecentNodes } from '::sass-modules/index';
 import { TState } from '::app/reducer';
+import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 
 type Props = {
   state: TState;
@@ -19,14 +20,16 @@ const RecentNodes: React.FC<Props> = ({
   const recentNodesOther = recentNodes.filter(
     ({ id }) => +id !== selectedNode.id,
   );
-  const lastN: TRecentNode[] = recentNodesOther.slice(
+  const lastN: TNodeMeta[] = recentNodesOther.slice(
     recentNodesOther.length > config.recentNodesN
       ? recentNodesOther.length - config.recentNodesN
       : 0,
   );
+
   const history = useHistory();
   const goToNode = useCallback(
     e => {
+      updateCachedHtmlAndImages();
       const node_id = e.target.dataset.id;
       history.push(`/document/${file_id}/node/${node_id}`);
     },

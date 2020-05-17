@@ -1,11 +1,14 @@
 import treeModule from '::sass-modules/tree/tree.scss';
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Node } from './node';
-import { NodeMeta } from '::types/generated';
+import { NodeMeta } from '::types/graphql/adapters';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Resizable } from 're-resizable';
 import { onResize, onResizeStop, onStart } from './helpers';
+import { useDnDNodes } from '::app/editor/document/tree/node/hooks/dnd-nodes';
+import { useContext } from 'react';
+import { RootContext } from '::root/root-context';
 
 type Props = {
   nodes: Map<number, NodeMeta>;
@@ -13,6 +16,17 @@ type Props = {
 
 const Tree: React.FC<Props> = ({ nodes }) => {
   useEffect(onStart, []);
+  const {
+    apolloClient: { cache },
+  } = useContext(RootContext);
+  const componentRef = useRef();
+  const rootTreeDndProps = useDnDNodes({
+    cache,
+    componentRef,
+    nodes,
+    node_id: 0,
+    draggable: false,
+  });
   return (
     <Resizable
       enable={{ right: true }}
@@ -22,7 +36,11 @@ const Tree: React.FC<Props> = ({ nodes }) => {
     >
       <ErrorBoundary>
         <div className={treeModule.tree}>
-          <ul className={treeModule.tree_rootList}>
+          <ul
+            className={treeModule.tree_rootList}
+            {...rootTreeDndProps}
+            ref={componentRef}
+          >
             {nodes &&
               nodes
                 .get(0)

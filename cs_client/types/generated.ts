@@ -50,7 +50,7 @@ export type Node = {
   html: Scalars['String'];
   image: Array<Maybe<Image>>;
 };
-export type NodeMeta = Omit<Node, 'html' | 'image'>;
+// export type NodeMeta = Omit<Node, 'html' | 'image'>;
 export type NodeImage = Pick<Node, 'node_id' | 'image'>;
 type Document = {
   __typename?: 'Document';

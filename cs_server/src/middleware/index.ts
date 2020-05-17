@@ -12,12 +12,16 @@ const redirectToHTTPS = (req, res, next) => {
   }
   return next();
 };
-
+const contentTypes = {
+  '/*.css': 'text/css',
+  '/*.svg': 'image/svg+xml',
+  '/*.js': 'application/javascript',
+};
 const sendCompressedJavascript = (req, res, next) => {
   if (req.url.indexOf('sw.js') === -1) {
     req.url = req.url + '.br';
     res.set('Content-Encoding', 'br');
-    res.set('Content-Type', 'application/javascript');
+    res.set('Content-Type', contentTypes[req.route.path]);
   }
   next();
 };
