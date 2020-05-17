@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react';
 type Props = {
   type: 'checkbox' | 'text';
   label: string;
+  testId?: string;
   onChange: Function;
   value;
   additionalInput?: ({ disabled: boolean }) => JSX.Element;
@@ -18,6 +19,7 @@ const FormInput: React.FC<Props> = ({
   value,
   additionalInput,
   lazyAutoFocus,
+  testId
 }) => {
   const inputName = label.replace(/[^A-Za-z]/g, '-').toLowerCase();
   const onChangeCheckbox = e => onChange(e.target.checked);
@@ -44,6 +46,7 @@ const FormInput: React.FC<Props> = ({
           onChange: type === 'checkbox' ? onChangeCheckbox : onChangeText,
           [type === 'checkbox' ? 'checked' : 'value']: value,
         }}
+        {...(testId && { 'data-testid': testId })}
       />
       {additionalInput ? additionalInput({ disabled: !value }) : <></>}
     </label>

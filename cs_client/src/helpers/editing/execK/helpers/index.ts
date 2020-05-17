@@ -3,7 +3,7 @@ const toNodes: (string: string, single?: boolean) => Element | Element[] = (
   single = true,
 ) =>
   // https://stackoverflow.com/a/42448876
-  [new DOMParser().parseFromString(html, 'text/html')].map(({ body }) =>
+  [new DOMParser().parseFromString(html, 'text/html')].flatMap(({ body }) =>
     single ? body.children[0] : Array.from(body.children),
   )[0];
 

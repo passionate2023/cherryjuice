@@ -35,13 +35,13 @@ const MainButtons: React.FC<Props> = ({
       >
         <Icon name={Icons.material.delete} />
       </ToolbarButton>
-      <ToolbarButton onClick={appActionCreators.showNodeMetaCreateSibling}>
+      <ToolbarButton onClick={appActionCreators.showNodeMetaCreateSibling} testId={"create-sibling-node"}>
         <Icon
           name={Icons.cherrytree.additionalIcons['tree-node-add']}
           style={{ width: 22 }}
         />
       </ToolbarButton>
-      <ToolbarButton onClick={appActionCreators.showNodeMetaCreateChild}>
+      <ToolbarButton onClick={appActionCreators.showNodeMetaCreateChild} testId={"create-child-node"}>
         <Icon
           name={Icons.cherrytree.additionalIcons['tree-subnode-add']}
           style={{ width: 22 }}

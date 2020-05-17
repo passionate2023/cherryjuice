@@ -4,11 +4,11 @@ exports[`rich-text snapshot tests adjacent images overlap 1`] = `
 "<span class=\\"rich-text__line\\"><span>- we can think of callbacks as a continuation, a secondary half that runs after a time-gap that separates it from the first half</span></span><span class=\\"rich-text__line\\"><span>&quot;w</span><span style=\\"color:#e6e6e6;\\">hen we refer to functions as continuations, what we mean is, we did the first half of our program now, and we wrap the second half of our program up in a callback</span><span>&quot;</span></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><span>- the instructor suggests that callback hell doesnt actually have to do with indentation, as we could rewrite a &quot;callback hell&quot; without nesting</span></span><span class=\\"rich-text__line\\"><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:100px; height:100px;\\"
-        
+        class=\\"rich-text__image\\"
       /><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:200px; height:200px;\\"
-        
+        class=\\"rich-text__image\\"
       /></span><span class=\\"rich-text__line\\"><span>the instructor suggests that t</span><span style=\\"color:#e6e6e6;\\">here are two conceptually deficient</span><span> problems with callbacks</span></span>"
 `;
 
@@ -20,11 +20,11 @@ exports[`rich-text snapshot tests offset images 1`] = `
 "<span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><code style=\\"background-color:#2B2B2B;color:#c792ea;\\"><small><em>let </em></small></code><code style=\\"background-color:#2B2B2B;\\"><small><em>it </em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>= </em></small></code><code style=\\"background-color:#2B2B2B;color:#82aaff;\\"><small><em>gen</em></small></code><code style=\\"background-color:#2B2B2B;color:#f78c6c;\\"><small><em>()</em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>;</em></small></code></span><span class=\\"rich-text__line\\"><code style=\\"background-color:#9a1197;color:#c792ea;\\"><small><em>console</em></small></code><code style=\\"background-color:#9a1197;color:#89ddff;\\"><small><em>.</em></small></code><code style=\\"background-color:#9a1197;color:#82aaff;\\"><small><em>log</em></small></code><code style=\\"background-color:#9a1197;color:#f78c6c;\\"><small><em>(</em></small></code><code style=\\"background-color:#9a1197;\\"><small><em>it</em></small></code><code style=\\"background-color:#9a1197;color:#89ddff;\\"><small><em>.</em></small></code><code style=\\"background-color:#9a1197;color:#82aaff;\\"><small><em>next</em></small></code><code style=\\"background-color:#9a1197;color:#f78c6c;\\"><small><em>())</em></small></code><code style=\\"background-color:#9a1197;color:#89ddff;\\"><small><em>;</em></small></code></span><span class=\\"rich-text__line\\"><code style=\\"background-color:#498b49;color:#c792ea;\\"><small><em>console</em></small></code><code style=\\"background-color:#498b49;color:#89ddff;\\"><small><em>.</em></small></code><code style=\\"background-color:#498b49;color:#82aaff;\\"><small><em>log</em></small></code><code style=\\"background-color:#498b49;color:#f78c6c;\\"><small><em>(</em></small></code><code style=\\"background-color:#498b49;\\"><small><em>it</em></small></code><code style=\\"background-color:#498b49;color:#89ddff;\\"><small><em>.</em></small></code><code style=\\"background-color:#498b49;color:#82aaff;\\"><small><em>next</em></small></code><code style=\\"background-color:#498b49;color:#f78c6c;\\"><small><em>(5))</em></small></code><code style=\\"background-color:#498b49;color:#89ddff;\\"><small><em>;</em></small></code></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:100px; height:100px;\\"
-        
+        class=\\"rich-text__image\\"
       /></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><span>example2</span></span><span class=\\"rich-text__line\\"><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:200px; height:200px;\\"
-        
+        class=\\"rich-text__image\\"
       /></span><span class=\\"rich-text__line\\"><span>(run is equivalent to it.next)</span></span>"
 `;
 
@@ -32,11 +32,11 @@ exports[`rich-text snapshot tests offset images 2`] = `
 "<span class=\\"rich-text__line\\"><code style=\\"background-color:#498b49;color:#89ddff;\\"><small><em> </em></small></code><code style=\\"background-color:#498b49;color:#ffffff;\\"><small><em> 5</em></small></code></span><span class=\\"rich-text__line\\"><code style=\\"background-color:#498b49;color:#89ddff;\\"><small><em>  </em></small></code><code style=\\"background-color:#498b49;color:#c792ea;\\"><small><em>let </em></small></code><code style=\\"background-color:#498b49;\\"><small><em>y </em></small></code><code style=\\"background-color:#498b49;color:#89ddff;\\"><small><em>= </em></small></code><code style=\\"background-color:#498b49;color:#f78c6c;\\"><small><em>0 </em></small></code><code style=\\"background-color:#498b49;color:#89ddff;\\"><small><em>+ </em></small></code></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:100px; height:100px;\\"
-        
+        class=\\"rich-text__image\\"
       /></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><span>example2</span></span><span class=\\"rich-text__line\\"><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:200px; height:200px;\\"
-        
+        class=\\"rich-text__image\\"
       /></span><span class=\\"rich-text__line\\"><span>(run is equivalent to it.next)</span></span>"
 `;
 
@@ -66,7 +66,7 @@ exports[`rich-text snapshot tests offset images, tables, and codebox 1`] = `
     </table></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><span>&gt;regex functions</span></span><span class=\\"rich-text__line\\"><span>a) regex.test returns a boolean if the pattern matches</span></span><span class=\\"rich-text__line\\"><code style=\\"background-color:#2B2B2B;color:#c792ea;\\"><small><em>let </em></small></code><code style=\\"background-color:#2B2B2B;\\"><small><em>str </em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>= </em></small></code><code style=\\"background-color:#2B2B2B;color:#c3e88d;\\"><small><em>\`Is this This?\`</em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>;</em></small></code></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><code style=\\"background-color:#2B2B2B;color:#c792ea;\\"><small><em>console</em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>.</em></small></code><code style=\\"background-color:#2B2B2B;color:#82aaff;\\"><small><em>log</em></small></code><code style=\\"background-color:#2B2B2B;color:#f78c6c;\\"><small><em>(</em></small></code><code style=\\"background-color:#2B2B2B;color:#c3e88d;\\"><small><em>/isd/g</em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>.</em></small></code><code style=\\"background-color:#2B2B2B;color:#82aaff;\\"><small><em>test</em></small></code><code style=\\"background-color:#2B2B2B;color:#f78c6c;\\"><small><em>(</em></small></code><code style=\\"background-color:#2B2B2B;\\"><small><em>str</em></small></code><code style=\\"background-color:#2B2B2B;color:#f78c6c;\\"><small><em>))</em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>; </em></small></code><code style=\\"background-color:#2B2B2B;color:#546e7a;\\"><small><em>// false</em></small></code></span><span class=\\"rich-text__line\\"><code style=\\"background-color:#2B2B2B;color:#c792ea;\\"><small><em>console</em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>.</em></small></code><code style=\\"background-color:#2B2B2B;color:#82aaff;\\"><small><em>log</em></small></code><code style=\\"background-color:#2B2B2B;color:#f78c6c;\\"><small><em>(</em></small></code><code style=\\"background-color:#2B2B2B;color:#c3e88d;\\"><small><em>/is/g</em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>.</em></small></code><code style=\\"background-color:#2B2B2B;color:#82aaff;\\"><small><em>test</em></small></code><code style=\\"background-color:#2B2B2B;color:#f78c6c;\\"><small><em>(</em></small></code><code style=\\"background-color:#2B2B2B;\\"><small><em>str</em></small></code><code style=\\"background-color:#2B2B2B;color:#f78c6c;\\"><small><em>))</em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>; </em></small></code><code style=\\"background-color:#2B2B2B;color:#546e7a;\\"><small><em>// true</em></small></code></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><span>b) regex.exec returns a regexArray</span></span><span class=\\"rich-text__line\\"><code style=\\"background-color:#2B2B2B;color:#c792ea;\\"><small><em>let </em></small></code><code style=\\"background-color:#2B2B2B;\\"><small><em>str </em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>= </em></small></code><code style=\\"background-color:#2B2B2B;color:#c3e88d;\\"><small><em>\`Is this This?\`</em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>;</em></small></code></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><code style=\\"background-color:#2B2B2B;color:#c792ea;\\"><small><em>let </em></small></code><code style=\\"background-color:#2B2B2B;\\"><small><em>regex </em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>= </em></small></code><code style=\\"background-color:#2B2B2B;color:#c3e88d;\\"><small><em>/is/g</em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>;</em></small></code></span><span class=\\"rich-text__line\\"><code style=\\"background-color:#2B2B2B;color:#c792ea;\\"><small><em>console</em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>.</em></small></code><code style=\\"background-color:#2B2B2B;color:#82aaff;\\"><small><em>log</em></small></code><code style=\\"background-color:#2B2B2B;color:#f78c6c;\\"><small><em>(</em></small></code><code style=\\"background-color:#2B2B2B;\\"><small><em>regex</em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>.</em></small></code><code style=\\"background-color:#2B2B2B;color:#82aaff;\\"><small><em>exec</em></small></code><code style=\\"background-color:#2B2B2B;color:#f78c6c;\\"><small><em>(</em></small></code><code style=\\"background-color:#2B2B2B;\\"><small><em>str</em></small></code><code style=\\"background-color:#2B2B2B;color:#f78c6c;\\"><small><em>))</em></small></code><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>;</em></small></code></span><span class=\\"rich-text__line\\"><code style=\\"background-color:#2B2B2B;color:#546e7a;\\"><small><em>// [ &#39;is&#39;, index: 5, input: &#39;Is this This?&#39;, groups: undefined ]</em></small></code></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><span>unlike </span><code style=\\"background-color:#2B2B2B;\\"><small>test</small></code><span>, the </span><code style=\\"background-color:#2B2B2B;\\"><small>exec</small></code><span> method is stateful: </span></span><span class=\\"rich-text__line\\"><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:100px; height:100px;\\"
-        
+        class=\\"rich-text__image\\"
       /></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><span>&gt;string functions</span></span><span class=\\"rich-text__line\\"><span>a) </span><code style=\\"background-color:#2B2B2B;\\"><small>str.match</small></code></span><span class=\\"rich-text__line\\"><em style=\\"color:#c792ea;\\">let </em><em >str </em><em style=\\"color:#89ddff;\\">= </em><em style=\\"color:#c3e88d;\\">\`Is this This?\`</em><em style=\\"color:#89ddff;\\">;</em></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><span>&gt;basic regex playground using </span><code style=\\"background-color:#2B2B2B;\\"><small>str.replace</small></code></span><span class=\\"rich-text__line\\"><code
       class=\\"rich-text__code\\"
       data-do_highl_bra=\\"1\\" 
@@ -98,11 +98,11 @@ exports[`rich-text snapshot tests offset images, tables, and codebox 1`] = `
     </code><span>&#8203;</span></span><span class=\\"rich-text__line\\"><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:200px; height:200px;\\"
-        
+        class=\\"rich-text__image\\"
       /></span><span class=\\"rich-text__line\\"><span>*</span></span><span class=\\"rich-text__line\\"><span>&gt;my react alternative</span></span><span class=\\"rich-text__line\\"><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:300px; height:300px;\\"
-        
+        class=\\"rich-text__image\\"
       /></span><span class=\\"rich-text__line\\"><span>- full code</span></span><span class=\\"rich-text__line\\"><code style=\\"background-color:#2B2B2B;color:#89ddff;\\"><small><em>i</em></small></code></span>"
 `;
 
@@ -110,11 +110,11 @@ exports[`rich-text snapshot tests tailing image not rendered 1`] = `
 "<span class=\\"rich-text__line\\"><span>promises can be chained together</span></span><span class=\\"rich-text__line\\"><span>&gt;example</span></span><span class=\\"rich-text__line\\"><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:100px; height:100px;\\"
-        
+        class=\\"rich-text__image\\"
       /></span><span class=\\"rich-text__line\\"><span>the </span><code style=\\"background-color:#2B2B2B;\\"><small>.then</small></code><span> on line 5 will &quot;magically&quot; wait for the promise from line 3</span></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><span>&gt;example2</span></span><span class=\\"rich-text__line\\"><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:200px; height:200px;\\"
-        
+        class=\\"rich-text__image\\"
       /></span>"
 `;
 
@@ -122,10 +122,10 @@ exports[`rich-text snapshot tests tailing image not rendered 2`] = `
 "<span class=\\"rich-text__line\\"><span>haha</span></span><span class=\\"rich-text__line\\"><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:100px; height:100px;\\"
-        
+        class=\\"rich-text__image\\"
       /><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:200px; height:200px;\\"
-        
+        class=\\"rich-text__image\\"
       /></span>"
 `;

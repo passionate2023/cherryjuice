@@ -28,7 +28,7 @@ const useGetDocumentMeta = ({
       reloadRequestIDs: [reloadRequestID],
       reset: true,
       beforeReset: () => {
-        history.push(`/document/${file_id}`);
+        // history.push(`/document/${file_id}`);
         clearLocalChanges(localChanges);
       },
     },

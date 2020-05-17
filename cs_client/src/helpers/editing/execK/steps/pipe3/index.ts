@@ -12,9 +12,9 @@ const aHtmlsToElements = (
     toNodes(aHtmlToElement(node)),
   ),
   adjacentElementsOfStartDDOE: midDDOEs
-    .reduce((acc, DDOEs) => {
+    .reduce((acc, DDOE) => {
       const startDDOEShell = startDDOE.cloneNode();
-      startDDOEShell.innerHTML = DDOEs.map(node => aHtmlToElement(node)).join(
+      startDDOEShell.innerHTML = DDOE.map(node => aHtmlToElement(node)).join(
         '',
       );
       acc.push(startDDOEShell.outerHTML);
