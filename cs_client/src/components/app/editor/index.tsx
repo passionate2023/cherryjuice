@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { TState } from '::app/reducer';
+import { useCreateDocument } from '::app/editor/document/hooks/create-document/create-document';
 
 const Document = React.lazy(() => import('::app/editor/document'));
 const InfoBar = React.lazy(() => import('::app/editor/info-bar'));
@@ -11,6 +12,9 @@ const ToolBar = React.lazy(() => import('::app/editor/tool-bar'));
 
 const Editor: React.FC<{ state: TState }> = ({ state }) => {
   const history = useHistory();
+  useCreateDocument({
+    createDocumentRequestId: state.createDocumentRequestId,
+  });
   return (
     <>
       <ErrorBoundary>

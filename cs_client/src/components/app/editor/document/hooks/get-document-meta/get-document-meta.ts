@@ -3,7 +3,6 @@ import { QUERY_NODE_META } from '::graphql/queries';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
 import { useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
-import { TEditedNodes } from '::app/editor/document/reducer/initial-state';
 import { constructTree } from '::app/editor/document/hooks/get-document-meta/helpers/construct-tree';
 import { handleErrors } from '::app/editor/document/hooks/get-document-meta/helpers/handle-errors';
 import { setHighestNodeId } from '::app/editor/document/hooks/get-document-meta/helpers/set-highset-node_id';
@@ -13,23 +12,26 @@ type Props = {
   file_id: string;
   selectedFile: string;
   reloadRequestID: number;
-  localChanges: TEditedNodes;
+  // localChanges: TEditedNodes;
+  cacheTimeStamp: number;
 };
+
 const useGetDocumentMeta = ({
   file_id,
   selectedFile,
-  localChanges,
+  // localChanges,
   reloadRequestID,
+  cacheTimeStamp,
 }: Props) => {
   const history = useHistory();
-  const queryVariables = { file_id: file_id || '' };
-  const { data, error, loading } = useReloadQuery(
+  const queryVariables = { file_id };
+  let { data, error, loading } = useReloadQuery(
     {
       reloadRequestIDs: [reloadRequestID],
       reset: true,
       beforeReset: () => {
         // history.push(`/document/${file_id}`);
-        clearLocalChanges(localChanges);
+        clearLocalChanges();
       },
     },
     {
@@ -46,9 +48,11 @@ const useGetDocumentMeta = ({
     { resourceName: 'the document' },
   );
 
-  const nodes = useMemo(() => constructTree({ data, localChanges }), [
+  const nodes = useMemo(() => constructTree({ data, file_id }), [
     data,
-    localChanges,
+    // localChanges,
+    // apolloCache.getModifiedNodeIds(),
+    cacheTimeStamp,
   ]);
 
   useEffect(() => {
@@ -56,7 +60,8 @@ const useGetDocumentMeta = ({
   }, [nodes]);
 
   useEffect(() => {
-    handleErrors({ history, file_id, selectedFile, error });
+    if (!file_id.startsWith('new-document'))
+      handleErrors({ history, file_id, selectedFile, error });
   }, [error, file_id]);
   return { nodes: !loading && nodes, loading };
 };

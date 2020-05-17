@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
-import { useIsNotProcessed } from '::hooks/misc/isnot-processed';
-import { apolloCache } from '::graphql/cache-helpers';
+import { createIsNotProcessed } from '::hooks/misc/isnot-processed';
+import { apolloCache } from '::graphql/cache/apollo-cache';
 
 const useFirstFetch = fetch => {
   const firstFetchRef = useRef(true);
@@ -10,7 +10,7 @@ const useFirstFetch = fetch => {
     fetch();
   }
 };
-
+const fn = createIsNotProcessed();
 const useReloadQuery = (
   {
     reloadRequestIDs,
@@ -23,7 +23,7 @@ const useReloadQuery = (
   },
   { query, queryVariables },
 ) => {
-  const isNotProcessed = useIsNotProcessed(reloadRequestIDs);
+  const isNotProcessed = fn(reloadRequestIDs);
   const fetchPolicy = useRef(undefined);
   if (isNotProcessed) {
     fetchPolicy.current = 'network-only';
@@ -39,7 +39,7 @@ const useReloadQuery = (
   useFirstFetch(fetch);
   if (isNotProcessed) {
     if (reset)
-      apolloCache.reset().then(() => {
+      apolloCache.__resetCache().then(() => {
         if (beforeReset) {
           beforeReset();
         }

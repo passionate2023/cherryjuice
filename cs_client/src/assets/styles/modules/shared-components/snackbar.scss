@@ -2,7 +2,8 @@
 @import '../../mixins/breakpoints';
 .snackbar__container {
   position: absolute;
-  height: var(--vh)
+  height: var(--vh);
+  z-index: $ZI-snackbar;
 }
 .snackbar {
   position: absolute;
@@ -16,7 +17,6 @@
   width: 250px;
   height: 45px;
   box-sizing: border-box;
-  z-index: $ZI-snackbar;
 
   // children
   display: flex;

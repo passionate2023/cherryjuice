@@ -24,6 +24,7 @@ type Document {
 }
 
 type DocumentMutation {
+    createDocument(document: CreateDocumentIt!): String!
     deleteDocument(documents: DeleteDocumentInputType!): String!
     node(node_id: String!): NodeMutation!
     uploadFile(files: [Upload!]!): Boolean!
@@ -111,6 +112,10 @@ enum DOCUMENT_SUBSCRIPTIONS {
     DOCUMENT_IMPORT_PENDING
     DOCUMENT_IMPORT_PREPARING
     DOCUMENT_IMPORT_STARTED
+}
+
+input CreateDocumentIt {
+    name: String!
 }
 
 input CreateNodeIt {

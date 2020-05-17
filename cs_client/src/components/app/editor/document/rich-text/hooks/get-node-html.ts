@@ -2,9 +2,7 @@ import { QUERY_NODE_CONTENT } from '::graphql/queries';
 import { useReloadQuery } from '::hooks/use-reload-query';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
 import { ApolloError } from 'apollo-client';
-import { useContext } from 'react';
-import { DocumentContext } from '::app/editor/document/reducer/context';
-import { apolloCache } from '::graphql/cache-helpers';
+import { apolloCache } from '::graphql/cache/apollo-cache';
 
 const useGetNodeHtml = ({
   node_id,
@@ -30,16 +28,6 @@ const useGetNodeHtml = ({
       queryVariables,
     },
   );
-  const html = { node_id, htmlRaw: '' };
-  const { nodes } = useContext(DocumentContext);
-  const isNewNode = nodeId && nodes[nodeId]?.new;
-  if (isNewNode) {
-    const node = apolloCache.getNode(nodeId);
-    if (node)
-      data = {
-        document: [{ node: [{ html: node.html, node_id: node.node_id }] }],
-      };
-  }
   useQueryTimeout(
     {
       queryData: data,
@@ -48,6 +36,15 @@ const useGetNodeHtml = ({
     },
     { resourceName: 'the node' },
   );
+  const html = { node_id, htmlRaw: '' };
+  const isNewNode = apolloCache.changes.isNodeNew(nodeId);
+  if (isNewNode) {
+    const node = apolloCache.node.get(nodeId);
+    if (node)
+      data = {
+        document: [{ node: [{ html: node.html, node_id: node.node_id }] }],
+      };
+  }
   const node = QUERY_NODE_CONTENT.html.path(data);
   if (node && node.node_id === node_id) {
     html.htmlRaw = node.html;

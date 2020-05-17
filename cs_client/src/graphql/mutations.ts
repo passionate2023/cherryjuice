@@ -75,6 +75,16 @@ const DOCUMENT_MUTATION = {
       }
     `,
   },
+  createDocument: {
+    path: (data): string => data?.document?.createDocument,
+    query: gql`
+      mutation createDocument($document: CreateDocumentIt!) {
+        document {
+          createDocument(document: $document)
+        }
+      }
+    `,
+  },
 };
 
 const USER_MUTATION = {

@@ -7,7 +7,7 @@ import {
   getInnerText,
   isElementNonTextual,
   moveCursor,
-  toNodes,
+  stringToSingleElement,
 } from '::helpers/editing/execK/helpers';
 import {
   splitAHtmlsToMultipleLines,
@@ -62,7 +62,7 @@ const processClipboard: { [p: string]: (str) => TAHtml[] } = {
           : child.nodeType === Node.TEXT_NODE
           ? (child as Text).wholeText === '\n'
             ? acc.length
-              ? toNodes(`<br>`)
+              ? stringToSingleElement(`<br>`)
               : undefined
             : wrapNodeInSpan(child as Text)
           : undefined;

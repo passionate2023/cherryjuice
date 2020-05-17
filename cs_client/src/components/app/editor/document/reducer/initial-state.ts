@@ -1,21 +1,11 @@
-type TEditedNode = {
-  fetchedImageIDs: string[];
-  edited: {
-    content: boolean;
-    meta: string[];
-  };
-  new: boolean;
-  deleted: boolean;
-};
-type TEditedNodes = {
-  [nodeId: string]: TEditedNode;
-};
 type TDocumentState = {
-  nodes: TEditedNodes;
+  cacheTimeStamp: number;
 };
 const state: TDocumentState = {
-  nodes: {},
+  // nodes: {},
+  // nodesWhomContentHasChanged: new Set<string>(),
+  cacheTimeStamp: undefined,
 };
 
 export { state as documentInitialState };
-export { TEditedNode, TEditedNodes, TDocumentState };
+export { TDocumentState };

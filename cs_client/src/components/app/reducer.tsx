@@ -48,6 +48,7 @@ const initialState = {
   showReloadConfirmationModal: false,
   documentHasUnsavedChanges: false,
   snackbarMessage: undefined,
+  createDocumentRequestId: undefined,
 };
 
 export type TState = typeof initialState & {
@@ -56,6 +57,7 @@ export type TState = typeof initialState & {
   recentNodes: TNodeMeta[];
   alert: TAlert;
   showNodeMeta: NodeMetaPopup;
+  createDocumentRequestId: number;
 };
 enum actions {
   setSnackbarMessage,
@@ -89,6 +91,7 @@ enum actions {
   showReloadConfirmationModal,
   documentHasUnsavedChanges,
   removeNodeFromRecentNodes,
+  createDocument,
 }
 const createActionCreators = () => {
   const state = {
@@ -252,6 +255,12 @@ const createActionCreators = () => {
         value: nodeId,
       });
     },
+    createDocument: () => {
+      state.dispatch({
+        type: actions.createDocument,
+        value: new Date().getTime(),
+      });
+    },
   };
 };
 const reducer = (
@@ -386,6 +395,11 @@ const reducer = (
         recentNodes: state.recentNodes.filter(
           ({ nodeId }) => nodeId !== action.value,
         ),
+      };
+    case actions.createDocument:
+      return {
+        ...state,
+        createDocumentRequestId: action.value,
       };
     default:
       throw new Error('action not supported');

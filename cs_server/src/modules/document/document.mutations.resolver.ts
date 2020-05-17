@@ -17,6 +17,7 @@ import { UploadLinkInputType } from './input-types/upload-link.input-type';
 import { DeleteDocumentInputType } from './input-types/delete-document.input-type';
 import { ImportsService } from '../imports/imports.service';
 import { NodeMutation } from '../node/entities/node-mutation.entity';
+import { CreateDocumentIt } from './input-types/create-document.it';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => DocumentMutation)
@@ -73,5 +74,22 @@ export class DocumentMutationsResolver {
   @ResolveField(() => [NodeMutation])
   async node(@Parent() parent, @Args('node_id') node_id: string) {
     return { node_id, documentId: parent.id };
+  }
+
+  @ResolveField(() => String)
+  async createDocument(
+    @Args({
+      name: 'document',
+      type: () => CreateDocumentIt,
+    })
+    { name }: CreateDocumentIt,
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    const createResult = await this.documentService.createDocument({
+      name,
+      size: 0,
+      user,
+    });
+    return createResult.id;
   }
 }

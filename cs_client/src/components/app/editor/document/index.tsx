@@ -45,12 +45,11 @@ const Document: React.FC<Props> = ({ state }) => {
     file_id,
     selectedFile,
     reloadRequestID: reloadDocument,
-    localChanges: documentState.nodes,
+    cacheTimeStamp: documentState.cacheTimeStamp,
   });
 
   useSaveDocument({
     saveDocumentCommandID: saveDocument,
-    nodes: documentState.nodes,
     documentHasUnsavedChanges,
   });
 
@@ -86,7 +85,6 @@ const Document: React.FC<Props> = ({ state }) => {
                     reloadRequestIDs={[String(reloadDocument)]}
                     contentEditable={contentEditable || !isOnMobile}
                     processLinks={processLinks}
-                    localChanges={documentState.nodes}
                   />
                 </ErrorBoundary>
               );

@@ -1,10 +1,8 @@
-import { updatedCachedMeta } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 import { appActionCreators } from '::app/reducer';
 import { NodeCached } from '::types/graphql/adapters';
 import { useHistory } from 'react-router-dom';
 import { TNodeMetaState } from '::app/menus/node-meta/reducer/reducer';
-import { apolloCache } from '::graphql/cache-helpers';
+import { apolloCache } from '::graphql/cache/apollo-cache';
 
 const calculateDiff = ({
   isNewNode,
@@ -70,8 +68,7 @@ const useSave = ({
       state,
     });
     if (newNode) {
-      apolloCache.setNode(res.id, res);
-      const fatherNode = apolloCache.getNode(res.fatherId);
+      const fatherNode = apolloCache.node.get(res.fatherId);
       const position =
         previous_sibling_node_id === -1
           ? -1
@@ -80,16 +77,15 @@ const useSave = ({
         position === -1
           ? fatherNode.child_nodes.push(res.node_id)
           : fatherNode.child_nodes.splice(position, 0, res.node_id);
-      apolloCache.setNode(res.id, res);
-      apolloCache.setNode(fatherNode.id, fatherNode);
-
-      documentActionCreators.createNewNode(res.id);
-      documentActionCreators.setNodeMetaHasChanged(node.fatherId, [
-        'child_nodes',
-      ]);
+      apolloCache.node.create(res);
+      apolloCache.node.mutate({
+        nodeId: fatherNode.id,
+        meta: {
+          child_nodes: fatherNode.child_nodes,
+        },
+      });
     } else {
-      if (Object.keys(res)) updatedCachedMeta({ nodeId, meta: res });
-      documentActionCreators.setNodeMetaHasChanged(nodeId, Object.keys(res));
+      if (Object.keys(res)) apolloCache.node.mutate({ nodeId, meta: res });
     }
 
     const nodePath = `/document/${node.documentId}/node/${node.node_id}`;

@@ -81,10 +81,15 @@ export interface Mutation {
 }
 
 export interface DocumentMutation {
+  createDocument: string;
   deleteDocument: string;
   node: NodeMutation;
   uploadFile: boolean;
   uploadLink: boolean;
+}
+
+export interface CreateDocumentIt {
+  name: string;
 }
 
 export interface DeleteDocumentInputType {
@@ -457,10 +462,18 @@ export interface MutationToUserResolver<TParent = any, TResult = any> {
 }
 
 export interface DocumentMutationTypeResolver<TParent = any> {
+  createDocument?: DocumentMutationToCreateDocumentResolver<TParent>;
   deleteDocument?: DocumentMutationToDeleteDocumentResolver<TParent>;
   node?: DocumentMutationToNodeResolver<TParent>;
   uploadFile?: DocumentMutationToUploadFileResolver<TParent>;
   uploadLink?: DocumentMutationToUploadLinkResolver<TParent>;
+}
+
+export interface DocumentMutationToCreateDocumentArgs {
+  document: CreateDocumentIt;
+}
+export interface DocumentMutationToCreateDocumentResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: DocumentMutationToCreateDocumentArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface DocumentMutationToDeleteDocumentArgs {

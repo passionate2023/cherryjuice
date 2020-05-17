@@ -7,7 +7,7 @@ import { useGetNodeHtml } from '::app/editor/document/rich-text/hooks/get-node-h
 import { useSetCurrentNode } from '::app/editor/document/rich-text/hooks/set-current-node';
 import { ContentEditable } from '::app/editor/document/rich-text/content-editable';
 import { useEffect } from 'react';
-import { TEditedNodes } from '::app/editor/document/reducer/initial-state';
+import { apolloCache } from '::graphql/cache/apollo-cache';
 
 type Props = {
   file_id: string;
@@ -15,7 +15,6 @@ type Props = {
   contentEditable: boolean;
   nodes: Map<number, NodeMeta>;
   processLinks: number;
-  localChanges: TEditedNodes;
 };
 
 const RichText: React.FC<Props> = ({
@@ -24,7 +23,6 @@ const RichText: React.FC<Props> = ({
   contentEditable,
   nodes,
   processLinks,
-  localChanges,
 }) => {
   const match = useRouteMatch();
   const history = useHistory();
@@ -45,7 +43,7 @@ const RichText: React.FC<Props> = ({
   useSetCurrentNode(node_id, nodes);
 
   useEffect(() => {
-    const nodeIsNew = localChanges[nodeId]?.new;
+    const nodeIsNew = apolloCache.changes.isNodeNew(nodeId);
     if (htmlError && !nodeIsNew) {
       history.push('/document/' + file_id);
     }

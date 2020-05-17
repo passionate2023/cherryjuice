@@ -1,54 +1,74 @@
 import { useMutation } from '@apollo/react-hooks';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { appActionCreators } from '::app/reducer';
-import { TEditedNodes } from '::app/editor/document/reducer/initial-state';
 import { SnackbarMessages } from '::shared-components/snackbar/snackbar-messages';
-import { useIsNotProcessed } from '::hooks/misc/isnot-processed';
+import { createIsNotProcessed } from '::hooks/misc/isnot-processed';
 import { AlertType } from '::types/react';
 import { saveNodesMeta } from '::app/editor/document/hooks/save-document/helpers/save-nodes-meta';
 import { saveNewNodes } from '::app/editor/document/hooks/save-document/helpers/save-new-nodes';
 import {
+  deleteDanglingNodes,
   saveDeletedNodes,
   SaveOperationState,
 } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
 import { saveNodesContent } from '::app/editor/document/hooks/save-document/helpers/save-nodes-content';
+import { useEffect } from 'react';
+import { saveNewDocument } from '::app/editor/document/hooks/save-document/helpers/save-new-document';
+import { useHistory } from 'react-router';
 
 type SaveDocumentProps = {
   saveDocumentCommandID: string;
-  nodes: TEditedNodes;
   documentHasUnsavedChanges;
 };
-const useSaveDocument = async ({
+
+const fn = createIsNotProcessed();
+const useSaveDocument = ({
   saveDocumentCommandID,
-  nodes,
   documentHasUnsavedChanges,
 }: SaveDocumentProps) => {
+  const history = useHistory();
   const [mutateContent] = useMutation(DOCUMENT_MUTATION.ahtml);
   const [mutateMeta] = useMutation(DOCUMENT_MUTATION.meta);
   const [mutateCreate] = useMutation(DOCUMENT_MUTATION.createNode.query);
   const [deleteNodeMutation] = useMutation(DOCUMENT_MUTATION.deleteNode.query);
+  const [createDocumentMutation] = useMutation(
+    DOCUMENT_MUTATION.createDocument.query,
+  );
 
-  const isNotProcessed = useIsNotProcessed([saveDocumentCommandID]);
-  if (isNotProcessed && documentHasUnsavedChanges) {
-    try {
-      const state: SaveOperationState = {
-        newFatherIds: {},
-      };
-      await saveDeletedNodes({ mutate: deleteNodeMutation, nodes, state });
-      await saveNewNodes({ mutate: mutateCreate, nodes, state });
-      await saveNodesMeta({ mutate: mutateMeta, nodes, state });
-      await saveNodesContent({ mutate: mutateContent, nodes, state });
-      appActionCreators.reloadDocument();
-      appActionCreators.setSnackbarMessage(SnackbarMessages.documentSaved);
-    } catch (e) {
-      appActionCreators.setAlert({
-        title: 'Could not save',
-        description: 'Check your network connection',
-        type: AlertType.Error,
-        error: e,
-      });
+  useEffect(() => {
+    const isNotProcessed = fn([saveDocumentCommandID]);
+    if (isNotProcessed && documentHasUnsavedChanges) {
+      (async () => {
+        try {
+          const state: SaveOperationState = {
+            newFatherIds: {},
+            swappedDocumentIds: {},
+            swappedNodeIds: {},
+            danglingNodes: {},
+            deletedNodes: {},
+          };
+          await saveNewDocument({ mutate: createDocumentMutation, state });
+          await saveDeletedNodes({ mutate: deleteNodeMutation, state });
+          await saveNewNodes({ mutate: mutateCreate, state });
+          await saveNodesContent({ mutate: mutateContent, state });
+          await saveNodesMeta({ mutate: mutateMeta, state });
+          await deleteDanglingNodes({ mutate: deleteNodeMutation, state });
+
+          const newDocument = Object.values(state.swappedDocumentIds)[0];
+          if (newDocument) history.push('/document/' + newDocument);
+          appActionCreators.reloadDocument();
+          appActionCreators.setSnackbarMessage(SnackbarMessages.documentSaved);
+        } catch (e) {
+          appActionCreators.setAlert({
+            title: 'Could not save',
+            description: 'Check your network connection',
+            type: AlertType.Error,
+            error: e,
+          });
+        }
+      })();
     }
-  }
+  }, [saveDocumentCommandID]);
 };
 
 export { useSaveDocument };

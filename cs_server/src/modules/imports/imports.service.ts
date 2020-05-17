@@ -1,6 +1,5 @@
 import imageThumbnail from 'image-thumbnail';
 import { Injectable } from '@nestjs/common';
-import { randomUUID10 } from '../shared';
 import {
   createGDriveDownloadTask,
   createGqlDownloadTask,
@@ -31,7 +30,7 @@ export type DocumentDTO = {
   name: string;
   size: number;
   user: User;
-  id: string;
+  // id: string;
 };
 @Injectable()
 export class ImportsService {
@@ -177,7 +176,7 @@ export class ImportsService {
           name: downloadTask.fileName,
           size: 0,
           user,
-          id: randomUUID10(),
+
         });
 
         documents.push({

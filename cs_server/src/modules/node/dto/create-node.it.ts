@@ -8,7 +8,7 @@ export class CreateNodeIt {
   @Field()
   father_id: number;
 
-  @Field()
+  @Field({ nullable: true })
   fatherId: string;
 
   @Field(() => Int)
@@ -34,7 +34,4 @@ export class CreateNodeIt {
 
   @Field(() => Int)
   read_only: number;
-
-  @Field(() => Int, { nullable: true })
-  position: number;
 }

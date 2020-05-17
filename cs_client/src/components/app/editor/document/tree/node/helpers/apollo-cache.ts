@@ -1,4 +1,4 @@
-import { apolloCache } from '::graphql/cache-helpers';
+import { apolloCache } from '::graphql/cache/apollo-cache';
 
 const unsetImagesAttributes = (images: HTMLImageElement[]) => {
   const imageAttributesTempContainer = [];
@@ -44,19 +44,19 @@ const getEditorContentWithoutImages = () => {
   };
 };
 const getNodeImageIDsFromCache = ({ nodeId }): string[] => {
-  return apolloCache.getNode(nodeId)[
+  return apolloCache.node.get(nodeId)[
     // eslint-disable-next-line no-unexpected-multiline
     'image({"thumbnail":true})'
   ].map(({ id }) => /:(.+)$/.exec(id)[1]);
 };
 
 const updatedCachedHtml = ({ nodeId, html }) => {
-  const node = apolloCache.getNode(nodeId);
-  apolloCache.setNode(nodeId, { ...node, html });
-};
-const updatedCachedMeta = ({ nodeId, meta }) => {
-  const node = apolloCache.getNode(nodeId);
-  apolloCache.setNode(nodeId, { ...node, ...meta });
+  apolloCache.node.mutate({
+    nodeId,
+    meta: {
+      html,
+    },
+  });
 };
 
 const updateCachedImages = ({
@@ -66,22 +66,22 @@ const updateCachedImages = ({
   nodeId;
   deletedImages: string[];
 }) => {
-  const node = apolloCache.getNode(nodeId);
+  const node = apolloCache.node.get(nodeId);
   const deleted = Object.fromEntries(
     deletedImages.map(id => ['Image:' + id, true]),
   );
-  apolloCache.setNode(nodeId, {
-    ...node,
-    // @ts-ignore
-    'image({"thumbnail":true})': node['image({"thumbnail":true})'].filter(
-      ({ id }) => !deleted[id],
-    ),
-    // @ts-ignore
-    'image({"thumbnail":false})': node['image({"thumbnail":false})'].filter(
-      ({ id }) => !deleted[id],
-    ),
+  apolloCache.node.mutate({
+    nodeId,
+    meta: {
+      'image({"thumbnail":true})': node['image({"thumbnail":true})'].filter(
+        ({ id }) => !deleted[id],
+      ),
+      'image({"thumbnail":false})': node['image({"thumbnail":false})'].filter(
+        ({ id }) => !deleted[id],
+      ),
+    },
   });
-  deletedImages.forEach(apolloCache.deleteImage);
+  deletedImages.forEach(apolloCache.image.delete(node.id));
 };
 const updateCachedHtmlAndImages = (): { deletedImageIDs: string[] } => {
   const {
@@ -106,5 +106,4 @@ export {
   updateCachedImages,
   updatedCachedHtml,
   getEditorContentWithoutImages,
-  updatedCachedMeta,
 };

@@ -11,14 +11,14 @@ import { DocumentDTO } from '../imports.service';
 
 const publishGraphqlMessage = async (
   eventType: DOCUMENT_SUBSCRIPTIONS,
-  document: Document | DocumentDTO,
+  document: Document,
 ): Promise<void> => {
   const payload: { document: DocumentSubscription } = {
     document: {
       documentId: document.id,
       eventType,
       documentName: document.name,
-      userId: document instanceof Document ? document.userId : document.user.id,
+      userId: document.userId,
     },
   };
   await pubSub.publish(SUBSCRIPTIONS.DOCUMENT, payload);
@@ -31,14 +31,15 @@ const updateDocumentStatus = async (
     if (event === DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FINISHED)
       document.status = null;
     else document.status = event;
-    await document.save();
+    if (event !== DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_DELETED)
+      await document.save();
   }
 };
 const EVENTS_TO_NOT_PERSIST = {
   [DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_DELETED]: true,
 };
 const createThreshold = (eventType: DOCUMENT_SUBSCRIPTIONS) => async (
-  document: Document | DocumentDTO,
+  document: Document,
 ): Promise<void> => {
   await publishGraphqlMessage(eventType, document);
   if (!EVENTS_TO_NOT_PERSIST[eventType])

@@ -1,8 +1,10 @@
-import { toNodes } from '::helpers/editing/execK/helpers';
+import { stringToSingleElement } from '::helpers/editing/execK/helpers';
 
 const splitTableByRow = ({ table }: { table: string }): Node[] => {
   const res = [];
-  const tableElement: HTMLTableElement = toNodes(table) as HTMLTableElement;
+  const tableElement: HTMLTableElement = stringToSingleElement(
+    table,
+  ) as HTMLTableElement;
   Array.from(tableElement.tBodies[0].rows).forEach(tr => {
     res.push(document.createElement('br'));
     res.push(

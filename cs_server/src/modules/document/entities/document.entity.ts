@@ -11,14 +11,15 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
+import { randomUUID10 } from '../../shared';
 
 @Unique(['hash'])
 @Entity()
 @ObjectType()
 export class Document extends BaseEntity {
-  constructor(user: User, name: string, size: number, id: string) {
+  constructor(user: User, name: string, size: number) {
     super();
-    this.id = id;
+    this.id = randomUUID10();
     this.name = name;
     this.user = user;
     this.size = size;

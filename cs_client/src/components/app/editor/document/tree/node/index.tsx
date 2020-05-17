@@ -57,7 +57,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
       nodeOverlay.updateWidth();
       nodeOverlay.updateLeft(componentRef);
 
-      updateCachedHtmlAndImages(cache);
+      updateCachedHtmlAndImages();
       history.push(path);
     },
     [nodePath],

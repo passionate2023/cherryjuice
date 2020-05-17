@@ -69,8 +69,9 @@ export class NodeRepository extends Repository<Node> {
     copyProperties(meta, node, {});
     node.documentId = documentId;
 
-    const parentNode = await this.getNodeMetaById(node.father_id, documentId);
-    node.father = parentNode;
+    if (node.father_id !== -1) {
+      node.father = await this.getNodeMetaById(node.father_id, documentId);
+    }
     await node.save();
 
     return node.id;

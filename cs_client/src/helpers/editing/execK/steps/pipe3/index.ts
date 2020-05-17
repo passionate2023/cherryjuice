@@ -1,4 +1,4 @@
-import { toNodes } from '::helpers/editing/execK/helpers';
+import { stringToSingleElement } from '::helpers/editing/execK/helpers';
 import { replaceElement } from '::helpers/editing/execK/steps/pipe3/helpers';
 import { getDDOE } from '::helpers/editing/execK/steps/pipe1/ddoes';
 import { Element } from '@cs/ahtml-to-html';
@@ -9,7 +9,7 @@ const aHtmlsToElements = (
   { startDDOE },
 ) => ({
   childrenElementsOfStartDDOE: childrenOfStartDDDE.map(node =>
-    toNodes(aHtmlToElement(node)),
+    stringToSingleElement(aHtmlToElement(node)),
   ),
   adjacentElementsOfStartDDOE: midDDOEs
     .reduce((acc, DDOE) => {
@@ -20,9 +20,9 @@ const aHtmlsToElements = (
       acc.push(startDDOEShell.outerHTML);
       return acc;
     }, [])
-    .map(toNodes),
+    .map(stringToSingleElement),
   childrenElementsOfEndDDOE: childrenOfEndDDDE.map(node =>
-    toNodes(aHtmlToElement(node)),
+    stringToSingleElement(aHtmlToElement(node)),
   ),
 });
 

@@ -19,7 +19,7 @@ const FormInput: React.FC<Props> = ({
   value,
   additionalInput,
   lazyAutoFocus,
-  testId
+  testId,
 }) => {
   const inputName = label.replace(/[^A-Za-z]/g, '-').toLowerCase();
   const onChangeCheckbox = e => onChange(e.target.checked);
