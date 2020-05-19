@@ -28,7 +28,12 @@ const nodeHelpers = (state: CacheState) => ({
           'image({"thumbnail":false})'?: any[];
         };
   }): void => {
-    const modificationType = (meta as any)?.html ? 'content' : 'meta';
+    const modificationType =
+      meta['html'] ||
+      meta['image({"thumbnail":true})'] ||
+      meta['image({"thumbnail":false})']
+        ? 'content'
+        : 'meta';
     const node = apolloCache.node.get(nodeId);
     if (!state.modifications.node[modificationType][nodeId])
       state.modifications.node[modificationType][nodeId] = {};

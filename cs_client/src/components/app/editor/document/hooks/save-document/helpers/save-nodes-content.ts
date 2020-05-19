@@ -17,7 +17,7 @@ const saveNodesContent = async ({ mutate, state }: SaveOperationProps) => {
     .map(id => apolloCache.node.get(id));
   for (const node of editedNodeContent) {
     if (collectDanglingNodes(state)(node)) continue;
-    // const { deletedImageIDs } = updateCachedHtmlAndImages(); // todo
+    const deletedImages = apolloCache.changes.image.deleted[node.id];
     updateDocumentId(state)(node);
     const DDOEs = stringToMultipleElements(node.html);
     const { abstractHtml, DDOEsAHtml } = getAHtml({
@@ -33,7 +33,7 @@ const saveNodesContent = async ({ mutate, state }: SaveOperationProps) => {
         file_id: node.documentId,
         node_id: `${node.node_id}`,
         ahtml: JSON.stringify(aHtml),
-        deletedImages: [],
+        deletedImages: deletedImages || [],
       },
       mutate,
     });

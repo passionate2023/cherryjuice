@@ -12,6 +12,12 @@ const apolloCache = (() => {
   return {
     __setCache: cache => (state.cache = cache),
     __resetCache: async () => await state.cache.reset(),
+    __state: (() => ({
+      get modifications() {
+        return cloneObj(state.modifications);
+      },
+      cache: state.cache,
+    }))(),
     node: nodeHelpers(state),
     image: imageHelpers(state),
     document: documentHelpers(state),

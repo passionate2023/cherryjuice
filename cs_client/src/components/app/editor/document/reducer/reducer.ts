@@ -10,12 +10,6 @@ const reducer = (
 ): TDocumentState => {
   let newState = state;
   switch (action.type) {
-    case documentActions.SET_FETCHED_IMAGE_IDS:
-      newState = {
-        ...state,
-      };
-      break;
-
     case documentActions.setCacheUpdated:
       newState = {
         ...state,

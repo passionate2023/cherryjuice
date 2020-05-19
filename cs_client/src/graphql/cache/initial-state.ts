@@ -33,6 +33,11 @@ type CacheState = {
         };
       };
     };
+    image: {
+      deleted: {
+        [nodeId: string]: string[];
+      };
+    };
   };
 };
 const cacheInitialState: CacheState = {
@@ -44,6 +49,9 @@ const cacheInitialState: CacheState = {
       meta: {},
       created: {},
       content: {},
+    },
+    image: {
+      deleted: {},
     },
   },
 };

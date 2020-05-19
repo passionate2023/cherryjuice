@@ -2,8 +2,6 @@ type TDocumentState = {
   cacheTimeStamp: number;
 };
 const state: TDocumentState = {
-  // nodes: {},
-  // nodesWhomContentHasChanged: new Set<string>(),
   cacheTimeStamp: undefined,
 };
 

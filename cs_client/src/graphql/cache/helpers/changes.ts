@@ -46,14 +46,8 @@ const changesHelpers = (state: CacheState) => ({
     },
   },
   image: {
-    get deleted(): string[] {
-      return Object.entries(state.modifications.node.content)
-        .filter(
-          ([, content]) =>
-            content['image({"thumbnail":true})'] ||
-            content['image({"thumbnail":false})'],
-        )
-        .map(([nodeId]) => nodeId);
+    get deleted(): { [nodeId: string]: string[] } {
+      return cloneObj(state.modifications.image.deleted);
     },
   },
   isNodeNew: (nodeId: string): boolean =>

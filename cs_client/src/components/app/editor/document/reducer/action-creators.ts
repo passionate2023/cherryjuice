@@ -1,5 +1,4 @@
 enum actions {
-  SET_FETCHED_IMAGE_IDS,
   setCacheUpdated,
 }
 
@@ -10,11 +9,6 @@ const actionCreators = (() => {
   };
   return {
     setDispatch: (dispatch): void => (state.dispatch = dispatch),
-    setFetchedImageIDs: (nodeId: string, fetchedImageIDs: string[]) =>
-      state.dispatch({
-        type: actions.SET_FETCHED_IMAGE_IDS,
-        value: { nodeId, fetchedImageIDs },
-      }),
     setCacheUpdated: () => {
       state.dispatch({
         type: actions.setCacheUpdated,

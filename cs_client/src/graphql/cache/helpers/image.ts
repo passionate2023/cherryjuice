@@ -2,12 +2,14 @@ import { documentActionCreators } from '::app/editor/document/reducer/action-cre
 import { CacheState } from '::graphql/cache/initial-state';
 
 const imageHelpers = (state: CacheState) => ({
-  delete: (nodeId: string) => (imageId: string): void => {
-    state.cache.data.delete('Image:' + imageId);
-    if (!state.modifications.node.content.deletedImages[nodeId])
-      state.modifications.node.content.deletedImages[nodeId] = {};
-    state.modifications.node.content.deletedImages[nodeId][imageId] = true;
-    documentActionCreators.setCacheUpdated();
+  delete: {
+    hard: (nodeId: string) => (imageId: string): void => {
+      state.cache.data.delete('Image:' + imageId);
+      if (!state.modifications.image.deleted[nodeId])
+        state.modifications.image.deleted[nodeId] = [];
+      state.modifications.image.deleted[nodeId].push(imageId);
+      documentActionCreators.setCacheUpdated();
+    },
   },
 });
 

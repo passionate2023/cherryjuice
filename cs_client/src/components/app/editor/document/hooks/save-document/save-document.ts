@@ -15,6 +15,7 @@ import { saveNodesContent } from '::app/editor/document/hooks/save-document/help
 import { useEffect } from 'react';
 import { saveNewDocument } from '::app/editor/document/hooks/save-document/helpers/save-new-document';
 import { useHistory } from 'react-router';
+import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 
 type SaveDocumentProps = {
   saveDocumentCommandID: string;
@@ -47,6 +48,7 @@ const useSaveDocument = ({
             danglingNodes: {},
             deletedNodes: {},
           };
+          updateCachedHtmlAndImages();
           await saveNewDocument({ mutate: createDocumentMutation, state });
           await saveDeletedNodes({ mutate: deleteNodeMutation, state });
           await saveNewNodes({ mutate: mutateCreate, state });

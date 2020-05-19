@@ -3,6 +3,7 @@ import { NodeCached } from '::types/graphql/adapters';
 import { useHistory } from 'react-router-dom';
 import { TNodeMetaState } from '::app/menus/node-meta/reducer/reducer';
 import { apolloCache } from '::graphql/cache/apollo-cache';
+import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 
 const calculateDiff = ({
   isNewNode,
@@ -84,12 +85,13 @@ const useSave = ({
           child_nodes: fatherNode.child_nodes,
         },
       });
+      updateCachedHtmlAndImages();
+      const nodePath = `/document/${node.documentId}/node/${node.node_id}`;
+      history.push(nodePath);
     } else {
       if (Object.keys(res)) apolloCache.node.mutate({ nodeId, meta: res });
     }
 
-    const nodePath = `/document/${node.documentId}/node/${node.node_id}`;
-    history.push(nodePath);
     appActionCreators.hideNodeMeta();
   };
   return {

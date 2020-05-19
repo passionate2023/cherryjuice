@@ -81,9 +81,9 @@ const updateCachedImages = ({
       ),
     },
   });
-  deletedImages.forEach(apolloCache.image.delete(node.id));
+  deletedImages.forEach(apolloCache.image.delete.hard(node.id));
 };
-const updateCachedHtmlAndImages = (): { deletedImageIDs: string[] } => {
+const updateCachedHtmlAndImages = (): void => {
   const {
     html,
     id,
@@ -98,7 +98,6 @@ const updateCachedHtmlAndImages = (): { deletedImageIDs: string[] } => {
     if (deletedImageIDs.length)
       updateCachedImages({ nodeId: id, deletedImages: deletedImageIDs });
   }
-  return { deletedImageIDs };
 };
 export {
   updateCachedHtmlAndImages,
