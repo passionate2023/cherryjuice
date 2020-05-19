@@ -3,7 +3,7 @@ import { EventHandler, useContext, useEffect, useReducer } from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { MetaForm } from '::shared-components/form/meta-form/meta-form';
-import { useSave } from '::app/menus/node-meta/hooks/save';
+import { save } from '::app/menus/node-meta/hooks/save';
 import { NodeMetaPopupRole } from '::app/reducer';
 import { AppContext } from '::app/context';
 import {
@@ -15,6 +15,7 @@ import { getNode } from '::app/menus/node-meta/helpers/get-node';
 import { modNodeMeta } from '::sass-modules/index';
 import { IconPicker } from '::app/menus/node-meta/components/icon-picker';
 import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
+import { useHistory } from 'react-router';
 
 type TNodeMetaModalProps = {
   nodeId: string;
@@ -42,13 +43,14 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
       nodeMetaActionCreators.reset(node);
     else nodeMetaActionCreators.reset(undefined);
   }, [nodeId, showDialog]);
-
-  const { onSave } = useSave({
+  const history = useHistory();
+  const onSave = save({
     nodeId,
     node,
     newNode: isNewNode,
     state,
     previous_sibling_node_id,
+    history,
   });
   const buttonsRight = [
     {

@@ -61,7 +61,7 @@ const nodeHelpers = (state: CacheState) => ({
     },
     hard: (nodeId): void => {
       state.cache.data.delete('Node:' + nodeId);
-      state.modifications.node.deleted[nodeId] = 'hard';
+      delete state.modifications.node.deleted[nodeId];
     },
   }))(),
   deletedAllModified: () => {

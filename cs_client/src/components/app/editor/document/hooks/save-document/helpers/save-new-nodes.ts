@@ -77,7 +77,7 @@ const saveNewNodes = async ({ mutate, state }: SaveOperationProps) => {
         state.newFatherIds[node_id] = permanentNodeId;
       });
     } else {
-      throw new Error('could not save node ' + JSON.stringify(node));
+      throw new Error('could not save node ' + node.id);
     }
     apolloCache.changes.unsetModificationFlag(
       localChanges.NODE_CREATED,

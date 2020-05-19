@@ -65,8 +65,8 @@ const changesHelpers = (state: CacheState) => ({
       state.modifications = {
         ...cloneObj(cacheInitialState.modifications),
       };
-      documentActionCreators.resetCacheUpdated();
     }
+    documentActionCreators.resetCacheUpdated();
   },
 });
 export { changesHelpers };

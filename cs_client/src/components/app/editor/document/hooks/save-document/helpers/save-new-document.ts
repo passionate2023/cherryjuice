@@ -3,6 +3,7 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 import { SaveOperationProps } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
 import { DocumentMutationToCreateDocumentArgs } from '::types/graphql/generated';
 import { performMutation } from '::app/editor/document/hooks/save-document/helpers/shared';
+import { localChanges } from '::graphql/cache/helpers/changes';
 
 const saveNewDocument = async ({ mutate, state }: SaveOperationProps) => {
   const newDocuments = apolloCache.changes.document.created;
@@ -23,7 +24,13 @@ const saveNewDocument = async ({ mutate, state }: SaveOperationProps) => {
         newId: permanentDocumentId,
       });
       state.swappedDocumentIds[temporaryId] = permanentDocumentId;
+    } else {
+      throw new Error('could not save document ' + document.id);
     }
+    apolloCache.changes.unsetModificationFlag(
+      localChanges.DOCUMENT_CREATED,
+      temporaryId,
+    );
   }
 };
 export { saveNewDocument };

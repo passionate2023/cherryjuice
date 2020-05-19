@@ -1,6 +1,5 @@
 import { appActionCreators } from '::app/reducer';
 import { NodeCached } from '::types/graphql/adapters';
-import { useHistory } from 'react-router-dom';
 import { TNodeMetaState } from '::app/menus/node-meta/reducer/reducer';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
@@ -52,17 +51,17 @@ type UseSaveProps = {
   newNode: boolean;
   state: TNodeMetaState;
   previous_sibling_node_id: number;
+  history: any;
 };
-const useSave = ({
+const save = ({
   node,
   newNode,
   nodeId,
   state,
   previous_sibling_node_id,
+  history,
 }: UseSaveProps) => {
-  const history = useHistory();
-
-  const onSave = () => {
+  return () => {
     const res = calculateDiff({
       isNewNode: newNode,
       node,
@@ -94,9 +93,6 @@ const useSave = ({
 
     appActionCreators.hideNodeMeta();
   };
-  return {
-    onSave,
-  };
 };
 
-export { useSave };
+export { save };
