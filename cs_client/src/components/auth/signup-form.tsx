@@ -118,7 +118,7 @@ const SignUpForm: React.FC<Props> = () => {
           <input
             type={'submit'}
             value={'Sign up'}
-            className={`${modLogin.login__form__input__input} ${modLogin.login__form__inputSubmit}`}
+            className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
             onClick={signUp}
             disabled={loading}
             style={{ marginTop: 20 }}

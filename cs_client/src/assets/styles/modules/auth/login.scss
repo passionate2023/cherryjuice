@@ -1,4 +1,5 @@
 @import '../../vars/vars';
+@import '../../vars/colors';
 @import '../../mixins/form';
 
 .login__card {
@@ -38,32 +39,60 @@
 
 .login__form__input {
   position: relative;
-  //padding: 0px 15px;
   display: flex;
   border-radius: 5px;
   background-color: white;
   filter: brightness(0.95);
   margin-top: 2px;
   @include form-element-size();
+  max-height: 50px;
+}
+
+.login__form__input:focus {
+  padding-bottom: 5px;
 }
 .login__form__input__icon {
-  opacity: 0.8;
+  opacity: 0.5;
   position: absolute;
   align-self: center;
   padding-left: 10px;
 }
 .login__form__input__input {
   border-radius: 5px;
-  padding: 10px 15px;
+  padding: 20px 15px;
   padding-left: 35px;
   //margin-left: 10px;
-  font-size: 1.2rem;
+  font-size: 1rem;
   width: 100%;
   border: none;
+  height: 50px;
+  box-sizing: border-box;
+
+
+}
+.login__form__input__input--highlight-invalid{
+  &:invalid{
+    color: $COLOR_WARNING;
+  }
+}
+.login__form__input__label {
+  position: absolute;
+  transform-origin: 0%;
+  transform: translateY(15px) translateX(35px);
+  transition: transform 200ms, opacity 200ms;
+  color: #6f6f6f;
+}
+.login__form__input:focus-within .login__form__input__label,
+.login__form__input__input:not(:placeholder-shown) {
+  padding-bottom: 3px;
+  + .login__form__input__label {
+    transform: scale(0.76) translateY(4px) translateX(47px);
+    opacity: 0.8;
+  }
 }
 .login__form__input--submit {
   margin-left: 0px;
-  padding: 10px 15px;
+  padding: 10px 15px !important;
   font-weight: lighter;
   background-color: $primary-dark2;
   color: white;

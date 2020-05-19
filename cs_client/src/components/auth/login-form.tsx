@@ -101,7 +101,11 @@ const LoginForm: React.FC<Props> = () => {
           />
           <FormSeparator text={'or'} />
           {inputs.map(inputProps => (
-            <TextInput {...inputProps} key={inputProps.variableName} />
+            <TextInput
+              {...inputProps}
+              key={inputProps.variableName}
+              highlightInvalidInput={false}
+            />
           ))}
           <span className={modLogin.login__form__rememberMe}>
             <Checkbox
