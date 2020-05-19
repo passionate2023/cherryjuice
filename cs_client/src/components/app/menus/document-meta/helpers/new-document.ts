@@ -34,7 +34,7 @@ const generateNewDocument = ({ name }: GenerateNewDocumentProps): Document => {
     name,
     size: 0,
     hash: '',
-    folder: undefined,
+    folder: 'Unsaved',
     status: undefined,
     createdAt: new Date().getTime(),
     updatedAt: new Date().getTime(),

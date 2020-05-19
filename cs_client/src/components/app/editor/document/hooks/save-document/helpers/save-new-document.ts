@@ -10,6 +10,7 @@ const saveNewDocument = async ({ mutate, state }: SaveOperationProps) => {
 
   for (const documentId of newDocuments) {
     const document = apolloCache.document.get(documentId);
+    if (document.folder === 'Unsaved') document.folder = null;
     const data = await performMutation<DocumentMutationToCreateDocumentArgs>({
       variables: {
         document: { name: document.name },

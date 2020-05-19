@@ -26,9 +26,9 @@ const saveNodesMeta = async ({ mutate, state }: SaveOperationProps) => {
   const editedNodeMeta = apolloCache.changes.node.meta.filter(
     ([id]): boolean => !state.deletedNodes[id],
   );
+
   for (let [nodeId, editedAttributes] of editedNodeMeta) {
-    nodeId = swapNodeIdIfApplies(state)(nodeId);
-    const node = apolloCache.node.get(nodeId);
+    const node = apolloCache.node.get(swapNodeIdIfApplies(state)(nodeId));
     const meta: NodeMetaIt = {};
     editedAttributes.forEach(attribute => {
       meta[attribute] = node[attribute];
@@ -44,7 +44,7 @@ const saveNodesMeta = async ({ mutate, state }: SaveOperationProps) => {
       },
       mutate,
     });
-    apolloCache.changes.unsetModificationFlag(localChanges.NODE_META, node.id);
+    apolloCache.changes.unsetModificationFlag(localChanges.NODE_META, nodeId);
   }
 };
 

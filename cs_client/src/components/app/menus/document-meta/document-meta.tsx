@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { MetaForm } from '::shared-components/form/meta-form/meta-form';
-import { useCallback, useState } from 'react';
+import {  useState } from 'react';
 import { EventHandler } from 'react';
 import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
 import { appActionCreators } from '::app/reducer';
@@ -12,15 +12,17 @@ import {
   generateNewDocument,
   generateRootNode,
 } from '::app/menus/document-meta/helpers/new-document';
+import { useDelayedCallback } from '::hooks/react/delayed-callback';
 
 type DocumentMetaDialogProps = {};
 
+const defaultDocumentName = 'new document';
 const DocumentMetaDialogWithTransition: React.FC<DocumentMetaDialogProps & {
   onClose: EventHandler<any>;
   showDialog: boolean;
   isOnMobile: boolean;
 }> = ({ showDialog, isOnMobile, onClose }) => {
-  const [name, setName] = useState('new document');
+  const [name, setName] = useState(defaultDocumentName);
   const inputs: FormInputProps[] = [
     {
       onChange: setName,
@@ -31,25 +33,26 @@ const DocumentMetaDialogWithTransition: React.FC<DocumentMetaDialogProps & {
       testId: 'document-name',
     },
   ];
-  const apply = useCallback(() => {
-    try {
-      const document = generateNewDocument({ name });
-      const rootNode = generateRootNode({ documentId: document.id });
-      document.node.push(rootNode);
-      apolloCache.node.create(rootNode);
-      apolloCache.document.create(document.id, document);
-      appActionCreators.selectFile(document.id);
-    } catch (e) {
-      appActionCreators.setAlert({
-        title: 'Could not create a document',
-        description: 'please refresh the page',
-        type: AlertType.Error,
-        error: e,
-      });
-    }
-
-    appActionCreators.hideDocumentMetaDialog();
-  }, [name]);
+  const apply = useDelayedCallback(
+    appActionCreators.hideDocumentMetaDialog,
+    () => {
+      try {
+        const document = generateNewDocument({ name });
+        const rootNode = generateRootNode({ documentId: document.id });
+        document.node.push(rootNode);
+        apolloCache.node.create(rootNode);
+        apolloCache.document.create(document.id, document);
+        appActionCreators.selectFile(document.id);
+      } catch (e) {
+        appActionCreators.setAlert({
+          title: 'Could not create a document',
+          description: 'please refresh the page',
+          type: AlertType.Error,
+          error: e,
+        });
+      }
+    },
+  );
   const buttonsRight = [
     {
       label: 'dismiss',

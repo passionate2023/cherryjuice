@@ -1,18 +1,16 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { appActionCreators } from '../../reducer';
-import { QUERY_DOCUMENTS } from '::graphql/queries';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
-import { useReloadQuery } from '::hooks/use-reload-query';
-import { useQueryTimeout } from '::hooks/use-query-timeout';
-import { DocumentList } from './documents-list/document-list';
+import { DocumentList } from './components/documents-list/document-list';
 import { CircleButton } from '::shared-components/buttons/circle-button';
 import { modDialog } from '::sass-modules/index';
 import { Icons, Icon } from '::shared-components/icon';
 import { useDeleteFile } from '::hooks/graphql/delete-file';
 import { useRef } from 'react';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
+import { useGetDocumentsList } from '::app/menus/select-file/hooks/get-documents-list';
 
 const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
   const buttonsLeft = [
@@ -42,26 +40,7 @@ const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
   return { buttonsLeft, buttonsRight };
 };
 
-const useData = ({ reloadFiles }: { reloadFiles: number }) => {
-  const { data, loading, error } = useReloadQuery(
-    {
-      reloadRequestIDs: [reloadFiles],
-    },
-    {
-      query: QUERY_DOCUMENTS.documentMeta.query,
-      queryVariables: undefined,
-    },
-  );
-  useQueryTimeout(
-    {
-      queryData: data,
-      queryError: error,
-      queryVariables: reloadFiles,
-    },
-    { resourceName: 'files' },
-  );
-  return { data, loading };
-};
+
 
 const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
   const [selectedIDs, setSelectedIDs] = useState([]);
@@ -77,8 +56,8 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
     open,
   });
 
-  const { loading, data } = useData({ reloadFiles });
-  const documentsMeta = QUERY_DOCUMENTS.documentMeta.path(data);
+  const { loading, documentsList } = useGetDocumentsList({ reloadFiles });
+
   const { deleteDocument } = useDeleteFile({
     IDs: selectedIDs,
     onCompleted: () => {
@@ -90,7 +69,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
   });
   const holdingRef = useRef(false);
   const rightHeaderButtons = [
-    documentsMeta.length && holdingRef.current && (
+    documentsList.length && holdingRef.current && (
       <CircleButton
         key={Icons.material.clear}
         className={modDialog.dialog__header__fileButton}
@@ -102,7 +81,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
         <Icon name={Icons.material.cancel} />
       </CircleButton>
     ),
-    documentsMeta.length && holdingRef.current && (
+    documentsList.length && holdingRef.current && (
       <CircleButton
         disabled={!selectedIDs.length}
         key={Icons.material.delete}
@@ -142,7 +121,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
           onSelect={onSelect}
           selectedIDs={selectedIDs}
           selectedFile={selectedFile}
-          documentsMeta={documentsMeta}
+          documentsMeta={documentsList}
           loading={loading}
         />
       </ErrorBoundary>

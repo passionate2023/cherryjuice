@@ -3,6 +3,7 @@ import { NodeCached } from '::types/graphql/adapters';
 import { TNodeMetaState } from '::app/menus/node-meta/reducer/reducer';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
+import { useDelayedCallback } from '::hooks/react/delayed-callback';
 
 const calculateDiff = ({
   isNewNode,
@@ -61,7 +62,7 @@ const save = ({
   previous_sibling_node_id,
   history,
 }: UseSaveProps) => {
-  return () => {
+  return useDelayedCallback(appActionCreators.hideNodeMeta, () => {
     const res = calculateDiff({
       isNewNode: newNode,
       node,
@@ -90,9 +91,7 @@ const save = ({
     } else {
       if (Object.keys(res)) apolloCache.node.mutate({ nodeId, meta: res });
     }
-
-    appActionCreators.hideNodeMeta();
-  };
+  });
 };
 
 export { save };
