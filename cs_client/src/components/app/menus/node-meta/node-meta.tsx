@@ -2,9 +2,9 @@ import * as React from 'react';
 import { EventHandler, useContext, useEffect, useReducer } from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
-import { Form } from './components/form';
+import { MetaForm } from '::shared-components/form/meta-form/meta-form';
 import { useSave } from '::app/menus/node-meta/hooks/save';
-import { NodeMetaPopup } from '::app/reducer';
+import { NodeMetaPopupRole } from '::app/reducer';
 import { AppContext } from '::app/context';
 import {
   nodeMetaActionCreators,
@@ -12,14 +12,17 @@ import {
   nodeMetaReducer,
 } from '::app/menus/node-meta/reducer/reducer';
 import { getNode } from '::app/menus/node-meta/helpers/get-node';
+import { modNodeMeta } from '::sass-modules/index';
+import { IconPicker } from '::app/menus/node-meta/components/icon-picker';
+import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
 
 type TNodeMetaModalProps = {
   nodeId: string;
-  onClose: EventHandler<any>;
 };
 
 const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
-  showDialog: NodeMetaPopup;
+  onClose: EventHandler<any>;
+  showDialog: NodeMetaPopupRole;
   isOnMobile: boolean;
 }> = ({ showDialog, isOnMobile, nodeId, onClose }) => {
   const [state, dispatch] = useReducer(nodeMetaReducer, nodeMetaInitialState);
@@ -35,7 +38,8 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
   });
 
   useEffect(() => {
-    if (showDialog === NodeMetaPopup.EDIT) nodeMetaActionCreators.reset(node);
+    if (showDialog === NodeMetaPopupRole.EDIT)
+      nodeMetaActionCreators.reset(node);
     else nodeMetaActionCreators.reset(undefined);
   }, [nodeId, showDialog]);
 
@@ -59,6 +63,59 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
     },
   ];
 
+  const inputs: FormInputProps[] = [
+    {
+      onChange: nodeMetaActionCreators.setName,
+      value: state.name,
+      type: 'text',
+      label: 'Node name',
+      lazyAutoFocus: 400,
+      testId: 'node-name',
+    },
+    {
+      onChange: nodeMetaActionCreators.setIsBold,
+      value: state.isBold,
+      type: 'checkbox',
+      label: 'Bold',
+    },
+    {
+      onChange: nodeMetaActionCreators.setHasCustomColor,
+      value: state.hasCustomColor,
+      type: 'checkbox',
+      label: 'User selected color',
+      additionalInput: (
+        <input
+          disabled={!state.hasCustomColor}
+          type={'color'}
+          onChange={e => nodeMetaActionCreators.setCustomColor(e.target.value)}
+          value={state.customColor}
+          className={`${modNodeMeta.nodeMeta__input__colorInput} ${
+            !state.hasCustomColor ? modNodeMeta.nodeMeta__inputDisabled : ''
+          }`}
+        />
+      ),
+    },
+    {
+      onChange: nodeMetaActionCreators.setHasCustomIcon,
+      value: state.hasCustomIcon,
+      type: 'checkbox',
+      label: 'User selected icon',
+      additionalInput: (
+        <IconPicker
+          onChange={nodeMetaActionCreators.setCustomIcon}
+          value={state.customIcon}
+          disabled={!state.hasCustomIcon}
+        />
+      ),
+    },
+    {
+      onChange: nodeMetaActionCreators.setIsReadOnly,
+      value: state.isReadOnly,
+      type: 'checkbox',
+      label: 'Read only',
+    },
+  ];
+
   return (
     <DialogWithTransition
       dialogTitle={'Node Properties'}
@@ -72,7 +129,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
       small={true}
     >
       <ErrorBoundary>
-        <Form state={state} />
+        <MetaForm inputs={inputs} />
       </ErrorBoundary>
     </DialogWithTransition>
   );

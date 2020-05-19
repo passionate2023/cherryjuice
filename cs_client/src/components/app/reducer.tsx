@@ -1,6 +1,6 @@
 import { TAlert } from '::types/react';
 import { NodeMeta } from '::types/graphql/adapters';
-enum NodeMetaPopup {
+enum NodeMetaPopupRole {
   EDIT = 1,
   CREATE_SIBLING,
   CREATE_CHILD,
@@ -49,6 +49,7 @@ const initialState = {
   documentHasUnsavedChanges: false,
   snackbarMessage: undefined,
   createDocumentRequestId: undefined,
+  showDocumentMetaDialog: false,
 };
 
 export type TState = typeof initialState & {
@@ -56,7 +57,7 @@ export type TState = typeof initialState & {
   rootNode: NodeMeta;
   recentNodes: TNodeMeta[];
   alert: TAlert;
-  showNodeMeta: NodeMetaPopup;
+  showNodeMeta: NodeMetaPopupRole;
   createDocumentRequestId: number;
 };
 enum actions {
@@ -92,6 +93,7 @@ enum actions {
   documentHasUnsavedChanges,
   removeNodeFromRecentNodes,
   createDocument,
+  showDocumentMetaDialog,
 }
 const createActionCreators = () => {
   const state = {
@@ -185,19 +187,19 @@ const createActionCreators = () => {
     showNodeMetaEdit() {
       state.dispatch({
         type: actions.SHOW_NODE_META,
-        value: NodeMetaPopup.EDIT,
+        value: NodeMetaPopupRole.EDIT,
       });
     },
     showNodeMetaCreateChild() {
       state.dispatch({
         type: actions.SHOW_NODE_META,
-        value: NodeMetaPopup.CREATE_CHILD,
+        value: NodeMetaPopupRole.CREATE_CHILD,
       });
     },
     showNodeMetaCreateSibling() {
       state.dispatch({
         type: actions.SHOW_NODE_META,
-        value: NodeMetaPopup.CREATE_SIBLING,
+        value: NodeMetaPopupRole.CREATE_SIBLING,
       });
     },
     hideNodeMeta() {
@@ -259,6 +261,18 @@ const createActionCreators = () => {
       state.dispatch({
         type: actions.createDocument,
         value: new Date().getTime(),
+      });
+    },
+    showDocumentMetaDialog: () => {
+      state.dispatch({
+        type: actions.showDocumentMetaDialog,
+        value: true,
+      });
+    },
+    hideDocumentMetaDialog: () => {
+      state.dispatch({
+        type: actions.showDocumentMetaDialog,
+        value: false,
       });
     },
   };
@@ -401,6 +415,11 @@ const reducer = (
         ...state,
         createDocumentRequestId: action.value,
       };
+    case actions.showDocumentMetaDialog:
+      return {
+        ...state,
+        showDocumentMetaDialog: action.value,
+      };
     default:
       throw new Error('action not supported');
   }
@@ -413,4 +432,4 @@ export {
   appActionCreators,
 };
 
-export { NodeMetaPopup };
+export { NodeMetaPopupRole };

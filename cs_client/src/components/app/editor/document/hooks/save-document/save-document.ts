@@ -58,12 +58,9 @@ const useSaveDocument = ({
 
           const createdDocuments = Object.values(state.swappedDocumentIds);
           if (createdDocuments.length) {
-            if (history.location.pathname.startsWith('new-document'))
-              history.push(
-                '/document/' + createdDocuments[createdDocuments.length - 1],
-              );
-          }
-          appActionCreators.reloadDocument();
+            if (history.location.pathname.startsWith('/document/new-document'))
+              appActionCreators.selectFile(createdDocuments.pop());
+          } else appActionCreators.reloadDocument();
           appActionCreators.setSnackbarMessage(SnackbarMessages.documentSaved);
         } catch (e) {
           appActionCreators.setAlert({
