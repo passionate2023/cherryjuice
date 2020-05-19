@@ -1,7 +1,6 @@
 import { createIsNotProcessed } from '::hooks/misc/isnot-processed';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { Document } from '::types/graphql/generated';
-import { useHistory } from 'react-router';
 import { appActionCreators } from '::app/reducer';
 import { NodeCached } from '::types/graphql/adapters';
 import { useEffect } from 'react';
@@ -52,7 +51,6 @@ const fn = createIsNotProcessed();
 const useCreateDocument = ({
   createDocumentRequestId,
 }: CreateDocumentProps) => {
-  const history = useHistory();
   useEffect(() => {
     const isNotProcessed = fn([createDocumentRequestId]);
     if (isNotProcessed) {
@@ -63,7 +61,6 @@ const useCreateDocument = ({
           document.node.push(rootNode);
           apolloCache.node.create(rootNode);
           apolloCache.document.create(document.id, document);
-          history.push('/');
           appActionCreators.selectFile(document.id);
         } catch (e) {
           appActionCreators.setAlert({

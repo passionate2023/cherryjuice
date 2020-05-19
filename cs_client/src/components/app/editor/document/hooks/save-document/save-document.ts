@@ -56,8 +56,13 @@ const useSaveDocument = ({
           await saveNodesMeta({ mutate: mutateMeta, state });
           await deleteDanglingNodes({ mutate: deleteNodeMutation, state });
 
-          const newDocument = Object.values(state.swappedDocumentIds)[0];
-          if (newDocument) history.push('/document/' + newDocument);
+          const createdDocuments = Object.values(state.swappedDocumentIds);
+          if (createdDocuments.length) {
+            if (history.location.pathname.startsWith('new-document'))
+              history.push(
+                '/document/' + createdDocuments[createdDocuments.length - 1],
+              );
+          }
           appActionCreators.reloadDocument();
           appActionCreators.setSnackbarMessage(SnackbarMessages.documentSaved);
         } catch (e) {

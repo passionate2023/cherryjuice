@@ -1,6 +1,6 @@
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import * as React from 'react';
-import { useEffect, useReducer, Suspense } from 'react';
+import { useEffect, useReducer, Suspense, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   appActionCreators,
@@ -45,11 +45,18 @@ const updateBreakpointState = ({ breakpoint, callback }) => {
   };
 };
 
-const useHandleRouting = state => {
+const useHandleRouting = (state: TState) => {
   const history = useHistory();
+  const selectedFileRef = useRef(state.selectedFile);
   useEffect(() => {
-    if (history.location.pathname === '/')
-      if (state.selectedFile) history.push('/document/' + state.selectedFile);
+    const pathnameIsEmpty =
+      history.location.pathname === '/' && state.selectedFile;
+    const newSelectedFile =
+      state.selectedFile && state.selectedFile !== selectedFileRef.current;
+    if (pathnameIsEmpty || newSelectedFile) {
+      history.push('/document/' + state.selectedFile);
+      selectedFileRef.current = state.selectedFile;
+    } else if (!state.selectedFile) history.push('/');
   }, [state.selectedFile, history.location.pathname]);
 };
 const useUpdateCssVariables = (state: TState) => {

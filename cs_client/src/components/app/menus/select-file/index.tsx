@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { useHistory } from 'react-router';
 import { appActionCreators } from '../../reducer';
 import { QUERY_DOCUMENTS } from '::graphql/queries';
 import { DialogWithTransition } from '::shared-components/dialog';
@@ -13,6 +12,7 @@ import { modDialog } from '::sass-modules/index';
 import { Icons, Icon } from '::shared-components/icon';
 import { useDeleteFile } from '::hooks/graphql/delete-file';
 import { useRef } from 'react';
+import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 
 const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
   const buttonsLeft = [
@@ -65,10 +65,9 @@ const useData = ({ reloadFiles }: { reloadFiles: number }) => {
 
 const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
   const [selectedIDs, setSelectedIDs] = useState([]);
-  const history = useHistory();
   const close = appActionCreators.toggleFileSelect;
   const open = () => {
-    history.push('/');
+    updateCachedHtmlAndImages();
     appActionCreators.selectFile(selectedIDs[0]);
   };
   const { buttonsLeft, buttonsRight } = createButtons({
@@ -85,7 +84,6 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
     onCompleted: () => {
       appActionCreators.reloadDocumentList();
       if (selectedIDs.includes(selectedFile)) {
-        history.push('/');
         appActionCreators.selectFile('');
       }
     },

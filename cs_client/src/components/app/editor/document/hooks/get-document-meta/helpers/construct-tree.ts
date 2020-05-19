@@ -27,9 +27,11 @@ const constructTree = ({
     ];
     for (const nodeId of modifiedNodes) {
       const node = apolloCache.node.get(nodeId);
-      const cacheOutOfSyncWithLocalChanges = !node;
-      if (cacheOutOfSyncWithLocalChanges) return undefined;
-      nodes.set(node.node_id, node);
+      if (node?.documentId === file_id) {
+        const cacheOutOfSyncWithLocalChanges = !node;
+        if (cacheOutOfSyncWithLocalChanges) return undefined;
+        nodes.set(node.node_id, node);
+      }
     }
   }
   return nodes;

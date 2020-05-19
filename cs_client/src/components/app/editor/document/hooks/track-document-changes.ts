@@ -10,7 +10,8 @@ const useTrackDocumentChanges = ({ documentState }: Props) => {
   useEffect(() => {
     const documentHasUnsavedNodes =
       Boolean(apolloCache.changes.node.meta.length) ||
-      Boolean(apolloCache.changes.node.html.length);
+      Boolean(apolloCache.changes.node.html.length) ||
+      Boolean(apolloCache.changes.document.created.length);
     appActionCreators.documentHasUnsavedChanges(documentHasUnsavedNodes);
   }, [documentState.cacheTimeStamp]);
 };
