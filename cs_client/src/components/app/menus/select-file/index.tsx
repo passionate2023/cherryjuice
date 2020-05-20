@@ -11,6 +11,7 @@ import { useDeleteFile } from '::hooks/graphql/delete-file';
 import { useRef } from 'react';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { useGetDocumentsList } from '::app/menus/select-file/hooks/get-documents-list';
+import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 
 const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
   const buttonsLeft = [
@@ -25,11 +26,12 @@ const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
       disabled: false,
     },
   ];
-  const buttonsRight = [
+  const buttonsRight: TDialogFooterButton[] = [
     {
       label: 'close',
       onClick: close,
       disabled: false,
+      testId:'close-document-select'
     },
     {
       label: 'open',
@@ -39,8 +41,6 @@ const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
   ];
   return { buttonsLeft, buttonsRight };
 };
-
-
 
 const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
   const [selectedIDs, setSelectedIDs] = useState([]);

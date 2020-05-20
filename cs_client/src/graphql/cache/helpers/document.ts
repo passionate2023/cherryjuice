@@ -5,7 +5,7 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 const documentHelpers = (state: CacheState) => ({
   create: (documentId: string, document: Document): void => {
     state.cache?.data.set('Document:' + documentId, document);
-    state.modifications.document[documentId] = true;
+    state.modifications.document.created[documentId] = true;
   },
   get: (documentId: string): Document =>
     state.cache?.data.get('Document:' + documentId),

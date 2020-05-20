@@ -8,6 +8,7 @@ export type TDialogFooterButton = {
   disabled: boolean;
   onClick: EventHandler<any>;
   lazyAutoFocus?: number;
+  testId?: string;
 };
 export type TDialogFooterProps = {
   isOnMobile: boolean;
@@ -24,7 +25,7 @@ const DialogFooter: React.FC<TDialogFooterProps> = ({
     <footer className={`${modDialog.dialog__footer}`}>
       <div>
         {dialogFooterLeftButtons.map(
-          ({ component, onClick, label, disabled }, i) =>
+          ({ component, onClick, label, disabled, testId }, i) =>
             component ? (
               component()
             ) : (
@@ -33,6 +34,7 @@ const DialogFooter: React.FC<TDialogFooterProps> = ({
                 className={''}
                 onClick={onClick}
                 disabled={disabled}
+                testId={testId}
               >
                 {label}
               </ButtonSquare>
@@ -41,13 +43,14 @@ const DialogFooter: React.FC<TDialogFooterProps> = ({
       </div>
       <div>
         {dialogFooterRightButtons.map(
-          ({ onClick, label, disabled, lazyAutoFocus }, i) => (
+          ({ onClick, label, disabled, lazyAutoFocus, testId }, i) => (
             <ButtonSquare
               key={i}
               className={''}
               onClick={onClick}
               disabled={disabled}
               lazyAutoFocus={!isOnMobile ? lazyAutoFocus : 0}
+              testId={testId}
             >
               {label}
             </ButtonSquare>

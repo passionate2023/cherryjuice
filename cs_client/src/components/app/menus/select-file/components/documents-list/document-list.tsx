@@ -13,7 +13,7 @@ const DocumentList = ({
 }) => {
   const filesPerFolders: [string, DocumentMeta[]][] = [
     documentsMeta.reduce((acc, val) => {
-      if(!val.folder) val.folder = 'Default group'
+      if (!val.folder) val.folder = 'Default group';
       if (acc[val.folder]) acc[val.folder].push(val);
       else acc[val.folder] = [val];
 

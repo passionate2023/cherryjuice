@@ -2,16 +2,16 @@ import nodeMod from '::sass-modules/tree/node.scss';
 import modIcons from '::sass-modules/tree/node.scss';
 import { NodeMeta } from '::types/graphql/adapters';
 import * as React from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
-import { getTreeStateFromLocalStorage } from '::helpers/misc';
+import { useCallback, useRef, useState } from 'react';
+import { useRouteMatch } from 'react-router-dom';
 import { Icon, ICON_SIZE, Icons } from '::shared-components/icon';
-import { nodeOverlay } from './helpers/node-overlay';
-import { scrollIntoToolbar } from '::helpers/ui';
-import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { useContext } from 'react';
-import { RootContext } from '::root/root-context';
 import { useDnDNodes } from '::app/editor/document/tree/node/hooks/dnd-nodes';
+import { useSelectNode } from '::app/editor/document/tree/node/hooks/select-node';
+import { useScrollNodeIntoView } from '::app/editor/document/tree/node/hooks/scroll-node-into-view';
+import { persistedTreeState } from '::app/editor/document/tree/node/hooks/persisted-tree-state/helpers';
+import { usePersistedTreeState } from '::app/editor/document/tree/node/hooks/persisted-tree-state/persisted-tree-state';
+
+
 
 type Props = {
   node_id: number;
@@ -21,85 +21,40 @@ type Props = {
   icon_id: string;
 };
 
-const collapseAll = (ids: number[], treeState: any, nodes: any) => {
-  ids.forEach(id => {
-    delete treeState[id];
-    collapseAll(nodes.get(id).child_nodes, treeState, nodes);
-  });
-};
-
 const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
   const { child_nodes, name } = nodes.get(node_id);
-
-  // misc hooks
-  const history = useHistory();
-  const match = useRouteMatch();
-  //@ts-ignore
+  const match = useRouteMatch<{ file_id: string }>();
   const { file_id } = match.params;
   const nodePath = `/document/${file_id}/node/${node_id}`;
-  // state and ref hook
-  const [showChildren, setShowChildren] = useState(
-    () => getTreeStateFromLocalStorage()[node_id],
-  );
   const componentRef = useRef();
   const listRef = useRef();
   const titleRef = useRef();
-  // callback hooks
-  const {
-    apolloClient: { cache },
-  } = useContext(RootContext);
-  const selectNode = useCallback(
-    (e, path = nodePath) => {
-      const eventIsTriggeredByCollapseButton = e.target.classList.contains(
-        nodeMod.node__titleButton,
-      );
-      if (eventIsTriggeredByCollapseButton) return;
-      nodeOverlay.updateWidth();
-      nodeOverlay.updateLeft(componentRef);
 
-      updateCachedHtmlAndImages();
-      history.push(path);
-    },
-    [nodePath],
-  );
+  const [showChildren, setShowChildren] = useState(() => {
+    const tree = persistedTreeState.get(file_id);
+    return tree[node_id] || file_id.startsWith('new-document');
+  });
   const toggleChildren = useCallback(() => {
     setShowChildren(!showChildren);
   }, [showChildren]);
-
-  // use-effect hooks
-  useEffect(() => {
-    if (location.pathname === nodePath) {
-      nodeOverlay.updateLeft(componentRef);
-      // @ts-ignore
-      componentRef?.current?.scrollIntoView();
-      // --
-      scrollIntoToolbar();
-      // --
-    }
-  }, []);
-  useEffect(() => {
-    const treeState = getTreeStateFromLocalStorage();
-    treeState[node_id] = showChildren;
-    if (!treeState[node_id]) {
-      collapseAll(child_nodes, treeState, nodes);
-    }
-    localStorage.setItem('treeState', JSON.stringify(treeState));
-    nodeOverlay.updateWidth();
-  }, [showChildren]);
-  // console.log('treeRef', nodeMod.node__titleButtonHidden,child_nodes);
-  // @ts-ignore
+  const selectNode = useSelectNode({ nodePath, componentRef });
+  useScrollNodeIntoView({ nodePath, componentRef });
+  usePersistedTreeState({
+    showChildren,
+    node_id,
+    file_id,
+    nodes,
+  });
   const nodeDndProps = useDnDNodes({
-    cache,
+    node_id,
     componentRef: titleRef,
     nodes,
-    node_id,
     afterDrop: ({ e, node_id }) => {
       selectNode(e, `/document/${file_id}/node/${node_id}`);
       setShowChildren(true);
     },
   });
   const listDndProps = useDnDNodes({
-    cache,
     componentRef: listRef,
     nodes,
     node_id,

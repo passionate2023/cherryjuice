@@ -2,7 +2,9 @@ type CacheState = {
   cache: any;
   modifications: {
     document: {
-      [documentId: string]: boolean;
+      created: {
+        [documentId: string]: boolean;
+      };
     };
     node: {
       deleted: {
@@ -43,7 +45,9 @@ type CacheState = {
 const cacheInitialState: CacheState = {
   cache: undefined,
   modifications: {
-    document: {},
+    document: {
+      created: {},
+    },
     node: {
       deleted: {},
       meta: {},

@@ -3,7 +3,7 @@ import { appActionCreators } from '::app/reducer';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { Icon, Icons } from '::shared-components/icon';
 import { modToolbar } from '::sass-modules/index';
-
+import {testIds} from '::cypress/helpers/test-ids'
 type Props = {
   showTree: boolean;
   documentHasUnsavedChanges: boolean;
@@ -37,7 +37,7 @@ const MainButtons: React.FC<Props> = ({
       </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.showNodeMetaCreateSibling}
-        testId={'create-sibling-node'}
+        testId={testIds.toolBar__main__createSiblingNode}
       >
         <Icon
           name={Icons.cherrytree.additionalIcons['tree-node-add']}
@@ -46,7 +46,7 @@ const MainButtons: React.FC<Props> = ({
       </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.showNodeMetaCreateChild}
-        testId={'create-child-node'}
+        testId={testIds.toolBar__main__createChildNode}
       >
         <Icon
           name={Icons.cherrytree.additionalIcons['tree-subnode-add']}

@@ -19,7 +19,7 @@ const fn = obj =>
 const changesHelpers = (state: CacheState) => ({
   document: {
     get created(): string[] {
-      return fn(state.modifications.document);
+      return fn(state.modifications.document.created);
     },
   },
   node: {

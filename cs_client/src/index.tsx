@@ -7,6 +7,7 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Root } from '::root/root';
+import { apolloCache } from '::graphql/cache/apollo-cache';
 
 render(
   <Router>
@@ -14,3 +15,7 @@ render(
   </Router>,
   document.querySelector('#app'),
 );
+if (process.env.NODE_ENV === 'development') {
+  // @ts-ignore
+  window.__APOLLO_CACHE__ = apolloCache;
+}

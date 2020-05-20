@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { MetaForm } from '::shared-components/form/meta-form/meta-form';
-import {  useState } from 'react';
+import { useState } from 'react';
 import { EventHandler } from 'react';
 import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
 import { appActionCreators } from '::app/reducer';
@@ -13,6 +13,10 @@ import {
   generateRootNode,
 } from '::app/menus/document-meta/helpers/new-document';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
+import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
+import { testIds } from '::cypress/helpers';
+
+
 
 type DocumentMetaDialogProps = {};
 
@@ -53,7 +57,7 @@ const DocumentMetaDialogWithTransition: React.FC<DocumentMetaDialogProps & {
       }
     },
   );
-  const buttonsRight = [
+  const buttonsRight: TDialogFooterButton[] = [
     {
       label: 'dismiss',
       onClick: onClose,
@@ -63,6 +67,7 @@ const DocumentMetaDialogWithTransition: React.FC<DocumentMetaDialogProps & {
       label: 'apply',
       onClick: apply,
       disabled: false,
+      testId: testIds.documentMeta__apply,
     },
   ];
   return (

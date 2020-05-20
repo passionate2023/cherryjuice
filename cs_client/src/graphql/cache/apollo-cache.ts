@@ -26,7 +26,4 @@ const apolloCache = (() => {
 })();
 
 export { apolloCache };
-if (process.env.NODE_ENV === 'development') {
-  // @ts-ignore
-  window.__APOLLO_CACHE__ = apolloCache;
-}
+

@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import { saveNewDocument } from '::app/editor/document/hooks/save-document/helpers/save-new-document';
 import { useHistory } from 'react-router';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
+import { swapTreeStateDocumentId } from '::app/editor/document/tree/node/hooks/persisted-tree-state/helpers';
 
 type SaveDocumentProps = {
   saveDocumentCommandID: string;
@@ -58,6 +59,7 @@ const useSaveDocument = ({
 
           const createdDocuments = Object.values(state.swappedDocumentIds);
           if (createdDocuments.length) {
+            swapTreeStateDocumentId(state.swappedDocumentIds);
             if (history.location.pathname.startsWith('/document/new-document'))
               appActionCreators.selectFile(createdDocuments.pop());
           } else appActionCreators.reloadDocument();

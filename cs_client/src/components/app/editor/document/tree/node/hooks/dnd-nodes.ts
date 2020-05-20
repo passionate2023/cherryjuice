@@ -77,10 +77,9 @@ const getFatherIdChain = (
 };
 type Props = {
   node_id: number;
-  nodes?: Map<number, NodeMeta>;
   componentRef: MutableRefObject<HTMLDivElement>;
-  cache;
-  draggable: boolean;
+  nodes?: Map<number, NodeMeta>;
+  draggable?: boolean;
   afterDrop?: Function;
 };
 const useDnDNodes = ({

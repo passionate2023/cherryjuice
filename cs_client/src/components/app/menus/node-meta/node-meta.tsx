@@ -16,6 +16,7 @@ import { modNodeMeta } from '::sass-modules/index';
 import { IconPicker } from '::app/menus/node-meta/components/icon-picker';
 import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
 import { useHistory } from 'react-router';
+import { testIds } from '::cypress/helpers';
 
 type TNodeMetaModalProps = {
   nodeId: string;
@@ -62,6 +63,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
       label: 'apply',
       onClick: onSave,
       disabled: false,
+      testId: testIds.nodeMeta__apply,
     },
   ];
 
@@ -72,13 +74,14 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
       type: 'text',
       label: 'Node name',
       lazyAutoFocus: 400,
-      testId: 'node-name',
+      testId: testIds.nodeMeta__nodeName,
     },
     {
       onChange: nodeMetaActionCreators.setIsBold,
       value: state.isBold,
       type: 'checkbox',
       label: 'Bold',
+      testId: testIds.nodeMeta__isBold,
     },
     {
       onChange: nodeMetaActionCreators.setHasCustomColor,

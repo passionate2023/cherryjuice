@@ -26,7 +26,7 @@ const useGetDocumentsList = ({ reloadFiles }: { reloadFiles: number }) => {
     const documentsList = [...QUERY_DOCUMENTS.documentMeta.path(data)];
     for (const docId of apolloCache.changes.document.created) {
       const document = apolloCache.document.get(docId);
-      documentsList.push({...document, name:`*${document.name}` });
+      documentsList.push({ ...document, name: `*${document.name}` });
     }
     return documentsList;
   }, [data]);
