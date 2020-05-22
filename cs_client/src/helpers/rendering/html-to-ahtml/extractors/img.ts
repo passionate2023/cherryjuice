@@ -16,6 +16,11 @@ const extractImage = (acc, el, commonAttributes, options, state) => {
               ...(el.dataset.link && {
                 link: decodeURIComponent(el.dataset.link),
               }),
+              ...(el.dataset.id && {
+                id: options.swappedImageIds
+                  ? options.swappedImageIds[el.dataset.id]
+                  : el.dataset.id,
+              }),
             },
             style: {
               width: el.style.width,

@@ -10,6 +10,7 @@ type CacheState = {
       deleted: {
         [nodeId: string]: 'soft' | 'hard';
       };
+
       meta: {
         [nodeId: string]: {
           child_nodes?: boolean;
@@ -39,6 +40,12 @@ type CacheState = {
       deleted: {
         [nodeId: string]: string[];
       };
+      created: {
+        [nodeId: string]: {
+          base64: string[];
+          url: string[];
+        };
+      };
     };
   };
 };
@@ -56,6 +63,7 @@ const cacheInitialState: CacheState = {
     },
     image: {
       deleted: {},
+      created: {},
     },
   },
 };

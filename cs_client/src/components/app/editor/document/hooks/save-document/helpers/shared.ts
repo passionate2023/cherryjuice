@@ -8,7 +8,7 @@ type PerformMutationProps<T> = {
 const performMutation = async <T>({
   mutate,
   variables,
-}: PerformMutationProps<T>) =>
+}: PerformMutationProps<T>): Promise<any> =>
   await new Promise((res, rej) => {
     mutate({
       variables,

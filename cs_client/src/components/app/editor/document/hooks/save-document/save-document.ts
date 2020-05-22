@@ -17,6 +17,7 @@ import { saveNewDocument } from '::app/editor/document/hooks/save-document/helpe
 import { useHistory } from 'react-router';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { swapTreeStateDocumentId } from '::app/editor/document/tree/node/hooks/persisted-tree-state/helpers';
+import { saveImages } from '::app/editor/document/hooks/save-document/helpers/save-images';
 
 type SaveDocumentProps = {
   saveDocumentCommandID: string;
@@ -36,9 +37,12 @@ const useSaveDocument = ({
   const [createDocumentMutation] = useMutation(
     DOCUMENT_MUTATION.createDocument.query,
   );
+  const [uploadImagesMutation] = useMutation(
+    DOCUMENT_MUTATION.uploadImages.query,
+  );
 
   useEffect(() => {
-    const isNotProcessed = fn([saveDocumentCommandID]);
+    const isNotProcessed = fn(saveDocumentCommandID);
     if (isNotProcessed && documentHasUnsavedChanges) {
       (async () => {
         try {
@@ -46,6 +50,7 @@ const useSaveDocument = ({
             newFatherIds: {},
             swappedDocumentIds: {},
             swappedNodeIds: {},
+            swappedImageIds: {},
             danglingNodes: {},
             deletedNodes: {},
           };
@@ -53,6 +58,7 @@ const useSaveDocument = ({
           await saveNewDocument({ mutate: createDocumentMutation, state });
           await saveDeletedNodes({ mutate: deleteNodeMutation, state });
           await saveNewNodes({ mutate: mutateCreate, state });
+          await saveImages({ mutate: uploadImagesMutation, state });
           await saveNodesContent({ mutate: mutateContent, state });
           await saveNodesMeta({ mutate: mutateMeta, state });
           await deleteDanglingNodes({ mutate: deleteNodeMutation, state });

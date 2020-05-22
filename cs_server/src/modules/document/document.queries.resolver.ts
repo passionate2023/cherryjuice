@@ -39,11 +39,18 @@ export class DocumentQueriesResolver {
 
   @ResolveField(() => [Node])
   async node(
-    @Parent() parent,
-    @Args('node_id', { nullable: true, type: () => Int }) node_id?: string,
+    @Parent() document,
+    @GetUserGql() user: User,
+    @Args('node_id', { nullable: true, type: () => Int }) node_id?: number,
   ) {
     return node_id
-      ? this.nodeService.getNodeMetaById(node_id, parent.id)
-      : this.nodeService.getNodesMeta(parent.id);
+      ? [
+          await this.nodeService.getNodeMetaById({
+            user,
+            node_id,
+            documentId: document.id,
+          }),
+        ]
+      : this.nodeService.getNodesMeta(document.id);
   }
 }

@@ -31,7 +31,7 @@ const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
       label: 'close',
       onClick: close,
       disabled: false,
-      testId:'close-document-select'
+      testId: 'close-document-select',
     },
     {
       label: 'open',

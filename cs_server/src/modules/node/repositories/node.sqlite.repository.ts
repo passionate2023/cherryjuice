@@ -1,6 +1,6 @@
 import { DocumentSqliteRepository } from '../../document/repositories/document.sqlite.repository';
 import { Injectable } from '@nestjs/common';
-import { Image } from '../../document/helpers/copy-ctb/entities/Image';
+import { Image as RawImage } from '../../document/helpers/copy-ctb/entities/Image';
 import { Grid } from '../../document/helpers/copy-ctb/entities/Grid';
 import { Codebox } from '../../document/helpers/copy-ctb/entities/Codebox';
 import { Node } from '../entities/node.entity';
@@ -8,6 +8,7 @@ import { organizeData } from '../../document/helpers';
 import { getPNGSize } from '../helpers/ctb';
 import { parseXml } from '../helpers/xml';
 import { ctbToAHtml } from '../helpers/rendering/query/ctb-to-ahtml';
+import { Image } from '../../image/entities/image.entity';
 
 const queries = {
   read: {
@@ -64,7 +65,7 @@ export class NodeSqliteRepository {
 
   private async getNodeImagesTablesCodeboxes({
     node_id,
-  }): Promise<{ image: Image[]; codebox: Codebox[]; table: Grid[] }> {
+  }): Promise<{ image: RawImage[]; codebox: Codebox[]; table: Grid[] }> {
     return {
       image: await this.documentSqliteRepository.sqliteAll(
         queries.read.images({ node_id, offset: undefined }),
@@ -112,7 +113,10 @@ export class NodeSqliteRepository {
     return data;
   }
 
-  async getAHtml(node_id: string): Promise<{ nodes: any; style: any }[]> {
+  async getAHtml(
+    node_id: string,
+    images?: Image[],
+  ): Promise<{ nodes: any; style: any }[]> {
     const { txt } =
       node_id === '0'
         ? { txt: '<?xml version="1.0" ?><node><rich_text></rich_text></node>' }
@@ -123,12 +127,13 @@ export class NodeSqliteRepository {
     const otherTables = {
       codebox,
       image: image.map(
-        ({ node_id, offset, justification, anchor, png, link }) => ({
+        ({ node_id, offset, justification, anchor, png, link }, i) => ({
           node_id,
           offset,
           justification,
           anchor,
           link,
+          id: images[i]?.id || `${node_id}/${i}`,
           ...getPNGSize(png),
         }),
       ),
@@ -153,10 +158,10 @@ export class NodeSqliteRepository {
     } else return await this.getNodesMetaRaw();
   }
 
-  async getNodeMetaById(node_id: string): Promise<Node[]> {
+  async getNodeMetaById(node_id: number): Promise<Node> {
     const nodes = await this.getNodesMetaRaw();
     const nodesMap = await organizeData(nodes);
-    return [nodesMap.get(+node_id)];
+    return nodesMap.get(node_id);
   }
 
   // async getNodeImages({

@@ -4,7 +4,7 @@ import { FRAGMENT_USER } from '::graphql/fragments';
 
 const DOCUMENT_MUTATION = {
   file: gql`
-    mutation($files: [Upload!]!) {
+    mutation($files: [CTBUpload!]!) {
       document {
         uploadFile(files: $files)
       }
@@ -27,7 +27,7 @@ const DOCUMENT_MUTATION = {
   ahtml: gql`
     mutation saveAhtml(
       $file_id: String!
-      $node_id: String!
+      $node_id: Int!
       $ahtml: String!
       $deletedImages: [String]!
     ) {
@@ -39,7 +39,7 @@ const DOCUMENT_MUTATION = {
     }
   `,
   meta: gql`
-    mutation meta($file_id: String!, $node_id: String!, $meta: NodeMetaIt!) {
+    mutation meta($file_id: String!, $node_id: Int!, $meta: NodeMetaIt!) {
       document(file_id: $file_id) {
         node(node_id: $node_id) {
           meta(meta: $meta)
@@ -52,7 +52,7 @@ const DOCUMENT_MUTATION = {
     query: gql`
       mutation createNode(
         $file_id: String!
-        $node_id: String!
+        $node_id: Int!
         $meta: CreateNodeIt!
       ) {
         document(file_id: $file_id) {
@@ -66,7 +66,7 @@ const DOCUMENT_MUTATION = {
   deleteNode: {
     path: (data): string => data?.document?.node?.deleteNode,
     query: gql`
-      mutation deleteNode($file_id: String!, $node_id: String!) {
+      mutation deleteNode($file_id: String!, $node_id: Int!) {
         document(file_id: $file_id) {
           node(node_id: $node_id) {
             deleteNode
@@ -81,6 +81,22 @@ const DOCUMENT_MUTATION = {
       mutation createDocument($document: CreateDocumentIt!) {
         document {
           createDocument(document: $document)
+        }
+      }
+    `,
+  },
+  uploadImages: {
+    path: (data): [string, string][] => data?.document?.node?.uploadImage,
+    query: gql`
+      mutation uploadImages(
+        $file_id: String!
+        $node_id: Int!
+        $images: [ImageUpload!]!
+      ) {
+        document(file_id: $file_id) {
+          node(node_id: $node_id) {
+            uploadImage(images: $images)
+          }
         }
       }
     `,

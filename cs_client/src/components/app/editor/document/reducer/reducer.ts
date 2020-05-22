@@ -16,6 +16,12 @@ const reducer = (
         cacheTimeStamp: action.value.reset ? undefined : new Date().getTime(),
       };
       break;
+    case documentActions.pastedImages:
+      newState = {
+        ...state,
+        pastedImages: new Date().getTime(),
+      };
+      break;
     default:
       throw new Error('action not supported');
   }

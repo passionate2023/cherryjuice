@@ -3,7 +3,7 @@ import { CreateNodeIt } from './create-node.it';
 
 export class CreateNodeDto {
   user: User;
-  node_id: string;
+  node_id: number;
   documentId: string;
   meta: CreateNodeIt;
 }

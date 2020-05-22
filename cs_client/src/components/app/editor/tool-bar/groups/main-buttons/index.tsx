@@ -3,7 +3,7 @@ import { appActionCreators } from '::app/reducer';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { Icon, Icons } from '::shared-components/icon';
 import { modToolbar } from '::sass-modules/index';
-import {testIds} from '::cypress/helpers/test-ids'
+import { testIds } from '::cypress/helpers/test-ids';
 type Props = {
   showTree: boolean;
   documentHasUnsavedChanges: boolean;

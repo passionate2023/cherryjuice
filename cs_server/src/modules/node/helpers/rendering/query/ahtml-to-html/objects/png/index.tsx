@@ -12,6 +12,7 @@ type Props = {
     do_highl_bra: number;
     o_show_linenum: number;
     link?: string;
+    id?: string;
   };
 };
 const addImageLinkProperties = (link: string) => {
@@ -30,7 +31,7 @@ const addImageLinkProperties = (link: string) => {
 
 const Png = ({
   style: { width, height },
-  other_attributes: { link },
+  other_attributes: { link, id },
 }: Props) => {
   return `<img src=""
         alt=""
@@ -38,6 +39,7 @@ const Png = ({
         ${
           link ? ` ${addImageLinkProperties(link)}` : 'class="rich-text__image"'
         }
+        ${id ? `data-id="${id}"` : ''}
       />`;
 };
 

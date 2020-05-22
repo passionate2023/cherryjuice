@@ -8,13 +8,18 @@ enum localChanges {
   NODE_CREATED,
   NODE_DELETED,
   DOCUMENT_CREATED,
+  IMAGE_CREATED,
   ALL,
 }
 
 const fn = obj =>
-  Object.entries(obj)
-    .filter(([, isModified]) => isModified)
-    .map(([id]) => id);
+  Array.from(
+    new Set(
+      Object.entries(obj)
+        .filter(([, isModified]) => isModified)
+        .map(([id]) => id),
+    ),
+  );
 
 const changesHelpers = (state: CacheState) => ({
   document: {
@@ -49,6 +54,14 @@ const changesHelpers = (state: CacheState) => ({
     get deleted(): { [nodeId: string]: string[] } {
       return cloneObj(state.modifications.image.deleted);
     },
+    get created(): {
+      [nodeId: string]: {
+        base64: string[];
+        url: string[];
+      };
+    } {
+      return cloneObj(state.modifications.image.created);
+    },
   },
   isNodeNew: (nodeId: string): boolean =>
     state.modifications.node.created[nodeId],
@@ -61,6 +74,8 @@ const changesHelpers = (state: CacheState) => ({
       delete state.modifications.node.meta[id];
     } else if (type === localChanges.NODE_DELETED) {
       delete state.modifications.node.deleted[id];
+    } else if (type === localChanges.IMAGE_CREATED) {
+      delete state.modifications.image.created[id];
     } else if (type === localChanges.ALL) {
       state.modifications = {
         ...cloneObj(cacheInitialState.modifications),

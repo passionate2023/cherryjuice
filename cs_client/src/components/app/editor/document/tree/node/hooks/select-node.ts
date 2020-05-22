@@ -27,4 +27,4 @@ const useSelectNode = ({ nodePath, componentRef }: SelectNodeProps) => {
 };
 
 export { useSelectNode };
-export {SelectNodeProps}
+export { SelectNodeProps };

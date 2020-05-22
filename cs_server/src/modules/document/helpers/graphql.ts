@@ -9,16 +9,18 @@ export interface FileUpload {
   createReadStream: () => Readable;
 }
 //https://stackoverflow.com/questions/60059940/graphql-apollo-upload-in-nestjs-returns-invalid-value
-const GraphQLUpload = (acceptedMimeTypes: string[]) =>
+const GraphQLUpload = (acceptedMimeTypes: string[], TypeName: string) =>
   new GraphQLScalarType({
-    name: 'Upload',
-    description: 'The `Upload` scalar type represents a file upload.',
+    name: TypeName,
+    description: `The ${TypeName} scalar type represents a file upload.`,
     async parseValue(value: Promise<FileUpload>): Promise<FileUpload> {
       const upload = await value;
       const stream = upload.createReadStream();
       const fileType = await FileType.fromStream(stream);
       if (!acceptedMimeTypes.includes(fileType.mime))
-        throw new GraphQLError('Mime type does not match file content.');
+        throw new GraphQLError(
+          'Mime type should be one of: ' + acceptedMimeTypes.join(', '),
+        );
 
       return upload;
     },

@@ -2,6 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
 import {
   Args,
+  Int,
   Mutation,
   Parent,
   ResolveField,
@@ -37,7 +38,7 @@ export class DocumentMutationsResolver {
   async uploadFile(
     @Args({
       name: 'files',
-      type: () => [GraphQLUpload(['application/x-sqlite3'])],
+      type: () => [GraphQLUpload(['application/x-sqlite3'], 'CTBUpload')],
     })
     files: FileUpload[],
     @GetUserGql() user: User,
@@ -72,7 +73,10 @@ export class DocumentMutationsResolver {
     return JSON.stringify(deleteResult);
   }
   @ResolveField(() => [NodeMutation])
-  async node(@Parent() parent, @Args('node_id') node_id: string) {
+  async node(
+    @Parent() parent,
+    @Args('node_id', { type: () => Int }) node_id: number,
+  ) {
     return { node_id, documentId: parent.id };
   }
 

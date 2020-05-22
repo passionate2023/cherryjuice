@@ -1,3 +1,4 @@
+@import "./vars/vars";
 body {
   margin: 0;
   overflow: hidden;
@@ -27,4 +28,10 @@ h4,
 h5,
 h6 {
   display: inline;
+}
+a:focus,
+button:focus,
+input:focus,
+textarea:focus {
+  outline: 1px solid rgba(grey,0.4);
 }

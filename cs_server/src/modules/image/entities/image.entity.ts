@@ -33,4 +33,7 @@ export class Image extends BaseEntity {
 
   @Field()
   base64: string;
+
+  @Column({ nullable: true })
+  hash: string;
 }

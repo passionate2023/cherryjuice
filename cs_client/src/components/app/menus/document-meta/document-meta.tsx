@@ -16,8 +16,6 @@ import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { testIds } from '::cypress/helpers';
 
-
-
 type DocumentMetaDialogProps = {};
 
 const defaultDocumentName = 'new document';

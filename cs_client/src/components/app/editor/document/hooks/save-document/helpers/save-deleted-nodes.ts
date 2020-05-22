@@ -13,6 +13,9 @@ type SaveOperationState = {
   swappedNodeIds: {
     [temporaryId: string]: string;
   };
+  swappedImageIds: {
+    [temporaryId: string]: string;
+  };
   danglingNodes: {
     [nodeId: string]: boolean;
   };

@@ -23,7 +23,7 @@ const useReloadQuery = (
   },
   { query, queryVariables },
 ) => {
-  const isNotProcessed = fn(reloadRequestIDs);
+  const isNotProcessed = fn(...reloadRequestIDs);
   const fetchPolicy = useRef(undefined);
   if (isNotProcessed) {
     fetchPolicy.current = 'network-only';

@@ -41,6 +41,7 @@ const adjustNode = ({ node, type }) => {
               width: node.width,
             },
             other_attributes: {
+              id: node.id,
               offset: node.offset,
               ...(node.link && { link: node.link }),
             },

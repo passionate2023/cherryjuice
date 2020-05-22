@@ -22,7 +22,13 @@ const saveNodesContent = async ({ mutate, state }: SaveOperationProps) => {
     const DDOEs = stringToMultipleElements(node.html);
     const { abstractHtml, DDOEsAHtml } = getAHtml({
       DDOEs: DDOEs as Node[],
-      options: { reduceLines: true, useObjForTextNodes: true },
+      options: {
+        reduceLines: true,
+        useObjForTextNodes: true,
+        swappedImageIds: Object.keys(state.swappedImageIds).length
+          ? state.swappedImageIds
+          : undefined,
+      },
     });
     const aHtml = DDOEsAHtml.map((ddoe, i) => ({
       style: ddoe.style,
@@ -31,7 +37,7 @@ const saveNodesContent = async ({ mutate, state }: SaveOperationProps) => {
     await performMutation({
       variables: {
         file_id: node.documentId,
-        node_id: `${node.node_id}`,
+        node_id: node.node_id,
         ahtml: JSON.stringify(aHtml),
         deletedImages: deletedImages || [],
       },

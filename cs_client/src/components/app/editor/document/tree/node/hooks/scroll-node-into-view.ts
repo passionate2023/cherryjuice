@@ -16,4 +16,4 @@ const useScrollNodeIntoView = ({ componentRef, nodePath }: SelectNodeProps) => {
   }, [nodePath]);
 };
 
-export {useScrollNodeIntoView}
+export { useScrollNodeIntoView };

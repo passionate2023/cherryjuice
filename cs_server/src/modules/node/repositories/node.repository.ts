@@ -6,6 +6,7 @@ import { NodeMetaDto } from '../dto/node-meta.dto';
 import { CreateNodeDto } from '../dto/create-node.dto';
 import { copyProperties } from '../../document/helpers';
 import { DeleteNodeDto } from '../dto/delete-node.dto';
+import { GetNodeByNodeIdIt } from '../dto/get-node-by-node-id.it';
 
 @Injectable()
 @EntityRepository(Node)
@@ -22,14 +23,16 @@ export class NodeRepository extends Repository<Node> {
       .then(node => JSON.parse(node.ahtml));
   }
 
-  async getNodeMetaById(
-    node_id: string | number,
-    documentId: string,
-  ): Promise<Node> {
+  async getNodeMetaById({
+    documentId,
+    node_id,
+    user,
+  }: GetNodeByNodeIdIt): Promise<Node> {
     return this.findOneOrFail({
       where: {
         node_id,
         documentId,
+        userId: user.id,
       },
     });
   }
@@ -64,13 +67,17 @@ export class NodeRepository extends Repository<Node> {
     return JSON.stringify(res);
   }
 
-  async createNode({ meta, documentId }: CreateNodeDto) {
+  async createNode({ meta, documentId, user }: CreateNodeDto) {
     const node = new Node();
     copyProperties(meta, node, {});
     node.documentId = documentId;
 
     if (node.father_id !== -1) {
-      node.father = await this.getNodeMetaById(node.father_id, documentId);
+      node.father = await this.getNodeMetaById({
+        node_id: node.father_id,
+        documentId,
+        user,
+      });
     }
     await node.save();
 

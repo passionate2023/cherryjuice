@@ -11,8 +11,6 @@ import { useScrollNodeIntoView } from '::app/editor/document/tree/node/hooks/scr
 import { persistedTreeState } from '::app/editor/document/tree/node/hooks/persisted-tree-state/helpers';
 import { usePersistedTreeState } from '::app/editor/document/tree/node/hooks/persisted-tree-state/persisted-tree-state';
 
-
-
 type Props = {
   node_id: number;
   nodes?: Map<number, NodeMeta>;

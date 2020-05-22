@@ -1,16 +1,17 @@
 import { google } from 'googleapis';
+import * as fs from 'fs';
 import { createWriteStream } from 'fs';
 import { FileUpload } from '../../document/helpers/graphql';
 import crypto from 'crypto';
-import { Readable } from 'stream';
-import * as fs from 'fs';
+import * as stream from 'stream';
+import { Readable, Writable } from 'stream';
 import { Logger } from '@nestjs/common';
-import { Document } from '../../document/entities/document.entity';
 
 const logger = new Logger('io');
 type TDownloadResult = { hash: string };
 type TDownloadTask = {
-  fileName: string;
+  fileName?: string;
+  chunksContainer?: { current: any[] };
   readStream: Readable;
 };
 type TDownloadTaskProps = FileUpload | string;
@@ -39,10 +40,11 @@ const createGDriveDownloadTask = (
   };
 };
 const UPLOADS_FOLDER = '/uploads/';
-const uploadsFolder = (fileName: string): string => UPLOADS_FOLDER + fileName;
+const resolveUploadsFolder = (fileName: string): string =>
+  UPLOADS_FOLDER + fileName;
 const deleteFile = (fileName: string): void => {
   try {
-    fs.unlinkSync(uploadsFolder(fileName));
+    fs.unlinkSync(resolveUploadsFolder(fileName));
   } catch (e) {
     logger.error(e);
   }
@@ -55,12 +57,24 @@ const cleanUploadsFolder = (): void => {
   }
 };
 
+const createTemporaryWritableStream = (chunksContainer: {
+  current: any[];
+}): Writable =>
+  new stream.Writable({
+    write: (chunk, encoding, next) => {
+      chunksContainer.current.push(chunk);
+      next();
+    },
+  });
+
 const download = async (
-  { readStream, fileName }: TDownloadTask,
-  document: Document,
+  { readStream, fileName, chunksContainer }: TDownloadTask,
+  healthCheckCallback: () => Promise<void>,
   timeout = 3000,
 ): Promise<TDownloadResult> => {
-  const writeStream = createWriteStream(uploadsFolder(fileName));
+  const writeStream = chunksContainer
+    ? createTemporaryWritableStream(chunksContainer)
+    : createWriteStream(resolveUploadsFolder(fileName));
   const hash = crypto.createHash('sha1');
   hash.setEncoding('hex');
   const state = {
@@ -69,8 +83,7 @@ const download = async (
   };
   return new Promise<TDownloadResult>((resolve, reject) => {
     const intervalHandle = setInterval(async () => {
-      const isDocumentDeleted = await document
-        .reload()
+      const isDocumentDeleted = await healthCheckCallback()
         .then(() => false)
         .catch(() => true);
       if (
@@ -80,7 +93,7 @@ const download = async (
         clearInterval(intervalHandle);
         writeStream.end();
         readStream.destroy();
-        reject({ hash: '' });
+        reject(new Error('upload timed-out'));
       } else {
         state.lastNumberOfChunks = state.numberOfChunks;
       }
@@ -92,10 +105,10 @@ const download = async (
         writeStream.end();
         resolve({ hash: hash.digest('hex') });
       })
-      .on('error', () => {
+      .on('error', e => {
         clearInterval(intervalHandle);
         writeStream.end();
-        reject({ hash: '' });
+        reject(e);
       });
 
     readStream.on('data', chunk => {
