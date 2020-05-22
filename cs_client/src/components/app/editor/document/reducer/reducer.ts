@@ -22,6 +22,12 @@ const reducer = (
         pastedImages: new Date().getTime(),
       };
       break;
+    case documentActions.savingInProgress:
+      newState = {
+        ...state,
+        savingInProgress: action.value,
+      };
+      break;
     default:
       throw new Error('action not supported');
   }

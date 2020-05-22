@@ -12,6 +12,7 @@ type Props = {
   selectedFile: string;
   reloadRequestID: number;
   cacheTimeStamp: number;
+  savingInProgress: boolean;
 };
 
 const useGetDocumentMeta = ({
@@ -19,6 +20,7 @@ const useGetDocumentMeta = ({
   selectedFile,
   reloadRequestID,
   cacheTimeStamp,
+  savingInProgress,
 }: Props) => {
   const queryVariables = { file_id };
   let { data, error, loading } = useReloadQuery(
@@ -43,11 +45,9 @@ const useGetDocumentMeta = ({
     { resourceName: 'the document' },
   );
 
-  const nodes = useMemo(() => constructTree({ data, file_id }), [
-    data,
-    cacheTimeStamp,
-    file_id,
-  ]);
+  const nodes = useMemo(() => {
+    return savingInProgress ? nodes : constructTree({ data, file_id });
+  }, [data, cacheTimeStamp, file_id, savingInProgress]);
 
   useEffect(() => {
     if (nodes) setHighestNodeId(nodes);

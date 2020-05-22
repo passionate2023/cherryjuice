@@ -46,11 +46,13 @@ const Document: React.FC<Props> = ({ state }) => {
     selectedFile,
     reloadRequestID: reloadDocument,
     cacheTimeStamp: documentState.cacheTimeStamp,
+    savingInProgress: documentState.savingInProgress,
   });
 
   useSaveDocument({
     saveDocumentCommandID: saveDocument,
     documentHasUnsavedChanges,
+    savingInProgress: documentState.savingInProgress,
   });
 
   useTrackDocumentChanges({ documentState });
@@ -58,6 +60,7 @@ const Document: React.FC<Props> = ({ state }) => {
     if (history.location.pathname.endsWith(file_id))
       appActionCreators.selectNode(undefined);
   }, [history.location.pathname]);
+
   return (
     <DocumentContext.Provider value={documentState}>
       <LinearProgress loading={fetchingDocumentMeta} />

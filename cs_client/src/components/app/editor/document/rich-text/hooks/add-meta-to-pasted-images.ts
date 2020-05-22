@@ -14,9 +14,11 @@ const useAddMetaToPastedImages = ({
       const editor = getEditor();
       Array.from(editor.querySelectorAll('img:not([class])')).forEach(
         (image: HTMLImageElement) => {
-          const { width, height } = image;
-          image.style.width = `${width}px`;
-          image.style.height = `${height}px`;
+          image.onload = () => {
+            const { width, height } = image;
+            image.style.width = `${width}px`;
+            image.style.height = `${height}px`;
+          };
           image.classList.add('rich-text__image');
           image.setAttribute('data-id', new Date().getTime().toString());
         },

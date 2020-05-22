@@ -15,7 +15,7 @@ const saveNodesContent = async ({ mutate, state }: SaveOperationProps) => {
     .filter(id => !state.deletedNodes[id])
     .map(swapNodeIdIfApplies(state))
     .map(id => apolloCache.node.get(id));
-  for (const node of editedNodeContent) {
+  for await (const node of editedNodeContent) {
     if (collectDanglingNodes(state)(node)) continue;
     const deletedImages = apolloCache.changes.image.deleted[node.id];
     updateDocumentId(state)(node);

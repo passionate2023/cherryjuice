@@ -55,7 +55,7 @@ const saveNewNodes = async ({ mutate, state }: SaveOperationProps) => {
     .filter(id => !state.deletedNodes[id])
     .map(id => apolloCache.node.get(id))
     .sort((a, b) => a.node_id - b.node_id);
-  for (const node of newNodes) {
+  for await (const node of newNodes) {
     swapFatherIdIfApplies(state)(node);
     if (collectDanglingNodes(state)(node)) continue;
     updateDocumentId(state)(node);
@@ -63,7 +63,7 @@ const saveNewNodes = async ({ mutate, state }: SaveOperationProps) => {
     const data = await performMutation({
       variables: {
         file_id: node.documentId,
-        node_id: `${node.node_id}`,
+        node_id: node.node_id,
         meta,
       },
       mutate,

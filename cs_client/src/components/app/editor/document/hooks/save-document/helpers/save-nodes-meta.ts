@@ -27,7 +27,7 @@ const saveNodesMeta = async ({ mutate, state }: SaveOperationProps) => {
     ([id]): boolean => !state.deletedNodes[id],
   );
 
-  for (let [nodeId, editedAttributes] of editedNodeMeta) {
+  for await (let [nodeId, editedAttributes] of editedNodeMeta) {
     const node = apolloCache.node.get(swapNodeIdIfApplies(state)(nodeId));
     const meta: NodeMetaIt = {};
     editedAttributes.forEach(attribute => {
@@ -39,7 +39,7 @@ const saveNodesMeta = async ({ mutate, state }: SaveOperationProps) => {
     await performMutation({
       variables: {
         file_id: node.documentId,
-        node_id: `${node.node_id}`,
+        node_id: node.node_id,
         meta,
       },
       mutate,

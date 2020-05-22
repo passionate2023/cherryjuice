@@ -34,7 +34,12 @@
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "react-spring": "^8.0.27",
-    "subscriptions-transport-ws": "^0.9.16"
+    "subscriptions-transport-ws": "^0.9.16",
+    "redux": "^4.0.5",
+    "react-redux": "^7.2.0",
+    "redux-observable": "^1.2.0",
+    "rxjs": "^6.5.5",
+    "deox": "^3.2.1"
   },
   "optionalDependencies": {
     "ramda": "^0.27.0",

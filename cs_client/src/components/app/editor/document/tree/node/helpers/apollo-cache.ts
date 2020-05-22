@@ -41,10 +41,10 @@ const getEditorContentWithoutImages = () => {
   };
 };
 const getNodeImageIDsFromCache = ({ nodeId }): string[] => {
-  return apolloCache.node
-    .get(nodeId)
+  return apolloCache.node.get(nodeId)[
     // eslint-disable-next-line no-unexpected-multiline
-    ['image({"thumbnail":true})'].map(({ id }) => /:(.+)$/.exec(id)[1]);
+    'image({"thumbnail":true})'
+  ].map(({ id }) => /:(.+)$/.exec(id)[1]);
 };
 
 const updatedCachedHtml = ({ nodeId, html }) => {
@@ -70,16 +70,18 @@ const updateCachedImages = ({
   const node = apolloCache.node.get(nodeId);
 
   const editor = getEditor();
-  const newImages = newImageIDs.map(id => {
+  const newImages = newImageIDs.reduce((acc, id) => {
     const imageInDom: HTMLImageElement = editor.querySelector(
       `img[data-id="${id}"]`,
     );
-    return {
-      id: imageInDom.getAttribute('data-id'),
-      base64: imageInDom.src.substr(22),
-      index: imageIDsInDom.indexOf(id),
-    };
-  });
+    if (imageInDom)
+      acc.push({
+        id: imageInDom.getAttribute('data-id'),
+        base64: imageInDom.src.substr(22),
+        index: imageIDsInDom.indexOf(id),
+      });
+    return acc;
+  }, []);
 
   deletedImageIDs.forEach(apolloCache.image.delete.hard(node.id));
   newImages.forEach(apolloCache.image.create(node.id));

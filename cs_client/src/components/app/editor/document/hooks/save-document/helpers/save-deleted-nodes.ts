@@ -33,7 +33,7 @@ const deleteNode = mutate => async (node: NodeCached) => {
     await performMutation({
       variables: {
         file_id: node.documentId,
-        node_id: `${node.node_id}`,
+        node_id: node.node_id,
       },
       mutate,
     });
@@ -43,7 +43,7 @@ const deleteNode = mutate => async (node: NodeCached) => {
 const saveDeletedNodes = async ({ mutate, state }: SaveOperationProps) => {
   const deletedNodes = apolloCache.changes.node.deleted;
 
-  for (const nodeId of deletedNodes) {
+  for await (const nodeId of deletedNodes) {
     const node: NodeCached = apolloCache.node.get(nodeId);
     await deleteNode(mutate)(node);
     apolloCache.changes.unsetModificationFlag(
@@ -56,7 +56,7 @@ const saveDeletedNodes = async ({ mutate, state }: SaveOperationProps) => {
 
 const deleteDanglingNodes = async ({ mutate, state }: SaveOperationProps) => {
   const deletedNodes = Object.keys(state.danglingNodes);
-  for (const nodeId of deletedNodes) {
+  for await (const nodeId of deletedNodes) {
     const node: NodeCached = apolloCache.node.get(nodeId);
     await deleteNode(mutate)(node);
   }

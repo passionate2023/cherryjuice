@@ -17,17 +17,20 @@ import { saveNewDocument } from '::app/editor/document/hooks/save-document/helpe
 import { useHistory } from 'react-router';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { swapTreeStateDocumentId } from '::app/editor/document/tree/node/hooks/persisted-tree-state/helpers';
+import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 import { saveImages } from '::app/editor/document/hooks/save-document/helpers/save-images';
 
 type SaveDocumentProps = {
   saveDocumentCommandID: string;
   documentHasUnsavedChanges;
+  savingInProgress: boolean;
 };
 
 const fn = createIsNotProcessed();
 const useSaveDocument = ({
   saveDocumentCommandID,
   documentHasUnsavedChanges,
+  savingInProgress,
 }: SaveDocumentProps) => {
   const history = useHistory();
   const [mutateContent] = useMutation(DOCUMENT_MUTATION.ahtml);
@@ -43,8 +46,9 @@ const useSaveDocument = ({
 
   useEffect(() => {
     const isNotProcessed = fn(saveDocumentCommandID);
-    if (isNotProcessed && documentHasUnsavedChanges) {
+    if (isNotProcessed && documentHasUnsavedChanges && !savingInProgress) {
       (async () => {
+        documentActionCreators.setSavingInProgress();
         try {
           const state: SaveOperationState = {
             newFatherIds: {},
@@ -59,8 +63,8 @@ const useSaveDocument = ({
           await saveDeletedNodes({ mutate: deleteNodeMutation, state });
           await saveNewNodes({ mutate: mutateCreate, state });
           await saveImages({ mutate: uploadImagesMutation, state });
-          await saveNodesContent({ mutate: mutateContent, state });
           await saveNodesMeta({ mutate: mutateMeta, state });
+          await saveNodesContent({ mutate: mutateContent, state });
           await deleteDanglingNodes({ mutate: deleteNodeMutation, state });
 
           const createdDocuments = Object.values(state.swappedDocumentIds);
@@ -78,6 +82,7 @@ const useSaveDocument = ({
             error: e,
           });
         }
+        documentActionCreators.clearSavingInProgress();
       })();
     }
   }, [saveDocumentCommandID]);

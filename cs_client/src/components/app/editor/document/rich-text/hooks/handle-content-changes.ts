@@ -1,6 +1,6 @@
 import { useMutationObserver } from '::hooks/dom/mutation-observer';
 import { MutableRefObject, useCallback } from 'react';
-import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
+import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 
 const useHandleContentChanges = ({
   nodeId,
@@ -23,7 +23,7 @@ const useHandleContentChanges = ({
         );
         if (userMutations.length) {
           ref.current.setAttribute('data-edited', String(new Date().getTime()));
-          updateCachedHtmlAndImages();
+          documentActionCreators.setCacheUpdated();
           observer.disconnect();
         }
       },

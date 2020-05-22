@@ -23,10 +23,9 @@ const imageHelpers = (state: CacheState) => ({
   },
   create: (nodeId: string) => (image: UnsavedImage) => {
     state.cache.data.set('Image:' + image.id, image);
-    const type = image.base64 ? 'base64' : 'url';
     if (!state.modifications.image.created[nodeId])
       state.modifications.image.created[nodeId] = { base64: [], url: [] };
-    state.modifications.image.created[nodeId][type].push(image.id);
+    state.modifications.image.created[nodeId]['base64'].push(image.id);
     documentActionCreators.setCacheUpdated();
   },
 });

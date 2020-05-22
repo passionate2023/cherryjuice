@@ -8,7 +8,7 @@ import { localChanges } from '::graphql/cache/helpers/changes';
 const saveNewDocument = async ({ mutate, state }: SaveOperationProps) => {
   const newDocuments = apolloCache.changes.document.created;
 
-  for (const documentId of newDocuments) {
+  for await (const documentId of newDocuments) {
     const document = apolloCache.document.get(documentId);
     if (document.folder === 'Unsaved') document.folder = null;
     const data = await performMutation<DocumentMutationToCreateDocumentArgs>({

@@ -20,20 +20,9 @@ const nodeHelpers = (state: CacheState) => ({
     meta,
   }: {
     nodeId: string;
-    meta:
-      | NodeMetaIt
-      | {
-          html?: string;
-          'image({"thumbnail":true})'?: any[];
-          'image({"thumbnail":false})'?: any[];
-        };
+    meta: NodeMetaIt | { html?: string } | { updatedAt?: string };
   }): void => {
-    const modificationType =
-      meta['html'] ||
-      meta['image({"thumbnail":true})'] ||
-      meta['image({"thumbnail":false})']
-        ? 'content'
-        : 'meta';
+    const modificationType = meta['html'] ? 'content' : 'meta';
     const node = apolloCache.node.get(nodeId);
     if (!state.modifications.node[modificationType][nodeId])
       state.modifications.node[modificationType][nodeId] = {};

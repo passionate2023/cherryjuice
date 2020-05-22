@@ -3,6 +3,7 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 import { performMutation } from '::app/editor/document/hooks/save-document/helpers/shared';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { localChanges } from '::graphql/cache/helpers/changes';
+import { swapNodeIdIfApplies } from '::app/editor/document/hooks/save-document/helpers/save-nodes-meta';
 
 const b64toBlob = ({ base64, id }): Promise<Blob> =>
   fetch(`data:image/png;base64,${base64}`).then(async res => {
@@ -14,8 +15,8 @@ const b64toBlob = ({ base64, id }): Promise<Blob> =>
 type SaveImagesProps = SaveOperationProps & {};
 const saveImages = async ({ state, mutate }: SaveImagesProps) => {
   const newImagesPerNode = apolloCache.changes.image.created;
-  for (const [nodeId, { base64 }] of Object.entries(newImagesPerNode)) {
-    const node = apolloCache.node.get(nodeId);
+  for await (const [nodeId, { base64 }] of Object.entries(newImagesPerNode)) {
+    const node = apolloCache.node.get(swapNodeIdIfApplies(state)(nodeId));
     const images: Blob[] = await Promise.all(
       base64
         .map(id => apolloCache.image.get(id))
