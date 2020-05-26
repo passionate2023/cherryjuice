@@ -1,5 +1,7 @@
+import { ApolloClient } from 'apollo-client';
 type CacheState = {
   cache: any;
+  client: ApolloClient<any>;
   modifications: {
     document: {
       created: {
@@ -51,6 +53,7 @@ type CacheState = {
 };
 const cacheInitialState: CacheState = {
   cache: undefined,
+  client: undefined,
   modifications: {
     document: {
       created: {},

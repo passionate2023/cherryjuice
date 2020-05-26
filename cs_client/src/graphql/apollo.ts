@@ -58,6 +58,7 @@ const useApolloClient = (session: AuthUser) => {
       ),
     });
     apolloCache.__setCache(client.cache);
+    apolloCache.__setClient(client);
     rootActionCreators.setApolloClient(client);
   }, [session?.user?.id]);
 };

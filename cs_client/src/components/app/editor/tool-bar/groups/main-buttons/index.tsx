@@ -4,13 +4,20 @@ import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { Icon, Icons } from '::shared-components/icon';
 import { modToolbar } from '::sass-modules/index';
 import { testIds } from '::cypress/helpers/test-ids';
+import { connect, ConnectedProps } from 'react-redux';
+import { ac } from '::root/store/ducks/actions.types';
+const mapState = () => ({});
+
+const connector = connect(mapState);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
 type Props = {
   showTree: boolean;
   documentHasUnsavedChanges: boolean;
-  selectedNodeId;
+  selectedNodeId: string;
 };
 
-const MainButtons: React.FC<Props> = ({
+const MainButtons: React.FC<Props & PropsFromRedux> = ({
   showTree,
   selectedNodeId,
   documentHasUnsavedChanges,
@@ -59,8 +66,8 @@ const MainButtons: React.FC<Props> = ({
       <ToolbarButton
         onClick={
           documentHasUnsavedChanges
-            ? appActionCreators.showReloadConfirmationModal
-            : appActionCreators.reloadDocument
+            ? ac.dialogs.showReloadDocument
+            : ac.document.fetchNodes
         }
       >
         <Icon name={Icons.material.refresh} />
@@ -68,5 +75,5 @@ const MainButtons: React.FC<Props> = ({
     </div>
   );
 };
-
-export { MainButtons };
+const _ = connector(MainButtons);
+export { _ as MainButtons };

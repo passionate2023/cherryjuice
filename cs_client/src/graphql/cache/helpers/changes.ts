@@ -1,6 +1,6 @@
-import { documentActionCreators } from '../../../components/app/editor/document/reducer/action-creators';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { cacheInitialState, CacheState } from '../initial-state';
+import { ac } from '::root/store/ducks/actions.types';
 
 enum localChanges {
   NODE_META,
@@ -81,7 +81,7 @@ const changesHelpers = (state: CacheState) => ({
         ...cloneObj(cacheInitialState.modifications),
       };
     }
-    documentActionCreators.setCacheUpdated();
+    ac.document.setCacheTimeStamp(0);
   },
 });
 export { changesHelpers };

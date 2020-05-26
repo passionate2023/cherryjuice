@@ -1,12 +1,10 @@
 type TDocumentState = {
-  cacheTimeStamp: number;
   pastedImages: number;
   savingInProgress: boolean;
 };
 const state: TDocumentState = {
-  cacheTimeStamp: undefined,
-  pastedImages: undefined,
-  savingInProgress: undefined,
+  pastedImages: 0,
+  savingInProgress: false,
 };
 
 export { state as documentInitialState };

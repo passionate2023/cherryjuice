@@ -8,23 +8,39 @@ import { RecentNodes } from './recent-nodes/recent-nodes';
 import { RichText } from '::app/editor/document/rich-text';
 import { appActionCreators, TState } from '::app/reducer';
 import { useSaveDocument } from '::app/editor/document/hooks/save-document/save-document';
-import { useGetDocumentMeta } from '::app/editor/document/hooks/get-document-meta/get-document-meta';
 import { documentReducer } from '::app/editor/document/reducer/reducer';
 import { documentInitialState } from '::app/editor/document/reducer/initial-state';
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 import { DocumentContext } from './reducer/context';
 import { useTrackDocumentChanges } from '::app/editor/document/hooks/track-document-changes';
+import { Store } from '::root/store';
+import { connect, ConnectedProps } from 'react-redux';
+import { ac } from '::root/store/ducks/actions.types';
+import { setHighestNodeId } from '::app/editor/document/hooks/get-document-meta/helpers/set-highset-node_id';
+
+const mapState = (state: Store) => ({
+  nodes: state.document.nodes,
+  fetchNodesStarted: state.document.fetchNodesStarted,
+  cacheTimeStamp: state.document.cacheTimeStamp,
+});
+
+const connector = connect(mapState);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {
   state: TState;
 };
 
-const Document: React.FC<Props> = ({ state }) => {
+const Document: React.FC<Props & PropsFromRedux> = ({
+  state,
+  nodes,
+  fetchNodesStarted,
+  cacheTimeStamp,
+}) => {
   const {
     showTree,
     saveDocument,
     reloadDocument,
-    selectedFile,
     contentEditable,
     isOnMobile,
     processLinks,
@@ -41,29 +57,28 @@ const Document: React.FC<Props> = ({ state }) => {
   const match = useRouteMatch<{ file_id: string }>();
   const { file_id } = match.params;
 
-  const { nodes, loading: fetchingDocumentMeta } = useGetDocumentMeta({
-    file_id,
-    selectedFile,
-    reloadRequestID: reloadDocument,
-    cacheTimeStamp: documentState.cacheTimeStamp,
-    savingInProgress: documentState.savingInProgress,
-  });
-
   useSaveDocument({
     saveDocumentCommandID: saveDocument,
     documentHasUnsavedChanges,
     savingInProgress: documentState.savingInProgress,
   });
-
-  useTrackDocumentChanges({ documentState });
+  useEffect(() => {
+    setHighestNodeId(nodes);
+  }, [nodes]);
+  useTrackDocumentChanges({ cacheTimeStamp });
   useEffect(() => {
     if (history.location.pathname.endsWith(file_id))
       appActionCreators.selectNode(undefined);
   }, [history.location.pathname]);
 
+  // temp hooks
+  useEffect(() => {
+    ac.document.setDocumentId(file_id);
+  }, [file_id]);
+
   return (
     <DocumentContext.Provider value={documentState}>
-      <LinearProgress loading={fetchingDocumentMeta} />
+      <LinearProgress loading={fetchNodesStarted} />
       {nodes && (
         <Fragment>
           {state.selectedNode && (
@@ -99,5 +114,4 @@ const Document: React.FC<Props> = ({ state }) => {
   );
 };
 
-export { Document };
-export default Document;
+export default connector(Document);

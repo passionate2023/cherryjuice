@@ -1,26 +1,28 @@
 import { NodeMeta } from '::types/graphql/adapters';
-import { QUERY_NODE_META } from '::graphql/queries';
 import { apolloCache } from '::graphql/cache/apollo-cache';
+import { nodesMetaMap } from '::types/misc';
 
 type Props = {
-  data: any;
-  // localChanges: TEditedNodes;
-  file_id: string;
+  nodes: NodeMeta[];
 };
 const constructTree = ({
-  data,
-  // localChanges,
-  file_id,
-}: Props): Map<number, NodeMeta> => {
-  if (apolloCache.changes.document.created.includes(file_id)) {
-    if (!data) data = { document: [] };
-    if (!data.document) data.document = [];
-    data.document.push(apolloCache.document.get(file_id));
-  }
-  let nodes: Map<number, NodeMeta>;
-  const nodesArray = QUERY_NODE_META.path(data) || [];
+  nodes: nodesArray = [],
+}: Props): Map<number, NodeMeta> | undefined => {
+  let nodes: Map<number, NodeMeta> = new Map();
   if (nodesArray.length) {
     nodes = new Map(nodesArray.map(node => [node.node_id, node]));
+  }
+  return nodes;
+};
+const applyLocalModifications = ({
+  nodes,
+  file_id,
+}: {
+  file_id: string;
+  nodes?: nodesMetaMap;
+}) => {
+  if (nodes) {
+    nodes = new Map(nodes);
     const modifiedNodes = [
       ...apolloCache.changes.node.meta.map(([nodeId]) => nodeId),
       ...apolloCache.changes.node.created,
@@ -36,5 +38,4 @@ const constructTree = ({
   }
   return nodes;
 };
-
-export { constructTree };
+export { constructTree, applyLocalModifications };

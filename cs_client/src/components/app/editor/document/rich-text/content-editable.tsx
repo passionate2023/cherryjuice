@@ -7,6 +7,16 @@ import { useAttachImagesToHtml } from '::app/editor/document/rich-text/hooks/get
 import { useHandleContentChanges } from '::app/editor/document/rich-text/hooks/handle-content-changes';
 import { useAddMetaToPastedImages } from '::app/editor/document/rich-text/hooks/add-meta-to-pasted-images';
 import { DocumentContext } from '::app/editor/document/reducer/context';
+
+type Props = {
+  contentEditable;
+  html: { htmlRaw: string; node_id: number };
+  nodeId;
+  file_id;
+  node_id;
+  processLinks;
+};
+
 const ContentEditable = ({
   contentEditable,
   html,
@@ -14,14 +24,7 @@ const ContentEditable = ({
   file_id,
   node_id,
   processLinks,
-}: {
-  contentEditable;
-  html: { htmlRaw: string; node_id: number };
-  nodeId;
-  file_id;
-  node_id;
-  processLinks;
-}) => {
+}: Props) => {
   const { pastedImages } = useContext(DocumentContext);
   useSetupStuff();
   useScrollToHashElement({ html: html.htmlRaw });

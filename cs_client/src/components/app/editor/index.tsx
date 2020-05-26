@@ -11,7 +11,6 @@ const ToolBar = React.lazy(() => import('::app/editor/tool-bar'));
 
 const Editor: React.FC<{ state: TState }> = ({ state }) => {
   const history = useHistory();
-
   return (
     <>
       <ErrorBoundary>

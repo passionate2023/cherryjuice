@@ -16,13 +16,22 @@ type Props = {
   nodes: Map<number, NodeMeta>;
   processLinks: number;
 };
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store';
 
-const RichText: React.FC<Props> = ({
+const mapState = (state: Store) => ({
+  fetchNodesStarted: state.document.fetchNodesStarted,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+const RichText: React.FC<Props & PropsFromRedux> = ({
   file_id,
   reloadRequestIDs,
   contentEditable,
   nodes,
   processLinks,
+  fetchNodesStarted,
 }) => {
   const match = useRouteMatch();
   const history = useHistory();
@@ -51,7 +60,7 @@ const RichText: React.FC<Props> = ({
 
   return (
     <div className={modRichText.richText__container}>
-      {html?.htmlRaw ? (
+      {html?.htmlRaw && !fetchNodesStarted ? (
         <ContentEditable
           contentEditable={contentEditable}
           html={html}
@@ -66,5 +75,5 @@ const RichText: React.FC<Props> = ({
     </div>
   );
 };
-
-export { RichText };
+const _ = connector(RichText);
+export { _ as RichText };

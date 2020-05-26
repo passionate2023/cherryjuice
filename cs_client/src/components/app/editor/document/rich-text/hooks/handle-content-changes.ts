@@ -1,6 +1,6 @@
 import { useMutationObserver } from '::hooks/dom/mutation-observer';
 import { MutableRefObject, useCallback } from 'react';
-import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
+import { ac } from '::root/store/ducks/actions.types';
 
 const useHandleContentChanges = ({
   nodeId,
@@ -23,7 +23,7 @@ const useHandleContentChanges = ({
         );
         if (userMutations.length) {
           ref.current.setAttribute('data-edited', String(new Date().getTime()));
-          documentActionCreators.setCacheUpdated();
+          ac.document.setCacheTimeStamp();
           observer.disconnect();
         }
       },

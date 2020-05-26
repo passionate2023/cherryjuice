@@ -1,8 +1,8 @@
 import { NodeCached } from '::types/graphql/adapters';
-import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 import { NodeMetaIt } from '::types/graphql/generated';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { CacheState } from '::graphql/cache/initial-state';
+import { ac } from '::root/store/ducks/actions.types';
 
 const nodeHelpers = (state: CacheState) => ({
   get: (nodeId: string): NodeCached => {
@@ -13,7 +13,7 @@ const nodeHelpers = (state: CacheState) => ({
   create: (node: NodeCached) => {
     state.cache?.data.set('Node:' + node.id, node);
     state.modifications.node.created[node.id] = true;
-    documentActionCreators.setCacheUpdated();
+    ac.document.setCacheTimeStamp();
   },
   mutate: ({
     nodeId,
@@ -34,9 +34,9 @@ const nodeHelpers = (state: CacheState) => ({
       ...meta,
       updatedAt: new Date().getTime(),
     });
-    documentActionCreators.setCacheUpdated();
+    ac.document.setCacheTimeStamp();
   },
-  swapId: ({ oldId, newId }) => {
+  swapId: ({ oldId, newId }: { oldId: string; newId: string }) => {
     const node = apolloCache.node.get(oldId);
     node.id = newId;
     apolloCache.node.delete.hard(oldId);
@@ -44,11 +44,11 @@ const nodeHelpers = (state: CacheState) => ({
     return node;
   },
   delete: (() => ({
-    soft: (nodeId): void => {
+    soft: (nodeId: string): void => {
       state.modifications.node.deleted[nodeId] = 'soft';
-      documentActionCreators.setCacheUpdated();
+      ac.document.setCacheTimeStamp();
     },
-    hard: (nodeId): void => {
+    hard: (nodeId: string): void => {
       state.cache.data.delete('Node:' + nodeId);
       delete state.modifications.node.deleted[nodeId];
     },
@@ -62,7 +62,7 @@ const nodeHelpers = (state: CacheState) => ({
     ].forEach(([nodeId]) => {
       apolloCache.node.delete.hard('Node:' + nodeId);
     });
-    documentActionCreators.resetCacheUpdated();
+    ac.document.setCacheTimeStamp(0);
   },
 });
 

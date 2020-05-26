@@ -16,10 +16,10 @@ export type TNodeMeta = {
   updatedAt: string;
 };
 const initialState = {
-  showTree: [JSON.parse(localStorage.getItem('showTree'))].map(value =>
-    value === null ? true : value === true,
-  )[0],
-  treeSize: JSON.parse(localStorage.getItem('treeSize')) || 250,
+  showTree: [
+    JSON.parse(localStorage.getItem('showTree') as string),
+  ].map(value => (value === null ? true : value === true))[0],
+  treeSize: JSON.parse(localStorage.getItem('treeSize') as string) || 250,
   selectedNode: undefined,
   selectedFile:
     [localStorage.getItem('selectedFile')].filter(
@@ -41,11 +41,10 @@ const initialState = {
   processLinks: undefined,
   showImportDocuments: false,
   showUserPopup: false,
-  showNodeMeta: undefined,
+  showNodeMeta: false,
   highest_node_id: -1,
   showDeleteDocumentModal: false,
   rootNode: undefined,
-  showReloadConfirmationModal: false,
   documentHasUnsavedChanges: false,
   snackbarMessage: undefined,
   createDocumentRequestId: undefined,
@@ -53,10 +52,10 @@ const initialState = {
 };
 
 export type TState = typeof initialState & {
-  selectedNode: TNodeMeta;
-  rootNode: NodeMeta;
-  recentNodes: TNodeMeta[];
-  alert: TAlert;
+  selectedNode?: TNodeMeta;
+  rootNode?: TNodeMeta;
+  recentNodes?: TNodeMeta[];
+  alert?: TAlert;
   showNodeMeta: NodeMetaPopupRole;
   createDocumentRequestId: number;
 };
@@ -76,7 +75,6 @@ enum actions {
   SELECT_NODE,
   SELECT_FILE,
   SAVE_DOCUMENT,
-  RELOAD_DOCUMENT,
   RELOAD_DOCUMENT_LIST,
   SET_ALERT,
   SET_IS_ON_MOBILE,
@@ -162,12 +160,6 @@ const createActionCreators = () => {
     saveDocument: () => {
       state.dispatch({
         type: actions.SAVE_DOCUMENT,
-        value: new Date().getTime(),
-      });
-    },
-    reloadDocument: () => {
-      state.dispatch({
-        type: actions.RELOAD_DOCUMENT,
         value: new Date().getTime(),
       });
     },
@@ -277,7 +269,8 @@ const createActionCreators = () => {
     },
   };
 };
-const reducer = (
+let reducer: (state: TState, action: { type: actions; value: any }) => TState;
+reducer = (
   state: TState,
   action: {
     type: actions;
@@ -339,12 +332,6 @@ const reducer = (
         ...state,
         saveDocument: action.value,
       };
-    case actions.RELOAD_DOCUMENT:
-      return {
-        ...state,
-        reloadDocument: action.value,
-        showReloadConfirmationModal: false,
-      };
     case actions.RELOAD_DOCUMENT_LIST:
       return {
         ...state,
@@ -391,8 +378,7 @@ const reducer = (
       };
     case actions.SET_ROOT_NODE:
       return { ...state, rootNode: action.value.node };
-    case actions.showReloadConfirmationModal:
-      return { ...state, showReloadConfirmationModal: action.value };
+
     case actions.documentHasUnsavedChanges:
       return {
         ...state,

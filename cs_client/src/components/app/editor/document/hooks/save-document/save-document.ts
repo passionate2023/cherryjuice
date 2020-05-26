@@ -19,6 +19,7 @@ import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpe
 import { swapTreeStateDocumentId } from '::app/editor/document/tree/node/hooks/persisted-tree-state/helpers';
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 import { saveImages } from '::app/editor/document/hooks/save-document/helpers/save-images';
+import { ac } from '::root/store/ducks/actions.types';
 
 type SaveDocumentProps = {
   saveDocumentCommandID: string;
@@ -72,7 +73,7 @@ const useSaveDocument = ({
             swapTreeStateDocumentId(state.swappedDocumentIds);
             if (history.location.pathname.startsWith('/document/new-document'))
               appActionCreators.selectFile(createdDocuments.pop());
-          } else appActionCreators.reloadDocument();
+          } else ac.document.fetchNodes();
           appActionCreators.setSnackbarMessage(SnackbarMessages.documentSaved);
         } catch (e) {
           appActionCreators.setAlert({

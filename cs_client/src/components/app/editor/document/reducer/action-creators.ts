@@ -1,5 +1,4 @@
 enum actions {
-  setCacheUpdated,
   pastedImages,
   savingInProgress,
 }
@@ -11,15 +10,6 @@ const actionCreators = (() => {
   };
   return {
     setDispatch: (dispatch): void => (state.dispatch = dispatch),
-    setCacheUpdated: () => {
-      state.dispatch({
-        type: actions.setCacheUpdated,
-        value: { reset: false },
-      });
-    },
-    resetCacheUpdated: () => {
-      state.dispatch({ type: actions.setCacheUpdated, value: { reset: true } });
-    },
     pastedImages: () => {
       state.dispatch({ type: actions.pastedImages });
     },
