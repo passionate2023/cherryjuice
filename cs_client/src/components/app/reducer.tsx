@@ -16,21 +16,19 @@ export type TNodeMeta = {
   updatedAt: string;
 };
 const initialState = {
+  documentHasUnsavedChanges: false,
+  selectedNode: undefined,
+  rootNode: undefined,
+  highest_node_id: -1,
+  recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}
+  processLinks: undefined,
+  createDocumentRequestId: undefined,
+  reloadFiles: 0,
   showTree: [
     JSON.parse(localStorage.getItem('showTree') as string),
   ].map(value => (value === null ? true : value === true))[0],
   treeSize: JSON.parse(localStorage.getItem('treeSize') as string) || 250,
-  selectedNode: undefined,
-  selectedFile:
-    [localStorage.getItem('selectedFile')].filter(
-      value => Boolean(value) && value !== 'null',
-    )[0] || '',
-  showFileSelect:
-    !localStorage.getItem('selectedFile') && location.pathname === '/',
-  recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}
-  saveDocument: '',
-  reloadDocument: 0,
-  reloadFiles: 0,
+  showFileSelect: location.pathname === '/',
   alert: undefined,
   showSettings: false,
   showFormattingButtons: false,
@@ -38,16 +36,11 @@ const initialState = {
   contentEditable: false,
   isOnMobile: false,
   showInfoBar: false,
-  processLinks: undefined,
   showImportDocuments: false,
   showUserPopup: false,
-  showNodeMeta: false,
-  highest_node_id: -1,
+  showNodeMeta: undefined,
   showDeleteDocumentModal: false,
-  rootNode: undefined,
-  documentHasUnsavedChanges: false,
   snackbarMessage: undefined,
-  createDocumentRequestId: undefined,
   showDocumentMetaDialog: false,
 };
 
@@ -61,20 +54,16 @@ export type TState = typeof initialState & {
 };
 enum actions {
   setSnackbarMessage,
-  hideReloadConfirmationModal,
   TOGGLE_TREE,
   TOGGLE_TREE_ON,
   TOGGLE_TREE_OFF,
   TOGGLE_FILE_SELECT,
   TOGGLE_SETTINGS,
   TOGGLE_FORMATTING_BUTTONS,
-  TOGGLE_CONTENT_EDITABLE,
   TOGGLE_RECENT_NODES_BAR,
   TOGGLE_INFO_BAR,
   RESIZE_TREE,
   SELECT_NODE,
-  SELECT_FILE,
-  SAVE_DOCUMENT,
   RELOAD_DOCUMENT_LIST,
   SET_ALERT,
   SET_IS_ON_MOBILE,
@@ -102,9 +91,6 @@ const createActionCreators = () => {
     setDispatch: (dispatch): void => (state.dispatch = dispatch),
     toggleFormattingButtons: (): void => {
       state.dispatch({ type: actions.TOGGLE_FORMATTING_BUTTONS });
-    },
-    toggleContentEditable: (): void => {
-      state.dispatch({ type: actions.TOGGLE_CONTENT_EDITABLE });
     },
     toggleRecentBar: (): void => {
       state.dispatch({ type: actions.TOGGLE_RECENT_NODES_BAR });
@@ -157,14 +143,6 @@ const createActionCreators = () => {
     hidePopups: () => {
       state.dispatch({ type: actions.HIDE_POPUPS });
     },
-    saveDocument: () => {
-      state.dispatch({
-        type: actions.SAVE_DOCUMENT,
-        value: new Date().getTime(),
-      });
-    },
-    selectFile: (fileId: string) =>
-      state.dispatch({ type: actions.SELECT_FILE, value: fileId }),
     selectNode: (node: TNodeMeta) =>
       state.dispatch({
         type: actions.SELECT_NODE,
@@ -320,18 +298,7 @@ reducer = (
             ]
           : state.recentNodes,
       };
-    case actions.SELECT_FILE:
-      return {
-        ...state,
-        selectedFile: action.value,
-        showTree: true,
-        selectedNode: undefined,
-      };
-    case actions.SAVE_DOCUMENT:
-      return {
-        ...state,
-        saveDocument: action.value,
-      };
+
     case actions.RELOAD_DOCUMENT_LIST:
       return {
         ...state,
@@ -359,8 +326,6 @@ reducer = (
         showFormattingButtons: !state.showFormattingButtons,
         contentEditable: !state.showFormattingButtons,
       };
-    case actions.TOGGLE_CONTENT_EDITABLE:
-      return { ...state, contentEditable: !state.contentEditable };
     case actions.TOGGLE_INFO_BAR:
       return { ...state, showInfoBar: !state.showInfoBar };
     case actions.SET_IS_ON_MOBILE:
@@ -407,7 +372,7 @@ reducer = (
         showDocumentMetaDialog: action.value,
       };
     default:
-      throw new Error('action not supported');
+      throw new Error(`action ${action.type} not supported`);
   }
 };
 const appActionCreators = createActionCreators();

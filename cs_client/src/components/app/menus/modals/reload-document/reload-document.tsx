@@ -3,7 +3,7 @@ import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { ConfirmationModal } from '::shared-components/modal/confirmation-modal';
 import { AlertType } from '::types/react';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac } from '::root/store/ducks/actions.types';
+import { ac } from '::root/store/actions.types';
 import { Store } from '::root/store';
 
 const mapState = (state: Store) => ({

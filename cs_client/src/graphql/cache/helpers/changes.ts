@@ -1,6 +1,6 @@
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { cacheInitialState, CacheState } from '../initial-state';
-import { ac } from '::root/store/ducks/actions.types';
+import { ac } from '::root/store/actions.types';
 
 enum localChanges {
   NODE_META,

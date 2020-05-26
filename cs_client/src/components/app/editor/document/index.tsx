@@ -14,7 +14,7 @@ import { DocumentContext } from './reducer/context';
 import { useTrackDocumentChanges } from '::app/editor/document/hooks/track-document-changes';
 import { Store } from '::root/store';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac } from '::root/store/ducks/actions.types';
+import { ac } from '::root/store/actions.types';
 import { setHighestNodeId } from '::app/editor/document/hooks/get-document-meta/helpers/set-highset-node_id';
 
 const mapState = (state: Store) => ({
@@ -36,13 +36,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   fetchNodesStarted,
   cacheTimeStamp,
 }) => {
-  const {
-    showTree,
-    reloadDocument,
-    contentEditable,
-    isOnMobile,
-    processLinks,
-  } = state;
+  const { showTree, contentEditable, isOnMobile, processLinks } = state;
   const [documentState, dispatch] = useReducer(
     documentReducer,
     documentInitialState,
@@ -66,6 +60,8 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   // temp hooks
   useEffect(() => {
     ac.document.setDocumentId(file_id);
+    appActionCreators.showTree();
+    appActionCreators.selectNode(undefined);
   }, [file_id]);
 
   return (
@@ -92,7 +88,6 @@ const Document: React.FC<Props & PropsFromRedux> = ({
                     {...props}
                     nodes={nodes}
                     file_id={file_id}
-                    reloadRequestIDs={[String(reloadDocument)]}
                     contentEditable={contentEditable || !isOnMobile}
                     processLinks={processLinks}
                   />

@@ -11,7 +11,6 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 
 type Props = {
   file_id: string;
-  reloadRequestIDs: string[];
   contentEditable: boolean;
   nodes: Map<number, NodeMeta>;
   processLinks: number;
@@ -27,7 +26,6 @@ const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 const RichText: React.FC<Props & PropsFromRedux> = ({
   file_id,
-  reloadRequestIDs,
   contentEditable,
   nodes,
   processLinks,
@@ -44,7 +42,6 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
     processLinks: processLinksDueToHtmlChange,
   } = useGetNodeHtml({
     node_id,
-    reloadRequestIDs,
     file_id,
     nodeId,
   });

@@ -6,7 +6,6 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 
 const useGetNodeHtml = ({
   node_id,
-  reloadRequestIDs,
   file_id,
   nodeId,
 }): {
@@ -21,7 +20,7 @@ const useGetNodeHtml = ({
   };
   let { data, error } = useReloadQuery(
     {
-      reloadRequestIDs,
+      reloadRequestIDs: [0],
     },
     {
       query: QUERY_NODE_CONTENT.html.query,

@@ -45,19 +45,18 @@ const updateBreakpointState = ({ breakpoint, callback }) => {
   };
 };
 
-const useHandleRouting = (state: TState) => {
+const useHandleRouting = (documentId: string) => {
   const history = useHistory();
-  const selectedFileRef = useRef(state.selectedFile);
+  const selectedFileRef = useRef(documentId);
   useEffect(() => {
-    const pathnameIsEmpty =
-      history.location.pathname === '/' && state.selectedFile;
+    const pathnameIsEmpty = history.location.pathname === '/' && documentId;
     const newSelectedFile =
-      state.selectedFile && state.selectedFile !== selectedFileRef.current;
+      documentId && documentId !== selectedFileRef.current;
     if (pathnameIsEmpty || newSelectedFile) {
-      history.push('/document/' + state.selectedFile);
-      selectedFileRef.current = state.selectedFile;
-    } else if (!state.selectedFile) history.push('/');
-  }, [state.selectedFile, history.location.pathname]);
+      history.push('/document/' + documentId);
+      selectedFileRef.current = documentId;
+    } else if (!documentId) history.push('/');
+  }, [documentId, history.location.pathname]);
 };
 const useUpdateCssVariables = (state: TState) => {
   useEffect(() => {
@@ -94,8 +93,17 @@ const useRefreshToken = ({ token }) => {
     }
   }, [data, error]);
 };
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store';
 
-const App: React.FC<Props> = ({ session }) => {
+const mapState = (state: Store) => ({
+  documentId: state.document.documentId,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const App: React.FC<Props & PropsFromRedux> = ({ session, documentId }) => {
   const [state, dispatch] = useReducer(appReducer, appInitialState);
   useEffect(() => {
     appActionCreators.setDispatch(dispatch);
@@ -109,7 +117,7 @@ const App: React.FC<Props> = ({ session }) => {
   ]);
   useDocumentEditedIndicator(state);
   useSaveStateToLocalStorage(state);
-  useHandleRouting(state);
+  useHandleRouting(documentId);
   useUpdateCssVariables(state);
   useRefreshToken({ token: session.token });
   return (
@@ -125,5 +133,5 @@ const App: React.FC<Props> = ({ session }) => {
     </AppContext.Provider>
   );
 };
-
-export { App };
+const _ = connector(App);
+export { _ as App };

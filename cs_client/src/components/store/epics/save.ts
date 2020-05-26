@@ -1,7 +1,7 @@
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { concat, from, Observable } from 'rxjs';
 import { ofType } from 'deox';
-import { ac, Actions } from '../ducks/actions.types';
+import { ac, Actions } from '../actions.types';
 import { documentActionCreators } from '::root/store/ducks/document';
 import { saveDocument } from '::app/editor/document/hooks/save-document/save-document';
 import { swapPersistedTreeStateDocumentId } from '::app/editor/document/tree/node/hooks/persisted-tree-state/helpers';
@@ -18,7 +18,6 @@ const postSave = (state: SaveOperationState) => {
 
   if (location.pathname.startsWith('/document/new-document')) {
     const newDocumentId = createdDocuments.pop();
-    appActionCreators.selectFile(newDocumentId);
     return ac.document.setDocumentId(newDocumentId);
   } else {
     return ac.document.fetchNodes();

@@ -18,6 +18,16 @@ import { FormInputProps } from '::shared-components/form/meta-form/meta-form-inp
 import { useHistory } from 'react-router';
 import { testIds } from '::cypress/helpers';
 
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store';
+
+const mapState = (state: Store) => ({
+  documentId: state.document.documentId,
+});
+
+const connector = connect(mapState);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
 type TNodeMetaModalProps = {
   nodeId: string;
 };
@@ -26,12 +36,12 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
   onClose: EventHandler<any>;
   showDialog: NodeMetaPopupRole;
   isOnMobile: boolean;
-}> = ({ showDialog, isOnMobile, nodeId, onClose }) => {
+} & PropsFromRedux> = ({ showDialog, isOnMobile, nodeId, onClose, documentId }) => {
   const [state, dispatch] = useReducer(nodeMetaReducer, nodeMetaInitialState);
   useEffect(() => {
     nodeMetaActionCreators.__setDispatch(dispatch);
   }, []);
-  const { selectedFile: documentId, highest_node_id } = useContext(AppContext);
+  const { highest_node_id } = useContext(AppContext);
   const { node, isNewNode, previous_sibling_node_id } = getNode({
     documentId,
     showDialog,
@@ -140,4 +150,4 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
   );
 };
 
-export default NodeMetaModalWithTransition;
+export default connector(NodeMetaModalWithTransition);

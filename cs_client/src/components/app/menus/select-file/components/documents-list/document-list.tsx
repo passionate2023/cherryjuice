@@ -7,7 +7,7 @@ import { SpinnerCircle } from '::shared-components/spinner-circle';
 const DocumentList = ({
   selectedIDs,
   onSelect,
-  selectedFile,
+                        documentId,
   documentsMeta,
   loading,
 }) => {
@@ -30,7 +30,7 @@ const DocumentList = ({
           <DocumentGroup
             key={folder}
             selectedIDs={selectedIDs}
-            selectedFile={selectedFile}
+            documentId={documentId}
             onSelect={onSelect}
             folder={folder}
             files={files}

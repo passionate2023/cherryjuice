@@ -29,7 +29,6 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
     <>
       <Suspense fallback={<Void />}>
         <SelectFile
-          selectedFile={state.selectedFile}
           reloadFiles={state.reloadFiles}
           showDialog={state.showFileSelect}
           isOnMobile={state.isOnMobile}
@@ -90,10 +89,7 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
         />
       </Suspense>
       <Suspense fallback={<Void />}>
-        <ReloadDocument
-          onClose={appActionCreators.hideReloadConfirmationModal}
-          show={state.showReloadConfirmationModal}
-        />
+        <ReloadDocument />
       </Suspense>
       <Suspense fallback={<Void />}>
         <Snackbar

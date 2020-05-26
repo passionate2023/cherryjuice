@@ -37,6 +37,7 @@ const reducer = createReducer(initialState, _ => [
   _(actionCreators.setDocumentId, (state, { payload }) => ({
     ...state,
     documentId: payload,
+    nodes: undefined,
   })),
   _(actionCreators.fetchNodesFulfilled, (state, { payload }) => ({
     ...state,

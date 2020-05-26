@@ -15,6 +15,7 @@ import {
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { testIds } from '::cypress/helpers';
+import { ac } from '::root/store/actions.types';
 
 type DocumentMetaDialogProps = {};
 
@@ -44,7 +45,7 @@ const DocumentMetaDialogWithTransition: React.FC<DocumentMetaDialogProps & {
         document.node.push(rootNode);
         apolloCache.node.create(rootNode);
         apolloCache.document.create(document.id, document);
-        appActionCreators.selectFile(document.id);
+        ac.document.setDocumentId(document.id);
       } catch (e) {
         appActionCreators.setAlert({
           title: 'Could not create a document',

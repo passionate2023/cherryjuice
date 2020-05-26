@@ -7,7 +7,7 @@ const DocumentGroup = ({
   folder,
   files,
   selectedIDs,
-  selectedFile,
+                         documentId,
   onSelect,
 }) => {
   return (
@@ -22,7 +22,7 @@ const DocumentGroup = ({
             key={fileProps.id}
             onSelect={onSelect}
             selectedIDs={selectedIDs}
-            selectedFile={selectedFile}
+            documentId={documentId}
           />
         ))}
       </span>

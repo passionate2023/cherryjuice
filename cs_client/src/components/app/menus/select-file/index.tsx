@@ -13,7 +13,7 @@ import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpe
 import { useGetDocumentsList } from '::app/menus/select-file/hooks/get-documents-list';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 
-const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
+const createButtons = ({ selectedIDs, documentId, close, open }) => {
   const buttonsLeft = [
     {
       label: 'reload',
@@ -36,22 +36,36 @@ const createButtons = ({ selectedIDs, selectedFile, close, open }) => {
     {
       label: 'open',
       onClick: open,
-      disabled: selectedIDs[0] === selectedFile || selectedIDs.length !== 1,
+      disabled: selectedIDs[0] === documentId || selectedIDs.length !== 1,
     },
   ];
   return { buttonsLeft, buttonsRight };
 };
 
-const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store';
+import { ac } from '::root/store/actions.types';
+
+const mapState = (state: Store) => ({
+  documentId: state.document.documentId,
+});
+const connector = connect(mapState);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const SelectFile: React.FC<{
+  reloadFiles;
+  showDialog;
+  isOnMobile;
+} & PropsFromRedux> = ({ documentId, reloadFiles, showDialog, isOnMobile }) => {
   const [selectedIDs, setSelectedIDs] = useState([]);
   const close = appActionCreators.toggleFileSelect;
   const open = () => {
     updateCachedHtmlAndImages();
-    appActionCreators.selectFile(selectedIDs[0]);
+    ac.document.setDocumentId(selectedIDs[0]);
   };
   const { buttonsLeft, buttonsRight } = createButtons({
     selectedIDs,
-    selectedFile,
+    documentId,
     close,
     open,
   });
@@ -62,8 +76,8 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
     IDs: selectedIDs,
     onCompleted: () => {
       appActionCreators.reloadDocumentList();
-      if (selectedIDs.includes(selectedFile)) {
-        appActionCreators.selectFile('');
+      if (selectedIDs.includes(documentId)) {
+        ac.document.setDocumentId(undefined);
       }
     },
   });
@@ -120,7 +134,7 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
         <DocumentList
           onSelect={onSelect}
           selectedIDs={selectedIDs}
-          selectedFile={selectedFile}
+          documentId={documentId}
           documentsMeta={documentsList}
           loading={loading}
         />
@@ -129,4 +143,4 @@ const SelectFile = ({ selectedFile, reloadFiles, showDialog, isOnMobile }) => {
   );
 };
 
-export default SelectFile;
+export default connector(SelectFile);

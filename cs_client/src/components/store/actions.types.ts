@@ -1,4 +1,4 @@
-import { documentActionCreators } from './document';
+import { documentActionCreators } from './ducks/document';
 import { dialogsActionCreators } from '::root/store/ducks/dialogs';
 import { bindActionCreators } from 'redux';
 import { store } from '::root/store';

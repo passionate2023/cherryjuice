@@ -6,7 +6,7 @@ import { QUERY_NODE_META } from '::graphql/queries';
 import { store } from '::root/store';
 import { constructTree } from '::app/editor/document/hooks/get-document-meta/helpers/construct-tree';
 import { clearLocalChanges } from '::app/editor/document/hooks/get-document-meta/helpers/clear-local-changes';
-import { Actions } from '../ducks/actions.types';
+import { Actions } from '../actions.types';
 import { documentActionCreators } from '::root/store/ducks/document';
 import { handleErrors } from '::app/editor/document/hooks/get-document-meta/helpers/handle-errors';
 import { NodeMeta } from '::types/graphql/adapters';
@@ -65,7 +65,7 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
       );
       return concat(loading, request, resetCache).pipe(
         catchError(error => {
-          handleErrors({ file_id, selectedFile: undefined, error });
+          handleErrors({ file_id, documentId: selectedDocumentId(), error });
           return error;
         }),
       );
