@@ -24,29 +24,35 @@ const DOCUMENT_MUTATION = {
       }
     }
   `,
-  ahtml: gql`
-    mutation saveAhtml(
-      $file_id: String!
-      $node_id: Int!
-      $ahtml: String!
-      $deletedImages: [String]!
-    ) {
-      document(file_id: $file_id) {
-        node(node_id: $node_id) {
-          saveAHtml(ahtml: $ahtml, deletedImages: $deletedImages)
+  ahtml: {
+    path: (data): string => data?.document?.node?.saveAHtml,
+    query: gql`
+      mutation saveAhtml(
+        $file_id: String!
+        $node_id: Int!
+        $ahtml: String!
+        $deletedImages: [String]!
+      ) {
+        document(file_id: $file_id) {
+          node(node_id: $node_id) {
+            saveAHtml(ahtml: $ahtml, deletedImages: $deletedImages)
+          }
         }
       }
-    }
-  `,
-  meta: gql`
-    mutation meta($file_id: String!, $node_id: Int!, $meta: NodeMetaIt!) {
-      document(file_id: $file_id) {
-        node(node_id: $node_id) {
-          meta(meta: $meta)
+    `,
+  },
+  meta: {
+    path: (data): string => data?.document?.node?.meta,
+    query: gql`
+      mutation meta($file_id: String!, $node_id: Int!, $meta: NodeMetaIt!) {
+        document(file_id: $file_id) {
+          node(node_id: $node_id) {
+            meta(meta: $meta)
+          }
         }
       }
-    }
-  `,
+    `,
+  },
   createNode: {
     path: (data): string => data?.document?.node?.createNode,
     query: gql`

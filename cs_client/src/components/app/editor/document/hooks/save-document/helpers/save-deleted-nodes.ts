@@ -1,7 +1,7 @@
 import { NodeCached } from '::types/graphql/adapters';
 import { apolloCache } from '::graphql/cache/apollo-cache';
-import { performMutation } from '::app/editor/document/hooks/save-document/helpers/shared';
 import { localChanges } from '::graphql/cache/helpers/changes';
+import { DOCUMENT_MUTATION } from '::graphql/mutations';
 
 type SaveOperationState = {
   newFatherIds: {
@@ -24,28 +24,28 @@ type SaveOperationState = {
   };
 };
 type SaveOperationProps = {
-  mutate: Function;
   state: SaveOperationState;
 };
 
-const deleteNode = mutate => async (node: NodeCached) => {
+const deleteNode = async (node: NodeCached) => {
   if (!node.id.startsWith('TEMP:'))
-    await performMutation({
+    await apolloCache.client.mutate({
       variables: {
         file_id: node.documentId,
         node_id: node.node_id,
       },
-      mutate,
+      query: DOCUMENT_MUTATION.deleteNode.query,
+      path: DOCUMENT_MUTATION.deleteNode.path,
     });
   apolloCache.node.delete.hard(node.id);
 };
 
-const saveDeletedNodes = async ({ mutate, state }: SaveOperationProps) => {
+const saveDeletedNodes = async ({ state }: SaveOperationProps) => {
   const deletedNodes = apolloCache.changes.node.deleted;
 
   for await (const nodeId of deletedNodes) {
     const node: NodeCached = apolloCache.node.get(nodeId);
-    await deleteNode(mutate)(node);
+    await deleteNode(node);
     apolloCache.changes.unsetModificationFlag(
       localChanges.NODE_DELETED,
       nodeId,
@@ -54,11 +54,11 @@ const saveDeletedNodes = async ({ mutate, state }: SaveOperationProps) => {
   }
 };
 
-const deleteDanglingNodes = async ({ mutate, state }: SaveOperationProps) => {
+const deleteDanglingNodes = async ({ state }: SaveOperationProps) => {
   const deletedNodes = Object.keys(state.danglingNodes);
   for await (const nodeId of deletedNodes) {
     const node: NodeCached = apolloCache.node.get(nodeId);
-    await deleteNode(mutate)(node);
+    await deleteNode(node);
   }
 };
 

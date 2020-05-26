@@ -1,23 +1,22 @@
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { SaveOperationProps } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
-import { DocumentMutationToCreateDocumentArgs } from '::types/graphql/generated';
-import { performMutation } from '::app/editor/document/hooks/save-document/helpers/shared';
 import { localChanges } from '::graphql/cache/helpers/changes';
 
-const saveNewDocument = async ({ mutate, state }: SaveOperationProps) => {
+const saveNewDocument = async ({ state }: SaveOperationProps) => {
   const newDocuments = apolloCache.changes.document.created;
 
   for await (const documentId of newDocuments) {
     const document = apolloCache.document.get(documentId);
     if (document.folder === 'Unsaved') document.folder = null;
-    const data = await performMutation<DocumentMutationToCreateDocumentArgs>({
+    const permanentDocumentId = await apolloCache.client.mutate({
+      query: DOCUMENT_MUTATION.createDocument.query,
       variables: {
         document: { name: document.name },
       },
-      mutate,
+      path: DOCUMENT_MUTATION.createDocument.path,
     });
-    const permanentDocumentId = DOCUMENT_MUTATION.createDocument.path(data);
+
     const temporaryId = document.id;
     if (permanentDocumentId) {
       apolloCache.document.swapId({

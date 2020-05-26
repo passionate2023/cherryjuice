@@ -5,7 +5,6 @@ import { changesHelpers } from '::graphql/cache/helpers/changes';
 import { documentHelpers } from '::graphql/cache/helpers/document';
 import { imageHelpers } from '::graphql/cache/helpers/image';
 import { DocumentNode } from 'graphql';
-import { ApolloQueryResult } from 'apollo-client/core/types';
 import { ApolloClient } from 'apollo-client';
 import { FetchPolicy } from 'apollo-client/core/watchQueryOptions';
 
@@ -25,12 +24,23 @@ const apolloCache = (() => {
     }))(),
     client: {
       query: <T, U>(args: {
-        path: Function;
+        path: (data: any) => U | undefined;
         query: DocumentNode;
         variables: T;
         fetchPolicy: FetchPolicy;
-      }): Promise<ApolloQueryResult<U>> =>
+      }): Promise<U> =>
         state.client.query(args).then(({ data }) => args.path(data)),
+      mutate: <T, U>(args: {
+        path: (data: any) => U | undefined;
+        query: DocumentNode;
+        variables: T;
+      }): Promise<U> =>
+        state.client
+          .mutate({
+            variables: args.variables,
+            mutation: args.query,
+          })
+          .then(({ data }) => args.path(data)),
     },
     node: nodeHelpers(state),
     image: imageHelpers(state),

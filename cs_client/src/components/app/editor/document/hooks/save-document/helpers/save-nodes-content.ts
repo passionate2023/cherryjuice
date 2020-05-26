@@ -2,15 +2,13 @@ import { SaveOperationProps } from '::app/editor/document/hooks/save-document/he
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { stringToMultipleElements } from '::helpers/editing/execK/helpers';
 import { getAHtml } from '::helpers/rendering/html-to-ahtml';
-import {
-  performMutation,
-  updateDocumentId,
-} from '::app/editor/document/hooks/save-document/helpers/shared';
+import { updateDocumentId } from '::app/editor/document/hooks/save-document/helpers/shared';
 import { localChanges } from '::graphql/cache/helpers/changes';
 import { swapNodeIdIfApplies } from '::app/editor/document/hooks/save-document/helpers/save-nodes-meta';
 import { collectDanglingNodes } from '::app/editor/document/hooks/save-document/helpers/save-new-nodes';
+import { DOCUMENT_MUTATION } from '::graphql/mutations';
 
-const saveNodesContent = async ({ mutate, state }: SaveOperationProps) => {
+const saveNodesContent = async ({ state }: SaveOperationProps) => {
   const editedNodeContent = apolloCache.changes.node.html
     .filter(id => !state.deletedNodes[id])
     .map(swapNodeIdIfApplies(state))
@@ -34,14 +32,14 @@ const saveNodesContent = async ({ mutate, state }: SaveOperationProps) => {
       style: ddoe.style,
       nodes: abstractHtml[i],
     }));
-    await performMutation({
+    await apolloCache.client.mutate({
+      ...DOCUMENT_MUTATION.ahtml,
       variables: {
         file_id: node.documentId,
         node_id: node.node_id,
         ahtml: JSON.stringify(aHtml),
         deletedImages: deletedImages || [],
       },
-      mutate,
     });
     apolloCache.changes.unsetModificationFlag(
       localChanges.NODE_CONTENT,

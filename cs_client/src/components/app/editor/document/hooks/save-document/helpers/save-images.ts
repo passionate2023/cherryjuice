@@ -1,6 +1,5 @@
 import { SaveOperationProps } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
 import { apolloCache } from '::graphql/cache/apollo-cache';
-import { performMutation } from '::app/editor/document/hooks/save-document/helpers/shared';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { localChanges } from '::graphql/cache/helpers/changes';
 import { swapNodeIdIfApplies } from '::app/editor/document/hooks/save-document/helpers/save-nodes-meta';
@@ -13,7 +12,7 @@ const b64toBlob = ({ base64, id }): Promise<Blob> =>
     return blob;
   });
 type SaveImagesProps = SaveOperationProps & {};
-const saveImages = async ({ state, mutate }: SaveImagesProps) => {
+const saveImages = async ({ state }: SaveImagesProps) => {
   const newImagesPerNode = apolloCache.changes.image.created;
   for await (const [nodeId, { base64 }] of Object.entries(newImagesPerNode)) {
     const node = apolloCache.node.get(swapNodeIdIfApplies(state)(nodeId));
@@ -23,14 +22,15 @@ const saveImages = async ({ state, mutate }: SaveImagesProps) => {
         .map(b64toBlob)
         .filter(Boolean),
     );
-    const imageIdsTuples: [string, string][] = await performMutation({
-      mutate,
+    const imageIdsTuples: [string, string][] = await apolloCache.client.mutate({
+      query: DOCUMENT_MUTATION.uploadImages.query,
       variables: {
         node_id: node.node_id,
         file_id: node.documentId,
         images,
       },
-    }).then(DOCUMENT_MUTATION.uploadImages.path);
+      path: DOCUMENT_MUTATION.uploadImages.path,
+    });
 
     if (imageIdsTuples?.length !== images.length)
       throw new Error('could not upload images');

@@ -6,10 +6,7 @@ import {
   SaveOperationState,
 } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
 import { CreateNodeIt } from '::types/graphql/generated';
-import {
-  performMutation,
-  updateDocumentId,
-} from '::app/editor/document/hooks/save-document/helpers/shared';
+import { updateDocumentId } from '::app/editor/document/hooks/save-document/helpers/shared';
 import { localChanges } from '::graphql/cache/helpers/changes';
 import { swapFatherIdIfApplies } from '::app/editor/document/hooks/save-document/helpers/save-nodes-meta';
 
@@ -50,7 +47,7 @@ const collectDanglingNodes = (state: SaveOperationState) => (
   return dangling;
 };
 
-const saveNewNodes = async ({ mutate, state }: SaveOperationProps) => {
+const saveNewNodes = async ({ state }: SaveOperationProps) => {
   const newNodes = apolloCache.changes.node.created
     .filter(id => !state.deletedNodes[id])
     .map(id => apolloCache.node.get(id))
@@ -60,15 +57,15 @@ const saveNewNodes = async ({ mutate, state }: SaveOperationProps) => {
     if (collectDanglingNodes(state)(node)) continue;
     updateDocumentId(state)(node);
     const meta: CreateNodeIt = adapt(node);
-    const data = await performMutation({
+    const permanentNodeId = await apolloCache.client.mutate({
       variables: {
         file_id: node.documentId,
         node_id: node.node_id,
         meta,
       },
-      mutate,
+      query: DOCUMENT_MUTATION.createNode.query,
+      path: DOCUMENT_MUTATION.createNode.path,
     });
-    const permanentNodeId = DOCUMENT_MUTATION.createNode.path(data);
     const temporaryId = node.id;
     if (permanentNodeId) {
       apolloCache.node.swapId({ oldId: node.id, newId: permanentNodeId });

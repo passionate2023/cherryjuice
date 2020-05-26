@@ -7,7 +7,6 @@ import { LinearProgress } from '::shared-components/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { RichText } from '::app/editor/document/rich-text';
 import { appActionCreators, TState } from '::app/reducer';
-import { useSaveDocument } from '::app/editor/document/hooks/save-document/save-document';
 import { documentReducer } from '::app/editor/document/reducer/reducer';
 import { documentInitialState } from '::app/editor/document/reducer/initial-state';
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
@@ -39,12 +38,10 @@ const Document: React.FC<Props & PropsFromRedux> = ({
 }) => {
   const {
     showTree,
-    saveDocument,
     reloadDocument,
     contentEditable,
     isOnMobile,
     processLinks,
-    documentHasUnsavedChanges,
   } = state;
   const [documentState, dispatch] = useReducer(
     documentReducer,
@@ -57,11 +54,6 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   const match = useRouteMatch<{ file_id: string }>();
   const { file_id } = match.params;
 
-  useSaveDocument({
-    saveDocumentCommandID: saveDocument,
-    documentHasUnsavedChanges,
-    savingInProgress: documentState.savingInProgress,
-  });
   useEffect(() => {
     setHighestNodeId(nodes);
   }, [nodes]);

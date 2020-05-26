@@ -1,9 +1,4 @@
-import {
-  catchError,
-  map,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { concat, from, Observable, ObservedValueOf, of } from 'rxjs';
 import { ofType } from 'deox';
 import { apolloCache } from '::graphql/cache/apollo-cache';

@@ -37,7 +37,7 @@ const collapseAll = (
     collapseAll(id, treeState, nodes);
   });
 };
-const swapTreeStateDocumentId = (
+const swapPersistedTreeStateDocumentId = (
   swappedDocumentIds: Record<string, string>,
 ): void => {
   Object.entries(swappedDocumentIds).forEach(([oldDocId, newDocId]) => {
@@ -47,4 +47,4 @@ const swapTreeStateDocumentId = (
   });
 };
 
-export { swapTreeStateDocumentId, collapseAll, persistedTreeState };
+export { swapPersistedTreeStateDocumentId, collapseAll, persistedTreeState };

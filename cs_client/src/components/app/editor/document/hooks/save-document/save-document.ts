@@ -1,9 +1,3 @@
-import { useMutation } from '@apollo/react-hooks';
-import { DOCUMENT_MUTATION } from '::graphql/mutations';
-import { appActionCreators } from '::app/reducer';
-import { SnackbarMessages } from '::shared-components/snackbar/snackbar-messages';
-import { createIsNotProcessed } from '::hooks/misc/isnot-processed';
-import { AlertType } from '::types/react';
 import { saveNodesMeta } from '::app/editor/document/hooks/save-document/helpers/save-nodes-meta';
 import { saveNewNodes } from '::app/editor/document/hooks/save-document/helpers/save-new-nodes';
 import {
@@ -12,81 +6,29 @@ import {
   SaveOperationState,
 } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
 import { saveNodesContent } from '::app/editor/document/hooks/save-document/helpers/save-nodes-content';
-import { useEffect } from 'react';
 import { saveNewDocument } from '::app/editor/document/hooks/save-document/helpers/save-new-document';
-import { useHistory } from 'react-router';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { swapTreeStateDocumentId } from '::app/editor/document/tree/node/hooks/persisted-tree-state/helpers';
-import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 import { saveImages } from '::app/editor/document/hooks/save-document/helpers/save-images';
-import { ac } from '::root/store/ducks/actions.types';
 
-type SaveDocumentProps = {
-  saveDocumentCommandID: string;
-  documentHasUnsavedChanges;
-  savingInProgress: boolean;
+const saveDocument = async (): Promise<SaveOperationState> => {
+  const state: SaveOperationState = {
+    newFatherIds: {},
+    swappedDocumentIds: {},
+    swappedNodeIds: {},
+    swappedImageIds: {},
+    danglingNodes: {},
+    deletedNodes: {},
+  };
+  updateCachedHtmlAndImages();
+  await saveNewDocument({ state });
+  await saveDeletedNodes({ state });
+  await saveNewNodes({ state });
+  await saveImages({ state });
+  await saveNodesMeta({ state });
+  await saveNodesContent({ state });
+  await deleteDanglingNodes({ state });
+
+  return state;
 };
 
-const fn = createIsNotProcessed();
-const useSaveDocument = ({
-  saveDocumentCommandID,
-  documentHasUnsavedChanges,
-  savingInProgress,
-}: SaveDocumentProps) => {
-  const history = useHistory();
-  const [mutateContent] = useMutation(DOCUMENT_MUTATION.ahtml);
-  const [mutateMeta] = useMutation(DOCUMENT_MUTATION.meta);
-  const [mutateCreate] = useMutation(DOCUMENT_MUTATION.createNode.query);
-  const [deleteNodeMutation] = useMutation(DOCUMENT_MUTATION.deleteNode.query);
-  const [createDocumentMutation] = useMutation(
-    DOCUMENT_MUTATION.createDocument.query,
-  );
-  const [uploadImagesMutation] = useMutation(
-    DOCUMENT_MUTATION.uploadImages.query,
-  );
-
-  useEffect(() => {
-    const isNotProcessed = fn(saveDocumentCommandID);
-    if (isNotProcessed && documentHasUnsavedChanges && !savingInProgress) {
-      (async () => {
-        documentActionCreators.setSavingInProgress();
-        try {
-          const state: SaveOperationState = {
-            newFatherIds: {},
-            swappedDocumentIds: {},
-            swappedNodeIds: {},
-            swappedImageIds: {},
-            danglingNodes: {},
-            deletedNodes: {},
-          };
-          updateCachedHtmlAndImages();
-          await saveNewDocument({ mutate: createDocumentMutation, state });
-          await saveDeletedNodes({ mutate: deleteNodeMutation, state });
-          await saveNewNodes({ mutate: mutateCreate, state });
-          await saveImages({ mutate: uploadImagesMutation, state });
-          await saveNodesMeta({ mutate: mutateMeta, state });
-          await saveNodesContent({ mutate: mutateContent, state });
-          await deleteDanglingNodes({ mutate: deleteNodeMutation, state });
-
-          const createdDocuments = Object.values(state.swappedDocumentIds);
-          if (createdDocuments.length) {
-            swapTreeStateDocumentId(state.swappedDocumentIds);
-            if (history.location.pathname.startsWith('/document/new-document'))
-              appActionCreators.selectFile(createdDocuments.pop());
-          } else ac.document.fetchNodes();
-          appActionCreators.setSnackbarMessage(SnackbarMessages.documentSaved);
-        } catch (e) {
-          appActionCreators.setAlert({
-            title: 'Could not save',
-            description: 'Check your network connection',
-            type: AlertType.Error,
-            error: e,
-          });
-        }
-        documentActionCreators.clearSavingInProgress();
-      })();
-    }
-  }, [saveDocumentCommandID]);
-};
-
-export { useSaveDocument };
+export { saveDocument };

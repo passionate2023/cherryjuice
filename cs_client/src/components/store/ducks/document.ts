@@ -17,6 +17,7 @@ const actionCreators = {
     'setCacheTimeStamp',
     _ => (timeStamp: number = new Date().getTime()) => _(timeStamp),
   ),
+  save: createActionCreator('save'),
 };
 
 type State = {
