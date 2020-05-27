@@ -40,7 +40,8 @@
     "@types/react-redux": "^7.1.9",
     "redux-observable": "^1.2.0",
     "rxjs": "^6.5.5",
-    "deox": "^3.2.1"
+    "deox": "^3.2.1",
+    "redux-persist": "^6.0.0"
   },
   "optionalDependencies": {
     "ramda": "^0.27.0",

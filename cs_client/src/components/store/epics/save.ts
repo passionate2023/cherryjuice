@@ -1,4 +1,4 @@
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { concat, from, Observable } from 'rxjs';
 import { ofType } from 'deox';
 import { ac, Actions } from '../actions.types';
@@ -7,8 +7,9 @@ import { saveDocument } from '::app/editor/document/hooks/save-document/save-doc
 import { swapPersistedTreeStateDocumentId } from '::app/editor/document/tree/node/hooks/persisted-tree-state/helpers';
 import { appActionCreators } from '::app/reducer';
 import { SnackbarMessages } from '::shared-components/snackbar/snackbar-messages';
-import { AlertType } from '::types/react';
 import { SaveOperationState } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
+import { resetCache } from '::root/store/epics/shared/clear-cache';
+import { createErrorHandler } from '::root/store/epics/shared/create-error-handler';
 
 const postSave = (state: SaveOperationState) => {
   appActionCreators.setSnackbarMessage(SnackbarMessages.documentSaved);
@@ -29,19 +30,9 @@ const saveEpic = (action$: Observable<Actions>) => {
     ofType([documentActionCreators.save]),
     switchMap(() => {
       const save = from(saveDocument()).pipe(map(postSave));
-
-      return concat(save).pipe(
-        catchError(error => {
-          appActionCreators.setAlert({
-            title: 'Could not save',
-            description: 'Check your network connection',
-            type: AlertType.Error,
-            error,
-          });
-          return error;
-        }),
-      );
+      return concat(save, resetCache);
     }),
+    createErrorHandler('Could not save', 'Check your network connection'),
   );
 };
 

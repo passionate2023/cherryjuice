@@ -1,7 +1,6 @@
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import * as React from 'react';
 import { useEffect, useReducer, Suspense, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   appActionCreators,
   appInitialState,
@@ -19,6 +18,7 @@ import { rootActionCreators } from '::root/root.reducer';
 import { AppContext } from './context';
 import { useDocumentEditedIndicator } from '::app/hooks/document-edited-indicator';
 
+import { navigate } from '::root/router/navigate';
 const Menus = React.lazy(() => import('::app/menus'));
 
 const Editor = React.lazy(() => import('::app/editor'));
@@ -44,19 +44,22 @@ const updateBreakpointState = ({ breakpoint, callback }) => {
     }
   };
 };
-
 const useHandleRouting = (documentId: string) => {
-  const history = useHistory();
   const selectedFileRef = useRef(documentId);
   useEffect(() => {
-    const pathnameIsEmpty = history.location.pathname === '/' && documentId;
+    const pathnameIsEmpty = navigate.location.pathname === '/';
     const newSelectedFile =
-      documentId && documentId !== selectedFileRef.current;
-    if (pathnameIsEmpty || newSelectedFile) {
-      history.push('/document/' + documentId);
+      Boolean(documentId) &&
+      Boolean(selectedFileRef.current) &&
+      documentId !== selectedFileRef.current;
+    if (newSelectedFile) {
+      navigate.document(documentId);
       selectedFileRef.current = documentId;
-    } else if (!documentId) history.push('/');
-  }, [documentId, history.location.pathname]);
+    } else if (pathnameIsEmpty) {
+      if (documentId) navigate.document(documentId);
+      else navigate.home();
+    }
+  }, [documentId, navigate.location.pathname]);
 };
 const useUpdateCssVariables = (state: TState) => {
   useEffect(() => {

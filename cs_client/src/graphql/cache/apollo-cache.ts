@@ -7,6 +7,7 @@ import { imageHelpers } from '::graphql/cache/helpers/image';
 import { DocumentNode } from 'graphql';
 import { ApolloClient } from 'apollo-client';
 import { FetchPolicy } from 'apollo-client/core/watchQueryOptions';
+import { GqlDataPath } from '::types/misc';
 
 const apolloCache = (() => {
   const state: CacheState = {
@@ -24,7 +25,7 @@ const apolloCache = (() => {
     }))(),
     client: {
       query: <T, U>(args: {
-        path: (data: any) => U | undefined;
+        path: GqlDataPath<U>;
         query: DocumentNode;
         variables: T;
         fetchPolicy: FetchPolicy;

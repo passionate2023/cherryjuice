@@ -2,25 +2,30 @@ import { MutableRefObject, useCallback } from 'react';
 import nodeMod from '::sass-modules/tree/node.scss';
 import { nodeOverlay } from '::app/editor/document/tree/node/helpers/node-overlay';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { useHistory } from 'react-router-dom';
+import { navigate } from '::root/router/navigate';
 
 type SelectNodeProps = {
   nodePath: string;
   componentRef: MutableRefObject<HTMLDivElement>;
+  node_id?: number;
+  file_id?: string;
 };
-const useSelectNode = ({ nodePath, componentRef }: SelectNodeProps) => {
-  const history = useHistory();
+const useSelectNode = ({
+  nodePath,
+  componentRef,
+  node_id,
+  file_id,
+}: SelectNodeProps) => {
   return useCallback(
-    (e, path = nodePath) => {
+    e => {
       const eventIsTriggeredByCollapseButton = e.target.classList.contains(
         nodeMod.node__titleButton,
       );
       if (eventIsTriggeredByCollapseButton) return;
       nodeOverlay.updateWidth();
       nodeOverlay.updateLeft(componentRef);
-
       updateCachedHtmlAndImages();
-      history.push(path);
+      navigate.node(file_id, node_id);
     },
     [nodePath],
   );

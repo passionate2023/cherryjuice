@@ -15,7 +15,6 @@ import { getNode } from '::app/menus/node-meta/helpers/get-node';
 import { modNodeMeta } from '::sass-modules/index';
 import { IconPicker } from '::app/menus/node-meta/components/icon-picker';
 import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
-import { useHistory } from 'react-router';
 import { testIds } from '::cypress/helpers';
 
 import { connect, ConnectedProps } from 'react-redux';
@@ -36,7 +35,13 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
   onClose: EventHandler<any>;
   showDialog: NodeMetaPopupRole;
   isOnMobile: boolean;
-} & PropsFromRedux> = ({ showDialog, isOnMobile, nodeId, onClose, documentId }) => {
+} & PropsFromRedux> = ({
+  showDialog,
+  isOnMobile,
+  nodeId,
+  onClose,
+  documentId,
+}) => {
   const [state, dispatch] = useReducer(nodeMetaReducer, nodeMetaInitialState);
   useEffect(() => {
     nodeMetaActionCreators.__setDispatch(dispatch);
@@ -54,14 +59,12 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
       nodeMetaActionCreators.reset(node);
     else nodeMetaActionCreators.reset(undefined);
   }, [nodeId, showDialog]);
-  const history = useHistory();
   const onSave = save({
     nodeId,
     node,
     newNode: isNewNode,
     state,
     previous_sibling_node_id,
-    history,
   });
   const buttonsRight = [
     {

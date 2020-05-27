@@ -35,7 +35,12 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
   const toggleChildren = useCallback(() => {
     setShowChildren(!showChildren);
   }, [showChildren]);
-  const selectNode = useSelectNode({ nodePath, componentRef });
+  const selectNode = useSelectNode({
+    nodePath,
+    componentRef,
+    file_id,
+    node_id,
+  });
   useScrollNodeIntoView({ nodePath, componentRef });
   usePersistedTreeState({
     showChildren,
@@ -47,8 +52,8 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
     node_id,
     componentRef: titleRef,
     nodes,
-    afterDrop: ({ e, node_id }) => {
-      selectNode(e, `/document/${file_id}/node/${node_id}`);
+    afterDrop: ({ e }) => {
+      selectNode(e);
       setShowChildren(true);
     },
   });

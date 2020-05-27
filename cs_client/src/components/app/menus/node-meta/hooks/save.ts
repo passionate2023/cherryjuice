@@ -4,6 +4,7 @@ import { TNodeMetaState } from '::app/menus/node-meta/reducer/reducer';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
+import { navigate } from '::root/router/navigate';
 
 const calculateDiff = ({
   isNewNode,
@@ -52,7 +53,6 @@ type UseSaveProps = {
   newNode: boolean;
   state: TNodeMetaState;
   previous_sibling_node_id: number;
-  history: any;
 };
 const save = ({
   node,
@@ -60,7 +60,6 @@ const save = ({
   nodeId,
   state,
   previous_sibling_node_id,
-  history,
 }: UseSaveProps) => {
   return useDelayedCallback(appActionCreators.hideNodeMeta, () => {
     const res = calculateDiff({
@@ -86,8 +85,7 @@ const save = ({
         },
       });
       updateCachedHtmlAndImages();
-      const nodePath = `/document/${node.documentId}/node/${node.node_id}`;
-      history.push(nodePath);
+      navigate.node(node.documentId, node.node_id);
     } else {
       if (Object.keys(res)) apolloCache.node.mutate({ nodeId, meta: res });
     }

@@ -10,7 +10,7 @@ import { DocumentContext } from '::app/editor/document/reducer/context';
 
 type Props = {
   contentEditable;
-  html: { htmlRaw: string; node_id: number };
+  html: string;
   nodeId;
   file_id;
   node_id;
@@ -27,27 +27,29 @@ const ContentEditable = ({
 }: Props) => {
   const { pastedImages } = useContext(DocumentContext);
   useSetupStuff();
-  useScrollToHashElement({ html: html.htmlRaw });
 
+  const ref = useRef();
+  useHandleContentChanges({ nodeId, ref });
+  useAddMetaToPastedImages({ requestId: pastedImages });
   useAttachImagesToHtml({
     node_id,
     file_id,
     nodeId,
   });
+  useScrollToHashElement({ html: html });
+
   useReactRouterForAnchors({
     file_id,
     processLinks: processLinks,
+    node_id,
   });
-  const ref = useRef();
-  useHandleContentChanges({ nodeId, ref });
-  useAddMetaToPastedImages({ requestId: pastedImages });
   return (
     <div
       ref={ref}
       key={node_id}
       className={modRichText.richText}
       contentEditable={contentEditable}
-      dangerouslySetInnerHTML={{ __html: html.htmlRaw }}
+      dangerouslySetInnerHTML={{ __html: html }}
       data-id={nodeId}
       data-node_id={node_id}
       id={'rich-text'}

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useApolloClient } from '::graphql/apollo';
 import { LoginForm } from '::auth/login-form';
 import { Suspense, useEffect, useReducer } from 'react';
-import { Route, useHistory } from 'react-router';
+import { Route } from 'react-router';
 import { Provider } from 'react-redux';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { App } from '::root/app';
@@ -16,7 +16,8 @@ import {
   rootInitialState,
   rootReducer,
 } from '::root/root.reducer';
-import { store } from '::root/store/index';
+import { store } from '::root/store';
+import { navigate } from '::root/router/navigate';
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
@@ -25,16 +26,15 @@ const ApolloProvider = React.lazy(() =>
 type Props = {};
 
 const useProtectedRoutes = ({ session }) => {
-  const history = useHistory();
   useEffect(() => {
     const isOnLoginOrSignUp = /(^\/login|^\/signup)/.test(
-      history.location.pathname,
+      navigate.location.pathname,
     );
     if (!session.token) {
-      if (!isOnLoginOrSignUp) history.push('/login');
+      if (!isOnLoginOrSignUp) navigate.login();
       localSessionManager.clear();
     } else {
-      if (isOnLoginOrSignUp) history.push('/');
+      if (isOnLoginOrSignUp) navigate.home();
       localSessionManager.set(session);
     }
   }, [session]);

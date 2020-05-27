@@ -10,7 +10,6 @@ const useFirstFetch = fetch => {
     fetch();
   }
 };
-const fn = createIsNotProcessed();
 const useReloadQuery = (
   {
     reloadRequestIDs,
@@ -23,7 +22,8 @@ const useReloadQuery = (
   },
   { query, queryVariables },
 ) => {
-  const isNotProcessed = fn(...reloadRequestIDs);
+  const fn = useRef(createIsNotProcessed());
+  const isNotProcessed = fn.current(...reloadRequestIDs);
   const fetchPolicy = useRef(undefined);
   if (isNotProcessed) {
     fetchPolicy.current = 'network-only';

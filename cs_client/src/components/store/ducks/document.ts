@@ -4,6 +4,7 @@ import { applyLocalModifications } from '::app/editor/document/hooks/get-documen
 
 const actionCreators = {
   fetchNodes: createActionCreator('fetchNodes'),
+  fetchFailed: createActionCreator('fetchFailed'),
   setDocumentId: createActionCreator(
     'setDocumentId',
     _ => (documentId: string) => _(documentId),
@@ -55,6 +56,9 @@ const reducer = createReducer(initialState, _ => [
       nodes: state.nodes,
       file_id: state.documentId,
     }),
+  })),
+  _(actionCreators.fetchFailed, () => ({
+    ...initialState,
   })),
 ]);
 

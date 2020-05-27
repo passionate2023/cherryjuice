@@ -3,6 +3,7 @@ import { createEpicMiddleware } from 'redux-observable';
 import { documentReducer } from '::root/store/ducks/document';
 import { rootEpic } from '::root/store/epics';
 import { dialogsReducer } from '::root/store/ducks/dialogs';
+import { nodeReducer } from '::root/store/ducks/node';
 
 const epicMiddleware = createEpicMiddleware();
 const middleware = applyMiddleware(epicMiddleware);
@@ -10,6 +11,7 @@ const middleware = applyMiddleware(epicMiddleware);
 const rootReducer = combineReducers({
   document: documentReducer,
   dialogs: dialogsReducer,
+  node: nodeReducer,
 });
 type Store = ReturnType<typeof rootReducer>;
 

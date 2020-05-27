@@ -1,22 +1,18 @@
-import { useHistory } from 'react-router';
 import { useEffect } from 'react';
 import { scrollIntoToolbar } from '::helpers/ui';
 
 const useScrollToHashElement = ({ html }: { html: string }) => {
-  const history = useHistory();
   useEffect(() => {
-    if (history.location.hash) {
-      const redirectedFromServer = history.location.pathname === '/';
+    if (location.hash) {
+      const redirectedFromServer = location.pathname === '/';
       if (!redirectedFromServer) {
         document
-          .getElementById(
-            `#${decodeURIComponent(history.location.hash.substr(1))}`,
-          )
+          .getElementById(`#${decodeURIComponent(location.hash.substr(1))}`)
           ?.scrollIntoView();
         scrollIntoToolbar();
       }
     }
-  }, [history.location.hash, html]);
+  }, [location.hash, html]);
 };
 
 export { useScrollToHashElement };

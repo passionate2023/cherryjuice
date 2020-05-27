@@ -1,6 +1,6 @@
 import { modRichText } from '::sass-modules/index';
 import * as React from 'react';
-import { useHistory, useRouteMatch } from 'react-router';
+import { useRouteMatch } from 'react-router';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
 import { NodeMeta } from '::types/graphql/adapters';
 import { useGetNodeHtml } from '::app/editor/document/rich-text/hooks/get-node-html';
@@ -17,6 +17,7 @@ type Props = {
 };
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store';
+import { navigate } from '::root/router/navigate';
 
 const mapState = (state: Store) => ({
   fetchNodesStarted: state.document.fetchNodesStarted,
@@ -32,7 +33,6 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   fetchNodesStarted,
 }) => {
   const match = useRouteMatch();
-  const history = useHistory();
   // @ts-ignore
   const node_id = Number(match.params?.node_id);
   const nodeId = nodes?.get(node_id)?.id;
@@ -51,7 +51,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   useEffect(() => {
     const nodeIsNew = apolloCache.changes.isNodeNew(nodeId);
     if (htmlError && !nodeIsNew) {
-      history.push('/document/' + file_id);
+      navigate.document(file_id);
     }
   }, [htmlError]);
 
@@ -60,7 +60,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
       {html?.htmlRaw && !fetchNodesStarted ? (
         <ContentEditable
           contentEditable={contentEditable}
-          html={html}
+          html={html.htmlRaw}
           nodeId={nodes.get(node_id)?.id}
           file_id={file_id}
           node_id={node_id}

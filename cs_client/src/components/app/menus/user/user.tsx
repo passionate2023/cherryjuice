@@ -5,10 +5,10 @@ import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
 import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
 import { TransitionWrapper } from '::shared-components/transition-wrapper';
 import { animated } from 'react-spring';
-import { useHistory } from 'react-router';
 import { RootContext } from '::root/root-context';
 import { rootActionCreators } from '::root/root.reducer';
 import { Icon, ICON_SIZE, Icons } from '::shared-components/icon';
+import { navigate } from '::root/router/navigate';
 
 type Props = {
   firstName: string;
@@ -26,11 +26,10 @@ const User: React.FC<Props & { style }> = ({ onClose, style }) => {
     ],
     cb: onClose,
   });
-  const history = useHistory();
   const { session } = useContext(RootContext);
   const signOut = useCallback(() => {
     rootActionCreators.setSession({ token: '', user: undefined });
-    history.push('/login');
+    navigate.login();
   }, []);
   const { picture, email, firstName, lastName } = session.user;
   return (

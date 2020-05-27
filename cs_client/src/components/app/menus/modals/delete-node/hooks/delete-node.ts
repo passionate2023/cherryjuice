@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { NodeCached } from '::types/graphql/adapters';
 import { appActionCreators } from '::app/reducer';
-import { useHistory } from 'react-router-dom';
+import { navigate } from '::root/router/navigate';
 
 const updateFatherNode = (deletedNode: NodeCached) => {
   const fatherNode = apolloCache.node.get(deletedNode.fatherId);
@@ -14,7 +14,6 @@ const updateFatherNode = (deletedNode: NodeCached) => {
 };
 
 const useDeleteNode = (nodeId: string, node: NodeCached) => {
-  const history = useHistory();
   return useCallback(() => {
     const fatherNode = updateFatherNode(node);
     apolloCache.node.mutate({
@@ -26,8 +25,7 @@ const useDeleteNode = (nodeId: string, node: NodeCached) => {
     apolloCache.node.delete.soft(node.id);
     appActionCreators.toggleDeleteDocumentModal();
     appActionCreators.removeNodeFromRecentNodes(nodeId);
-    const nodePath = `/document/${node.documentId}/`;
-    history.push(nodePath);
+    navigate.document(node.documentId);
   }, [nodeId]);
 };
 

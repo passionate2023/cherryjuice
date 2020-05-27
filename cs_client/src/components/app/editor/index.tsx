@@ -1,4 +1,4 @@
-import { Route, useHistory } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { Suspense } from 'react';
 import * as React from 'react';
 import { Void } from '::shared-components/suspense-fallback/void';
@@ -10,6 +10,7 @@ const InfoBar = React.lazy(() => import('::app/editor/info-bar'));
 const ToolBar = React.lazy(() => import('::app/editor/tool-bar'));
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store';
+import { navigate } from '::root/router/navigate';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
@@ -21,7 +22,6 @@ const Editor: React.FC<{ state: TState } & PropsFromRedux> = ({
   state,
   documentId,
 }) => {
-  const history = useHistory();
   return (
     <>
       <ErrorBoundary>
@@ -38,7 +38,7 @@ const Editor: React.FC<{ state: TState } & PropsFromRedux> = ({
           />
         </Suspense>
       </ErrorBoundary>
-      {!documentId && history.location.pathname === '/' ? (
+      {!documentId && navigate.location.pathname === '/' ? (
         <p>No selected document</p>
       ) : (
         <Route

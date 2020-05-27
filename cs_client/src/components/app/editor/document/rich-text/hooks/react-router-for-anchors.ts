@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { useHistory } from 'react-router';
-import { useIsNotProcessed } from '::hooks/misc/isnot-processed';
+
+import { navigate } from '::root/router/navigate';
 
 type Props = {
   file_id: string;
   processLinks: (number | string)[];
+  node_id: number;
 };
 
 const getURL = ({ target, file_id }): URL => {
@@ -21,31 +22,31 @@ const getURL = ({ target, file_id }): URL => {
   return url;
 };
 
-const useReactRouterForAnchors = ({ file_id, processLinks }: Props) => {
-  const history = useHistory();
-  const isNotProcessed = useIsNotProcessed(processLinks);
+const useReactRouterForAnchors = ({
+  file_id,
+  processLinks,
+  node_id,
+}: Props) => {
   useEffect(() => {
-    if (!isNotProcessed) {
-      const editor = document.querySelector('#rich-text');
-      const anchors = Array.from(editor.querySelectorAll('a,img[data-href]'));
-      anchors.forEach(anchor => {
-        // @ts-ignore
-        anchor.onclick = e => {
-          const url = getURL({ file_id, target: e.target });
-          if (url) {
-            const isLocalLink = url.host === location.host;
-            const isWebLink = !isLocalLink && url.protocol.startsWith('http');
-            if (isLocalLink) {
-              history.push(url.pathname + url.hash);
-              e.preventDefault();
-            } else if (isWebLink) {
-              window.open(url.href, '_blank');
-            }
+    const editor = document.querySelector('#rich-text');
+    const anchors = Array.from(editor.querySelectorAll('a,img[data-href]'));
+    anchors.forEach(anchor => {
+      // @ts-ignore
+      anchor.onclick = e => {
+        const url = getURL({ file_id, target: e.target });
+        if (url) {
+          const isLocalLink = url.host === location.host;
+          const isWebLink = !isLocalLink && url.protocol.startsWith('http');
+          if (isLocalLink) {
+            navigate.hash(url.pathname + url.hash);
+            e.preventDefault();
+          } else if (isWebLink) {
+            window.open(url.href, '_blank');
           }
-        };
-      });
-    }
-  }, [processLinks]);
+        }
+      };
+    });
+  }, [processLinks, node_id]);
 };
 
 export { useReactRouterForAnchors };

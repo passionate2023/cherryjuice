@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Fragment, useEffect, useReducer } from 'react';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Tree } from './tree';
-import { Route, useHistory, useRouteMatch } from 'react-router-dom';
+import { Route, useRouteMatch } from 'react-router-dom';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { RichText } from '::app/editor/document/rich-text';
@@ -16,6 +16,7 @@ import { Store } from '::root/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac } from '::root/store/actions.types';
 import { setHighestNodeId } from '::app/editor/document/hooks/get-document-meta/helpers/set-highset-node_id';
+import { navigate } from '::root/router/navigate';
 
 const mapState = (state: Store) => ({
   nodes: state.document.nodes,
@@ -44,7 +45,6 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   useEffect(() => {
     documentActionCreators.setDispatch(dispatch);
   }, []);
-  const history = useHistory();
   const match = useRouteMatch<{ file_id: string }>();
   const { file_id } = match.params;
 
@@ -53,9 +53,9 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   }, [nodes]);
   useTrackDocumentChanges({ cacheTimeStamp });
   useEffect(() => {
-    if (history.location.pathname.endsWith(file_id))
+    if (navigate.location.pathname.endsWith(file_id))
       appActionCreators.selectNode(undefined);
-  }, [history.location.pathname]);
+  }, [navigate.location.pathname]);
 
   // temp hooks
   useEffect(() => {

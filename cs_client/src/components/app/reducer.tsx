@@ -197,12 +197,7 @@ const createActionCreators = () => {
         value: true,
       });
     },
-    hideReloadConfirmationModal: () => {
-      state.dispatch({
-        type: actions.showReloadConfirmationModal,
-        value: false,
-      });
-    },
+
     documentHasUnsavedChanges: (documentHasUnsavedChanges: boolean) => {
       state.dispatch({
         type: actions.documentHasUnsavedChanges,
