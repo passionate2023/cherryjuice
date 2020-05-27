@@ -90,6 +90,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
               : Icons.cherrytree.cherries[depth >= 11 ? 11 : depth]
           }
           className={modIcons.node__titleCherry}
+          testId={'cherry' + icon_id}
         />
         <div
           className={nodeMod.node__title}

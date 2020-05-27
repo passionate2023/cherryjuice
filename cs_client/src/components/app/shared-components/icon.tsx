@@ -173,6 +173,7 @@ const Icon = ({
   style,
   color,
   group,
+  testId,
 }: {
   color?: ICON_COLOR;
   name: string;
@@ -181,6 +182,7 @@ const Icon = ({
   onClick?: EventHandler<any>;
   style?: React.CSSProperties;
   group?: ICON_GROUP;
+  testId?: string;
 }) => (
   <img
     src={getIconPath({ name, size, color, group })}
@@ -188,8 +190,9 @@ const Icon = ({
     {...(className && { className })}
     {...(onClick && { onClick })}
     {...(style && { style })}
+    {...(testId && { 'data-testid': testId })}
   />
 );
 
-export { Icon, Icons };
+export { Icon, Icons, getIconPath };
 export { ICON_COLOR, ICON_GROUP, ICON_SIZE };

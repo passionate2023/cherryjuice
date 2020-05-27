@@ -15,7 +15,7 @@ import { getNode } from '::app/menus/node-meta/helpers/get-node';
 import { modNodeMeta } from '::sass-modules/index';
 import { IconPicker } from '::app/menus/node-meta/components/icon-picker';
 import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
-import { testIds } from '::cypress/helpers';
+import { testIds } from '::cypress/index';
 
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store';
@@ -101,6 +101,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
       value: state.hasCustomColor,
       type: 'checkbox',
       label: 'User selected color',
+      testId: testIds.nodeMeta__hasCustomColor,
       additionalInput: (
         <input
           disabled={!state.hasCustomColor}
@@ -110,6 +111,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
           className={`${modNodeMeta.nodeMeta__input__colorInput} ${
             !state.hasCustomColor ? modNodeMeta.nodeMeta__inputDisabled : ''
           }`}
+          data-testid={testIds.nodeMeta__customColor}
         />
       ),
     },
@@ -118,6 +120,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
       value: state.hasCustomIcon,
       type: 'checkbox',
       label: 'User selected icon',
+      testId: testIds.nodeMeta__hasCustomIcon,
       additionalInput: (
         <IconPicker
           onChange={nodeMetaActionCreators.setCustomIcon}

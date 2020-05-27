@@ -14,7 +14,7 @@ import {
 } from '::app/menus/document-meta/helpers/new-document';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
-import { testIds } from '::cypress/helpers';
+import { testIds } from '::cypress/index';
 import { ac } from '::root/store/actions.types';
 
 type DocumentMetaDialogProps = {};
