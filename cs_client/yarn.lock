@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@4tw/cypress-drag-drop@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@4tw/cypress-drag-drop/-/cypress-drag-drop-1.3.1.tgz#910983ca8c12a276e1732aeafa79e58078a68ee3"
+  integrity sha512-3MdfK3Ccc0gJiBfYZm1DN5PjHoghDtdca3KgjwqO174TClnwUU226zLvSCf7C3q+0MGJdRRCRSB85msNbUPZnQ==
+
 "@apollo/react-common@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@apollo/react-common/-/react-common-3.1.1.tgz#540619d8276d750ce4f381c9cf8f51a6f657f75d"
