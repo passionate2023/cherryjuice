@@ -1,12 +1,13 @@
 import { login } from '../support/workflows/login';
 import { generateFlatTree } from '../fixtures/nodes';
-import { createNode } from '../support/workflows/create-node';
+import { createNode, editNode } from '../support/workflows/create-node';
 import { wait } from '../support/helpers/cypress-helpers';
 import { goHome } from '../support/workflows/navigate-home';
 import { createDocument } from '../support/workflows/create-document';
 import { getElementPath, getTreeInDom } from '../support/helpers/dom';
 import {
   randomArrayElement,
+  randomInteger,
   removeArrayElement,
   rgbToHex,
 } from '../support/helpers/javascript-utils';
@@ -57,7 +58,17 @@ describe('create document > create nodes', () => {
       });
     });
   });
-  it.skip('perform meta edit', () => undefined);
+  it('perform meta edit', () => {
+    const randomNodeIndex = randomInteger(0, tree[0].length - 1);
+    const editedNode = tree[0][randomNodeIndex];
+    const previousInstanceOfNode = JSON.parse(JSON.stringify(editedNode));
+    editedNode.isBold = !editedNode.isBold;
+    editedNode.name = 'new name';
+    editedNode.icon = 48;
+    editedNode.color = '#ff0fff';
+    tree[0][randomNodeIndex] = editedNode;
+    editNode({ node: editedNode, previousInstanceOfNode });
+  });
   it.skip('perform deletion', () => undefined);
 
   it('test nodes structure', () => {

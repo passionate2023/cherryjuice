@@ -33,6 +33,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
       <ToolbarButton
         onClick={appActionCreators.showNodeMetaEdit}
         disabled={!selectedNodeId}
+        testId={testIds.toolBar__main__editNodeMeta}
       >
         <Icon name={Icons.material.edit} />
       </ToolbarButton>

@@ -10,6 +10,7 @@ const testIds = {
   nodeMeta__hasCustomIcon: 'nodeMeta__hasCustomIcon',
   nodeMeta__customIcon: 'nodeMeta__customIcon',
   nodeMeta__customIconList: 'nodeMeta__customIconList',
+  toolBar__main__editNodeMeta: 'toolBar__main__editNodeMeta',
 };
 
 export { testIds };
