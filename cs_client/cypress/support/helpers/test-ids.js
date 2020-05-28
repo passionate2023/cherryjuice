@@ -12,6 +12,7 @@ const testIds = {
   nodeMeta__customIconList: 'nodeMeta__customIconList',
   toolBar__main__editNodeMeta: 'toolBar__main__editNodeMeta',
   toolBar__main__deleteNode: 'toolBar__main__deleteNode',
+  toolBar__main__saveDocument: 'toolBar__main__saveDocument',
   modal__deleteNode__confirm: 'modal__deleteNode__confirm',
 };
 

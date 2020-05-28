@@ -16,6 +16,7 @@ import {
 } from '../support/assertions/nodes-title-style';
 import { assertTreeStructure } from '../support/assertions/tree-structure';
 import { deleteNode } from '../support/workflows/tree/delete-node';
+import { testIds } from '../support/helpers/test-ids';
 
 describe('create document > create nodes', () => {
   before(() => {
@@ -31,44 +32,44 @@ describe('create document > create nodes', () => {
     nodesPerLevel: [[2], [2], [1]],
   });
 
-  it('create document', () => {
+  it('perform: create document', () => {
     goHome();
     createDocument();
   });
-  it('create nodes', () => {
+  it('perform: create nodes', () => {
     for (const node of tree.flatMap(x => x)) {
       createNode({ node });
       wait.ms500();
     }
   });
 
-  it('assert nodes names', () => {
+  it('assert: nodes names', () => {
     wait.s1();
     assertNodesName({ tree });
   });
-  it('assert nodes font-weight and color and icons', () => {
+  it('assert: nodes font-weight and color and icons', () => {
     assertNodesTitleStyle({ tree });
   });
 
-  it('perform dnd', () => {
+  it('perform: dnd node', () => {
     dndNode({ tree });
   });
 
-  it('assert nodes structure', () => {
+  it('assert: nodes structure', () => {
     wait.s1();
     assertTreeStructure({ tree });
   });
 
-  it('delete node', () => {
+  it('perform: delete node', () => {
     deleteNode({ tree });
   });
 
-  it('test nodes structure', () => {
+  it('assert: nodes structure', () => {
     wait.s1();
     assertTreeStructure({ tree });
   });
 
-  it('edit node meta', () => {
+  it('perform: edit node meta', () => {
     const newAttributes = {
       name: 'new name',
       icon: 48,
@@ -81,7 +82,7 @@ describe('create document > create nodes', () => {
     });
   });
 
-  it('assert edited node meta', () => {
+  it('assert: edited node meta', () => {
     wait.s1();
     cy.document().then(document => {
       const treeInDom = getTreeInDom({ document, tree });
@@ -91,5 +92,20 @@ describe('create document > create nodes', () => {
     });
   });
 
-  it.skip('test saving', () => undefined);
+  it('perform: save document', () => {
+    cy.findByTestId(testIds.toolBar__main__saveDocument).click();
+    cy.contains('Document saved', { timeout: 10000 });
+  });
+  it('assert: nodes structure', () => {
+    wait.s1();
+    assertTreeStructure({ tree });
+  });
+
+  it('assert: nodes names', () => {
+    wait.s1();
+    assertNodesName({ tree });
+  });
+  it('assert: nodes font-weight and color and icons', () => {
+    assertNodesTitleStyle({ tree });
+  });
 });

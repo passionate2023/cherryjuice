@@ -3,7 +3,9 @@ import { createBrowserHistory } from 'history';
 const history = createBrowserHistory();
 const navigate = {
   __history: history,
-  location: history.location,
+  get location() {
+    return history.location;
+  },
   document: (documentId: string) => {
     history.push(`/document/${documentId}/`);
   },

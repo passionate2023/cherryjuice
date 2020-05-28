@@ -62,7 +62,10 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
           style={{ width: 22 }}
         />
       </ToolbarButton>
-      <ToolbarButton onClick={ac.document.save}>
+      <ToolbarButton
+        onClick={ac.document.save}
+        testId={testIds.toolBar__main__saveDocument}
+      >
         <Icon name={Icons.material.save} />
       </ToolbarButton>
       <ToolbarButton
