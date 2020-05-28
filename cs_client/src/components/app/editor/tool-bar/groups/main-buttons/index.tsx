@@ -40,6 +40,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
       <ToolbarButton
         onClick={appActionCreators.toggleDeleteDocumentModal}
         disabled={!selectedNodeId}
+        testId={testIds.toolBar__main__deleteNode}
       >
         <Icon name={Icons.material.delete} />
       </ToolbarButton>

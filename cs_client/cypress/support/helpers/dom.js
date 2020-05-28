@@ -1,6 +1,6 @@
 export const getTreeInDom = ({ document, tree }) => {
   const treeElement = document.querySelector('.tree');
-  const nOfLevels = tree.filter(level => level.length).length;
+  const nOfLevels = tree.filter(level => Boolean(level.length)).length;
   return Array.from({ length: nOfLevels })
     .map(
       (_, i) =>

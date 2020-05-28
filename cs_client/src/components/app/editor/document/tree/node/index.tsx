@@ -4,7 +4,7 @@ import { NodeMeta } from '::types/graphql/adapters';
 import * as React from 'react';
 import { useCallback, useRef, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import { Icon, ICON_SIZE, Icons } from '::shared-components/icon';
+import { Icon, ICON_GROUP, ICON_SIZE, Icons } from '::shared-components/icon';
 import { useDnDNodes } from '::app/editor/document/tree/node/hooks/dnd-nodes';
 import { useSelectNode } from '::app/editor/document/tree/node/hooks/select-node';
 import { useScrollNodeIntoView } from '::app/editor/document/tree/node/hooks/scroll-node-into-view';
@@ -90,6 +90,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
               : Icons.cherrytree.cherries[depth >= 11 ? 11 : depth]
           }
           className={modIcons.node__titleCherry}
+          group={ICON_GROUP.cherrytree}
           testId={'cherry' + icon_id}
         />
         <div

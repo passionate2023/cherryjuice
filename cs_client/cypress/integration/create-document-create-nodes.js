@@ -1,16 +1,21 @@
 import { login } from '../support/workflows/login';
-import { generateFlatTree } from '../fixtures/nodes';
+import { generateTree } from '../fixtures/nodes';
 import { createNode, editNode } from '../support/workflows/create-node';
 import { wait } from '../support/helpers/cypress-helpers';
 import { goHome } from '../support/workflows/navigate-home';
 import { createDocument } from '../support/workflows/create-document';
-import { getElementPath, getTreeInDom } from '../support/helpers/dom';
+import { getTreeInDom } from '../support/helpers/dom';
+import { dndNode } from '../support/workflows/tree/dnd-node';
 import {
-  randomArrayElement,
-  randomInteger,
-  removeArrayElement,
-  rgbToHex,
-} from '../support/helpers/javascript-utils';
+  assertNodeName,
+  assertNodesName,
+} from '../support/assertions/nodes-name';
+import {
+  assertNodesTitleStyle,
+  assertNodeTitleStyle,
+} from '../support/assertions/nodes-title-style';
+import { assertTreeStructure } from '../support/assertions/tree-structure';
+import { deleteNode } from '../support/workflows/tree/delete-node';
 
 describe('create document > create nodes', () => {
   before(() => {
@@ -22,109 +27,67 @@ describe('create document > create nodes', () => {
     });
     login();
   });
-  const tree = generateFlatTree({
+  const tree = generateTree({
     nodesPerLevel: [[2], [2], [1]],
   });
-  const flatTree = tree.flatMap(x => x);
 
   it('create document', () => {
     goHome();
     createDocument();
   });
   it('create nodes', () => {
-    for (const node of flatTree) {
-      createNode(node);
+    for (const node of tree.flatMap(x => x)) {
+      createNode({ node });
       wait.ms500();
     }
   });
+
+  it('assert nodes names', () => {
+    wait.s1();
+    assertNodesName({ tree });
+  });
+  it('assert nodes font-weight and color and icons', () => {
+    assertNodesTitleStyle({ tree });
+  });
+
   it('perform dnd', () => {
-    const sourceLevel = tree[tree.length - 1];
-    const newParentLevel = tree[0];
-    const getTargetLevel = () => tree[1];
-    const setTargetLevel = arr => (tree[1] = arr);
-    const draggedNode = randomArrayElement(sourceLevel);
-    const targetNode = randomArrayElement(newParentLevel);
-    draggedNode.parent = targetNode;
-    removeArrayElement(sourceLevel, draggedNode);
-    getTargetLevel().push(draggedNode);
-    setTargetLevel(getTargetLevel().sort((a, b) => a.parent.id - b.parent.id));
-    cy.findAllByText(draggedNode.name).then(target$ => {
-      wait.ms250();
-      cy.findAllByText(targetNode.name).then(dragged$ => {
-        wait.ms250();
-        const targetSelector = getElementPath(target$[1], 'tree');
-        const draggedSelector = getElementPath(dragged$[1], 'tree');
-        cy.get(targetSelector).drag(draggedSelector, { force: true });
-      });
-    });
+    dndNode({ tree });
   });
-  it('perform meta edit', () => {
-    const randomNodeIndex = randomInteger(0, tree[0].length - 1);
-    const editedNode = tree[0][randomNodeIndex];
-    const previousInstanceOfNode = JSON.parse(JSON.stringify(editedNode));
-    editedNode.isBold = !editedNode.isBold;
-    editedNode.name = 'new name';
-    editedNode.icon = 48;
-    editedNode.color = '#ff0fff';
-    tree[0][randomNodeIndex] = editedNode;
-    editNode({ node: editedNode, previousInstanceOfNode });
+
+  it('assert nodes structure', () => {
+    wait.s1();
+    assertTreeStructure({ tree });
   });
-  it.skip('perform deletion', () => undefined);
+
+  it('delete node', () => {
+    deleteNode({ tree });
+  });
 
   it('test nodes structure', () => {
-    cy.document().then(document => {
-      const treeInDom = getTreeInDom({ document, tree });
-      treeInDom.forEach((nodesLevel, indexOfLevel) => {
-        const nOfNodesInLevel = nodesLevel.length;
-        expect(nOfNodesInLevel).equal(tree[indexOfLevel].length);
-      });
+    wait.s1();
+    assertTreeStructure({ tree });
+  });
+
+  it('edit node meta', () => {
+    const newAttributes = {
+      name: 'new name',
+      icon: 48,
+      color: '#ff0fff',
+      isBold: true,
+    };
+    editNode({
+      editedNode: tree[0][0],
+      newAttributes,
     });
   });
-  it('test nodes names', () => {
-    cy.document().then(document => {
-      const treeInDom = getTreeInDom({
-        document,
-        tree,
-      });
-      treeInDom.forEach((nodesLevel, indexOfLevel) => {
-        nodesLevel.forEach((nodeElement, indexOfNode) => {
-          expect(nodeElement.innerText).equal(
-            tree[indexOfLevel][indexOfNode].name,
-          );
-        });
-      });
-    });
-  });
-  it('test nodes font-weight and color', () => {
+
+  it('assert edited node meta', () => {
+    wait.s1();
     cy.document().then(document => {
       const treeInDom = getTreeInDom({ document, tree });
-      treeInDom.forEach((nodesLevel, indexOfLevel) => {
-        nodesLevel.forEach((nodeInDom, indexOfNode) => {
-          const plannedNode = tree[indexOfLevel][indexOfNode];
-          const nodeTitle = nodeInDom.querySelector('.node__title');
-
-          const { fontWeight } = nodeTitle.style;
-          expect(fontWeight).equal(plannedNode.isBold ? 'bold' : 'normal');
-
-          const { color } = nodeTitle.style;
-          expect(rgbToHex(color)).equal(plannedNode.color || '#ffffff');
-
-          const nodeCherry = nodeInDom.childNodes[2];
-          expect(nodeCherry.dataset.testid).equal('cherry' + plannedNode.icon);
-        });
-      });
-    });
-  });
-  it('test nodes custom-icons', () => {
-    cy.document().then(document => {
-      const treeInDom = getTreeInDom({ document, tree });
-      treeInDom.forEach((nodesLevel, indexOfLevel) => {
-        nodesLevel.forEach((nodeInDom, indexOfNode) => {
-          const plannedNode = tree[indexOfLevel][indexOfNode];
-          const nodeCherry = nodeInDom.childNodes[2];
-          expect(nodeCherry.dataset.testid).equal('cherry' + plannedNode.icon);
-        });
-      });
+      const nodeInDom = treeInDom[0][0];
+      assertNodeName({ nodeInDom })({ node: tree[0][0] });
+      assertNodeTitleStyle({ nodeInDom })({ node: tree[0][0] });
     });
   });
 

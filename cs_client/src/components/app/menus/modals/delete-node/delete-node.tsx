@@ -6,6 +6,7 @@ import { useDeleteNode } from '::app/menus/modals/delete-node/hooks/delete-node'
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { ConfirmationModal } from '::shared-components/modal/confirmation-modal';
 import { AlertType } from '::types/react';
+import { testIds } from '::cypress/index';
 
 export type Props = {
   show: boolean;
@@ -29,6 +30,7 @@ const DeleteNode: React.FC<Props> = ({ onClose, show, nodeId }) => {
       label: 'Delete',
       onClick: deleteNode,
       disabled: false,
+      testId: testIds.modal__deleteNode__confirm,
     },
   ];
   return (
