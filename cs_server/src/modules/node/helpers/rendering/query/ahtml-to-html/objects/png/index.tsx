@@ -38,8 +38,7 @@ const Png = ({
         style="width:${width}; height:${height};"
         ${
           link ? ` ${addImageLinkProperties(link)}` : 'class="rich-text__image"'
-        }
-        ${id ? `data-id="${id}"` : ''}
+        }${id ? ` data-id="${id}"` : ''}
       />`;
 };
 

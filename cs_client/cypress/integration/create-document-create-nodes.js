@@ -43,7 +43,7 @@ describe('create document > create nodes', () => {
     }
   });
 
-  it('assert: nodes names', () => {
+  it('assert: nodes name', () => {
     wait.s1();
     assertNodesName({ tree });
   });

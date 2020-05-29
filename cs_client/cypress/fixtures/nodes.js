@@ -4,23 +4,29 @@ import {
   randomHexColor,
   removeArrayElement,
 } from '../support/helpers/javascript-utils';
+import { generateNodeText } from './content/text';
 
 const generateName = (base => {
   const state = { count: 1 };
   return () => ({ name: `${base} ${state.count}`, id: state.count++ });
 })('node');
 
-const generateNode = levelIndex => () => ({
-  ...generateName(),
-  isBold: randomBoolean(),
-  color: randomBoolean() ? randomHexColor() : undefined,
-  icon: randomBoolean() ? randomInteger(1, 48) : 0,
-  children: [],
-  parent: undefined,
-  levelIndex,
-});
+const generateNode = (levelIndex, includeText) => () => {
+  const { id, name } = generateName();
+  return {
+    id,
+    name,
+    isBold: randomBoolean(),
+    color: randomBoolean() ? randomHexColor() : undefined,
+    icon: randomBoolean() ? randomInteger(1, 48) : 0,
+    children: [],
+    parent: undefined,
+    levelIndex,
+    ...(includeText && { text: generateNodeText({ name }) }),
+  };
+};
 
-const generateTree = ({ nodesPerLevel }) => {
+const generateTree = ({ nodesPerLevel, includeText }) => {
   return Array.from({ length: nodesPerLevel.length })
     .map((_, levelIndex) =>
       Array.from({
@@ -30,7 +36,7 @@ const generateTree = ({ nodesPerLevel }) => {
             ? nodesPerLevel[levelIndex][1]
             : nodesPerLevel[levelIndex][0],
         ),
-      }).map(generateNode(levelIndex)),
+      }).map(generateNode(levelIndex, includeText)),
     )
     .map((level, levelIndex, arr) =>
       levelIndex === 0

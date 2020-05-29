@@ -1,6 +1,7 @@
 import { testIds } from '../helpers/test-ids';
 import { wait } from '../helpers/cypress-helpers';
 import { setColorInputValue } from '../helpers/dom';
+import { selectNode } from './micro/select-node';
 // https://github.com/cypress-io/cypress/issues/1570#issuecomment-450966053
 const setNodeMeta = ({ node }) => {
   const { isBold, color, name, icon } = node;
@@ -34,10 +35,7 @@ const setNodeMeta = ({ node }) => {
 export const createNode = ({ node }) => {
   const { name, isBold, parent, color, icon } = node;
   if (parent) {
-    cy.get('.tree')
-      .findAllByText(parent.name)
-      .first()
-      .click();
+    selectNode(parent);
     cy.findByTestId(testIds.toolBar__main__createChildNode).click();
   } else {
     cy.findByTestId(testIds.toolBar__main__createSiblingNode).click();
@@ -46,10 +44,7 @@ export const createNode = ({ node }) => {
   setNodeMeta({ node: { name, isBold, color, icon } });
 };
 export const editNode = ({ editedNode, newAttributes }) => {
-  cy.get('.tree')
-    .findAllByText(editedNode.name)
-    .first()
-    .click();
+  selectNode(editedNode);
   wait.s1();
   cy.findByTestId(testIds.toolBar__main__editNodeMeta).click();
   wait.ms500();
