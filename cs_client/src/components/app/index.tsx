@@ -1,6 +1,6 @@
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import * as React from 'react';
-import { useEffect, useReducer, Suspense, useRef } from 'react';
+import { useEffect, useReducer, Suspense,  } from 'react';
 import {
   appActionCreators,
   appInitialState,
@@ -18,7 +18,6 @@ import { rootActionCreators } from '::root/root.reducer';
 import { AppContext } from './context';
 import { useDocumentEditedIndicator } from '::app/hooks/document-edited-indicator';
 
-import { navigate } from '::root/router/navigate';
 const Menus = React.lazy(() => import('::app/menus'));
 
 const Editor = React.lazy(() => import('::app/editor'));
@@ -44,23 +43,7 @@ const updateBreakpointState = ({ breakpoint, callback }) => {
     }
   };
 };
-const useHandleRouting = (documentId: string) => {
-  const selectedFileRef = useRef(documentId);
-  useEffect(() => {
-    const pathnameIsEmpty = navigate.location.pathname === '/';
-    const newSelectedFile =
-      Boolean(documentId) &&
-      Boolean(selectedFileRef.current) &&
-      documentId !== selectedFileRef.current;
-    if (newSelectedFile) {
-      navigate.document(documentId);
-      selectedFileRef.current = documentId;
-    } else if (pathnameIsEmpty) {
-      if (documentId) navigate.document(documentId);
-      else navigate.home();
-    }
-  }, [documentId, navigate.location.pathname]);
-};
+
 const useUpdateCssVariables = (state: TState) => {
   useEffect(() => {
     cssVariables.setTreeWidth(state.showTree ? state.treeSize : 0);
@@ -98,6 +81,7 @@ const useRefreshToken = ({ token }) => {
 };
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store';
+import { useHandleRouting } from '::app/hooks/handle-routing/handle-routing';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
