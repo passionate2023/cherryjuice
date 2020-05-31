@@ -1,7 +1,7 @@
 import { commands } from '::helpers/hotkeys/commands';
 import { execK } from '::helpers/editing/execK';
 import { createTestSample } from '::helpers/editing/execK/__tests__/__helpers__/create-test-sample';
-import { appActionCreators } from '::app/reducer';
+import { ac } from '::root/store/actions.types';
 
 type THotKey = {
   key?: string;
@@ -97,13 +97,10 @@ const setupFormattingHotKeys = () => {
     });
   });
 
-  hotKeysManager.createHotKey(
-    { key: 's', ctrlKey: true },
-    appActionCreators.saveDocument,
-  );
+  hotKeysManager.createHotKey({ key: 's', ctrlKey: true }, ac.document.save);
   hotKeysManager.createHotKey(
     { key: 'r', ctrlKey: true },
-    appActionCreators.reloadDocument,
+    ac.document.fetchNodes,
   );
 };
 

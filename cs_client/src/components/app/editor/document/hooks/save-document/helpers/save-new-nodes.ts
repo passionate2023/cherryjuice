@@ -1,12 +1,14 @@
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { NodeCached } from '::types/graphql/adapters';
-import { apolloCache } from '::graphql/cache-helpers';
+import { apolloCache } from '::graphql/cache/apollo-cache';
 import {
-  documentActionCreators,
-  localChanges,
-} from '::app/editor/document/reducer/action-creators';
-import { SaveOperationProps } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
+  SaveOperationProps,
+  SaveOperationState,
+} from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
 import { CreateNodeIt } from '::types/graphql/generated';
+import { updateDocumentId } from '::app/editor/document/hooks/save-document/helpers/shared';
+import { localChanges } from '::graphql/cache/helpers/changes';
+import { swapFatherIdIfApplies } from '::app/editor/document/hooks/save-document/helpers/save-nodes-meta';
 
 const adapt = ({
   child_nodes,
@@ -19,9 +21,8 @@ const adapt = ({
   node_title_styles,
   read_only,
   updatedAt,
-  position,
   fatherId,
-}: NodeCached & { position }): CreateNodeIt => ({
+}: NodeCached): CreateNodeIt => ({
   child_nodes,
   createdAt,
   documentId,
@@ -32,50 +33,53 @@ const adapt = ({
   node_title_styles,
   read_only,
   updatedAt,
-  position,
   fatherId,
 });
 
-const mutateCreateNode = async ({ nodeId, mutate }) =>
-  await new Promise((res, rej) => {
-    const node = apolloCache.getNode(nodeId) as NodeCached & {
-      position: number;
-    };
+const collectDanglingNodes = (state: SaveOperationState) => (
+  node: NodeCached,
+): boolean => {
+  let dangling = false;
+  if (state.deletedNodes[node.fatherId]) {
+    state.danglingNodes[node.id] = true;
+    dangling = true;
+  }
+  return dangling;
+};
+
+const saveNewNodes = async ({ state }: SaveOperationProps) => {
+  const newNodes = apolloCache.changes.node.created
+    .filter(id => !state.deletedNodes[id])
+    .map(id => apolloCache.node.get(id))
+    .sort((a, b) => a.node_id - b.node_id);
+  for await (const node of newNodes) {
+    swapFatherIdIfApplies(state)(node);
+    if (collectDanglingNodes(state)(node)) continue;
+    updateDocumentId(state)(node);
     const meta: CreateNodeIt = adapt(node);
-    mutate({
+    const permanentNodeId = await apolloCache.client.mutate({
       variables: {
         file_id: node.documentId,
-        node_id: `${node.node_id}`,
+        node_id: node.node_id,
         meta,
       },
-      update: (cache, { data }) => {
-        res(data);
-      },
-    }).catch(rej);
-  });
-
-const saveNewNodes = async ({ nodes, mutate, state }: SaveOperationProps) => {
-  const newNodes = Object.entries(nodes)
-    .filter(([, attributes]) => attributes.new && !attributes.deleted)
-    .map(([nodeId]) => nodeId);
-  for (const nodeId of newNodes) {
-    const data = await mutateCreateNode({
-      nodeId,
-      mutate,
+      query: DOCUMENT_MUTATION.createNode.query,
+      path: DOCUMENT_MUTATION.createNode.path,
     });
-    const permanentNodeId = DOCUMENT_MUTATION.createNode.path(data);
+    const temporaryId = node.id;
     if (permanentNodeId) {
-      const node: NodeCached = apolloCache.getNode(nodeId);
-      node.id = permanentNodeId;
-      apolloCache.setNode(permanentNodeId, node);
-      apolloCache.deleteNode(nodeId);
-      nodes[permanentNodeId] = nodes[nodeId];
-      delete nodes[nodeId];
+      apolloCache.node.swapId({ oldId: node.id, newId: permanentNodeId });
+      state.swappedNodeIds[temporaryId] = permanentNodeId;
       node.child_nodes.forEach(node_id => {
         state.newFatherIds[node_id] = permanentNodeId;
       });
+    } else {
+      throw new Error('could not save node ' + node.id);
     }
-    documentActionCreators.clearLocalChanges(nodeId, localChanges.IS_NEW);
+    apolloCache.changes.unsetModificationFlag(
+      localChanges.NODE_CREATED,
+      temporaryId,
+    );
   }
 };
-export { saveNewNodes };
+export { saveNewNodes, collectDanglingNodes };

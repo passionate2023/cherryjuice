@@ -22,11 +22,17 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
         modToolbar.toolBar__group + ' ' + modToolbar.toolBar__groupNavBar
       }
     >
+      <ToolbarButton
+        onClick={appActionCreators.showDocumentMetaDialog}
+        testId={'new-document'}
+      >
+        <Icon name={Icons.material.document} />
+      </ToolbarButton>
       <ToolbarButton onClick={appActionCreators.toggleFileSelect}>
-        <Icon name={Icons.material.folder}  />
+        <Icon name={Icons.material.folder} />
       </ToolbarButton>
       <ToolbarButton onClick={appActionCreators.toggleSettings}>
-        <Icon name={Icons.material.settings}  />
+        <Icon name={Icons.material.settings} />
       </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.toggleUserPopup}

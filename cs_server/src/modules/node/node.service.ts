@@ -9,6 +9,7 @@ import { ImageService } from '../image/image.service';
 import { NodeMetaDto } from './dto/node-meta.dto';
 import { CreateNodeDto } from './dto/create-node.dto';
 import { DeleteNodeDto } from './dto/delete-node.dto';
+import { GetNodeByNodeIdIt } from './dto/get-node-by-node-id.it';
 
 @Injectable()
 export class NodeService {
@@ -33,10 +34,10 @@ export class NodeService {
     return this.nodeRepository.getNodesMeta(documentId);
   }
 
-  async getNodeMetaById(node_id: string, documentId: string): Promise<Node[]> {
+  async getNodeMetaById(args: GetNodeByNodeIdIt): Promise<Node> {
     if (debug.loadSqliteDocuments)
-      return this.nodeSqliteRepository.getNodeMetaById(node_id);
-    return [await this.nodeRepository.getNodeMetaById(node_id, documentId)];
+      return this.nodeSqliteRepository.getNodeMetaById(args.node_id);
+    return await this.nodeRepository.getNodeMetaById(args);
   }
   async saveAHtml(args: SaveAhtmlDto): Promise<string> {
     if (args.deletedImages.length)

@@ -1,32 +1,37 @@
 import * as React from 'react';
-import { EventHandler } from 'react';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { ConfirmationModal } from '::shared-components/modal/confirmation-modal';
 import { AlertType } from '::types/react';
-import { appActionCreators } from '::app/reducer';
+import { connect, ConnectedProps } from 'react-redux';
+import { ac } from '::root/store/actions.types';
+import { Store } from '::root/store';
 
-export type Props = {
-  show: boolean;
-  onClose: EventHandler<undefined>;
-};
+const mapState = (state: Store) => ({
+  show: state.dialogs.showReloadDocument,
+});
 
-const ReloadDocument: React.FC<Props> = ({ onClose, show }) => {
+const connector = connect(mapState);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = {};
+
+const ReloadDocument: React.FC<Props & PropsFromRedux> = ({ show }) => {
   const buttons: TDialogFooterButton[] = [
     {
       label: 'Dismiss',
-      onClick: appActionCreators.hideReloadConfirmationModal,
+      onClick: ac.dialogs.hideReloadDocument,
       disabled: false,
     },
     {
       label: 'Reload',
-      onClick: appActionCreators.reloadDocument,
+      onClick: ac.document.fetchNodes,
       disabled: false,
     },
   ];
   return (
     <ConfirmationModal
       show={show}
-      onClose={onClose}
+      onClose={ac.dialogs.hideReloadDocument}
       alert={{
         type: AlertType.Warning,
         description: ' unsaved changes will be lost',
@@ -37,4 +42,4 @@ const ReloadDocument: React.FC<Props> = ({ onClose, show }) => {
   );
 };
 
-export default ReloadDocument;
+export default connector(ReloadDocument);

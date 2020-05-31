@@ -1,13 +1,13 @@
-const toNodes: (string: string, single?: boolean) => Element | Element[] = (
-  html,
-  single = true,
-) =>
+const stringToSingleElement = (singleElement: string): Element =>
   // https://stackoverflow.com/a/42448876
-  [new DOMParser().parseFromString(html, 'text/html')].flatMap(({ body }) =>
-    single ? body.children[0] : Array.from(body.children),
-  )[0];
-
-const cloneObj = ogObj => JSON.parse(JSON.stringify(ogObj));
+  new DOMParser().parseFromString(singleElement, 'text/html').body.children[0];
+const stringToMultipleElements = (multipleElements: string): Element[] =>
+  // https://stackoverflow.com/a/42448876
+  Array.from(
+    new DOMParser().parseFromString(multipleElements, 'text/html').body
+      .children,
+  );
+const cloneObj = <T>(ogObj): T => JSON.parse(JSON.stringify(ogObj));
 
 const nonTextualElements = ['img', 'table'];
 const isElementNonTextual = node => nonTextualElements.includes(node.localName);
@@ -50,7 +50,8 @@ const getAllElementsUntilElement = (
   }
 };
 export {
-  toNodes,
+  stringToSingleElement,
+  stringToMultipleElements,
   cloneObj,
   getInnerText,
   isElementNonTextual,

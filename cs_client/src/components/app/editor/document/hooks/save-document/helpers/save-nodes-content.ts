@@ -1,51 +1,49 @@
-import {
-  documentActionCreators,
-  localChanges,
-} from '::app/editor/document/reducer/action-creators';
 import { SaveOperationProps } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
-import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { NodeCached } from '::types/graphql/adapters';
-import { apolloCache } from '::graphql/cache-helpers';
-import { toNodes } from '::helpers/editing/execK/helpers';
+import { apolloCache } from '::graphql/cache/apollo-cache';
+import { stringToMultipleElements } from '::helpers/editing/execK/helpers';
 import { getAHtml } from '::helpers/rendering/html-to-ahtml';
+import { updateDocumentId } from '::app/editor/document/hooks/save-document/helpers/shared';
+import { localChanges } from '::graphql/cache/helpers/changes';
+import { swapNodeIdIfApplies } from '::app/editor/document/hooks/save-document/helpers/save-nodes-meta';
+import { collectDanglingNodes } from '::app/editor/document/hooks/save-document/helpers/save-new-nodes';
+import { DOCUMENT_MUTATION } from '::graphql/mutations';
 
-const mutateDocumentContent = async ({ nodeId, mutate }) =>
-  await new Promise((res, rej) => {
-    const { deletedImageIDs } = updateCachedHtmlAndImages();
-    const node: NodeCached = apolloCache.getNode(nodeId);
-    const DDOEs = toNodes(node.html, false);
+const saveNodesContent = async ({ state }: SaveOperationProps) => {
+  const editedNodeContent = apolloCache.changes.node.html
+    .filter(id => !state.deletedNodes[id])
+    .map(swapNodeIdIfApplies(state))
+    .map(id => apolloCache.node.get(id));
+  for await (const node of editedNodeContent) {
+    if (collectDanglingNodes(state)(node)) continue;
+    const deletedImages = apolloCache.changes.image.deleted[node.id];
+    updateDocumentId(state)(node);
+    const DDOEs = stringToMultipleElements(node.html);
     const { abstractHtml, DDOEsAHtml } = getAHtml({
       DDOEs: DDOEs as Node[],
-      options: { reduceLines: true, useObjForTextNodes: true },
+      options: {
+        reduceLines: true,
+        useObjForTextNodes: true,
+        swappedImageIds: Object.keys(state.swappedImageIds).length
+          ? state.swappedImageIds
+          : undefined,
+      },
     });
     const aHtml = DDOEsAHtml.map((ddoe, i) => ({
       style: ddoe.style,
       nodes: abstractHtml[i],
     }));
-    mutate({
+    await apolloCache.client.mutate({
+      ...DOCUMENT_MUTATION.ahtml,
       variables: {
         file_id: node.documentId,
-        node_id: `${node.node_id}`,
+        node_id: node.node_id,
         ahtml: JSON.stringify(aHtml),
-        deletedImages: deletedImageIDs,
+        deletedImages: deletedImages || [],
       },
-
-      update: () => {
-        res();
-      },
-    }).catch(rej);
-  });
-
-const saveNodesContent = async ({ nodes, mutate }: SaveOperationProps) => {
-  const editedNodeContent = Object.entries(nodes)
-    .filter(([, { deleted, edited }]) => edited?.content && !deleted)
-    .map(([nodeId]) => nodeId);
-
-  for (const nodeId of editedNodeContent) {
-    await mutateDocumentContent({ nodeId, mutate });
-    documentActionCreators.clearLocalChanges(
-      nodeId as string,
-      localChanges.CONTENT,
+    });
+    apolloCache.changes.unsetModificationFlag(
+      localChanges.NODE_CONTENT,
+      node.id,
     );
   }
 };

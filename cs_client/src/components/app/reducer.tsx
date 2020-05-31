@@ -1,6 +1,6 @@
 import { TAlert } from '::types/react';
 import { NodeMeta } from '::types/graphql/adapters';
-enum NodeMetaPopup {
+enum NodeMetaPopupRole {
   EDIT = 1,
   CREATE_SIBLING,
   CREATE_CHILD,
@@ -16,21 +16,19 @@ export type TNodeMeta = {
   updatedAt: string;
 };
 const initialState = {
-  showTree: [JSON.parse(localStorage.getItem('showTree'))].map(value =>
-    value === null ? true : value === true,
-  )[0],
-  treeSize: JSON.parse(localStorage.getItem('treeSize')) || 250,
+  documentHasUnsavedChanges: false,
   selectedNode: undefined,
-  selectedFile:
-    [localStorage.getItem('selectedFile')].filter(
-      value => Boolean(value) && value !== 'null',
-    )[0] || '',
-  showFileSelect:
-    !localStorage.getItem('selectedFile') && location.pathname === '/',
+  rootNode: undefined,
+  highest_node_id: -1,
   recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}
-  saveDocument: '',
-  reloadDocument: 0,
+  processLinks: undefined,
+  createDocumentRequestId: undefined,
   reloadFiles: 0,
+  showTree: [
+    JSON.parse(localStorage.getItem('showTree') as string),
+  ].map(value => (value === null ? true : value === true))[0],
+  treeSize: JSON.parse(localStorage.getItem('treeSize') as string) || 250,
+  showFileSelect: location.pathname === '/',
   alert: undefined,
   showSettings: false,
   showFormattingButtons: false,
@@ -38,42 +36,34 @@ const initialState = {
   contentEditable: false,
   isOnMobile: false,
   showInfoBar: false,
-  processLinks: undefined,
   showImportDocuments: false,
   showUserPopup: false,
   showNodeMeta: undefined,
-  highest_node_id: -1,
   showDeleteDocumentModal: false,
-  rootNode: undefined,
-  showReloadConfirmationModal: false,
-  documentHasUnsavedChanges: false,
   snackbarMessage: undefined,
+  showDocumentMetaDialog: false,
 };
 
 export type TState = typeof initialState & {
-  selectedNode: TNodeMeta;
-  rootNode: NodeMeta;
-  recentNodes: TNodeMeta[];
-  alert: TAlert;
-  showNodeMeta: NodeMetaPopup;
+  selectedNode?: TNodeMeta;
+  rootNode?: TNodeMeta;
+  recentNodes?: TNodeMeta[];
+  alert?: TAlert;
+  showNodeMeta: NodeMetaPopupRole;
+  createDocumentRequestId: number;
 };
 enum actions {
   setSnackbarMessage,
-  hideReloadConfirmationModal,
   TOGGLE_TREE,
   TOGGLE_TREE_ON,
   TOGGLE_TREE_OFF,
   TOGGLE_FILE_SELECT,
   TOGGLE_SETTINGS,
   TOGGLE_FORMATTING_BUTTONS,
-  TOGGLE_CONTENT_EDITABLE,
   TOGGLE_RECENT_NODES_BAR,
   TOGGLE_INFO_BAR,
   RESIZE_TREE,
   SELECT_NODE,
-  SELECT_FILE,
-  SAVE_DOCUMENT,
-  RELOAD_DOCUMENT,
   RELOAD_DOCUMENT_LIST,
   SET_ALERT,
   SET_IS_ON_MOBILE,
@@ -89,6 +79,8 @@ enum actions {
   showReloadConfirmationModal,
   documentHasUnsavedChanges,
   removeNodeFromRecentNodes,
+  createDocument,
+  showDocumentMetaDialog,
 }
 const createActionCreators = () => {
   const state = {
@@ -99,9 +91,6 @@ const createActionCreators = () => {
     setDispatch: (dispatch): void => (state.dispatch = dispatch),
     toggleFormattingButtons: (): void => {
       state.dispatch({ type: actions.TOGGLE_FORMATTING_BUTTONS });
-    },
-    toggleContentEditable: (): void => {
-      state.dispatch({ type: actions.TOGGLE_CONTENT_EDITABLE });
     },
     toggleRecentBar: (): void => {
       state.dispatch({ type: actions.TOGGLE_RECENT_NODES_BAR });
@@ -154,20 +143,6 @@ const createActionCreators = () => {
     hidePopups: () => {
       state.dispatch({ type: actions.HIDE_POPUPS });
     },
-    saveDocument: () => {
-      state.dispatch({
-        type: actions.SAVE_DOCUMENT,
-        value: new Date().getTime(),
-      });
-    },
-    reloadDocument: () => {
-      state.dispatch({
-        type: actions.RELOAD_DOCUMENT,
-        value: new Date().getTime(),
-      });
-    },
-    selectFile: (fileId: string) =>
-      state.dispatch({ type: actions.SELECT_FILE, value: fileId }),
     selectNode: (node: TNodeMeta) =>
       state.dispatch({
         type: actions.SELECT_NODE,
@@ -182,19 +157,19 @@ const createActionCreators = () => {
     showNodeMetaEdit() {
       state.dispatch({
         type: actions.SHOW_NODE_META,
-        value: NodeMetaPopup.EDIT,
+        value: NodeMetaPopupRole.EDIT,
       });
     },
     showNodeMetaCreateChild() {
       state.dispatch({
         type: actions.SHOW_NODE_META,
-        value: NodeMetaPopup.CREATE_CHILD,
+        value: NodeMetaPopupRole.CREATE_CHILD,
       });
     },
     showNodeMetaCreateSibling() {
       state.dispatch({
         type: actions.SHOW_NODE_META,
-        value: NodeMetaPopup.CREATE_SIBLING,
+        value: NodeMetaPopupRole.CREATE_SIBLING,
       });
     },
     hideNodeMeta() {
@@ -222,12 +197,7 @@ const createActionCreators = () => {
         value: true,
       });
     },
-    hideReloadConfirmationModal: () => {
-      state.dispatch({
-        type: actions.showReloadConfirmationModal,
-        value: false,
-      });
-    },
+
     documentHasUnsavedChanges: (documentHasUnsavedChanges: boolean) => {
       state.dispatch({
         type: actions.documentHasUnsavedChanges,
@@ -252,9 +222,28 @@ const createActionCreators = () => {
         value: nodeId,
       });
     },
+    createDocument: () => {
+      state.dispatch({
+        type: actions.createDocument,
+        value: new Date().getTime(),
+      });
+    },
+    showDocumentMetaDialog: () => {
+      state.dispatch({
+        type: actions.showDocumentMetaDialog,
+        value: true,
+      });
+    },
+    hideDocumentMetaDialog: () => {
+      state.dispatch({
+        type: actions.showDocumentMetaDialog,
+        value: false,
+      });
+    },
   };
 };
-const reducer = (
+let reducer: (state: TState, action: { type: actions; value: any }) => TState;
+reducer = (
   state: TState,
   action: {
     type: actions;
@@ -304,24 +293,7 @@ const reducer = (
             ]
           : state.recentNodes,
       };
-    case actions.SELECT_FILE:
-      return {
-        ...state,
-        selectedFile: action.value,
-        showTree: true,
-        selectedNode: undefined,
-      };
-    case actions.SAVE_DOCUMENT:
-      return {
-        ...state,
-        saveDocument: action.value,
-      };
-    case actions.RELOAD_DOCUMENT:
-      return {
-        ...state,
-        reloadDocument: action.value,
-        showReloadConfirmationModal: false,
-      };
+
     case actions.RELOAD_DOCUMENT_LIST:
       return {
         ...state,
@@ -349,8 +321,6 @@ const reducer = (
         showFormattingButtons: !state.showFormattingButtons,
         contentEditable: !state.showFormattingButtons,
       };
-    case actions.TOGGLE_CONTENT_EDITABLE:
-      return { ...state, contentEditable: !state.contentEditable };
     case actions.TOGGLE_INFO_BAR:
       return { ...state, showInfoBar: !state.showInfoBar };
     case actions.SET_IS_ON_MOBILE:
@@ -368,8 +338,7 @@ const reducer = (
       };
     case actions.SET_ROOT_NODE:
       return { ...state, rootNode: action.value.node };
-    case actions.showReloadConfirmationModal:
-      return { ...state, showReloadConfirmationModal: action.value };
+
     case actions.documentHasUnsavedChanges:
       return {
         ...state,
@@ -387,8 +356,18 @@ const reducer = (
           ({ nodeId }) => nodeId !== action.value,
         ),
       };
+    case actions.createDocument:
+      return {
+        ...state,
+        createDocumentRequestId: action.value,
+      };
+    case actions.showDocumentMetaDialog:
+      return {
+        ...state,
+        showDocumentMetaDialog: action.value,
+      };
     default:
-      throw new Error('action not supported');
+      throw new Error(`action ${action.type} not supported`);
   }
 };
 const appActionCreators = createActionCreators();
@@ -399,4 +378,4 @@ export {
   appActionCreators,
 };
 
-export { NodeMetaPopup };
+export { NodeMetaPopupRole };

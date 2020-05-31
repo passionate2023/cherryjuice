@@ -3,14 +3,21 @@ import { appActionCreators } from '::app/reducer';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { Icon, Icons } from '::shared-components/icon';
 import { modToolbar } from '::sass-modules/index';
+import { testIds } from '::cypress/support/helpers/test-ids';
+import { connect, ConnectedProps } from 'react-redux';
+import { ac } from '::root/store/actions.types';
+const mapState = () => ({});
+
+const connector = connect(mapState);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {
   showTree: boolean;
   documentHasUnsavedChanges: boolean;
-  selectedNodeId;
+  selectedNodeId: string;
 };
 
-const MainButtons: React.FC<Props> = ({
+const MainButtons: React.FC<Props & PropsFromRedux> = ({
   showTree,
   selectedNodeId,
   documentHasUnsavedChanges,
@@ -26,35 +33,46 @@ const MainButtons: React.FC<Props> = ({
       <ToolbarButton
         onClick={appActionCreators.showNodeMetaEdit}
         disabled={!selectedNodeId}
+        testId={testIds.toolBar__main__editNodeMeta}
       >
         <Icon name={Icons.material.edit} />
       </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.toggleDeleteDocumentModal}
         disabled={!selectedNodeId}
+        testId={testIds.toolBar__main__deleteNode}
       >
         <Icon name={Icons.material.delete} />
       </ToolbarButton>
-      <ToolbarButton onClick={appActionCreators.showNodeMetaCreateSibling} testId={"create-sibling-node"}>
+      <ToolbarButton
+        onClick={appActionCreators.showNodeMetaCreateSibling}
+        testId={testIds.toolBar__main__createSiblingNode}
+      >
         <Icon
           name={Icons.cherrytree.additionalIcons['tree-node-add']}
           style={{ width: 22 }}
         />
       </ToolbarButton>
-      <ToolbarButton onClick={appActionCreators.showNodeMetaCreateChild} testId={"create-child-node"}>
+      <ToolbarButton
+        onClick={appActionCreators.showNodeMetaCreateChild}
+        testId={testIds.toolBar__main__createChildNode}
+      >
         <Icon
           name={Icons.cherrytree.additionalIcons['tree-subnode-add']}
           style={{ width: 22 }}
         />
       </ToolbarButton>
-      <ToolbarButton onClick={appActionCreators.saveDocument}>
+      <ToolbarButton
+        onClick={ac.document.save}
+        testId={testIds.toolBar__main__saveDocument}
+      >
         <Icon name={Icons.material.save} />
       </ToolbarButton>
       <ToolbarButton
         onClick={
           documentHasUnsavedChanges
-            ? appActionCreators.showReloadConfirmationModal
-            : appActionCreators.reloadDocument
+            ? ac.dialogs.showReloadDocument
+            : ac.document.fetchNodes
         }
       >
         <Icon name={Icons.material.refresh} />
@@ -62,5 +80,5 @@ const MainButtons: React.FC<Props> = ({
     </div>
   );
 };
-
-export { MainButtons };
+const _ = connector(MainButtons);
+export { _ as MainButtons };

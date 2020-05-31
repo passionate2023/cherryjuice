@@ -1,17 +1,16 @@
-import { appActionCreators } from '::app/reducer';
+import { ac } from '::root/store/actions.types';
 
-const handleErrors = ({ file_id, selectedFile, history, error }) => {
+const handleErrors = ({ file_id, documentId, error }) => {
   if (error) {
-    if (file_id && file_id === selectedFile) {
-      appActionCreators.selectFile(undefined);
-      history.push('/');
+    if (file_id && file_id === documentId) {
+      return ac.document.fetchFailed();
     } else {
-      history.push('/' + selectedFile);
+      return ac.document.setDocumentId(documentId);
     }
   } else {
-    if (selectedFile && !file_id) history.push('/' + selectedFile);
-    else if (file_id !== selectedFile && !/(login.*|signup.*)/.test(file_id)) {
-      appActionCreators.selectFile(file_id);
+    if (documentId && !file_id) return ac.document.setDocumentId(documentId);
+    else if (file_id !== documentId && !/(login.*|signup.*)/.test(file_id)) {
+      return ac.document.setDocumentId(file_id);
     }
   }
 };

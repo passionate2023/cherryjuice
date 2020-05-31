@@ -1,16 +1,16 @@
-import { NodeMetaPopup } from '::app/reducer';
+import { NodeMetaPopupRole } from '::app/reducer';
 import { createNode } from '::app/menus/node-meta/helpers/create-node';
-import { apolloCache } from '::graphql/cache-helpers';
+import { apolloCache } from '::graphql/cache/apollo-cache';
 
 const getNode = ({ showDialog, documentId, highest_node_id, nodeId }) => {
   let node, previous_sibling_node_id;
   const newNode =
-    showDialog === NodeMetaPopup.CREATE_SIBLING ||
-    showDialog === NodeMetaPopup.CREATE_CHILD;
+    showDialog === NodeMetaPopupRole.CREATE_SIBLING ||
+    showDialog === NodeMetaPopupRole.CREATE_CHILD;
   if (newNode) {
-    const _selectedNode = apolloCache.getNode(nodeId);
+    const _selectedNode = apolloCache.node.get(nodeId);
     const selectedNodeIsASibling =
-      showDialog === NodeMetaPopup.CREATE_SIBLING &&
+      showDialog === NodeMetaPopupRole.CREATE_SIBLING &&
       _selectedNode.father_id !== -1;
     (previous_sibling_node_id = selectedNodeIsASibling
       ? _selectedNode.node_id
@@ -26,7 +26,7 @@ const getNode = ({ showDialog, documentId, highest_node_id, nodeId }) => {
           : _selectedNode.node_id,
       }));
   } else {
-    node = apolloCache.getNode(nodeId);
+    node = apolloCache.node.get(nodeId);
   }
   return {
     node,

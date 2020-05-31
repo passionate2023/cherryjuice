@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { useHistory } from 'react-router';
 import { TNodeMeta } from '::app/reducer';
 import { modRecentNodes } from '::sass-modules/index';
 import { TState } from '::app/reducer';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
+import { navigate } from '::root/router/navigate';
 
 type Props = {
   state: TState;
@@ -26,12 +26,11 @@ const RecentNodes: React.FC<Props> = ({
       : 0,
   );
 
-  const history = useHistory();
   const goToNode = useCallback(
     e => {
       updateCachedHtmlAndImages();
       const node_id = e.target.dataset.id;
-      history.push(`/document/${file_id}/node/${node_id}`);
+      navigate.node(file_id, node_id);
     },
     [file_id],
   );

@@ -1,6 +1,6 @@
 import { useMutationObserver } from '::hooks/dom/mutation-observer';
 import { MutableRefObject, useCallback } from 'react';
-import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
+import { ac } from '::root/store/actions.types';
 
 const useHandleContentChanges = ({
   nodeId,
@@ -22,8 +22,8 @@ const useHandleContentChanges = ({
             ),
         );
         if (userMutations.length) {
-          documentActionCreators.setNodeContentHasChanged(nodeId);
           ref.current.setAttribute('data-edited', String(new Date().getTime()));
+          ac.document.setCacheTimeStamp();
           observer.disconnect();
         }
       },

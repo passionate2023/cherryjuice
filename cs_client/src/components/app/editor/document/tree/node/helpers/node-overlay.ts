@@ -21,25 +21,3 @@ const createNodeOverlayHelper = () => {
 const nodeOverlay = createNodeOverlayHelper();
 
 export { nodeOverlay };
-// const updateWidthAndLeft = (() => {
-//   const state = {
-//     tree: undefined,
-//   };
-//   return ({ overlayParent }) => {
-//     if (!state.tree) state.tree = document.querySelector('.' + treeModule.tree);
-//     cssVariables.setNodeWidth(0);
-//     cssVariables.setNodeWidth(state.tree.scrollWidth);
-//     cssVariables.setNodeLeft(nodeRect.left);
-//   };
-// })();
-//
-// const updateOverlayWidth = (() => {
-//   const state = {
-//     tree: undefined,
-//   };
-//   return () => {
-//     if (!state.tree) state.tree = document.querySelector('.' + treeModule.tree);
-//     cssVariables.setNodeWidth(0);
-//     cssVariables.setNodeWidth(state.tree.scrollWidth);
-//   };
-// })();

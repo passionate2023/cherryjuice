@@ -24,9 +24,10 @@ type Document {
 }
 
 type DocumentMutation {
+    createDocument(document: CreateDocumentIt!): String!
     deleteDocument(documents: DeleteDocumentInputType!): String!
-    node(node_id: String!): NodeMutation!
-    uploadFile(files: [Upload!]!): Boolean!
+    node(node_id: Int!): NodeMutation!
+    uploadFile(files: [CTBUpload!]!): Boolean!
     uploadLink(file: UploadLinkInputType!): Boolean!
 }
 
@@ -70,6 +71,7 @@ type NodeMutation {
     deleteNode: String!
     meta(meta: NodeMetaIt!): String!
     saveAHtml(ahtml: String!, deletedImages: [String]!): String!
+    uploadImage(images: [ImageUpload!]!): [[String!]!]!
 }
 
 type Query {
@@ -113,17 +115,20 @@ enum DOCUMENT_SUBSCRIPTIONS {
     DOCUMENT_IMPORT_STARTED
 }
 
+input CreateDocumentIt {
+    name: String!
+}
+
 input CreateNodeIt {
     child_nodes: [Int!]!
     createdAt: Float!
     documentId: String!
-    fatherId: String!
+    fatherId: String
     father_id: Float!
     icon_id: String!
     name: String!
     node_id: Int!
     node_title_styles: String
-    position: Int
     read_only: Int!
     updatedAt: Float!
 }
@@ -164,5 +169,8 @@ input UploadLinkInputType {
 }
 
 
-"The `Upload` scalar type represents a file upload."
-scalar Upload
+"The ImageUpload scalar type represents a file upload."
+scalar ImageUpload
+
+"The CTBUpload scalar type represents a file upload."
+scalar CTBUpload

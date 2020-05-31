@@ -2,6 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
 import {
   Args,
+  Int,
   Mutation,
   Parent,
   ResolveField,
@@ -17,6 +18,7 @@ import { UploadLinkInputType } from './input-types/upload-link.input-type';
 import { DeleteDocumentInputType } from './input-types/delete-document.input-type';
 import { ImportsService } from '../imports/imports.service';
 import { NodeMutation } from '../node/entities/node-mutation.entity';
+import { CreateDocumentIt } from './input-types/create-document.it';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => DocumentMutation)
@@ -36,7 +38,7 @@ export class DocumentMutationsResolver {
   async uploadFile(
     @Args({
       name: 'files',
-      type: () => [GraphQLUpload(['application/x-sqlite3'])],
+      type: () => [GraphQLUpload(['application/x-sqlite3'], 'CTBUpload')],
     })
     files: FileUpload[],
     @GetUserGql() user: User,
@@ -71,7 +73,27 @@ export class DocumentMutationsResolver {
     return JSON.stringify(deleteResult);
   }
   @ResolveField(() => [NodeMutation])
-  async node(@Parent() parent, @Args('node_id') node_id: string) {
+  async node(
+    @Parent() parent,
+    @Args('node_id', { type: () => Int }) node_id: number,
+  ) {
     return { node_id, documentId: parent.id };
+  }
+
+  @ResolveField(() => String)
+  async createDocument(
+    @Args({
+      name: 'document',
+      type: () => CreateDocumentIt,
+    })
+    { name }: CreateDocumentIt,
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    const createResult = await this.documentService.createDocument({
+      name,
+      size: 0,
+      user,
+    });
+    return createResult.id;
   }
 }

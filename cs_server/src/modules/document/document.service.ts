@@ -50,7 +50,9 @@ export class DocumentService implements IDocumentService {
     );
     if (notifySubscribers)
       IDs.forEach(id => {
-        importThreshold.deleted({ id, name: '', size: 0, user });
+        const document = new Document(user,"",0)
+        document.id = id
+        importThreshold.deleted(document);
       });
     return deleteResult;
   }

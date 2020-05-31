@@ -7,7 +7,7 @@ import {
   getInnerText,
   isElementNonTextual,
   moveCursor,
-  toNodes,
+  stringToSingleElement,
 } from '::helpers/editing/execK/helpers';
 import {
   splitAHtmlsToMultipleLines,
@@ -16,6 +16,7 @@ import {
 import { getDDOE } from '::helpers/editing/execK/steps/pipe1/ddoes';
 import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
+import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 
 const getPngBase64 = file =>
   new Promise(resolve => {
@@ -62,7 +63,7 @@ const processClipboard: { [p: string]: (str) => TAHtml[] } = {
           : child.nodeType === Node.TEXT_NODE
           ? (child as Text).wholeText === '\n'
             ? acc.length
-              ? toNodes(`<br>`)
+              ? stringToSingleElement(`<br>`)
               : undefined
             : wrapNodeInSpan(child as Text)
           : undefined;
@@ -146,6 +147,9 @@ const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
     putCursorAtTheEndOfPastedElement({
       newEndElement,
     });
+    if (pastedData.some(ahtml => ahtml?.type === 'png')) {
+      documentActionCreators.pastedImages();
+    }
   } catch (e) {
     document.querySelector('#rich-text ').innerHTML = ogHtml;
     throw e;

@@ -4,8 +4,7 @@ import { DOCUMENT_SUBSCRIPTIONS } from '::types/graphql/generated';
 import { CircleButton } from '::shared-components/buttons/circle-button';
 import { Icon, Icons } from '::shared-components/icon';
 import { useDeleteFile } from '::hooks/graphql/delete-file';
-import { appActionCreators } from '::app/reducer';
-import { useHistory } from 'react-router';
+import { ac } from '::root/store/actions.types';
 
 type TDocumentProps = {
   name: string;
@@ -70,10 +69,8 @@ const Document: React.FC<TDocumentProps & {
   clearFinishedDocuments: Function;
 }> = ({ name, eventType, id, clearFinishedDocuments }) => {
   const { deleteDocument } = useDeleteFile({ IDs: [id] });
-  const history = useHistory();
   const open = () => {
-    history.push('/');
-    appActionCreators.selectFile(id);
+    ac.document.setDocumentId(id);
   };
 
   return (

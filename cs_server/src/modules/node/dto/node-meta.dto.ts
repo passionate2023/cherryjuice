@@ -3,7 +3,7 @@ import { NodeMetaIt } from './node-meta.it';
 
 export class NodeMetaDto {
   user: User;
-  node_id: string;
+  node_id: number;
   documentId: string;
   meta: NodeMetaIt;
 }

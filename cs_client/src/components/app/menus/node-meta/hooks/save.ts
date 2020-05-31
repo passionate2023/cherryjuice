@@ -1,10 +1,10 @@
-import { updatedCachedMeta } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 import { appActionCreators } from '::app/reducer';
 import { NodeCached } from '::types/graphql/adapters';
-import { useHistory } from 'react-router-dom';
 import { TNodeMetaState } from '::app/menus/node-meta/reducer/reducer';
-import { apolloCache } from '::graphql/cache-helpers';
+import { apolloCache } from '::graphql/cache/apollo-cache';
+import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
+import { useDelayedCallback } from '::hooks/react/delayed-callback';
+import { navigate } from '::root/router/navigate';
 
 const calculateDiff = ({
   isNewNode,
@@ -54,24 +54,21 @@ type UseSaveProps = {
   state: TNodeMetaState;
   previous_sibling_node_id: number;
 };
-const useSave = ({
+const save = ({
   node,
   newNode,
   nodeId,
   state,
   previous_sibling_node_id,
 }: UseSaveProps) => {
-  const history = useHistory();
-
-  const onSave = () => {
+  return useDelayedCallback(appActionCreators.hideNodeMeta, () => {
     const res = calculateDiff({
       isNewNode: newNode,
       node,
       state,
     });
     if (newNode) {
-      apolloCache.setNode(res.id, res);
-      const fatherNode = apolloCache.getNode(res.fatherId);
+      const fatherNode = apolloCache.node.get(res.fatherId);
       const position =
         previous_sibling_node_id === -1
           ? -1
@@ -80,25 +77,19 @@ const useSave = ({
         position === -1
           ? fatherNode.child_nodes.push(res.node_id)
           : fatherNode.child_nodes.splice(position, 0, res.node_id);
-      apolloCache.setNode(res.id, res);
-      apolloCache.setNode(fatherNode.id, fatherNode);
-
-      documentActionCreators.createNewNode(res.id);
-      documentActionCreators.setNodeMetaHasChanged(node.fatherId, [
-        'child_nodes',
-      ]);
+      apolloCache.node.create(res);
+      apolloCache.node.mutate({
+        nodeId: fatherNode.id,
+        meta: {
+          child_nodes: fatherNode.child_nodes,
+        },
+      });
+      updateCachedHtmlAndImages();
+      navigate.node(node.documentId, node.node_id);
     } else {
-      if (Object.keys(res)) updatedCachedMeta({ nodeId, meta: res });
-      documentActionCreators.setNodeMetaHasChanged(nodeId, Object.keys(res));
+      if (Object.keys(res)) apolloCache.node.mutate({ nodeId, meta: res });
     }
-
-    const nodePath = `/document/${node.documentId}/node/${node.node_id}`;
-    history.push(nodePath);
-    appActionCreators.hideNodeMeta();
-  };
-  return {
-    onSave,
-  };
+  });
 };
 
-export { useSave };
+export { save };

@@ -2,24 +2,24 @@ import * as React from 'react';
 import { modNodeMeta, modTextInput } from '::sass-modules/index';
 import { useEffect, useRef } from 'react';
 
-type Props = {
+type FormInputProps = {
   type: 'checkbox' | 'text';
   label: string;
   testId?: string;
   onChange: Function;
   value;
-  additionalInput?: ({ disabled: boolean }) => JSX.Element;
+  additionalInput?: JSX.Element;
   lazyAutoFocus?: number;
 };
 
-const FormInput: React.FC<Props> = ({
+const MetaFormInput: React.FC<FormInputProps> = ({
   type,
   label,
   onChange,
   value,
   additionalInput,
   lazyAutoFocus,
-  testId
+  testId,
 }) => {
   const inputName = label.replace(/[^A-Za-z]/g, '-').toLowerCase();
   const onChangeCheckbox = e => onChange(e.target.checked);
@@ -48,9 +48,10 @@ const FormInput: React.FC<Props> = ({
         }}
         {...(testId && { 'data-testid': testId })}
       />
-      {additionalInput ? additionalInput({ disabled: !value }) : <></>}
+      {additionalInput ? additionalInput : <></>}
     </label>
   );
 };
 
-export { FormInput };
+export { MetaFormInput };
+export { FormInputProps };

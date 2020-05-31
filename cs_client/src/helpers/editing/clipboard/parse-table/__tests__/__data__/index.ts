@@ -1,4 +1,4 @@
-import { toNodes } from '::helpers/editing/execK/helpers';
+import { stringToSingleElement } from '::helpers/editing/execK/helpers';
 
 const t1 = `<table role="presentation">
 <tbody>
@@ -53,7 +53,7 @@ const testSamples = [
         `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Johannes_Vermeer%2C_Allegory_of_the_Catholic_Faith%2C_The_Metropolitan_Museum_of_Art.jpg/350px-Johannes_Vermeer%2C_Allegory_of_the_Catholic_Faith%2C_The_Metropolitan_Museum_of_Art.jpg">`,
         `<p>The Allegory of Faith</p>`,
         `<p>Painting credit: Johannes Vermeer</p>`,
-      ].map(toNodes),
+      ].map(stringToSingleElement),
       presentational: true,
     },
   },

@@ -16,6 +16,9 @@ type TProps = {
     useObjForTextNodes?: boolean;
     serializeNonTextElements?: boolean;
     reduceLines?: boolean;
+    swappedImageIds?: {
+      [temporaryId: string]: string;
+    };
   };
 };
 const getAHtml = ({ DDOEs, options = {} }: TProps) => {

@@ -1,4 +1,5 @@
-import { apolloCache } from '::graphql/cache-helpers';
+import { apolloCache } from '::graphql/cache/apollo-cache';
+import { getEditor } from '::app/editor/document/rich-text/hooks/get-node-images';
 
 const unsetImagesAttributes = (images: HTMLImageElement[]) => {
   const imageAttributesTempContainer = [];
@@ -7,15 +8,13 @@ const unsetImagesAttributes = (images: HTMLImageElement[]) => {
       src: img.getAttribute('src'),
       dataId: img.getAttribute('data-id'),
     });
-    img.setAttribute('src', '');
-    img.removeAttribute('data-id');
+    img.removeAttribute('src');
   });
   return imageAttributesTempContainer;
 };
 const setImageAttributes = (images, attributes) => {
   images.forEach((img, i) => {
     img.setAttribute('src', attributes[i].src);
-    img.setAttribute('data-id', attributes[i].dataId);
   });
 };
 const getEditorContentWithoutImages = () => {
@@ -38,73 +37,86 @@ const getEditorContentWithoutImages = () => {
     id,
     node_id,
     edited,
-    imageIDs: Object.fromEntries(
-      imageAttributesTempContainer.map(({ dataId }) => [dataId, true]),
-    ),
+    imageIDs: imageAttributesTempContainer.map(({ dataId }) => dataId),
   };
 };
 const getNodeImageIDsFromCache = ({ nodeId }): string[] => {
-  return apolloCache.getNode(nodeId)[
+  return apolloCache.node.get(nodeId)[
     // eslint-disable-next-line no-unexpected-multiline
     'image({"thumbnail":true})'
   ].map(({ id }) => /:(.+)$/.exec(id)[1]);
 };
 
 const updatedCachedHtml = ({ nodeId, html }) => {
-  const node = apolloCache.getNode(nodeId);
-  apolloCache.setNode(nodeId, { ...node, html });
-};
-const updatedCachedMeta = ({ nodeId, meta }) => {
-  const node = apolloCache.getNode(nodeId);
-  apolloCache.setNode(nodeId, { ...node, ...meta });
+  apolloCache.node.mutate({
+    nodeId,
+    meta: {
+      html,
+    },
+  });
 };
 
 const updateCachedImages = ({
   nodeId,
-  deletedImages,
+  deletedImageIDs,
+  newImageIDs,
+  imageIDsInDom,
 }: {
   nodeId;
-  deletedImages: string[];
+  deletedImageIDs: string[];
+  newImageIDs: string[];
+  imageIDsInDom: string[];
 }) => {
-  const node = apolloCache.getNode(nodeId);
-  const deleted = Object.fromEntries(
-    deletedImages.map(id => ['Image:' + id, true]),
-  );
-  apolloCache.setNode(nodeId, {
-    ...node,
-    // @ts-ignore
-    'image({"thumbnail":true})': node['image({"thumbnail":true})'].filter(
-      ({ id }) => !deleted[id],
-    ),
-    // @ts-ignore
-    'image({"thumbnail":false})': node['image({"thumbnail":false})'].filter(
-      ({ id }) => !deleted[id],
-    ),
-  });
-  deletedImages.forEach(apolloCache.deleteImage);
+  const node = apolloCache.node.get(nodeId);
+
+  const editor = getEditor();
+  const newImages = newImageIDs.reduce((acc, id) => {
+    const imageInDom: HTMLImageElement = editor.querySelector(
+      `img[data-id="${id}"]`,
+    );
+    if (imageInDom)
+      acc.push({
+        id: imageInDom.getAttribute('data-id'),
+        base64: imageInDom.src.substr(22),
+        index: imageIDsInDom.indexOf(id),
+      });
+    return acc;
+  }, []);
+
+  deletedImageIDs.forEach(apolloCache.image.delete.hard(node.id));
+  newImages.forEach(apolloCache.image.create(node.id));
 };
-const updateCachedHtmlAndImages = (): { deletedImageIDs: string[] } => {
+const updateCachedHtmlAndImages = (): void => {
   const {
     html,
     id,
     edited,
     imageIDs: imageIDsInDom,
   } = getEditorContentWithoutImages();
+
   let deletedImageIDs = [];
+  let newImageIDs = [];
   if (edited) {
     const imageIDsInCache = getNodeImageIDsFromCache({ nodeId: id });
-    deletedImageIDs = imageIDsInCache.filter(id => !imageIDsInDom[id]);
+    const sets = {
+      imageIDsInDom: new Set(imageIDsInDom),
+      imageIDsInCache: new Set(imageIDsInCache),
+    };
+    deletedImageIDs = imageIDsInCache.filter(id => !sets.imageIDsInDom.has(id));
+    newImageIDs = imageIDsInDom.filter(id => !sets.imageIDsInCache.has(id));
     updatedCachedHtml({ nodeId: id, html });
-    if (deletedImageIDs.length)
-      updateCachedImages({ nodeId: id, deletedImages: deletedImageIDs });
+    if (deletedImageIDs.length || newImageIDs.length)
+      updateCachedImages({
+        nodeId: id,
+        deletedImageIDs,
+        newImageIDs,
+        imageIDsInDom,
+      });
   }
-  return { deletedImageIDs };
 };
 export {
   updateCachedHtmlAndImages,
   getNodeImageIDsFromCache,
   updateCachedImages,
   updatedCachedHtml,
-  getEditorContentWithoutImages,
-  updatedCachedMeta,
 };

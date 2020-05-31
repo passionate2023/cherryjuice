@@ -17,7 +17,7 @@ module.exports = {
     '::app': path.resolve(__dirname, '../src/components/app/'),
     '::auth': path.resolve(__dirname, '../src/components/auth/'),
     '::root': path.resolve(__dirname, '../src/components/'),
-    '~nm': '../node_modules/',
+    '::cypress': path.resolve(__dirname, '../cypress/'),
   },
   globalStyles: new RegExp(
     `(${[

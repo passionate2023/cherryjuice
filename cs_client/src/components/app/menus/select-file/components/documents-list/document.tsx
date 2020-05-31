@@ -6,7 +6,7 @@ import { useMouseHold } from '::hooks/dom/mouse-hold';
 type Props = {
   selectedIDs: string[];
   id: string;
-  selectedFile: string;
+  documentId: string;
   name: string;
   size: number;
   updatedAt: number;
@@ -18,7 +18,7 @@ const Document: React.FC<Props> = ({
   id,
   name,
   selectedIDs,
-  selectedFile,
+                                     documentId,
   updatedAt,
   onSelect,
 }) => {
@@ -34,7 +34,7 @@ const Document: React.FC<Props> = ({
         selectedIDs.includes(id)
           ? modSelectFile.selectFile__fileSelectedCandidate
           : ''
-      } ${selectedFile === id ? modSelectFile.selectFile__fileSelected : ''}`}
+      } ${documentId === id ? modSelectFile.selectFile__fileSelected : ''}`}
       onClick={() => onSelect({ id })}
       key={id}
       tabIndex={0}

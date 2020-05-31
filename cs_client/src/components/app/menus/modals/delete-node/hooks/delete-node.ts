@@ -1,33 +1,31 @@
 import { useCallback } from 'react';
-import { apolloCache } from '::graphql/cache-helpers';
+import { apolloCache } from '::graphql/cache/apollo-cache';
 import { NodeCached } from '::types/graphql/adapters';
-import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 import { appActionCreators } from '::app/reducer';
-import { useHistory } from 'react-router-dom';
+import { navigate } from '::root/router/navigate';
 
-const updateFatherNode = (deletedNode: NodeCached, fatherNode: NodeCached) => {
+const updateFatherNode = (deletedNode: NodeCached) => {
+  const fatherNode = apolloCache.node.get(deletedNode.fatherId);
   const nodeIndexInParentNodeChildNodes = fatherNode.child_nodes.indexOf(
     deletedNode.node_id,
   );
   fatherNode.child_nodes.splice(nodeIndexInParentNodeChildNodes, 1);
-  apolloCache.setNode(fatherNode.id, fatherNode);
-};
-
-const notifyLocalStore = (deletedNode: NodeCached, fatherNode: NodeCached) => {
-  documentActionCreators.setNodeDeleted(deletedNode.id);
-  documentActionCreators.setNodeMetaHasChanged(fatherNode.id, ['child_nodes']);
+  return fatherNode;
 };
 
 const useDeleteNode = (nodeId: string, node: NodeCached) => {
-  const history = useHistory();
   return useCallback(() => {
-    const fatherNode = apolloCache.getNode(node.fatherId);
-    updateFatherNode(node, fatherNode);
-    notifyLocalStore(node, fatherNode);
+    const fatherNode = updateFatherNode(node);
+    apolloCache.node.mutate({
+      nodeId: fatherNode.id,
+      meta: {
+        child_nodes: fatherNode.child_nodes,
+      },
+    });
+    apolloCache.node.delete.soft(node.id);
     appActionCreators.toggleDeleteDocumentModal();
     appActionCreators.removeNodeFromRecentNodes(nodeId);
-    const nodePath = `/document/${fatherNode.documentId}/`;
-    history.push(nodePath);
+    navigate.document(node.documentId);
   }, [nodeId]);
 };
 

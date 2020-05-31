@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { DocumentMeta, Node } from '::types/generated';
+import { DocumentMeta } from '::types/generated';
 import {
   AuthUser,
   DOCUMENT_SUBSCRIPTIONS,
@@ -7,7 +7,7 @@ import {
   Secrets,
 } from '::types/graphql/generated';
 import { FRAGMENT_USER } from '::graphql/fragments';
-import { NodeMeta } from '::types/graphql/adapters';
+import { NodeHtml, NodeMeta } from '::types/graphql/adapters';
 
 const QUERY_NODE_META = {
   path: (data): NodeMeta[] | undefined => data?.document[0]?.node,
@@ -60,7 +60,7 @@ const QUERY_NODE_CONTENT = {
     `,
   },
   html: {
-    path: (data): Pick<Node, 'html' | 'node_id'> => data?.document[0]?.node[0],
+    path: (data): NodeHtml => data?.document[0]?.node[0],
     query: gql`
       query node_content__html($file_id: String!, $node_id: Int!) {
         document(file_id: $file_id) {

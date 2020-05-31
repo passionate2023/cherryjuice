@@ -48,13 +48,14 @@ const ConfirmationModal = ({
   >
     <ModalBody {...alert} />
     <div className={modDeleteNode.deleteDocument__buttons}>
-      {buttons.map(({ onClick, label, disabled }, i) => (
+      {buttons.map(({ onClick, label, disabled, testId }, i) => (
         <ButtonSquare
           key={i}
           className={`${modAlertModal.alertModal__dismissButton}`}
           onClick={onClick}
           lazyAutoFocus={i === 0 && 300}
           disabled={disabled}
+          testId={testId}
         >
           {label}
         </ButtonSquare>

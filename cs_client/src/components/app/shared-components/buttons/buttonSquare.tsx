@@ -9,6 +9,7 @@ type Props = {
   autoFocus?: boolean;
   dark?: boolean;
   lazyAutoFocus?: number;
+  testId?: string;
 };
 
 const ButtonSquare: React.FC<Props> = ({
@@ -19,6 +20,7 @@ const ButtonSquare: React.FC<Props> = ({
   autoFocus,
   lazyAutoFocus,
   dark,
+  testId,
 }) => {
   const ref = useRef<HTMLButtonElement>();
   useEffect(() => {
@@ -36,6 +38,7 @@ const ButtonSquare: React.FC<Props> = ({
       } ${dark ? modButton.buttonDark : ''}`}
       disabled={disabled}
       autoFocus={autoFocus}
+      {...(testId && { 'data-testid': testId })}
     >
       {children}
     </button>

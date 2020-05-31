@@ -7,5 +7,4 @@ yarn.lock
 report*.json
 .idea
 sh.exe.stackdump
-cypress.json
-cypress
+debug.log

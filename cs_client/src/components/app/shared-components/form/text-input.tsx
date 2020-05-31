@@ -19,7 +19,9 @@ export type TextInputProps = {
   idPrefix: string;
 };
 
-const TextInput: React.FC<TextInputProps> = ({
+const TextInput: React.FC<TextInputProps & {
+  highlightInvalidInput?: boolean;
+}> = ({
   label,
   icon,
   ariaLabel,
@@ -30,10 +32,12 @@ const TextInput: React.FC<TextInputProps> = ({
   inputRef,
   autoComplete,
   idPrefix,
+  highlightInvalidInput = true,
 }) => {
   useCustomValidityMessage({ inputRef, patterns });
+  const id = `${idPrefix}-${label.replace(' ', '-')}`;
   return (
-    <span className={modLogin.login__form__input}>
+    <div className={modLogin.login__form__input}>
       {icon && (
         <Icon
           name={typeof icon === 'string' ? icon : icon[0]}
@@ -42,18 +46,25 @@ const TextInput: React.FC<TextInputProps> = ({
         />
       )}
       <input
-        className={modLogin.login__form__input__input}
+        className={`${modLogin.login__form__input__input} ${
+          highlightInvalidInput
+            ? modLogin.login__form__input__inputHighlightInvalid
+            : ''
+        }`}
         ref={inputRef}
         type={type}
-        placeholder={label}
+        placeholder={' '}
         pattern={patternToString(patterns)}
         minLength={minLength}
         required={required}
         autoComplete={Boolean(autoComplete).toString()}
         aria-label={ariaLabel || label}
-        id={`${idPrefix}-${label.replace(' ', '-')}`}
+        id={id}
       />
-    </span>
+      <label htmlFor={id} className={modLogin.login__form__input__label}>
+        {label}
+      </label>
+    </div>
   );
 };
 

@@ -12,12 +12,14 @@
       "::hooks/*": ["./src/hooks/*"],
       "::app/*": ["./src/components/app/*"],
       "::auth/*": ["./src/components/auth/*"],
-      "::root/*": ["./src/components/*"]
+      "::root/*": ["./src/components/*"],
+      "::cypress/*": ["./cypress/*"]
     },
     "target": "esnext",
     "sourceMap": true,
     "module": "esnext",
     "esModuleInterop": true,
     "moduleResolution": "node"
+
   }
 }

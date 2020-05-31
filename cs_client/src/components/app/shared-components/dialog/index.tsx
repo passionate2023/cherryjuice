@@ -42,7 +42,7 @@ const Dialog: React.FC<TDialogProps & {
   useModalKeyboardEvents({
     onCloseModal: onClose,
     modalSelector: `.${modDialog.dialog}`,
-    onConfirmModal:onConfirm
+    onConfirmModal: onConfirm,
   });
 
   return (

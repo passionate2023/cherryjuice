@@ -1,23 +1,22 @@
 import { useEffect } from 'react';
-import {
-  TDocumentState,
-  TEditedNode,
-} from '::app/editor/document/reducer/initial-state';
 import { appActionCreators } from '::app/reducer';
-
-const nodeHasUnsavedChanges = ({ new: isNew, deleted, edited }: TEditedNode) =>
-  isNew || deleted || edited?.meta?.length || edited?.content;
+import { apolloCache } from '::graphql/cache/apollo-cache';
+import { getEditor } from '::app/editor/document/rich-text/hooks/get-node-images';
 
 type Props = {
-  documentState: TDocumentState;
+  cacheTimeStamp: number;
 };
-const useTrackDocumentChanges = ({ documentState }: Props) => {
+const useTrackDocumentChanges = ({ cacheTimeStamp }: Props) => {
   useEffect(() => {
-    const documentHasUnsavedNodes = Object.values(documentState.nodes).some(
-      nodeHasUnsavedChanges,
-    );
+    const documentHasUnsavedNodes =
+      Boolean(cacheTimeStamp) &&
+      (Boolean(getEditor()?.getAttribute('data-edited')) ||
+        Boolean(apolloCache.changes.node.created.length) ||
+        Boolean(apolloCache.changes.node.meta.length) ||
+        Boolean(apolloCache.changes.node.html.length) ||
+        Boolean(apolloCache.changes.document.created.length));
     appActionCreators.documentHasUnsavedChanges(documentHasUnsavedNodes);
-  }, [documentState.nodes]);
+  }, [cacheTimeStamp]);
 };
 
 export { useTrackDocumentChanges };

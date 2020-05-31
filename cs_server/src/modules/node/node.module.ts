@@ -7,6 +7,7 @@ import { ImageModule } from '../image/image.module';
 import { NodeRepository } from './repositories/node.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NodeMutationsResolver } from './node.mutations.resolver';
+import { ImportsModule } from '../imports/imports.module';
 
 @Module({
   providers: [
@@ -20,6 +21,7 @@ import { NodeMutationsResolver } from './node.mutations.resolver';
     forwardRef(() => DocumentModule),
     ImageModule,
     TypeOrmModule.forFeature([NodeRepository]),
+    ImportsModule,
   ],
 })
 export class NodeModule {}

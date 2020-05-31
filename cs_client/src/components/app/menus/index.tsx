@@ -16,6 +16,9 @@ const ImportDocuments = React.lazy(() =>
 const Settings = React.lazy(() => import('::app/menus/settings'));
 const SelectFile = React.lazy(() => import('::app/menus/select-file'));
 const NodeMeta = React.lazy(() => import('::app/menus/node-meta/node-meta'));
+const DocumentMeta = React.lazy(() =>
+  import('::app/menus/document-meta/document-meta'),
+);
 const DeleteNode = React.lazy(() =>
   import('::app/menus/modals/delete-node/delete-node'),
 );
@@ -26,7 +29,6 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
     <>
       <Suspense fallback={<Void />}>
         <SelectFile
-          selectedFile={state.selectedFile}
           reloadFiles={state.reloadFiles}
           showDialog={state.showFileSelect}
           isOnMobile={state.isOnMobile}
@@ -73,6 +75,13 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
         />
       </Suspense>
       <Suspense fallback={<Void />}>
+        <DocumentMeta
+          showDialog={state.showDocumentMetaDialog}
+          isOnMobile={state.isOnMobile}
+          onClose={appActionCreators.hideDocumentMetaDialog}
+        />
+      </Suspense>
+      <Suspense fallback={<Void />}>
         <DeleteNode
           onClose={appActionCreators.toggleDeleteDocumentModal}
           show={state.showDeleteDocumentModal}
@@ -80,10 +89,7 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
         />
       </Suspense>
       <Suspense fallback={<Void />}>
-        <ReloadDocument
-          onClose={appActionCreators.hideReloadConfirmationModal}
-          show={state.showReloadConfirmationModal}
-        />
+        <ReloadDocument />
       </Suspense>
       <Suspense fallback={<Void />}>
         <Snackbar

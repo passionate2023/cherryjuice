@@ -43,6 +43,7 @@ const adjustNode = ({ node, type }) => {
             other_attributes: {
               offset: node.offset,
               ...(node.link && { link: node.link }),
+              ...(node.id && { id: node.id }),
             },
           };
     case 'table':

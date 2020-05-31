@@ -2,6 +2,6 @@ import { User } from '../../user/entities/user.entity';
 
 export class DeleteNodeDto {
   user: User;
-  node_id: string;
+  node_id: number;
   documentId: string;
 }

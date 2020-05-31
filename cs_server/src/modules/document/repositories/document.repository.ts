@@ -37,10 +37,9 @@ export class DocumentRepository extends Repository<Document>
   async createDocument({
     name,
     size,
-    id,
     user,
   }: DocumentDTO): Promise<Document> {
-    const document = new Document(user, name, size, id);
+    const document = new Document(user, name, size, );
     await document.save();
     return document;
   }

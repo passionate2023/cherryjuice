@@ -1,27 +1,26 @@
 import nodeMod from '::sass-modules/tree/node.scss';
-import { updatedCachedMeta } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 import { NodeMeta } from '::types/graphql/adapters';
 import { MutableRefObject, useMemo } from 'react';
 import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
 import { modTree } from '::sass-modules/index';
+import { apolloCache } from '::graphql/cache/apollo-cache';
 
 const updateCache = ({ fatherOfDroppedNode, targetNode, droppedNode }) => {
-  updatedCachedMeta({
+  apolloCache.node.mutate({
     nodeId: droppedNode.id,
     meta: {
-      position: targetNode.child_nodes.length - 1,
       father_id: targetNode.node_id,
+      fatherId: targetNode.id,
     },
   });
-  updatedCachedMeta({
+  apolloCache.node.mutate({
     nodeId: fatherOfDroppedNode.id,
     meta: {
       child_nodes: fatherOfDroppedNode.child_nodes,
     },
   });
-  updatedCachedMeta({
+  apolloCache.node.mutate({
     nodeId: targetNode.id,
     meta: {
       child_nodes: targetNode.child_nodes,
@@ -46,25 +45,6 @@ const switchParent = ({
   droppedNode.father_id = targetNode.node_id;
   droppedNode.fatherId = targetNode.id;
   droppedNode.position = targetNode.child_nodes.length - 1;
-};
-
-const notifyLocalStore = ({
-  droppedNode,
-  fatherOfDroppedNode,
-  targetNode,
-}: {
-  droppedNode: NodeMeta;
-  fatherOfDroppedNode: NodeMeta;
-  targetNode: NodeMeta;
-}) => {
-  documentActionCreators.setNodeMetaHasChanged(droppedNode.id, [
-    'father_id',
-    'fatherId',
-  ]);
-  documentActionCreators.setNodeMetaHasChanged(targetNode.id, ['child_nodes']);
-  documentActionCreators.setNodeMetaHasChanged(fatherOfDroppedNode.id, [
-    'child_nodes',
-  ]);
 };
 
 const calculateDroppingPosition = (e): number => {
@@ -97,10 +77,9 @@ const getFatherIdChain = (
 };
 type Props = {
   node_id: number;
-  nodes?: Map<number, NodeMeta>;
   componentRef: MutableRefObject<HTMLDivElement>;
-  cache;
-  draggable: boolean;
+  nodes?: Map<number, NodeMeta>;
+  draggable?: boolean;
   afterDrop?: Function;
 };
 const useDnDNodes = ({
@@ -171,11 +150,6 @@ const useDnDNodes = ({
               position,
             });
             updateCache({
-              targetNode,
-              fatherOfDroppedNode,
-              droppedNode,
-            });
-            notifyLocalStore({
               targetNode,
               fatherOfDroppedNode,
               droppedNode,

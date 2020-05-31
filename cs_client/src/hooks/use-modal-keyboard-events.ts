@@ -54,7 +54,7 @@ const setupKeyboardShortcuts = ({
     }
   };
   const handleEnterKey = ({ e }) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && onConfirmModal) {
       onConfirmModal();
     }
   };
@@ -74,7 +74,7 @@ const setupKeyboardShortcuts = ({
 const useModalKeyboardEvents = ({
   modalSelector,
   onCloseModal,
-  onConfirmModal = () => undefined,
+  onConfirmModal,
   focusableElementsSelector = [],
   enabled = true,
 }) => {
@@ -91,7 +91,7 @@ const useModalKeyboardEvents = ({
       );
     }
     return () => cleanEventHandlers.forEach(cleanCallBack => cleanCallBack());
-  }, []);
+  }, [onConfirmModal]);
 };
 
 export { useModalKeyboardEvents };

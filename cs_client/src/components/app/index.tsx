@@ -1,7 +1,6 @@
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import * as React from 'react';
-import { useEffect, useReducer, Suspense } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useEffect, useReducer, Suspense,  } from 'react';
 import {
   appActionCreators,
   appInitialState,
@@ -45,13 +44,6 @@ const updateBreakpointState = ({ breakpoint, callback }) => {
   };
 };
 
-const useHandleRouting = state => {
-  const history = useHistory();
-  useEffect(() => {
-    if (history.location.pathname === '/')
-      if (state.selectedFile) history.push('/document/' + state.selectedFile);
-  }, [state.selectedFile, history.location.pathname]);
-};
 const useUpdateCssVariables = (state: TState) => {
   useEffect(() => {
     cssVariables.setTreeWidth(state.showTree ? state.treeSize : 0);
@@ -87,8 +79,18 @@ const useRefreshToken = ({ token }) => {
     }
   }, [data, error]);
 };
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store';
+import { useHandleRouting } from '::app/hooks/handle-routing/handle-routing';
 
-const App: React.FC<Props> = ({ session }) => {
+const mapState = (state: Store) => ({
+  documentId: state.document.documentId,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const App: React.FC<Props & PropsFromRedux> = ({ session, documentId }) => {
   const [state, dispatch] = useReducer(appReducer, appInitialState);
   useEffect(() => {
     appActionCreators.setDispatch(dispatch);
@@ -102,7 +104,7 @@ const App: React.FC<Props> = ({ session }) => {
   ]);
   useDocumentEditedIndicator(state);
   useSaveStateToLocalStorage(state);
-  useHandleRouting(state);
+  useHandleRouting(documentId);
   useUpdateCssVariables(state);
   useRefreshToken({ token: session.token });
   return (
@@ -118,5 +120,5 @@ const App: React.FC<Props> = ({ session }) => {
     </AppContext.Provider>
   );
 };
-
-export { App };
+const _ = connector(App);
+export { _ as App };

@@ -1,49 +1,66 @@
-import { TEditedNodes } from '::app/editor/document/reducer/initial-state';
-import {
-  documentActionCreators,
-  localChanges,
-} from '::app/editor/document/reducer/action-creators';
 import { NodeCached } from '::types/graphql/adapters';
-import { apolloCache } from '::graphql/cache-helpers';
+import { apolloCache } from '::graphql/cache/apollo-cache';
+import { localChanges } from '::graphql/cache/helpers/changes';
+import { DOCUMENT_MUTATION } from '::graphql/mutations';
 
-const mutateDeleteNode = async ({ nodeId, mutate }: { nodeId; mutate }) =>
-  await new Promise((res, rej) => {
-    const node: NodeCached = apolloCache.getNode(nodeId);
-
-    mutate({
-      variables: {
-        file_id: node.documentId,
-        node_id: `${node.node_id}`,
-      },
-
-      update: () => {
-        apolloCache.deleteNode(nodeId);
-        res();
-      },
-    }).catch(rej);
-  });
 type SaveOperationState = {
   newFatherIds: {
     [node_id: string]: string;
   };
+  swappedDocumentIds: {
+    [temporaryId: string]: string;
+  };
+  swappedNodeIds: {
+    [temporaryId: string]: string;
+  };
+  swappedImageIds: {
+    [temporaryId: string]: string;
+  };
+  danglingNodes: {
+    [nodeId: string]: boolean;
+  };
+  deletedNodes: {
+    [nodeId: string]: boolean;
+  };
 };
 type SaveOperationProps = {
-  mutate: Function;
-  nodes: TEditedNodes;
   state: SaveOperationState;
 };
-const saveDeletedNodes = async ({ mutate, nodes }: SaveOperationProps) => {
-  const deletedNodes = Object.entries(nodes)
-    .filter(([, { deleted, new: isNew }]) => deleted && !isNew)
-    .map(([nodeId]) => nodeId);
-  for (const nodeId of deletedNodes) {
-    await mutateDeleteNode({
-      nodeId,
-      mutate,
+
+const deleteNode = async (node: NodeCached) => {
+  if (!node.id.startsWith('TEMP:'))
+    await apolloCache.client.mutate({
+      variables: {
+        file_id: node.documentId,
+        node_id: node.node_id,
+      },
+      query: DOCUMENT_MUTATION.deleteNode.query,
+      path: DOCUMENT_MUTATION.deleteNode.path,
     });
-    documentActionCreators.clearLocalChanges(nodeId, localChanges.DELETED);
+  apolloCache.node.delete.hard(node.id);
+};
+
+const saveDeletedNodes = async ({ state }: SaveOperationProps) => {
+  const deletedNodes = apolloCache.changes.node.deleted;
+
+  for await (const nodeId of deletedNodes) {
+    const node: NodeCached = apolloCache.node.get(nodeId);
+    await deleteNode(node);
+    apolloCache.changes.unsetModificationFlag(
+      localChanges.NODE_DELETED,
+      nodeId,
+    );
+    state.deletedNodes[nodeId] = true;
   }
 };
 
-export { saveDeletedNodes };
+const deleteDanglingNodes = async ({ state }: SaveOperationProps) => {
+  const deletedNodes = Object.keys(state.danglingNodes);
+  for await (const nodeId of deletedNodes) {
+    const node: NodeCached = apolloCache.node.get(nodeId);
+    await deleteNode(node);
+  }
+};
+
+export { saveDeletedNodes, deleteDanglingNodes };
 export { SaveOperationProps, SaveOperationState };
