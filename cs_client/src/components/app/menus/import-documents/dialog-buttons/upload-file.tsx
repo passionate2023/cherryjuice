@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
+import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { useRef } from 'react';
 import { modImportDocument } from '::sass-modules/index';
 import { Icon, Icons } from '::shared-components/icon';

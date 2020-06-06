@@ -1,6 +1,6 @@
 import { modDialog } from '::sass-modules/index';
 import * as React from 'react';
-import { CircleButton } from '::shared-components/buttons/circle-button';
+import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
 import { EventHandler } from 'react';
 import { Icon, Icons } from '::shared-components/icon';
 
@@ -24,12 +24,12 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
       <span className={modDialog.dialog__header__subTitle} />
       <div className={modDialog.dialog__header__buttons}>
         {rightHeaderButtons}
-        <CircleButton
+        <ButtonCircle
           className={modDialog.dialog__header__exitButton}
           onClick={onClose}
         >
           <Icon name={Icons.material.close} />
-        </CircleButton>
+        </ButtonCircle>
       </div>
     </div>
   );

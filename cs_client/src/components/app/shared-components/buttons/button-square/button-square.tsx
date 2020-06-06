@@ -4,7 +4,7 @@ import { EventHandler, useEffect, useRef } from 'react';
 
 type Props = {
   className?: string;
-  onClick: EventHandler<undefined>;
+  onClick?: EventHandler<undefined>;
   disabled?: boolean;
   autoFocus?: boolean;
   dark?: boolean;

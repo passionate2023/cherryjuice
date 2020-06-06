@@ -9,6 +9,7 @@ import { assertTreeStructure } from '../support/assertions/tree-structure';
 import { testIds } from '../support/helpers/test-ids';
 import { writeText } from '../support/workflows/content/write-text';
 import { assertNodeText } from '../support/assertions/content/node-text';
+import { writeImage } from '../support/workflows/content/write-image';
 
 describe('create document > create nodes', () => {
   before(() => {
@@ -59,5 +60,8 @@ describe('create document > create nodes', () => {
     tree[0].forEach(node => {
       assertNodeText({ node, text: node.text });
     });
+  });
+  it.skip('add image', () => {
+    writeImage({ tree });
   });
 });

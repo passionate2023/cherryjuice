@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useContext } from 'react';
 import { modToolbar, modUserPopup } from '::sass-modules/index';
 import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
-import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
+import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { TransitionWrapper } from '::shared-components/transition-wrapper';
 import { animated } from 'react-spring';
 import { RootContext } from '::root/root-context';

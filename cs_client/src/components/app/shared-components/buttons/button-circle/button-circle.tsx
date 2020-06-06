@@ -4,11 +4,11 @@ import { EventHandler } from 'react';
 
 type Props = {
   className?: string;
-  onClick: EventHandler<undefined>;
+  onClick?: EventHandler<undefined>;
   disabled?: boolean;
 };
 
-const CircleButton: React.FC<Props> = ({
+const ButtonCircle: React.FC<Props> = ({
   className,
   children,
   onClick,
@@ -25,4 +25,4 @@ const CircleButton: React.FC<Props> = ({
   );
 };
 
-export { CircleButton };
+export { ButtonCircle };

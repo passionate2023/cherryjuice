@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots shared/button/circle With Emoji 1`] = `
+<button
+  className="undefined button buttonCircle"
+>
+  <span
+    aria-label="so cool"
+    role="img"
+  >
+    😀 😎 👍 💯
+  </span>
+</button>
+`;
+
+exports[`Storyshots shared/button/circle With Text 1`] = `
+<button
+  className="undefined button buttonCircle"
+>
+  Hello Button
+</button>
+`;
+
+exports[`Storyshots shared/button/square With Emoji 1`] = `
+<button
+  className=" button buttonSquare "
+  disabled={false}
+  onClick={[Function]}
+>
+  <span
+    aria-label="so cool"
+    role="img"
+  >
+    😀 😎 👍 💯
+  </span>
+</button>
+`;
+
+exports[`Storyshots shared/button/square With Text 1`] = `
+<button
+  className=" button buttonSquare "
+>
+  Hello Button
+</button>
+`;

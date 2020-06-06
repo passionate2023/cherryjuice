@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { modSnackbar } from '::sass-modules/index';
 import { Icon, Icons } from '::shared-components/icon';
-import { CircleButton } from '::shared-components/buttons/circle-button';
+import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
 import { ComponentWithTransition } from '::shared-components/transitions/component-with-transition';
 import { transitions } from '::shared-components/transitions/transitions';
 import { useEffect } from 'react';
@@ -37,13 +37,13 @@ const Snackbar: React.FC<Props> = ({
     >
       <div className={modSnackbar.snackbar}>
         <span className={modSnackbar.snackbar__message}>{message}</span>
-        <CircleButton
+        <ButtonCircle
           key={Icons.material.delete}
           className={modSnackbar.snackbar__closeButton}
           onClick={onClose}
         >
           <Icon name={Icons.material.clear} />
-        </CircleButton>
+        </ButtonCircle>
       </div>
     </ComponentWithTransition>
   );

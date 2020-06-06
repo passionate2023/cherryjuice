@@ -27,6 +27,7 @@ module.exports = {
       'material-ui.scss',
       'google-picker.scss',
       'css-variables.scss',
+      'storybook.scss',
     ].join('|')})`,
   ),
   paths: {
