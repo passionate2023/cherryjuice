@@ -10,9 +10,11 @@ import { setupGesturesHandler } from '::shared-components/drawer/drawer-navigati
 import { appActionCreators } from '::app/reducer';
 import { modRichText } from '::sass-modules/index';
 
-const useSetupStuff = () => {
+const useSetupStuff = node_id => {
   useEffect(() => {
     setupClipboard();
+  }, [node_id]);
+  useEffect(() => {
     setupKeyboardEvents();
     setupFormattingHotKeys();
     setupDevHotKeys();

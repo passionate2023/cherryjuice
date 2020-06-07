@@ -9,15 +9,7 @@ import { saveNodesContent } from '::app/editor/document/hooks/save-document/help
 import { saveNewDocument } from '::app/editor/document/hooks/save-document/helpers/save-new-document';
 import { saveImages } from '::app/editor/document/hooks/save-document/helpers/save-images';
 
-const saveDocument = async (): Promise<SaveOperationState> => {
-  const state: SaveOperationState = {
-    newFatherIds: {},
-    swappedDocumentIds: {},
-    swappedNodeIds: {},
-    swappedImageIds: {},
-    danglingNodes: {},
-    deletedNodes: {},
-  };
+const saveDocument = async (state: SaveOperationState) => {
   await saveNewDocument({ state });
   await saveDeletedNodes({ state });
   await saveNewNodes({ state });

@@ -179,18 +179,19 @@ const handlePaste = async e => {
     }
   }
 };
+const onpaste = e => {
+  handlePaste(e).catch(error => {
+    appActionCreators.setAlert({
+      title: 'Could not perform the paste',
+      description: 'Please submit a bug report',
+      error,
+      type: AlertType.Error,
+    });
+  });
+};
 const setupClipboard = () => {
   const editableDiv = document.getElementById('rich-text');
-  editableDiv.onpaste = e => {
-    handlePaste(e).catch(error => {
-      appActionCreators.setAlert({
-        title: 'Could not perform the paste',
-        description: 'Please submit a bug report',
-        error,
-        type: AlertType.Error,
-      });
-    });
-  };
+  editableDiv.onpaste = onpaste;
 };
 
 export { setupClipboard };

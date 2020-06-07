@@ -2,8 +2,15 @@ import { createActionCreator, createReducer } from 'deox';
 import { nodesMetaMap } from '::types/misc';
 import { applyLocalModifications } from '::app/editor/document/hooks/get-document-meta/helpers/construct-tree';
 
+enum asyncOperation {
+  pending = 'pending',
+  inProgress = 'inProgress',
+  idle = 'idle',
+}
 const actionCreators = {
-  fetchNodes: createActionCreator('fetchNodes'),
+  fetchNodes: createActionCreator('fetchNodes', _ => () => {
+    return _();
+  }),
   fetchFailed: createActionCreator('fetchFailed'),
   setDocumentId: createActionCreator(
     'setDocumentId',
@@ -16,9 +23,13 @@ const actionCreators = {
   ),
   setCacheTimeStamp: createActionCreator(
     'setCacheTimeStamp',
-    _ => (timeStamp: number = new Date().getTime()) => _(timeStamp),
+    _ => (timeStamp: number = new Date().getTime()) => {
+      return _(timeStamp);
+    },
   ),
   save: createActionCreator('save'),
+  saveFulfilled: createActionCreator('saveFulfilled'),
+  saveInProgress: createActionCreator('saveInProgress'),
 };
 
 type State = {
@@ -26,6 +37,7 @@ type State = {
   fetchNodesStarted?: number;
   documentId: string;
   cacheTimeStamp: number;
+  saveInProgress: asyncOperation;
 };
 
 const initialState: State = {
@@ -33,6 +45,7 @@ const initialState: State = {
   fetchNodesStarted: 0,
   documentId: '',
   cacheTimeStamp: 0,
+  saveInProgress: asyncOperation.idle,
 };
 const reducer = createReducer(initialState, _ => [
   _(actionCreators.setDocumentId, (state, { payload }) => ({
@@ -49,16 +62,32 @@ const reducer = createReducer(initialState, _ => [
     ...state,
     fetchNodesStarted: new Date().getTime(),
   })),
-  _(actionCreators.setCacheTimeStamp, (state, { payload }) => ({
-    ...state,
-    cacheTimeStamp: payload,
-    nodes: applyLocalModifications({
-      nodes: state.nodes,
-      file_id: state.documentId,
-    }),
-  })),
+  _(actionCreators.setCacheTimeStamp, (state, { payload }) =>
+    state.saveInProgress !== asyncOperation.idle
+      ? state
+      : {
+          ...state,
+          cacheTimeStamp: payload,
+          nodes: applyLocalModifications({
+            nodes: state.nodes,
+            file_id: state.documentId,
+          }),
+        },
+  ),
   _(actionCreators.fetchFailed, () => ({
     ...initialState,
+  })),
+  _(actionCreators.save, state => ({
+    ...state,
+    saveInProgress: asyncOperation.pending,
+  })),
+  _(actionCreators.saveInProgress, state => ({
+    ...state,
+    saveInProgress: asyncOperation.inProgress,
+  })),
+  _(actionCreators.saveFulfilled, state => ({
+    ...state,
+    saveInProgress: asyncOperation.idle,
   })),
 ]);
 

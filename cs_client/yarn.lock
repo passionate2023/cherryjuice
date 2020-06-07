@@ -14153,7 +14153,7 @@ redux-starter-kit@0.5.1:
     redux-thunk "^2.2.0"
     selectorator "^4.0.3"
 
-redux-thunk@^2.2.0:
+redux-thunk@^2.2.0, redux-thunk@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
   integrity sha512-km6dclyFnmcvxhAcrQV2AkZmPQjzPDjgVlQtR0EQjxZPyJ0BnMf3in1ryuR8A2qU0HldVRfxYXbFSKlI3N7Slw==
@@ -14685,6 +14685,13 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   integrity sha1-6Eg5bwV9Ij8kOGkkYY4laUFh7Ec=
   dependencies:
     aproba "^1.1.1"
+
+rxjs-watcher@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/rxjs-watcher/-/rxjs-watcher-1.1.3.tgz#7995716218faddd6d404aa4e63119605b51eacb8"
+  integrity sha512-a34yFD6FvGiXVRopwJm2Lzw8CVc2o1W+yggYIzCtycsOm4ZTpkTN6FubFvBlymJyzAEWAfGznHMWcixQYK6F3w==
+  dependencies:
+    rxjs "^6.3.3"
 
 rxjs@^6.3.3, rxjs@^6.4.0, rxjs@^6.5.3:
   version "6.5.4"

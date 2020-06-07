@@ -6,10 +6,12 @@ import { swapNodeIdIfApplies } from '::app/editor/document/hooks/save-document/h
 
 const b64toBlob = ({ base64, id }): Promise<Blob> =>
   fetch(`data:image/png;base64,${base64}`).then(async res => {
-    const blob = await res.blob();
-    // @ts-ignore
-    blob.name = id;
-    return blob;
+    if (base64) {
+      const blob = await res.blob();
+      // @ts-ignore
+      blob.name = id;
+      return blob;
+    }
   });
 type SaveImagesProps = SaveOperationProps & {};
 const saveImages = async ({ state }: SaveImagesProps) => {

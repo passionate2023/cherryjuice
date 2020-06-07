@@ -3,8 +3,8 @@ import { getEditor } from '::app/editor/document/rich-text/hooks/get-node-images
 import { useEffect } from 'react';
 const attachWidthAndHeight = (image: HTMLImageElement) => () => {
   const { width, height } = image;
-  image.style.width = `${width}px`;
-  image.style.height = `${height}px`;
+  if (width) image.style.width = `${width}px`;
+  if (height) image.style.height = `${height}px`;
 };
 type AddMetaToPastedImagesProps = {
   requestId: string | number;

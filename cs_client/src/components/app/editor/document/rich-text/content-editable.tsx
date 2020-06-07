@@ -26,7 +26,7 @@ const ContentEditable = ({
   processLinks,
 }: Props) => {
   const { pastedImages } = useContext(DocumentContext);
-  useSetupStuff();
+  useSetupStuff(node_id);
 
   const ref = useRef();
   useHandleContentChanges({ nodeId, ref });
