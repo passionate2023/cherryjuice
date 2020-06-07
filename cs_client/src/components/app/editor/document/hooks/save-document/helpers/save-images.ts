@@ -16,7 +16,10 @@ const b64toBlob = ({ base64, id }): Promise<Blob> =>
 type SaveImagesProps = SaveOperationProps & {};
 const saveImages = async ({ state }: SaveImagesProps) => {
   const newImagesPerNode = apolloCache.changes.image.created;
-  for await (const [nodeId, { base64 }] of Object.entries(newImagesPerNode)) {
+  const nodes = Object.entries(newImagesPerNode).filter(
+    ([id]) => !state.deletedNodes[id],
+  );
+  for await (const [nodeId, { base64 }] of nodes) {
     const node = apolloCache.node.get(swapNodeIdIfApplies(state)(nodeId));
     const images: Blob[] = await Promise.all(
       base64
