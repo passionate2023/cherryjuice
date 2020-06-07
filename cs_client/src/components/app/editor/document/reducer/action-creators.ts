@@ -13,12 +13,6 @@ const actionCreators = (() => {
     pastedImages: () => {
       state.dispatch({ type: actions.pastedImages });
     },
-    setSavingInProgress: () => {
-      state.dispatch({ type: actions.savingInProgress, value: true });
-    },
-    clearSavingInProgress: () => {
-      state.dispatch({ type: actions.savingInProgress, value: false });
-    },
   };
 })();
 

@@ -30,7 +30,6 @@ const useProtectedRoutes = ({ session }) => {
     const isOnLoginOrSignUp = /(^\/login|^\/signup)/.test(
       navigate.location.pathname,
     );
-    debugger
     if (!session.token) {
       if (!isOnLoginOrSignUp) navigate.login();
       localSessionManager.clear();

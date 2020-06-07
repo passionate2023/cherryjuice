@@ -14,9 +14,6 @@ const apolloCache = (() => {
     ...cloneObj<CacheState>(cacheInitialState),
   };
   return {
-    __setCache: (cache: any) => (state.cache = cache),
-    __setClient: (client: ApolloClient<any>) => (state.client = client),
-    __resetCache: async () => await state.cache.reset(),
     __state: (() => ({
       get modifications() {
         return cloneObj(state.modifications);
@@ -24,6 +21,11 @@ const apolloCache = (() => {
       cache: state.cache,
     }))(),
     client: {
+      resetCache: async () => await state.cache.reset(),
+      set: (client: ApolloClient<any>) => {
+        state.client = client;
+        state.cache = client.cache;
+      },
       query: <T, U>(args: {
         path: GqlDataPath<U>;
         query: DocumentNode;

@@ -15,6 +15,7 @@ module.exports = {
       tsConfig: {
         ...tsconfig.compilerOptions,
         target: 'es6',
+        allowJs: true,
       },
       babelConfig: false,
     },

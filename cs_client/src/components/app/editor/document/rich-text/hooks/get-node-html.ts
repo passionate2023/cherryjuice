@@ -2,12 +2,13 @@ import { QUERY_NODE_CONTENT } from '::graphql/queries';
 import { useQueryTimeout } from '::hooks/use-query-timeout';
 import { ApolloError } from 'apollo-client';
 import { apolloCache } from '::graphql/cache/apollo-cache';
-import { useQuery } from '@apollo/react-hooks';
+import { useReloadQuery } from '::hooks/use-reload-query';
 
 const useGetNodeHtml = ({
   node_id,
   file_id,
   nodeId,
+  reloadRequestIDs,
 }): {
   html: { node_id: number; htmlRaw: string };
   processLinks: number;
@@ -18,9 +19,15 @@ const useGetNodeHtml = ({
     file_id,
     node_id,
   };
-  let { data, error } = useQuery(QUERY_NODE_CONTENT.html.query, {
-    variables: queryVariables,
-  });
+  let { data, error } = useReloadQuery(
+    {
+      reloadRequestIDs,
+    },
+    {
+      query: QUERY_NODE_CONTENT.html.query,
+      queryVariables,
+    },
+  );
   useQueryTimeout(
     {
       queryData: data,

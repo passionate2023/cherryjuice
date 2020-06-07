@@ -19,7 +19,6 @@
     "sourceMap": true,
     "module": "esnext",
     "esModuleInterop": true,
-    "moduleResolution": "node",
-    "allowJs": true
+    "moduleResolution": "node"
   }
 }

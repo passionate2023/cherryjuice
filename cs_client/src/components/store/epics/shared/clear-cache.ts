@@ -4,8 +4,8 @@ import { tap } from 'rxjs/operators';
 import { clearLocalChanges } from '::app/editor/document/hooks/get-document-meta/helpers/clear-local-changes';
 
 const resetCache = of(documentActionCreators.setCacheTimeStamp(0)).pipe(
-  tap(() => {
-    clearLocalChanges();
+  tap(async () => {
+    await clearLocalChanges();
   }),
 );
 

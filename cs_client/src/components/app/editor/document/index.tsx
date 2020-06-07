@@ -66,7 +66,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
 
   return (
     <DocumentContext.Provider value={documentState}>
-      <LinearProgress loading={fetchNodesStarted} />
+      <LinearProgress loading={Boolean(fetchNodesStarted)} />
       {nodes && (
         <Fragment>
           {state.selectedNode && (

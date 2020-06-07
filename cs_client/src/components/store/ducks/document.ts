@@ -23,14 +23,14 @@ const actionCreators = {
 
 type State = {
   nodes?: nodesMetaMap;
-  fetchNodesStarted: boolean;
+  fetchNodesStarted?: number;
   documentId: string;
   cacheTimeStamp: number;
 };
 
 const initialState: State = {
   nodes: undefined,
-  fetchNodesStarted: false,
+  fetchNodesStarted: 0,
   documentId: '',
   cacheTimeStamp: 0,
 };
@@ -42,12 +42,12 @@ const reducer = createReducer(initialState, _ => [
   })),
   _(actionCreators.fetchNodesFulfilled, (state, { payload }) => ({
     ...state,
-    fetchNodesStarted: false,
+    fetchNodesStarted: 0,
     nodes: payload,
   })),
   _(actionCreators.fetchNodesStarted, state => ({
     ...state,
-    fetchNodesStarted: true,
+    fetchNodesStarted: new Date().getTime(),
   })),
   _(actionCreators.setCacheTimeStamp, (state, { payload }) => ({
     ...state,

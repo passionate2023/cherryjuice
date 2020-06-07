@@ -44,6 +44,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
     node_id,
     file_id,
     nodeId,
+    reloadRequestIDs: [fetchNodesStarted],
   });
 
   useSetCurrentNode(node_id, nodes);
