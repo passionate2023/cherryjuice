@@ -8,4 +8,8 @@ const isValidUrl = (url: string): boolean => {
 
   return true;
 };
-export { insertAt, isValidUrl };
+
+const isNotPngBase64 = (image: HTMLImageElement) =>
+  !image.src.startsWith('data:image/png');
+
+export { insertAt, isValidUrl, isNotPngBase64 };

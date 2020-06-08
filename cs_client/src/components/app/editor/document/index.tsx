@@ -17,11 +17,13 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac } from '::root/store/actions.types';
 import { setHighestNodeId } from '::app/editor/document/hooks/get-document-meta/helpers/set-highset-node_id';
 import { navigate } from '::root/router/navigate';
+import { asyncOperation } from '::root/store/ducks/document';
 
 const mapState = (state: Store) => ({
   nodes: state.document.nodes,
   fetchNodesStarted: state.document.fetchNodesStarted,
   cacheTimeStamp: state.document.cacheTimeStamp,
+  saveInProgress: state.document.saveInProgress,
 });
 
 const connector = connect(mapState);
@@ -36,6 +38,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   nodes,
   fetchNodesStarted,
   cacheTimeStamp,
+  saveInProgress,
 }) => {
   const { showTree, contentEditable, isOnMobile, processLinks } = state;
   const [documentState, dispatch] = useReducer(
@@ -66,7 +69,11 @@ const Document: React.FC<Props & PropsFromRedux> = ({
 
   return (
     <DocumentContext.Provider value={documentState}>
-      <LinearProgress loading={Boolean(fetchNodesStarted)} />
+      <LinearProgress
+        loading={
+          Boolean(fetchNodesStarted) || saveInProgress !== asyncOperation.idle
+        }
+      />
       {nodes && (
         <Fragment>
           {state.selectedNode && (

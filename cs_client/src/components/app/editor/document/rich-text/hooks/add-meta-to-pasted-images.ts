@@ -4,11 +4,6 @@ import { useEffect } from 'react';
 import { replaceImageUrlWithBase64 } from '::helpers/editing/clipboard';
 import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
-const attachWidthAndHeight = (image: HTMLImageElement) => () => {
-  const { width, height } = image;
-  if (width) image.style.width = `${width}px`;
-  if (height) image.style.height = `${height}px`;
-};
 type AddMetaToPastedImagesProps = {
   requestId: string | number;
 };
@@ -23,8 +18,6 @@ const useAddMetaToPastedImages = ({
         (image: HTMLImageElement) => {
           replaceImageUrlWithBase64(image)
             .then(() => {
-              image.onload = attachWidthAndHeight(image);
-              attachWidthAndHeight(image)();
               image.classList.add('rich-text__image');
               image.setAttribute('data-id', new Date().getTime().toString());
             })

@@ -17,7 +17,7 @@ import { getDDOE } from '::helpers/editing/execK/steps/pipe1/ddoes';
 import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
-import { isValidUrl } from '::helpers/misc';
+import { isValidUrl, isNotPngBase64 } from '::helpers/misc';
 
 const blobToBase64 = (file: Blob): Promise<string> =>
   new Promise(resolve => {
@@ -31,12 +31,35 @@ const urlToBase64 = (url: string): Promise<string> =>
   fetch(url)
     .then(res => res.blob())
     .then(blobToBase64);
+
+const anyImageBase64ToPngBase64 = (image: HTMLImageElement): string => {
+  const canvas = document.createElement('canvas');
+  canvas.width = image.width;
+  canvas.height = image.height;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(image, 0, 0, image.width, image.height);
+  return canvas.toDataURL('image/png');
+};
+const attachWidthAndHeight = (image: HTMLImageElement) => () => {
+  const { width, height } = image;
+  if (width) image.style.width = `${width}px`;
+  if (height) image.style.height = `${height}px`;
+};
 const replaceImageUrlWithBase64 = async (
   image: HTMLImageElement,
 ): Promise<void> => {
   if (isValidUrl(image.src)) {
-    image.src = await  urlToBase64(image.src)
+    image.src = await urlToBase64(image.src);
   }
+  await new Promise(res => {
+    image.onload = () => {
+      attachWidthAndHeight(image)();
+      if (isNotPngBase64(image)) {
+        image.src = anyImageBase64ToPngBase64(image);
+      }
+      res();
+    };
+  });
 };
 const cleanHtml = html => {
   if (html.startsWith('<HTML><HEAD></HEAD><BODY><!--StartFragment-->'))

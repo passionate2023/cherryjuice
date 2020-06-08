@@ -92,3 +92,4 @@ const reducer = createReducer(initialState, _ => [
 ]);
 
 export { reducer as documentReducer, actionCreators as documentActionCreators };
+export { asyncOperation };
