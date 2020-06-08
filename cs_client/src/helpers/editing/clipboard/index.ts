@@ -109,6 +109,7 @@ const processClipboard: { [p: string]: (str) => TAHtml[] } = {
       options: {
         useObjForTextNodes: true,
         serializeNonTextElements: true,
+        removeAttributes: true,
       },
     });
     if (abstractHtml[0] === '\n') abstractHtml.shift();
@@ -181,7 +182,7 @@ const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
     putCursorAtTheEndOfPastedElement({
       newEndElement,
     });
-    if (pastedData.some(ahtml => ahtml?.type === 'png')) {
+    if (pastedData.some(ahtml => (ahtml as any)?.type === 'png')) {
       documentActionCreators.pastedImages();
     }
   } catch (e) {

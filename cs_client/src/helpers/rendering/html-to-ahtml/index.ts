@@ -10,16 +10,18 @@ import {
 } from '::helpers/rendering/html-to-ahtml/helpers/helpers';
 import { extractAnchor } from '::helpers/rendering/html-to-ahtml/extractors/anchor';
 
+type GetAhtmlOptions = {
+  useObjForTextNodes?: boolean;
+  serializeNonTextElements?: boolean;
+  reduceLines?: boolean;
+  swappedImageIds?: {
+    [temporaryId: string]: string;
+  };
+  removeAttributes?: boolean;
+};
 type TProps = {
   DDOEs: Node[];
-  options?: {
-    useObjForTextNodes?: boolean;
-    serializeNonTextElements?: boolean;
-    reduceLines?: boolean;
-    swappedImageIds?: {
-      [temporaryId: string]: string;
-    };
-  };
+  options?: GetAhtmlOptions;
 };
 const getAHtml = ({ DDOEs, options = {} }: TProps) => {
   const { DDOEsChildren, DDOEsAHtml } = flattenDDOEs({ DDOEs });
@@ -64,3 +66,4 @@ const getAHtml = ({ DDOEs, options = {} }: TProps) => {
 };
 
 export { getAHtml };
+export { GetAhtmlOptions };
