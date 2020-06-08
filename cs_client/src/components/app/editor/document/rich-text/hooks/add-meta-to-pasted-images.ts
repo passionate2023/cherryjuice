@@ -1,6 +1,9 @@
 import { createIsNotProcessed } from '::hooks/misc/isnot-processed';
 import { getEditor } from '::app/editor/document/rich-text/hooks/get-node-images';
 import { useEffect } from 'react';
+import { replaceImageUrlWithBase64 } from '::helpers/editing/clipboard';
+import { appActionCreators } from '::app/reducer';
+import { AlertType } from '::types/react';
 const attachWidthAndHeight = (image: HTMLImageElement) => () => {
   const { width, height } = image;
   if (width) image.style.width = `${width}px`;
@@ -18,10 +21,22 @@ const useAddMetaToPastedImages = ({
       const editor = getEditor();
       Array.from(editor.querySelectorAll('img:not([class])')).forEach(
         (image: HTMLImageElement) => {
-          image.onload = attachWidthAndHeight(image);
-          attachWidthAndHeight(image)();
-          image.classList.add('rich-text__image');
-          image.setAttribute('data-id', new Date().getTime().toString());
+          replaceImageUrlWithBase64(image)
+            .then(() => {
+              image.onload = attachWidthAndHeight(image);
+              attachWidthAndHeight(image)();
+              image.classList.add('rich-text__image');
+              image.setAttribute('data-id', new Date().getTime().toString());
+            })
+            .catch(error => {
+              image.remove();
+              appActionCreators.setAlert({
+                title: 'could not download the pasted image',
+                type: AlertType.Error,
+                description: 'verify your network connection',
+                error,
+              });
+            });
         },
       );
     }

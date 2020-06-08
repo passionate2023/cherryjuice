@@ -17,16 +17,27 @@ import { getDDOE } from '::helpers/editing/execK/steps/pipe1/ddoes';
 import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
+import { isValidUrl } from '::helpers/misc';
 
-const getPngBase64 = file =>
+const blobToBase64 = (file: Blob): Promise<string> =>
   new Promise(resolve => {
     const reader = new FileReader();
     reader.onload = event => {
-      resolve(event.target.result);
+      resolve(event.target.result as string);
     };
     reader.readAsDataURL(file);
   });
-
+const urlToBase64 = (url: string): Promise<string> =>
+  fetch(url)
+    .then(res => res.blob())
+    .then(blobToBase64);
+const replaceImageUrlWithBase64 = async (
+  image: HTMLImageElement,
+): Promise<void> => {
+  if (isValidUrl(image.src)) {
+    image.src = await  urlToBase64(image.src)
+  }
+};
 const cleanHtml = html => {
   if (html.startsWith('<HTML><HEAD></HEAD><BODY><!--StartFragment-->'))
     html = html.replace(
@@ -168,7 +179,7 @@ const handlePaste = async e => {
     const { clipboardData } = e;
     if (clipboardData.types.includes('Files')) {
       const file = clipboardData.files[0];
-      const base64 = await getPngBase64(file);
+      const base64 = await blobToBase64(file);
       addNodeToDom({ pastedData: processClipboard.image(base64) });
     } else if (clipboardData.types.includes('text/html')) {
       const pastedData = e.clipboardData.getData('text/html');
@@ -194,4 +205,4 @@ const setupClipboard = () => {
   editableDiv.onpaste = onpaste;
 };
 
-export { setupClipboard };
+export { setupClipboard, replaceImageUrlWithBase64 };
