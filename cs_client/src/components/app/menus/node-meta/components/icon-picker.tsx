@@ -3,7 +3,7 @@ import { modIconPicker, modNodeMeta } from '::sass-modules/index';
 import { Icon, ICON_GROUP, Icons } from '::shared-components/icon';
 import { useState } from 'react';
 import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
-import { testIds } from '::cypress/index';
+import { testIds } from '::cypress/support/helpers/test-ids';
 
 const icons = [...Object.entries(Icons.cherrytree.custom_icons)];
 

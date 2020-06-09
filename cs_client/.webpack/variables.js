@@ -38,6 +38,7 @@ module.exports = {
     env: undefined /*path.join(__dirname, '../.env')*/,
     src: [
       path.resolve(__dirname, '../src'),
+      path.resolve(__dirname, '../cypress'),
       path.resolve(__dirname, '../types'),
       fs.realpathSync('node_modules/@cs/ahtml-to-html'),
     ],

@@ -15,7 +15,7 @@ import { getNode } from '::app/menus/node-meta/helpers/get-node';
 import { modNodeMeta } from '::sass-modules/index';
 import { IconPicker } from '::app/menus/node-meta/components/icon-picker';
 import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
-import { testIds } from '::cypress/index';
+import { testIds } from '::cypress/support/helpers/test-ids';
 
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store';

@@ -6,7 +6,7 @@ import { useDeleteNode } from '::app/menus/modals/delete-node/hooks/delete-node'
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { ConfirmationModal } from '::shared-components/modal/confirmation-modal';
 import { AlertType } from '::types/react';
-import { testIds } from '::cypress/index';
+import { testIds } from '::cypress/support/helpers/test-ids';
 
 export type Props = {
   show: boolean;

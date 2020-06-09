@@ -16,6 +16,7 @@ export const dndNode = ({ tree }) => {
       wait.s1();
       const targetSelector = getElementPath(target$[1], 'tree');
       const draggedSelector = getElementPath(dragged$[1], 'tree');
+      // @ts-ignore
       cy.get(targetSelector).drag(draggedSelector, { force: true });
       targetNode.children.push(draggedNode);
       draggedNode.parent = targetNode.id;
