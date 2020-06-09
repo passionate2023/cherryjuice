@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import * as React from 'react';
-import { modAuthBanner, modLogin } from '::sass-modules/index';
+import { modLogin } from '::sass-modules/index';
 import { ICON_COLOR, Icons } from '::shared-components/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { TextInput, TextInputProps } from '::shared-components/form/text-input';
@@ -11,7 +11,6 @@ import { AuthScreen } from '::auth/auth-screen';
 import { createRef, useEffect, useRef } from 'react';
 import { AuthUser } from '::types/graphql/generated';
 import { LinearProgress } from '::shared-components/linear-progress';
-import { Banner } from '::auth/banner';
 import { Link } from 'react-router-dom';
 import { rootActionCreators } from '::root/root.reducer';
 import { useDefaultValues } from '::hooks/use-default-form-values';
@@ -73,18 +72,13 @@ type Props = {
   session: AuthUser;
 };
 const SignUpForm: React.FC<Props> = () => {
-  useModalKeyboardEvents({
-    modalSelector: '.' + modLogin.login__card,
-    onCloseModal: () => undefined,
-    focusableElementsSelector: ['a', 'input[type="submit"]'],
-  });
   const [mutate, { loading, error, data }] = useMutation(
     USER_MUTATION.signUp.query,
   );
   const formRef = useRef<HTMLFormElement>();
-  const signUp = e => {
+  const signUp = (e?: any) => {
     if (formRef.current.checkValidity()) {
-      e.preventDefault();
+      if (e) e.preventDefault();
       const variables = Object.fromEntries(
         inputs.map(({ variableName, inputRef }) => [
           variableName,
@@ -105,9 +99,14 @@ const SignUpForm: React.FC<Props> = () => {
     if (session?.token) rootActionCreators.setSession(session);
   }, [data]);
   useDefaultValues(inputs);
+  useModalKeyboardEvents({
+    modalSelector: '.' + modLogin.login__card,
+    focusableElementsSelector: ['a', 'input[type="submit"]'],
+    onCloseModal: () => undefined,
+    onConfirmModal: signUp,
+  });
   return (
-    <AuthScreen>
-      <Banner error={error} className={modAuthBanner.bannerSignUp} />
+    <AuthScreen error={error}>
       <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
