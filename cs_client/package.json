@@ -4,7 +4,7 @@
   "scripts": {
     "postinstall": "npm link @cs/ahtml-to-html",
     "watch:liveserver": "webpack-dev-server --color --progress --config .webpack/webpack.dev.js ",
-    "build": ".webpack --config .webpack/webpack.prod.js",
+    "build": "webpack --config .webpack/webpack.prod.js",
     "cypress:open": "yarn cypress open",
     "watch:server": "cd ../cs_server/ && yarn run watch:server ",
     "commit": "git-cz",
