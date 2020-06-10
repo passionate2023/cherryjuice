@@ -1,13 +1,14 @@
-import { appActionCreators } from '::app/reducer';
 import { NodeMeta } from '::types/graphql/adapters';
+import { ac } from '::root/store/actions.types';
 
 const setHighestNodeId = (nodes: Map<number, NodeMeta>) => {
   if (nodes) {
     const SET_HIGHEST_NODE_ID = Array.from(nodes.keys())
       .sort((a, b) => a - b)
       .pop();
-    appActionCreators.setHighestNodeId(SET_HIGHEST_NODE_ID);
-    appActionCreators.setRootNode(nodes.get(0));
+    ac.node.setHighestNode_id(SET_HIGHEST_NODE_ID);
+    const { id, node_id } = nodes.get(0);
+    ac.node.setRoot({ id, node_id });
   }
 };
 

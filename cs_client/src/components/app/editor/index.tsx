@@ -33,7 +33,6 @@ const Editor: React.FC<{ state: TState } & PropsFromRedux> = ({
             showInfoBar={state.showInfoBar}
             showRecentNodes={state.showRecentNodes}
             showTree={state.showTree}
-            selectedNodeId={state.selectedNode?.nodeId}
             documentHasUnsavedChanges={state.documentHasUnsavedChanges}
           />
         </Suspense>
@@ -52,7 +51,7 @@ const Editor: React.FC<{ state: TState } & PropsFromRedux> = ({
       )}
 
       <Suspense fallback={<Void />}>
-        <InfoBar state={state} node={state.selectedNode} />
+        <InfoBar state={state} />
       </Suspense>
     </>
   );

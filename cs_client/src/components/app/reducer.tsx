@@ -1,26 +1,12 @@
 import { TAlert } from '::types/react';
-import { NodeMeta } from '::types/graphql/adapters';
 enum NodeMetaPopupRole {
   EDIT = 1,
   CREATE_SIBLING,
   CREATE_CHILD,
 }
-export type TNodeMeta = {
-  name: string;
-  style: { color: string; fontWeight: 'normal' | 'bold' };
-  icon_id: string;
-  nodeId: string;
-  id: number;
-  is_richtxt: string;
-  createdAt: string;
-  updatedAt: string;
-};
+
 const initialState = {
   documentHasUnsavedChanges: false,
-  selectedNode: undefined,
-  rootNode: undefined,
-  highest_node_id: -1,
-  recentNodes: [], //recentNodes ? { [selectedNode]: recentNodes[selectedNode] } : {}
   processLinks: undefined,
   createDocumentRequestId: undefined,
   reloadFiles: 0,
@@ -45,9 +31,6 @@ const initialState = {
 };
 
 export type TState = typeof initialState & {
-  selectedNode?: TNodeMeta;
-  rootNode?: TNodeMeta;
-  recentNodes?: TNodeMeta[];
   alert?: TAlert;
   showNodeMeta: NodeMetaPopupRole;
   createDocumentRequestId: number;
@@ -63,7 +46,6 @@ enum actions {
   TOGGLE_RECENT_NODES_BAR,
   TOGGLE_INFO_BAR,
   RESIZE_TREE,
-  SELECT_NODE,
   RELOAD_DOCUMENT_LIST,
   SET_ALERT,
   SET_IS_ON_MOBILE,
@@ -73,12 +55,9 @@ enum actions {
   TOGGLE_USER_POPUP,
   SHOW_NODE_META,
   HIDE_NODE_META,
-  SET_HIGHEST_NODE_ID,
   TOGGLE_DELETE_DOCUMENT,
-  SET_ROOT_NODE,
   showReloadConfirmationModal,
   documentHasUnsavedChanges,
-  removeNodeFromRecentNodes,
   createDocument,
   showDocumentMetaDialog,
 }
@@ -143,11 +122,6 @@ const createActionCreators = () => {
     hidePopups: () => {
       state.dispatch({ type: actions.HIDE_POPUPS });
     },
-    selectNode: (node: TNodeMeta) =>
-      state.dispatch({
-        type: actions.SELECT_NODE,
-        value: node,
-      }),
     processLinks(value: number) {
       state.dispatch({
         type: actions.PROCESS_LINKS,
@@ -177,19 +151,9 @@ const createActionCreators = () => {
         type: actions.HIDE_NODE_META,
       });
     },
-    setHighestNodeId: (highest_node_id: number) =>
-      state.dispatch({
-        type: actions.SET_HIGHEST_NODE_ID,
-        value: { highest_node_id },
-      }),
     toggleDeleteDocumentModal: () =>
       state.dispatch({
         type: actions.TOGGLE_DELETE_DOCUMENT,
-      }),
-    setRootNode: (node: NodeMeta) =>
-      state.dispatch({
-        type: actions.SET_ROOT_NODE,
-        value: { node },
       }),
     showReloadConfirmationModal: () => {
       state.dispatch({
@@ -214,12 +178,6 @@ const createActionCreators = () => {
       state.dispatch({
         type: actions.setSnackbarMessage,
         value: undefined,
-      });
-    },
-    removeNodeFromRecentNodes: (nodeId: string) => {
-      state.dispatch({
-        type: actions.removeNodeFromRecentNodes,
-        value: nodeId,
       });
     },
     createDocument: () => {
@@ -280,19 +238,6 @@ reducer = (
       return { ...state, treeSize: action.value };
     case actions.HIDE_POPUPS:
       return { ...state, ...(state.isOnMobile && { showInfoBar: false }) };
-    case actions.SELECT_NODE:
-      return {
-        ...state,
-        selectedNode: action.value,
-        recentNodes: action.value
-          ? [
-              ...state.recentNodes.filter(
-                node => +node.id !== +action.value.id,
-              ),
-              action.value,
-            ]
-          : state.recentNodes,
-      };
 
     case actions.RELOAD_DOCUMENT_LIST:
       return {
@@ -331,13 +276,6 @@ reducer = (
       return { ...state, showNodeMeta: action.value };
     case actions.HIDE_NODE_META:
       return { ...state, showNodeMeta: undefined };
-    case actions.SET_HIGHEST_NODE_ID:
-      return {
-        ...state,
-        highest_node_id: action.value.highest_node_id,
-      };
-    case actions.SET_ROOT_NODE:
-      return { ...state, rootNode: action.value.node };
 
     case actions.documentHasUnsavedChanges:
       return {
@@ -348,13 +286,6 @@ reducer = (
       return {
         ...state,
         snackbarMessage: action.value,
-      };
-    case actions.removeNodeFromRecentNodes:
-      return {
-        ...state,
-        recentNodes: state.recentNodes.filter(
-          ({ nodeId }) => nodeId !== action.value,
-        ),
       };
     case actions.createDocument:
       return {

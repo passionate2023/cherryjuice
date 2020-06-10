@@ -2,7 +2,7 @@ import { NodeMetaPopupRole } from '::app/reducer';
 import { createNode } from '::app/menus/node-meta/helpers/create-node';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 
-const getNode = ({ showDialog, documentId, highest_node_id, nodeId }) => {
+const getNode = ({ showDialog, documentId, highestNode_id, nodeId }) => {
   let node, previous_sibling_node_id;
   const newNode =
     showDialog === NodeMetaPopupRole.CREATE_SIBLING ||
@@ -17,7 +17,7 @@ const getNode = ({ showDialog, documentId, highest_node_id, nodeId }) => {
       : -1),
       (node = createNode({
         documentId,
-        highest_node_id,
+        highestNode_id,
         fatherId: selectedNodeIsASibling
           ? _selectedNode.fatherId
           : _selectedNode.id,

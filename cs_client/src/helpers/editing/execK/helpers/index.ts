@@ -7,7 +7,8 @@ const stringToMultipleElements = (multipleElements: string): Element[] =>
     new DOMParser().parseFromString(multipleElements, 'text/html').body
       .children,
   );
-const cloneObj = <T>(ogObj): T => JSON.parse(JSON.stringify(ogObj));
+const cloneObj = <T>(ogObj: T): typeof ogObj =>
+  JSON.parse(JSON.stringify(ogObj));
 
 const nonTextualElements = ['img', 'table'];
 const isElementNonTextual = node => nonTextualElements.includes(node.localName);

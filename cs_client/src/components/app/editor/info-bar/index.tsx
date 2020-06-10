@@ -3,11 +3,20 @@ import { formatTime } from '::helpers/time';
 import { modInfoBar } from '::sass-modules/index';
 import { TState } from '::app/reducer';
 
-const defaultProps = { is_richtxt: '', createdAt: '', updatedAt: '' };
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store';
+
+const mapState = (state: Store) => ({
+  node: state.document.nodes?.get(state.node.selectedNode?.node_id),
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
 type Props = {
-  node?: any;
   state: TState;
 };
+const defaultProps = { is_richtxt: '', createdAt: '', updatedAt: '' };
 const doubleSpace = '\u00A0 ';
 const Separator = () => (
   <span className={modInfoBar.infoBar__separator}>
@@ -15,11 +24,11 @@ const Separator = () => (
   </span>
 );
 
-const InfoBar: React.FC<Props> = ({
+const InfoBar: React.FC<Props & PropsFromRedux> = ({
   node,
   state: { showInfoBar, isOnMobile },
 }) => {
-  let { is_richtxt, createdAt, updatedAt } = node ? node : defaultProps;
+  const { is_richtxt, createdAt, updatedAt } = node ? node : defaultProps;
   return (
     <>
       {!isOnMobile || showInfoBar ? (
@@ -48,5 +57,5 @@ const InfoBar: React.FC<Props> = ({
   );
 };
 
-// export { InfoBar };
-export default InfoBar;
+const _ = connector(InfoBar);
+export default _;

@@ -24,6 +24,8 @@ const mapState = (state: Store) => ({
   fetchNodesStarted: state.document.fetchNodesStarted,
   cacheTimeStamp: state.document.cacheTimeStamp,
   saveInProgress: state.document.saveInProgress,
+  selectedNode: state.node.selectedNode,
+  recentNodes: state.node.recentNodes,
 });
 
 const connector = connect(mapState);
@@ -39,6 +41,8 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   fetchNodesStarted,
   cacheTimeStamp,
   saveInProgress,
+  selectedNode,
+  recentNodes,
 }) => {
   const { showTree, contentEditable, isOnMobile, processLinks } = state;
   const [documentState, dispatch] = useReducer(
@@ -56,15 +60,13 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   }, [nodes]);
   useTrackDocumentChanges({ cacheTimeStamp });
   useEffect(() => {
-    if (navigate.location.pathname.endsWith(file_id))
-      appActionCreators.selectNode(undefined);
+    if (navigate.location.pathname.endsWith(file_id)) ac.node.clearSelected();
   }, [navigate.location.pathname]);
 
-  // temp hooks
   useEffect(() => {
     ac.document.setDocumentId(file_id);
     appActionCreators.showTree();
-    appActionCreators.selectNode(undefined);
+    ac.node.clearSelected();
   }, [file_id]);
 
   return (
@@ -76,8 +78,15 @@ const Document: React.FC<Props & PropsFromRedux> = ({
       />
       {nodes && (
         <Fragment>
-          {state.selectedNode && (
-            <RecentNodes state={state} file_id={file_id} />
+          {Boolean(selectedNode.node_id) && (
+            <RecentNodes
+              isOnMobile={state.isOnMobile}
+              showRecentNodes={state.showRecentNodes}
+              file_id={file_id}
+              recentNodes={recentNodes}
+              selectedNode_id={selectedNode.node_id}
+              nodes={nodes}
+            />
           )}
           {showTree && (
             <ErrorBoundary>

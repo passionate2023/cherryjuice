@@ -13,18 +13,18 @@ const defaultNode = {
   'image({"thumbnail":true})': [],
 };
 const createNode = ({
-  highest_node_id,
+  highestNode_id,
   documentId,
   father_id,
   fatherId,
 }: {
-  highest_node_id: number;
+  highestNode_id: number;
   documentId: string;
   meta?: NodeMetaIt;
   father_id: number;
   fatherId: string;
 }): NodeNew => {
-  const node_id = highest_node_id + 1;
+  const node_id = highestNode_id + 1;
   return {
     ...defaultNode,
     id: `TEMP:${documentId}:${node_id}`,

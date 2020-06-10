@@ -15,11 +15,17 @@ type Props = {
   node_id: number;
   nodes?: Map<number, NodeMeta>;
   depth: number;
-  styles: string;
+  node_title_styles: string;
   icon_id: string;
 };
 
-const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
+const Node: React.FC<Props> = ({
+  node_id,
+  nodes,
+  depth,
+  node_title_styles,
+  icon_id,
+}) => {
   const { child_nodes, name } = nodes.get(node_id);
   const match = useRouteMatch<{ file_id: string }>();
   const { file_id } = match.params;
@@ -95,7 +101,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
         />
         <div
           className={nodeMod.node__title}
-          style={{ ...(styles && JSON.parse(styles)) }}
+          style={{ ...(node_title_styles && JSON.parse(node_title_styles)) }}
           ref={titleRef}
           {...nodeDndProps}
         >
@@ -125,7 +131,7 @@ const Node: React.FC<Props> = ({ node_id, nodes, depth, styles, icon_id }) => {
                 nodes={nodes}
                 depth={depth + 1}
                 icon_id={node.icon_id}
-                styles={node.node_title_styles}
+                node_title_styles={node.node_title_styles}
               />
             ))}
         </ul>

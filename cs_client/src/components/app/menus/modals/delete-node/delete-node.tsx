@@ -8,13 +8,26 @@ import { ConfirmationModal } from '::shared-components/modal/confirmation-modal'
 import { AlertType } from '::types/react';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store';
+
+const mapState = (state: Store) => ({
+  nodeId: state.node.selectedNode.id,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
 export type Props = {
   show: boolean;
   onClose: EventHandler<undefined>;
-  nodeId: string;
 };
 
-const DeleteNode: React.FC<Props> = ({ onClose, show, nodeId }) => {
+const DeleteNode: React.FC<Props & PropsFromRedux> = ({
+  onClose,
+  show,
+  nodeId,
+}) => {
   const node: NodeCached = useMemo(() => apolloCache.node.get(nodeId), [
     nodeId,
   ]);
@@ -48,5 +61,5 @@ const DeleteNode: React.FC<Props> = ({ onClose, show, nodeId }) => {
     />
   );
 };
-
-export default DeleteNode;
+const _ = connector(DeleteNode);
+export default _;
