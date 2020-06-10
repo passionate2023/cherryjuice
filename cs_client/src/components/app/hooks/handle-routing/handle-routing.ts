@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { navigate } from '::root/router/navigate';
+import { router } from '::root/router/router';
 import { routingLogic } from '::app/hooks/handle-routing/helpers/routing-logic';
 
 const useHandleRouting = (documentId: string) => {
@@ -7,11 +7,11 @@ const useHandleRouting = (documentId: string) => {
   useEffect(() => {
     routingLogic({
       documentId,
-      pathname: navigate.location.pathname,
+      pathname: router.location.pathname,
       isFirstCall: initialCall.current,
     });
     initialCall.current = false;
-  }, [documentId, navigate.location.pathname]);
+  }, [documentId, router.location.pathname]);
 };
 
 export { useHandleRouting };

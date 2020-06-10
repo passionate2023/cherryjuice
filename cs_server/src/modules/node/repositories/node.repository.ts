@@ -26,13 +26,11 @@ export class NodeRepository extends Repository<Node> {
   async getNodeMetaById({
     documentId,
     node_id,
-    user,
   }: GetNodeByNodeIdIt): Promise<Node> {
     return this.findOneOrFail({
       where: {
         node_id,
         documentId,
-        userId: user.id,
       },
     });
   }
@@ -44,24 +42,23 @@ export class NodeRepository extends Repository<Node> {
   }
 
   async saveAHtml({
-    user,
-    ahtml,
+    data: { ahtml, updatedAt },
     node_id,
     documentId,
   }: SaveAhtmlDto): Promise<string> {
     const res = await this.createQueryBuilder('node')
       .update()
-      .set({ ahtml })
-      .where({ node_id, userId: user.id, documentId })
+      .set({ ahtml, updatedAt: new Date(updatedAt) })
+      .where({ node_id, documentId })
       .execute();
     return JSON.stringify(res);
   }
 
-  async setMeta({ user, documentId, node_id, meta }: NodeMetaDto) {
+  async setMeta({ documentId, node_id, meta }: NodeMetaDto) {
     const res = await this.createQueryBuilder('node')
       .update()
-      .set(meta)
-      .where({ node_id, userId: user.id, documentId })
+      .set({ ...meta, updatedAt: new Date(meta.updatedAt) })
+      .where({ node_id, documentId })
       .execute();
 
     return JSON.stringify(res);
@@ -71,7 +68,8 @@ export class NodeRepository extends Repository<Node> {
     const node = new Node();
     copyProperties(meta, node, {});
     node.documentId = documentId;
-
+    node.createdAt = new Date(meta.createdAt);
+    node.updatedAt = new Date(meta.updatedAt);
     if (node.father_id !== -1) {
       node.father = await this.getNodeMetaById({
         node_id: node.father_id,

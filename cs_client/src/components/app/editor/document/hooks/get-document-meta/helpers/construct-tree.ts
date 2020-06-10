@@ -25,6 +25,7 @@ const applyLocalModifications = ({
     nodes = new Map(nodes);
     const modifiedNodes = [
       ...apolloCache.changes.node.meta.map(([nodeId]) => nodeId),
+      ...apolloCache.changes.node.html,
       ...apolloCache.changes.node.created,
     ];
     for (const nodeId of modifiedNodes) {

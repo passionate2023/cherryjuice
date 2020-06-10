@@ -30,12 +30,11 @@ const DOCUMENT_MUTATION = {
       mutation saveAhtml(
         $file_id: String!
         $node_id: Int!
-        $ahtml: String!
-        $deletedImages: [String]!
+        $data: SaveHtmlIt!
       ) {
         document(file_id: $file_id) {
           node(node_id: $node_id) {
-            saveAHtml(ahtml: $ahtml, deletedImages: $deletedImages)
+            saveAHtml(data: $data)
           }
         }
       }

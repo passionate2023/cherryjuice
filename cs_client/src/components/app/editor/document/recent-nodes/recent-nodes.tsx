@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback } from 'react';
 import { modRecentNodes } from '::sass-modules/index';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { navigate } from '::root/router/navigate';
+import { router } from '::root/router/router';
 import { NodeMeta } from '::types/graphql/adapters';
 import { nodesMetaMap } from '::types/misc';
 
@@ -41,7 +41,7 @@ const RecentNodes: React.FC<Props> = ({
     e => {
       updateCachedHtmlAndImages();
       const node_id = e.target.dataset.id;
-      navigate.node(file_id, node_id);
+      router.node(file_id, node_id);
     },
     [file_id],
   );

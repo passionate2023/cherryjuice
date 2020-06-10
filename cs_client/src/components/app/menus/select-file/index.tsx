@@ -58,7 +58,7 @@ const SelectFile: React.FC<{
   isOnMobile;
 } & PropsFromRedux> = ({ documentId, reloadFiles, showDialog, isOnMobile }) => {
   const [selectedIDs, setSelectedIDs] = useState([]);
-  const close = appActionCreators.toggleFileSelect;
+  const close = appActionCreators.hideFileSelect;
   const open = () => {
     updateCachedHtmlAndImages();
     ac.document.setDocumentId(selectedIDs[0]);

@@ -40,8 +40,8 @@ export class NodeService {
     return await this.nodeRepository.getNodeMetaById(args);
   }
   async saveAHtml(args: SaveAhtmlDto): Promise<string> {
-    if (args.deletedImages.length)
-      await this.imageService.deleteImages(args.deletedImages);
+    if (args.data.deletedImages.length)
+      await this.imageService.deleteImages(args.data.deletedImages);
     return await this.nodeRepository.saveAHtml(args);
   }
 

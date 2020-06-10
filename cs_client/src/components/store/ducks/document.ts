@@ -16,7 +16,7 @@ enum asyncOperation {
 }
 
 const AP = createActionPrefixer('document');
-const ACs = {
+const ac = {
   // document
   fetchNodes: _('fetchNodes', _ => () => {
     return _();
@@ -36,6 +36,7 @@ const ACs = {
   save: _('save'),
   saveFulfilled: _('saveFulfilled'),
   saveInProgress: _('saveInProgress'),
+  saveFailed: _('saveFailed'),
   // node
   selectNode: _(AP('selectNode'), _ => (node: NodeId) => _(node)),
   selectRootNode: _(AP('selectRootNode'), _ => (node: NodeId) => _(node)),
@@ -83,20 +84,20 @@ const initialState: State = {
   highestNode_id: -1,
 };
 const reducer = createReducer(cloneObj(initialState), _ => [
-  _(ACs.setDocumentId, (state, { payload }) => ({
+  _(ac.setDocumentId, (state, { payload }) => ({
     ...cloneObj(initialState),
     documentId: payload,
   })),
-  _(ACs.fetchNodesFulfilled, (state, { payload }) => ({
+  _(ac.fetchNodesFulfilled, (state, { payload }) => ({
     ...state,
     fetchNodesStarted: 0,
     nodes: payload,
   })),
-  _(ACs.fetchNodesStarted, state => ({
+  _(ac.fetchNodesStarted, state => ({
     ...state,
     fetchNodesStarted: new Date().getTime(),
   })),
-  _(ACs.setCacheTimeStamp, (state, { payload }) =>
+  _(ac.setCacheTimeStamp, (state, { payload }) =>
     state.saveInProgress !== asyncOperation.idle
       ? state
       : {
@@ -108,22 +109,26 @@ const reducer = createReducer(cloneObj(initialState), _ => [
           }),
         },
   ),
-  _(ACs.fetchFailed, () => ({
+  _(ac.fetchFailed, () => ({
     ...initialState,
   })),
-  _(ACs.save, state => ({
+  _(ac.save, state => ({
     ...state,
     saveInProgress: asyncOperation.pending,
   })),
-  _(ACs.saveInProgress, state => ({
+  _(ac.saveInProgress, state => ({
     ...state,
     saveInProgress: asyncOperation.inProgress,
   })),
-  _(ACs.saveFulfilled, state => ({
+  _(ac.saveFulfilled, state => ({
     ...state,
     saveInProgress: asyncOperation.idle,
   })),
-  _(ACs.selectNode, (state, { payload: node }) => ({
+  _(ac.saveFailed, state => ({
+    ...state,
+    saveInProgress: asyncOperation.idle,
+  })),
+  _(ac.selectNode, (state, { payload: node }) => ({
     ...state,
     selectedNode: node,
     recentNodes: [
@@ -131,14 +136,14 @@ const reducer = createReducer(cloneObj(initialState), _ => [
       node.node_id,
     ],
   })),
-  _(ACs.selectRootNode, (state, { payload: node }) => ({
+  _(ac.selectRootNode, (state, { payload: node }) => ({
     ...state,
     rootNode: node,
     selectedNode: state.selectedNode.id
       ? state.selectedNode
       : getFallbackNode(state.nodes),
   })),
-  _(ACs.clearSelectedNode, (state, { payload: { removeChildren } }) => {
+  _(ac.clearSelectedNode, (state, { payload: { removeChildren } }) => {
     return {
       ...state,
       recentNodes: calcRecentNodes({
@@ -150,15 +155,15 @@ const reducer = createReducer(cloneObj(initialState), _ => [
       selectedNode: getFallbackNode(state.nodes),
     };
   }),
-  _(ACs.setHighestNode_id, (state, { payload: node_id }) => ({
+  _(ac.setHighestNode_id, (state, { payload: node_id }) => ({
     ...state,
     highestNode_id: node_id,
   })),
-  _(ACs.setHighestNode_id, (state, { payload: node_id }) => ({
+  _(ac.setHighestNode_id, (state, { payload: node_id }) => ({
     ...state,
     highestNode_id: node_id,
   })),
 ]);
 
-export { reducer as documentReducer, ACs as documentActionCreators };
+export { reducer as documentReducer, ac as documentActionCreators };
 export { asyncOperation, NodeId };

@@ -1,7 +1,7 @@
 import { createBrowserHistory } from 'history';
 
 const history = createBrowserHistory();
-const navigate = {
+const router = {
   __history: history,
   get location() {
     return history.location;
@@ -21,4 +21,4 @@ const navigate = {
   },
 };
 
-export { navigate };
+export { router };

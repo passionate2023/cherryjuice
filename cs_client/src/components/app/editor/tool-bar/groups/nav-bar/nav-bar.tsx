@@ -28,7 +28,7 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
       >
         <Icon name={Icons.material.document} />
       </ToolbarButton>
-      <ToolbarButton onClick={appActionCreators.toggleFileSelect}>
+      <ToolbarButton onClick={appActionCreators.showFileSelect}>
         <Icon name={Icons.material.folder} />
       </ToolbarButton>
       <ToolbarButton onClick={appActionCreators.toggleSettings}>

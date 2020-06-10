@@ -4,7 +4,7 @@ import { TNodeMetaState } from '::app/menus/node-meta/reducer/reducer';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
-import { navigate } from '::root/router/navigate';
+import { router } from '::root/router/router';
 
 const calculateDiff = ({
   isNewNode,
@@ -85,7 +85,7 @@ const save = ({
         },
       });
       updateCachedHtmlAndImages();
-      navigate.node(node.documentId, node.node_id);
+      router.node(node.documentId, node.node_id);
     } else {
       if (Object.keys(res)) apolloCache.node.mutate({ nodeId, meta: res });
     }

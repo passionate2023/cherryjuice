@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { navigate } from '::root/router/navigate';
+import { router } from '::root/router/router';
 
 type Props = {
   file_id: string;
@@ -38,7 +38,7 @@ const useReactRouterForAnchors = ({
           const isLocalLink = url.host === location.host;
           const isWebLink = !isLocalLink && url.protocol.startsWith('http');
           if (isLocalLink) {
-            navigate.hash(url.pathname + url.hash);
+            router.hash(url.pathname + url.hash);
             e.preventDefault();
           } else if (isWebLink) {
             window.open(url.href, '_blank');

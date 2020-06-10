@@ -13,7 +13,7 @@ import {
 import { User } from '../../user/entities/user.entity';
 import { randomUUID10 } from '../../shared';
 
-@Unique(['hash'])
+@Unique(['hash', 'userId'])
 @Entity()
 @ObjectType()
 export class Document extends BaseEntity {

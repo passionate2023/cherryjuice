@@ -1,7 +1,7 @@
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { NodeCached } from '::types/graphql/adapters';
 import { appActionCreators } from '::app/reducer';
-import { navigate } from '::root/router/navigate';
+import { router } from '::root/router/router';
 import { ac } from '::root/store/actions.types';
 
 const updateFatherNode = (deletedNode: NodeCached) => {
@@ -25,7 +25,7 @@ const deleteNode = (node: NodeCached) => {
     apolloCache.node.delete.soft(node.id);
     appActionCreators.toggleDeleteDocumentModal();
     ac.document.clearSelectedNode({ removeChildren: true });
-    navigate.document(node.documentId);
+    router.document(node.documentId);
   };
 };
 

@@ -5,9 +5,11 @@ import { TState } from '::app/reducer';
 
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store';
+import { router } from '::root/router/router';
 
 const mapState = (state: Store) => ({
   node: state.document.nodes?.get(state.document.selectedNode?.node_id),
+  documentId: state.document.documentId,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -26,6 +28,7 @@ const Separator = () => (
 
 const InfoBar: React.FC<Props & PropsFromRedux> = ({
   node,
+  documentId,
   state: { showInfoBar, isOnMobile },
 }) => {
   const { is_richtxt, createdAt, updatedAt } = node ? node : defaultProps;
@@ -46,7 +49,9 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
         ) : (
           <footer className={modInfoBar.infoBar}>
             <span className={modInfoBar.infoBar__placeHolder}>
-              No selected node
+              {!documentId && router.location.pathname === '/'
+                ? 'No selected document'
+                : 'No selected node'}
             </span>
           </footer>
         )

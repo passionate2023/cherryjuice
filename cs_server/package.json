@@ -58,7 +58,7 @@
     "short-unique-id": "^2.0.7",
     "shorthash": "^0.0.2",
     "slugify": "^1.3.6",
-    "typeorm": "^0.2.24",
+    "typeorm": "^0.2.25",
     "xml2js": "^0.4.22"
   },
   "devDependencies": {

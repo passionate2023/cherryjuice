@@ -76,7 +76,9 @@ export class DocumentMutationsResolver {
   async node(
     @Parent() parent,
     @Args('node_id', { type: () => Int }) node_id: number,
+    @GetUserGql() user: User,
   ) {
+    await this.documentService.getDocumentMetaById(user, parent.id);
     return { node_id, documentId: parent.id };
   }
 

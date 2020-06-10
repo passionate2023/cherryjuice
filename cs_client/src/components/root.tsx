@@ -17,7 +17,7 @@ import {
   rootReducer,
 } from '::root/root.reducer';
 import { store } from '::root/store';
-import { navigate } from '::root/router/navigate';
+import { router } from '::root/router/router';
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
@@ -28,13 +28,13 @@ type Props = {};
 const useProtectedRoutes = ({ session }) => {
   useEffect(() => {
     const isOnLoginOrSignUp = /(^\/login|^\/signup)/.test(
-      navigate.location.pathname,
+      router.location.pathname,
     );
     if (!session.token) {
-      if (!isOnLoginOrSignUp) navigate.login();
+      if (!isOnLoginOrSignUp) router.login();
       localSessionManager.clear();
     } else {
-      if (isOnLoginOrSignUp) navigate.home();
+      if (isOnLoginOrSignUp) router.home();
       localSessionManager.set(session);
     }
   }, [session]);

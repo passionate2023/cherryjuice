@@ -1,4 +1,4 @@
-import { navigate } from '::root/router/navigate';
+import { router } from '::root/router/router';
 
 const routingLogic = ({ documentId, pathname = '/', isFirstCall = false }) => {
   const docIdInPath = [/\/*document\/([^/]*)/.exec(pathname)]
@@ -8,10 +8,10 @@ const routingLogic = ({ documentId, pathname = '/', isFirstCall = false }) => {
   const newDocument = Boolean(documentId) && documentId !== docIdInPath;
   if (newDocumentIsEmpty) {
     if (!isFirstCall) {
-      navigate.home();
+      router.home();
     }
   } else if (newDocument) {
-    navigate.document(documentId);
+    router.document(documentId);
   }
 };
 

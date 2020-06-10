@@ -1,4 +1,5 @@
 import { Field, Float, InputType, Int } from '@nestjs/graphql';
+import { Timestamp } from '../../document/helpers/graphql-types/timestamp';
 
 @InputType()
 export class CreateNodeIt {
@@ -20,11 +21,11 @@ export class CreateNodeIt {
   @Field()
   name: string;
 
-  @Field(() => Float)
-  createdAt: Date;
+  @Field(() => Timestamp)
+  createdAt: number;
 
-  @Field(() => Float)
-  updatedAt: Date;
+  @Field(() => Timestamp)
+  updatedAt: number;
 
   @Field({ nullable: true })
   node_title_styles: string;

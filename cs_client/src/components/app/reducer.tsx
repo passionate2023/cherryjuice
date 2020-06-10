@@ -107,8 +107,11 @@ const createActionCreators = () => {
     toggleSettings: () => {
       state.dispatch({ type: actions.TOGGLE_SETTINGS });
     },
-    toggleFileSelect: () => {
-      state.dispatch({ type: actions.TOGGLE_FILE_SELECT });
+    hideFileSelect: () => {
+      state.dispatch({ type: actions.TOGGLE_FILE_SELECT, value: false });
+    },
+    showFileSelect: () => {
+      state.dispatch({ type: actions.TOGGLE_FILE_SELECT, value: true });
     },
     showTree: () => {
       state.dispatch({ type: actions.TOGGLE_TREE_ON });
@@ -231,8 +234,8 @@ reducer = (
     case actions.TOGGLE_FILE_SELECT:
       return {
         ...state,
-        showFileSelect: !state.showFileSelect,
-        reloadFiles: new Date().getTime(),
+        showFileSelect: action.value,
+        reloadFiles: action.value ? new Date().getTime() : state.reloadFiles,
       };
     case actions.RESIZE_TREE:
       return { ...state, treeSize: action.value };

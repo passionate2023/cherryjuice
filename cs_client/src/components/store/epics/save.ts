@@ -58,7 +58,11 @@ const saveEpic = (action$: Observable<Actions>) => {
       const ps = defer(() => of(postSave(state)));
       return concat(sip, updateCache, save, resetCache, ps);
     }),
-    createErrorHandler('Could not save', 'Check your network connection'),
+    createErrorHandler(
+      'Could not save',
+      'Check your network connection',
+      documentActionCreators.saveFailed,
+    ),
   );
 };
 

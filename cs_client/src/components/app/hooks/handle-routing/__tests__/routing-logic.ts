@@ -1,8 +1,8 @@
-import { navigate } from '::root/router/navigate';
+import { router } from '::root/router/router';
 import { routingLogic } from '::app/hooks/handle-routing/helpers/routing-logic';
-jest.mock('::root/router/navigate', () => {
+jest.mock('::root/router/router', () => {
   return {
-    navigate: {
+    router: {
       document: jest.fn(),
       home: jest.fn(),
     },
@@ -11,9 +11,9 @@ jest.mock('::root/router/navigate', () => {
 describe('app component routing logic', () => {
   beforeEach(() => {
     // @ts-ignore
-    navigate.document.mockReset();
+    router.document.mockReset();
     // @ts-ignore
-    navigate.home.mockReset();
+    router.home.mockReset();
   });
   it('/  x -> x', () => {
     const test = {
@@ -21,8 +21,8 @@ describe('app component routing logic', () => {
       documentId: 'x',
     };
     routingLogic(test);
-    expect(navigate.document).toHaveBeenCalledWith(test.documentId);
-    expect(navigate.home).not.toHaveBeenCalled();
+    expect(router.document).toHaveBeenCalledWith(test.documentId);
+    expect(router.home).not.toHaveBeenCalled();
   });
   it('x z -> z', () => {
     const test = {
@@ -30,8 +30,8 @@ describe('app component routing logic', () => {
       documentId: 'z',
     };
     routingLogic(test);
-    expect(navigate.document).toHaveBeenCalledWith(test.documentId);
-    expect(navigate.home).not.toHaveBeenCalled();
+    expect(router.document).toHaveBeenCalledWith(test.documentId);
+    expect(router.home).not.toHaveBeenCalled();
   });
   it('x empty (first) -> -', () => {
     const test = {
@@ -40,8 +40,8 @@ describe('app component routing logic', () => {
       isFirstCall: true,
     };
     routingLogic(test);
-    expect(navigate.document).not.toHaveBeenCalled();
-    expect(navigate.home).not.toHaveBeenCalled();
+    expect(router.document).not.toHaveBeenCalled();
+    expect(router.home).not.toHaveBeenCalled();
   });
   it('x empty -> /', () => {
     const test = {
@@ -49,8 +49,8 @@ describe('app component routing logic', () => {
       documentId: '',
     };
     routingLogic(test);
-    expect(navigate.document).not.toHaveBeenCalled();
-    expect(navigate.home).toHaveBeenCalled();
+    expect(router.document).not.toHaveBeenCalled();
+    expect(router.home).toHaveBeenCalled();
   });
   it('x x -> -', () => {
     const test = {
@@ -58,7 +58,7 @@ describe('app component routing logic', () => {
       documentId: 'x',
     };
     routingLogic(test);
-    expect(navigate.document).not.toHaveBeenCalled();
-    expect(navigate.home).not.toHaveBeenCalled();
+    expect(router.document).not.toHaveBeenCalled();
+    expect(router.home).not.toHaveBeenCalled();
   });
 });

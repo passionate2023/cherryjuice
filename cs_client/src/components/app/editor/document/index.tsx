@@ -16,7 +16,7 @@ import { Store } from '::root/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac } from '::root/store/actions.types';
 import { setHighestNodeId } from '::app/editor/document/hooks/get-document-meta/helpers/set-highset-node_id';
-import { navigate } from '::root/router/navigate';
+import { router } from '::root/router/router';
 import { asyncOperation } from '::root/store/ducks/document';
 
 const mapState = (state: Store) => ({
@@ -59,13 +59,13 @@ const Document: React.FC<Props & PropsFromRedux> = ({
     setHighestNodeId(nodes);
   }, [nodes]);
   useEffect(() => {
-    if (selectedNode.node_id) navigate.node(file_id, selectedNode.node_id);
-  }, [selectedNode.node_id]);
+    if (selectedNode.node_id) router.node(file_id, selectedNode.node_id);
+  }, [selectedNode.node_id, file_id]);
   useTrackDocumentChanges({ cacheTimeStamp });
   useEffect(() => {
-    if (navigate.location.pathname.endsWith(file_id))
+    if (router.location.pathname.endsWith(file_id))
       ac.document.clearSelectedNode();
-  }, [navigate.location.pathname]);
+  }, [router.location.pathname]);
 
   useEffect(() => {
     ac.document.setDocumentId(file_id);

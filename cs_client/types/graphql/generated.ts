@@ -128,6 +128,18 @@ export interface NodeMetaIt {
   position?: number;
   read_only?: number;
   sequence?: number;
+  updatedAt: Timestamp;
+}
+
+/**
+ * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+ */
+export type Timestamp = any;
+
+export interface SaveHtmlIt {
+  ahtml: string;
+  deletedImages: Array<string | null>;
+  updatedAt: Timestamp;
 }
 
 /**
@@ -204,6 +216,7 @@ export interface Resolver {
   Mutation?: MutationTypeResolver;
   DocumentMutation?: DocumentMutationTypeResolver;
   NodeMutation?: NodeMutationTypeResolver;
+  Timestamp?: GraphQLScalarType;
   ImageUpload?: GraphQLScalarType;
   CTBUpload?: GraphQLScalarType;
   UserMutation?: UserMutationTypeResolver;
@@ -612,8 +625,7 @@ export interface NodeMutationToMetaResolver<TParent = any, TResult = any> {
 }
 
 export interface NodeMutationToSaveAHtmlArgs {
-  ahtml: string;
-  deletedImages: Array<string | null>;
+  data: SaveHtmlIt;
 }
 export interface NodeMutationToSaveAHtmlResolver<TParent = any, TResult = any> {
   (
