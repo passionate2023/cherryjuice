@@ -6,9 +6,9 @@ const setHighestNodeId = (nodes: Map<number, NodeMeta>) => {
     const SET_HIGHEST_NODE_ID = Array.from(nodes.keys())
       .sort((a, b) => a - b)
       .pop();
-    ac.node.setHighestNode_id(SET_HIGHEST_NODE_ID);
+    ac.document.setHighestNode_id(SET_HIGHEST_NODE_ID);
     const { id, node_id } = nodes.get(0);
-    ac.node.setRoot({ id, node_id });
+    ac.document.selectRootNode({ id, node_id });
   }
 };
 

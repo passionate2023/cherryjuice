@@ -21,8 +21,8 @@ import { Store } from '::root/store';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
-  nodeId: state.node.selectedNode.id,
-  highestNode_id: state.node.highestNode_id,
+  nodeId: state.document.selectedNode.id,
+  highestNode_id: state.document.highestNode_id,
 });
 
 const connector = connect(mapState);

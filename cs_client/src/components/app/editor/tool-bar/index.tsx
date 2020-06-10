@@ -13,7 +13,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store';
 
 const mapState = (state: Store) => ({
-  selectedNodeId: state.node.selectedNode.id,
+  selectedNodeId: state.document.selectedNode.id,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);

@@ -25,7 +25,7 @@ const useDeleteNode = (nodeId: string, node: NodeCached) => {
     });
     apolloCache.node.delete.soft(node.id);
     appActionCreators.toggleDeleteDocumentModal();
-    ac.node.clearSelected();
+    ac.document.clearSelectedNode();
     navigate.document(node.documentId);
   }, [nodeId]);
 };

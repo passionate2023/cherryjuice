@@ -1,43 +1,65 @@
-import { createActionCreator, createReducer } from 'deox';
+import { createActionCreator as _, createReducer } from 'deox';
 import { nodesMetaMap } from '::types/misc';
 import { applyLocalModifications } from '::app/editor/document/hooks/get-document-meta/helpers/construct-tree';
+import { createActionPrefixer } from './shared';
+import { cloneObj } from '::helpers/editing/execK/helpers';
 
 enum asyncOperation {
   pending = 'pending',
   inProgress = 'inProgress',
   idle = 'idle',
 }
-const actionCreators = {
-  fetchNodes: createActionCreator('fetchNodes', _ => () => {
+
+const AP = createActionPrefixer('document');
+const ACs = {
+  // document
+  fetchNodes: _('fetchNodes', _ => () => {
     return _();
   }),
-  fetchFailed: createActionCreator('fetchFailed'),
-  setDocumentId: createActionCreator(
-    'setDocumentId',
-    _ => (documentId: string) => _(documentId),
+  fetchFailed: _('fetchFailed'),
+  setDocumentId: _('setDocumentId', _ => (documentId: string) => _(documentId)),
+  fetchNodesStarted: _('fetchNodesStarted'),
+  fetchNodesFulfilled: _('fetchNodesFulfilled', _ => (nodes: nodesMetaMap) =>
+    _(nodes),
   ),
-  fetchNodesStarted: createActionCreator('fetchNodesStarted'),
-  fetchNodesFulfilled: createActionCreator(
-    'fetchNodesFulfilled',
-    _ => (nodes: nodesMetaMap) => _(nodes),
-  ),
-  setCacheTimeStamp: createActionCreator(
+  setCacheTimeStamp: _(
     'setCacheTimeStamp',
     _ => (timeStamp: number = new Date().getTime()) => {
       return _(timeStamp);
     },
   ),
-  save: createActionCreator('save'),
-  saveFulfilled: createActionCreator('saveFulfilled'),
-  saveInProgress: createActionCreator('saveInProgress'),
+  save: _('save'),
+  saveFulfilled: _('saveFulfilled'),
+  saveInProgress: _('saveInProgress'),
+  // node
+  selectNode: _(AP('selectNode'), _ => (node: NodeId) => _(node)),
+  selectRootNode: _(AP('selectRootNode'), _ => (node: NodeId) => _(node)),
+  removeNodeFromRecentNodes: _(
+    AP('removeNodeFromRecentNodes'),
+    _ => (node_id: number) => _(node_id),
+  ),
+  clearSelectedNode: _(AP('clearSelectedNode')),
+  fetch: _(AP('fetch')),
+  fetchStarted: _(AP('fetchStarted')),
+  fetchFulfilled: _(AP('fetchFulfilled'), _ => (html: string) => _(html)),
+  setHighestNode_id: _(AP('setHighestNode_id'), _ => (node_id: number) =>
+    _(node_id),
+  ),
 };
-
+type NodeId = {
+  id: string;
+  node_id: number;
+};
 type State = {
   nodes?: nodesMetaMap;
   fetchNodesStarted?: number;
   documentId: string;
   cacheTimeStamp: number;
   saveInProgress: asyncOperation;
+  selectedNode?: NodeId;
+  rootNode?: NodeId;
+  recentNodes: number[];
+  highestNode_id: number;
 };
 
 const initialState: State = {
@@ -46,23 +68,26 @@ const initialState: State = {
   documentId: '',
   cacheTimeStamp: 0,
   saveInProgress: asyncOperation.idle,
+  selectedNode: { node_id: 0, id: '' },
+  rootNode: { node_id: 0, id: '' },
+  recentNodes: [],
+  highestNode_id: -1,
 };
-const reducer = createReducer(initialState, _ => [
-  _(actionCreators.setDocumentId, (state, { payload }) => ({
-    ...state,
+const reducer = createReducer(cloneObj(initialState), _ => [
+  _(ACs.setDocumentId, (state, { payload }) => ({
+    ...cloneObj(initialState),
     documentId: payload,
-    nodes: undefined,
   })),
-  _(actionCreators.fetchNodesFulfilled, (state, { payload }) => ({
+  _(ACs.fetchNodesFulfilled, (state, { payload }) => ({
     ...state,
     fetchNodesStarted: 0,
     nodes: payload,
   })),
-  _(actionCreators.fetchNodesStarted, state => ({
+  _(ACs.fetchNodesStarted, state => ({
     ...state,
     fetchNodesStarted: new Date().getTime(),
   })),
-  _(actionCreators.setCacheTimeStamp, (state, { payload }) =>
+  _(ACs.setCacheTimeStamp, (state, { payload }) =>
     state.saveInProgress !== asyncOperation.idle
       ? state
       : {
@@ -74,22 +99,46 @@ const reducer = createReducer(initialState, _ => [
           }),
         },
   ),
-  _(actionCreators.fetchFailed, () => ({
+  _(ACs.fetchFailed, () => ({
     ...initialState,
   })),
-  _(actionCreators.save, state => ({
+  _(ACs.save, state => ({
     ...state,
     saveInProgress: asyncOperation.pending,
   })),
-  _(actionCreators.saveInProgress, state => ({
+  _(ACs.saveInProgress, state => ({
     ...state,
     saveInProgress: asyncOperation.inProgress,
   })),
-  _(actionCreators.saveFulfilled, state => ({
+  _(ACs.saveFulfilled, state => ({
     ...state,
     saveInProgress: asyncOperation.idle,
   })),
+  _(ACs.selectNode, (state, { payload: node }) => ({
+    ...state,
+    selectedNode: node,
+    recentNodes: [
+      ...state.recentNodes.filter(node_id => node_id !== node.node_id),
+      node.node_id,
+    ],
+  })),
+  _(ACs.selectRootNode, (state, { payload: node }) => ({
+    ...state,
+    rootNode: node,
+    selectedNode: state.selectedNode.id ? state.selectedNode : node,
+  })),
+  _(ACs.clearSelectedNode, state => ({
+    ...state,
+    recentNodes: state.recentNodes.filter(
+      node_id => state.selectedNode.node_id !== node_id,
+    ),
+    selectedNode: state.rootNode,
+  })),
+  _(ACs.setHighestNode_id, (state, { payload: node_id }) => ({
+    ...state,
+    highestNode_id: node_id,
+  })),
 ]);
 
-export { reducer as documentReducer, actionCreators as documentActionCreators };
+export { reducer as documentReducer, ACs as documentActionCreators };
 export { asyncOperation };

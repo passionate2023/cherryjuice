@@ -6,7 +6,7 @@ const useSetCurrentNode = (node_id, nodes) => {
     const node = nodes?.get(node_id);
     if (node) {
       const { id } = node;
-      ac.node.setSelected({ id, node_id });
+      ac.document.selectNode({ id, node_id });
     }
   }, [node_id, nodes]);
 };
