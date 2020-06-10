@@ -1,8 +1,13 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { nodesMetaMap } from '::types/misc';
 import { applyLocalModifications } from '::app/editor/document/hooks/get-document-meta/helpers/construct-tree';
-import { createActionPrefixer } from './shared';
+import { createActionPrefixer } from './helpers/shared';
 import { cloneObj } from '::helpers/editing/execK/helpers';
+import {
+  calcRecentNodes,
+  defaultRootNode,
+  getFallbackNode,
+} from './helpers/document';
 
 enum asyncOperation {
   pending = 'pending',
@@ -38,7 +43,11 @@ const ACs = {
     AP('removeNodeFromRecentNodes'),
     _ => (node_id: number) => _(node_id),
   ),
-  clearSelectedNode: _(AP('clearSelectedNode')),
+  clearSelectedNode: _(
+    AP('clearSelectedNode'),
+    _ => (payload: { removeChildren: boolean } = { removeChildren: false }) =>
+      _(payload),
+  ),
   fetch: _(AP('fetch')),
   fetchStarted: _(AP('fetchStarted')),
   fetchFulfilled: _(AP('fetchFulfilled'), _ => (html: string) => _(html)),
@@ -68,8 +77,8 @@ const initialState: State = {
   documentId: '',
   cacheTimeStamp: 0,
   saveInProgress: asyncOperation.idle,
-  selectedNode: { node_id: 0, id: '' },
-  rootNode: { node_id: 0, id: '' },
+  selectedNode: defaultRootNode,
+  rootNode: defaultRootNode,
   recentNodes: [],
   highestNode_id: -1,
 };
@@ -125,14 +134,25 @@ const reducer = createReducer(cloneObj(initialState), _ => [
   _(ACs.selectRootNode, (state, { payload: node }) => ({
     ...state,
     rootNode: node,
-    selectedNode: state.selectedNode.id ? state.selectedNode : node,
+    selectedNode: state.selectedNode.id
+      ? state.selectedNode
+      : getFallbackNode(state.nodes),
   })),
-  _(ACs.clearSelectedNode, state => ({
+  _(ACs.clearSelectedNode, (state, { payload: { removeChildren } }) => {
+    return {
+      ...state,
+      recentNodes: calcRecentNodes({
+        nodes: state.nodes,
+        recentNodes: state.recentNodes,
+        removeChildren,
+        selectedNode_id: state.selectedNode.node_id,
+      }),
+      selectedNode: getFallbackNode(state.nodes),
+    };
+  }),
+  _(ACs.setHighestNode_id, (state, { payload: node_id }) => ({
     ...state,
-    recentNodes: state.recentNodes.filter(
-      node_id => state.selectedNode.node_id !== node_id,
-    ),
-    selectedNode: state.rootNode,
+    highestNode_id: node_id,
   })),
   _(ACs.setHighestNode_id, (state, { payload: node_id }) => ({
     ...state,
@@ -141,4 +161,4 @@ const reducer = createReducer(cloneObj(initialState), _ => [
 ]);
 
 export { reducer as documentReducer, ACs as documentActionCreators };
-export { asyncOperation };
+export { asyncOperation, NodeId };

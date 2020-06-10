@@ -14,7 +14,7 @@ render(
   <Router history={navigate.__history}>
     <Root />
   </Router>,
-  document.querySelector('#app'),
+  document.querySelector('#cs'),
 );
 if (process.env.NODE_ENV === 'development') {
   // @ts-ignore

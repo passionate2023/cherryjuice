@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { NodeCached } from '::types/graphql/adapters';
 import { appActionCreators } from '::app/reducer';
@@ -14,8 +13,8 @@ const updateFatherNode = (deletedNode: NodeCached) => {
   return fatherNode;
 };
 
-const useDeleteNode = (nodeId: string, node: NodeCached) => {
-  return useCallback(() => {
+const deleteNode = (node: NodeCached) => {
+  return () => {
     const fatherNode = updateFatherNode(node);
     apolloCache.node.mutate({
       nodeId: fatherNode.id,
@@ -25,9 +24,9 @@ const useDeleteNode = (nodeId: string, node: NodeCached) => {
     });
     apolloCache.node.delete.soft(node.id);
     appActionCreators.toggleDeleteDocumentModal();
-    ac.document.clearSelectedNode();
+    ac.document.clearSelectedNode({ removeChildren: true });
     navigate.document(node.documentId);
-  }, [nodeId]);
+  };
 };
 
-export { useDeleteNode, updateFatherNode };
+export { deleteNode, updateFatherNode };

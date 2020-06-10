@@ -1,5 +1,5 @@
 import { createActionCreator, createReducer } from 'deox';
-import { createActionPrefixer } from '::root/store/ducks/shared';
+import { createActionPrefixer } from '::root/store/ducks/helpers/shared';
 import { documentActionCreators } from './document';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 const actionPrefixer = createActionPrefixer('node');
@@ -34,7 +34,6 @@ const reducer = createReducer(initialState, _ => [
     fetchInProgress: false,
     html: payload,
   })),
-
 ]);
 
 export { reducer as nodeReducer, actionCreators as nodeActionCreators };
