@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ac } from '::root/store/actions.types';
+import { ac } from '::root/store/store';
 
 const useSetCurrentNode = (node_id, nodes) => {
   useEffect(() => {

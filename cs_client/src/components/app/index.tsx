@@ -79,7 +79,7 @@ const useRefreshToken = ({ token }) => {
   }, [data, error]);
 };
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store';
+import { Store } from '::root/store/store';
 import { useHandleRouting } from '::app/hooks/handle-routing/handle-routing';
 
 const mapState = (state: Store) => ({

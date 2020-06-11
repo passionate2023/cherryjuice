@@ -9,7 +9,7 @@ import { AlertType } from '::types/react';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store';
+import { Store } from '::root/store/store';
 
 const mapState = (state: Store) => ({
   nodeId: state.document.selectedNode.id,

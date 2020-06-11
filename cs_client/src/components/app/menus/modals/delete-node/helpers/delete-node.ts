@@ -2,7 +2,7 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 import { NodeCached } from '::types/graphql/adapters';
 import { appActionCreators } from '::app/reducer';
 import { router } from '::root/router/router';
-import { ac } from '::root/store/actions.types';
+import { ac } from '::root/store/store';
 
 const updateFatherNode = (deletedNode: NodeCached) => {
   const fatherNode = apolloCache.node.get(deletedNode.fatherId);

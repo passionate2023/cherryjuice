@@ -14,7 +14,7 @@ const initialState = {
     JSON.parse(localStorage.getItem('showTree') as string),
   ].map(value => (value === null ? true : value === true))[0],
   treeSize: JSON.parse(localStorage.getItem('treeSize') as string) || 250,
-  showFileSelect: location.pathname === '/',
+  showFileSelect: false,
   alert: undefined,
   showSettings: false,
   showFormattingButtons: false,

@@ -43,8 +43,8 @@ const createButtons = ({ selectedIDs, documentId, close, open }) => {
 };
 
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store';
-import { ac } from '::root/store/actions.types';
+import { Store } from '::root/store/store';
+import { ac } from '::root/store/store';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,

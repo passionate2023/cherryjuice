@@ -17,7 +17,7 @@ import { FormInputProps } from '::shared-components/form/meta-form/meta-form-inp
 import { testIds } from '::cypress/support/helpers/test-ids';
 
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store';
+import { Store } from '::root/store/store';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,

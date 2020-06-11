@@ -2,7 +2,7 @@ import { NodeCached } from '::types/graphql/adapters';
 import { NodeMetaIt } from '::types/graphql/generated';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { CacheState } from '::graphql/cache/initial-state';
-import { ac } from '::root/store/actions.types';
+import { ac } from '::root/store/store';
 
 const nodeHelpers = (state: CacheState) => ({
   get: (nodeId: string): NodeCached => {

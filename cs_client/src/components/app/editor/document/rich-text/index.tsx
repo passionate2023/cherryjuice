@@ -16,7 +16,7 @@ type Props = {
   processLinks: number;
 };
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store';
+import { Store } from '::root/store/store';
 import { router } from '::root/router/router';
 
 const mapState = (state: Store) => ({

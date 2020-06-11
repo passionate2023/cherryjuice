@@ -1,6 +1,6 @@
 import { useMutationObserver } from '::hooks/dom/mutation-observer';
 import { MutableRefObject, useCallback } from 'react';
-import { ac } from '::root/store/actions.types';
+import { ac } from '::root/store/store';
 
 const useHandleContentChanges = ({
   nodeId,

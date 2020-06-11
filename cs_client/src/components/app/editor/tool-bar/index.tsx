@@ -10,7 +10,7 @@ import {
 } from './groups/formatting-buttons';
 import { NavBar } from '::app/editor/tool-bar/groups/nav-bar/nav-bar';
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store';
+import { Store } from '::root/store/store';
 
 const mapState = (state: Store) => ({
   selectedNodeId: state.document.selectedNode.id,

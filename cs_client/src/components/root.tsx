@@ -16,8 +16,11 @@ import {
   rootInitialState,
   rootReducer,
 } from '::root/root.reducer';
-import { store } from '::root/store';
+import { store } from '::root/store/store';
 import { router } from '::root/router/router';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore } from 'redux-persist';
+const persistor = persistStore(store);
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
@@ -50,28 +53,30 @@ const Root: React.FC<Props> = () => {
   useProtectedRoutes({ session: state.session });
   return (
     <Provider store={store}>
-      <RootContext.Provider value={state}>
-        <Suspense fallback={<Void />}>
-          {state.apolloClient && (
-            <ApolloProvider client={state.apolloClient}>
-              {state.session.token && (
+      <PersistGate loading={null} persistor={persistor}>
+        <RootContext.Provider value={state}>
+          <Suspense fallback={<Void />}>
+            {state.apolloClient && (
+              <ApolloProvider client={state.apolloClient}>
+                {state.session.token && (
+                  <Route
+                    path={'/'}
+                    render={() => <App session={state.session} />}
+                  />
+                )}
                 <Route
-                  path={'/'}
-                  render={() => <App session={state.session} />}
+                  path={'/login'}
+                  render={() => <LoginForm session={state.session} />}
+                />{' '}
+                <Route
+                  path={'/signup'}
+                  render={() => <SignUpForm session={state.session} />}
                 />
-              )}
-              <Route
-                path={'/login'}
-                render={() => <LoginForm session={state.session} />}
-              />{' '}
-              <Route
-                path={'/signup'}
-                render={() => <SignUpForm session={state.session} />}
-              />
-            </ApolloProvider>
-          )}
-        </Suspense>
-      </RootContext.Provider>
+              </ApolloProvider>
+            )}
+          </Suspense>
+        </RootContext.Provider>
+      </PersistGate>
     </Provider>
   );
 };

@@ -4,7 +4,7 @@ import { DOCUMENT_SUBSCRIPTIONS } from '::types/graphql/generated';
 import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
 import { Icon, Icons } from '::shared-components/icon';
 import { useDeleteFile } from '::hooks/graphql/delete-file';
-import { ac } from '::root/store/actions.types';
+import { ac } from '::root/store/store';
 
 type TDocumentProps = {
   name: string;

@@ -5,7 +5,7 @@ import { Icon, Icons } from '::shared-components/icon';
 import { modToolbar } from '::sass-modules/index';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac } from '::root/store/actions.types';
+import { ac } from '::root/store/store';
 const mapState = () => ({});
 
 const connector = connect(mapState);

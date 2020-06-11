@@ -1,5 +1,5 @@
 import { NodeMeta } from '::types/graphql/adapters';
-import { ac } from '::root/store/actions.types';
+import { ac } from '::root/store/store';
 
 const setHighestNodeId = (nodes: Map<number, NodeMeta>) => {
   if (nodes) {

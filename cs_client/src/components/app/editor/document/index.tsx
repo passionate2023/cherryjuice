@@ -12,9 +12,9 @@ import { documentInitialState } from '::app/editor/document/reducer/initial-stat
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 import { DocumentContext } from './reducer/context';
 import { useTrackDocumentChanges } from '::app/editor/document/hooks/track-document-changes';
-import { Store } from '::root/store';
+import { Store } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac } from '::root/store/actions.types';
+import { ac } from '::root/store/store';
 import { setHighestNodeId } from '::app/editor/document/hooks/get-document-meta/helpers/set-highset-node_id';
 import { router } from '::root/router/router';
 import { asyncOperation } from '::root/store/ducks/document';

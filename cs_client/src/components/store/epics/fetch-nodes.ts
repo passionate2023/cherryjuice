@@ -3,7 +3,7 @@ import { concat, from, Observable, ObservedValueOf, of } from 'rxjs';
 import { ofType } from 'deox';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { QUERY_NODE_META } from '::graphql/queries';
-import { store } from '::root/store';
+import { store } from '::root/store/store';
 import { constructTree } from '::app/editor/document/hooks/get-document-meta/helpers/construct-tree';
 import { Actions } from '../actions.types';
 import { documentActionCreators } from '::root/store/ducks/document';
