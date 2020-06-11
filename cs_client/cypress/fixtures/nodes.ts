@@ -5,13 +5,20 @@ import {
   removeArrayElement,
 } from '../support/helpers/javascript-utils';
 import { generateNodeText } from './content/text';
+import { createImageGenerator } from './content/image';
 
 const generateName = (base => {
   const state = { count: 1 };
   return () => ({ name: `${base} ${state.count}`, id: state.count++ });
 })('node');
-
-const generateNode = (levelIndex, includeText) => () => {
+const generateImage = createImageGenerator([
+  'pink',
+  'cyan',
+  'yellow',
+  'orange',
+  'green',
+])(['blue', 'black', 'red']);
+const generateNode = (levelIndex, includeText, numberOfImages) => () => {
   const { id, name } = generateName();
   return {
     id,
@@ -23,10 +30,15 @@ const generateNode = (levelIndex, includeText) => () => {
     parent: undefined,
     levelIndex,
     ...(includeText && { text: generateNodeText({ name }) }),
+    ...(!!numberOfImages && {
+      images: Array.from({
+        length: randomInteger(numberOfImages[0], numberOfImages[1]),
+      }).map((_, i) => generateImage([`${name}`, `image ${i + 1}`])),
+    }),
   };
 };
 
-const generateTree = ({ nodesPerLevel, includeText }) => {
+const generateTree = ({ nodesPerLevel, includeText, numberOfImages }) => {
   return Array.from({ length: nodesPerLevel.length })
     .map((_, levelIndex) =>
       Array.from({
@@ -36,7 +48,7 @@ const generateTree = ({ nodesPerLevel, includeText }) => {
             ? nodesPerLevel[levelIndex][1]
             : nodesPerLevel[levelIndex][0],
         ),
-      }).map(generateNode(levelIndex, includeText)),
+      }).map(generateNode(levelIndex, includeText, numberOfImages)),
     )
     .map((level, levelIndex, arr) =>
       levelIndex === 0
