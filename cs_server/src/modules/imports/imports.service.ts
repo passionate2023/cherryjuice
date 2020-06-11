@@ -58,7 +58,7 @@ export class ImportsService {
     await this.documentSqliteRepository.closeUploadedFile();
   }
 
-  async functiona(
+  async saveNodesMeta(
     newDocument: Document,
     rawNodes: (Node & { is_ro; has_image })[],
   ) {
@@ -80,7 +80,7 @@ export class ImportsService {
       nodeRaw.icon_id = '' + nodeTitleHelpers.customIconId(nodeRaw.is_ro);
 
       const node = new Node();
-      copyProperties(nodeRaw, node, {});
+      copyProperties(nodeRaw, node, { createdAt: true, updatedAt: true });
       node.document = newDocument;
       nodesMap.set(node.node_id, node);
       await node.save();
@@ -112,10 +112,11 @@ export class ImportsService {
     const rawNodes = (await this.nodeSqliteRepository.getNodesMeta(
       false,
     )) as (Node & { is_ro; has_image })[];
-    const { nodesWithImages, nodesMap, nodeDatesMap } = await this.functiona(
-      newDocument,
-      rawNodes,
-    );
+    const {
+      nodesWithImages,
+      nodesMap,
+      nodeDatesMap,
+    } = await this.saveNodesMeta(newDocument, rawNodes);
     return { nodesWithImages, nodesMap, nodeDatesMap };
   }
   private async saveDocument({
