@@ -3,15 +3,8 @@
     "allowJs": true,
     "strict": false,
     "baseUrl": "../node_modules",
-    "target": "es6",
-    "lib": [
-      "es5",
-      "dom",
-      "es2015.collection"
-    ],
+    "target": "es2018",
     "types": ["cypress", "@types/testing-library__cypress"]
   },
-  "include": [
-    "**/*.ts"
-  ]
+  "include": ["**/*.ts"]
 }

@@ -30,7 +30,7 @@ const generateNode = (levelIndex, includeText, numberOfImages) => () => {
     parent: undefined,
     levelIndex,
     ...(includeText && { text: generateNodeText({ name }) }),
-    ...(!!numberOfImages && {
+    ...(!!numberOfImages.length && {
       images: Array.from({
         length: randomInteger(numberOfImages[0], numberOfImages[1]),
       }).map((_, i) => generateImage([`${name}`, `image ${i + 1}`])),
@@ -38,7 +38,11 @@ const generateNode = (levelIndex, includeText, numberOfImages) => () => {
   };
 };
 
-const generateTree = ({ nodesPerLevel, includeText, numberOfImages }) => {
+const generateTree = ({
+  nodesPerLevel,
+  includeText = false,
+  numberOfImages = [],
+}) => {
   return Array.from({ length: nodesPerLevel.length })
     .map((_, levelIndex) =>
       Array.from({

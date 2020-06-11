@@ -14,12 +14,13 @@ const useAddMetaToPastedImages = ({
   useEffect(() => {
     if (isNotProcessed(requestId)) {
       const editor = getEditor();
+      let baseId = new Date().getTime()
       Array.from(editor.querySelectorAll('img:not([class])')).forEach(
         (image: HTMLImageElement) => {
           replaceImageUrlWithBase64(image)
             .then(() => {
               image.classList.add('rich-text__image');
-              image.setAttribute('data-id', new Date().getTime().toString());
+              image.setAttribute('data-id', (baseId++).toString());
             })
             .catch(error => {
               image.remove();

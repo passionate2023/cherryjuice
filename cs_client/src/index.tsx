@@ -9,6 +9,7 @@ import { Router } from 'react-router-dom';
 import { Root } from '::root/root';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { router } from '::root/router/router';
+import { attachTestCallbacks } from '::helpers/attach-test-callbacks';
 
 render(
   <Router history={router.__history}>
@@ -19,4 +20,5 @@ render(
 if (process.env.NODE_ENV === 'development') {
   // @ts-ignore
   window.__APOLLO_CACHE__ = apolloCache;
+  attachTestCallbacks()
 }

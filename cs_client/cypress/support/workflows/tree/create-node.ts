@@ -1,7 +1,7 @@
-import { testIds } from '../helpers/test-ids';
-import { wait } from '../helpers/cypress-helpers';
-import { setColorInputValue } from '../helpers/dom';
-import { selectNode } from './micro/select-node';
+import { testIds } from '../../helpers/test-ids';
+import { wait } from '../../helpers/cypress-helpers';
+import { setColorInputValue } from '../../helpers/dom';
+import { selectNode } from '../micro/select-node';
 // https://github.com/cypress-io/cypress/issues/1570#issuecomment-450966053
 const setNodeMeta = ({ node }) => {
   const { isBold, color, name, icon } = node;

@@ -7,7 +7,6 @@ type WriteImage = {
   images: ImageAst[];
 };
 
-
 const writeImage = ({ node, images }: WriteImage) => {
   selectNode(node);
 
@@ -17,6 +16,11 @@ const writeImage = ({ node, images }: WriteImage) => {
     .then($div => {
       $div.append(...images.map(imgAstToImage));
     });
+  cy.window().then(window => {
+    // @ts-ignore
+    window.__testCallbacks.pastedImages();
+    wait.ms500();
+  });
 };
 
 export { writeImage };

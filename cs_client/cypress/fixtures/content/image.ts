@@ -1,9 +1,8 @@
 import { randomArrayElement } from '../../support/helpers/javascript-utils';
 type ImageAst = {
   src: string;
-  style: string;
-  class: string;
-  'data-id': string;
+  h: number;
+  w: number;
 };
 const drawText = ({ texts, bg, c }) => {
   const canvas = document.createElement('canvas');
@@ -19,10 +18,10 @@ const drawText = ({ texts, bg, c }) => {
   texts.forEach((text, i) => {
     ctx.strokeText(text, 5, 40 + i * 30);
   });
-  return canvas.toDataURL('image/png');
+  return canvas.toDataURL('image/jpeg');
 };
 
-const createImageGenerator = bgs => cs => texts => {
+const createImageGenerator = bgs => cs => (texts: string[]): ImageAst => {
   const src = drawText({
     texts,
     bg: randomArrayElement(bgs),
@@ -30,21 +29,14 @@ const createImageGenerator = bgs => cs => texts => {
   });
   return {
     src,
-    style: 'width: 100px;height:100px;',
-    class: 'rich-text__image',
-    'data-id': new Date().getTime().toString(),
+    h: 100,
+    w: 100,
   };
-  // return `<img ${[
-  //   `src="${src}"`,
-  //   `style="width: 100px;height:100px;"`,
-  //   `class="rich-text__image" `,
-  //   `data-id="${new Date().getTime().toString()}"`,
-  // ].join(' ')} />`;
 };
 const imgAstToImage = (image: ImageAst): string =>
   `<img ${Object.entries(image)
-    .map(([k, v]) => `${k}=${v}`)
+    .map(([k, v]) => `${k}="${v}"`)
     .join(' ')} />`;
-export { createImageGenerator ,imgAstToImage};
 
-export {ImageAst}
+export { createImageGenerator, imgAstToImage };
+export { ImageAst };

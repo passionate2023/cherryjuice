@@ -1,6 +1,6 @@
 import { login } from '../support/workflows/login';
 import { generateTree } from '../fixtures/nodes';
-import { createNode, editNode } from '../support/workflows/create-node';
+import { createNode, editNode } from '../support/workflows/tree/create-node';
 import { wait } from '../support/helpers/cypress-helpers';
 import { goHome } from '../support/workflows/navigate-home';
 import { createDocument } from '../support/workflows/create-document';
@@ -18,7 +18,7 @@ import { assertTreeStructure } from '../support/assertions/tree-structure';
 import { deleteNode } from '../support/workflows/tree/delete-node';
 import { testIds } from '../support/helpers/test-ids';
 
-describe('create document > create nodes', () => {
+describe('create document > create nodes > dnd > edit', () => {
   before(() => {
     Cypress.on('scrolled', $el => {
       $el.get(0).scrollIntoView({
@@ -26,11 +26,19 @@ describe('create document > create nodes', () => {
         inline: 'center',
       });
     });
+    cy.visit(`/`);
     login();
   });
+
   const tree = generateTree({
     nodesPerLevel: [[2], [2], [1]],
   });
+  const newAttributes = {
+    name: 'new name',
+    icon: 48,
+    color: '#ff0fff',
+    isBold: true,
+  };
 
   it('perform: create document', () => {
     goHome();
@@ -70,12 +78,6 @@ describe('create document > create nodes', () => {
   });
 
   it('perform: edit node meta', () => {
-    const newAttributes = {
-      name: 'new name',
-      icon: 48,
-      color: '#ff0fff',
-      isBold: true,
-    };
     editNode({
       editedNode: tree[0][0],
       newAttributes,

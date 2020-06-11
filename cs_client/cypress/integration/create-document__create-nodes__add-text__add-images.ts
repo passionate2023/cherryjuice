@@ -1,6 +1,6 @@
 import { login } from '../support/workflows/login';
 import { generateTree } from '../fixtures/nodes';
-import { createNode } from '../support/workflows/create-node';
+import { createNode } from '../support/workflows/tree/create-node';
 import { wait } from '../support/helpers/cypress-helpers';
 import { goHome } from '../support/workflows/navigate-home';
 import { createDocument } from '../support/workflows/create-document';
@@ -21,6 +21,7 @@ describe('create document > create nodes', () => {
         inline: 'center',
       });
     });
+    cy.visit(`/`);
     login();
   });
   const tree = generateTree({
@@ -78,11 +79,17 @@ describe('create document > create nodes', () => {
     });
   });
 
-  it('perform: reload > login > write additional image', () => {
+  it('perform: reload > login', () => {
+    cy.location().then(({ pathname }) => {
+      cy.reload();
+      login();
+      cy.visit(pathname);
+      cy.contains(tree[0][0].name, { timeout: 10000 });
+    });
+  });
+
+  it('perform: write additional image', () => {
     const imageGenerator = createImageGenerator(['black'])(['white']);
-    cy.reload();
-    login();
-    cy.contains(tree[0][0].name, { timeout: 10000 });
     tree[0].forEach(node => {
       const additionalImage = imageGenerator([node.name, 'image x']);
       node.images.push(additionalImage);

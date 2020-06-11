@@ -229,4 +229,4 @@ const setupClipboard = () => {
   editableDiv.onpaste = onpaste;
 };
 
-export { setupClipboard, replaceImageUrlWithBase64 };
+export { setupClipboard, replaceImageUrlWithBase64, anyImageBase64ToPngBase64 };
