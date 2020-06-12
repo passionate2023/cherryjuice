@@ -8,7 +8,10 @@ import { assertTreeStructure } from '../support/assertions/tree-structure';
 import { testIds } from '../support/helpers/test-ids';
 import { writeText } from '../support/workflows/content/write-text';
 import { assertNodeText } from '../support/assertions/content/node-text';
-import { writeImage } from '../support/workflows/content/write-image';
+import {
+  writeBlobImages,
+  writeHtmlImages,
+} from '../support/workflows/content/write-image';
 import { assertNodeImage } from '../support/assertions/content/node-image';
 import { createImageGenerator } from '../fixtures/node/generate-node-content/image/generate-image';
 import { generateTree } from '../fixtures/tree/generate-tree';
@@ -50,18 +53,29 @@ describe('create document > create nodes', () => {
     assertTreeStructure({ tree });
   });
 
-  it('perform: write text', () => {
+  it('perform: paste blob images', () => {
     tree[0].forEach(node => {
-      writeText({ node, text: node.text });
+      writeBlobImages({
+        node,
+        images: node.images.filter((_, i) => i >= node.images.length - 1),
+      });
     });
   });
 
   it('perform: paste html images', () => {
     tree[0].forEach(node => {
-      writeImage({ node, images: node.images });
+      writeHtmlImages({
+        node,
+        images: node.images.filter((_, i) => i < node.images.length - 1),
+      });
     });
   });
 
+  it('perform: write text', () => {
+    tree[0].forEach(node => {
+      writeText({ node, text: node.text });
+    });
+  });
   it('perform: save document', () => {
     cy.findByTestId(testIds.toolBar__main__saveDocument).click();
     cy.contains('Document saved', { timeout: 10000 });
@@ -91,9 +105,12 @@ describe('create document > create nodes', () => {
   it('perform: write additional image', () => {
     const imageGenerator = createImageGenerator(['black'])(['white']);
     tree[0].forEach(node => {
-      const additionalImage = imageGenerator([node.name, 'image x']);
+      const additionalImage = imageGenerator({
+        texts: [node.name, 'image x'],
+        format: 'image/jpeg',
+      });
       node.images.push(additionalImage);
-      writeImage({ node, images: [additionalImage] });
+      writeHtmlImages({ node, images: [additionalImage] });
     });
   });
 

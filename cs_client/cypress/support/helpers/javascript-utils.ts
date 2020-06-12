@@ -1,3 +1,5 @@
+import { cloneObj } from '../../../src/helpers/editing/execK/helpers';
+
 export const randomBoolean = () => Math.floor(Math.random() * 10) < 5;
 export const randomInteger = (min, max) => {
   min = Math.ceil(min);
@@ -30,4 +32,8 @@ export const randomArrayElement = <T>(arr: T[]): T =>
   arr[randomInteger(0, arr.length - 1)];
 export const removeArrayElement = <T>(arr: T[], el: T): void => {
   arr.splice(arr.indexOf(el), 1);
+};
+export const splitArrayIntoTwoArrays = <T>(arr: T[]): [T[], T[]] => {
+  const clone = cloneObj(arr);
+  return [clone, clone.splice(Math.floor(arr.length - 1) / 2 + 1)];
 };

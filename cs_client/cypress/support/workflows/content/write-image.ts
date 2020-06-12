@@ -1,22 +1,26 @@
 import { pasteIntoEditor } from '../micro/paste-into-editor';
-import { imgAstToImage } from '../../../fixtures/node/generate-node-content/image/helpers';
+import { imgAstToImageHTMLString } from '../../../fixtures/node/generate-node-content/image/helpers';
 import { ImageAst } from '../../../fixtures/node/generate-node-content/image/generate-image';
+import { wait } from '../../helpers/cypress-helpers';
 
 type WriteImage = {
   node: any;
   images: ImageAst[];
 };
 
-const writeImage = ({ node, images }: WriteImage) => {
-  const image = images
-    .map(imgAstToImage)
+const writeHtmlImages = ({ images, node }: WriteImage) => {
+  const htmlImages = images
+    .map(imgAstToImageHTMLString)
     .map(img => `${img}`)
     .join('');
   pasteIntoEditor({
     node,
     pastedData: {
       type: 'text/html',
-      value: ['span'].reduce((acc, val) => `<${val}>${acc}</${val}>`, image),
+      value: ['div'].reduce(
+        (acc, val) => `<${val}>${acc}</${val}>`,
+        htmlImages,
+      ),
     },
     cursor: {
       lineIndex: 0,
@@ -25,4 +29,18 @@ const writeImage = ({ node, images }: WriteImage) => {
   });
 };
 
-export { writeImage };
+const writeBlobImages = ({ images, node }: WriteImage) => {
+  for (const image of images) {
+    pasteIntoEditor({
+      node,
+      image,
+      cursor: {
+        lineIndex: 0,
+        position: 'start',
+      },
+    });
+    wait.ms250();
+  }
+};
+
+export { writeBlobImages, writeHtmlImages };

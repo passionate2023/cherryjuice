@@ -53,7 +53,13 @@ const generateNode = (
     images: numberOfImages.length
       ? Array.from({
           length: randomInteger(numberOfImages[0], numberOfImages[1]),
-        }).map((_, i) => generateImage([`${name}`, `image ${i + 1}`]))
+        }).map((_, i, arr) =>
+          generateImage({
+            format: 'random',
+            texts: [`${name}`, `image ${i + 1}`],
+            bottomRightCornerWaterMark: `/${arr.length}`,
+          }),
+        )
       : [],
   };
 };

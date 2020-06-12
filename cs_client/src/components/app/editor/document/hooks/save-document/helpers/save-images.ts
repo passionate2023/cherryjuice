@@ -3,13 +3,12 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { localChanges } from '::graphql/cache/helpers/changes';
 import { swapNodeIdIfApplies } from '::app/editor/document/hooks/save-document/helpers/save-nodes-meta';
-
-const b64toBlob = ({ base64, id }): Promise<Blob> =>
-  fetch(`data:image/png;base64,${base64}`).then(async res => {
-    if (base64) {
+const base64toBlob = ({ url, name }): Promise<Blob> =>
+  fetch(url).then(async res => {
+    if (url) {
       const blob = await res.blob();
       // @ts-ignore
-      blob.name = id;
+      blob.name = name;
       return blob;
     }
   });
@@ -24,7 +23,14 @@ const saveImages = async ({ state }: SaveImagesProps) => {
     const images: Blob[] = await Promise.all(
       base64
         .map(id => apolloCache.image.get(id))
-        .map(b64toBlob)
+        .map(
+          ({ id, base64 }) =>
+            base64 && {
+              name: id,
+              url: `data:image/png;base64,${base64}`,
+            },
+        )
+        .map(base64toBlob)
         .filter(Boolean),
     );
     const imageIdsTuples: [string, string][] = await apolloCache.client.mutate({

@@ -49,7 +49,9 @@ const useAttachImagesToHtml = ({
             'src',
             `data:image/png;base64,${images.current.get(id)}`,
           );
-        else img.remove();
+        else {
+          // img.remove();
+        }
       });
     }
   }, [all_png_base64?.pngs, node_id]);

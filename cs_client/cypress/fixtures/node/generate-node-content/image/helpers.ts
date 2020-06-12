@@ -1,11 +1,26 @@
-import { ImageAst } from './generate-image';
+import {
+  Base64Type,
+  CreateImageGeneratorProps,
+  ImageAst,
+} from './generate-image';
 
-const imgAstToImage = (image: ImageAst): string =>
+const imgAstToImageHTMLString = (image: ImageAst): string =>
   `<img ${Object.entries(image.attributes)
     .map(([k, v]) => `${k}="${v}"`)
     .join(' ')} />`;
 
-const drawText = ({ texts, bg, c, type }) => {
+type DrawTextProps = CreateImageGeneratorProps & {
+  bg: string;
+  c: string;
+  format: Base64Type;
+};
+const drawText = ({
+  texts,
+  bg,
+  c,
+  format,
+  bottomRightCornerWaterMark,
+}: DrawTextProps) => {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   canvas.width = 100;
@@ -19,7 +34,25 @@ const drawText = ({ texts, bg, c, type }) => {
   texts.forEach((text, i) => {
     ctx.strokeText(text, 5, 40 + i * 30);
   });
-  return canvas.toDataURL(type);
+
+  ctx.font = '18px Arial';
+  ctx.fillStyle = 'black';
+  ctx.fillText(format === 'image/png' ? 'P' : 'J', 5, 95);
+
+  if (bottomRightCornerWaterMark) {
+    ctx.font = '18px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText(bottomRightCornerWaterMark, 82, 95);
+  }
+  return {
+    src: canvas.toDataURL(format),
+    getBlob: cb => {
+      ctx.font = '18px Arial';
+      ctx.fillStyle = 'black';
+      ctx.fillText('B', 85, 18);
+      canvas.toBlob(cb, format);
+    },
+  };
 };
 
-export { imgAstToImage, drawText };
+export { imgAstToImageHTMLString, drawText };

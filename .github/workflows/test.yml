@@ -42,7 +42,7 @@ jobs:
       run: cd cs_server && sudo yarn run postinstall
 
     - name: install client dependencies
-      run: cd cs_client && yarn install --ignore-optional && yarn add jest ts-jest
+      run: cd cs_client && yarn install
 
     - name: run jest tests
       run:  cd cs_client && yarn run test
