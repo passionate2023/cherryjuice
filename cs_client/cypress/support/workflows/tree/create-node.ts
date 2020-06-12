@@ -27,7 +27,8 @@ const setNodeMeta = ({ node }) => {
     wait.ms250();
     cy.findByTestId(testIds.nodeMeta__customIconList).then($element => {
       const element = $element[0];
-      element.children[icon - 1].click();
+      const child = element.children[icon - 1] as HTMLDivElement;
+      child.click();
     });
   }
   cy.findByTestId(testIds.nodeMeta__apply).click();

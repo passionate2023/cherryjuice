@@ -4,12 +4,17 @@ import {
   randomArrayElement,
   removeArrayElement,
 } from '../../helpers/javascript-utils';
+import { TreeAst } from '../../../fixtures/tree/generate-tree';
 
-export const dndNode = ({ tree }) => {
+type DndNodeProps = {
+  tree: TreeAst;
+};
+export const dndNode = ({ tree }: DndNodeProps) => {
   const sourceLevel = tree[tree.length - 1];
   const newParentLevel = tree[0];
   const targetLevel = tree[1];
   const draggedNode = randomArrayElement(sourceLevel);
+  const draggedNodeParent = draggedNode.parent;
   const targetNode = randomArrayElement(newParentLevel);
   cy.findAllByText(draggedNode.name).then(target$ => {
     cy.findAllByText(targetNode.name).then(dragged$ => {
@@ -18,9 +23,10 @@ export const dndNode = ({ tree }) => {
       const draggedSelector = getElementPath(dragged$[1], 'tree');
       // @ts-ignore
       cy.get(targetSelector).drag(draggedSelector, { force: true });
-      targetNode.children.push(draggedNode);
-      draggedNode.parent = targetNode.id;
+      targetNode.children.push(draggedNode.id);
+      draggedNode.parent = targetNode;
       removeArrayElement(sourceLevel, draggedNode);
+      removeArrayElement(draggedNodeParent.children, draggedNode.id);
       targetLevel.push(draggedNode);
       const temp = targetLevel.slice();
       targetLevel.splice(0, Infinity);

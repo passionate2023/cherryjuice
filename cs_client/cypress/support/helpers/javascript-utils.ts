@@ -26,5 +26,8 @@ export const rgbToHex = color =>
     .map(d => `${d.toString(16)}`.padStart(2, '0'))
     .join('');
 
-export const randomArrayElement = arr => arr[randomInteger(0, arr.length - 1)];
-export const removeArrayElement = (arr, el) => arr.splice(arr.indexOf(el), 1);
+export const randomArrayElement = <T>(arr: T[]): T =>
+  arr[randomInteger(0, arr.length - 1)];
+export const removeArrayElement = <T>(arr: T[], el: T): void => {
+  arr.splice(arr.indexOf(el), 1);
+};

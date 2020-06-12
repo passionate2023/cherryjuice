@@ -1,5 +1,4 @@
 import { login } from '../support/workflows/login';
-import { generateTree } from '../fixtures/nodes';
 import { createNode, editNode } from '../support/workflows/tree/create-node';
 import { wait } from '../support/helpers/cypress-helpers';
 import { goHome } from '../support/workflows/navigate-home';
@@ -17,6 +16,7 @@ import {
 import { assertTreeStructure } from '../support/assertions/tree-structure';
 import { deleteNode } from '../support/workflows/tree/delete-node';
 import { testIds } from '../support/helpers/test-ids';
+import { generateTree } from '../fixtures/tree/generate-tree';
 
 describe('create document > create nodes > dnd > edit', () => {
   before(() => {

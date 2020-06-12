@@ -1,8 +1,15 @@
+// @ts-ignore
+import { anyImageBase64ToPngBase64 } from '../../../../src/helpers/editing/clipboard';
 import { selectNode } from '../../workflows/micro/select-node';
 import { wait } from '../../helpers/cypress-helpers';
-import { anyImageBase64ToPngBase64 } from '../../../../src/helpers/editing/clipboard';
+import { NodeAst } from '../../../fixtures/node/generate-node';
+import { ImageAst } from '../../../fixtures/node/generate-node-content/image/generate-image';
 
-export const assertNodeImage = ({ node, images }) => {
+type AssertNodeImage = {
+  node: NodeAst;
+  images: ImageAst[];
+};
+export const assertNodeImage = ({ node, images }: AssertNodeImage) => {
   selectNode(node);
   wait.ms500();
   cy.get('#rich-text').then(editor$ => {
@@ -14,7 +21,10 @@ export const assertNodeImage = ({ node, images }) => {
 
     imagesInDom.forEach(async (imageInDom, i) => {
       const imageEl = document.createElement('img');
-      const { src, h, w } = node.images[i];
+      const {
+        attributes: { src },
+        meta: { h, w },
+      } = node.images[i];
       imageEl.src = src;
       imageEl.style.width = `${w}px`;
       imageEl.style.height = `${h}px`;

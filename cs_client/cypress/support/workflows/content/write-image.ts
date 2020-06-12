@@ -1,6 +1,6 @@
-import { selectNode } from '../micro/select-node';
-import { wait } from '../../helpers/cypress-helpers';
-import { ImageAst, imgAstToImage } from '../../../fixtures/content/image';
+import { pasteIntoEditor } from '../micro/paste-into-editor';
+import { imgAstToImage } from '../../../fixtures/node/generate-node-content/image/helpers';
+import { ImageAst } from '../../../fixtures/node/generate-node-content/image/generate-image';
 
 type WriteImage = {
   node: any;
@@ -8,18 +8,20 @@ type WriteImage = {
 };
 
 const writeImage = ({ node, images }: WriteImage) => {
-  selectNode(node);
-
-  wait.s1();
-  cy.get('.rich-text__line')
-    .last()
-    .then($div => {
-      $div.append(...images.map(imgAstToImage));
-    });
-  cy.window().then(window => {
-    // @ts-ignore
-    window.__testCallbacks.pastedImages();
-    wait.ms500();
+  const image = images
+    .map(imgAstToImage)
+    .map(img => `${img}`)
+    .join('');
+  pasteIntoEditor({
+    node,
+    pastedData: {
+      type: 'text/html',
+      value: ['span'].reduce((acc, val) => `<${val}>${acc}</${val}>`, image),
+    },
+    cursor: {
+      lineIndex: 0,
+      position: 'start',
+    },
   });
 };
 

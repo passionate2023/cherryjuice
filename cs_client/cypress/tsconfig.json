@@ -3,7 +3,7 @@
     "allowJs": true,
     "strict": false,
     "baseUrl": "../node_modules",
-    "target": "es2018",
+    "target": "es2019",
     "types": ["cypress", "@types/testing-library__cypress"]
   },
   "include": ["**/*.ts"]

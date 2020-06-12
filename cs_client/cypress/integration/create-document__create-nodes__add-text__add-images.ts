@@ -1,5 +1,4 @@
 import { login } from '../support/workflows/login';
-import { generateTree } from '../fixtures/nodes';
 import { createNode } from '../support/workflows/tree/create-node';
 import { wait } from '../support/helpers/cypress-helpers';
 import { goHome } from '../support/workflows/navigate-home';
@@ -11,7 +10,8 @@ import { writeText } from '../support/workflows/content/write-text';
 import { assertNodeText } from '../support/assertions/content/node-text';
 import { writeImage } from '../support/workflows/content/write-image';
 import { assertNodeImage } from '../support/assertions/content/node-image';
-import { createImageGenerator } from '../fixtures/content/image';
+import { createImageGenerator } from '../fixtures/node/generate-node-content/image/generate-image';
+import { generateTree } from '../fixtures/tree/generate-tree';
 
 describe('create document > create nodes', () => {
   before(() => {
@@ -56,7 +56,7 @@ describe('create document > create nodes', () => {
     });
   });
 
-  it('perform: write image', () => {
+  it('perform: paste html images', () => {
     tree[0].forEach(node => {
       writeImage({ node, images: node.images });
     });
