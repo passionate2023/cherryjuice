@@ -3,8 +3,8 @@ import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { ConfirmationModal } from '::shared-components/modal/confirmation-modal';
 import { AlertType } from '::types/react';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac } from '::root/store/actions.types';
-import { Store } from '::root/store';
+import { ac } from '::root/store/store';
+import { Store } from '::root/store/store';
 
 const mapState = (state: Store) => ({
   show: state.dialogs.showReloadDocument,

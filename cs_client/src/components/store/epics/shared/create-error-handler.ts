@@ -1,8 +1,13 @@
 import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
 import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
-const createErrorHandler = (title: string, description: string) =>
+const createErrorHandler = (
+  title: string,
+  description: string,
+  action,
+) =>
   catchError(error => {
     appActionCreators.setAlert({
       title,
@@ -10,7 +15,7 @@ const createErrorHandler = (title: string, description: string) =>
       type: AlertType.Error,
       error,
     });
-    return error;
+    return of(action());
   });
 
 export { createErrorHandler };

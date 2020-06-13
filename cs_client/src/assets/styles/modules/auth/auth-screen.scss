@@ -9,3 +9,11 @@
   justify-content: center;
   font-family: Roboto, sans-serif;
 }
+
+.auth-screen__card-container{
+  position: relative;
+  @include respond-to($md-down) {
+    width: 95%;
+    height: 92%;
+  }
+}

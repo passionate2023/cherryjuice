@@ -1,7 +1,7 @@
 import { commands } from '::helpers/hotkeys/commands';
 import { execK } from '::helpers/editing/execK';
 import { createTestSample } from '::helpers/editing/execK/__tests__/__helpers__/create-test-sample';
-import { ac } from '::root/store/actions.types';
+import { ac } from '::root/store/store';
 
 type THotKey = {
   key?: string;

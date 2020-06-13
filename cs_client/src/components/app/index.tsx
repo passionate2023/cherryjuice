@@ -1,6 +1,6 @@
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import * as React from 'react';
-import { useEffect, useReducer, Suspense,  } from 'react';
+import { useEffect, useReducer, Suspense } from 'react';
 import {
   appActionCreators,
   appInitialState,
@@ -19,7 +19,6 @@ import { AppContext } from './context';
 import { useDocumentEditedIndicator } from '::app/hooks/document-edited-indicator';
 
 const Menus = React.lazy(() => import('::app/menus'));
-
 const Editor = React.lazy(() => import('::app/editor'));
 
 type Props = { session: AuthUser };
@@ -80,7 +79,7 @@ const useRefreshToken = ({ token }) => {
   }, [data, error]);
 };
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store';
+import { Store } from '::root/store/store';
 import { useHandleRouting } from '::app/hooks/handle-routing/handle-routing';
 
 const mapState = (state: Store) => ({

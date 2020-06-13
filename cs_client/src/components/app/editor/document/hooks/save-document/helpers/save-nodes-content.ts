@@ -37,8 +37,11 @@ const saveNodesContent = async ({ state }: SaveOperationProps) => {
       variables: {
         file_id: node.documentId,
         node_id: node.node_id,
-        ahtml: JSON.stringify(aHtml),
-        deletedImages: deletedImages || [],
+        data: {
+          ahtml: JSON.stringify(aHtml),
+          deletedImages: deletedImages || [],
+          updatedAt: node.updatedAt,
+        },
       },
     });
     apolloCache.changes.unsetModificationFlag(

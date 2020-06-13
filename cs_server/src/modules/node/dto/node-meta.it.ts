@@ -1,4 +1,5 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
+import { Timestamp } from '../../document/helpers/graphql-types/timestamp';
 
 @InputType()
 export class NodeMetaIt {
@@ -30,4 +31,7 @@ export class NodeMetaIt {
 
   @Field({ nullable: true })
   fatherId: string;
+
+  @Field(() => Timestamp)
+  updatedAt: number;
 }

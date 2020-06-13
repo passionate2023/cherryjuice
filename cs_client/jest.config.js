@@ -2,8 +2,8 @@
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const tsconfig = require('./tsconfig');
 module.exports = {
-  roots: ['<rootDir>/src', '<rootDir>/cypress'],
-  preset: 'ts-jest',
+  roots: ['<rootDir>/.storybook', '<rootDir>/src', '<rootDir>/cypress'],
+  preset: 'ts-jest/presets/js-with-ts',
   testEnvironment: 'jsdom',
 
   // jest.config.js
@@ -15,12 +15,18 @@ module.exports = {
       tsConfig: {
         ...tsconfig.compilerOptions,
         target: 'es6',
+        allowJs: true,
       },
       babelConfig: false,
     },
   },
-  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
-    prefix: '<rootDir>/',
-  }),
+  moduleNameMapper: {
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+      '<rootDir>/__mocks__/fileMock.js',
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+      prefix: '<rootDir>/',
+    }),
+  },
   testPathIgnorePatterns: ['/node_modules/', '/__data__/', '__helpers__'],
 };

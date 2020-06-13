@@ -13,7 +13,6 @@ import { USER_MUTATION } from '::graphql/mutations';
 import { AuthScreen } from '::auth/auth-screen';
 import { AuthUser } from '::types/graphql/generated';
 import { LinearProgress } from '::shared-components/linear-progress';
-import { Banner } from '::auth/banner';
 import { Link } from 'react-router-dom';
 import { openConsentWindow } from '::auth/helpers/oauth';
 import { useDefaultValues } from '::hooks/use-default-form-values';
@@ -47,18 +46,15 @@ type Props = {
 };
 
 const LoginForm: React.FC<Props> = () => {
-  useModalKeyboardEvents({
-    modalSelector: '.' + modLogin.login__card,
-    onCloseModal: () => undefined,
-    focusableElementsSelector: ['a', 'input[type="submit"]', '#google-btn'],
-  });
   const [mutate, { loading, error, data }] = useMutation(
     USER_MUTATION.signIn.query,
   );
   const formRef = useRef<HTMLFormElement>();
-  const login = e => {
+
+  const staySignedRef = useRef<HTMLInputElement>();
+  const login = (e?: any) => {
     if (formRef.current.checkValidity()) {
-      e.preventDefault();
+      if (e) e.preventDefault();
       const variables = Object.fromEntries(
         inputs.map(({ variableName, inputRef }) => [
           variableName,
@@ -73,8 +69,6 @@ const LoginForm: React.FC<Props> = () => {
       });
     }
   };
-
-  const staySignedRef = useRef<HTMLInputElement>();
   useEffect(() => {
     const session = USER_MUTATION.signIn.path(data);
     if (session?.token) {
@@ -84,9 +78,14 @@ const LoginForm: React.FC<Props> = () => {
   }, [data]);
 
   useDefaultValues(inputs);
+  useModalKeyboardEvents({
+    modalSelector: '.' + modLogin.login__card,
+    onCloseModal: () => undefined,
+    onConfirmModal: login,
+    focusableElementsSelector: ['a', 'input[type="submit"]', '#google-btn'],
+  });
   return (
-    <AuthScreen>
-      <Banner error={error} />
+    <AuthScreen error={error}>
       <div className={modLogin.login__card}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>

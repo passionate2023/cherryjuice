@@ -2,7 +2,7 @@ import { MutableRefObject, useCallback } from 'react';
 import nodeMod from '::sass-modules/tree/node.scss';
 import { nodeOverlay } from '::app/editor/document/tree/node/helpers/node-overlay';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { navigate } from '::root/router/navigate';
+import { router } from '::root/router/router';
 
 type SelectNodeProps = {
   nodePath: string;
@@ -25,7 +25,7 @@ const useSelectNode = ({
       nodeOverlay.updateWidth();
       nodeOverlay.updateLeft(componentRef);
       updateCachedHtmlAndImages();
-      navigate.node(file_id, node_id);
+      router.node(file_id, node_id);
     },
     [nodePath],
   );

@@ -69,9 +69,6 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
           showDialog={state.showNodeMeta}
           isOnMobile={state.isOnMobile}
           onClose={appActionCreators.hideNodeMeta}
-          nodeId={
-            state.selectedNode ? state.selectedNode.nodeId : state.rootNode?.id
-          }
         />
       </Suspense>
       <Suspense fallback={<Void />}>
@@ -85,7 +82,6 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
         <DeleteNode
           onClose={appActionCreators.toggleDeleteDocumentModal}
           show={state.showDeleteDocumentModal}
-          nodeId={state.selectedNode?.nodeId}
         />
       </Suspense>
       <Suspense fallback={<Void />}>

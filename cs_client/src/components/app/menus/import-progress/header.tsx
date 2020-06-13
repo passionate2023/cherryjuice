@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modImportProgress } from '::sass-modules/index';
-import { CircleButton } from '::shared-components/buttons/circle-button';
+import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
 import { EventHandler } from 'react';
 import { DOCUMENT_SUBSCRIPTIONS } from '::types/graphql/generated';
 import { TDocumentProps } from '::app/menus/import-progress/document';
@@ -36,19 +36,19 @@ const Header: React.FC<Props> = ({
       </span>
       <span className={modImportProgress.importProgress__header__buttons}>
         {!ongoingImports && !collapsed && (
-          <CircleButton
+          <ButtonCircle
             onClick={clearFinishedDocuments}
             className={modImportProgress.importProgress__header__button}
           >
             &times;
-          </CircleButton>
+          </ButtonCircle>
         )}
-        <CircleButton
+        <ButtonCircle
           onClick={toggleCollapsed}
           className={modImportProgress.importProgress__header__button}
         >
           {collapsed ? '▴' : '▾'}
-        </CircleButton>
+        </ButtonCircle>
       </span>
     </div>
   );

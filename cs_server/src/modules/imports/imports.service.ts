@@ -35,7 +35,7 @@ export type DocumentDTO = {
   // id: string;
 };
 type ImageIdsMap = { [tempId: string]: string };
-
+type NodeDatesMap = Map<number, { createdAt: Date; updatedAt: Date }>;
 @Injectable()
 export class ImportsService {
   constructor(
@@ -58,12 +58,13 @@ export class ImportsService {
     await this.documentSqliteRepository.closeUploadedFile();
   }
 
-  async functiona(
+  async saveNodesMeta(
     newDocument: Document,
     rawNodes: (Node & { is_ro; has_image })[],
   ) {
     const nodesWithImages: Node[] = [];
     const nodesMap = new Map<number, Node>();
+    const nodeDatesMap: NodeDatesMap = new Map();
     const rawNodesMap: Map<number, Node> = new Map(
       rawNodes.map(node => [node.node_id, node]),
     );
@@ -79,10 +80,14 @@ export class ImportsService {
       nodeRaw.icon_id = '' + nodeTitleHelpers.customIconId(nodeRaw.is_ro);
 
       const node = new Node();
-      copyProperties(nodeRaw, node, {});
+      copyProperties(nodeRaw, node, { createdAt: true, updatedAt: true });
       node.document = newDocument;
       nodesMap.set(node.node_id, node);
       await node.save();
+      nodeDatesMap.set(node.node_id, {
+        createdAt: new Date(nodeRaw.createdAt),
+        updatedAt: new Date(nodeRaw.updatedAt),
+      });
       if (nodeRaw.has_image) nodesWithImages.push(node);
     }
 
@@ -94,20 +99,25 @@ export class ImportsService {
       const father = nodesMap.get(node.father_id);
       if (father) node.father = father;
     }
-    return { nodesWithImages, nodesMap };
+    return { nodesWithImages, nodesMap, nodeDatesMap };
   }
 
   private async saveNodes(
     newDocument: Document,
-  ): Promise<{ nodesWithImages: Node[]; nodesMap: Map<number, Node> }> {
+  ): Promise<{
+    nodesWithImages: Node[];
+    nodesMap: Map<number, Node>;
+    nodeDatesMap: NodeDatesMap;
+  }> {
     const rawNodes = (await this.nodeSqliteRepository.getNodesMeta(
       false,
     )) as (Node & { is_ro; has_image })[];
-    const { nodesWithImages, nodesMap } = await this.functiona(
-      newDocument,
-      rawNodes,
-    );
-    return { nodesWithImages, nodesMap };
+    const {
+      nodesWithImages,
+      nodesMap,
+      nodeDatesMap,
+    } = await this.saveNodesMeta(newDocument, rawNodes);
+    return { nodesWithImages, nodesMap, nodeDatesMap };
   }
   private async saveDocument({
     document,
@@ -118,9 +128,11 @@ export class ImportsService {
   }): Promise<void> {
     const filePath = '/uploads/' + document.name;
     await this.openUploadedFile(filePath);
-    const { nodesWithImages, nodesMap } = await this.saveNodes(document);
+    const { nodesWithImages, nodesMap, nodeDatesMap } = await this.saveNodes(
+      document,
+    );
     const { imagesOfNodes } = await this.saveImages(nodesWithImages);
-    await this.saveAhtml({ imagesOfNodes, nodesMap });
+    await this.saveAhtml({ imagesOfNodes, nodesMap, nodeDatesMap });
     const { size } = fs.statSync(filePath);
     document.size = size;
     document.hash = hash;
@@ -265,9 +277,11 @@ export class ImportsService {
   private async saveAhtml({
     nodesMap,
     imagesOfNodes,
+    nodeDatesMap,
   }: {
     nodesMap: Map<number, Node>;
     imagesOfNodes: Map<number, Image[]>;
+    nodeDatesMap: NodeDatesMap;
   }) {
     for (const node of Array.from(nodesMap.values())) {
       node.ahtml = JSON.stringify(
@@ -276,6 +290,8 @@ export class ImportsService {
           imagesOfNodes.get(node.node_id),
         ),
       );
+      node.createdAt = nodeDatesMap.get(node.node_id).createdAt;
+      node.updatedAt = nodeDatesMap.get(node.node_id).updatedAt;
       await node.save();
     }
   }

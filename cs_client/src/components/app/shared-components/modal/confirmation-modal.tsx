@@ -1,7 +1,7 @@
 import { modAlertModal, modDeleteNode } from '::sass-modules/index';
 import { EventHandler, default as React } from 'react';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
-import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
+import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { AlertType, TAlert } from '::types/react';
 import { ComponentWithTransition } from '::shared-components/transitions/component-with-transition';
 import { transitions } from '::shared-components/transitions/transitions';

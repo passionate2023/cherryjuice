@@ -8,15 +8,17 @@ import { render } from 'react-dom';
 import { Router } from 'react-router-dom';
 import { Root } from '::root/root';
 import { apolloCache } from '::graphql/cache/apollo-cache';
-import { navigate } from '::root/router/navigate';
+import { router } from '::root/router/router';
+import { attachTestCallbacks } from '::helpers/attach-test-callbacks';
 
 render(
-  <Router history={navigate.__history}>
+  <Router history={router.__history}>
     <Root />
   </Router>,
-  document.querySelector('#app'),
+  document.querySelector('#cs'),
 );
 if (process.env.NODE_ENV === 'development') {
   // @ts-ignore
   window.__APOLLO_CACHE__ = apolloCache;
+  attachTestCallbacks()
 }

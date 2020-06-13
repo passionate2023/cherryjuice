@@ -42,8 +42,27 @@ jobs:
       run: cd cs_server && sudo yarn run postinstall
 
     - name: install client dependencies
-      run: cd cs_client && yarn install --ignore-optional && yarn add jest ts-jest
+      run: cd cs_client && yarn install
 
     - name: run jest tests
       run:  cd cs_client && yarn run test
-  
+
+    - name: Notify slack success
+      if: success()
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        channel: ${{ secrets.SLACK_CHANNEL }}
+        status: SUCCESS
+        color: good
+
+    - name: Notify slack fail
+      if: failure()
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        channel: ${{ secrets.SLACK_CHANNEL }}
+        status: FAILED
+        color: danger

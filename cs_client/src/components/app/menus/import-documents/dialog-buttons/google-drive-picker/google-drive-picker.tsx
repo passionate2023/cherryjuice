@@ -8,7 +8,7 @@ import { AlertType } from '::types/react';
 import { useMutation } from '@apollo/react-hooks';
 import { googlePickerDefaultProps, googlePickerHelpers } from './helpers';
 import { useLoadGoogleSDK } from '::hooks/use-google-sdk';
-import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
+import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { modImportDocument } from '::sass-modules/index';
 import { Icons, Icon } from '::shared-components/icon';
 import { RootContext } from '::root/root-context';

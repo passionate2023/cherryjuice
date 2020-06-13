@@ -1,24 +1,37 @@
 import * as React from 'react';
-import { EventHandler, useMemo } from 'react';
+import { EventHandler, useMemo, useCallback } from 'react';
 import { NodeCached } from '::types/graphql/adapters';
 import { apolloCache } from '::graphql/cache/apollo-cache';
-import { useDeleteNode } from '::app/menus/modals/delete-node/hooks/delete-node';
+import { deleteNode } from '::app/menus/modals/delete-node/helpers/delete-node';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { ConfirmationModal } from '::shared-components/modal/confirmation-modal';
 import { AlertType } from '::types/react';
-import { testIds } from '::cypress/index';
+import { testIds } from '::cypress/support/helpers/test-ids';
+
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({
+  nodeId: state.document.selectedNode.id,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export type Props = {
   show: boolean;
   onClose: EventHandler<undefined>;
-  nodeId: string;
 };
 
-const DeleteNode: React.FC<Props> = ({ onClose, show, nodeId }) => {
+const DeleteNode: React.FC<Props & PropsFromRedux> = ({
+  onClose,
+  show,
+  nodeId,
+}) => {
   const node: NodeCached = useMemo(() => apolloCache.node.get(nodeId), [
     nodeId,
   ]);
-  const deleteNode = useDeleteNode(nodeId, node);
+  const deleteSelectedNode = useCallback(deleteNode(node), [nodeId]);
 
   const buttons: TDialogFooterButton[] = [
     {
@@ -28,7 +41,7 @@ const DeleteNode: React.FC<Props> = ({ onClose, show, nodeId }) => {
     },
     {
       label: 'Delete',
-      onClick: deleteNode,
+      onClick: deleteSelectedNode,
       disabled: false,
       testId: testIds.modal__deleteNode__confirm,
     },
@@ -48,5 +61,5 @@ const DeleteNode: React.FC<Props> = ({ onClose, show, nodeId }) => {
     />
   );
 };
-
-export default DeleteNode;
+const _ = connector(DeleteNode);
+export default _;

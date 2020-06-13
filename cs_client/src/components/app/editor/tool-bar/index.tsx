@@ -9,6 +9,15 @@ import {
   FormattingButtonsWithTransition,
 } from './groups/formatting-buttons';
 import { NavBar } from '::app/editor/tool-bar/groups/nav-bar/nav-bar';
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({
+  selectedNodeId: state.document.selectedNode.id,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {
   isOnMobile: boolean;
@@ -17,11 +26,10 @@ type Props = {
   showRecentNodes: boolean;
   showInfoBar: boolean;
   showTree: boolean;
-  selectedNodeId: string;
   documentHasUnsavedChanges: boolean;
 };
 
-const ToolBar: React.FC<Props> = ({
+const ToolBar: React.FC<Props & PropsFromRedux> = ({
   isOnMobile,
   showFormattingButtons,
   contentEditable,
@@ -60,5 +68,5 @@ const ToolBar: React.FC<Props> = ({
     </div>
   );
 };
-
-export default ToolBar;
+const _ = connector(ToolBar);
+export default _;

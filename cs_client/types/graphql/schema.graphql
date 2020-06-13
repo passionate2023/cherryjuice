@@ -70,7 +70,7 @@ type NodeMutation {
     createNode(meta: CreateNodeIt!): String!
     deleteNode: String!
     meta(meta: NodeMetaIt!): String!
-    saveAHtml(ahtml: String!, deletedImages: [String]!): String!
+    saveAHtml(data: SaveHtmlIt!): String!
     uploadImage(images: [ImageUpload!]!): [[String!]!]!
 }
 
@@ -148,6 +148,13 @@ input NodeMetaIt {
     position: Int
     read_only: Int
     sequence: Float
+    updatedAt: Timestamp!
+}
+
+input SaveHtmlIt {
+    ahtml: String!
+    deletedImages: [String]!
+    updatedAt: Timestamp!
 }
 
 input SignInCredentials {
@@ -168,6 +175,9 @@ input UploadLinkInputType {
     access_token: String!
 }
 
+
+"The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch."
+scalar Timestamp
 
 "The ImageUpload scalar type represents a file upload."
 scalar ImageUpload

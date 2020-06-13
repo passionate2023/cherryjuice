@@ -12,16 +12,20 @@ import { documentInitialState } from '::app/editor/document/reducer/initial-stat
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
 import { DocumentContext } from './reducer/context';
 import { useTrackDocumentChanges } from '::app/editor/document/hooks/track-document-changes';
-import { Store } from '::root/store';
+import { Store } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac } from '::root/store/actions.types';
+import { ac } from '::root/store/store';
 import { setHighestNodeId } from '::app/editor/document/hooks/get-document-meta/helpers/set-highset-node_id';
-import { navigate } from '::root/router/navigate';
+import { router } from '::root/router/router';
+import { asyncOperation } from '::root/store/ducks/document';
 
 const mapState = (state: Store) => ({
   nodes: state.document.nodes,
   fetchNodesStarted: state.document.fetchNodesStarted,
   cacheTimeStamp: state.document.cacheTimeStamp,
+  saveInProgress: state.document.saveInProgress,
+  selectedNode: state.document.selectedNode,
+  recentNodes: state.document.recentNodes,
 });
 
 const connector = connect(mapState);
@@ -36,6 +40,9 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   nodes,
   fetchNodesStarted,
   cacheTimeStamp,
+  saveInProgress,
+  selectedNode,
+  recentNodes,
 }) => {
   const { showTree, contentEditable, isOnMobile, processLinks } = state;
   const [documentState, dispatch] = useReducer(
@@ -51,26 +58,39 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   useEffect(() => {
     setHighestNodeId(nodes);
   }, [nodes]);
+  useEffect(() => {
+    if (selectedNode.node_id) router.node(file_id, selectedNode.node_id);
+  }, [selectedNode.node_id, file_id]);
   useTrackDocumentChanges({ cacheTimeStamp });
   useEffect(() => {
-    if (navigate.location.pathname.endsWith(file_id))
-      appActionCreators.selectNode(undefined);
-  }, [navigate.location.pathname]);
+    if (router.location.pathname.endsWith(file_id))
+      ac.document.clearSelectedNode();
+  }, [router.location.pathname]);
 
-  // temp hooks
   useEffect(() => {
     ac.document.setDocumentId(file_id);
     appActionCreators.showTree();
-    appActionCreators.selectNode(undefined);
+    ac.document.clearSelectedNode();
   }, [file_id]);
 
   return (
     <DocumentContext.Provider value={documentState}>
-      <LinearProgress loading={fetchNodesStarted} />
+      <LinearProgress
+        loading={
+          Boolean(fetchNodesStarted) || saveInProgress !== asyncOperation.idle
+        }
+      />
       {nodes && (
         <Fragment>
-          {state.selectedNode && (
-            <RecentNodes state={state} file_id={file_id} />
+          {Boolean(selectedNode.node_id) && (
+            <RecentNodes
+              isOnMobile={state.isOnMobile}
+              showRecentNodes={state.showRecentNodes}
+              file_id={file_id}
+              recentNodes={recentNodes}
+              selectedNode_id={selectedNode.node_id}
+              nodes={nodes}
+            />
           )}
           {showTree && (
             <ErrorBoundary>

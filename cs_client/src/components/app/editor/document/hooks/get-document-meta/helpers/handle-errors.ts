@@ -1,4 +1,4 @@
-import { ac } from '::root/store/actions.types';
+import { ac } from '::root/store/store';
 
 const handleErrors = ({ file_id, documentId, error }) => {
   if (error) {

@@ -4,7 +4,7 @@ import { appActionCreators } from '../../reducer';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { DocumentList } from './components/documents-list/document-list';
-import { CircleButton } from '::shared-components/buttons/circle-button';
+import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
 import { modDialog } from '::sass-modules/index';
 import { Icons, Icon } from '::shared-components/icon';
 import { useDeleteFile } from '::hooks/graphql/delete-file';
@@ -43,8 +43,8 @@ const createButtons = ({ selectedIDs, documentId, close, open }) => {
 };
 
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store';
-import { ac } from '::root/store/actions.types';
+import { Store } from '::root/store/store';
+import { ac } from '::root/store/store';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
@@ -58,7 +58,7 @@ const SelectFile: React.FC<{
   isOnMobile;
 } & PropsFromRedux> = ({ documentId, reloadFiles, showDialog, isOnMobile }) => {
   const [selectedIDs, setSelectedIDs] = useState([]);
-  const close = appActionCreators.toggleFileSelect;
+  const close = appActionCreators.hideFileSelect;
   const open = () => {
     updateCachedHtmlAndImages();
     ac.document.setDocumentId(selectedIDs[0]);
@@ -84,7 +84,7 @@ const SelectFile: React.FC<{
   const holdingRef = useRef(false);
   const rightHeaderButtons = [
     documentsList.length && holdingRef.current && (
-      <CircleButton
+      <ButtonCircle
         key={Icons.material.clear}
         className={modDialog.dialog__header__fileButton}
         onClick={() => {
@@ -93,17 +93,17 @@ const SelectFile: React.FC<{
         }}
       >
         <Icon name={Icons.material.cancel} />
-      </CircleButton>
+      </ButtonCircle>
     ),
     documentsList.length && holdingRef.current && (
-      <CircleButton
+      <ButtonCircle
         disabled={!selectedIDs.length}
         key={Icons.material.delete}
         className={modDialog.dialog__header__fileButton}
         onClick={deleteDocument}
       >
         <Icon name={Icons.material['delete']} />
-      </CircleButton>
+      </ButtonCircle>
     ),
   ].filter(Boolean);
   const onSelect = ({ id, holding }) => {

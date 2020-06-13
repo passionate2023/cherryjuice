@@ -17,16 +17,50 @@ import { getDDOE } from '::helpers/editing/execK/steps/pipe1/ddoes';
 import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
+import { isValidUrl, isNotPngBase64 } from '::helpers/misc';
 
-const getPngBase64 = file =>
+const blobToBase64 = (file: Blob): Promise<string> =>
   new Promise(resolve => {
     const reader = new FileReader();
     reader.onload = event => {
-      resolve(event.target.result);
+      resolve(event.target.result as string);
     };
     reader.readAsDataURL(file);
   });
+const urlToBase64 = (url: string): Promise<string> =>
+  fetch(url)
+    .then(res => res.blob())
+    .then(blobToBase64);
 
+const anyImageBase64ToPngBase64 = (image: HTMLImageElement): string => {
+  const canvas = document.createElement('canvas');
+  canvas.width = image.width;
+  canvas.height = image.height;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(image, 0, 0, image.width, image.height);
+  return canvas.toDataURL('image/png');
+};
+const attachWidthAndHeight = (image: HTMLImageElement) => () => {
+  const { width, height } = image;
+  if (width) image.style.width = `${width}px`;
+  if (height) image.style.height = `${height}px`;
+};
+const replaceImageUrlWithBase64 = async (
+  image: HTMLImageElement,
+): Promise<void> => {
+  if (isValidUrl(image.src)) {
+    image.src = await urlToBase64(image.src);
+  }
+  await new Promise(res => {
+    image.onload = () => {
+      attachWidthAndHeight(image)();
+      if (isNotPngBase64(image)) {
+        image.src = anyImageBase64ToPngBase64(image);
+      }
+      res();
+    };
+  });
+};
 const cleanHtml = html => {
   if (html.startsWith('<HTML><HEAD></HEAD><BODY><!--StartFragment-->'))
     html = html.replace(
@@ -75,6 +109,7 @@ const processClipboard: { [p: string]: (str) => TAHtml[] } = {
       options: {
         useObjForTextNodes: true,
         serializeNonTextElements: true,
+        removeAttributes: true,
       },
     });
     if (abstractHtml[0] === '\n') abstractHtml.shift();
@@ -147,7 +182,7 @@ const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
     putCursorAtTheEndOfPastedElement({
       newEndElement,
     });
-    if (pastedData.some(ahtml => ahtml?.type === 'png')) {
+    if (pastedData.some(ahtml => (ahtml as any)?.type === 'png')) {
       documentActionCreators.pastedImages();
     }
   } catch (e) {
@@ -168,7 +203,7 @@ const handlePaste = async e => {
     const { clipboardData } = e;
     if (clipboardData.types.includes('Files')) {
       const file = clipboardData.files[0];
-      const base64 = await getPngBase64(file);
+      const base64 = await blobToBase64(file);
       addNodeToDom({ pastedData: processClipboard.image(base64) });
     } else if (clipboardData.types.includes('text/html')) {
       const pastedData = e.clipboardData.getData('text/html');
@@ -179,18 +214,24 @@ const handlePaste = async e => {
     }
   }
 };
+const onpaste = e => {
+  handlePaste(e).catch(error => {
+    appActionCreators.setAlert({
+      title: 'Could not perform the paste',
+      description: 'Please submit a bug report',
+      error,
+      type: AlertType.Error,
+    });
+  });
+};
 const setupClipboard = () => {
   const editableDiv = document.getElementById('rich-text');
-  editableDiv.onpaste = e => {
-    handlePaste(e).catch(error => {
-      appActionCreators.setAlert({
-        title: 'Could not perform the paste',
-        description: 'Please submit a bug report',
-        error,
-        type: AlertType.Error,
-      });
-    });
-  };
+  editableDiv.onpaste = onpaste;
 };
 
-export { setupClipboard };
+export {
+  setupClipboard,
+  replaceImageUrlWithBase64,
+  anyImageBase64ToPngBase64,
+  onpaste,
+};

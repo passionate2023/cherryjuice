@@ -1,36 +1,47 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { TNodeMeta } from '::app/reducer';
 import { modRecentNodes } from '::sass-modules/index';
-import { TState } from '::app/reducer';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { navigate } from '::root/router/navigate';
+import { router } from '::root/router/router';
+import { NodeMeta } from '::types/graphql/adapters';
+import { nodesMetaMap } from '::types/misc';
 
 type Props = {
-  state: TState;
+  recentNodes: number[];
+  selectedNode_id: number;
+  nodes: nodesMetaMap;
   file_id: string;
+  isOnMobile: boolean;
+  showRecentNodes: boolean;
 };
 const config = {
   recentNodesN: 4,
 };
 const RecentNodes: React.FC<Props> = ({
-  state: { recentNodes, selectedNode, isOnMobile, showRecentNodes },
+  isOnMobile,
+  showRecentNodes,
   file_id,
+  recentNodes,
+  selectedNode_id,
+  nodes,
 }) => {
+  const selectedNode = nodes.get(selectedNode_id);
   const recentNodesOther = recentNodes.filter(
-    ({ id }) => +id !== selectedNode.id,
+    node_id => +node_id !== selectedNode.node_id,
   );
-  const lastN: TNodeMeta[] = recentNodesOther.slice(
-    recentNodesOther.length > config.recentNodesN
-      ? recentNodesOther.length - config.recentNodesN
-      : 0,
-  );
+  const lastN: NodeMeta[] = recentNodesOther
+    .slice(
+      recentNodesOther.length > config.recentNodesN
+        ? recentNodesOther.length - config.recentNodesN
+        : 0,
+    )
+    .map(node_id => nodes.get(node_id));
 
   const goToNode = useCallback(
     e => {
       updateCachedHtmlAndImages();
       const node_id = e.target.dataset.id;
-      navigate.node(file_id, node_id);
+      router.node(file_id, node_id);
     },
     [file_id],
   );
@@ -39,17 +50,17 @@ const RecentNodes: React.FC<Props> = ({
       {(!isOnMobile || showRecentNodes) && (
         <div className={modRecentNodes.titleAndRecentNodes__recentNodes}>
           {lastN.length ? (
-            lastN.map(({ id, name }) => {
+            lastN.map(({ node_id, name }) => {
               return (
                 name &&
-                +id !== selectedNode.id && (
+                node_id !== selectedNode.node_id && (
                   <button
                     className={
                       modRecentNodes.titleAndRecentNodes__recentNodes__node
                     }
-                    data-id={id}
+                    data-id={node_id}
                     onClick={goToNode}
-                    key={id}
+                    key={node_id}
                   >
                     {name.substring(0, 10)}
                     {`${name.length > 10 ? '...' : ''}`}
@@ -72,12 +83,14 @@ const RecentNodes: React.FC<Props> = ({
       )}
       <div
         className={modRecentNodes.titleAndRecentNodes__title}
-        style={selectedNode.style}
+        style={{
+          ...(selectedNode.node_title_styles &&
+            JSON.parse(selectedNode.node_title_styles)),
+        }}
       >
         {selectedNode.name}
       </div>
     </div>
   );
 };
-
 export { RecentNodes };

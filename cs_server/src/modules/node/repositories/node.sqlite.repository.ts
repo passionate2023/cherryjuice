@@ -52,7 +52,8 @@ const queries = {
     WHERE node_id = ${node_id}`,
   },
 };
-
+const convertTime = data =>
+  Math.round((new Date(data * 1000) as unknown) as number);
 @Injectable()
 export class NodeSqliteRepository {
   constructor(private documentSqliteRepository: DocumentSqliteRepository) {}
@@ -87,6 +88,8 @@ export class NodeSqliteRepository {
           ...node,
           child_nodes: [],
           is_empty: 0,
+          createdAt: convertTime(node.createdAt),
+          updatedAt: convertTime(node.updatedAt),
         })),
       );
 
@@ -101,8 +104,8 @@ export class NodeSqliteRepository {
       has_codebox: 0,
       has_table: 0,
       sequence: 0,
-      createdAt: 0,
-      updatedAt: 0,
+      createdAt: new Date().getTime(),
+      updatedAt: new Date().getTime(),
       child_nodes: [],
       is_empty: 0,
       node_title_styles: '',

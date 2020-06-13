@@ -9,6 +9,7 @@ import { NodeMetaIt } from './dto/node-meta.it';
 import { CreateNodeIt } from './dto/create-node.it';
 import { ImportsService } from '../imports/imports.service';
 import { FileUpload, GraphQLUpload } from '../document/helpers/graphql';
+import { SaveHtmlIt } from './dto/save-html.it';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => NodeMutation)
@@ -22,17 +23,15 @@ export class NodeMutationsResolver {
   @ResolveField()
   async saveAHtml(
     @Parent() { node_id, documentId }: { node_id: number; documentId: string },
-    @Args('ahtml') ahtml: string,
-    @Args({ name: 'deletedImages', type: () => [String], nullable: 'items' })
+    @Args({ name: 'data', type: () => SaveHtmlIt }) data: SaveHtmlIt,
     deletedImages: string[],
     @GetUserGql() user: User,
   ): Promise<string> {
     await this.nodeService.saveAHtml({
       user,
       node_id,
-      ahtml,
+      data,
       documentId,
-      deletedImages,
     });
     return '';
   }

@@ -1,9 +1,9 @@
 import { User } from '../../user/entities/user.entity';
+import { SaveHtmlIt } from './save-html.it';
 
 export class SaveAhtmlDto {
   user: User;
-  ahtml: string;
   node_id: number;
   documentId: string;
-  deletedImages: string[];
+  data: SaveHtmlIt;
 }

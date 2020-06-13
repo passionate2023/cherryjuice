@@ -1,12 +1,9 @@
 import { createActionCreator, createReducer } from 'deox';
-import { createActionPrefixer } from '::root/store/ducks/shared';
+import { createActionPrefixer } from '::root/store/ducks/helpers/shared';
+import { documentActionCreators } from './document';
+import { cloneObj } from '::helpers/editing/execK/helpers';
 const actionPrefixer = createActionPrefixer('node');
 const actionCreators = {
-  setId: createActionCreator(
-    actionPrefixer('setId'),
-    _ => ({ nodeId, node_id }: { nodeId: string; node_id: number }) =>
-      _({ nodeId, node_id }),
-  ),
   fetch: createActionCreator(actionPrefixer('fetch')),
   fetchStarted: createActionCreator(actionPrefixer('fetchStarted')),
   fetchFulfilled: createActionCreator(
@@ -16,25 +13,17 @@ const actionCreators = {
 };
 
 type State = {
-  rootNodeId?: string;
-  nodeId?: string;
-  node_id?: number;
   html?: string;
   fetchInProgress: boolean;
 };
 
-const initialState: State = {
+const initialState: State = cloneObj<State>({
   html: '',
-  nodeId: '',
-  node_id: -1,
   fetchInProgress: false,
-  rootNodeId: '',
-};
+});
 const reducer = createReducer(initialState, _ => [
-  _(actionCreators.setId, (state, { payload: { nodeId, node_id } }) => ({
-    ...state,
-    nodeId,
-    node_id,
+  _(documentActionCreators.setDocumentId, () => ({
+    ...cloneObj(initialState),
   })),
   _(actionCreators.fetchStarted, state => ({
     ...state,

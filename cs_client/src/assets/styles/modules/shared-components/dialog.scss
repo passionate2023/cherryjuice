@@ -24,6 +24,9 @@ $small-dialog-width: 350px;
     width: $small-dialog-width;
     margin-left: calc(100vw / 2 - #{$small-dialog-width}/ 2);
     margin-top: calc(100vh / 2 - 500px / 2);
+    .dialog__header {
+      padding: 10px 15px;
+    }
   }
 }
 .dialog__header {
@@ -34,13 +37,10 @@ $small-dialog-width: 350px;
   display: flex;
   align-items: center;
   font-family: 'Roboto Light', sans-serif;
-  padding: 10px;
+  padding: 15px;
   user-select: none;
-  @include respond-to('md') {
-    padding: 20px;
-    h2 {
-      margin-left: 10px;
-    }
+  h2 {
+    font-size: 1.2rem;
   }
 }
 

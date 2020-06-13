@@ -1,7 +1,7 @@
 import * as React from 'react';
 import modDialog from '::sass-modules/shared-components/dialog.scss';
 import { EventHandler } from 'react';
-import { ButtonSquare } from '::shared-components/buttons/buttonSquare';
+import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 export type TDialogFooterButton = {
   component?: () => React.Component;
   label: string | JSX.Element;

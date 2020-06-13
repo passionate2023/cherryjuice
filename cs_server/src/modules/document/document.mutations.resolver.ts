@@ -72,13 +72,6 @@ export class DocumentMutationsResolver {
     const deleteResult = await this.documentService.deleteDocuments(IDs, user);
     return JSON.stringify(deleteResult);
   }
-  @ResolveField(() => [NodeMutation])
-  async node(
-    @Parent() parent,
-    @Args('node_id', { type: () => Int }) node_id: number,
-  ) {
-    return { node_id, documentId: parent.id };
-  }
 
   @ResolveField(() => String)
   async createDocument(
@@ -95,5 +88,15 @@ export class DocumentMutationsResolver {
       user,
     });
     return createResult.id;
+  }
+
+  @ResolveField(() => [NodeMutation])
+  async node(
+    @Parent() parent,
+    @Args('node_id', { type: () => Int }) node_id: number,
+    @GetUserGql() user: User,
+  ) {
+    await this.documentService.getDocumentMetaById(user, parent.id);
+    return { node_id, documentId: parent.id };
   }
 }

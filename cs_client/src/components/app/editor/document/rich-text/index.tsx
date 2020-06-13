@@ -16,8 +16,8 @@ type Props = {
   processLinks: number;
 };
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store';
-import { navigate } from '::root/router/navigate';
+import { Store } from '::root/store/store';
+import { router } from '::root/router/router';
 
 const mapState = (state: Store) => ({
   fetchNodesStarted: state.document.fetchNodesStarted,
@@ -44,6 +44,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
     node_id,
     file_id,
     nodeId,
+    reloadRequestIDs: [fetchNodesStarted],
   });
 
   useSetCurrentNode(node_id, nodes);
@@ -51,7 +52,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   useEffect(() => {
     const nodeIsNew = apolloCache.changes.isNodeNew(nodeId);
     if (htmlError && !nodeIsNew) {
-      navigate.document(file_id);
+      router.document(file_id);
     }
   }, [htmlError]);
 

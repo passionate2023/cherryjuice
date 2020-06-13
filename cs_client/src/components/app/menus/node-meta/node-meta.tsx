@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { EventHandler, useContext, useEffect, useReducer } from 'react';
+import { EventHandler, useEffect, useReducer } from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { MetaForm } from '::shared-components/form/meta-form/meta-form';
 import { save } from '::app/menus/node-meta/hooks/save';
 import { NodeMetaPopupRole } from '::app/reducer';
-import { AppContext } from '::app/context';
 import {
   nodeMetaActionCreators,
   nodeMetaInitialState,
@@ -15,21 +14,21 @@ import { getNode } from '::app/menus/node-meta/helpers/get-node';
 import { modNodeMeta } from '::sass-modules/index';
 import { IconPicker } from '::app/menus/node-meta/components/icon-picker';
 import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
-import { testIds } from '::cypress/index';
+import { testIds } from '::cypress/support/helpers/test-ids';
 
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store';
+import { Store } from '::root/store/store';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
+  nodeId: state.document.selectedNode.id,
+  highestNode_id: state.document.highestNode_id,
 });
 
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type TNodeMetaModalProps = {
-  nodeId: string;
-};
+type TNodeMetaModalProps = {};
 
 const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
   onClose: EventHandler<any>;
@@ -41,17 +40,17 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
   nodeId,
   onClose,
   documentId,
+  highestNode_id,
 }) => {
   const [state, dispatch] = useReducer(nodeMetaReducer, nodeMetaInitialState);
   useEffect(() => {
     nodeMetaActionCreators.__setDispatch(dispatch);
   }, []);
-  const { highest_node_id } = useContext(AppContext);
   const { node, isNewNode, previous_sibling_node_id } = getNode({
     documentId,
     showDialog,
     nodeId,
-    highest_node_id,
+    highestNode_id,
   });
 
   useEffect(() => {

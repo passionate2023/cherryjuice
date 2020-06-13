@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { modImportProgress } from '::sass-modules/index';
 import { DOCUMENT_SUBSCRIPTIONS } from '::types/graphql/generated';
-import { CircleButton } from '::shared-components/buttons/circle-button';
+import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
 import { Icon, Icons } from '::shared-components/icon';
 import { useDeleteFile } from '::hooks/graphql/delete-file';
-import { ac } from '::root/store/actions.types';
+import { ac } from '::root/store/store';
 
 type TDocumentProps = {
   name: string;
@@ -54,13 +54,13 @@ const ActionButton = ({ eventType, deleteDocument, clear, open }) => {
   return !props.onClick ? (
     <></>
   ) : (
-    <CircleButton
+    <ButtonCircle
       key={props.iconName}
       className={modImportProgress.importProgress__document__button}
       onClick={props.onClick}
     >
       <Icon name={props.iconName} />
-    </CircleButton>
+    </ButtonCircle>
   );
 };
 const cropNampe = (name: string) =>
