@@ -3,18 +3,12 @@ import { AlertType } from '::types/react';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ac } from '::root/store/store';
-import { Actions } from '::root/store/actions.types';
+import { CreateAlertHandler } from './create-timeout-handler';
 
-type ErrorDetails = {
-  title: string;
-  description: string;
-};
-type CreateErrorHandler = {
-  errorDetails: ErrorDetails;
-  actionCreators: (() => Actions)[];
-};
+type CreateErrorHandler = CreateAlertHandler;
+
 const createErrorHandler = ({
-  errorDetails: { title, description },
+  alertDetails: { title, description },
   actionCreators,
 }: CreateErrorHandler) =>
   catchError(error => {
@@ -27,7 +21,7 @@ const createErrorHandler = ({
           error,
         }),
       ),
-      ...actionCreators.map(action => of(action())),
+      ...actionCreators.map(actionCreator => of(actionCreator(error))),
     );
   });
 

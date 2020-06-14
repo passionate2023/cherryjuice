@@ -11,6 +11,7 @@ import { resetCache } from '::root/store/epics/shared/clear-cache';
 import { createErrorHandler } from '::root/store/epics/shared/create-error-handler';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { ac } from '../store';
+import { createTimeoutHandler } from './shared/create-timeout-handler';
 
 const updateCachedHtmlAndImagesPromisified = () =>
   new Promise(res => {
@@ -53,14 +54,22 @@ const saveEpic = (action$: Observable<Actions>) => {
       ).pipe(ignoreElements());
       const sip = of(ac.__.document.saveInProgress());
       const ps = defer(() => of(postSave(state)));
-      return concat(sip, updateCache, save, resetCache, ps);
-    }),
-    createErrorHandler({
-      errorDetails: {
-        title: 'Could not save',
-        description: 'Check your network connection',
-      },
-      actionCreators: [ac.__.document.saveFailed],
+      return concat(sip, updateCache, save, resetCache, ps).pipe(
+        createTimeoutHandler({
+          alertDetails: {
+            title: 'Saving is taking longer then expected',
+            description: 'try refreshing the page',
+          },
+          due: 60000,
+        }),
+        createErrorHandler({
+          alertDetails: {
+            title: 'Could not save',
+            description: 'Check your network connection',
+          },
+          actionCreators: [ac.__.document.saveFailed],
+        }),
+      );
     }),
   );
 };
