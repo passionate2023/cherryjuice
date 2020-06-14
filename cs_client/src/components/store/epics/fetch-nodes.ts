@@ -3,10 +3,9 @@ import { concat, from, Observable, ObservedValueOf, of } from 'rxjs';
 import { ofType } from 'deox';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { QUERY_NODE_META } from '::graphql/queries';
-import { store } from '::root/store/store';
+import { store, ac } from '::root/store/store';
 import { constructTree } from '::app/editor/document/hooks/get-document-meta/helpers/construct-tree';
 import { Actions } from '../actions.types';
-import { documentActionCreators } from '::root/store/ducks/document';
 import { handleErrors } from '::app/editor/document/hooks/get-document-meta/helpers/handle-errors';
 import { NodeMeta } from '::types/graphql/adapters';
 import { gqlQuery } from '::root/store/epics/shared/gql-query';
@@ -27,10 +26,7 @@ const createLocalRequest = (
 const fetchNodesEpic = (action$: Observable<Actions>) => {
   const selectedDocumentId = () => store.getState().document.documentId;
   return action$.pipe(
-    ofType([
-      documentActionCreators.fetchNodes,
-      documentActionCreators.setDocumentId,
-    ]),
+    ofType([ac.__.document.fetchNodes, ac.__.document.setDocumentId]),
     map(action =>
       'payload' in action ? action.payload : selectedDocumentId(),
     ),
@@ -45,10 +41,10 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
           })
       ).pipe(
         map(nodes => constructTree({ nodes })),
-        map(nodesMap => documentActionCreators.fetchNodesFulfilled(nodesMap)),
+        map(nodesMap => ac.__.document.fetchNodesFulfilled(nodesMap)),
       );
 
-      const loading = of(documentActionCreators.fetchNodesStarted());
+      const loading = of(ac.__.document.fetchNodesStarted());
       return concat(loading, request).pipe(
         catchError(error =>
           of(

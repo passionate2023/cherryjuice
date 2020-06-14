@@ -2,7 +2,6 @@ import { ignoreElements, map, switchMap } from 'rxjs/operators';
 import { concat, defer, from, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { Actions } from '../actions.types';
-import { documentActionCreators } from '::root/store/ducks/document';
 import { saveDocument } from '::app/editor/document/hooks/save-document/save-document';
 import { swapPersistedTreeStateDocumentId } from '::app/editor/document/tree/node/hooks/persisted-tree-state/helpers';
 import { appActionCreators } from '::app/reducer';
@@ -11,6 +10,7 @@ import { SaveOperationState } from '::app/editor/document/hooks/save-document/he
 import { resetCache } from '::root/store/epics/shared/clear-cache';
 import { createErrorHandler } from '::root/store/epics/shared/create-error-handler';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
+import { ac } from '../store';
 
 const updateCachedHtmlAndImagesPromisified = () =>
   new Promise(res => {
@@ -26,16 +26,15 @@ const postSave = (state: SaveOperationState) => {
 
   if (location.pathname.startsWith('/document/new-document')) {
     const newDocumentId = createdDocuments.pop();
-    return documentActionCreators.setDocumentId(newDocumentId);
+    return ac.__.document.setDocumentId(newDocumentId);
   } else {
-    return documentActionCreators.fetchNodes();
+    return ac.__.document.fetchNodes();
   }
 };
 
 const saveEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
-    ofType([documentActionCreators.save]),
-
+    ofType([ac.__.document.save]),
     switchMap(() => {
       const state: SaveOperationState = {
         newFatherIds: {},
@@ -47,22 +46,22 @@ const saveEpic = (action$: Observable<Actions>) => {
       };
 
       const save = defer(() =>
-        from(saveDocument(state)).pipe(
-          map(documentActionCreators.saveFulfilled),
-        ),
+        from(saveDocument(state)).pipe(map(ac.__.document.saveFulfilled)),
       );
       const updateCache = defer(() =>
         of(updateCachedHtmlAndImagesPromisified()),
       ).pipe(ignoreElements());
-      const sip = of(documentActionCreators.saveInProgress());
+      const sip = of(ac.__.document.saveInProgress());
       const ps = defer(() => of(postSave(state)));
       return concat(sip, updateCache, save, resetCache, ps);
     }),
-    createErrorHandler(
-      'Could not save',
-      'Check your network connection',
-      documentActionCreators.saveFailed,
-    ),
+    createErrorHandler({
+      errorDetails: {
+        title: 'Could not save',
+        description: 'Check your network connection',
+      },
+      actionCreators: [ac.__.document.saveFailed],
+    }),
   );
 };
 
