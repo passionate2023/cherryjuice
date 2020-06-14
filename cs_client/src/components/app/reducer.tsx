@@ -40,7 +40,6 @@ enum actions {
   SHOW_NODE_META,
   HIDE_NODE_META,
   TOGGLE_DELETE_DOCUMENT,
-  showReloadConfirmationModal,
   documentHasUnsavedChanges,
   createDocument,
   showDocumentMetaDialog,
@@ -113,12 +112,6 @@ const createActionCreators = () => {
       state.dispatch({
         type: actions.TOGGLE_DELETE_DOCUMENT,
       }),
-    showReloadConfirmationModal: () => {
-      state.dispatch({
-        type: actions.showReloadConfirmationModal,
-        value: true,
-      });
-    },
 
     documentHasUnsavedChanges: (documentHasUnsavedChanges: boolean) => {
       state.dispatch({

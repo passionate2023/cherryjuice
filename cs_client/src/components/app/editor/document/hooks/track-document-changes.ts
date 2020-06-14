@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { appActionCreators } from '::app/reducer';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { getEditor } from '::app/editor/document/rich-text/hooks/get-node-images';
+import { onBeforeUnload } from '::helpers/dom/on-before-unload';
 
 type Props = {
   cacheTimeStamp: number;
@@ -16,6 +17,10 @@ const useTrackDocumentChanges = ({ cacheTimeStamp }: Props) => {
         Boolean(apolloCache.changes.node.html.length) ||
         Boolean(apolloCache.changes.document.created.length));
     appActionCreators.documentHasUnsavedChanges(documentHasUnsavedNodes);
+    if (documentHasUnsavedNodes) {
+      onBeforeUnload.attach();
+    } else onBeforeUnload.remove();
+    return onBeforeUnload.remove;
   }, [cacheTimeStamp]);
 };
 
