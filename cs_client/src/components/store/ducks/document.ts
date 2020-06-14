@@ -15,7 +15,7 @@ enum asyncOperation {
   idle = 'idle',
 }
 
-const AP = createActionPrefixer('document');
+const ap = createActionPrefixer('document');
 const ac = {
   // document
   fetchNodes: _('fetchNodes', _ => () => {
@@ -29,30 +29,28 @@ const ac = {
   ),
   setCacheTimeStamp: _(
     'setCacheTimeStamp',
-    _ => (timeStamp: number = new Date().getTime()) => {
-      return _(timeStamp);
-    },
+    _ => (timeStamp: number = new Date().getTime()) => _(timeStamp),
   ),
   save: _('save'),
   saveFulfilled: _('saveFulfilled'),
   saveInProgress: _('saveInProgress'),
   saveFailed: _('saveFailed'),
   // node
-  selectNode: _(AP('selectNode'), _ => (node: NodeId) => _(node)),
-  selectRootNode: _(AP('selectRootNode'), _ => (node: NodeId) => _(node)),
+  selectNode: _(ap('selectNode'), _ => (node: NodeId) => _(node)),
+  selectRootNode: _(ap('selectRootNode'), _ => (node: NodeId) => _(node)),
   removeNodeFromRecentNodes: _(
-    AP('removeNodeFromRecentNodes'),
+    ap('removeNodeFromRecentNodes'),
     _ => (node_id: number) => _(node_id),
   ),
   clearSelectedNode: _(
-    AP('clearSelectedNode'),
+    ap('clearSelectedNode'),
     _ => (payload: { removeChildren: boolean } = { removeChildren: false }) =>
       _(payload),
   ),
-  fetch: _(AP('fetch')),
-  fetchStarted: _(AP('fetchStarted')),
-  fetchFulfilled: _(AP('fetchFulfilled'), _ => (html: string) => _(html)),
-  setHighestNode_id: _(AP('setHighestNode_id'), _ => (node_id: number) =>
+  fetch: _(ap('fetch')),
+  fetchStarted: _(ap('fetchStarted')),
+  fetchFulfilled: _(ap('fetchFulfilled'), _ => (html: string) => _(html)),
+  setHighestNode_id: _(ap('setHighestNode_id'), _ => (node_id: number) =>
     _(node_id),
   ),
 };

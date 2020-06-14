@@ -5,6 +5,7 @@ import { appActionCreators, TState } from '::app/reducer';
 import { AuthUser } from '::types/graphql/generated';
 import ReloadDocument from '::app/menus/modals/reload-document/reload-document';
 import { Snackbar } from '::shared-components/snackbar/snackbar';
+import { ac } from '::root/store/store';
 const AlertModal = React.lazy(() => import('./modals/alert-modal/alert-modal'));
 const UserPopup = React.lazy(() => import('./user/user'));
 const ImportProgress = React.lazy(() =>
@@ -24,7 +25,22 @@ const DeleteNode = React.lazy(() =>
 );
 type Props = { state: TState; dispatch: any; session: AuthUser };
 
-const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({
+  alert: state.dialogs.alert,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const Menus: React.FC<Props & PropsFromRedux> = ({
+  state,
+  dispatch,
+  session: { user },
+  alert,
+}) => {
   return (
     <>
       <Suspense fallback={<Void />}>
@@ -43,9 +59,9 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
       </Suspense>
       <Suspense fallback={<Void />}>
         <AlertModal
-          alert={state.alert}
-          show={Boolean(state.alert)}
-          onClose={appActionCreators.clearAlert}
+          alert={alert}
+          show={Boolean(alert)}
+          onClose={ac.dialogs.clearAlert}
         />
       </Suspense>
       <Suspense fallback={<Void />}>
@@ -96,5 +112,5 @@ const Menus: React.FC<Props> = ({ state, dispatch, session: { user } }) => {
     </>
   );
 };
-
-export default Menus;
+const _ = connector(Menus);
+export default _;

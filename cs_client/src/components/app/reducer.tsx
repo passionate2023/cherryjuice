@@ -1,4 +1,3 @@
-import { TAlert } from '::types/react';
 enum NodeMetaPopupRole {
   EDIT = 1,
   CREATE_SIBLING,
@@ -15,7 +14,6 @@ const initialState = {
   ].map(value => (value === null ? true : value === true))[0],
   treeSize: JSON.parse(localStorage.getItem('treeSize') as string) || 250,
   showFileSelect: false,
-  alert: undefined,
   showSettings: false,
   showFormattingButtons: false,
   showRecentNodes: false,
@@ -31,7 +29,6 @@ const initialState = {
 };
 
 export type TState = typeof initialState & {
-  alert?: TAlert;
   showNodeMeta: NodeMetaPopupRole;
   createDocumentRequestId: number;
 };
@@ -47,7 +44,6 @@ enum actions {
   TOGGLE_INFO_BAR,
   RESIZE_TREE,
   RELOAD_DOCUMENT_LIST,
-  SET_ALERT,
   SET_IS_ON_MOBILE,
   PROCESS_LINKS,
   HIDE_POPUPS,
@@ -85,12 +81,6 @@ const createActionCreators = () => {
     },
     setIsOnMobile: (isOnMobile: boolean): void => {
       state.dispatch({ type: actions.SET_IS_ON_MOBILE, value: isOnMobile });
-    },
-    setAlert: (alert: TAlert): void => {
-      state.dispatch({ type: actions.SET_ALERT, value: alert });
-    },
-    clearAlert: (): void => {
-      state.dispatch({ type: actions.SET_ALERT, value: undefined });
     },
     reloadDocumentList: (): void => {
       state.dispatch({
@@ -246,15 +236,6 @@ reducer = (
       return {
         ...state,
         reloadFiles: action.value,
-      };
-    case actions.SET_ALERT:
-      if (action.value?.error && process.env.NODE_ENV === 'development')
-        // eslint-disable-next-line no-console
-        console.error(action.value.error);
-      return {
-        ...state,
-        alert: action.value,
-        showImportDocuments: false,
       };
     case actions.TOGGLE_SETTINGS:
       return { ...state, showSettings: !state.showSettings };

@@ -1,7 +1,7 @@
 import { useTimeout } from './use-timeout';
-import { appActionCreators } from '::app/reducer';
 import { useEffect } from 'react';
 import { AlertType } from '::types/react';
+import { ac } from '::root/store/store';
 
 const useQueryTimeout = (
   { queryData, queryError, queryVariables },
@@ -18,7 +18,7 @@ const useQueryTimeout = (
     timer.timeHasElapsed &&
     timer.id === JSON.stringify(queryVariables)
   ) {
-    appActionCreators.setAlert({
+    ac.dialogs.setAlert({
       title: `Fetching ${resourceName} is taking longer then expected`,
       description: 'Please refresh the page',
       type: AlertType.Warning,
@@ -27,7 +27,7 @@ const useQueryTimeout = (
   }
   useEffect(() => {
     if (queryError && showErrorAlert)
-      appActionCreators.setAlert({
+      ac.dialogs.setAlert({
         title: `Could not fetch ${resourceName}`,
         description: 'Please refresh the page',
         type: AlertType.Error,

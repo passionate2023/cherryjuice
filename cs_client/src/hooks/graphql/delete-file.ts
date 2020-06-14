@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/react-hooks';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { useCallback, useEffect } from 'react';
-import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
+import { ac } from '::root/store/store';
 
 const useDeleteFile = ({
   IDs,
@@ -27,7 +27,7 @@ const useDeleteFile = ({
   }, [IDs]);
   useEffect(() => {
     if (deleteError)
-      appActionCreators.setAlert({
+      ac.dialogs.setAlert({
         title: `Could not delete document`,
         description: 'Please refresh the page',
         type: AlertType.Error,

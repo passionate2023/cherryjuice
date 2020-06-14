@@ -3,7 +3,6 @@ import React, { useContext, useMemo, useRef } from 'react';
 import { GooglePickerResult } from '::types/google';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { useCallback } from 'react';
-import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
 import { useMutation } from '@apollo/react-hooks';
 import { googlePickerDefaultProps, googlePickerHelpers } from './helpers';
@@ -12,6 +11,7 @@ import { ButtonSquare } from '::shared-components/buttons/button-square/button-s
 import { modImportDocument } from '::sass-modules/index';
 import { Icons, Icon } from '::shared-components/icon';
 import { RootContext } from '::root/root-context';
+import { ac } from '::root/store/store';
 
 type Props = {};
 
@@ -39,7 +39,7 @@ const GoogleDrivePicker: React.FC<Props> = () => {
   );
   const { secrets } = useContext(RootContext);
   const onAuthFailed = error =>
-    appActionCreators.setAlert({
+    ac.dialogs.setAlert({
       error,
       type: AlertType.Error,
       description: error.message,

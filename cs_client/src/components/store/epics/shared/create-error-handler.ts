@@ -1,15 +1,11 @@
-import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { ac } from '::root/store/store';
 
-const createErrorHandler = (
-  title: string,
-  description: string,
-  action,
-) =>
+const createErrorHandler = (title: string, description: string, action) =>
   catchError(error => {
-    appActionCreators.setAlert({
+    ac.dialogs.setAlert({
       title,
       description,
       type: AlertType.Error,

@@ -47,7 +47,7 @@ const DocumentMetaDialogWithTransition: React.FC<DocumentMetaDialogProps & {
         apolloCache.document.create(document.id, document);
         ac.document.setDocumentId(document.id);
       } catch (e) {
-        appActionCreators.setAlert({
+        ac.dialogs.setAlert({
           title: 'Could not create a document',
           description: 'please refresh the page',
           type: AlertType.Error,

@@ -20,7 +20,10 @@ const nodeHelpers = (state: CacheState) => ({
     meta,
   }: {
     nodeId: string;
-    meta: NodeMetaIt | { html?: string } | { updatedAt?: string };
+    meta:
+      | (NodeMetaIt & { updatedAt?: number })
+      | { html?: string }
+      | { updatedAt?: string };
   }): void => {
     const modificationType = meta['html'] ? 'content' : 'meta';
     const node = apolloCache.node.get(nodeId);
