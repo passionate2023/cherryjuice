@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { appActionCreators } from '../../reducer';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { DocumentList } from './components/documents-list/document-list';
@@ -12,17 +11,19 @@ import { useRef } from 'react';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { useGetDocumentsList } from '::app/menus/select-file/hooks/get-documents-list';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
+import { ac, Store } from '::root/store/store';
+import { connect, ConnectedProps } from 'react-redux';
 
 const createButtons = ({ selectedIDs, documentId, close, open }) => {
   const buttonsLeft = [
     {
       label: 'reload',
-      onClick: appActionCreators.reloadDocumentList,
+      onClick: ac.dialogs.reloadDocumentList,
       disabled: false,
     },
     {
       label: 'import',
-      onClick: appActionCreators.toggleShowImportDocuments,
+      onClick: ac.dialogs.showImportDocument,
       disabled: false,
     },
   ];
@@ -42,23 +43,25 @@ const createButtons = ({ selectedIDs, documentId, close, open }) => {
   return { buttonsLeft, buttonsRight };
 };
 
-import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store/store';
-import { ac } from '::root/store/store';
-
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
+  showImportDocuments: state.dialogs.showImportDocuments,
+  showDocumentList: state.dialogs.showDocumentList,
+  reloadDocumentList: state.dialogs.reloadDocumentList,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const SelectFile: React.FC<{
-  reloadFiles;
-  showDialog;
   isOnMobile;
-} & PropsFromRedux> = ({ documentId, reloadFiles, showDialog, isOnMobile }) => {
+} & PropsFromRedux> = ({
+  documentId,
+  reloadDocumentList,
+  showDocumentList,
+  isOnMobile,
+}) => {
   const [selectedIDs, setSelectedIDs] = useState([]);
-  const close = appActionCreators.hideFileSelect;
+  const close = ac.dialogs.hideDocumentList;
   const open = () => {
     updateCachedHtmlAndImages();
     ac.document.setDocumentId(selectedIDs[0]);
@@ -70,12 +73,14 @@ const SelectFile: React.FC<{
     open,
   });
 
-  const { loading, documentsList } = useGetDocumentsList({ reloadFiles });
+  const { loading, documentsList } = useGetDocumentsList({
+    reloadFiles: reloadDocumentList,
+  });
 
   const { deleteDocument } = useDeleteFile({
     IDs: selectedIDs,
     onCompleted: () => {
-      appActionCreators.reloadDocumentList();
+      ac.dialogs.reloadDocumentList();
       if (selectedIDs.includes(documentId)) {
         ac.document.setDocumentId(undefined);
       }
@@ -126,7 +131,7 @@ const SelectFile: React.FC<{
       dialogFooterLeftButtons={buttonsLeft}
       dialogFooterRightButtons={buttonsRight}
       isOnMobile={isOnMobile}
-      show={showDialog}
+      show={showDocumentList}
       onClose={close}
       rightHeaderButtons={rightHeaderButtons}
     >

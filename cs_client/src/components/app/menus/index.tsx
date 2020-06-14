@@ -30,6 +30,8 @@ import { Store } from '::root/store/store';
 
 const mapState = (state: Store) => ({
   alert: state.dialogs.alert,
+  showImportDocuments: state.dialogs.showImportDocuments,
+  showDocumentList: state.dialogs.showDocumentList,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -40,15 +42,12 @@ const Menus: React.FC<Props & PropsFromRedux> = ({
   dispatch,
   session: { user },
   alert,
+  showImportDocuments,
 }) => {
   return (
     <>
       <Suspense fallback={<Void />}>
-        <SelectFile
-          reloadFiles={state.reloadFiles}
-          showDialog={state.showFileSelect}
-          isOnMobile={state.isOnMobile}
-        />
+        <SelectFile isOnMobile={state.isOnMobile} />
       </Suspense>
       <Suspense fallback={<Void />}>
         <Settings
@@ -66,8 +65,8 @@ const Menus: React.FC<Props & PropsFromRedux> = ({
       </Suspense>
       <Suspense fallback={<Void />}>
         <ImportDocuments
-          show={Boolean(state.showImportDocuments)}
-          onClose={appActionCreators.toggleShowImportDocuments}
+          show={showImportDocuments}
+          onClose={ac.dialogs.hideImportDocument}
         />
       </Suspense>
       <Suspense fallback={<Void />}>

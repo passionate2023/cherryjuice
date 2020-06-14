@@ -8,19 +8,16 @@ const initialState = {
   documentHasUnsavedChanges: false,
   processLinks: undefined,
   createDocumentRequestId: undefined,
-  reloadFiles: 0,
   showTree: [
     JSON.parse(localStorage.getItem('showTree') as string),
   ].map(value => (value === null ? true : value === true))[0],
   treeSize: JSON.parse(localStorage.getItem('treeSize') as string) || 250,
-  showFileSelect: false,
   showSettings: false,
   showFormattingButtons: false,
   showRecentNodes: false,
   contentEditable: false,
   isOnMobile: false,
   showInfoBar: false,
-  showImportDocuments: false,
   showUserPopup: false,
   showNodeMeta: undefined,
   showDeleteDocumentModal: false,
@@ -37,17 +34,14 @@ enum actions {
   TOGGLE_TREE,
   TOGGLE_TREE_ON,
   TOGGLE_TREE_OFF,
-  TOGGLE_FILE_SELECT,
   TOGGLE_SETTINGS,
   TOGGLE_FORMATTING_BUTTONS,
   TOGGLE_RECENT_NODES_BAR,
   TOGGLE_INFO_BAR,
   RESIZE_TREE,
-  RELOAD_DOCUMENT_LIST,
   SET_IS_ON_MOBILE,
   PROCESS_LINKS,
   HIDE_POPUPS,
-  TOGGLE_SHOW_IMPORT_FILES,
   TOGGLE_USER_POPUP,
   SHOW_NODE_META,
   HIDE_NODE_META,
@@ -73,21 +67,13 @@ const createActionCreators = () => {
     toggleInfoBar: (): void => {
       state.dispatch({ type: actions.TOGGLE_INFO_BAR });
     },
-    toggleShowImportDocuments: (): void => {
-      state.dispatch({ type: actions.TOGGLE_SHOW_IMPORT_FILES });
-    },
     toggleUserPopup: (): void => {
       state.dispatch({ type: actions.TOGGLE_USER_POPUP });
     },
     setIsOnMobile: (isOnMobile: boolean): void => {
       state.dispatch({ type: actions.SET_IS_ON_MOBILE, value: isOnMobile });
     },
-    reloadDocumentList: (): void => {
-      state.dispatch({
-        type: actions.RELOAD_DOCUMENT_LIST,
-        value: new Date().getTime(),
-      });
-    },
+
     setTreeWidth: (width: number) => {
       state.dispatch({
         type: actions.RESIZE_TREE,
@@ -96,12 +82,6 @@ const createActionCreators = () => {
     },
     toggleSettings: () => {
       state.dispatch({ type: actions.TOGGLE_SETTINGS });
-    },
-    hideFileSelect: () => {
-      state.dispatch({ type: actions.TOGGLE_FILE_SELECT, value: false });
-    },
-    showFileSelect: () => {
-      state.dispatch({ type: actions.TOGGLE_FILE_SELECT, value: true });
     },
     showTree: () => {
       state.dispatch({ type: actions.TOGGLE_TREE_ON });
@@ -215,28 +195,11 @@ reducer = (
         ...state,
         showDeleteDocumentModal: !state.showDeleteDocumentModal,
       };
-    case actions.TOGGLE_SHOW_IMPORT_FILES:
-      return {
-        ...state,
-        showImportDocuments: !state.showImportDocuments,
-        showFileSelect: false,
-      };
-    case actions.TOGGLE_FILE_SELECT:
-      return {
-        ...state,
-        showFileSelect: action.value,
-        reloadFiles: action.value ? new Date().getTime() : state.reloadFiles,
-      };
     case actions.RESIZE_TREE:
       return { ...state, treeSize: action.value };
     case actions.HIDE_POPUPS:
       return { ...state, ...(state.isOnMobile && { showInfoBar: false }) };
 
-    case actions.RELOAD_DOCUMENT_LIST:
-      return {
-        ...state,
-        reloadFiles: action.value,
-      };
     case actions.TOGGLE_SETTINGS:
       return { ...state, showSettings: !state.showSettings };
     case actions.TOGGLE_RECENT_NODES_BAR:
