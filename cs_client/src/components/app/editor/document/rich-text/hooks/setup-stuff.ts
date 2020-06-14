@@ -9,6 +9,7 @@ import {
 import { setupGesturesHandler } from '::shared-components/drawer/drawer-navigation/helpers';
 import { appActionCreators } from '::app/reducer';
 import { modRichText } from '::sass-modules/index';
+import { ac } from '::root/store/store';
 
 const useSetupStuff = node_id => {
   useEffect(() => {
@@ -20,8 +21,8 @@ const useSetupStuff = node_id => {
     setupDevHotKeys();
     hotKeysManager.startListening();
     setupGesturesHandler({
-      onRight: appActionCreators.showTree,
-      onLeft: appActionCreators.hideTree,
+      onRight: ac.editor.showTree,
+      onLeft: ac.editor.hideTree,
       onTap: appActionCreators.hidePopups,
       gestureZoneSelector: modRichText.richText,
       minimumLength: 170,

@@ -8,9 +8,6 @@ const initialState = {
   documentHasUnsavedChanges: false,
   processLinks: undefined,
   createDocumentRequestId: undefined,
-  showTree: [
-    JSON.parse(localStorage.getItem('showTree') as string),
-  ].map(value => (value === null ? true : value === true))[0],
   treeSize: JSON.parse(localStorage.getItem('treeSize') as string) || 250,
   showSettings: false,
   showFormattingButtons: false,
@@ -31,9 +28,6 @@ export type TState = typeof initialState & {
 };
 enum actions {
   setSnackbarMessage,
-  TOGGLE_TREE,
-  TOGGLE_TREE_ON,
-  TOGGLE_TREE_OFF,
   TOGGLE_SETTINGS,
   TOGGLE_FORMATTING_BUTTONS,
   TOGGLE_RECENT_NODES_BAR,
@@ -82,15 +76,6 @@ const createActionCreators = () => {
     },
     toggleSettings: () => {
       state.dispatch({ type: actions.TOGGLE_SETTINGS });
-    },
-    showTree: () => {
-      state.dispatch({ type: actions.TOGGLE_TREE_ON });
-    },
-    hideTree: () => {
-      state.dispatch({ type: actions.TOGGLE_TREE_OFF });
-    },
-    toggleTree: () => {
-      state.dispatch({ type: actions.TOGGLE_TREE });
     },
     hidePopups: () => {
       state.dispatch({ type: actions.HIDE_POPUPS });
@@ -182,12 +167,6 @@ reducer = (
   },
 ): TState => {
   switch (action.type) {
-    case actions.TOGGLE_TREE:
-      return { ...state, showTree: !state.showTree };
-    case actions.TOGGLE_TREE_ON:
-      return { ...state, showTree: true };
-    case actions.TOGGLE_TREE_OFF:
-      return { ...state, showTree: false };
     case actions.TOGGLE_USER_POPUP:
       return { ...state, showUserPopup: !state.showUserPopup };
     case actions.TOGGLE_DELETE_DOCUMENT:

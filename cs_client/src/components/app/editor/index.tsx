@@ -13,6 +13,7 @@ const ToolBar = React.lazy(() => import('::app/editor/tool-bar'));
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
+  showTree: state.editor.showTree,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -20,6 +21,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 const Editor: React.FC<{ state: TState } & PropsFromRedux> = ({
   state,
   documentId,
+  showTree,
 }) => {
   useEffect(() => {
     if (!documentId && router.location.pathname === '/')
@@ -35,7 +37,7 @@ const Editor: React.FC<{ state: TState } & PropsFromRedux> = ({
             isOnMobile={state.isOnMobile}
             showInfoBar={state.showInfoBar}
             showRecentNodes={state.showRecentNodes}
-            showTree={state.showTree}
+            showTree={showTree}
             documentHasUnsavedChanges={state.documentHasUnsavedChanges}
           />
         </Suspense>

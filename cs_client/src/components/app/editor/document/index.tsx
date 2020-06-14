@@ -6,7 +6,7 @@ import { Route, useRouteMatch } from 'react-router-dom';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { RichText } from '::app/editor/document/rich-text';
-import { appActionCreators, TState } from '::app/reducer';
+import { TState } from '::app/reducer';
 import { documentReducer } from '::app/editor/document/reducer/reducer';
 import { documentInitialState } from '::app/editor/document/reducer/initial-state';
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
@@ -26,6 +26,7 @@ const mapState = (state: Store) => ({
   saveInProgress: state.document.saveInProgress,
   selectedNode: state.document.selectedNode,
   recentNodes: state.document.recentNodes,
+  showTree: state.editor.showTree,
 });
 
 const connector = connect(mapState);
@@ -43,8 +44,9 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   saveInProgress,
   selectedNode,
   recentNodes,
+  showTree,
 }) => {
-  const { showTree, contentEditable, isOnMobile, processLinks } = state;
+  const { contentEditable, isOnMobile, processLinks } = state;
   const [documentState, dispatch] = useReducer(
     documentReducer,
     documentInitialState,
@@ -69,7 +71,6 @@ const Document: React.FC<Props & PropsFromRedux> = ({
 
   useEffect(() => {
     ac.document.setDocumentId(file_id);
-    appActionCreators.showTree();
     ac.document.clearSelectedNode();
   }, [file_id]);
 

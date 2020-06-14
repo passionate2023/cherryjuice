@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage';
 import { documentReducer } from './ducks/document';
 import { dialogsReducer } from './ducks/dialogs';
 import { nodeReducer } from './ducks/node';
+import { editorReducer } from './ducks/editor';
 
 const reducer = combineReducers({
   document: persistReducer(
@@ -17,6 +18,13 @@ const reducer = combineReducers({
   ),
   dialogs: dialogsReducer,
   node: nodeReducer,
+  editor: persistReducer(
+    {
+      key: 'editor',
+      storage,
+    },
+    editorReducer,
+  ),
 });
 
 export { reducer };

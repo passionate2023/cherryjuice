@@ -5,14 +5,15 @@ import { Icon, Icons } from '::shared-components/icon';
 import { modToolbar } from '::sass-modules/index';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac } from '::root/store/store';
-const mapState = () => ({});
+import { ac, Store } from '::root/store/store';
+const mapState = (state: Store) => ({
+  showTree: state.editor.showTree,
+});
 
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {
-  showTree: boolean;
   documentHasUnsavedChanges: boolean;
   selectedNodeId: string;
 };
@@ -24,7 +25,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
 }) => {
   return (
     <div className={modToolbar.toolBar__group}>
-      <ToolbarButton onClick={appActionCreators.toggleTree} enabled={showTree}>
+      <ToolbarButton onClick={ac.editor.toggleTree} enabled={showTree}>
         <Icon
           name={Icons.cherrytree.additionalIcons.cherries}
           style={{ width: 22 }}
