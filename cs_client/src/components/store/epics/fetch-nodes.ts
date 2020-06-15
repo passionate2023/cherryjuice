@@ -1,4 +1,4 @@
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { concat, from, Observable, ObservedValueOf, of } from 'rxjs';
 import { ofType } from 'deox';
 import { apolloCache } from '::graphql/cache/apollo-cache';
@@ -42,6 +42,9 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
             variables: { file_id },
           })
       ).pipe(
+        tap(() => {
+          apolloCache.changes.initDocumentChangesState(file_id);
+        }),
         map(nodes => constructTree({ nodes })),
         map(nodesMap => ac.__.document.fetchNodesFulfilled(nodesMap)),
       );

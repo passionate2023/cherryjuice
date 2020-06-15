@@ -89,8 +89,15 @@ const updateCachedImages = ({
     return acc;
   }, []);
 
-  deletedImageIDs.forEach(apolloCache.image.delete.hard(node.id));
-  newImages.forEach(apolloCache.image.create(node.id));
+  deletedImageIDs.forEach(
+    apolloCache.image.delete.hard({
+      nodeId: node.id,
+      documentId: node.documentId,
+    }),
+  );
+  newImages.forEach(
+    apolloCache.image.create({ nodeId: node.id, documentId: node.documentId }),
+  );
 };
 const updateCachedHtmlAndImages = () => {
   const {

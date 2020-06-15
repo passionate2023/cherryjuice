@@ -6,16 +6,14 @@ import { onBeforeUnload } from '::helpers/dom/on-before-unload';
 
 type Props = {
   cacheTimeStamp: number;
+  documentId: string;
 };
 const useTrackDocumentChanges = ({ cacheTimeStamp }: Props) => {
   useEffect(() => {
     const documentHasUnsavedNodes =
       Boolean(cacheTimeStamp) &&
       (Boolean(getEditor()?.getAttribute('data-edited')) ||
-        Boolean(apolloCache.changes.node.created.length) ||
-        Boolean(apolloCache.changes.node.meta.length) ||
-        Boolean(apolloCache.changes.node.html.length) ||
-        Boolean(apolloCache.changes.document.created.length));
+        Boolean(apolloCache.changes.document().unsaved));
     appActionCreators.documentHasUnsavedChanges(documentHasUnsavedNodes);
     if (documentHasUnsavedNodes) {
       onBeforeUnload.attach();

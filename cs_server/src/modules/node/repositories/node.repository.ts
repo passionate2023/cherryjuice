@@ -82,14 +82,10 @@ export class NodeRepository extends Repository<Node> {
     return node.id;
   }
 
-  async deleteNode({
-    documentId,
-    node_id,
-    user,
-  }: DeleteNodeDto): Promise<string> {
+  async deleteNode({ documentId, node_id }: DeleteNodeDto): Promise<string> {
     return await this.createQueryBuilder('node')
       .delete()
-      .where({ node_id, userId: user.id, documentId })
+      .where({ node_id, documentId })
       .execute()
       .then(res => JSON.stringify(res));
   }

@@ -88,9 +88,9 @@ describe('create document > create nodes', () => {
   });
 
   it('assert: written images', () => {
-    tree[0].forEach(node => {
+    for (const node of tree[0]) {
       assertNodeImage({ node, images: node.images });
-    });
+    }
   });
 
   it('perform: reload > login', () => {
@@ -109,15 +109,15 @@ describe('create document > create nodes', () => {
         texts: [node.name, 'image x'],
         format: 'image/jpeg',
       });
-      node.images.push(additionalImage);
+      node.images.unshift(additionalImage);
       writeHtmlImages({ node, images: [additionalImage] });
     });
   });
 
   it('assert: written images', () => {
-    tree[0].forEach(node => {
+    for (const node of tree[0]) {
       assertNodeImage({ node, images: node.images });
-    });
+    }
   });
 
   it('perform: save document', () => {
@@ -126,8 +126,8 @@ describe('create document > create nodes', () => {
   });
 
   it('assert: written images', () => {
-    tree[0].forEach(node => {
+    for (const node of tree[0]) {
       assertNodeImage({ node, images: node.images });
-    });
+    }
   });
 });

@@ -90,6 +90,7 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     ...state,
     fetchNodesStarted: 0,
     nodes: payload,
+    cacheTimeStamp: 0,
   })),
   _(ac.fetchNodesStarted, state => ({
     ...state,

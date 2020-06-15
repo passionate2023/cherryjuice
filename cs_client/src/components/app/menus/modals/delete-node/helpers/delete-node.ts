@@ -22,7 +22,10 @@ const deleteNode = (node: NodeCached) => {
         child_nodes: fatherNode.child_nodes,
       },
     });
-    apolloCache.node.delete.soft(node.id);
+    apolloCache.node.delete.soft({
+      documentId: node.documentId,
+      nodeId: node.id,
+    });
     appActionCreators.toggleDeleteDocumentModal();
     ac.document.clearSelectedNode({ removeChildren: true });
     router.document(node.documentId);

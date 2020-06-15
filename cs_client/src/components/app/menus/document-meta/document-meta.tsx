@@ -43,6 +43,7 @@ const DocumentMetaDialogWithTransition: React.FC<DocumentMetaDialogProps & {
         const document = generateNewDocument({ name });
         const rootNode = generateRootNode({ documentId: document.id });
         document.node.push(rootNode);
+        apolloCache.changes.initDocumentChangesState(document.id);
         apolloCache.node.create(rootNode);
         apolloCache.document.create(document.id, document);
         ac.document.setDocumentId(document.id);

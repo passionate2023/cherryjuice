@@ -16,7 +16,7 @@ const apolloCache = (() => {
   return {
     __state: (() => ({
       get modifications() {
-        return cloneObj(state.modifications);
+        return state.modifications;
       },
       cache: state.cache,
     }))(),

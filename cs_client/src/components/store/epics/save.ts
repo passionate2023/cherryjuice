@@ -1,4 +1,4 @@
-import { ignoreElements, map, switchMap } from 'rxjs/operators';
+import { ignoreElements, map, switchMap, tap } from 'rxjs/operators';
 import { concat, defer, from, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { Actions } from '../actions.types';
@@ -7,11 +7,11 @@ import { swapPersistedTreeStateDocumentId } from '::app/editor/document/tree/nod
 import { appActionCreators } from '::app/reducer';
 import { SnackbarMessages } from '::shared-components/snackbar/snackbar-messages';
 import { SaveOperationState } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
-import { resetCache } from '::root/store/epics/shared/clear-cache';
 import { createErrorHandler } from '::root/store/epics/shared/create-error-handler';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { ac } from '../store';
 import { createTimeoutHandler } from './shared/create-timeout-handler';
+import { apolloCache } from '::graphql/cache/apollo-cache';
 
 const updateCachedHtmlAndImagesPromisified = () =>
   new Promise(res => {
@@ -46,15 +46,20 @@ const saveEpic = (action$: Observable<Actions>) => {
         deletedNodes: {},
       };
 
-      const save = defer(() =>
-        from(saveDocument(state)).pipe(map(ac.__.document.saveFulfilled)),
-      );
       const updateCache = defer(() =>
         of(updateCachedHtmlAndImagesPromisified()),
       ).pipe(ignoreElements());
+      const save = defer(() =>
+        from(saveDocument(state)).pipe(
+          tap(async () => {
+            await apolloCache.client.resetCache();
+          }),
+          map(ac.__.document.saveFulfilled),
+        ),
+      );
       const sip = of(ac.__.document.saveInProgress());
       const ps = defer(() => of(postSave(state)));
-      return concat(sip, updateCache, save, resetCache, ps).pipe(
+      return concat(sip, updateCache, save, ps).pipe(
         createTimeoutHandler({
           alertDetails: {
             title: 'Saving is taking longer then expected',

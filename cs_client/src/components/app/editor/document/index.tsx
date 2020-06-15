@@ -63,7 +63,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   useEffect(() => {
     if (selectedNode.node_id) router.node(file_id, selectedNode.node_id);
   }, [selectedNode.node_id, file_id]);
-  useTrackDocumentChanges({ cacheTimeStamp });
+  useTrackDocumentChanges({ cacheTimeStamp, documentId: file_id });
   useEffect(() => {
     if (router.location.pathname.endsWith(file_id))
       ac.document.clearSelectedNode();

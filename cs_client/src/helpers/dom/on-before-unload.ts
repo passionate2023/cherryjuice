@@ -1,6 +1,6 @@
 const onBeforeUnload = (() => {
   const fn = event => {
-    event.returnValue = '';
+    if (process.env.NODE_ENV === 'production') event.returnValue = '';
   };
   return {
     attach: () => {
