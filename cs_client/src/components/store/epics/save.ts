@@ -1,4 +1,4 @@
-import { ignoreElements, map, switchMap, tap } from 'rxjs/operators';
+import { filter, ignoreElements, map, switchMap, tap } from 'rxjs/operators';
 import { concat, defer, from, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { Actions } from '../actions.types';
@@ -9,7 +9,7 @@ import { SnackbarMessages } from '::shared-components/snackbar/snackbar-messages
 import { SaveOperationState } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
 import { createErrorHandler } from '::root/store/epics/shared/create-error-handler';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { ac } from '../store';
+import { ac, store } from '../store';
 import { createTimeoutHandler } from './shared/create-timeout-handler';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 
@@ -36,6 +36,11 @@ const postSave = (state: SaveOperationState) => {
 const saveEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
     ofType([ac.__.document.save]),
+    filter(
+      () =>
+        store.getState().document.saveInProgress === 'idle' &&
+        !!store.getState().document.cacheTimeStamp,
+    ),
     switchMap(() => {
       const state: SaveOperationState = {
         newFatherIds: {},
@@ -57,9 +62,10 @@ const saveEpic = (action$: Observable<Actions>) => {
           map(ac.__.document.saveFulfilled),
         ),
       );
+      const sp = of(ac.__.document.savePending());
       const sip = of(ac.__.document.saveInProgress());
       const ps = defer(() => of(postSave(state)));
-      return concat(sip, updateCache, save, ps).pipe(
+      return concat(sp, updateCache, sip, save, ps).pipe(
         createTimeoutHandler({
           alertDetails: {
             title: 'Saving is taking longer then expected',

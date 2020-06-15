@@ -17,7 +17,6 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac } from '::root/store/store';
 import { setHighestNodeId } from '::app/editor/document/hooks/get-document-meta/helpers/set-highset-node_id';
 import { router } from '::root/router/router';
-import { asyncOperation } from '::root/store/ducks/document';
 
 const mapState = (state: Store) => ({
   nodes: state.document.nodes,
@@ -77,9 +76,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   return (
     <DocumentContext.Provider value={documentState}>
       <LinearProgress
-        loading={
-          Boolean(fetchNodesStarted) || saveInProgress !== asyncOperation.idle
-        }
+        loading={Boolean(fetchNodesStarted) || saveInProgress !== 'idle'}
       />
       {nodes && (
         <Fragment>

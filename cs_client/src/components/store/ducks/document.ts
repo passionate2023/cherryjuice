@@ -9,12 +9,6 @@ import {
   getFallbackNode,
 } from './helpers/document';
 
-enum asyncOperation {
-  pending = 'pending',
-  inProgress = 'inProgress',
-  idle = 'idle',
-}
-
 const ap = createActionPrefixer('document');
 const ac = {
   // document
@@ -31,10 +25,13 @@ const ac = {
     'setCacheTimeStamp',
     _ => (timeStamp: number = new Date().getTime()) => _(timeStamp),
   ),
-  save: _('save'),
-  saveFulfilled: _('saveFulfilled'),
-  saveInProgress: _('saveInProgress'),
-  saveFailed: _('saveFailed'),
+  ...{
+    save: _('save'),
+    savePending: _('savePending'),
+    saveFulfilled: _('saveFulfilled'),
+    saveInProgress: _('saveInProgress'),
+    saveFailed: _('saveFailed'),
+  },
   // node
   selectNode: _(ap('selectNode'), _ => (node: NodeId) => _(node)),
   selectRootNode: _(ap('selectRootNode'), _ => (node: NodeId) => _(node)),
@@ -63,7 +60,7 @@ type State = {
   fetchNodesStarted?: number;
   documentId: string;
   cacheTimeStamp: number;
-  saveInProgress: asyncOperation;
+  saveInProgress: 'in-progress' | 'idle' | 'pending';
   selectedNode?: NodeId;
   rootNode?: NodeId;
   recentNodes: number[];
@@ -75,7 +72,7 @@ const initialState: State = {
   fetchNodesStarted: 0,
   documentId: '',
   cacheTimeStamp: 0,
-  saveInProgress: asyncOperation.idle,
+  saveInProgress: 'idle',
   selectedNode: defaultRootNode,
   rootNode: defaultRootNode,
   recentNodes: [],
@@ -97,7 +94,7 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     fetchNodesStarted: new Date().getTime(),
   })),
   _(ac.setCacheTimeStamp, (state, { payload }) =>
-    state.saveInProgress !== asyncOperation.idle
+    state.saveInProgress !== 'idle'
       ? state
       : {
           ...state,
@@ -111,21 +108,21 @@ const reducer = createReducer(cloneObj(initialState), _ => [
   _(ac.fetchFailed, () => ({
     ...initialState,
   })),
-  _(ac.save, state => ({
+  _(ac.savePending, state => ({
     ...state,
-    saveInProgress: asyncOperation.pending,
+    saveInProgress: 'pending',
   })),
   _(ac.saveInProgress, state => ({
     ...state,
-    saveInProgress: asyncOperation.inProgress,
+    saveInProgress: 'in-progress',
   })),
   _(ac.saveFulfilled, state => ({
     ...state,
-    saveInProgress: asyncOperation.idle,
+    saveInProgress: 'idle',
   })),
   _(ac.saveFailed, state => ({
     ...state,
-    saveInProgress: asyncOperation.idle,
+    saveInProgress: 'idle',
   })),
   _(ac.selectNode, (state, { payload: node }) => ({
     ...state,
@@ -165,4 +162,4 @@ const reducer = createReducer(cloneObj(initialState), _ => [
 ]);
 
 export { reducer as documentReducer, ac as documentActionCreators };
-export { asyncOperation, NodeId };
+export { NodeId };
