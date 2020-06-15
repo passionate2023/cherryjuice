@@ -51,24 +51,25 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
 
       const loading = of(ac.__.document.fetchNodesStarted());
       return concat(loading, request).pipe(
-        createTimeoutHandler({
-          alertDetails: {
-            title: 'Fetching the document is taking longer then expected',
-            description: 'try refreshing the page',
-          },
-          due: 15000,
-        }),
         createErrorHandler({
+          dontShowAlert: isNewDocument,
           alertDetails: {
             title: 'Could not fetch the document',
             description: 'Check your network connection',
           },
           actionCreators: [
             handleFetchError({
-              file_id,
-              documentId: selectedDocumentId(),
+              documentIdBeingFetched: file_id,
+              previousDocumentId: selectedDocumentId(),
             }),
           ],
+        }),
+        createTimeoutHandler({
+          alertDetails: {
+            title: 'Fetching the document is taking longer then expected',
+            description: 'try refreshing the page',
+          },
+          due: 15000,
         }),
       );
     }),
