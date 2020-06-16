@@ -6,7 +6,7 @@ import { DocumentList } from './components/documents-list/document-list';
 import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
 import { modDialog } from '::sass-modules/index';
 import { Icons, Icon } from '::shared-components/icon';
-import { useDeleteFile } from '::hooks/graphql/delete-file';
+import { useDeleteFile } from './hooks/delete-documents/delete-file';
 import { useRef } from 'react';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { useGetDocumentsList } from '::app/menus/select-file/hooks/get-documents-list';

@@ -4,7 +4,10 @@ import { ofType } from 'deox';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { QUERY_NODE_META } from '::graphql/queries';
 import { store, ac } from '::root/store/store';
-import { constructTree } from '::app/editor/document/hooks/get-document-meta/helpers/construct-tree';
+import {
+  constructTree,
+  applyLocalModifications,
+} from '::app/editor/document/hooks/get-document-meta/helpers/construct-tree';
 import { Actions } from '../actions.types';
 import { handleFetchError } from '::app/editor/document/hooks/get-document-meta/helpers/handle-fetch-error';
 import { NodeMeta } from '::types/graphql/adapters';
@@ -46,6 +49,7 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
           apolloCache.changes.initDocumentChangesState(file_id);
         }),
         map(nodes => constructTree({ nodes })),
+        map(nodes => applyLocalModifications({ nodes, file_id })),
         map(nodesMap => ac.__.document.fetchNodesFulfilled(nodesMap)),
       );
 

@@ -3,6 +3,7 @@ import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { useCallback, useEffect } from 'react';
 import { AlertType } from '::types/react';
 import { ac } from '::root/store/store';
+import { deleteLocalDocuments } from './helpers/delete-local-documents';
 
 const useDeleteFile = ({
   IDs,
@@ -14,16 +15,24 @@ const useDeleteFile = ({
   const [
     deleteDocumentMutation,
     { loading: deleteLoading, error: deleteError },
-  ] = useMutation(
-    DOCUMENT_MUTATION.deleteDocument,
-    onCompleted && {
-      onCompleted,
-    },
-  );
+  ] = useMutation(DOCUMENT_MUTATION.deleteDocument);
   const deleteDocument = useCallback(() => {
-    deleteDocumentMutation({
-      variables: { documents: { IDs } },
-    });
+    const fetchedDocuments = IDs.filter(id => !id.startsWith('new-document'));
+    const promises: Promise<any>[] = [];
+    promises.push(
+      fetchedDocuments.length
+        ? deleteDocumentMutation({
+            variables: { documents: { IDs: fetchedDocuments } },
+          })
+        : Promise.resolve(),
+    );
+    promises.push(
+      new Promise(res => {
+        deleteLocalDocuments({ IDs });
+        res();
+      }),
+    );
+    Promise.all(promises).then(onCompleted);
   }, [IDs]);
   useEffect(() => {
     if (deleteError)

@@ -10,8 +10,10 @@ const documentHelpers = (state: CacheState) => ({
   get: (documentId: string): Document =>
     state.cache?.data.get('Document:' + documentId),
   delete: {
-    hard: (documentId: string): Document =>
-      state.cache?.data.delete('Document:' + documentId),
+    hard: (documentId: string): void => {
+      state.cache?.data.delete('Document:' + documentId);
+      apolloCache.changes.resetDocumentChangesState(documentId);
+    },
   },
   swapId: ({ oldId, newId }) => {
     const document = apolloCache.document.get(oldId);

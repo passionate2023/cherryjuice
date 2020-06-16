@@ -155,10 +155,6 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     ...state,
     highestNode_id: node_id,
   })),
-  _(ac.setHighestNode_id, (state, { payload: node_id }) => ({
-    ...state,
-    highestNode_id: node_id,
-  })),
 ]);
 
 export { reducer as documentReducer, ac as documentActionCreators };
