@@ -9,11 +9,13 @@ import { saveNodesContent } from '::app/editor/document/hooks/save-document/help
 import { saveNewDocument } from '::app/editor/document/hooks/save-document/helpers/save-new-document';
 import { saveImages } from '::app/editor/document/hooks/save-document/helpers/save-images';
 import { apolloCache } from '::graphql/cache/apollo-cache';
+import { saveDocumentMeta } from './helpers/save-document-meta';
 
 const saveDocument = async (state: SaveOperationState) => {
   const editedDocuments = apolloCache.changes.document().unsaved;
   for (const documentId of editedDocuments) {
     await saveNewDocument({ state, documentId });
+    await saveDocumentMeta({ state, documentId });
     await saveDeletedNodes({ state, documentId });
     await saveNewNodes({ state, documentId });
     await saveNodesMeta({ state, documentId });

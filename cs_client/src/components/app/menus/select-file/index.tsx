@@ -62,8 +62,8 @@ const SelectFile: React.FC<{
   loading,
 }) => {
   useEffect(() => {
-    ac.documentsList.fetchDocuments();
-  }, []);
+    if (showDocumentList) ac.documentsList.fetchDocuments();
+  }, [showDocumentList]);
   const [selectedIDs, setSelectedIDs] = useState([]);
   const close = ac.dialogs.hideDocumentList;
   const open = () => {

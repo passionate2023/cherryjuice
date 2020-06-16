@@ -28,6 +28,10 @@ const documentHelpers = (state: CacheState) => ({
     Object.entries(meta).forEach(([key, value]) => {
       state.modifications.document[documentId].meta.set(key, value);
     });
+    state.modifications.document[documentId].meta.set(
+      'updatedAt',
+      new Date().getTime(),
+    );
 
     ac.document.setCacheTimeStamp();
   },

@@ -2,11 +2,12 @@ import { DocumentMeta } from '::types/generated';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 
 const addUnsavedDocuments = (documents: DocumentMeta[]): DocumentMeta[] => {
+  const res = [...documents];
   for (const docId of apolloCache.changes.document().created) {
     const document = apolloCache.document.get(docId);
-    documents.push({ ...document, name: `*${document.name}` });
+    res.push({ ...document });
   }
-  return [...documents];
+  return res;
 };
 const editedDocuments = (documents: DocumentMeta[]): DocumentMeta[] => {
   for (const docId of apolloCache.changes.document().unsaved) {

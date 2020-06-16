@@ -10,38 +10,26 @@ import { SignUpForm } from '::auth/signup-form';
 import { RootContext } from './root-context';
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import { useOnWindowResize } from '::hooks/use-on-window-resize';
-import { localSessionManager } from '::auth/helpers/auth-state';
 import {
   rootActionCreators,
   rootInitialState,
   rootReducer,
 } from '::root/root.reducer';
 import { store } from '::root/store/store';
-import { router } from '::root/router/router';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
-const persistor = persistStore(store);
+import { useLoadEpics } from './hooks/load-epics';
+import { useProtectedRoutes } from './hooks/protected-routes';
+
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
   })),
 );
-type Props = {};
 
-const useProtectedRoutes = ({ session }) => {
-  useEffect(() => {
-    const isOnLoginOrSignUp = /(^\/login|^\/signup)/.test(
-      router.location.pathname,
-    );
-    if (!session.token) {
-      if (!isOnLoginOrSignUp) router.login();
-      localSessionManager.clear();
-    } else {
-      if (isOnLoginOrSignUp) router.home();
-      localSessionManager.set(session);
-    }
-  }, [session]);
-};
+const persistor = persistStore(store);
+
+type Props = {};
 
 const Root: React.FC<Props> = () => {
   useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
@@ -51,6 +39,8 @@ const Root: React.FC<Props> = () => {
   }, []);
   useApolloClient(state.session);
   useProtectedRoutes({ session: state.session });
+
+  const { loadedEpics } = useLoadEpics();
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -58,7 +48,7 @@ const Root: React.FC<Props> = () => {
           <Suspense fallback={<Void />}>
             {state.apolloClient && (
               <ApolloProvider client={state.apolloClient}>
-                {state.session.token && (
+                {state.session.token && loadedEpics && (
                   <Route
                     path={'/'}
                     render={() => <App session={state.session} />}

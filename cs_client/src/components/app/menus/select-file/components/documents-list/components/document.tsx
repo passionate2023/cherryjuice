@@ -44,7 +44,9 @@ const Document: React.FC<Props> = ({
       key={id}
       tabIndex={0}
     >
-      <span className={`${modSelectFile.selectFile__file__name} `}>{name}</span>
+      <span className={`${modSelectFile.selectFile__file__name} `}>
+        {id.startsWith('new-document') ? `*${name}` : name}
+      </span>
       <ThreeDotsButton documentId={id} />
 
       <span className={`${modSelectFile.selectFile__file__details} `}>

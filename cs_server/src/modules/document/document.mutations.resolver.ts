@@ -19,6 +19,7 @@ import { DeleteDocumentInputType } from './input-types/delete-document.input-typ
 import { ImportsService } from '../imports/imports.service';
 import { NodeMutation } from '../node/entities/node-mutation.entity';
 import { CreateDocumentIt } from './input-types/create-document.it';
+import { EditDocumentIt } from './input-types/edit-document.it';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => DocumentMutation)
@@ -89,7 +90,23 @@ export class DocumentMutationsResolver {
     });
     return createResult.id;
   }
-
+  @ResolveField(() => String)
+  async editDocument(
+    @Args({
+      name: 'meta',
+      type: () => EditDocumentIt,
+    })
+    meta: EditDocumentIt,
+    @Parent() parent,
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    const res = await this.documentService.editDocument({
+      meta,
+      user,
+      documentId: parent.id,
+    });
+    return res;
+  }
   @ResolveField(() => [NodeMutation])
   async node(
     @Parent() parent,

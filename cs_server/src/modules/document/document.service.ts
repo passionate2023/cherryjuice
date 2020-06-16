@@ -9,6 +9,7 @@ import { debug } from '../shared';
 import { DeleteResult } from 'typeorm';
 import { DocumentDTO } from '../imports/imports.service';
 import { importThreshold } from '../imports/helpers/thresholds';
+import { EditDocumentDto } from './input-types/edit-document.dto';
 
 @Injectable()
 export class DocumentService implements IDocumentService {
@@ -50,8 +51,8 @@ export class DocumentService implements IDocumentService {
     );
     if (notifySubscribers)
       IDs.forEach(id => {
-        const document = new Document(user,"",0)
-        document.id = id
+        const document = new Document(user, '', 0);
+        document.id = id;
         importThreshold.deleted(document);
       });
     return deleteResult;
@@ -60,5 +61,9 @@ export class DocumentService implements IDocumentService {
     return await this.documentRepository.findOne({
       where: { userId: user.id, hash },
     });
+  }
+
+  async editDocument(args: EditDocumentDto): Promise<string> {
+    return await this.documentRepository.editDocument(args);
   }
 }

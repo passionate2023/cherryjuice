@@ -10,6 +10,7 @@ import { User } from '../../user/entities/user.entity';
 import { DOCUMENT_SUBSCRIPTIONS } from '../entities/document-subscription.entity';
 import { DocumentDTO } from '../../imports/imports.service';
 import { NotFoundException } from '@nestjs/common';
+import { EditDocumentDto } from '../input-types/edit-document.dto';
 
 @EntityRepository(Document)
 export class DocumentRepository extends Repository<Document>
@@ -34,12 +35,8 @@ export class DocumentRepository extends Repository<Document>
     return queryBuilder.getMany();
   }
 
-  async createDocument({
-    name,
-    size,
-    user,
-  }: DocumentDTO): Promise<Document> {
-    const document = new Document(user, name, size, );
+  async createDocument({ name, size, user }: DocumentDTO): Promise<Document> {
+    const document = new Document(user, name, size);
     await document.save();
     return document;
   }
@@ -60,5 +57,19 @@ export class DocumentRepository extends Repository<Document>
       .set({ status: DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FAILED })
       .where('document.status is not null')
       .execute();
+  }
+
+  async editDocument({
+    documentId,
+    meta,
+    user,
+  }: EditDocumentDto): Promise<string> {
+    const res = await this.createQueryBuilder('document')
+      .update()
+      .set({ ...meta, updatedAt: new Date(meta.updatedAt) })
+      .where({ id: documentId, userId: user.id })
+      .execute();
+
+    return JSON.stringify(res);
   }
 }

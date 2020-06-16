@@ -48,7 +48,7 @@ const reducer = createReducer(initialState, _ => [
   ...[
     _(ac.fetchDocumentsFulfilled, (state, { payload }) => ({
       ...state,
-      documents: addUnsavedDocuments(editedDocuments(payload)),
+      documents: editedDocuments(addUnsavedDocuments(payload)),
       fetchDocuments: 'idle',
     })),
   ],

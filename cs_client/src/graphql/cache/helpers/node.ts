@@ -15,7 +15,7 @@ type MutateNodeProps = {
 const nodeHelpers = (state: CacheState) => ({
   get: (nodeId: string): NodeCached => {
     const node = state.cache?.data.get('Node:' + nodeId);
-    if (node?.child_nodes.json) node.child_nodes = node.child_nodes.json;
+    if (node?.child_nodes?.json) node.child_nodes = node.child_nodes.json;
     return node;
   },
   create: (node: NodeCached) => {
