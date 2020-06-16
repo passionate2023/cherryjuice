@@ -87,11 +87,7 @@ const Menus: React.FC<Props & PropsFromRedux> = ({
         />
       </Suspense>
       <Suspense fallback={<Void />}>
-        <DocumentMeta
-          showDialog={state.showDocumentMetaDialog}
-          isOnMobile={state.isOnMobile}
-          onClose={appActionCreators.hideDocumentMetaDialog}
-        />
+        <DocumentMeta isOnMobile={state.isOnMobile} />
       </Suspense>
       <Suspense fallback={<Void />}>
         <DeleteNode

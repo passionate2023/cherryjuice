@@ -10,7 +10,7 @@ const gqlQuery = <Variables, Data>({
 }: {
   query: DocumentNode;
   path: GqlDataPath<Data>;
-  variables: Variables;
+  variables?: Variables;
 }) =>
   from(
     apolloCache.client.query<Variables, Data>({

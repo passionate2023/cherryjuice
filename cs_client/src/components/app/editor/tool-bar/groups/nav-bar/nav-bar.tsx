@@ -24,7 +24,7 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
       }
     >
       <ToolbarButton
-        onClick={appActionCreators.showDocumentMetaDialog}
+        onClick={ac.dialogs.showCreateDocumentDialog}
         testId={'new-document'}
       >
         <Icon name={Icons.material.document} />

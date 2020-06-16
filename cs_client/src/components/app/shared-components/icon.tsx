@@ -175,8 +175,8 @@ const Icon = ({
   group,
   testId,
 }: {
-  color?: ICON_COLOR;
   name: string;
+  color?: ICON_COLOR;
   size?: ICON_SIZE;
   className?: string;
   onClick?: EventHandler<any>;

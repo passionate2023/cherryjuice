@@ -55,12 +55,13 @@ type NodeId = {
   id: string;
   node_id: number;
 };
+type AsyncOperation = 'in-progress' | 'idle' | 'pending';
 type State = {
   nodes?: nodesMetaMap;
   fetchNodesStarted?: number;
   documentId: string;
   cacheTimeStamp: number;
-  saveInProgress: 'in-progress' | 'idle' | 'pending';
+  saveInProgress: AsyncOperation;
   selectedNode?: NodeId;
   rootNode?: NodeId;
   recentNodes: number[];
@@ -158,4 +159,4 @@ const reducer = createReducer(cloneObj(initialState), _ => [
 ]);
 
 export { reducer as documentReducer, ac as documentActionCreators };
-export { NodeId };
+export { NodeId, AsyncOperation };

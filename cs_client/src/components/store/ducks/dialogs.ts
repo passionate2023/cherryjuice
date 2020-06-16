@@ -6,36 +6,50 @@ import { TAlert } from '::types/react';
 const ap = createActionPrefixer('dialogs');
 
 const actionCreators = {
-  showReloadDocument: _(ap('showReloadDocument')),
-  showImportDocument: _(ap('showImportDocument')),
-  hideImportDocument: _(ap('hideImportDocument')),
-  hideReloadDocument: _(ap('hideReloadDocument')),
-  showDocumentList: _(ap('showDocumentList')),
-  hideDocumentList: _(ap('hideDocumentList')),
-  reloadDocumentList: _(ap('reloadDocumentList')),
-  setAlert: _(ap('setAlert'), _ => (alert: TAlert) => {
-    if (alert?.error && process.env.NODE_ENV === 'development')
-      // eslint-disable-next-line no-console
-      console.error(alert.error);
-    return _(alert);
-  }),
-  clearAlert: _(ap('clearAlert')),
+  ...{
+    showEditDocumentDialog: _(
+      ap('showEditDocumentDialog'),
+      _ => (documentId: string) => _(documentId),
+    ),
+    showCreateDocumentDialog: _(ap('showCreateDocumentDialog')),
+    hideDocumentMetaDialog: _(ap('hideDocumentMetaDialog')),
+  },
+  ...{
+    showReloadDocument: _(ap('showReloadDocument')),
+    hideReloadDocument: _(ap('hideReloadDocument')),
+  },
+  ...{
+    showImportDocument: _(ap('showImportDocument')),
+    hideImportDocument: _(ap('hideImportDocument')),
+  },
+  ...{
+    showDocumentList: _(ap('showDocumentList')),
+    hideDocumentList: _(ap('hideDocumentList')),
+  },
+  ...{
+    setAlert: _(ap('setAlert'), _ => (alert: TAlert) => {
+      if (alert?.error && process.env.NODE_ENV === 'development')
+        // eslint-disable-next-line no-console
+        console.error(alert.error);
+      return _(alert);
+    }),
+    clearAlert: _(ap('clearAlert')),
+  },
 };
 
 type State = {
   showReloadDocument: boolean;
+  alert?: TAlert;
   showImportDocuments: boolean;
   showDocumentList: boolean;
-  alert?: TAlert;
-  reloadDocumentList: number;
+  showDocumentMetaDialog?: 'edit' | 'create';
 };
 
 const initialState: State = {
   showReloadDocument: false,
-  alert: undefined,
   showImportDocuments: false,
   showDocumentList: false,
-  reloadDocumentList: 0,
+  alert: undefined,
 };
 
 const reducer = createReducer(initialState, _ => [
@@ -78,10 +92,26 @@ const reducer = createReducer(initialState, _ => [
     ...state,
     showDocumentList: false,
   })),
-  _(actionCreators.reloadDocumentList, state => ({
-    ...state,
-    reloadDocumentList: new Date().getTime(),
-  })),
+
+  ...[
+    _(actionCreators.showCreateDocumentDialog, state => ({
+      ...state,
+      showDocumentMetaDialog: 'create',
+    })),
+    _(actionCreators.showEditDocumentDialog, (state, { payload }) => ({
+      ...state,
+      documentMetaDialogDocumentId: payload,
+      showDocumentMetaDialog: 'edit',
+    })),
+    _(
+      actionCreators.hideDocumentMetaDialog,
+      state =>
+        ({
+          ...state,
+          showDocumentMetaDialog: undefined,
+        } as State),
+    ),
+  ],
 ]);
 
 export { reducer as dialogsReducer, actionCreators as dialogsActionCreators };

@@ -7,7 +7,6 @@ const persistDocumentReducer = reducer => {
       key: 'document',
       storage,
       blacklist: ['nodes'],
-      transforms: [],
     },
     reducer,
   );

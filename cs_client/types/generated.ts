@@ -62,4 +62,4 @@ type Document = {
   folder?: Maybe<Scalars['String']>;
   node: Array<Maybe<Node>>;
 };
-export type DocumentMeta = Omit<Document, 'node'>;
+export type DocumentMeta = Omit<Document, 'node' | '__typename'>;

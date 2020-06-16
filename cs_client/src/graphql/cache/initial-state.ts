@@ -2,6 +2,7 @@ import { ApolloClient } from 'apollo-client';
 
 type DocumentChanges = {
   isNew: boolean;
+  meta: Map<string, any>;
   node: {
     deleted: Set<string>;
     meta: Map<string, Set<string>>;
@@ -24,6 +25,7 @@ type CacheState = {
 };
 const getInitialDocumentState = (): DocumentChanges => ({
   isNew: false,
+  meta: new Map<string, any>(),
   node: {
     deleted: new Set<string>(),
     meta: new Map<string, Set<string>>(),

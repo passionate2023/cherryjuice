@@ -5,10 +5,17 @@ import { documentReducer } from './ducks/document';
 import { dialogsReducer } from './ducks/dialogs';
 import { nodeReducer } from './ducks/node';
 import { editorReducer } from './ducks/editor';
-import { persistDocumentReducer } from './redux-persist/document';
+import { documentsListReducer } from './ducks/documents-list';
 
 const reducer = combineReducers({
-  document: persistDocumentReducer(documentReducer),
+  document: persistReducer(
+    {
+      key: 'document',
+      storage,
+      blacklist: ['nodes'],
+    },
+    documentReducer,
+  ),
   dialogs: dialogsReducer,
   node: nodeReducer,
   editor: persistReducer(
@@ -18,6 +25,7 @@ const reducer = combineReducers({
     },
     editorReducer,
   ),
+  documentsList: documentsListReducer,
 });
 
 export { reducer };

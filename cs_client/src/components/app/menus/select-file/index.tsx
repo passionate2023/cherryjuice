@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { DocumentList } from './components/documents-list/document-list';
@@ -9,7 +9,6 @@ import { Icons, Icon } from '::shared-components/icon';
 import { useDeleteFile } from './hooks/delete-documents/delete-file';
 import { useRef } from 'react';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { useGetDocumentsList } from '::app/menus/select-file/hooks/get-documents-list';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { ac, Store } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';
@@ -18,7 +17,7 @@ const createButtons = ({ selectedIDs, documentId, close, open }) => {
   const buttonsLeft = [
     {
       label: 'reload',
-      onClick: ac.dialogs.reloadDocumentList,
+      onClick: ac.documentsList.fetchDocuments,
       disabled: false,
     },
     {
@@ -47,7 +46,8 @@ const mapState = (state: Store) => ({
   documentId: state.document.documentId,
   showImportDocuments: state.dialogs.showImportDocuments,
   showDocumentList: state.dialogs.showDocumentList,
-  reloadDocumentList: state.dialogs.reloadDocumentList,
+  documents: state.documentsList.documents,
+  loading: state.documentsList.fetchDocuments === 'in-progress',
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -56,10 +56,14 @@ const SelectFile: React.FC<{
   isOnMobile;
 } & PropsFromRedux> = ({
   documentId,
-  reloadDocumentList,
   showDocumentList,
   isOnMobile,
+  documents,
+  loading,
 }) => {
+  useEffect(() => {
+    ac.documentsList.fetchDocuments();
+  }, []);
   const [selectedIDs, setSelectedIDs] = useState([]);
   const close = ac.dialogs.hideDocumentList;
   const open = () => {
@@ -73,14 +77,10 @@ const SelectFile: React.FC<{
     open,
   });
 
-  const { loading, documentsList } = useGetDocumentsList({
-    reloadFiles: reloadDocumentList,
-  });
-
   const { deleteDocument } = useDeleteFile({
     IDs: selectedIDs,
     onCompleted: () => {
-      ac.dialogs.reloadDocumentList();
+      ac.documentsList.fetchDocuments();
       if (selectedIDs.includes(documentId)) {
         ac.document.setDocumentId(undefined);
       }
@@ -88,7 +88,7 @@ const SelectFile: React.FC<{
   });
   const holdingRef = useRef(false);
   const rightHeaderButtons = [
-    documentsList.length && holdingRef.current && (
+    documents.length && holdingRef.current && (
       <ButtonCircle
         key={Icons.material.clear}
         className={modDialog.dialog__header__fileButton}
@@ -100,7 +100,7 @@ const SelectFile: React.FC<{
         <Icon name={Icons.material.cancel} />
       </ButtonCircle>
     ),
-    documentsList.length && holdingRef.current && (
+    documents.length && holdingRef.current && (
       <ButtonCircle
         disabled={!selectedIDs.length}
         key={Icons.material.delete}
@@ -140,7 +140,7 @@ const SelectFile: React.FC<{
           onSelect={onSelect}
           selectedIDs={selectedIDs}
           documentId={documentId}
-          documentsMeta={documentsList}
+          documentsMeta={documents}
           loading={loading}
         />
       </ErrorBoundary>

@@ -1,6 +1,16 @@
 import { Document } from '::types/graphql/generated';
 import { CacheState } from '::graphql/cache/initial-state';
 import { apolloCache } from '::graphql/cache/apollo-cache';
+import { ac } from '::root/store/store';
+
+type DocumentMeta = {
+  name?: string;
+};
+
+type MutateDocumentProps = {
+  documentId: string;
+  meta: DocumentMeta;
+};
 
 const documentHelpers = (state: CacheState) => ({
   create: (documentId: string, document: Document): void => {
@@ -12,8 +22,14 @@ const documentHelpers = (state: CacheState) => ({
   delete: {
     hard: (documentId: string): void => {
       state.cache?.data.delete('Document:' + documentId);
-      apolloCache.changes.resetDocumentChangesState(documentId);
     },
+  },
+  mutate: ({ documentId, meta }: MutateDocumentProps): void => {
+    Object.entries(meta).forEach(([key, value]) => {
+      state.modifications.document[documentId].meta.set(key, value);
+    });
+
+    ac.document.setCacheTimeStamp();
   },
   swapId: ({ oldId, newId }) => {
     const document = apolloCache.document.get(oldId);

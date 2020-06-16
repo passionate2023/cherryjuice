@@ -19,7 +19,6 @@ const initialState = {
   showNodeMeta: undefined,
   showDeleteDocumentModal: false,
   snackbarMessage: undefined,
-  showDocumentMetaDialog: false,
 };
 
 export type TState = typeof initialState & {
@@ -42,7 +41,6 @@ enum actions {
   TOGGLE_DELETE_DOCUMENT,
   documentHasUnsavedChanges,
   createDocument,
-  showDocumentMetaDialog,
 }
 const createActionCreators = () => {
   const state = {
@@ -137,18 +135,6 @@ const createActionCreators = () => {
         value: new Date().getTime(),
       });
     },
-    showDocumentMetaDialog: () => {
-      state.dispatch({
-        type: actions.showDocumentMetaDialog,
-        value: true,
-      });
-    },
-    hideDocumentMetaDialog: () => {
-      state.dispatch({
-        type: actions.showDocumentMetaDialog,
-        value: false,
-      });
-    },
   };
 };
 let reducer: (state: TState, action: { type: actions; value: any }) => TState;
@@ -210,11 +196,6 @@ reducer = (
       return {
         ...state,
         createDocumentRequestId: action.value,
-      };
-    case actions.showDocumentMetaDialog:
-      return {
-        ...state,
-        showDocumentMetaDialog: action.value,
       };
     default:
       throw new Error(`action ${action.type} not supported`);

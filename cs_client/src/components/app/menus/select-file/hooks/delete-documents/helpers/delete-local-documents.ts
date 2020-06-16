@@ -21,6 +21,7 @@ const deleteNodes = ({ documentId }: { documentId: string }) => {
 
 const deleteDocument = ({ documentId }: { documentId: string }) => {
   apolloCache.document.delete.hard(documentId);
+  apolloCache.changes.resetDocumentChangesState(documentId);
 };
 
 const deleteLocalDocuments = ({ IDs }: { IDs: string[] }) => {

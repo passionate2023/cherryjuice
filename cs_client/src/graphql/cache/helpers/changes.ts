@@ -11,7 +11,8 @@ const changesHelpers = (state: CacheState) => ({
       get unsaved(): string[] {
         return Object.keys(state.modifications.document).filter(documentId =>
           Boolean(
-            changesHelpers(state).document(documentId).node.created.length +
+            changesHelpers(state).document(documentId).meta.size +
+              changesHelpers(state).document(documentId).node.created.length +
               changesHelpers(state).document(documentId).node.deleted.length +
               changesHelpers(state).document(documentId).node.html.length +
               changesHelpers(state).document(documentId).node.meta.length +
@@ -19,6 +20,9 @@ const changesHelpers = (state: CacheState) => ({
               changesHelpers(state).document(documentId).image.deleted.length,
           ),
         );
+      },
+      get meta(): Map<string, any> {
+        return state.modifications.document[documentId].meta;
       },
       node: {
         get html(): string[] {

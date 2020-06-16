@@ -9,6 +9,7 @@
   cursor: pointer;
   display: block;
   background-color: $grey-light;
+  position: relative;
   color: black;
   margin-top: 5px;
   padding: 10px 20px;
@@ -17,6 +18,30 @@
     background-color: $primary-light;
   }
   transition: background-color 0.3s ease;
+}
+.selectFile__file__three-dots-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.selectFile__file__three-dots-popup {
+  z-index: 2;
+  width: 150px;
+  position: absolute;
+  right: 3px;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  color: #000000;
+  box-shadow: $box-shadow1;
+}
+.selectFile__file__three-dots-popup__item {
+  padding: 10px 10px;
+  border-bottom: 1px solid #a7a7a755;
+  &:hover {
+    background-color: #e7e7e7;
+  }
 }
 .selectFile__file__name {
   display: block;
