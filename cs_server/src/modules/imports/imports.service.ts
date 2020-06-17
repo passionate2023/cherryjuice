@@ -1,4 +1,3 @@
-import imageThumbnail from 'image-thumbnail';
 import { Injectable } from '@nestjs/common';
 import {
   createGDriveDownloadTask,
@@ -10,32 +9,23 @@ import {
   TDownloadTaskProps,
 } from './helpers/io';
 import { User } from '../user/entities/user.entity';
-import fs from 'fs';
 import { ImageService } from '../image/image.service';
 import { Node } from '../node/entities/node.entity';
 import { NodeSqliteRepository } from '../node/repositories/node.sqlite.repository';
 import { DocumentSqliteRepository } from '../document/repositories/document.sqlite.repository';
 import { DocumentService } from '../document/document.service';
-import {
-  copyProperties,
-  nodeTitleHelpers,
-  nodeTitleStyle,
-} from '../document/helpers';
 import { Document } from '../document/entities/document.entity';
 import { FileUpload } from '../document/helpers/graphql';
-import { Image } from '../image/entities/image.entity';
-import { ImageSqliteRepository } from '../image/repositories/image.sqlite.repository';
 import { importThreshold } from './helpers/thresholds';
 import { UploadImageDto } from './dto/upload-image.dto';
 import { NodeService } from '../node/node.service';
+import { SaveDocumentsService } from './save-documents.service';
 export type DocumentDTO = {
   name: string;
   size: number;
   user: User;
-  // id: string;
 };
-type ImageIdsMap = { [tempId: string]: string };
-type NodeDatesMap = Map<number, { createdAt: Date; updatedAt: Date }>;
+
 @Injectable()
 export class ImportsService {
   constructor(
@@ -44,7 +34,7 @@ export class ImportsService {
     private nodeService: NodeService,
     private documentSqliteRepository: DocumentSqliteRepository,
     private nodeSqliteRepository: NodeSqliteRepository,
-    private imageSqliteRepository: ImageSqliteRepository,
+    private saveDocumentsService: SaveDocumentsService,
   ) {}
 
   onModuleInit(): void {
@@ -58,109 +48,20 @@ export class ImportsService {
     await this.documentSqliteRepository.closeUploadedFile();
   }
 
-  async saveNodesMeta(
-    newDocument: Document,
-    rawNodes: (Node & { is_ro; has_image })[],
-  ) {
-    const nodesWithImages: Node[] = [];
-    const nodesMap = new Map<number, Node>();
-    const nodeDatesMap: NodeDatesMap = new Map();
-    const rawNodesMap: Map<number, Node> = new Map(
-      rawNodes.map(node => [node.node_id, node]),
-    );
-
-    for (const nodeRaw of rawNodes) {
-      const parentNode = rawNodesMap.get(nodeRaw.father_id);
-      if (parentNode) {
-        parentNode.child_nodes.push(nodeRaw.node_id);
-      }
-      nodeRaw.node_title_styles = nodeTitleStyle({
-        is_richtxt: nodeRaw.is_richtxt,
-      });
-      nodeRaw.icon_id = '' + nodeTitleHelpers.customIconId(nodeRaw.is_ro);
-
-      const node = new Node();
-      copyProperties(nodeRaw, node, { createdAt: true, updatedAt: true });
-      node.document = newDocument;
-      nodesMap.set(node.node_id, node);
-      await node.save();
-      nodeDatesMap.set(node.node_id, {
-        createdAt: new Date(nodeRaw.createdAt),
-        updatedAt: new Date(nodeRaw.updatedAt),
-      });
-      if (nodeRaw.has_image) nodesWithImages.push(node);
-    }
-
-    for (const node of Array.from(nodesMap.values())) {
-      node.child_nodes.sort(
-        // @ts-ignore
-        (a, b) => rawNodesMap.get(a).sequence - rawNodesMap.get(b).sequence,
-      );
-      const father = nodesMap.get(node.father_id);
-      if (father) node.father = father;
-    }
-    return { nodesWithImages, nodesMap, nodeDatesMap };
-  }
-
-  private async saveNodes(
-    newDocument: Document,
-  ): Promise<{
-    nodesWithImages: Node[];
-    nodesMap: Map<number, Node>;
-    nodeDatesMap: NodeDatesMap;
-  }> {
-    const rawNodes = (await this.nodeSqliteRepository.getNodesMeta(
-      false,
-    )) as (Node & { is_ro; has_image })[];
-    const {
-      nodesWithImages,
-      nodesMap,
-      nodeDatesMap,
-    } = await this.saveNodesMeta(newDocument, rawNodes);
-    return { nodesWithImages, nodesMap, nodeDatesMap };
-  }
   private async saveDocument({
     document,
-    hash,
   }: {
     document: Document;
-    hash: string;
   }): Promise<void> {
     const filePath = '/uploads/' + document.name;
     await this.openUploadedFile(filePath);
-    const { nodesWithImages, nodesMap, nodeDatesMap } = await this.saveNodes(
+    const rawNodes = (await this.nodeSqliteRepository.getNodesMeta(
+      false,
+    )) as (Node & { is_ro; has_image })[];
+    await this.saveDocumentsService.saveDocument({
       document,
-    );
-    const { imagesOfNodes } = await this.saveImages(nodesWithImages);
-    await this.saveAhtml({ imagesOfNodes, nodesMap, nodeDatesMap });
-    const { size } = fs.statSync(filePath);
-    document.size = size;
-    document.hash = hash;
-    await document.save();
-  }
-  async saveImages(
-    nodes: Node[],
-  ): Promise<{ imagesOfNodes: Map<number, Image[]> }> {
-    const imagesOfNodes: Map<number, Image[]> = new Map();
-    for (const node of nodes) {
-      const images = await this.imageSqliteRepository.getNodeImages({
-        node_id: node.node_id,
-      });
-      imagesOfNodes.set(node.node_id, []);
-      for (const { png } of images) {
-        if (png) {
-          const image = new Image();
-          image.image = png;
-          image.thumbnail = await imageThumbnail(png, {
-            percentage: 5,
-          });
-          image.nodeId = node.id;
-          await image.save();
-          imagesOfNodes.get(node.node_id).push(image);
-        }
-      }
-    }
-    return { imagesOfNodes };
+      rawNodes,
+    });
   }
   async importDocumentsFromGDrive(
     meta: string[],
@@ -187,7 +88,8 @@ export class ImportsService {
     user,
     documentId,
   }: UploadImageDto): Promise<[string, string][]> {
-    const imageIDs: [string, string][] = [];
+    const imageIDs: string[] = [];
+    const pngs: { png: Buffer; hash: string }[] = [];
     for (const file of images) {
       const { createReadStream, filename } = await file;
       const chunksContainer = { current: [] };
@@ -196,22 +98,22 @@ export class ImportsService {
         () => Promise.resolve(),
       );
       const buffer = Buffer.concat(chunksContainer.current);
-      const image = new Image();
-      image.image = buffer;
-      image.thumbnail = await imageThumbnail(buffer, {
-        percentage: 5,
-      });
-      const node = await this.nodeService.getNodeMetaById({
-        documentId,
-        node_id,
-        user,
-      });
-      image.nodeId = node.id;
-      image.hash = hash;
-      await image.save();
-      imageIDs.push([filename, image.id]);
+      pngs.push({ png: buffer, hash });
+      imageIDs.push(filename);
     }
-    return imageIDs;
+
+    const node = await this.nodeService.getNodeMetaById({
+      documentId,
+      node_id,
+      user,
+    });
+
+    const map = new Map();
+    map.set(node, pngs);
+    const { node_idImagesMap } = await this.saveDocumentsService.saveImages(
+      map,
+    );
+    return node_idImagesMap.get(node_id).map((id, i) => [imageIDs[i], id]);
   }
 
   async importDocument(
@@ -261,7 +163,6 @@ export class ImportsService {
           await importThreshold.started(document);
           await this.saveDocument({
             document,
-            hash,
           });
           await importThreshold.finished(document);
         }
@@ -272,27 +173,5 @@ export class ImportsService {
       await this.closeUploadedFile();
     }
     cleanUploadsFolder();
-  }
-
-  private async saveAhtml({
-    nodesMap,
-    imagesOfNodes,
-    nodeDatesMap,
-  }: {
-    nodesMap: Map<number, Node>;
-    imagesOfNodes: Map<number, Image[]>;
-    nodeDatesMap: NodeDatesMap;
-  }) {
-    for (const node of Array.from(nodesMap.values())) {
-      node.ahtml = JSON.stringify(
-        await this.nodeSqliteRepository.getAHtml(
-          String(node.node_id),
-          imagesOfNodes.get(node.node_id),
-        ),
-      );
-      node.createdAt = nodeDatesMap.get(node.node_id).createdAt;
-      node.updatedAt = nodeDatesMap.get(node.node_id).updatedAt;
-      await node.save();
-    }
   }
 }
