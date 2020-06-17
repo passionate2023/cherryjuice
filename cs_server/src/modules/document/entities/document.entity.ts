@@ -2,18 +2,21 @@ import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Node } from '../../node/entities/node.entity';
 import {
   BaseEntity,
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryColumn,
-  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { randomUUID10 } from '../../shared';
+import hash from 'object-hash';
 
-@Unique(['hash', 'userId'])
+export type NodesHash = { [node_id: number]: { hash: string } };
+
 @Entity()
 @ObjectType()
 export class Document extends BaseEntity {
@@ -53,10 +56,6 @@ export class Document extends BaseEntity {
   @Field(() => Float)
   updatedAt: Date;
 
-  @Column({ nullable: true })
-  @Field()
-  hash: string;
-
   @Field({ nullable: true })
   folder: string;
 
@@ -66,4 +65,18 @@ export class Document extends BaseEntity {
   @Column({ nullable: true })
   @Field({ nullable: true })
   status: string;
+
+  @Column('json', { nullable: true, default: {} })
+  nodes: NodesHash;
+
+  @Column({ nullable: true })
+  @Field()
+  hash: string;
+
+  @BeforeUpdate()
+  @BeforeInsert()
+  updateHash() {
+    const fields = [this.name, this.nodes];
+    this.hash = hash(fields);
+  }
 }

@@ -39,7 +39,10 @@ const saveNodesContent = async ({ state, documentId }: SaveOperationProps) => {
         file_id: node.documentId,
         node_id: node.node_id,
         data: {
-          ahtml: JSON.stringify(aHtml),
+          ahtml:
+            aHtml.length === 1 && aHtml[0].nodes.length === 0
+              ? '[]'
+              : JSON.stringify(aHtml),
           deletedImages: deletedImages || [],
           updatedAt: node.updatedAt,
         },

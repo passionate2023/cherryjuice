@@ -66,4 +66,35 @@ export class DocumentService implements IDocumentService {
   async editDocument(args: EditDocumentDto): Promise<string> {
     return await this.documentRepository.editDocument(args);
   }
+
+  async updateNodesHash({
+    user,
+    documentId,
+    node_id,
+    hash,
+  }: {
+    user: User;
+    documentId: string;
+    node_id: number;
+    hash: string;
+  }): Promise<void> {
+    const document = await this.getDocumentMetaById(user, documentId);
+    document.nodes[node_id] = { hash };
+    await document.save();
+  }
+  async deleteNodesHash({
+    user,
+    documentId,
+    node_id,
+  }: {
+    node_id: number;
+    user: User;
+    documentId: string;
+  }): Promise<void> {
+    const document = await this.getDocumentMetaById(user, documentId);
+    delete document.nodes[node_id].hash;
+    if (Object.keys(document.nodes[node_id]).length === 0)
+      delete document.nodes[node_id];
+    await document.save();
+  }
 }

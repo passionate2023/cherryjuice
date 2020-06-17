@@ -8,9 +8,12 @@ import {
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
+  BeforeUpdate,
+  BeforeInsert,
 } from 'typeorm';
 import { Document } from '../../document/entities/document.entity';
 import { Image } from '../../image/entities/image.entity';
+import hash from 'object-hash';
 
 @Unique(['node_id', 'documentId'])
 @Entity()
@@ -93,4 +96,26 @@ export class Node extends BaseEntity {
   @Column('int2', { default: 0 })
   @Field(() => Int)
   read_only: number;
+
+  @Field()
+  @Column({ nullable: true })
+  hash: string;
+
+  @BeforeUpdate()
+  @BeforeInsert()
+  updateSha() {
+    const fields = [
+      this.name,
+      this.father_id,
+      this.node_id,
+      this.child_nodes,
+      this.ahtml,
+      this.node_title_styles,
+      this.icon_id,
+      this.read_only,
+      this.is_richtxt,
+      this.is_empty,
+    ];
+    this.hash = hash(fields);
+  }
 }
