@@ -9,7 +9,8 @@
     "watch:server:nest": "nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "watch:liveserver": "cd ../cs_client && yarn watch:liveserver"
   },
   "optionalDependencies": {
     "@types/jest": "^25.1.0",

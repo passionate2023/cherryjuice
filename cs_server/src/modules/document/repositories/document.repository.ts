@@ -59,17 +59,53 @@ export class DocumentRepository extends Repository<Document>
       .execute();
   }
 
+  private async updateDocument({
+    documentId,
+    meta,
+    user,
+  }: {
+    user: User;
+    documentId: string;
+    meta: Record<string, any>;
+  }): Promise<string> {
+    const res = await this.createQueryBuilder('document')
+      .update()
+      .set({ ...meta, size: await this.getSize({ documentId }) })
+      .where({ id: documentId, userId: user.id })
+      .execute();
+
+    return JSON.stringify(res);
+  }
+
   async editDocument({
     documentId,
     meta,
     user,
   }: EditDocumentDto): Promise<string> {
-    const res = await this.createQueryBuilder('document')
-      .update()
-      .set({ ...meta, updatedAt: new Date(meta.updatedAt) })
-      .where({ id: documentId, userId: user.id })
-      .execute();
+    const res = await this.updateDocument({
+      documentId,
+      user,
+      meta: {
+        ...meta,
+        updatedAt: new Date(meta.updatedAt),
+      },
+    });
 
     return JSON.stringify(res);
+  }
+
+  async getSize({ documentId }: { documentId: string }): Promise<number> {
+    return await this.manager
+      .query(
+        `
+    select (
+    (select sum(pg_column_size(i.*)) from image as i where i."documentId"=$1) +
+    (select sum(pg_column_size(n.*)) from node as n where n."documentId"=$1)
+   ) /1024 as kb
+    `,
+        [documentId],
+      )
+
+      .then(res => Number(res[0].kb));
   }
 }

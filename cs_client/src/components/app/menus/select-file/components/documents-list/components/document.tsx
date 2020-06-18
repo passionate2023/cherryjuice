@@ -50,7 +50,7 @@ const Document: React.FC<Props> = ({
       <ThreeDotsButton documentId={id} />
 
       <span className={`${modSelectFile.selectFile__file__details} `}>
-        <span>{size / 1024}kb</span>
+        <span>{size}kb</span>
         <span>{dateToFormattedString(new Date(updatedAt))}</span>
       </span>
     </div>

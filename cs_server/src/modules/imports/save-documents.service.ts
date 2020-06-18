@@ -14,6 +14,7 @@ import { Document } from '../document/entities/document.entity';
 import { Image } from '../image/entities/image.entity';
 import { ImageSqliteRepository } from '../image/repositories/image.sqlite.repository';
 import { NodeService } from '../node/node.service';
+import { User } from '../user/entities/user.entity';
 
 type NodeDateMap = Map<number, { createdAt: Date; updatedAt: Date }>;
 type NodeDatesMap = NodeDateMap;
@@ -22,7 +23,7 @@ type NodeNode_idMap = Map<number, Node>;
 const sortBySequence = rawNodesMap => (a, b) =>
   rawNodesMap.get(a).sequence - rawNodesMap.get(b).sequence;
 
-type NodeImagesMap = Map<Node, { png: Buffer }[]>;
+type NodeImagesMap = [Node, { png: Buffer; hash?: string }[]][];
 
 type Node_idImagesMap = Map<number, string[]>;
 
@@ -38,9 +39,11 @@ export class SaveDocumentsService {
   ) {}
 
   async saveDocument({
+    user,
     document,
     rawNodes,
   }: {
+    user: User;
     document: Document;
     rawNodes: (Node & { is_ro; has_image })[];
   }): Promise<void> {
@@ -55,7 +58,10 @@ export class SaveDocumentsService {
       nodeDatesMap,
       document,
     });
-    document.size = 0;
+    document.size = await this.documentService.getSize({
+      documentId: document.id,
+      user,
+    });
     await document.save();
   }
 
@@ -67,7 +73,7 @@ export class SaveDocumentsService {
     nodeImagesMap: NodeImagesMap;
     nodeDatesMap: NodeDateMap;
   }> {
-    const nodeImagesMap: NodeImagesMap = new Map<Node, { png: Buffer }[]>();
+    const nodeImagesMap: NodeImagesMap = [];
     const nodesMap = new Map<number, Node>();
     const nodeDatesMap: NodeDatesMap = new Map();
     const rawNodesMap: NodeNode_idMap = new Map(
@@ -97,7 +103,7 @@ export class SaveDocumentsService {
         const images = await this.imageSqliteRepository.getNodeImages({
           node_id: node.node_id,
         });
-        nodeImagesMap.set(node, images);
+        nodeImagesMap.push([node, images]);
       }
     }
 
@@ -114,9 +120,9 @@ export class SaveDocumentsService {
     nodeImagesMap: NodeImagesMap,
   ): Promise<{ node_idImagesMap: Node_idImagesMap }> {
     const node_idImagesMap: Node_idImagesMap = new Map();
-    for (const [node, images] of Array.from(nodeImagesMap)) {
+    for (const [node, images] of nodeImagesMap) {
       const imageIds = [];
-      for (const { png } of images) {
+      for (const { png, hash } of images) {
         if (png) {
           const image = new Image();
           image.image = png;
@@ -124,6 +130,8 @@ export class SaveDocumentsService {
             percentage: 5,
           });
           image.nodeId = node.id;
+          image.documentId = node.documentId;
+          image.hash = hash;
           await image.save();
           imageIds.push(image.id);
         }

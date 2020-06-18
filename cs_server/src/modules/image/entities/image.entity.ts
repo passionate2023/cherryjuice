@@ -25,6 +25,9 @@ export class Image extends BaseEntity {
   @Column()
   nodeId: string;
 
+  @Column()
+  documentId: string;
+
   @Column({ type: 'bytea', nullable: false })
   thumbnail: Buffer;
 

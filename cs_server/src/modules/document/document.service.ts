@@ -97,4 +97,8 @@ export class DocumentService implements IDocumentService {
       delete document.nodes[node_id];
     await document.save();
   }
+
+  async getSize(args: { documentId: string; user: User }): Promise<number> {
+    return await this.documentRepository.getSize(args);
+  }
 }

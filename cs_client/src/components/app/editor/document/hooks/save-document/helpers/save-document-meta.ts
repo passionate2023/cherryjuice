@@ -9,15 +9,15 @@ const saveDocumentMeta = async ({ state, documentId }: SaveOperationProps) => {
     Array.from(apolloCache.changes.document(documentId).meta),
   );
 
-  if (Object.keys(editedAttributes).length) {
-    await apolloCache.client.mutate<MutationVariables, string>({
-      ...DOCUMENT_MUTATION.editDocument,
-      variables: {
-        file_id: state.swappedDocumentIds[documentId] || documentId,
-        meta: { ...editedAttributes, updatedAt: editedAttributes.updatedAt },
-      },
-    });
-  }
+  if (!editedAttributes.updatedAt)
+    editedAttributes.updatedAt = new Date().getTime();
+  await apolloCache.client.mutate<MutationVariables, string>({
+    ...DOCUMENT_MUTATION.editDocument,
+    variables: {
+      file_id: state.swappedDocumentIds[documentId] || documentId,
+      meta: { ...editedAttributes, updatedAt: editedAttributes.updatedAt },
+    },
+  });
 };
 
 export { saveDocumentMeta };

@@ -50,8 +50,10 @@ export class ImportsService {
 
   private async saveDocument({
     document,
+    user,
   }: {
     document: Document;
+    user: User;
   }): Promise<void> {
     const filePath = '/uploads/' + document.name;
     await this.openUploadedFile(filePath);
@@ -61,6 +63,7 @@ export class ImportsService {
     await this.saveDocumentsService.saveDocument({
       document,
       rawNodes,
+      user,
     });
   }
   async importDocumentsFromGDrive(
@@ -108,11 +111,9 @@ export class ImportsService {
       user,
     });
 
-    const map = new Map();
-    map.set(node, pngs);
-    const { node_idImagesMap } = await this.saveDocumentsService.saveImages(
-      map,
-    );
+    const { node_idImagesMap } = await this.saveDocumentsService.saveImages([
+      [node, pngs],
+    ]);
     return node_idImagesMap.get(node_id).map((id, i) => [imageIDs[i], id]);
   }
 
@@ -163,6 +164,7 @@ export class ImportsService {
           await importThreshold.started(document);
           await this.saveDocument({
             document,
+            user,
           });
           await importThreshold.finished(document);
         }
