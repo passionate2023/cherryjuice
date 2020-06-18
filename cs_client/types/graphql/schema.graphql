@@ -54,6 +54,7 @@ type Node {
     documentId: String!
     fatherId: String
     father_id: Float!
+    hash: String!
     html: String!
     icon_id: String!
     id: String!

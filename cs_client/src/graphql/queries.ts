@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import { DocumentMeta } from '::types/generated';
 import {
   AuthUser,
   DOCUMENT_SUBSCRIPTIONS,
@@ -7,7 +6,7 @@ import {
   Secrets,
 } from '::types/graphql/generated';
 import { FRAGMENT_USER } from '::graphql/fragments';
-import { NodeHtml, NodeMeta } from '::types/graphql/adapters';
+import { NodeHtml, NodeMeta, DocumentMeta } from '::types/graphql/adapters';
 
 const QUERY_NODE_META = {
   path: (data): NodeMeta[] | undefined => data?.document[0]?.node,
@@ -85,7 +84,7 @@ const QUERY_DOCUMENTS = {
           id
           name
           size
-          size
+          hash
           createdAt
           updatedAt
           folder

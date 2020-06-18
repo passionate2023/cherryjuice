@@ -5,23 +5,18 @@ import { EventHandler } from 'react';
 import { useMouseHold } from '::hooks/dom/mouse-hold';
 import { ThreeDotsButton } from './components/three-dots-button';
 import { ac } from '::root/store/store';
+import { DocumentMeta } from '::types/graphql/adapters';
 type Props = {
   selectedIDs: string[];
-  id: string;
   documentId: string;
-  name: string;
-  size: number;
-  updatedAt: number;
   onSelect: EventHandler<any>;
+  documentMeta: DocumentMeta;
 };
 
 const Document: React.FC<Props> = ({
-  size,
-  id,
-  name,
+  documentMeta: { size, id, name, updatedAt, hash },
   selectedIDs,
   documentId,
-  updatedAt,
   onSelect,
 }) => {
   const mouseHoldHandlers = useMouseHold({
@@ -51,7 +46,12 @@ const Document: React.FC<Props> = ({
 
       <span className={`${modSelectFile.selectFile__file__details} `}>
         <span>{size}kb</span>
-        <span>{dateToFormattedString(new Date(updatedAt))}</span>
+        <div>
+          <span className={`${modSelectFile.selectFile__file__details__hash}`}>
+            {hash}
+          </span>
+          <span>{dateToFormattedString(new Date(updatedAt))}</span>
+        </div>
       </span>
     </div>
   );

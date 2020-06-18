@@ -50,8 +50,6 @@ export type Node = {
   html: Scalars['String'];
   image: Array<Maybe<Image>>;
 };
-// export type NodeMeta = Omit<Node, 'html' | 'image'>;
-export type NodeImage = Pick<Node, 'node_id' | 'image'>;
 type Document = {
   __typename?: 'Document';
   id: Scalars['String'];
@@ -62,4 +60,3 @@ type Document = {
   folder?: Maybe<Scalars['String']>;
   node: Array<Maybe<Node>>;
 };
-export type DocumentMeta = Omit<Document, 'node' | '__typename'>;
