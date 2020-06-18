@@ -2,41 +2,43 @@ import * as React from 'react';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { execK } from '::helpers/editing/execK';
 import { ColorInput } from '::app/editor/tool-bar/groups/formatting-buttons/color-input';
-import { commands } from '::helpers/hotkeys/commands';
 import { modToolbar } from '::sass-modules/index';
 import { Icon } from '::shared-components/icon/icon';
 import { TransitionWrapper } from '::shared-components/transition-wrapper';
 import { animated } from 'react-spring';
+import { formattingHotKeys } from '::helpers/hotkeys/combinations/formatting';
 
 type Props = {};
 
 const Buttons = () => (
   <>
-    {commands.tagsAndStyles.map(({ icon, execCommandArguments }, i) => (
-      <ToolbarButton
-        key={i}
-        onClick={() =>
-          execK({
-            tagName: execCommandArguments.tagName,
-            // @ts-ignore
-            style: execCommandArguments?.style,
-            // @ts-ignore
-            command: execCommandArguments?.command,
-          })
-        }
-        className={modToolbar.toolBar__iconStrictWidth}
-      >
-        <Icon svg={{ name: icon }} />
-      </ToolbarButton>
-    ))}
-    {commands.colors.map(({ icon, label, cssProperty, inputId }) => (
+    {formattingHotKeys.tagsAndStyles.map(
+      ({ icon, execCommandArguments }, i) => (
+        <ToolbarButton
+          key={i}
+          onClick={() =>
+            execK({
+              tagName: execCommandArguments.tagName,
+              // @ts-ignore
+              style: execCommandArguments?.style,
+              // @ts-ignore
+              command: execCommandArguments?.command,
+            })
+          }
+          className={modToolbar.toolBar__iconStrictWidth}
+        >
+          <Icon svg={{ name: icon }} />
+        </ToolbarButton>
+      ),
+    )}
+    {formattingHotKeys.colors.map(({ icon, label, cssProperty, inputId }) => (
       <ColorInput
         key={label}
         icon={icon}
         {...{ label, cssProperty, inputId }}
       />
     ))}
-    {commands.misc.map(({ icon, execCommandArguments }, i) => (
+    {formattingHotKeys.misc.map(({ icon, execCommandArguments }, i) => (
       <ToolbarButton
         key={i}
         onClick={() =>

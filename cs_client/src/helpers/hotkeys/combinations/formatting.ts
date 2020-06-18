@@ -165,6 +165,6 @@ const misc = [
     hotKey: { key: `r`, altKey: true },
   },
 ];
-const commands = { tagsAndStyles, colors, misc };
+const formattingHotKeys = { tagsAndStyles, colors, misc };
 
-export { commands };
+export { formattingHotKeys };

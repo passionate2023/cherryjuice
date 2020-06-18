@@ -27,6 +27,7 @@ const Editor: React.FC<{ state: TState } & PropsFromRedux> = ({
     if (!documentId && router.location.pathname === '/')
       ac.dialogs.showDocumentList();
   }, [documentId, router.location.pathname]);
+
   return (
     <>
       <ErrorBoundary>
@@ -38,7 +39,6 @@ const Editor: React.FC<{ state: TState } & PropsFromRedux> = ({
             showInfoBar={state.showInfoBar}
             showRecentNodes={state.showRecentNodes}
             showTree={showTree}
-            documentHasUnsavedChanges={state.documentHasUnsavedChanges}
           />
         </Suspense>
       </ErrorBoundary>

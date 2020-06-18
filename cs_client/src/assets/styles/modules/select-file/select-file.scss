@@ -57,6 +57,9 @@
 .selectFile__file__details__hash {
   margin-right: 10px;
   opacity: 0.5;
+  @include respond-to($md-down) {
+    display: none;
+  }
 }
 .selectFile__file__details {
   font-family: monospace;

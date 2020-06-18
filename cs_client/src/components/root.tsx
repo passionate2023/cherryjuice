@@ -20,6 +20,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { useLoadEpics } from './hooks/load-epics';
 import { useProtectedRoutes } from './hooks/protected-routes';
+import { useSetupHotKeys } from '::helpers/hotkeys/hooks/setup-hotkeys';
 
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
@@ -39,7 +40,7 @@ const Root: React.FC<Props> = () => {
   }, []);
   useApolloClient(state.session);
   useProtectedRoutes({ session: state.session });
-
+  useSetupHotKeys();
   const { loadedEpics } = useLoadEpics();
   return (
     <Provider store={store}>

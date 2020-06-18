@@ -17,6 +17,9 @@ import { QUERY_USER } from '::graphql/queries';
 import { rootActionCreators } from '::root/root.reducer';
 import { AppContext } from './context';
 import { useDocumentEditedIndicator } from '::app/hooks/document-edited-indicator';
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+import { useHandleRouting } from '::app/hooks/handle-routing/handle-routing';
 
 const Menus = React.lazy(() => import('::app/menus'));
 const Editor = React.lazy(() => import('::app/editor'));
@@ -78,13 +81,11 @@ const useRefreshToken = ({ token }) => {
     }
   }, [data, error]);
 };
-import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store/store';
-import { useHandleRouting } from '::app/hooks/handle-routing/handle-routing';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
   showTree: state.editor.showTree,
+  documentHasUnsavedChanges: state.document.hasUnsavedChanges,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -94,6 +95,7 @@ const App: React.FC<Props & PropsFromRedux> = ({
   session,
   documentId,
   showTree,
+  documentHasUnsavedChanges,
 }) => {
   const [state, dispatch] = useReducer(appReducer, appInitialState);
   useEffect(() => {
@@ -106,7 +108,7 @@ const App: React.FC<Props & PropsFromRedux> = ({
       callback: appActionCreators.setIsOnMobile,
     }),
   ]);
-  useDocumentEditedIndicator(state);
+  useDocumentEditedIndicator(documentHasUnsavedChanges);
   useSaveStateToLocalStorage(state);
   useHandleRouting(documentId);
   useUpdateCssVariables(state, showTree);

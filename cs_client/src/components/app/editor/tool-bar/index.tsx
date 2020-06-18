@@ -26,7 +26,6 @@ type Props = {
   showRecentNodes: boolean;
   showInfoBar: boolean;
   showTree: boolean;
-  documentHasUnsavedChanges: boolean;
 };
 
 const ToolBar: React.FC<Props & PropsFromRedux> = ({
@@ -35,17 +34,11 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   contentEditable,
   showRecentNodes,
   showInfoBar,
-  showTree,
   selectedNodeId,
-  documentHasUnsavedChanges,
 }) => {
   return (
     <div className={modToolbar.toolBar}>
-      <MainButtons
-        showTree={showTree}
-        selectedNodeId={selectedNodeId}
-        documentHasUnsavedChanges={documentHasUnsavedChanges}
-      />
+      <MainButtons selectedNodeId={selectedNodeId} />
       <Separator />
       <MobileButtons
         {...{

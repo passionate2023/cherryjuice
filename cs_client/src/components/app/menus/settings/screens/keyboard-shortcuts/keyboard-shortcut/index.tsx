@@ -1,11 +1,11 @@
 import modKeyboardShortcut from '::sass-modules/settings/keyboard-shortcut.scss';
 import modSettings from '::sass-modules/settings/settings.scss';
 import * as React from 'react';
-import { THotKey } from '::helpers/hotkeys';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { TextInput } from '::shared-components/text-input';
 import { modButton } from '::sass-modules/index';
 import { useState } from 'react';
+import { HotKeyKeys } from '::helpers/hotkeys/helpers/hotkeys-manager';
 
 const MetaKey: React.FC<{
   label: string;
@@ -57,7 +57,7 @@ const KeyboardShortcut = ({
   hotkey: { shiftKey, ctrlKey, altKey, key, code },
 }: {
   name: string;
-  hotkey: THotKey;
+  hotkey: HotKeyKeys;
 }) => (
   <span className={modSettings.settings__settingElement}>
     <span className={modSettings.settings__settingElement__name}>{name}</span>

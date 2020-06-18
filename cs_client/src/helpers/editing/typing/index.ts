@@ -3,7 +3,7 @@ import { handleBackSpace } from './backspace';
 import { AlertType } from '::types/react';
 import { ac } from '::root/store/store';
 
-const setupKeyboardEvents = () => {
+const setupTabAndBackspaceHandler = () => {
   const editor: HTMLDivElement = document.querySelector('#rich-text');
   editor.onkeydown = e => {
     try {
@@ -26,4 +26,4 @@ const setupKeyboardEvents = () => {
   };
 };
 
-export { setupKeyboardEvents };
+export { setupTabAndBackspaceHandler };

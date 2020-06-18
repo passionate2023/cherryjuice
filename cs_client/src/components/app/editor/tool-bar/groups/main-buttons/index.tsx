@@ -8,13 +8,13 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 const mapState = (state: Store) => ({
   showTree: state.editor.showTree,
+  documentHasUnsavedChanges: state.document.hasUnsavedChanges,
 });
 
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {
-  documentHasUnsavedChanges: boolean;
   selectedNodeId: string;
 };
 

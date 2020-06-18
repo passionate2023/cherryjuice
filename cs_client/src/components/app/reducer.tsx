@@ -5,7 +5,6 @@ enum NodeMetaPopupRole {
 }
 
 const initialState = {
-  documentHasUnsavedChanges: false,
   processLinks: undefined,
   createDocumentRequestId: undefined,
   treeSize: JSON.parse(localStorage.getItem('treeSize') as string) || 250,
@@ -39,7 +38,6 @@ enum actions {
   SHOW_NODE_META,
   HIDE_NODE_META,
   TOGGLE_DELETE_DOCUMENT,
-  documentHasUnsavedChanges,
   createDocument,
 }
 const createActionCreators = () => {
@@ -111,12 +109,6 @@ const createActionCreators = () => {
         type: actions.TOGGLE_DELETE_DOCUMENT,
       }),
 
-    documentHasUnsavedChanges: (documentHasUnsavedChanges: boolean) => {
-      state.dispatch({
-        type: actions.documentHasUnsavedChanges,
-        value: documentHasUnsavedChanges,
-      });
-    },
     setSnackbarMessage: (snackbarMessage: string) => {
       state.dispatch({
         type: actions.setSnackbarMessage,
@@ -181,12 +173,6 @@ reducer = (
       return { ...state, showNodeMeta: action.value };
     case actions.HIDE_NODE_META:
       return { ...state, showNodeMeta: undefined };
-
-    case actions.documentHasUnsavedChanges:
-      return {
-        ...state,
-        documentHasUnsavedChanges: action.value,
-      };
     case actions.setSnackbarMessage:
       return {
         ...state,

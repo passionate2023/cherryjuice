@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { appActionCreators } from '::app/reducer';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { getEditor } from '::app/editor/document/rich-text/hooks/get-node-images';
 import { onBeforeUnload } from '::helpers/dom/on-before-unload';
+import { ac } from '::root/store/store';
 
 type Props = {
   cacheTimeStamp: number;
@@ -14,7 +14,7 @@ const useTrackDocumentChanges = ({ cacheTimeStamp }: Props) => {
       Boolean(cacheTimeStamp) &&
       (Boolean(getEditor()?.getAttribute('data-edited')) ||
         Boolean(apolloCache.changes.document().unsaved));
-    appActionCreators.documentHasUnsavedChanges(documentHasUnsavedNodes);
+    ac.document.hasUnsavedChanges(documentHasUnsavedNodes);
     if (documentHasUnsavedNodes) {
       onBeforeUnload.attach();
     } else onBeforeUnload.remove();

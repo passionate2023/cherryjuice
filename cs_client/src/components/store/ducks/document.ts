@@ -17,6 +17,9 @@ const ac = {
   }),
   fetchFailed: _('fetchFailed'),
   setDocumentId: _('setDocumentId', _ => (documentId: string) => _(documentId)),
+  hasUnsavedChanges: _('hasUnsavedChanges', _ => (unsaved: boolean) =>
+    _(unsaved),
+  ),
   fetchNodesStarted: _('fetchNodesStarted'),
   fetchNodesFulfilled: _('fetchNodesFulfilled', _ => (nodes: nodesMetaMap) =>
     _(nodes),
@@ -66,6 +69,7 @@ type State = {
   rootNode?: NodeId;
   recentNodes: number[];
   highestNode_id: number;
+  hasUnsavedChanges: boolean;
 };
 
 const initialState: State = {
@@ -78,11 +82,16 @@ const initialState: State = {
   rootNode: defaultRootNode,
   recentNodes: [],
   highestNode_id: -1,
+  hasUnsavedChanges: false,
 };
 const reducer = createReducer(cloneObj(initialState), _ => [
   _(ac.setDocumentId, (state, { payload }) => ({
     ...cloneObj(initialState),
     documentId: payload,
+  })),
+  _(ac.hasUnsavedChanges, (state, { payload }) => ({
+    ...state,
+    hasUnsavedChanges: payload,
   })),
   _(ac.fetchNodesFulfilled, (state, { payload }) => ({
     ...state,
