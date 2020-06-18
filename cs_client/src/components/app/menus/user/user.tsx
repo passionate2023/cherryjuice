@@ -43,9 +43,14 @@ const User: React.FC<Props & { style }> = ({ onClose, style }) => {
           />
         ) : (
           <Icon
-            name={Icons.material['person-circle']}
-            size={ICON_SIZE._145}
-            className={modUserPopup.user__info__picture}
+            svg={{
+              name: Icons.material['person-circle'],
+              size: ICON_SIZE._145,
+            }}
+            svgAttributes={{ width: 40, height: 40 }}
+            containerAttributes={{
+              className: modUserPopup.user__info__picture,
+            }}
           />
         )}
 

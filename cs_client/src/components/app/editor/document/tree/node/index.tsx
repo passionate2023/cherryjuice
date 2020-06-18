@@ -81,22 +81,33 @@ const Node: React.FC<Props> = ({
         <div style={{ marginLeft: depth * 20 }} />
         {
           <Icon
-            className={`${nodeMod.node__titleButton} ${
-              child_nodes.length > 0 ? '' : nodeMod.node__titleButtonHidden
-            }`}
+            svg={{
+              name: showChildren ? Icons.material.remove : Icons.material.add,
+              size: ICON_SIZE._24,
+            }}
+            containerAttributes={{
+              class: `${nodeMod.node__titleButton} ${
+                child_nodes.length > 0 ? '' : nodeMod.node__titleButtonHidden
+              }`,
+            }}
+            svgAttributes={{
+              width: '8px',
+              height: '8px',
+            }}
             onClick={toggleChildren}
-            name={showChildren ? Icons.material.remove : Icons.material.add}
-            size={ICON_SIZE._24}
           />
         }
         <Icon
-          name={
-            +icon_id
+          svg={{
+            name: +icon_id
               ? Icons.cherrytree.custom_icons[icon_id]
-              : Icons.cherrytree.cherries[depth >= 11 ? 11 : depth]
-          }
-          className={modIcons.node__titleCherry}
-          group={ICON_GROUP.cherrytree}
+              : Icons.cherrytree.cherries[depth >= 11 ? 11 : depth],
+            group: ICON_GROUP.cherrytree,
+          }}
+          containerAttributes={{
+            className: modIcons.node__titleCherry,
+          }}
+          svgAttributes={{ width: '14px', height: '14px' }}
           testId={'cherry' + icon_id}
         />
         <div

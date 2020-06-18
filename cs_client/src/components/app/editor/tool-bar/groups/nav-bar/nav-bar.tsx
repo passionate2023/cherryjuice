@@ -27,13 +27,13 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
         onClick={ac.dialogs.showCreateDocumentDialog}
         testId={'new-document'}
       >
-        <Icon name={Icons.material.document} />
+        <Icon svg={{ name: Icons.material.document }} />
       </ToolbarButton>
       <ToolbarButton onClick={ac.dialogs.showDocumentList}>
-        <Icon name={Icons.material.folder} />
+        <Icon svg={{ name: Icons.material.folder }} />
       </ToolbarButton>
       <ToolbarButton onClick={appActionCreators.toggleSettings}>
-        <Icon name={Icons.material.settings} />
+        <Icon svg={{ name: Icons.material.settings }} />
       </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.toggleUserPopup}
@@ -46,7 +46,7 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
             className={modToolbar.toolBar__groupNavBar__profilePicture}
           />
         ) : (
-          <Icon name={Icons.material['person-circle']} />
+          <Icon svg={{ name: Icons.material['person-circle'] }} />
         )}
       </ToolbarButton>
     </div>

@@ -67,8 +67,12 @@ const GoogleDrivePicker: React.FC<Props> = () => {
       className={modImportDocument.importDocument__button}
     >
       <Icon
-        name={Icons.material['google-drive']}
-        className={modImportDocument.importDocument__button__icon}
+        svg={{
+          name: Icons.material['google-drive'],
+        }}
+        containerAttributes={{
+          className: modImportDocument.importDocument__button__icon,
+        }}
       />
       google drive
     </ButtonSquare>

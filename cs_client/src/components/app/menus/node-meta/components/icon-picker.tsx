@@ -32,14 +32,18 @@ const IconsList = ({
     >
       {icons.map(([iconId, iconName], i) => (
         <Icon
-          name={iconName}
+          svg={{
+            name: iconName,
+            group: ICON_GROUP.cherrytree,
+          }}
+          containerAttributes={{
+            className: `${modIconPicker.iconPicker__icon} ${
+              selectedIcon === iconId
+                ? modIconPicker.iconPicker__iconSelected
+                : ''
+            }`,
+          }}
           key={i}
-          className={`${modIconPicker.iconPicker__icon} ${
-            selectedIcon === iconId
-              ? modIconPicker.iconPicker__iconSelected
-              : ''
-          }`}
-          group={ICON_GROUP.cherrytree}
           onClick={() => {
             setSelectedIcon(iconId);
             setShowList(false);
@@ -65,11 +69,15 @@ const IconPicker: React.FC<Props> = ({
       data-testid={testIds.nodeMeta__customIcon}
     >
       <Icon
-        name={Icons.cherrytree.custom_icons[value]}
-        className={`${modIconPicker.iconPicker__icon} ${
-          disabled ? modNodeMeta.nodeMeta__inputDisabled : ''
-        }`}
-        group={ICON_GROUP.cherrytree}
+        svg={{
+          name: Icons.cherrytree.custom_icons[value],
+          group: ICON_GROUP.cherrytree,
+        }}
+        containerAttributes={{
+          className: `${modIconPicker.iconPicker__icon} ${
+            disabled ? modNodeMeta.nodeMeta__inputDisabled : ''
+          }`,
+        }}
         onClick={() => !disabled && setShowList(!showList)}
       />
       {showList && (

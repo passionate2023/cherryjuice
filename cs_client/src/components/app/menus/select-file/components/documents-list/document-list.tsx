@@ -7,7 +7,7 @@ import { SpinnerCircle } from '::shared-components/spinner-circle';
 const DocumentList = ({
   selectedIDs,
   onSelect,
-                        documentId,
+  documentId,
   documentsMeta,
   loading,
 }) => {

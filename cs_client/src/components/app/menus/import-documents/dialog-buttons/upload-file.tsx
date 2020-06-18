@@ -23,9 +23,12 @@ const UploadFile: React.FC<{}> = () => {
         className={modImportDocument.importDocument__button}
       >
         <Icon
-          name={Icons.material.storage}
-          small={true}
-          className={modImportDocument.importDocument__button__icon}
+          svg={{
+            name: Icons.material.storage,
+          }}
+          containerAttributes={{
+            className: modImportDocument.importDocument__button__icon,
+          }}
         />
         local storage
       </ButtonSquare>

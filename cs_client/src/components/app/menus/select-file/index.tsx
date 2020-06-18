@@ -97,7 +97,7 @@ const SelectFile: React.FC<{
           holdingRef.current = false;
         }}
       >
-        <Icon name={Icons.material.cancel} />
+        <Icon svg={{name:Icons.material.cancel}} />
       </ButtonCircle>
     ),
     documents.length && holdingRef.current && (
@@ -107,7 +107,7 @@ const SelectFile: React.FC<{
         className={modDialog.dialog__header__fileButton}
         onClick={deleteDocument}
       >
-        <Icon name={Icons.material['delete']} />
+        <Icon svg={{name:Icons.material['delete']}} />
       </ButtonCircle>
     ),
   ].filter(Boolean);

@@ -24,7 +24,9 @@ const ThreeDotsButton: React.FC<Props> = ({ documentId }) => {
     <>
       <div className={`${modSelectFile.selectFile__file__threeDotsButton} `}>
         <Icon
-          name={Icons.material.menu}
+          svg={{
+            name: Icons.material.menu,
+          }}
           onClick={() => {
             setShowModal(!showModal);
           }}

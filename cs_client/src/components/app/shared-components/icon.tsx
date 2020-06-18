@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { EventHandler } from 'react';
+import { EventHandler, useEffect, useRef } from 'react';
+import { stringToSingleElement } from '::helpers/editing/execK/helpers';
 enum ICON_GROUP {
   cherrytree = 'cherrytree',
   material = 'material',
@@ -143,11 +144,9 @@ const Icons = {
     },
   },
 };
-
 const getIconGroup = name =>
   Icons.material[name] ? 'material' : Icons.misc[name] ? 'misc' : 'cherrytree';
-
-const getIconPath = ({
+const getIconPath = async ({
   name,
   size,
   color,
@@ -160,39 +159,66 @@ const getIconPath = ({
 }) => {
   const folder = group || getIconGroup(name);
   if (!size && folder === 'material') size = 18;
-  return `/icons/${folder}/${size ? `${size}/` : ''}${name}${
+  const path = `${folder}/${size ? `${size}/` : ''}${name}${
     color ? '-' + color : ''
-  }.svg`;
+  }`;
+  return {
+    svg: await import(`::assets/icons/${path}.svg`).then(
+      module => module.default,
+    ),
+    path: `/icons/${path}.svg`,
+  };
 };
 
+type Attributes = { width?: string; height?: string; class?: string };
+type SVGAttributes = Attributes & { fill?: string };
+type SvgContainerAttributes = Attributes;
 const Icon = ({
-  name,
-  size,
-  className,
+  svg: { name, size, group, color },
+  svgAttributes = {},
+  containerAttributes = {},
   onClick,
-  style,
-  color,
-  group,
   testId,
 }: {
-  name: string;
-  color?: ICON_COLOR;
-  size?: ICON_SIZE;
-  className?: string;
+  svg: {
+    name: string;
+    color?: ICON_COLOR;
+    size?: ICON_SIZE;
+    group?: ICON_GROUP;
+  };
+  svgAttributes?: SVGAttributes;
+  containerAttributes?: SvgContainerAttributes;
   onClick?: EventHandler<any>;
-  style?: React.CSSProperties;
-  group?: ICON_GROUP;
   testId?: string;
-}) => (
-  <img
-    src={getIconPath({ name, size, color, group })}
-    alt={name}
-    {...(className && { className })}
-    {...(onClick && { onClick })}
-    {...(style && { style })}
-    {...(testId && { 'data-testid': testId })}
-  />
-);
+}) => {
+  const ref = useRef<HTMLElement>();
+  useEffect(() => {
+    getIconPath({ name, size, color, group }).then(({ svg, path }) => {
+      let element;
+      if (group === ICON_GROUP.cherrytree) {
+        element = document.createElement('img');
+        element.src = path;
+      } else {
+        element = stringToSingleElement(svg);
+      }
+      element.setAttribute('width', (size || 18).toString());
+      element.setAttribute('height', (size || 18).toString());
+      Object.entries(svgAttributes).forEach(([k, v]) => {
+        element.setAttribute(k, v);
+      });
+      ref.current.innerHTML = '';
+      ref.current.append(element);
+    });
+  }, [name]);
+  return (
+    <span
+      ref={ref}
+      {...containerAttributes}
+      {...(onClick && { onClick })}
+      {...(testId && { 'data-testid': testId })}
+    />
+  );
+};
 
 export { Icon, Icons, getIconPath };
 export { ICON_COLOR, ICON_GROUP, ICON_SIZE };

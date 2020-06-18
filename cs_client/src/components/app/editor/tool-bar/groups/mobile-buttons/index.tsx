@@ -28,20 +28,20 @@ const MobileButtons: React.FC<Props> = ({
         onClick={appActionCreators.toggleFormattingButtons}
         enabled={showFormattingButtons}
       >
-        <Icon name={Icons.material['justify-left']}  />
+        <Icon svg={{name:Icons.material['justify-left']}}  />
       </ToolbarButton>
       <Separator />
       <ToolbarButton
         onClick={appActionCreators.toggleRecentBar}
         enabled={showRecentNodes}
       >
-        <Icon name={Icons.material.history}  />
+        <Icon svg={{name:Icons.material.history}}  />
       </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.toggleInfoBar}
         enabled={showInfoBar}
       >
-        <Icon name={Icons.material.info}  />
+        <Icon svg={{name:Icons.material.info}}  />
       </ToolbarButton>
     </div>
   );
