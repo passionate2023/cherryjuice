@@ -4,7 +4,7 @@ import { execK } from '::helpers/editing/execK';
 import { ColorInput } from '::app/editor/tool-bar/groups/formatting-buttons/color-input';
 import { commands } from '::helpers/hotkeys/commands';
 import { modToolbar } from '::sass-modules/index';
-import { Icon } from '::shared-components/icon';
+import { Icon } from '::shared-components/icon/icon';
 import { TransitionWrapper } from '::shared-components/transition-wrapper';
 import { animated } from 'react-spring';
 

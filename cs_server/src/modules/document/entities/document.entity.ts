@@ -70,7 +70,7 @@ export class Document extends BaseEntity {
   nodes: NodesHash;
 
   @Column({ nullable: true })
-  @Field()
+  @Field({ nullable: true })
   hash: string;
 
   @BeforeUpdate()

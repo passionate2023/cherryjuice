@@ -4,7 +4,7 @@ import { NodeMeta } from '::types/graphql/adapters';
 import * as React from 'react';
 import { useCallback, useRef, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import { Icon,  ICON_SIZE, Icons } from '::shared-components/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 import { useDnDNodes } from '::app/editor/document/tree/node/hooks/dnd-nodes';
 import { useSelectNode } from '::app/editor/document/tree/node/hooks/select-node';
 import { useScrollNodeIntoView } from '::app/editor/document/tree/node/hooks/scroll-node-into-view';
@@ -83,16 +83,15 @@ const Node: React.FC<Props> = ({
           <Icon
             svg={{
               name: showChildren ? Icons.material.remove : Icons.material.add,
-              size: ICON_SIZE._24,
             }}
             containerAttributes={{
-              class: `${nodeMod.node__titleButton} ${
+              className: `${nodeMod.node__titleButton} ${
                 child_nodes.length > 0 ? '' : nodeMod.node__titleButtonHidden
               }`,
             }}
             svgAttributes={{
-              width: '8px',
-              height: '8px',
+              width: '10px',
+              height: '10px',
             }}
             onClick={toggleChildren}
           />

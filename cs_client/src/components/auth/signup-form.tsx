@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import * as React from 'react';
 import { modLogin } from '::sass-modules/index';
-import { Icons } from '::shared-components/icon';
+import { Icons } from '::shared-components/icon/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { TextInput, TextInputProps } from '::shared-components/form/text-input';
 import { patterns } from '::auth/helpers/form-validation';

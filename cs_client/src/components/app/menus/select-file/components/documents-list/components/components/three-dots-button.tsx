@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
 import { modSelectFile } from '::sass-modules/index';
 import { ThreeDotsPopup } from './three-dots-popup';
-import { Icon, Icons } from '::shared-components/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 
 type Props = {
   documentId: string;

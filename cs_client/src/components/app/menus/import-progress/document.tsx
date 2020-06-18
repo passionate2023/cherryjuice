@@ -2,7 +2,7 @@ import * as React from 'react';
 import { modImportProgress } from '::sass-modules/index';
 import { DOCUMENT_SUBSCRIPTIONS } from '::types/graphql/generated';
 import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
-import { Icon, Icons } from '::shared-components/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 import { useDeleteFile } from '../select-file/hooks/delete-documents/delete-file';
 import { ac } from '::root/store/store';
 

@@ -25,7 +25,7 @@ export class Image extends BaseEntity {
   @Column()
   nodeId: string;
 
-  @Column()
+  @Column({ nullable: true })
   documentId: string;
 
   @Column({ type: 'bytea', nullable: false })

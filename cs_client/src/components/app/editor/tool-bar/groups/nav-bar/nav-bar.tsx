@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { appActionCreators } from '::app/reducer';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
-import { Icon, Icons } from '::shared-components/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 import { modToolbar } from '::sass-modules/index';
 import { useContext } from 'react';
 import { RootContext } from '::root/root-context';

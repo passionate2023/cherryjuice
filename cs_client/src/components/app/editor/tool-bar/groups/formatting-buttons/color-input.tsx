@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { execK } from '::helpers/editing/execK';
-import { Icon } from '::shared-components/icon';
+import { Icon } from '::shared-components/icon/icon';
 import { modToolbar } from '::sass-modules/index';
 
 const ColorInput: React.FC<{

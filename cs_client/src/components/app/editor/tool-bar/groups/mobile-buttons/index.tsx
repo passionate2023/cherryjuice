@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { modToolbar } from '::sass-modules/index';
 import { ToolbarButton } from '../../tool-bar-button';
-import { Icon, Icons } from '::shared-components/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 import { appActionCreators } from '::app/reducer';
 import { Separator } from '::app/editor/tool-bar/separator';
 

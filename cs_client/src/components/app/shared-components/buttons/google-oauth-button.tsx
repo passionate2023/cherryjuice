@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon, Icons,  } from '::shared-components/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 import { modGoogleOauth } from '::sass-modules/index';
 import { useOnKeyPress } from '::hooks/use-on-key-up';
 import { EventHandler } from 'react';

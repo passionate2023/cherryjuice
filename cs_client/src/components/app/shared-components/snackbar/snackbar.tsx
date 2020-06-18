@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modSnackbar } from '::sass-modules/index';
-import { Icon, Icons } from '::shared-components/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
 import { ComponentWithTransition } from '::shared-components/transitions/component-with-transition';
 import { transitions } from '::shared-components/transitions/transitions';

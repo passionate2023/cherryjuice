@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modLogin } from '::sass-modules/index';
-import { Icon } from '::shared-components/icon';
+import { Icon } from '::shared-components/icon/icon';
 import { Ref } from 'react';
 import { patternToString, TPattern } from '::auth/helpers/form-validation';
 import { useCustomValidityMessage } from '::hooks/use-custom-validation-message';

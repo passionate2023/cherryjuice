@@ -1,16 +1,3 @@
-import * as React from 'react';
-import { EventHandler, useEffect, useRef } from 'react';
-import { stringToSingleElement } from '::helpers/editing/execK/helpers';
-
-type IconGroup = 'cherrytree' | 'material' | 'misc';
-
-enum ICON_SIZE {
-  _18 = 18,
-  _24 = 24,
-  _36 = 24,
-  _48 = 48,
-  _145 = 145,
-}
 const Icons = {
   material: {
     add: 'add',
@@ -87,10 +74,10 @@ const Icons = {
       2: 'circle-yellow',
       3: 'circle-red',
       4: 'circle-grey',
-      5: 'add',
-      6: 'remove',
+      5: 'add-ct',
+      6: 'remove-ct',
       7: 'done',
-      8: 'cancel',
+      8: 'cancel-ct',
       9: 'edit-delete',
       10: 'warning',
       11: 'star',
@@ -126,7 +113,7 @@ const Icons = {
       41: 'unlocked',
       42: 'people',
       43: 'urgent',
-      44: 'folder',
+      44: 'folder-ct',
       45: 'leaf',
       46: 'xml',
       47: 'c',
@@ -139,75 +126,5 @@ const Icons = {
     },
   },
 };
-const getIconGroup = (name: string): IconGroup =>
-  Icons.material[name] ? 'material' : Icons.misc[name] ? 'misc' : 'cherrytree';
-const getIconPath = async ({
-  name,
-  size,
-  group,
-}: {
-  name: string;
-  size?: ICON_SIZE;
-  group: string;
-}) => {
-  if (!size && group === 'material') size = 18;
-  const path = `${group}/${size ? `${size}/` : ''}${name}`;
-  return {
-    svg: await import(`::assets/icons/${path}.svg`).then(
-      module => module.default,
-    ),
-    path: `/icons/${path}.svg`,
-  };
-};
 
-type Attributes = { width?: string; height?: string; className?: string };
-type SVGAttributes = Attributes & { fill?: string };
-type SvgContainerAttributes = Attributes;
-const Icon = ({
-  svg: { name, size },
-  svgAttributes = {},
-  containerAttributes = {},
-  onClick,
-  testId,
-}: {
-  svg: {
-    name: string;
-    size?: ICON_SIZE;
-  };
-  svgAttributes?: SVGAttributes;
-  containerAttributes?: SvgContainerAttributes;
-  onClick?: EventHandler<any>;
-  testId?: string;
-}) => {
-  const ref = useRef<HTMLElement>();
-  useEffect(() => {
-    const group = getIconGroup(name);
-    getIconPath({ name, size, group }).then(({ svg, path }) => {
-      let element;
-      if (group === 'cherrytree' || group === 'misc') {
-        element = document.createElement('img');
-        element.src = path;
-      } else {
-        element = stringToSingleElement(svg);
-      }
-      element.setAttribute('width', (size || 18).toString());
-      element.setAttribute('height', (size || 18).toString());
-      Object.entries(svgAttributes).forEach(([k, v]) => {
-        element.setAttribute(k, v);
-      });
-      ref.current.innerHTML = '';
-      ref.current.append(element);
-    });
-  }, [name]);
-  return (
-    <span
-      ref={ref}
-      {...containerAttributes}
-      {...(onClick && { onClick })}
-      {...(testId && { 'data-testid': testId })}
-    />
-  );
-};
-
-export { Icon, Icons, getIconPath };
-export { ICON_SIZE };
+export { Icons };
