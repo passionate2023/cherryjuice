@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { appActionCreators } from '::app/reducer';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
-import { Icon, Icons, ICON_GROUP } from '::shared-components/icon';
+import { Icon, Icons,  } from '::shared-components/icon';
 import { modToolbar } from '::sass-modules/index';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
@@ -30,7 +30,6 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         <Icon
           svg={{
             name: Icons.cherrytree.additionalIcons['cherries'],
-            group: ICON_GROUP.cherrytree,
           }}
           svgAttributes={ctSvgAttributes}
         />
@@ -56,7 +55,6 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         <Icon
           svg={{
             name: Icons.cherrytree.additionalIcons['tree-node-add'],
-            group: ICON_GROUP.cherrytree,
           }}
           svgAttributes={ctSvgAttributes}
         />
@@ -68,7 +66,6 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         <Icon
           svg={{
             name: Icons.cherrytree.additionalIcons['tree-subnode-add'],
-            group: ICON_GROUP.cherrytree,
           }}
           svgAttributes={ctSvgAttributes}
         />

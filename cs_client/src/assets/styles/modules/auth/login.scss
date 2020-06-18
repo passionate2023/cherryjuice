@@ -56,6 +56,9 @@
   position: absolute;
   align-self: center;
   padding-left: 10px;
+  svg {
+    fill: black;
+  }
 }
 .login__form__input__input {
   border-radius: 5px;
@@ -67,8 +70,6 @@
   border: none;
   height: 50px;
   box-sizing: border-box;
-
-
 }
 .login__form__input__input--highlight-invalid {
   &:invalid {

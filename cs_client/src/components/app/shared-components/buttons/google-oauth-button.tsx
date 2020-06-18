@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon, Icons } from '::shared-components/icon';
+import { Icon, Icons,  } from '::shared-components/icon';
 import { modGoogleOauth } from '::sass-modules/index';
 import { useOnKeyPress } from '::hooks/use-on-key-up';
 import { EventHandler } from 'react';
@@ -19,8 +19,12 @@ const GoogleOauthButton: React.FC<Props> = ({ onClick, signIn = true }) => {
     >
       <div className={modGoogleOauth.googleIconWrapper}>
         <Icon
-          className={modGoogleOauth.googleIconSvg}
-          name={Icons.misc['google-g']}
+          svg={{
+            name: Icons.misc['google-g'],
+          }}
+          containerAttributes={{
+            className: modGoogleOauth.googleIconSvg,
+          }}
         />
       </div>
       <p className={modGoogleOauth.btnText}>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modLogin } from '::sass-modules/index';
-import { Icon, ICON_COLOR } from '::shared-components/icon';
+import { Icon } from '::shared-components/icon';
 import { Ref } from 'react';
 import { patternToString, TPattern } from '::auth/helpers/form-validation';
 import { useCustomValidityMessage } from '::hooks/use-custom-validation-message';
@@ -10,7 +10,7 @@ export type TextInputProps = {
   inputRef: Ref<HTMLInputElement>;
   variableName: string;
   type?: string;
-  icon?: string | [string, ICON_COLOR];
+  icon?: string | [string];
   ariaLabel?: string;
   minLength?: number;
   patterns?: TPattern[];
@@ -40,9 +40,12 @@ const TextInput: React.FC<TextInputProps & {
     <div className={modLogin.login__form__input}>
       {icon && (
         <Icon
-          name={typeof icon === 'string' ? icon : icon[0]}
-          color={typeof icon === 'string' ? undefined : icon[1]}
-          className={modLogin.login__form__input__icon}
+          svg={{
+            name: typeof icon === 'string' ? icon : icon[0],
+          }}
+          containerAttributes={{
+            className: modLogin.login__form__input__icon,
+          }}
         />
       )}
       <input

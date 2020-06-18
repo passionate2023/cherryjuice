@@ -9,7 +9,7 @@ const DrawerToggle: React.FC<{}> = () => (
     className={`${modDrawer.drawer__drawerToggle}`}
     onClick={handleToggle()}
   >
-    <Icon svg={{name:Icons.material.menu}} />
+    <Icon svg={{ name: Icons.material.menu }} />
   </ButtonCircle>
 );
 

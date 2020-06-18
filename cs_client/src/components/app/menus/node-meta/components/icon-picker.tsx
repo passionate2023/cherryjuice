@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modIconPicker, modNodeMeta } from '::sass-modules/index';
-import { Icon, ICON_GROUP, Icons } from '::shared-components/icon';
+import { Icon,  Icons } from '::shared-components/icon';
 import { useState } from 'react';
 import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
 import { testIds } from '::cypress/support/helpers/test-ids';
@@ -34,7 +34,6 @@ const IconsList = ({
         <Icon
           svg={{
             name: iconName,
-            group: ICON_GROUP.cherrytree,
           }}
           containerAttributes={{
             className: `${modIconPicker.iconPicker__icon} ${
@@ -71,7 +70,6 @@ const IconPicker: React.FC<Props> = ({
       <Icon
         svg={{
           name: Icons.cherrytree.custom_icons[value],
-          group: ICON_GROUP.cherrytree,
         }}
         containerAttributes={{
           className: `${modIconPicker.iconPicker__icon} ${

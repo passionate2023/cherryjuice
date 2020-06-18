@@ -3,7 +3,7 @@ import { createRef, useEffect, useRef } from 'react';
 import { modLogin } from '::sass-modules/index';
 import { Checkbox } from '::shared-components/checkbox';
 import { GoogleOauthButton } from '::shared-components/buttons/google-oauth-button';
-import { ICON_COLOR, Icons } from '::shared-components/icon';
+import { Icons } from '::shared-components/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { TextInput, TextInputProps } from '::shared-components/form/text-input';
 import { FormSeparator } from '::shared-components/form/form-separator';
@@ -22,7 +22,7 @@ import { rootActionCreators } from '::root/root.reducer';
 const inputs: TextInputProps[] = [
   {
     label: 'username',
-    icon: [Icons.material.username, ICON_COLOR.black],
+    icon: [Icons.material.username],
     patterns: [patterns.userName, patterns.email],
     minLength: 4,
     required: true,
@@ -35,7 +35,7 @@ const inputs: TextInputProps[] = [
     variableName: 'password',
     label: 'password',
     type: 'password',
-    icon: [Icons.material.lock, ICON_COLOR.black],
+    icon: [Icons.material.lock],
     required: true,
     idPrefix: 'login',
   },

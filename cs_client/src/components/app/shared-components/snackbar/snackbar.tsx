@@ -42,7 +42,7 @@ const Snackbar: React.FC<Props> = ({
           className={modSnackbar.snackbar__closeButton}
           onClick={onClose}
         >
-          <Icon svg={{name:Icons.material.clear}} />
+          <Icon svg={{ name: Icons.material.clear }} />
         </ButtonCircle>
       </div>
     </ComponentWithTransition>
