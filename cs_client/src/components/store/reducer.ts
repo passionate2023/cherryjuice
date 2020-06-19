@@ -6,6 +6,7 @@ import { dialogsReducer } from './ducks/dialogs';
 import { nodeReducer } from './ducks/node';
 import { editorReducer } from './ducks/editor';
 import { documentsListReducer } from './ducks/documents-list';
+import { documentTransforms } from './redux-persist/transforms/document';
 
 const reducer = combineReducers({
   document: persistReducer(
@@ -13,6 +14,7 @@ const reducer = combineReducers({
       key: 'document',
       storage,
       blacklist: ['nodes'],
+      transforms: documentTransforms,
     },
     documentReducer,
   ),

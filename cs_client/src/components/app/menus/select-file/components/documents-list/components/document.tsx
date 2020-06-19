@@ -48,6 +48,9 @@ const Document: React.FC<Props> = ({
         <span>{size}kb</span>
         <div>
           <span className={`${modSelectFile.selectFile__file__details__hash}`}>
+            {id}
+          </span>
+          <span className={`${modSelectFile.selectFile__file__details__hash}`}>
             {hash}
           </span>
           <span>{dateToFormattedString(new Date(updatedAt))}</span>
