@@ -29,7 +29,7 @@ const createNodeDto: CreateNodeDto = {
   },
 };
 
-describe('node service', () => {
+describe.skip('node service', () => {
   let nodeTh: NodeTH, documentTh: DocumentTH;
 
   beforeAll(async () => {

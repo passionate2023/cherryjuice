@@ -21,6 +21,7 @@ import {
 } from './reducer/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
+import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showDocumentMetaDialog,
@@ -67,11 +68,12 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       type: 'text',
       label: 'Document name',
       lazyAutoFocus: 400,
-      testId: 'document-name',
+      testId: testIds.documentMeta__documentName,
     },
   ];
   const createDocument = () => {
     try {
+      updateCachedHtmlAndImages();
       const document = generateNewDocument(state);
       const rootNode = generateRootNode({ documentId: document.id });
       document.node.push(rootNode);

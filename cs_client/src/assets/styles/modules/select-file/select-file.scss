@@ -54,7 +54,8 @@
   position: absolute;
   margin-right: 5px;
 }
-.selectFile__file__details__hash {
+.selectFile__file__details__hash,
+.selectFile__file__details__id {
   margin-right: 10px;
   opacity: 0.5;
   @include respond-to($md-down) {

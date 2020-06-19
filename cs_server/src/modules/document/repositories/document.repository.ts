@@ -67,14 +67,17 @@ export class DocumentRepository extends Repository<Document>
     user: User;
     documentId: string;
     meta: Record<string, any>;
-  }): Promise<string> {
-    const res = await this.createQueryBuilder('document')
-      .update()
-      .set({ ...meta, size: await this.getSize({ documentId }) })
-      .where({ id: documentId, userId: user.id })
-      .execute();
-
-    return JSON.stringify(res);
+  }): Promise<Document> {
+    const document = await this.findOneOrFail({
+      id: documentId,
+      userId: user.id,
+    });
+    Object.entries(meta).forEach(([k, v]) => {
+      document[k] = v;
+    });
+    document.size = await this.getSize({ documentId });
+    await this.save(document);
+    return document;
   }
 
   async editDocument({
@@ -82,7 +85,7 @@ export class DocumentRepository extends Repository<Document>
     meta,
     user,
   }: EditDocumentDto): Promise<string> {
-    const res = await this.updateDocument({
+    const document = await this.updateDocument({
       documentId,
       user,
       meta: {
@@ -91,7 +94,7 @@ export class DocumentRepository extends Repository<Document>
       },
     });
 
-    return JSON.stringify(res);
+    return document.id;
   }
 
   async getSize({ documentId }: { documentId: string }): Promise<number> {

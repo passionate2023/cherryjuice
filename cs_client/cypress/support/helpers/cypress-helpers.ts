@@ -5,3 +5,12 @@ export const wait = {
   s1: () => cy.wait(1000),
   s5: () => cy.wait(5000),
 };
+
+export const fixScrolling = () => {
+  Cypress.on('scrolled', $el => {
+    $el.get(0).scrollIntoView({
+      block: 'center',
+      inline: 'center',
+    });
+  });
+};

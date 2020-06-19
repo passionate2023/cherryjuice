@@ -12,6 +12,7 @@ import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpe
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { ac, Store } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';
+import { testIds } from '::cypress/support/helpers/test-ids';
 
 const createButtons = ({ selectedIDs, documentId, close, open }) => {
   const buttonsLeft = [
@@ -107,7 +108,10 @@ const SelectFile: React.FC<{
         className={modDialog.dialog__header__fileButton}
         onClick={deleteDocument}
       >
-        <Icon {...{ name: Icons.material['delete'] }} />
+        <Icon
+          name={Icons.material['delete']}
+          testId={testIds.dialogs__selectDocument__header__buttons__delete}
+        />
       </ButtonCircle>
     ),
   ].filter(Boolean);

@@ -6,6 +6,7 @@ import { modToolbar } from '::sass-modules/index';
 import { useContext } from 'react';
 import { RootContext } from '::root/root-context';
 import { ac } from '::root/store/store';
+import { testIds } from '::cypress/support/helpers/test-ids';
 
 type Props = {
   showUserPopup: boolean;
@@ -30,7 +31,10 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
         <Icon name={Icons.material.document} />
       </ToolbarButton>
       <ToolbarButton onClick={ac.dialogs.showDocumentList}>
-        <Icon name={Icons.material.folder} />
+        <Icon
+          name={Icons.material.folder}
+          testId={testIds.toolBar__navBar__showDocumentList}
+        />
       </ToolbarButton>
       <ToolbarButton onClick={appActionCreators.toggleSettings}>
         <Icon name={Icons.material.settings} />

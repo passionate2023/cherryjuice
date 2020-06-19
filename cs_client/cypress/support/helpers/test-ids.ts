@@ -1,5 +1,6 @@
 const testIds = {
   documentMeta__apply: 'documentMeta__apply',
+  documentMeta__documentName: 'documentMeta__documentName',
   toolBar__main__createSiblingNode: 'toolBar__main__createSiblingNode',
   toolBar__main__createChildNode: 'toolBar__main__createChildNode',
   nodeMeta__nodeName: 'nodeMeta__nodeName',
@@ -13,7 +14,10 @@ const testIds = {
   toolBar__main__editNodeMeta: 'toolBar__main__editNodeMeta',
   toolBar__main__deleteNode: 'toolBar__main__deleteNode',
   toolBar__main__saveDocument: 'toolBar__main__saveDocument',
+  toolBar__navBar__showDocumentList: 'toolBar__navBar__showDocumentList',
   modal__deleteNode__confirm: 'modal__deleteNode__confirm',
+  dialogs__selectDocument__header__buttons__delete:
+    'dialogs__selectDocument__header__buttons__delete',
 };
 
 export { testIds };

@@ -1,6 +1,6 @@
 import { login } from '../support/workflows/login';
 import { createNode } from '../support/workflows/tree/create-node';
-import { wait } from '../support/helpers/cypress-helpers';
+import { fixScrolling, wait } from '../support/helpers/cypress-helpers';
 import { goHome } from '../support/workflows/navigate-home';
 import { createDocument } from '../support/workflows/create-document';
 import { assertNodesName } from '../support/assertions/nodes-name';
@@ -15,30 +15,32 @@ import {
 import { assertNodeImage } from '../support/assertions/content/node-image';
 import { createImageGenerator } from '../fixtures/node/generate-node-content/image/generate-image';
 import { generateTree } from '../fixtures/tree/generate-tree';
+import { documentList } from '../support/workflows/dialogs/document-list';
 
 describe('create document > create nodes', () => {
   before(() => {
-    Cypress.on('scrolled', $el => {
-      $el.get(0).scrollIntoView({
-        block: 'center',
-        inline: 'center',
-      });
-    });
+    fixScrolling();
     cy.visit(`/`);
     login();
+    goHome();
+    documentList.close();
   });
-  const tree = generateTree({
-    nodesPerLevel: [[2]],
-    includeText: true,
-    numberOfImages: [2, 5],
-  });
+  const document = {
+    meta: {
+      name: new Date().toString(),
+    },
+    tree: generateTree({
+      nodesPerLevel: [[2]],
+      includeText: true,
+      numberOfImages: [2, 5],
+    }),
+  };
 
   it('perform: create document', () => {
-    goHome();
-    createDocument();
+    createDocument(document.meta);
   });
   it('perform: create nodes', () => {
-    for (const node of tree.flatMap(x => x)) {
+    for (const node of document.tree.flatMap(x => x)) {
       createNode({ node });
       wait.ms500();
     }
@@ -46,15 +48,15 @@ describe('create document > create nodes', () => {
 
   it('assert: nodes name', () => {
     wait.s1();
-    assertNodesName({ tree });
+    assertNodesName(document);
   });
   it('assert: nodes structure', () => {
     wait.s1();
-    assertTreeStructure({ tree });
+    assertTreeStructure(document);
   });
 
   it('perform: paste blob images', () => {
-    tree[0].forEach(node => {
+    document.tree[0].forEach(node => {
       writeBlobImages({
         node,
         images: node.images.filter((_, i) => i >= node.images.length - 1),
@@ -63,7 +65,7 @@ describe('create document > create nodes', () => {
   });
 
   it('perform: paste html images', () => {
-    tree[0].forEach(node => {
+    document.tree[0].forEach(node => {
       writeHtmlImages({
         node,
         images: node.images.filter((_, i) => i < node.images.length - 1),
@@ -72,7 +74,7 @@ describe('create document > create nodes', () => {
   });
 
   it('perform: write text', () => {
-    tree[0].forEach(node => {
+    document.tree[0].forEach(node => {
       writeText({ node, text: node.text });
     });
   });
@@ -82,13 +84,13 @@ describe('create document > create nodes', () => {
   });
 
   it('assert: written text', () => {
-    tree[0].forEach(node => {
+    document.tree[0].forEach(node => {
       assertNodeText({ node, text: node.text });
     });
   });
 
   it('assert: written images', () => {
-    for (const node of tree[0]) {
+    for (const node of document.tree[0]) {
       assertNodeImage({ node, images: node.images });
     }
   });
@@ -98,13 +100,13 @@ describe('create document > create nodes', () => {
       cy.reload();
       login();
       cy.visit(pathname);
-      cy.contains(tree[0][0].name, { timeout: 10000 });
+      cy.contains(document.tree[0][0].name, { timeout: 10000 });
     });
   });
 
   it('perform: write additional image', () => {
     const imageGenerator = createImageGenerator(['black'])(['white']);
-    tree[0].forEach(node => {
+    document.tree[0].forEach(node => {
       const additionalImage = imageGenerator({
         texts: [node.name, 'image x'],
         format: 'image/jpeg',
@@ -115,7 +117,7 @@ describe('create document > create nodes', () => {
   });
 
   it('assert: written images', () => {
-    for (const node of tree[0]) {
+    for (const node of document.tree[0]) {
       assertNodeImage({ node, images: node.images });
     }
   });
@@ -126,7 +128,7 @@ describe('create document > create nodes', () => {
   });
 
   it('assert: written images', () => {
-    for (const node of tree[0]) {
+    for (const node of document.tree[0]) {
       assertNodeImage({ node, images: node.images });
     }
   });
