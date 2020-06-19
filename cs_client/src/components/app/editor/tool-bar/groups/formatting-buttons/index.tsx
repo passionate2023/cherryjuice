@@ -27,7 +27,7 @@ const Buttons = () => (
           }
           className={modToolbar.toolBar__iconStrictWidth}
         >
-          <Icon svg={{ name: icon }} />
+          <Icon name={icon} />
         </ToolbarButton>
       ),
     )}
@@ -52,7 +52,7 @@ const Buttons = () => (
         }
         className={modToolbar.toolBar__iconStrictWidth}
       >
-        <Icon svg={{ name: icon }} />
+        <Icon name={icon} />
       </ToolbarButton>
     ))}
   </>

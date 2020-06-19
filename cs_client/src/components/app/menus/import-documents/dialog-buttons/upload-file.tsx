@@ -23,10 +23,8 @@ const UploadFile: React.FC<{}> = () => {
         className={modImportDocument.importDocument__button}
       >
         <Icon
-          svg={{
+          {...{
             name: Icons.material.storage,
-          }}
-          containerAttributes={{
             className: modImportDocument.importDocument__button__icon,
           }}
         />

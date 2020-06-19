@@ -13,7 +13,7 @@ const ColorInput: React.FC<{
   return (
     <ToolbarButton className={modToolbar.toolBar__iconStrictWidth}>
       <label htmlFor={label} style={{ cursor: 'pointer' }} id={inputId}>
-        <Icon svg={{ name: icon }} />
+        <Icon name={icon} />
         <input
           id={label}
           type="color"

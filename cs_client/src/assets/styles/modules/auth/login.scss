@@ -52,13 +52,11 @@
   padding-bottom: 5px;
 }
 .login__form__input__icon {
-  opacity: 0.5;
+  opacity: 0.4;
   position: absolute;
   align-self: center;
   padding-left: 10px;
-  svg {
-    fill: black;
-  }
+  fill: black;
 }
 .login__form__input__input {
   border-radius: 5px;

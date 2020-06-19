@@ -19,12 +19,8 @@ const GoogleOauthButton: React.FC<Props> = ({ onClick, signIn = true }) => {
     >
       <div className={modGoogleOauth.googleIconWrapper}>
         <Icon
-          svg={{
-            name: Icons.misc['google-g'],
-          }}
-          containerAttributes={{
-            className: modGoogleOauth.googleIconSvg,
-          }}
+          name={Icons.misc['google-g']}
+          className={modGoogleOauth.googleIconSvg}
         />
       </div>
       <p className={modGoogleOauth.btnText}>

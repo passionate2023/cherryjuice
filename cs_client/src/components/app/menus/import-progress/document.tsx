@@ -59,7 +59,7 @@ const ActionButton = ({ eventType, deleteDocument, clear, open }) => {
       className={modImportProgress.importProgress__document__button}
       onClick={props.onClick}
     >
-      <Icon svg={{ name: props.iconName }} />
+      <Icon {...{ name: props.iconName }} />
     </ButtonCircle>
   );
 };

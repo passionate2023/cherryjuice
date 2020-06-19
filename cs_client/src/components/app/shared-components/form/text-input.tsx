@@ -40,12 +40,9 @@ const TextInput: React.FC<TextInputProps & {
     <div className={modLogin.login__form__input}>
       {icon && (
         <Icon
-          svg={{
-            name: typeof icon === 'string' ? icon : icon[0],
-          }}
-          containerAttributes={{
-            className: modLogin.login__form__input__icon,
-          }}
+          loadAsInlineSVG={'force'}
+          name={typeof icon === 'string' ? icon : icon[0]}
+          className={modLogin.login__form__input__icon}
         />
       )}
       <input

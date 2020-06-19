@@ -23,40 +23,32 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
   selectedNodeId,
   documentHasUnsavedChanges,
 }) => {
-  const ctSvgAttributes = { width: '20px', height: '20px' };
   return (
     <div className={modToolbar.toolBar__group}>
       <ToolbarButton onClick={ac.editor.toggleTree} enabled={showTree}>
-        <Icon
-          svg={{
-            name: Icons.cherrytree.additionalIcons['cherries'],
-          }}
-          svgAttributes={ctSvgAttributes}
-        />
+        <Icon name={Icons.cherrytree.additionalIcons['cherries']} size={20} />
       </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.showNodeMetaEdit}
         disabled={!selectedNodeId}
         testId={testIds.toolBar__main__editNodeMeta}
       >
-        <Icon svg={{ name: Icons.material.edit }} />
+        <Icon name={Icons.material.edit} />
       </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.toggleDeleteDocumentModal}
         disabled={!selectedNodeId}
         testId={testIds.toolBar__main__deleteNode}
       >
-        <Icon svg={{ name: Icons.material.delete }} />
+        <Icon name={Icons.material.delete} />
       </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.showNodeMetaCreateSibling}
         testId={testIds.toolBar__main__createSiblingNode}
       >
         <Icon
-          svg={{
-            name: Icons.cherrytree.additionalIcons['tree-node-add'],
-          }}
-          svgAttributes={ctSvgAttributes}
+          name={Icons.cherrytree.additionalIcons['tree-node-add']}
+          size={20}
         />
       </ToolbarButton>
       <ToolbarButton
@@ -64,17 +56,15 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         testId={testIds.toolBar__main__createChildNode}
       >
         <Icon
-          svg={{
-            name: Icons.cherrytree.additionalIcons['tree-subnode-add'],
-          }}
-          svgAttributes={ctSvgAttributes}
+          name={Icons.cherrytree.additionalIcons['tree-subnode-add']}
+          size={20}
         />
       </ToolbarButton>
       <ToolbarButton
         onClick={ac.document.save}
         testId={testIds.toolBar__main__saveDocument}
       >
-        <Icon svg={{ name: Icons.material.save }} />
+        <Icon name={Icons.material.save} />
       </ToolbarButton>
       <ToolbarButton
         onClick={
@@ -83,7 +73,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
             : ac.document.fetchNodes
         }
       >
-        <Icon svg={{ name: Icons.material.refresh }} />
+        <Icon name={Icons.material.refresh} />
       </ToolbarButton>
     </div>
   );

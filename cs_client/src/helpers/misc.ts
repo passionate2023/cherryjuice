@@ -12,4 +12,24 @@ const isValidUrl = (url: string): boolean => {
 const isNotPngBase64 = (image: HTMLImageElement) =>
   !image.src.startsWith('data:image/png');
 
-export { insertAt, isValidUrl, isNotPngBase64 };
+// https://medium.com/@rajeshnaroth/writing-a-react-hook-to-cancel-promises-when-a-component-unmounts-526efabf251f
+const makeCancelable = <T>(
+  promise: Promise<T>,
+): { cancel: Function; promise: Promise<T> } => {
+  let isCanceled = false;
+  const wrappedPromise = new Promise<T>((resolve, reject) => {
+    promise
+      .then(val => (isCanceled ? reject(new Error('canceled')) : resolve(val)))
+      .catch(error =>
+        isCanceled ? reject(new Error('canceled')) : reject(error),
+      );
+  });
+  return {
+    promise: wrappedPromise,
+    cancel() {
+      isCanceled = true;
+    },
+  };
+};
+
+export { insertAt, isValidUrl, isNotPngBase64, makeCancelable };
