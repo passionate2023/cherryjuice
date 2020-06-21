@@ -9,6 +9,7 @@ import { DeleteNodeDto } from '../dto/delete-node.dto';
 import { GetNodeByNodeIdIt } from '../dto/get-node-by-node-id.it';
 import { SaveHtmlIt } from '../dto/save-html.it';
 import { NodeMetaIt } from '../dto/node-meta.it';
+import { AHtml } from '../helpers/rendering/query/ahtml-to-html';
 
 @Injectable()
 @EntityRepository(Node)
@@ -30,10 +31,7 @@ export class NodeRepository extends Repository<Node> {
     return node;
   }
 
-  getAHtml(
-    node_id: string,
-    documentId: string,
-  ): Promise<{ nodes: any; style: any }[]> {
+  getAHtml(node_id: string, documentId: string): Promise<AHtml[]> {
     return this.createQueryBuilder('node')
       .select('node.ahtml')
       .where('node.documentId = :documentId', { documentId })

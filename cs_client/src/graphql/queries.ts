@@ -22,8 +22,6 @@ const QUERY_NODE_META = {
           fatherId
           name
           child_nodes
-          is_empty
-          is_richtxt
           createdAt
           updatedAt
           node_title_styles

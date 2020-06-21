@@ -52,8 +52,8 @@ const whiteListedAttributes = {
 const translateAttributesToHtmlAndCss = xml =>
   xml.map(inlineNodes => {
     const lineStyles = {};
-    return {
-      nodes: inlineNodes.map(node => {
+    return [
+      inlineNodes.map(node => {
         const translator = createTranslatedNode(lineStyles);
         if (node.$) {
           Object.entries(node.$).forEach(([key, value]) => {
@@ -86,8 +86,8 @@ const translateAttributesToHtmlAndCss = xml =>
 
         return node;
       }),
-      style: Object.keys(lineStyles).length ? lineStyles : undefined,
-    };
+      Object.keys(lineStyles).length ? lineStyles : undefined,
+    ];
   });
 export {
   translateAttributesToHtmlAndCss,

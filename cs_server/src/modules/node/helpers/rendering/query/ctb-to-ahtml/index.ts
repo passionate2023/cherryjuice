@@ -4,6 +4,7 @@ import { groupNodesByLine } from './steps/group-nodes-by-line';
 import { insertOtherTables } from './steps/insert-other-tables';
 import { compose } from 'ramda';
 import { parseXml } from './steps/parse-xml';
+import { AHtml } from '../ahtml-to-html';
 
 const processingPipe: (otherTables) => (txtTable) => any[] = otherTables =>
   compose(
@@ -13,7 +14,10 @@ const processingPipe: (otherTables) => (txtTable) => any[] = otherTables =>
     insertOtherTables(otherTables),
   );
 
-const ctbToAHtml = async ({ nodeTableXml, otherTables = {} }) => {
+const ctbToAHtml = async ({
+  nodeTableXml,
+  otherTables = {},
+}): Promise<AHtml[]> => {
   const json = await parseXml(nodeTableXml);
   return processingPipe(otherTables)(json);
 };

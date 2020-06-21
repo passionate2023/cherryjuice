@@ -82,6 +82,7 @@ export class SaveDocumentsService {
         parentNode.child_nodes.push(nodeRaw.node_id);
       }
       nodeRaw.node_title_styles = nodeTitleStyle({
+        // @ts-ignore
         is_richtxt: nodeRaw.is_richtxt,
         is_ro: nodeRaw.is_ro,
       });

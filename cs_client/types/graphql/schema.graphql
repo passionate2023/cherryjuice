@@ -58,8 +58,6 @@ type Node {
     html: String!
     id: String!
     image(thumbnail: Boolean): [Image]!
-    is_empty: Int!
-    is_richtxt: Int!
     name: String!
     node_id: Int!
     node_title_styles: String

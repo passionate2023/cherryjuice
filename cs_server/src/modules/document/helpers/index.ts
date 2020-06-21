@@ -100,7 +100,9 @@ const nodeTitleStyle = ({ is_richtxt, is_ro }) => {
 
   const customIconId = nodeTitleHelpers.customIconId(is_ro);
   if (customIconId) style.icon_id = customIconId;
-  return JSON.stringify(style);
+  return hasCustomColor || customIconId || isBold
+    ? JSON.stringify(style)
+    : undefined;
 };
 
 const organizeData = async (data): Promise<Map<number, Node>> => {

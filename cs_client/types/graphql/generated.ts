@@ -39,8 +39,6 @@ export interface Node {
   html: string;
   id: string;
   image: Array<Image | null>;
-  is_empty: number;
-  is_richtxt: number;
   name: string;
   node_id: number;
   node_title_styles?: string;
@@ -319,8 +317,6 @@ export interface NodeTypeResolver<TParent = any> {
   html?: NodeToHtmlResolver<TParent>;
   id?: NodeToIdResolver<TParent>;
   image?: NodeToImageResolver<TParent>;
-  is_empty?: NodeToIs_emptyResolver<TParent>;
-  is_richtxt?: NodeToIs_richtxtResolver<TParent>;
   name?: NodeToNameResolver<TParent>;
   node_id?: NodeToNode_idResolver<TParent>;
   node_title_styles?: NodeToNode_title_stylesResolver<TParent>;
@@ -370,14 +366,6 @@ export interface NodeToImageResolver<TParent = any, TResult = any> {
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
-}
-
-export interface NodeToIs_emptyResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface NodeToIs_richtxtResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface NodeToNameResolver<TParent = any, TResult = any> {
