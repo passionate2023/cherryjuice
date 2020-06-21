@@ -17,5 +17,5 @@ module.exports = {
   // moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
   //   prefix: '<rootDir>/',
   // }),
-  testPathIgnorePatterns: ['/node_modules/', '/__data__/', '__helpers__'],
+  testPathIgnorePatterns: ['/node_modules/', '/__data__/', '__helpers__','node/__tests__'],
 };

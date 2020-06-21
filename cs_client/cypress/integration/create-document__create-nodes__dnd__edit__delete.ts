@@ -1,10 +1,8 @@
 import { login } from '../support/workflows/login';
-import { createNode, editNode } from '../support/workflows/tree/create-node';
 import { fixScrolling, wait } from '../support/helpers/cypress-helpers';
 import { goHome } from '../support/workflows/navigate-home';
-import { createDocument } from '../support/workflows/create-document';
 import { getTreeInDom } from '../support/helpers/dom';
-import { dndNode } from '../support/workflows/tree/dnd-node';
+import { dndNode } from '../support/workflows/tree/helpers/dnd-node';
 import {
   assertNodeName,
   assertNodesName,
@@ -14,10 +12,9 @@ import {
   assertNodeTitleStyle,
 } from '../support/assertions/nodes-title-style';
 import { assertTreeStructure } from '../support/assertions/tree-structure';
-import { deleteNode } from '../support/workflows/tree/delete-node';
 import { testIds } from '../support/helpers/test-ids';
 import { generateTree } from '../fixtures/tree/generate-tree';
-import { documentList } from '../support/workflows/dialogs/document-list';
+import { dialogs } from '../support/workflows/dialogs/dialogs';
 
 describe('create document > create nodes > dnd > edit', () => {
   before(() => {
@@ -25,7 +22,7 @@ describe('create document > create nodes > dnd > edit', () => {
     cy.visit(`/`);
     login();
     goHome();
-    documentList.close();
+    dialogs.documentsList.interact.close();
   });
   const document = {
     meta: {
@@ -43,11 +40,11 @@ describe('create document > create nodes > dnd > edit', () => {
   };
 
   it('perform: create document', () => {
-    createDocument(document.meta);
+    dialogs.document.interact.create(document.meta);
   });
   it('perform: create nodes', () => {
     for (const node of document.tree.flatMap(x => x)) {
-      createNode({ node });
+      dialogs.node.create({ node });
       wait.ms500();
     }
   });
@@ -70,7 +67,7 @@ describe('create document > create nodes > dnd > edit', () => {
   });
 
   it('perform: delete node', () => {
-    deleteNode(document);
+    dialogs.node.delete(document);
   });
 
   it('assert: nodes structure', () => {
@@ -79,7 +76,7 @@ describe('create document > create nodes > dnd > edit', () => {
   });
 
   it('perform: edit node meta', () => {
-    editNode({
+    dialogs.node.edit({
       editedNode: document.tree[0][0],
       newAttributes,
     });

@@ -1,4 +1,4 @@
-import { selectNode } from '../../workflows/micro/select-node';
+import { selectNode } from '../../workflows/tree/helpers/select-node';
 import { wait } from '../../helpers/cypress-helpers';
 import { NodeAst } from '../../../fixtures/node/generate-node';
 import { ImageAst } from '../../../fixtures/node/generate-node-content/image/generate-image';

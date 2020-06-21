@@ -1,8 +1,7 @@
-import { testIds } from '../../helpers/test-ids';
-import { wait } from '../../helpers/cypress-helpers';
-import { setColorInputValue } from '../../helpers/dom';
-import { selectNode } from '../micro/select-node';
-// https://github.com/cypress-io/cypress/issues/1570#issuecomment-450966053
+import { testIds } from '../../../../helpers/test-ids';
+import { setColorInputValue } from '../../../../helpers/dom';
+import { wait } from '../../../../helpers/cypress-helpers';
+
 const setNodeMeta = ({ node }) => {
   const { isBold, color, name, icon } = node;
   cy.findByTestId(testIds.nodeMeta__nodeName)
@@ -33,24 +32,5 @@ const setNodeMeta = ({ node }) => {
   }
   cy.findByTestId(testIds.nodeMeta__apply).click();
 };
-export const createNode = ({ node }) => {
-  const { name, isBold, parent, color, icon } = node;
-  if (parent) {
-    selectNode(parent);
-    cy.findByTestId(testIds.toolBar__main__createChildNode).click();
-  } else {
-    cy.findByTestId(testIds.toolBar__main__createSiblingNode).click();
-  }
-  wait.s1();
-  setNodeMeta({ node: { name, isBold, color, icon } });
-};
-export const editNode = ({ editedNode, newAttributes }) => {
-  selectNode(editedNode);
-  wait.s1();
-  cy.findByTestId(testIds.toolBar__main__editNodeMeta).click();
-  wait.ms500();
-  setNodeMeta({ node: newAttributes });
-  Object.entries(newAttributes).forEach(([key, value]) => {
-    editedNode[key] = value;
-  });
-};
+
+export { setNodeMeta };

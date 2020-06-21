@@ -1,17 +1,11 @@
 import { login } from '../support/workflows/login';
-import { createNode } from '../support/workflows/tree/create-node';
 import { fixScrolling, wait } from '../support/helpers/cypress-helpers';
 import { goHome } from '../support/workflows/navigate-home';
-import {
-  applyDocumentMeta,
-  createDocument,
-  setDocumentName,
-} from '../support/workflows/create-document';
 import { testIds } from '../support/helpers/test-ids';
-import { writeText } from '../support/workflows/content/write-text';
 import { assertNodeText } from '../support/assertions/content/node-text';
 import { generateTree } from '../fixtures/tree/generate-tree';
-import { documentList } from '../support/workflows/dialogs/document-list';
+import { dialogs } from '../support/workflows/dialogs/dialogs';
+import { editor } from '../support/workflows/editor/editor';
 
 describe('create document > edit-document > delete-document', () => {
   before(() => {
@@ -19,7 +13,7 @@ describe('create document > edit-document > delete-document', () => {
     cy.visit(`/`);
     login();
     goHome();
-    documentList.close();
+    dialogs.documentsList.interact.close();
   });
   const documentBaseName = `test-${new Date().getSeconds()}:${new Date().getSeconds()}`;
   const documents = [
@@ -66,32 +60,32 @@ describe('create document > edit-document > delete-document', () => {
     numberOfDocuments: 0,
   };
   it('perform: remember number of documents', () => {
-    documentList.show();
+    dialogs.documentsList.interact.show();
     cy.get('.selectFile').then(body$ => {
       const body = body$[0];
       state.numberOfDocuments = body.querySelectorAll(
         '.selectFile__file__name',
       ).length;
     });
-    documentList.close();
+    dialogs.documentsList.interact.close();
   });
   documents.forEach(document1 => {
     it('perform: create document', () => {
-      createDocument(document1.meta);
+      dialogs.document.interact.create(document1.meta);
       cy.location().then(location => {
         document1.meta.id = /document\/([^/])/.exec(location.pathname)[1];
       });
     });
     it('perform: create nodes', () => {
       for (const node of document1.tree.flatMap(x => x)) {
-        createNode({ node });
+        dialogs.node.create({ node });
         wait.ms500();
       }
     });
 
     it('perform: write text', () => {
       document1.tree[0].forEach(node => {
-        writeText({ node, text: node.text });
+        editor.keyboard.typeText({ node, text: node.text });
       });
     });
   });
@@ -101,10 +95,10 @@ describe('create document > edit-document > delete-document', () => {
   });
 
   it('perform: get documents hash', () => {
-    documentList.show();
+    dialogs.documentsList.interact.show();
     documents.forEach(document => {
-      documentList
-        .getDocumentHashAndId(document.meta.name)
+      dialogs.documentsList.inspect
+        .getDocumentInfo(document.meta.name)
         .then(({ id, hash }) => {
           document.meta.id = id;
           document.meta.hash = hash;
@@ -134,10 +128,10 @@ describe('create document > edit-document > delete-document', () => {
     cy.reload();
     login();
     cy.visit(`/document/${document.meta.id}`);
-    documentList.showRenameDocumentDialog(document.meta.name);
-    setDocumentName(documents[1].meta.name);
-    applyDocumentMeta();
-    documentList.close();
+    dialogs.document.interact.rename({
+      currentName: document.meta.name,
+      newName: documents[1].meta.name,
+    });
     documents[0].meta.name = documents[1].meta.name;
   });
 
@@ -146,16 +140,16 @@ describe('create document > edit-document > delete-document', () => {
     cy.contains('Document saved', { timeout: 10000 });
   });
   it('perform: get documents hash', () => {
-    documentList.show();
+    dialogs.documentsList.interact.show();
     documents.forEach(document => {
-      documentList
-        .getDocumentHashAndId(undefined, document.meta.id)
+      dialogs.documentsList.inspect
+        .getDocumentInfo(undefined, document.meta.id)
         .then(({ id, hash }) => {
           document.meta.id = id;
           document.meta.hash = hash;
         });
     });
-    documentList.close();
+    dialogs.documentsList.interact.close();
   });
   it('assert: documents have same hash', () => {
     expect(documents[0].meta.hash).to.equal(documents[1].meta.hash);
@@ -163,38 +157,38 @@ describe('create document > edit-document > delete-document', () => {
 
   additionalDocuments.forEach(document1 => {
     it('perform: create additional documents', () => {
-      createDocument(document1.meta);
+      dialogs.document.interact.create(document1.meta);
       cy.location().then(location => {
         document1.meta.id = /document\/([^/])/.exec(location.pathname)[1];
       });
     });
     it('perform: create nodes', () => {
       for (const node of document1.tree.flatMap(x => x)) {
-        createNode({ node });
+        dialogs.node.create({ node });
         wait.ms500();
       }
     });
 
     it('perform: write text', () => {
       document1.tree[0].forEach(node => {
-        writeText({ node, text: node.text });
+        editor.keyboard.typeText({ node, text: node.text });
       });
     });
   });
   it('perform: get documents hash', () => {
-    documentList.show();
+    dialogs.documentsList.interact.show();
     additionalDocuments.forEach(document => {
-      documentList
-        .getDocumentHashAndId('*' + document.meta.name)
+      dialogs.documentsList.inspect
+        .getDocumentInfo('*' + document.meta.name)
         .then(({ id, hash }) => {
           document.meta.id = id;
           document.meta.hash = hash;
         });
     });
-    documentList.close();
+    dialogs.documentsList.interact.close();
   });
   it('perform: delete saved and unsaved documents', () => {
-    documentList.show();
+    dialogs.documentsList.interact.show();
     [documents[0], additionalDocuments[0]].forEach(document => {
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.findByText(document.meta.id)

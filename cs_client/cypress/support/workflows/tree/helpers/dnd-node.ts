@@ -1,10 +1,10 @@
-import { wait } from '../../helpers/cypress-helpers';
-import { getElementPath } from '../../helpers/dom';
+import { wait } from '../../../helpers/cypress-helpers';
+import { getElementPath } from '../../../helpers/dom';
 import {
   randomArrayElement,
   removeArrayElement,
-} from '../../helpers/javascript-utils';
-import { TreeAst } from '../../../fixtures/tree/generate-tree';
+} from '../../../helpers/javascript-utils';
+import { TreeAst } from '../../../../fixtures/tree/generate-tree';
 
 type DndNodeProps = {
   tree: TreeAst;

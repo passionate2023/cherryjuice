@@ -1,21 +1,15 @@
 import { login } from '../support/workflows/login';
-import { createNode } from '../support/workflows/tree/create-node';
 import { fixScrolling, wait } from '../support/helpers/cypress-helpers';
 import { goHome } from '../support/workflows/navigate-home';
-import { createDocument } from '../support/workflows/create-document';
 import { assertNodesName } from '../support/assertions/nodes-name';
 import { assertTreeStructure } from '../support/assertions/tree-structure';
 import { testIds } from '../support/helpers/test-ids';
-import { writeText } from '../support/workflows/content/write-text';
 import { assertNodeText } from '../support/assertions/content/node-text';
-import {
-  writeBlobImages,
-  writeHtmlImages,
-} from '../support/workflows/content/write-image';
 import { assertNodeImage } from '../support/assertions/content/node-image';
 import { createImageGenerator } from '../fixtures/node/generate-node-content/image/generate-image';
 import { generateTree } from '../fixtures/tree/generate-tree';
-import { documentList } from '../support/workflows/dialogs/document-list';
+import { dialogs } from '../support/workflows/dialogs/dialogs';
+import { editor } from '../support/workflows/editor/editor';
 
 describe('create document > create nodes', () => {
   before(() => {
@@ -23,7 +17,7 @@ describe('create document > create nodes', () => {
     cy.visit(`/`);
     login();
     goHome();
-    documentList.close();
+    dialogs.documentsList.interact.close();
   });
   const document = {
     meta: {
@@ -37,11 +31,11 @@ describe('create document > create nodes', () => {
   };
 
   it('perform: create document', () => {
-    createDocument(document.meta);
+    dialogs.document.interact.create(document.meta);
   });
   it('perform: create nodes', () => {
     for (const node of document.tree.flatMap(x => x)) {
-      createNode({ node });
+      dialogs.node.create({ node });
       wait.ms500();
     }
   });
@@ -57,7 +51,7 @@ describe('create document > create nodes', () => {
 
   it('perform: paste blob images', () => {
     document.tree[0].forEach(node => {
-      writeBlobImages({
+      editor.clipboard.pasteBlobImages({
         node,
         images: node.images.filter((_, i) => i >= node.images.length - 1),
       });
@@ -66,7 +60,7 @@ describe('create document > create nodes', () => {
 
   it('perform: paste html images', () => {
     document.tree[0].forEach(node => {
-      writeHtmlImages({
+      editor.clipboard.pasteHtmlImages({
         node,
         images: node.images.filter((_, i) => i < node.images.length - 1),
       });
@@ -75,7 +69,7 @@ describe('create document > create nodes', () => {
 
   it('perform: write text', () => {
     document.tree[0].forEach(node => {
-      writeText({ node, text: node.text });
+      editor.keyboard.typeText({ node, text: node.text });
     });
   });
   it('perform: save document', () => {
@@ -112,7 +106,7 @@ describe('create document > create nodes', () => {
         format: 'image/jpeg',
       });
       node.images.unshift(additionalImage);
-      writeHtmlImages({ node, images: [additionalImage] });
+      editor.clipboard.pasteHtmlImages({ node, images: [additionalImage] });
     });
   });
 

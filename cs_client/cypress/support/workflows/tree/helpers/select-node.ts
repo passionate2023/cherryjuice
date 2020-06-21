@@ -1,4 +1,4 @@
-import { wait } from '../../helpers/cypress-helpers';
+import { wait } from '../../../helpers/cypress-helpers';
 
 export const selectNode = ({ name }) => {
   cy.get('.tree')

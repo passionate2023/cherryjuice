@@ -1,4 +1,4 @@
-import { selectNode } from '../../workflows/micro/select-node';
+import { selectNode } from '../../workflows/tree/helpers/select-node';
 
 export const assertNodeText = ({ node, text }) => {
   selectNode(node);
