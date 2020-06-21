@@ -84,12 +84,13 @@ const nodeTitleHelpers = {
   },
 };
 
-const nodeTitleStyle = ({ is_richtxt }) => {
+const nodeTitleStyle = ({ is_richtxt, is_ro }) => {
   return JSON.stringify({
     color: nodeTitleHelpers.hasForground(is_richtxt)
       ? nodeTitleHelpers.rgb_str_from_int24bit((is_richtxt >> 3) & 0xffffff)
       : '#ffffff',
     fontWeight: nodeTitleHelpers.isBold(is_richtxt) ? 'bold' : 'normal',
+    icon_id: nodeTitleHelpers.customIconId(is_ro),
   });
 };
 
@@ -104,8 +105,10 @@ const organizeData = async (data): Promise<Map<number, Node>> => {
       parentNode.child_nodes.push(node.node_id);
     }
 
-    node.node_title_styles = nodeTitleStyle({ is_richtxt: node.is_richtxt });
-    node.icon_id = nodeTitleHelpers.customIconId(node.is_ro);
+    node.node_title_styles = nodeTitleStyle({
+      is_richtxt: node.is_richtxt,
+      is_ro: node.is_ro,
+    });
   });
 
   data.forEach(node => {

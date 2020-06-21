@@ -27,7 +27,6 @@ const QUERY_NODE_META = {
           createdAt
           updatedAt
           node_title_styles
-          icon_id
         }
       }
     }

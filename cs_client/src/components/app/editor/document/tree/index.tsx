@@ -46,7 +46,6 @@ const Tree: React.FC<Props> = ({ nodes }) => {
                     nodes={nodes}
                     depth={0}
                     node_title_styles={node.node_title_styles}
-                    icon_id={node.icon_id}
                   />
                 ))}
           </ul>

@@ -14,7 +14,6 @@ const rootNode = {
   has_txt: false,
   is_empty: 0,
   node_title_styles: '',
-  icon_id: '',
 };
 
 const getPNGSize = buffer => {

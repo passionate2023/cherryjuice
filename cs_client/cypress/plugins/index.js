@@ -18,7 +18,7 @@ const common = require('../../.webpack/webpack.common');
  * @type {Cypress.PluginConfig}
  */
 module.exports = on => {
-  const config = common();
+  const config = common;
   const options = {
     webpackOptions: {
       mode: 'development',

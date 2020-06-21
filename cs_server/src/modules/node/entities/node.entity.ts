@@ -83,10 +83,6 @@ export class Node extends BaseEntity {
   @Field(() => Int)
   is_richtxt: number;
 
-  @Column()
-  @Field()
-  icon_id: string;
-
   @Field(() => [Image], { nullable: 'items' })
   image: Image[];
 
@@ -111,7 +107,6 @@ export class Node extends BaseEntity {
       this.child_nodes,
       this.ahtml,
       this.node_title_styles,
-      this.icon_id,
       this.read_only,
       this.is_richtxt,
       this.is_empty,

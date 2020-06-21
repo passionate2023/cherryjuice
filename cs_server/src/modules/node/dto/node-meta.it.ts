@@ -20,9 +20,6 @@ export class NodeMetaIt {
   @Field(() => Int, { nullable: true })
   is_richtxt: number;
 
-  @Field({ nullable: true })
-  icon_id: string;
-
   @Field(() => Int, { nullable: true })
   read_only: number;
 

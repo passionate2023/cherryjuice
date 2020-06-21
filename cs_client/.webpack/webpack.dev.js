@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-process.env.NODE_ENV = 'development'
+process.env.NODE_ENV = 'development';
 const { paths } = require('./variables');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');

@@ -1,4 +1,4 @@
-import { Field, Float, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { Timestamp } from '../../document/helpers/graphql-types/timestamp';
 
 @InputType()
@@ -29,9 +29,6 @@ export class CreateNodeIt {
 
   @Field({ nullable: true })
   node_title_styles: string;
-
-  @Field()
-  icon_id: string;
 
   @Field(() => Int)
   read_only: number;

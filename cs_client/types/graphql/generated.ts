@@ -20,7 +20,7 @@ export interface Query {
 export interface Document {
   createdAt: number;
   folder?: string;
-  hash: string;
+  hash?: string;
   id: string;
   name: string;
   node: Array<Node | null>;
@@ -37,7 +37,6 @@ export interface Node {
   father_id: number;
   hash: string;
   html: string;
-  icon_id: string;
   id: string;
   image: Array<Image | null>;
   is_empty: number;
@@ -121,7 +120,6 @@ export interface CreateNodeIt {
   documentId: string;
   fatherId?: string;
   father_id: number;
-  icon_id: string;
   name: string;
   node_id: number;
   node_title_styles?: string;
@@ -133,7 +131,6 @@ export interface NodeMetaIt {
   child_nodes?: Array<number | null>;
   fatherId?: string;
   father_id?: number;
-  icon_id?: string;
   is_richtxt?: number;
   name?: string;
   node_title_styles?: string;
@@ -320,7 +317,6 @@ export interface NodeTypeResolver<TParent = any> {
   father_id?: NodeToFather_idResolver<TParent>;
   hash?: NodeToHashResolver<TParent>;
   html?: NodeToHtmlResolver<TParent>;
-  icon_id?: NodeToIcon_idResolver<TParent>;
   id?: NodeToIdResolver<TParent>;
   image?: NodeToImageResolver<TParent>;
   is_empty?: NodeToIs_emptyResolver<TParent>;
@@ -357,10 +353,6 @@ export interface NodeToHashResolver<TParent = any, TResult = any> {
 }
 
 export interface NodeToHtmlResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface NodeToIcon_idResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 

@@ -16,15 +16,13 @@ type Props = {
   nodes?: Map<number, NodeMeta>;
   depth: number;
   node_title_styles: string;
-  icon_id: string;
 };
 
 const Node: React.FC<Props> = ({
   node_id,
   nodes,
   depth,
-  node_title_styles,
-  icon_id,
+  node_title_styles = '{}',
 }) => {
   const { child_nodes, name } = nodes.get(node_id);
   const match = useRouteMatch<{ file_id: string }>();
@@ -69,6 +67,8 @@ const Node: React.FC<Props> = ({
     node_id,
     draggable: false,
   });
+  const nodeStyle = JSON.parse(node_title_styles);
+  const icon_id = +nodeStyle.icon_id;
   return (
     <>
       <div
@@ -94,7 +94,7 @@ const Node: React.FC<Props> = ({
         </div>
         <Icon
           name={
-            +icon_id
+            icon_id
               ? Icons.cherrytree.custom_icons[icon_id]
               : Icons.cherrytree.cherries[depth >= 11 ? 11 : depth]
           }
@@ -104,7 +104,7 @@ const Node: React.FC<Props> = ({
         />
         <div
           className={nodeMod.node__title}
-          style={{ ...(node_title_styles && JSON.parse(node_title_styles)) }}
+          style={{ ...nodeStyle }}
           ref={titleRef}
           {...nodeDndProps}
         >
@@ -133,7 +133,6 @@ const Node: React.FC<Props> = ({
                 node_id={node.node_id}
                 nodes={nodes}
                 depth={depth + 1}
-                icon_id={node.icon_id}
                 node_title_styles={node.node_title_styles}
               />
             ))}

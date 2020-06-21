@@ -108,7 +108,6 @@ export class NodeSqliteRepository {
       child_nodes: [],
       is_empty: 0,
       node_title_styles: '',
-      icon_id: '',
       read_only: 0,
     } as unknown);
 

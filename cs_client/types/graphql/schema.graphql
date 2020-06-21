@@ -14,7 +14,7 @@ type AuthUser {
 type Document {
     createdAt: Float!
     folder: String
-    hash: String!
+    hash: String
     id: String!
     name: String!
     node(node_id: Int): [Node]!
@@ -56,7 +56,6 @@ type Node {
     father_id: Float!
     hash: String!
     html: String!
-    icon_id: String!
     id: String!
     image(thumbnail: Boolean): [Image]!
     is_empty: Int!
@@ -127,7 +126,6 @@ input CreateNodeIt {
     documentId: String!
     fatherId: String
     father_id: Float!
-    icon_id: String!
     name: String!
     node_id: Int!
     node_title_styles: String
@@ -148,7 +146,6 @@ input NodeMetaIt {
     child_nodes: [Int]
     fatherId: String
     father_id: Float
-    icon_id: String
     is_richtxt: Int
     name: String
     node_title_styles: String
