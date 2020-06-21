@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { useRef } from 'react';
 import { modImportDocument } from '::sass-modules/index';
-import { Icon, Icons } from '::shared-components/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 
 const UploadFile: React.FC<{}> = () => {
@@ -23,9 +23,10 @@ const UploadFile: React.FC<{}> = () => {
         className={modImportDocument.importDocument__button}
       >
         <Icon
-          name={Icons.material.storage}
-          small={true}
-          className={modImportDocument.importDocument__button__icon}
+          {...{
+            name: Icons.material.storage,
+            className: modImportDocument.importDocument__button__icon,
+          }}
         />
         local storage
       </ButtonSquare>

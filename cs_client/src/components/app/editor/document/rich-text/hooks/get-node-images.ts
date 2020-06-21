@@ -7,10 +7,12 @@ const useAttachImagesToHtml = ({
   file_id,
   node_id,
   nodeId,
+  html,
 }: {
   file_id;
   node_id;
   nodeId;
+  html;
 }) => {
   const all_png_base64 = usePng({
     file_id,
@@ -26,9 +28,12 @@ const useAttachImagesToHtml = ({
         images.current.set(image.id, image.base64);
       });
     }
-    const pastedImages = apolloCache.changes.image.created[nodeId]?.base64.map(
-      apolloCache.image.get,
-    );
+    const pastedImages = apolloCache.changes
+      .document(file_id)
+      .image.created?.filter(([imageNodeId]) => nodeId === imageNodeId)
+      .flatMap(([, imagesIds]) =>
+        Array.from(imagesIds).map(apolloCache.image.get),
+      );
 
     if (pastedImages?.length) {
       if (!images.current) images.current = new Map<string, string>();
@@ -54,7 +59,7 @@ const useAttachImagesToHtml = ({
         }
       });
     }
-  }, [all_png_base64?.pngs, node_id]);
+  }, [all_png_base64?.pngs, node_id, html]);
 };
 
 export { useAttachImagesToHtml };

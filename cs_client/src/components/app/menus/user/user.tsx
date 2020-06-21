@@ -7,7 +7,7 @@ import { TransitionWrapper } from '::shared-components/transition-wrapper';
 import { animated } from 'react-spring';
 import { RootContext } from '::root/root-context';
 import { rootActionCreators } from '::root/root.reducer';
-import { Icon, ICON_SIZE, Icons } from '::shared-components/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 import { router } from '::root/router/router';
 
 type Props = {
@@ -43,9 +43,11 @@ const User: React.FC<Props & { style }> = ({ onClose, style }) => {
           />
         ) : (
           <Icon
-            name={Icons.material['person-circle']}
-            size={ICON_SIZE._145}
-            className={modUserPopup.user__info__picture}
+            {...{
+              name: Icons.material['person-circle'],
+              size: 40,
+              className: modUserPopup.user__info__picture,
+            }}
           />
         )}
 

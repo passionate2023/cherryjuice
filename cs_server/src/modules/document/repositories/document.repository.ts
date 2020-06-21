@@ -10,6 +10,7 @@ import { User } from '../../user/entities/user.entity';
 import { DOCUMENT_SUBSCRIPTIONS } from '../entities/document-subscription.entity';
 import { DocumentDTO } from '../../imports/imports.service';
 import { NotFoundException } from '@nestjs/common';
+import { EditDocumentDto } from '../input-types/edit-document.dto';
 
 @EntityRepository(Document)
 export class DocumentRepository extends Repository<Document>
@@ -34,12 +35,8 @@ export class DocumentRepository extends Repository<Document>
     return queryBuilder.getMany();
   }
 
-  async createDocument({
-    name,
-    size,
-    user,
-  }: DocumentDTO): Promise<Document> {
-    const document = new Document(user, name, size, );
+  async createDocument({ name, size, user }: DocumentDTO): Promise<Document> {
+    const document = new Document(user, name, size);
     await document.save();
     return document;
   }
@@ -60,5 +57,58 @@ export class DocumentRepository extends Repository<Document>
       .set({ status: DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FAILED })
       .where('document.status is not null')
       .execute();
+  }
+
+  private async updateDocument({
+    documentId,
+    meta,
+    user,
+  }: {
+    user: User;
+    documentId: string;
+    meta: Record<string, any>;
+  }): Promise<Document> {
+    const document = await this.findOneOrFail({
+      id: documentId,
+      userId: user.id,
+    });
+    Object.entries(meta).forEach(([k, v]) => {
+      document[k] = v;
+    });
+    document.size = await this.getSize({ documentId });
+    await this.save(document);
+    return document;
+  }
+
+  async editDocument({
+    documentId,
+    meta,
+    user,
+  }: EditDocumentDto): Promise<string> {
+    const document = await this.updateDocument({
+      documentId,
+      user,
+      meta: {
+        ...meta,
+        updatedAt: new Date(meta.updatedAt),
+      },
+    });
+
+    return document.id;
+  }
+
+  async getSize({ documentId }: { documentId: string }): Promise<number> {
+    return await this.manager
+      .query(
+        `
+    select (
+    (select sum(pg_column_size(i.*)) from image as i where i."documentId"=$1) +
+    (select sum(pg_column_size(n.*)) from node as n where n."documentId"=$1)
+   ) /1024 as kb
+    `,
+        [documentId],
+      )
+
+      .then(res => Number(res[0].kb));
   }
 }

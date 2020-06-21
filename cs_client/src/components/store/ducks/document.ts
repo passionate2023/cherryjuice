@@ -9,13 +9,7 @@ import {
   getFallbackNode,
 } from './helpers/document';
 
-enum asyncOperation {
-  pending = 'pending',
-  inProgress = 'inProgress',
-  idle = 'idle',
-}
-
-const AP = createActionPrefixer('document');
+const ap = createActionPrefixer('document');
 const ac = {
   // document
   fetchNodes: _('fetchNodes', _ => () => {
@@ -23,36 +17,40 @@ const ac = {
   }),
   fetchFailed: _('fetchFailed'),
   setDocumentId: _('setDocumentId', _ => (documentId: string) => _(documentId)),
+  hasUnsavedChanges: _('hasUnsavedChanges', _ => (unsaved: boolean) =>
+    _(unsaved),
+  ),
   fetchNodesStarted: _('fetchNodesStarted'),
   fetchNodesFulfilled: _('fetchNodesFulfilled', _ => (nodes: nodesMetaMap) =>
     _(nodes),
   ),
   setCacheTimeStamp: _(
     'setCacheTimeStamp',
-    _ => (timeStamp: number = new Date().getTime()) => {
-      return _(timeStamp);
-    },
+    _ => (timeStamp: number = new Date().getTime()) => _(timeStamp),
   ),
-  save: _('save'),
-  saveFulfilled: _('saveFulfilled'),
-  saveInProgress: _('saveInProgress'),
-  saveFailed: _('saveFailed'),
+  ...{
+    save: _('save'),
+    savePending: _('savePending'),
+    saveFulfilled: _('saveFulfilled'),
+    saveInProgress: _('saveInProgress'),
+    saveFailed: _('saveFailed'),
+  },
   // node
-  selectNode: _(AP('selectNode'), _ => (node: NodeId) => _(node)),
-  selectRootNode: _(AP('selectRootNode'), _ => (node: NodeId) => _(node)),
+  selectNode: _(ap('selectNode'), _ => (node: NodeId) => _(node)),
+  selectRootNode: _(ap('selectRootNode'), _ => (node: NodeId) => _(node)),
   removeNodeFromRecentNodes: _(
-    AP('removeNodeFromRecentNodes'),
+    ap('removeNodeFromRecentNodes'),
     _ => (node_id: number) => _(node_id),
   ),
   clearSelectedNode: _(
-    AP('clearSelectedNode'),
+    ap('clearSelectedNode'),
     _ => (payload: { removeChildren: boolean } = { removeChildren: false }) =>
       _(payload),
   ),
-  fetch: _(AP('fetch')),
-  fetchStarted: _(AP('fetchStarted')),
-  fetchFulfilled: _(AP('fetchFulfilled'), _ => (html: string) => _(html)),
-  setHighestNode_id: _(AP('setHighestNode_id'), _ => (node_id: number) =>
+  fetch: _(ap('fetch')),
+  fetchStarted: _(ap('fetchStarted')),
+  fetchFulfilled: _(ap('fetchFulfilled'), _ => (html: string) => _(html)),
+  setHighestNode_id: _(ap('setHighestNode_id'), _ => (node_id: number) =>
     _(node_id),
   ),
 };
@@ -60,16 +58,18 @@ type NodeId = {
   id: string;
   node_id: number;
 };
+type AsyncOperation = 'in-progress' | 'idle' | 'pending';
 type State = {
   nodes?: nodesMetaMap;
   fetchNodesStarted?: number;
   documentId: string;
   cacheTimeStamp: number;
-  saveInProgress: asyncOperation;
+  saveInProgress: AsyncOperation;
   selectedNode?: NodeId;
   rootNode?: NodeId;
   recentNodes: number[];
   highestNode_id: number;
+  hasUnsavedChanges: boolean;
 };
 
 const initialState: State = {
@@ -77,28 +77,34 @@ const initialState: State = {
   fetchNodesStarted: 0,
   documentId: '',
   cacheTimeStamp: 0,
-  saveInProgress: asyncOperation.idle,
+  saveInProgress: 'idle',
   selectedNode: defaultRootNode,
   rootNode: defaultRootNode,
   recentNodes: [],
   highestNode_id: -1,
+  hasUnsavedChanges: false,
 };
 const reducer = createReducer(cloneObj(initialState), _ => [
   _(ac.setDocumentId, (state, { payload }) => ({
     ...cloneObj(initialState),
     documentId: payload,
   })),
+  _(ac.hasUnsavedChanges, (state, { payload }) => ({
+    ...state,
+    hasUnsavedChanges: payload,
+  })),
   _(ac.fetchNodesFulfilled, (state, { payload }) => ({
     ...state,
     fetchNodesStarted: 0,
     nodes: payload,
+    cacheTimeStamp: 0,
   })),
   _(ac.fetchNodesStarted, state => ({
     ...state,
     fetchNodesStarted: new Date().getTime(),
   })),
   _(ac.setCacheTimeStamp, (state, { payload }) =>
-    state.saveInProgress !== asyncOperation.idle
+    state.saveInProgress !== 'idle'
       ? state
       : {
           ...state,
@@ -112,21 +118,21 @@ const reducer = createReducer(cloneObj(initialState), _ => [
   _(ac.fetchFailed, () => ({
     ...initialState,
   })),
-  _(ac.save, state => ({
+  _(ac.savePending, state => ({
     ...state,
-    saveInProgress: asyncOperation.pending,
+    saveInProgress: 'pending',
   })),
   _(ac.saveInProgress, state => ({
     ...state,
-    saveInProgress: asyncOperation.inProgress,
+    saveInProgress: 'in-progress',
   })),
   _(ac.saveFulfilled, state => ({
     ...state,
-    saveInProgress: asyncOperation.idle,
+    saveInProgress: 'idle',
   })),
   _(ac.saveFailed, state => ({
     ...state,
-    saveInProgress: asyncOperation.idle,
+    saveInProgress: 'idle',
   })),
   _(ac.selectNode, (state, { payload: node }) => ({
     ...state,
@@ -159,11 +165,7 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     ...state,
     highestNode_id: node_id,
   })),
-  _(ac.setHighestNode_id, (state, { payload: node_id }) => ({
-    ...state,
-    highestNode_id: node_id,
-  })),
 ]);
 
 export { reducer as documentReducer, ac as documentActionCreators };
-export { asyncOperation, NodeId };
+export { NodeId, AsyncOperation };

@@ -6,7 +6,6 @@ import { NodeCached } from '::types/graphql/adapters';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { NodeMetaIt } from '::types/graphql/generated';
 import { updateDocumentId } from '::app/editor/document/hooks/save-document/helpers/shared';
-import { localChanges } from '::graphql/cache/helpers/changes';
 import { collectDanglingNodes } from '::app/editor/document/hooks/save-document/helpers/save-new-nodes';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 
@@ -20,18 +19,17 @@ const swapFatherIdIfApplies = (state: SaveOperationState) => (
   }
 };
 
-const saveNodesMeta = async ({ state }: SaveOperationProps) => {
-  const editedNodeMeta = apolloCache.changes.node.meta.filter(
-    ([id]): boolean => !state.deletedNodes[id],
-  );
+const saveNodesMeta = async ({ state, documentId }: SaveOperationProps) => {
+  const editedNodeMeta = apolloCache.changes
+    .document(documentId)
+    .node.meta.filter(([id]): boolean => !state.deletedNodes[id]);
 
   for await (let [nodeId, editedAttributes] of editedNodeMeta) {
     const node = apolloCache.node.get(swapNodeIdIfApplies(state)(nodeId));
-    const meta: NodeMetaIt = {};
+    const meta: NodeMetaIt = { updatedAt: node.updatedAt };
     editedAttributes.forEach(attribute => {
       meta[attribute] = node[attribute];
     });
-    meta['updatedAt'] = node.updatedAt;
     swapFatherIdIfApplies(state)(node);
     if (collectDanglingNodes(state)(node)) continue;
     updateDocumentId(state)(node);
@@ -43,7 +41,6 @@ const saveNodesMeta = async ({ state }: SaveOperationProps) => {
         meta,
       },
     });
-    apolloCache.changes.unsetModificationFlag(localChanges.NODE_META, nodeId);
   }
 };
 

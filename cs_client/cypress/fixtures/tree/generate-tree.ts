@@ -1,5 +1,5 @@
 import { randomInteger } from '../../support/helpers/javascript-utils';
-import { generateNode, NodeAst } from '../node/generate-node';
+import { createNodeGenerator, NodeAst } from '../node/generate-node';
 
 type TreeAst = NodeAst[][];
 
@@ -7,7 +7,9 @@ const generateTree = ({
   nodesPerLevel,
   includeText = false,
   numberOfImages = [],
+  randomStyle = true,
 }): TreeAst => {
+  const nodeGenerator = createNodeGenerator();
   return Array.from({ length: nodesPerLevel.length })
     .map((_, levelIndex) =>
       Array.from({
@@ -17,7 +19,9 @@ const generateTree = ({
             ? nodesPerLevel[levelIndex][1]
             : nodesPerLevel[levelIndex][0],
         ),
-      }).map(generateNode(levelIndex, includeText, numberOfImages)),
+      }).map(
+        nodeGenerator(randomStyle, levelIndex, includeText, numberOfImages),
+      ),
     )
     .map((level, levelIndex, arr) =>
       levelIndex === 0

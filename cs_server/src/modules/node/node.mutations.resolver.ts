@@ -27,7 +27,7 @@ export class NodeMutationsResolver {
     deletedImages: string[],
     @GetUserGql() user: User,
   ): Promise<string> {
-    await this.nodeService.saveAHtml({
+    await this.nodeService.setAHtml({
       user,
       node_id,
       data,
@@ -65,9 +65,9 @@ export class NodeMutationsResolver {
     @GetUserGql() user: User,
   ): Promise<string> {
     return await this.nodeService.deleteNode({
-      user,
       node_id,
       documentId,
+      user,
     });
   }
 

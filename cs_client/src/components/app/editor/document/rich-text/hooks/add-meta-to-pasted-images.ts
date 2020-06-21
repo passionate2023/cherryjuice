@@ -2,8 +2,8 @@ import { createIsNotProcessed } from '::hooks/misc/isnot-processed';
 import { getEditor } from '::app/editor/document/rich-text/hooks/get-node-images';
 import { useEffect } from 'react';
 import { replaceImageUrlWithBase64 } from '::helpers/editing/clipboard';
-import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
+import { ac } from '::root/store/store';
 type AddMetaToPastedImagesProps = {
   requestId: string | number;
 };
@@ -14,7 +14,7 @@ const useAddMetaToPastedImages = ({
   useEffect(() => {
     if (isNotProcessed(requestId)) {
       const editor = getEditor();
-      let baseId = new Date().getTime()
+      let baseId = new Date().getTime();
       Array.from(editor.querySelectorAll('img:not([class])')).forEach(
         (image: HTMLImageElement) => {
           replaceImageUrlWithBase64(image)
@@ -24,7 +24,7 @@ const useAddMetaToPastedImages = ({
             })
             .catch(error => {
               image.remove();
-              appActionCreators.setAlert({
+              ac.dialogs.setAlert({
                 title: 'could not download the pasted image',
                 type: AlertType.Error,
                 description: 'verify your network connection',

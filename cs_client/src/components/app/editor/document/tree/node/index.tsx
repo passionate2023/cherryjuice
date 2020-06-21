@@ -4,7 +4,7 @@ import { NodeMeta } from '::types/graphql/adapters';
 import * as React from 'react';
 import { useCallback, useRef, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import { Icon, ICON_GROUP, ICON_SIZE, Icons } from '::shared-components/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 import { useDnDNodes } from '::app/editor/document/tree/node/hooks/dnd-nodes';
 import { useSelectNode } from '::app/editor/document/tree/node/hooks/select-node';
 import { useScrollNodeIntoView } from '::app/editor/document/tree/node/hooks/scroll-node-into-view';
@@ -79,24 +79,27 @@ const Node: React.FC<Props> = ({
         onDragStart={nodeDndProps.onDragStart}
       >
         <div style={{ marginLeft: depth * 20 }} />
-        {
-          <Icon
-            className={`${nodeMod.node__titleButton} ${
-              child_nodes.length > 0 ? '' : nodeMod.node__titleButtonHidden
-            }`}
-            onClick={toggleChildren}
-            name={showChildren ? Icons.material.remove : Icons.material.add}
-            size={ICON_SIZE._24}
-          />
-        }
+        <div
+          className={`${nodeMod.node__titleButton} ${
+            child_nodes.length > 0 ? '' : nodeMod.node__titleButtonHidden
+          }`}
+        >
+          {
+            <Icon
+              name={showChildren ? Icons.material.remove : Icons.material.add}
+              size={10}
+              onClick={toggleChildren}
+            />
+          }
+        </div>
         <Icon
           name={
             +icon_id
               ? Icons.cherrytree.custom_icons[icon_id]
               : Icons.cherrytree.cherries[depth >= 11 ? 11 : depth]
           }
+          size={14}
           className={modIcons.node__titleCherry}
-          group={ICON_GROUP.cherrytree}
           testId={'cherry' + icon_id}
         />
         <div

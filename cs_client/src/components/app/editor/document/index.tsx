@@ -6,7 +6,7 @@ import { Route, useRouteMatch } from 'react-router-dom';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { RichText } from '::app/editor/document/rich-text';
-import { appActionCreators, TState } from '::app/reducer';
+import { TState } from '::app/reducer';
 import { documentReducer } from '::app/editor/document/reducer/reducer';
 import { documentInitialState } from '::app/editor/document/reducer/initial-state';
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
@@ -17,7 +17,6 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac } from '::root/store/store';
 import { setHighestNodeId } from '::app/editor/document/hooks/get-document-meta/helpers/set-highset-node_id';
 import { router } from '::root/router/router';
-import { asyncOperation } from '::root/store/ducks/document';
 
 const mapState = (state: Store) => ({
   nodes: state.document.nodes,
@@ -26,6 +25,7 @@ const mapState = (state: Store) => ({
   saveInProgress: state.document.saveInProgress,
   selectedNode: state.document.selectedNode,
   recentNodes: state.document.recentNodes,
+  showTree: state.editor.showTree,
 });
 
 const connector = connect(mapState);
@@ -43,8 +43,9 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   saveInProgress,
   selectedNode,
   recentNodes,
+  showTree,
 }) => {
-  const { showTree, contentEditable, isOnMobile, processLinks } = state;
+  const { contentEditable, isOnMobile, processLinks } = state;
   const [documentState, dispatch] = useReducer(
     documentReducer,
     documentInitialState,
@@ -61,7 +62,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   useEffect(() => {
     if (selectedNode.node_id) router.node(file_id, selectedNode.node_id);
   }, [selectedNode.node_id, file_id]);
-  useTrackDocumentChanges({ cacheTimeStamp });
+  useTrackDocumentChanges({ cacheTimeStamp, documentId: file_id });
   useEffect(() => {
     if (router.location.pathname.endsWith(file_id))
       ac.document.clearSelectedNode();
@@ -69,16 +70,13 @@ const Document: React.FC<Props & PropsFromRedux> = ({
 
   useEffect(() => {
     ac.document.setDocumentId(file_id);
-    appActionCreators.showTree();
     ac.document.clearSelectedNode();
   }, [file_id]);
 
   return (
     <DocumentContext.Provider value={documentState}>
       <LinearProgress
-        loading={
-          Boolean(fetchNodesStarted) || saveInProgress !== asyncOperation.idle
-        }
+        loading={Boolean(fetchNodesStarted) || saveInProgress !== 'idle'}
       />
       {nodes && (
         <Fragment>

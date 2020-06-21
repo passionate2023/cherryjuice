@@ -2,10 +2,8 @@ import * as React from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { MetaForm } from '::shared-components/form/meta-form/meta-form';
-import { useState } from 'react';
-import { EventHandler } from 'react';
+import { useReducer, useEffect } from 'react';
 import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
-import { appActionCreators } from '::app/reducer';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { AlertType } from '::types/react';
 import {
@@ -16,50 +14,101 @@ import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { ac } from '::root/store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
+import {
+  documentMetaActionCreators,
+  documentMetaInitialState,
+  documentMetaReducer,
+} from './reducer/reducer';
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 
-type DocumentMetaDialogProps = {};
+const mapState = (state: Store) => ({
+  showDialog: state.dialogs.showDocumentMetaDialog,
+  focusedDocumentId: state.documentsList.focusedDocumentId,
+  documents: state.documentsList.documents,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type DocumentMetaDialogProps = {
+  showDialog: 'edit' | 'create';
+  documentId?: string;
+};
 
-const defaultDocumentName = 'new document';
-const DocumentMetaDialogWithTransition: React.FC<DocumentMetaDialogProps & {
-  onClose: EventHandler<any>;
-  showDialog: boolean;
-  isOnMobile: boolean;
-}> = ({ showDialog, isOnMobile, onClose }) => {
-  const [name, setName] = useState(defaultDocumentName);
+type Props = PropsFromRedux &
+  DocumentMetaDialogProps & {
+    isOnMobile: boolean;
+  };
+const DocumentMetaDialogWithTransition: React.FC<Props> = ({
+  showDialog,
+  isOnMobile,
+  focusedDocumentId,
+  documents,
+}) => {
+  const [state, dispatch] = useReducer(
+    documentMetaReducer,
+    documentMetaInitialState,
+  );
+  useEffect(() => {
+    documentMetaActionCreators.__setDispatch(dispatch);
+  }, []);
+  const document = documents.find(
+    document => document.id === focusedDocumentId,
+  );
+  useEffect(() => {
+    if (showDialog === 'edit') documentMetaActionCreators.reset(document);
+    else documentMetaActionCreators.reset();
+  }, [showDialog, focusedDocumentId]);
+
   const inputs: FormInputProps[] = [
     {
-      onChange: setName,
-      value: name,
+      onChange: documentMetaActionCreators.setName,
+      value: state.name,
       type: 'text',
       label: 'Document name',
       lazyAutoFocus: 400,
-      testId: 'document-name',
+      testId: testIds.documentMeta__documentName,
     },
   ];
+  const createDocument = () => {
+    try {
+      updateCachedHtmlAndImages();
+      const document = generateNewDocument(state);
+      const rootNode = generateRootNode({ documentId: document.id });
+      document.node.push(rootNode);
+      apolloCache.changes.initDocumentChangesState(document.id);
+      apolloCache.node.create(rootNode);
+      apolloCache.document.create(document.id, document);
+      ac.document.setDocumentId(document.id);
+    } catch (e) {
+      ac.dialogs.setAlert({
+        title: 'Could not create a document',
+        description: 'please refresh the page',
+        type: AlertType.Error,
+        error: e,
+      });
+    }
+  };
+  const editDocument = () => {
+    const meta = Object.fromEntries(
+      Object.entries(state).reduce((entries, [k, v]) => {
+        if (document[k] !== v) entries.push([k, v]);
+        return entries;
+      }, []),
+    );
+    apolloCache.changes.initDocumentChangesState(focusedDocumentId);
+    apolloCache.document.mutate({ documentId: focusedDocumentId, meta });
+    ac.documentsList.fetchDocuments();
+  };
   const apply = useDelayedCallback(
-    appActionCreators.hideDocumentMetaDialog,
-    () => {
-      try {
-        const document = generateNewDocument({ name });
-        const rootNode = generateRootNode({ documentId: document.id });
-        document.node.push(rootNode);
-        apolloCache.node.create(rootNode);
-        apolloCache.document.create(document.id, document);
-        ac.document.setDocumentId(document.id);
-      } catch (e) {
-        appActionCreators.setAlert({
-          title: 'Could not create a document',
-          description: 'please refresh the page',
-          type: AlertType.Error,
-          error: e,
-        });
-      }
-    },
+    ac.dialogs.hideDocumentMetaDialog,
+    showDialog === 'edit' ? editDocument : createDocument,
   );
   const buttonsRight: TDialogFooterButton[] = [
     {
       label: 'dismiss',
-      onClick: onClose,
+      onClick: ac.dialogs.hideDocumentMetaDialog,
       disabled: false,
     },
     {
@@ -76,7 +125,7 @@ const DocumentMetaDialogWithTransition: React.FC<DocumentMetaDialogProps & {
       dialogFooterRightButtons={buttonsRight}
       isOnMobile={isOnMobile}
       show={Boolean(showDialog)}
-      onClose={onClose}
+      onClose={ac.dialogs.hideDocumentMetaDialog}
       onConfirm={apply}
       rightHeaderButtons={[]}
       small={true}
@@ -88,4 +137,6 @@ const DocumentMetaDialogWithTransition: React.FC<DocumentMetaDialogProps & {
   );
 };
 
-export default DocumentMetaDialogWithTransition;
+const _ = connector(DocumentMetaDialogWithTransition);
+
+export default _;

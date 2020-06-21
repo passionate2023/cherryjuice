@@ -27,6 +27,7 @@ module.exports = ({ production } = { production: false }) => {
         '.ts',
         '.js',
         '.scss',
+        '.svg',
       ],
       alias,
     },
@@ -53,12 +54,13 @@ module.exports = ({ production } = { production: false }) => {
           include: paths.src,
         },
         {
-          test: /\.(graphql|gql|svg)$/,
+          test: /\.(graphql|gql)$/,
           exclude: /node_modules/,
           use: {
             loader: 'raw-loader',
           },
         },
+        { test: /\.svg$/, loader: 'svg-inline-loader' },
         {
           test: /\.(s[ac]|c)ss$/i,
           use: [

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
+import { ac } from '::root/store/store';
 
 class ErrorBoundary extends React.Component<{}, { error?: Error }> {
   constructor(props) {
@@ -14,7 +14,7 @@ class ErrorBoundary extends React.Component<{}, { error?: Error }> {
   }
 
   componentDidCatch(error) {
-    appActionCreators.setAlert({
+    ac.dialogs.setAlert({
       title: 'Something went wrong',
       description: 'Please refresh the page',
       type: AlertType.Error,

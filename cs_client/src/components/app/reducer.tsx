@@ -1,4 +1,3 @@
-import { TAlert } from '::types/react';
 enum NodeMetaPopupRole {
   EDIT = 1,
   CREATE_SIBLING,
@@ -6,60 +5,40 @@ enum NodeMetaPopupRole {
 }
 
 const initialState = {
-  documentHasUnsavedChanges: false,
   processLinks: undefined,
   createDocumentRequestId: undefined,
-  reloadFiles: 0,
-  showTree: [
-    JSON.parse(localStorage.getItem('showTree') as string),
-  ].map(value => (value === null ? true : value === true))[0],
   treeSize: JSON.parse(localStorage.getItem('treeSize') as string) || 250,
-  showFileSelect: false,
-  alert: undefined,
   showSettings: false,
   showFormattingButtons: false,
   showRecentNodes: false,
   contentEditable: false,
   isOnMobile: false,
   showInfoBar: false,
-  showImportDocuments: false,
   showUserPopup: false,
   showNodeMeta: undefined,
   showDeleteDocumentModal: false,
   snackbarMessage: undefined,
-  showDocumentMetaDialog: false,
 };
 
 export type TState = typeof initialState & {
-  alert?: TAlert;
   showNodeMeta: NodeMetaPopupRole;
   createDocumentRequestId: number;
 };
 enum actions {
   setSnackbarMessage,
-  TOGGLE_TREE,
-  TOGGLE_TREE_ON,
-  TOGGLE_TREE_OFF,
-  TOGGLE_FILE_SELECT,
   TOGGLE_SETTINGS,
   TOGGLE_FORMATTING_BUTTONS,
   TOGGLE_RECENT_NODES_BAR,
   TOGGLE_INFO_BAR,
   RESIZE_TREE,
-  RELOAD_DOCUMENT_LIST,
-  SET_ALERT,
   SET_IS_ON_MOBILE,
   PROCESS_LINKS,
   HIDE_POPUPS,
-  TOGGLE_SHOW_IMPORT_FILES,
   TOGGLE_USER_POPUP,
   SHOW_NODE_META,
   HIDE_NODE_META,
   TOGGLE_DELETE_DOCUMENT,
-  showReloadConfirmationModal,
-  documentHasUnsavedChanges,
   createDocument,
-  showDocumentMetaDialog,
 }
 const createActionCreators = () => {
   const state = {
@@ -77,27 +56,13 @@ const createActionCreators = () => {
     toggleInfoBar: (): void => {
       state.dispatch({ type: actions.TOGGLE_INFO_BAR });
     },
-    toggleShowImportDocuments: (): void => {
-      state.dispatch({ type: actions.TOGGLE_SHOW_IMPORT_FILES });
-    },
     toggleUserPopup: (): void => {
       state.dispatch({ type: actions.TOGGLE_USER_POPUP });
     },
     setIsOnMobile: (isOnMobile: boolean): void => {
       state.dispatch({ type: actions.SET_IS_ON_MOBILE, value: isOnMobile });
     },
-    setAlert: (alert: TAlert): void => {
-      state.dispatch({ type: actions.SET_ALERT, value: alert });
-    },
-    clearAlert: (): void => {
-      state.dispatch({ type: actions.SET_ALERT, value: undefined });
-    },
-    reloadDocumentList: (): void => {
-      state.dispatch({
-        type: actions.RELOAD_DOCUMENT_LIST,
-        value: new Date().getTime(),
-      });
-    },
+
     setTreeWidth: (width: number) => {
       state.dispatch({
         type: actions.RESIZE_TREE,
@@ -106,21 +71,6 @@ const createActionCreators = () => {
     },
     toggleSettings: () => {
       state.dispatch({ type: actions.TOGGLE_SETTINGS });
-    },
-    hideFileSelect: () => {
-      state.dispatch({ type: actions.TOGGLE_FILE_SELECT, value: false });
-    },
-    showFileSelect: () => {
-      state.dispatch({ type: actions.TOGGLE_FILE_SELECT, value: true });
-    },
-    showTree: () => {
-      state.dispatch({ type: actions.TOGGLE_TREE_ON });
-    },
-    hideTree: () => {
-      state.dispatch({ type: actions.TOGGLE_TREE_OFF });
-    },
-    toggleTree: () => {
-      state.dispatch({ type: actions.TOGGLE_TREE });
     },
     hidePopups: () => {
       state.dispatch({ type: actions.HIDE_POPUPS });
@@ -158,19 +108,7 @@ const createActionCreators = () => {
       state.dispatch({
         type: actions.TOGGLE_DELETE_DOCUMENT,
       }),
-    showReloadConfirmationModal: () => {
-      state.dispatch({
-        type: actions.showReloadConfirmationModal,
-        value: true,
-      });
-    },
 
-    documentHasUnsavedChanges: (documentHasUnsavedChanges: boolean) => {
-      state.dispatch({
-        type: actions.documentHasUnsavedChanges,
-        value: documentHasUnsavedChanges,
-      });
-    },
     setSnackbarMessage: (snackbarMessage: string) => {
       state.dispatch({
         type: actions.setSnackbarMessage,
@@ -189,18 +127,6 @@ const createActionCreators = () => {
         value: new Date().getTime(),
       });
     },
-    showDocumentMetaDialog: () => {
-      state.dispatch({
-        type: actions.showDocumentMetaDialog,
-        value: true,
-      });
-    },
-    hideDocumentMetaDialog: () => {
-      state.dispatch({
-        type: actions.showDocumentMetaDialog,
-        value: false,
-      });
-    },
   };
 };
 let reducer: (state: TState, action: { type: actions; value: any }) => TState;
@@ -212,12 +138,6 @@ reducer = (
   },
 ): TState => {
   switch (action.type) {
-    case actions.TOGGLE_TREE:
-      return { ...state, showTree: !state.showTree };
-    case actions.TOGGLE_TREE_ON:
-      return { ...state, showTree: true };
-    case actions.TOGGLE_TREE_OFF:
-      return { ...state, showTree: false };
     case actions.TOGGLE_USER_POPUP:
       return { ...state, showUserPopup: !state.showUserPopup };
     case actions.TOGGLE_DELETE_DOCUMENT:
@@ -225,37 +145,11 @@ reducer = (
         ...state,
         showDeleteDocumentModal: !state.showDeleteDocumentModal,
       };
-    case actions.TOGGLE_SHOW_IMPORT_FILES:
-      return {
-        ...state,
-        showImportDocuments: !state.showImportDocuments,
-        showFileSelect: false,
-      };
-    case actions.TOGGLE_FILE_SELECT:
-      return {
-        ...state,
-        showFileSelect: action.value,
-        reloadFiles: action.value ? new Date().getTime() : state.reloadFiles,
-      };
     case actions.RESIZE_TREE:
       return { ...state, treeSize: action.value };
     case actions.HIDE_POPUPS:
       return { ...state, ...(state.isOnMobile && { showInfoBar: false }) };
 
-    case actions.RELOAD_DOCUMENT_LIST:
-      return {
-        ...state,
-        reloadFiles: action.value,
-      };
-    case actions.SET_ALERT:
-      if (action.value?.error && process.env.NODE_ENV === 'development')
-        // eslint-disable-next-line no-console
-        console.error(action.value.error);
-      return {
-        ...state,
-        alert: action.value,
-        showImportDocuments: false,
-      };
     case actions.TOGGLE_SETTINGS:
       return { ...state, showSettings: !state.showSettings };
     case actions.TOGGLE_RECENT_NODES_BAR:
@@ -279,12 +173,6 @@ reducer = (
       return { ...state, showNodeMeta: action.value };
     case actions.HIDE_NODE_META:
       return { ...state, showNodeMeta: undefined };
-
-    case actions.documentHasUnsavedChanges:
-      return {
-        ...state,
-        documentHasUnsavedChanges: action.value,
-      };
     case actions.setSnackbarMessage:
       return {
         ...state,
@@ -294,11 +182,6 @@ reducer = (
       return {
         ...state,
         createDocumentRequestId: action.value,
-      };
-    case actions.showDocumentMetaDialog:
-      return {
-        ...state,
-        showDocumentMetaDialog: action.value,
       };
     default:
       throw new Error(`action ${action.type} not supported`);

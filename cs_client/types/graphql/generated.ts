@@ -35,6 +35,7 @@ export interface Node {
   documentId: string;
   fatherId?: string;
   father_id: number;
+  hash: string;
   html: string;
   icon_id: string;
   id: string;
@@ -82,6 +83,7 @@ export interface Mutation {
 export interface DocumentMutation {
   createDocument: string;
   deleteDocument: string;
+  editDocument: string;
   node: NodeMutation;
   uploadFile: boolean;
   uploadLink: boolean;
@@ -95,6 +97,16 @@ export interface DeleteDocumentInputType {
   IDs: Array<string>;
 }
 
+export interface EditDocumentIt {
+  name?: string;
+  updatedAt: Timestamp;
+}
+
+/**
+ * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+ */
+export type Timestamp = any;
+
 export interface NodeMutation {
   createNode: string;
   deleteNode: string;
@@ -105,7 +117,7 @@ export interface NodeMutation {
 
 export interface CreateNodeIt {
   child_nodes: Array<number>;
-  createdAt: number;
+  createdAt: Timestamp;
   documentId: string;
   fatherId?: string;
   father_id: number;
@@ -114,7 +126,7 @@ export interface CreateNodeIt {
   node_id: number;
   node_title_styles?: string;
   read_only: number;
-  updatedAt: number;
+  updatedAt: Timestamp;
 }
 
 export interface NodeMetaIt {
@@ -130,11 +142,6 @@ export interface NodeMetaIt {
   sequence?: number;
   updatedAt: Timestamp;
 }
-
-/**
- * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
- */
-export type Timestamp = any;
 
 export interface SaveHtmlIt {
   ahtml: string;
@@ -215,8 +222,8 @@ export interface Resolver {
   User?: UserTypeResolver;
   Mutation?: MutationTypeResolver;
   DocumentMutation?: DocumentMutationTypeResolver;
-  NodeMutation?: NodeMutationTypeResolver;
   Timestamp?: GraphQLScalarType;
+  NodeMutation?: NodeMutationTypeResolver;
   ImageUpload?: GraphQLScalarType;
   CTBUpload?: GraphQLScalarType;
   UserMutation?: UserMutationTypeResolver;
@@ -311,6 +318,7 @@ export interface NodeTypeResolver<TParent = any> {
   documentId?: NodeToDocumentIdResolver<TParent>;
   fatherId?: NodeToFatherIdResolver<TParent>;
   father_id?: NodeToFather_idResolver<TParent>;
+  hash?: NodeToHashResolver<TParent>;
   html?: NodeToHtmlResolver<TParent>;
   icon_id?: NodeToIcon_idResolver<TParent>;
   id?: NodeToIdResolver<TParent>;
@@ -341,6 +349,10 @@ export interface NodeToFatherIdResolver<TParent = any, TResult = any> {
 }
 
 export interface NodeToFather_idResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeToHashResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -505,6 +517,7 @@ export interface MutationToUserResolver<TParent = any, TResult = any> {
 export interface DocumentMutationTypeResolver<TParent = any> {
   createDocument?: DocumentMutationToCreateDocumentResolver<TParent>;
   deleteDocument?: DocumentMutationToDeleteDocumentResolver<TParent>;
+  editDocument?: DocumentMutationToEditDocumentResolver<TParent>;
   node?: DocumentMutationToNodeResolver<TParent>;
   uploadFile?: DocumentMutationToUploadFileResolver<TParent>;
   uploadLink?: DocumentMutationToUploadLinkResolver<TParent>;
@@ -535,6 +548,21 @@ export interface DocumentMutationToDeleteDocumentResolver<
   (
     parent: TParent,
     args: DocumentMutationToDeleteDocumentArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface DocumentMutationToEditDocumentArgs {
+  meta: EditDocumentIt;
+}
+export interface DocumentMutationToEditDocumentResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: DocumentMutationToEditDocumentArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;

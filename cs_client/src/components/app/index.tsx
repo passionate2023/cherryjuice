@@ -17,6 +17,9 @@ import { QUERY_USER } from '::graphql/queries';
 import { rootActionCreators } from '::root/root.reducer';
 import { AppContext } from './context';
 import { useDocumentEditedIndicator } from '::app/hooks/document-edited-indicator';
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+import { useHandleRouting } from '::app/hooks/handle-routing/handle-routing';
 
 const Menus = React.lazy(() => import('::app/menus'));
 const Editor = React.lazy(() => import('::app/editor'));
@@ -43,9 +46,9 @@ const updateBreakpointState = ({ breakpoint, callback }) => {
   };
 };
 
-const useUpdateCssVariables = (state: TState) => {
+const useUpdateCssVariables = (state: TState, showTree: boolean) => {
   useEffect(() => {
-    cssVariables.setTreeWidth(state.showTree ? state.treeSize : 0);
+    cssVariables.setTreeWidth(showTree ? state.treeSize : 0);
     if (state.showFormattingButtons) {
       cssVariables.setFormattingBar(40);
     } else {
@@ -54,7 +57,7 @@ const useUpdateCssVariables = (state: TState) => {
         cssVariables.setFormattingBar(0);
       })();
     }
-  }, [state.showFormattingButtons, state.showTree]);
+  }, [state.showFormattingButtons, showTree]);
 };
 
 const useRefreshToken = ({ token }) => {
@@ -78,18 +81,22 @@ const useRefreshToken = ({ token }) => {
     }
   }, [data, error]);
 };
-import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store/store';
-import { useHandleRouting } from '::app/hooks/handle-routing/handle-routing';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
+  showTree: state.editor.showTree,
+  documentHasUnsavedChanges: state.document.hasUnsavedChanges,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const App: React.FC<Props & PropsFromRedux> = ({ session, documentId }) => {
+const App: React.FC<Props & PropsFromRedux> = ({
+  session,
+  documentId,
+  showTree,
+  documentHasUnsavedChanges,
+}) => {
   const [state, dispatch] = useReducer(appReducer, appInitialState);
   useEffect(() => {
     appActionCreators.setDispatch(dispatch);
@@ -101,10 +108,10 @@ const App: React.FC<Props & PropsFromRedux> = ({ session, documentId }) => {
       callback: appActionCreators.setIsOnMobile,
     }),
   ]);
-  useDocumentEditedIndicator(state);
+  useDocumentEditedIndicator(documentHasUnsavedChanges);
   useSaveStateToLocalStorage(state);
   useHandleRouting(documentId);
-  useUpdateCssVariables(state);
+  useUpdateCssVariables(state, showTree);
   useRefreshToken({ token: session.token });
   return (
     <AppContext.Provider value={state}>

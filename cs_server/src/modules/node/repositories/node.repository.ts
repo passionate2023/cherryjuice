@@ -7,10 +7,29 @@ import { CreateNodeDto } from '../dto/create-node.dto';
 import { copyProperties } from '../../document/helpers';
 import { DeleteNodeDto } from '../dto/delete-node.dto';
 import { GetNodeByNodeIdIt } from '../dto/get-node-by-node-id.it';
+import { SaveHtmlIt } from '../dto/save-html.it';
+import { NodeMetaIt } from '../dto/node-meta.it';
 
 @Injectable()
 @EntityRepository(Node)
 export class NodeRepository extends Repository<Node> {
+  async createNode({ meta, documentId, user }: CreateNodeDto): Promise<Node> {
+    const node = new Node();
+    copyProperties(meta, node, {});
+    node.documentId = documentId;
+    node.createdAt = new Date(meta.createdAt);
+    node.updatedAt = new Date(meta.updatedAt);
+    if (node.father_id !== -1) {
+      node.father = await this.getNodeMetaById({
+        node_id: node.father_id,
+        documentId,
+        user,
+      });
+    }
+    await this.save(node);
+    return node;
+  }
+
   getAHtml(
     node_id: string,
     documentId: string,
@@ -21,6 +40,12 @@ export class NodeRepository extends Repository<Node> {
       .andWhere('node.node_id = :node_id', { node_id })
       .getOne()
       .then(node => JSON.parse(node.ahtml));
+  }
+
+  async getNodesMeta(documentId: string): Promise<Node[]> {
+    return await this.createQueryBuilder('node')
+      .where('node.documentId = :documentId', { documentId })
+      .getMany();
   }
 
   async getNodeMetaById({
@@ -35,61 +60,49 @@ export class NodeRepository extends Repository<Node> {
     });
   }
 
-  async getNodesMeta(documentId: string): Promise<Node[]> {
-    return await this.createQueryBuilder('node')
-      .where('node.documentId = :documentId', { documentId })
-      .getMany();
-  }
-
-  async saveAHtml({
-    data: { ahtml, updatedAt },
+  private async updateNode({
+    attributes,
     node_id,
     documentId,
-  }: SaveAhtmlDto): Promise<string> {
-    const res = await this.createQueryBuilder('node')
-      .update()
-      .set({ ahtml, updatedAt: new Date(updatedAt) })
-      .where({ node_id, documentId })
-      .execute();
-    return JSON.stringify(res);
+  }: {
+    node_id: number;
+    documentId: string;
+    attributes: SaveHtmlIt | NodeMetaIt;
+  }): Promise<Node> {
+    const node = await this.findOneOrFail({ node_id, documentId });
+    if (typeof attributes.updatedAt === 'number')
+      attributes.updatedAt = (new Date(attributes.updatedAt) as unknown) as any;
+    Object.entries(attributes).forEach(([k, v]) => {
+      node[k] = v;
+    });
+
+    await this.save(node);
+    return node;
   }
 
-  async setMeta({ documentId, node_id, meta }: NodeMetaDto) {
-    const res = await this.createQueryBuilder('node')
-      .update()
-      .set({ ...meta, updatedAt: new Date(meta.updatedAt) })
-      .where({ node_id, documentId })
-      .execute();
-
-    return JSON.stringify(res);
+  async setAHtml({ data, node_id, documentId }: SaveAhtmlDto): Promise<Node> {
+    const node = await this.updateNode({
+      node_id,
+      documentId,
+      attributes: data,
+    });
+    return node;
   }
 
-  async createNode({ meta, documentId, user }: CreateNodeDto) {
-    const node = new Node();
-    copyProperties(meta, node, {});
-    node.documentId = documentId;
-    node.createdAt = new Date(meta.createdAt);
-    node.updatedAt = new Date(meta.updatedAt);
-    if (node.father_id !== -1) {
-      node.father = await this.getNodeMetaById({
-        node_id: node.father_id,
-        documentId,
-        user,
-      });
-    }
-    await node.save();
+  async setMeta({ documentId, node_id, meta }: NodeMetaDto): Promise<Node> {
+    const node = await this.updateNode({
+      attributes: meta,
+      node_id,
+      documentId,
+    });
 
-    return node.id;
+    return node;
   }
 
-  async deleteNode({
-    documentId,
-    node_id,
-    user,
-  }: DeleteNodeDto): Promise<string> {
+  async deleteNode({ documentId, node_id }: DeleteNodeDto): Promise<string> {
     return await this.createQueryBuilder('node')
       .delete()
-      .where({ node_id, userId: user.id, documentId })
+      .where({ node_id, documentId })
       .execute()
       .then(res => JSON.stringify(res));
   }

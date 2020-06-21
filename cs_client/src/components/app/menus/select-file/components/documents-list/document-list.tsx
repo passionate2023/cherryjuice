@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DocumentMeta } from '::types/generated';
+import { DocumentMeta } from '::types/graphql/adapters';
 import { modSelectFile } from '::sass-modules/index';
 import { DocumentGroup } from './document-group';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
@@ -7,7 +7,7 @@ import { SpinnerCircle } from '::shared-components/spinner-circle';
 const DocumentList = ({
   selectedIDs,
   onSelect,
-                        documentId,
+  documentId,
   documentsMeta,
   loading,
 }) => {

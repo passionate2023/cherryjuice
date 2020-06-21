@@ -33,6 +33,7 @@
 .tool-bar__group--nav-bar__profile-picture {
   width: 18px;
   border-radius: 50%;
+  margin-top: -2px;
 }
 .tool-bar__group--mobile-buttons {
   @include respond-to($md-up) {

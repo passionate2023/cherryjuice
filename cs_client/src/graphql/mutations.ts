@@ -106,6 +106,16 @@ const DOCUMENT_MUTATION = {
       }
     `,
   },
+  editDocument: {
+    path: (data): string => data?.document?.editDocument,
+    query: gql`
+      mutation editDocument($file_id: String!, $meta: EditDocumentIt!) {
+        document(file_id: $file_id) {
+          editDocument(meta: $meta)
+        }
+      }
+    `,
+  },
 };
 
 const USER_MUTATION = {

@@ -9,6 +9,7 @@ import { debug } from '../shared';
 import { DeleteResult } from 'typeorm';
 import { DocumentDTO } from '../imports/imports.service';
 import { importThreshold } from '../imports/helpers/thresholds';
+import { EditDocumentDto } from './input-types/edit-document.dto';
 
 @Injectable()
 export class DocumentService implements IDocumentService {
@@ -50,8 +51,8 @@ export class DocumentService implements IDocumentService {
     );
     if (notifySubscribers)
       IDs.forEach(id => {
-        const document = new Document(user,"",0)
-        document.id = id
+        const document = new Document(user, '', 0);
+        document.id = id;
         importThreshold.deleted(document);
       });
     return deleteResult;
@@ -60,5 +61,44 @@ export class DocumentService implements IDocumentService {
     return await this.documentRepository.findOne({
       where: { userId: user.id, hash },
     });
+  }
+
+  async editDocument(args: EditDocumentDto): Promise<string> {
+    return await this.documentRepository.editDocument(args);
+  }
+
+  async updateNodesHash({
+    user,
+    documentId,
+    node_id,
+    hash,
+  }: {
+    user: User;
+    documentId: string;
+    node_id: number;
+    hash: string;
+  }): Promise<void> {
+    const document = await this.getDocumentMetaById(user, documentId);
+    document.nodes[node_id] = { hash };
+    await document.save();
+  }
+  async deleteNodesHash({
+    user,
+    documentId,
+    node_id,
+  }: {
+    node_id: number;
+    user: User;
+    documentId: string;
+  }): Promise<void> {
+    const document = await this.getDocumentMetaById(user, documentId);
+    delete document.nodes[node_id].hash;
+    if (Object.keys(document.nodes[node_id]).length === 0)
+      delete document.nodes[node_id];
+    await document.save();
+  }
+
+  async getSize(args: { documentId: string; user: User }): Promise<number> {
+    return await this.documentRepository.getSize(args);
   }
 }

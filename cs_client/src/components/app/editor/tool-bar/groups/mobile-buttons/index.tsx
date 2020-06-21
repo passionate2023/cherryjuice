@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { modToolbar } from '::sass-modules/index';
 import { ToolbarButton } from '../../tool-bar-button';
-import { Icon, Icons } from '::shared-components/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 import { appActionCreators } from '::app/reducer';
 import { Separator } from '::app/editor/tool-bar/separator';
 
@@ -28,20 +28,20 @@ const MobileButtons: React.FC<Props> = ({
         onClick={appActionCreators.toggleFormattingButtons}
         enabled={showFormattingButtons}
       >
-        <Icon name={Icons.material['justify-left']}  />
+        <Icon name={Icons.material['justify-left']} />
       </ToolbarButton>
       <Separator />
       <ToolbarButton
         onClick={appActionCreators.toggleRecentBar}
         enabled={showRecentNodes}
       >
-        <Icon name={Icons.material.history}  />
+        <Icon name={Icons.material.history} />
       </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.toggleInfoBar}
         enabled={showInfoBar}
       >
-        <Icon name={Icons.material.info}  />
+        <Icon name={Icons.material.info} />
       </ToolbarButton>
     </div>
   );

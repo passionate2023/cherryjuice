@@ -26,6 +26,7 @@ type Document {
 type DocumentMutation {
     createDocument(document: CreateDocumentIt!): String!
     deleteDocument(documents: DeleteDocumentInputType!): String!
+    editDocument(meta: EditDocumentIt!): String!
     node(node_id: Int!): NodeMutation!
     uploadFile(files: [CTBUpload!]!): Boolean!
     uploadLink(file: UploadLinkInputType!): Boolean!
@@ -53,6 +54,7 @@ type Node {
     documentId: String!
     fatherId: String
     father_id: Float!
+    hash: String!
     html: String!
     icon_id: String!
     id: String!
@@ -121,7 +123,7 @@ input CreateDocumentIt {
 
 input CreateNodeIt {
     child_nodes: [Int!]!
-    createdAt: Float!
+    createdAt: Timestamp!
     documentId: String!
     fatherId: String
     father_id: Float!
@@ -130,11 +132,16 @@ input CreateNodeIt {
     node_id: Int!
     node_title_styles: String
     read_only: Int!
-    updatedAt: Float!
+    updatedAt: Timestamp!
 }
 
 input DeleteDocumentInputType {
     IDs: [String!]!
+}
+
+input EditDocumentIt {
+    name: String
+    updatedAt: Timestamp!
 }
 
 input NodeMetaIt {

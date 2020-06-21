@@ -22,11 +22,14 @@ const applyLocalModifications = ({
   nodes?: nodesMetaMap;
 }) => {
   if (nodes) {
+    apolloCache.changes.initDocumentChangesState(file_id);
     nodes = new Map(nodes);
     const modifiedNodes = [
-      ...apolloCache.changes.node.meta.map(([nodeId]) => nodeId),
-      ...apolloCache.changes.node.html,
-      ...apolloCache.changes.node.created,
+      ...apolloCache.changes
+        .document(file_id)
+        .node.meta.map(([nodeId]) => nodeId),
+      ...apolloCache.changes.document(file_id).node.html,
+      ...apolloCache.changes.document(file_id).node.created,
     ];
     for (const nodeId of modifiedNodes) {
       const node = apolloCache.node.get(nodeId);

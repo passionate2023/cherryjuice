@@ -3,19 +3,20 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 import { stringToMultipleElements } from '::helpers/editing/execK/helpers';
 import { getAHtml } from '::helpers/rendering/html-to-ahtml';
 import { updateDocumentId } from '::app/editor/document/hooks/save-document/helpers/shared';
-import { localChanges } from '::graphql/cache/helpers/changes';
 import { swapNodeIdIfApplies } from '::app/editor/document/hooks/save-document/helpers/save-nodes-meta';
 import { collectDanglingNodes } from '::app/editor/document/hooks/save-document/helpers/save-new-nodes';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 
-const saveNodesContent = async ({ state }: SaveOperationProps) => {
-  const editedNodeContent = apolloCache.changes.node.html
-    .filter(id => !state.deletedNodes[id])
+const saveNodesContent = async ({ state, documentId }: SaveOperationProps) => {
+  const editedNodeContent = apolloCache.changes
+    .document(documentId)
+    .node.html.filter(id => !state.deletedNodes[id])
     .map(swapNodeIdIfApplies(state))
     .map(id => apolloCache.node.get(id));
   for await (const node of editedNodeContent) {
     if (collectDanglingNodes(state)(node)) continue;
-    const deletedImages = apolloCache.changes.image.deleted[node.id];
+    const deletedImages = apolloCache.changes.document(documentId).image
+      .deleted[node.id];
     updateDocumentId(state)(node);
     const DDOEs = stringToMultipleElements(node.html);
     const { abstractHtml, DDOEsAHtml } = getAHtml({
@@ -38,16 +39,15 @@ const saveNodesContent = async ({ state }: SaveOperationProps) => {
         file_id: node.documentId,
         node_id: node.node_id,
         data: {
-          ahtml: JSON.stringify(aHtml),
+          ahtml:
+            aHtml.length === 1 && aHtml[0].nodes.length === 0
+              ? '[]'
+              : JSON.stringify(aHtml),
           deletedImages: deletedImages || [],
           updatedAt: node.updatedAt,
         },
       },
     });
-    apolloCache.changes.unsetModificationFlag(
-      localChanges.NODE_CONTENT,
-      node.id,
-    );
   }
 };
 

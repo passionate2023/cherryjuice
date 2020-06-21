@@ -6,6 +6,7 @@ import { restoreSelection } from '::helpers/editing/execK/steps/restore-selectio
 import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
 import { FormattingError } from '::types/errors';
+import { ac } from '::root/store/store';
 
 enum ExecKCommand {
   clear = 'clear',
@@ -83,7 +84,7 @@ const execK = ({
     }
   } catch (e) {
     document.querySelector('#rich-text ').innerHTML = ogHtml;
-    appActionCreators.setAlert({
+    ac.dialogs.setAlert({
       title: 'Could not apply formatting',
       description:
         e instanceof FormattingError ? e.message : 'Please submit a bug report',

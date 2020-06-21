@@ -3,32 +3,45 @@ import { NodeMetaIt } from '::types/graphql/generated';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { CacheState } from '::graphql/cache/initial-state';
 import { ac } from '::root/store/store';
+import { NodeIdDocumentId } from './image';
 
+type MutateNodeProps = {
+  nodeId: string;
+  meta:
+    | (NodeMetaIt & { updatedAt?: number })
+    | { html?: string }
+    | { updatedAt?: string };
+};
 const nodeHelpers = (state: CacheState) => ({
   get: (nodeId: string): NodeCached => {
     const node = state.cache?.data.get('Node:' + nodeId);
-    if (node?.child_nodes.json) node.child_nodes = node.child_nodes.json;
+    if (node?.child_nodes?.json) node.child_nodes = node.child_nodes.json;
     return node;
   },
   create: (node: NodeCached) => {
     state.cache?.data.set('Node:' + node.id, node);
-    state.modifications.node.created[node.id] = true;
+    state.modifications.document[node.documentId].node.created.add(node.id);
     ac.document.setCacheTimeStamp();
   },
-  mutate: ({
-    nodeId,
-    meta,
-  }: {
-    nodeId: string;
-    meta: NodeMetaIt | { html?: string } | { updatedAt?: string };
-  }): void => {
-    const modificationType = meta['html'] ? 'content' : 'meta';
+  mutate: ({ nodeId, meta }: MutateNodeProps): void => {
     const node = apolloCache.node.get(nodeId);
-    if (!state.modifications.node[modificationType][nodeId])
-      state.modifications.node[modificationType][nodeId] = {};
-    Object.entries(meta).forEach(([key]) => {
-      state.modifications.node[modificationType][nodeId][key] = true;
-    });
+    const { documentId } = node;
+
+    if (meta['html']) {
+      state.modifications.document[documentId].node.content.add(nodeId);
+    } else {
+      const nodeUnmodified = !state.modifications.document[
+        documentId
+      ].node.meta.get(nodeId);
+      if (nodeUnmodified)
+        state.modifications.document[documentId].node.meta.set(
+          nodeId,
+          new Set(),
+        );
+      Object.entries(meta).forEach(([key]) => {
+        state.modifications.document[documentId].node.meta.get(nodeId).add(key);
+      });
+    }
     state.cache?.data.set('Node:' + nodeId, {
       ...node,
       ...meta,
@@ -36,33 +49,33 @@ const nodeHelpers = (state: CacheState) => ({
     });
     ac.document.setCacheTimeStamp();
   },
-  swapId: ({ oldId, newId }: { oldId: string; newId: string }) => {
+  swapId: ({
+    oldId,
+    newId,
+    documentId,
+  }: {
+    oldId: string;
+    newId: string;
+    documentId: string;
+  }) => {
     const node = apolloCache.node.get(oldId);
     node.id = newId;
-    apolloCache.node.delete.hard(oldId);
+    apolloCache.node.delete.hard({
+      nodeId: oldId,
+      documentId,
+    });
     state.cache.data.set('Node:' + newId, node);
     return node;
   },
-  delete: (() => ({
-    soft: (nodeId: string): void => {
-      state.modifications.node.deleted[nodeId] = 'soft';
+  delete: {
+    soft: ({ nodeId, documentId }: NodeIdDocumentId): void => {
+      state.modifications.document[documentId].node.deleted.add(nodeId);
       ac.document.setCacheTimeStamp();
     },
-    hard: (nodeId: string): void => {
+    hard: ({ nodeId, documentId }: NodeIdDocumentId): void => {
       state.cache.data.delete('Node:' + nodeId);
-      delete state.modifications.node.deleted[nodeId];
+      state.modifications.document[documentId].node.deleted.delete(nodeId);
     },
-  }))(),
-  deletedAllModified: () => {
-    [
-      ...apolloCache.changes.node.created,
-      ...apolloCache.changes.node.deleted,
-      ...apolloCache.changes.node.html,
-      ...apolloCache.changes.node.meta.map(([nodeId]) => nodeId),
-    ].forEach(([nodeId]) => {
-      apolloCache.node.delete.hard('Node:' + nodeId);
-    });
-    ac.document.setCacheTimeStamp(0);
   },
 });
 

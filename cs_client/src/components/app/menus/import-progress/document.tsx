@@ -2,8 +2,8 @@ import * as React from 'react';
 import { modImportProgress } from '::sass-modules/index';
 import { DOCUMENT_SUBSCRIPTIONS } from '::types/graphql/generated';
 import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
-import { Icon, Icons } from '::shared-components/icon';
-import { useDeleteFile } from '::hooks/graphql/delete-file';
+import { Icon, Icons } from '::shared-components/icon/icon';
+import { useDeleteFile } from '../select-file/hooks/delete-documents/delete-file';
 import { ac } from '::root/store/store';
 
 type TDocumentProps = {
@@ -59,7 +59,7 @@ const ActionButton = ({ eventType, deleteDocument, clear, open }) => {
       className={modImportProgress.importProgress__document__button}
       onClick={props.onClick}
     >
-      <Icon name={props.iconName} />
+      <Icon {...{ name: props.iconName }} />
     </ButtonCircle>
   );
 };

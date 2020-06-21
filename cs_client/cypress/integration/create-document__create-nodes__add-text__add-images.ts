@@ -1,61 +1,57 @@
 import { login } from '../support/workflows/login';
-import { createNode } from '../support/workflows/tree/create-node';
-import { wait } from '../support/helpers/cypress-helpers';
+import { fixScrolling, wait } from '../support/helpers/cypress-helpers';
 import { goHome } from '../support/workflows/navigate-home';
-import { createDocument } from '../support/workflows/create-document';
 import { assertNodesName } from '../support/assertions/nodes-name';
 import { assertTreeStructure } from '../support/assertions/tree-structure';
 import { testIds } from '../support/helpers/test-ids';
-import { writeText } from '../support/workflows/content/write-text';
 import { assertNodeText } from '../support/assertions/content/node-text';
-import {
-  writeBlobImages,
-  writeHtmlImages,
-} from '../support/workflows/content/write-image';
 import { assertNodeImage } from '../support/assertions/content/node-image';
 import { createImageGenerator } from '../fixtures/node/generate-node-content/image/generate-image';
 import { generateTree } from '../fixtures/tree/generate-tree';
+import { dialogs } from '../support/workflows/dialogs/dialogs';
+import { editor } from '../support/workflows/editor/editor';
 
 describe('create document > create nodes', () => {
   before(() => {
-    Cypress.on('scrolled', $el => {
-      $el.get(0).scrollIntoView({
-        block: 'center',
-        inline: 'center',
-      });
-    });
+    fixScrolling();
     cy.visit(`/`);
     login();
+    goHome();
+    dialogs.documentsList.interact.close();
   });
-  const tree = generateTree({
-    nodesPerLevel: [[2]],
-    includeText: true,
-    numberOfImages: [2, 5],
-  });
+  const document = {
+    meta: {
+      name: new Date().toString(),
+    },
+    tree: generateTree({
+      nodesPerLevel: [[2]],
+      includeText: true,
+      numberOfImages: [2, 5],
+    }),
+  };
 
   it('perform: create document', () => {
-    goHome();
-    createDocument();
+    dialogs.document.interact.create(document.meta);
   });
   it('perform: create nodes', () => {
-    for (const node of tree.flatMap(x => x)) {
-      createNode({ node });
+    for (const node of document.tree.flatMap(x => x)) {
+      dialogs.node.create({ node });
       wait.ms500();
     }
   });
 
   it('assert: nodes name', () => {
     wait.s1();
-    assertNodesName({ tree });
+    assertNodesName(document);
   });
   it('assert: nodes structure', () => {
     wait.s1();
-    assertTreeStructure({ tree });
+    assertTreeStructure(document);
   });
 
   it('perform: paste blob images', () => {
-    tree[0].forEach(node => {
-      writeBlobImages({
+    document.tree[0].forEach(node => {
+      editor.clipboard.pasteBlobImages({
         node,
         images: node.images.filter((_, i) => i >= node.images.length - 1),
       });
@@ -63,8 +59,8 @@ describe('create document > create nodes', () => {
   });
 
   it('perform: paste html images', () => {
-    tree[0].forEach(node => {
-      writeHtmlImages({
+    document.tree[0].forEach(node => {
+      editor.clipboard.pasteHtmlImages({
         node,
         images: node.images.filter((_, i) => i < node.images.length - 1),
       });
@@ -72,8 +68,8 @@ describe('create document > create nodes', () => {
   });
 
   it('perform: write text', () => {
-    tree[0].forEach(node => {
-      writeText({ node, text: node.text });
+    document.tree[0].forEach(node => {
+      editor.keyboard.typeText({ node, text: node.text });
     });
   });
   it('perform: save document', () => {
@@ -82,15 +78,15 @@ describe('create document > create nodes', () => {
   });
 
   it('assert: written text', () => {
-    tree[0].forEach(node => {
+    document.tree[0].forEach(node => {
       assertNodeText({ node, text: node.text });
     });
   });
 
   it('assert: written images', () => {
-    tree[0].forEach(node => {
+    for (const node of document.tree[0]) {
       assertNodeImage({ node, images: node.images });
-    });
+    }
   });
 
   it('perform: reload > login', () => {
@@ -98,26 +94,26 @@ describe('create document > create nodes', () => {
       cy.reload();
       login();
       cy.visit(pathname);
-      cy.contains(tree[0][0].name, { timeout: 10000 });
+      cy.contains(document.tree[0][0].name, { timeout: 10000 });
     });
   });
 
   it('perform: write additional image', () => {
     const imageGenerator = createImageGenerator(['black'])(['white']);
-    tree[0].forEach(node => {
+    document.tree[0].forEach(node => {
       const additionalImage = imageGenerator({
         texts: [node.name, 'image x'],
         format: 'image/jpeg',
       });
-      node.images.push(additionalImage);
-      writeHtmlImages({ node, images: [additionalImage] });
+      node.images.unshift(additionalImage);
+      editor.clipboard.pasteHtmlImages({ node, images: [additionalImage] });
     });
   });
 
   it('assert: written images', () => {
-    tree[0].forEach(node => {
+    for (const node of document.tree[0]) {
       assertNodeImage({ node, images: node.images });
-    });
+    }
   });
 
   it('perform: save document', () => {
@@ -126,8 +122,8 @@ describe('create document > create nodes', () => {
   });
 
   it('assert: written images', () => {
-    tree[0].forEach(node => {
+    for (const node of document.tree[0]) {
       assertNodeImage({ node, images: node.images });
-    });
+    }
   });
 });

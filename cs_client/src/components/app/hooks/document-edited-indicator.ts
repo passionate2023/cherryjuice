@@ -1,10 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { appActionCreators, TState } from '::app/reducer';
 
-const useDocumentEditedIndicator = ({ documentHasUnsavedChanges }: TState) => {
+const useDocumentEditedIndicator = (documentHasUnsavedChanges: boolean) => {
   const originalWindowTitle = useRef(document.title);
   useEffect(() => {
-    appActionCreators.documentHasUnsavedChanges(documentHasUnsavedChanges);
     if (documentHasUnsavedChanges) {
       document.title = '*' + originalWindowTitle.current;
     } else {

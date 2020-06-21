@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modIconPicker, modNodeMeta } from '::sass-modules/index';
-import { Icon, ICON_GROUP, Icons } from '::shared-components/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 import { useState } from 'react';
 import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
 import { testIds } from '::cypress/support/helpers/test-ids';
@@ -33,13 +33,12 @@ const IconsList = ({
       {icons.map(([iconId, iconName], i) => (
         <Icon
           name={iconName}
-          key={i}
           className={`${modIconPicker.iconPicker__icon} ${
             selectedIcon === iconId
               ? modIconPicker.iconPicker__iconSelected
               : ''
           }`}
-          group={ICON_GROUP.cherrytree}
+          key={i}
           onClick={() => {
             setSelectedIcon(iconId);
             setShowList(false);
@@ -69,7 +68,6 @@ const IconPicker: React.FC<Props> = ({
         className={`${modIconPicker.iconPicker__icon} ${
           disabled ? modNodeMeta.nodeMeta__inputDisabled : ''
         }`}
-        group={ICON_GROUP.cherrytree}
         onClick={() => !disabled && setShowList(!showList)}
       />
       {showList && (

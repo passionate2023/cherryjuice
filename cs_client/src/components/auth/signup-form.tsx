@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import * as React from 'react';
 import { modLogin } from '::sass-modules/index';
-import { ICON_COLOR, Icons } from '::shared-components/icon';
+import { Icons } from '::shared-components/icon/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { TextInput, TextInputProps } from '::shared-components/form/text-input';
 import { patterns } from '::auth/helpers/form-validation';
@@ -18,7 +18,7 @@ import { useDefaultValues } from '::hooks/use-default-form-values';
 const inputs: TextInputProps[] = [
   {
     label: 'first name',
-    icon: [Icons.material['person-circle'], ICON_COLOR.black],
+    icon: [Icons.material['person-circle']],
     patterns: [patterns.name],
     minLength: 2,
     required: true,
@@ -28,7 +28,7 @@ const inputs: TextInputProps[] = [
   },
   {
     label: 'last name',
-    icon: [Icons.material['person-circle'], ICON_COLOR.black],
+    icon: [Icons.material['person-circle']],
     patterns: [patterns.name],
     minLength: 2,
     required: true,
@@ -38,7 +38,7 @@ const inputs: TextInputProps[] = [
   },
   {
     label: 'username',
-    icon: [Icons.material.username, ICON_COLOR.black],
+    icon: [Icons.material.username],
     patterns: [patterns.userName],
     minLength: 4,
     required: true,
@@ -48,7 +48,7 @@ const inputs: TextInputProps[] = [
   },
   {
     label: 'email',
-    icon: [Icons.material.email, ICON_COLOR.black],
+    icon: [Icons.material.email],
     type: 'email',
     required: true,
     variableName: 'email',
@@ -61,7 +61,7 @@ const inputs: TextInputProps[] = [
     patterns: [patterns.password],
     label: 'password',
     type: 'password',
-    icon: [Icons.material.lock, ICON_COLOR.black],
+    icon: [Icons.material.lock],
     minLength: 8,
     required: true,
     idPrefix: 'sign-up',

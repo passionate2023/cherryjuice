@@ -35,6 +35,7 @@ const ContentEditable = ({
     node_id,
     file_id,
     nodeId,
+    html,
   });
   useScrollToHashElement({ html: html });
 

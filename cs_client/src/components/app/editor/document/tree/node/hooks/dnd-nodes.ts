@@ -1,10 +1,10 @@
 import nodeMod from '::sass-modules/tree/node.scss';
 import { NodeMeta } from '::types/graphql/adapters';
 import { MutableRefObject, useMemo } from 'react';
-import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
 import { modTree } from '::sass-modules/index';
 import { apolloCache } from '::graphql/cache/apollo-cache';
+import { ac } from '::root/store/store';
 
 const updateCache = ({ fatherOfDroppedNode, targetNode, droppedNode }) => {
   apolloCache.node.mutate({
@@ -136,7 +136,7 @@ const useDnDNodes = ({
             child_node => father_id_chain.has(child_node),
           );
           if (fatherDroppedToChild)
-            appActionCreators.setAlert({
+            ac.dialogs.setAlert({
               title: 'forbidden operation',
               type: AlertType.Warning,
               description: "a child node can't be a target",

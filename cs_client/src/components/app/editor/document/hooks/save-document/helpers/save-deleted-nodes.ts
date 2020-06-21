@@ -1,6 +1,5 @@
 import { NodeCached } from '::types/graphql/adapters';
 import { apolloCache } from '::graphql/cache/apollo-cache';
-import { localChanges } from '::graphql/cache/helpers/changes';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 
 type SaveOperationState = {
@@ -25,6 +24,7 @@ type SaveOperationState = {
 };
 type SaveOperationProps = {
   state: SaveOperationState;
+  documentId: string;
 };
 
 const deleteNode = async (node: NodeCached) => {
@@ -37,19 +37,17 @@ const deleteNode = async (node: NodeCached) => {
       query: DOCUMENT_MUTATION.deleteNode.query,
       path: DOCUMENT_MUTATION.deleteNode.path,
     });
-  apolloCache.node.delete.hard(node.id);
+  apolloCache.node.delete.hard({
+    nodeId: node.id,
+    documentId: node.documentId,
+  });
 };
 
-const saveDeletedNodes = async ({ state }: SaveOperationProps) => {
-  const deletedNodes = apolloCache.changes.node.deleted;
-
+const saveDeletedNodes = async ({ state, documentId }: SaveOperationProps) => {
+  const deletedNodes = apolloCache.changes.document(documentId).node.deleted;
   for await (const nodeId of deletedNodes) {
     const node: NodeCached = apolloCache.node.get(nodeId);
     await deleteNode(node);
-    apolloCache.changes.unsetModificationFlag(
-      localChanges.NODE_DELETED,
-      nodeId,
-    );
     state.deletedNodes[nodeId] = true;
   }
 };

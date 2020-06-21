@@ -40,6 +40,12 @@
   min-width: 8px;
   min-height: 8px;
   width: 8px;
+  height: 8px;
+  img {
+    margin-left: -1px;
+    margin-top: -1px;
+    transform: scale(1.3);
+  }
   padding: 1px;
   font-weight: lighter;
   font-style: normal;
@@ -55,6 +61,7 @@
   min-width: 14px;
   width: 14px;
   z-index: $ZI-node-elements;
+  margin-top: -2px;
 }
 .node__list {
   padding-left: 0;

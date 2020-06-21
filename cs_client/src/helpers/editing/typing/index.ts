@@ -1,9 +1,9 @@
 import { handleIndentation } from '::helpers/editing/typing/indentation';
-import { appActionCreators } from '::app/reducer';
 import { handleBackSpace } from './backspace';
 import { AlertType } from '::types/react';
+import { ac } from '::root/store/store';
 
-const setupKeyboardEvents = () => {
+const setupTabAndBackspaceHandler = () => {
   const editor: HTMLDivElement = document.querySelector('#rich-text');
   editor.onkeydown = e => {
     try {
@@ -13,7 +13,7 @@ const setupKeyboardEvents = () => {
         handleBackSpace(e);
       }
     } catch (error) {
-      appActionCreators.setAlert({
+      ac.dialogs.setAlert({
         title:
           e.keyCode == 9
             ? 'Could not perform the indentation'
@@ -26,4 +26,4 @@ const setupKeyboardEvents = () => {
   };
 };
 
-export { setupKeyboardEvents };
+export { setupTabAndBackspaceHandler };

@@ -8,7 +8,6 @@ import { organizeData } from '../../document/helpers';
 import { getPNGSize } from '../helpers/ctb';
 import { parseXml } from '../helpers/xml';
 import { ctbToAHtml } from '../helpers/rendering/query/ctb-to-ahtml';
-import { Image } from '../../image/entities/image.entity';
 
 const queries = {
   read: {
@@ -118,7 +117,7 @@ export class NodeSqliteRepository {
 
   async getAHtml(
     node_id: string,
-    images?: Image[],
+    imagesIds?: string[],
   ): Promise<{ nodes: any; style: any }[]> {
     const { txt } =
       node_id === '0'
@@ -136,7 +135,7 @@ export class NodeSqliteRepository {
           justification,
           anchor,
           link,
-          id: images[i]?.id || `${node_id}/${i}`,
+          id: imagesIds[i] || `${node_id}/${i}`,
           ...getPNGSize(png),
         }),
       ),

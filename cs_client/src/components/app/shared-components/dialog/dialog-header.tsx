@@ -2,7 +2,7 @@ import { modDialog } from '::sass-modules/index';
 import * as React from 'react';
 import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
 import { EventHandler } from 'react';
-import { Icon, Icons } from '::shared-components/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 
 export type DialogHeaderProps = {
   dialogTitle: string;
@@ -28,7 +28,7 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
           className={modDialog.dialog__header__exitButton}
           onClick={onClose}
         >
-          <Icon name={Icons.material.close} />
+          <Icon {...{ name: Icons.material.close }} />
         </ButtonCircle>
       </div>
     </div>
