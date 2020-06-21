@@ -18,13 +18,13 @@ const calculateDiff = ({
   const { name, node_title_styles, read_only } = node;
   const style = JSON.parse(node_title_styles);
   const newStyle = JSON.stringify({
-    color: state.hasCustomColor ? state.customColor : '#ffffff',
-    fontWeight: state.isBold ? 'bold' : 'normal',
-    icon_id: !state.hasCustomIcon
-      ? '0'
-      : state.customIcon === '0'
-      ? '1'
-      : state.customIcon,
+    ...(state.hasCustomColor && {
+      color: state.customColor,
+    }),
+    ...(state.isBold && { fontWeight: 'bold' }),
+    ...(state.hasCustomIcon && {
+      icon_id: state.customIcon === '0' ? '1' : state.customIcon,
+    }),
   });
   let res;
   if (isNewNode) {

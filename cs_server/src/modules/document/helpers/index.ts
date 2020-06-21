@@ -85,13 +85,22 @@ const nodeTitleHelpers = {
 };
 
 const nodeTitleStyle = ({ is_richtxt, is_ro }) => {
-  return JSON.stringify({
-    color: nodeTitleHelpers.hasForground(is_richtxt)
-      ? nodeTitleHelpers.rgb_str_from_int24bit((is_richtxt >> 3) & 0xffffff)
-      : '#ffffff',
-    fontWeight: nodeTitleHelpers.isBold(is_richtxt) ? 'bold' : 'normal',
-    icon_id: nodeTitleHelpers.customIconId(is_ro),
-  });
+  const style: {
+    color?: string;
+    fontWeight?: string;
+    icon_id?: number;
+  } = {};
+  const hasCustomColor = nodeTitleHelpers.hasForground(is_richtxt);
+  if (hasCustomColor)
+    style.color = nodeTitleHelpers.rgb_str_from_int24bit(
+      (is_richtxt >> 3) & 0xffffff,
+    );
+  const isBold = nodeTitleHelpers.isBold(is_richtxt);
+  if (isBold) style.fontWeight = 'bold';
+
+  const customIconId = nodeTitleHelpers.customIconId(is_ro);
+  if (customIconId) style.icon_id = customIconId;
+  return JSON.stringify(style);
 };
 
 const organizeData = async (data): Promise<Map<number, Node>> => {
