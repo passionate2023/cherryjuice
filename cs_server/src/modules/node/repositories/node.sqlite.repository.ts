@@ -8,7 +8,7 @@ import { organizeData } from '../../document/helpers';
 import { getPNGSize } from '../helpers/ctb';
 import { parseXml } from '../helpers/xml';
 import { ctbToAHtml } from '../helpers/rendering/query/ctb-to-ahtml';
-import { AHtml } from '../helpers/rendering/query/ahtml-to-html';
+import { AHtmlLine } from '../helpers/rendering/query/ahtml-to-html';
 
 const queries = {
   read: {
@@ -115,7 +115,7 @@ export class NodeSqliteRepository {
     return data;
   }
 
-  async getAHtml(node_id: string, imagesIds?: string[]): Promise<AHtml[]> {
+  async getAHtml(node_id: string, imagesIds?: string[]): Promise<AHtmlLine[]> {
     const { txt } =
       node_id === '0'
         ? { txt: '<?xml version="1.0" ?><node><rich_text></rich_text></node>' }

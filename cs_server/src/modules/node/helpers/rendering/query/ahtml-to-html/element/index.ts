@@ -1,4 +1,5 @@
 import { escapeHtml } from '../helpers/escape-html';
+import { AHtmlNode } from '../index';
 
 const stringifyStyles = (style = {}, onlyStylesThatStartWith = undefined) =>
   (
@@ -25,7 +26,7 @@ const createElement = (tag, attributes, children) => {
   }${attributesPairs.join(' ')}`}`}>${children}</${tag}>`;
 };
 
-const Element = node =>
+const Element = (node: AHtmlNode) =>
   node?.tags?.length
     ? node.tags.reduceRight((acc, [tagName, attributes]) => {
         return createElement(`${tagName}`, attributes, acc);

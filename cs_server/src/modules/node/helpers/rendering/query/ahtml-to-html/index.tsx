@@ -2,8 +2,16 @@
 import { Element, stringifyStyles } from './element';
 import { objects } from './objects/objects';
 
-type AHtml = [Record<string, any>[], Record<string, any>[]];
-const aHtmlToHtml = (ahtml: AHtml[]) => {
+type AHtmlNodeAttributes = Record<string, string | number>;
+type AHtmlNode = {
+  _?: string;
+  $?: AHtmlNodeAttributes;
+  type?: string;
+  tags?: any[];
+};
+type AHtmlLineAttributes = Record<string, any>;
+type AHtmlLine = [AHtmlNode[], AHtmlLineAttributes];
+const aHtmlToHtml = (ahtml: AHtmlLine[]) => {
   let res = '<span class="rich-text__line"></span>';
   if (ahtml.length)
     try {
@@ -26,4 +34,4 @@ const aHtmlToHtml = (ahtml: AHtml[]) => {
 };
 
 export { aHtmlToHtml, Element };
-export { AHtml };
+export { AHtmlLine, AHtmlNode, AHtmlNodeAttributes, AHtmlLineAttributes };

@@ -1,17 +1,17 @@
 import { translateTable } from './other-tables';
 import { translateText } from './text';
 import { translateLink } from './link';
+import { AHtmlLine, AHtmlNode } from '../../../../query/ahtml-to-html';
 
-const aHtmlToMidPipe = html =>
-  html.map(node => {
-    // console.log({ node });
-    if (node.$) {
+const aHtmlToMidPipe = (aHtmls: AHtmlLine[]): AHtmlNode[] =>
+  aHtmls.flatMap(([line]) =>
+    line.map(node => {
       if (node.type) node = translateTable({ node });
-      else if (node.tags.includes('a')) node = translateLink({ node });
-      else node = translateText({ node });
-    }
-    // console.log('result', { node });
-    return node;
-  });
+      else if (typeof node === 'object')
+        if (node.tags?.includes('a')) node = translateLink({ node });
+        else node = translateText({ node });
+      return node;
+    }),
+  );
 
 export { aHtmlToMidPipe };

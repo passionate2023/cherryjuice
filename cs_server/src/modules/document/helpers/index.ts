@@ -84,7 +84,13 @@ const nodeTitleHelpers = {
   },
 };
 
-const nodeTitleStyle = ({ is_richtxt, is_ro }) => {
+const nodeTitleStyle = ({
+  is_richtxt,
+  is_ro,
+}: {
+  is_richtxt: number;
+  is_ro: number;
+}) => {
   const style: {
     color?: string;
     fontWeight?: string;

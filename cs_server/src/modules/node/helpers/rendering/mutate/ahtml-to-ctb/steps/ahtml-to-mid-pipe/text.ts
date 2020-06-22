@@ -49,7 +49,7 @@ const ignoredArtificialStyles = {
   'min-height': true,
   display: true,
 };
-
+const tagsToIgnore = new Set<string>(['span']);
 const translateText = ({ node }) => {
   const styles = {};
   Object.entries(cssPreferences).forEach(([tagName, customStyles]) => {
@@ -59,25 +59,26 @@ const translateText = ({ node }) => {
   });
   const translator = createTranslator(styles);
 
-  Object.entries(node.$).forEach(([key, value]) => {
+  node.tags.forEach(([tagName, attributes]) => {
     try {
-      translator.styles[key](value);
-    } catch {
-      if (!ignoredArtificialStyles[key])
-        throw new Error(
-          `Exception in the interpreter: translator.styles[${key}] is not defined
+      if (attributes?.style)
+        Object.entries(attributes.style).forEach(([key, value]) => {
+          try {
+            translator.styles[key](value);
+          } catch {
+            if (!ignoredArtificialStyles[key])
+              throw new Error(
+                `Exception in the interpreter: translator.styles[${key}] is not defined
              value: ${value} 
              node: ${JSON.stringify(node)}
             `,
-        );
-    }
-  });
-  node.tags.forEach(tag => {
-    try {
-      translator.tags[tag](node);
+              );
+          }
+        });
+      if (!tagsToIgnore.has(tagName)) translator.tags[tagName](node);
     } catch {
       throw new Error(
-        `Exception in the interpreter: translator.tags[${tag}] is not defined`,
+        `Exception in the interpreter: translator.tags[${tagName}] is not defined`,
       );
     }
   });

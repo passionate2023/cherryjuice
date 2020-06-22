@@ -1,5 +1,7 @@
+import { AHtmlNode } from '../../../../query/ahtml-to-html';
+
 const translateTable = ({ node }) => {
-  const newNode = {};
+  const newNode: AHtmlNode = {};
   if (node.type === 'png') {
     newNode['type'] = 'png';
     newNode['$'] = {

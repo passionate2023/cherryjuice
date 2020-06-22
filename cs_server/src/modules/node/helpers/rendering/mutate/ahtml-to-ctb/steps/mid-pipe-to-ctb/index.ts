@@ -1,18 +1,9 @@
-import { extractOtherTables } from './tables';
+import { extractOtherTables } from './helpers/tables';
 import { objToXml } from '../../../../../xml';
+import { AHtmlNode } from '../../../../query/ahtml-to-html';
 
-// const adjustNewLine = nodes =>
-//   nodes.reduce((acc, val, i) => {
-//     if (val === newLineCharacter || val._ === newLineCharacter) {
-//       if (acc[acc.length - 1])
-//         acc[acc.length - 1]._
-//           ? (acc[acc.length - 1]._ += val)
-//           : (acc[acc.length - 1] += val);
-//     } else acc.push(val);
-//     return acc;
-//   }, []);
-
-const midPipeToCtb = nodes => {
+type PreCTB = { otherTables: any; xmlString: string };
+const midPipeToCtb = (nodes: AHtmlNode[]): PreCTB => {
   const { nodes: rich_text, otherTables } = extractOtherTables(nodes);
   return {
     xmlString: objToXml({
