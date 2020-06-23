@@ -104,4 +104,11 @@ export class NodeRepository extends Repository<Node> {
       .execute()
       .then(res => JSON.stringify(res));
   }
+
+  async getNodesMetaAndAHtml(documentId: string): Promise<Node[]> {
+    return await this.createQueryBuilder('node')
+      .where('node.documentId = :documentId', { documentId })
+      .addSelect('node.ahtml')
+      .getMany();
+  }
 }

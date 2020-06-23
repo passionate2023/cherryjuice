@@ -16,6 +16,7 @@ const host = localStorage.getItem('graphqlAPIHost') || location.host;
 const secure = location.protocol === 'https:';
 
 const uri = {
+  httpBase: `http${secure ? 's' : ''}://${host}`,
   http: `http${secure ? 's' : ''}://${host}/graphql`,
   ws: `ws${secure ? 's' : ''}://${host}/graphql`,
 };
@@ -61,4 +62,4 @@ const useApolloClient = (session: AuthUser) => {
     rootActionCreators.setApolloClient(client);
   }, [session?.user?.id]);
 };
-export { useApolloClient };
+export { useApolloClient, uri };

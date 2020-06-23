@@ -19,5 +19,6 @@ copy --from=cs /server/node_modules /cs/server/node_modules
 copy --from=cs /client/dist /cs/client
 copy ./ctb-samples /cs/ctb-samples
 run mkdir /uploads
+run mkdir /.cs/exports/
 
 entrypoint ["node","./cs/server/main.js"]

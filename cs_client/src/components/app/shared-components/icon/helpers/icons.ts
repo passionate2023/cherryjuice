@@ -3,6 +3,7 @@ const Icons = {
     add: 'add',
     close: 'close',
     menu: 'menu',
+    export: 'export',
     remove: 'remove',
     'alert-information': 'alert-information',
     'alert-error': 'alert-error',

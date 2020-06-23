@@ -27,6 +27,7 @@ type DocumentMutation {
     createDocument(document: CreateDocumentIt!): String!
     deleteDocument(documents: DeleteDocumentInputType!): String!
     editDocument(meta: EditDocumentIt!): String!
+    exportDocument: Boolean!
     node(node_id: Int!): NodeMutation!
     uploadFile(files: [CTBUpload!]!): Boolean!
     uploadLink(file: UploadLinkInputType!): Boolean!

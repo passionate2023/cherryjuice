@@ -81,6 +81,7 @@ export interface DocumentMutation {
   createDocument: string;
   deleteDocument: string;
   editDocument: string;
+  exportDocument: boolean;
   node: NodeMutation;
   uploadFile: boolean;
   uploadLink: boolean;
@@ -498,6 +499,7 @@ export interface DocumentMutationTypeResolver<TParent = any> {
   createDocument?: DocumentMutationToCreateDocumentResolver<TParent>;
   deleteDocument?: DocumentMutationToDeleteDocumentResolver<TParent>;
   editDocument?: DocumentMutationToEditDocumentResolver<TParent>;
+  exportDocument?: DocumentMutationToExportDocumentResolver<TParent>;
   node?: DocumentMutationToNodeResolver<TParent>;
   uploadFile?: DocumentMutationToUploadFileResolver<TParent>;
   uploadLink?: DocumentMutationToUploadLinkResolver<TParent>;
@@ -546,6 +548,13 @@ export interface DocumentMutationToEditDocumentResolver<
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
+}
+
+export interface DocumentMutationToExportDocumentResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface DocumentMutationToNodeArgs {

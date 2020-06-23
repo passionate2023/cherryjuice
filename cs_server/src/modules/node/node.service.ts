@@ -69,4 +69,10 @@ export class NodeService {
       return this.nodeSqliteRepository.getNodeMetaById(args.node_id);
     return await this.nodeRepository.getNodeMetaById(args);
   }
+
+  async getNodesMetaAndAHtml(documentId: string): Promise<Node[]> {
+    if (debug.loadSqliteDocuments)
+      return this.nodeSqliteRepository.getNodesMeta(true);
+    return await this.nodeRepository.getNodesMetaAndAHtml(documentId);
+  }
 }
