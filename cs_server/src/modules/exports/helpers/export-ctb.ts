@@ -3,12 +3,22 @@ import * as fs from 'fs';
 import { Node } from '../../node/entities/node.entity';
 import { queries } from './helpers/queries/queries';
 import sqlite3 from 'sqlite3';
+import {
+  LoadedImageRow,
+  UnloadedImageRow,
+} from './helpers/ahtml-to-ctb/helpers/translate-ahtml/helpers/translate-object/objects/image';
+import { LoadedImages } from './__tests__/__data__/images/get-loaded-images';
 
 const exportsFolder = '/.cs/exports';
 type DebugOptions = {
   addSuffixToDocumentName?: boolean;
   verbose?: boolean;
 };
+
+type GetNodeImages = (
+  nodeId: string,
+  nodeImages?: UnloadedImageRow[],
+) => Promise<LoadedImages>;
 
 class ExportCTB {
   private db: sqlite.Database;
@@ -60,9 +70,10 @@ class ExportCTB {
     await this.db.close();
   };
 
-  private writeNode = (nodesMap: Map<number, Node>) => async (
-    node_id: number,
-  ): Promise<void> => {
+  private writeAHtml = (
+    nodesMap: Map<number, Node>,
+    imagesMap: ImagesMap,
+  ) => async (node_id: number): Promise<void> => {
     const node = nodesMap.get(node_id);
     try {
       for (const node_id of node.child_nodes) {
@@ -73,18 +84,20 @@ class ExportCTB {
         }
 
         try {
-          for (const statement of queries.insertNode({
+          const { queries: qs, images } = queries.insertAHtml({
             node: childNode,
             sequence: i + 1,
-          })) {
+          });
+          for (const statement of qs) {
             await this.db.run(statement);
           }
+          imagesMap.set(childNode.id, images);
         } catch (e) {
           // eslint-disable-next-line no-console
           console.log(`node: [${JSON.stringify(node)}]`);
           throw e;
         }
-        await this.writeNode(nodesMap)(childNode.node_id);
+        await this.writeAHtml(nodesMap, imagesMap)(childNode.node_id);
       }
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -93,10 +106,41 @@ class ExportCTB {
     }
   };
 
-  writeNodes = async (nodes: Node[]): Promise<void> => {
+  writeAHtmls = async (nodes: Node[]): Promise<ImagesMap> => {
+    const imagesMap: ImagesMap = new Map();
     const nodesMap = new Map(nodes.map(node => [node.node_id, node]));
-    await this.writeNode(nodesMap)(0);
+    await this.writeAHtml(nodesMap, imagesMap)(0);
+    return imagesMap;
+  };
+
+  writeNodeImages = async (nodeImages: LoadedImageRow[]): Promise<void> => {
+    for (const q of queries.insertImages(nodeImages)) {
+      await this.db.run(q);
+    }
+  };
+
+  writeNodesImages = async ({
+    imagesPerNode,
+    getNodeImages,
+  }: {
+    getNodeImages: GetNodeImages;
+    imagesPerNode: ImagesMap;
+  }) => {
+    for (const nodeId of imagesPerNode.keys()) {
+      const nodeImages = imagesPerNode.get(nodeId);
+      const blobImages = await getNodeImages(nodeId, nodeImages);
+      const loadedNodeImages: LoadedImageRow[] = nodeImages.map(image => ({
+        ...image,
+        png: {
+          id: image.png.id,
+          buffer: blobImages.get(image.png.id),
+        },
+      }));
+
+      await this.writeNodeImages(loadedNodeImages);
+    }
   };
 }
-
+type ImagesMap = Map<string, UnloadedImageRow[]>;
 export { ExportCTB };
+export { GetNodeImages };

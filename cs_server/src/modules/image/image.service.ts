@@ -6,6 +6,7 @@ import { debug } from '../shared';
 import { ImageRepository } from './repositories/image.repository';
 import { Image } from './entities/image.entity';
 import { DeleteResult } from 'typeorm';
+import { GetNodeImages } from '../exports/helpers/export-ctb';
 
 @Injectable()
 export class ImageService {
@@ -46,7 +47,16 @@ export class ImageService {
         });
       });
   }
-
+  getLoadedImages: GetNodeImages = async nodeId => {
+    return await this.imageRepository
+      .getNodeImages({
+        nodeId,
+        thumbnail: false,
+      })
+      .then(nodes => {
+        return new Map(nodes.map(image => [image.id, image.image]));
+      });
+  };
   async getPNGThumbnailBase64({
     node_id,
     nodeId,

@@ -1,4 +1,3 @@
-
 import { AHtmlObject, CTBObject } from '../translate-object';
 
 type GridRow = {
