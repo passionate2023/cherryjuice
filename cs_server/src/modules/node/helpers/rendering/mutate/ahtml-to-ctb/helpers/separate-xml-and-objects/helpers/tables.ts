@@ -45,7 +45,7 @@ const nodeType_nodeTableName = {
   table: 'grid',
   png: 'image',
 };
-const extractOtherTables = nodes =>
+const extractObjects = nodes =>
   nodes.reduce(
     (acc, val) => {
       if (val.type) {
@@ -59,4 +59,4 @@ const extractOtherTables = nodes =>
     { nodes: [], otherTables: {} },
   );
 
-export { extractOtherTables };
+export { extractObjects };

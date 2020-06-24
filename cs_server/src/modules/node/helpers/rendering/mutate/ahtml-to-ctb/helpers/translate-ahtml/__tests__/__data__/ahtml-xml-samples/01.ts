@@ -1,6 +1,6 @@
 const sample_01 = {
   name: 'text link image table code',
-  pseudoHtml: [
+  ahtml: [
     'simlple text',
     '\n',
     {
@@ -193,7 +193,7 @@ const sample_01 = {
     '\n    ',
     '\n',
   ],
-  midPipe: [
+  xml: [
     'simlple text',
     '\n',
     {

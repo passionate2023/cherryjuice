@@ -2,10 +2,13 @@ import { ExportCTB } from '../export-ctb';
 import * as fs from 'fs';
 import { createTree } from './__data__/create-tree';
 import { adaptNodeStyle } from '../helpers/adapt-node-meta';
+import { ahtmlXmlSamples } from '../../../node/helpers/rendering/mutate/ahtml-to-ctb/helpers/translate-ahtml/__tests__/__data__/ahtml-xml-samples/ahtml-xml-samples';
+import { selectNode_ids } from './__data__/select-node_ids';
+import { Node } from '../../../node/entities/node.entity';
 
 jest.setTimeout(20000);
 
-describe('export-ctb helpers', () => {
+describe('export-ctb - create and populate basic ctb', () => {
   const state: { exportCtb: ExportCTB } = {
     exportCtb: undefined,
   };
@@ -37,5 +40,32 @@ describe('export-ctb helpers', () => {
         }))
         .sort((a, b) => a.node_id - b.node_id),
     );
+  });
+});
+
+describe('export-ctb - create and populate complex ctb', () => {
+  const state: { exportCtb: ExportCTB; documentExists?: boolean } = {
+    exportCtb: undefined,
+    documentExists: false,
+  };
+  beforeAll(async () => {
+    state.exportCtb = new ExportCTB('monday-14', '12345', {
+      verbose: true,
+      addSuffixToDocumentName: false,
+      updateNodeIfExists: true,
+    });
+    try {
+      await state.exportCtb.createCtb();
+      await state.exportCtb.createTables();
+    } catch (e) {
+      state.documentExists = true;
+    }
+  });
+
+  it(`export document ${ahtmlXmlSamples[0][0].documentId}`, async () => {
+    const nodes = (selectNode_ids([134, 7, 16, 17, 18, 9, 6, 2, 4, 1, 3])(
+      ahtmlXmlSamples[0],
+    ) as unknown) as Node[];
+    await state.exportCtb.writeNodesMeta(nodes);
   });
 });

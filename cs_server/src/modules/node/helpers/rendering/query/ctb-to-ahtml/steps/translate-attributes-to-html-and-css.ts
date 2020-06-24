@@ -86,7 +86,9 @@ const translateAttributesToHtmlAndCss = xml =>
 
         return node;
       }),
-      Object.keys(lineStyles).length ? lineStyles : undefined,
+      ...[Object.keys(lineStyles).length ? lineStyles : undefined].filter(
+        Boolean,
+      ),
     ];
   });
 export {

@@ -1,6 +1,7 @@
 import { Node } from '../../../node/entities/node.entity';
 import { adaptNodeStyle, adaptNodeTime } from './adapt-node-meta';
-import { aHtmlToCtb } from '../../../node/helpers/rendering/mutate/ahtml-to-ctb';
+import { aHtmlToCtb } from '../../../node/helpers/rendering/mutate/ahtml-to-ctb/ahtml-to-ctb';
+import SQL from 'sql-template-strings';
 
 const queries = {
   createTables: [
@@ -80,20 +81,32 @@ ts_lastsave INTEGER
     sequence: number;
   }) => {
     const { is_ro, is_richtxt } = adaptNodeStyle(node_title_styles);
+    const txt = ahtml
+      ? aHtmlToCtb(JSON.parse(ahtml)).xmlString
+      : '<?xml version="1.0" ?><node><rich_text></rich_text></node>';
     return [
-      `
-    INSERT INTO "main"."node" 
-    ("node_id", "name", "txt", "syntax","tags", "is_ro", "is_richtxt", "has_codebox", "has_table", "has_image", "level","ts_creation","ts_lastsave") 
-    VALUES 
-    ('${node_id}', '${name}', '${
-        ahtml
-          ? aHtmlToCtb(JSON.parse(ahtml)).xmlString
-          : '<?xml version="1.0" ?><node><rich_text></rich_text></node>'
-      }', 'custom-colors', '', '${is_ro}', '${is_richtxt}', '0', '0', '0', '0','${adaptNodeTime(
-        createdAt,
-      )}','${adaptNodeTime(updatedAt)}')`,
-      `INSERT INTO "main"."children" ("node_id", "father_id", "sequence") VALUES ('${node_id}', '${father_id}', '${sequence}')`,
-    ].join(';');
+      SQL`
+    INSERT INTO "main"."node"  (
+    "node_id", "name", "txt", "syntax","tags", "is_ro", "is_richtxt", "has_codebox", "has_table", "has_image", "level","ts_creation","ts_lastsave"
+    ) VALUES (
+    ${node_id}, ${name}, 
+    ${txt}, 'custom-colors', '', ${is_ro}, ${is_richtxt}, '0', '0', '0', '0',
+    ${adaptNodeTime(createdAt)},${adaptNodeTime(updatedAt)}
+    )`,
+      SQL`
+      INSERT INTO "main"."children" (
+      "node_id", "father_id", "sequence"
+      ) VALUES  (
+      ${node_id}, ${father_id}, ${sequence}
+      )`,
+    ];
+  },
+  updateText: (node: Node) => {
+    return [
+      SQL`UPDATE "main"."node" SET "txt"=${
+        aHtmlToCtb(JSON.parse(node.ahtml)).xmlString
+      } WHERE "node"."node_id"=${node.node_id}`,
+    ];
   },
 };
 

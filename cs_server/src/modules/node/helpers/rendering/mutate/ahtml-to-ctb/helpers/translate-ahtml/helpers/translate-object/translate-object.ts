@@ -1,13 +1,13 @@
-import { AHtmlNode } from '../../../../query/ahtml-to-html';
+import { AHtmlNode } from '../../../../../../query/ahtml-to-html';
 
-const translateTable = ({ node }) => {
+const translateObject = ({ node }) => {
   const newNode: AHtmlNode = {};
   if (node.type === 'png') {
     newNode['type'] = 'png';
     newNode['$'] = {
       justification: 'left',
-      height: +node.$['height'].match(/\d+/)[0],
-      width: +node.$['width'].match(/\d+/)[0],
+      height: node.$['height'],
+      width: node.$['width'],
     };
     newNode['other_attributes'] = {
       ...node.other_attributes,
@@ -40,4 +40,4 @@ const translateTable = ({ node }) => {
   return newNode;
 };
 
-export { translateTable };
+export { translateObject };
