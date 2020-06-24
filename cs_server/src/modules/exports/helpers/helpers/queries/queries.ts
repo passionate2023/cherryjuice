@@ -5,6 +5,7 @@ import { insertIntoChildren } from './insert/children';
 import { createTables } from './create/create-tables';
 import { insertIntoCodeBox } from './insert/codebox';
 import { insertIntoGrid } from './insert/grid';
+import { insertIntoAnchor } from './insert/anchor';
 
 const queries = {
   createTables: createTables,
@@ -15,26 +16,23 @@ const queries = {
       ? preCTB.xmlString
       : '<?xml version="1.0" ?><node><rich_text></rich_text></node>';
 
-    const codeboxTable = preCTB.objects['codebox'].map(insertIntoCodeBox);
-    const gridTable = preCTB.objects['grid'].map(insertIntoGrid);
-    const childrenTable = insertIntoChildren({
+    const codeboxes = preCTB.objects['codebox'].map(insertIntoCodeBox);
+    const grids = preCTB.objects['grid'].map(insertIntoGrid);
+    const anchors = preCTB.objects['anchor'].map(insertIntoAnchor);
+    const childrenRow = insertIntoChildren({
       node,
       sequence,
     });
-    const nodeTable = insertIntoNode({
+    const nodeRow = insertIntoNode({
       node,
       txt,
       hasObjects: {
-        codebox: codeboxTable.length > 0 ? 1 : 0,
-        grid: gridTable.length > 0 ? 1 : 0,
+        codebox: codeboxes.length > 0 ? 1 : 0,
+        grid: grids.length > 0 ? 1 : 0,
+        anchor: anchors.length > 0 ? 1 : 0,
       },
     });
-    return [
-      nodeTable,
-      childrenTable,
-      ...codeboxTable,
-      ...gridTable,
-    ];
+    return [nodeRow, childrenRow, ...codeboxes, ...grids, ...anchors];
   },
 };
 

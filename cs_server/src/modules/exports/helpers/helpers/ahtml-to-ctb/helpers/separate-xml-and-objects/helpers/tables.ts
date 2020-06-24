@@ -72,7 +72,7 @@ const extractObjects = (nodes: (AHtmlNode | CTBObject)[]) => {
       }
       return acc;
     },
-    { nodes: [], otherTables: { codebox: [], grid: [] } },
+    { nodes: [], otherTables: { codebox: [], grid: [], anchor: [] } },
   );
 };
 

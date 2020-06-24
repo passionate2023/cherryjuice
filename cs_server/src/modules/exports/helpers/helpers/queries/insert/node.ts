@@ -5,13 +5,14 @@ import { Node } from '../../../../../node/entities/node.entity';
 const insertIntoNode = ({
   node: { node_id, name, createdAt, updatedAt, node_title_styles },
   txt,
-  hasObjects: { codebox, grid },
+  hasObjects: { codebox, grid, anchor },
 }: {
   node: Node;
   txt: string;
   hasObjects: {
     codebox: 1 | 0;
     grid: 1 | 0;
+    anchor: 1 | 0;
   };
 }) => {
   const { is_ro, is_richtxt } = adaptNodeStyle(node_title_styles);
@@ -21,7 +22,7 @@ const insertIntoNode = ({
     "node_id", "name", "txt", "syntax","tags", "is_ro", "is_richtxt", "has_codebox", "has_table", "has_image", "level","ts_creation","ts_lastsave"
     ) VALUES (
     ${node_id}, ${name}, 
-    ${txt}, 'custom-colors', '', ${is_ro}, ${is_richtxt}, ${codebox}, ${grid}, '0', '0',
+    ${txt}, 'custom-colors', '', ${is_ro}, ${is_richtxt}, ${codebox}, ${grid}, ${anchor}, '0',
     ${adaptNodeTime(createdAt)},${adaptNodeTime(updatedAt)}
     )`;
 };

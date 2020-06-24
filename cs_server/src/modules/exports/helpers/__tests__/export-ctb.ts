@@ -67,13 +67,15 @@ describe('export-ctb - create and populate complex ctb', () => {
   it(`export document ${ahtmlXmlSamples[0][0].documentId}`, async () => {
     const nodeCategories = {
       codebox: [11, 12, 14],
-      colorful: [134, 7, 16, 17, 18, 9, 6, 2, 4, 1, 3],
+      colorful: [134, 7, 16, 17, 18, 9, 6, 4, 1, 3],
       table: [42],
+      anchors: [2],
     };
     const node_idsSelection = [
       // nodeCategories.colorful,
       // nodeCategories.codebox,
-      nodeCategories.table,
+      // nodeCategories.table,
+      nodeCategories.anchors,
     ].flatMap(x => x);
 
     const nodes = (selectNode_ids(node_idsSelection)(
