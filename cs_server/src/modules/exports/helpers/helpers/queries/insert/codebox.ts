@@ -1,4 +1,4 @@
-import { CodeboxRow } from '../../../../../node/helpers/rendering/mutate/ahtml-to-ctb/helpers/translate-ahtml/helpers/translate-object/objects/codebox';
+import { CodeboxRow } from '../../ahtml-to-ctb/helpers/translate-ahtml/helpers/translate-object/objects/codebox';
 import SQL from 'sql-template-strings';
 const insertIntoCodeBox = ({
   node_id,

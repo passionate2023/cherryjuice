@@ -2,7 +2,7 @@ import { ExportCTB } from '../export-ctb';
 import * as fs from 'fs';
 import { createTree } from './__data__/create-tree';
 import { adaptNodeStyle } from '../helpers/adapt-node-meta';
-import { ahtmlXmlSamples } from '../../../node/helpers/rendering/mutate/ahtml-to-ctb/helpers/translate-ahtml/__tests__/__data__/ahtml-xml-samples/ahtml-xml-samples';
+import { ahtmlXmlSamples } from '../helpers/ahtml-to-ctb/helpers/translate-ahtml/__tests__/__data__/ahtml-xml-samples/ahtml-xml-samples';
 import { selectNode_ids } from './__data__/select-node_ids';
 import { Node } from '../../../node/entities/node.entity';
 
@@ -67,7 +67,7 @@ describe('export-ctb - create and populate complex ctb', () => {
   it(`export document ${ahtmlXmlSamples[0][0].documentId}`, async () => {
     const nodeCategories = {
       codebox: [11, 12, 14],
-      colorful: [134, 7, 16, 17, 18, 9, 6, 2, 4, 1, 3],
+      // colorful: [134, 7, 16, 17, 18, 9, 6, 2, 4, 1, 3],
     };
     const node_idsSelection = [
       nodeCategories.colorful,

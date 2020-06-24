@@ -1,4 +1,4 @@
-import { NodeDump } from '../../../../node/helpers/rendering/mutate/ahtml-to-ctb/helpers/translate-ahtml/__tests__/__data__/ahtml-xml-samples/02';
+import { NodeDump } from '../../helpers/ahtml-to-ctb/helpers/translate-ahtml/__tests__/__data__/ahtml-xml-samples/02';
 
 const selectNode_ids = (node_ids?: number[]) => (xs: any[]): NodeDump[] =>
   xs

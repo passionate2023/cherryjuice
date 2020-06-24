@@ -1,5 +1,5 @@
 import SQL from 'sql-template-strings';
-import { aHtmlToCtb } from '../../../../../node/helpers/rendering/mutate/ahtml-to-ctb/ahtml-to-ctb';
+import { aHtmlToCtb } from '../../ahtml-to-ctb/ahtml-to-ctb';
 import { Node } from '../../../../../node/entities/node.entity';
 
 const updateNode = ({ node }: { node: Node }) => {

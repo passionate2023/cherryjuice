@@ -7,8 +7,8 @@ import { Node } from '../entities/node.entity';
 import { organizeData } from '../../document/helpers';
 import { getPNGSize } from '../helpers/ctb';
 import { parseXml } from '../helpers/xml';
-import { ctbToAHtml } from '../helpers/rendering/query/ctb-to-ahtml';
-import { AHtmlLine } from '../helpers/rendering/query/ahtml-to-html';
+import { ctbToAHtml } from '../helpers/rendering/ctb-to-ahtml';
+import { AHtmlLine } from '../helpers/rendering/ahtml-to-html';
 
 const queries = {
   read: {

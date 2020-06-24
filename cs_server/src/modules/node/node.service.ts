@@ -1,4 +1,4 @@
-import { aHtmlToHtml } from './helpers/rendering/query/ahtml-to-html';
+import { aHtmlToHtml } from './helpers/rendering/ahtml-to-html';
 import { NodeSqliteRepository } from './repositories/node.sqlite.repository';
 import { Injectable } from '@nestjs/common';
 import { Node } from './entities/node.entity';

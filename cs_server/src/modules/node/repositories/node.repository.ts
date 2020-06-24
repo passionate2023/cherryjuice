@@ -9,7 +9,7 @@ import { DeleteNodeDto } from '../dto/delete-node.dto';
 import { GetNodeByNodeIdIt } from '../dto/get-node-by-node-id.it';
 import { SaveHtmlIt } from '../dto/save-html.it';
 import { NodeMetaIt } from '../dto/node-meta.it';
-import { AHtmlLine } from '../helpers/rendering/query/ahtml-to-html';
+import { AHtmlLine } from '../helpers/rendering/ahtml-to-html';
 
 @Injectable()
 @EntityRepository(Node)

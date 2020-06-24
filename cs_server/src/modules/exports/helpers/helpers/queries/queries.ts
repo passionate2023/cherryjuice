@@ -1,5 +1,5 @@
 import { Node } from '../../../../node/entities/node.entity';
-import { aHtmlToCtb } from '../../../../node/helpers/rendering/mutate/ahtml-to-ctb/ahtml-to-ctb';
+import { aHtmlToCtb } from '../ahtml-to-ctb/ahtml-to-ctb';
 import { insertIntoNode } from './insert/node';
 import { insertIntoChildren } from './insert/children';
 import { createTables } from './create/create-tables';
