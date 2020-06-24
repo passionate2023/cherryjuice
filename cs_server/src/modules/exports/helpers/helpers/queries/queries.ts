@@ -4,6 +4,7 @@ import { insertIntoNode } from './insert/node';
 import { insertIntoChildren } from './insert/children';
 import { createTables } from './create/create-tables';
 import { insertIntoCodeBox } from './insert/codebox';
+import { insertIntoGrid } from './insert/grid';
 
 const queries = {
   createTables: createTables,
@@ -13,18 +14,26 @@ const queries = {
     const txt = ahtml
       ? preCTB.xmlString
       : '<?xml version="1.0" ?><node><rich_text></rich_text></node>';
-    const codeboxQueries = preCTB.objects['codebox'].map(insertIntoCodeBox);
+
+    const codeboxTable = preCTB.objects['codebox'].map(insertIntoCodeBox);
+    const gridTable = preCTB.objects['grid'].map(insertIntoGrid);
+    const childrenTable = insertIntoChildren({
+      node,
+      sequence,
+    });
+    const nodeTable = insertIntoNode({
+      node,
+      txt,
+      hasObjects: {
+        codebox: codeboxTable.length > 0 ? 1 : 0,
+        grid: gridTable.length > 0 ? 1 : 0,
+      },
+    });
     return [
-      insertIntoNode({
-        node,
-        txt,
-        hasObjects: { codebox: codeboxQueries.length > 0 ? 1 : 0 },
-      }),
-      insertIntoChildren({
-        node,
-        sequence,
-      }),
-      ...codeboxQueries,
+      nodeTable,
+      childrenTable,
+      ...codeboxTable,
+      ...gridTable,
     ];
   },
 };

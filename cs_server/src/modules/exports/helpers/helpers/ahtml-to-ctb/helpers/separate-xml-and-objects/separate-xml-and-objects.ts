@@ -3,12 +3,11 @@ import { objToXml } from '../../../../../../node/helpers/xml';
 import { AHtmlNode } from '../../../../../../node/helpers/rendering/ahtml-to-html';
 
 type PreCTB = { objects: any; xmlString: string };
-const separateXmlAndObjects = (node_id: number) => (
+const separateXmlAndObjects =  (
   nodes: AHtmlNode[],
 ): PreCTB => {
   const { nodes: rich_text, otherTables: objects } = extractObjects(
     nodes,
-    node_id,
   );
   return {
     xmlString: objToXml({

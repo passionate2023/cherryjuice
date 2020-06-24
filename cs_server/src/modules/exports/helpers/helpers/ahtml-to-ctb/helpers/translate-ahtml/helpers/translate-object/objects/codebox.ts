@@ -1,5 +1,4 @@
-import { AHtmlNode } from '../../../../../../../../../node/helpers/rendering/ahtml-to-html';
-import { ObjectType } from '../translate-object';
+import { AHtmlObject, CTBObject } from '../translate-object';
 
 type CodeboxRow = {
   justification: 'left';
@@ -10,13 +9,13 @@ type CodeboxRow = {
   is_width_pix: number;
   do_highl_bra: number;
   do_show_linenum: number;
+  node_id: number;
+  offset: number;
 };
 
-type TranslatedObject = { row: CodeboxRow; type: ObjectType };
-const extractCodeBox = (
-  node: AHtmlNode & { other_attributes: Record<string, string> },
-): TranslatedObject => {
+const extractCodeBox = (node: AHtmlObject, node_id: number): CTBObject => {
   const codeboxRow: CodeboxRow = {
+    node_id,
     txt: node._,
     height: +node.$.height,
     width: +node.$.width,
@@ -25,6 +24,7 @@ const extractCodeBox = (
     is_width_pix: +node.other_attributes.is_width_pix,
     syntax: node.other_attributes.syntax,
     do_show_linenum: 1,
+    offset: 0,
   };
   return {
     row: codeboxRow,
@@ -32,4 +32,4 @@ const extractCodeBox = (
   };
 };
 export { extractCodeBox };
-export { CodeboxRow, TranslatedObject };
+export { CodeboxRow };

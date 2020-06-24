@@ -1,6 +1,6 @@
 import { objToXml } from '../../../../../../../node/helpers/xml';
 import { AHtmlNode } from '../../../../../../../node/helpers/rendering/ahtml-to-html';
-import { TranslatedObject } from '../../translate-ahtml/helpers/translate-object/objects/codebox';
+import { CTBObject } from '../../translate-ahtml/helpers/translate-object/translate-object';
 
 const helpers = {
   table: ({ th, td }) => ({
@@ -48,10 +48,7 @@ const helpers = {
 //   png: 'image',
 // };
 
-const extractObjects = (
-  nodes: (AHtmlNode | TranslatedObject)[],
-  node_id: number,
-) => {
+const extractObjects = (nodes: (AHtmlNode | CTBObject)[]) => {
   const state = {
     offset: 0,
   };
@@ -60,7 +57,6 @@ const extractObjects = (
       if (val['row']) {
         acc.otherTables[val.type].push({
           ...val['row'],
-          node_id: node_id,
           offset: state.offset,
         });
         acc.nodes.push({ $: { justification: val['row'].justification } });
@@ -76,7 +72,7 @@ const extractObjects = (
       }
       return acc;
     },
-    { nodes: [], otherTables: { codebox: [] } },
+    { nodes: [], otherTables: { codebox: [], grid: [] } },
   );
 };
 

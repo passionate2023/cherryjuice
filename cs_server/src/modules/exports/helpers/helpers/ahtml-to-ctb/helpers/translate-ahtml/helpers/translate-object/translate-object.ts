@@ -1,7 +1,15 @@
 import { AHtmlNode } from '../../../../../../../../node/helpers/rendering/ahtml-to-html';
-import { extractCodeBox } from './objects/codebox';
-type ObjectType = 'codebox';
-const translateObject = ({ node }) => {
+import { CodeboxRow, extractCodeBox } from './objects/codebox';
+import { extractGrid, GridRow } from './objects/grid';
+
+type ObjectType = 'codebox' | 'grid';
+type CTBObject = { row: CodeboxRow | GridRow; type: ObjectType };
+type AHtmlObject = AHtmlNode & {
+  other_attributes: Record<string, string>;
+  table?: { td: string[][]; th: string[] };
+};
+
+const translateObject = ({ node, node_id }) => {
   const newNode: AHtmlNode = {};
   if (node.type === 'png') {
     newNode['type'] = 'png';
@@ -15,22 +23,12 @@ const translateObject = ({ node }) => {
     };
   }
   if (node.type === 'table') {
-    newNode['type'] = 'table';
-    newNode['$'] = {
-      justification: 'left',
-    };
-    newNode['other_attributes'] = {
-      ...node.other_attributes,
-    };
-    newNode['table'] = {
-      th: node.thead.split('\n')[0].split('\t'),
-      td: node.tbody.split('\n').map(line => line.split('\t')),
-    };
+    return extractGrid(node, node_id);
   } else if (node.type === 'code') {
-    return extractCodeBox(node);
+    return extractCodeBox(node, node_id);
   }
   return newNode;
 };
 
 export { translateObject };
-export { ObjectType };
+export { ObjectType, CTBObject, AHtmlObject };
