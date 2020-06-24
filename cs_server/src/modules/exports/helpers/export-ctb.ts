@@ -1,14 +1,13 @@
 import * as sqlite from 'sqlite';
 import * as fs from 'fs';
 import { Node } from '../../node/entities/node.entity';
-import { queries } from './helpers/queries';
+import { queries } from './helpers/queries/queries';
 import sqlite3 from 'sqlite3';
 
 const exportsFolder = '/.cs/exports';
-type Options = {
+type DebugOptions = {
   addSuffixToDocumentName?: boolean;
   verbose?: boolean;
-  updateNodeIfExists?: boolean;
 };
 
 class ExportCTB {
@@ -16,16 +15,16 @@ class ExportCTB {
   private readonly documentFolder;
   private readonly documentPath;
   private readonly documentName;
-  private readonly options: Options;
+  private readonly debugOptions: DebugOptions;
   constructor(
     documentName: string,
     private readonly userId: string,
-    options: Options = {},
+    debugOptions: DebugOptions = {},
   ) {
-    this.options = options;
+    this.debugOptions = debugOptions;
     this.documentFolder = `${exportsFolder}/user-${userId}`;
     this.documentName = `${documentName}${
-      options.addSuffixToDocumentName ? `-${new Date().getTime()}` : ''
+      debugOptions.addSuffixToDocumentName ? `-${new Date().getTime()}` : ''
     }.ctb`;
     this.documentPath = `${this.documentFolder}/${this.documentName}`;
   }
@@ -46,7 +45,7 @@ class ExportCTB {
       fs.mkdirSync(this.documentFolder);
     }
     this.db = await sqlite.open(this.getDocumentPath);
-    if (this.options.verbose) {
+    if (this.debugOptions.verbose) {
       sqlite3.verbose();
       // eslint-disable-next-line no-console
       this.db.on('trace', console.log);
@@ -55,13 +54,13 @@ class ExportCTB {
   };
 
   createTables = async (): Promise<void> => {
-    await this.db.exec(queries.createTables);
+    await this.db.exec(queries.createTables());
   };
   closeCtb = async (): Promise<void> => {
     await this.db.close();
   };
 
-  private writeNodeMeta = (nodesMap: Map<number, Node>) => async (
+  private writeNode = (nodesMap: Map<number, Node>) => async (
     node_id: number,
   ): Promise<void> => {
     const node = nodesMap.get(node_id);
@@ -74,24 +73,18 @@ class ExportCTB {
         }
 
         try {
-          for (const statement of queries.insertNodeTableAndChildrenTable({
+          for (const statement of queries.insertNode({
             node: childNode,
             sequence: i + 1,
           })) {
             await this.db.run(statement);
           }
         } catch (e) {
-          if (this.options.updateNodeIfExists) {
-            for (const statement of queries.updateText(childNode)) {
-              await this.db.run(statement);
-            }
-          } else {
-            // eslint-disable-next-line no-console
-            console.log(`node: [${JSON.stringify(node)}]`);
-            throw e;
-          }
+          // eslint-disable-next-line no-console
+          console.log(`node: [${JSON.stringify(node)}]`);
+          throw e;
         }
-        await this.writeNodeMeta(nodesMap)(childNode.node_id);
+        await this.writeNode(nodesMap)(childNode.node_id);
       }
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -100,9 +93,9 @@ class ExportCTB {
     }
   };
 
-  writeNodesMeta = async (nodes: Node[]): Promise<void> => {
+  writeNodes = async (nodes: Node[]): Promise<void> => {
     const nodesMap = new Map(nodes.map(node => [node.node_id, node]));
-    await this.writeNodeMeta(nodesMap)(0);
+    await this.writeNode(nodesMap)(0);
   };
 }
 

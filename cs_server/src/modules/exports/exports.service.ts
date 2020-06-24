@@ -24,7 +24,7 @@ export class ExportsService {
     const exportCTB = new ExportCTB(document.name, user.id);
     await exportCTB.createCtb();
     await exportCTB.createTables();
-    await exportCTB.writeNodesMeta(nodes);
+    await exportCTB.writeNodes(nodes);
     await exportCTB.closeCtb();
     return exportCTB.getDocumentName;
   };

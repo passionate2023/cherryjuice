@@ -1,4 +1,6 @@
 import { objToXml } from '../../../../../../xml';
+import { AHtmlNode } from '../../../../../query/ahtml-to-html';
+import { TranslatedObject } from '../../translate-ahtml/helpers/translate-object/objects/codebox';
 
 const helpers = {
   table: ({ th, td }) => ({
@@ -40,23 +42,43 @@ const helpers = {
     return res;
   },
 };
-const nodeType_nodeTableName = {
-  code: 'codebox',
-  table: 'grid',
-  png: 'image',
-};
-const extractObjects = nodes =>
-  nodes.reduce(
+// const nodeType_nodeTableName = {
+//   code: 'codebox',
+//   table: 'grid',
+//   png: 'image',
+// };
+
+
+const extractObjects = (
+  nodes: (AHtmlNode | TranslatedObject)[],
+  node_id: number,
+) => {
+  const state = {
+    offset: 0,
+  };
+  return nodes.reduce(
     (acc, val) => {
-      if (val.type) {
-        val.type = nodeType_nodeTableName[val.type];
-        if (!acc.otherTables[val.type]) acc.otherTables[val.type] = [];
-        acc.otherTables[val.type].push(helpers.flattenNode({ node: val }));
-        acc.nodes.push({ $: { justification: val.$.justification } });
-      } else acc.nodes.push(val);
+      if (val['row']) {
+        acc.otherTables[val.type].push({
+          ...val['row'],
+          node_id: node_id,
+          offset: state.offset,
+        });
+        acc.nodes.push({ $: { justification: val['row'].justification } });
+        state.offset += 1;
+      } else {
+        acc.nodes.push(val);
+        state.offset +=
+          typeof val === 'string'
+            ? (val as string).length
+            : val._
+            ? val._.length
+            : 0;
+      }
       return acc;
     },
-    { nodes: [], otherTables: {} },
+    { nodes: [], otherTables: { codebox: [] } },
   );
+};
 
 export { extractObjects };

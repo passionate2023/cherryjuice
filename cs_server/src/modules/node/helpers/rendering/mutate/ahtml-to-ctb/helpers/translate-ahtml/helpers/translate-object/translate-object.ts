@@ -1,5 +1,6 @@
 import { AHtmlNode } from '../../../../../../query/ahtml-to-html';
-
+import { extractCodeBox } from './objects/codebox';
+type ObjectType = 'codebox';
 const translateObject = ({ node }) => {
   const newNode: AHtmlNode = {};
   if (node.type === 'png') {
@@ -26,18 +27,10 @@ const translateObject = ({ node }) => {
       td: node.tbody.split('\n').map(line => line.split('\t')),
     };
   } else if (node.type === 'code') {
-    newNode['type'] = 'code';
-    newNode['$'] = {
-      justification: 'left',
-      height: +node.$['min-height'].match(/\d+/)[0],
-      width: +node.$['width'].match(/\d+/)[0],
-    };
-    newNode['other_attributes'] = {
-      ...node.other_attributes,
-    };
-    newNode['_'] = node._;
+    return extractCodeBox(node);
   }
   return newNode;
 };
 
 export { translateObject };
+export { ObjectType };

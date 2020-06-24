@@ -27,7 +27,7 @@ describe('export-ctb - create and populate basic ctb', () => {
   });
   it('should write node meta to node and children tables', async () => {
     const { rootNode, nodes } = createTree();
-    await state.exportCtb.writeNodesMeta([rootNode, ...nodes]);
+    await state.exportCtb.writeNodes([rootNode, ...nodes]);
     const writtenNodes = await state.exportCtb.getDb.all(
       'select n.node_id, n.is_ro, n.is_richtxt, c.node_id as cnode_id from node as n INNER JOIN children as c on n.node_id = c.node_id',
     );
@@ -46,26 +46,37 @@ describe('export-ctb - create and populate basic ctb', () => {
 describe('export-ctb - create and populate complex ctb', () => {
   const state: { exportCtb: ExportCTB; documentExists?: boolean } = {
     exportCtb: undefined,
-    documentExists: false,
   };
   beforeAll(async () => {
     state.exportCtb = new ExportCTB('monday-14', '12345', {
       verbose: true,
       addSuffixToDocumentName: false,
-      updateNodeIfExists: true,
     });
     try {
       await state.exportCtb.createCtb();
       await state.exportCtb.createTables();
     } catch (e) {
-      state.documentExists = true;
+      await state.exportCtb.getDb.exec(
+        ['node', 'codebox', 'children']
+          .map(table => `delete from "main"."${table}"`)
+          .join(';'),
+      );
     }
   });
 
   it(`export document ${ahtmlXmlSamples[0][0].documentId}`, async () => {
-    const nodes = (selectNode_ids([134, 7, 16, 17, 18, 9, 6, 2, 4, 1, 3])(
+    const nodeCategories = {
+      codebox: [11, 12, 14],
+      colorful: [134, 7, 16, 17, 18, 9, 6, 2, 4, 1, 3],
+    };
+    const node_idsSelection = [
+      nodeCategories.colorful,
+      nodeCategories.codebox,
+    ].flatMap(x => x);
+
+    const nodes = (selectNode_ids(node_idsSelection)(
       ahtmlXmlSamples[0],
     ) as unknown) as Node[];
-    await state.exportCtb.writeNodesMeta(nodes);
+    await state.exportCtb.writeNodes(nodes);
   });
 });
