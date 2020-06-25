@@ -38,7 +38,7 @@ describe('export-ctb - create and populate basic ctb', () => {
 describe('export-ctb - create and populate complex ctb', () => {
   const state: { exportCtb: ExportCTB } = { exportCtb: undefined };
   beforeAll(async () => {
-    state.exportCtb = await createCTB('complex ctb', '12345', {
+    state.exportCtb = await createCTB('complex', '12345', {
       verbose: false,
     });
   });
@@ -51,13 +51,22 @@ describe('export-ctb - create and populate complex ctb', () => {
       anchors: [2],
       links: [9],
       images: [133],
+      justification: [38],
     };
     // eslint-disable-next-line no-unused-vars
-    const node_idsSelection = [nodeCategories.links].flatMap(x => x);
+    let node_idsSelection: number[];
+    // eslint-disable-next-line prefer-const
+    node_idsSelection = [nodeCategories.justification].flatMap(x => x);
 
     const { nodes, rootNode } = selectNode_ids(node_idsSelection)(
       ahtmlXmlSamples[0],
     );
+    if (node_idsSelection?.length) {
+      rootNode.child_nodes = node_idsSelection as any;
+      nodes.forEach(node => {
+        node.father_id = rootNode.node_id;
+      });
+    }
     const imagesPerNode = await state.exportCtb.writeAHtmls(([
       ...nodes,
       rootNode,

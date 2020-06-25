@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { Element, stringifyStyles } from './element';
 import { objects } from './objects/objects';
+import { AHtmlObject } from '../../../../exports/helpers/helpers/ahtml-to-ctb/helpers/translate-ahtml/helpers/translate-object/translate-object';
 
 type AHtmlNodeAttributes = Record<string, string | number>;
 type AHtmlNode = {
@@ -10,7 +11,7 @@ type AHtmlNode = {
   tags?: any[];
 };
 type AHtmlLineAttributes = Record<string, any>;
-type AHtmlLine = [AHtmlNode[], AHtmlLineAttributes];
+type AHtmlLine = [(AHtmlObject | AHtmlNode)[], AHtmlLineAttributes];
 const aHtmlToHtml = (ahtml: AHtmlLine[]) => {
   let res = '<span class="rich-text__line"></span>';
   if (ahtml.length)

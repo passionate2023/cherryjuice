@@ -1,5 +1,6 @@
 import { translateColor } from './helpers/translate-color';
 import { translateLink } from './helpers/translate-link';
+import { AHtmlNode } from '../../../../../../../../node/helpers/rendering/ahtml-to-html';
 
 const createTranslator = (styles: { [key: string]: string | number }) => {
   return {
@@ -40,11 +41,22 @@ const ignoredArtificialStyles = {
   'min-height': true,
   display: true,
 };
+type CTJustification = 'left' | 'end' | 'center' | 'justify';
 const tagsToIgnore = new Set<string>(['span']);
-const translateNode = ({ node }) => {
+type LineStyle = { 'text-align'?: CTJustification };
+const translateNode = ({
+  node,
+  justification,
+}: {
+  node: AHtmlNode;
+  justification: CTJustification;
+}) => {
   const attributes = {};
   const translator = createTranslator(attributes);
 
+  if (justification !== 'left') {
+    attributes['justification'] = justification;
+  }
   node.tags.forEach(([tagName, attributes]) => {
     if (attributes?.style)
       Object.entries(attributes.style).forEach(([key, value]) => {
@@ -78,3 +90,4 @@ const translateNode = ({ node }) => {
 };
 
 export { translateNode };
+export { LineStyle, CTJustification };

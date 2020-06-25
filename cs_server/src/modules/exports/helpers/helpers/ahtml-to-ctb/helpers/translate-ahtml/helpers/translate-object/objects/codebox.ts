@@ -1,7 +1,8 @@
 import { AHtmlObject, CTBObject } from '../translate-object';
+import { CTJustification } from '../../translate-node/translate-node';
 
 type CodeboxRow = {
-  justification: 'left';
+  justification: CTJustification;
   txt: string;
   syntax: string;
   width: number;
@@ -13,13 +14,17 @@ type CodeboxRow = {
   offset: number;
 };
 
-const extractCodeBox = (node: AHtmlObject, node_id: number): CTBObject => {
+const extractCodeBox = (
+  node: AHtmlObject,
+  node_id: number,
+  justification: CTJustification,
+): CTBObject => {
   const codeboxRow: CodeboxRow = {
     node_id,
     txt: node._,
     height: +node.$.height,
     width: +node.$.width,
-    justification: 'left',
+    justification,
     do_highl_bra: +node.other_attributes.do_highl_bra,
     is_width_pix: +node.other_attributes.is_width_pix,
     syntax: node.other_attributes.syntax,

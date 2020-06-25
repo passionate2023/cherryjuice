@@ -12,6 +12,12 @@ const justificationMap = {
     fill: 'justify',
   },
 };
+const reverseJustificationMap = {
+  'text-align': Object.fromEntries(
+    // @ts-ignore
+    Object.entries(justificationMap['text-align']).map(kv => kv.reverse()),
+  ),
+};
 const createTranslatedNode = (lineStyles: { [key: string]: string }) => {
   const tags: [string, Record<string, any>][] = [];
   const styles: { [key: string]: string } = {};
@@ -100,4 +106,5 @@ export {
   translateAttributesToHtmlAndCss,
   preferences as cssPreferences,
   utils as xmlAttributesToCssUtils,
+  reverseJustificationMap,
 };

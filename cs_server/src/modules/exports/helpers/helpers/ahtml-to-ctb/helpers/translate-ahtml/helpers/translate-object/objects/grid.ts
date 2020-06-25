@@ -1,18 +1,23 @@
 import { AHtmlObject, CTBObject } from '../translate-object';
+import { CTJustification } from '../../translate-node/translate-node';
 
 type GridRow = {
   node_id: number;
   offset: number;
-  justification: 'left';
+  justification: CTJustification;
   txt: string;
   col_min: number;
   col_max: number;
 };
 
-const extractGrid = (node: AHtmlObject, node_id: number): CTBObject => {
+const extractGrid = (
+  node: AHtmlObject,
+  node_id: number,
+  justification: CTJustification,
+): CTBObject => {
   const row: GridRow = {
     node_id,
-    justification: 'left',
+    justification,
     offset: 0,
     txt: `<table>${[...node.table.td, node.table.th]
       .map(

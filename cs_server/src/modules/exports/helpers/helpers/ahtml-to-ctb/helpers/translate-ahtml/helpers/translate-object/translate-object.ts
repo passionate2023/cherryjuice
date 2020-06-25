@@ -2,8 +2,9 @@ import { AHtmlNode } from '../../../../../../../../node/helpers/rendering/ahtml-
 import { CodeboxRow, extractCodeBox } from './objects/codebox';
 import { extractGrid, GridRow } from './objects/grid';
 import { AnchorRow, extractAnchor } from './objects/anchor';
-import { extractImage,  UnloadedImageRow } from './objects/image';
+import { extractImage, UnloadedImageRow } from './objects/image';
 import { LinkAttributes } from '../../../../../../../../node/helpers/rendering/ahtml-to-html/helpers/ctb';
+import { CTJustification } from '../translate-node/translate-node';
 
 type ObjectType = 'codebox' | 'grid' | 'anchor' | 'image';
 type CTBObject = {
@@ -16,15 +17,23 @@ type AHtmlObject = AHtmlNode & {
   table?: { td: string[][]; th: string[] };
 };
 
-const translateObject = ({ node, node_id }) => {
+const translateObject = ({
+  node,
+  node_id,
+  justification,
+}: {
+  node: AHtmlObject;
+  node_id: number;
+  justification: CTJustification;
+}) => {
   if (node.type === 'png') {
-    return extractImage(node, node_id);
+    return extractImage(node, node_id, justification);
   } else if (node.type === 'table') {
-    return extractGrid(node, node_id);
+    return extractGrid(node, node_id, justification);
   } else if (node.type === 'anchor') {
-    return extractAnchor(node, node_id);
+    return extractAnchor(node, node_id, justification);
   } else if (node.type === 'code') {
-    return extractCodeBox(node, node_id);
+    return extractCodeBox(node, node_id, justification);
   }
 };
 
