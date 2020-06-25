@@ -1,9 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { UnloadedImageRow } from '../../../helpers/ahtml-to-ctb/helpers/translate-ahtml/helpers/translate-object/objects/image';
+import { GetNodeImages } from '../../../export-ctb';
 
 type LoadedImages = Map<string, Buffer>;
-const getLoadedImages = async (
+const getLoadedImages: GetNodeImages = async (
+  nodeId: string,
   imageRows: UnloadedImageRow[],
 ): Promise<LoadedImages> =>
   new Map(

@@ -2198,10 +2198,10 @@ const nodes = [
     hash: '485f68cc3fbb9c5e744d9f0da86aaf54de3ebe75',
   },
 ];
-type NodeDump = typeof nodes[0] & {
+type NodeFromPG = typeof nodes[0] & {
   createdAt: Date;
   updatedAt: Date;
   child_nodes: number[];
 };
 export { nodes as s02 };
-export { NodeDump };
+export { NodeFromPG };

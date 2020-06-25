@@ -1,9 +1,9 @@
 import { translateAHtml } from '../translate-ahtml';
 import { ahtmlXmlSamples } from './__data__/ahtml-xml-samples/ahtml-xml-samples';
-import { NodeDump } from './__data__/ahtml-xml-samples/02';
+import { NodeFromPG } from './__data__/ahtml-xml-samples/02';
 import { selectNode_ids } from '../../../../../__tests__/__data__/select-node_ids';
 
-const testTemplate = ({ nodes }: { nodes: NodeDump[] }) => {
+const testTemplate = ({ nodes }: { nodes: NodeFromPG[] }) => {
   nodes.forEach(node => {
     const res = translateAHtml(JSON.parse(node.ahtml));
     // eslint-disable-next-line no-console

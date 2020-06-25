@@ -7,7 +7,7 @@ const extractObjects = (nodes: (AHtmlNode | CTBObject)[]) => {
   };
   return nodes.reduce(
     (acc, val) => {
-      if (val['row']) {
+      if (typeof val === 'object' && 'row' in val) {
         acc.otherTables[val.type].push({
           ...val['row'],
           offset: state.offset,

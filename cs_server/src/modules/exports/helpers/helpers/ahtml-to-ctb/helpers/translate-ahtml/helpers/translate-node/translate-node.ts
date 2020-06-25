@@ -11,8 +11,13 @@ const utils = {
   adaptColor: color => (utils.isHex(color) ? color : utils.rgbToHex(color)),
   translateLink: {
     node: href => {
-      const [, id, value] = href.match(/(\d+)#(.+)$/);
-      return `node ${id} ${value}`;
+      if (/(\d+)#(.+)$/.test(href)) {
+        const [, id, value] = href.match(/(\d+)#(.+)$/);
+        return `node ${id} ${value}`;
+      } else if (/\d+/.test(href)) {
+        const [, id] = href.match(/(\d+)$/);
+        return `node ${id}`;
+      }
     },
     web: href => {
       return `webs ${href}`;

@@ -143,4 +143,4 @@ class ExportCTB {
 }
 type ImagesMap = Map<string, UnloadedImageRow[]>;
 export { ExportCTB };
-export { GetNodeImages };
+export { GetNodeImages, DebugOptions };
