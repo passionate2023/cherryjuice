@@ -1,4 +1,5 @@
 import { AHtmlObject, CTBObject } from '../translate-object';
+import { translateLink } from '../../translate-node/helpers/translate-link';
 
 type ImageRow = {
   node_id: number;
@@ -16,6 +17,9 @@ const extractImage = (node: AHtmlObject, node_id: number): CTBObject => {
     justification: 'left',
     offset: 0,
     png: { id: node.other_attributes.id },
+    ...('linkAttributes' in node && {
+      link: translateLink(node.linkAttributes),
+    }),
   };
   return {
     row,

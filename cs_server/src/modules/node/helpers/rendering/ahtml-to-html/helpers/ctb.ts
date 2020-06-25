@@ -1,6 +1,12 @@
 import path from 'path';
+type LinkAttributes = {
+  href: string;
+  target: string;
+  'data-type': string;
+  class: string;
+};
 const parseLink = c => {
-  const attributes = {
+  const attributes: LinkAttributes = {
     href: '',
     target: '_blank',
     'data-type': '',
@@ -34,3 +40,4 @@ const parseLink = c => {
 };
 
 export { parseLink };
+export { LinkAttributes };

@@ -1,58 +1,25 @@
-import path from 'path';
-
-const utils = {
-  rgbToHex: color =>
-    '#' +
-    Array.from(color.matchAll(/\d+/g))
-      .map(arr => +arr[0])
-      .map(d => `${d.toString(16)}`.padStart(2, '0'))
-      .join(''),
-  isHex: color => color.startsWith('#'),
-  adaptColor: color => (utils.isHex(color) ? color : utils.rgbToHex(color)),
-  translateLink: {
-    node: href => {
-      if (/(\d+)#(.+)$/.test(href)) {
-        const [, id, value] = href.match(/(\d+)#(.+)$/);
-        return `node ${id} ${value}`;
-      } else if (/\d+/.test(href)) {
-        const [, id] = href.match(/(\d+)$/);
-        return `node ${id}`;
-      }
-    },
-    web: href => {
-      return `webs ${href}`;
-    },
-    folder: href => {
-      const [, value] = href.match(/file:\/\/\/(.+$)/);
-      const encryptedValue = new Buffer(path.resolve(value)).toString('base64');
-      return `fold ${encryptedValue}`;
-    },
-    file: href => {
-      const [, value] = href.match(/file:\/\/\/(.+$)/);
-      const encryptedValue = new Buffer(path.resolve(value)).toString('base64');
-      return `file ${encryptedValue}`;
-    },
-  },
-};
+import { translateColor } from './helpers/translate-color';
+import { translateLink } from './helpers/translate-link';
 
 const createTranslator = (styles: { [key: string]: string | number }) => {
   return {
     styles: {
-      color: c => (styles['foreground'] = utils.adaptColor(c)),
-      ['background-color']: c => (styles['background'] = utils.adaptColor(c)),
-      ['text-decoration']: c =>
-        c === 'underline'
-          ? (styles['underline'] = 'single')
-          : c === 'line-through'
-          ? (styles['strikethrough'] = 'true')
-          : undefined,
+      color: c => (styles['foreground'] = translateColor(c)),
+      ['background-color']: c => (styles['background'] = translateColor(c)),
+      ['text-decoration']: c => {
+        c.split(' ').forEach(c => {
+          if (c === 'underline') {
+            styles['underline'] = 'single';
+          } else if (c === 'line-through') {
+            styles['strikethrough'] = 'true';
+          }
+        });
+      },
       width: c => (styles['width'] = +c.match(/\d+/)[0]),
       height: c => (styles['height'] = +c.match(/\d+/)[0]),
     },
     tags: {
       strong: () => (styles['weight'] = 'heavy'),
-      // b: () => (styles['weight'] = 'heavy'),
-      // br: () => undefined,
       em: () => (styles['style'] = 'italic'),
       code: () => (styles['family'] = 'monospace'),
       ...[
@@ -63,15 +30,8 @@ const createTranslator = (styles: { [key: string]: string | number }) => {
         {},
       ),
       a: attributes => {
-        const type = attributes['data-type'];
-        const href = attributes.href;
-        styles['link'] = utils.translateLink[type](href);
+        styles['link'] = translateLink(attributes);
       },
-    },
-    otherTables: {
-      img: () => undefined,
-      table: () => undefined,
-      code: () => undefined,
     },
   };
 };

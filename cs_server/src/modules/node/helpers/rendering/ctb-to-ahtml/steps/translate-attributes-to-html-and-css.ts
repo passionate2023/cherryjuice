@@ -70,6 +70,11 @@ const translateAttributesToHtmlAndCss = xml =>
           });
           if (node.type) {
             node.style = translator.styles;
+            if (node.$?.link) {
+              node.linkAttributes = translator.tags.find(
+                ([tagName]) => tagName === 'a',
+              )[1];
+            }
           } else {
             node.tags = translator.tags;
             if (node.tags.length) {

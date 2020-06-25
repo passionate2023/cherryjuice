@@ -6,11 +6,14 @@ const insertIntoImage = ({
   justification,
   offset,
   png,
+  link,
 }: LoadedImageRow) =>
   SQL`
 INSERT INTO "main"."image" 
 ("node_id", "offset", "justification", "anchor", "png", "filename", "link") 
 VALUES 
-(${node_id}, ${offset}, ${justification}, '', ${png.buffer}, '', '');`;
+(${node_id}, ${offset}, ${justification}, '', ${png.buffer}, '', ${String(
+    link || '',
+  )});`;
 
 export { insertIntoImage };

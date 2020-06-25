@@ -1,4 +1,5 @@
-import { parseLink } from '../../helpers/ctb';
+import { LinkAttributes } from '../../helpers/ctb';
+
 type Props = {
   style: {
     'text-align': string;
@@ -11,12 +12,15 @@ type Props = {
     is_width_pix: number;
     do_highl_bra: number;
     o_show_linenum: number;
-    link?: string;
     id?: string;
   };
+  linkAttributes?: LinkAttributes;
 };
-const addImageLinkProperties = (link: string) => {
-  const { 'data-type': dataType, href, target } = parseLink(link);
+const addImageLinkProperties = ({
+  'data-type': dataType,
+  href,
+  target,
+}: LinkAttributes) => {
   return [
     'class="rich-text__image rich-text__image--link rich-text__image--link-' +
       dataType +
@@ -25,19 +29,21 @@ const addImageLinkProperties = (link: string) => {
     `data-type="${dataType}"`,
     `data-href="${href}"`,
     `data-target="${target}"`,
-    `data-link="${encodeURIComponent(link)}"`,
   ].join(' ');
 };
 
 const Png = ({
   style: { width, height },
-  other_attributes: { link, id },
+  other_attributes: { id },
+  linkAttributes,
 }: Props) => {
   return `<img src=""
         alt=""
         style="width:${width}; height:${height};"
         ${
-          link ? ` ${addImageLinkProperties(link)}` : 'class="rich-text__image"'
+          linkAttributes
+            ? ` ${addImageLinkProperties(linkAttributes)}`
+            : 'class="rich-text__image"'
         }${id ? ` data-id="${id}"` : ''}
       />`;
 };

@@ -39,10 +39,10 @@ const adjustNode = ({ node, type }) => {
               justification: node.justification,
               height: node.height,
               width: node.width,
+              ...(node.link && { link: node.link }),
             },
             other_attributes: {
               offset: node.offset,
-              ...(node.link && { link: node.link }),
               ...(node.id && { id: node.id }),
             },
           };

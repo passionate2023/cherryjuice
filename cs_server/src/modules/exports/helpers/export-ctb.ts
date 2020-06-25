@@ -34,7 +34,9 @@ class ExportCTB {
     this.debugOptions = debugOptions;
     this.documentFolder = `${exportsFolder}/user-${userId}`;
     this.documentName = `${documentName}${
-      debugOptions.addSuffixToDocumentName ? `-${new Date().getTime()}` : ''
+      debugOptions.addSuffixToDocumentName
+        ? ` - ${new Date().toUTCString()}`
+        : ''
     }.ctb`;
     this.documentPath = `${this.documentFolder}/${this.documentName}`;
   }

@@ -3,6 +3,7 @@ import { CodeboxRow, extractCodeBox } from './objects/codebox';
 import { extractGrid, GridRow } from './objects/grid';
 import { AnchorRow, extractAnchor } from './objects/anchor';
 import { extractImage,  UnloadedImageRow } from './objects/image';
+import { LinkAttributes } from '../../../../../../../../node/helpers/rendering/ahtml-to-html/helpers/ctb';
 
 type ObjectType = 'codebox' | 'grid' | 'anchor' | 'image';
 type CTBObject = {
@@ -11,6 +12,7 @@ type CTBObject = {
 };
 type AHtmlObject = AHtmlNode & {
   other_attributes: Record<string, string>;
+  linkAttributes?: LinkAttributes;
   table?: { td: string[][]; th: string[] };
 };
 
