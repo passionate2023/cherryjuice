@@ -1,6 +1,10 @@
 import { ExportCTB } from '../../export-ctb';
 
-const createCTB = async (documentName, userId, debugOptions = {}): Promise<ExportCTB> => {
+const createCTB = async (
+  documentName,
+  userId,
+  debugOptions = {},
+): Promise<ExportCTB> => {
   const exportCtb = new ExportCTB(documentName, userId, debugOptions);
   try {
     await exportCtb.createCtb();

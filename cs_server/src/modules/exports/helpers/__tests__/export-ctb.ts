@@ -46,21 +46,23 @@ describe('export-ctb - create and populate complex ctb', () => {
   it(`export document ${ahtmlXmlSamples[0][0].documentId}`, async () => {
     const nodeCategories = {
       codebox: [11, 12, 14],
-      colorful: [134, 7, 16, 17, 18, 9, 6, 4, 1, 3],
+      colorful: [134, 7, 16, 17, 18, 9],
       table: [42],
       anchors: [2],
       images: [133],
     };
     // eslint-disable-next-line no-unused-vars
     const node_idsSelection = [
-      // nodeCategories.colorful,
+      nodeCategories.colorful,
       // nodeCategories.codebox,
       // nodeCategories.table,
       // nodeCategories.anchors,
-      nodeCategories.images,
+      // nodeCategories.images,
     ].flatMap(x => x);
 
-    const { nodes, rootNode } = selectNode_ids()(ahtmlXmlSamples[0]);
+    const { nodes, rootNode } = selectNode_ids(node_idsSelection)(
+      ahtmlXmlSamples[0],
+    );
     const imagesPerNode = await state.exportCtb.writeAHtmls(([
       ...nodes,
       rootNode,
