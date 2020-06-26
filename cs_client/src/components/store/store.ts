@@ -11,6 +11,7 @@ import { nodeActionCreators } from './ducks/node';
 import { createEpicMiddleware } from 'redux-observable';
 import { editorActionCreators } from './ducks/editor';
 import { documentsListActionCreators } from './ducks/documents-list';
+import { documentOperationsActionCreators } from './ducks/document-operations';
 
 type Store = ReturnType<typeof reducer>;
 
@@ -28,6 +29,7 @@ const ac = {
     node: nodeActionCreators,
     editor: editorActionCreators,
     documentsList: documentsListActionCreators,
+    documentOperations: documentOperationsActionCreators,
   },
   document: bindActionCreators(documentActionCreators, store.dispatch),
   dialogs: bindActionCreators(dialogsActionCreators, store.dispatch),
@@ -35,6 +37,10 @@ const ac = {
   editor: bindActionCreators(editorActionCreators, store.dispatch),
   documentsList: bindActionCreators(
     documentsListActionCreators,
+    store.dispatch,
+  ),
+  documentOperations: bindActionCreators(
+    documentOperationsActionCreators,
     store.dispatch,
   ),
 };

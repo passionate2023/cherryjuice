@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import {
   AuthUser,
-  DS,
+  DOCUMENT_SUBSCRIPTIONS as DS,
   Image,
   Secrets,
 } from '::types/graphql/generated';
@@ -96,12 +96,11 @@ const QUERY_DOCUMENTS = {
           id
           status
           name
+          hash
         }
       }
     `,
-    path: (
-      data,
-    ): { id: string; status: DS; name: string }[] =>
+    path: (data): { id: string; status: DS; name: string; hash: string }[] =>
       data?.document || [],
   },
 };

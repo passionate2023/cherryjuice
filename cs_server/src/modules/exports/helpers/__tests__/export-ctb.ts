@@ -40,6 +40,7 @@ describe('export-ctb - create and populate complex ctb', () => {
   beforeAll(async () => {
     state.exportCtb = await createCTB('complex', '12345', {
       verbose: false,
+      dontAddSuffixToDocumentName: true,
     });
   });
 

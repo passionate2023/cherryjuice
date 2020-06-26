@@ -26,8 +26,12 @@ import { DocumentSubscriptionsService } from './document.subscriptions.service';
     DocumentSubscriptionsResolver,
     DocumentService,
     DocumentSqliteRepository,
-    DocumentSubscriptionsService
+    DocumentSubscriptionsService,
   ],
-  exports: [DocumentSqliteRepository, DocumentService, DocumentSubscriptionsService],
+  exports: [
+    DocumentSqliteRepository,
+    DocumentService,
+    DocumentSubscriptionsService,
+  ],
 })
 export class DocumentModule {}

@@ -1,8 +1,10 @@
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { QUERY_DOCUMENTS } from '::graphql/queries';
 import { useEffect } from 'react';
+import { getOperationCategory } from './get-active-operations';
+import { ac } from '::root/store/store';
 
-const useGetPreviousOperations = ({ activeImports, setActiveImports }) => {
+const useGetPreviousOperations = () => {
   useEffect(() => {
     apolloCache.client
       .query({
@@ -10,21 +12,21 @@ const useGetPreviousOperations = ({ activeImports, setActiveImports }) => {
         fetchPolicy: 'network-only',
       })
       .then(data => {
-        const activeOperations = data
+        const { exports, imports } = data
           .filter(({ status }) => status)
-          .map(({ id, status, name }) => [
-            id,
-            {
-              documentId: id,
-              documentName: name,
-              eventType: status,
+          .reduce(
+            (acc, document) => {
+              const category = getOperationCategory(document);
+              acc[category].push(document);
+              return acc;
             },
-          ]);
-        if (activeOperations.length)
-          setActiveImports({
-            ...Object.fromEntries(activeOperations),
-            ...activeImports,
-          });
+            {
+              imports: [],
+              exports: [],
+            },
+          );
+        ac.documentOperations.addImports(imports);
+        ac.documentOperations.addExports(exports);
       });
   }, []);
 };

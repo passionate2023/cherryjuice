@@ -8,6 +8,13 @@ export enum DOCUMENT_SUBSCRIPTIONS {
   IMPORT_FAILED = 'IMPORT_FAILED',
   IMPORT_DUPLICATE = 'IMPORT_DUPLICATE',
   DELETED = 'DELETED',
+
+  EXPORT_PENDING = 'EXPORT_PENDING',
+  EXPORT_PREPARING = 'EXPORT_PREPARING',
+  EXPORT_NODES_STARTED = 'EXPORT_NODES_STARTED',
+  EXPORT_IMAGES_STARTED = 'EXPORT_IMAGES_STARTED',
+  EXPORT_FINISHED = 'EXPORT_FINISHED',
+  EXPORT_FAILED = 'EXPORT_FAILED',
 }
 registerEnumType(DOCUMENT_SUBSCRIPTIONS, {
   name: 'DOCUMENT_SUBSCRIPTIONS',
@@ -18,11 +25,14 @@ export class DocumentSubscription {
   userId: string;
 
   @Field(() => DOCUMENT_SUBSCRIPTIONS)
-  eventType: DOCUMENT_SUBSCRIPTIONS;
+  status: DOCUMENT_SUBSCRIPTIONS;
 
   @Field(() => ID)
-  documentId: string;
+  id: string;
 
   @Field(() => ID)
-  documentName: string;
+  name: string;
+
+  @Field(() => ID)
+  hash: string;
 }

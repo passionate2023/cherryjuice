@@ -1,43 +1,34 @@
 import { modDocumentOperations } from '::sass-modules/index';
 import * as React from 'react';
-import { useCallback, useMemo, useState } from 'react';
-import { Header } from './components/header';
-import { Document } from './components/document/document';
-import { DocumentSubscription } from '::types/graphql/generated';
-import { mapDocuments } from './helpers/map-documents';
-import { clearUnfinishedImports } from './helpers/clear-funfinished-imports';
+import { useState } from 'react';
+import { Header } from './components/header/header';
+import { Body } from './components/body/body';
 import { useGetActiveOperations } from './hooks/get-active-operations';
 import { useGetPreviousOperations } from './hooks/get-previous-operations';
+import { connect, ConnectedProps } from 'react-redux';
+
+import { Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({
+  imports: Object.values(state.documentOperations.imports),
+  exports: Object.values(state.documentOperations.exports),
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
-type ActiveOperations = {
-  [id: string]: DocumentSubscription;
-};
-
-const DocumentOperations: React.FC<Props> = () => {
+const DocumentOperations: React.FC<Props & PropsFromRedux> = ({
+  imports,
+  exports,
+}) => {
   const [collapsed, setCollapsed] = useState(false);
   const toggleCollapsed = () => setCollapsed(!collapsed);
-  const [activeOperations, setActiveOperations] = useState<ActiveOperations>(
-    {},
-  );
 
-  useGetPreviousOperations({
-    setActiveImports: setActiveOperations,
-    activeImports: activeOperations,
-  });
-  useGetActiveOperations({
-    setActiveImports: setActiveOperations,
-    activeImports: activeOperations,
-  });
+  useGetPreviousOperations();
+  useGetActiveOperations();
 
-  const documents = useMemo(() => mapDocuments(activeOperations), [
-    activeOperations,
-  ]);
-  const clearUnfinished = useCallback(
-    clearUnfinishedImports(setActiveOperations)(activeOperations),
-    [setActiveOperations, activeOperations],
-  );
-  return documents.length ? (
+  return imports.length || exports.length ? (
     <div
       className={`${modDocumentOperations.documentOperations} ${
         collapsed ? modDocumentOperations.documentOperationsCollapsed : ''
@@ -45,29 +36,15 @@ const DocumentOperations: React.FC<Props> = () => {
     >
       <Header
         toggleCollapsed={toggleCollapsed}
-        documents={documents}
+        imports={imports}
+        exports={exports}
         collapsed={collapsed}
-        clearFinishedDocuments={clearUnfinished}
       />
-      <div
-        className={modDocumentOperations.documentOperations__header__buttons}
-      />
-      <div
-        className={modDocumentOperations.documentOperations__documentsContainer}
-      >
-        {documents.map(document => (
-          <Document
-            key={document.id}
-            {...document}
-            clearFinishedDocuments={clearUnfinished}
-          />
-        ))}
-      </div>
+      <Body imports={imports} exports={exports} />
     </div>
   ) : (
     <></>
   );
 };
-
-export default DocumentOperations;
-export { ActiveOperations };
+const _ = connector(DocumentOperations);
+export default _;

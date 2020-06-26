@@ -17,7 +17,7 @@ export class DocumentService implements IDocumentService {
     @InjectRepository(DocumentRepository)
     private documentSqliteRepository: DocumentSqliteRepository,
     private documentRepository: DocumentRepository,
-    private subscriptionsService: DocumentSubscriptionsService
+    private subscriptionsService: DocumentSubscriptionsService,
   ) {}
   async onModuleInit(): Promise<void> {
     await this.documentRepository.markUnfinishedImportsAsFailed();
@@ -54,6 +54,7 @@ export class DocumentService implements IDocumentService {
       IDs.forEach(id => {
         const document = new Document(user, '', 0);
         document.id = id;
+        document.userId = user.id;
         this.subscriptionsService.import.deleted(document);
       });
     return deleteResult;

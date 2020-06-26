@@ -16,10 +16,11 @@ export class DocumentSubscriptionsService {
   ): Promise<void> => {
     const payload: { document: DocumentSubscription } = {
       document: {
-        documentId: document.id,
-        eventType,
-        documentName: document.name,
+        id: document.id,
+        status: eventType,
+        name: document.name,
         userId: document.userId,
+        hash: document.hash,
       },
     };
     await pubSub.publish(SUBSCRIPTIONS.DOCUMENT, payload);
@@ -37,5 +38,14 @@ export class DocumentSubscriptionsService {
     failed: this._(DS.IMPORT_FAILED),
     duplicate: this._(DS.IMPORT_DUPLICATE),
     deleted: this._(DS.DELETED),
+  };
+
+  export = {
+    pending: this._(DS.EXPORT_PENDING),
+    preparing: this._(DS.EXPORT_PREPARING),
+    nodesStarted: this._(DS.EXPORT_NODES_STARTED),
+    imagesStarted: this._(DS.EXPORT_IMAGES_STARTED),
+    finished: this._(DS.EXPORT_FINISHED),
+    failed: this._(DS.EXPORT_FAILED),
   };
 }

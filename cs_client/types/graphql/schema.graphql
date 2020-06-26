@@ -34,9 +34,10 @@ type DocumentMutation {
 }
 
 type DocumentSubscription {
-    documentId: ID!
-    documentName: ID!
-    eventType: DOCUMENT_SUBSCRIPTIONS!
+    hash: ID!
+    id: ID!
+    name: ID!
+    status: DOCUMENT_SUBSCRIPTIONS!
 }
 
 type Image {
@@ -107,6 +108,12 @@ type UserMutation {
 
 enum DOCUMENT_SUBSCRIPTIONS {
     DELETED
+    EXPORT_FAILED
+    EXPORT_FINISHED
+    EXPORT_IMAGES_STARTED
+    EXPORT_NODES_STARTED
+    EXPORT_PENDING
+    EXPORT_PREPARING
     IMPORT_DUPLICATE
     IMPORT_FAILED
     IMPORT_FINISHED

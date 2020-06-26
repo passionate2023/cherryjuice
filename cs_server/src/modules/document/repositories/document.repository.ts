@@ -116,8 +116,11 @@ export class DocumentRepository extends Repository<Document>
   }
 
   setDocumentStatus = async (event: DS, document: Document): Promise<void> => {
-    if (event === DS.IMPORT_FINISHED) document.status = null;
-    else document.status = event;
+    if (event === DS.IMPORT_FINISHED || event === DS.EXPORT_FINISHED) {
+      document.status = null;
+    } else {
+      document.status = event;
+    }
     if (event !== DS.DELETED) {
       await this.save(document);
     }

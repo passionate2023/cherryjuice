@@ -11,7 +11,6 @@ import { LoadedImages } from './__tests__/__data__/images/get-loaded-images';
 
 const exportsFolder = '/.cs/exports';
 type DebugOptions = {
-  addSuffixToDocumentName?: boolean;
   verbose?: boolean;
 };
 
@@ -20,41 +19,37 @@ type GetNodeImages = (
   nodeImages?: UnloadedImageRow[],
 ) => Promise<LoadedImages>;
 
+type DocumentMeta = { name: string; hash: string; userId: string; id: string };
+
 class ExportCTB {
   private db: sqlite.Database;
   private readonly documentFolder;
-  private readonly documentPath;
   private readonly documentName;
   private readonly debugOptions: DebugOptions;
   constructor(
-    documentName: string,
-    private readonly userId: string,
+    { hash, name, userId, id }: DocumentMeta,
     debugOptions: DebugOptions = {},
   ) {
     this.debugOptions = debugOptions;
-    this.documentFolder = `${exportsFolder}/user-${userId}`;
-    this.documentName = `${documentName}${
-      debugOptions.addSuffixToDocumentName
-        ? ` - ${new Date().toUTCString()}`
-        : ''
-    }.ctb`;
-    this.documentPath = `${this.documentFolder}/${this.documentName}`;
+    this.documentName = `${name}.ctb`;
+    this.documentFolder = `${userId}/${id}/${hash}`;
   }
   get getDocumentPath(): string {
-    return this.documentPath;
+    return `${exportsFolder}/${this.documentFolder}/${this.documentName}`;
   }
-
-  get getDocumentName(): string {
-    return this.documentName;
+  get getDocumentFolder(): string {
+    return `${exportsFolder}/${this.documentFolder}/`;
   }
-
+  get getDocumentRelativePath(): string {
+    return `${this.documentFolder}/${this.documentName}`;
+  }
   get getDb(): sqlite.Database {
     return this.db;
   }
 
   createCtb = async (): Promise<sqlite.Database> => {
-    if (!fs.existsSync(this.documentFolder)) {
-      fs.mkdirSync(this.documentFolder);
+    if (!fs.existsSync(this.getDocumentFolder)) {
+      fs.mkdirSync(this.getDocumentFolder, { recursive: true });
     }
     this.db = await sqlite.open(this.getDocumentPath);
     if (this.debugOptions.verbose) {

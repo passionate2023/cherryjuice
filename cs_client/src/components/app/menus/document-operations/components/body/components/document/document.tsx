@@ -1,42 +1,37 @@
 import * as React from 'react';
 import { modDocumentOperations } from '::sass-modules/index';
-import { DS } from '::types/graphql/generated';
+import { DocumentSubscription } from '::types/graphql/generated';
 import { ac } from '::root/store/store';
 import { useDeleteFile } from '::app/menus/select-file/hooks/delete-documents/delete-file';
 import { mapEventType } from './helpers/map-event-type';
 import { ActionButton } from './components/action-button';
+import { useContext } from 'react';
+import { RootContext } from '::root/root-context';
 
-type TDocumentProps = {
-  name: string;
-  id: string;
-  eventType: DS;
-};
-
-const cropNampe = (name: string) =>
-  name.length < 19 ? name : `${name.substring(0, 18)}...`;
-
-const Document: React.FC<TDocumentProps & {
-  clearFinishedDocuments: Function;
-}> = ({ name, eventType, id, clearFinishedDocuments }) => {
+const Document: React.FC<DocumentSubscription> = document => {
+  const { name, status, id } = document;
   const { deleteDocument } = useDeleteFile({ IDs: [id] });
   const open = () => {
     ac.document.setDocumentId(id);
   };
-
+  const {
+    session: {
+      user: { id: userId },
+    },
+  } = useContext(RootContext);
   return (
     <div className={modDocumentOperations.documentOperations__document}>
       <div className={modDocumentOperations.documentOperations__document__name}>
-        {cropNampe(name)}
+        {name}
       </div>
-      <div className={modDocumentOperations.documentOperations__document__status}>
-        {mapEventType(eventType)}
+      <div
+        className={modDocumentOperations.documentOperations__document__status}
+      >
+        {mapEventType(status)}
       </div>
-      <ActionButton
-        {...{ open, deleteDocument, clear: clearFinishedDocuments, eventType }}
-      />
+      <ActionButton {...{ open, deleteDocument, document, userId }} />
     </div>
   );
 };
 
 export { Document };
-export { TDocumentProps };

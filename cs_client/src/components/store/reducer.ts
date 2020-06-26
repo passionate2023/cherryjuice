@@ -7,6 +7,7 @@ import { nodeReducer } from './ducks/node';
 import { editorReducer } from './ducks/editor';
 import { documentsListReducer } from './ducks/documents-list';
 import { documentTransforms } from './redux-persist/transforms/document';
+import { documentOperationsReducer } from './ducks/document-operations';
 
 const reducer = combineReducers({
   document: persistReducer(
@@ -28,6 +29,7 @@ const reducer = combineReducers({
     editorReducer,
   ),
   documentsList: documentsListReducer,
+  documentOperations: documentOperationsReducer,
 });
 
 export { reducer };

@@ -45,6 +45,7 @@ const Icons = {
     clear: 'clear',
     cancel: 'cancel',
     document: 'document',
+    download: 'download',
     stop: 'stop',
     person: 'person',
     'person-circle': 'person-circle',
