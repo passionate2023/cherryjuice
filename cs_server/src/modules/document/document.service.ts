@@ -8,15 +8,16 @@ import { User } from '../user/entities/user.entity';
 import { debug } from '../shared';
 import { DeleteResult } from 'typeorm';
 import { DocumentDTO } from '../imports/imports.service';
-import { importThreshold } from '../imports/helpers/thresholds';
 import { EditDocumentDto } from './input-types/edit-document.dto';
+import { DocumentSubscriptionsService } from './document.subscriptions.service';
 
 @Injectable()
 export class DocumentService implements IDocumentService {
   constructor(
-    private documentSqliteRepository: DocumentSqliteRepository,
     @InjectRepository(DocumentRepository)
+    private documentSqliteRepository: DocumentSqliteRepository,
     private documentRepository: DocumentRepository,
+    private subscriptionsService: DocumentSubscriptionsService
   ) {}
   async onModuleInit(): Promise<void> {
     await this.documentRepository.markUnfinishedImportsAsFailed();
@@ -53,7 +54,7 @@ export class DocumentService implements IDocumentService {
       IDs.forEach(id => {
         const document = new Document(user, '', 0);
         document.id = id;
-        importThreshold.deleted(document);
+        this.subscriptionsService.import.deleted(document);
       });
     return deleteResult;
   }

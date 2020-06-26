@@ -1,7 +1,7 @@
 @import '../../vars/colors';
 @import '../../vars/vars';
-.import-progress {
-  z-index: $ZI-import-progress;
+.document-operations {
+  z-index: $ZI-document-operations;
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -15,11 +15,11 @@
   background-color: white;
   border-radius: 5px;
 }
-.import-progress--collapsed {
+.document-operations--collapsed {
   height: 40px;
   width: 100px;
 }
-.import-progress__header {
+.document-operations__header {
   background-color: $dark-grey;
   height: 30px;
   display: flex;
@@ -27,13 +27,13 @@
   justify-content: center;
   padding: 5px;
 }
-.import-progress__header__text {
+.document-operations__header__text {
   margin-left: 5px;
 }
-.import-progress__header__buttons {
+.document-operations__header__buttons {
   margin-left: auto;
 }
-.import-progress__header__button {
+.document-operations__header__button {
   color: white;
   font-size: 1.2rem;
   min-width: 30px;
@@ -50,14 +50,14 @@
   }
 }
 
-// document
-.import-progress__documents {
+.document-operations__documents-container {
   flex: 1;
   width: 100%;
   overflow-y: auto;
   max-height: 123px;
 }
-.import-progress__document {
+
+.document-operations__document {
   height: 20px;
   width: calc(100% - 20px);
   padding: 10px;
@@ -66,14 +66,14 @@
   display: flex;
   justify-content: space-between;
 }
-.import-progress__document__name {
+.document-operations__document__name {
   color: black;
 }
-.import-progress__document__button {
+.document-operations__document__button {
   margin-right: -5px;
   margin-top: -4px;
 }
-.import-progress__document__status {
+.document-operations__document__status {
   color: grey;
   margin-left: auto;
 }

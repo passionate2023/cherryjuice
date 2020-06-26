@@ -27,7 +27,7 @@ type DocumentMutation {
     createDocument(document: CreateDocumentIt!): String!
     deleteDocument(documents: DeleteDocumentInputType!): String!
     editDocument(meta: EditDocumentIt!): String!
-    exportDocument: Boolean!
+    exportDocument: String!
     node(node_id: Int!): NodeMutation!
     uploadFile(files: [CTBUpload!]!): Boolean!
     uploadLink(file: UploadLinkInputType!): Boolean!
@@ -106,13 +106,13 @@ type UserMutation {
 }
 
 enum DOCUMENT_SUBSCRIPTIONS {
-    DOCUMENT_IMPORT_DELETED
-    DOCUMENT_IMPORT_DUPLICATE
-    DOCUMENT_IMPORT_FAILED
-    DOCUMENT_IMPORT_FINISHED
-    DOCUMENT_IMPORT_PENDING
-    DOCUMENT_IMPORT_PREPARING
-    DOCUMENT_IMPORT_STARTED
+    DELETED
+    IMPORT_DUPLICATE
+    IMPORT_FAILED
+    IMPORT_FINISHED
+    IMPORT_PENDING
+    IMPORT_PREPARING
+    IMPORT_STARTED
 }
 
 input CreateDocumentIt {

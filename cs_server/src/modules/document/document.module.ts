@@ -10,6 +10,7 @@ import { DocumentQueriesResolver } from './document.queries.resolver';
 import { DocumentSubscriptionsResolver } from './document.subscriptions.resolver';
 import { ImportsModule } from '../imports/imports.module';
 import { ExportsModule } from '../exports/exports.module';
+import { DocumentSubscriptionsService } from './document.subscriptions.service';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { ExportsModule } from '../exports/exports.module';
     DocumentSubscriptionsResolver,
     DocumentService,
     DocumentSqliteRepository,
+    DocumentSubscriptionsService
   ],
-  exports: [DocumentSqliteRepository, DocumentService],
+  exports: [DocumentSqliteRepository, DocumentService, DocumentSubscriptionsService],
 })
 export class DocumentModule {}
