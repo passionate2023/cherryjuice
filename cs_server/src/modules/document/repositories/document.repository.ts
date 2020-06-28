@@ -14,7 +14,11 @@ import {
 import { DocumentDTO } from '../../imports/imports.service';
 import { NotFoundException } from '@nestjs/common';
 import { EditDocumentDto } from '../input-types/edit-document.dto';
-
+const nullableEvents = [
+  DS.IMPORT_FINISHED,
+  DS.EXPORT_FINISHED,
+  DS.EXPORT_FAILED,
+];
 @EntityRepository(Document)
 export class DocumentRepository extends Repository<Document>
   implements IDocumentRepository {
@@ -116,11 +120,7 @@ export class DocumentRepository extends Repository<Document>
   }
 
   setDocumentStatus = async (event: DS, document: Document): Promise<void> => {
-    if (event === DS.IMPORT_FINISHED || event === DS.EXPORT_FINISHED) {
-      document.status = null;
-    } else {
-      document.status = event;
-    }
+    document.status = nullableEvents.includes(event) ? null : event;
     if (event !== DS.DELETED) {
       await this.save(document);
     }

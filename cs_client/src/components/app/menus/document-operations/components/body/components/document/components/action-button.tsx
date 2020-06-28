@@ -8,7 +8,13 @@ import { uri } from '::graphql/apollo';
 
 const ActionButton = ({ document, deleteDocument, open, userId }) => {
   const { id, status, hash, name } = document;
-  const props = { onClick: undefined, iconName: '' };
+  const props = {
+    onClick: undefined,
+    iconName: '',
+    wrapper: function Wrapper({ children }): JSX.Element {
+      return <>{children}</>;
+    },
+  };
   if (OperationTypes.import.active[status]) {
     props.iconName = Icons.material.stop;
     props.onClick = deleteDocument;
@@ -23,8 +29,16 @@ const ActionButton = ({ document, deleteDocument, open, userId }) => {
     props.onClick = ac.documentOperations.clearFinished;
   } else if (OperationTypes.export.successful[status]) {
     props.iconName = Icons.material.download;
-    props.onClick = () =>
-      window.open(`${uri.httpBase}/exports/${userId}/${id}/${hash}/${name}`);
+    props.wrapper = function Wrapper({ children }): JSX.Element {
+      return (
+        <a
+          href={`${uri.httpBase}/exports/${userId}/${id}/${hash}/${name}`}
+          download
+        >
+          {children}
+        </a>
+      );
+    };
   }
   if (OperationTypes.export.failed[status]) {
     props.iconName = Icons.material.clear;
@@ -32,16 +46,16 @@ const ActionButton = ({ document, deleteDocument, open, userId }) => {
       ac.documentOperations.deleteExport(id);
     };
   }
-  return !props.onClick ? (
-    <></>
-  ) : (
+  return props.iconName ? (
     <ButtonCircle
       key={props.iconName}
       className={modDocumentOperations.documentOperations__document__button}
       onClick={props.onClick}
     >
-      <Icon {...{ name: props.iconName }} />
+      {props.wrapper({ children: <Icon {...{ name: props.iconName }} /> })}
     </ButtonCircle>
+  ) : (
+    <></>
   );
 };
 
