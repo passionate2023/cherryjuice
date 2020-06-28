@@ -19,6 +19,8 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/',
     '/__data__/',
+    '/__assertions__/',
+    '/__preparations__/',
     '__helpers__',
     'node/__tests__',
   ],

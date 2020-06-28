@@ -7,7 +7,7 @@ import { Node } from '../../../node/entities/node.entity';
 import { getLoadedImages } from './__data__/images/get-loaded-images';
 import { assertNodeMeta } from './__assertions__/node-meta';
 import { NodeFromPG } from '../helpers/ahtml-to-ctb/helpers/translate-ahtml/__tests__/__data__/ahtml-xml-samples/02';
-import { createCTB } from './__pereparations__/create-ctb';
+import { createCTB } from './__preparations__/create-ctb';
 
 jest.setTimeout(15 * 60 * 1000);
 
@@ -16,7 +16,12 @@ describe('export-ctb - create and populate basic ctb', () => {
     exportCtb: undefined,
   };
   beforeAll(() => {
-    state.exportCtb = new ExportCTB(new Date().getTime().toString(), '12345');
+    state.exportCtb = new ExportCTB({
+      userId: 'test1',
+      id: 'doc1',
+      hash: new Date().getTime().toString(),
+      name: 'test1-document',
+    });
   });
   it('should create an empty ctb file', async () => {
     const db = await state.exportCtb.createCtb();
@@ -38,9 +43,13 @@ describe('export-ctb - create and populate basic ctb', () => {
 describe('export-ctb - create and populate complex ctb', () => {
   const state: { exportCtb: ExportCTB } = { exportCtb: undefined };
   beforeAll(async () => {
-    state.exportCtb = await createCTB('complex', '12345', {
+    state.exportCtb = await createCTB({
+      userId: 'test2',
+      id: 'doc1',
+      hash: '1234',
+      name: 'test2-document',
+    }, {
       verbose: false,
-      dontAddSuffixToDocumentName: true,
     });
   });
 

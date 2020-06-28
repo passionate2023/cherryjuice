@@ -68,21 +68,23 @@ const testData = {
       scale: 'small',
       style: 'italic',
     },
-    output: {
-      tags: [
-        [
-          'code',
-          {
-            style: {
-              'background-color': '#2B2B2B',
-              color: '#c792ea',
+    output: [
+      {
+        tags: [
+          [
+            'code',
+            {
+              style: {
+                'background-color': '#2B2B2B',
+                color: '#c792ea',
+              },
             },
-          },
+          ],
+          ['small', {}],
+          ['em', {}],
         ],
-        ['small', {}],
-        ['em', {}],
-      ],
-    },
+      },
+    ],
   },
 };
 describe('map css and attributes', () => {
@@ -93,7 +95,7 @@ describe('map css and attributes', () => {
         const { input, output } = testData[testName];
         const res = translateAttributesToHtmlAndCss([[{ $: input }]]);
 
-        expect(res[0].nodes[0]).toEqual(output);
+        expect(res[0][0]).toEqual(output);
       });
     });
   // test('test2', () => {

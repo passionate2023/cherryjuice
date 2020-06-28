@@ -15,7 +15,7 @@ const testTemplate = ({ nodes }: { nodes: NodeFromPG[] }) => {
 describe('translate-ahtml', () => {
   for (const nodes of ahtmlXmlSamples) {
     test(`document ${nodes[0].documentId}`, () => {
-      testTemplate({ nodes: selectNode_ids([7])(nodes) });
+      testTemplate(selectNode_ids([7])(nodes));
     });
   }
 });

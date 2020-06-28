@@ -39,7 +39,7 @@ const translateAHtml = (node_id: number) => (
   });
   const trail = translatedAHtmls[translatedAHtmls.length - 1];
   // @ts-ignore
-  if (trail._ === '\n' && trail.tags.length === 0) {
+  if (trail?._ === '\n' && trail.tags.length === 0) {
     translatedAHtmls.pop();
   }
   return translatedAHtmls;
