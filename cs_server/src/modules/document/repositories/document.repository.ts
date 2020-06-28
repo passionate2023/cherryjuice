@@ -7,7 +7,10 @@ import {
 import { IDocumentRepository } from '../interfaces/document.repository';
 import { Document } from '../entities/document.entity';
 import { User } from '../../user/entities/user.entity';
-import { DOCUMENT_SUBSCRIPTIONS } from '../entities/document-subscription.entity';
+import {
+  DOCUMENT_SUBSCRIPTIONS as DS,
+  DOCUMENT_SUBSCRIPTIONS,
+} from '../entities/document-subscription.entity';
 import { DocumentDTO } from '../../imports/imports.service';
 import { NotFoundException } from '@nestjs/common';
 import { EditDocumentDto } from '../input-types/edit-document.dto';
@@ -54,7 +57,7 @@ export class DocumentRepository extends Repository<Document>
     const queryBuilder = this.createQueryBuilder('document');
     return await queryBuilder
       .update(Document)
-      .set({ status: DOCUMENT_SUBSCRIPTIONS.DOCUMENT_IMPORT_FAILED })
+      .set({ status: DOCUMENT_SUBSCRIPTIONS.IMPORT_FAILED })
       .where('document.status is not null')
       .execute();
   }
@@ -111,4 +114,15 @@ export class DocumentRepository extends Repository<Document>
 
       .then(res => Number(res[0].kb));
   }
+
+  setDocumentStatus = async (event: DS, document: Document): Promise<void> => {
+    if (event === DS.IMPORT_FINISHED || event === DS.EXPORT_FINISHED) {
+      document.status = null;
+    } else {
+      document.status = event;
+    }
+    if (event !== DS.DELETED) {
+      await this.save(document);
+    }
+  };
 }

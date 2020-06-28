@@ -5,11 +5,7 @@ import { Node } from '../node/entities/node.entity';
 import { NodeSqliteRepository } from '../node/repositories/node.sqlite.repository';
 import { DocumentSqliteRepository } from '../document/repositories/document.sqlite.repository';
 import { DocumentService } from '../document/document.service';
-import {
-  copyProperties,
-  nodeTitleHelpers,
-  nodeTitleStyle,
-} from '../document/helpers';
+import { copyProperties, nodeTitleStyle } from '../document/helpers';
 import { Document } from '../document/entities/document.entity';
 import { Image } from '../image/entities/image.entity';
 import { ImageSqliteRepository } from '../image/repositories/image.sqlite.repository';
@@ -86,9 +82,10 @@ export class SaveDocumentsService {
         parentNode.child_nodes.push(nodeRaw.node_id);
       }
       nodeRaw.node_title_styles = nodeTitleStyle({
+        // @ts-ignore
         is_richtxt: nodeRaw.is_richtxt,
+        is_ro: nodeRaw.is_ro,
       });
-      nodeRaw.icon_id = '' + nodeTitleHelpers.customIconId(nodeRaw.is_ro);
 
       const node = new Node();
       copyProperties(nodeRaw, node, { createdAt: true, updatedAt: true });

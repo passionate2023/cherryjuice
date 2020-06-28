@@ -18,7 +18,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = {
   state: TState;
 };
-const defaultProps = { is_richtxt: '', createdAt: '', updatedAt: '' };
+const defaultProps = { createdAt: '', updatedAt: '' };
 const doubleSpace = '\u00A0 ';
 const Separator = () => (
   <span className={modInfoBar.infoBar__separator}>
@@ -31,20 +31,20 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
   documentId,
   state: { showInfoBar, isOnMobile },
 }) => {
-  const { is_richtxt, createdAt, updatedAt } = node ? node : defaultProps;
+  const { createdAt, updatedAt } = node ? node : defaultProps;
   return (
     <>
       {!isOnMobile || showInfoBar ? (
         node && node.createdAt ? (
           <footer className={modInfoBar.infoBar}>
-            <span>Node Type: {is_richtxt ? 'Rich Text' : 'Plain Text'}</span>
-            <Separator />
             <span>
-              Date created:
+              {'Date created: '}
               {formatTime(createdAt)}
             </span>
             <Separator />
-            <span>Date modified {formatTime(updatedAt)}</span>
+            <span>
+              {'Date modified: '} {formatTime(updatedAt)}
+            </span>
           </footer>
         ) : (
           <footer className={modInfoBar.infoBar}>

@@ -22,16 +22,16 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: install server dependencies
-        run: cd cs_server && yarn install --ignore-optional --ignore-scripts && yarn add jest ts-jest --ignore-scripts
+        run: cd cs_server && sudo yarn install
 
       - name: link dependencies
-        run: cd cs_server && sudo yarn run postinstall
+        run: cd cs_server && sudo yarn link:ahtml-to-html
 
       - name: install client dependencies
         run: cd cs_client && yarn install
 
       - name: run jest tests
-        run: cd cs_client && yarn run test
+        run: cd cs_client && sudo yarn run test
 
       - name: Notify slack success
         if: success()

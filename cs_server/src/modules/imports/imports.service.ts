@@ -16,10 +16,10 @@ import { DocumentSqliteRepository } from '../document/repositories/document.sqli
 import { DocumentService } from '../document/document.service';
 import { Document } from '../document/entities/document.entity';
 import { FileUpload } from '../document/helpers/graphql';
-import { importThreshold } from './helpers/thresholds';
 import { UploadImageDto } from './dto/upload-image.dto';
 import { NodeService } from '../node/node.service';
 import { SaveDocumentsService } from './save-documents.service';
+import { DocumentSubscriptionsService } from '../document/document.subscriptions.service';
 export type DocumentDTO = {
   name: string;
   size: number;
@@ -35,6 +35,7 @@ export class ImportsService {
     private documentSqliteRepository: DocumentSqliteRepository,
     private nodeSqliteRepository: NodeSqliteRepository,
     private saveDocumentsService: SaveDocumentsService,
+    private subscriptionsService: DocumentSubscriptionsService,
   ) {}
 
   onModuleInit(): void {
@@ -141,35 +142,35 @@ export class ImportsService {
           document,
           downloadTask,
         });
-        await importThreshold.pending(document);
+        await this.subscriptionsService.import.pending(document);
       } catch (e) {
-        await importThreshold.failed(document);
+        await this.subscriptionsService.import.failed(document);
         throw e;
       }
     }
     for (const { document, downloadTask } of documents) {
       try {
-        await importThreshold.preparing(document);
+        await this.subscriptionsService.import.preparing(document);
         const { hash } = await download(downloadTask, document.reload);
         const documentWithSameHash = await this.documentService.findDocumentByHash(
           hash,
           user,
         );
         if (documentWithSameHash) {
-          await importThreshold.duplicate(document);
+          await this.subscriptionsService.import.duplicate(document);
           await this.documentService.deleteDocuments([document.id], user, {
             notifySubscribers: false,
           });
         } else {
-          await importThreshold.started(document);
+          await this.subscriptionsService.import.started(document);
           await this.saveDocument({
             document,
             user,
           });
-          await importThreshold.finished(document);
+          await this.subscriptionsService.import.finished(document);
         }
       } catch (e) {
-        await importThreshold.failed(document);
+        await this.subscriptionsService.import.failed(document);
         throw e;
       }
       await this.closeUploadedFile();

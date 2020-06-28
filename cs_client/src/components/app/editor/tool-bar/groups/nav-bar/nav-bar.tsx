@@ -30,6 +30,9 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
       >
         <Icon name={Icons.material.document} />
       </ToolbarButton>
+      <ToolbarButton onClick={ac.document.export}>
+        <Icon name={Icons.material.export} />
+      </ToolbarButton>
       <ToolbarButton onClick={ac.dialogs.showDocumentList}>
         <Icon
           name={Icons.material.folder}

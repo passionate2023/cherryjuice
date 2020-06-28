@@ -22,7 +22,6 @@ const createNodeDto: CreateNodeDto = {
     father_id: -1,
     fatherId: null,
     updatedAt: new Date().getTime(),
-    icon_id: '0',
     node_title_styles: '',
     createdAt: new Date().getTime(),
     read_only: 0,

@@ -3,9 +3,8 @@ import { NodeNew } from '::types/graphql/adapters';
 
 const defaultNode = {
   name: '',
-  node_title_styles: '{"color":"#ffffff","fontWeight":"normal"}',
+  node_title_styles: '{"color":"#ffffff","fontWeight":"normal","icon_id":0}',
   html: '<span class="rich-text__line"/>',
-  icon_id: '0',
   read_only: 0,
   child_nodes: [],
   is_richtxt: 1,

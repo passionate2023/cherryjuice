@@ -9,6 +9,8 @@ import { DocumentMutationsResolver } from './document.mutations.resolver';
 import { DocumentQueriesResolver } from './document.queries.resolver';
 import { DocumentSubscriptionsResolver } from './document.subscriptions.resolver';
 import { ImportsModule } from '../imports/imports.module';
+import { ExportsModule } from '../exports/exports.module';
+import { DocumentSubscriptionsService } from './document.subscriptions.service';
 
 @Module({
   imports: [
@@ -16,6 +18,7 @@ import { ImportsModule } from '../imports/imports.module';
     ImageModule,
     TypeOrmModule.forFeature([DocumentRepository]),
     ImportsModule,
+    ExportsModule,
   ],
   providers: [
     DocumentQueriesResolver,
@@ -23,7 +26,12 @@ import { ImportsModule } from '../imports/imports.module';
     DocumentSubscriptionsResolver,
     DocumentService,
     DocumentSqliteRepository,
+    DocumentSubscriptionsService,
   ],
-  exports: [DocumentSqliteRepository, DocumentService],
+  exports: [
+    DocumentSqliteRepository,
+    DocumentService,
+    DocumentSubscriptionsService,
+  ],
 })
 export class DocumentModule {}

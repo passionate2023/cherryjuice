@@ -15,7 +15,7 @@ import modGoogleOauth from '::sass-modules/shared-components/google-oauth-button
 import modAuthBanner from './auth/banner.scss';
 import modUserPopup from './user/user-popup.scss';
 import appModule from '::sass-modules/app.scss';
-import modImportProgress from '::sass-modules/select-file/import-progress.scss';
+import modDocumentOperations from './document-operations/document-operations.scss';
 import modNodeMeta from './node-meta/node-meta.scss';
 import modIconPicker from './node-meta/icon-picker.scss';
 import modTreeNode from './tree/node.scss';
@@ -40,7 +40,7 @@ export {
   modGoogleOauth,
   modAuthBanner,
   modUserPopup,
-  modImportProgress,
+  modDocumentOperations,
   modNodeMeta,
   modIconPicker,
   modTreeNode,

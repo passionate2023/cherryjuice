@@ -2,6 +2,7 @@ from node:12.2.0 as cs
 workdir /server
 copy ./cs_server/ .
 run yarn install
+run yarn link:ahtml-to-html
 
 workdir /client
 copy ./cs_client/ .
@@ -19,5 +20,6 @@ copy --from=cs /server/node_modules /cs/server/node_modules
 copy --from=cs /client/dist /cs/client
 copy ./ctb-samples /cs/ctb-samples
 run mkdir /uploads
+run mkdir -p /.cs/exports
 
 entrypoint ["node","./cs/server/main.js"]

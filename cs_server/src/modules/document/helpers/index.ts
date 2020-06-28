@@ -84,13 +84,31 @@ const nodeTitleHelpers = {
   },
 };
 
-const nodeTitleStyle = ({ is_richtxt }) => {
-  return JSON.stringify({
-    color: nodeTitleHelpers.hasForground(is_richtxt)
-      ? nodeTitleHelpers.rgb_str_from_int24bit((is_richtxt >> 3) & 0xffffff)
-      : '#ffffff',
-    fontWeight: nodeTitleHelpers.isBold(is_richtxt) ? 'bold' : 'normal',
-  });
+const nodeTitleStyle = ({
+  is_richtxt,
+  is_ro,
+}: {
+  is_richtxt: number;
+  is_ro: number;
+}) => {
+  const style: {
+    color?: string;
+    fontWeight?: string;
+    icon_id?: number;
+  } = {};
+  const hasCustomColor = nodeTitleHelpers.hasForground(is_richtxt);
+  if (hasCustomColor)
+    style.color = nodeTitleHelpers.rgb_str_from_int24bit(
+      (is_richtxt >> 3) & 0xffffff,
+    );
+  const isBold = nodeTitleHelpers.isBold(is_richtxt);
+  if (isBold) style.fontWeight = 'bold';
+
+  const customIconId = nodeTitleHelpers.customIconId(is_ro);
+  if (customIconId) style.icon_id = customIconId;
+  return hasCustomColor || customIconId || isBold
+    ? JSON.stringify(style)
+    : undefined;
 };
 
 const organizeData = async (data): Promise<Map<number, Node>> => {
@@ -104,8 +122,10 @@ const organizeData = async (data): Promise<Map<number, Node>> => {
       parentNode.child_nodes.push(node.node_id);
     }
 
-    node.node_title_styles = nodeTitleStyle({ is_richtxt: node.is_richtxt });
-    node.icon_id = nodeTitleHelpers.customIconId(node.is_ro);
+    node.node_title_styles = nodeTitleStyle({
+      is_richtxt: node.is_richtxt,
+      is_ro: node.is_ro,
+    });
   });
 
   data.forEach(node => {

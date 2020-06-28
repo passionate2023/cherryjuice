@@ -25,10 +25,14 @@ const extractImage = (
         }
       : {
           type: 'png',
+          ...(el.dataset.href && {
+            linkAttributes: {
+              'data-type': el.dataset.type,
+              href: decodeURIComponent(el.dataset.href),
+              target: el.dataset.target,
+            },
+          }),
           other_attributes: {
-            ...(el.dataset.link && {
-              link: decodeURIComponent(el.dataset.link),
-            }),
             ...(el.dataset.id && {
               id:
                 options?.swappedImageIds &&

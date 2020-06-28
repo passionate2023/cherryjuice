@@ -35,6 +35,9 @@ const ac = {
     saveInProgress: _('saveInProgress'),
     saveFailed: _('saveFailed'),
   },
+  ...{
+    export: _('export'),
+  },
   // node
   selectNode: _(ap('selectNode'), _ => (node: NodeId) => _(node)),
   selectRootNode: _(ap('selectRootNode'), _ => (node: NodeId) => _(node)),

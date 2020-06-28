@@ -7,7 +7,8 @@ import { Node } from '../entities/node.entity';
 import { organizeData } from '../../document/helpers';
 import { getPNGSize } from '../helpers/ctb';
 import { parseXml } from '../helpers/xml';
-import { ctbToAHtml } from '../helpers/rendering/query/ctb-to-ahtml';
+import { ctbToAHtml } from '../helpers/rendering/ctb-to-ahtml';
+import { AHtmlLine } from '../helpers/rendering/ahtml-to-html';
 
 const queries = {
   read: {
@@ -108,17 +109,13 @@ export class NodeSqliteRepository {
       child_nodes: [],
       is_empty: 0,
       node_title_styles: '',
-      icon_id: '',
       read_only: 0,
     } as unknown);
 
     return data;
   }
 
-  async getAHtml(
-    node_id: string,
-    imagesIds?: string[],
-  ): Promise<{ nodes: any; style: any }[]> {
+  async getAHtml(node_id: string, imagesIds?: string[]): Promise<AHtmlLine[]> {
     const { txt } =
       node_id === '0'
         ? { txt: '<?xml version="1.0" ?><node><rich_text></rich_text></node>' }

@@ -14,7 +14,7 @@ type AuthUser {
 type Document {
     createdAt: Float!
     folder: String
-    hash: String!
+    hash: String
     id: String!
     name: String!
     node(node_id: Int): [Node]!
@@ -27,15 +27,17 @@ type DocumentMutation {
     createDocument(document: CreateDocumentIt!): String!
     deleteDocument(documents: DeleteDocumentInputType!): String!
     editDocument(meta: EditDocumentIt!): String!
+    exportDocument: String!
     node(node_id: Int!): NodeMutation!
     uploadFile(files: [CTBUpload!]!): Boolean!
     uploadLink(file: UploadLinkInputType!): Boolean!
 }
 
 type DocumentSubscription {
-    documentId: ID!
-    documentName: ID!
-    eventType: DOCUMENT_SUBSCRIPTIONS!
+    hash: ID!
+    id: ID!
+    name: ID!
+    status: DOCUMENT_SUBSCRIPTIONS!
 }
 
 type Image {
@@ -56,11 +58,8 @@ type Node {
     father_id: Float!
     hash: String!
     html: String!
-    icon_id: String!
     id: String!
     image(thumbnail: Boolean): [Image]!
-    is_empty: Int!
-    is_richtxt: Int!
     name: String!
     node_id: Int!
     node_title_styles: String
@@ -108,13 +107,19 @@ type UserMutation {
 }
 
 enum DOCUMENT_SUBSCRIPTIONS {
-    DOCUMENT_IMPORT_DELETED
-    DOCUMENT_IMPORT_DUPLICATE
-    DOCUMENT_IMPORT_FAILED
-    DOCUMENT_IMPORT_FINISHED
-    DOCUMENT_IMPORT_PENDING
-    DOCUMENT_IMPORT_PREPARING
-    DOCUMENT_IMPORT_STARTED
+    DELETED
+    EXPORT_FAILED
+    EXPORT_FINISHED
+    EXPORT_IMAGES_STARTED
+    EXPORT_NODES_STARTED
+    EXPORT_PENDING
+    EXPORT_PREPARING
+    IMPORT_DUPLICATE
+    IMPORT_FAILED
+    IMPORT_FINISHED
+    IMPORT_PENDING
+    IMPORT_PREPARING
+    IMPORT_STARTED
 }
 
 input CreateDocumentIt {
@@ -127,7 +132,6 @@ input CreateNodeIt {
     documentId: String!
     fatherId: String
     father_id: Float!
-    icon_id: String!
     name: String!
     node_id: Int!
     node_title_styles: String
@@ -148,7 +152,6 @@ input NodeMetaIt {
     child_nodes: [Int]
     fatherId: String
     father_id: Float
-    icon_id: String
     is_richtxt: Int
     name: String
     node_title_styles: String

@@ -20,7 +20,7 @@ export interface Query {
 export interface Document {
   createdAt: number;
   folder?: string;
-  hash: string;
+  hash?: string;
   id: string;
   name: string;
   node: Array<Node | null>;
@@ -37,11 +37,8 @@ export interface Node {
   father_id: number;
   hash: string;
   html: string;
-  icon_id: string;
   id: string;
   image: Array<Image | null>;
-  is_empty: number;
-  is_richtxt: number;
   name: string;
   node_id: number;
   node_title_styles?: string;
@@ -84,6 +81,7 @@ export interface DocumentMutation {
   createDocument: string;
   deleteDocument: string;
   editDocument: string;
+  exportDocument: string;
   node: NodeMutation;
   uploadFile: boolean;
   uploadLink: boolean;
@@ -121,7 +119,6 @@ export interface CreateNodeIt {
   documentId: string;
   fatherId?: string;
   father_id: number;
-  icon_id: string;
   name: string;
   node_id: number;
   node_title_styles?: string;
@@ -133,7 +130,6 @@ export interface NodeMetaIt {
   child_nodes?: Array<number | null>;
   fatherId?: string;
   father_id?: number;
-  icon_id?: string;
   is_richtxt?: number;
   name?: string;
   node_title_styles?: string;
@@ -187,19 +183,26 @@ export interface Subscription {
 }
 
 export interface DocumentSubscription {
-  documentId: string;
-  documentName: string;
-  eventType: DOCUMENT_SUBSCRIPTIONS;
+  hash: string;
+  id: string;
+  name: string;
+  status: DOCUMENT_SUBSCRIPTIONS;
 }
 
 export enum DOCUMENT_SUBSCRIPTIONS {
-  DOCUMENT_IMPORT_DELETED = 'DOCUMENT_IMPORT_DELETED',
-  DOCUMENT_IMPORT_DUPLICATE = 'DOCUMENT_IMPORT_DUPLICATE',
-  DOCUMENT_IMPORT_FAILED = 'DOCUMENT_IMPORT_FAILED',
-  DOCUMENT_IMPORT_FINISHED = 'DOCUMENT_IMPORT_FINISHED',
-  DOCUMENT_IMPORT_PENDING = 'DOCUMENT_IMPORT_PENDING',
-  DOCUMENT_IMPORT_PREPARING = 'DOCUMENT_IMPORT_PREPARING',
-  DOCUMENT_IMPORT_STARTED = 'DOCUMENT_IMPORT_STARTED',
+  DELETED = 'DELETED',
+  EXPORT_FAILED = 'EXPORT_FAILED',
+  EXPORT_FINISHED = 'EXPORT_FINISHED',
+  EXPORT_IMAGES_STARTED = 'EXPORT_IMAGES_STARTED',
+  EXPORT_NODES_STARTED = 'EXPORT_NODES_STARTED',
+  EXPORT_PENDING = 'EXPORT_PENDING',
+  EXPORT_PREPARING = 'EXPORT_PREPARING',
+  IMPORT_DUPLICATE = 'IMPORT_DUPLICATE',
+  IMPORT_FAILED = 'IMPORT_FAILED',
+  IMPORT_FINISHED = 'IMPORT_FINISHED',
+  IMPORT_PENDING = 'IMPORT_PENDING',
+  IMPORT_PREPARING = 'IMPORT_PREPARING',
+  IMPORT_STARTED = 'IMPORT_STARTED',
 }
 
 /*********************************
@@ -320,11 +323,8 @@ export interface NodeTypeResolver<TParent = any> {
   father_id?: NodeToFather_idResolver<TParent>;
   hash?: NodeToHashResolver<TParent>;
   html?: NodeToHtmlResolver<TParent>;
-  icon_id?: NodeToIcon_idResolver<TParent>;
   id?: NodeToIdResolver<TParent>;
   image?: NodeToImageResolver<TParent>;
-  is_empty?: NodeToIs_emptyResolver<TParent>;
-  is_richtxt?: NodeToIs_richtxtResolver<TParent>;
   name?: NodeToNameResolver<TParent>;
   node_id?: NodeToNode_idResolver<TParent>;
   node_title_styles?: NodeToNode_title_stylesResolver<TParent>;
@@ -360,10 +360,6 @@ export interface NodeToHtmlResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface NodeToIcon_idResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
 export interface NodeToIdResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
@@ -378,14 +374,6 @@ export interface NodeToImageResolver<TParent = any, TResult = any> {
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
-}
-
-export interface NodeToIs_emptyResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface NodeToIs_richtxtResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface NodeToNameResolver<TParent = any, TResult = any> {
@@ -518,6 +506,7 @@ export interface DocumentMutationTypeResolver<TParent = any> {
   createDocument?: DocumentMutationToCreateDocumentResolver<TParent>;
   deleteDocument?: DocumentMutationToDeleteDocumentResolver<TParent>;
   editDocument?: DocumentMutationToEditDocumentResolver<TParent>;
+  exportDocument?: DocumentMutationToExportDocumentResolver<TParent>;
   node?: DocumentMutationToNodeResolver<TParent>;
   uploadFile?: DocumentMutationToUploadFileResolver<TParent>;
   uploadLink?: DocumentMutationToUploadLinkResolver<TParent>;
@@ -566,6 +555,13 @@ export interface DocumentMutationToEditDocumentResolver<
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
+}
+
+export interface DocumentMutationToExportDocumentResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface DocumentMutationToNodeArgs {
@@ -731,26 +727,34 @@ export interface SubscriptionToDocumentResolver<TParent = any, TResult = any> {
 }
 
 export interface DocumentSubscriptionTypeResolver<TParent = any> {
-  documentId?: DocumentSubscriptionToDocumentIdResolver<TParent>;
-  documentName?: DocumentSubscriptionToDocumentNameResolver<TParent>;
-  eventType?: DocumentSubscriptionToEventTypeResolver<TParent>;
+  hash?: DocumentSubscriptionToHashResolver<TParent>;
+  id?: DocumentSubscriptionToIdResolver<TParent>;
+  name?: DocumentSubscriptionToNameResolver<TParent>;
+  status?: DocumentSubscriptionToStatusResolver<TParent>;
 }
 
-export interface DocumentSubscriptionToDocumentIdResolver<
+export interface DocumentSubscriptionToHashResolver<
   TParent = any,
   TResult = any
 > {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface DocumentSubscriptionToDocumentNameResolver<
+export interface DocumentSubscriptionToIdResolver<
   TParent = any,
   TResult = any
 > {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface DocumentSubscriptionToEventTypeResolver<
+export interface DocumentSubscriptionToNameResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentSubscriptionToStatusResolver<
   TParent = any,
   TResult = any
 > {

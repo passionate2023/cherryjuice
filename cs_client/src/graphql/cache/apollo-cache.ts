@@ -29,7 +29,7 @@ const apolloCache = (() => {
       query: <T, U>(args: {
         path: GqlDataPath<U>;
         query: DocumentNode;
-        variables: T;
+        variables?: T;
         fetchPolicy: FetchPolicy;
       }): Promise<U> =>
         state.client.query(args).then(({ data }) => args.path(data)),

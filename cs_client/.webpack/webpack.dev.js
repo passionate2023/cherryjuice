@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+process.env.NODE_ENV = 'development';
 const { paths } = require('./variables');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const DotEnv = require('dotenv-webpack');
-module.exports = merge(common(), {
+module.exports = merge(common, {
   mode: 'development',
   devtool: 'eval-source-map',
   devServer: {

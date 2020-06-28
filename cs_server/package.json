@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "npm link parcel-bundler && cd src/modules/node/helpers/rendering/query/ahtml-to-html && npm link",
-    "watch:server:parcel": "node scripts/parcel.dev.js",
+    "link:ahtml-to-html": "cd src/modules/node/helpers/rendering/ahtml-to-html && npm link",
     "watch:server": "webpack --progress",
     "watch:server:nest": "nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
     "prebuild": "rimraf dist",

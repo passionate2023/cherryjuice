@@ -9,7 +9,7 @@ import { ac } from '::root/store/store';
 const AlertModal = React.lazy(() => import('./modals/alert-modal/alert-modal'));
 const UserPopup = React.lazy(() => import('./user/user'));
 const ImportProgress = React.lazy(() =>
-  import('./import-progress/import-progress'),
+  import('./document-operations/document-operations'),
 );
 const ImportDocuments = React.lazy(() =>
   import('./import-documents/import-documents'),

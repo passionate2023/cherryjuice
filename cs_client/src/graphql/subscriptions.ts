@@ -6,9 +6,10 @@ const SUBSCRIPTION_DOCUMENT = {
   query: gql`
     subscription documentImportPreparing($userId: String!) {
       document(userId: $userId) {
-        eventType
-        documentId
-        documentName
+        status
+        id
+        name
+        hash
       }
     }
   `,

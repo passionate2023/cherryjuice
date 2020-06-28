@@ -70,22 +70,11 @@ export class Node extends BaseEntity {
   updatedAt: Date;
 
   @Column({ nullable: true })
-  @Field({ nullable: true })
+  @Field({ nullable: true, defaultValue: '{}' })
   node_title_styles: string;
 
-  @Column({ select: false, default: '[]' }) ahtml: string;
-
-  @Column('int2', { default: 0 })
-  @Field(() => Int)
-  is_empty: number;
-
-  @Column('int8', { default: 1 })
-  @Field(() => Int)
-  is_richtxt: number;
-
-  @Column()
-  @Field()
-  icon_id: string;
+  @Column({ select: false, default: '[]' })
+  ahtml: string;
 
   @Field(() => [Image], { nullable: 'items' })
   image: Image[];
@@ -111,10 +100,7 @@ export class Node extends BaseEntity {
       this.child_nodes,
       this.ahtml,
       this.node_title_styles,
-      this.icon_id,
       this.read_only,
-      this.is_richtxt,
-      this.is_empty,
     ];
     this.hash = hash(fields);
   }

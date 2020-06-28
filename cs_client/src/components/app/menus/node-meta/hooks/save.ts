@@ -15,24 +15,23 @@ const calculateDiff = ({
   node: NodeCached;
   state: TNodeMetaState;
 }) => {
-  const { name, node_title_styles, icon_id, read_only } = node;
+  const { name, node_title_styles, read_only } = node;
   const style = JSON.parse(node_title_styles);
   const newStyle = JSON.stringify({
-    color: state.hasCustomColor ? state.customColor : '#ffffff',
-    fontWeight: state.isBold ? 'bold' : 'normal',
+    ...(state.hasCustomColor && {
+      color: state.customColor,
+    }),
+    ...(state.isBold && { fontWeight: 'bold' }),
+    ...(state.hasCustomIcon && {
+      icon_id: state.customIcon === '0' ? '1' : state.customIcon,
+    }),
   });
-  const newIconId = !state.hasCustomIcon
-    ? '0'
-    : state.customIcon === '0'
-    ? '1'
-    : state.customIcon;
   let res;
   if (isNewNode) {
     res = {
       ...node,
       name: state.name || '?',
       node_title_styles: newStyle,
-      icon_id: newIconId,
       read_only: state.isReadOnly ? 1 : 0,
       child_nodes: [...node.child_nodes],
     };
@@ -40,7 +39,6 @@ const calculateDiff = ({
     res = {};
     if (state.name !== name) res.name = state.name;
     if (newStyle !== JSON.stringify(style)) res.node_title_styles = newStyle;
-    if (newIconId !== icon_id) res.icon_id = newIconId;
     if (state.isReadOnly !== Boolean(read_only))
       res.read_only = state.isReadOnly ? 1 : 0;
   }
@@ -54,7 +52,7 @@ type UseSaveProps = {
   state: TNodeMetaState;
   previous_sibling_node_id: number;
 };
-const save = ({
+const useSave = ({
   node,
   newNode,
   nodeId,
@@ -92,4 +90,4 @@ const save = ({
   });
 };
 
-export { save };
+export { useSave };

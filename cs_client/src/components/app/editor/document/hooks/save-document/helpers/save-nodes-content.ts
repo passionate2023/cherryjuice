@@ -29,10 +29,7 @@ const saveNodesContent = async ({ state, documentId }: SaveOperationProps) => {
           : undefined,
       },
     });
-    const aHtml = DDOEsAHtml.map((ddoe, i) => ({
-      style: ddoe.style,
-      nodes: abstractHtml[i],
-    }));
+    const aHtml = DDOEsAHtml.map((ddoe, i) => [abstractHtml[i], ddoe.style]);
     await apolloCache.client.mutate({
       ...DOCUMENT_MUTATION.ahtml,
       variables: {
@@ -40,7 +37,7 @@ const saveNodesContent = async ({ state, documentId }: SaveOperationProps) => {
         node_id: node.node_id,
         data: {
           ahtml:
-            aHtml.length === 1 && aHtml[0].nodes.length === 0
+            aHtml.length === 1 && aHtml[0][0].length === 0
               ? '[]'
               : JSON.stringify(aHtml),
           deletedImages: deletedImages || [],

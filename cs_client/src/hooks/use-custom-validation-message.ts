@@ -1,5 +1,5 @@
-import { TPattern } from '::app/auth/helpers/form-validation';
 import { useEffect } from 'react';
+import { TPattern } from '::auth/helpers/form-validation';
 
 const useCustomValidityMessage = ({
   inputRef,

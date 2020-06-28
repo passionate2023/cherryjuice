@@ -3,7 +3,7 @@ import { EventHandler, useEffect, useReducer } from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { MetaForm } from '::shared-components/form/meta-form/meta-form';
-import { save } from '::app/menus/node-meta/hooks/save';
+import { useSave } from '::app/menus/node-meta/hooks/save';
 import { NodeMetaPopupRole } from '::app/reducer';
 import {
   nodeMetaActionCreators,
@@ -58,7 +58,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
       nodeMetaActionCreators.reset(node);
     else nodeMetaActionCreators.reset(undefined);
   }, [nodeId, showDialog]);
-  const onSave = save({
+  const onSave = useSave({
     nodeId,
     node,
     newNode: isNewNode,
