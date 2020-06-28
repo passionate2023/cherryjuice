@@ -14,13 +14,19 @@ export class ExportsController {
     @Param('documentHash') documentHash: string,
     @Param('documentName') documentName: string,
   ) {
-    res.header('content-type', 'application/x-sqlite3');
-    res.header(
-      'content-disposition',
-      `attachment; filename="${documentName}.ctb"`,
-    );
-    return this.exportsService
-      .createDownloadStream({ userId, documentId, documentHash, documentName })
-      .pipe(res);
+    const fileStream = this.exportsService.createDownloadStream({
+      userId,
+      documentId,
+      documentHash,
+      documentName,
+    });
+    if (fileStream) {
+      res.header('content-type', 'application/x-sqlite3');
+      res.header(
+        'content-disposition',
+        `attachment; filename="${documentName}.ctb"`,
+      );
+      return fileStream.pipe(res);
+    }
   }
 }

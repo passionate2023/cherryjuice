@@ -61,7 +61,15 @@ class ExportCTB {
   };
 
   createTables = async (): Promise<void> => {
-    await this.db.exec(queries.createTables());
+    try {
+      await this.db.exec(queries.createTables());
+    } catch (e) {
+      await this.getDb.exec(
+        ['node', 'codebox', 'children', 'grid', 'image', 'bookmark']
+          .map(table => `delete from "main"."${table}"`)
+          .join(';'),
+      );
+    }
   };
   closeCtb = async (): Promise<void> => {
     await this.db.close();

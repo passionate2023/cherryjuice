@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ExportDocumentDto } from './dto/export-document.dto';
 import { DocumentService } from '../document/document.service';
 import { NodeService } from '../node/node.service';
@@ -25,9 +25,10 @@ export class ExportsService {
     );
     try {
       await this.subscriptionsService.export.pending(document);
-      const nodes = await this.nodeService.getNodesMetaAndAHtml(documentId);
       await this.subscriptionsService.export.preparing(document);
       const exportCTB = new ExportCTB(document);
+      await this.subscriptionsService.export.preparing(document);
+      const nodes = await this.nodeService.getNodesMetaAndAHtml(documentId);
       await exportCTB.createCtb();
       await exportCTB.createTables();
       await this.subscriptionsService.export.nodesStarted(document);
@@ -37,8 +38,8 @@ export class ExportsService {
         imagesPerNode,
         getNodeImages: this.imageService.getLoadedImages,
       });
-      await this.subscriptionsService.export.finished(document);
       await exportCTB.closeCtb();
+      await this.subscriptionsService.export.finished(document);
       return exportCTB.getDocumentRelativePath;
     } catch (e) {
       await this.subscriptionsService.export.failed(document);
@@ -58,9 +59,11 @@ export class ExportsService {
     documentId: string;
     documentHash: string;
     documentName: string;
-  }): ReadStream => {
-    return fs.createReadStream(
-      `/.cs/exports/${userId}/${documentId}/${documentHash}/${documentName}.ctb`,
-    );
+  }): ReadStream | undefined => {
+    const fullPath = `/.cs/exports/${userId}/${documentId}/${documentHash}/${documentName}.ctb`;
+    if (fs.existsSync(fullPath)) return fs.createReadStream(fullPath);
+    else {
+      throw new NotFoundException();
+    }
   };
 }
