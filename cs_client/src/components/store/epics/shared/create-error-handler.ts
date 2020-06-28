@@ -9,7 +9,7 @@ type CreateErrorHandler = CreateAlertHandler & { dontShowAlert?: boolean };
 
 const createErrorHandler = ({
   alertDetails: { title, description },
-  actionCreators,
+  actionCreators = [],
   dontShowAlert,
 }: CreateErrorHandler) =>
   catchError(error => {

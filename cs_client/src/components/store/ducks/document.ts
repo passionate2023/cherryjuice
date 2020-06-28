@@ -37,6 +37,7 @@ const ac = {
   },
   ...{
     export: _('export'),
+    exportFulfilled: _('exportFulfilled'),
   },
   // node
   selectNode: _(ap('selectNode'), _ => (node: NodeId) => _(node)),
