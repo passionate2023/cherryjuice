@@ -1,0 +1,18 @@
+{
+  "name": "cherryscript",
+  "version": "0.0.1",
+  "description": "cherrytree webapp",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ycnmhd/cherryscript.git"
+  },
+  "keywords": [
+    "cherrytree"
+  ],
+  "author": "Yacine Mohamdi",
+  "license": "ISC",
+  "homepage": "https://github.com/ycnmhd/cherryscript#readme"
+}
