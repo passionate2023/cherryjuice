@@ -36,51 +36,51 @@ const postSave = (state: SaveOperationState) => {
 const saveEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
     ofType([ac.__.document.save]),
-    filter(
-      () =>
-        store.getState().document.saveInProgress === 'idle' &&
-        !!store.getState().document.cacheTimeStamp,
-    ),
+    filter(() => store.getState().document.saveInProgress === 'idle'),
     switchMap(() => {
-      const state: SaveOperationState = {
-        newFatherIds: {},
-        swappedDocumentIds: {},
-        swappedNodeIds: {},
-        swappedImageIds: {},
-        danglingNodes: {},
-        deletedNodes: {},
-      };
+      if (!store.getState().document.cacheTimeStamp) {
+        return of(ac.__.document.saveFulfilled());
+      } else {
+        const state: SaveOperationState = {
+          newFatherIds: {},
+          swappedDocumentIds: {},
+          swappedNodeIds: {},
+          swappedImageIds: {},
+          danglingNodes: {},
+          deletedNodes: {},
+        };
 
-      const updateCache = defer(() =>
-        of(updateCachedHtmlAndImagesPromisified()),
-      ).pipe(ignoreElements());
-      const save = defer(() =>
-        from(saveDocument(state)).pipe(
-          tap(async () => {
-            await apolloCache.client.resetCache();
+        const updateCache = defer(() =>
+          of(updateCachedHtmlAndImagesPromisified()),
+        ).pipe(ignoreElements());
+        const save = defer(() =>
+          from(saveDocument(state)).pipe(
+            tap(async () => {
+              await apolloCache.client.resetCache();
+            }),
+            map(ac.__.document.saveFulfilled),
+          ),
+        );
+        const sp = of(ac.__.document.savePending());
+        const sip = of(ac.__.document.saveInProgress());
+        const ps = defer(() => of(postSave(state)));
+        return concat(sp, updateCache, sip, save, ps).pipe(
+          createTimeoutHandler({
+            alertDetails: {
+              title: 'Saving is taking longer then expected',
+              description: 'try refreshing the page',
+            },
+            due: 60000,
           }),
-          map(ac.__.document.saveFulfilled),
-        ),
-      );
-      const sp = of(ac.__.document.savePending());
-      const sip = of(ac.__.document.saveInProgress());
-      const ps = defer(() => of(postSave(state)));
-      return concat(sp, updateCache, sip, save, ps).pipe(
-        createTimeoutHandler({
-          alertDetails: {
-            title: 'Saving is taking longer then expected',
-            description: 'try refreshing the page',
-          },
-          due: 60000,
-        }),
-        createErrorHandler({
-          alertDetails: {
-            title: 'Could not save',
-            description: 'Check your network connection',
-          },
-          actionCreators: [ac.__.document.saveFailed],
-        }),
-      );
+          createErrorHandler({
+            alertDetails: {
+              title: 'Could not save',
+              description: 'Check your network connection',
+            },
+            actionCreators: [ac.__.document.saveFailed],
+          }),
+        );
+      }
     }),
   );
 };
