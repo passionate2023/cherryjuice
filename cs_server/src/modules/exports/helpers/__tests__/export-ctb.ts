@@ -43,14 +43,17 @@ describe('export-ctb - create and populate basic ctb', () => {
 describe('export-ctb - create and populate complex ctb', () => {
   const state: { exportCtb: ExportCTB } = { exportCtb: undefined };
   beforeAll(async () => {
-    state.exportCtb = await createCTB({
-      userId: 'test2',
-      id: 'doc1',
-      hash: '1234',
-      name: 'test2-document',
-    }, {
-      verbose: false,
-    });
+    state.exportCtb = await createCTB(
+      {
+        userId: 'test2',
+        id: 'doc1',
+        hash: '1234',
+        name: 'test2-document',
+      },
+      {
+        verbose: false,
+      },
+    );
   });
 
   it(`export document ${ahtmlXmlSamples[0][0].documentId}`, async () => {
