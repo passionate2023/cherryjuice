@@ -11,7 +11,7 @@ import { createCTB } from './__preparations__/create-ctb';
 
 jest.setTimeout(15 * 60 * 1000);
 
-describe('export-ctb - create and populate basic ctb', () => {
+describe('export-import-ctb - create and populate basic import-ctb', () => {
   const state: { exportCtb: ExportCTB } = {
     exportCtb: undefined,
   };
@@ -23,12 +23,12 @@ describe('export-ctb - create and populate basic ctb', () => {
       name: 'test1-document',
     });
   });
-  it('should create an empty ctb file', async () => {
+  it('should create an empty import-ctb file', async () => {
     const db = await state.exportCtb.createCtb();
     expect(db).toBeDefined();
     expect(fs.existsSync(state.exportCtb.getDocumentPath)).toBeTruthy();
   });
-  it('should create tables in the ctb file', async () => {
+  it('should create tables in the import-ctb file', async () => {
     await state.exportCtb.createTables();
     const size = fs.statSync(state.exportCtb.getDocumentPath).size;
     expect(size).toEqual(40960);
@@ -40,7 +40,7 @@ describe('export-ctb - create and populate basic ctb', () => {
   });
 });
 
-describe('export-ctb - create and populate complex ctb', () => {
+describe('export-import-ctb - create and populate complex import-ctb', () => {
   const state: { exportCtb: ExportCTB } = { exportCtb: undefined };
   for (const document of documentsFromPG) {
     it(`export document ${document.name}`, async () => {

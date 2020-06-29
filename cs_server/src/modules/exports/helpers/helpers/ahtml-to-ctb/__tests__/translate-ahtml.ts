@@ -10,7 +10,7 @@ const testTemplate = ({ nodes }: { nodes: NodeFromPG[] }) => {
   });
 };
 
-describe('ahtml-to-ctb', () => {
+describe('ahtml-to-import-ctb', () => {
   for (const document of documentsFromPG) {
     test(`document: ${document.name}`, () => {
       testTemplate(selectNode_ids()(document.nodes));

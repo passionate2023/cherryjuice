@@ -11,7 +11,7 @@ import {
   CTJustification,
   translateNode,
 } from './helpers/translate-node/translate-node';
-import { reverseJustificationMap } from '../../../../../../node/helpers/rendering/ctb-to-ahtml/steps/translate-attributes-to-html-and-css';
+import { reverseJustificationMap } from '../../../../../../imports/helpers/import-ctb/rendering/ctb-to-ahtml/steps/translate-attributes-to-html-and-css';
 
 const translateAHtml = (node_id: number) => (
   aHtmls: AHtmlLine[],

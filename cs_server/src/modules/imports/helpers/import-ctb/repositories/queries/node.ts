@@ -1,9 +1,4 @@
-import { DocumentSqliteRepository } from '../../document/repositories/document.sqlite.repository';
-import { Injectable } from '@nestjs/common';
-import { Image } from '../../document/helpers/copy-ctb/entities/Image';
-import { IImageRepository } from '../interfaces/image.repository';
-
-const queries = {
+const nodeQueries = {
   read: {
     text: ({ node_id }) => `
   SELECT 
@@ -28,6 +23,15 @@ const queries = {
   FROM grid
   WHERE node_id = ${node_id};
   `,
+    node_meta: (node_id?: number) => `
+  SELECT 
+    n.node_id, n.name, n.is_ro, 
+    n.is_richtxt, n.has_image, n.has_codebox,
+    n.has_table,n.ts_creation as createdAt,n.ts_lastsave as updatedAt, 
+    c.father_id,c.sequence, n.is_ro as read_only
+   FROM node as n INNER JOIN children AS c
+   on n.node_id = c.node_id
+   ${node_id ? `where n.node_id = ${node_id}` : ''}`,
   },
   write: {
     column: ({ table, column, value, node_id }) => ` 
@@ -37,20 +41,4 @@ const queries = {
   },
 };
 
-@Injectable()
-export class ImageSqliteRepository implements IImageRepository {
-  constructor(private documentSqliteRepository: DocumentSqliteRepository) {}
-
-  async getNodeImages({
-    node_id,
-  }): Promise<
-    Pick<
-      Image,
-      'node_id' |  'justification' | 'anchor' | 'png' | 'link'
-    >[]
-  > {
-    return this.documentSqliteRepository.sqliteAll(
-      queries.read.images({ node_id: node_id, offset: undefined }),
-    );
-  }
-}
+export { nodeQueries };

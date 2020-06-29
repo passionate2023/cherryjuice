@@ -17,16 +17,14 @@ export class NodeResolver {
   }
   @ResolveField(() => [Image])
   async image(
-    @Parent() { node_id, id: nodeId },
+    @Parent() { id: nodeId },
     @Args('thumbnail', { nullable: true }) thumbnail: boolean,
   ): Promise<Promise<Image>[] | Image[]> {
     return thumbnail
       ? this.imageService.getPNGThumbnailBase64({
-          node_id,
           nodeId,
         })
       : this.imageService.getPNGFullBase64({
-          node_id,
           nodeId,
         });
   }

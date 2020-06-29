@@ -1,16 +1,12 @@
 import imageThumbnail from 'image-thumbnail';
-import { Injectable } from '@nestjs/common';
-import { ImageService } from '../image/image.service';
-import { Node } from '../node/entities/node.entity';
-import { NodeSqliteRepository } from '../node/repositories/node.sqlite.repository';
-import { DocumentSqliteRepository } from '../document/repositories/document.sqlite.repository';
-import { DocumentService } from '../document/document.service';
-import { copyProperties, nodeTitleStyle } from '../document/helpers';
-import { Document } from '../document/entities/document.entity';
-import { Image } from '../image/entities/image.entity';
-import { ImageSqliteRepository } from '../image/repositories/image.sqlite.repository';
-import { NodeService } from '../node/node.service';
-import { User } from '../user/entities/user.entity';
+import { Node } from '../../../node/entities/node.entity';
+import { NodeSqliteRepository } from './repositories/node.sqlite.repository';
+import { DocumentSqliteRepository } from './repositories/document.sqlite.repository';
+import { copyProperties } from '../../../document/helpers';
+import { Document } from '../../../document/entities/document.entity';
+import { Image } from '../../../image/entities/image.entity';
+import { ImageSqliteRepository } from './repositories/image.sqlite.repository';
+import { nodeTitleStyle } from './rendering/node-meta/node-title-style';
 
 type NodeDateMap = Map<number, { createdAt: Date; updatedAt: Date }>;
 type NodeDatesMap = NodeDateMap;
@@ -23,42 +19,40 @@ type NodeImagesMap = [Node, { png: Buffer; hash?: string }[]][];
 
 type Node_idImagesMap = Map<number, string[]>;
 
-@Injectable()
-export class SaveDocumentsService {
-  constructor(
-    private documentService: DocumentService,
-    private imageService: ImageService,
-    private nodeService: NodeService,
-    private documentSqliteRepository: DocumentSqliteRepository,
-    private nodeSqliteRepository: NodeSqliteRepository,
-    private imageSqliteRepository: ImageSqliteRepository,
-  ) {}
+export class ImportCTB {
+  private readonly documentSqliteRepository: DocumentSqliteRepository;
+  private readonly nodeSqliteRepository: NodeSqliteRepository;
+  private readonly imageSqliteRepository: ImageSqliteRepository;
+  constructor() {
+    this.documentSqliteRepository = new DocumentSqliteRepository();
+    this.nodeSqliteRepository = new NodeSqliteRepository(
+      this.documentSqliteRepository,
+    );
+    this.imageSqliteRepository = new ImageSqliteRepository(
+      this.documentSqliteRepository,
+    );
+  }
 
-  async saveDocument({
-    user,
-    document,
-    rawNodes,
-  }: {
-    user: User;
-    document: Document;
-    rawNodes: (Node & { is_ro; has_image })[];
-  }): Promise<void> {
+  async saveDocument({ document }: { document: Document }): Promise<Document> {
+    const filePath = '/uploads/' + document.name + '.ctb';
+    await this.documentSqliteRepository.openDB(filePath);
+    const rawNodes = (await this.nodeSqliteRepository.getNodesMeta()) as (Node & {
+      is_ro;
+      has_image;
+    })[];
     const { nodeImagesMap, nodesMap, nodeDatesMap } = await this.saveNodesMeta(
       document,
       rawNodes,
     );
-    const { node_idImagesMap } = await this.saveImages(nodeImagesMap);
+    const { node_idImagesMap } = await ImportCTB.saveImages(nodeImagesMap);
     await this.saveAhtml({
       node_idImagesMap,
       nodesMap,
       nodeDatesMap,
       document,
     });
-    document.size = await this.documentService.getSize({
-      documentId: document.id,
-      user,
-    });
-    await document.save();
+    await this.documentSqliteRepository.closeDB();
+    return document;
   }
 
   async saveNodesMeta(
@@ -113,7 +107,7 @@ export class SaveDocumentsService {
     return { nodeImagesMap, nodesMap, nodeDatesMap };
   }
 
-  async saveImages(
+  static async saveImages(
     nodeImagesMap: NodeImagesMap,
   ): Promise<{ node_idImagesMap: Node_idImagesMap }> {
     const node_idImagesMap: Node_idImagesMap = new Map();

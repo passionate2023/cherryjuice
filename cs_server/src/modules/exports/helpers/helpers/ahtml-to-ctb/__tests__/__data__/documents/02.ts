@@ -2208,7 +2208,7 @@ const document = {
   userId: 'test',
   id: 'doc1',
   hash: '1234',
-  name: 'file.ctb',
+  name: 'file.import-ctb',
   nodes: nodes as NodeFromPG[],
 };
 export { document as s02 };

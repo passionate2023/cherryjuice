@@ -1,4 +1,4 @@
-import { parseLink } from '../../ahtml-to-html/helpers/ctb';
+import { parseLink } from '../../../../../../node/helpers/rendering/ahtml-to-html/helpers/ctb';
 const preferences = { code: { 'background-color': '#2B2B2B' } };
 
 const utils = {

@@ -10,15 +10,12 @@ import {
 } from './helpers/io';
 import { User } from '../user/entities/user.entity';
 import { ImageService } from '../image/image.service';
-import { Node } from '../node/entities/node.entity';
-import { NodeSqliteRepository } from '../node/repositories/node.sqlite.repository';
-import { DocumentSqliteRepository } from '../document/repositories/document.sqlite.repository';
 import { DocumentService } from '../document/document.service';
 import { Document } from '../document/entities/document.entity';
 import { FileUpload } from '../document/helpers/graphql';
 import { UploadImageDto } from './dto/upload-image.dto';
 import { NodeService } from '../node/node.service';
-import { SaveDocumentsService } from './save-documents.service';
+import { ImportCTB } from './helpers/import-ctb/import-ctb';
 import { DocumentSubscriptionsService } from '../document/document.subscriptions.service';
 export type DocumentDTO = {
   name: string;
@@ -32,21 +29,11 @@ export class ImportsService {
     private documentService: DocumentService,
     private imageService: ImageService,
     private nodeService: NodeService,
-    private documentSqliteRepository: DocumentSqliteRepository,
-    private nodeSqliteRepository: NodeSqliteRepository,
-    private saveDocumentsService: SaveDocumentsService,
     private subscriptionsService: DocumentSubscriptionsService,
   ) {}
 
   onModuleInit(): void {
     cleanUploadsFolder();
-  }
-
-  async openUploadedFile(filePath: string): Promise<void> {
-    await this.documentSqliteRepository.openUploadedFile(filePath);
-  }
-  async closeUploadedFile(): Promise<void> {
-    await this.documentSqliteRepository.closeUploadedFile();
   }
 
   private async saveDocument({
@@ -56,16 +43,18 @@ export class ImportsService {
     document: Document;
     user: User;
   }): Promise<void> {
-    const filePath = '/uploads/' + document.name;
-    await this.openUploadedFile(filePath);
-    const rawNodes = (await this.nodeSqliteRepository.getNodesMeta(
-      false,
-    )) as (Node & { is_ro; has_image })[];
-    await this.saveDocumentsService.saveDocument({
+    document.name = document.name.replace(/\.ctb$/, '');
+
+    const importCTB = new ImportCTB();
+
+    const pgDocument = await importCTB.saveDocument({
       document,
-      rawNodes,
+    });
+    pgDocument.size = await this.documentService.getSize({
+      documentId: pgDocument.id,
       user,
     });
+    await pgDocument.save();
   }
   async importDocumentsFromGDrive(
     meta: string[],
@@ -112,9 +101,7 @@ export class ImportsService {
       user,
     });
 
-    const { node_idImagesMap } = await this.saveDocumentsService.saveImages([
-      [node, pngs],
-    ]);
+    const { node_idImagesMap } = await ImportCTB.saveImages([[node, pngs]]);
     return node_idImagesMap.get(node_id).map((id, i) => [imageIDs[i], id]);
   }
 
@@ -173,7 +160,6 @@ export class ImportsService {
         await this.subscriptionsService.import.failed(document);
         throw e;
       }
-      await this.closeUploadedFile();
     }
     cleanUploadsFolder();
   }
