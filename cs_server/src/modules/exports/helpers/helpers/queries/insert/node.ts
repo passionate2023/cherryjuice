@@ -1,5 +1,5 @@
 import SQL from 'sql-template-strings';
-import { adaptNodeStyle, adaptNodeTime } from '../../adapt-node-meta';
+import { adaptNodeStyle, adaptNodeTime } from '../../adapt-node-meta/adapt-node-meta';
 import { Node } from '../../../../../node/entities/node.entity';
 
 const insertIntoNode = ({

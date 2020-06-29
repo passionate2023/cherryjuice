@@ -1,5 +1,5 @@
 import { nodeStyleTestSamples } from './__data__/node-meta';
-import { nodeTitleStyle } from '../../../../document/helpers';
+import { nodeTitleStyle } from '../../../../../document/helpers';
 import { adaptNodeStyle } from '../adapt-node-meta';
 
 describe('adapt node title style', () => {

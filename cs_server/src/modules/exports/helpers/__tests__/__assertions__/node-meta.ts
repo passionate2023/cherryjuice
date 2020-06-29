@@ -1,6 +1,6 @@
-import { adaptNodeStyle } from '../../helpers/adapt-node-meta';
+import { adaptNodeStyle } from '../../helpers/adapt-node-meta/adapt-node-meta';
 import { ExportCTB } from '../../export-ctb';
-import { NodeFromPG } from '../../helpers/ahtml-to-ctb/helpers/translate-ahtml/__tests__/__data__/ahtml-xml-samples/02';
+import { NodeFromPG } from '../../helpers/ahtml-to-ctb/__tests__/__data__/documents/02';
 
 const assertNodeMeta = async (exportCtb: ExportCTB, nodes: NodeFromPG[]) => {
   const writtenNodes = await exportCtb.getDb.all(

@@ -2203,5 +2203,13 @@ type NodeFromPG = typeof nodes[0] & {
   updatedAt: Date;
   child_nodes: number[];
 };
-export { nodes as s02 };
+
+const document = {
+  userId: 'test',
+  id: 'doc1',
+  hash: '1234',
+  name: 'file.ctb',
+  nodes: nodes as NodeFromPG[],
+};
+export { document as s02 };
 export { NodeFromPG };
