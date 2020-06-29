@@ -6,15 +6,29 @@ import { ExportCTB } from './helpers/export-ctb';
 import fs, { ReadStream } from 'fs';
 import { ImageService } from '../image/image.service';
 import { DocumentSubscriptionsService } from '../document/document.subscriptions.service';
+import { Document } from '../document/entities/document.entity';
+import { deleteFolder } from '../shared/delete-folder';
+import Timeout = NodeJS.Timeout;
 
 @Injectable()
 export class ExportsService {
+  private deleteTimeouts: { [hash: string]: Timeout } = {};
   constructor(
     private documentService: DocumentService,
     private subscriptionsService: DocumentSubscriptionsService,
     private nodeService: NodeService,
     private imageService: ImageService,
   ) {}
+
+  private scheduleDeletion = (document: Document, exportCTB: ExportCTB) => {
+    if (this.deleteTimeouts[document.hash])
+      clearInterval(this.deleteTimeouts[document.hash]);
+    this.deleteTimeouts[document.hash] = setTimeout(() => {
+      deleteFolder(exportCTB.getDocumentFolder);
+      delete this.deleteTimeouts[document.hash];
+    }, 30 * 60 * 1000);
+  };
+
   exportDocument = async ({
     documentId,
     user,
@@ -39,6 +53,7 @@ export class ExportsService {
         getNodeImages: this.imageService.getLoadedImages,
       });
       await exportCTB.closeCtb();
+      this.scheduleDeletion(document, exportCTB);
       await this.subscriptionsService.export.finished(document);
       return exportCTB.getDocumentRelativePath;
     } catch (e) {
