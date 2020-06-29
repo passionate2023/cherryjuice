@@ -1,4 +1,10 @@
-import { filter, ignoreElements, map, switchMap, tap } from 'rxjs/operators';
+import {
+  filter,
+  ignoreElements,
+  switchMap,
+  switchMapTo,
+  tap,
+} from 'rxjs/operators';
 import { concat, defer, from, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { Actions } from '../actions.types';
@@ -58,13 +64,24 @@ const saveEpic = (action$: Observable<Actions>) => {
             tap(async () => {
               await apolloCache.client.resetCache();
             }),
-            map(ac.__.document.saveFulfilled),
+            ignoreElements(),
           ),
         );
         const sp = of(ac.__.document.savePending());
+        const sf = of(ac.__.document.saveFulfilled());
         const sip = of(ac.__.document.saveInProgress());
         const ps = defer(() => of(postSave(state)));
-        return concat(sp, updateCache, sip, save, ps).pipe(
+        return concat(
+          sp,
+          updateCache,
+          sip,
+          save,
+          ps,
+          action$.pipe(
+            ofType([ac.__.document.fetchNodesFulfilled]),
+            switchMapTo(sf),
+          ),
+        ).pipe(
           createTimeoutHandler({
             alertDetails: {
               title: 'Saving is taking longer then expected',

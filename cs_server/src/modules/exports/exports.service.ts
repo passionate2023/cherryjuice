@@ -20,8 +20,8 @@ export class ExportsService {
     private imageService: ImageService,
   ) {}
 
-  onModuleInit(): void {
-    deleteFolder(exportsFolder, true);
+  async onModuleInit(): Promise<void> {
+    await deleteFolder(exportsFolder, true);
   }
   private scheduleDeletion = async (
     document: Document,
