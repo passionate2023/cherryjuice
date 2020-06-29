@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ExportDocumentDto } from './dto/export-document.dto';
 import { DocumentService } from '../document/document.service';
 import { NodeService } from '../node/node.service';
-import { ExportCTB } from './helpers/export-ctb';
+import { ExportCTB, exportsFolder } from './helpers/export-ctb';
 import fs, { ReadStream } from 'fs';
 import { ImageService } from '../image/image.service';
 import { DocumentSubscriptionsService } from '../document/document.subscriptions.service';
@@ -20,12 +20,19 @@ export class ExportsService {
     private imageService: ImageService,
   ) {}
 
-  private scheduleDeletion = (document: Document, exportCTB: ExportCTB) => {
+  onModuleInit(): void {
+    deleteFolder(exportsFolder, true);
+  }
+  private scheduleDeletion = async (
+    document: Document,
+    exportCTB: ExportCTB,
+  ): Promise<void> => {
     if (this.deleteTimeouts[document.hash])
       clearInterval(this.deleteTimeouts[document.hash]);
     this.deleteTimeouts[document.hash] = setTimeout(() => {
-      deleteFolder(exportCTB.getDocumentFolder);
-      delete this.deleteTimeouts[document.hash];
+      deleteFolder(exportCTB.getDocumentFolder).then(() => {
+        delete this.deleteTimeouts[document.hash];
+      });
     }, 30 * 60 * 1000);
   };
 
@@ -37,10 +44,9 @@ export class ExportsService {
       user,
       documentId,
     );
+    const exportCTB = new ExportCTB(document);
     try {
       await this.subscriptionsService.export.pending(document);
-      await this.subscriptionsService.export.preparing(document);
-      const exportCTB = new ExportCTB(document);
       await this.subscriptionsService.export.preparing(document);
       const nodes = await this.nodeService.getNodesMetaAndAHtml(documentId);
       await exportCTB.createCtb();
@@ -53,11 +59,12 @@ export class ExportsService {
         getNodeImages: this.imageService.getLoadedImages,
       });
       await exportCTB.closeCtb();
-      this.scheduleDeletion(document, exportCTB);
+      await this.scheduleDeletion(document, exportCTB);
       await this.subscriptionsService.export.finished(document);
       return exportCTB.getDocumentRelativePath;
     } catch (e) {
       await this.subscriptionsService.export.failed(document);
+      await exportCTB.closeCtb();
       // eslint-disable-next-line no-console
       console.error(e);
       throw e;

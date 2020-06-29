@@ -8,6 +8,7 @@ import {
   UnloadedImageRow,
 } from './helpers/ahtml-to-ctb/helpers/translate-ahtml/helpers/translate-object/objects/image';
 import { LoadedImages } from './__tests__/__data__/images/get-loaded-images';
+import { deleteFolder } from '../../shared/delete-folder';
 
 const exportsFolder = '/.cs/exports';
 type DebugOptions = {
@@ -48,9 +49,8 @@ class ExportCTB {
   }
 
   createCtb = async (): Promise<sqlite.Database> => {
-    if (!fs.existsSync(this.getDocumentFolder)) {
-      fs.mkdirSync(this.getDocumentFolder, { recursive: true });
-    }
+    deleteFolder(this.getDocumentFolder, true);
+    fs.mkdirSync(this.getDocumentFolder, { recursive: true });
     this.db = await sqlite.open(this.getDocumentPath);
     if (this.debugOptions.verbose) {
       sqlite3.verbose();
@@ -61,15 +61,7 @@ class ExportCTB {
   };
 
   createTables = async (): Promise<void> => {
-    try {
-      await this.db.exec(queries.createTables());
-    } catch (e) {
-      await this.getDb.exec(
-        ['node', 'codebox', 'children', 'grid', 'image', 'bookmark']
-          .map(table => `delete from "main"."${table}"`)
-          .join(';'),
-      );
-    }
+    await this.db.exec(queries.createTables());
   };
   closeCtb = async (): Promise<void> => {
     await this.db.close();
@@ -147,5 +139,5 @@ class ExportCTB {
   };
 }
 type ImagesMap = Map<string, UnloadedImageRow[]>;
-export { ExportCTB };
+export { ExportCTB, exportsFolder };
 export { GetNodeImages, DebugOptions, DocumentMeta };
