@@ -1,6 +1,6 @@
 import { nodeStyleTestSamples } from './__data__/node-meta';
-import { nodeTitleStyle } from '../../../../../document/helpers';
 import { adaptNodeStyle } from '../adapt-node-meta';
+import { nodeTitleStyle } from '../../../../../imports/helpers/import-ctb/rendering/node-meta/node-title-style';
 
 describe('adapt node title style', () => {
   it('should reverse node-title-style to rich_text and is_ro', () => {

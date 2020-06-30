@@ -75,7 +75,6 @@ const testData = {
             'code',
             {
               style: {
-                'background-color': '#2B2B2B',
                 color: '#c792ea',
               },
             },

@@ -26,11 +26,11 @@ describe('export-import-ctb - create and populate basic import-ctb', () => {
   it('should create an empty import-ctb file', async () => {
     const db = await state.exportCtb.createCtb();
     expect(db).toBeDefined();
-    expect(fs.existsSync(state.exportCtb.getDocumentPath)).toBeTruthy();
+    expect(fs.existsSync(state.exportCtb.getFileLocation.path)).toBeTruthy();
   });
   it('should create tables in the import-ctb file', async () => {
     await state.exportCtb.createTables();
-    const size = fs.statSync(state.exportCtb.getDocumentPath).size;
+    const size = fs.statSync(state.exportCtb.getFileLocation.path).size;
     expect(size).toEqual(40960);
   });
   it('should write node meta to node and children tables', async () => {

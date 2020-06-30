@@ -1,4 +1,4 @@
-@import "./vars/vars";
+@import './vars/vars';
 body {
   margin: 0;
   overflow: hidden;
@@ -14,8 +14,7 @@ h6 {
   font-weight: normal;
 }
 code {
-  //font-size: 18px;
-  //font-weight: 400;
+  background-color: #2b2b2b;
 }
 small {
   font-size: 22px;
@@ -33,5 +32,5 @@ a:focus,
 button:focus,
 input:focus,
 textarea:focus {
-  outline: 1px solid rgba(grey,0.4);
+  outline: 1px solid rgba(grey, 0.4);
 }

@@ -1,5 +1,4 @@
 import { parseLink } from '../../../../../../node/helpers/rendering/ahtml-to-html/helpers/ctb';
-const preferences = { code: { 'background-color': '#2B2B2B' } };
 
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10],
@@ -44,10 +43,7 @@ const createTranslatedNode = (lineStyles: { [key: string]: string }) => {
       weight: () => tags.push(['strong', {}]),
       style: () => tags.push(['em', {}]),
       scale: c => tags.push([c, {}]), // todo: complete this
-      family: () => (
-        tags.push(['code', {}]),
-        (styles['background-color'] = styles['background-color'] || '#2B2B2B')
-      ),
+      family: () => tags.push(['code', {}]),
       link: c => tags.push(['a', utils.parseLink(c)]),
     },
   };
@@ -102,9 +98,5 @@ const translateAttributesToHtmlAndCss = xml =>
       ),
     ];
   });
-export {
-  translateAttributesToHtmlAndCss,
-  preferences as cssPreferences,
-  utils as xmlAttributesToCssUtils,
-  reverseJustificationMap,
-};
+
+export { translateAttributesToHtmlAndCss, reverseJustificationMap };
