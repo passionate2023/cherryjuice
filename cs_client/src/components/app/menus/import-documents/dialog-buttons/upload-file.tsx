@@ -1,21 +1,26 @@
 import * as React from 'react';
-import { useMutation } from '@apollo/react-hooks';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { useRef } from 'react';
 import { modImportDocument } from '::sass-modules/index';
 import { Icon, Icons } from '::shared-components/icon/icon';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
+import { apolloCache } from '::graphql/cache/apollo-cache';
 
 const UploadFile: React.FC<{}> = () => {
-  // eslint-disable-next-line no-unused-vars
-  const [mutate, { loading, called, error, data }] = useMutation(
-    DOCUMENT_MUTATION.file,
-  );
+  const inputRef = useRef<HTMLInputElement>();
 
   const onChange = ({ target: { validity, files } }) => {
-    if (validity.valid) mutate({ variables: { files } });
+    if (validity.valid) {
+      apolloCache.client.mutate({
+        query: DOCUMENT_MUTATION.file,
+        path: () => undefined,
+        variables: { files },
+      });
+      setTimeout(() => {
+        inputRef.current.value = '';
+      }, 500);
+    }
   };
-  const inputRef = useRef<HTMLInputElement>();
   return (
     <>
       <ButtonSquare
