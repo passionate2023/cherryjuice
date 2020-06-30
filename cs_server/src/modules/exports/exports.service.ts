@@ -2,13 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ExportDocumentDto } from './dto/export-document.dto';
 import { DocumentService } from '../document/document.service';
 import { NodeService } from '../node/node.service';
-import { ExportCTB, exportsFolder } from './helpers/export-ctb';
+import { ExportCTB } from './helpers/export-ctb';
 import fs, { ReadStream } from 'fs';
 import { ImageService } from '../image/image.service';
 import { DocumentSubscriptionsService } from '../document/document.subscriptions.service';
 import { Document } from '../document/entities/document.entity';
-import { deleteFolder } from '../shared/delete-folder';
+import { deleteFolder } from '../shared/fs/delete-folder';
 import Timeout = NodeJS.Timeout;
+import { paths } from '../shared/fs/paths';
+import { resolveFileLocation } from '../shared/fs/resolve-file-location';
 
 @Injectable()
 export class ExportsService {
@@ -21,7 +23,7 @@ export class ExportsService {
   ) {}
 
   async onModuleInit(): Promise<void> {
-    await deleteFolder(exportsFolder, true);
+    await deleteFolder(paths.exportsFolder, true);
   }
   private scheduleDeletion = async (
     document: Document,
@@ -30,7 +32,7 @@ export class ExportsService {
     if (this.deleteTimeouts[document.hash])
       clearInterval(this.deleteTimeouts[document.hash]);
     this.deleteTimeouts[document.hash] = setTimeout(() => {
-      deleteFolder(exportCTB.getDocumentFolder).then(() => {
+      deleteFolder(exportCTB.getFileLocation.folder).then(() => {
         delete this.deleteTimeouts[document.hash];
       });
     }, 30 * 60 * 1000);
@@ -61,7 +63,7 @@ export class ExportsService {
       await exportCTB.closeCtb();
       await this.scheduleDeletion(document, exportCTB);
       await this.subscriptionsService.export.finished(document);
-      return exportCTB.getDocumentRelativePath;
+      return exportCTB.getFileLocation.relativePath;
     } catch (e) {
       await this.subscriptionsService.export.failed(document);
       await exportCTB.closeCtb();
@@ -73,7 +75,6 @@ export class ExportsService {
 
   createDownloadStream = ({
     userId,
-    documentId,
     documentHash,
     documentName,
   }: {
@@ -82,8 +83,14 @@ export class ExportsService {
     documentHash: string;
     documentName: string;
   }): ReadStream | undefined => {
-    const fullPath = `/.cs/exports/${userId}/${documentId}/${documentHash}/${documentName}.ctb`;
-    if (fs.existsSync(fullPath)) return fs.createReadStream(fullPath);
+    const { path } = resolveFileLocation({
+      extension: 'ctb',
+      userId,
+      timeStamp: documentHash,
+      fileName: documentName,
+      type: 'export',
+    });
+    if (fs.existsSync(path)) return fs.createReadStream(path);
     else {
       throw new NotFoundException();
     }

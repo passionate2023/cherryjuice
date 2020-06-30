@@ -7,6 +7,7 @@ import { Document } from '../../../document/entities/document.entity';
 import { Image } from '../../../image/entities/image.entity';
 import { ImageSqliteRepository } from './repositories/image.sqlite.repository';
 import { nodeTitleStyle } from './rendering/node-meta/node-title-style';
+import { FileMeta } from '../download/create-dowload-task/create-gdrive-download-task';
 
 type NodeDateMap = Map<number, { createdAt: Date; updatedAt: Date }>;
 type NodeDatesMap = NodeDateMap;
@@ -33,9 +34,14 @@ export class ImportCTB {
     );
   }
 
-  async saveDocument({ document }: { document: Document }): Promise<Document> {
-    const filePath = '/uploads/' + document.name + '.ctb';
-    await this.documentSqliteRepository.openDB(filePath);
+  async saveDocument({
+    document,
+    fileMeta,
+  }: {
+    document: Document;
+    fileMeta: FileMeta;
+  }): Promise<Document> {
+    await this.documentSqliteRepository.openDB(fileMeta.location.path);
     const rawNodes = (await this.nodeSqliteRepository.getNodesMeta()) as (Node & {
       is_ro;
       has_image;

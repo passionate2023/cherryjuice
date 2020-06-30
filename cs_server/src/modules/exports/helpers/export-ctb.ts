@@ -8,9 +8,12 @@ import {
   UnloadedImageRow,
 } from './helpers/ahtml-to-ctb/helpers/translate-ahtml/helpers/translate-object/objects/image';
 import { LoadedImages } from './__tests__/__data__/images/get-loaded-images';
-import { deleteFolder } from '../../shared/delete-folder';
+import { deleteFolder } from '../../shared/fs/delete-folder';
+import {
+  FileLocation,
+  resolveFileLocation,
+} from '../../shared/fs/resolve-file-location';
 
-const exportsFolder = '/.cs/exports';
 type DebugOptions = {
   verbose?: boolean;
 };
@@ -27,6 +30,7 @@ class ExportCTB {
   private readonly documentFolder;
   private readonly documentName;
   private readonly debugOptions: DebugOptions;
+  private readonly fileLocation: FileLocation;
   constructor(
     { hash, name, userId, id }: DocumentMeta,
     debugOptions: DebugOptions = {},
@@ -34,24 +38,26 @@ class ExportCTB {
     this.debugOptions = debugOptions;
     this.documentName = `${name}.ctb`;
     this.documentFolder = `${userId}/${id}/${hash}`;
+    this.fileLocation = resolveFileLocation({
+      userId,
+      fileName: name,
+      extension: 'ctb',
+      timeStamp: hash,
+      type: 'export',
+    });
   }
-  get getDocumentPath(): string {
-    return `${exportsFolder}/${this.documentFolder}/${this.documentName}`;
+  get getFileLocation(): FileLocation {
+    return this.fileLocation;
   }
-  get getDocumentFolder(): string {
-    return `${exportsFolder}/${this.documentFolder}/`;
-  }
-  get getDocumentRelativePath(): string {
-    return `${this.documentFolder}/${this.documentName}`;
-  }
+
   get getDb(): sqlite.Database {
     return this.db;
   }
 
   createCtb = async (): Promise<sqlite.Database> => {
-    deleteFolder(this.getDocumentFolder, true);
-    fs.mkdirSync(this.getDocumentFolder, { recursive: true });
-    this.db = await sqlite.open(this.getDocumentPath);
+    await deleteFolder(this.fileLocation.folder, true);
+    fs.mkdirSync(this.fileLocation.folder, { recursive: true });
+    this.db = await sqlite.open(this.fileLocation.path);
     if (this.debugOptions.verbose) {
       sqlite3.verbose();
       // eslint-disable-next-line no-console
@@ -139,5 +145,5 @@ class ExportCTB {
   };
 }
 type ImagesMap = Map<string, UnloadedImageRow[]>;
-export { ExportCTB, exportsFolder };
+export { ExportCTB };
 export { GetNodeImages, DebugOptions, DocumentMeta };
