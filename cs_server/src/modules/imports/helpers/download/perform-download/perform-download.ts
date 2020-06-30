@@ -18,16 +18,17 @@ const performDownload = async (
   const state = {
     numberOfChunks: 0,
     lastNumberOfChunks: 0,
+    retries: 0,
   };
   return new Promise<DownloadResult>((resolve, reject) => {
     const intervalHandle = setInterval(async () => {
       const isDocumentDeleted = await healthCheckCallback()
         .then(() => false)
         .catch(() => true);
-      if (
-        isDocumentDeleted ||
-        state.numberOfChunks <= state.lastNumberOfChunks
-      ) {
+      const uploadIsStale = state.numberOfChunks <= state.lastNumberOfChunks;
+      state.retries = uploadIsStale ? state.retries + 1 : 0;
+
+      if (isDocumentDeleted || state.retries === 5) {
         clearInterval(intervalHandle);
         writeStream.end();
         readStream.destroy();

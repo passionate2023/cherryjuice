@@ -40,7 +40,7 @@ export class ImportCTB {
   }: {
     document: Document;
     fileMeta: FileMeta;
-  }): Promise<Document> {
+  }): Promise<void> {
     await this.documentSqliteRepository.openDB(fileMeta.location.path);
     const rawNodes = (await this.nodeSqliteRepository.getNodesMeta()) as (Node & {
       is_ro;
@@ -58,7 +58,6 @@ export class ImportCTB {
       document,
     });
     await this.documentSqliteRepository.closeDB();
-    return document;
   }
 
   async saveNodesMeta(

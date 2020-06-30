@@ -49,15 +49,15 @@ export class ImportsService {
   }): Promise<void> {
     const importCTB = new ImportCTB();
 
-    const pgDocument = await importCTB.saveDocument({
+    await importCTB.saveDocument({
       document,
       fileMeta,
     });
-    pgDocument.size = await this.documentService.getSize({
-      documentId: pgDocument.id,
+    document.size = await this.documentService.getSize({
+      documentId: document.id,
       user,
     });
-    await pgDocument.save();
+    await document.save();
   }
   async importDocumentsFromGDrive(
     gDriveFileIds: string[],
@@ -145,7 +145,9 @@ export class ImportsService {
     for (const { document, downloadTask } of documents) {
       try {
         await this.subscriptionsService.import.preparing(document);
-        const { hash } = await performDownload(downloadTask, document.reload);
+        const { hash } = await performDownload(downloadTask, async () => {
+          await document.reload();
+        });
         const documentWithSameHash = await this.documentService.findDocumentByHash(
           hash,
           user,
