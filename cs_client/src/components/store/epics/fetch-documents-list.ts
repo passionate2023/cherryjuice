@@ -15,23 +15,24 @@ const fetchDocumentsListEpic = (action$: Observable<Actions>) => {
     switchMap(() => {
       const request = gqlQuery({
         ...QUERY_DOCUMENTS.documentMeta,
+        variables: undefined,
       }).pipe(map(ac.__.documentsList.fetchDocumentsFulfilled));
 
       const loading = of(ac.__.documentsList.fetchDocumentsInProgress());
       return concat(loading, request).pipe(
-        createErrorHandler({
-          alertDetails: {
-            title: 'Could not fetch the documents',
-            description: 'Check your network connection',
-          },
-          actionCreators: [],
-        }),
         createTimeoutHandler({
           alertDetails: {
             title: 'Fetching the documents is taking longer then expected',
             description: 'try refreshing the page',
           },
           due: 15000,
+        }),
+        createErrorHandler({
+          alertDetails: {
+            title: 'Could not fetch the documents',
+            description: 'Check your network connection',
+          },
+          actionCreators: [],
         }),
       );
     }),

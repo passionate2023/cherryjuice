@@ -26,7 +26,7 @@ const Editor: React.FC<{ state: TState } & PropsFromRedux> = ({
   useEffect(() => {
     if (!documentId && router.location.pathname === '/')
       ac.dialogs.showDocumentList();
-  }, [documentId, router.location.pathname]);
+  }, []);
 
   return (
     <>

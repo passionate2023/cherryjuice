@@ -32,7 +32,13 @@ const actionCreators = {
     setAlert: _(ap('setAlert'), _ => (alert: TAlert) => {
       if (alert?.error && process.env.NODE_ENV === 'development')
         // eslint-disable-next-line no-console
-        console.error(alert.error);
+        console.error(alert);
+      if (alert.error?.message.includes('cs::')) {
+        const [, message] = alert.error.message
+          .replace(/^.*cs::/, '')
+          .split('::');
+        alert.description = message;
+      }
       return _(alert);
     }),
     clearAlert: _(ap('clearAlert')),

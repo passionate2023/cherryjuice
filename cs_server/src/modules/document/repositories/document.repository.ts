@@ -14,6 +14,7 @@ import {
 import { DocumentDTO } from '../../imports/imports.service';
 import { NotFoundException } from '@nestjs/common';
 import { EditDocumentDto } from '../input-types/edit-document.dto';
+import { createErrorDescription } from '../../shared/errors/create-error-description';
 const nullableEvents = [
   DS.IMPORT_FINISHED,
   DS.EXPORT_FINISHED,
@@ -31,7 +32,7 @@ export class DocumentRepository extends Repository<Document>
     });
     if (!document)
       throw new NotFoundException(
-        `document ${file_id} does not exist in your library`,
+        createErrorDescription.documentNotExist(file_id),
       );
     return document;
   }

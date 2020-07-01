@@ -44,7 +44,6 @@ $width: $height * 1.35;
   text-align: start;
 }
 
-
 .alert-modal__header--danger {
   color: $COLOR_DANGER;
 }
@@ -55,6 +54,10 @@ $width: $height * 1.35;
   font-size: 16px;
   padding: 5px 1px;
   opacity: 0.7;
+  text-align: initial;
+  &:first-letter {
+    text-transform: capitalize;
+  }
 }
 .alert-modal__dismiss-button {
   align-self: flex-end;

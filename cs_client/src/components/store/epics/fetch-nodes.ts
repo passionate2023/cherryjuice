@@ -55,6 +55,13 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
 
       const loading = of(ac.__.document.fetchNodesStarted());
       return concat(loading, request).pipe(
+        createTimeoutHandler({
+          alertDetails: {
+            title: 'Fetching the document is taking longer then expected',
+            description: 'try refreshing the page',
+          },
+          due: 15000,
+        }),
         createErrorHandler({
           dontShowAlert: isNewDocument,
           alertDetails: {
@@ -67,13 +74,6 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
               previousDocumentId: selectedDocumentId(),
             }),
           ],
-        }),
-        createTimeoutHandler({
-          alertDetails: {
-            title: 'Fetching the document is taking longer then expected',
-            description: 'try refreshing the page',
-          },
-          due: 15000,
         }),
       );
     }),
