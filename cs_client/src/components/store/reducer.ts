@@ -14,7 +14,7 @@ const reducer = combineReducers({
     {
       key: 'document',
       storage,
-      blacklist: ['nodes'],
+      blacklist: ['nodes', 'cacheTimeStamp', 'hasUnsavedChanges'],
       transforms: documentTransforms,
     },
     documentReducer,

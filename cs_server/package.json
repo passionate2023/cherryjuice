@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "link:ahtml-to-html": "cd src/modules/node/helpers/rendering/ahtml-to-html && npm link",
-    "watch:server": "webpack --progress",
-    "watch:server:nest": "nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
+    "dev": "nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
+    "dev:webpack": "webpack --progress",
+    "dev:client": "cd ../cs_client && yarn watch:liveserver",
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "start": "node dist/main.js",
-    "watch:liveserver": "cd ../cs_client && yarn watch:liveserver"
+    "start": "node dist/main.js"
   },
   "optionalDependencies": {
     "@types/jest": "^25.1.0",
