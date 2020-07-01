@@ -1,15 +1,23 @@
 import { createTransform } from 'redux-persist';
+import { defaultRootNode } from '::root/store/ducks/helpers/document';
 
-const documentId = createTransform(
+const documentIdAndSelectedNode = createTransform(
   null,
-  documentId => {
-    return /^\/document\/.*\//.test(location.pathname) ? undefined : documentId;
+  (value, key) => {
+    switch (key) {
+      case 'documentId':
+        return /^\/document\/.*\//.test(location.pathname) ? undefined : value;
+      case 'selectedNode':
+        return /^\/document\/.*\/node\/\d+/.test(location.pathname)
+          ? defaultRootNode
+          : value;
+    }
   },
   {
-    whitelist: ['documentId'],
+    whitelist: ['documentId', 'selectedNode'],
   },
 );
 
-const documentTransforms = [documentId];
+const documentTransforms = [documentIdAndSelectedNode];
 
 export { documentTransforms };
