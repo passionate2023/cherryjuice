@@ -5,12 +5,10 @@ import { nodeOverlay } from '../node/helpers/node-overlay';
 
 const attachTreeResizeBubble = onResize => {
   const handleRef = document.querySelector('.' + treeModule.tree__resizeHandle);
-  if (handleRef) {
-    const handle = document.createElement('div');
-    handle.classList.add(treeModule.tree__resizeHandle__bubble);
-    handle.onclick = onResize;
-    handleRef.lastElementChild.lastElementChild.appendChild(handle);
-  }
+  const handle = document.createElement('div');
+  handle.classList.add(treeModule.tree__resizeHandle__bubble);
+  handle.onclick = onResize;
+  handleRef.lastElementChild.lastElementChild.appendChild(handle);
 };
 const createTreeHelper = () => {
   const state: { tree: HTMLDivElement } = {
@@ -38,7 +36,6 @@ const onStart = () => {
   treeHelper.init();
   nodeOverlay.init();
   nodeOverlay.updateWidth();
-  const hasTouch = 'ontouchstart' in window || process.env.NODE_ENV === 'development';
-  if (hasTouch) attachTreeResizeBubble(onResize);
+  attachTreeResizeBubble(onResize);
 };
 export { onStart, onResize, onResizeStop };

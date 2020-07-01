@@ -14,6 +14,7 @@
   align-items: center;
   flex-wrap: nowrap;
   overflow-x: auto;
+  overflow-y: hidden;
   // style
   background-color: $toolbar-bg-light;
   user-select: none;
@@ -45,7 +46,9 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    z-index: $ZI-floating-scrollbar;
   }
+  overflow-x: auto;
   // size
   @include respond-to($md-down) {
     height: $tool-bar-height;
