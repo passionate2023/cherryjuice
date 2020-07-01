@@ -178,4 +178,4 @@ const reducer = createReducer(cloneObj(initialState), _ => [
 ]);
 
 export { reducer as documentReducer, ac as documentActionCreators };
-export { NodeId, AsyncOperation };
+export { NodeId, AsyncOperation, State as DocumentState };

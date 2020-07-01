@@ -1,7 +1,7 @@
-import { combineReducers } from 'redux';
+import { combineReducers, Reducer } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { documentReducer } from './ducks/document';
+import { documentReducer, DocumentState } from './ducks/document';
 import { dialogsReducer } from './ducks/dialogs';
 import { nodeReducer } from './ducks/node';
 import { editorReducer } from './ducks/editor';
@@ -19,7 +19,7 @@ const reducer = combineReducers({
       transforms: documentTransforms,
     },
     documentReducer,
-  ),
+  ) as Reducer<DocumentState>,
   dialogs: dialogsReducer,
   node: nodeReducer,
   editor: persistReducer(

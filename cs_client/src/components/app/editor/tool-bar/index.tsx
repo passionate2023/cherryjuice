@@ -10,11 +10,8 @@ import {
 } from './groups/formatting-buttons';
 import { NavBar } from '::app/editor/tool-bar/groups/nav-bar/nav-bar';
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store/store';
 
-const mapState = (state: Store) => ({
-  selectedNodeId: state.document.selectedNode.id,
-});
+const mapState = () => ({});
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -34,11 +31,10 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   contentEditable,
   showRecentNodes,
   showInfoBar,
-  selectedNodeId,
 }) => {
   return (
     <div className={modToolbar.toolBar}>
-      <MainButtons selectedNodeId={selectedNodeId} />
+      <MainButtons />
       <Separator />
       <MobileButtons
         {...{

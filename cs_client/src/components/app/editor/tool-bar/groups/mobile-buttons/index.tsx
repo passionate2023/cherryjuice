@@ -4,6 +4,15 @@ import { ToolbarButton } from '../../tool-bar-button';
 import { Icon, Icons } from '::shared-components/icon/icon';
 import { appActionCreators } from '::app/reducer';
 import { Separator } from '::app/editor/tool-bar/separator';
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({
+  documentId: state.document.documentId,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {
   showFormattingButtons: boolean;
@@ -12,11 +21,13 @@ type Props = {
   showInfoBar: boolean;
 };
 
-const MobileButtons: React.FC<Props> = ({
+const MobileButtons: React.FC<Props & PropsFromRedux> = ({
   showFormattingButtons,
   showRecentNodes,
   showInfoBar,
+  documentId,
 }) => {
+  const noDocumentIsSelected = !documentId;
   return (
     <div
       className={[
@@ -26,20 +37,23 @@ const MobileButtons: React.FC<Props> = ({
     >
       <ToolbarButton
         onClick={appActionCreators.toggleFormattingButtons}
-        enabled={showFormattingButtons}
+        active={showFormattingButtons}
+        disabled={noDocumentIsSelected}
       >
         <Icon name={Icons.material['justify-left']} />
       </ToolbarButton>
       <Separator />
       <ToolbarButton
         onClick={appActionCreators.toggleRecentBar}
-        enabled={showRecentNodes}
+        active={showRecentNodes}
+        disabled={noDocumentIsSelected}
       >
         <Icon name={Icons.material.history} />
       </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.toggleInfoBar}
-        enabled={showInfoBar}
+        active={showInfoBar}
+        disabled={noDocumentIsSelected}
       >
         <Icon name={Icons.material.info} />
       </ToolbarButton>
@@ -47,4 +61,5 @@ const MobileButtons: React.FC<Props> = ({
   );
 };
 
-export { MobileButtons };
+const _ = connector(MobileButtons);
+export { _ as MobileButtons };

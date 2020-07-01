@@ -38,6 +38,7 @@ const DeleteNode: React.FC<Props & PropsFromRedux> = ({
       label: 'Dismiss',
       onClick: onClose,
       disabled: false,
+      lazyAutoFocus: 300
     },
     {
       label: 'Delete',

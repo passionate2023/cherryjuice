@@ -8,16 +8,30 @@ import { RootContext } from '::root/root-context';
 import { ac } from '::root/store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({
+  documentId: state.document.documentId,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
 type Props = {
   showUserPopup: boolean;
 };
 
-const NavBar: React.FC<Props> = ({ showUserPopup }) => {
+const NavBar: React.FC<Props & PropsFromRedux> = ({
+  showUserPopup,
+  documentId,
+}) => {
   const {
     session: {
       user: { picture: userPicture },
     },
   } = useContext(RootContext);
+  const noDocumentIsSelected = !documentId;
   return (
     <div
       className={
@@ -30,7 +44,10 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
       >
         <Icon name={Icons.material.document} />
       </ToolbarButton>
-      <ToolbarButton onClick={ac.document.export}>
+      <ToolbarButton
+        onClick={ac.document.export}
+        disabled={noDocumentIsSelected}
+      >
         <Icon name={Icons.material.export} />
       </ToolbarButton>
       <ToolbarButton onClick={ac.dialogs.showDocumentList}>
@@ -44,7 +61,7 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
       </ToolbarButton>
       <ToolbarButton
         onClick={appActionCreators.toggleUserPopup}
-        enabled={showUserPopup}
+        active={showUserPopup}
       >
         {userPicture ? (
           <img
@@ -59,5 +76,5 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
     </div>
   );
 };
-
-export { NavBar };
+const _ = connector(NavBar);
+export { _ as NavBar };

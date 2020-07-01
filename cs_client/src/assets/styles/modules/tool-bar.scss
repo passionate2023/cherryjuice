@@ -81,12 +81,18 @@
     height: $tool-bar-height-md;
     width: $tool-bar-height-md;
   }
-  cursor: pointer;
+  &:not([disabled]) {
+    cursor: pointer;
+  }
 
   @include respond-to($md-up) {
-    &:hover {
+    &:hover:not([disabled]) {
       background-color: lightgrey;
     }
+  }
+  &[disabled] {
+    filter: grayscale(0.9) opacity(0.6);
+    cursor: initial;
   }
   transition: $bg-transition-1;
 }
@@ -95,11 +101,14 @@
     min-width: $tool-bar-height;
   }
 }
-.tool-bar__icon--enabled {
+.tool-bar__icon--active {
   @include respond-to($md-down) {
-    background-color: lightgrey;
+    &:not([disabled]) {
+      background-color: lightgrey;
+    }
   }
 }
+
 .tool-bar__letter-icon {
   color: grey;
   font-family: sans-serif;
