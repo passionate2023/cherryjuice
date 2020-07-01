@@ -1,5 +1,5 @@
 import { concat } from 'rxjs';
-import { AlertType } from '::types/react';
+import { AlertAction, AlertType } from '::types/react';
 import { timeoutWith } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ac } from '::root/store/store';
@@ -8,6 +8,7 @@ import { Actions } from '::root/store/actions.types';
 type AlertDetails = {
   title: string;
   description: string;
+  action?: AlertAction;
 };
 type CreateAlertHandler = {
   alertDetails: AlertDetails;

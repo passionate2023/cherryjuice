@@ -29,7 +29,6 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 
 const mapState = (state: Store) => ({
-  alert: state.dialogs.alert,
   showImportDocuments: state.dialogs.showImportDocuments,
   showDocumentList: state.dialogs.showDocumentList,
 });
@@ -41,7 +40,6 @@ const Menus: React.FC<Props & PropsFromRedux> = ({
   state,
   dispatch,
   session: { user },
-  alert,
   showImportDocuments,
 }) => {
   return (
@@ -57,11 +55,7 @@ const Menus: React.FC<Props & PropsFromRedux> = ({
         />
       </Suspense>
       <Suspense fallback={<Void />}>
-        <AlertModal
-          alert={alert}
-          show={Boolean(alert)}
-          onClose={ac.dialogs.clearAlert}
-        />
+        <AlertModal />
       </Suspense>
       <Suspense fallback={<Void />}>
         <ImportDocuments

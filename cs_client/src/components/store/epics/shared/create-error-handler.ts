@@ -8,7 +8,7 @@ import { CreateAlertHandler } from './create-timeout-handler';
 type CreateErrorHandler = CreateAlertHandler & { dontShowAlert?: boolean };
 
 const createErrorHandler = ({
-  alertDetails: { title, description },
+  alertDetails: { title, description, action },
   actionCreators = [],
   dontShowAlert,
 }: CreateErrorHandler) =>
@@ -22,6 +22,7 @@ const createErrorHandler = ({
               description,
               type: AlertType.Error,
               error,
+              ...(action && { action }),
             }),
           ),
       ].filter(Boolean),
