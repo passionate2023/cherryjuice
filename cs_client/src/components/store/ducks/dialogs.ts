@@ -2,6 +2,8 @@ import { createActionCreator as _, createReducer } from 'deox';
 import { documentActionCreators } from '::root/store/ducks/document';
 import { createActionPrefixer } from './helpers/shared';
 import { TAlert } from '::types/react';
+import { cloneObj } from '::helpers/editing/execK/helpers';
+import { rootActionCreators } from '::root/store/ducks/root';
 
 const ap = createActionPrefixer('dialogs');
 
@@ -53,6 +55,11 @@ const initialState: State = {
 };
 
 const reducer = createReducer(initialState, _ => [
+  ...[
+    _(rootActionCreators.resetState, () => ({
+      ...cloneObj(initialState),
+    })),
+  ],
   _(actionCreators.showReloadDocument, state => ({
     ...state,
     showReloadDocument: true,

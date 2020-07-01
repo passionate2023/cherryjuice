@@ -6,6 +6,8 @@ import {
   addUnsavedDocuments,
   editedDocuments,
 } from '../epics/fetch-documents-list/layers/unsaved-documents';
+import { rootActionCreators } from '::root/store/ducks/root';
+import { cloneObj } from '::helpers/editing/execK/helpers';
 
 const ap = createActionPrefixer('document-list');
 
@@ -39,6 +41,11 @@ const initialState: State = {
   documents: [],
 };
 const reducer = createReducer(initialState, _ => [
+  ...[
+    _(rootActionCreators.resetState, () => ({
+      ...cloneObj(initialState),
+    })),
+  ],
   ...[
     _(ac.setFocusedDocumentId, (state, { payload }) => ({
       ...state,

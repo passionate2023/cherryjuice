@@ -2,6 +2,7 @@ import { createActionCreator, createReducer } from 'deox';
 import { createActionPrefixer } from '::root/store/ducks/helpers/shared';
 import { documentActionCreators } from './document';
 import { cloneObj } from '::helpers/editing/execK/helpers';
+import { rootActionCreators } from '::root/store/ducks/root';
 const actionPrefixer = createActionPrefixer('node');
 const actionCreators = {
   fetch: createActionCreator(actionPrefixer('fetch')),
@@ -22,6 +23,11 @@ const initialState: State = cloneObj<State>({
   fetchInProgress: false,
 });
 const reducer = createReducer(initialState, _ => [
+  ...[
+    _(rootActionCreators.resetState, () => ({
+      ...cloneObj(initialState),
+    })),
+  ],
   _(documentActionCreators.setDocumentId, () => ({
     ...cloneObj(initialState),
   })),

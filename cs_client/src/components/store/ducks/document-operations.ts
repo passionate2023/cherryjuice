@@ -2,6 +2,8 @@ import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { DocumentSubscription } from '::types/graphql/generated';
 import { filterStaleOperations } from './helpers/document-operations';
+import { rootActionCreators } from '::root/store/ducks/root';
+import { cloneObj } from '::helpers/editing/execK/helpers';
 
 const ap = createActionPrefixer('document-operation');
 
@@ -28,6 +30,11 @@ const initialState: State = {
   exports: {},
 };
 const reducer = createReducer(initialState, _ => [
+  ...[
+    _(rootActionCreators.resetState, () => ({
+      ...cloneObj(initialState),
+    })),
+  ],
   _(ac.addExports, (state, { payload }) => ({
     ...state,
     exports: filterStaleOperations.deleted({

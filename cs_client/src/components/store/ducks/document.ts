@@ -8,6 +8,7 @@ import {
   defaultRootNode,
   getFallbackNode,
 } from './helpers/document';
+import { rootActionCreators } from '::root/store/ducks/root';
 
 const ap = createActionPrefixer('document');
 const ac = {
@@ -89,6 +90,11 @@ const initialState: State = {
   hasUnsavedChanges: false,
 };
 const reducer = createReducer(cloneObj(initialState), _ => [
+  ...[
+    _(rootActionCreators.resetState, () => ({
+      ...cloneObj(initialState),
+    })),
+  ],
   _(ac.setDocumentId, (state, { payload }) => ({
     ...cloneObj(initialState),
     documentId: payload,
