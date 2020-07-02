@@ -10,7 +10,6 @@ import { ofType } from 'deox';
 import { Actions } from '../actions.types';
 import { saveDocument } from '::app/editor/document/hooks/save-document/save-document';
 import { swapPersistedTreeStateDocumentId } from '::app/editor/document/tree/node/hooks/persisted-tree-state/helpers';
-import { appActionCreators } from '::app/reducer';
 import { SnackbarMessages } from '::shared-components/snackbar/snackbar-messages';
 import { SaveOperationState } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
 import { createErrorHandler } from '::root/store/epics/shared/create-error-handler';
@@ -26,7 +25,7 @@ const updateCachedHtmlAndImagesPromisified = () =>
   });
 
 const postSave = (state: SaveOperationState) => {
-  appActionCreators.setSnackbarMessage(SnackbarMessages.documentSaved);
+  ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
   const createdDocuments = Object.values(state.swappedDocumentIds);
   if (createdDocuments.length)
     swapPersistedTreeStateDocumentId(state.swappedDocumentIds);

@@ -6,18 +6,27 @@ import { router } from '::root/router/router';
 import { NodeMeta } from '::types/graphql/adapters';
 import { nodesMetaMap } from '::types/misc';
 
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({
+  isOnMobile: state.root.isOnMobile,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
 type Props = {
   recentNodes: number[];
   selectedNode_id: number;
   nodes: nodesMetaMap;
   file_id: string;
-  isOnMobile: boolean;
   showRecentNodes: boolean;
 };
 const config = {
   recentNodesN: 4,
 };
-const RecentNodes: React.FC<Props> = ({
+const RecentNodes: React.FC<Props & PropsFromRedux> = ({
   isOnMobile,
   showRecentNodes,
   file_id,
@@ -93,4 +102,5 @@ const RecentNodes: React.FC<Props> = ({
     </div>
   );
 };
-export { RecentNodes };
+const _ = connector(RecentNodes);
+export { _ as RecentNodes };

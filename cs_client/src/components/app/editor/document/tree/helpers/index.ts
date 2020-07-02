@@ -1,7 +1,7 @@
 import treeModule from '::sass-modules/tree/tree.scss';
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
-import { appActionCreators } from '::app/reducer';
 import { nodeOverlay } from '../node/helpers/node-overlay';
+import { ac } from '::root/store/store';
 
 const attachTreeResizeBubble = onResize => {
   const handleRef = document.querySelector('.' + treeModule.tree__resizeHandle);
@@ -24,7 +24,7 @@ const createTreeHelper = () => {
 };
 const treeHelper = createTreeHelper();
 const onResizeStop = () => {
-  appActionCreators.setTreeWidth(treeHelper.getTreeWidth());
+  ac.editor.setTreeWidth(treeHelper.getTreeWidth());
   treeHelper.updateTreeSizeCssVariable();
   nodeOverlay.updateWidth();
 };

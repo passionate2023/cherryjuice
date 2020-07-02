@@ -136,7 +136,7 @@ export interface NodeMetaIt {
   position?: number;
   read_only?: number;
   sequence?: number;
-  updatedAt: Timestamp;
+  updatedAt?: Timestamp;
 }
 
 export interface SaveHtmlIt {

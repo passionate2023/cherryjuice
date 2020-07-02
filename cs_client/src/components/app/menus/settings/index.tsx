@@ -1,25 +1,33 @@
 import * as React from 'react';
-import { TDispatchAppReducer } from '::types/react';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { Drawer } from '::shared-components/drawer';
 import { screens } from '::app/menus/settings/screens';
-import { appActions } from '::app/reducer';
 import { DrawerToggle } from '::shared-components/drawer/drawer-toggle';
 import { ErrorBoundary } from '::shared-components/error-boundary';
-type Props = {
-  dispatch: TDispatchAppReducer;
-  showDialog: boolean;
-  isOnMobile: boolean;
-};
 
-const Settings: React.FC<Props> = ({ dispatch, showDialog, isOnMobile }) => {
+import { connect, ConnectedProps } from 'react-redux';
+import { ac, Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({
+  show: state.dialogs.showSettingsDialog,
+  isOnMobile: state.root.isOnMobile,
+});
+const mapDispatch = {
+  onClose: ac.dialogs.hideSettingsDialog,
+};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = {};
+
+const Settings: React.FC<Props & PropsFromRedux> = ({
+  onClose,
+  show,
+  isOnMobile,
+}) => {
   const [selectedTabTitle, setSelectedTabTitle] = useState(
     'Keyboard Shortcuts',
-  );
-  const cancel = useCallback(
-    () => dispatch({ type: appActions.TOGGLE_SETTINGS }),
-    [],
   );
 
   return (
@@ -27,13 +35,13 @@ const Settings: React.FC<Props> = ({ dispatch, showDialog, isOnMobile }) => {
       menuButton={<DrawerToggle />}
       dialogTitle={'Settings'}
       dialogFooterRightButtons={[
-        { label: 'Close', onClick: cancel, disabled: false },
-        { label: 'Apply', onClick: cancel, disabled: true },
+        { label: 'Close', onClick: onClose, disabled: false },
+        { label: 'Apply', onClick: onClose, disabled: true },
       ]}
       dialogFooterLeftButtons={[]}
       isOnMobile={isOnMobile}
-      onClose={cancel}
-      show={showDialog}
+      onClose={onClose}
+      show={show}
     >
       <ErrorBoundary>
         <Drawer
@@ -45,5 +53,5 @@ const Settings: React.FC<Props> = ({ dispatch, showDialog, isOnMobile }) => {
     </DialogWithTransition>
   );
 };
-
-export default Settings;
+const _ = connector(Settings);
+export default _;

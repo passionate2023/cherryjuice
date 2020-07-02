@@ -7,6 +7,7 @@ const actionPrefixer = createActionPrefixer('node');
 const actionCreators = {
   fetch: createActionCreator(actionPrefixer('fetch')),
   fetchStarted: createActionCreator(actionPrefixer('fetchStarted')),
+  processLinks: createActionCreator(actionPrefixer('process-links')),
   fetchFulfilled: createActionCreator(
     actionPrefixer('fetchFulfilled'),
     _ => (html: string) => _(html),
@@ -16,11 +17,13 @@ const actionCreators = {
 type State = {
   html?: string;
   fetchInProgress: boolean;
+  processLinks: number;
 };
 
 const initialState: State = cloneObj<State>({
   html: '',
   fetchInProgress: false,
+  processLinks: 0,
 });
 const reducer = createReducer(initialState, _ => [
   ...[

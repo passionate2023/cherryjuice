@@ -10,40 +10,27 @@ import {
 } from './groups/formatting-buttons';
 import { NavBar } from '::app/editor/tool-bar/groups/nav-bar/nav-bar';
 import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
 
-const mapState = () => ({});
+const mapState = (state: Store) => ({
+  isOnMobile: state.root.isOnMobile,
+  showFormattingButtons: state.editor.showFormattingButtons,
+});
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {
-  isOnMobile: boolean;
-  showFormattingButtons: boolean;
-  contentEditable: boolean;
-  showRecentNodes: boolean;
-  showInfoBar: boolean;
-  showTree: boolean;
-};
+type Props = {};
 
 const ToolBar: React.FC<Props & PropsFromRedux> = ({
   isOnMobile,
   showFormattingButtons,
-  contentEditable,
-  showRecentNodes,
-  showInfoBar,
 }) => {
   return (
     <div className={modToolbar.toolBar}>
       <MainButtons />
       <Separator />
-      <MobileButtons
-        {...{
-          showFormattingButtons,
-          contentEditable,
-          showRecentNodes,
-          showInfoBar,
-        }}
-      />
+      <MobileButtons />
       {isOnMobile ? (
         createPortal(
           <FormattingButtonsWithTransition show={showFormattingButtons} />,

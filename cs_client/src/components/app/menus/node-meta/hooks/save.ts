@@ -1,10 +1,10 @@
-import { appActionCreators } from '::app/reducer';
 import { NodeCached } from '::types/graphql/adapters';
 import { TNodeMetaState } from '::app/menus/node-meta/reducer/reducer';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { router } from '::root/router/router';
+import { ac } from '::root/store/store';
 
 const calculateDiff = ({
   isNewNode,
@@ -59,7 +59,7 @@ const useSave = ({
   state,
   previous_sibling_node_id,
 }: UseSaveProps) => {
-  return useDelayedCallback(appActionCreators.hideNodeMeta, () => {
+  return useDelayedCallback(ac.dialogs.hideNodeMeta, () => {
     const res = calculateDiff({
       isNewNode: newNode,
       node,

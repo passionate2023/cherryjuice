@@ -6,7 +6,6 @@ import { Route, useRouteMatch } from 'react-router-dom';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { RecentNodes } from './recent-nodes/recent-nodes';
 import { RichText } from '::app/editor/document/rich-text';
-import { TState } from '::app/reducer';
 import { documentReducer } from '::app/editor/document/reducer/reducer';
 import { documentInitialState } from '::app/editor/document/reducer/initial-state';
 import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
@@ -26,17 +25,15 @@ const mapState = (state: Store) => ({
   selectedNode: state.document.selectedNode,
   recentNodes: state.document.recentNodes,
   showTree: state.editor.showTree,
+  showRecentNodesBar: state.editor.showRecentNodesBar,
 });
 
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {
-  state: TState;
-};
+type Props = {};
 
 const Document: React.FC<Props & PropsFromRedux> = ({
-  state,
   nodes,
   fetchNodesStarted,
   cacheTimeStamp,
@@ -44,8 +41,8 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   selectedNode,
   recentNodes,
   showTree,
+  showRecentNodesBar,
 }) => {
-  const { contentEditable, isOnMobile, processLinks } = state;
   const [documentState, dispatch] = useReducer(
     documentReducer,
     documentInitialState,
@@ -82,8 +79,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
         <Fragment>
           {Boolean(selectedNode.node_id) && (
             <RecentNodes
-              isOnMobile={state.isOnMobile}
-              showRecentNodes={state.showRecentNodes}
+              showRecentNodes={showRecentNodesBar}
               file_id={file_id}
               recentNodes={recentNodes}
               selectedNode_id={selectedNode.node_id}
@@ -102,13 +98,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
             render={props => {
               return (
                 <ErrorBoundary>
-                  <RichText
-                    {...props}
-                    nodes={nodes}
-                    file_id={file_id}
-                    contentEditable={contentEditable || !isOnMobile}
-                    processLinks={processLinks}
-                  />
+                  <RichText {...props} nodes={nodes} file_id={file_id} />
                 </ErrorBoundary>
               );
             }}

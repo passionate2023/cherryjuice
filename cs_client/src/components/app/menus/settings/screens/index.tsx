@@ -4,7 +4,7 @@ import modSettings from '::sass-modules/settings/settings.scss';
 const screens = {
   ...keyboardShortcutsScreen,
   ...{
-    Typography: <div className={modSettings.settings__screen}>//todo</div>,
+    Typography: <div className={modSettings.settings__screen}></div>,
   },
 };
 

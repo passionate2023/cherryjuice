@@ -49,13 +49,12 @@ const mapState = (state: Store) => ({
   showDocumentList: state.dialogs.showDocumentList,
   documents: state.documentsList.documents,
   loading: state.documentsList.fetchDocuments === 'in-progress',
+  isOnMobile: state.root.isOnMobile,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const SelectFile: React.FC<{
-  isOnMobile;
-} & PropsFromRedux> = ({
+const SelectFile: React.FC<PropsFromRedux> = ({
   documentId,
   showDocumentList,
   isOnMobile,

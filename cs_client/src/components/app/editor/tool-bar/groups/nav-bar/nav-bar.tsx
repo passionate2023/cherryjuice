@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { appActionCreators } from '::app/reducer';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { Icon, Icons } from '::shared-components/icon/icon';
 import { modToolbar } from '::sass-modules/index';
@@ -56,13 +55,10 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
           testId={testIds.toolBar__navBar__showDocumentList}
         />
       </ToolbarButton>
-      <ToolbarButton onClick={appActionCreators.toggleSettings}>
+      <ToolbarButton onClick={ac.dialogs.showSettingsDialog}>
         <Icon name={Icons.material.settings} />
       </ToolbarButton>
-      <ToolbarButton
-        onClick={appActionCreators.toggleUserPopup}
-        active={showUserPopup}
-      >
+      <ToolbarButton onClick={ac.dialogs.showUserPopup} active={showUserPopup}>
         {userPicture ? (
           <img
             src={userPicture}

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { appActionCreators } from '::app/reducer';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { Icon, Icons } from '::shared-components/icon/icon';
 import { modToolbar } from '::sass-modules/index';
@@ -11,6 +10,7 @@ const mapState = (state: Store) => ({
   documentHasUnsavedChanges: state.document.hasUnsavedChanges,
   selectedNode_id: state.document.selectedNode.node_id,
   documentId: state.document.documentId,
+  hasUnsavedChanges: state.document.hasUnsavedChanges,
 });
 
 const connector = connect(mapState);
@@ -23,6 +23,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
   documentHasUnsavedChanges,
   selectedNode_id,
   documentId,
+  hasUnsavedChanges,
 }) => {
   const noDocumentIsSelected = !documentId;
   const noNodeIsSelected = !selectedNode_id;
@@ -36,21 +37,21 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         <Icon name={Icons.cherrytree.additionalIcons['cherries']} size={20} />
       </ToolbarButton>
       <ToolbarButton
-        onClick={appActionCreators.showNodeMetaEdit}
+        onClick={ac.dialogs.showEditNode}
         disabled={noNodeIsSelected || noDocumentIsSelected}
         testId={testIds.toolBar__main__editNodeMeta}
       >
         <Icon name={Icons.material.edit} />
       </ToolbarButton>
       <ToolbarButton
-        onClick={appActionCreators.toggleDeleteDocumentModal}
+        onClick={ac.dialogs.showDeleteNode}
         disabled={noNodeIsSelected || noDocumentIsSelected}
         testId={testIds.toolBar__main__deleteNode}
       >
         <Icon name={Icons.material.delete} />
       </ToolbarButton>
       <ToolbarButton
-        onClick={appActionCreators.showNodeMetaCreateSibling}
+        onClick={ac.dialogs.showCreateSiblingNode}
         testId={testIds.toolBar__main__createSiblingNode}
         disabled={noDocumentIsSelected}
       >
@@ -60,7 +61,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         />
       </ToolbarButton>
       <ToolbarButton
-        onClick={appActionCreators.showNodeMetaCreateChild}
+        onClick={ac.dialogs.showCreateChildNode}
         testId={testIds.toolBar__main__createChildNode}
         disabled={noDocumentIsSelected}
       >
@@ -72,7 +73,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
       <ToolbarButton
         onClick={ac.document.save}
         testId={testIds.toolBar__main__saveDocument}
-        disabled={noDocumentIsSelected}
+        disabled={!hasUnsavedChanges || noDocumentIsSelected}
       >
         <Icon name={Icons.material.save} />
       </ToolbarButton>

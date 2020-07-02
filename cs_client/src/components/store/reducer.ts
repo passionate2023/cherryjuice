@@ -20,8 +20,6 @@ const reducer = combineReducers({
     },
     documentReducer,
   ) as Reducer<DocumentState>,
-  dialogs: dialogsReducer,
-  node: nodeReducer,
   editor: persistReducer(
     {
       key: 'editor',
@@ -29,9 +27,11 @@ const reducer = combineReducers({
     },
     editorReducer,
   ),
+  dialogs: dialogsReducer,
+  node: nodeReducer,
   documentsList: documentsListReducer,
   documentOperations: documentOperationsReducer,
-  rootReducer: rootReducer,
+  root: rootReducer,
 });
 
 export { reducer };

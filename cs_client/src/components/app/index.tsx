@@ -1,12 +1,6 @@
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import * as React from 'react';
-import { useEffect, useReducer, Suspense } from 'react';
-import {
-  appActionCreators,
-  appInitialState,
-  appReducer,
-  TState,
-} from './reducer';
+import { useEffect, Suspense } from 'react';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { formattingBarUnmountAnimationDelay } from './editor/tool-bar/groups/formatting-buttons';
 import { AuthUser } from '::types/graphql/generated';
@@ -15,10 +9,9 @@ import { appModule } from '::sass-modules/index';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { QUERY_USER } from '::graphql/queries';
 import { rootActionCreators } from '::root/root.reducer';
-import { AppContext } from './context';
 import { useDocumentEditedIndicator } from '::app/hooks/document-edited-indicator';
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store/store';
+import { ac, Store } from '::root/store/store';
 import { useHandleRouting } from '::app/hooks/handle-routing/handle-routing';
 
 const Menus = React.lazy(() => import('::app/menus'));
@@ -26,15 +19,6 @@ const Editor = React.lazy(() => import('::app/editor'));
 
 type Props = { session: AuthUser };
 
-const useSaveStateToLocalStorage = state => {
-  useEffect(() => {
-    Object.entries(state).forEach(([key, value]) => {
-      const toBeWritten =
-        typeof value === 'object' ? JSON.stringify(value) : (value as string);
-      if (value !== undefined) localStorage.setItem(key, toBeWritten);
-    });
-  }, [state]);
-};
 const updateBreakpointState = ({ breakpoint, callback }) => {
   let previousState = undefined;
   return () => {
@@ -46,10 +30,14 @@ const updateBreakpointState = ({ breakpoint, callback }) => {
   };
 };
 
-const useUpdateCssVariables = (state: TState, showTree: boolean) => {
+const useUpdateCssVariables = (
+  showFormattingButtons: boolean,
+  showTree: boolean,
+  treeWidth: number,
+) => {
   useEffect(() => {
-    cssVariables.setTreeWidth(showTree ? state.treeSize : 0);
-    if (state.showFormattingButtons) {
+    cssVariables.setTreeWidth(showTree ? treeWidth : 0);
+    if (showFormattingButtons) {
       cssVariables.setFormattingBar(40);
     } else {
       (async () => {
@@ -57,7 +45,7 @@ const useUpdateCssVariables = (state: TState, showTree: boolean) => {
         cssVariables.setFormattingBar(0);
       })();
     }
-  }, [state.showFormattingButtons, showTree]);
+  }, [showFormattingButtons, showTree]);
 };
 
 const useRefreshToken = ({ token }) => {
@@ -85,7 +73,9 @@ const useRefreshToken = ({ token }) => {
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
   showTree: state.editor.showTree,
+  treeWidth: state.editor.treeWidth,
   documentHasUnsavedChanges: state.document.hasUnsavedChanges,
+  showFormattingButtons: state.editor.showFormattingButtons,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -95,35 +85,29 @@ const App: React.FC<Props & PropsFromRedux> = ({
   session,
   documentId,
   showTree,
+  treeWidth,
   documentHasUnsavedChanges,
+  showFormattingButtons,
 }) => {
-  const [state, dispatch] = useReducer(appReducer, appInitialState);
-  useEffect(() => {
-    appActionCreators.setDispatch(dispatch);
-  }, [dispatch]);
-
   useOnWindowResize([
     updateBreakpointState({
       breakpoint: 850,
-      callback: appActionCreators.setIsOnMobile,
+      callback: ac.root.setIsOnMobile,
     }),
   ]);
   useDocumentEditedIndicator(documentHasUnsavedChanges);
-  useSaveStateToLocalStorage(state);
   useHandleRouting(documentId);
-  useUpdateCssVariables(state, showTree);
+  useUpdateCssVariables(showFormattingButtons, showTree, treeWidth);
   useRefreshToken({ token: session.token });
   return (
-    <AppContext.Provider value={state}>
-      <div className={appModule.app}>
-        <Suspense fallback={<Void />}>
-          <Editor state={state} />
-        </Suspense>
-        <Suspense fallback={<Void />}>
-          <Menus state={state} dispatch={dispatch} session={session} />
-        </Suspense>
-      </div>
-    </AppContext.Provider>
+    <div className={appModule.app}>
+      <Suspense fallback={<Void />}>
+        <Editor />
+      </Suspense>
+      <Suspense fallback={<Void />}>
+        <Menus />
+      </Suspense>
+    </div>
   );
 };
 const _ = connector(App);

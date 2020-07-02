@@ -2,20 +2,26 @@ import { modAlertModal, modImportDocument } from '::sass-modules/index';
 import { UploadFile } from './dialog-buttons/upload-file';
 import { GoogleDrivePicker } from './dialog-buttons/google-drive-picker/google-drive-picker';
 import * as React from 'react';
-import { EventHandler } from 'react';
 import { ComponentWithTransition } from '::shared-components/transitions/component-with-transition';
 import { transitions } from '::shared-components/transitions/transitions';
 
-export type Props = {
-  show: boolean;
-  onClose: EventHandler<undefined>;
-};
+import { connect, ConnectedProps } from 'react-redux';
+import { ac, Store } from '::root/store/store';
 
-const ImportDocuments: React.FC<Props> = ({ onClose, show }) => {
+const mapState = (state: Store) => ({
+  show: state.dialogs.showImportDocuments,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = {};
+
+const ImportDocuments: React.FC<Props & PropsFromRedux> = ({ show }) => {
   return (
     <ComponentWithTransition
       show={show}
-      onClose={onClose}
+      onClose={ac.dialogs.hideImportDocument}
       transitionValues={transitions.t1}
       className={modAlertModal.alertModal}
     >
@@ -29,5 +35,5 @@ const ImportDocuments: React.FC<Props> = ({ onClose, show }) => {
     </ComponentWithTransition>
   );
 };
-
-export default ImportDocuments;
+const _ = connector(ImportDocuments);
+export default _;

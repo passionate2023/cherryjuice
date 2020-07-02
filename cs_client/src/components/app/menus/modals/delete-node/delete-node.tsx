@@ -9,12 +9,16 @@ import { AlertType } from '::types/react';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store/store';
+import { ac, Store } from '::root/store/store';
+import { useDelayedCallback } from '::hooks/react/delayed-callback';
 
 const mapState = (state: Store) => ({
   nodeId: state.document.selectedNode.id,
+  show: state.dialogs.showDeleteNode,
 });
-const mapDispatch = {};
+const mapDispatch = {
+  onClose: ac.dialogs.hideDeleteNode,
+};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
@@ -31,14 +35,17 @@ const DeleteNode: React.FC<Props & PropsFromRedux> = ({
   const node: NodeCached = useMemo(() => apolloCache.node.get(nodeId), [
     nodeId,
   ]);
-  const deleteSelectedNode = useCallback(deleteNode(node), [nodeId]);
+  const deleteSelectedNode = useDelayedCallback(
+    ac.dialogs.hideDeleteNode,
+    useCallback(deleteNode(node), [nodeId]),
+  );
 
   const buttons: TDialogFooterButton[] = [
     {
       label: 'Dismiss',
       onClick: onClose,
       disabled: false,
-      lazyAutoFocus: 300
+      lazyAutoFocus: 300,
     },
     {
       label: 'Delete',

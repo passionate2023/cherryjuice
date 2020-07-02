@@ -5,22 +5,30 @@ import { ButtonCircle } from '::shared-components/buttons/button-circle/button-c
 import { ComponentWithTransition } from '::shared-components/transitions/component-with-transition';
 import { transitions } from '::shared-components/transitions/transitions';
 import { useEffect } from 'react';
-import { appActionCreators } from '::app/reducer';
+import { connect, ConnectedProps } from 'react-redux';
+import { ac, Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({
+  message: state.dialogs.snackbar?.message,
+});
+const mapDispatch = {
+  onClose: ac.dialogs.clearSnackbar,
+};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {
-  message: string;
-  onClose: (event: React.SyntheticEvent<any>) => void;
   autoCloseDuration?: number;
 };
 
-const Snackbar: React.FC<Props> = ({
+const Snackbar: React.FC<Props & PropsFromRedux> = ({
   onClose,
   message,
   autoCloseDuration = 6000,
 }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      appActionCreators.clearSnackbarMessage();
+      onClose();
     }, autoCloseDuration);
     return () => {
       clearInterval(timer);
@@ -48,5 +56,5 @@ const Snackbar: React.FC<Props> = ({
     </ComponentWithTransition>
   );
 };
-
-export { Snackbar };
+const _ = connector(Snackbar);
+export { _ as Snackbar };

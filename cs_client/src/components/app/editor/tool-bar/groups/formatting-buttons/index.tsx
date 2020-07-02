@@ -104,7 +104,7 @@ const FormattingButtons: React.FC<Props & {
 };
 const FormattingButtonsWithTransition: React.FC<Props & {
   show: boolean;
-} & PropsFromRedux> = ({ show }) => {
+}> = ({ show }) => {
   return (
     <TransitionWrapper<Props>
       Component={FormattingButtons}
