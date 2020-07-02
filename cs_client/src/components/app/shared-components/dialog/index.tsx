@@ -79,10 +79,10 @@ const Dialog: React.FC<TDialogProps & {
   );
 };
 
-const DialogWithTransition: React.FC<TDialogProps & { show: boolean }> = ({
-  show,
-  ...props
-}) => {
+const DialogWithTransition: React.FC<TDialogProps & {
+  show: boolean;
+  isShownOnTopOfDialog?: boolean;
+}> = ({ show, isShownOnTopOfDialog, ...props }) => {
   return (
     <TransitionWrapper<TDialogProps>
       Component={Dialog}
@@ -96,7 +96,7 @@ const DialogWithTransition: React.FC<TDialogProps & { show: boolean }> = ({
         },
       }}
       componentProps={props}
-      scrimProps={{ onClick: props.onClose }}
+      scrimProps={{ isShownOnTopOfDialog, onClick: props.onClose }}
     />
   );
 };

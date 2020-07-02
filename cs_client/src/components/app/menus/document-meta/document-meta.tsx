@@ -127,6 +127,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       onConfirm={apply}
       rightHeaderButtons={[]}
       small={true}
+      isShownOnTopOfDialog={true}
     >
       <ErrorBoundary>
         <MetaForm inputs={inputs} />

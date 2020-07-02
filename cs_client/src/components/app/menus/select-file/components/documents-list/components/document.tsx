@@ -2,7 +2,6 @@ import * as React from 'react';
 import { modSelectFile } from '::sass-modules/index';
 import { dateToFormattedString } from '::helpers/time';
 import { EventHandler } from 'react';
-import { useMouseHold } from '::hooks/dom/mouse-hold';
 import { ThreeDotsButton } from './components/three-dots-button';
 import { ac } from '::root/store/store';
 import { DocumentMeta } from '::types/graphql/adapters';
@@ -11,6 +10,7 @@ type Props = {
   documentId: string;
   onSelect: EventHandler<any>;
   documentMeta: DocumentMeta;
+  deleteMode: boolean;
 };
 
 const Document: React.FC<Props> = ({
@@ -18,20 +18,19 @@ const Document: React.FC<Props> = ({
   selectedIDs,
   documentId,
   onSelect,
+  deleteMode,
 }) => {
-  const mouseHoldHandlers = useMouseHold({
-    onMouseHold: onSelect,
-    callbackProps: { id, holding: true },
-    minHoldDuration: 500,
-  });
   return (
     <div
-      {...mouseHoldHandlers}
       className={`${modSelectFile.selectFile__file} ${
         selectedIDs.includes(id)
           ? modSelectFile.selectFile__fileSelectedCandidate
           : ''
-      } ${documentId === id ? modSelectFile.selectFile__fileSelected : ''}`}
+      } ${
+        !deleteMode && documentId === id
+          ? modSelectFile.selectFile__fileSelected
+          : ''
+      }`}
       onClick={() => {
         onSelect({ id });
         ac.documentsList.setFocusedDocumentId(id);

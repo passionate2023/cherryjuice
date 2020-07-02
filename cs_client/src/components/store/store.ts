@@ -16,8 +16,9 @@ import { rootActionCreators } from './ducks/root';
 
 type Store = ReturnType<typeof reducer>;
 
-// @ts-ignore
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers =
+  // @ts-ignore
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ maxAge: 10 }) || compose;
 
 const epicMiddleware = createEpicMiddleware();
 const middleware = applyMiddleware(epicMiddleware);

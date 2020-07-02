@@ -9,6 +9,7 @@ const DocumentGroup = ({
   selectedIDs,
   documentId,
   onSelect,
+  deleteMode,
 }) => {
   return (
     <div className={modSelectFile.selectFile__fileFolder}>
@@ -23,6 +24,7 @@ const DocumentGroup = ({
             onSelect={onSelect}
             selectedIDs={selectedIDs}
             documentId={documentId}
+            deleteMode={deleteMode}
           />
         ))}
       </span>

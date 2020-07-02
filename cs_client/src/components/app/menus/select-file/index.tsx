@@ -14,7 +14,13 @@ import { ac, Store } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
-const createButtons = ({ selectedIDs, documentId, close, open }) => {
+const createButtons = ({
+  selectedIDs,
+  documentId,
+  close,
+  open,
+  deleteMode,
+}) => {
   const buttonsLeft = [
     {
       label: 'reload',
@@ -37,7 +43,8 @@ const createButtons = ({ selectedIDs, documentId, close, open }) => {
     {
       label: 'open',
       onClick: open,
-      disabled: selectedIDs[0] === documentId || selectedIDs.length !== 1,
+      disabled:
+        deleteMode || selectedIDs[0] === documentId || selectedIDs.length !== 1,
     },
   ];
   return { buttonsLeft, buttonsRight };
@@ -70,11 +77,13 @@ const SelectFile: React.FC<PropsFromRedux> = ({
     updateCachedHtmlAndImages();
     ac.document.setDocumentId(selectedIDs[0]);
   };
+  const holdingRef = useRef(false);
   const { buttonsLeft, buttonsRight } = createButtons({
     selectedIDs,
     documentId,
     close,
     open,
+    deleteMode: holdingRef.current,
   });
 
   const { deleteDocument } = useDeleteFile({
@@ -86,8 +95,20 @@ const SelectFile: React.FC<PropsFromRedux> = ({
       }
     },
   });
-  const holdingRef = useRef(false);
+
   const rightHeaderButtons = [
+    documents.length && !holdingRef.current && (
+      <ButtonCircle
+        key={Icons.material['delete-sweep']}
+        className={modDialog.dialog__header__fileButton}
+        onClick={() => {
+          holdingRef.current = true;
+          setSelectedIDs([]);
+        }}
+      >
+        <Icon {...{ name: Icons.material['delete-sweep'] }} />
+      </ButtonCircle>
+    ),
     documents.length && holdingRef.current && (
       <ButtonCircle
         key={Icons.material.clear}
@@ -114,13 +135,10 @@ const SelectFile: React.FC<PropsFromRedux> = ({
       </ButtonCircle>
     ),
   ].filter(Boolean);
-  const onSelect = ({ id, holding }) => {
+  const onSelect = ({ id }) => {
     const unselectElement = selectedIDs.includes(id);
-    const clickDuringHolding = !holding && holdingRef.current;
-    if (holding) {
-      setSelectedIDs(selectedIDs => [...selectedIDs, id]);
-      holdingRef.current = true;
-    } else if (clickDuringHolding) {
+    const clickDuringHolding = holdingRef.current;
+    if (clickDuringHolding) {
       if (unselectElement)
         setSelectedIDs(selectedIDs => [...selectedIDs.filter(x => x !== id)]);
       else setSelectedIDs(selectedIDs => [...selectedIDs, id]);
@@ -140,6 +158,7 @@ const SelectFile: React.FC<PropsFromRedux> = ({
     >
       <ErrorBoundary>
         <DocumentList
+          deleteMode={holdingRef.current}
           onSelect={onSelect}
           selectedIDs={selectedIDs}
           documentId={documentId}

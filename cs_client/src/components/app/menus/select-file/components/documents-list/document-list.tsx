@@ -10,6 +10,7 @@ const DocumentList = ({
   documentId,
   documentsMeta,
   loading,
+  deleteMode,
 }) => {
   const filesPerFolders: [string, DocumentMeta[]][] = [
     documentsMeta.reduce((acc, val) => {
@@ -28,6 +29,7 @@ const DocumentList = ({
       ) : (
         filesPerFolders.map(([folder, files]) => (
           <DocumentGroup
+            deleteMode={deleteMode}
             key={folder}
             selectedIDs={selectedIDs}
             documentId={documentId}
