@@ -102,7 +102,7 @@ const Node: React.FC<Props> = ({
           }
           size={14}
           className={modIcons.node__titleCherry}
-          testId={'cherry' + icon_id}
+          testId={'cherry' + (icon_id || 0)}
         />
         <div
           className={nodeMod.node__title}

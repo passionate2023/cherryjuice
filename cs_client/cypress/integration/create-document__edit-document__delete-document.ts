@@ -94,7 +94,7 @@ describe('create document > edit-document > delete-document', () => {
     cy.contains('Document saved', { timeout: 10000 });
   });
 
-  it('perform: get documents hash', () => {
+  it('perform: get hash of each created document', () => {
     dialogs.documentsList.interact.show();
     documents.forEach(document => {
       dialogs.documentsList.inspect
@@ -189,13 +189,11 @@ describe('create document > edit-document > delete-document', () => {
   });
   it('perform: delete saved and unsaved documents', () => {
     dialogs.documentsList.interact.show();
+    cy.findByTestId(
+      testIds.dialogs__selectDocument__header__buttons__deleteSweep,
+    ).click();
     [documents[0], additionalDocuments[0]].forEach(document => {
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.findByText(document.meta.id)
-        .first()
-        .trigger('mousedown')
-        .wait(2000)
-        .trigger('mouseup');
+      cy.findByText(document.meta.id).click();
     });
     cy.findByTestId(
       testIds.dialogs__selectDocument__header__buttons__delete,

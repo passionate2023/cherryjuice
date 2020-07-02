@@ -18,6 +18,8 @@ const testIds = {
   modal__deleteNode__confirm: 'modal__deleteNode__confirm',
   dialogs__selectDocument__header__buttons__delete:
     'dialogs__selectDocument__header__buttons__delete',
+  dialogs__selectDocument__header__buttons__deleteSweep:
+    'dialogs__selectDocument__header__buttons__deleteSweep',
 };
 
 export { testIds };

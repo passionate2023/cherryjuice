@@ -11,6 +11,7 @@ const showDocumentMetaDialog = (documentName: string) => {
   cy.findByText(documentName)
     .parent()
     .find('.selectFile__file__three-dots-popup__item')
+    .first()
     .click();
 };
 

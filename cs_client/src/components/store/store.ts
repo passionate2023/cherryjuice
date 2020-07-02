@@ -16,9 +16,16 @@ import { rootActionCreators } from './ducks/root';
 
 type Store = ReturnType<typeof reducer>;
 
-const composeEnhancers =
+const reduxDevtoolsExtensionCompose =
+  process.env.NODE_ENV === 'development' &&
   // @ts-ignore
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ maxAge: 10 }) || compose;
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+
+const composeEnhancers = reduxDevtoolsExtensionCompose
+  ? reduxDevtoolsExtensionCompose({
+      maxAge: 10,
+    })
+  : compose;
 
 const epicMiddleware = createEpicMiddleware();
 const middleware = applyMiddleware(epicMiddleware);

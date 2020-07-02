@@ -5,9 +5,8 @@ import { ErrorBoundary } from '::shared-components/error-boundary';
 import { DocumentList } from './components/documents-list/document-list';
 import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
 import { modDialog } from '::sass-modules/index';
-import { Icons, Icon } from '::shared-components/icon/icon';
+import { Icon, Icons } from '::shared-components/icon/icon';
 import { useDeleteFile } from './hooks/delete-documents/delete-file';
-import { useRef } from 'react';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { ac, Store } from '::root/store/store';
@@ -77,13 +76,13 @@ const SelectFile: React.FC<PropsFromRedux> = ({
     updateCachedHtmlAndImages();
     ac.document.setDocumentId(selectedIDs[0]);
   };
-  const holdingRef = useRef(false);
+  const [deleteMode, setDeleteMode] = useState<boolean>(false);
   const { buttonsLeft, buttonsRight } = createButtons({
     selectedIDs,
     documentId,
     close,
     open,
-    deleteMode: holdingRef.current,
+    deleteMode: deleteMode,
   });
 
   const { deleteDocument } = useDeleteFile({
@@ -93,35 +92,51 @@ const SelectFile: React.FC<PropsFromRedux> = ({
       if (selectedIDs.includes(documentId)) {
         ac.document.setDocumentId(undefined);
       }
+      setDeleteMode(false);
+      setSelectedIDs([]);
     },
   });
 
   const rightHeaderButtons = [
-    documents.length && !holdingRef.current && (
+    documents.length && !deleteMode && (
       <ButtonCircle
         key={Icons.material['delete-sweep']}
         className={modDialog.dialog__header__fileButton}
         onClick={() => {
-          holdingRef.current = true;
+          setDeleteMode(true);
           setSelectedIDs([]);
         }}
       >
-        <Icon {...{ name: Icons.material['delete-sweep'] }} />
+        <Icon
+          name={Icons.material['delete-sweep']}
+          testId={testIds.dialogs__selectDocument__header__buttons__deleteSweep}
+        />
       </ButtonCircle>
     ),
-    documents.length && holdingRef.current && (
+    documents.length && deleteMode && (
       <ButtonCircle
         key={Icons.material.clear}
         className={modDialog.dialog__header__fileButton}
         onClick={() => {
           setSelectedIDs([selectedIDs.pop()]);
-          holdingRef.current = false;
+          setDeleteMode(false);
         }}
       >
         <Icon {...{ name: Icons.material.cancel }} />
       </ButtonCircle>
     ),
-    documents.length && holdingRef.current && (
+    documents.length && deleteMode && (
+      <ButtonCircle
+        key={Icons.material['select-all']}
+        className={modDialog.dialog__header__fileButton}
+        onClick={() => {
+          setSelectedIDs(documents.map(document => document.id));
+        }}
+      >
+        <Icon {...{ name: Icons.material['select-all'] }} />
+      </ButtonCircle>
+    ),
+    documents.length && deleteMode && (
       <ButtonCircle
         disabled={!selectedIDs.length}
         key={Icons.material.delete}
@@ -137,8 +152,7 @@ const SelectFile: React.FC<PropsFromRedux> = ({
   ].filter(Boolean);
   const onSelect = ({ id }) => {
     const unselectElement = selectedIDs.includes(id);
-    const clickDuringHolding = holdingRef.current;
-    if (clickDuringHolding) {
+    if (deleteMode) {
       if (unselectElement)
         setSelectedIDs(selectedIDs => [...selectedIDs.filter(x => x !== id)]);
       else setSelectedIDs(selectedIDs => [...selectedIDs, id]);
@@ -158,7 +172,7 @@ const SelectFile: React.FC<PropsFromRedux> = ({
     >
       <ErrorBoundary>
         <DocumentList
-          deleteMode={holdingRef.current}
+          deleteMode={deleteMode}
           onSelect={onSelect}
           selectedIDs={selectedIDs}
           documentId={documentId}
