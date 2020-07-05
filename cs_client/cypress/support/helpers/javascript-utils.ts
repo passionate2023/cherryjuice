@@ -30,8 +30,12 @@ export const rgbToHex = color =>
 
 export const randomArrayElement = <T>(arr: T[]): T =>
   arr[randomInteger(0, arr.length - 1)];
-export const removeArrayElement = <T>(arr: T[], el: T): void => {
-  arr.splice(arr.indexOf(el), 1);
+
+export const removeArrayElement = <T>(
+  arr: T[],
+  finder: (n: T) => boolean,
+): void => {
+  arr.splice(arr.findIndex(finder), 1);
 };
 export const splitArrayIntoTwoArrays = <T>(arr: T[]): [T[], T[]] => {
   const clone = cloneObj(arr);

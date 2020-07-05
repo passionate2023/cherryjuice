@@ -8,12 +8,52 @@ import { TransitionWrapper } from '::shared-components/transition-wrapper';
 import { animated } from 'react-spring';
 import { formattingHotKeys } from '::helpers/hotkeys/combinations/formatting';
 
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({
+  selectedNode_id: state.document.selectedNode.node_id,
+  documentId: state.document.documentId,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
 type Props = {};
 
-const Buttons = () => (
-  <>
-    {formattingHotKeys.tagsAndStyles.map(
-      ({ icon, execCommandArguments }, i) => (
+const Buttons: React.FC<PropsFromRedux> = ({ selectedNode_id, documentId }) => {
+  const disabled = !documentId || !selectedNode_id;
+  return (
+    <>
+      {formattingHotKeys.tagsAndStyles.map(
+        ({ icon, execCommandArguments }, i) => (
+          <ToolbarButton
+            key={i}
+            onClick={() =>
+              execK({
+                tagName: execCommandArguments.tagName,
+                // @ts-ignore
+                style: execCommandArguments?.style,
+                // @ts-ignore
+                command: execCommandArguments?.command,
+              })
+            }
+            className={modToolbar.toolBar__iconStrictWidth}
+            disabled={disabled}
+          >
+            <Icon name={icon} />
+          </ToolbarButton>
+        ),
+      )}
+      {formattingHotKeys.colors.map(({ icon, label, cssProperty, inputId }) => (
+        <ColorInput
+          key={label}
+          icon={icon}
+          {...{ label, cssProperty, inputId }}
+          disabled={disabled}
+        />
+      ))}
+      {formattingHotKeys.misc.map(({ icon, execCommandArguments }, i) => (
         <ToolbarButton
           key={i}
           onClick={() =>
@@ -26,38 +66,15 @@ const Buttons = () => (
             })
           }
           className={modToolbar.toolBar__iconStrictWidth}
+          disabled={disabled}
         >
           <Icon name={icon} />
         </ToolbarButton>
-      ),
-    )}
-    {formattingHotKeys.colors.map(({ icon, label, cssProperty, inputId }) => (
-      <ColorInput
-        key={label}
-        icon={icon}
-        {...{ label, cssProperty, inputId }}
-      />
-    ))}
-    {formattingHotKeys.misc.map(({ icon, execCommandArguments }, i) => (
-      <ToolbarButton
-        key={i}
-        onClick={() =>
-          execK({
-            tagName: execCommandArguments.tagName,
-            // @ts-ignore
-            style: execCommandArguments?.style,
-            // @ts-ignore
-            command: execCommandArguments?.command,
-          })
-        }
-        className={modToolbar.toolBar__iconStrictWidth}
-      >
-        <Icon name={icon} />
-      </ToolbarButton>
-    ))}
-  </>
-);
-
+      ))}
+    </>
+  );
+};
+const ConnectedButtons = connector(Buttons);
 const FormattingButtons: React.FC<Props & {
   style?: any;
 }> = ({ style }) => {
@@ -73,7 +90,7 @@ const FormattingButtons: React.FC<Props & {
         ),
       }}
     >
-      <Buttons />
+      <ConnectedButtons />
     </animated.div>
   ) : (
     <div
@@ -81,13 +98,13 @@ const FormattingButtons: React.FC<Props & {
         modToolbar.toolBar__groupFormatting + ' ' + modToolbar.toolBar__group
       }
     >
-      <Buttons />
+      <ConnectedButtons />
     </div>
   );
 };
-const FormattingButtonsWithTransition: React.FC<Props & { show: boolean }> = ({
-  show,
-}) => {
+const FormattingButtonsWithTransition: React.FC<Props & {
+  show: boolean;
+}> = ({ show }) => {
   return (
     <TransitionWrapper<Props>
       Component={FormattingButtons}

@@ -11,10 +11,6 @@ import { Icon, Icons } from '::shared-components/icon/icon';
 import { router } from '::root/router/router';
 
 type Props = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  picture?: string;
   onClose: Function;
 };
 
@@ -69,7 +65,15 @@ const User: React.FC<Props & { style }> = ({ onClose, style }) => {
   );
 };
 
-const UserWithTransition: React.FC<Props & { show: boolean }> = ({
+import { connect, ConnectedProps } from 'react-redux';
+import { ac, Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({ show: state.dialogs.showUserPopup });
+const mapDispatch = { onClose: ac.dialogs.hideUserPopup };
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const UserWithTransition: React.FC<Props & PropsFromRedux> = ({
   show,
   ...props
 }) => {
@@ -97,4 +101,5 @@ const UserWithTransition: React.FC<Props & { show: boolean }> = ({
   );
 };
 
-export default UserWithTransition;
+const _ = connector(UserWithTransition);
+export default _;

@@ -12,6 +12,7 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
+const { copyDownloadedFile } = require('./downloaded-file-meta');
 const webpackPreprocessor = require('@cypress/webpack-preprocessor');
 const common = require('../../.webpack/webpack.common');
 /**
@@ -29,4 +30,10 @@ module.exports = on => {
   };
 
   on('file:preprocessor', webpackPreprocessor(options));
+  on('task', {
+    // deconstruct the individual properties
+    copyDownloadedFile({ name, tempSubFolder, extension, suffix }) {
+      return copyDownloadedFile({ name, tempSubFolder, extension, suffix });
+    },
+  });
 };

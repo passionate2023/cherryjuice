@@ -14,7 +14,6 @@ import { GqlAuthGuard } from '../user/guards/graphql.guard';
 import { UseGuards } from '@nestjs/common';
 import { GetUserGql } from '../user/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
-import { debug } from '../shared';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Document)
@@ -29,9 +28,6 @@ export class DocumentQueriesResolver {
     @Args('file_id', { nullable: true }) file_id: string | undefined,
     @GetUserGql() user: User,
   ): Promise<Document[]> {
-    if (debug.loadSqliteDocuments) {
-      if (file_id) await this.documentService.openLocalSqliteFile(file_id);
-    }
     return file_id
       ? [await this.documentService.getDocumentMetaById(user, file_id)]
       : this.documentService.getDocumentsMeta(user);

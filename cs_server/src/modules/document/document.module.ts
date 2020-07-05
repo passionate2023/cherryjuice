@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { NodeModule } from '../node/node.module';
 import { DocumentService } from './document.service';
-import { DocumentSqliteRepository } from './repositories/document.sqlite.repository';
 import { ImageModule } from '../image/image.module';
 import { DocumentRepository } from './repositories/document.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -25,13 +24,8 @@ import { DocumentSubscriptionsService } from './document.subscriptions.service';
     DocumentMutationsResolver,
     DocumentSubscriptionsResolver,
     DocumentService,
-    DocumentSqliteRepository,
     DocumentSubscriptionsService,
   ],
-  exports: [
-    DocumentSqliteRepository,
-    DocumentService,
-    DocumentSubscriptionsService,
-  ],
+  exports: [DocumentService, DocumentSubscriptionsService],
 })
 export class DocumentModule {}

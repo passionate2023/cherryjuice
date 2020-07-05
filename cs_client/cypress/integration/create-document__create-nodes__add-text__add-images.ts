@@ -1,5 +1,5 @@
 import { login } from '../support/workflows/login';
-import { fixScrolling, wait } from '../support/helpers/cypress-helpers';
+import { fixScrolling } from '../support/helpers/cypress-helpers';
 import { goHome } from '../support/workflows/navigate-home';
 import { assertNodesName } from '../support/assertions/nodes-name';
 import { assertTreeStructure } from '../support/assertions/tree-structure';
@@ -7,9 +7,10 @@ import { testIds } from '../support/helpers/test-ids';
 import { assertNodeText } from '../support/assertions/content/node-text';
 import { assertNodeImage } from '../support/assertions/content/node-image';
 import { createImageGenerator } from '../fixtures/node/generate-node-content/image/generate-image';
-import { generateTree } from '../fixtures/tree/generate-tree';
 import { dialogs } from '../support/workflows/dialogs/dialogs';
 import { editor } from '../support/workflows/editor/editor';
+import { generateDocument } from '../fixtures/document/generate-document';
+import { documentPuppeteer } from '../support/workflows/document/document-puppeteer';
 
 describe('create document > create nodes', () => {
   before(() => {
@@ -17,35 +18,31 @@ describe('create document > create nodes', () => {
     cy.visit(`/`);
     login();
     goHome();
-    dialogs.documentsList.interact.close();
+    dialogs.documentsList.close();
   });
-  const document = {
-    meta: {
-      name: new Date().toString(),
-    },
-    tree: generateTree({
+
+  const document = generateDocument({
+    treeConfig: {
       nodesPerLevel: [[2]],
       includeText: true,
       numberOfImages: [2, 5],
-    }),
-  };
+    },
+    documentConfig: {
+      name: new Date().toString(),
+    },
+  });
 
   it('perform: create document', () => {
-    dialogs.document.interact.create(document.meta);
+    dialogs.documentMeta.create(document.meta);
   });
   it('perform: create nodes', () => {
-    for (const node of document.tree.flatMap(x => x)) {
-      dialogs.node.create({ node });
-      wait.ms500();
-    }
+    documentPuppeteer.createTree(document);
   });
 
   it('assert: nodes name', () => {
-    wait.s1();
     assertNodesName(document);
   });
   it('assert: nodes structure', () => {
-    wait.s1();
     assertTreeStructure(document);
   });
 
@@ -68,9 +65,7 @@ describe('create document > create nodes', () => {
   });
 
   it('perform: write text', () => {
-    document.tree[0].forEach(node => {
-      editor.keyboard.typeText({ node, text: node.text });
-    });
+    editor.keyboard.typeText(document.tree[0]);
   });
   it('perform: save document', () => {
     cy.findByTestId(testIds.toolBar__main__saveDocument).click();

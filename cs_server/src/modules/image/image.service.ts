@@ -1,40 +1,17 @@
-import imageThumbnail from 'image-thumbnail';
 import { Injectable } from '@nestjs/common';
-import { ImageSqliteRepository } from './repositories/image.sqlite.repository';
-import { bufferToPng } from '../node/helpers/ctb';
-import { debug } from '../shared';
 import { ImageRepository } from './repositories/image.repository';
 import { Image } from './entities/image.entity';
 import { DeleteResult } from 'typeorm';
 import { GetNodeImages } from '../exports/helpers/export-ctb';
 
+const bufferToPng = buffer =>
+  buffer ? new Buffer(buffer, 'binary').toString('base64') : undefined;
+
 @Injectable()
 export class ImageService {
-  constructor(
-    private imageSqliteRepository: ImageSqliteRepository,
-    private imageRepository: ImageRepository,
-  ) {}
+  constructor(private imageRepository: ImageRepository) {}
 
-  async getPNGFullBase64({
-    node_id,
-    nodeId,
-  }: {
-    node_id: number;
-    nodeId: string;
-  }): Promise<Image[]> {
-    if (debug.loadSqliteDocuments)
-      return this.imageSqliteRepository
-        .getNodeImages({
-          node_id,
-        })
-        .then(nodes => {
-          return nodes.map(({ png }) => {
-            const image = new Image();
-            image.base64 = bufferToPng(png);
-            image.id = new Date().getTime() + '';
-            return image;
-          });
-        });
+  async getPNGFullBase64({ nodeId }: { nodeId: string }): Promise<Image[]> {
     return this.imageRepository
       .getNodeImages({
         nodeId,
@@ -58,35 +35,10 @@ export class ImageService {
       });
   };
   async getPNGThumbnailBase64({
-    node_id,
     nodeId,
   }: {
-    node_id: number;
     nodeId: string;
   }): Promise<Promise<Image>[] | Image[]> {
-    if (debug.loadSqliteDocuments)
-      return this.imageSqliteRepository
-        .getNodeImages({
-          node_id,
-        })
-        .then(nodes =>
-          nodes.map(async ({ anchor, png }) =>
-            anchor
-              ? null
-              : (async () => {
-                  const image = new Image();
-                  image.base64 = (
-                    await imageThumbnail(png, {
-                      percentage: 5,
-                      responseType: 'base64',
-                    })
-                  ).toString();
-                  image.id = new Date().getTime() + '';
-                  return image;
-                })(),
-          ),
-        );
-
     return this.imageRepository
       .getNodeImages({
         nodeId,

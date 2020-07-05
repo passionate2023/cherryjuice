@@ -1,25 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import {
-  createGDriveDownloadTask,
-  createGqlDownloadTask,
-  cleanUploadsFolder,
-  download,
-  TDownloadTask,
-  TDownloadTaskCreator,
-  TDownloadTaskProps,
-} from './helpers/io';
+import { performDownload } from './helpers/download/perform-download/perform-download';
 import { User } from '../user/entities/user.entity';
 import { ImageService } from '../image/image.service';
-import { Node } from '../node/entities/node.entity';
-import { NodeSqliteRepository } from '../node/repositories/node.sqlite.repository';
-import { DocumentSqliteRepository } from '../document/repositories/document.sqlite.repository';
 import { DocumentService } from '../document/document.service';
 import { Document } from '../document/entities/document.entity';
 import { FileUpload } from '../document/helpers/graphql';
 import { UploadImageDto } from './dto/upload-image.dto';
 import { NodeService } from '../node/node.service';
-import { SaveDocumentsService } from './save-documents.service';
+import { ImportCTB } from './helpers/import-ctb/import-ctb';
 import { DocumentSubscriptionsService } from '../document/document.subscriptions.service';
+import {
+  createGDriveDownloadTask,
+  DownloadTask,
+  DownloadTaskCreator,
+  DownloadTaskProps,
+  FileMeta,
+} from './helpers/download/create-dowload-task/create-gdrive-download-task';
+import { createGqlDownloadTask } from './helpers/download/create-dowload-task/create-gql-download-task';
+import { deleteFolder } from '../shared/fs/delete-folder';
+import { paths } from '../shared/fs/paths';
 export type DocumentDTO = {
   name: string;
   size: number;
@@ -32,48 +31,41 @@ export class ImportsService {
     private documentService: DocumentService,
     private imageService: ImageService,
     private nodeService: NodeService,
-    private documentSqliteRepository: DocumentSqliteRepository,
-    private nodeSqliteRepository: NodeSqliteRepository,
-    private saveDocumentsService: SaveDocumentsService,
     private subscriptionsService: DocumentSubscriptionsService,
   ) {}
 
-  onModuleInit(): void {
-    cleanUploadsFolder();
-  }
-
-  async openUploadedFile(filePath: string): Promise<void> {
-    await this.documentSqliteRepository.openUploadedFile(filePath);
-  }
-  async closeUploadedFile(): Promise<void> {
-    await this.documentSqliteRepository.closeUploadedFile();
+  async onModuleInit(): Promise<void> {
+    await deleteFolder(paths.importsFolder, true);
   }
 
   private async saveDocument({
     document,
     user,
+    fileMeta,
   }: {
     document: Document;
     user: User;
+    fileMeta: FileMeta;
   }): Promise<void> {
-    const filePath = '/uploads/' + document.name;
-    await this.openUploadedFile(filePath);
-    const rawNodes = (await this.nodeSqliteRepository.getNodesMeta(
-      false,
-    )) as (Node & { is_ro; has_image })[];
-    await this.saveDocumentsService.saveDocument({
+    const importCTB = new ImportCTB();
+
+    await importCTB.saveDocument({
       document,
-      rawNodes,
+      fileMeta,
+    });
+    document.size = await this.documentService.getSize({
+      documentId: document.id,
       user,
     });
+    await document.save();
   }
   async importDocumentsFromGDrive(
-    meta: string[],
+    gDriveFileIds: string[],
     user: User,
     access_token: string,
   ): Promise<void> {
     await this.importDocument(
-      meta,
+      gDriveFileIds.map(gDriveFileId => ({ gDriveFileId, userId: user.id })),
       user,
       createGDriveDownloadTask(access_token),
     );
@@ -83,7 +75,11 @@ export class ImportsService {
     files: FileUpload[],
     user: User,
   ): Promise<void> {
-    await this.importDocument(files, user, createGqlDownloadTask);
+    await this.importDocument(
+      files.map(fileUpload => ({ fileUpload, userId: user.id })),
+      user,
+      createGqlDownloadTask,
+    );
   }
 
   async importImages({
@@ -97,7 +93,7 @@ export class ImportsService {
     for (const file of images) {
       const { createReadStream, filename } = await file;
       const chunksContainer = { current: [] };
-      const { hash } = await download(
+      const { hash } = await performDownload(
         { readStream: createReadStream(), chunksContainer },
         () => Promise.resolve(),
       );
@@ -112,20 +108,18 @@ export class ImportsService {
       user,
     });
 
-    const { node_idImagesMap } = await this.saveDocumentsService.saveImages([
-      [node, pngs],
-    ]);
+    const { node_idImagesMap } = await ImportCTB.saveImages([[node, pngs]]);
     return node_idImagesMap.get(node_id).map((id, i) => [imageIDs[i], id]);
   }
 
   async importDocument(
-    meta: TDownloadTaskProps[],
+    meta: DownloadTaskProps[],
     user: User,
-    taskCreator: TDownloadTaskCreator,
+    taskCreator: DownloadTaskCreator,
   ): Promise<void> {
     const documents: {
       document: Document;
-      downloadTask: TDownloadTask;
+      downloadTask: DownloadTask;
     }[] = [];
 
     for (const file of meta) {
@@ -133,7 +127,7 @@ export class ImportsService {
       try {
         const downloadTask = await taskCreator(file);
         document = await this.documentService.createDocument({
-          name: downloadTask.fileName,
+          name: downloadTask.fileMeta.fileName,
           size: 0,
           user,
         });
@@ -151,7 +145,9 @@ export class ImportsService {
     for (const { document, downloadTask } of documents) {
       try {
         await this.subscriptionsService.import.preparing(document);
-        const { hash } = await download(downloadTask, document.reload);
+        const { hash } = await performDownload(downloadTask, async () => {
+          await document.reload();
+        });
         const documentWithSameHash = await this.documentService.findDocumentByHash(
           hash,
           user,
@@ -166,15 +162,16 @@ export class ImportsService {
           await this.saveDocument({
             document,
             user,
+            fileMeta: downloadTask.fileMeta,
           });
           await this.subscriptionsService.import.finished(document);
+          await deleteFolder(downloadTask.fileMeta.location.folder);
         }
       } catch (e) {
         await this.subscriptionsService.import.failed(document);
+        await deleteFolder(downloadTask.fileMeta.location.folder);
         throw e;
       }
-      await this.closeUploadedFile();
     }
-    cleanUploadsFolder();
   }
 }

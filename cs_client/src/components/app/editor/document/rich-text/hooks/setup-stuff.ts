@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { setupClipboard } from '::helpers/editing/clipboard';
 import { setupTabAndBackspaceHandler } from '::helpers/editing/typing';
 import { setupGesturesHandler } from '::shared-components/drawer/drawer-navigation/helpers';
-import { appActionCreators } from '::app/reducer';
 import { modRichText } from '::sass-modules/index';
 import { ac } from '::root/store/store';
 
@@ -15,7 +14,7 @@ const useSetupStuff = node_id => {
     setupGesturesHandler({
       onRight: ac.editor.showTree,
       onLeft: ac.editor.hideTree,
-      onTap: appActionCreators.hidePopups,
+      onTap: ac.root.hidePopups,
       gestureZoneSelector: modRichText.richText,
       minimumLength: 170,
     });

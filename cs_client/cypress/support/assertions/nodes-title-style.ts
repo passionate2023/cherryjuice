@@ -4,7 +4,7 @@ import { rgbToHex } from '../helpers/javascript-utils';
 export const assertNodeTitleStyle = ({ nodeInDom }) => ({ node }) => {
   const nodeTitle = nodeInDom.querySelector('.node__title');
   const { fontWeight } = nodeTitle.style;
-  expect(fontWeight).equal(node.isBold ? 'bold' : 'normal');
+  expect(fontWeight).equal(node.isBold ? 'bold' : '');
 
   const { color } = nodeTitle.style;
   expect(rgbToHex(color)).equal(node.color || '#ffffff');

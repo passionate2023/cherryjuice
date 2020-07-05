@@ -1,33 +1,41 @@
 import { createNode } from './helpers/node/create';
 import { edit } from './helpers/node/edit';
 import { deleteNode } from './helpers/node/delete';
-import { show } from './helpers/documents-list/interact/show';
+import { showDocumentsList } from './helpers/documents-list/interact/show';
 import { close } from './helpers/documents-list/interact/close';
 import { showDocumentMetaDialog } from './helpers/documents-list/interact/show-document-meta-dialog';
 import { getDocumentInfo } from './helpers/documents-list/inspect/get-document-info';
 import { createDocument } from './helpers/document/interact/create';
 import { renameDocument } from './helpers/document/interact/rename';
+import { showImportDocument } from './helpers/import-document/show';
 
 const dialogs = {
-  node: {
+  importDocument: {
+    show: showImportDocument,
+  },
+  nodeMeta: {
     create: createNode,
     edit,
     delete: deleteNode,
   },
+  documentMeta: {
+    create: createDocument,
+    rename: renameDocument,
+  },
   documentsList: {
-    interact: {
-      show,
-      close,
-      showDocumentMetaDialog,
-    },
+    show: showDocumentsList,
+    close,
+    showDocumentMetaDialog,
     inspect: {
       getDocumentInfo,
-    },
-  },
-  document: {
-    interact: {
-      create: createDocument,
-      rename: renameDocument,
+      getNumberOfDocuments: () => {
+        return new Cypress.Promise(res => {
+          cy.get('.selectFile').then(body$ => {
+            const body = body$[0];
+            res(body.querySelectorAll('.selectFile__file__name').length);
+          });
+        });
+      },
     },
   },
 };

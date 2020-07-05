@@ -1,4 +1,4 @@
-import { Image as CTBImage } from '../../document/helpers/copy-ctb/entities/Image';
+import { Image as CTBImage } from '../../imports/helpers/import-ctb/entities/Image';
 
 export interface IImageRepository {
   getNodeImages({

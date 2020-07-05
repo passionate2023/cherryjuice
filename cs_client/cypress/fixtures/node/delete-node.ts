@@ -8,7 +8,7 @@ const deleteNodeAndItsChildren = (tree: TreeAst) => treeMap => (
   node.children
     .map(id => treeMap.get(id))
     .forEach(deleteNodeAndItsChildren(tree)(treeMap));
-  removeArrayElement(tree[node.levelIndex], node);
+  removeArrayElement(tree[node.levelIndex], n => n.id === node.id);
 };
 
 export { deleteNodeAndItsChildren };

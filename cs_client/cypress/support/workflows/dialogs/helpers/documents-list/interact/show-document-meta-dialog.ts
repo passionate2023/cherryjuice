@@ -2,7 +2,7 @@ import { wait } from '../../../../../helpers/cypress-helpers';
 import { dialogs } from '../../../dialogs';
 
 const showDocumentMetaDialog = (documentName: string) => {
-  dialogs.documentsList.interact.show();
+  dialogs.documentsList.show();
   wait.s1();
   cy.findByText(documentName)
     .parent()
@@ -11,6 +11,7 @@ const showDocumentMetaDialog = (documentName: string) => {
   cy.findByText(documentName)
     .parent()
     .find('.selectFile__file__three-dots-popup__item')
+    .first()
     .click();
 };
 

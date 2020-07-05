@@ -8,19 +8,19 @@ import { useSetCurrentNode } from '::app/editor/document/rich-text/hooks/set-cur
 import { ContentEditable } from '::app/editor/document/rich-text/content-editable';
 import { useEffect } from 'react';
 import { apolloCache } from '::graphql/cache/apollo-cache';
-
-type Props = {
-  file_id: string;
-  contentEditable: boolean;
-  nodes: Map<number, NodeMeta>;
-  processLinks: number;
-};
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 import { router } from '::root/router/router';
 
+type Props = {
+  file_id: string;
+  nodes: Map<number, NodeMeta>;
+};
+
 const mapState = (state: Store) => ({
   fetchNodesStarted: state.document.fetchNodesStarted,
+  contentEditable: state.editor.contentEditable || !state.root.isOnMobile,
+  processLinks: state.node.processLinks,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);

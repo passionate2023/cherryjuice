@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { appActionCreators } from '::app/reducer';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { Icon, Icons } from '::shared-components/icon/icon';
 import { modToolbar } from '::sass-modules/index';
@@ -8,16 +7,30 @@ import { RootContext } from '::root/root-context';
 import { ac } from '::root/store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({
+  documentId: state.document.documentId,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
 type Props = {
   showUserPopup: boolean;
 };
 
-const NavBar: React.FC<Props> = ({ showUserPopup }) => {
+const NavBar: React.FC<Props & PropsFromRedux> = ({
+  showUserPopup,
+  documentId,
+}) => {
   const {
     session: {
       user: { picture: userPicture },
     },
   } = useContext(RootContext);
+  const noDocumentIsSelected = !documentId;
   return (
     <div
       className={
@@ -30,8 +43,14 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
       >
         <Icon name={Icons.material.document} />
       </ToolbarButton>
-      <ToolbarButton onClick={ac.document.export}>
-        <Icon name={Icons.material.export} />
+      <ToolbarButton
+        onClick={ac.document.export}
+        disabled={noDocumentIsSelected}
+      >
+        <Icon
+          name={Icons.material.export}
+          testId={testIds.toolBar__navBar__exportDocument}
+        />
       </ToolbarButton>
       <ToolbarButton onClick={ac.dialogs.showDocumentList}>
         <Icon
@@ -39,13 +58,10 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
           testId={testIds.toolBar__navBar__showDocumentList}
         />
       </ToolbarButton>
-      <ToolbarButton onClick={appActionCreators.toggleSettings}>
+      <ToolbarButton onClick={ac.dialogs.showSettingsDialog}>
         <Icon name={Icons.material.settings} />
       </ToolbarButton>
-      <ToolbarButton
-        onClick={appActionCreators.toggleUserPopup}
-        enabled={showUserPopup}
-      >
+      <ToolbarButton onClick={ac.dialogs.showUserPopup} active={showUserPopup}>
         {userPicture ? (
           <img
             src={userPicture}
@@ -59,5 +75,5 @@ const NavBar: React.FC<Props> = ({ showUserPopup }) => {
     </div>
   );
 };
-
-export { NavBar };
+const _ = connector(NavBar);
+export { _ as NavBar };

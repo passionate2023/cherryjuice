@@ -27,6 +27,7 @@ const mapState = (state: Store) => ({
   showDialog: state.dialogs.showDocumentMetaDialog,
   focusedDocumentId: state.documentsList.focusedDocumentId,
   documents: state.documentsList.documents,
+  isOnMobile: state.root.isOnMobile,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -36,10 +37,7 @@ type DocumentMetaDialogProps = {
   documentId?: string;
 };
 
-type Props = PropsFromRedux &
-  DocumentMetaDialogProps & {
-    isOnMobile: boolean;
-  };
+type Props = PropsFromRedux & DocumentMetaDialogProps;
 const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   showDialog,
   isOnMobile,
@@ -129,6 +127,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       onConfirm={apply}
       rightHeaderButtons={[]}
       small={true}
+      isShownOnTopOfDialog={true}
     >
       <ErrorBoundary>
         <MetaForm inputs={inputs} />

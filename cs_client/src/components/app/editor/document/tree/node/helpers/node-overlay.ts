@@ -1,10 +1,9 @@
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import treeModule from '::sass-modules/tree/tree.scss';
-import { appInitialState } from '::app/reducer';
 
 const createNodeOverlayHelper = () => {
   const state = {
-    tree: { scrollWidth: appInitialState.treeSize },
+    tree: { scrollWidth: 250 },
   };
   return {
     init: () => (state.tree = document.querySelector('.' + treeModule.tree)),

@@ -10,3 +10,7 @@
 .body-scrim--alert-modal {
   z-index: $ZI-alert-modal-scrim;
 }
+
+.body-scrim--on-top-of-dialog {
+  z-index: $ZI-scrim-on-top-of-dialog;
+}

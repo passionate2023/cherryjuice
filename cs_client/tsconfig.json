@@ -18,6 +18,7 @@
     },
     "target": "esnext",
     "sourceMap": true,
+    "module": "esnext",
     "esModuleInterop": true,
     "moduleResolution": "node"
   }

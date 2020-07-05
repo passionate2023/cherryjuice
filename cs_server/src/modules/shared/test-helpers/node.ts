@@ -2,7 +2,7 @@ require('dotenv').config();
 import { NodeService } from '../../node/node.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { NodeResolver } from '../../node/node.resolver';
-import { NodeSqliteRepository } from '../../node/repositories/node.sqlite.repository';
+import { NodeSqliteRepository } from '../../imports/helpers/import-ctb/repositories/node.sqlite.repository';
 import { NodeMutationsResolver } from '../../node/node.mutations.resolver';
 import { forwardRef } from '@nestjs/common';
 import { DocumentModule } from '../../document/document.module';

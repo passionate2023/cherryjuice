@@ -25,8 +25,8 @@ const useGetPreviousOperations = () => {
               exports: [],
             },
           );
-        ac.documentOperations.addImports(imports);
-        ac.documentOperations.addExports(exports);
+        if (imports.length) ac.documentOperations.addImports(imports);
+        if (exports.length) ac.documentOperations.addExports(exports);
       });
   }, []);
 };

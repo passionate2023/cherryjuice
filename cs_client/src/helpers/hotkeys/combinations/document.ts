@@ -1,6 +1,5 @@
 import { HotKey } from '../helpers/hotkeys-manager';
 import { ac, store } from '::root/store/store';
-import { appActionCreators } from '::app/reducer';
 
 const hotKeys: HotKey[] = [
   {
@@ -44,7 +43,7 @@ const hotKeys: HotKey[] = [
   },
   {
     hotKey: { key: 'n', altKey: true },
-    callback: appActionCreators.showNodeMetaCreateSibling,
+    callback: ac.dialogs.showCreateSiblingNode,
     options: {
       richTextHasToBeOnFocus: false,
     },

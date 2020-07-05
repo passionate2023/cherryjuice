@@ -1,9 +1,9 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
-import {
-  DocumentSubscription,
-  DOCUMENT_SUBSCRIPTIONS as DS,
-} from '::types/graphql/generated';
+import { DocumentSubscription } from '::types/graphql/generated';
+import { filterStaleOperations } from './helpers/document-operations';
+import { rootActionCreators } from '::root/store/ducks/root';
+import { cloneObj } from '::helpers/editing/execK/helpers';
 
 const ap = createActionPrefixer('document-operation');
 
@@ -19,9 +19,10 @@ const ac = {
   clearFinished: _(ap('clearFinished')),
 };
 
+type DocumentSubscriptions = { [id: string]: DocumentSubscription };
 type State = {
-  imports: { [id: string]: DocumentSubscription };
-  exports: { [id: string]: DocumentSubscription };
+  imports: DocumentSubscriptions;
+  exports: DocumentSubscriptions;
 };
 
 const initialState: State = {
@@ -29,19 +30,24 @@ const initialState: State = {
   exports: {},
 };
 const reducer = createReducer(initialState, _ => [
+  ...[
+    _(rootActionCreators.resetState, () => ({
+      ...cloneObj(initialState),
+    })),
+  ],
   _(ac.addExports, (state, { payload }) => ({
     ...state,
-    exports: {
+    exports: filterStaleOperations.deleted({
       ...state.exports,
       ...Object.fromEntries(payload.map(document => [document.id, document])),
-    },
+    }),
   })),
   _(ac.addImports, (state, { payload }) => ({
     ...state,
-    imports: {
+    imports: filterStaleOperations.deleted({
       ...state.imports,
       ...Object.fromEntries(payload.map(document => [document.id, document])),
-    },
+    }),
   })),
   _(ac.deleteImport, (state, { payload }) => ({
     ...state,
@@ -56,16 +62,8 @@ const reducer = createReducer(initialState, _ => [
     ),
   })),
   _(ac.clearFinished, state => ({
-    exports: Object.fromEntries(
-      Object.entries(state.exports).filter(
-        ([, { status }]) => ![DS.EXPORT_FINISHED].includes(status),
-      ),
-    ),
-    imports: Object.fromEntries(
-      Object.entries(state.imports).filter(
-        ([, { status }]) => ![DS.IMPORT_FINISHED].includes(status),
-      ),
-    ),
+    exports: filterStaleOperations.finished(state.imports),
+    imports: filterStaleOperations.finished(state.imports),
   })),
 ]);
 
@@ -73,3 +71,4 @@ export {
   reducer as documentOperationsReducer,
   ac as documentOperationsActionCreators,
 };
+export { DocumentSubscriptions };

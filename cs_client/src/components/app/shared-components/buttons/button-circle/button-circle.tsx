@@ -6,6 +6,7 @@ type Props = {
   className?: string;
   onClick?: EventHandler<undefined>;
   disabled?: boolean;
+  testId?: string;
 };
 
 const ButtonCircle: React.FC<Props> = ({
@@ -13,12 +14,14 @@ const ButtonCircle: React.FC<Props> = ({
   children,
   onClick,
   disabled,
+  testId,
 }) => {
   return (
     <button
       disabled={disabled}
       onClick={onClick}
       className={`${className} ${modButton.button} ${modButton.buttonCircle}`}
+      {...(testId && { 'data-testid': testId })}
     >
       {children}
     </button>

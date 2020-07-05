@@ -1,7 +1,7 @@
-import { Observable, concat, of, defer } from 'rxjs';
+import { concat, Observable, of } from 'rxjs';
 import { Actions } from '../actions.types';
 import { ac, store } from '../store';
-import { switchMap, ignoreElements } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { ofType } from 'deox';
 import { gqlMutation } from './shared/gql-query';
@@ -18,24 +18,21 @@ const exportDocumentEpic = (action$: Observable<Actions>) => {
         save,
         action$.pipe(
           ofType([ac.__.document.saveFulfilled]),
+          take(1),
           switchMap(() => {
-            const exportDocument = defer(() =>
-              gqlMutation({
-                ...DOCUMENT_MUTATION.exportDocument,
-                variables: { file_id: selectedDocumentId() },
-              }),
-            ).pipe(
-              ignoreElements(),
-              createErrorHandler({
-                alertDetails: {
-                  title: 'Could not export',
-                  description: 'Check your network connection',
-                },
-              }),
-            );
-            return exportDocument;
+            return gqlMutation({
+              ...DOCUMENT_MUTATION.exportDocument,
+              variables: { file_id: selectedDocumentId() },
+            }).pipe(map(ac.__.document.exportFulfilled));
           }),
         ),
+      ).pipe(
+        createErrorHandler({
+          alertDetails: {
+            title: 'Could not export',
+            description: 'Check your network connection',
+          },
+        }),
       );
     }),
   );

@@ -9,10 +9,18 @@ const ColorInput: React.FC<{
   cssProperty: string;
   inputId: string;
   icon: string;
-}> = ({ icon, label, cssProperty, inputId }) => {
+  disabled?: boolean;
+}> = ({ icon, label, cssProperty, inputId, disabled }) => {
   return (
-    <ToolbarButton className={modToolbar.toolBar__iconStrictWidth}>
-      <label htmlFor={label} style={{ cursor: 'pointer' }} id={inputId}>
+    <ToolbarButton
+      className={modToolbar.toolBar__iconStrictWidth}
+      disabled={disabled}
+    >
+      <label
+        htmlFor={label}
+        style={!disabled ? { cursor: 'pointer' } : {}}
+        id={inputId}
+      >
         <Icon name={icon} />
         <input
           id={label}

@@ -31,24 +31,5 @@ const localSessionManager = (() => {
 
   return { setStorageType, clear, set, get };
 })();
-const inMemoryTokenManager = (() => {
-  const authState = {
-    token: '',
-  };
-  const clear = () => {
-    authState.token = '';
-  };
-  const getHeader = () => (authState.token ? `Bearer ${authState.token}` : '');
-  const getToken = () => authState.token;
-  const set = token => {
-    authState.token = token;
-  };
-  return {
-    clear,
-    getHeader,
-    getToken,
-    set,
-  };
-})();
 
-export { localSessionManager, inMemoryTokenManager };
+export { localSessionManager };

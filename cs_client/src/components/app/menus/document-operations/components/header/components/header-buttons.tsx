@@ -4,6 +4,7 @@ import { ButtonCircle } from '../../../../../shared-components/buttons/button-ci
 import { ac } from '../../../../../../store/store';
 import { EventHandler } from 'react';
 import { OperationsStats } from '../header';
+import { testIds } from '::cypress/support/helpers/test-ids';
 
 type Props = {
   collapsed: boolean;
@@ -22,6 +23,7 @@ const HeaderButtons: React.FC<Props> = ({
         <ButtonCircle
           onClick={ac.documentOperations.clearFinished}
           className={modDocumentOperations.documentOperations__header__button}
+          testId={testIds.popups__documentOperations__clearAllFinished}
         >
           &times;
         </ButtonCircle>

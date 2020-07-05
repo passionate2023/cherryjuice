@@ -18,6 +18,7 @@ const Icons = {
     background: 'background',
     bold: 'bold',
     'clear-format': 'clear-format',
+    'select-all': 'select-all',
     foreground: 'foreground',
     'lock-open': 'lock-open',
     'lock-closed': 'lock-closed',

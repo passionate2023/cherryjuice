@@ -3,7 +3,6 @@ import { getSelection } from '::helpers/editing/execK/steps/get-selection';
 import { pipe1 } from '::helpers/editing/execK/steps//pipe1';
 import { pipe3 } from '::helpers/editing/execK/steps/pipe3';
 import { restoreSelection } from '::helpers/editing/execK/steps/restore-selection';
-import { appActionCreators } from '::app/reducer';
 import { AlertType } from '::types/react';
 import { FormattingError } from '::types/errors';
 import { ac } from '::root/store/store';
@@ -79,8 +78,7 @@ const execK = ({
         ogSelection: { startElement, endElement, startOffset, endOffset },
         options: { collapse: isJustificationCommand(command) },
       });
-      if (selectionContainsLinks)
-        appActionCreators.processLinks(new Date().getTime());
+      if (selectionContainsLinks) ac.node.processLinks(new Date().getTime());
     }
   } catch (e) {
     document.querySelector('#rich-text ').innerHTML = ogHtml;

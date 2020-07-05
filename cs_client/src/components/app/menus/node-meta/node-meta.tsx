@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { EventHandler, useEffect, useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { MetaForm } from '::shared-components/form/meta-form/meta-form';
 import { useSave } from '::app/menus/node-meta/hooks/save';
-import { NodeMetaPopupRole } from '::app/reducer';
 import {
   nodeMetaActionCreators,
   nodeMetaInitialState,
@@ -17,24 +16,25 @@ import { FormInputProps } from '::shared-components/form/meta-form/meta-form-inp
 import { testIds } from '::cypress/support/helpers/test-ids';
 
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store/store';
+import { ac, Store } from '::root/store/store';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
   nodeId: state.document.selectedNode.id,
   highestNode_id: state.document.highestNode_id,
+  showDialog: state.dialogs.showNodeMetaDialog,
+  isOnMobile: state.root.isOnMobile,
 });
-
-const connector = connect(mapState);
+const mapDispatch = {
+  onClose: ac.dialogs.hideNodeMeta,
+};
+const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type TNodeMetaModalProps = {};
 
-const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
-  onClose: EventHandler<any>;
-  showDialog: NodeMetaPopupRole;
-  isOnMobile: boolean;
-} & PropsFromRedux> = ({
+const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
+  PropsFromRedux> = ({
   showDialog,
   isOnMobile,
   nodeId,
@@ -54,8 +54,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps & {
   });
 
   useEffect(() => {
-    if (showDialog === NodeMetaPopupRole.EDIT)
-      nodeMetaActionCreators.reset(node);
+    if (showDialog === 'edit') nodeMetaActionCreators.reset(node);
     else nodeMetaActionCreators.reset(undefined);
   }, [nodeId, showDialog]);
   const onSave = useSave({

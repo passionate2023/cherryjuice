@@ -10,7 +10,7 @@ import { DocumentQueriesResolver } from '../../document/document.queries.resolve
 import { DocumentMutationsResolver } from '../../document/document.mutations.resolver';
 import { DocumentSubscriptionsResolver } from '../../document/document.subscriptions.resolver';
 import { DocumentService } from '../../document/document.service';
-import { DocumentSqliteRepository } from '../../document/repositories/document.sqlite.repository';
+import { DocumentSqliteRepository } from '../../imports/helpers/import-ctb/repositories/document.sqlite.repository';
 
 export type DocumentTH = {
   service: DocumentService;

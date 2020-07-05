@@ -1,4 +1,4 @@
-import { NodeFromPG } from '../../helpers/ahtml-to-ctb/helpers/translate-ahtml/__tests__/__data__/ahtml-xml-samples/02';
+import { NodeFromPG } from '../../helpers/ahtml-to-ctb/__tests__/__data__/documents/02';
 
 const selectNode_ids = (node_ids?: number[]) => (
   xs: any[],

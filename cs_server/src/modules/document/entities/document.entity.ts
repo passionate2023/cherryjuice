@@ -26,6 +26,7 @@ export class Document extends BaseEntity {
     this.name = name;
     this.user = user;
     this.size = size;
+    this.hash = '';
   }
   @PrimaryColumn()
   @Field()

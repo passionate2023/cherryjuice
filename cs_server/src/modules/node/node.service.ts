@@ -1,9 +1,7 @@
 import { aHtmlToHtml } from './helpers/rendering/ahtml-to-html';
-import { NodeSqliteRepository } from './repositories/node.sqlite.repository';
 import { Injectable } from '@nestjs/common';
 import { Node } from './entities/node.entity';
 import { NodeRepository } from './repositories/node.repository';
-import { debug } from '../shared';
 import { SaveAhtmlDto } from './dto/save-ahtml.dto';
 import { ImageService } from '../image/image.service';
 import { NodeMetaDto } from './dto/node-meta.dto';
@@ -18,7 +16,6 @@ export class NodeService {
     private imageService: ImageService,
     private nodeRepository: NodeRepository,
     private documentService: DocumentService,
-    private nodeSqliteRepository: NodeSqliteRepository,
   ) {}
 
   async createNode(args: CreateNodeDto): Promise<string> {
@@ -50,29 +47,19 @@ export class NodeService {
   }
 
   async getHtml(node_id: string, documentId: string): Promise<string> {
-    if (debug.loadSqliteDocuments) {
-      const ahtml = await this.nodeSqliteRepository.getAHtml(node_id);
-      return aHtmlToHtml(ahtml);
-    }
     const ahtml = await this.nodeRepository.getAHtml(node_id, documentId);
     return aHtmlToHtml(ahtml);
   }
 
   async getNodesMeta(documentId: string): Promise<Node[]> {
-    if (debug.loadSqliteDocuments)
-      return this.nodeSqliteRepository.getNodesMeta();
     return this.nodeRepository.getNodesMeta(documentId);
   }
 
   async getNodeMetaById(args: GetNodeByNodeIdIt): Promise<Node> {
-    if (debug.loadSqliteDocuments)
-      return this.nodeSqliteRepository.getNodeMetaById(args.node_id);
     return await this.nodeRepository.getNodeMetaById(args);
   }
 
   async getNodesMetaAndAHtml(documentId: string): Promise<Node[]> {
-    if (debug.loadSqliteDocuments)
-      return this.nodeSqliteRepository.getNodesMeta(true);
     return await this.nodeRepository.getNodesMetaAndAHtml(documentId);
   }
 }

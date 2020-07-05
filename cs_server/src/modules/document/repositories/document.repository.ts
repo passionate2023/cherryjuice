@@ -14,7 +14,12 @@ import {
 import { DocumentDTO } from '../../imports/imports.service';
 import { NotFoundException } from '@nestjs/common';
 import { EditDocumentDto } from '../input-types/edit-document.dto';
-
+import { createErrorDescription } from '../../shared/errors/create-error-description';
+const nullableEvents = [
+  DS.IMPORT_FINISHED,
+  DS.EXPORT_FINISHED,
+  DS.EXPORT_FAILED,
+];
 @EntityRepository(Document)
 export class DocumentRepository extends Repository<Document>
   implements IDocumentRepository {
@@ -27,7 +32,7 @@ export class DocumentRepository extends Repository<Document>
     });
     if (!document)
       throw new NotFoundException(
-        `document ${file_id} does not exist in your library`,
+        createErrorDescription.documentNotExist(file_id),
       );
     return document;
   }
@@ -116,11 +121,7 @@ export class DocumentRepository extends Repository<Document>
   }
 
   setDocumentStatus = async (event: DS, document: Document): Promise<void> => {
-    if (event === DS.IMPORT_FINISHED || event === DS.EXPORT_FINISHED) {
-      document.status = null;
-    } else {
-      document.status = event;
-    }
+    document.status = nullableEvents.includes(event) ? null : event;
     if (event !== DS.DELETED) {
       await this.save(document);
     }

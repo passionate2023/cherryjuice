@@ -2,6 +2,8 @@ import { createActionCreator as _, createReducer } from 'deox';
 import { documentActionCreators } from '::root/store/ducks/document';
 import { createActionPrefixer } from './helpers/shared';
 import { TAlert } from '::types/react';
+import { cloneObj } from '::helpers/editing/execK/helpers';
+import { rootActionCreators } from '::root/store/ducks/root';
 
 const ap = createActionPrefixer('dialogs');
 
@@ -30,19 +32,56 @@ const actionCreators = {
     setAlert: _(ap('setAlert'), _ => (alert: TAlert) => {
       if (alert?.error && process.env.NODE_ENV === 'development')
         // eslint-disable-next-line no-console
-        console.error(alert.error);
+        console.error(alert);
+      if (alert.error?.message.includes('cs::')) {
+        const [, message] = alert.error.message
+          .replace(/^.*cs::/, '')
+          .split('::');
+        alert.description = message;
+      }
       return _(alert);
     }),
     clearAlert: _(ap('clearAlert')),
   },
+  ...{
+    showDeleteNode: _(ap('show-delete-node')),
+    hideDeleteNode: _(ap('hide-delete-node')),
+  },
+  ...{
+    showCreateChildNode: _(ap('show-create-child-node')),
+    showCreateSiblingNode: _(ap('show-create-sibling-node')),
+    showEditNode: _(ap('show-edit-node')),
+    hideNodeMeta: _(ap('hide-node-meta')),
+  },
+  ...{
+    showUserPopup: _(ap('show-user-popup')),
+    hideUserPopup: _(ap('hide-user-popup')),
+  },
+  ...{
+    showSettingsDialog: _(ap('show-settings-dialog')),
+    hideSettingsDialog: _(ap('hide-settings-dialog')),
+  },
+  ...{
+    setSnackbar: _(ap('set-snackbar'), _ => (snackbar: Snackbar) =>
+      _(snackbar),
+    ),
+    clearSnackbar: _(ap('clear-snackbar')),
+  },
 };
 
+type NodeMetaDialogRole = 'edit' | 'create-child' | 'create-sibling';
+type Snackbar = { message: string };
 type State = {
   showReloadDocument: boolean;
   alert?: TAlert;
   showImportDocuments: boolean;
   showDocumentList: boolean;
   showDocumentMetaDialog?: 'edit' | 'create';
+  showNodeMetaDialog?: NodeMetaDialogRole;
+  showDeleteNode: boolean;
+  showUserPopup: boolean;
+  showSettingsDialog: boolean;
+  snackbar?: Snackbar;
 };
 
 const initialState: State = {
@@ -50,9 +89,19 @@ const initialState: State = {
   showImportDocuments: false,
   showDocumentList: false,
   alert: undefined,
+  showDeleteNode: false,
+  showNodeMetaDialog: undefined,
+  showUserPopup: false,
+  showSettingsDialog: false,
+  snackbar: undefined,
 };
 
 const reducer = createReducer(initialState, _ => [
+  ...[
+    _(rootActionCreators.resetState, () => ({
+      ...cloneObj(initialState),
+    })),
+  ],
   _(actionCreators.showReloadDocument, state => ({
     ...state,
     showReloadDocument: true,
@@ -112,6 +161,73 @@ const reducer = createReducer(initialState, _ => [
         } as State),
     ),
   ],
+  ...[
+    _(actionCreators.showDeleteNode, state => ({
+      ...state,
+      showDeleteNode: true,
+    })),
+    _(actionCreators.hideDeleteNode, state => ({
+      ...state,
+      showDeleteNode: false,
+    })),
+  ],
+  ...[
+    _(actionCreators.showCreateChildNode, state => ({
+      ...state,
+      showNodeMetaDialog: 'create-child',
+    })),
+    _(actionCreators.showCreateSiblingNode, state => ({
+      ...state,
+      showNodeMetaDialog: 'create-sibling',
+    })),
+    _(actionCreators.showEditNode, state => ({
+      ...state,
+      showNodeMetaDialog: 'edit',
+    })),
+    _(
+      actionCreators.hideNodeMeta,
+      state =>
+        ({
+          ...state,
+          showNodeMetaDialog: undefined,
+        } as State),
+    ),
+  ],
+  ...[
+    _(actionCreators.showUserPopup, state => ({
+      ...state,
+      showUserPopup: true,
+    })),
+    _(actionCreators.hideUserPopup, state => ({
+      ...state,
+      showUserPopup: false,
+    })),
+  ],
+  ...[
+    _(actionCreators.showSettingsDialog, state => ({
+      ...state,
+      showSettingsDialog: true,
+    })),
+    _(actionCreators.hideSettingsDialog, state => ({
+      ...state,
+      showSettingsDialog: false,
+    })),
+  ],
+  ...[
+    _(actionCreators.setSnackbar, (state, { payload }) => ({
+      ...state,
+      snackbar: payload,
+    })),
+    _(
+      actionCreators.clearSnackbar,
+      state =>
+        ({
+          ...state,
+          snackbar: undefined,
+        } as State),
+    ),
+  ],
 ]);
 
 export { reducer as dialogsReducer, actionCreators as dialogsActionCreators };
+export { NodeMetaDialogRole };

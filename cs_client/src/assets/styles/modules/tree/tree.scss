@@ -29,18 +29,16 @@
 }
 $bubble-width: 35px;
 .tree__resizeHandle__bubble {
-  position: absolute;
-  left: -#{$bubble-width * 0.4};
-  top: 70%;
-  opacity: 0.3;
-  height: $bubble-width;
-  width: $bubble-width;
-  border-radius: 50%;
-  background-color: white;
-  cursor: grab;
-  z-index: $ZI-resize-bubble;
-
-  @include respond-to($md-up) {
-    display: none;
+  @media (pointer: coarse) {
+    position: absolute;
+    left: -#{$bubble-width * 0.4};
+    top: 70%;
+    opacity: 0.3;
+    height: $bubble-width;
+    width: $bubble-width;
+    border-radius: 50%;
+    background-color: white;
+    cursor: grab;
+    z-index: $ZI-resize-bubble;
   }
 }

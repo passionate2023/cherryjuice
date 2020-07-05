@@ -8,10 +8,10 @@ const renameDocument = ({
   currentName: string;
   newName: string;
 }) => {
-  dialogs.documentsList.interact.showDocumentMetaDialog(currentName);
+  dialogs.documentsList.showDocumentMetaDialog(currentName);
   setDocumentName(newName);
   applyDocumentMeta();
-  dialogs.documentsList.interact.close();
+  dialogs.documentsList.close();
 };
 
 export { renameDocument };

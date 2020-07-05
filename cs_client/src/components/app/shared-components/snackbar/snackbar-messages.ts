@@ -1,5 +1,7 @@
-enum SnackbarMessages {
-  documentSaved = 'Document saved',
-}
+const SnackbarMessages = {
+  documentSaved: {
+    message: 'Document saved',
+  },
+};
 
 export { SnackbarMessages };

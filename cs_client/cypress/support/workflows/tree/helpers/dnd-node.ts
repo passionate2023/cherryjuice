@@ -25,8 +25,12 @@ export const dndNode = ({ tree }: DndNodeProps) => {
       cy.get(targetSelector).drag(draggedSelector, { force: true });
       targetNode.children.push(draggedNode.id);
       draggedNode.parent = targetNode;
-      removeArrayElement(sourceLevel, draggedNode);
-      removeArrayElement(draggedNodeParent.children, draggedNode.id);
+      draggedNode.levelIndex = targetNode.levelIndex + 1;
+      removeArrayElement(sourceLevel, n => n.id === draggedNode.id);
+      removeArrayElement(
+        draggedNodeParent.children,
+        nid => nid === draggedNode.id,
+      );
       targetLevel.push(draggedNode);
       const temp = targetLevel.slice();
       targetLevel.splice(0, Infinity);
