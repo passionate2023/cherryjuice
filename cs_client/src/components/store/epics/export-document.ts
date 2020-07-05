@@ -1,7 +1,7 @@
 import { concat, Observable, of } from 'rxjs';
 import { Actions } from '../actions.types';
 import { ac, store } from '../store';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { ofType } from 'deox';
 import { gqlMutation } from './shared/gql-query';
@@ -18,6 +18,7 @@ const exportDocumentEpic = (action$: Observable<Actions>) => {
         save,
         action$.pipe(
           ofType([ac.__.document.saveFulfilled]),
+          take(1),
           switchMap(() => {
             return gqlMutation({
               ...DOCUMENT_MUTATION.exportDocument,

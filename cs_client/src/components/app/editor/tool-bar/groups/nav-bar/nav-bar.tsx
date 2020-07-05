@@ -47,7 +47,10 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
         onClick={ac.document.export}
         disabled={noDocumentIsSelected}
       >
-        <Icon name={Icons.material.export} />
+        <Icon
+          name={Icons.material.export}
+          testId={testIds.toolBar__navBar__exportDocument}
+        />
       </ToolbarButton>
       <ToolbarButton onClick={ac.dialogs.showDocumentList}>
         <Icon

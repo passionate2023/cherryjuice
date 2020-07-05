@@ -30,6 +30,7 @@ const createButtons = ({
       label: 'import',
       onClick: ac.dialogs.showImportDocument,
       disabled: false,
+      testId: testIds.dialogs__selectDocument__footerLeft__import,
     },
   ];
   const buttonsRight: TDialogFooterButton[] = [

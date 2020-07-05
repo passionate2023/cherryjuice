@@ -4,12 +4,13 @@ const deleteFolder = async (
   location: string,
   onlyDeleteContent = false,
 ): Promise<void> =>
-  new Promise((res, rej) => {
+  new Promise(res => {
     if (fs.existsSync(location))
       rimraf(
         `${location.replace(/\/$/, '')}${onlyDeleteContent ? '/*' : ''}`,
         err => {
-          if (err) rej(err);
+          // eslint-disable-next-line no-console
+          if (err) console.error(err);
           res();
         },
       );

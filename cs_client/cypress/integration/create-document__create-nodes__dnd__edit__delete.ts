@@ -13,8 +13,9 @@ import {
 } from '../support/assertions/nodes-title-style';
 import { assertTreeStructure } from '../support/assertions/tree-structure';
 import { testIds } from '../support/helpers/test-ids';
-import { generateTree } from '../fixtures/tree/generate-tree';
 import { dialogs } from '../support/workflows/dialogs/dialogs';
+import { generateDocument } from '../fixtures/document/generate-document';
+import { documentPuppeteer } from '../support/workflows/document/document-puppeteer';
 
 describe('create document > create nodes > dnd > edit', () => {
   before(() => {
@@ -22,16 +23,16 @@ describe('create document > create nodes > dnd > edit', () => {
     cy.visit(`/`);
     login();
     goHome();
-    dialogs.documentsList.interact.close();
+    dialogs.documentsList.close();
   });
-  const document = {
-    meta: {
+  const document = generateDocument({
+    documentConfig: {
       name: new Date().toString(),
     },
-    tree: generateTree({
+    treeConfig: {
       nodesPerLevel: [[2], [2], [1]],
-    }),
-  };
+    },
+  });
   const newAttributes = {
     name: 'new name',
     icon: 48,
@@ -40,17 +41,13 @@ describe('create document > create nodes > dnd > edit', () => {
   };
 
   it('perform: create document', () => {
-    dialogs.document.interact.create(document.meta);
+    dialogs.documentMeta.create(document.meta);
   });
   it('perform: create nodes', () => {
-    for (const node of document.tree.flatMap(x => x)) {
-      dialogs.node.create({ node });
-      wait.ms500();
-    }
+    documentPuppeteer.createTree(document);
   });
 
   it('assert: nodes name', () => {
-    wait.s1();
     assertNodesName(document);
   });
   it('assert: nodes font-weight and color and icons', () => {
@@ -62,21 +59,19 @@ describe('create document > create nodes > dnd > edit', () => {
   });
 
   it('assert: nodes structure', () => {
-    wait.s1();
     assertTreeStructure(document);
   });
 
   it('perform: delete node', () => {
-    dialogs.node.delete(document);
+    dialogs.nodeMeta.delete(document);
   });
 
   it('assert: nodes structure', () => {
-    wait.s1();
     assertTreeStructure(document);
   });
 
   it('perform: edit node meta', () => {
-    dialogs.node.edit({
+    dialogs.nodeMeta.edit({
       editedNode: document.tree[0][0],
       newAttributes,
     });
@@ -100,12 +95,10 @@ describe('create document > create nodes > dnd > edit', () => {
     cy.contains('Document saved', { timeout: 10000 });
   });
   it('assert: nodes structure', () => {
-    wait.s1();
     assertTreeStructure(document);
   });
 
   it('assert: nodes names', () => {
-    wait.s1();
     assertNodesName(document);
   });
   it('assert: nodes font-weight and color and icons', () => {

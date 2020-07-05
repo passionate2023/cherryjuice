@@ -5,6 +5,7 @@ import { modImportDocument } from '::sass-modules/index';
 import { Icon, Icons } from '::shared-components/icon/icon';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { apolloCache } from '::graphql/cache/apollo-cache';
+import { testIds } from '::cypress/support/helpers/test-ids';
 
 const UploadFile: React.FC<{}> = () => {
   const inputRef = useRef<HTMLInputElement>();
@@ -36,6 +37,7 @@ const UploadFile: React.FC<{}> = () => {
         local storage
       </ButtonSquare>
       <input
+        data-testid={testIds.dialogs__importDocument__fileInput}
         type="file"
         required
         multiple

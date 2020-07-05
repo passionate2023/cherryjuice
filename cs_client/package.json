@@ -97,7 +97,8 @@
     "@storybook/addons": "^5.3.19",
     "@storybook/addon-knobs": "^5.3.19",
     "react-test-renderer": "^16.13.1",
-    "identity-obj-proxy": "^3.0.0"
+    "identity-obj-proxy": "^3.0.0",
+    "cypress-file-upload": "^4.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-0",

@@ -250,10 +250,4 @@ describe('it should put nodes into arrays', () => {
     const res = groupNodesByLine(seprated);
     expect(res).toEqual(output);
   });
-  it.skip('test3', () => {
-    // const { input,  } = testData.test3;
-    // const seprated = flattenIntoLines(input);
-    // const res = groupNodesByLine(seprated);
-    // expect(res).toEqual(output);
-  });
 });

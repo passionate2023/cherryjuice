@@ -1,4 +1,3 @@
-import path from 'path';
 import { LinkAttributes } from '../../../../../../../../../node/helpers/rendering/ahtml-to-html/helpers/ctb';
 
 const translateLinkType = {
@@ -16,12 +15,12 @@ const translateLinkType = {
   },
   folder: href => {
     const [, value] = href.match(/file:\/\/\/(.+$)/);
-    const encryptedValue = new Buffer(path.resolve(value)).toString('base64');
+    const encryptedValue = new Buffer(value).toString('base64');
     return `fold ${encryptedValue}`;
   },
   file: href => {
     const [, value] = href.match(/file:\/\/\/(.+$)/);
-    const encryptedValue = new Buffer(path.resolve(value)).toString('base64');
+    const encryptedValue = new Buffer(value).toString('base64');
     return `file ${encryptedValue}`;
   },
 };

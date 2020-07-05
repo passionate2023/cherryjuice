@@ -3,12 +3,18 @@ import { createNodeGenerator, NodeAst } from '../node/generate-node';
 
 type TreeAst = NodeAst[][];
 
+type GenerateTreeProps = {
+  nodesPerLevel: number[][];
+  numberOfImages?: [number, number] | [number] | [];
+  includeText?: boolean;
+  randomStyle?: boolean;
+};
 const generateTree = ({
   nodesPerLevel,
-  includeText = false,
   numberOfImages = [],
+  includeText = false,
   randomStyle = true,
-}): TreeAst => {
+}: GenerateTreeProps): TreeAst => {
   const nodeGenerator = createNodeGenerator();
   return Array.from({ length: nodesPerLevel.length })
     .map((_, levelIndex) =>
@@ -43,4 +49,4 @@ const generateTree = ({
 };
 
 export { generateTree };
-export { TreeAst };
+export { TreeAst, GenerateTreeProps };

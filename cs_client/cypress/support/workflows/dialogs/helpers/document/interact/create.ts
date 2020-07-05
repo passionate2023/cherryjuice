@@ -1,10 +1,16 @@
 import { wait } from '../../../../../helpers/cypress-helpers';
 import { applyDocumentMeta, setDocumentName } from './helpers';
 
-const createDocument = ({ name }: { name: string }) => {
+// const assignId = (meta: { id: string }) => {
+//   cy.location().then(location => {
+//     meta.id = /document\/([^/]+)/.exec(location.pathname)[1];
+//   });
+// };
+
+const createDocument = (meta: { name: string; id: string }) => {
   cy.findByTestId('new-document').click();
   wait.ms500();
-  setDocumentName(name);
+  setDocumentName(meta.name);
   applyDocumentMeta();
 };
 

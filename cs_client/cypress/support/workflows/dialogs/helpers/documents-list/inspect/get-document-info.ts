@@ -1,9 +1,15 @@
-const getDocumentInfo = (
-  documentName: string,
-  id?: string,
-): Promise<{ id: string; hash: string }> =>
+const getDocumentInfo = ({
+  name,
+  id,
+  unsaved,
+}: {
+  name;
+  id;
+  unsaved: boolean;
+}): Promise<{ id: string; hash: string }> =>
   new Cypress.Promise(res => {
-    cy.findByText(id || documentName)
+    if (unsaved) name = `*${name}`;
+    cy.findByText(id || name)
       .parent()
       .then(parent$ => {
         const parent = parent$[0];

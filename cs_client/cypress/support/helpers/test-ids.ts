@@ -20,6 +20,17 @@ const testIds = {
     'dialogs__selectDocument__header__buttons__delete',
   dialogs__selectDocument__header__buttons__deleteSweep:
     'dialogs__selectDocument__header__buttons__deleteSweep',
+  dialogs__selectDocument__footerLeft__import:
+    'dialogs__selectDocument__footerLeft__import',
+  dialogs__importDocument__fileInput: 'dialogs__importDocument__fileInput',
+  toolBar__navBar__exportDocument: 'toolBar__navBar__exportDocument',
+  popups__documentOperations__downloadDocument:
+    'popups__documentOperations__downloadDocument',
+  popups__documentOperations__openDownloadedDocument:
+    'popups__documentOperations__openDownloadedDocument',
+  popups__documentOperations__clearAllFinished:
+    'popups__documentOperations__clearAllFinished',
+  dialogs__scrim: 'dialogs__scrim',
 };
 
 export { testIds };

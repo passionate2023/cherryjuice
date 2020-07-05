@@ -8,3 +8,4 @@ report*.json
 .idea
 sh.exe.stackdump
 debug.log
+cypress/fixtures/temp/
