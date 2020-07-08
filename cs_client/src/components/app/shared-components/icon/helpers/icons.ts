@@ -15,6 +15,7 @@ const Icons = {
     edit: 'edit',
     history: 'history',
     info: 'info',
+    search: 'search',
     background: 'background',
     bold: 'bold',
     'clear-format': 'clear-format',

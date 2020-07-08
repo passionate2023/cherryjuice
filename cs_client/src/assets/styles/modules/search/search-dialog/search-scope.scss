@@ -1,0 +1,33 @@
+@import "../../../vars/colors";
+@import '../../../mixins/breakpoints';
+.search-scope {
+  display: flex;
+  @include respond-to($mb-down) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  user-select: none;
+}
+
+.search-scope__scope-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background-color: $grey-1;
+  user-select: none;
+  flex-wrap: wrap;
+}
+
+.search-scope__scope-list__scope__scope-label {
+  color: lightgrey;
+  padding: 10px;
+  width: 120px;
+}
+
+.search-scope__scope-list__scope {
+  display: flex;
+}

@@ -9,6 +9,8 @@ import { CreateNodeDto } from './dto/create-node.dto';
 import { DeleteNodeDto } from './dto/delete-node.dto';
 import { GetNodeByNodeIdIt } from './dto/get-node-by-node-id.it';
 import { DocumentService } from '../document/document.service';
+import { NodeSearchDto } from '../search/dto/node-search.dto';
+import { NodeSearchResultEntity } from '../search/entities/node.search-result.entity';
 
 @Injectable()
 export class NodeService {
@@ -61,5 +63,9 @@ export class NodeService {
 
   async getNodesMetaAndAHtml(documentId: string): Promise<Node[]> {
     return await this.nodeRepository.getNodesMetaAndAHtml(documentId);
+  }
+
+  async findNode(searchDto: NodeSearchDto): Promise<NodeSearchResultEntity[]> {
+    return await this.nodeRepository.findNodes(searchDto);
   }
 }

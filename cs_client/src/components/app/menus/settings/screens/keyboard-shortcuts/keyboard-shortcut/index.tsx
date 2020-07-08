@@ -17,9 +17,8 @@ const MetaKey: React.FC<{
       className={`${pressed ? modButton.buttonPressed : ''}`}
       key={label}
       onClick={() => setPressed(!pressed)}
-    >
-      <span>{label}</span>
-    </ButtonSquare>
+      text={label}
+    />
   );
 };
 

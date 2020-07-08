@@ -75,10 +75,24 @@ type NodeMutation {
     uploadImage(images: [ImageUpload!]!): [[String!]!]!
 }
 
+type NodeSearchResultEntity {
+    documentId: String!
+    documentName: String!
+    headline: String!
+    nodeId: String!
+    nodeName: String!
+    node_id: Int!
+}
+
 type Query {
     document(file_id: String): [Document]!
+    search: SearchResultEntity!
     secrets: Secrets!
     user: AuthUser!
+}
+
+type SearchResultEntity {
+    node(searchArgs: NodeSearchIt): [NodeSearchResultEntity!]!
 }
 
 type Secrets {
@@ -159,6 +173,14 @@ input NodeMetaIt {
     read_only: Int
     sequence: Float
     updatedAt: Timestamp!
+}
+
+input NodeSearchIt {
+    documentId: String!
+    nodeId: String!
+    query: String!
+    searchScope: String!
+    searchType: [String!]!
 }
 
 input SaveHtmlIt {

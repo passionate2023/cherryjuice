@@ -17,10 +17,11 @@ import express from 'express';
 import { NodeModule } from './node/node.module';
 import { ImageModule } from './image/image.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmConfig } from '../config/typeorm.config';
+import * as typeOrmConfig from '../config/typeorm.config';
 import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
 import { APP_PIPE } from '@nestjs/core';
+import { SearchModule } from './search/search.module';
 
 const staticAssetsRootFolder =
   process.env.NODE_ENV === 'production'
@@ -28,10 +29,17 @@ const staticAssetsRootFolder =
     : path.join(process.cwd(), '../cs_client/dist');
 @Module({
   imports: [
+    SearchModule,
     NodeModule,
     ImageModule,
     GraphQLModule.forRoot({
-      include: [NodeModule, DocumentModule, ImageModule, UserModule],
+      include: [
+        NodeModule,
+        DocumentModule,
+        ImageModule,
+        UserModule,
+        SearchModule,
+      ],
       autoSchemaFile: true,
       context: ({ req, connection }) => {
         if (connection) {

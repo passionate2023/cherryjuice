@@ -49,9 +49,8 @@ const Snackbar: React.FC<Props & PropsFromRedux> = ({
           key={Icons.material.delete}
           className={modSnackbar.snackbar__closeButton}
           onClick={onClose}
-        >
-          <Icon {...{ name: Icons.material.clear }} />
-        </ButtonCircle>
+          icon={<Icon {...{ name: Icons.material.clear }} />}
+        />
       </div>
     </ComponentWithTransition>
   );

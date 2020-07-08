@@ -9,6 +9,7 @@ import { documentsListReducer } from './ducks/documents-list';
 import { documentTransforms } from './redux-persist/transforms/document';
 import { documentOperationsReducer } from './ducks/document-operations';
 import { rootReducer } from '::root/store/ducks/root';
+import { searchReducer } from '::root/store/ducks/search';
 
 const reducer = combineReducers({
   document: persistReducer(
@@ -32,6 +33,7 @@ const reducer = combineReducers({
   documentsList: documentsListReducer,
   documentOperations: documentOperationsReducer,
   root: rootReducer,
+  search: searchReducer,
 });
 
 export { reducer };

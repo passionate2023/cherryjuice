@@ -57,9 +57,8 @@ const ActionButton = ({ document, deleteDocument, open, userId }) => {
       className={modDocumentOperations.documentOperations__document__button}
       onClick={props.onClick}
       testId={props.testId}
-    >
-      {props.wrapper({ children: <Icon {...{ name: props.iconName }} /> })}
-    </ButtonCircle>
+      icon={props.wrapper({ children: <Icon {...{ name: props.iconName }} /> })}
+    />
   ) : (
     <></>
   );

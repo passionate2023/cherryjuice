@@ -5,11 +5,13 @@ import { documentOperationsActionCreators } from '::root/store/ducks/document-op
 import { editorActionCreators } from './ducks/editor';
 import { documentsListActionCreators } from './ducks/documents-list';
 import { rootActionCreators } from '::root/store/ducks/root';
+import { searchActionCreators } from '::root/store/ducks/search';
 
 type t1 = typeof documentActionCreators &
   typeof dialogsActionCreators &
   typeof editorActionCreators &
   typeof documentsListActionCreators &
+  typeof searchActionCreators &
   typeof documentOperationsActionCreators &
   typeof rootActionCreators &
   typeof nodeActionCreators;

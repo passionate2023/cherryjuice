@@ -13,6 +13,7 @@ import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { EventHandler } from 'react';
 import { animated } from 'react-spring';
 import { TransitionWrapper } from '::shared-components/transition-wrapper';
+import { LinearProgress } from '::shared-components/linear-progress';
 
 type TDialogProps = {
   menuButton?: JSX.Element;
@@ -21,6 +22,7 @@ type TDialogProps = {
   onConfirm?: EventHandler<undefined>;
   isOnMobile: boolean;
   small?: boolean;
+  loading?: boolean;
 } & TDialogFooterProps &
   DialogHeaderProps;
 
@@ -38,6 +40,7 @@ const Dialog: React.FC<TDialogProps & {
   isOnMobile,
   rightHeaderButtons,
   small,
+  loading = false,
 }) => {
   useModalKeyboardEvents({
     onCloseModal: onClose,
@@ -59,14 +62,13 @@ const Dialog: React.FC<TDialogProps & {
             ),
           }}
         >
-          {dialogTitle && (
-            <DialogHeader
-              menuButton={menuButton}
-              dialogTitle={dialogTitle}
-              onClose={onClose}
-              rightHeaderButtons={rightHeaderButtons}
-            />
-          )}
+          <LinearProgress loading={loading} />
+          <DialogHeader
+            menuButton={menuButton}
+            dialogTitle={dialogTitle}
+            onClose={onClose}
+            rightHeaderButtons={rightHeaderButtons}
+          />
           <DialogBody dialogBodyElements={children} />
           <DialogFooter
             dialogFooterRightButtons={dialogFooterRightButtons}

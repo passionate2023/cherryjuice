@@ -13,6 +13,7 @@ import { editorActionCreators } from './ducks/editor';
 import { documentsListActionCreators } from './ducks/documents-list';
 import { documentOperationsActionCreators } from './ducks/document-operations';
 import { rootActionCreators } from './ducks/root';
+import { searchActionCreators } from '::root/store/ducks/search';
 
 type Store = ReturnType<typeof reducer>;
 
@@ -40,6 +41,7 @@ const ac = {
     documentsList: documentsListActionCreators,
     documentOperations: documentOperationsActionCreators,
     root: rootActionCreators,
+    search: searchActionCreators,
   },
   document: bindActionCreators(documentActionCreators, store.dispatch),
   dialogs: bindActionCreators(dialogsActionCreators, store.dispatch),
@@ -54,6 +56,7 @@ const ac = {
     store.dispatch,
   ),
   root: bindActionCreators(rootActionCreators, store.dispatch),
+  search: bindActionCreators(searchActionCreators, store.dispatch),
 };
 
 export { store, ac, epicMiddleware };

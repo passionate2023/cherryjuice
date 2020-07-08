@@ -27,15 +27,16 @@ const UploadFile: React.FC<{}> = () => {
       <ButtonSquare
         onClick={() => inputRef.current.click()}
         className={modImportDocument.importDocument__button}
-      >
-        <Icon
-          {...{
-            name: Icons.material.storage,
-            className: modImportDocument.importDocument__button__icon,
-          }}
-        />
-        local storage
-      </ButtonSquare>
+        text={'local storage'}
+        icon={
+          <Icon
+            {...{
+              name: Icons.material.storage,
+              className: modImportDocument.importDocument__button__icon,
+            }}
+          />
+        }
+      />
       <input
         data-testid={testIds.dialogs__importDocument__fileInput}
         type="file"

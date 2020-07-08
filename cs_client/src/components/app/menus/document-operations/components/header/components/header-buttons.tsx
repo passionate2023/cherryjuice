@@ -24,16 +24,14 @@ const HeaderButtons: React.FC<Props> = ({
           onClick={ac.documentOperations.clearFinished}
           className={modDocumentOperations.documentOperations__header__button}
           testId={testIds.popups__documentOperations__clearAllFinished}
-        >
-          &times;
-        </ButtonCircle>
+          icon={<span>&times;</span>}
+        />
       )}
       <ButtonCircle
         onClick={toggleCollapsed}
         className={modDocumentOperations.documentOperations__header__button}
-      >
-        {collapsed ? '▴' : '▾'}
-      </ButtonCircle>
+        icon={<span>{collapsed ? '▴' : '▾'}</span>}
+      />
     </span>
   );
 };

@@ -10,6 +10,8 @@ import { GetNodeByNodeIdIt } from '../dto/get-node-by-node-id.it';
 import { SaveHtmlIt } from '../dto/save-html.it';
 import { NodeMetaIt } from '../dto/node-meta.it';
 import { AHtmlLine } from '../helpers/rendering/ahtml-to-html';
+import { NodeSearchDto } from '../../search/dto/node-search.dto';
+import { NodeSearchResultEntity } from '../../search/entities/node.search-result.entity';
 
 @Injectable()
 @EntityRepository(Node)
@@ -20,6 +22,7 @@ export class NodeRepository extends Repository<Node> {
     node.documentId = documentId;
     node.createdAt = new Date(meta.createdAt);
     node.updatedAt = new Date(meta.updatedAt);
+    node.user = user;
     if (node.father_id !== -1) {
       node.father = await this.getNodeMetaById({
         node_id: node.father_id,
@@ -73,7 +76,7 @@ export class NodeRepository extends Repository<Node> {
     Object.entries(attributes).forEach(([k, v]) => {
       node[k] = v;
     });
-
+    if (attributes['ahtml']) node.updateAhtmlTxt();
     await this.save(node);
     return node;
   }
@@ -110,5 +113,43 @@ export class NodeRepository extends Repository<Node> {
       .where('node.documentId = :documentId', { documentId })
       .addSelect('node.ahtml')
       .getMany();
+  }
+
+  async findNodes({
+    it,
+    user,
+  }: NodeSearchDto): Promise<NodeSearchResultEntity[]> {
+    const { searchScope, query, nodeId, documentId } = it;
+    const variables = [];
+    variables.push(user.id);
+    const queryConditions = ['n."userId" = $' + variables.length];
+    switch (searchScope) {
+      case 'current-node':
+        variables.push(nodeId);
+        queryConditions.push('n."id" = $' + variables.length);
+        break;
+      case 'child-nodes':
+        variables.push(nodeId);
+        queryConditions.push('n."fatherId" = $' + variables.length);
+        break;
+      case 'current-document':
+        variables.push(documentId);
+        queryConditions.push('n."documentId" = $' + variables.length);
+        break;
+    }
+    variables.push(query);
+    queryConditions.push(`ahtml_tsv @@ to_tsquery($${variables.length})`);
+    const searchQuery = `
+      select 
+        ts_headline(n.ahtml_txt,to_tsquery($${
+          variables.length
+        }),'MinWords=5, MaxWords=20')  as headline, 
+        n.node_id, n.id as "nodeId", n.name as "nodeName", n."documentId", d.name as "documentName"
+        from node as n
+        inner join document as d
+        on d.id = n."documentId"
+        where ${queryConditions.join(' and ')};
+  `;
+    return this.manager.query(searchQuery, variables);
   }
 }

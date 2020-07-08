@@ -1,14 +1,20 @@
-import { useEffect } from 'react';
+import { MutableRefObject, useEffect } from 'react';
 
+type KeyCodes = 'Space' | 'Enter' | 'Tab';
+const defaultKeys: KeyCodes[] = ['Space', 'Enter'];
 const useOnKeyPress = ({
-  elementSelector,
+  ref,
   onClick,
-  keys = { Space: true, Enter: true, Tab: false },
+  keys = defaultKeys,
+}: {
+  ref: MutableRefObject<HTMLElement>;
+  onClick: Function;
+  keys?: KeyCodes[];
 }) => {
   useEffect(() => {
-    const element = document.querySelector(elementSelector);
+    const element = ref.current;
     const eventHandler = e => {
-      if (keys[e.code]) {
+      if (keys.includes(e.code)) {
         onClick();
       }
     };
@@ -16,7 +22,7 @@ const useOnKeyPress = ({
     return () => {
       element.removeEventListener('keyup', eventHandler);
     };
-  }, []);
+  }, [ref]);
 };
 
 export { useOnKeyPress };

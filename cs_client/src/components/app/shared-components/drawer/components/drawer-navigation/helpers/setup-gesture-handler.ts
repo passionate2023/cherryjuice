@@ -1,18 +1,3 @@
-import { modDialog, modDrawer } from '::sass-modules/index';
-
-const handleToggle = () => {
-  let drawer, drawerScrim;
-  return () => {
-    if (!drawer)
-      drawer = document.querySelector(`.${modDrawer.drawer__navigation}`);
-    if (!drawerScrim)
-      drawerScrim = document.querySelector(
-        `.${modDrawer.drawer__navigation__scrim}`,
-      );
-    drawer.classList.toggle(modDrawer.drawer__navigationVisible);
-    drawerScrim.classList.toggle(modDrawer.drawer__navigation__scrimVisible);
-  };
-};
 const noOpFn = () => undefined;
 // https://gist.github.com/SleepWalker/da5636b1abcbaff48c4d#gistcomment-2577818
 const setupGesturesHandler = ({
@@ -85,10 +70,5 @@ const setupGesturesHandler = ({
     false,
   );
 };
-const updateSubTitle = ({ selectedScreenTitle }) => {
-  const subTitleElement = document.querySelector(
-    '.' + modDialog.dialog__header__subTitle,
-  );
-  subTitleElement.innerHTML = selectedScreenTitle;
-};
-export { handleToggle, setupGesturesHandler, updateSubTitle };
+
+export { setupGesturesHandler };

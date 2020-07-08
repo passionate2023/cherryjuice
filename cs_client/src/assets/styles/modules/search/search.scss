@@ -1,0 +1,80 @@
+@import '../../mixins/breakpoints';
+$bg-color: white;
+$text-color: grey;
+.search__container {
+  @include respond-to($wd-down) {
+    width: 40px;
+    background-color: transparent;
+    margin-right: 0;
+  }
+  width: 250px;
+  height: 100%;
+  margin-right: 50px;
+  display: flex;
+  align-items: center;
+  background-color: $bg-color;
+}
+
+.search__field {
+  flex: 1;
+  height: 100%;
+  max-height: 100%;
+  position: relative;
+  display: flex;
+  opacity: 0.7;
+  &:focus-within {
+    opacity: 1;
+  }
+
+  transition: opacity 200ms linear;
+}
+
+.search__field--nav-bar {
+  @include respond-to($wd-down) {
+    display: none;
+  }
+}
+
+.search__field__input {
+  flex: 1;
+  height: 100%;
+  background-color: $bg-color;
+  color: $text-color;
+  border: 0;
+  padding: 0 10px;
+}
+
+.search__field__clear-text-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  transition: opacity 200ms linear;
+  cursor: text;
+}
+.search__clear-text-button--visible {
+  opacity: 0.3;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+  }
+}
+.search__search-button {
+  border: 0;
+  margin: 0;
+  height: 100%;
+  border-radius: 0;
+  width: 50px;
+}
+
+.search__search-button--nav-bar {
+  @include respond-to($md-up) {
+    width: 30px;
+    height: 30px;
+  }
+  @include respond-to($mb-down) {
+    &:hover {
+      background-color: initial;
+    }
+  }
+}

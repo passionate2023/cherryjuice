@@ -1,47 +1,17 @@
 import * as React from 'react';
 import { modButton } from '::sass-modules/index';
-import { EventHandler, useEffect, useRef } from 'react';
+import { joinClassNames } from '::helpers/dom/join-class-names';
+import {
+  ButtonBase,
+  ButtonBaseProps,
+} from '::shared-components/buttons/button-base/button-base';
 
-type Props = {
-  className?: string;
-  onClick?: EventHandler<undefined>;
-  disabled?: boolean;
-  autoFocus?: boolean;
-  dark?: boolean;
-  lazyAutoFocus?: number;
-  testId?: string;
-};
-
-const ButtonSquare: React.FC<Props> = ({
-  disabled,
-  className,
-  children,
-  onClick,
-  autoFocus,
-  lazyAutoFocus,
-  dark,
-  testId,
-}) => {
-  const ref = useRef<HTMLButtonElement>();
-  useEffect(() => {
-    if (lazyAutoFocus) {
-      const handle = setTimeout(() => ref.current.focus(), lazyAutoFocus);
-      return () => clearTimeout(handle);
-    }
-  }, []);
+const ButtonSquare: React.FC<ButtonBaseProps> = args => {
   return (
-    <button
-      ref={ref}
-      onClick={onClick}
-      className={`${className || ''} ${modButton.button} ${
-        modButton.buttonSquare
-      } ${dark ? modButton.buttonDark : ''}`}
-      disabled={disabled}
-      autoFocus={autoFocus}
-      {...(testId && { 'data-testid': testId })}
-    >
-      {children}
-    </button>
+    <ButtonBase
+      {...args}
+      className={joinClassNames([modButton.buttonSquare, args.className])}
+    />
   );
 };
 

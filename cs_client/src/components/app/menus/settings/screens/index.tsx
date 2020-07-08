@@ -1,11 +1,7 @@
 import { keyboardShortcutsScreen } from '::app/menus/settings/screens/keyboard-shortcuts';
-import * as React from 'react';
-import modSettings from '::sass-modules/settings/settings.scss';
-const screens = {
-  ...keyboardShortcutsScreen,
-  ...{
-    Typography: <div className={modSettings.settings__screen}></div>,
-  },
-};
+import { DrawerScreens } from '::shared-components/drawer/drawer';
+import { groupScreensByName } from '::shared-components/drawer/helpers/group-screens-by-name';
+
+const screens: DrawerScreens = groupScreensByName([keyboardShortcutsScreen]);
 
 export { screens };

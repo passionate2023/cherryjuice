@@ -57,9 +57,8 @@ const User: React.FC<Props & { style }> = ({ onClose, style }) => {
           className={modUserPopup.user__actions__signOut}
           onClick={signOut}
           dark={true}
-        >
-          sign out
-        </ButtonSquare>
+          text={'sign out'}
+        />
       </div>
     </animated.div>
   );

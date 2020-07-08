@@ -48,6 +48,9 @@ $small-dialog-width: 350px;
   justify-self: flex-end;
   margin-left: auto;
   align-items: center;
+  & > button {
+    display: inline-block;
+  }
 }
 
 .dialog__header__file-button {

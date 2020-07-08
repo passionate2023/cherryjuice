@@ -56,9 +56,8 @@ const ConfirmationModal = ({
           lazyAutoFocus={lazyAutoFocus}
           disabled={disabled}
           testId={testId}
-        >
-          {label}
-        </ButtonSquare>
+          text={label}
+        />
       ))}
     </div>
   </ComponentWithTransition>
