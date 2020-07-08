@@ -15,10 +15,17 @@ run yarn build
 
 from node:12.2.0-slim
 label maintainer ycnmhd
-copy --from=cs /server/dist /cs/server
 copy --from=cs /server/node_modules /cs/server/node_modules
+copy --from=cs /server/dist /cs/server/dist
+copy --from=cs /server/package.json /cs/server/package.json
+copy --from=cs /server/tsconfig.json /cs/server/tsconfig.json
+copy --from=cs /server/src /cs/server/src
+copy --from=cs /server/migrations /cs/server/migrations
 copy --from=cs /client/dist /cs/client
 run mkdir -p /.cs/exports
 run mkdir -p /.cs/imports
 
-entrypoint ["node","./cs/server/main.js"]
+run echo "cd /cs/server/ && yarn start" > /entrypoint.sh
+run chmod +x /entrypoint.sh
+
+entrypoint ["/entrypoint.sh"]

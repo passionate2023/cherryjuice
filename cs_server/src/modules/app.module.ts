@@ -12,21 +12,16 @@ import {
   redirectToHTTPS,
   sendCompressedJavascript,
 } from '../middleware';
-import path from 'path';
 import express from 'express';
 import { NodeModule } from './node/node.module';
 import { ImageModule } from './image/image.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as typeOrmConfig from '../config/typeorm.config';
 import { UserModule } from './user/user.module';
-import { AppController } from './app.controller';
+import { AppController, staticAssetsRootFolder } from './app.controller';
 import { APP_PIPE } from '@nestjs/core';
 import { SearchModule } from './search/search.module';
 
-const staticAssetsRootFolder =
-  process.env.NODE_ENV === 'production'
-    ? path.join(__dirname, '../../client')
-    : path.join(process.cwd(), '../cs_client/dist');
 @Module({
   imports: [
     SearchModule,

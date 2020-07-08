@@ -2,7 +2,7 @@ import { Controller, Get, Res } from '@nestjs/common';
 import * as path from 'path';
 const staticAssetsRootFolder =
   process.env.NODE_ENV === 'production'
-    ? path.join(__dirname, '../../client')
+    ? '/cs/client'
     : path.join(process.cwd(), '../cs_client/dist');
 const assets = {
   ['index.html']: path.join(staticAssetsRootFolder, '/index.html'),
@@ -14,3 +14,5 @@ export class AppController {
     res.sendFile(assets['index.html']);
   }
 }
+
+export {staticAssetsRootFolder}

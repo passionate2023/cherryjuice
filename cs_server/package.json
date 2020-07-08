@@ -11,11 +11,11 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "prestart": "yarn typeorm:migration:run",
-    "start": "node dist/main.js",
+    "start": "node dist/src/main.js",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/config/typeorm.config.ts",
-    "typeorm:migration:generate": "npm run typeorm migration:generate -- -n",
-    "typeorm:migration:run": "npm run typeorm migration:run",
-    "typeorm:migration:revert": "npm run typeorm migration:revert"
+    "typeorm:migration:generate": "yarn typeorm migration:generate -- -n",
+    "typeorm:migration:run": "yarn typeorm migration:run",
+    "typeorm:migration:revert": "yarn typeorm migration:revert"
   },
   "optionalDependencies": {
     "@types/jest": "^25.1.0",
