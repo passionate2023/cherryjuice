@@ -2,8 +2,10 @@ import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import {
   NodeSearchResultEntity,
+  SearchOptions,
   SearchScope,
   SearchTarget,
+  SearchType,
 } from '::types/graphql/generated';
 
 const ap = createActionPrefixer('search');
@@ -27,11 +29,14 @@ const ac = {
     setSearchScope: _(ap('set-search-scope'), _ => (scope: SearchScope) =>
       _(scope),
     ),
-  },
-  ...{
     setSearchTarget: _(ap('set-search-target'), _ => (scope: SearchTarget) =>
       _(scope),
     ),
+    setSearchOptions: _(
+      ap('set-search-options'),
+      _ => (options: SearchOptions) => _(options),
+    ),
+    setSearchType: _(ap('set-search-type'), _ => (args: SearchType) => _(args)),
   },
 };
 
@@ -43,6 +48,8 @@ type State = {
   searchScope: SearchScope;
   searchTarget: SearchTarget[];
   searchResults: NodeSearchResultEntity[];
+  searchOptions: SearchOptions;
+  searchType: SearchType;
 };
 
 const initialState: State = {
@@ -51,6 +58,11 @@ const initialState: State = {
   searchScope: SearchScope.currentDocument,
   searchTarget: [SearchTarget.nodeContent],
   searchResults: [],
+  searchOptions: {
+    caseSensitive: false,
+    fullWord: true,
+  },
+  searchType: SearchType.FullText,
 };
 const reducer = createReducer(initialState, _ => [
   ...[
@@ -83,6 +95,14 @@ const reducer = createReducer(initialState, _ => [
     })),
   ],
   ...[
+    _(ac.setSearchOptions, (state, { payload }) => ({
+      ...state,
+      searchOptions: payload,
+    })),
+    _(ac.setSearchType, (state, { payload }) => ({
+      ...state,
+      searchType: payload,
+    })),
     _(ac.setSearchScope, (state, { payload }) => ({
       ...state,
       searchScope: payload,

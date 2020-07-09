@@ -18,7 +18,13 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
       if (!store.getState().search.query)
         return of(ac.__.search.setSearchStandBy());
       else {
-        const { query, searchTarget, searchScope } = store.getState().search;
+        const {
+          query,
+          searchTarget,
+          searchScope,
+          searchType,
+          searchOptions,
+        } = store.getState().search;
         const {
           documentId,
           selectedNode: { id: nodeId },
@@ -32,6 +38,8 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
               searchTarget,
               documentId,
               nodeId,
+              searchType,
+              searchOptions,
             },
           }),
         }).pipe(map(ac.__.search.setSearchFulfilled));
@@ -50,7 +58,7 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
               title: 'Could not perform the search',
               description: 'Check your network connection',
             },
-            actionCreators: [],
+            actionCreators: [ac.search.setSearchStandBy],
           }),
         );
       }

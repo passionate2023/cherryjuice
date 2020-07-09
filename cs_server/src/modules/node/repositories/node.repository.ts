@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Node } from '../entities/node.entity';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { SaveAhtmlDto } from '../dto/save-ahtml.dto';
 import { NodeMetaDto } from '../dto/node-meta.dto';
 import { CreateNodeDto } from '../dto/create-node.dto';
@@ -12,7 +12,8 @@ import { NodeMetaIt } from '../dto/node-meta.it';
 import { AHtmlLine } from '../helpers/rendering/ahtml-to-html';
 import { NodeSearchDto } from '../../search/dto/node-search.dto';
 import { NodeSearchResultEntity } from '../../search/entities/node.search-result.entity';
-import { SearchTarget } from '../../search/it/node-search.it';
+import { SearchType } from '../../search/it/node-search.it';
+import { nodeSearch } from '../../search/helpers/pg-queries/node-search';
 
 @Injectable()
 @EntityRepository(Node)
@@ -120,44 +121,20 @@ export class NodeRepository extends Repository<Node> {
     it,
     user,
   }: NodeSearchDto): Promise<NodeSearchResultEntity[]> {
-    const { searchTarget, searchScope, query, nodeId, documentId } = it;
-    const variables = [];
-    const andWhereClauses = [];
-    const orWhereClauses = [];
-    variables.push(user.id);
-    andWhereClauses.push('n."userId" = $' + variables.length);
-    switch (searchScope) {
-      case 'current-node':
-        variables.push(nodeId);
-        andWhereClauses.push('n."id" = $' + variables.length);
-        break;
-      case 'child-nodes':
-        variables.push(nodeId);
-        andWhereClauses.push('n."fatherId" = $' + variables.length);
-        break;
-      case 'current-document':
-        variables.push(documentId);
-        andWhereClauses.push('n."documentId" = $' + variables.length);
-        break;
+    const { query, variables } = nodeSearch({ it, user });
+
+    let searchResults: NodeSearchResultEntity[] = await this.manager.query(
+      query,
+      variables,
+    );
+    if (
+      it.searchOptions.caseSensitive &&
+      it.searchType === SearchType.FullText
+    ) {
+      searchResults = searchResults.filter(res => {
+        return res.headline.includes(it.query);
+      });
     }
-    variables.push(query);
-    if (searchTarget.includes(SearchTarget.nodeContent))
-      orWhereClauses.push(`ahtml_tsv @@ to_tsquery($${variables.length})`);
-    if (searchTarget.includes(SearchTarget.nodeTitle))
-      orWhereClauses.push(`name_tsv @@ to_tsquery($${variables.length})`);
-    if (!orWhereClauses.length) throw new ForbiddenException();
-    andWhereClauses.push(`( ${orWhereClauses.join(' or ')} )`);
-    const searchQuery = `
-      select 
-        ts_headline(n.ahtml_txt,to_tsquery($${
-          variables.length
-        }),'MinWords=5, MaxWords=20')  as headline, 
-        n.node_id, n.id as "nodeId", n.name as "nodeName", n."documentId", d.name as "documentName"
-        from node as n
-        inner join document as d
-        on d.id = n."documentId"
-        where ${andWhereClauses.join(' and ')};
-  `;
-    return this.manager.query(searchQuery, variables);
+    return searchResults;
   }
 }

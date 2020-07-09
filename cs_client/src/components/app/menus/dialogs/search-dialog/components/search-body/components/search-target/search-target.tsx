@@ -2,7 +2,7 @@ import * as React from 'react';
 import { SearchTarget as TSearchTarget } from '::types/graphql/generated';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modSearchScope } from '::sass-modules/';
-import { Target } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-type/components/target';
+import { Target } from './components/target';
 
 type Props = {};
 

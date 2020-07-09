@@ -148,6 +148,12 @@ enum SearchTarget {
     nodeTitle
 }
 
+enum SearchType {
+    FullText
+    Regex
+    Simple
+}
+
 input CreateDocumentIt {
     name: String!
 }
@@ -191,14 +197,21 @@ input NodeSearchIt {
     documentId: String!
     nodeId: String!
     query: String!
+    searchOptions: SearchOptions!
     searchScope: SearchScope!
     searchTarget: [SearchTarget!]!
+    searchType: SearchType!
 }
 
 input SaveHtmlIt {
     ahtml: String!
     deletedImages: [String]!
     updatedAt: Timestamp!
+}
+
+input SearchOptions {
+    caseSensitive: Boolean!
+    fullWord: Boolean!
 }
 
 input SignInCredentials {

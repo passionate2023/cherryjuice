@@ -1,16 +1,13 @@
 import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
-import {
-  SearchScope,
-  SearchTarget as TSearchTarget,
-} from '::types/graphql/generated';
+import { SearchTarget as TSearchTarget } from '::types/graphql/generated';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modSearchScope } from '::sass-modules/';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { useCallback } from 'react';
 
-const mapScopeToLabel = (scope: TSearchTarget | SearchScope) => {
+const mapScopeToLabel = (scope: string) => {
   return scope
     .split(/(?=[A-Z])/)
     .join(' ')

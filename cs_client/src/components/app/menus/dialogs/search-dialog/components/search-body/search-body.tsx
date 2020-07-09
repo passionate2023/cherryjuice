@@ -3,7 +3,9 @@ import { modSearchDialog } from '::sass-modules/';
 import { SearchResults } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-results/search-results';
 import { Search } from '::app/editor/tool-bar/groups/nav-bar/components/search/search';
 import { SearchScope } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-scope/search-scope';
-import { SearchTarget } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-type/search-target';
+import { SearchTarget } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-target/search-target';
+import { SearchOptions } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-options/search-options';
+import { SearchType } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-type/search-type';
 
 type Props = {};
 
@@ -20,6 +22,8 @@ const SearchBody: React.FC<Props> = () => {
             modSearchDialog.searchDialog__searchSettings__searchFilters
           }
         >
+          <SearchType />
+          <SearchOptions />
           <SearchScope />
           <SearchTarget />
         </div>

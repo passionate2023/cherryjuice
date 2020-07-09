@@ -5,7 +5,7 @@ import { ButtonSquare } from '::shared-components/buttons/button-square/button-s
 import { SearchScope } from '::types/graphql/generated';
 import { ac } from '::root/store/store';
 import { useCallback } from 'react';
-import { mapScopeToLabel } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-type/components/target';
+import { mapScopeToLabel } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-target/components/target';
 
 type ScopeProps = {
   scope: SearchScope;

@@ -60,8 +60,15 @@ export interface NodeSearchIt {
   documentId: string;
   nodeId: string;
   query: string;
+  searchOptions: SearchOptions;
   searchScope: SearchScope;
   searchTarget: Array<SearchTarget>;
+  searchType: SearchType;
+}
+
+export interface SearchOptions {
+  caseSensitive: boolean;
+  fullWord: boolean;
 }
 
 export enum SearchScope {
@@ -74,6 +81,12 @@ export enum SearchScope {
 export enum SearchTarget {
   nodeContent = 'nodeContent',
   nodeTitle = 'nodeTitle',
+}
+
+export enum SearchType {
+  FullText = 'FullText',
+  Regex = 'Regex',
+  Simple = 'Simple',
 }
 
 export interface NodeSearchResultEntity {
