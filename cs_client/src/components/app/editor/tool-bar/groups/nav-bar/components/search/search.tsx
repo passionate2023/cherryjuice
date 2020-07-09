@@ -6,6 +6,8 @@ import { ac, Store } from '::root/store/store';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { Icon, Icons } from '::shared-components/icon/icon';
 import { joinClassNames } from '::helpers/dom/join-class-names';
+import { useRef } from 'react';
+import { useOnKeyPress } from '::hooks/use-on-key-up';
 
 const mapState = (state: Store) => ({
   query: state.search.query,
@@ -31,13 +33,19 @@ const Search: React.FC<Props & PropsFromRedux> = ({
   const onClick = ac.search.setSearchQueued;
 
   const searchImpossible = !query || searchType.length === 0;
-
+  const ref = useRef<HTMLDivElement>();
+  useOnKeyPress({
+    ref,
+    keys: ['Enter', 'Space'],
+    onClick: ac.search.setSearchQueued,
+  });
   return (
     <div className={`${modSearch.search__container} ${className || ''}`}>
       <div
         className={`${modSearch.search__field} ${
           navBar ? modSearch.search__fieldNavBar : ''
         }`}
+        ref={ref}
       >
         <input
           className={modSearch.search__field__input}

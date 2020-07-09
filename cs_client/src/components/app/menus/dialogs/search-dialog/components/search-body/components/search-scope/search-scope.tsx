@@ -24,7 +24,6 @@ const SearchScope: React.FC<Props & PropsFromRedux> = ({
   selectedNode,
   documentId,
 }) => {
-
   const noSelectedDocument = !documentId;
   const noSelectedNode = noSelectedDocument || !selectedNode.node_id;
 
