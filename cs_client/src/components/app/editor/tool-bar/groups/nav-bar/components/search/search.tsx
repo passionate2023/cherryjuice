@@ -32,7 +32,7 @@ const Search: React.FC<Props & PropsFromRedux> = ({
   const clearLocalQueryM = useCallback(() => ac.search.clearQuery(), []);
   const onClick = ac.search.setSearchQueued;
 
-  const searchImpossible = !query || searchType.length === 0;
+  const searchImpossible = !navBar && (!query || searchType.length === 0);
   const ref = useRef<HTMLDivElement>();
   useOnKeyPress({
     ref,

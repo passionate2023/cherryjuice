@@ -4,7 +4,6 @@ import { ErrorBoundary } from '::shared-components/error-boundary';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { footerLeftButtons } from '::app/menus/dialogs/search-dialog/components/footer-buttons/footer-buttons';
-import { DrawerToggle } from '::shared-components/drawer/components/drawer-toggle/drawer-toggle';
 import { SearchBody } from '::app/menus/dialogs/search-dialog/components/search-body/search-body';
 
 const mapState = (state: Store) => ({
@@ -31,7 +30,6 @@ const SearchDialog: React.FC<Props & PropsFromRedux> = ({
       loading={searchState === 'in-progress'}
       onClose={ac.search.setSearchIdle}
       rightHeaderButtons={[]}
-      menuButton={<DrawerToggle />}
     >
       <ErrorBoundary>
         <SearchBody />
