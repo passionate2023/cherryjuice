@@ -115,11 +115,11 @@ export class Node extends BaseEntity {
       }, '');
   }
 
-  @Column({
-    asExpression: "to_tsvector('english', ahtml_txt)",
-    generatedType: 'STORED',
-  })
+  @Column('tsvector')
   ahtml_tsv: string;
+
+  @Column('tsvector')
+  name_tsv: string;
 
   @BeforeUpdate()
   @BeforeInsert()

@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Node } from '../entities/node.entity';
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { SaveAhtmlDto } from '../dto/save-ahtml.dto';
 import { NodeMetaDto } from '../dto/node-meta.dto';
 import { CreateNodeDto } from '../dto/create-node.dto';
@@ -119,26 +119,33 @@ export class NodeRepository extends Repository<Node> {
     it,
     user,
   }: NodeSearchDto): Promise<NodeSearchResultEntity[]> {
-    const { searchScope, query, nodeId, documentId } = it;
+    const { searchType, searchScope, query, nodeId, documentId } = it;
     const variables = [];
+    const andWhereClauses = [];
+    const orWhereClauses = [];
     variables.push(user.id);
-    const queryConditions = ['n."userId" = $' + variables.length];
+    andWhereClauses.push('n."userId" = $' + variables.length);
     switch (searchScope) {
       case 'current-node':
         variables.push(nodeId);
-        queryConditions.push('n."id" = $' + variables.length);
+        andWhereClauses.push('n."id" = $' + variables.length);
         break;
       case 'child-nodes':
         variables.push(nodeId);
-        queryConditions.push('n."fatherId" = $' + variables.length);
+        andWhereClauses.push('n."fatherId" = $' + variables.length);
         break;
       case 'current-document':
         variables.push(documentId);
-        queryConditions.push('n."documentId" = $' + variables.length);
+        andWhereClauses.push('n."documentId" = $' + variables.length);
         break;
     }
     variables.push(query);
-    queryConditions.push(`ahtml_tsv @@ to_tsquery($${variables.length})`);
+    if (searchType.includes('node-content'))
+      orWhereClauses.push(`ahtml_tsv @@ to_tsquery($${variables.length})`);
+    if (searchType.includes('node-title'))
+      orWhereClauses.push(`name_tsv @@ to_tsquery($${variables.length})`);
+    if (!orWhereClauses.length) throw new ForbiddenException();
+    andWhereClauses.push(`( ${orWhereClauses.join(' or ')} )`);
     const searchQuery = `
       select 
         ts_headline(n.ahtml_txt,to_tsquery($${
@@ -148,7 +155,7 @@ export class NodeRepository extends Repository<Node> {
         from node as n
         inner join document as d
         on d.id = n."documentId"
-        where ${queryConditions.join(' and ')};
+        where ${andWhereClauses.join(' and ')};
   `;
     return this.manager.query(searchQuery, variables);
   }
