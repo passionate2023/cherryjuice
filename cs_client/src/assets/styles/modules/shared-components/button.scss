@@ -9,17 +9,18 @@
   text-transform: uppercase;
   letter-spacing: 1.25px;
   cursor: pointer;
-  &:hover {
+  &:hover:not([disabled]) {
     background-color: $primary-lighter;
     color: $primary-dark;
   }
-  &:active {
+  &:active:not([disabled]) {
     background-color: $primary-light;
     color: $primary-dark;
     box-shadow: $box-shadow1;
   }
   &:disabled {
     opacity: 0.3;
+    cursor: not-allowed;
   }
   display: flex;
   align-items: center;
@@ -42,12 +43,7 @@
   }
 }
 .button--square {
-  //height: 0;
-  //min-height: 25px;
-  //width: 50px;
-  //margin: 2px;
   border-radius: 5px;
-  //padding: 10px 10px;
 }
 .button--dark {
   color: white;

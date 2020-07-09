@@ -9,6 +9,7 @@ import { joinClassNames } from '::helpers/dom/join-class-names';
 
 const mapState = (state: Store) => ({
   query: state.search.query,
+  searchType: state.search.searchType,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -23,10 +24,13 @@ const Search: React.FC<Props & PropsFromRedux> = ({
   className,
   query,
   navBar = true,
+  searchType,
 }) => {
   const setQueryM = useCallback(e => ac.search.setQuery(e.target.value), []);
   const clearLocalQueryM = useCallback(() => ac.search.clearQuery(), []);
   const onClick = ac.search.setSearchQueued;
+
+  const searchImpossible = !query || searchType.length === 0;
 
   return (
     <div className={`${modSearch.search__container} ${className || ''}`}>
@@ -58,6 +62,7 @@ const Search: React.FC<Props & PropsFromRedux> = ({
           modSearch.search__searchButton,
           [modSearch.search__searchButtonNavBar, navBar],
         ])}
+        disabled={searchImpossible}
         onClick={onClick}
         icon={<Icon name={Icons.material.search} />}
       />

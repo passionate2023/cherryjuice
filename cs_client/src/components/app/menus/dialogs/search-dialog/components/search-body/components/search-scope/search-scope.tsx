@@ -1,17 +1,38 @@
 import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modSearchScope } from '::sass-modules/';
-import { Scope } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-scope/components/scope';
-import { SearchScope as TSearchScope } from '::root/store/ducks/search';
+import {
+  Scope,
+  ScopeProps,
+} from '::app/menus/dialogs/search-dialog/components/search-body/components/search-scope/components/scope';
+import { Store } from '::root/store/store';
+import { connect, ConnectedProps } from 'react-redux';
+
+const mapState = (state: Store) => ({
+  selectedScope: state.search.searchScope,
+  selectedNode: state.document.selectedNode,
+  documentId: state.document.documentId,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const SearchScope: React.FC<Props> = () => {
-  const scopes: { scope: TSearchScope }[] = [
-    { scope: 'current-node' },
-    { scope: 'child-nodes' },
-    { scope: 'current-document' },
-    { scope: 'all-documents' },
+const SearchScope: React.FC<Props & PropsFromRedux> = ({
+  selectedScope,
+  selectedNode,
+  documentId,
+}) => {
+
+  const noSelectedDocument = !documentId;
+  const noSelectedNode = noSelectedDocument || !selectedNode.node_id;
+
+  const scopes: ScopeProps[] = [
+    { scope: 'current-node', selectedScope, disabled: noSelectedNode },
+    { scope: 'child-nodes', selectedScope, disabled: noSelectedNode },
+    { scope: 'current-document', selectedScope, disabled: noSelectedDocument },
+    { scope: 'all-documents', selectedScope, disabled: false },
   ];
 
   return (
@@ -29,5 +50,5 @@ const SearchScope: React.FC<Props> = () => {
     </div>
   );
 };
-
-export { SearchScope };
+const _ = connector(SearchScope);
+export { _ as SearchScope };
