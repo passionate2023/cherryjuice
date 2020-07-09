@@ -136,6 +136,18 @@ enum DOCUMENT_SUBSCRIPTIONS {
     IMPORT_STARTED
 }
 
+enum SearchScope {
+    allDocuments
+    childNodes
+    currentDocument
+    currentNode
+}
+
+enum SearchTarget {
+    nodeContent
+    nodeTitle
+}
+
 input CreateDocumentIt {
     name: String!
 }
@@ -179,8 +191,8 @@ input NodeSearchIt {
     documentId: String!
     nodeId: String!
     query: String!
-    searchScope: String!
-    searchType: [String!]!
+    searchScope: SearchScope!
+    searchTarget: [SearchTarget!]!
 }
 
 input SaveHtmlIt {

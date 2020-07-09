@@ -11,7 +11,7 @@ import { useOnKeyPress } from '::hooks/use-on-key-up';
 
 const mapState = (state: Store) => ({
   query: state.search.query,
-  searchType: state.search.searchType,
+  searchTarget: state.search.searchTarget,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -26,13 +26,13 @@ const Search: React.FC<Props & PropsFromRedux> = ({
   className,
   query,
   navBar = true,
-  searchType,
+  searchTarget,
 }) => {
   const setQueryM = useCallback(e => ac.search.setQuery(e.target.value), []);
   const clearLocalQueryM = useCallback(() => ac.search.clearQuery(), []);
   const onClick = ac.search.setSearchQueued;
 
-  const searchImpossible = !navBar && (!query || searchType.length === 0);
+  const searchImpossible = !navBar && (!query || searchTarget.length === 0);
   const ref = useRef<HTMLDivElement>();
   useOnKeyPress({
     ref,

@@ -7,6 +7,7 @@ import {
 } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-scope/components/scope';
 import { Store } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';
+import { SearchScope as TSearchScope } from '::types/graphql/generated';
 
 const mapState = (state: Store) => ({
   selectedScope: state.search.searchScope,
@@ -28,10 +29,18 @@ const SearchScope: React.FC<Props & PropsFromRedux> = ({
   const noSelectedNode = noSelectedDocument || !selectedNode.node_id;
 
   const scopes: ScopeProps[] = [
-    { scope: 'current-node', selectedScope, disabled: noSelectedNode },
-    { scope: 'child-nodes', selectedScope, disabled: noSelectedNode },
-    { scope: 'current-document', selectedScope, disabled: noSelectedDocument },
-    { scope: 'all-documents', selectedScope, disabled: false },
+    {
+      scope: TSearchScope.currentNode,
+      selectedScope,
+      disabled: noSelectedNode,
+    },
+    { scope: TSearchScope.childNodes, selectedScope, disabled: noSelectedNode },
+    {
+      scope: TSearchScope.currentDocument,
+      selectedScope,
+      disabled: noSelectedDocument,
+    },
+    { scope: TSearchScope.allDocuments, selectedScope, disabled: false },
   ];
 
   return (

@@ -1,6 +1,10 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
-import { NodeSearchResultEntity } from '::types/graphql/generated';
+import {
+  NodeSearchResultEntity,
+  SearchScope,
+  SearchTarget,
+} from '::types/graphql/generated';
 
 const ap = createActionPrefixer('search');
 
@@ -25,33 +29,27 @@ const ac = {
     ),
   },
   ...{
-    setSearchType: _(ap('set-search-type'), _ => (scope: SearchType) =>
+    setSearchTarget: _(ap('set-search-target'), _ => (scope: SearchTarget) =>
       _(scope),
     ),
   },
 };
 
 type SearchState = 'idle' | 'queued' | 'in-progress' | 'stand-by';
-type SearchScope =
-  | 'current-node'
-  | 'child-nodes'
-  | 'current-document'
-  | 'all-documents';
-type SearchType = 'node-content' | 'node-title';
 
 type State = {
   query: string;
   searchState: SearchState;
   searchScope: SearchScope;
-  searchType: SearchType[];
+  searchTarget: SearchTarget[];
   searchResults: NodeSearchResultEntity[];
 };
 
 const initialState: State = {
   query: '',
   searchState: 'idle',
-  searchScope: 'current-document',
-  searchType: ['node-content'],
+  searchScope: SearchScope.currentDocument,
+  searchTarget: [SearchTarget.nodeContent],
   searchResults: [],
 };
 const reducer = createReducer(initialState, _ => [
@@ -91,14 +89,14 @@ const reducer = createReducer(initialState, _ => [
     })),
   ],
   ...[
-    _(ac.setSearchType, (state, { payload }) => ({
+    _(ac.setSearchTarget, (state, { payload }) => ({
       ...state,
-      searchType: state.searchType.includes(payload)
-        ? state.searchType.filter(type => type !== payload)
-        : [...state.searchType, payload],
+      searchTarget: state.searchTarget.includes(payload)
+        ? state.searchTarget.filter(type => type !== payload)
+        : [...state.searchTarget, payload],
     })),
   ],
 ]);
 
 export { reducer as searchReducer, ac as searchActionCreators };
-export { SearchState, SearchScope, SearchType };
+export { SearchState };

@@ -60,8 +60,20 @@ export interface NodeSearchIt {
   documentId: string;
   nodeId: string;
   query: string;
-  searchScope: string;
-  searchType: Array<string>;
+  searchScope: SearchScope;
+  searchTarget: Array<SearchTarget>;
+}
+
+export enum SearchScope {
+  allDocuments = 'allDocuments',
+  childNodes = 'childNodes',
+  currentDocument = 'currentDocument',
+  currentNode = 'currentNode',
+}
+
+export enum SearchTarget {
+  nodeContent = 'nodeContent',
+  nodeTitle = 'nodeTitle',
 }
 
 export interface NodeSearchResultEntity {

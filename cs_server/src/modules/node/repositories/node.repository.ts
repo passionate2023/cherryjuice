@@ -12,6 +12,7 @@ import { NodeMetaIt } from '../dto/node-meta.it';
 import { AHtmlLine } from '../helpers/rendering/ahtml-to-html';
 import { NodeSearchDto } from '../../search/dto/node-search.dto';
 import { NodeSearchResultEntity } from '../../search/entities/node.search-result.entity';
+import { SearchTarget } from '../../search/it/node-search.it';
 
 @Injectable()
 @EntityRepository(Node)
@@ -119,7 +120,7 @@ export class NodeRepository extends Repository<Node> {
     it,
     user,
   }: NodeSearchDto): Promise<NodeSearchResultEntity[]> {
-    const { searchType, searchScope, query, nodeId, documentId } = it;
+    const { searchTarget, searchScope, query, nodeId, documentId } = it;
     const variables = [];
     const andWhereClauses = [];
     const orWhereClauses = [];
@@ -140,9 +141,9 @@ export class NodeRepository extends Repository<Node> {
         break;
     }
     variables.push(query);
-    if (searchType.includes('node-content'))
+    if (searchTarget.includes(SearchTarget.nodeContent))
       orWhereClauses.push(`ahtml_tsv @@ to_tsquery($${variables.length})`);
-    if (searchType.includes('node-title'))
+    if (searchTarget.includes(SearchTarget.nodeTitle))
       orWhereClauses.push(`name_tsv @@ to_tsquery($${variables.length})`);
     if (!orWhereClauses.length) throw new ForbiddenException();
     andWhereClauses.push(`( ${orWhereClauses.join(' or ')} )`);

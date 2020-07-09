@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { SearchType as TSearchType } from '::root/store/ducks/search';
+import { SearchTarget as TSearchTarget } from '::types/graphql/generated';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modSearchScope } from '::sass-modules/';
-import { Type } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-type/search-type/components/type';
+import { Target } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-type/components/target';
 
 type Props = {};
 
-const SearchType: React.FC<Props> = () => {
-  const types: { type: TSearchType }[] = [
-    { type: 'node-content' },
-    { type: 'node-title' },
+const SearchTarget: React.FC<Props> = () => {
+  const types: { target: TSearchTarget }[] = [
+    { target: TSearchTarget.nodeContent },
+    { target: TSearchTarget.nodeTitle },
   ];
 
   return (
@@ -21,11 +21,11 @@ const SearchType: React.FC<Props> = () => {
       </span>
       <div className={modSearchScope.searchScope__scopeList}>
         {types.map(args => (
-          <Type key={args.type} {...args} />
+          <Target key={args.target} {...args} />
         ))}
       </div>
     </div>
   );
 };
 
-export { SearchType };
+export { SearchTarget };
