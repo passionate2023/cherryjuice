@@ -1,8 +1,4 @@
-import {
-  Field,
-  InputType,
-  registerEnumType,
-} from '@nestjs/graphql';
+import { Field, InputType, registerEnumType } from '@nestjs/graphql';
 
 export enum SearchScope {
   currentNode = 'current-node',

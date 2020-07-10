@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modSearchResults } from '::sass-modules/';
+import { modSearchResult } from '::sass-modules/';
 import { NodeSearchResultEntity } from '::types/graphql/generated';
 import { Link } from 'react-router-dom';
 
@@ -9,13 +9,13 @@ type Props = {
 
 const Result: React.FC<Props> = ({ result }) => {
   return (
-    <div className={modSearchResults.searchResults__result}>
+    <div className={modSearchResult.searchResult}>
       <span
-        className={modSearchResults.searchResults__result__headline}
+        className={modSearchResult.searchResult__headline}
         dangerouslySetInnerHTML={{ __html: result.headline }}
       />
       <Link
-        className={modSearchResults.searchResults__result__location}
+        className={modSearchResult.searchResult__location}
         to={`/document/${result.documentId}/node/${result.node_id}`}
       >
         {result.documentName}/{result.nodeName}

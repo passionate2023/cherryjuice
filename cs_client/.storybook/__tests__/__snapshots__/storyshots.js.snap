@@ -2,7 +2,7 @@
 
 exports[`Storyshots shared/button/circle With Emoji 1`] = `
 <button
-  className="undefined button buttonCircle"
+  className="button buttonCircle"
 >
   <span
     aria-label="so cool"
@@ -15,7 +15,7 @@ exports[`Storyshots shared/button/circle With Emoji 1`] = `
 
 exports[`Storyshots shared/button/circle With Text 1`] = `
 <button
-  className="undefined button buttonCircle"
+  className="button buttonText buttonCircle"
 >
   Hello Button
 </button>
@@ -23,7 +23,7 @@ exports[`Storyshots shared/button/circle With Text 1`] = `
 
 exports[`Storyshots shared/button/square With Emoji 1`] = `
 <button
-  className=" button buttonSquare "
+  className="button buttonSquare"
   disabled={false}
   onClick={[Function]}
 >
@@ -38,7 +38,7 @@ exports[`Storyshots shared/button/square With Emoji 1`] = `
 
 exports[`Storyshots shared/button/square With Text 1`] = `
 <button
-  className=" button buttonSquare "
+  className="button buttonText buttonSquare"
 >
   Hello Button
 </button>

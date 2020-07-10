@@ -14,5 +14,5 @@ const ButtonCircle: React.FC<ButtonBaseProps> = args => {
     />
   );
 };
-
+ButtonCircle.displayName = 'ButtonCircle';
 export { ButtonCircle };

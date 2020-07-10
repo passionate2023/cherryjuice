@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { SearchTarget as TSearchTarget } from '::types/graphql/generated';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { modSearchScope } from '::sass-modules/';
+import { modSearchFilter } from '::sass-modules/';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { useCallback } from 'react';
 
@@ -30,9 +30,7 @@ const Target: React.FC<Props & PropsFromRedux> = ({ target, searchTarget }) => {
     ac.search.setSearchTarget(target);
   }, []);
   return (
-    <div
-      className={joinClassNames([modSearchScope.searchScope__scopeList__scope])}
-    >
+    <div className={joinClassNames([modSearchFilter.searchFilter__list__item])}>
       <ButtonSquare
         text={mapScopeToLabel(target)}
         onClick={setSearchTargetM}

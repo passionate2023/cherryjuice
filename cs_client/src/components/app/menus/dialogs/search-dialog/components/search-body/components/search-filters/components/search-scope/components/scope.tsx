@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { modSearchScope } from '::sass-modules/';
+import { modSearchFilter } from '::sass-modules/';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { SearchScope } from '::types/graphql/generated';
 import { ac } from '::root/store/store';
 import { useCallback } from 'react';
-import { mapScopeToLabel } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-target/components/target';
+import { mapScopeToLabel } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
 
 type ScopeProps = {
   scope: SearchScope;
@@ -18,9 +18,7 @@ const Scope: React.FC<ScopeProps> = ({ scope, selectedScope, disabled }) => {
     ac.search.setSearchScope(scope);
   }, []);
   return (
-    <div
-      className={joinClassNames([modSearchScope.searchScope__scopeList__scope])}
-    >
+    <div className={joinClassNames([modSearchFilter.searchFilter__list__item])}>
       <ButtonSquare
         text={mapScopeToLabel(scope)}
         onClick={setSearchScopeM}

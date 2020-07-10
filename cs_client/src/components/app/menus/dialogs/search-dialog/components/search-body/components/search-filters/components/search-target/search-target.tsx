@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { SearchTarget as TSearchTarget } from '::types/graphql/generated';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { modSearchScope } from '::sass-modules/';
+import { modSearchFilter } from '::sass-modules/';
 import { Target } from './components/target';
 
 type Props = {};
@@ -13,13 +13,9 @@ const SearchTarget: React.FC<Props> = () => {
   ];
 
   return (
-    <div className={joinClassNames([modSearchScope.searchScope])}>
-      <span
-        className={modSearchScope.searchScope__scopeList__scope__scopeLabel}
-      >
-        search type
-      </span>
-      <div className={modSearchScope.searchScope__scopeList}>
+    <div className={joinClassNames([modSearchFilter.searchFilter])}>
+      <span className={modSearchFilter.searchFilter__label}>search type</span>
+      <div className={modSearchFilter.searchFilter__list}>
         {types.map(args => (
           <Target key={args.target} {...args} />
         ))}

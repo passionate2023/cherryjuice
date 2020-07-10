@@ -1,5 +1,5 @@
 @import '../../../vars/colors';
-.search-results__result {
+.search-result {
   display: flex;
   align-items: center;
   width: calc(100% - 40px);
@@ -7,13 +7,13 @@
   padding: 10px 20px;
   background-color: $grey-2;
   margin-bottom: 5px;
-  //box-sizing: border-box;
+  overflow: auto
 }
 
-.search-results__result__headline {
+.search-result__headline {
   flex: 1;
 }
 
-.search-results__result__location {
+.search-result__location {
   cursor: pointer;
 }

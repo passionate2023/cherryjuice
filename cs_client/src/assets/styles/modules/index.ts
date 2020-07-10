@@ -24,8 +24,8 @@ import modDeleteNode from './delete-node.scss';
 import modSnackbar from './shared-components/snackbar.scss';
 import modSearch from './search/search.scss';
 import modSearchDialog from './search/search-dialog.scss';
-import modSearchScope from './search/search-dialog/search-scope.scss';
-import modSearchResults from './search/search-dialog/search-results.scss';
+import modSearchFilter from './search/search-dialog/search-filter.scss';
+import modSearchResult from './search/search-dialog/search-result.scss';
 import modSearchOptions from './search/search-dialog/search-options.scss';
 export {
   appModule,
@@ -54,7 +54,7 @@ export {
   modSnackbar,
   modSearch,
   modSearchDialog,
-  modSearchResults,
-  modSearchScope,
+  modSearchResult,
+  modSearchFilter,
   modSearchOptions,
 };

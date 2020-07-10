@@ -38,11 +38,11 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   return (
     <button
       className={joinClassNames([
-        className,
         modButton.button,
         [modButton.buttonDark, dark],
         [modButton.buttonText, text],
         [modButton.buttonPressed, active],
+        className,
       ])}
       ref={ref}
       onClick={onClick}

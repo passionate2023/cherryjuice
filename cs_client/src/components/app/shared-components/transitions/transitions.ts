@@ -19,4 +19,4 @@ const transitions = {
   },
 };
 
-export { transitions };
+export { transitions, configs };

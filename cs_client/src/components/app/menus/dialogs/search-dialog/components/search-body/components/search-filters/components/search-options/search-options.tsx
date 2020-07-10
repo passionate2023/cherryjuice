@@ -2,8 +2,8 @@ import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { useCallback } from 'react';
-import { modSearchScope } from '::sass-modules/';
-import { mapScopeToLabel } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-target/components/target';
+import { modSearchFilter } from '::sass-modules/';
+import { mapScopeToLabel } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 
@@ -28,18 +28,16 @@ const SearchOptions: React.FC<Props & PropsFromRedux> = ({ searchOptions }) => {
   );
 
   return (
-    <div className={modSearchScope.searchScope}>
-      <span
-        className={modSearchScope.searchScope__scopeList__scope__scopeLabel}
-      >
+    <div className={modSearchFilter.searchFilter}>
+      <span className={modSearchFilter.searchFilter__label}>
         search options
       </span>
-      <div className={modSearchScope.searchScope__scopeList}>
+      <div className={modSearchFilter.searchFilter__list}>
         {[{ optionName: 'caseSensitive' }, { optionName: 'fullWord' }].map(
           ({ optionName }) => (
             <div
               className={joinClassNames([
-                modSearchScope.searchScope__scopeList__scope,
+                modSearchFilter.searchFilter__list__item,
               ])}
               key={optionName}
             >

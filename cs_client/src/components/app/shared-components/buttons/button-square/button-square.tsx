@@ -14,5 +14,5 @@ const ButtonSquare: React.FC<ButtonBaseProps> = args => {
     />
   );
 };
-
+ButtonSquare.displayName = 'ButtonSquare';
 export { ButtonSquare };

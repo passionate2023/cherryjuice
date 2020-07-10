@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { modSearchScope } from '::sass-modules/';
+import { modSearchFilter } from '::sass-modules/';
 import {
   Scope,
   ScopeProps,
-} from '::app/menus/dialogs/search-dialog/components/search-body/components/search-scope/components/scope';
+} from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-scope/components/scope';
 import { Store } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { SearchScope as TSearchScope } from '::types/graphql/generated';
@@ -28,31 +28,25 @@ const SearchScope: React.FC<Props & PropsFromRedux> = ({
   const noSelectedDocument = !documentId;
   const noSelectedNode = noSelectedDocument || !selectedNode.node_id;
 
-  const scopes: ScopeProps[] = [
-    {
-      scope: TSearchScope.currentNode,
-      selectedScope,
-      disabled: noSelectedNode,
-    },
-    { scope: TSearchScope.childNodes, selectedScope, disabled: noSelectedNode },
+  const scopes: Omit<ScopeProps, 'selectedScope'>[] = [
+    { scope: TSearchScope.allDocuments, disabled: false },
     {
       scope: TSearchScope.currentDocument,
-      selectedScope,
       disabled: noSelectedDocument,
     },
-    { scope: TSearchScope.allDocuments, selectedScope, disabled: false },
+    { scope: TSearchScope.childNodes, disabled: noSelectedNode },
+    {
+      scope: TSearchScope.currentNode,
+      disabled: noSelectedNode,
+    },
   ];
 
   return (
-    <div className={joinClassNames([modSearchScope.searchScope])}>
-      <span
-        className={modSearchScope.searchScope__scopeList__scope__scopeLabel}
-      >
-        search scope
-      </span>
-      <div className={modSearchScope.searchScope__scopeList}>
+    <div className={joinClassNames([modSearchFilter.searchFilter])}>
+      <span className={modSearchFilter.searchFilter__label}>search scope</span>
+      <div className={modSearchFilter.searchFilter__list}>
         {scopes.map(args => (
-          <Scope key={args.scope} {...args} />
+          <Scope key={args.scope} {...args} selectedScope={selectedScope} />
         ))}
       </div>
     </div>

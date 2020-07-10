@@ -38,32 +38,38 @@ const ac = {
     ),
     setSearchType: _(ap('set-search-type'), _ => (args: SearchType) => _(args)),
   },
+  ...{
+    toggleFilters: _(ap('toggle-filters')),
+  },
 };
 
 type SearchState = 'idle' | 'queued' | 'in-progress' | 'stand-by';
 
 type State = {
   query: string;
+  searchResults: NodeSearchResultEntity[];
   searchState: SearchState;
   searchScope: SearchScope;
   searchTarget: SearchTarget[];
-  searchResults: NodeSearchResultEntity[];
   searchOptions: SearchOptions;
   searchType: SearchType;
+  showFilters: boolean;
 };
 
 const initialState: State = {
   query: '',
   searchState: 'idle',
-  searchScope: SearchScope.currentDocument,
-  searchTarget: [SearchTarget.nodeContent],
+  searchScope: SearchScope.allDocuments,
+  searchTarget: [SearchTarget.nodeContent, SearchTarget.nodeTitle],
   searchResults: [],
   searchOptions: {
     caseSensitive: false,
-    fullWord: true,
+    fullWord: false,
   },
-  searchType: SearchType.FullText,
+  searchType: SearchType.Simple,
+  showFilters: false,
 };
+
 const reducer = createReducer(initialState, _ => [
   ...[
     _(ac.setQuery, (state, { payload }) => ({
@@ -116,7 +122,13 @@ const reducer = createReducer(initialState, _ => [
         : [...state.searchTarget, payload],
     })),
   ],
+  ...[
+    _(ac.toggleFilters, state => ({
+      ...state,
+      showFilters: !state.showFilters,
+    })),
+  ],
 ]);
 
 export { reducer as searchReducer, ac as searchActionCreators };
-export { SearchState };
+export { SearchState, State as SearchReducerState };

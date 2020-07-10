@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modSearchScope } from '::sass-modules/';
+import { modSearchFilter } from '::sass-modules/';
 import { SearchType as TSearchType } from '::types/graphql/generated';
 import { Store } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';
@@ -15,15 +15,16 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = {};
 
 const SearchType: React.FC<Props & PropsFromRedux> = ({ searchType }) => {
+  const searchTypes: TSearchType[] = [
+    TSearchType.Simple,
+    TSearchType.FullText,
+    TSearchType.Regex,
+  ];
   return (
-    <div className={modSearchScope.searchScope}>
-      <span
-        className={modSearchScope.searchScope__scopeList__scope__scopeLabel}
-      >
-        search method
-      </span>
-      <div className={modSearchScope.searchScope__scopeList}>
-        {Object.values(TSearchType).map(optionName => (
+    <div className={modSearchFilter.searchFilter}>
+      <span className={modSearchFilter.searchFilter__label}>search method</span>
+      <div className={modSearchFilter.searchFilter__list}>
+        {searchTypes.map(optionName => (
           <Type
             key={optionName}
             optionName={optionName}

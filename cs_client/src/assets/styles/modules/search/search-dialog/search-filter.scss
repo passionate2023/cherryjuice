@@ -1,33 +1,35 @@
-@import "../../../vars/colors";
+@import '../../../vars/colors';
 @import '../../../mixins/breakpoints';
-.search-scope {
+.search-filter {
   display: flex;
+  flex-direction: column;
   @include respond-to($mb-down) {
-    flex-direction: column;
     align-items: flex-start;
   }
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 10px 20px;
   user-select: none;
 }
 
-.search-scope__scope-list {
+.search-filter__list {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
-  padding: 10px 20px;
-  background-color: $grey-1;
+  padding: 10px 0px;
+  //background-color: $grey-1;
   user-select: none;
   flex-wrap: wrap;
 }
 
-.search-scope__scope-list__scope__scope-label {
+.search-filter__label {
   color: lightgrey;
   padding: 10px;
   width: 120px;
 }
 
-.search-scope__scope-list__scope {
+.search-filter__list__item {
   display: flex;
+  justify-content: flex-start;
 }
