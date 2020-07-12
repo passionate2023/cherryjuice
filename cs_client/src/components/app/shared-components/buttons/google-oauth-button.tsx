@@ -11,6 +11,7 @@ const GoogleOauthButton: React.FC<Props> = ({ onClick, signIn = true }) => {
     ref,
     onClick,
   });
+
   return (
     <div
       className={modGoogleOauth.googleBtn}
