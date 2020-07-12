@@ -4,7 +4,7 @@ import { EventHandler } from 'react';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 export type TDialogFooterButton = {
   component?: () => React.Component;
-  label: string | JSX.Element;
+  label: string;
   disabled: boolean;
   onClick: EventHandler<any>;
   lazyAutoFocus?: number;
@@ -35,9 +35,8 @@ const DialogFooter: React.FC<TDialogFooterProps> = ({
                 onClick={onClick}
                 disabled={disabled}
                 testId={testId}
-              >
-                {label}
-              </ButtonSquare>
+                text={label}
+              />
             ),
         )}
       </div>
@@ -51,9 +50,8 @@ const DialogFooter: React.FC<TDialogFooterProps> = ({
               disabled={disabled}
               lazyAutoFocus={!isOnMobile ? lazyAutoFocus : 0}
               testId={testId}
-            >
-              {label}
-            </ButtonSquare>
+              text={label}
+            />
           ),
         )}
       </div>

@@ -14,6 +14,7 @@ import {
 import { Document } from '../../document/entities/document.entity';
 import { Image } from '../../image/entities/image.entity';
 import hash from 'object-hash';
+import { User } from '../../user/entities/user.entity';
 
 @Unique(['node_id', 'documentId'])
 @Entity()
@@ -40,6 +41,15 @@ export class Node extends BaseEntity {
   @Column({ nullable: true })
   @Field({ nullable: true })
   fatherId: string;
+
+  @ManyToOne(
+    () => User,
+    user => user.id,
+    { onDelete: 'CASCADE' },
+  )
+  user: User;
+  @Column()
+  userId: string;
 
   @Field()
   @PrimaryGeneratedColumn('uuid')
@@ -89,6 +99,27 @@ export class Node extends BaseEntity {
   @Field()
   @Column({ nullable: true })
   hash: string;
+
+  @Column({ select: false, default: '' })
+  ahtml_txt: string;
+
+  updateAhtmlTxt() {
+    if (this.ahtml)
+      this.ahtml_txt = JSON.parse(this.ahtml).reduce((acc, val) => {
+        acc += `${val[0]
+          .flatMap(element =>
+            typeof element === 'string' ? element : element._ || '',
+          )
+          .join(' ')}\n`;
+        return acc;
+      }, '');
+  }
+
+  @Column('tsvector')
+  ahtml_tsv: string;
+
+  @Column('tsvector')
+  name_tsv: string;
 
   @BeforeUpdate()
   @BeforeInsert()

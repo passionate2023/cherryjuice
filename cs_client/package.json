@@ -8,7 +8,7 @@
     "postinstall": "npm link @cs/ahtml-to-html",
     "commit": "git-cz",
     "docker:build": "docker image build -t cs ..",
-    "docker:run": "docker container run -it -p 1430:1430 -e PORT=1430 -e ctbFolders=/cs/ctb-samples cs",
+    "docker:run": "docker container run -it -p 1430:1430 -e PORT=1430 cs",
     "cypress:open": "yarn cypress open",
     "test:client": "jest .",
     "test:server": "cd ../cs_server && jest",

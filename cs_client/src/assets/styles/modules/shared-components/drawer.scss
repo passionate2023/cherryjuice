@@ -19,6 +19,7 @@ $navigation-width: 200px;
   padding-bottom: 10px;
   position: absolute;
   background-color: white;
+  user-select: none;
   left: -500px;
   min-height: calc(100% - 10px - 8px);
   width: $navigation-width;
@@ -44,9 +45,17 @@ $navigation-width: 200px;
   width: $navigation-width;
   //height: 100%;
 }
-.drawer__navigation__list__item {
+.drawer__navigation__category {
+  padding: 15px 10px;
+  color: #c9c9c9;
+  font-family: 'Roboto Light', sans-serif;
+  font-size: 0.8rem;
+  transition: background-color 0.3s ease;
+}
+.drawer__navigation__element {
   padding: 15px 10px;
   margin-bottom: 5px;
+
   color: black;
   font-family: 'Roboto Light', sans-serif;
   transition: background-color 0.3s ease;
@@ -55,7 +64,7 @@ $navigation-width: 200px;
     background-color: $primary-lighter;
   }
 }
-.drawer__navigation__list__item--active {
+.drawer__navigation__element--active {
   background-color: $primary-light;
   color: $primary;
 }
@@ -88,13 +97,13 @@ $navigation-width: 200px;
 
 .drawer__drawer-toggle {
   @include respond-to('md') {
-    display: none;
+    display: none !important;
   }
   //margin-left: 14px;
   margin-right: 5px;
   width: 40px;
   height: 40px;
-  img{
+  img {
     //width: 1.1em
   }
 }

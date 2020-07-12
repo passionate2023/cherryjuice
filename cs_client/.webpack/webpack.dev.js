@@ -18,6 +18,7 @@ module.exports = merge(common, {
     stats: 'errors-only',
     overlay: true,
     writeToDisk: true,
+    host: '0.0.0.0',
   },
   plugins: [new DotEnv({ path: paths.env })],
 });

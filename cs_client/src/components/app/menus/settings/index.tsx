@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { useState } from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
-import { Drawer } from '::shared-components/drawer';
+import { Drawer } from '::shared-components/drawer/drawer';
 import { screens } from '::app/menus/settings/screens';
-import { DrawerToggle } from '::shared-components/drawer/drawer-toggle';
+import { DrawerToggle } from '::shared-components/drawer/components/drawer-toggle/drawer-toggle';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
+import { useState } from 'react';
 
 const mapState = (state: Store) => ({
   show: state.dialogs.showSettingsDialog,
@@ -26,8 +26,8 @@ const Settings: React.FC<Props & PropsFromRedux> = ({
   show,
   isOnMobile,
 }) => {
-  const [selectedTabTitle, setSelectedTabTitle] = useState(
-    'Keyboard Shortcuts',
+  const [selectedScreenTitle, setSelectedScreenTitle] = useState(
+    () => Object.keys(screens)[0],
   );
 
   return (
@@ -46,8 +46,8 @@ const Settings: React.FC<Props & PropsFromRedux> = ({
       <ErrorBoundary>
         <Drawer
           screens={screens}
-          selectedScreenTitle={selectedTabTitle}
-          setSelectedScreenTitle={setSelectedTabTitle}
+          selectedScreenTitle={selectedScreenTitle}
+          setSelectedScreenTitle={setSelectedScreenTitle}
         />
       </ErrorBoundary>
     </DialogWithTransition>

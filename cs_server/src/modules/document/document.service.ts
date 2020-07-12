@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Document } from './entities/document.entity';
 import { DocumentRepository } from './repositories/document.repository';
 import { IDocumentService } from './interfaces/document.service';
@@ -11,13 +11,22 @@ import { DocumentSubscriptionsService } from './document.subscriptions.service';
 
 @Injectable()
 export class DocumentService implements IDocumentService {
+  logger = new Logger('document-service');
   constructor(
     @InjectRepository(DocumentRepository)
     private documentRepository: DocumentRepository,
     private subscriptionsService: DocumentSubscriptionsService,
   ) {}
   async onModuleInit(): Promise<void> {
-    await this.documentRepository.markUnfinishedImportsAsFailed();
+    await this.documentRepository
+      .markUnfinishedImportsAsFailed()
+      .catch(e =>
+        this.logger.error(
+          e.message,
+          e.trace,
+          'mark-unfinished-imports-as-failed',
+        ),
+      );
   }
 
   async getDocumentsMeta(user: User): Promise<Document[]> {

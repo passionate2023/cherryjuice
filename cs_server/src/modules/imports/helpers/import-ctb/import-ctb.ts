@@ -89,6 +89,7 @@ export class ImportCTB {
       const node = new Node();
       copyProperties(nodeRaw, node, { createdAt: true, updatedAt: true });
       node.document = newDocument;
+      node.user = newDocument.user;
       nodesMap.set(node.node_id, node);
       await node.save();
       nodeDatesMap.set(node.node_id, {
@@ -155,6 +156,7 @@ export class ImportCTB {
           node_idImagesMap.get(node.node_id),
         ),
       );
+      node.updateAhtmlTxt();
       node.createdAt = nodeDatesMap.get(node.node_id).createdAt;
       node.updatedAt = nodeDatesMap.get(node.node_id).updatedAt;
       node.updateSha();

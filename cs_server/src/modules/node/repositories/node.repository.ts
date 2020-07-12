@@ -10,6 +10,10 @@ import { GetNodeByNodeIdIt } from '../dto/get-node-by-node-id.it';
 import { SaveHtmlIt } from '../dto/save-html.it';
 import { NodeMetaIt } from '../dto/node-meta.it';
 import { AHtmlLine } from '../helpers/rendering/ahtml-to-html';
+import { NodeSearchDto } from '../../search/dto/node-search.dto';
+import { NodeSearchResultEntity } from '../../search/entities/node.search-result.entity';
+import { SearchType } from '../../search/it/node-search.it';
+import { nodeSearch } from '../../search/helpers/pg-queries/node-search';
 
 @Injectable()
 @EntityRepository(Node)
@@ -20,6 +24,7 @@ export class NodeRepository extends Repository<Node> {
     node.documentId = documentId;
     node.createdAt = new Date(meta.createdAt);
     node.updatedAt = new Date(meta.updatedAt);
+    node.user = user;
     if (node.father_id !== -1) {
       node.father = await this.getNodeMetaById({
         node_id: node.father_id,
@@ -73,7 +78,7 @@ export class NodeRepository extends Repository<Node> {
     Object.entries(attributes).forEach(([k, v]) => {
       node[k] = v;
     });
-
+    if (attributes['ahtml']) node.updateAhtmlTxt();
     await this.save(node);
     return node;
   }
@@ -110,5 +115,26 @@ export class NodeRepository extends Repository<Node> {
       .where('node.documentId = :documentId', { documentId })
       .addSelect('node.ahtml')
       .getMany();
+  }
+
+  async findNodes({
+    it,
+    user,
+  }: NodeSearchDto): Promise<NodeSearchResultEntity[]> {
+    const { query, variables } = nodeSearch({ it, user });
+
+    let searchResults: NodeSearchResultEntity[] = await this.manager.query(
+      query,
+      variables,
+    );
+    if (
+      it.searchOptions.caseSensitive &&
+      it.searchType === SearchType.FullText
+    ) {
+      searchResults = searchResults.filter(res => {
+        return res.headline.includes(it.query);
+      });
+    }
+    return searchResults;
   }
 }

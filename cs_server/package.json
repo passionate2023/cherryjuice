@@ -9,7 +9,12 @@
     "dev:client": "cd ../cs_client && yarn watch:liveserver",
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "start": "node dist/main.js"
+    "prestart": "yarn typeorm:migration:run",
+    "start": "node dist/src/main.js",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/config/typeorm.config.ts",
+    "typeorm:migration:generate": "yarn typeorm migration:generate -- -n",
+    "typeorm:migration:run": "yarn typeorm migration:run",
+    "typeorm:migration:revert": "yarn typeorm migration:revert"
   },
   "optionalDependencies": {
     "@types/jest": "^25.1.0",
@@ -61,7 +66,8 @@
     "typeorm": "^0.2.25",
     "xml2js": "^0.4.22",
     "object-hash": "^2.0.3",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.10.2"
   },
   "devDependencies": {
     "@babel/runtime": "^7.9.6",
@@ -85,9 +91,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "keywords": [
-    "express",
-    "react",
-    "parcel"
+    "cherrytree"
   ],
   "author": "Yacine Mohamdi",
   "license": "MIT",

@@ -107,12 +107,15 @@ const SelectFile: React.FC<PropsFromRedux> = ({
           setDeleteMode(true);
           setSelectedIDs([]);
         }}
-      >
-        <Icon
-          name={Icons.material['delete-sweep']}
-          testId={testIds.dialogs__selectDocument__header__buttons__deleteSweep}
-        />
-      </ButtonCircle>
+        icon={
+          <Icon
+            name={Icons.material['delete-sweep']}
+            testId={
+              testIds.dialogs__selectDocument__header__buttons__deleteSweep
+            }
+          />
+        }
+      />
     ),
     documents.length && deleteMode && (
       <ButtonCircle
@@ -122,9 +125,8 @@ const SelectFile: React.FC<PropsFromRedux> = ({
           setSelectedIDs([selectedIDs.pop()]);
           setDeleteMode(false);
         }}
-      >
-        <Icon {...{ name: Icons.material.cancel }} />
-      </ButtonCircle>
+        icon={<Icon {...{ name: Icons.material.cancel }} />}
+      />
     ),
     documents.length && deleteMode && (
       <ButtonCircle
@@ -133,9 +135,8 @@ const SelectFile: React.FC<PropsFromRedux> = ({
         onClick={() => {
           setSelectedIDs(documents.map(document => document.id));
         }}
-      >
-        <Icon {...{ name: Icons.material['select-all'] }} />
-      </ButtonCircle>
+        icon={<Icon {...{ name: Icons.material['select-all'] }} />}
+      />
     ),
     documents.length && deleteMode && (
       <ButtonCircle
@@ -143,12 +144,13 @@ const SelectFile: React.FC<PropsFromRedux> = ({
         key={Icons.material.delete}
         className={modDialog.dialog__header__fileButton}
         onClick={deleteDocument}
-      >
-        <Icon
-          name={Icons.material['delete']}
-          testId={testIds.dialogs__selectDocument__header__buttons__delete}
-        />
-      </ButtonCircle>
+        icon={
+          <Icon
+            name={Icons.material['delete']}
+            testId={testIds.dialogs__selectDocument__header__buttons__delete}
+          />
+        }
+      />
     ),
   ].filter(Boolean);
   const onSelect = ({ id }) => {

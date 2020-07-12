@@ -22,6 +22,11 @@ import modTreeNode from './tree/node.scss';
 import modTree from './tree/tree.scss';
 import modDeleteNode from './delete-node.scss';
 import modSnackbar from './shared-components/snackbar.scss';
+import modSearch from './search/search.scss';
+import modSearchDialog from './search/search-dialog.scss';
+import modSearchFilter from './search/search-dialog/search-filter.scss';
+import modSearchResult from './search/search-dialog/search-result.scss';
+import modSearchOptions from './search/search-dialog/search-options.scss';
 export {
   appModule,
   modDrawer,
@@ -47,4 +52,9 @@ export {
   modTree,
   modDeleteNode,
   modSnackbar,
+  modSearch,
+  modSearchDialog,
+  modSearchResult,
+  modSearchFilter,
+  modSearchOptions,
 };

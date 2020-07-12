@@ -1,8 +1,8 @@
-name: Release
+name: release_master
+
 on:
-  push:
-    branches:
-      - master
+  repository_dispatch:
+    types: [build__master__finished]
 
 jobs:
   release:

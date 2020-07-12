@@ -1,0 +1,19 @@
+@import '../../../vars/colors';
+.search-result {
+  display: flex;
+  align-items: center;
+  width: calc(100% - 40px);
+  min-height: 35px;
+  padding: 10px 20px;
+  background-color: $grey-2;
+  margin-bottom: 5px;
+  overflow: auto
+}
+
+.search-result__headline {
+  flex: 1;
+}
+
+.search-result__location {
+  cursor: pointer;
+}

@@ -3,12 +3,14 @@ import { ButtonCircle } from '::shared-components/buttons/button-circle/button-c
 
 export default { title: 'shared/button/circle' };
 
-export const withText = () => <ButtonCircle>Hello Button</ButtonCircle>;
+export const withText = () => <ButtonCircle text={'Hello Button'} />;
 
 export const withEmoji = () => (
-  <ButtonCircle>
-    <span role="img" aria-label="so cool">
-      😀 😎 👍 💯
-    </span>
-  </ButtonCircle>
+  <ButtonCircle
+    icon={
+      <span role="img" aria-label="so cool">
+        😀 😎 👍 💯
+      </span>
+    }
+  />
 );

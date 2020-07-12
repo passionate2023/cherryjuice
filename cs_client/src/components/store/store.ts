@@ -13,6 +13,9 @@ import { editorActionCreators } from './ducks/editor';
 import { documentsListActionCreators } from './ducks/documents-list';
 import { documentOperationsActionCreators } from './ducks/document-operations';
 import { rootActionCreators } from './ducks/root';
+import { searchActionCreators } from '::root/store/ducks/search';
+import { cssVariablesActionCreators } from '::root/store/ducks/css-variables';
+import { setCssVariables } from '::root/store/middleware/set-css-variables';
 
 type Store = ReturnType<typeof reducer>;
 
@@ -28,7 +31,7 @@ const composeEnhancers = reduxDevtoolsExtensionCompose
   : compose;
 
 const epicMiddleware = createEpicMiddleware();
-const middleware = applyMiddleware(epicMiddleware);
+const middleware = applyMiddleware(epicMiddleware, setCssVariables);
 const store = createStore(reducer, composeEnhancers(middleware));
 
 const ac = {
@@ -40,6 +43,8 @@ const ac = {
     documentsList: documentsListActionCreators,
     documentOperations: documentOperationsActionCreators,
     root: rootActionCreators,
+    search: searchActionCreators,
+    cssVariables: cssVariablesActionCreators,
   },
   document: bindActionCreators(documentActionCreators, store.dispatch),
   dialogs: bindActionCreators(dialogsActionCreators, store.dispatch),
@@ -54,6 +59,8 @@ const ac = {
     store.dispatch,
   ),
   root: bindActionCreators(rootActionCreators, store.dispatch),
+  search: bindActionCreators(searchActionCreators, store.dispatch),
+  cssVariables: bindActionCreators(cssVariablesActionCreators, store.dispatch),
 };
 
 export { store, ac, epicMiddleware };

@@ -22,6 +22,7 @@ const DeleteNode = React.lazy(() =>
 );
 
 import { connect, ConnectedProps } from 'react-redux';
+import { SearchDialog } from '::app/menus/dialogs/search-dialog/search-dialog';
 
 const mapState = () => ({});
 const mapDispatch = {};
@@ -65,6 +66,7 @@ const Menus: React.FC<Props & PropsFromRedux> = () => {
       <Suspense fallback={<Void />}>
         <Snackbar />
       </Suspense>
+      <SearchDialog />
     </>
   );
 };

@@ -9,6 +9,8 @@ import { documentsListReducer } from './ducks/documents-list';
 import { documentTransforms } from './redux-persist/transforms/document';
 import { documentOperationsReducer } from './ducks/document-operations';
 import { rootReducer } from '::root/store/ducks/root';
+import { searchReducer, SearchReducerState } from '::root/store/ducks/search';
+import { cssVariablesReducer } from '::root/store/ducks/css-variables';
 
 const reducer = combineReducers({
   document: persistReducer(
@@ -32,6 +34,15 @@ const reducer = combineReducers({
   documentsList: documentsListReducer,
   documentOperations: documentOperationsReducer,
   root: rootReducer,
+  cssVariables: cssVariablesReducer,
+  search: persistReducer(
+    {
+      key: 'search',
+      storage,
+      blacklist: ['query', 'searchResults', 'searchState'],
+    },
+    searchReducer,
+  ) as Reducer<SearchReducerState>,
 });
 
 export { reducer };

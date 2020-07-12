@@ -13,6 +13,7 @@ import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
  *******************************/
 export interface Query {
   document: Array<Document | null>;
+  search: SearchResultEntity;
   secrets: Secrets;
   user: AuthUser;
 }
@@ -49,6 +50,52 @@ export interface Node {
 export interface Image {
   base64: string;
   id: string;
+}
+
+export interface SearchResultEntity {
+  node: Array<NodeSearchResultEntity>;
+}
+
+export interface NodeSearchIt {
+  documentId: string;
+  nodeId: string;
+  query: string;
+  searchOptions: SearchOptions;
+  searchScope: SearchScope;
+  searchTarget: Array<SearchTarget>;
+  searchType: SearchType;
+}
+
+export interface SearchOptions {
+  caseSensitive: boolean;
+  fullWord: boolean;
+}
+
+export enum SearchScope {
+  allDocuments = 'allDocuments',
+  childNodes = 'childNodes',
+  currentDocument = 'currentDocument',
+  currentNode = 'currentNode',
+}
+
+export enum SearchTarget {
+  nodeContent = 'nodeContent',
+  nodeTitle = 'nodeTitle',
+}
+
+export enum SearchType {
+  FullText = 'FullText',
+  Regex = 'Regex',
+  Simple = 'Simple',
+}
+
+export interface NodeSearchResultEntity {
+  documentId: string;
+  documentName: string;
+  headline: string;
+  nodeId: string;
+  nodeName: string;
+  node_id: number;
 }
 
 export interface Secrets {
@@ -136,7 +183,7 @@ export interface NodeMetaIt {
   position?: number;
   read_only?: number;
   sequence?: number;
-  updatedAt?: Timestamp;
+  updatedAt: Timestamp;
 }
 
 export interface SaveHtmlIt {
@@ -220,6 +267,8 @@ export interface Resolver {
   Document?: DocumentTypeResolver;
   Node?: NodeTypeResolver;
   Image?: ImageTypeResolver;
+  SearchResultEntity?: SearchResultEntityTypeResolver;
+  NodeSearchResultEntity?: NodeSearchResultEntityTypeResolver;
   Secrets?: SecretsTypeResolver;
   AuthUser?: AuthUserTypeResolver;
   User?: UserTypeResolver;
@@ -235,6 +284,7 @@ export interface Resolver {
 }
 export interface QueryTypeResolver<TParent = any> {
   document?: QueryToDocumentResolver<TParent>;
+  search?: QueryToSearchResolver<TParent>;
   secrets?: QueryToSecretsResolver<TParent>;
   user?: QueryToUserResolver<TParent>;
 }
@@ -249,6 +299,10 @@ export interface QueryToDocumentResolver<TParent = any, TResult = any> {
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
+}
+
+export interface QueryToSearchResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface QueryToSecretsResolver<TParent = any, TResult = any> {
@@ -406,6 +460,76 @@ export interface ImageToBase64Resolver<TParent = any, TResult = any> {
 }
 
 export interface ImageToIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface SearchResultEntityTypeResolver<TParent = any> {
+  node?: SearchResultEntityToNodeResolver<TParent>;
+}
+
+export interface SearchResultEntityToNodeArgs {
+  searchArgs?: NodeSearchIt;
+}
+export interface SearchResultEntityToNodeResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: SearchResultEntityToNodeArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface NodeSearchResultEntityTypeResolver<TParent = any> {
+  documentId?: NodeSearchResultEntityToDocumentIdResolver<TParent>;
+  documentName?: NodeSearchResultEntityToDocumentNameResolver<TParent>;
+  headline?: NodeSearchResultEntityToHeadlineResolver<TParent>;
+  nodeId?: NodeSearchResultEntityToNodeIdResolver<TParent>;
+  nodeName?: NodeSearchResultEntityToNodeNameResolver<TParent>;
+  node_id?: NodeSearchResultEntityToNode_idResolver<TParent>;
+}
+
+export interface NodeSearchResultEntityToDocumentIdResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultEntityToDocumentNameResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultEntityToHeadlineResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultEntityToNodeIdResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultEntityToNodeNameResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultEntityToNode_idResolver<
+  TParent = any,
+  TResult = any
+> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 

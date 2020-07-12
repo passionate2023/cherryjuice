@@ -1,6 +1,9 @@
 $mobile: 425px;
 $tablet: 850px;
+$wide: 1200px;
 // https://css-tricks.com/snippets/sass/mixin-manage-breakpoints/
+$wd-up: 'wd-up';
+$wd-down: 'wd-down';
 $md-up: 'md';
 $md-down: 'md-down';
 $mb-up: 'md-up';
@@ -17,6 +20,12 @@ $breakpoints: (
   ),
   'mb-down': (
     max-width: $mobile,
+  ),
+  'wd-up': (
+    min-width: $wide,
+  ),
+  'wd-down': (
+    max-width: $wide,
   ),
 ) !default;
 @mixin respond-to($breakpoint) {

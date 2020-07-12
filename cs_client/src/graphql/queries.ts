@@ -3,6 +3,8 @@ import {
   AuthUser,
   DOCUMENT_SUBSCRIPTIONS as DS,
   Image,
+  NodeSearchIt,
+  NodeSearchResultEntity,
   Secrets,
 } from '::types/graphql/generated';
 import { FRAGMENT_USER } from '::graphql/fragments';
@@ -123,4 +125,33 @@ const QUERY_USER = {
     ${FRAGMENT_USER.userInfo}
   `,
 };
-export { QUERY_DOCUMENTS, QUERY_NODE_META, QUERY_NODE_CONTENT, QUERY_USER };
+const QUERY_SEARCH = {
+  searchNode: {
+    path: (data): NodeSearchResultEntity[] => data?.search.node || [],
+    args: (args: { args: NodeSearchIt }): { args: NodeSearchIt } => args,
+    query: gql`
+      query searchNode($args: NodeSearchIt) {
+        search {
+          node(searchArgs: $args) {
+            documentId
+            nodeId
+            node_id
+            nodeName
+            documentName
+            headline
+          }
+        }
+      }
+    `,
+  },
+};
+const QUERY = {
+  SEARCH: QUERY_SEARCH,
+};
+export {
+  QUERY,
+  QUERY_DOCUMENTS,
+  QUERY_NODE_META,
+  QUERY_NODE_CONTENT,
+  QUERY_USER,
+};

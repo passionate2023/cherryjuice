@@ -9,6 +9,7 @@ import { testIds } from '::cypress/support/helpers/test-ids';
 
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
+import { Search } from '::app/editor/tool-bar/groups/nav-bar/components/search/search';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
@@ -37,6 +38,7 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
         modToolbar.toolBar__group + ' ' + modToolbar.toolBar__groupNavBar
       }
     >
+      <Search />
       <ToolbarButton
         onClick={ac.dialogs.showCreateDocumentDialog}
         testId={'new-document'}

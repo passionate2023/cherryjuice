@@ -1,31 +1,18 @@
 import * as React from 'react';
 import { modButton } from '::sass-modules/index';
-import { EventHandler } from 'react';
+import { joinClassNames } from '::helpers/dom/join-class-names';
+import {
+  ButtonBase,
+  ButtonBaseProps,
+} from '::shared-components/buttons/button-base/button-base';
 
-type Props = {
-  className?: string;
-  onClick?: EventHandler<undefined>;
-  disabled?: boolean;
-  testId?: string;
-};
-
-const ButtonCircle: React.FC<Props> = ({
-  className,
-  children,
-  onClick,
-  disabled,
-  testId,
-}) => {
+const ButtonCircle: React.FC<ButtonBaseProps> = args => {
   return (
-    <button
-      disabled={disabled}
-      onClick={onClick}
-      className={`${className} ${modButton.button} ${modButton.buttonCircle}`}
-      {...(testId && { 'data-testid': testId })}
-    >
-      {children}
-    </button>
+    <ButtonBase
+      {...args}
+      className={joinClassNames([modButton.buttonCircle, args.className])}
+    />
   );
 };
-
+ButtonCircle.displayName = 'ButtonCircle';
 export { ButtonCircle };

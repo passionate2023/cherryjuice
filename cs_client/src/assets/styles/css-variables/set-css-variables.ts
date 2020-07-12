@@ -1,5 +1,9 @@
 const root = document.documentElement;
 const cssVariables = {
+  setProperty: (propertyName: string) => (value: number) =>
+    root.style.setProperty('--' + propertyName, value + 'px'),
+  getProperty: (propertyName: string) => () =>
+    root.style.getPropertyValue('--' + propertyName),
   setVH: () => {
     root.style.setProperty('--vh', window.innerHeight + 'px');
   },

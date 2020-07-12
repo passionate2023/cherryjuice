@@ -75,10 +75,24 @@ type NodeMutation {
     uploadImage(images: [ImageUpload!]!): [[String!]!]!
 }
 
+type NodeSearchResultEntity {
+    documentId: String!
+    documentName: String!
+    headline: String!
+    nodeId: String!
+    nodeName: String!
+    node_id: Int!
+}
+
 type Query {
     document(file_id: String): [Document]!
+    search: SearchResultEntity!
     secrets: Secrets!
     user: AuthUser!
+}
+
+type SearchResultEntity {
+    node(searchArgs: NodeSearchIt): [NodeSearchResultEntity!]!
 }
 
 type Secrets {
@@ -122,6 +136,24 @@ enum DOCUMENT_SUBSCRIPTIONS {
     IMPORT_STARTED
 }
 
+enum SearchScope {
+    allDocuments
+    childNodes
+    currentDocument
+    currentNode
+}
+
+enum SearchTarget {
+    nodeContent
+    nodeTitle
+}
+
+enum SearchType {
+    FullText
+    Regex
+    Simple
+}
+
 input CreateDocumentIt {
     name: String!
 }
@@ -161,10 +193,25 @@ input NodeMetaIt {
     updatedAt: Timestamp!
 }
 
+input NodeSearchIt {
+    documentId: String!
+    nodeId: String!
+    query: String!
+    searchOptions: SearchOptions!
+    searchScope: SearchScope!
+    searchTarget: [SearchTarget!]!
+    searchType: SearchType!
+}
+
 input SaveHtmlIt {
     ahtml: String!
     deletedImages: [String]!
     updatedAt: Timestamp!
+}
+
+input SearchOptions {
+    caseSensitive: Boolean!
+    fullWord: Boolean!
 }
 
 input SignInCredentials {

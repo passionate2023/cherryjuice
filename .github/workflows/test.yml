@@ -33,6 +33,11 @@ jobs:
       - name: run jest tests
         run: cd cs_client && sudo yarn run test
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
       - name: Notify slack success
         if: success()
         env:
@@ -42,6 +47,13 @@ jobs:
           channel: ${{ secrets.SLACK_CHANNEL }}
           status: SUCCESS
           color: good
+
+      - name: trigger workflow
+        if: success()
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          event-type: test__${{ steps.extract_branch.outputs.branch }}__finished
 
       - name: Notify slack fail
         if: failure()
