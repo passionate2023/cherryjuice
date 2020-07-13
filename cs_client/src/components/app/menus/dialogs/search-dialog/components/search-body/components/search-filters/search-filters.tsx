@@ -34,6 +34,8 @@ type Props = {
   show: boolean;
 };
 import { connect, ConnectedProps } from 'react-redux';
+import { useSpring, animated } from 'react-spring';
+import { configs } from '::shared-components/transitions/transitions';
 
 const mapState = (state: Store) => ({
   dockedDialog: state.root.dockedDialog,
@@ -42,21 +44,32 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const SearchFilters: React.FC<Props & PropsFromRedux> = ({ dockedDialog }) => {
+const SearchFilters: React.FC<Props & PropsFromRedux> = ({
+  show,
+  dockedDialog,
+}) => {
   const ref = useSetCssVariablesOnWindowResize(
     ac.cssVariables.setSearchFiltersHeight,
     dockedDialog,
   );
+  const props = useSpring({
+    to: {
+      opacity: show ? 1 : 0,
+      transform: show ? 'translateY(0)' : 'translateY(50px)',
+    },
+    config: configs.c1,
+  });
   return (
-    <div
+    <animated.div
       className={joinClassNames([modSearchDialog.searchDialog__searchFilters])}
       ref={ref}
+      style={props}
     >
       <SearchTarget />
       <SearchScope />
       <SearchType />
       <SearchOptions />
-    </div>
+    </animated.div>
   );
 };
 const _ = connector(SearchFilters);

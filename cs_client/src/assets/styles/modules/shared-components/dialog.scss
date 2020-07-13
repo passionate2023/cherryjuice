@@ -24,6 +24,10 @@
   height: 50vh;
   margin: 0;
   border-radius: 0;
+  z-index: $ZI-dialog--docked;
+  .dialog__header {
+    display: none;
+  }
 }
 $small-dialog-width: 350px;
 .dialog--small {

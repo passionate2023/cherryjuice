@@ -15,7 +15,7 @@ const data = [
       length: 3,
       startFromEnd: true,
     },
-    output: 'today is sunny',
+    output: ' today is sunny',
   },
 ];
 

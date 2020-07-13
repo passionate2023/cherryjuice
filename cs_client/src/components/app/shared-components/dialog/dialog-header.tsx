@@ -6,6 +6,7 @@ import { Icon, Icons } from '::shared-components/icon/icon';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 export type DialogHeaderButton = Pick<TDialogFooterButton, 'onClick'> & {
   icon: string;
+  text: string;
   hidden?: boolean;
   className?: string;
   disabled?: boolean;
@@ -35,7 +36,7 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
             <></>
           ) : (
             <ButtonCircle
-              {...button}
+              onClick={button.onClick}
               icon={<Icon name={button.icon} />}
               key={button.icon}
             />

@@ -8,7 +8,8 @@ import {
   DialogHeader,
   DialogHeaderProps,
 } from '::shared-components/dialog/dialog-header';
-import { DialogBody } from '::shared-components/dialog/dialog-body';
+import { DialogBody } from '::shared-components/dialog/dialog-body/dialog-body';
+import { MeasurableDialogBody } from '::shared-components/dialog/dialog-body/measurable-dialog-body';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { EventHandler } from 'react';
 import { animated } from 'react-spring';
@@ -25,6 +26,7 @@ type TDialogProps = {
   small?: boolean;
   loading?: boolean;
   docked?: boolean;
+  measurable?: boolean;
 } & TDialogFooterProps &
   DialogHeaderProps;
 
@@ -44,6 +46,7 @@ const Dialog: React.FC<TDialogProps & {
   small,
   loading = false,
   docked,
+  measurable,
 }) => {
   useModalKeyboardEvents({
     onCloseModal: onClose,
@@ -74,11 +77,17 @@ const Dialog: React.FC<TDialogProps & {
             onClose={onClose}
             rightHeaderButtons={rightHeaderButtons}
           />
-          <DialogBody dialogBodyElements={children} />
+          {measurable ? (
+            <MeasurableDialogBody dialogBodyElements={children} />
+          ) : (
+            <DialogBody dialogBodyElements={children} />
+          )}
           <DialogFooter
             dialogFooterRightButtons={dialogFooterRightButtons}
             dialogFooterLeftButtons={dialogFooterLeftButtons}
+            rightHeaderButtons={rightHeaderButtons}
             isOnMobile={isOnMobile}
+            docked={docked}
           />
         </animated.div>
       }

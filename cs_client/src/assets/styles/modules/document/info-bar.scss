@@ -5,7 +5,7 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-  };
+  }
   // size
   @include respond-to($md-up) {
     height: $info-bar-height-md;
@@ -15,11 +15,11 @@
     height: calc(var(--vh) * 0.12);
   }
   // position
+  z-index: $ZI-info-bar;
   @include respond-to($md-down) {
     left: 10px;
     position: absolute;
     bottom: calc(10px + var(--formatting-bar));
-    z-index: $ZI-info-bar;
   }
   @include respond-to($md-up) {
     grid-area: info-bar;

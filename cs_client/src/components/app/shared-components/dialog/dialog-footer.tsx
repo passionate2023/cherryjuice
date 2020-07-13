@@ -2,6 +2,7 @@ import * as React from 'react';
 import modDialog from '::sass-modules/shared-components/dialog.scss';
 import { EventHandler } from 'react';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
+import { DialogHeaderButton } from '::shared-components/dialog/dialog-header';
 export type TDialogFooterButton = {
   component?: () => React.Component;
   label: string;
@@ -14,12 +15,16 @@ export type TDialogFooterProps = {
   isOnMobile: boolean;
   dialogFooterLeftButtons: TDialogFooterButton[];
   dialogFooterRightButtons: TDialogFooterButton[];
+  docked: boolean;
+  rightHeaderButtons: DialogHeaderButton[];
 };
 
 const DialogFooter: React.FC<TDialogFooterProps> = ({
   dialogFooterRightButtons,
   dialogFooterLeftButtons,
   isOnMobile,
+  docked,
+  rightHeaderButtons,
 }) => {
   return (
     <footer className={`${modDialog.dialog__footer}`}>
@@ -38,6 +43,21 @@ const DialogFooter: React.FC<TDialogFooterProps> = ({
                 text={label}
               />
             ),
+        )}
+        {docked ? (
+          rightHeaderButtons.map(button =>
+            button.hidden ? (
+              <></>
+            ) : (
+              <ButtonSquare
+                onClick={button.onClick}
+                text={button.text}
+                key={button.icon}
+              />
+            ),
+          )
+        ) : (
+          <></>
         )}
       </div>
       <div>

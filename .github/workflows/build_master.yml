@@ -1,8 +1,6 @@
 name: build_master
 
-on:
-  repository_dispatch:
-    types: [test__master__finished]
+on: workflow_dispatch
 
 jobs:
   build:
@@ -35,9 +33,10 @@ jobs:
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
 
+
       - name: trigger workflow
         if: success()
-        uses: peter-evans/repository-dispatch@v1
+        uses: benc-uk/workflow-dispatch@v1
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
-          event-type: build__${{ steps.extract_branch.outputs.branch }}__finished
+          workflow: release_${{ steps.extract_branch.outputs.branch }}

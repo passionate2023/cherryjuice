@@ -16,7 +16,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = { dialogBodyElements: ReactNode };
 
-const DialogBody: React.FC<Props & PropsFromRedux> = ({
+const MeasurableDialogBody: React.FC<Props & PropsFromRedux> = ({
   dialogBodyElements,
   dockedDialog,
 }) => {
@@ -30,5 +30,5 @@ const DialogBody: React.FC<Props & PropsFromRedux> = ({
     </div>
   );
 };
-const _ = connector(DialogBody);
-export { _ as DialogBody };
+const _ = connector(MeasurableDialogBody);
+export { _ as MeasurableDialogBody };

@@ -32,8 +32,9 @@ const SearchDialog: React.FC<Props & PropsFromRedux> = ({
       show={searchState !== 'idle'}
       loading={searchState === 'in-progress'}
       onClose={ac.search.setSearchIdle}
-      rightHeaderButtons={dialogHeaderButtons}
+      rightHeaderButtons={dialogHeaderButtons({ docked })}
       docked={docked}
+      measurable={true}
     >
       <ErrorBoundary>
         <SearchBody />

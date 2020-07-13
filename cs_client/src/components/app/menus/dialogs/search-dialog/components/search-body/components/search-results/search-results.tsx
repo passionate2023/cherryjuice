@@ -50,18 +50,23 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
     config: configs.c1,
   });
   return (
-    <animated.div
-      className={joinClassNames([modSearchDialog.searchDialog__searchResults])}
-      style={props}
-    >
-      {searchResults.map(result => (
-        <Result
-          key={result.nodeId}
-          result={result}
-          searchMeta={{ query, searchType, searchOptions }}
-        />
-      ))}
-    </animated.div>
+    <>
+      <animated.div
+        className={joinClassNames([
+          modSearchDialog.searchDialog__searchResults,
+        ])}
+        style={props}
+      >
+        {searchResults.map(result => (
+          <Result
+            key={result.nodeId}
+            result={result}
+            searchMeta={{ query, searchType, searchOptions }}
+          />
+        ))}
+      </animated.div>
+      <div className={modSearchDialog.searchDialog__searchResults__footer} />
+    </>
   );
 };
 const _ = connector(SearchResults);
