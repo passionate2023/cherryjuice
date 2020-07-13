@@ -8,8 +8,7 @@ const whereClause = ({
     searchOptions.fullWord ? '' : "'%'||"
   }$${variableIndex}${searchOptions.fullWord ? '' : "||'%'"})`;
 
-const headline = ({ columnName }: HeadlineProps): string =>
-  `substr(${columnName},0,35)`;
+const headline = ({ columnName }: HeadlineProps): string => `${columnName}`;
 
 const simple = {
   whereClause: whereClause,

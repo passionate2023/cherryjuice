@@ -7,11 +7,17 @@
   padding: 10px 20px;
   background-color: $grey-2;
   margin-bottom: 5px;
-  overflow: auto
+  overflow: auto;
 }
 
 .search-result__headline {
   flex: 1;
+}
+
+.search-result__match {
+  background-color: yellow;
+  font-weight: bold;
+  font-style: italic;
 }
 
 .search-result__location {

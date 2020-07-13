@@ -13,6 +13,9 @@ const mapState = (state: Store) => ({
   searchFiltersHeight: state.cssVariables.searchFiltersHeight,
   dialogBodyHeight: state.cssVariables.dialogBodyHeight,
   isOnMobile: state.root.isOnMobile,
+  query: state.search.query,
+  searchOptions: state.search.searchOptions,
+  searchType: state.search.searchType,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -26,6 +29,9 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
   searchFiltersHeight,
   dialogBodyHeight,
   isOnMobile,
+  query,
+  searchType,
+  searchOptions,
 }) => {
   const adjustedDialogBodyHeight =
     dialogBodyHeight - 117 - (isOnMobile ? 10 : 30);
@@ -49,7 +55,11 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
       style={props}
     >
       {searchResults.map(result => (
-        <Result key={result.nodeId} result={result} />
+        <Result
+          key={result.nodeId}
+          result={result}
+          searchMeta={{ query, searchType, searchOptions }}
+        />
       ))}
     </animated.div>
   );

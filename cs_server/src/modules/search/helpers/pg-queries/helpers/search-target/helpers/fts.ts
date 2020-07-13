@@ -17,7 +17,7 @@ const whereClause = ({
   `@@ to_tsquery($${variableIndex}${searchOptions.fullWord ? '' : "||':*'"})`;
 
 const headline = ({ columnName, numberOfVariables }: HeadlineProps): string =>
-  `ts_headline(${columnName},to_tsquery($${numberOfVariables}),'MinWords=5, MaxWords=35')`;
+  `ts_headline(${columnName},to_tsquery($${numberOfVariables}),'MinWords=5, MaxWords=35,StartSel=<#>, StopSel=<#>')`;
 
 const fts = {
   whereClause,
