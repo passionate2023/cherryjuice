@@ -11,7 +11,11 @@ type Props = {
 };
 
 const Result: React.FC<Props> = ({ result, searchMeta }) => {
-  const headline = useHeadline({ headline: result.headline, ...searchMeta });
+  const headline = useHeadline({
+    headline: result.headline,
+    searchedColumn: result.searchedColumn,
+    ...searchMeta,
+  });
   return (
     <div className={modSearchResult.searchResult}>
       <span className={modSearchResult.searchResult__headline}>

@@ -23,55 +23,57 @@ const searchTargetWC = ({
   searchTarget,
 }: Props) => {
   variables.push(query);
-  const variableQueryParts = {
-    orWhereClauses: [],
-    headline: '',
+  const state = {
     whereClause: '',
+  };
+  const res = {
+    orWhereClauses: [],
+    headline: undefined,
+    searchedColumn: undefined,
   };
   const headlineVariables = {
     numberOfVariables: variables.length,
     columnName: searchTarget.includes(SearchTarget.nodeContent)
       ? 'n.ahtml_txt'
       : 'n.name',
+    searchOptions,
   };
   switch (searchType) {
     case SearchType.FullText:
-      variableQueryParts.whereClause = fts.whereClause({
+      state.whereClause = fts.whereClause({
         searchOptions,
         variableIndex: variables.length,
       });
-      variableQueryParts.headline = fts.headline(headlineVariables);
+      res.headline = fts.headline(headlineVariables);
       break;
     case SearchType.Regex:
-      variableQueryParts.whereClause = regex.whereClause({
+      state.whereClause = regex.whereClause({
         searchOptions,
         variableIndex: variables.length,
       });
-      variableQueryParts.headline = regex.headline(headlineVariables);
+      res.headline = regex.headline(headlineVariables);
+      res.searchedColumn = `${headlineVariables.columnName}`;
       break;
     case SearchType.Simple:
-      variableQueryParts.whereClause = simple.whereClause({
+      state.whereClause = simple.whereClause({
         searchOptions,
         variableIndex: variables.length,
       });
 
-      variableQueryParts.headline = simple.headline(headlineVariables);
+      res.searchedColumn = `${headlineVariables.columnName}`;
       break;
   }
-  if (!variableQueryParts.whereClause) throw new ForbiddenException();
+  if (!state.whereClause) throw new ForbiddenException();
   if (searchTarget.includes(SearchTarget.nodeContent))
-    variableQueryParts.orWhereClauses.push(
-      `n."ahtml_txt" ${variableQueryParts.whereClause}`,
-    );
+    res.orWhereClauses.push(`n."ahtml_txt" ${state.whereClause}`);
 
   if (searchTarget.includes(SearchTarget.nodeTitle))
-    variableQueryParts.orWhereClauses.push(
-      `n."name" ${variableQueryParts.whereClause}`,
-    );
+    res.orWhereClauses.push(`n."name" ${state.whereClause}`);
 
   return {
-    orWhereClauses: `( ${variableQueryParts.orWhereClauses.join(' or ')} )`,
-    headline: variableQueryParts.headline,
+    orWhereClauses: `( ${res.orWhereClauses.join(' or ')} )`,
+    headline: res.headline,
+    searchedColumn: res.searchedColumn,
   };
 };
 

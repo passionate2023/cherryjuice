@@ -139,6 +139,7 @@ const QUERY_SEARCH = {
             nodeName
             documentName
             headline
+            searchedColumn
           }
         }
       }

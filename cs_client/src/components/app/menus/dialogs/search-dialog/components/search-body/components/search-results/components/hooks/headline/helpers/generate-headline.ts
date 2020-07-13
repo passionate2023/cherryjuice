@@ -21,6 +21,7 @@ type GenerateHeadlineProps = {
   searchType: SearchType;
   searchOptions: SearchOptions;
   headline: string;
+  searchedColumn: string;
 };
 
 const generateHeadline = ({
@@ -28,6 +29,7 @@ const generateHeadline = ({
   searchType,
   searchOptions: { caseSensitive, fullWord },
   headline,
+  searchedColumn,
 }: GenerateHeadlineProps): Headline => {
   let res;
   try {
@@ -37,13 +39,13 @@ const generateHeadline = ({
         `${fullWord ? '\\b' : ''}${query}${fullWord ? '\\b' : ''}`,
         caseSensitive ? '' : 'i',
       );
-      const execArray = reg.exec(headline);
+      const execArray = reg.exec(searchedColumn);
       const match = execArray[0];
       const index = execArray.index;
       res = {
-        start: headline.substring(0, index),
+        start: searchedColumn.substring(0, index),
         match,
-        end: headline.substring(index + match.length),
+        end: searchedColumn.substring(index + match.length),
         index,
       };
     } else if (searchType === SearchType.FullText) {
@@ -55,6 +57,15 @@ const generateHeadline = ({
         end,
         index,
       };
+    } else if (searchType === SearchType.Regex) {
+      const [start, end] = searchedColumn.split(headline);
+      const index = start.length;
+      res = {
+        start,
+        match: headline,
+        end,
+        index,
+      };
     }
     res.start = reduceWordsFromEndTo3(res.start);
     res.end = reduceWordsFromStartTo3(res.end);
@@ -62,7 +73,7 @@ const generateHeadline = ({
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log(
-      `could not generate headline for [${headline}]`,
+      `could not generate headline for [headline:${headline}] [searchedColumn:${searchedColumn}] ]`,
       { query, searchType, caseSensitive, fullWord },
       e,
     );

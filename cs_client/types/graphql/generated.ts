@@ -92,10 +92,11 @@ export enum SearchType {
 export interface NodeSearchResultEntity {
   documentId: string;
   documentName: string;
-  headline: string;
+  headline?: string;
   nodeId: string;
   nodeName: string;
   node_id: number;
+  searchedColumn?: string;
 }
 
 export interface Secrets {
@@ -489,6 +490,7 @@ export interface NodeSearchResultEntityTypeResolver<TParent = any> {
   nodeId?: NodeSearchResultEntityToNodeIdResolver<TParent>;
   nodeName?: NodeSearchResultEntityToNodeNameResolver<TParent>;
   node_id?: NodeSearchResultEntityToNode_idResolver<TParent>;
+  searchedColumn?: NodeSearchResultEntityToSearchedColumnResolver<TParent>;
 }
 
 export interface NodeSearchResultEntityToDocumentIdResolver<
@@ -527,6 +529,13 @@ export interface NodeSearchResultEntityToNodeNameResolver<
 }
 
 export interface NodeSearchResultEntityToNode_idResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultEntityToSearchedColumnResolver<
   TParent = any,
   TResult = any
 > {

@@ -24,7 +24,7 @@ const nodeSearch = ({
     searchScopeWC({ variables, searchScope, nodeId, documentId }),
   );
 
-  const { headline, orWhereClauses } = searchTargetWC({
+  const { headline, orWhereClauses, searchedColumn } = searchTargetWC({
     searchTarget,
     searchType,
     variables,
@@ -34,7 +34,8 @@ const nodeSearch = ({
   andWhereClauses.push(orWhereClauses);
   const searchQuery = `
       select
-        ${headline} as headline, 
+        ${headline ? `${headline} as headline,` : ''}
+        ${searchedColumn ? `${searchedColumn} as "searchedColumn",` : ''}
         n.node_id, n.id as "nodeId", n.name as "nodeName", n."documentId", d.name as "documentName"
         from node as n
         inner join document as d

@@ -1,4 +1,4 @@
-import { HeadlineProps, SearchTypeQueryProps } from './fts';
+import { SearchTypeQueryProps } from './fts';
 
 const whereClause = ({
   searchOptions,
@@ -8,11 +8,11 @@ const whereClause = ({
     searchOptions.fullWord ? '' : "'%'||"
   }$${variableIndex}${searchOptions.fullWord ? '' : "||'%'"})`;
 
-const headline = ({ columnName }: HeadlineProps): string => `${columnName}`;
+// const headline = ({ columnName }: HeadlineProps): string => `${columnName}`;
 
 const simple = {
   whereClause: whereClause,
-  headline: headline,
+  // headline: headline,
 };
 
 export { simple };

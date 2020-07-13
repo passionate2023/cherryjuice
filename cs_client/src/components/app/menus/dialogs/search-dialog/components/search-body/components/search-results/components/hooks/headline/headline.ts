@@ -7,18 +7,11 @@ import {
 
 type HeadlineProps = GenerateHeadlineProps;
 
-const useHeadline = ({
-  headline,
-  query,
-  searchOptions,
-  searchType,
-}: HeadlineProps) => {
+const useHeadline = (args: HeadlineProps) => {
   const [processedHeadline, setProcessedHeadline] = useState<Headline>();
   useEffect(() => {
-    setProcessedHeadline(
-      generateHeadline({ headline, query, searchOptions, searchType }),
-    );
-  }, [headline]);
+    setProcessedHeadline(generateHeadline(args));
+  }, [args.headline]);
   return processedHeadline;
 };
 

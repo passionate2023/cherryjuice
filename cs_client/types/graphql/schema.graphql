@@ -78,10 +78,11 @@ type NodeMutation {
 type NodeSearchResultEntity {
     documentId: String!
     documentName: String!
-    headline: String!
+    headline: String
     nodeId: String!
     nodeName: String!
     node_id: Int!
+    searchedColumn: String
 }
 
 type Query {

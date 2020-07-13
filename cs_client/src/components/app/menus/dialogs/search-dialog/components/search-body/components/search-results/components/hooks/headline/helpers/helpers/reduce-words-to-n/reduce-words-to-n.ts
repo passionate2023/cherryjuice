@@ -6,7 +6,7 @@ const reduceWordsToN = ({
   nOfWordsToLeave,
   startFromEnd,
 }: ReduceWordsToNConfig) => {
-  const pattern = `${startFromEnd ? '' : '^'}([^\\s]* *){${nOfWordsToLeave}}${
+  const pattern = `${startFromEnd ? '' : '^'}\\s*([^\\s]+\\s*){${nOfWordsToLeave}}${
     startFromEnd ? '$' : ''
   }`;
   return (words = '') => {
