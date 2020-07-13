@@ -30,3 +30,20 @@
   background-color: black;
   font-family: Verdana, sans-serif;
 }
+
+.app--dialog-docked {
+  grid-template-areas:
+    'tool-bar tool-bar '
+    'tree recent-nodes '
+    'tree rich-text '
+    'formatting-bar formatting-bar'
+    'dialog dialog';
+  @include respond-to($md-up) {
+    grid-template-areas:
+      'tool-bar tool-bar '
+      'tree recent-nodes '
+      'tree rich-text '
+      'info-bar info-bar'
+      'dialog dialog';
+  }
+}

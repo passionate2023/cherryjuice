@@ -14,6 +14,7 @@ import { EventHandler } from 'react';
 import { animated } from 'react-spring';
 import { TransitionWrapper } from '::shared-components/transition-wrapper';
 import { LinearProgress } from '::shared-components/linear-progress';
+import { joinClassNames } from '::helpers/dom/join-class-names';
 
 type TDialogProps = {
   menuButton?: JSX.Element;
@@ -23,6 +24,7 @@ type TDialogProps = {
   isOnMobile: boolean;
   small?: boolean;
   loading?: boolean;
+  docked?: boolean;
 } & TDialogFooterProps &
   DialogHeaderProps;
 
@@ -41,6 +43,7 @@ const Dialog: React.FC<TDialogProps & {
   rightHeaderButtons,
   small,
   loading = false,
+  docked,
 }) => {
   useModalKeyboardEvents({
     onCloseModal: onClose,
@@ -52,9 +55,11 @@ const Dialog: React.FC<TDialogProps & {
     <>
       {
         <animated.div
-          className={`${modDialog.dialog} ${
-            small ? modDialog.dialogSmall : ''
-          }`}
+          className={joinClassNames([
+            modDialog.dialog,
+            [modDialog.dialogSmall, small],
+            [modDialog.dialogDocked, docked],
+          ])}
           style={{
             ...style,
             transform: style.xy.interpolate(
@@ -98,7 +103,11 @@ const DialogWithTransition: React.FC<TDialogProps & {
         },
       }}
       componentProps={props}
-      scrimProps={{ isShownOnTopOfDialog, onClick: props.onClose }}
+      scrimProps={
+        props.docked
+          ? undefined
+          : { isShownOnTopOfDialog, onClick: props.onClose }
+      }
     />
   );
 };

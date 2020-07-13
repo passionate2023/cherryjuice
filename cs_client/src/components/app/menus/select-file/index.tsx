@@ -3,15 +3,15 @@ import { useEffect, useState } from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { DocumentList } from './components/documents-list/document-list';
-import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
 import { modDialog } from '::sass-modules/index';
-import { Icon, Icons } from '::shared-components/icon/icon';
+import { Icons } from '::shared-components/icon/icon';
 import { useDeleteFile } from './hooks/delete-documents/delete-file';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { ac, Store } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { testIds } from '::cypress/support/helpers/test-ids';
+import { DialogHeaderButton } from '::shared-components/dialog/dialog-header';
 
 const createButtons = ({
   selectedIDs,
@@ -98,61 +98,43 @@ const SelectFile: React.FC<PropsFromRedux> = ({
     },
   });
 
-  const rightHeaderButtons = [
-    documents.length && !deleteMode && (
-      <ButtonCircle
-        key={Icons.material['delete-sweep']}
-        className={modDialog.dialog__header__fileButton}
-        onClick={() => {
-          setDeleteMode(true);
-          setSelectedIDs([]);
-        }}
-        icon={
-          <Icon
-            name={Icons.material['delete-sweep']}
-            testId={
-              testIds.dialogs__selectDocument__header__buttons__deleteSweep
-            }
-          />
-        }
-      />
-    ),
-    documents.length && deleteMode && (
-      <ButtonCircle
-        key={Icons.material.clear}
-        className={modDialog.dialog__header__fileButton}
-        onClick={() => {
-          setSelectedIDs([selectedIDs.pop()]);
-          setDeleteMode(false);
-        }}
-        icon={<Icon {...{ name: Icons.material.cancel }} />}
-      />
-    ),
-    documents.length && deleteMode && (
-      <ButtonCircle
-        key={Icons.material['select-all']}
-        className={modDialog.dialog__header__fileButton}
-        onClick={() => {
-          setSelectedIDs(documents.map(document => document.id));
-        }}
-        icon={<Icon {...{ name: Icons.material['select-all'] }} />}
-      />
-    ),
-    documents.length && deleteMode && (
-      <ButtonCircle
-        disabled={!selectedIDs.length}
-        key={Icons.material.delete}
-        className={modDialog.dialog__header__fileButton}
-        onClick={deleteDocument}
-        icon={
-          <Icon
-            name={Icons.material['delete']}
-            testId={testIds.dialogs__selectDocument__header__buttons__delete}
-          />
-        }
-      />
-    ),
-  ].filter(Boolean);
+  const rightHeaderButtons: DialogHeaderButton[] = [
+    {
+      hidden: !documents.length || deleteMode,
+      className: modDialog.dialog__header__fileButton,
+      onClick: () => {
+        setDeleteMode(true);
+        setSelectedIDs([]);
+      },
+      icon: Icons.material['delete-sweep'],
+      testId: testIds.dialogs__selectDocument__header__buttons__deleteSweep,
+    },
+    {
+      hidden: !documents.length || !deleteMode,
+      className: modDialog.dialog__header__fileButton,
+      onClick: () => {
+        setSelectedIDs([selectedIDs.pop()]);
+        setDeleteMode(false);
+      },
+      icon: Icons.material.cancel,
+    },
+    {
+      hidden: !documents.length || !deleteMode,
+      className: modDialog.dialog__header__fileButton,
+      onClick: () => {
+        setSelectedIDs(documents.map(document => document.id));
+      },
+      icon: Icons.material['select-all'],
+    },
+    {
+      hidden: !documents.length || !deleteMode,
+      className: modDialog.dialog__header__fileButton,
+      onClick: deleteDocument,
+      icon: Icons.material['delete'],
+      testId: testIds.dialogs__selectDocument__header__buttons__delete,
+      disabled: !selectedIDs.length,
+    },
+  ];
   const onSelect = ({ id }) => {
     const unselectElement = selectedIDs.includes(id);
     if (deleteMode) {

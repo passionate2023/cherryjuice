@@ -8,7 +8,7 @@ import { editorReducer } from './ducks/editor';
 import { documentsListReducer } from './ducks/documents-list';
 import { documentTransforms } from './redux-persist/transforms/document';
 import { documentOperationsReducer } from './ducks/document-operations';
-import { rootReducer } from '::root/store/ducks/root';
+import { rootReducer, RootReducerState } from '::root/store/ducks/root';
 import { searchReducer, SearchReducerState } from '::root/store/ducks/search';
 import { cssVariablesReducer } from '::root/store/ducks/css-variables';
 
@@ -33,7 +33,14 @@ const reducer = combineReducers({
   node: nodeReducer,
   documentsList: documentsListReducer,
   documentOperations: documentOperationsReducer,
-  root: rootReducer,
+  root: persistReducer(
+    {
+      key: 'root',
+      storage,
+      blacklist: [],
+    },
+    rootReducer,
+  ) as Reducer<RootReducerState>,
   cssVariables: cssVariablesReducer,
   search: persistReducer(
     {

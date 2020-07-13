@@ -7,29 +7,46 @@ import { SearchType } from '::app/menus/dialogs/search-dialog/components/search-
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { useOnWindowResize } from '::hooks/use-on-window-resize';
 import { useRef } from 'react';
-import { ac } from '::root/store/store';
+import { ac, Store } from '::root/store/store';
 
-export const useSetCssVariables = actionCreator => {
+export const useSetCssVariablesOnWindowResize = (
+  actionCreator,
+  dependency?: any,
+) => {
   const ref = useRef<HTMLDivElement>();
   const height = useRef(0);
-  useOnWindowResize([
-    () => {
-      const clientHeight = ref.current.clientHeight;
-      if (clientHeight !== height.current) {
-        height.current = clientHeight;
-        actionCreator(clientHeight);
-      }
-    },
-  ]);
+  useOnWindowResize(
+    [
+      () => {
+        const clientHeight = ref.current.clientHeight;
+        if (clientHeight !== height.current) {
+          height.current = clientHeight;
+          actionCreator(clientHeight);
+        }
+      },
+    ],
+    dependency,
+  );
   return ref;
 };
 
 type Props = {
   show: boolean;
 };
+import { connect, ConnectedProps } from 'react-redux';
 
-const SearchFilters: React.FC<Props> = () => {
-  const ref = useSetCssVariables(ac.cssVariables.setSearchFiltersHeight);
+const mapState = (state: Store) => ({
+  dockedDialog: state.root.dockedDialog,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const SearchFilters: React.FC<Props & PropsFromRedux> = ({ dockedDialog }) => {
+  const ref = useSetCssVariablesOnWindowResize(
+    ac.cssVariables.setSearchFiltersHeight,
+    dockedDialog,
+  );
   return (
     <div
       className={joinClassNames([modSearchDialog.searchDialog__searchFilters])}
@@ -42,5 +59,5 @@ const SearchFilters: React.FC<Props> = () => {
     </div>
   );
 };
-
-export { SearchFilters };
+const _ = connector(SearchFilters);
+export { _ as SearchFilters };
