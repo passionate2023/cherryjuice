@@ -76,6 +76,7 @@ type NodeMutation {
 }
 
 type NodeSearchResultEntity {
+    createdAt: Timestamp!
     documentId: String!
     documentName: String!
     headline: String
@@ -83,6 +84,7 @@ type NodeSearchResultEntity {
     nodeName: String!
     node_id: Int!
     searchedColumn: String
+    updatedAt: Timestamp!
 }
 
 type Query {

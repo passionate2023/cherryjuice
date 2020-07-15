@@ -16,7 +16,7 @@ const ModalBody = ({ description }: TAlert) => {
   );
 };
 
-type ConfirmationModalProps = BaseModalProps & {
+type ConfirmationModalProps = Omit<BaseModalProps, 'title'> & {
   alert: TAlert;
 };
 const ConfirmationModal = ({
@@ -30,6 +30,7 @@ const ConfirmationModal = ({
     onClose={onClose}
     buttons={buttons}
     title={alert?.title}
+    alertType={alert?.type}
   >
     <ModalBody {...alert} />
   </BaseModal>

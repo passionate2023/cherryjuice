@@ -140,6 +140,8 @@ const QUERY_SEARCH = {
             documentName
             headline
             searchedColumn
+            createdAt
+            updatedAt
           }
         }
       }

@@ -113,6 +113,7 @@ export enum SearchType {
 }
 
 export interface NodeSearchResultEntity {
+  createdAt: Timestamp;
   documentId: string;
   documentName: string;
   headline?: string;
@@ -120,6 +121,7 @@ export interface NodeSearchResultEntity {
   nodeName: string;
   node_id: number;
   searchedColumn?: string;
+  updatedAt: Timestamp;
 }
 
 export interface Secrets {
@@ -502,6 +504,7 @@ export interface SearchResultEntityToNodeResolver<
 }
 
 export interface NodeSearchResultEntityTypeResolver<TParent = any> {
+  createdAt?: NodeSearchResultEntityToCreatedAtResolver<TParent>;
   documentId?: NodeSearchResultEntityToDocumentIdResolver<TParent>;
   documentName?: NodeSearchResultEntityToDocumentNameResolver<TParent>;
   headline?: NodeSearchResultEntityToHeadlineResolver<TParent>;
@@ -509,6 +512,14 @@ export interface NodeSearchResultEntityTypeResolver<TParent = any> {
   nodeName?: NodeSearchResultEntityToNodeNameResolver<TParent>;
   node_id?: NodeSearchResultEntityToNode_idResolver<TParent>;
   searchedColumn?: NodeSearchResultEntityToSearchedColumnResolver<TParent>;
+  updatedAt?: NodeSearchResultEntityToUpdatedAtResolver<TParent>;
+}
+
+export interface NodeSearchResultEntityToCreatedAtResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface NodeSearchResultEntityToDocumentIdResolver<
@@ -554,6 +565,13 @@ export interface NodeSearchResultEntityToNode_idResolver<
 }
 
 export interface NodeSearchResultEntityToSearchedColumnResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultEntityToUpdatedAtResolver<
   TParent = any,
   TResult = any
 > {

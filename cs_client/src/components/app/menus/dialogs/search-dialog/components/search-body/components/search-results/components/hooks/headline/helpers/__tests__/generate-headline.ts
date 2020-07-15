@@ -20,7 +20,7 @@ const data: (GenerateHeadlineProps & { res: Headline })[] = [
       res: {
         start: 'hello ',
         match: 'hav',
-        end: 'id, Have a ',
+        end: 'id, Have a nice day',
         index: 6,
       },
     },
@@ -33,7 +33,7 @@ const data: (GenerateHeadlineProps & { res: Headline })[] = [
       res: {
         start: 'hello havid, ',
         match: 'Hav',
-        end: 'e a nice ',
+        end: 'e a nice day',
         index: 13,
       },
     },
@@ -88,7 +88,7 @@ const data: (GenerateHeadlineProps & { res: Headline })[] = [
       res: {
         start: '',
         match: 'Hello',
-        end: ' again, and welcome ',
+        end: ' again, and welcome to our final ',
         index: 0,
       },
       searchedColumn:

@@ -1,11 +1,11 @@
 import { SearchOptions, SearchType } from '::types/graphql/generated';
 import { reduceWordsToN } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/helpers/helpers/reduce-words-to-n/reduce-words-to-n';
-const reduceWordsFromEndTo3 = reduceWordsToN({
-  nOfWordsToLeave: 3,
+const reduceWordsFromEnd = reduceWordsToN({
+  nOfWordsToLeave: 6,
   startFromEnd: true,
 });
-const reduceWordsFromStartTo3 = reduceWordsToN({
-  nOfWordsToLeave: 3,
+const reduceWordsFromStart = reduceWordsToN({
+  nOfWordsToLeave: 6,
   startFromEnd: false,
 });
 
@@ -67,8 +67,8 @@ const generateHeadline = ({
         index,
       };
     }
-    res.start = reduceWordsFromEndTo3(res.start);
-    res.end = reduceWordsFromStartTo3(res.end);
+    res.start = reduceWordsFromEnd(res.start);
+    res.end = reduceWordsFromStart(res.end);
     return res;
   } catch (e) {
     // eslint-disable-next-line no-console

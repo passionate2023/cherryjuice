@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Timestamp } from '../../document/helpers/graphql-types/timestamp';
 
 @ObjectType()
 export class NodeSearchResultEntity {
@@ -18,4 +19,10 @@ export class NodeSearchResultEntity {
 
   @Field({ nullable: true })
   searchedColumn?: string;
+
+  @Field(() => Timestamp)
+  createdAt: number;
+
+  @Field(() => Timestamp)
+  updatedAt: number;
 }

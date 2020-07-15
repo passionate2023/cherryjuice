@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { modSearchResult } from '::sass-modules/';
+import { modSearchResult, modSelectFile } from '::sass-modules/';
 import { NodeSearchResultEntity } from '::types/graphql/generated';
 import { Link } from 'react-router-dom';
 import { useHeadline } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/headline';
 import { GenerateHeadlineProps } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/helpers/generate-headline';
+import { joinClassNames } from '::helpers/dom/join-class-names';
 
 type Props = {
   result: NodeSearchResultEntity;
@@ -30,11 +31,25 @@ const Result: React.FC<Props> = ({ result, searchMeta }) => {
         )}
       </span>
       <Link
-        className={modSearchResult.searchResult__location}
+        className={modSearchResult.searchResult__link}
         to={`/document/${result.documentId}/node/${result.node_id}`}
       >
         {result.documentName}/{result.nodeName}
       </Link>
+      <span
+        className={joinClassNames([
+          modSearchResult.searchResult__info,
+          modSelectFile.selectFile__file__details,
+        ])}
+      >
+        <span
+          className={joinClassNames([modSearchResult.searchResult__info__item])}
+        >{`created ${new Date(result.createdAt).toUTCString()}`}</span>
+        <span>-</span>
+        <span
+          className={joinClassNames([modSearchResult.searchResult__info__item])}
+        >{`updated ${new Date(result.updatedAt).toUTCString()}`}</span>
+      </span>
     </div>
   );
 };

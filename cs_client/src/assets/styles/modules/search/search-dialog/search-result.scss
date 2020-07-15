@@ -1,17 +1,31 @@
 @import '../../../vars/colors';
+@import '../../../vars/vars';
+@import '../../../mixins/text';
+@import '../../../mixins/breakpoints';
+
 .search-result {
-  display: flex;
+  //display: flex;
   align-items: center;
   width: calc(100% - 40px);
-  min-height: 35px;
+  max-height: 250px;
   padding: 10px 20px;
   background-color: $grey-2;
   margin-bottom: 5px;
   overflow: auto;
+  display: grid;
+  grid-template-areas:
+    ' headline headline link'
+    ' headline headline link'
+    ' info info info';
+  grid-template-columns: 1fr 1fr 120px;
+  grid-template-rows: minmax(20px, 1fr) 1fr 25px;
 }
 
 .search-result__headline {
-  flex: 1;
+  grid-area: headline;
+  align-self: flex-start;
+  justify-self: flex-start;
+  @include clampMultiLine(4);
 }
 
 .search-result__match {
@@ -19,6 +33,23 @@
   font-weight: bold;
 }
 
-.search-result__location {
+.search-result__link {
+  grid-area: link;
   cursor: pointer;
+  align-self: flex-start;
+  justify-self: flex-end;
+
+  @include clampMultiLine(3);
+}
+
+.search-result__info {
+  grid-area: info;
+  align-self: flex-end;
+  justify-self: flex-end;
+  @include respond-to($md-down) {
+    font-size: 0.8rem;
+  }
+}
+.search-result__info__item {
+  margin: 0 10px;
 }
