@@ -1,9 +1,24 @@
 .time-filter {
   display: flex;
   flex-direction: column;
-  width: 260px;
+  width: 275px;
   align-items: flex-start;
   justify-content: center;
+}
+.time-filter__filter-toggle {
+  z-index: 1;
+  background-color: white;
+}
+.time-filter__filter-container {
+  display: flex;
+  color: grey;
+  align-items: center;
+  transition: transform 200ms cubic-bezier(0, 1.29, 1, 0.7), opacity 200ms cubic-bezier(0, 1.29, 1, 0.7);
+  transform: translateX(0);
+}
+.time-filter__filter-container--hidden {
+  opacity: 0;
+  transform: translateX(-100px);
 }
 .time-filter__select-container {
   display: flex;
@@ -24,4 +39,5 @@
   cursor: pointer;
   font-family: monospace;
   font-weight: bold;
+  margin-left: 5px;
 }

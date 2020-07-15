@@ -10,7 +10,7 @@
   letter-spacing: 1.25px;
   cursor: pointer;
   &:hover:not([disabled]) {
-    background-color: $primary-lighter;
+    background-color: #f1e5e5;
     color: $primary-dark;
   }
   &:active:not([disabled]) {
@@ -67,4 +67,11 @@
   background-color: $primary !important;
   color: white !important;
   box-shadow: $box-shadow1;
+  svg {
+    fill: white;
+  }
+}
+
+.button--rotated45 {
+  transform: rotateZ(45deg);
 }

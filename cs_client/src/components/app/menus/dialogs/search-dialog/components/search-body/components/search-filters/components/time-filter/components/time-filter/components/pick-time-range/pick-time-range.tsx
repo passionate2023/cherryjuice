@@ -46,10 +46,16 @@ const PickTimeRange: React.FC<Props> = ({
     {
       label: 'select',
       onClick: () => {
+        let tempRangeEnd = rangeEnd;
         if (rangeStart) {
+          if (!rangeEnd) {
+            const now = new Date().getTime();
+            if (rangeStart > now) tempRangeEnd = rangeStart + 1;
+            else tempRangeEnd = now;
+          }
           onSubmit({
             rangeStart,
-            rangeEnd: rangeEnd || new Date().getTime(),
+            rangeEnd: tempRangeEnd,
             rangeName: TimeRange.CustomRange,
           });
         }

@@ -1,11 +1,16 @@
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import { modTimeFilter } from '::sass-modules/';
 import { PickTimeRange } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/pick-time-range/pick-time-range';
-import { mapRangeNameToTimeFilter } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/helpers/map-range-name-to-time-filter';
 import { TimeFilter, TimeRange } from '::types/graphql/generated';
-import { CustomRange } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/custom-range';
-import { SelectRange } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/select-range';
+import {
+  createTimeFilterAC,
+  TimeFilterAC,
+  timeFilterInitialState,
+  timeFilterReducer,
+} from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/reducer';
+import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
+import { FilterControls } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/filter-controls/filter-controls';
 
 type TimeFilterProps = {
   filterName: string;
@@ -18,55 +23,41 @@ const Filter: React.FC<TimeFilterProps> = ({
   onChange,
   timeFilter,
 }) => {
-  const [showCustomRangePicker, setShowCustomRangePicker] = useState(false);
-  const [customRange, setCustomRange] = useState<TimeFilter>(timeFilter);
-  const [rangeName, setRangeName] = useState<TimeRange>(timeFilter.rangeName);
-  const setRangeNameM = useCallback(e => {
-    if ((e.target.value as TimeRange) === TimeRange.CustomRange)
-      setShowCustomRangePicker(true);
-    else {
-      const filter = mapRangeNameToTimeFilter(e.target.value as TimeRange);
-      onChange(filter);
-    }
-    setRangeName(e.target.value);
-  }, []);
-  const setCustomRangeM = (filter: TimeFilter) => {
-    onChange(filter);
-    setCustomRange(filter);
-  };
-  const resetCustomRange = () => {
-    setRangeNameM({
-      target: { value: TimeRange.AnyTime },
-    });
-  };
+  const [state, dispatch] = useReducer(timeFilterReducer, {}, () => ({
+    ...timeFilterInitialState,
+    timeFilter,
+  }));
 
-  const aCustomRangeIsSelected =
-    (rangeName as TimeRange) === TimeRange.CustomRange &&
-    Boolean(customRange?.rangeStart);
+  const timeFilterAC = useRef<TimeFilterAC>();
+  if (!timeFilterAC.current) {
+    timeFilterAC.current = createTimeFilterAC();
+    timeFilterAC.current.setDispatch(dispatch);
+  }
+  useEffect(() => {
+    onChange(state.timeFilter);
+  }, [state.timeFilter]);
+  const enableFilters = state.timeFilter.rangeName !== TimeRange.AnyTime;
+
   return (
     <div className={modTimeFilter.timeFilter}>
       <div className={modTimeFilter.timeFilter__selectContainer}>
-        <span className={modTimeFilter.timeFilter__filterName}>
-          {filterName}
-        </span>
-        {aCustomRangeIsSelected ? (
-          <CustomRange
-            customRange={customRange}
-            resetCustomRange={resetCustomRange}
-            setShowCustomRangePicker={setShowCustomRangePicker}
-          />
-        ) : (
-          <SelectRange
-            defaultRangeName={rangeName}
-            setRangeName={setRangeNameM}
-          />
-        )}
+        <ButtonSquare
+          text={filterName}
+          active={enableFilters}
+          onClick={timeFilterAC.current.toggleTimeFilter}
+          className={modTimeFilter.timeFilter__filterToggle}
+        />
+        <FilterControls
+          enableFilters={enableFilters}
+          timeFilter={state.timeFilter}
+          timeFilterAC={timeFilterAC.current}
+        />
       </div>
       <PickTimeRange
-        onSubmit={setCustomRangeM}
-        onClose={() => setShowCustomRangePicker(false)}
-        initialRange={customRange}
-        show={showCustomRangePicker}
+        onSubmit={timeFilterAC.current.setCustomTimeFilter}
+        onClose={timeFilterAC.current.hideCustomRangePicker}
+        initialRange={state.timeFilter}
+        show={state.showCustomRangePicker}
         title={filterName + ' - custom range'}
       />
     </div>

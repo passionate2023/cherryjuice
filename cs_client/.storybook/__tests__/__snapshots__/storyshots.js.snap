@@ -1,5 +1,69 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Storyshots search/filters/time-filter With Text 1`] = `
+<div
+  className="timeFilter"
+>
+  <div
+    className="timeFilter__selectContainer"
+  >
+    <button
+      className="button buttonText buttonSquare timeFilter__filterToggle"
+      onClick={[Function]}
+    >
+      created between
+    </button>
+    <div
+      className="timeFilter__filterContainer"
+      style={
+        Object {
+          "opacity": 0,
+          "transform": "translateX(-50px)",
+        }
+      }
+    >
+      <select
+        className="timeFilter__select"
+        defaultValue="AnyTime"
+        id=""
+        onChange={[Function]}
+      >
+        <option
+          value="PastHour"
+        >
+          past hour
+        </option>
+        <option
+          value="PastDay"
+        >
+          past day
+        </option>
+        <option
+          value="PastWeek"
+        >
+          past week
+        </option>
+        <option
+          value="PastMonth"
+        >
+          past month
+        </option>
+        <option
+          value="PastYear"
+        >
+          past year
+        </option>
+        <option
+          value="CustomRange"
+        >
+          custom range
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots shared/button/circle With Emoji 1`] = `
 <button
   className="button buttonCircle"

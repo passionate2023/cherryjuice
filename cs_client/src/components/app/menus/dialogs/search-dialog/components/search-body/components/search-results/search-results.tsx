@@ -35,10 +35,10 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
 }) => {
   dialogBodyHeight = dialogBodyHeight - 117 - (isOnMobile ? 15 : 30);
   const bottomOffset = 10;
-  const height =
+  let height =
     bottomOffset +
     (collapse ? dialogBodyHeight - searchFiltersHeight : dialogBodyHeight);
-
+  if (collapse && height < 180) height = 0;
   const props = useSpring({
     to: {
       height,

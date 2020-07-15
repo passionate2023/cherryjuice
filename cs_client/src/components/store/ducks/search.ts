@@ -70,7 +70,7 @@ type State = {
   updatedAtTimeFilter: TimeFilter;
 };
 
-const NeutralTimeRange = {
+const EmptyTimeFilter = {
   rangeName: TimeRange.AnyTime,
   rangeStart: 0,
   rangeEnd: 0,
@@ -87,8 +87,8 @@ const initialState: State = {
   },
   searchType: SearchType.Simple,
   showFilters: false,
-  createdAtTimeFilter: NeutralTimeRange,
-  updatedAtTimeFilter: NeutralTimeRange,
+  createdAtTimeFilter: EmptyTimeFilter,
+  updatedAtTimeFilter: EmptyTimeFilter,
 };
 
 const reducer = createReducer(initialState, _ => [
@@ -161,5 +161,9 @@ const reducer = createReducer(initialState, _ => [
   ],
 ]);
 
-export { reducer as searchReducer, ac as searchActionCreators };
+export {
+  EmptyTimeFilter,
+  reducer as searchReducer,
+  ac as searchActionCreators,
+};
 export { SearchState, State as SearchReducerState };

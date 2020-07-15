@@ -39,6 +39,7 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
               onClick={button.onClick}
               icon={<Icon name={button.icon} />}
               key={button.icon}
+              className={button.className}
             />
           ),
         )}
