@@ -57,6 +57,7 @@ export interface SearchResultEntity {
 }
 
 export interface NodeSearchIt {
+  createdAtTimeFilter: TimeFilter;
   documentId: string;
   nodeId: string;
   query: string;
@@ -64,6 +65,28 @@ export interface NodeSearchIt {
   searchScope: SearchScope;
   searchTarget: Array<SearchTarget>;
   searchType: SearchType;
+  updatedAtTimeFilter: TimeFilter;
+}
+
+export interface TimeFilter {
+  rangeEnd: Timestamp;
+  rangeName: TimeRange;
+  rangeStart: Timestamp;
+}
+
+/**
+ * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+ */
+export type Timestamp = any;
+
+export enum TimeRange {
+  AnyTime = 'AnyTime',
+  CustomRange = 'CustomRange',
+  PastDay = 'PastDay',
+  PastHour = 'PastHour',
+  PastMonth = 'PastMonth',
+  PastWeek = 'PastWeek',
+  PastYear = 'PastYear',
 }
 
 export interface SearchOptions {
@@ -147,11 +170,6 @@ export interface EditDocumentIt {
   name?: string;
   updatedAt: Timestamp;
 }
-
-/**
- * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
- */
-export type Timestamp = any;
 
 export interface NodeMutation {
   createNode: string;
@@ -269,13 +287,13 @@ export interface Resolver {
   Node?: NodeTypeResolver;
   Image?: ImageTypeResolver;
   SearchResultEntity?: SearchResultEntityTypeResolver;
+  Timestamp?: GraphQLScalarType;
   NodeSearchResultEntity?: NodeSearchResultEntityTypeResolver;
   Secrets?: SecretsTypeResolver;
   AuthUser?: AuthUserTypeResolver;
   User?: UserTypeResolver;
   Mutation?: MutationTypeResolver;
   DocumentMutation?: DocumentMutationTypeResolver;
-  Timestamp?: GraphQLScalarType;
   NodeMutation?: NodeMutationTypeResolver;
   ImageUpload?: GraphQLScalarType;
   CTBUpload?: GraphQLScalarType;

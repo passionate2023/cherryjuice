@@ -71,11 +71,11 @@ export class Node extends BaseEntity {
   @Field()
   name: string;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'timestamp with time zone' })
   @Field(() => Float)
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
   @Field(() => Float)
   updatedAt: Date;
 

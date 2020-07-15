@@ -155,6 +155,16 @@ enum SearchType {
     Simple
 }
 
+enum TimeRange {
+    AnyTime
+    CustomRange
+    PastDay
+    PastHour
+    PastMonth
+    PastWeek
+    PastYear
+}
+
 input CreateDocumentIt {
     name: String!
 }
@@ -195,6 +205,7 @@ input NodeMetaIt {
 }
 
 input NodeSearchIt {
+    createdAtTimeFilter: TimeFilter!
     documentId: String!
     nodeId: String!
     query: String!
@@ -202,6 +213,7 @@ input NodeSearchIt {
     searchScope: SearchScope!
     searchTarget: [SearchTarget!]!
     searchType: SearchType!
+    updatedAtTimeFilter: TimeFilter!
 }
 
 input SaveHtmlIt {
@@ -226,6 +238,12 @@ input SignUpCredentials {
     lastName: String!
     password: String!
     username: String!
+}
+
+input TimeFilter {
+    rangeEnd: Timestamp!
+    rangeName: TimeRange!
+    rangeStart: Timestamp!
 }
 
 input UploadLinkInputType {

@@ -33,15 +33,11 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
   searchType,
   searchOptions,
 }) => {
-  const adjustedDialogBodyHeight =
-    dialogBodyHeight - 117 - (isOnMobile ? 10 : 30);
-  searchFiltersHeight = searchFiltersHeight - (isOnMobile ? 55 : 45);
+  dialogBodyHeight = dialogBodyHeight - 117 - (isOnMobile ? 15 : 30);
   const bottomOffset = 10;
   const height =
     bottomOffset +
-    (collapse
-      ? adjustedDialogBodyHeight - searchFiltersHeight
-      : adjustedDialogBodyHeight);
+    (collapse ? dialogBodyHeight - searchFiltersHeight : dialogBodyHeight);
 
   const props = useSpring({
     to: {
@@ -61,7 +57,12 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
           <Result
             key={result.nodeId}
             result={result}
-            searchMeta={{ query, searchType, searchOptions }}
+            searchMeta={{
+              query,
+              searchType,
+              searchOptions,
+              searchedColumn: result.searchedColumn,
+            }}
           />
         ))}
       </animated.div>

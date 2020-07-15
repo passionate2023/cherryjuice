@@ -1,38 +1,23 @@
-import { modAlertModal, modDeleteNode } from '::sass-modules/index';
-import { EventHandler, default as React } from 'react';
-import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
-import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
-import { AlertType, TAlert } from '::types/react';
-import { ComponentWithTransition } from '::shared-components/transitions/component-with-transition';
-import { transitions } from '::shared-components/transitions/transitions';
+import { modAlertModal } from '::sass-modules/index';
+import { default as React } from 'react';
+import { TAlert } from '::types/react';
+import {
+  BaseModal,
+  BaseModalProps,
+} from '::shared-components/modal/base-modal';
 
-const headerVariant = {
-  [AlertType.Error]: modAlertModal.alertModal__headerDanger,
-  [AlertType.Warning]: modAlertModal.alertModal__headerWarning,
-};
-
-const ModalBody = ({ title, description, type }: TAlert) => {
+const ModalBody = ({ description }: TAlert) => {
   return (
     <>
-      <span className={modAlertModal.alertModal__body}>
-        <span
-          className={`${modAlertModal.alertModal__header} ${headerVariant[type]}`}
-        >
-          {title}
-        </span>
-        <span className={`${modAlertModal.alertModal__message}`}>
-          {description}
-        </span>
+      <span className={`${modAlertModal.alertModal__message}`}>
+        {description}
       </span>
     </>
   );
 };
 
-type ConfirmationModalProps = {
+type ConfirmationModalProps = BaseModalProps & {
   alert: TAlert;
-  show: boolean;
-  onClose: EventHandler<undefined>;
-  buttons: TDialogFooterButton[];
 };
 const ConfirmationModal = ({
   show,
@@ -40,27 +25,14 @@ const ConfirmationModal = ({
   alert,
   buttons,
 }: ConfirmationModalProps) => (
-  <ComponentWithTransition
+  <BaseModal
     show={show}
     onClose={onClose}
-    transitionValues={transitions.t1}
-    className={modAlertModal.alertModal}
+    buttons={buttons}
+    title={alert?.title}
   >
     <ModalBody {...alert} />
-    <div className={modDeleteNode.deleteDocument__buttons}>
-      {buttons.map(({ onClick, label, disabled, testId, lazyAutoFocus }, i) => (
-        <ButtonSquare
-          key={i}
-          className={`${modAlertModal.alertModal__dismissButton}`}
-          onClick={onClick}
-          lazyAutoFocus={lazyAutoFocus}
-          disabled={disabled}
-          testId={testId}
-          text={label}
-        />
-      ))}
-    </div>
-  </ComponentWithTransition>
+  </BaseModal>
 );
 
 export { ConfirmationModal };

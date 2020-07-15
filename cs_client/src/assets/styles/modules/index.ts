@@ -27,6 +27,8 @@ import modSearchDialog from './search/search-dialog.scss';
 import modSearchFilter from './search/search-dialog/search-filter.scss';
 import modSearchResult from './search/search-dialog/search-result.scss';
 import modSearchOptions from './search/search-dialog/search-options.scss';
+import modPickTimeRange from './search/search-dialog/pick-time-range.scss';
+import modTimeFilter from './search/search-dialog/time-filter.scss';
 export {
   appModule,
   modDrawer,
@@ -57,4 +59,6 @@ export {
   modSearchResult,
   modSearchFilter,
   modSearchOptions,
+  modTimeFilter,
+  modPickTimeRange,
 };

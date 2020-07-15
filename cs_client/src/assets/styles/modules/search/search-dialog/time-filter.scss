@@ -1,0 +1,27 @@
+.time-filter {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  align-items: flex-start;
+  justify-content: center;
+}
+.time-filter__select-container {
+  display: flex;
+  color: grey;
+  align-items: center;
+}
+.time-filter__select {
+  padding: 10px 0px;
+  border: none;
+}
+.time-filter__filter-name {
+  padding: 10px;
+  color: grey;
+}
+.time-filter__timestamp {
+  padding: 10px 0;
+  color: grey;
+  cursor: pointer;
+  font-family: monospace;
+  font-weight: bold;
+}

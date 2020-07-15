@@ -36,6 +36,7 @@ type Props = {
 import { connect, ConnectedProps } from 'react-redux';
 import { useSpring, animated } from 'react-spring';
 import { configs } from '::shared-components/transitions/transitions';
+import { TimeFilters } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/time-filters';
 
 const mapState = (state: Store) => ({
   dockedDialog: state.root.dockedDialog,
@@ -69,6 +70,7 @@ const SearchFilters: React.FC<Props & PropsFromRedux> = ({
       <SearchScope />
       <SearchType />
       <SearchOptions />
+      <TimeFilters />
     </animated.div>
   );
 };

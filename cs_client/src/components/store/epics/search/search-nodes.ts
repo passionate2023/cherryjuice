@@ -24,6 +24,8 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
           searchScope,
           searchType,
           searchOptions,
+          createdAtTimeFilter,
+          updatedAtTimeFilter,
         } = store.getState().search;
         const {
           documentId,
@@ -40,6 +42,8 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
               nodeId,
               searchType,
               searchOptions,
+              createdAtTimeFilter,
+              updatedAtTimeFilter,
             },
           }),
         }).pipe(map(ac.__.search.setSearchFulfilled));

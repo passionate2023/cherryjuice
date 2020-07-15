@@ -6,6 +6,8 @@ import {
   SearchScope,
   SearchTarget,
   SearchType,
+  TimeFilter,
+  TimeRange,
 } from '::types/graphql/generated';
 
 const ap = createActionPrefixer('search');
@@ -41,6 +43,16 @@ const ac = {
   ...{
     toggleFilters: _(ap('toggle-filters')),
   },
+  ...{
+    setUpdatedAtTimeFilter: _(
+      ap('set-updated-at-time-filter'),
+      _ => (filter: TimeFilter) => _(filter),
+    ),
+    setCreatedAtTimeFilter: _(
+      ap('set-created-at-time-filter'),
+      _ => (filter: TimeFilter) => _(filter),
+    ),
+  },
 };
 
 type SearchState = 'idle' | 'queued' | 'in-progress' | 'stand-by';
@@ -54,8 +66,15 @@ type State = {
   searchOptions: SearchOptions;
   searchType: SearchType;
   showFilters: boolean;
+  createdAtTimeFilter: TimeFilter;
+  updatedAtTimeFilter: TimeFilter;
 };
 
+const NeutralTimeRange = {
+  rangeName: TimeRange.AnyTime,
+  rangeStart: 0,
+  rangeEnd: 0,
+};
 const initialState: State = {
   query: '',
   searchState: 'idle',
@@ -68,6 +87,8 @@ const initialState: State = {
   },
   searchType: SearchType.Simple,
   showFilters: false,
+  createdAtTimeFilter: NeutralTimeRange,
+  updatedAtTimeFilter: NeutralTimeRange,
 };
 
 const reducer = createReducer(initialState, _ => [
@@ -126,6 +147,16 @@ const reducer = createReducer(initialState, _ => [
     _(ac.toggleFilters, state => ({
       ...state,
       showFilters: !state.showFilters,
+    })),
+  ],
+  ...[
+    _(ac.setCreatedAtTimeFilter, (state, { payload }) => ({
+      ...state,
+      createdAtTimeFilter: payload,
+    })),
+    _(ac.setUpdatedAtTimeFilter, (state, { payload }) => ({
+      ...state,
+      updatedAtTimeFilter: payload,
     })),
   ],
 ]);

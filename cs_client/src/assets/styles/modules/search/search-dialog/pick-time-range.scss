@@ -1,0 +1,23 @@
+.pick-time-range {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+}
+
+.pick-time-range__form {
+  display: flex;
+  flex-direction: column;
+}
+.pick-time-range__form__field {
+  display: flex;
+  padding: 10px;
+}
+.pick-time-range__form__field__input-label {
+  padding: 10px;
+  width: 30px;
+  color: black;
+}
+.pick-time-range__form__field__input {
+  padding: 10px;
+  width: 150px;
+}

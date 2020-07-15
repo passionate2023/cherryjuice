@@ -1,6 +1,7 @@
 import { NodeSearchDto } from '../../dto/node-search.dto';
 import { searchScopeWC } from './helpers/search-scope';
 import { searchTargetWC } from './helpers/search-target/search-target';
+import { timeFilterWC } from './helpers/time-filter';
 
 const nodeSearch = ({
   it,
@@ -14,12 +15,21 @@ const nodeSearch = ({
     documentId,
     searchOptions,
     searchType,
+    createdAtTimeFilter,
+    updatedAtTimeFilter,
   } = it;
   const variables = [];
-  const andWhereClauses = [];
+  const andWhereClauses: string[] = [];
   variables.push(user.id);
   andWhereClauses.push('n."userId" = $' + variables.length);
 
+  andWhereClauses.push(
+    ...timeFilterWC({
+      state: { variables },
+      createdAtTimeFilter,
+      updatedAtTimeFilter,
+    }),
+  );
   andWhereClauses.push(
     searchScopeWC({ variables, searchScope, nodeId, documentId }),
   );

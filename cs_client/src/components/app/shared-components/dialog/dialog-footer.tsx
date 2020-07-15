@@ -4,10 +4,10 @@ import { EventHandler } from 'react';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { DialogHeaderButton } from '::shared-components/dialog/dialog-header';
 export type TDialogFooterButton = {
-  component?: () => React.Component;
   label: string;
-  disabled: boolean;
   onClick: EventHandler<any>;
+  component?: () => React.Component;
+  disabled?: boolean;
   lazyAutoFocus?: number;
   testId?: string;
 };
