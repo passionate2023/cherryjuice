@@ -10,7 +10,7 @@ type HeadlineProps = GenerateHeadlineProps;
 const useHeadline = (args: HeadlineProps) => {
   const [processedHeadline, setProcessedHeadline] = useState<Headline>();
   useEffect(() => {
-    setProcessedHeadline(generateHeadline(args));
+    new Promise(res => res(generateHeadline(args))).then(setProcessedHeadline);
   }, [args.headline]);
   return processedHeadline;
 };

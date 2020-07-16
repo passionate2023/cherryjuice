@@ -59,6 +59,9 @@
   opacity: 0;
 }
 
+.search-dialog__search-results__header {
+  padding: 10px;
+}
 .search-dialog__search-results {
   @include search-div;
   flex-direction: column;

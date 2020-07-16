@@ -1,7 +1,7 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import {
-  NodeSearchResultEntity,
+  NodeSearchResults,
   SearchOptions,
   SearchScope,
   SearchSortOptions,
@@ -27,7 +27,7 @@ const ac = {
     setSearchInProgress: _(ap('set-search-in-progress')),
     setSearchFulfilled: _(
       ap('set-search-fulfilled'),
-      _ => (searchResults: NodeSearchResultEntity[]) => _(searchResults),
+      _ => (result: NodeSearchResults) => _(result),
     ),
   },
   ...{
@@ -66,7 +66,7 @@ type SearchState = 'idle' | 'queued' | 'in-progress' | 'stand-by';
 
 type State = {
   query: string;
-  searchResults: NodeSearchResultEntity[];
+  searchResults: NodeSearchResults;
   searchState: SearchState;
   searchScope: SearchScope;
   searchTarget: SearchTarget[];
@@ -88,7 +88,7 @@ const initialState: State = {
   searchState: 'idle',
   searchScope: SearchScope.allDocuments,
   searchTarget: [SearchTarget.nodeContent, SearchTarget.nodeTitle],
-  searchResults: [],
+  searchResults: { results: [], meta: { elapsedTimeMs: -1 } },
   searchOptions: {
     caseSensitive: false,
     fullWord: false,

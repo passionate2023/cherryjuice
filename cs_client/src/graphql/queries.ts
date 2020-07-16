@@ -4,7 +4,7 @@ import {
   DOCUMENT_SUBSCRIPTIONS as DS,
   Image,
   NodeSearchIt,
-  NodeSearchResultEntity,
+  NodeSearchResults,
   Secrets,
 } from '::types/graphql/generated';
 import { FRAGMENT_USER } from '::graphql/fragments';
@@ -127,21 +127,26 @@ const QUERY_USER = {
 };
 const QUERY_SEARCH = {
   searchNode: {
-    path: (data): NodeSearchResultEntity[] => data?.search.node || [],
+    path: (data): NodeSearchResults => data?.search.node,
     args: (args: { args: NodeSearchIt }): { args: NodeSearchIt } => args,
     query: gql`
       query searchNode($args: NodeSearchIt) {
         search {
           node(searchArgs: $args) {
-            documentId
-            nodeId
-            node_id
-            nodeName
-            documentName
-            headline
-            searchedColumn
-            createdAt
-            updatedAt
+            meta {
+              elapsedTimeMs
+            }
+            results {
+              documentId
+              nodeId
+              node_id
+              nodeName
+              documentName
+              headline
+              searchedColumn
+              createdAt
+              updatedAt
+            }
           }
         }
       }

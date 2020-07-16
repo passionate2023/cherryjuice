@@ -53,7 +53,7 @@ export interface Image {
 }
 
 export interface SearchResultEntity {
-  node: Array<NodeSearchResultEntity>;
+  node: NodeSearchResults;
 }
 
 export interface NodeSearchIt {
@@ -128,6 +128,15 @@ export enum SortNodesBy {
 export enum SortDirection {
   Ascending = 'Ascending',
   Descending = 'Descending',
+}
+
+export interface NodeSearchResults {
+  meta: SearchResultMeta;
+  results: Array<NodeSearchResultEntity | null>;
+}
+
+export interface SearchResultMeta {
+  elapsedTimeMs: number;
 }
 
 export interface NodeSearchResultEntity {
@@ -308,6 +317,8 @@ export interface Resolver {
   Image?: ImageTypeResolver;
   SearchResultEntity?: SearchResultEntityTypeResolver;
   Timestamp?: GraphQLScalarType;
+  NodeSearchResults?: NodeSearchResultsTypeResolver;
+  SearchResultMeta?: SearchResultMetaTypeResolver;
   NodeSearchResultEntity?: NodeSearchResultEntityTypeResolver;
   Secrets?: SecretsTypeResolver;
   AuthUser?: AuthUserTypeResolver;
@@ -519,6 +530,33 @@ export interface SearchResultEntityToNodeResolver<
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
+}
+
+export interface NodeSearchResultsTypeResolver<TParent = any> {
+  meta?: NodeSearchResultsToMetaResolver<TParent>;
+  results?: NodeSearchResultsToResultsResolver<TParent>;
+}
+
+export interface NodeSearchResultsToMetaResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultsToResultsResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface SearchResultMetaTypeResolver<TParent = any> {
+  elapsedTimeMs?: SearchResultMetaToElapsedTimeMsResolver<TParent>;
+}
+
+export interface SearchResultMetaToElapsedTimeMsResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface NodeSearchResultEntityTypeResolver<TParent = any> {

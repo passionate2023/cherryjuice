@@ -43,7 +43,8 @@
     "redux-observable": "^1.2.0",
     "rxjs": "^6.5.5",
     "deox": "^3.2.1",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "@koale/useworker": "^3.2.1"
   },
   "optionalDependencies": {
     "ramda": "^0.27.0",

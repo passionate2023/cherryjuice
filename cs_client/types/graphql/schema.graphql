@@ -87,6 +87,11 @@ type NodeSearchResultEntity {
     updatedAt: Timestamp!
 }
 
+type NodeSearchResults {
+    meta: SearchResultMeta!
+    results: [NodeSearchResultEntity]!
+}
+
 type Query {
     document(file_id: String): [Document]!
     search: SearchResultEntity!
@@ -95,7 +100,11 @@ type Query {
 }
 
 type SearchResultEntity {
-    node(searchArgs: NodeSearchIt): [NodeSearchResultEntity!]!
+    node(searchArgs: NodeSearchIt): NodeSearchResults!
+}
+
+type SearchResultMeta {
+    elapsedTimeMs: Int!
 }
 
 type Secrets {

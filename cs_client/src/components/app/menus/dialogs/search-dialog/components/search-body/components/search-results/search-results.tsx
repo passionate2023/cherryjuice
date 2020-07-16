@@ -7,6 +7,7 @@ import { Result } from '::app/menus/dialogs/search-dialog/components/search-body
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { configs } from '::shared-components/transitions/transitions';
 import { useSpring, animated } from 'react-spring';
+import { ResultsHeader } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-results/components/results-header';
 
 const mapState = (state: Store) => ({
   searchResults: state.search.searchResults,
@@ -53,7 +54,8 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
         ])}
         style={props}
       >
-        {searchResults.map(result => (
+        <ResultsHeader searchResults={searchResults} />
+        {searchResults.results.map(result => (
           <Result
             key={result.nodeId}
             result={result}
