@@ -33,6 +33,17 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.worker\.ts$/,
+        use: {
+          loader: 'worker-loader',
+          options: {
+            name: 'WorkerName.[hash].js',
+            inline: true,
+            publicPath: '/workers/',
+          },
+        },
+      },
+      {
         test: /\.(js|ts|tsx)$/,
         use: [
           {

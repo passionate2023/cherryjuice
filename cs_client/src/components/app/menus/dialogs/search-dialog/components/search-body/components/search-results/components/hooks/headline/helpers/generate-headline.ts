@@ -1,13 +1,14 @@
 import { SearchOptions, SearchType } from '::types/graphql/generated';
-import { reduceWordsToN } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/helpers/helpers/reduce-words-to-n/reduce-words-to-n';
-const reduceWordsFromEnd = reduceWordsToN({
-  nOfWordsToLeave: 6,
-  startFromEnd: true,
-});
-const reduceWordsFromStart = reduceWordsToN({
-  nOfWordsToLeave: 6,
-  startFromEnd: false,
-});
+
+const createTextClamper = (startFromEnd: boolean) => (
+  nOfCharacters: number,
+) => (text: string): string => {
+  return startFromEnd
+    ? text.substring(text.length - nOfCharacters)
+    : text.substring(0, nOfCharacters);
+};
+const reduceWordsFromEnd = createTextClamper(true)(50);
+const reduceWordsFromStart = createTextClamper(false)(50);
 
 type Headline = {
   start: string;
