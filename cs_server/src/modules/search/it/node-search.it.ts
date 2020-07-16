@@ -1,5 +1,6 @@
 import { Field, InputType, registerEnumType } from '@nestjs/graphql';
 import { Timestamp } from '../../document/helpers/graphql-types/timestamp';
+import { SearchSortOptions } from './node-search.it/it/search-sort-options';
 
 export enum SearchScope {
   currentNode = 'current-node',
@@ -88,4 +89,7 @@ export class NodeSearchIt {
 
   @Field(() => TimeFilter)
   updatedAtTimeFilter: TimeFilter;
+
+  @Field(() => SearchSortOptions)
+  sortOptions: SearchSortOptions;
 }

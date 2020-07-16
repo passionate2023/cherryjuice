@@ -5,8 +5,18 @@ import { CustomRange } from '::app/menus/dialogs/search-dialog/components/search
 import { SelectRange } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/filter-controls/components/select-range';
 import { TimeFilter, TimeRange } from '::types/graphql/generated';
 import { TimeFilterAC } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/reducer';
-import { useSpring, animated } from 'react-spring';
+import { animated, useSpring } from 'react-spring';
 import { configs } from '::shared-components/transitions/transitions';
+
+export const useSlideSpring = (on: boolean) => {
+  return useSpring({
+    to: {
+      opacity: on ? 1 : 0,
+      transform: on ? 'translateX(0px)' : 'translateX(-50px)',
+    },
+    config: configs.c2,
+  });
+};
 
 type Props = {
   timeFilter: TimeFilter;
@@ -23,13 +33,7 @@ const FilterControls: React.FC<Props> = ({
     (timeFilter.rangeName as TimeRange) === TimeRange.CustomRange &&
     Boolean(timeFilter?.rangeStart);
 
-  const props = useSpring({
-    to: {
-      opacity: enableFilters ? 1 : 0,
-      transform: enableFilters ? 'translateX(0px)' : 'translateX(-50px)',
-    },
-    config: configs.c2,
-  });
+  const props = useSlideSpring(enableFilters);
   return (
     <animated.div
       className={joinClassNames([modTimeFilter.timeFilter__filterContainer])}
@@ -38,10 +42,7 @@ const FilterControls: React.FC<Props> = ({
       {enableCustomFilter ? (
         <CustomRange timeFilterAC={timeFilterAC} customRange={timeFilter} />
       ) : (
-        <SelectRange
-          timeFilterAC={timeFilterAC}
-          timeFilter={timeFilter}
-        />
+        <SelectRange timeFilterAC={timeFilterAC} timeFilter={timeFilter} />
       )}
     </animated.div>
   );

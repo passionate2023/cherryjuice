@@ -2,6 +2,7 @@ import { NodeSearchDto } from '../../dto/node-search.dto';
 import { searchScopeWC } from './helpers/search-scope';
 import { searchTargetWC } from './helpers/search-target/search-target';
 import { timeFilterWC } from './helpers/time-filter';
+import { orderBy } from './helpers/order-by/order-by';
 
 const nodeSearch = ({
   it,
@@ -17,6 +18,7 @@ const nodeSearch = ({
     searchType,
     createdAtTimeFilter,
     updatedAtTimeFilter,
+    sortOptions,
   } = it;
   const variables = [];
   const andWhereClauses: string[] = [];
@@ -51,7 +53,8 @@ const nodeSearch = ({
         from node as n
         inner join document as d
         on d.id = n."documentId"
-        where ${andWhereClauses.filter(Boolean).join(' and ')};
+        where ${andWhereClauses.filter(Boolean).join(' and ')}
+        ${orderBy({ sortOptions })};
   `;
 
   return {

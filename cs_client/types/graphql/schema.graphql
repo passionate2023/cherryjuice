@@ -157,6 +157,18 @@ enum SearchType {
     Simple
 }
 
+enum SortDirection {
+    Ascending
+    Descending
+}
+
+enum SortNodesBy {
+    CreatedAt
+    DocumentName
+    NodeName
+    UpdatedAt
+}
+
 enum TimeRange {
     AnyTime
     CustomRange
@@ -215,6 +227,7 @@ input NodeSearchIt {
     searchScope: SearchScope!
     searchTarget: [SearchTarget!]!
     searchType: SearchType!
+    sortOptions: SearchSortOptions!
     updatedAtTimeFilter: TimeFilter!
 }
 
@@ -227,6 +240,11 @@ input SaveHtmlIt {
 input SearchOptions {
     caseSensitive: Boolean!
     fullWord: Boolean!
+}
+
+input SearchSortOptions {
+    sortBy: SortNodesBy!
+    sortDirection: SortDirection!
 }
 
 input SignInCredentials {

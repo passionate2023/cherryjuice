@@ -65,6 +65,7 @@ export interface NodeSearchIt {
   searchScope: SearchScope;
   searchTarget: Array<SearchTarget>;
   searchType: SearchType;
+  sortOptions: SearchSortOptions;
   updatedAtTimeFilter: TimeFilter;
 }
 
@@ -110,6 +111,23 @@ export enum SearchType {
   FullText = 'FullText',
   Regex = 'Regex',
   Simple = 'Simple',
+}
+
+export interface SearchSortOptions {
+  sortBy: SortNodesBy;
+  sortDirection: SortDirection;
+}
+
+export enum SortNodesBy {
+  CreatedAt = 'CreatedAt',
+  DocumentName = 'DocumentName',
+  NodeName = 'NodeName',
+  UpdatedAt = 'UpdatedAt',
+}
+
+export enum SortDirection {
+  Ascending = 'Ascending',
+  Descending = 'Descending',
 }
 
 export interface NodeSearchResultEntity {

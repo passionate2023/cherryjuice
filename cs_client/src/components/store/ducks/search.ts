@@ -4,8 +4,11 @@ import {
   NodeSearchResultEntity,
   SearchOptions,
   SearchScope,
+  SearchSortOptions,
   SearchTarget,
   SearchType,
+  SortDirection,
+  SortNodesBy,
   TimeFilter,
   TimeRange,
 } from '::types/graphql/generated';
@@ -53,6 +56,10 @@ const ac = {
       _ => (filter: TimeFilter) => _(filter),
     ),
   },
+  ...{
+    setSortBy: _(ap('set-sort-by'), _ => (options: SortNodesBy) => _(options)),
+    toggleSortDirection: _(ap('toggle-sort-direction')),
+  },
 };
 
 type SearchState = 'idle' | 'queued' | 'in-progress' | 'stand-by';
@@ -68,6 +75,7 @@ type State = {
   showFilters: boolean;
   createdAtTimeFilter: TimeFilter;
   updatedAtTimeFilter: TimeFilter;
+  sortOptions: SearchSortOptions;
 };
 
 const EmptyTimeFilter = {
@@ -89,6 +97,10 @@ const initialState: State = {
   showFilters: false,
   createdAtTimeFilter: EmptyTimeFilter,
   updatedAtTimeFilter: EmptyTimeFilter,
+  sortOptions: {
+    sortBy: SortNodesBy.UpdatedAt,
+    sortDirection: SortDirection.Descending,
+  },
 };
 
 const reducer = createReducer(initialState, _ => [
@@ -157,6 +169,25 @@ const reducer = createReducer(initialState, _ => [
     _(ac.setUpdatedAtTimeFilter, (state, { payload }) => ({
       ...state,
       updatedAtTimeFilter: payload,
+    })),
+  ],
+  ...[
+    _(ac.setSortBy, (state, { payload }) => ({
+      ...state,
+      sortOptions: {
+        ...state.sortOptions,
+        sortBy: payload,
+      },
+    })),
+    _(ac.toggleSortDirection, state => ({
+      ...state,
+      sortOptions: {
+        ...state.sortOptions,
+        sortDirection:
+          state.sortOptions.sortDirection === SortDirection.Descending
+            ? SortDirection.Ascending
+            : SortDirection.Descending,
+      },
     })),
   ],
 ]);

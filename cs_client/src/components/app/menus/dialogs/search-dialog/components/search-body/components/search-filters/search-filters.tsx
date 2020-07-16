@@ -8,6 +8,11 @@ import { joinClassNames } from '::helpers/dom/join-class-names';
 import { useOnWindowResize } from '::hooks/use-on-window-resize';
 import { useRef } from 'react';
 import { ac, Store } from '::root/store/store';
+import { connect, ConnectedProps } from 'react-redux';
+import { useSpring, animated } from 'react-spring';
+import { configs } from '::shared-components/transitions/transitions';
+import { TimeFilters } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/time-filters';
+import { SortOptions } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-sort/sort-options';
 
 export const useSetCssVariablesOnWindowResize = (
   actionCreator,
@@ -33,10 +38,6 @@ export const useSetCssVariablesOnWindowResize = (
 type Props = {
   show: boolean;
 };
-import { connect, ConnectedProps } from 'react-redux';
-import { useSpring, animated } from 'react-spring';
-import { configs } from '::shared-components/transitions/transitions';
-import { TimeFilters } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/time-filters';
 
 const mapState = (state: Store) => ({
   dockedDialog: state.root.dockedDialog,
@@ -66,6 +67,7 @@ const SearchFilters: React.FC<Props & PropsFromRedux> = ({
       ref={ref}
       style={props}
     >
+      <SortOptions />
       <SearchTarget />
       <SearchScope />
       <SearchType />

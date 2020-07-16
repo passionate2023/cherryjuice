@@ -12,18 +12,24 @@ type Props = {
 };
 
 const CustomRange: React.FC<Props> = ({ customRange, timeFilterAC }) => {
-  const customRangeString = `${mapTimestampToDateString(
-    customRange.rangeStart,
-  ).substring(2)} to ${mapTimestampToDateString(customRange.rangeEnd).substring(
-    2,
-  )}`;
+  const customRangeString = [
+    `${mapTimestampToDateString(customRange.rangeStart).substring(2)}`,
+    `${mapTimestampToDateString(customRange.rangeEnd).substring(2)}`,
+  ];
   return (
     <>
       <span
         className={modTimeFilter.timeFilter__timestamp}
         onClick={timeFilterAC.showCustomRangePicker}
       >
-        {customRangeString}
+        {customRangeString.map(string => (
+          <span
+            key={string}
+            className={modTimeFilter.timeFilter__timestamp__item}
+          >
+            {string}
+          </span>
+        ))}
       </span>
       <ButtonCircle
         icon={<Icon name={Icons.material.clear} />}
