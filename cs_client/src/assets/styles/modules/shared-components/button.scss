@@ -51,12 +51,12 @@
   color: white;
   background-color: $dark-grey;
   filter: brightness(0.85);
-  &:hover {
+  &:hover:not([disabled]) {
     filter: brightness(1.1);
-    background-color: $dark-grey;
-    color: white;
+    background-color: $dark-grey ;
+    color: white ;
   }
-  &:active {
+  &:active:not([disabled]) {
     filter: brightness(1.2);
     background-color: $dark-grey;
     color: white;
@@ -73,5 +73,8 @@
 }
 
 .button--rotated45 {
-  transform: rotateZ(45deg);
+  svg,
+  img {
+    transform: rotateZ(45deg);
+  }
 }

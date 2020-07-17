@@ -17,7 +17,7 @@ const useHeadline = (args: HeadlineProps) => {
     });
     headlineWorker.postMessage(args);
     return () => headlineWorker.terminate();
-  }, [args.headline]);
+  }, [args?.searchResult.headline]);
   return processedHeadline;
 };
 

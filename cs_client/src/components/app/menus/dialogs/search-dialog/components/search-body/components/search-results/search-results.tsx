@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { modSearchDialog } from '::sass-modules/';
-
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 import { Result } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-results/components/result';
@@ -29,12 +28,11 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
   collapse,
   searchFiltersHeight,
   dialogBodyHeight,
-  isOnMobile,
   query,
   searchType,
   searchOptions,
 }) => {
-  dialogBodyHeight = dialogBodyHeight - 117 - (isOnMobile ? 15 : 30);
+  dialogBodyHeight = dialogBodyHeight - 117; //- (isOnMobile ? 25 : 30);
   const bottomOffset = 10;
   let height =
     bottomOffset +
@@ -48,26 +46,34 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
   });
   return (
     <>
-      <animated.div
-        className={joinClassNames([
-          modSearchDialog.searchDialog__searchResults,
-        ])}
-        style={props}
-      >
-        <ResultsHeader searchResults={searchResults} />
-        {searchResults.results.map(result => (
-          <Result
-            key={result.nodeId}
-            result={result}
-            searchMeta={{
-              query,
-              searchType,
-              searchOptions,
-              searchedColumn: result.searchedColumn,
-            }}
-          />
-        ))}
-      </animated.div>
+      {!!searchResults?.results.length && query && (
+        <animated.div
+          className={joinClassNames([
+            modSearchDialog.searchDialog__searchResults,
+          ])}
+          style={props}
+          data-collapsed={height===0 ? true : undefined}
+        >
+          {<ResultsHeader searchResults={searchResults} />}
+          <div
+            className={joinClassNames([
+              modSearchDialog.searchDialog__searchResults__list,
+            ])}
+          >
+            {searchResults.results.map(result => (
+              <Result
+                key={result.nodeId}
+                result={result}
+                searchContext={{
+                  query,
+                  searchType,
+                  searchOptions,
+                }}
+              />
+            ))}
+          </div>
+        </animated.div>
+      )}
       <div className={modSearchDialog.searchDialog__searchResults__footer} />
     </>
   );

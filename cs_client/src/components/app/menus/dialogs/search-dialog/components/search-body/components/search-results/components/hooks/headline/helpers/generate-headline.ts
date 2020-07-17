@@ -1,4 +1,8 @@
-import { SearchOptions, SearchType } from '::types/graphql/generated';
+import {
+  NodeSearchIt,
+  NodeSearchResultEntity,
+  SearchType,
+} from '::types/graphql/generated';
 
 const createTextClamper = (startFromEnd: boolean) => (
   nOfCharacters: number,
@@ -17,20 +21,23 @@ type Headline = {
   index: number;
 };
 
+type SearchContext = Pick<
+  NodeSearchIt,
+  'query' | 'searchType' | 'searchOptions'
+>;
+type SearchResult = Pick<NodeSearchResultEntity, 'headline' | 'searchedColumn'>;
 type GenerateHeadlineProps = {
-  query: string;
-  searchType: SearchType;
-  searchOptions: SearchOptions;
-  headline: string;
-  searchedColumn: string;
+  searchContext: SearchContext;
+  searchResult: SearchResult;
 };
 
 const generateHeadline = ({
-  query,
-  searchType,
-  searchOptions: { caseSensitive, fullWord },
-  headline,
-  searchedColumn,
+  searchContext: {
+    query,
+    searchType,
+    searchOptions: { caseSensitive, fullWord },
+  },
+  searchResult: { headline, searchedColumn },
 }: GenerateHeadlineProps): Headline => {
   let res;
   try {
@@ -83,4 +90,4 @@ const generateHeadline = ({
 };
 
 export { generateHeadline };
-export { GenerateHeadlineProps, Headline };
+export { GenerateHeadlineProps, Headline, SearchContext, SearchResult };
