@@ -12,7 +12,7 @@ import { NodeMetaIt } from '../dto/node-meta.it';
 import { AHtmlLine } from '../helpers/rendering/ahtml-to-html';
 import { NodeSearchDto } from '../../search/dto/node-search.dto';
 import { NodeSearchResultEntity } from '../../search/entities/node.search-result.entity';
-import { SearchType } from '../../search/it/node-search.it';
+import { SearchTarget, SearchType } from '../../search/it/node-search.it';
 import { nodeSearch } from '../../search/helpers/pg-queries/node-search';
 
 @Injectable()
@@ -132,7 +132,13 @@ export class NodeRepository extends Repository<Node> {
       it.searchType === SearchType.FullText
     ) {
       searchResults = searchResults.filter(res => {
-        return res.headline.includes(it.query);
+        let ahtmlHeadline = true,
+          nodeNameHeadline = true;
+        if (it.searchTarget.includes(SearchTarget.nodeContent))
+          ahtmlHeadline = res.ahtmlHeadline.includes(it.query);
+        if (it.searchTarget.includes(SearchTarget.nodeTitle))
+          nodeNameHeadline = res.nodeNameHeadline.includes(it.query);
+        return ahtmlHeadline && nodeNameHeadline;
       });
     }
     return searchResults;

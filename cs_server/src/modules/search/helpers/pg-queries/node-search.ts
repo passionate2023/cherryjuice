@@ -3,6 +3,7 @@ import { searchScopeWC } from './helpers/search-scope';
 import { searchTargetWC } from './helpers/search-target/search-target';
 import { timeFilterWC } from './helpers/time-filter';
 import { orderBy } from './helpers/order-by/order-by';
+import { SearchTarget } from '../../it/node-search.it';
 
 const nodeSearch = ({
   it,
@@ -36,7 +37,7 @@ const nodeSearch = ({
     searchScopeWC({ variables, searchScope, nodeId, documentId }),
   );
 
-  const { headline, orWhereClauses, searchedColumn } = searchTargetWC({
+  const { headline, orWhereClauses,  } = searchTargetWC({
     searchTarget,
     searchType,
     variables,
@@ -46,8 +47,9 @@ const nodeSearch = ({
   andWhereClauses.push(orWhereClauses);
   const searchQuery = `
       select
-        ${headline ? `${headline} as headline,` : ''}
-        ${searchedColumn ? `${searchedColumn} as "searchedColumn",` : ''}
+        ${headline?.ahtmlHeadline ? `${headline.ahtmlHeadline} as "ahtmlHeadline",` : ''}
+        ${headline?.nodeNameHeadline ? `${headline.nodeNameHeadline} as "nodeNameHeadline",` : ''}
+        ${searchTarget.includes(SearchTarget.nodeContent) ? `n.ahtml_txt,` : ''}
         n.node_id, n.id as "nodeId", n.name as "nodeName", n."documentId", n."createdAt", n."updatedAt",
         d.name as "documentName"
         from node as n

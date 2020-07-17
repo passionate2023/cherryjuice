@@ -142,8 +142,9 @@ const QUERY_SEARCH = {
               node_id
               nodeName
               documentName
-              headline
-              searchedColumn
+              ahtmlHeadline
+              nodeNameHeadline
+              ahtml_txt
               createdAt
               updatedAt
             }

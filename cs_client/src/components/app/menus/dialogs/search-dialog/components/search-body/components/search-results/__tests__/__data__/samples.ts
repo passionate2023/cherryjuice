@@ -11,7 +11,7 @@ const searchResultsData = {
             nodeName: 'node 1.2',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'hello world\n',
+            ahtml_txt: 'hello world\n',
             createdAt: 1568911874063,
             updatedAt: 1569059344245,
             __typename: 'NodeSearchResultEntity',
@@ -23,7 +23,7 @@ const searchResultsData = {
             nodeName: 'node 2.1',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'hello world\n\n',
+            ahtml_txt: 'hello world\n\n',
             createdAt: 1568911888007,
             updatedAt: 1569059360868,
             __typename: 'NodeSearchResultEntity',
@@ -35,7 +35,7 @@ const searchResultsData = {
             nodeName: 'node 1.1',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'hello world\n',
+            ahtml_txt: 'hello world\n',
             createdAt: 1568911867218,
             updatedAt: 1569059366567,
             __typename: 'NodeSearchResultEntity',
@@ -47,7 +47,7 @@ const searchResultsData = {
             nodeName: 'code-lite',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               "example: logging into the console console.log('hello');\n",
             createdAt: 1578008223968,
             updatedAt: 1578436533072,
@@ -60,7 +60,7 @@ const searchResultsData = {
             nodeName: 'sole code',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               "alert('hellloooooo');\nalert('helllooooooX');\nhaha\n",
             createdAt: 1578440634696,
             updatedAt: 1578442245053,
@@ -73,7 +73,7 @@ const searchResultsData = {
             nodeName: 'newline-edgecase',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'a\nb\n',
+            ahtml_txt: 'a\nb\n',
             createdAt: 1578525249718,
             updatedAt: 1578604263300,
             __typename: 'NodeSearchResultEntity',
@@ -85,7 +85,7 @@ const searchResultsData = {
             nodeName: 'fixed',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1578872318194,
             updatedAt: 1578872318194,
             __typename: 'NodeSearchResultEntity',
@@ -97,7 +97,7 @@ const searchResultsData = {
             nodeName: 'bug2_empty_newline_ignred',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'the instructor suggests\n\ngenerators will solve\n\n\nif a yield\n\ninstead \n\n\n\nyield > pause > then > it.next\n',
             createdAt: 1578695437406,
             updatedAt: 1578954241606,
@@ -110,7 +110,7 @@ const searchResultsData = {
             nodeName: 'issue3_monospace_not_fully_applied',
             documentName: 'file',
             headline: null,
-            searchedColumn: "i  a  f  '' ;\nimport *  f  '' ;\n",
+            ahtml_txt: "i  a  f  '' ;\nimport *  f  '' ;\n",
             createdAt: 1578954421522,
             updatedAt: 1578957219763,
             __typename: 'NodeSearchResultEntity',
@@ -122,7 +122,7 @@ const searchResultsData = {
             nodeName: 'full',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               '\n\n- whenever we do a  return  from a generator, we immediately complete it, and we get the returned value alongside  done:true\n\n- when we call the next method, we can pass messages to the generator\nfunction *  gen () {\n   let  x  =  0  +  ( yield ) ;\n   console . log ( x ) ;  // 5\n   let  y  =  0  +  ( yield ) ;\n   console . log ( y ) ;  // 2\n   yield  x  +  y ;\n}\nlet  it  =  gen () ;\nconsole . log ( it . next ()) ;\nconsole . log ( it . next (5)) ;\nconsole . log ( it . next (2)) ;\n\n\n\n\nexample2\n\n(run is equivalent to it.next)\n',
             createdAt: 1578960525767,
             updatedAt: 1579039219201,
@@ -135,7 +135,7 @@ const searchResultsData = {
             nodeName: 'full',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               "- we can define a regex using either\n\t/le_pattern/le_flags\n\tnew RegExp(le_pattern, le_flags)\n\t\n\t\n- from mdn:  Regular expressions are used with the  RegExp  methods  test  and  exec , and with the  String methods  match ,  replace ,  search , and  split .\n\n\n\n>regex functions\na) regex.test returns a boolean if the pattern matches\nlet  str  =  `Is this This?` ;\n\nconsole . log ( /isd/g . test ( str )) ;  // false\nconsole . log ( /is/g . test ( str )) ;  // true\n\nb) regex.exec returns a regexArray\nlet  str  =  `Is this This?` ;\n\nlet  regex  =  /is/g ;\nconsole . log ( regex . exec ( str )) ;\n// [ 'is', index: 5, input: 'Is this This?', groups: undefined ]\n\nunlike  test , the  exec  method is stateful: \n\n\n>string functions\na)  str.match\nlet  str  =  `Is this This?` ;\n\nlet  regex  =  /is/gi ;\nconsole . log ( str . match ( regex )) ;  // [ 'Is', 'is', 'is' ]\n\nb)  str.matchAll\nlet  str  =  `Is this This?` ;\n\nlet  regex  =  /is/gi ;\nconsole . log ( ...str . matchAll ( regex )) ;  // [ 'Is', index: 0, input: 'Is this This?', groups: undefined ] [ 'is', index: 5, input: 'Is this This?', groups: undefined ] [ 'is', index: 10, input: 'Is this This?', groups: undefined ]\n\nc)  str.replace\nlet  str  =  `Is this This?` ;\n\nlet  regex  =  /is/gi ;\nconsole . log ( str . replace ( regex ,  \"**\" )) ;  // ** th** Th**?\n\nd)  str.search : returns the index of the first match\nlet  str  =  `Is this This?` ;\n\nlet  regex  =  /is/g ;\nconsole . log ( str . search ( regex )) ;  // 5\n\n\n>basic regex playground using  str.replace\n// app.js\n'use strict';\n\nconst output = (str, regex, target) => {\n  target.innerHTML =\n    str.replace(regex, str => `<span>${str}</span>`);\n}\n\nvar str = `Is this This?`;\n\n//var regex = new RegExp(\"is\", \"g\");\nvar regex = /is/gi;\n\noutput(str, regex, document.querySelector('pre'))\n// index.html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Javascript Regular Expressions: Introduction</title>\n  <style>\n    pre {\n      line-height: 2;\n    }\n\n    span {\n      background-color: #eee;\n      padding: 1px;\n      outline: 1px solid #999;\n    }\n\n  </style>\n</head>\n<body>\n  <pre></pre>\n  <script src=\"app.js\"></script>\n</body>\n</html>\n\n\n*\n>my react alternative\n\n- full code\nimport  {  useState  }  from  'react' ;\nimport *  as  React  from  'react' ;\n\nfunction  createMarkup (str ,  { regex ,  flag }) {\n   let  regexExpression ;\n   try  {\n     regexExpression  =  new  RegExp (regex ,  flag) ;\n   }  catch  (e) {\n     console . log (e) ;\n     return  {  __html :  ' < h1 style=\"background: red\" >  wrong regex  </ h1 > '  } ;\n   }\n\n   return  {\n     __html :  str . replace (\n       regexExpression ,\n       str  =>\n         ` < span style=\"background-color: #e44234; padding: 1px; outline: 1px solid #0b1621;\" > $ {str}</ span > ` ,\n     ) ,\n   } ;\n}\n\nfunction  Regex () {\n   const  [ str ,  setStr ]  =  useState ( 'Is this This?' ) ;\n   const  [ regex ,  setRegex ]  =  useState ( 'is' ) ;\n   const  [ flag ,  setFlag ]  =  useState ( 'gi' ) ;\n\n   return  (\n    < div\n       style = {{\n         display :  'flex' ,\n         flexDirection :  'column' ,\n         width :  200 ,\n         margin :  'auto' ,\n       }}\n    >\n      < label > text </ label >\n      < textarea\n         onChange = {e  =>  setStr (e . target . value )}\n         placeholder = { 'string' }\n         value = { str }\n      />\n      < label > regex </ label >\n      < input\n         type =\"text\"\n         onChange = {e  =>  setRegex (e . target . value )}\n         placeholder = { 'regex' }\n         value = { regex }\n      />\n      < label > flags </ label >\n\n      < input\n         type =\"text\"\n         onChange = {e  =>  setFlag (e . target . value )}\n         placeholder = { 'flag' }\n         value = { flag }\n      />\n      < div  style = {{  background :  '#f6d4d9' ,  marginTop :  '10px'  }}>\n        < div  style = {{  margin :  '10px'  }}>\n          { ' ' }\n          < h3 >{ `/ $ { regex } / $ { flag } ` }</ h3 >\n          < pre\n             style = {{  lineHeight :  2 }}\n             dangerouslySetInnerHTML = { createMarkup ( str ,  {  regex ,  flag  })}\n          />\n        </ div >\n      </ div >\n    </ div >\n  ) ;\n}\n\nexport  {  Regex  } ;\n\n*\n",
             createdAt: 1579042482131,
             updatedAt: 1579042608798,
@@ -148,7 +148,7 @@ const searchResultsData = {
             nodeName: 'issue5_offset_images_and_tables_and_code_box',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               '- fr  and  split .\n\n\n\n>regex functions\na) regex.test returns a boolean if the pattern matches\nlet  str  =  `Is this This?` ;\n\nconsole . log ( /isd/g . test ( str )) ;  // false\nconsole . log ( /is/g . test ( str )) ;  // true\n\nb) regex.exec returns a regexArray\nlet  str  =  `Is this This?` ;\n\nlet  regex  =  /is/g ;\nconsole . log ( regex . exec ( str )) ;\n// [ \'is\', index: 5, input: \'Is this This?\', groups: undefined ]\n\nunlike  test , the  exec  method is stateful: \n\n\n>string functions\na)  str.match\nlet  str  =  `Is this This?` ;\n\n\n>basic regex playground using  str.replace\n// app.js\n\'use strict\';\n\nconst output = (str, regex, target) => {\n  target.innerHTML =\n    str.replace(regex, str => `<span>${str}</span>`);\n}\n\nvar str = `Is this This?`;\n\n//var regex = new RegExp("is", "g");\nvar regex = /is/gi;\n\noutput(str, regex, document.querySelector(\'pre\'))\n// index.html\n<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>Javascript Regular Expressions: Introduction</title>\n  <style>\n    pre {\n      line-height: 2;\n    }\n\n    span {\n      background-color: #eee;\n      padding: 1px;\n      outline: 1px solid #999;\n    }\n\n  </style>\n</head>\n<body>\n  <pre></pre>\n  <script src="app.js"></script>\n</body>\n</html>\n\n\n*\n>my react alternative\n\n- full code\ni\n',
             createdAt: 1579042468223,
             updatedAt: 1579124312068,
@@ -161,7 +161,7 @@ const searchResultsData = {
             nodeName: 'table',
             documentName: 'file',
             headline: null,
-            searchedColumn: ' dzadza\n   \n',
+            ahtml_txt: ' dzadza\n   \n',
             createdAt: 1578442245054,
             updatedAt: 1579216036221,
             __typename: 'NodeSearchResultEntity',
@@ -173,7 +173,7 @@ const searchResultsData = {
             nodeName: 'mini',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'there is a difference between async and parallism. js\'s async is not parallalism\n\n" non-parallelism would be like you waiting in line at amusement park for a roller coaster. Lots of people in line, the roller coaster has 30 seats on it but  only one person \n',
             createdAt: 1580076064537,
             updatedAt: 1580076871949,
@@ -186,7 +186,7 @@ const searchResultsData = {
             nodeName: 'new-line from thinair',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               "there is a difference between async and parallism. js's async is not parallalism\n\n\" non-parallelism would be like you waiting in line at amusement park for a roller coaster. Lots of people in line, the roller coaster has 30 seats on it but  only one person can ride at any given  moment\non the other hand, if  30 people are experiencing the roller coaster at exactly the same instant. That's more parallelism \"\n\n-  in a computing sense, parallelism is expressed through threads\nin asynchronicity, our js program runs only on a single thread even though the browser may have access to multiple threads and even the JavaScript engine node for example could use hundreds of threads in the background.\nat any given instant there is only one line of JavaScript running in the JavaScript engine\n\n- we  could in theory spend multiple instances of the JavaScript engine on entirely separate threads, but they couldn't communicate in any useful way\n\nw eb workers are an example of trying to bridge that gap, but that's not a JavaScript thing, that's a browser thing\nas far as js is concerned,  those two things don't know about each other they don't have any overlap, they're not sharing variables , however  web workers do give us a communication path through asynchronous events , which themselves rely  on the single threaded notion through the event loop\n",
             createdAt: 1580075744535,
             updatedAt: 1580083674205,
@@ -199,7 +199,7 @@ const searchResultsData = {
             nodeName: 'text link image table code',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               "simlple text\nbold red  green-insider-sub  text\nconst  RichText :  React . FC < Props > \nnode url:  node2\nhttp url:  wikipedia  \nfolder url:  temp folder\nfile url:  txt file\n\n\nconsole.log('hello');\n",
             createdAt: 1578619489036,
             updatedAt: 1580864785228,
@@ -212,7 +212,7 @@ const searchResultsData = {
             nodeName: 'text',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'simlple text\nbold red  green-insider-sub  text\nconst  RichText :  React . FC < Props > \n',
             createdAt: 1580864794188,
             updatedAt: 1580951040435,
@@ -225,7 +225,7 @@ const searchResultsData = {
             nodeName: 'reverse-rendering',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1580864765269,
             updatedAt: 1580951648292,
             __typename: 'NodeSearchResultEntity',
@@ -237,7 +237,7 @@ const searchResultsData = {
             nodeName: 'code',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               "\nexample: logging into the console\n\nexample: alerting the user\n\n alert('hello');\n\nconsole.log('hello');\nArray.from(3)\nconsole.log('hello');\nArray.from(3)\n\nconsole.log('hello');\nArray.from(3)\n\nconsole.log('hello');\nArray.from(3)\nconsole.log('hello');\nArray.from(3)\n\nconsole.log('hello');\nArray.from(3)\nconsole.log('hello');\nArray.from(3)\nconsole.log('hello');\nArray.from(3)\n\nconsole.log('hello');\nArray.from(3)\n\nconsole.log('hello');\nArray.from(3)\nconsole.log('hello');\nArray.from(3)\n\nconsole.log('hello');\nArray.from(3)\nconsole.log('hello');\nArray.from(3)\nconsole.log('hello');\nArray.from(3)\n\nconsole.log('hello');\nArray.from(3)\n\nconsole.log('hello');\nArray.from(3)\nconsole.log('hello');\nArray.from(3)\n\nconsole.log('hello');\nArray.from(3)\nconclusion: foo bar!\n\n    \n\n",
             createdAt: 1578005111885,
             updatedAt: 1581383960568,
@@ -250,7 +250,7 @@ const searchResultsData = {
             nodeName: 'issue6',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               '- we can think of callbacks as a continuation, a secondary half that runs after a time-gap that separates it from the first half\n"w hen we refer to functions as continuations, what we mean is, we did the first half of our program  now, and we wrap the seco nd half of our program up in a callback "\n\n- [ ! ] the instructor suggests that callback hell doesnt actually have to do with indentation, as we could rewrite a "callback hell" without nesting\n \nthe instructor suggests that t here are two conceptually deficient  problems with callbacks\n',
             createdAt: 1579124827588,
             updatedAt: 1581384083124,
@@ -263,7 +263,7 @@ const searchResultsData = {
             nodeName: 'issue7',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'promises can be chained together\n>example\n\nthe  .then  on line 5 will "magically" wait for the promise from line 3\n\n>example2\n\n',
             createdAt: 1579125541946,
             updatedAt: 1581384124535,
@@ -276,7 +276,7 @@ const searchResultsData = {
             nodeName: 'link style overriden',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'bold  red  text  with blue  bg\n',
+            ahtml_txt: 'bold  red  text  with blue  bg\n',
             createdAt: 1582130984349,
             updatedAt: 1582130984724,
             __typename: 'NodeSearchResultEntity',
@@ -288,7 +288,7 @@ const searchResultsData = {
             nodeName: 'description',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'style is not applyed on the standalone space\n\n',
+            ahtml_txt: 'style is not applyed on the standalone space\n\n',
             createdAt: 1582475200482,
             updatedAt: 1582475208964,
             __typename: 'NodeSearchResultEntity',
@@ -300,7 +300,7 @@ const searchResultsData = {
             nodeName: 'closed',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1582454896022,
             updatedAt: 1582551182945,
             __typename: 'NodeSearchResultEntity',
@@ -312,7 +312,7 @@ const searchResultsData = {
             nodeName: 'white spaces',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               '• trimmed\nric h\n\ntext\n\n• space at end-1\nric h \n\ntext\n\n• space at mid\nric h\n \ntext\n\n• space at end-2\nric h\n\ntext  \n\n• space at end-1 and mid\nric h  \n \ntext\n\n• space at end-1 and mid and end-2\nric h  \n \ntext  \n\n• 2 spaces at end-1\nric h   \n\ntext\n',
             createdAt: 1582485079705,
             updatedAt: 1582555792623,
@@ -325,7 +325,7 @@ const searchResultsData = {
             nodeName: 'code',
             documentName: 'file',
             headline: null,
-            searchedColumn: "some\n  console.log('hello');  \ntext\n\n",
+            ahtml_txt: "some\n  console.log('hello');  \ntext\n\n",
             createdAt: 1582125432580,
             updatedAt: 1582556931198,
             __typename: 'NodeSearchResultEntity',
@@ -337,7 +337,7 @@ const searchResultsData = {
             nodeName: 'standalone tag',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               "so me\nsome\n \ntext\nte xt\n\nsome\nso me\n  console.log('hello');  \nte xt\ntext\n\n\n\n\n",
             createdAt: 1582556890282,
             updatedAt: 1582562347386,
@@ -350,7 +350,7 @@ const searchResultsData = {
             nodeName: 'deleted start root',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'text   bold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\n\nhalo   bold  red text with blue  bg\n',
             createdAt: 1582565231063,
             updatedAt: 1582565632333,
@@ -363,7 +363,7 @@ const searchResultsData = {
             nodeName: 'apply-to-dom',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1582565294295,
             updatedAt: 1582635341575,
             __typename: 'NodeSearchResultEntity',
@@ -375,7 +375,7 @@ const searchResultsData = {
             nodeName: 'offset',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'bold  red text with blue  bg\n \ntext   bold  red text with blue  bg\nbold  red text with blue  bg\n\n',
             createdAt: 1582557295266,
             updatedAt: 1582635351497,
@@ -388,7 +388,7 @@ const searchResultsData = {
             nodeName: 'general',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'bold  red text with blue  bg\nbold  red text with blue  bg\n\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\n \ntext   bold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\n\n\n\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\n  .bold red text with blue bg\nbold red text with blue bg\nbold red text with blue bg\nbold red text with blue bg\nbold red text with blue bg\nbold red text with blue bg\nbold red text with blue bg simple text  \ntext   bold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\n',
             createdAt: 1582567972680,
             updatedAt: 1582635354314,
@@ -401,7 +401,7 @@ const searchResultsData = {
             nodeName: 'undefined startElement',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'bold  red text with blue  bg\n \ntext   bold  red text with blue  bg\n',
             createdAt: 1582567878411,
             updatedAt: 1582635356817,
@@ -414,7 +414,7 @@ const searchResultsData = {
             nodeName: 'justification',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'bold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg  simple text\n\nbold  red  _link_  with blue  bg\n\nsimple text  bold  red text with blue  bg\n\n',
             createdAt: 1583070079328,
             updatedAt: 1583070254301,
@@ -427,7 +427,7 @@ const searchResultsData = {
             nodeName: 'code tags',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'sam ple  tex t\n',
+            ahtml_txt: 'sam ple  tex t\n',
             createdAt: 1582833307865,
             updatedAt: 1583152704392,
             __typename: 'NodeSearchResultEntity',
@@ -439,7 +439,7 @@ const searchResultsData = {
             nodeName: 'selection starts with space',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               "first second\n$mdc-theme-background :  floralwhite ;\n@import  '~@material/linear-progress/mdc-linear-progress' ;\nport  '~@mate\n\thello\n",
             createdAt: 1583301795608,
             updatedAt: 1583301982792,
@@ -452,7 +452,7 @@ const searchResultsData = {
             nodeName: 'wikipedia',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               ' \nPublic support [ edit ]\n Acceptance of human evolution in various countries. [111] [112] There does not appear to be significant correlation between believing in evolution and understanding evolutionary science. [113] [114]  In some countries, creationist beliefs (or a lack of support for evolutionary theory) are relatively widespread, even garnering a majority of public opinion. A study published in  Science  compared attitudes about evolution in the United States, 32 European countries (including Turkey) and  Japan . The only country where acceptance of evolution was lower than in the United States was  Turkey  (25%). Public acceptance of evolution was most widespread (at over 80% of the population) in  Iceland ,  Denmark  and  Sweden . [115]\n\nAfghanistan [ edit ]\nAccording to the Pew Research Center, Afghanistan has the lowest acceptance of evolution in the Muslim countries. Only 26% of people in  Afghanistan  accept evolution. 62% deny human evolution and believe that humans have always existed in their present form. [116]\n\n',
             createdAt: 1583386927630,
             updatedAt: 1583386940198,
@@ -465,7 +465,7 @@ const searchResultsData = {
             nodeName: 'mdn',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'The  Node.cloneNode()  method returns a duplicate of the node on which this method was called.\nSyntax\nlet newClone = node.cloneNode([deep]) node     The node to be cloned. newClone    The new node, cloned from node.\n\n',
             createdAt: 1583386940201,
             updatedAt: 1583417366816,
@@ -478,7 +478,7 @@ const searchResultsData = {
             nodeName: 'mdn2',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\nnode\n\tThe node to be cloned.\n',
+            ahtml_txt: '\nnode\n\tThe node to be cloned.\n',
             createdAt: 1583390349730,
             updatedAt: 1583749570534,
             __typename: 'NodeSearchResultEntity',
@@ -490,7 +490,7 @@ const searchResultsData = {
             nodeName: 'webstorm',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               "import  {  escapeHtml  }  from  '::helpers/escape-html' ;\nimport  {  flattenAHtml  }  from  '::helpers/execK/helpers/html-to-ahtml/steps/flatten-ahtml' ;\nimport  {\n   flattenLines ,\n   isBlock\n}  from  '::helpers/execK/helpers/html-to-ahtml/steps/flatten-lines' ;\n\nconst  getStyles  =  el  =>\n   (el . style . cssText . match ( / ([ \\w\\- ] + )(?= : ) /g )  ||  []) . reduce (\n    (acc ,  key)  =>  ({  ... acc ,  [key] :  el . style [key] }) ,\n     {}\n  ) ;\n\ntype  TProps  =  {\n   DDOEs :  Node [] ;\n   // startElement;\n  // endElement;\n  // coordinates: {\n  //   indexOfEndLine;\n  //   indexOfEndElement;\n  //   indexOfStartLine;\n  //   indexOfStartElement;\n  // };\n   options ?:  {\n     useObjForTextNodes ?:  boolean ;\n     serializeNonTextElements ?:  boolean ;\n     // includeDatasetInTextElements?: boolean;\n    // includeRefToEl?: boolean;\n   } ;\n} ;\n\nconst  getAttributes  =  (ignoredAttributes :  string [])  =>  el  =>\n   // @ts-ignore\n   Object . fromEntries (\n     Array .from (el . attributes )\n       . filter (({ name })  => ! ignoredAttributes . includes (name))\n       . map (({ name ,  value })  =>  [\n        name ,\n         name  ===  'style'  ?  getStyles (el)  :  value\n      ])\n  ) ;\n\nconst  getTags  =  (list  =  [])  =>  el  =>  [\n   ... list ,\n   [el . localName ,  getAttributes ([])(el)] ,\n   ... (el . localName  ===  'table'\n     ?  []\n     :  Array .from (el . children ) . flatMap ( getTags (list)))\n] ;\n\nconst  flattenDDOEs  =  ({ DDOEs })  =>  {\n   const  flat  =  [] ;\n   DDOEs . forEach (DDOE  =>  {\n     Array .from (DDOE . childNodes ) . forEach (child  =>  {\n       const  DDOEClone  =  DDOE . cloneNode () ;\n       DDOEClone . innerHTML  =\n         child . nodeType  ===  Node . TEXT_NODE  ?  child . wholeText  :  child . outerHTML ;\n       flat . push ( DDOEClone ) ;\n     }) ;\n     // if (isBlock(DDOE)) flat.push(document.createElement('br'));\n   }) ;\n   return  flat ;\n} ;\n\nconst  getAHtml  =  ({\n  DDOEs ,\n   // coordinates,\n  // startElement,\n  // endElement,\n   options  =  {}\n} :  TProps )  =>  {\n   // const flatList = flattenLines({lines});\n   const  flatList  =  flattenDDOEs ({ DDOEs }) ;  //DDOEs.flatMap(DDOE => Array.from(DDOE.childNodes));\n   const  state  =  {  offset :  0 } ;\n   const  abstractHtml  =  ( flatList  as any []) . reduce ((\n    acc ,\n     el  //: HTMLElement | HTMLTableElement | HTMLImageElement | HTMLAnchorElement\n   )  =>  {\n     if  (el . nodeType  ===  Node . ELEMENT_NODE  ||  el . nodeType  ===  Node . TEXT_NODE ) {\n       if  (el . localName  ===  'br' ) {\n        acc . push ( ' \\n ' ) ;\n         state . offset  +=  1 ;\n       }  else  {\n         let  commonAttributes  =  {\n           tags :\n             el . nodeType  ===  Node . ELEMENT_NODE\n               ?  getTags ([])(el)  //.filter(([tagName]) => tagName !== 'br')\n               :  []\n        } ;\n         if  (el . localName  ===  'code'  &&  el . classList . contains ( 'rich-text__code' ))\n          acc . push (\n            options . serializeNonTextElements\n               ?  {\n                   ... commonAttributes ,\n                   type :  'code' ,\n                   outerHTML :  el . outerHTML\n                 }\n               :  {\n                   ... commonAttributes ,\n                   type :  'code' ,\n                   _ :  el . innerText ,\n                   other_attributes :  {\n                     offset :  state . offset ++,\n                     do_highl_bra : + el . dataset . do_highl_bra ,\n                     is_width_pix : + el . dataset . is_width_pix ,\n                     width_raw : + el . dataset . width_raw ,\n                     syntax :  el . dataset . syntax\n                   }\n                }\n          ) ;\n         else if  (el . localName  ===  'img' )\n           if  (el . dataset )\n             // existing image\n             acc . push (\n              options . serializeNonTextElements\n                 ?  {\n                     ... commonAttributes ,\n                     type :  'png' ,\n                     outerHTML :  el . outerHTML\n                   }\n                 :  {\n                     ... commonAttributes ,\n                     type :  'png' ,\n                     other_attributes :  {\n                       offset :  state . offset ++\n                     }\n                  }\n            ) ;\n           // new image\n           else\n             acc . push (\n              options . serializeNonTextElements\n                 ?  {\n                     ... commonAttributes ,\n                     type :  'png' ,\n                     outerHTML :  el . outerHTML\n                   }\n                 :  {\n                     ... commonAttributes ,\n                     type :  'png' ,\n                     src :  el . src ,\n                     other_attributes :  {\n                       offset :  state . offset ++\n                     }\n                  }\n            ) ;\n         else if  (el . localName  ===  'table' )\n          acc . push (\n            options . serializeNonTextElements\n               ?  {\n                   ... commonAttributes ,\n                   type :  'table' ,\n                   outerHTML :  el . outerHTML\n                 }\n               :  {\n                   ... commonAttributes ,\n                   type :  'table' ,\n                   thead :  el . tHead . innerText ,\n                   tbody :  el . tBodies [0] . innerText ,\n                   other_attributes :  {\n                     offset :  state . offset ++,\n                     col_min_width : + el . dataset . col_min_width ,\n                     col_max_width : + el . dataset . col_max_width\n                   }\n                }\n          ) ;\n         else if  (el . localName  ===  'a' ) {\n           state . offset  +=  el . innerText . length ;\n           acc . push ({\n             ... commonAttributes ,\n             _ :  el . innerText ,\n             other_attributes :  {\n               type :  el . dataset . type ,\n               href :  el . href\n             }\n          }) ;\n         }  else if  (el . nodeType  ===  Node . TEXT_NODE ) {\n           state . offset  +=  el . wholeText . length ;\n           console . log ( 'pushing the element' ,  el) ;\n           if  (options . useObjForTextNodes ) {\n            acc . push ({\n               ... commonAttributes ,\n               _ :  escapeHtml (el . wholeText )\n            }) ;\n           }  else  {\n            acc . push ( escapeHtml (el . wholeText )) ;\n           }\n        }  else  {\n           const  {  numberOfNewLines ,  newAcc  }  =  flattenAHtml ({\n            acc ,\n             aHtml :  {\n               _ :  escapeHtml (el . textContent ) ,\n               ... commonAttributes\n             }\n          }) ;\n           acc  =  newAcc ;\n           state . offset  +=  el . textContent . length  +  numberOfNewLines ;\n           // acc.push({\n          //   _: el.textContent,\n          //   ...commonAttributes\n          // });\n         }\n      }\n       // const insertedAHtml = acc[acc.length - 1];\n      // if (insertedAHtml._)\n      //   acc = replaceNewLineCharacterWithBreakLine(insertedAHtml, acc);\n     }\n     return  acc ;\n   } ,  []) ;\n   return  {  abstractHtml  } ;\n} ;\n\nexport  {  getAHtml  } ;\n\n",
             createdAt: 1583749570548,
             updatedAt: 1583749572246,
@@ -503,7 +503,7 @@ const searchResultsData = {
             nodeName: 'richtext multiline',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'red text\ngreen text\nblue text\n',
+            ahtml_txt: 'red text\ngreen text\nblue text\n',
             createdAt: 1583917337525,
             updatedAt: 1583917338245,
             __typename: 'NodeSearchResultEntity',
@@ -515,7 +515,7 @@ const searchResultsData = {
             nodeName: 'node y',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               '\n1. hello\n2. world!\n3. :D\n• hello\n• world\n• :D\n☐ hello\n☐ world\n☐ :D\n',
             createdAt: 1576532756399,
             updatedAt: 1583926059156,
@@ -528,7 +528,7 @@ const searchResultsData = {
             nodeName: 'link',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'simple text  http://google.com   rich text\nsim ple\n\n text  http://google. co m   rich  text\nhttp://google.com  dz\n',
             createdAt: 1582124983137,
             updatedAt: 1584007852759,
@@ -541,7 +541,7 @@ const searchResultsData = {
             nodeName: '?',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'bold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg  simple text\n\nbold  red  _link_  with blue  bg\n\nsimple text  bold  red text with blue  bg\n\n',
             createdAt: 1581553669558,
             updatedAt: 1584010412568,
@@ -554,7 +554,7 @@ const searchResultsData = {
             nodeName: 'text',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'hello world\n',
+            ahtml_txt: 'hello world\n',
             createdAt: 1584010412596,
             updatedAt: 1584010413569,
             __typename: 'NodeSearchResultEntity',
@@ -566,7 +566,7 @@ const searchResultsData = {
             nodeName: 'wb 3',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'fst\nscd  thr   for\nfiv\n',
+            ahtml_txt: 'fst\nscd  thr   for\nfiv\n',
             createdAt: 1584338137307,
             updatedAt: 1584338137835,
             __typename: 'NodeSearchResultEntity',
@@ -578,7 +578,7 @@ const searchResultsData = {
             nodeName: 'text and image',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'hello world\n\n\n',
+            ahtml_txt: 'hello world\n\n\n',
             createdAt: 1584366971578,
             updatedAt: 1584367369935,
             __typename: 'NodeSearchResultEntity',
@@ -590,7 +590,7 @@ const searchResultsData = {
             nodeName: 'wb 5',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'hello world\n\n',
+            ahtml_txt: 'hello world\n\n',
             createdAt: 1584354142842,
             updatedAt: 1584432811823,
             __typename: 'NodeSearchResultEntity',
@@ -602,7 +602,7 @@ const searchResultsData = {
             nodeName: 'pasting',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               "first second\n$mdc-theme-background :  floralwhite ;\n@import  '~@material/linear-progress/mdc-linear-progress' ;\nport  '~@mate  \n",
             createdAt: 1583154184916,
             updatedAt: 1584527166844,
@@ -615,7 +615,7 @@ const searchResultsData = {
             nodeName: '1',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\t\tyacine mohamdi\n\tkamel  3azira\n',
+            ahtml_txt: '\t\tyacine mohamdi\n\tkamel  3azira\n',
             createdAt: 1584527161864,
             updatedAt: 1584527974486,
             __typename: 'NodeSearchResultEntity',
@@ -627,7 +627,7 @@ const searchResultsData = {
             nodeName: 'structure',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'multiline text is selected\n\tpress tab\n\t\tinsert a tab at the start of each line\n\tpress shift+tab\n\t\tremove a tab from the start of each line\n',
             createdAt: 1584454382698,
             updatedAt: 1584527979001,
@@ -640,7 +640,7 @@ const searchResultsData = {
             nodeName: 'wb 4',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'one two   three four\nfive six\n\n  three four\nfive six\n\none two hello world  three four\nfive six\n\nhello insideworld  three four\nfive six\n\none two    three four\nfive six\n\n    three four\nfive six\n',
             createdAt: 1583154193013,
             updatedAt: 1584528985024,
@@ -653,7 +653,7 @@ const searchResultsData = {
             nodeName: 'rich text',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'multiline text is selected\n\tpress tab\n\t\tinsert a tab at the start of each line\n\tpress shift+tab\n\t\tremove a tab from the start of each line\n',
             createdAt: 1584527979018,
             updatedAt: 1584533254343,
@@ -666,7 +666,7 @@ const searchResultsData = {
             nodeName: 'empty lines',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'multiline text is selected\n\tpress tab\n\t\tinsert a tab at the start of each line\n\n\n\tpress shift+tab\n\t\tremove a tab from the start of each line\n',
             createdAt: 1584533247465,
             updatedAt: 1584533274389,
@@ -679,7 +679,7 @@ const searchResultsData = {
             nodeName: 'images',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'one two   three four\nfive six\n\n\n  three four\nfive six\n\none two hello world  three four\nfive six\n\nhello insideworld  three four\nfive six\n\none two    three four\nfive six\n\n    three four\nfive six\n',
             createdAt: 1584528985042,
             updatedAt: 1584533978357,
@@ -692,7 +692,7 @@ const searchResultsData = {
             nodeName: 'simple text',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'yacine mohamdi\nkamel 3azira\n',
+            ahtml_txt: 'yacine mohamdi\nkamel 3azira\n',
             createdAt: 1584432815382,
             updatedAt: 1584599003832,
             __typename: 'NodeSearchResultEntity',
@@ -704,7 +704,7 @@ const searchResultsData = {
             nodeName: 'wb',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               "// childrenElementsOfStartDDOE = [left, ...pastedData].map(node =>\n// toNodes(node === '\\n' ? `<br>` : aHtmlToElement({ node })),\n// );\n// const childrenElementsOfEndDDOE = [right].map(node =>\n//   toNodes(aHtmlToElement({ node })),\n// );\n",
             createdAt: 1584598995374,
             updatedAt: 1584624108407,
@@ -717,7 +717,7 @@ const searchResultsData = {
             nodeName: 'justification',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'left\nmiddle\nright\nhello\n',
+            ahtml_txt: 'left\nmiddle\nright\nhello\n',
             createdAt: 1583070672572,
             updatedAt: 1584874238141,
             __typename: 'NodeSearchResultEntity',
@@ -729,7 +729,7 @@ const searchResultsData = {
             nodeName: 'node 1',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1568911850917,
             updatedAt: 1585660590532,
             __typename: 'NodeSearchResultEntity',
@@ -741,7 +741,7 @@ const searchResultsData = {
             nodeName: 'test',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'haha     o \nnormal text  bold red text with blue bg  italic :o t/// ext  \n---\nred text   bold italic blue text with pink bg   sourlign2  mono pink text\nthis is h1 green stroke through text\nthis is the second line, size h2, in pink\nthis is h3\nthis is sup   this is sub   this is zero\n\n\nthis is the 8th line. the previous two lines was empty\nthis  is  the 9th  line. the previous line was empty\n\ncode normal  bold   small\ncode normal  bold   small\ndza dz\n',
             createdAt: 1580951040447,
             updatedAt: 1585661131530,
@@ -754,7 +754,7 @@ const searchResultsData = {
             nodeName: 'new node',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1585661131564,
             updatedAt: 1585661131564,
             __typename: 'NodeSearchResultEntity',
@@ -766,7 +766,7 @@ const searchResultsData = {
             nodeName: 'new node 2',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1585666624153,
             updatedAt: 1585666624153,
             __typename: 'NodeSearchResultEntity',
@@ -778,7 +778,7 @@ const searchResultsData = {
             nodeName: 'closed',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1585748348847,
             updatedAt: 1585748348847,
             __typename: 'NodeSearchResultEntity',
@@ -790,7 +790,7 @@ const searchResultsData = {
             nodeName: 'rendering',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1585748652992,
             updatedAt: 1585748658159,
             __typename: 'NodeSearchResultEntity',
@@ -802,7 +802,7 @@ const searchResultsData = {
             nodeName: 'code box has invisible offset',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'some  hello world text\n',
+            ahtml_txt: 'some  hello world text\n',
             createdAt: 1585742092091,
             updatedAt: 1585748665000,
             __typename: 'NodeSearchResultEntity',
@@ -814,7 +814,7 @@ const searchResultsData = {
             nodeName: 'closed',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1585751996371,
             updatedAt: 1585751996371,
             __typename: 'NodeSearchResultEntity',
@@ -826,7 +826,7 @@ const searchResultsData = {
             nodeName: 'colored titles',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1585768704793,
             updatedAt: 1585768704793,
             __typename: 'NodeSearchResultEntity',
@@ -838,7 +838,7 @@ const searchResultsData = {
             nodeName: 'bold green title with warning icon',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1579211146642,
             updatedAt: 1585768707161,
             __typename: 'NodeSearchResultEntity',
@@ -850,7 +850,7 @@ const searchResultsData = {
             nodeName: 'bold purple title with warning icon',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1579211050108,
             updatedAt: 1585768709016,
             __typename: 'NodeSearchResultEntity',
@@ -862,7 +862,7 @@ const searchResultsData = {
             nodeName: 'indentation',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1584527166856,
             updatedAt: 1585834246948,
             __typename: 'NodeSearchResultEntity',
@@ -874,7 +874,7 @@ const searchResultsData = {
             nodeName: 'images',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\nhello world\n\n',
+            ahtml_txt: '\nhello world\n\n',
             createdAt: 1585834818317,
             updatedAt: 1585835382975,
             __typename: 'NodeSearchResultEntity',
@@ -886,7 +886,7 @@ const searchResultsData = {
             nodeName: 'text',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'hello world\nsome text\n',
+            ahtml_txt: 'hello world\nsome text\n',
             createdAt: 1585834805776,
             updatedAt: 1585835392411,
             __typename: 'NodeSearchResultEntity',
@@ -898,7 +898,7 @@ const searchResultsData = {
             nodeName: 'multi',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'left\nmiddle\nright\nhello\n',
+            ahtml_txt: 'left\nmiddle\nright\nhello\n',
             createdAt: 1585835409669,
             updatedAt: 1585835410178,
             __typename: 'NodeSearchResultEntity',
@@ -910,7 +910,7 @@ const searchResultsData = {
             nodeName: 'IDless anchor',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'Introduction\n',
+            ahtml_txt: 'Introduction\n',
             createdAt: 1585750261665,
             updatedAt: 1585838019982,
             __typename: 'NodeSearchResultEntity',
@@ -922,7 +922,7 @@ const searchResultsData = {
             nodeName: 'line height',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'bold  red text with blue  bg\nbold  red  text with blue  bg\nb old  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text with blue  bg\nbold  red text  with blue  bg  simple text\n\nbold  red  _link_  with blue  bg\n\nsimple text  bold  red text with blue  bg\n\n',
             createdAt: 1586175088007,
             updatedAt: 1586177429416,
@@ -935,7 +935,7 @@ const searchResultsData = {
             nodeName: 'header',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               '\n\n  Cherrytree User Manual\n  Cherrytree User Manual\n          version 0.38.9,  October, 2019\n\n\n\t\nregular h1\n',
             createdAt: 0,
             updatedAt: 1586179994237,
@@ -948,7 +948,7 @@ const searchResultsData = {
             nodeName: 'richtext adjacent to code is raw',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'some  hello world text\n',
+            ahtml_txt: 'some  hello world text\n',
             createdAt: 1585748665021,
             updatedAt: 1586180286457,
             __typename: 'NodeSearchResultEntity',
@@ -960,7 +960,7 @@ const searchResultsData = {
             nodeName: 'rich text height not equal to object',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'some  hello world te x t\n\n',
+            ahtml_txt: 'some  hello world te x t\n\n',
             createdAt: 1586180268148,
             updatedAt: 1586180369909,
             __typename: 'NodeSearchResultEntity',
@@ -972,7 +972,7 @@ const searchResultsData = {
             nodeName: 'long text and images',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               '\nCherrytree is a free   and open source , hierarchical,  note-taking   application . It can store   text,  images , files, links, tables,    and executable snippets of code . \nCherrytree is a free    and open source, hierarchical,  note-taking    application. It can store   text,  images , files, links, tables,    and executable snippets of code . \nCherrytree is a free    and open source, hierarchical,  note-taking    application. It can store   text,  images , files, links, tables,    and executable snippets of code . \n\n\n',
             createdAt: 1586243598609,
             updatedAt: 1586245649406,
@@ -985,7 +985,7 @@ const searchResultsData = {
             nodeName: 'old',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1578872313053,
             updatedAt: 1586245720252,
             __typename: 'NodeSearchResultEntity',
@@ -997,7 +997,7 @@ const searchResultsData = {
             nodeName: 'justification',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'dz red right text  dza\nred right text dza\ngreen center  bj\npurple fill\nblue left\n \n\n\n\nhello\nhello x\n',
             createdAt: 1580253842519,
             updatedAt: 1586247181203,
@@ -1010,7 +1010,7 @@ const searchResultsData = {
             nodeName: 'paragraph',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean finibus vitae arcu et cursus. Integer id felis gravida, finibus enim a, congue nulla. Praesent vitae gravida dui. In pellentesque hendrerit orci, nec placerat tortor lobortis pretium.   Maecenas porta, dolor vel aliquam consectetur, massa nisl sodales massa, id dignissim odio risus ullamcorper est. Aliquam risus dui, dapibus quis scelerisque ac, gravida nec eros. Pellentesque ac ante massa. Ut a est tortor. Nullam sollicitudin convallis magna sit amet rutrum. Aliquam viverra metus a posuere viverra. Praesent at risus rutrum, laoreet nisl eu, tempor arcu. Vivamus ut congue turpis. Donec a orci quam. Donec non molestie mi. Praesent et commodo nunc, porta commodo urna. Donec nec felis erat.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean finibus vitae arcu et cursus. Integer id felis gravida, finibus enim a, congue nulla. Praesent vitae gravida dui. In pellentesque hendrerit orci, nec placerat tortor lobortis pretium.   Maecenas porta, dolor vel aliquam consectetur, massa nisl sodales massa, id dignissim odio risus ullamcorper est. Aliquam risus dui, dapibus quis scelerisque ac, gravida nec eros. Pellentesque ac ante massa. Ut a est tortor. Nullam sollicitudin convallis magna sit amet rutrum. Aliquam viverra metus a posuere viverra. Praesent at risus rutrum, laoreet nisl eu, tempor arcu. Vivamus ut congue turpis. Donec a orci quam. Donec non molestie mi. Praesent et commodo nunc, porta commodo urna. Donec nec felis erat.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean finibus vitae arcu et cursus. Integer id felis gravida, finibus enim a, congue nulla. Praesent vitae gravida dui. In pellentesque hendrerit orci, nec placerat tortor lobortis pretium.   Maecenas porta, dolor vel aliquam consectetur, massa nisl sodales massa, id dignissim odio risus ullamcorper est. Aliquam risus dui, dapibus quis scelerisque ac, gravida nec eros. Pellentesque ac ante massa. Ut a est tortor. Nullam sollicitudin convallis magna sit amet rutrum. Aliquam viverra metus a posuere viverra. Praesent at risus rutrum, laoreet nisl eu, tempor arcu. Vivamus ut congue turpis. Donec a orci quam. Donec non molestie mi. Praesent et commodo nunc, porta commodo urna. Donec nec felis erat.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean finibus vitae arcu et cursus. Integer id felis gravida, finibus enim a, congue nulla. Praesent vitae gravida dui. In pellentesque hendrerit orci, nec placerat tortor lobortis pretium.   Maecenas porta, dolor vel aliquam consectetur, massa nisl sodales massa, id dignissim odio risus ullamcorper est. Aliquam risus dui, dapibus quis scelerisque ac, gravida nec eros. Pellentesque ac ante massa. Ut a est tortor. Nullam sollicitudin convallis magna sit amet rutrum. Aliquam viverra metus a posuere viverra. Praesent at risus rutrum, laoreet nisl eu, tempor arcu. Vivamus ut congue turpis. Donec a orci quam. Donec non molestie mi. Praesent et commodo nunc, porta commodo urna. Donec nec felis erat.\n',
             createdAt: 1586247181232,
             updatedAt: 1586247428953,
@@ -1023,7 +1023,7 @@ const searchResultsData = {
             nodeName: 'red',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1586250403019,
             updatedAt: 1586251904693,
             __typename: 'NodeSearchResultEntity',
@@ -1035,7 +1035,7 @@ const searchResultsData = {
             nodeName: 'node title color',
             documentName: 'file',
             headline: null,
-            searchedColumn: '\n',
+            ahtml_txt: '\n',
             createdAt: 1586182111647,
             updatedAt: 1586252195667,
             __typename: 'NodeSearchResultEntity',
@@ -1047,7 +1047,7 @@ const searchResultsData = {
             nodeName: 'image with node link',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'blue text      pink test\n',
+            ahtml_txt: 'blue text      pink test\n',
             createdAt: 1585837900891,
             updatedAt: 1586254018220,
             __typename: 'NodeSearchResultEntity',
@@ -1059,7 +1059,7 @@ const searchResultsData = {
             nodeName: 'links',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'Wanchor:   node 1.1.1\nimage node:  \nnode2:  node2\nhttp url:  wikipedia  \nimage web:  \nfolder url:  temp folder\nfile url:  txt file\n',
             createdAt: 1576795094804,
             updatedAt: 1586260217026,
@@ -1072,7 +1072,7 @@ const searchResultsData = {
             nodeName: 'node x',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'red text   bold italic blue text with pink bg   sourlign2  mono pink text\nthis is h1 green stroke through text\nthis is the  second  line, size h2, in pink\nthis is h3\nthis is sup this is s ub this is zero\n\n\nthis is the 8th line. the previous two lines was empty\nthis is  the 9th line. the previous line was empty\n\ncode normal bold small\ncode norma l bold small\ndzad zt\n',
             createdAt: 1575927262865,
             updatedAt: 1588518386429,
@@ -1085,7 +1085,7 @@ const searchResultsData = {
             nodeName: 'flipping bold',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               '      { error  &&  < p > error </ p >}\n      { data  &&\n         richText . map ((inlineNodes ,  i)  =>  (\n          < div  key = {i}>\n            {inlineNodes . length  ?  (\n              inlineNodes . map ((node ,  i)  =>  (\n',
             createdAt: 1588597823290,
             updatedAt: 1588597838968,
@@ -1098,7 +1098,7 @@ const searchResultsData = {
             nodeName: 'complex code',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               "\nimport  rtModule  from  '::sass-modules/rich-text.scss' ;\nimport *  as  React  from  'react' ;\nimport  {  Fragment ,  useEffect  }  from  'react' ;\nimport   {  Link  as  CtLink  }  from  './link' ;\nimport   {  useQuery  }  from  '@apollo/react-hooks' ;\nimport  {  QUERY_CT_NODE_CONTENT  }  from  '::graphql/queries' ;\nimport  {  Png  }  from  './png' ;\nimport  {  SpinnerCircle  }  from  '::shared-components/spinner-circle' ;\nimport  {  Code  }  from  './code' ;\nimport  {  Table  }  from  './table' ;\nimport  {  Tab  }  from  '::shared-components/tab' ;\n\ntype  Props  =  {\n   node_id :  number ;\n   has_txt :  boolean ;\n   file_id :  string ;\n} ;\nconst  RichText :  React . FC < Props > =  ({ node_id ,  has_txt ,  file_id })  =>  {\n   const  {  loading ,  error ,  data  }  =  useQuery ( QUERY_CT_NODE_CONTENT . rich_txt ,  {\n     variables :  { file_id ,  node_id }\n  }) ;\n   // let pngCounter = 0;\n   let  richText :  any [] ;\n   // let pngMeta: {\n  //   height: number;\n  //   width: number;\n  //   offset: number;\n  //   node_id: number;\n  //   anchor: string;\n  //   thumbnail: string;\n  // }[];\n   if  ( data ) {\n     richText  =  JSON . parse ( data . ct_node_content [0] . rich_txt ) ;\n     // pngMeta = data.ct_nodes[0].png_meta;\n    // console.log('png', pngMeta);\n   }\n   // if (!has_txt) return <></>;\n  // console.log({ pngMeta });\n   console . log ( '********' ,  richText ) ;\n   return  (\n    < div  className = { rtModule . richText }>\n      { loading  &&  < SpinnerCircle  />}\n      { error  &&  < p > error </ p >}\n      { data  &&\n         richText . map ((inlineNodes ,  i)  =>  (\n          < div  key = {i}>\n            {inlineNodes . length  ?  (\n              inlineNodes . map ((node ,  i)  =>  (\n                < Fragment  key = {i}>\n                  { typeof  node  ===  'object'  ?  (\n                     // !node._ && node.$$ && pngMeta && pngMeta[pngCounter] ? (\n                     node . type  ?  (\n                      node . type  ===  'tab'  ?  (\n                         // pngMeta[pngCounter].anchor ? (\n                        < Tab />\n                      )  :  node . type  ===  'anchor'  ?  (\n                         // pngMeta[pngCounter].anchor ? (\n                         < i\n                           className = { rtModule . richText__anchor }\n                           id = {node . other_attributes . id }\n                        >\n                           ⚓ {node . $$ . id }\n                        </ i >\n                      )  :  node . type  ===  'png'  ?  (\n                        < Png\n                           key = {i}\n                           node_id = {node_id}\n                           offset = {node . other_attributes . offset }\n                           height = {node . $$ . height }\n                           width = {node . $$ . width }\n                           // thumbnail={pngMeta[pngCounter++].thumbnail}\n                           file_id = {file_id}\n                        />\n                      )  :  node . type  ===  'code'  ?  (\n                        < Code\n                           styles = {node . $$ }\n                           other_attributes = {node . other_attributes }\n                           text = {node . _ }\n                        />\n                      )  :  node . type  ===  'table'  ?  (\n                        < Table\n                           styles = {node . $$ }\n                           other_attributes = {node . other_attributes }\n                           table = {node . table }\n                        />\n                      )  :  (\n                         <></>\n                       )\n                    )  :  (\n                      < div  style = {{  ... node . $$ ,  display :  'inline'  }}>\n                        {node . $$ . tags . reduce (\n                           // @ts-ignore\n                           (acc ,  val)  =>  {\n                             if  ( typeof  val  !==  'string' )\n                               console . log ( 'val' ,  val) ;\n                             return typeof  val  ===  'string'  ?  (\n                               React . createElement ( ` $ { val } ` ,  null ,  acc)\n                            )  :  (\n                              < CtLink\n                                 target = {val[1] . target }\n                                 href = {val[1] . href }\n                                 text = {node . _ }\n                              />\n                            ) ;\n                           } ,\n                           node . _\n                         )}\n                      </ div >\n                    )\n                  )  :  (\n                    node\n                  )}\n                </ Fragment >\n              ))\n            )  :  (\n              < br  />\n            )}\n          </ div >\n        ))}\n    </ div >\n  ) ;\n} ;\n\nexport  {  RichText  } ;\n\n",
             createdAt: 1578617016489,
             updatedAt: 1588597897776,
@@ -1111,7 +1111,7 @@ const searchResultsData = {
             nodeName: 'html characters',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               '\n      {}\n      {< p > error </ p >}\n      { data  &&\nexport  {  RichText  } ;\n\n',
             createdAt: 1588597897802,
             updatedAt: 1588600214351,
@@ -1124,7 +1124,7 @@ const searchResultsData = {
             nodeName: 'node z',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'tesla cyber truck:\n\n:D\n\n\ngoogle link:  https://google.com  \n',
             createdAt: 1588713622392,
             updatedAt: 1588713624492,
@@ -1137,7 +1137,7 @@ const searchResultsData = {
             nodeName: 'node z',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'tesla cyber truck:\n\n:D\n\n\ngoogle link:  https://google.com  \n',
             createdAt: 1588713626332,
             updatedAt: 1588713628069,
@@ -1150,7 +1150,7 @@ const searchResultsData = {
             nodeName: 'node z',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'tesla cyber truck:\n\n:D\n\n\ngoogle link:  https://google.com  \n',
             createdAt: 1588713628095,
             updatedAt: 1588713630142,
@@ -1163,7 +1163,7 @@ const searchResultsData = {
             nodeName: 'node z',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'tesla cyber truck:\n\n:D\n\n\ngoogle link:  https://google.com  \n',
             createdAt: 1588713630169,
             updatedAt: 1588713630172,
@@ -1176,7 +1176,7 @@ const searchResultsData = {
             nodeName: 'images',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'tesla cyber truck:\n\n:D\n\n\ngoogle link:  https://google.com  \n',
             createdAt: 1576533050196,
             updatedAt: 1588713641867,
@@ -1189,7 +1189,7 @@ const searchResultsData = {
             nodeName: 'node 2',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',
             createdAt: 1568911857231,
             updatedAt: 1589122750862,
@@ -1202,7 +1202,7 @@ const searchResultsData = {
             nodeName: 'new line',
             documentName: 'file',
             headline: null,
-            searchedColumn: 'hello world\n',
+            ahtml_txt: 'hello world\n',
             createdAt: 1580083674209,
             updatedAt: 1594246131080,
             __typename: 'NodeSearchResultEntity',
@@ -1214,7 +1214,7 @@ const searchResultsData = {
             nodeName: 'node 1.1.1',
             documentName: 'file',
             headline: null,
-            searchedColumn:
+            ahtml_txt:
               'hi :)  bold   itali c   un derlined  up sub  mon osppaca  zero  red   bgblue\nh1\nh2\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nawesome anchor \n',
             createdAt: 1569059366567,
             updatedAt: 1594493676688,
@@ -1227,7 +1227,7 @@ const searchResultsData = {
             nodeName: 'hp',
             documentName: 'liste de laptops',
             headline: null,
-            searchedColumn: "hp pavillion 15\ntoday i'm driving a bike\n",
+            ahtml_txt: "hp pavillion 15\ntoday i'm driving a bike\n",
             createdAt: 1594493690509,
             updatedAt: 1594493844014,
             __typename: 'NodeSearchResultEntity',

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useHeadline } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/headline';
 import { SearchContext } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/helpers/generate-headline';
 import { joinClassNames } from '::helpers/dom/join-class-names';
+import { HighlightedHeadline } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-results/components/components/highlighted-headline';
 
 type Props = {
   result: NodeSearchResultEntity;
@@ -14,10 +15,7 @@ type Props = {
 const Result: React.FC<Props> = ({ result, searchContext }) => {
   const headline = useHeadline({
     searchContext,
-    searchResult: {
-      headline: result.headline,
-      searchedColumn: result.searchedColumn,
-    },
+    searchResult: result,
   });
   return (
     <div className={modSearchResult.searchResult}>
@@ -29,22 +27,18 @@ const Result: React.FC<Props> = ({ result, searchContext }) => {
           className={modSearchResult.searchResult__location__nodeName}
           to={`/document/${result.documentId}/node/${result.node_id}`}
         >
-          {result.nodeName}
+          {headline?.nodeNameHeadline ? (
+            <HighlightedHeadline headline={headline.nodeNameHeadline} />
+          ) : (
+            result.nodeName
+          )}
         </Link>
       </div>
       <span className={modSearchResult.searchResult__headline}>
-        {headline?.match && (
-          <>
-            <span className={modSearchResult.searchResult__headline__end}>
-              {headline.start}
-            </span>
-            <span className={modSearchResult.searchResult__headline__match}>
-              {headline.match}
-            </span>
-            <span className={modSearchResult.searchResult__headline__end}>
-              {headline.end}
-            </span>
-          </>
+        {headline?.ahtmlHeadline ? (
+          <HighlightedHeadline headline={headline.ahtmlHeadline} />
+        ) : (
+          <></>
         )}
       </span>
       <span

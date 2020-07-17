@@ -76,14 +76,15 @@ type NodeMutation {
 }
 
 type NodeSearchResultEntity {
+    ahtmlHeadline: String
+    ahtml_txt: String
     createdAt: Timestamp!
     documentId: String!
     documentName: String!
-    headline: String
     nodeId: String!
     nodeName: String!
+    nodeNameHeadline: String
     node_id: Int!
-    searchedColumn: String
     updatedAt: Timestamp!
 }
 

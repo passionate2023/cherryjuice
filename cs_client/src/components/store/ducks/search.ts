@@ -83,12 +83,13 @@ const EmptyTimeFilter = {
   rangeStart: 0,
   rangeEnd: 0,
 };
+const EmptySearchResults = { results: [], meta: { elapsedTimeMs: -1 } };
 const initialState: State = {
   query: '',
   searchState: 'idle',
   searchScope: SearchScope.allDocuments,
   searchTarget: [SearchTarget.nodeContent, SearchTarget.nodeTitle],
-  searchResults: { results: [], meta: { elapsedTimeMs: -1 } },
+  searchResults: EmptySearchResults,
   searchOptions: {
     caseSensitive: false,
     fullWord: false,
@@ -112,20 +113,23 @@ const reducer = createReducer(initialState, _ => [
     _(ac.clearQuery, state => ({
       ...state,
       query: '',
+      searchResults: EmptySearchResults
     })),
   ],
   ...[
     _(ac.setSearchIdle, state => ({
       ...state,
       searchState: 'idle',
-    })),
-    _(ac.setSearchInProgress, state => ({
-      ...state,
-      searchState: 'in-progress',
+      searchResults: EmptySearchResults
     })),
     _(ac.setSearchStandBy, state => ({
       ...state,
       searchState: 'stand-by',
+      searchResults: EmptySearchResults
+    })),
+    _(ac.setSearchInProgress, state => ({
+      ...state,
+      searchState: 'in-progress',
     })),
     _(ac.setSearchFulfilled, (state, { payload }) => ({
       ...state,

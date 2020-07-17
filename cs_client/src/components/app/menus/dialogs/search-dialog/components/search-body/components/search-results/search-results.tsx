@@ -16,6 +16,7 @@ const mapState = (state: Store) => ({
   query: state.search.query,
   searchOptions: state.search.searchOptions,
   searchType: state.search.searchType,
+  searchTarget: state.search.searchTarget,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -27,6 +28,7 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
   searchResults,
   collapse,
   searchFiltersHeight,
+  searchTarget,
   dialogBodyHeight,
   query,
   searchType,
@@ -52,7 +54,7 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
             modSearchDialog.searchDialog__searchResults,
           ])}
           style={props}
-          data-collapsed={height===0 ? true : undefined}
+          data-collapsed={height === 0 ? true : undefined}
         >
           {<ResultsHeader searchResults={searchResults} />}
           <div
@@ -62,12 +64,13 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
           >
             {searchResults.results.map(result => (
               <Result
-                key={result.nodeId}
+                key={result.nodeId + searchResults.meta.ti}
                 result={result}
                 searchContext={{
                   query,
                   searchType,
                   searchOptions,
+                  searchTarget,
                 }}
               />
             ))}

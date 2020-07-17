@@ -15,10 +15,13 @@ export class NodeSearchResultEntity {
   documentName: string;
 
   @Field({ nullable: true })
-  headline?: string;
+  nodeNameHeadline?: string;
 
   @Field({ nullable: true })
-  searchedColumn?: string;
+  ahtmlHeadline?: string;
+
+  @Field({ nullable: true })
+  ahtml_txt?: string;
 
   @Field(() => Timestamp)
   createdAt: number;
