@@ -60,8 +60,7 @@ const searchResultsData = {
             nodeName: 'sole code',
             documentName: 'file',
             headline: null,
-            ahtml_txt:
-              "alert('hellloooooo');\nalert('helllooooooX');\nhaha\n",
+            ahtml_txt: "alert('hellloooooo');\nalert('helllooooooX');\nhaha\n",
             createdAt: 1578440634696,
             updatedAt: 1578442245053,
             __typename: 'NodeSearchResultEntity',

@@ -135,6 +135,7 @@ const QUERY_SEARCH = {
           node(searchArgs: $args) {
             meta {
               elapsedTimeMs
+              timestamp
             }
             results {
               documentId

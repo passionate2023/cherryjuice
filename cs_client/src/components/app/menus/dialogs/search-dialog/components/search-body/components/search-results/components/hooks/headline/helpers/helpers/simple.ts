@@ -1,4 +1,4 @@
-import { SearchOptions, } from '::types/graphql/generated';
+import { SearchOptions } from '::types/graphql/generated';
 
 type Props = {
   searchOptions: SearchOptions;

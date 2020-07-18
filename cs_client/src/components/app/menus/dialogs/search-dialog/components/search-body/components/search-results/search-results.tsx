@@ -64,7 +64,7 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
           >
             {searchResults.results.map(result => (
               <Result
-                key={result.nodeId + searchResults.meta.ti}
+                key={result.nodeId + searchResults.meta.timestamp}
                 result={result}
                 searchContext={{
                   query,

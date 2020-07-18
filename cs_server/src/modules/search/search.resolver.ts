@@ -24,15 +24,14 @@ export class SearchResolver {
     @Args('searchArgs', { nullable: true, type: () => NodeSearchIt })
     searchArgs?: NodeSearchIt,
   ): Promise<NodeSearchResults> {
-    const state = {
-      t0: Date.now(),
-    };
     const nodeSearchResults = new NodeSearchResults();
+    nodeSearchResults.meta.timestamp = Date.now();
     nodeSearchResults.results = await this.searchService.nodeSearch({
       it: searchArgs,
       user,
     });
-    nodeSearchResults.meta.elapsedTimeMs = Date.now() - state.t0;
+    nodeSearchResults.meta.elapsedTimeMs =
+      Date.now() - nodeSearchResults.meta.timestamp;
     return nodeSearchResults;
   }
 }

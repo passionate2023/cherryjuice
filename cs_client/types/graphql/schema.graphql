@@ -106,6 +106,7 @@ type SearchResultEntity {
 
 type SearchResultMeta {
     elapsedTimeMs: Int!
+    timestamp: Timestamp!
 }
 
 type Secrets {

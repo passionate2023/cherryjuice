@@ -113,19 +113,19 @@ const reducer = createReducer(initialState, _ => [
     _(ac.clearQuery, state => ({
       ...state,
       query: '',
-      searchResults: EmptySearchResults
+      searchResults: EmptySearchResults,
     })),
   ],
   ...[
     _(ac.setSearchIdle, state => ({
       ...state,
       searchState: 'idle',
-      searchResults: EmptySearchResults
+      searchResults: EmptySearchResults,
     })),
     _(ac.setSearchStandBy, state => ({
       ...state,
       searchState: 'stand-by',
-      searchResults: EmptySearchResults
+      searchResults: EmptySearchResults,
     })),
     _(ac.setSearchInProgress, state => ({
       ...state,

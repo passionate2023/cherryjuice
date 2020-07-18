@@ -37,7 +37,7 @@ const nodeSearch = ({
     searchScopeWC({ variables, searchScope, nodeId, documentId }),
   );
 
-  const { headline, orWhereClauses,  } = searchTargetWC({
+  const { headline, orWhereClauses } = searchTargetWC({
     searchTarget,
     searchType,
     variables,
@@ -47,8 +47,16 @@ const nodeSearch = ({
   andWhereClauses.push(orWhereClauses);
   const searchQuery = `
       select
-        ${headline?.ahtmlHeadline ? `${headline.ahtmlHeadline} as "ahtmlHeadline",` : ''}
-        ${headline?.nodeNameHeadline ? `${headline.nodeNameHeadline} as "nodeNameHeadline",` : ''}
+        ${
+          headline?.ahtmlHeadline
+            ? `${headline.ahtmlHeadline} as "ahtmlHeadline",`
+            : ''
+        }
+        ${
+          headline?.nodeNameHeadline
+            ? `${headline.nodeNameHeadline} as "nodeNameHeadline",`
+            : ''
+        }
         ${searchTarget.includes(SearchTarget.nodeContent) ? `n.ahtml_txt,` : ''}
         n.node_id, n.id as "nodeId", n.name as "nodeName", n."documentId", n."createdAt", n."updatedAt",
         d.name as "documentName"
