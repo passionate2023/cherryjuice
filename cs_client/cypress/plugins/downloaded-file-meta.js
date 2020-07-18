@@ -32,7 +32,7 @@ const copyDownloadedFile = async ({
   suffix,
 }) => {
   const source = {
-    path: (await getUserHomeFolder()) + '\\downloads\\' + name,
+    path: (await getUserHomeFolder()) + '\\downloads\\' + name + '.ctb',
   };
   if (!fs.existsSync(source.path))
     throw new Error(`${source.path} does not exist`);

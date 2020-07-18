@@ -14,7 +14,7 @@ const config: TypeOrmModuleOptions = {
     migrationsDir: 'migrations',
   },
   keepConnectionAlive: true,
-  logging: process.env.NODE_ENV === 'development',
+  logging: process.env.NODE_ENV === 'development' && false,
 };
 
 module.exports = config;
