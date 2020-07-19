@@ -1,18 +1,22 @@
 import * as React from 'react';
 import { modSearchDialog } from '::sass-modules/';
-
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 import { Result } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-results/components/result';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { configs } from '::shared-components/transitions/transitions';
 import { useSpring, animated } from 'react-spring';
+import { ResultsHeader } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-results/components/results-header';
 
 const mapState = (state: Store) => ({
   searchResults: state.search.searchResults,
   searchFiltersHeight: state.cssVariables.searchFiltersHeight,
   dialogBodyHeight: state.cssVariables.dialogBodyHeight,
   isOnMobile: state.root.isOnMobile,
+  query: state.search.query,
+  searchOptions: state.search.searchOptions,
+  searchType: state.search.searchType,
+  searchTarget: state.search.searchTarget,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -24,19 +28,18 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
   searchResults,
   collapse,
   searchFiltersHeight,
+  searchTarget,
   dialogBodyHeight,
-  isOnMobile,
+  query,
+  searchType,
+  searchOptions,
 }) => {
-  const adjustedDialogBodyHeight =
-    dialogBodyHeight - 117 - (isOnMobile ? 10 : 30);
-  searchFiltersHeight = searchFiltersHeight - (isOnMobile ? 55 : 45);
+  dialogBodyHeight = dialogBodyHeight - 117; //- (isOnMobile ? 25 : 30);
   const bottomOffset = 10;
-  const height =
+  let height =
     bottomOffset +
-    (collapse
-      ? adjustedDialogBodyHeight - searchFiltersHeight
-      : adjustedDialogBodyHeight);
-
+    (collapse ? dialogBodyHeight - searchFiltersHeight : dialogBodyHeight);
+  if (collapse && height < 160) height = 0;
   const props = useSpring({
     to: {
       height,
@@ -44,14 +47,38 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
     config: configs.c1,
   });
   return (
-    <animated.div
-      className={joinClassNames([modSearchDialog.searchDialog__searchResults])}
-      style={props}
-    >
-      {searchResults.map(result => (
-        <Result key={result.nodeId} result={result} />
-      ))}
-    </animated.div>
+    <>
+      {!!searchResults?.results.length && query && (
+        <animated.div
+          className={joinClassNames([
+            modSearchDialog.searchDialog__searchResults,
+          ])}
+          style={props}
+          data-collapsed={height === 0 ? true : undefined}
+        >
+          {<ResultsHeader searchResults={searchResults} />}
+          <div
+            className={joinClassNames([
+              modSearchDialog.searchDialog__searchResults__list,
+            ])}
+          >
+            {searchResults.results.map(result => (
+              <Result
+                key={result.nodeId + searchResults.meta.timestamp}
+                result={result}
+                searchContext={{
+                  query,
+                  searchType,
+                  searchOptions,
+                  searchTarget,
+                }}
+              />
+            ))}
+          </div>
+        </animated.div>
+      )}
+      <div className={modSearchDialog.searchDialog__searchResults__footer} />
+    </>
   );
 };
 const _ = connector(SearchResults);

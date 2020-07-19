@@ -49,11 +49,11 @@ export class Document extends BaseEntity {
   @Field(() => Int)
   size: number;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'timestamp with time zone' })
   @Field(() => Float)
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
   @Field(() => Float)
   updatedAt: Date;
 

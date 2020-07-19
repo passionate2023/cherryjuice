@@ -10,7 +10,7 @@
   letter-spacing: 1.25px;
   cursor: pointer;
   &:hover:not([disabled]) {
-    background-color: $primary-lighter;
+    background-color: #f1e5e5;
     color: $primary-dark;
   }
   &:active:not([disabled]) {
@@ -41,6 +41,8 @@
   img {
     margin-bottom: -2px;
   }
+  width: 30px;
+  height: 30px;
 }
 .button--square {
   border-radius: 5px;
@@ -49,12 +51,12 @@
   color: white;
   background-color: $dark-grey;
   filter: brightness(0.85);
-  &:hover {
+  &:hover:not([disabled]) {
     filter: brightness(1.1);
-    background-color: $dark-grey;
-    color: white;
+    background-color: $dark-grey ;
+    color: white ;
   }
-  &:active {
+  &:active:not([disabled]) {
     filter: brightness(1.2);
     background-color: $dark-grey;
     color: white;
@@ -65,4 +67,14 @@
   background-color: $primary !important;
   color: white !important;
   box-shadow: $box-shadow1;
+  svg {
+    fill: white;
+  }
+}
+
+.button--rotated45 {
+  svg,
+  img {
+    transform: rotateZ(45deg);
+  }
 }

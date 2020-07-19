@@ -13,6 +13,7 @@ import { useDocumentEditedIndicator } from '::app/hooks/document-edited-indicato
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { useHandleRouting } from '::app/hooks/handle-routing/handle-routing';
+import { joinClassNames } from '::helpers/dom/join-class-names';
 
 const Menus = React.lazy(() => import('::app/menus'));
 const Editor = React.lazy(() => import('::app/editor'));
@@ -76,6 +77,7 @@ const mapState = (state: Store) => ({
   treeWidth: state.editor.treeWidth,
   documentHasUnsavedChanges: state.document.hasUnsavedChanges,
   showFormattingButtons: state.editor.showFormattingButtons,
+  dockedDialog: state.root.dockedDialog,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -88,6 +90,7 @@ const App: React.FC<Props & PropsFromRedux> = ({
   treeWidth,
   documentHasUnsavedChanges,
   showFormattingButtons,
+  dockedDialog,
 }) => {
   useOnWindowResize([
     updateBreakpointState({
@@ -100,7 +103,12 @@ const App: React.FC<Props & PropsFromRedux> = ({
   useUpdateCssVariables(showFormattingButtons, showTree, treeWidth);
   useRefreshToken({ token: session.token });
   return (
-    <div className={appModule.app}>
+    <div
+      className={joinClassNames([
+        appModule.app,
+        [appModule.appDialogDocked, dockedDialog],
+      ])}
+    >
       <Suspense fallback={<Void />}>
         <Editor />
       </Suspense>

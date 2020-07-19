@@ -4,6 +4,7 @@ import { addDecorator, addParameters } from '@storybook/react';
 import { actions } from '@storybook/addon-actions';
 import { withA11y } from '@storybook/addon-a11y';
 import { boolean, withKnobs } from '@storybook/addon-knobs';
+import { MemoryRouter } from 'react-router';
 import '@storybook/addon-console';
 addParameters({
   backgrounds: [
@@ -26,3 +27,9 @@ addDecorator((storyFn, context) => {
 });
 addDecorator(withA11y);
 addDecorator(withKnobs);
+import { Provider } from 'react-redux';
+import { store } from '::root/store/store';
+addDecorator(story => (
+  <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+));
+addDecorator(story => <Provider store={store}>{story()}</Provider>);

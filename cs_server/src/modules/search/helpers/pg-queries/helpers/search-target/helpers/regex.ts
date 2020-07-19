@@ -4,7 +4,7 @@ const whereClause = ({
   searchOptions,
   variableIndex,
 }: SearchTypeQueryProps): string =>
-  `~${searchOptions.caseSensitive ? '' : '*'} ($${variableIndex})`;
+  `~${searchOptions.caseSensitive ? '' : '*'} $${variableIndex}`;
 
 const headline = ({ columnName, numberOfVariables }: HeadlineProps): string =>
   `(regexp_matches(${columnName}, $${numberOfVariables}))[1]`;

@@ -21,6 +21,7 @@ const HeaderButtons: React.FC<Props> = ({
     <span className={modDocumentOperations.documentOperations__header__buttons}>
       {!stats.active && !collapsed && (
         <ButtonCircle
+          dark={true}
           onClick={ac.documentOperations.clearFinished}
           className={modDocumentOperations.documentOperations__header__button}
           testId={testIds.popups__documentOperations__clearAllFinished}
@@ -28,6 +29,7 @@ const HeaderButtons: React.FC<Props> = ({
         />
       )}
       <ButtonCircle
+        dark={true}
         onClick={toggleCollapsed}
         className={modDocumentOperations.documentOperations__header__button}
         icon={<span>{collapsed ? '▴' : '▾'}</span>}

@@ -8,12 +8,14 @@ import {
   DialogHeader,
   DialogHeaderProps,
 } from '::shared-components/dialog/dialog-header';
-import { DialogBody } from '::shared-components/dialog/dialog-body';
+import { DialogBody } from '::shared-components/dialog/dialog-body/dialog-body';
+import { MeasurableDialogBody } from '::shared-components/dialog/dialog-body/measurable-dialog-body';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { EventHandler } from 'react';
 import { animated } from 'react-spring';
 import { TransitionWrapper } from '::shared-components/transition-wrapper';
 import { LinearProgress } from '::shared-components/linear-progress';
+import { joinClassNames } from '::helpers/dom/join-class-names';
 
 type TDialogProps = {
   menuButton?: JSX.Element;
@@ -23,6 +25,8 @@ type TDialogProps = {
   isOnMobile: boolean;
   small?: boolean;
   loading?: boolean;
+  docked?: boolean;
+  measurable?: boolean;
 } & TDialogFooterProps &
   DialogHeaderProps;
 
@@ -41,6 +45,8 @@ const Dialog: React.FC<TDialogProps & {
   rightHeaderButtons,
   small,
   loading = false,
+  docked,
+  measurable,
 }) => {
   useModalKeyboardEvents({
     onCloseModal: onClose,
@@ -52,9 +58,11 @@ const Dialog: React.FC<TDialogProps & {
     <>
       {
         <animated.div
-          className={`${modDialog.dialog} ${
-            small ? modDialog.dialogSmall : ''
-          }`}
+          className={joinClassNames([
+            modDialog.dialog,
+            [modDialog.dialogSmall, small],
+            [modDialog.dialogDocked, docked],
+          ])}
           style={{
             ...style,
             transform: style.xy.interpolate(
@@ -69,11 +77,17 @@ const Dialog: React.FC<TDialogProps & {
             onClose={onClose}
             rightHeaderButtons={rightHeaderButtons}
           />
-          <DialogBody dialogBodyElements={children} />
+          {measurable ? (
+            <MeasurableDialogBody dialogBodyElements={children} />
+          ) : (
+            <DialogBody dialogBodyElements={children} />
+          )}
           <DialogFooter
             dialogFooterRightButtons={dialogFooterRightButtons}
             dialogFooterLeftButtons={dialogFooterLeftButtons}
+            rightHeaderButtons={rightHeaderButtons}
             isOnMobile={isOnMobile}
+            docked={docked}
           />
         </animated.div>
       }
@@ -98,7 +112,11 @@ const DialogWithTransition: React.FC<TDialogProps & {
         },
       }}
       componentProps={props}
-      scrimProps={{ isShownOnTopOfDialog, onClick: props.onClose }}
+      scrimProps={
+        props.docked
+          ? undefined
+          : { isShownOnTopOfDialog, onClick: props.onClose }
+      }
     />
   );
 };

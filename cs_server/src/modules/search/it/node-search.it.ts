@@ -1,4 +1,6 @@
 import { Field, InputType, registerEnumType } from '@nestjs/graphql';
+import { Timestamp } from '../../document/helpers/graphql-types/timestamp';
+import { SearchSortOptions } from './node-search.it/it/search-sort-options';
 
 export enum SearchScope {
   currentNode = 'current-node',
@@ -27,6 +29,29 @@ registerEnumType(SearchType, {
   name: 'SearchType',
 });
 
+export enum TimeRange {
+  AnyTime = 'AnyTime',
+  PastHour = 'PastHour',
+  PastDay = 'PastDay',
+  PastWeek = 'PastWeek',
+  PastMonth = 'PastMonth',
+  PastYear = 'PastYear',
+  CustomRange = 'CustomRange',
+}
+registerEnumType(TimeRange, {
+  name: 'TimeRange',
+});
+@InputType()
+export class TimeFilter {
+  @Field(() => TimeRange)
+  rangeName: TimeRange;
+
+  @Field(() => Timestamp)
+  rangeStart: Date;
+
+  @Field(() => Timestamp)
+  rangeEnd: Date;
+}
 @InputType()
 export class SearchOptions {
   @Field(() => Boolean)
@@ -58,4 +83,13 @@ export class NodeSearchIt {
 
   @Field()
   documentId: string;
+
+  @Field(() => TimeFilter)
+  createdAtTimeFilter: TimeFilter;
+
+  @Field(() => TimeFilter)
+  updatedAtTimeFilter: TimeFilter;
+
+  @Field(() => SearchSortOptions)
+  sortOptions: SearchSortOptions;
 }

@@ -1,29 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Timestamp } from '../../document/helpers/graphql-types/timestamp';
 
 @ObjectType()
 export class NodeSearchResultEntity {
-  constructor({
-    nodeName,
-    documentName,
-    documentId,
-    node_id,
-    nodeId,
-    headline,
-  }: {
-    documentId: string;
-    node_id: number;
-    nodeId: string;
-    nodeName: string;
-    documentName: string;
-    headline: string;
-  }) {
-    this.documentId = documentId;
-    this.node_id = node_id;
-    this.nodeId = nodeId;
-    this.nodeName = nodeName;
-    this.documentName = documentName;
-    this.headline = headline;
-  }
   @Field()
   documentId: string;
   @Field(() => Int)
@@ -34,6 +13,19 @@ export class NodeSearchResultEntity {
   nodeName: string;
   @Field()
   documentName: string;
-  @Field()
-  headline: string;
+
+  @Field({ nullable: true })
+  nodeNameHeadline?: string;
+
+  @Field({ nullable: true })
+  ahtmlHeadline?: string;
+
+  @Field({ nullable: true })
+  ahtml_txt?: string;
+
+  @Field(() => Timestamp)
+  createdAt: number;
+
+  @Field(() => Timestamp)
+  updatedAt: number;
 }

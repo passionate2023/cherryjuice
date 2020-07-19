@@ -11,14 +11,17 @@ const ac = {
       _(isOnMobile),
     ),
   },
+  toggleDockedDialog: _(ap('toggle-docked-dialog')),
 };
 
 type State = {
   isOnMobile: boolean;
+  dockedDialog: boolean;
 };
 
 const initialState: State = {
   isOnMobile: false,
+  dockedDialog: true,
 };
 const reducer = createReducer(initialState, _ => [
   ...[
@@ -26,7 +29,12 @@ const reducer = createReducer(initialState, _ => [
       ...state,
       isOnMobile: payload,
     })),
+    _(ac.toggleDockedDialog, state => ({
+      ...state,
+      dockedDialog: !state.dockedDialog,
+    })),
   ],
 ]);
 
 export { reducer as rootReducer, ac as rootActionCreators };
+export { State as RootReducerState };

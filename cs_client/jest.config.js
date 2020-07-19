@@ -2,7 +2,7 @@
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const tsconfig = require('./tsconfig');
 module.exports = {
-  roots: ['<rootDir>/.storybook', '<rootDir>/src', '<rootDir>/cypress'],
+  roots: [/*'<rootDir>/.storybook', */ '<rootDir>/src', '<rootDir>/cypress'],
   preset: 'ts-jest/presets/js-with-ts',
   testEnvironment: 'jsdom',
 

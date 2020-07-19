@@ -6,7 +6,7 @@ import { User } from '../user/entities/user.entity';
 import { SearchService } from './search.service';
 import { SearchResultEntity } from './entities/search-result.entity';
 import { NodeSearchIt } from './it/node-search.it';
-import { NodeSearchResultEntity } from './entities/node.search-result.entity';
+import { NodeSearchResults } from './entities/node-search-results.entity';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => SearchResultEntity)
@@ -18,12 +18,20 @@ export class SearchResolver {
     return new SearchResultEntity();
   }
 
-  @ResolveField(() => [NodeSearchResultEntity])
+  @ResolveField(() => NodeSearchResults)
   async node(
     @GetUserGql() user: User,
     @Args('searchArgs', { nullable: true, type: () => NodeSearchIt })
     searchArgs?: NodeSearchIt,
-  ): Promise<NodeSearchResultEntity[]> {
-    return this.searchService.nodeSearch({ it: searchArgs, user });
+  ): Promise<NodeSearchResults> {
+    const nodeSearchResults = new NodeSearchResults();
+    nodeSearchResults.meta.timestamp = Date.now();
+    nodeSearchResults.results = await this.searchService.nodeSearch({
+      it: searchArgs,
+      user,
+    });
+    nodeSearchResults.meta.elapsedTimeMs =
+      Date.now() - nodeSearchResults.meta.timestamp;
+    return nodeSearchResults;
   }
 }

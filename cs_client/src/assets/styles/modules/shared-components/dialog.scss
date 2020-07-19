@@ -17,6 +17,20 @@
     margin: 2vh 5vw;
   }
 }
+.dialog--docked {
+  grid-area: dialog;
+  position: static;
+  @include respond-to($md-up) {
+    width: 100%;
+  }
+  height: 50vh;
+  margin: 0;
+  border-radius: 0;
+  z-index: $ZI-dialog--docked;
+  .dialog__header {
+    display: none;
+  }
+}
 $small-dialog-width: 350px;
 .dialog--small {
   @include respond-to($md-up) {

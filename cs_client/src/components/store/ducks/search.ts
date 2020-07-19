@@ -1,11 +1,16 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import {
-  NodeSearchResultEntity,
+  NodeSearchResults,
   SearchOptions,
   SearchScope,
+  SearchSortOptions,
   SearchTarget,
   SearchType,
+  SortDirection,
+  SortNodesBy,
+  TimeFilter,
+  TimeRange,
 } from '::types/graphql/generated';
 
 const ap = createActionPrefixer('search');
@@ -22,7 +27,7 @@ const ac = {
     setSearchInProgress: _(ap('set-search-in-progress')),
     setSearchFulfilled: _(
       ap('set-search-fulfilled'),
-      _ => (searchResults: NodeSearchResultEntity[]) => _(searchResults),
+      _ => (result: NodeSearchResults) => _(result),
     ),
   },
   ...{
@@ -41,33 +46,62 @@ const ac = {
   ...{
     toggleFilters: _(ap('toggle-filters')),
   },
+  ...{
+    setUpdatedAtTimeFilter: _(
+      ap('set-updated-at-time-filter'),
+      _ => (filter: TimeFilter) => _(filter),
+    ),
+    setCreatedAtTimeFilter: _(
+      ap('set-created-at-time-filter'),
+      _ => (filter: TimeFilter) => _(filter),
+    ),
+  },
+  ...{
+    setSortBy: _(ap('set-sort-by'), _ => (options: SortNodesBy) => _(options)),
+    toggleSortDirection: _(ap('toggle-sort-direction')),
+  },
 };
 
 type SearchState = 'idle' | 'queued' | 'in-progress' | 'stand-by';
 
 type State = {
   query: string;
-  searchResults: NodeSearchResultEntity[];
+  searchResults: NodeSearchResults;
   searchState: SearchState;
   searchScope: SearchScope;
   searchTarget: SearchTarget[];
   searchOptions: SearchOptions;
   searchType: SearchType;
   showFilters: boolean;
+  createdAtTimeFilter: TimeFilter;
+  updatedAtTimeFilter: TimeFilter;
+  sortOptions: SearchSortOptions;
 };
 
+const EmptyTimeFilter = {
+  rangeName: TimeRange.AnyTime,
+  rangeStart: 0,
+  rangeEnd: 0,
+};
+const EmptySearchResults = { results: [], meta: { elapsedTimeMs: -1 } };
 const initialState: State = {
   query: '',
   searchState: 'idle',
   searchScope: SearchScope.allDocuments,
   searchTarget: [SearchTarget.nodeContent, SearchTarget.nodeTitle],
-  searchResults: [],
+  searchResults: EmptySearchResults,
   searchOptions: {
     caseSensitive: false,
     fullWord: false,
   },
   searchType: SearchType.Simple,
   showFilters: false,
+  createdAtTimeFilter: EmptyTimeFilter,
+  updatedAtTimeFilter: EmptyTimeFilter,
+  sortOptions: {
+    sortBy: SortNodesBy.UpdatedAt,
+    sortDirection: SortDirection.Descending,
+  },
 };
 
 const reducer = createReducer(initialState, _ => [
@@ -79,20 +113,23 @@ const reducer = createReducer(initialState, _ => [
     _(ac.clearQuery, state => ({
       ...state,
       query: '',
+      searchResults: EmptySearchResults,
     })),
   ],
   ...[
     _(ac.setSearchIdle, state => ({
       ...state,
       searchState: 'idle',
-    })),
-    _(ac.setSearchInProgress, state => ({
-      ...state,
-      searchState: 'in-progress',
+      searchResults: EmptySearchResults,
     })),
     _(ac.setSearchStandBy, state => ({
       ...state,
       searchState: 'stand-by',
+      searchResults: EmptySearchResults,
+    })),
+    _(ac.setSearchInProgress, state => ({
+      ...state,
+      searchState: 'in-progress',
     })),
     _(ac.setSearchFulfilled, (state, { payload }) => ({
       ...state,
@@ -128,7 +165,40 @@ const reducer = createReducer(initialState, _ => [
       showFilters: !state.showFilters,
     })),
   ],
+  ...[
+    _(ac.setCreatedAtTimeFilter, (state, { payload }) => ({
+      ...state,
+      createdAtTimeFilter: payload,
+    })),
+    _(ac.setUpdatedAtTimeFilter, (state, { payload }) => ({
+      ...state,
+      updatedAtTimeFilter: payload,
+    })),
+  ],
+  ...[
+    _(ac.setSortBy, (state, { payload }) => ({
+      ...state,
+      sortOptions: {
+        ...state.sortOptions,
+        sortBy: payload,
+      },
+    })),
+    _(ac.toggleSortDirection, state => ({
+      ...state,
+      sortOptions: {
+        ...state.sortOptions,
+        sortDirection:
+          state.sortOptions.sortDirection === SortDirection.Descending
+            ? SortDirection.Ascending
+            : SortDirection.Descending,
+      },
+    })),
+  ],
 ]);
 
-export { reducer as searchReducer, ac as searchActionCreators };
+export {
+  EmptyTimeFilter,
+  reducer as searchReducer,
+  ac as searchActionCreators,
+};
 export { SearchState, State as SearchReducerState };

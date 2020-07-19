@@ -53,10 +53,11 @@ export interface Image {
 }
 
 export interface SearchResultEntity {
-  node: Array<NodeSearchResultEntity>;
+  node: NodeSearchResults;
 }
 
 export interface NodeSearchIt {
+  createdAtTimeFilter: TimeFilter;
   documentId: string;
   nodeId: string;
   query: string;
@@ -64,6 +65,29 @@ export interface NodeSearchIt {
   searchScope: SearchScope;
   searchTarget: Array<SearchTarget>;
   searchType: SearchType;
+  sortOptions: SearchSortOptions;
+  updatedAtTimeFilter: TimeFilter;
+}
+
+export interface TimeFilter {
+  rangeEnd: Timestamp;
+  rangeName: TimeRange;
+  rangeStart: Timestamp;
+}
+
+/**
+ * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+ */
+export type Timestamp = any;
+
+export enum TimeRange {
+  AnyTime = 'AnyTime',
+  CustomRange = 'CustomRange',
+  PastDay = 'PastDay',
+  PastHour = 'PastHour',
+  PastMonth = 'PastMonth',
+  PastWeek = 'PastWeek',
+  PastYear = 'PastYear',
 }
 
 export interface SearchOptions {
@@ -89,13 +113,44 @@ export enum SearchType {
   Simple = 'Simple',
 }
 
+export interface SearchSortOptions {
+  sortBy: SortNodesBy;
+  sortDirection: SortDirection;
+}
+
+export enum SortNodesBy {
+  CreatedAt = 'CreatedAt',
+  DocumentName = 'DocumentName',
+  NodeName = 'NodeName',
+  UpdatedAt = 'UpdatedAt',
+}
+
+export enum SortDirection {
+  Ascending = 'Ascending',
+  Descending = 'Descending',
+}
+
+export interface NodeSearchResults {
+  meta: SearchResultMeta;
+  results: Array<NodeSearchResultEntity | null>;
+}
+
+export interface SearchResultMeta {
+  elapsedTimeMs: number;
+  timestamp: Timestamp;
+}
+
 export interface NodeSearchResultEntity {
+  ahtmlHeadline?: string;
+  ahtml_txt?: string;
+  createdAt: Timestamp;
   documentId: string;
   documentName: string;
-  headline: string;
   nodeId: string;
   nodeName: string;
+  nodeNameHeadline?: string;
   node_id: number;
+  updatedAt: Timestamp;
 }
 
 export interface Secrets {
@@ -146,11 +201,6 @@ export interface EditDocumentIt {
   name?: string;
   updatedAt: Timestamp;
 }
-
-/**
- * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
- */
-export type Timestamp = any;
 
 export interface NodeMutation {
   createNode: string;
@@ -268,13 +318,15 @@ export interface Resolver {
   Node?: NodeTypeResolver;
   Image?: ImageTypeResolver;
   SearchResultEntity?: SearchResultEntityTypeResolver;
+  Timestamp?: GraphQLScalarType;
+  NodeSearchResults?: NodeSearchResultsTypeResolver;
+  SearchResultMeta?: SearchResultMetaTypeResolver;
   NodeSearchResultEntity?: NodeSearchResultEntityTypeResolver;
   Secrets?: SecretsTypeResolver;
   AuthUser?: AuthUserTypeResolver;
   User?: UserTypeResolver;
   Mutation?: MutationTypeResolver;
   DocumentMutation?: DocumentMutationTypeResolver;
-  Timestamp?: GraphQLScalarType;
   NodeMutation?: NodeMutationTypeResolver;
   ImageUpload?: GraphQLScalarType;
   CTBUpload?: GraphQLScalarType;
@@ -482,13 +534,73 @@ export interface SearchResultEntityToNodeResolver<
   ): TResult;
 }
 
+export interface NodeSearchResultsTypeResolver<TParent = any> {
+  meta?: NodeSearchResultsToMetaResolver<TParent>;
+  results?: NodeSearchResultsToResultsResolver<TParent>;
+}
+
+export interface NodeSearchResultsToMetaResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultsToResultsResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface SearchResultMetaTypeResolver<TParent = any> {
+  elapsedTimeMs?: SearchResultMetaToElapsedTimeMsResolver<TParent>;
+  timestamp?: SearchResultMetaToTimestampResolver<TParent>;
+}
+
+export interface SearchResultMetaToElapsedTimeMsResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface SearchResultMetaToTimestampResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface NodeSearchResultEntityTypeResolver<TParent = any> {
+  ahtmlHeadline?: NodeSearchResultEntityToAhtmlHeadlineResolver<TParent>;
+  ahtml_txt?: NodeSearchResultEntityToAhtml_txtResolver<TParent>;
+  createdAt?: NodeSearchResultEntityToCreatedAtResolver<TParent>;
   documentId?: NodeSearchResultEntityToDocumentIdResolver<TParent>;
   documentName?: NodeSearchResultEntityToDocumentNameResolver<TParent>;
-  headline?: NodeSearchResultEntityToHeadlineResolver<TParent>;
   nodeId?: NodeSearchResultEntityToNodeIdResolver<TParent>;
   nodeName?: NodeSearchResultEntityToNodeNameResolver<TParent>;
+  nodeNameHeadline?: NodeSearchResultEntityToNodeNameHeadlineResolver<TParent>;
   node_id?: NodeSearchResultEntityToNode_idResolver<TParent>;
+  updatedAt?: NodeSearchResultEntityToUpdatedAtResolver<TParent>;
+}
+
+export interface NodeSearchResultEntityToAhtmlHeadlineResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultEntityToAhtml_txtResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultEntityToCreatedAtResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface NodeSearchResultEntityToDocumentIdResolver<
@@ -499,13 +611,6 @@ export interface NodeSearchResultEntityToDocumentIdResolver<
 }
 
 export interface NodeSearchResultEntityToDocumentNameResolver<
-  TParent = any,
-  TResult = any
-> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface NodeSearchResultEntityToHeadlineResolver<
   TParent = any,
   TResult = any
 > {
@@ -526,7 +631,21 @@ export interface NodeSearchResultEntityToNodeNameResolver<
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface NodeSearchResultEntityToNodeNameHeadlineResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface NodeSearchResultEntityToNode_idResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultEntityToUpdatedAtResolver<
   TParent = any,
   TResult = any
 > {

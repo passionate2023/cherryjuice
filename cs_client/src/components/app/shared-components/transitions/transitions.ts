@@ -3,6 +3,10 @@ const configs = {
     tension: 255,
     friction: 30,
   },
+  c2: {
+    tension: 220,
+    friction: 14,
+  },
 };
 const transitions = {
   t1: {

@@ -87,6 +87,7 @@ const documentPuppeteer = {
     cy.findByTestId(
       testIds.popups__documentOperations__clearAllFinished,
     ).click();
+    wait.s5();
   },
 };
 

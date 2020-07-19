@@ -76,12 +76,21 @@ type NodeMutation {
 }
 
 type NodeSearchResultEntity {
+    ahtmlHeadline: String
+    ahtml_txt: String
+    createdAt: Timestamp!
     documentId: String!
     documentName: String!
-    headline: String!
     nodeId: String!
     nodeName: String!
+    nodeNameHeadline: String
     node_id: Int!
+    updatedAt: Timestamp!
+}
+
+type NodeSearchResults {
+    meta: SearchResultMeta!
+    results: [NodeSearchResultEntity]!
 }
 
 type Query {
@@ -92,7 +101,12 @@ type Query {
 }
 
 type SearchResultEntity {
-    node(searchArgs: NodeSearchIt): [NodeSearchResultEntity!]!
+    node(searchArgs: NodeSearchIt): NodeSearchResults!
+}
+
+type SearchResultMeta {
+    elapsedTimeMs: Int!
+    timestamp: Timestamp!
 }
 
 type Secrets {
@@ -154,6 +168,28 @@ enum SearchType {
     Simple
 }
 
+enum SortDirection {
+    Ascending
+    Descending
+}
+
+enum SortNodesBy {
+    CreatedAt
+    DocumentName
+    NodeName
+    UpdatedAt
+}
+
+enum TimeRange {
+    AnyTime
+    CustomRange
+    PastDay
+    PastHour
+    PastMonth
+    PastWeek
+    PastYear
+}
+
 input CreateDocumentIt {
     name: String!
 }
@@ -194,6 +230,7 @@ input NodeMetaIt {
 }
 
 input NodeSearchIt {
+    createdAtTimeFilter: TimeFilter!
     documentId: String!
     nodeId: String!
     query: String!
@@ -201,6 +238,8 @@ input NodeSearchIt {
     searchScope: SearchScope!
     searchTarget: [SearchTarget!]!
     searchType: SearchType!
+    sortOptions: SearchSortOptions!
+    updatedAtTimeFilter: TimeFilter!
 }
 
 input SaveHtmlIt {
@@ -214,6 +253,11 @@ input SearchOptions {
     fullWord: Boolean!
 }
 
+input SearchSortOptions {
+    sortBy: SortNodesBy!
+    sortDirection: SortDirection!
+}
+
 input SignInCredentials {
     emailOrUsername: String!
     password: String!
@@ -225,6 +269,12 @@ input SignUpCredentials {
     lastName: String!
     password: String!
     username: String!
+}
+
+input TimeFilter {
+    rangeEnd: Timestamp!
+    rangeName: TimeRange!
+    rangeStart: Timestamp!
 }
 
 input UploadLinkInputType {

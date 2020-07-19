@@ -8,16 +8,23 @@ type SearchTypeQueryProps = {
 type HeadlineProps = {
   numberOfVariables: number;
   columnName: string;
+  searchOptions?: SearchOptions;
 };
 
 const whereClause = ({
   searchOptions,
   variableIndex,
 }: SearchTypeQueryProps): string =>
-  `@@ to_tsquery($${variableIndex}${searchOptions.fullWord ? '' : "||':*'"})`;
+  `@@ plainto_tsquery($${variableIndex}${searchOptions.fullWord ? '' : "||':*'"})`;
 
-const headline = ({ columnName, numberOfVariables }: HeadlineProps): string =>
-  `ts_headline(${columnName},to_tsquery($${numberOfVariables}),'MinWords=5, MaxWords=35')`;
+const headline = ({
+  columnName,
+  numberOfVariables,
+  searchOptions,
+}: HeadlineProps): string =>
+  `ts_headline(${columnName}, plainto_tsquery($${numberOfVariables}${
+    searchOptions.fullWord ? '' : "||':*'"
+  }),'MinWords=5, MaxWords=35,StartSel=<#>, StopSel=<#>')`;
 
 const fts = {
   whereClause,

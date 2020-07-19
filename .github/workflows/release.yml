@@ -1,8 +1,6 @@
 name: release_master
 
-on:
-  repository_dispatch:
-    types: [build__master__finished]
+on: workflow_dispatch
 
 jobs:
   release:

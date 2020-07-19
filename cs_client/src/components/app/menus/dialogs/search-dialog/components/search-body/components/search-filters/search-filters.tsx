@@ -7,20 +7,31 @@ import { SearchType } from '::app/menus/dialogs/search-dialog/components/search-
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { useOnWindowResize } from '::hooks/use-on-window-resize';
 import { useRef } from 'react';
-import { ac } from '::root/store/store';
+import { ac, Store } from '::root/store/store';
+import { connect, ConnectedProps } from 'react-redux';
+import { useSpring, animated } from 'react-spring';
+import { configs } from '::shared-components/transitions/transitions';
+import { TimeFilters } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/time-filters';
+import { SortOptions } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-sort/sort-options';
 
-export const useSetCssVariables = actionCreator => {
+export const useSetCssVariablesOnWindowResize = (
+  actionCreator,
+  dependency?: any,
+) => {
   const ref = useRef<HTMLDivElement>();
   const height = useRef(0);
-  useOnWindowResize([
-    () => {
-      const clientHeight = ref.current.clientHeight;
-      if (clientHeight !== height.current) {
-        height.current = clientHeight;
-        actionCreator(clientHeight);
-      }
-    },
-  ]);
+  useOnWindowResize(
+    [
+      () => {
+        const clientHeight = ref.current.clientHeight;
+        if (clientHeight !== height.current) {
+          height.current = clientHeight;
+          actionCreator(clientHeight);
+        }
+      },
+    ],
+    dependency,
+  );
   return ref;
 };
 
@@ -28,19 +39,42 @@ type Props = {
   show: boolean;
 };
 
-const SearchFilters: React.FC<Props> = () => {
-  const ref = useSetCssVariables(ac.cssVariables.setSearchFiltersHeight);
+const mapState = (state: Store) => ({
+  dockedDialog: state.root.dockedDialog,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const SearchFilters: React.FC<Props & PropsFromRedux> = ({
+  show,
+  dockedDialog,
+}) => {
+  const ref = useSetCssVariablesOnWindowResize(
+    ac.cssVariables.setSearchFiltersHeight,
+    dockedDialog,
+  );
+  const props = useSpring({
+    to: {
+      opacity: show ? 1 : 0,
+      transform: show ? 'translateY(0)' : 'translateY(50px)',
+    },
+    config: configs.c1,
+  });
   return (
-    <div
+    <animated.div
       className={joinClassNames([modSearchDialog.searchDialog__searchFilters])}
       ref={ref}
+      style={props}
     >
+      <SortOptions />
       <SearchTarget />
       <SearchScope />
       <SearchType />
       <SearchOptions />
-    </div>
+      <TimeFilters />
+    </animated.div>
   );
 };
-
-export { SearchFilters };
+const _ = connector(SearchFilters);
+export { _ as SearchFilters };

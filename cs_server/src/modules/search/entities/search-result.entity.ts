@@ -1,7 +1,8 @@
-import { ObjectType } from '@nestjs/graphql';
-import { NodeSearchResultEntity } from './node.search-result.entity';
+import { Field, ObjectType } from '@nestjs/graphql';
+import { NodeSearchResults } from './node-search-results.entity';
 
 @ObjectType()
 export class SearchResultEntity {
-  node: NodeSearchResultEntity[];
+  @Field(() => NodeSearchResults)
+  node: NodeSearchResults;
 }

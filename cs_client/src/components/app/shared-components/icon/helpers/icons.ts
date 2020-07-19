@@ -1,6 +1,7 @@
 const Icons = {
   material: {
     add: 'add',
+    pin: 'pin',
     close: 'close',
     menu: 'menu',
     tune: 'tune',

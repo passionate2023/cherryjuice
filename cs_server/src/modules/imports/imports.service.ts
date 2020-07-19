@@ -47,8 +47,8 @@ export class ImportsService {
     user: User;
     fileMeta: FileMeta;
   }): Promise<void> {
+    document.user = user;
     const importCTB = new ImportCTB();
-
     await importCTB.saveDocument({
       document,
       fileMeta,

@@ -9,6 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -33,11 +38,6 @@ jobs:
       - name: run jest tests
         run: cd cs_client && sudo yarn run test
 
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-
       - name: Notify slack success
         if: success()
         env:
@@ -50,10 +50,10 @@ jobs:
 
       - name: trigger workflow
         if: success()
-        uses: peter-evans/repository-dispatch@v1
+        uses: benc-uk/workflow-dispatch@v1
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
-          event-type: test__${{ steps.extract_branch.outputs.branch }}__finished
+          workflow: build_${{ steps.extract_branch.outputs.branch }}
 
       - name: Notify slack fail
         if: failure()

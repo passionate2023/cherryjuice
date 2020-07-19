@@ -9,7 +9,7 @@ type Props = {
   showFilters: boolean;
 };
 
-const SearchHeader: React.FC<Props> = () => {
+const SearchHeader: React.FC<Props> = ({ showFilters }) => {
   return (
     <div className={modSearchDialog.searchDialog__header}>
       <Search
@@ -19,7 +19,8 @@ const SearchHeader: React.FC<Props> = () => {
       <ButtonCircle
         className={modSearchDialog.searchDialog__header__toggleFilters}
         onClick={ac.search.toggleFilters}
-        icon={<Icon name={Icons.material.tune} />}
+        icon={<Icon name={Icons.material.tune} loadAsInlineSVG={"force"} />}
+        active={showFilters}
       />
     </div>
   );
