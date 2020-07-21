@@ -9,6 +9,7 @@ import { OwnershipLevel } from '../../../document/entities/document.owner.entity
 const nodeSearch = ({
   it,
   user,
+  publicAccess,
 }: NodeSearchDto): { query: string; variables: string[] } => {
   const {
     searchTarget,
@@ -29,7 +30,11 @@ const nodeSearch = ({
   ownershipWhereClauses.push('n_o."userId" = $' + variables.length);
   variables.push(OwnershipLevel.READER);
   ownershipWhereClauses.push('n_o."ownershipLevel" >= $' + variables.length);
-  andWhereClauses.push(`(${ownershipWhereClauses.join(' and ')})`);
+  andWhereClauses.push(
+    `((${ownershipWhereClauses.join(' and ')}) ${
+      publicAccess ? 'OR n_o."public" = true' : ''
+    })`,
+  );
 
   andWhereClauses.push(
     ...timeFilterWC({

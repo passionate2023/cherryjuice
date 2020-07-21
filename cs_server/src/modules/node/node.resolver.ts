@@ -26,7 +26,7 @@ export class NodeResolver {
           documentId: node.documentId,
           node_id: node.node_id,
           ownership: OwnershipLevel.READER,
-          publicAccess: false,
+          publicAccess: true,
         });
   }
   @ResolveField(() => [Image])

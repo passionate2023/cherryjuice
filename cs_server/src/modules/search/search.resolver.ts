@@ -29,6 +29,7 @@ export class SearchResolver {
     nodeSearchResults.results = await this.searchService.nodeSearch({
       it: searchArgs,
       user,
+      publicAccess: true
     });
     nodeSearchResults.meta.elapsedTimeMs =
       Date.now() - nodeSearchResults.meta.timestamp;

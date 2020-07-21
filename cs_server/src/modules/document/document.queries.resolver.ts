@@ -11,7 +11,7 @@ import { Document } from './entities/document.entity';
 import { Node } from '../node/entities/node.entity';
 import { NodeService } from '../node/node.service';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
-import { UseGuards } from '@nestjs/common';
+import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { GetUserGql } from '../user/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
 import { OwnershipLevel } from './entities/document.owner.entity';
@@ -29,12 +29,14 @@ export class DocumentQueriesResolver {
     @Args('file_id', { nullable: true }) file_id: string | undefined,
     @GetUserGql() user: User,
   ): Promise<Document[]> {
+    if (!file_id && !user) throw new UnauthorizedException();
     return file_id
       ? [
           await this.documentService.getDocumentById({
             documentId: file_id,
             ownership: OwnershipLevel.READER,
             userId: user.id,
+            publicAccess: true,
           }),
         ]
       : this.documentService.getDocuments({
@@ -57,14 +59,14 @@ export class DocumentQueriesResolver {
             userId: user.id,
             documentId: document.id,
             ownership: OwnershipLevel.READER,
-            publicAccess: false,
+            publicAccess: true,
           }),
         ]
       : await this.nodeService.getNodes({
           userId: user.id,
           documentId: document.id,
           ownership: OwnershipLevel.READER,
-          publicAccess: false,
+          publicAccess: true,
         });
   }
 }

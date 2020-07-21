@@ -141,8 +141,9 @@ export class NodeRepository extends Repository<Node> {
   async findNodes({
     it,
     user,
+    privateAccess
   }: NodeSearchDto): Promise<NodeSearchResultEntity[]> {
-    const { query, variables } = nodeSearch({ it, user });
+    const { query, variables } = nodeSearch({ it, user ,privateAccess});
 
     let searchResults: NodeSearchResultEntity[] = await this.manager.query(
       query,
