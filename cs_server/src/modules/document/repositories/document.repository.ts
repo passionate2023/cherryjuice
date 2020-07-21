@@ -1,63 +1,135 @@
-import {
-  DeleteResult,
-  EntityRepository,
-  Repository,
-  UpdateResult,
-} from 'typeorm';
-import { IDocumentRepository } from '../interfaces/document.repository';
+import { EntityRepository, Repository, UpdateResult } from 'typeorm';
 import { Document } from '../entities/document.entity';
 import { User } from '../../user/entities/user.entity';
 import {
   DOCUMENT_SUBSCRIPTIONS as DS,
   DOCUMENT_SUBSCRIPTIONS,
 } from '../entities/document-subscription.entity';
-import { DocumentDTO } from '../../imports/imports.service';
+import { CreateDocumentDTO } from '../../imports/imports.service';
 import { NotFoundException } from '@nestjs/common';
-import { EditDocumentDto } from '../input-types/edit-document.dto';
 import { createErrorDescription } from '../../shared/errors/create-error-description';
+import { GetDocumentDTO } from '../document.service';
+import {
+  DocumentOwner,
+  OwnershipLevel,
+} from '../entities/document.owner.entity';
+
 const nullableEvents = [
   DS.IMPORT_FINISHED,
   DS.EXPORT_FINISHED,
   DS.EXPORT_FAILED,
 ];
+const documentMetaFields = [
+  `d.id`,
+  `d.name`,
+  `d.size`,
+  `d.createdAt`,
+  `d.updatedAt`,
+  `d.status`,
+  `d.nodes`,
+  `d.hash`,
+];
+const select = () => documentMetaFields;
+
+export type EditDocumentDTO = {
+  getDocumentDTO: GetDocumentDTO;
+  meta: Record<string, any>;
+  updater?: (document: Document) => Document;
+};
+
 @EntityRepository(Document)
-export class DocumentRepository extends Repository<Document>
-  implements IDocumentRepository {
-  async getDocumentMetaById(user: User, file_id: string): Promise<Document> {
-    const document = await this.findOne({
-      where: {
-        id: file_id,
-        userId: user.id,
-      },
-    });
+export class DocumentRepository extends Repository<Document> {
+  async getDocumentById({
+    userId,
+    documentId,
+    ownership,
+    publicAccess,
+  }: GetDocumentDTO): Promise<Document> {
+    const document = await this.createQueryBuilder('d')
+      .leftJoin(DocumentOwner, 'n_o', 'n_o."documentId" = d.id ')
+      .select(select())
+      .andWhere(
+        `( (n_o."userId" = :userId AND n_o."ownershipLevel" >= :ownership)  ${
+          publicAccess ? 'OR n_o."public" = true' : ''
+        })`,
+        { userId, ownership },
+      )
+      .andWhere('n_o."documentId" = :documentId', { documentId })
+      .getOne();
     if (!document)
       throw new NotFoundException(
-        createErrorDescription.documentNotExist(file_id),
+        createErrorDescription.documentNotExist(documentId),
       );
     return document;
   }
 
-  async getDocumentsMeta(user: User): Promise<Document[]> {
-    const queryBuilder = this.createQueryBuilder('document');
-    queryBuilder.andWhere('document.userId = :userId', { userId: user.id });
-    return queryBuilder.getMany();
+  async getDocuments({
+    userId,
+    ownership,
+    publicAccess,
+  }: GetDocumentDTO): Promise<Document[]> {
+    return await this.createQueryBuilder('d')
+      .leftJoin(DocumentOwner, 'n_o', 'n_o."documentId" = d.id ')
+      .select(select())
+      .andWhere(
+        `( (n_o."userId" = :userId AND n_o."ownershipLevel" >= :ownership)  ${
+          publicAccess ? 'OR n_o."public" = true' : ''
+        })`,
+        { userId, ownership },
+      )
+      .getMany();
   }
 
-  async createDocument({ name, size, user }: DocumentDTO): Promise<Document> {
-    const document = new Document(user, name, size);
+  async createDocument({ name, size }: CreateDocumentDTO): Promise<Document> {
+    const document = new Document(name, size);
     await document.save();
     return document;
   }
 
-  async deleteDocuments(IDs: string[], user: User): Promise<DeleteResult> {
-    const queryBuilder = this.createQueryBuilder();
-    return await queryBuilder
-      .delete()
-      .where('userId = :userId', { userId: user.id })
-      .andWhereInIds(IDs)
-      .execute();
+  private async updateDocument({
+    meta,
+    getDocumentDTO,
+    updater,
+  }: EditDocumentDTO): Promise<Document> {
+    let document = await this.getDocumentById(getDocumentDTO);
+    Object.entries(meta).forEach(([k, v]) => {
+      document[k] = v;
+    });
+    if (updater) document = updater(document);
+    document.size = await this.getSize({
+      documentId: getDocumentDTO.documentId,
+    });
+    await this.save(document);
+    return document;
+  }
+  async editDocument({
+    getDocumentDTO,
+    meta,
+    updater,
+  }: EditDocumentDTO): Promise<Document> {
+    return await this.updateDocument({
+      getDocumentDTO,
+      meta: {
+        ...meta,
+        updatedAt: meta.updatedAt ? new Date(meta.updatedAt) : new Date(),
+      },
+      updater,
+    });
   }
 
+  async deleteDocuments(IDs: string[], user: User): Promise<string[]> {
+    const documents = await Promise.all(
+      IDs.map(documentId =>
+        this.getDocumentById({
+          userId: user.id,
+          documentId,
+          ownership: OwnershipLevel.OWNER,
+        } as GetDocumentDTO),
+      ),
+    );
+    await this.remove(documents);
+    return IDs;
+  }
   async markUnfinishedImportsAsFailed(): Promise<UpdateResult> {
     const queryBuilder = this.createQueryBuilder('document');
     return await queryBuilder
@@ -65,44 +137,6 @@ export class DocumentRepository extends Repository<Document>
       .set({ status: DOCUMENT_SUBSCRIPTIONS.IMPORT_FAILED })
       .where('document.status is not null')
       .execute();
-  }
-
-  private async updateDocument({
-    documentId,
-    meta,
-    user,
-  }: {
-    user: User;
-    documentId: string;
-    meta: Record<string, any>;
-  }): Promise<Document> {
-    const document = await this.findOneOrFail({
-      id: documentId,
-      userId: user.id,
-    });
-    Object.entries(meta).forEach(([k, v]) => {
-      document[k] = v;
-    });
-    document.size = await this.getSize({ documentId });
-    await this.save(document);
-    return document;
-  }
-
-  async editDocument({
-    documentId,
-    meta,
-    user,
-  }: EditDocumentDto): Promise<string> {
-    const document = await this.updateDocument({
-      documentId,
-      user,
-      meta: {
-        ...meta,
-        updatedAt: new Date(meta.updatedAt),
-      },
-    });
-
-    return document.id;
   }
 
   async getSize({ documentId }: { documentId: string }): Promise<number> {

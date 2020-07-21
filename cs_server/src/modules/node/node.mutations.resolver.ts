@@ -5,11 +5,13 @@ import { NodeService } from './node.service';
 import { GetUserGql } from '../user/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
-import { NodeMetaIt } from './dto/node-meta.it';
-import { CreateNodeIt } from './dto/create-node.it';
+import { NodeMetaIt } from './it/node-meta.it';
+import { CreateNodeIt } from './it/create-node.it';
 import { ImportsService } from '../imports/imports.service';
 import { FileUpload, GraphQLUpload } from '../document/helpers/graphql';
-import { SaveHtmlIt } from './dto/save-html.it';
+import { SaveHtmlIt } from './it/save-html.it';
+import { OwnershipLevel } from '../document/entities/document.owner.entity';
+import { Node } from './entities/node.entity';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => NodeMutation)
@@ -22,55 +24,72 @@ export class NodeMutationsResolver {
 
   @ResolveField()
   async saveAHtml(
-    @Parent() { node_id, documentId }: { node_id: number; documentId: string },
+    @Parent() node: Node,
     @Args({ name: 'data', type: () => SaveHtmlIt }) data: SaveHtmlIt,
     deletedImages: string[],
     @GetUserGql() user: User,
   ): Promise<string> {
     await this.nodeService.setAHtml({
-      user,
-      node_id,
       data,
-      documentId,
+      getNodeDTO: {
+        userId: user.id,
+        node_id: node.node_id,
+        documentId: node.documentId,
+        ownership: OwnershipLevel.WRITER,
+      },
     });
     return '';
   }
 
   @ResolveField()
   async meta(
-    @Args({ name: 'meta', type: () => NodeMetaIt }) meta: NodeMetaIt,
-    @Parent() { node_id, documentId }: { node_id: number; documentId: string },
+    @Parent() node: Node,
+    @Args({ name: 'meta', type: () => NodeMetaIt }) data: NodeMetaIt,
     @GetUserGql() user: User,
   ): Promise<string> {
-    return await this.nodeService.setMeta({ user, node_id, documentId, meta });
+    return await this.nodeService.setMeta({
+      data,
+      getNodeDTO: {
+        userId: user.id,
+        node_id: node.node_id,
+        documentId: node.documentId,
+        ownership: OwnershipLevel.WRITER,
+      },
+    });
   }
-
   @ResolveField()
   async createNode(
-    @Args({ name: 'meta', type: () => CreateNodeIt }) meta: CreateNodeIt,
-    @Parent() { node_id, documentId }: { node_id: number; documentId: string },
+    @Args({ name: 'meta', type: () => CreateNodeIt }) data: CreateNodeIt,
+    @Parent() node: Node,
     @GetUserGql() user: User,
   ): Promise<string> {
-    return await this.nodeService.createNode({
+    const createdNode = await this.nodeService.createNode(
+      {
+        getNodeDTO: {
+          documentId: node.documentId,
+          userId: user.id,
+          ownership: OwnershipLevel.WRITER,
+          node_id: node.node_id,
+        },
+        data,
+      },
       user,
-      node_id,
-      documentId,
-      meta,
-    });
+    );
+    return createdNode.id;
   }
 
   @ResolveField()
   async deleteNode(
-    @Parent() { node_id, documentId }: { node_id: number; documentId: string },
+    @Parent() node: Node,
     @GetUserGql() user: User,
   ): Promise<string> {
     return await this.nodeService.deleteNode({
-      node_id,
-      documentId,
-      user,
+      ownership: OwnershipLevel.WRITER,
+      node_id: node.node_id,
+      documentId: node.documentId,
+      userId: user.id,
     });
   }
-
   @ResolveField(() => [[String]])
   async uploadImage(
     @Args({
@@ -78,14 +97,17 @@ export class NodeMutationsResolver {
       type: () => [GraphQLUpload(['image/png'], 'ImageUpload')],
     })
     images: FileUpload[],
-    @Parent() { node_id, documentId }: { node_id: number; documentId: string },
+    @Parent() node: Node,
     @GetUserGql() user: User,
   ): Promise<[string, string][]> {
     return await this.importsService.importImages({
       images,
-      documentId,
-      node_id,
-      user,
+      getNodeDTO: {
+        node_id: node.node_id,
+        documentId: node.documentId,
+        userId: user.id,
+        ownership: OwnershipLevel.WRITER,
+      },
     });
   }
 }

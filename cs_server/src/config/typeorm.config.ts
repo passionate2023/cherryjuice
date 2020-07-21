@@ -4,11 +4,13 @@ import { Node } from '../modules/node/entities/node.entity';
 import { Image } from '../modules/image/entities/image.entity';
 import { User } from '../modules/user/entities/user.entity';
 import path from 'path';
+import { NodeOwner } from '../modules/node/entities/node.owner.entity';
+import { DocumentOwner } from '../modules/document/entities/document.owner.entity';
 
 const config: TypeOrmModuleOptions = {
   type: 'postgres',
   url: process.env.DATABASE_URL,
-  entities: [Document, Node, Image, User],
+  entities: [Document, Node, Image, User, NodeOwner, DocumentOwner],
   migrations: [path.resolve(__dirname, '../../migrations/**/*.ts')],
   cli: {
     migrationsDir: 'migrations',

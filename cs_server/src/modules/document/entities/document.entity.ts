@@ -7,11 +7,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../user/entities/user.entity';
 import { randomUUID10 } from '../../shared';
 import hash from 'object-hash';
 
@@ -20,26 +18,16 @@ export type NodesHash = { [node_id: number]: { hash: string } };
 @Entity()
 @ObjectType()
 export class Document extends BaseEntity {
-  constructor(user: User, name: string, size: number) {
+  constructor(name: string, size = 0) {
     super();
     this.id = randomUUID10();
     this.name = name;
-    this.user = user;
     this.size = size;
     this.hash = '';
   }
   @PrimaryColumn()
   @Field()
   id: string;
-
-  @ManyToOne(
-    () => User,
-    user => user.id,
-    { onDelete: 'CASCADE' },
-  )
-  user: User;
-  @Column()
-  userId: string;
 
   @Column('text', { nullable: false })
   @Field()
@@ -67,7 +55,7 @@ export class Document extends BaseEntity {
   @Field({ nullable: true })
   status: string;
 
-  @Column('json', { nullable: true, default: {} })
+  @Column('json', { nullable: true, default: {}, select: false })
   nodes: NodesHash;
 
   @Column({ nullable: true })

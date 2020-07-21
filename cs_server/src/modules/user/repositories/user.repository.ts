@@ -85,9 +85,9 @@ class UserRepository extends Repository<User> {
       hash = await hashPassword(password, user.salt);
     }
     if (!(hash && hash === user.password)) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-    return UserRepository.getAuthUser(user);
+      // throw new UnauthorizedException('Invalid credentials');
+      return undefined;
+    } else return UserRepository.getAuthUser(user);
   }
 
   async getUser({

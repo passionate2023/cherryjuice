@@ -21,6 +21,8 @@ import { NodeMutation } from '../node/entities/node-mutation.entity';
 import { CreateDocumentIt } from './input-types/create-document.it';
 import { EditDocumentIt } from './input-types/edit-document.it';
 import { ExportsService } from '../exports/exports.service';
+import { OwnershipLevel } from './entities/document.owner.entity';
+import { Document } from './entities/document.entity';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => DocumentMutation)
@@ -33,8 +35,90 @@ export class DocumentMutationsResolver {
   ) {}
 
   @Mutation(() => DocumentMutation)
-  document(@Args('file_id', { nullable: true }) file_id?: string): {} {
+  async document(
+    @GetUserGql() user: User,
+    @Args('file_id', { nullable: true }) file_id?: string,
+  ) {
     return { id: file_id };
+  }
+
+  @ResolveField(() => String)
+  async createDocument(
+    @Args({
+      name: 'document',
+      type: () => CreateDocumentIt,
+    })
+    { name }: CreateDocumentIt,
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    const document = await this.documentService.createDocument({
+      name,
+      user,
+    });
+    return document.id;
+  }
+  @ResolveField(() => String)
+  async editDocument(
+    @Args({
+      name: 'meta',
+      type: () => EditDocumentIt,
+    })
+    meta: EditDocumentIt,
+    @Parent() document: Document,
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    const node = await this.documentService.editDocument({
+      meta,
+      getDocumentDTO: {
+        documentId: document.id,
+        userId: user.id,
+        ownership: OwnershipLevel.OWNER,
+      },
+    });
+    return node.id;
+  }
+  @ResolveField(() => String)
+  async deleteDocument(
+    @Args({
+      name: 'documents',
+      type: () => DeleteDocumentInputType,
+    })
+    { IDs }: DeleteDocumentInputType,
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    const deleteResult = await this.documentService.deleteDocuments(IDs, user);
+    return JSON.stringify(deleteResult);
+  }
+  @ResolveField(() => String)
+  async exportDocument(
+    @Parent() parent,
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    return await this.exportsService.exportDocument({
+      userId: user.id,
+      documentId: parent.id,
+      ownership: OwnershipLevel.OWNER,
+    });
+  }
+  @ResolveField(() => [NodeMutation])
+  async node(
+    @Parent() { id: documentId },
+    @Args('node_id', { type: () => Int }) node_id: number,
+  ) {
+    return { node_id, documentId };
+  }
+
+  @ResolveField(() => Boolean)
+  async uploadFromGDrive(
+    @Args({
+      name: 'file',
+      type: () => UploadLinkInputType,
+    })
+    { IDs, access_token }: UploadLinkInputType,
+    @GetUserGql() user: User,
+  ): Promise<boolean> {
+    this.importsService.importDocumentsFromGDrive(IDs, user, access_token);
+    return true;
   }
 
   @ResolveField(() => Boolean)
@@ -48,84 +132,5 @@ export class DocumentMutationsResolver {
   ): Promise<boolean> {
     await this.importsService.importFromGraphqlClient(files, user);
     return true;
-  }
-
-  @ResolveField(() => Boolean)
-  async uploadLink(
-    @Args({
-      name: 'file',
-      type: () => UploadLinkInputType,
-    })
-    { IDs, access_token }: UploadLinkInputType,
-    @GetUserGql() user: User,
-  ): Promise<boolean> {
-    this.importsService.importDocumentsFromGDrive(IDs, user, access_token);
-    return true;
-  }
-
-  @ResolveField(() => String)
-  async deleteDocument(
-    @Args({
-      name: 'documents',
-      type: () => DeleteDocumentInputType,
-    })
-    { IDs }: DeleteDocumentInputType,
-    @GetUserGql() user: User,
-  ): Promise<string> {
-    const deleteResult = await this.documentService.deleteDocuments(IDs, user);
-    return JSON.stringify(deleteResult);
-  }
-
-  @ResolveField(() => String)
-  async createDocument(
-    @Args({
-      name: 'document',
-      type: () => CreateDocumentIt,
-    })
-    { name }: CreateDocumentIt,
-    @GetUserGql() user: User,
-  ): Promise<string> {
-    const createResult = await this.documentService.createDocument({
-      name,
-      size: 0,
-      user,
-    });
-    return createResult.id;
-  }
-  @ResolveField(() => String)
-  async editDocument(
-    @Args({
-      name: 'meta',
-      type: () => EditDocumentIt,
-    })
-    meta: EditDocumentIt,
-    @Parent() parent,
-    @GetUserGql() user: User,
-  ): Promise<string> {
-    const res = await this.documentService.editDocument({
-      meta,
-      user,
-      documentId: parent.id,
-    });
-    return res;
-  }
-  @ResolveField(() => String)
-  async exportDocument(
-    @Parent() parent,
-    @GetUserGql() user: User,
-  ): Promise<string> {
-    return await this.exportsService.exportDocument({
-      user,
-      documentId: parent.id,
-    });
-  }
-  @ResolveField(() => [NodeMutation])
-  async node(
-    @Parent() parent,
-    @Args('node_id', { type: () => Int }) node_id: number,
-    @GetUserGql() user: User,
-  ) {
-    await this.documentService.getDocumentMetaById(user, parent.id);
-    return { node_id, documentId: parent.id };
   }
 }

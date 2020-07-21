@@ -4,6 +4,7 @@ import { searchTargetWC } from './helpers/search-target/search-target';
 import { timeFilterWC } from './helpers/time-filter';
 import { orderBy } from './helpers/order-by/order-by';
 import { SearchTarget } from '../../it/node-search.it';
+import { OwnershipLevel } from '../../../document/entities/document.owner.entity';
 
 const nodeSearch = ({
   it,
@@ -24,7 +25,11 @@ const nodeSearch = ({
   const variables = [];
   const andWhereClauses: string[] = [];
   variables.push(user.id);
-  andWhereClauses.push('n."userId" = $' + variables.length);
+  const ownershipWhereClauses = [];
+  ownershipWhereClauses.push('n_o."userId" = $' + variables.length);
+  variables.push(OwnershipLevel.READER);
+  ownershipWhereClauses.push('n_o."ownershipLevel" >= $' + variables.length);
+  andWhereClauses.push(`(${ownershipWhereClauses.join(' and ')})`);
 
   andWhereClauses.push(
     ...timeFilterWC({
@@ -61,12 +66,12 @@ const nodeSearch = ({
         n.node_id, n.id as "nodeId", n.name as "nodeName", n."documentId", n."createdAt", n."updatedAt",
         d.name as "documentName"
         from node as n
+        left join node_owner n_o on n.id = n_o."nodeId"
         inner join document as d
         on d.id = n."documentId"
         where ${andWhereClauses.filter(Boolean).join(' and ')}
         ${orderBy({ sortOptions })};
   `;
-
   return {
     query: searchQuery,
     variables,

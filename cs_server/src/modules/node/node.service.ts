@@ -2,15 +2,20 @@ import { aHtmlToHtml } from './helpers/rendering/ahtml-to-html';
 import { Injectable } from '@nestjs/common';
 import { Node } from './entities/node.entity';
 import { NodeRepository } from './repositories/node.repository';
-import { SaveAhtmlDto } from './dto/save-ahtml.dto';
+import {
+  CreateNodeDTO,
+  GetNodeDTO,
+  GetNodesDTO,
+  MutateNodeContentDTO,
+  MutateNodeMetaDTO,
+} from './dto/mutate-node.dto';
 import { ImageService } from '../image/image.service';
-import { NodeMetaDto } from './dto/node-meta.dto';
-import { CreateNodeDto } from './dto/create-node.dto';
-import { DeleteNodeDto } from './dto/delete-node.dto';
-import { GetNodeByNodeIdIt } from './dto/get-node-by-node-id.it';
 import { DocumentService } from '../document/document.service';
 import { NodeSearchDto } from '../search/dto/node-search.dto';
 import { NodeSearchResultEntity } from '../search/entities/node.search-result.entity';
+import { NodeOwnerRepository } from './repositories/node.owner.repository';
+import { OwnershipLevel } from '../document/entities/document.owner.entity';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class NodeService {
@@ -18,51 +23,71 @@ export class NodeService {
     private imageService: ImageService,
     private nodeRepository: NodeRepository,
     private documentService: DocumentService,
+    private ownershipService: NodeOwnerRepository,
+    private nodeOwnerRepository: NodeOwnerRepository,
   ) {}
 
-  async createNode(args: CreateNodeDto): Promise<string> {
-    const node = await this.nodeRepository.createNode(args);
-    await this.documentService.updateNodesHash({ ...args, ...node });
-    return node.id;
+  async getNodes(dto: GetNodesDTO): Promise<Node[]> {
+    return this.nodeRepository.getNodes(dto);
   }
-  async setAHtml(args: SaveAhtmlDto): Promise<string> {
+
+  async getNodeById(dto: GetNodeDTO): Promise<Node> {
+    return await this.nodeRepository.getNodeById(dto);
+  }
+
+  async getHtml(dto: GetNodeDTO): Promise<string> {
+    const ahtml = await this.nodeRepository.getAHtml(dto);
+    return aHtmlToHtml(ahtml);
+  }
+  async createNode(dto: CreateNodeDTO, user: User): Promise<Node> {
+    const node = await this.nodeRepository.createNode(dto);
+    const document = await this.documentService.updateNodesHash({
+      ownership: OwnershipLevel.WRITER,
+      userId: dto.getNodeDTO.userId,
+      documentId: dto.getNodeDTO.documentId,
+      hash: node.hash,
+      node_id: node.node_id,
+    });
+    await this.nodeOwnerRepository.createOwnership({
+      document,
+      user: user,
+      ownershipLevel: OwnershipLevel.OWNER,
+      node,
+    });
+    return node;
+  }
+  async setAHtml(args: MutateNodeContentDTO): Promise<string> {
     if (args.data.deletedImages.length)
       await this.imageService.deleteImages(args.data.deletedImages);
     const node = await this.nodeRepository.setAHtml(args);
-    await this.documentService.updateNodesHash({ ...args, ...node });
-    return node.id;
-  }
-
-  async setMeta(args: NodeMetaDto): Promise<string> {
-    const node = await this.nodeRepository.setMeta(args);
-    await this.documentService.updateNodesHash({ ...args, ...node });
-    return node.id;
-  }
-
-  async deleteNode(args: DeleteNodeDto): Promise<string> {
-    const res = await this.nodeRepository.deleteNode(args);
-    await this.documentService.deleteNodesHash({
-      ...args,
-      node_id: args.node_id,
+    await this.documentService.updateNodesHash({
+      documentId: args.getNodeDTO.documentId,
+      node_id: node.node_id,
+      hash: node.hash,
+      userId: args.getNodeDTO.userId,
+      ownership: OwnershipLevel.WRITER,
     });
+    return node.id;
+  }
+  async setMeta(args: MutateNodeMetaDTO): Promise<string> {
+    const node = await this.nodeRepository.setMeta(args);
+    await this.documentService.updateNodesHash({
+      documentId: args.getNodeDTO.documentId,
+      node_id: node.node_id,
+      hash: node.hash,
+      userId: args.getNodeDTO.userId,
+      ownership: OwnershipLevel.WRITER,
+    });
+    return node.id;
+  }
+
+  async deleteNode(dto: GetNodeDTO): Promise<string> {
+    const res = await this.nodeRepository.deleteNode(dto);
+    await this.documentService.deleteNodesHash(dto);
     return res;
   }
-
-  async getHtml(node_id: string, documentId: string): Promise<string> {
-    const ahtml = await this.nodeRepository.getAHtml(node_id, documentId);
-    return aHtmlToHtml(ahtml);
-  }
-
-  async getNodesMeta(documentId: string): Promise<Node[]> {
-    return this.nodeRepository.getNodesMeta(documentId);
-  }
-
-  async getNodeMetaById(args: GetNodeByNodeIdIt): Promise<Node> {
-    return await this.nodeRepository.getNodeMetaById(args);
-  }
-
-  async getNodesMetaAndAHtml(documentId: string): Promise<Node[]> {
-    return await this.nodeRepository.getNodesMetaAndAHtml(documentId);
+  async getNodesMetaAndAHtml(dto: GetNodesDTO): Promise<Node[]> {
+    return await this.nodeRepository.getNodesMetaAndAHtml(dto);
   }
 
   async findNode(searchDto: NodeSearchDto): Promise<NodeSearchResultEntity[]> {

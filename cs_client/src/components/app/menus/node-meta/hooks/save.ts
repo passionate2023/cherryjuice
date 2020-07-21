@@ -38,7 +38,10 @@ const calculateDiff = ({
   } else {
     res = {};
     if (state.name !== name) res.name = state.name;
-    if (newStyle !== JSON.stringify(style)) res.node_title_styles = newStyle;
+    if (newStyle !== JSON.stringify(style)) {
+      const noChanges = newStyle === '{}' && !style;
+      if (!noChanges) res.node_title_styles = newStyle;
+    }
     if (state.isReadOnly !== Boolean(read_only))
       res.read_only = state.isReadOnly ? 1 : 0;
   }
@@ -85,7 +88,8 @@ const useSave = ({
       updateCachedHtmlAndImages();
       router.node(node.documentId, node.node_id);
     } else {
-      if (Object.keys(res)) apolloCache.node.mutate({ nodeId, meta: res });
+      if (Object.keys(res).length)
+        apolloCache.node.mutate({ nodeId, meta: res });
     }
   });
 };

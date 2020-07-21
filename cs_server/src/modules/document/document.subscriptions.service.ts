@@ -13,20 +13,24 @@ export class DocumentSubscriptionsService {
   private publishMessage = async (
     eventType: DS,
     document: Document,
+    userId: string,
   ): Promise<void> => {
     const payload: { document: DocumentSubscription } = {
       document: {
         id: document.id,
         status: eventType,
         name: document.name,
-        userId: document.userId,
+        userId,
         hash: document.hash,
       },
     };
     await pubSub.publish(SUBSCRIPTIONS.DOCUMENT, payload);
   };
-  private _ = (eventType: DS) => async (document: Document): Promise<void> => {
-    await this.publishMessage(eventType, document);
+  private _ = (eventType: DS) => async (
+    document: Document,
+    userId: string,
+  ): Promise<void> => {
+    await this.publishMessage(eventType, document, userId);
     await this.documentRepository.setDocumentStatus(eventType, document);
   };
 

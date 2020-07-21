@@ -79,7 +79,7 @@ const documentPuppeteer = {
   exportDocument(document: DocumentAst) {
     documentPuppeteer.goToDocument(document);
     cy.findByTestId(testIds.toolBar__navBar__exportDocument).click();
-    cy.contains('finished');
+    cy.contains('finished', { timeout: 60000 });
     cy.findByTestId(
       testIds.popups__documentOperations__downloadDocument + document.meta.id,
     ).click();

@@ -12,7 +12,6 @@ import { swapFatherIdIfApplies } from '::app/editor/document/hooks/save-document
 const adapt = ({
   child_nodes,
   createdAt,
-  documentId,
   father_id,
   name,
   node_id,
@@ -23,7 +22,6 @@ const adapt = ({
 }: NodeCached): CreateNodeIt => ({
   child_nodes,
   createdAt,
-  documentId,
   father_id,
   name,
   node_id,
@@ -56,11 +54,11 @@ const saveNewNodes = async ({ state, documentId }: SaveOperationProps) => {
     updateDocumentId(state)(node);
     const meta: CreateNodeIt = adapt(node);
     const permanentNodeId = await apolloCache.client.mutate({
-      variables: {
+      variables: DOCUMENT_MUTATION.createNode.args({
         file_id: node.documentId,
         node_id: node.node_id,
         meta,
-      },
+      }),
       query: DOCUMENT_MUTATION.createNode.query,
       path: DOCUMENT_MUTATION.createNode.path,
     });

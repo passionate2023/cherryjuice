@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ExportDocumentDto } from './dto/export-document.dto';
-import { DocumentService } from '../document/document.service';
+import { DocumentService, GetDocumentDTO } from '../document/document.service';
 import { NodeService } from '../node/node.service';
 import { ExportCTB } from './helpers/export-ctb';
 import fs, { ReadStream } from 'fs';
@@ -40,32 +39,43 @@ export class ExportsService {
 
   exportDocument = async ({
     documentId,
-    user,
-  }: ExportDocumentDto): Promise<string> => {
-    const document = await this.documentService.getDocumentMetaById(
-      user,
+    userId,
+    ownership,
+  }: GetDocumentDTO): Promise<string> => {
+    const document = await this.documentService.getDocumentById({
+      ownership,
       documentId,
-    );
-    const exportCTB = new ExportCTB(document);
+      userId,
+    });
+    const exportCTB = new ExportCTB({
+      id: document.id,
+      name: document.name,
+      hash: document.hash,
+      userId,
+    });
     try {
-      await this.subscriptionsService.export.pending(document);
-      await this.subscriptionsService.export.preparing(document);
-      const nodes = await this.nodeService.getNodesMetaAndAHtml(documentId);
+      await this.subscriptionsService.export.pending(document, userId);
+      await this.subscriptionsService.export.preparing(document, userId);
+      const nodes = await this.nodeService.getNodesMetaAndAHtml({
+        ownership,
+        documentId: document.id,
+        userId,
+      });
       await exportCTB.createCtb();
       await exportCTB.createTables();
-      await this.subscriptionsService.export.nodesStarted(document);
+      await this.subscriptionsService.export.nodesStarted(document, userId);
       const imagesPerNode = await exportCTB.writeAHtmls(nodes);
-      await this.subscriptionsService.export.imagesStarted(document);
+      await this.subscriptionsService.export.imagesStarted(document, userId);
       await exportCTB.writeNodesImages({
         imagesPerNode,
         getNodeImages: this.imageService.getLoadedImages,
       });
       await exportCTB.closeCtb();
       await this.scheduleDeletion(document, exportCTB);
-      await this.subscriptionsService.export.finished(document);
+      await this.subscriptionsService.export.finished(document, userId);
       return exportCTB.getFileLocation.relativePath;
     } catch (e) {
-      await this.subscriptionsService.export.failed(document);
+      await this.subscriptionsService.export.failed(document, userId);
       await exportCTB.closeCtb();
       // eslint-disable-next-line no-console
       console.error(e);

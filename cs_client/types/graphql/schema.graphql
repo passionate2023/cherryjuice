@@ -30,7 +30,7 @@ type DocumentMutation {
     exportDocument: String!
     node(node_id: Int!): NodeMutation!
     uploadFile(files: [CTBUpload!]!): Boolean!
-    uploadLink(file: UploadLinkInputType!): Boolean!
+    uploadFromGDrive(file: UploadLinkInputType!): Boolean!
 }
 
 type DocumentSubscription {
@@ -197,7 +197,6 @@ input CreateDocumentIt {
 input CreateNodeIt {
     child_nodes: [Int!]!
     createdAt: Timestamp!
-    documentId: String!
     fatherId: String
     father_id: Float!
     name: String!

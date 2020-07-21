@@ -4,5 +4,5 @@ import { User } from '../../user/entities/user.entity';
 export interface IDocumentRepository {
   getDocumentsMeta(user: User): Promise<Document[]>;
 
-  getDocumentMetaById(user: User, file_id: string): Promise<Document>;
+  getDocumentById(user: User, file_id: string): Promise<Document>;
 }

@@ -4,9 +4,6 @@ import { Timestamp } from '../../document/helpers/graphql-types/timestamp';
 @InputType()
 export class CreateNodeIt {
   @Field()
-  documentId: string;
-
-  @Field()
   father_id: number;
 
   @Field({ nullable: true })

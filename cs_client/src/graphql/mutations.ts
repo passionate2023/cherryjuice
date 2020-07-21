@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { AuthUser } from '::types/graphql/generated';
+import { AuthUser, CreateNodeIt } from '::types/graphql/generated';
 import { FRAGMENT_USER } from '::graphql/fragments';
 
 const DOCUMENT_MUTATION = {
@@ -13,7 +13,7 @@ const DOCUMENT_MUTATION = {
   grdrive: gql`
     mutation($file: UploadLinkInputType!) {
       document {
-        uploadLink(file: $file)
+        uploadFromGDrive(file: $file)
       }
     }
   `,
@@ -63,6 +63,8 @@ const DOCUMENT_MUTATION = {
     `,
   },
   createNode: {
+    args: (args: { file_id: string; node_id: number; meta: CreateNodeIt }) =>
+      args,
     path: (data): string => data?.document?.node?.createNode,
     query: gql`
       mutation createNode(

@@ -186,7 +186,7 @@ export interface DocumentMutation {
   exportDocument: string;
   node: NodeMutation;
   uploadFile: boolean;
-  uploadLink: boolean;
+  uploadFromGDrive: boolean;
 }
 
 export interface CreateDocumentIt {
@@ -213,7 +213,6 @@ export interface NodeMutation {
 export interface CreateNodeIt {
   child_nodes: Array<number>;
   createdAt: Timestamp;
-  documentId: string;
   fatherId?: string;
   father_id: number;
   name: string;
@@ -752,7 +751,7 @@ export interface DocumentMutationTypeResolver<TParent = any> {
   exportDocument?: DocumentMutationToExportDocumentResolver<TParent>;
   node?: DocumentMutationToNodeResolver<TParent>;
   uploadFile?: DocumentMutationToUploadFileResolver<TParent>;
-  uploadLink?: DocumentMutationToUploadLinkResolver<TParent>;
+  uploadFromGDrive?: DocumentMutationToUploadFromGDriveResolver<TParent>;
 }
 
 export interface DocumentMutationToCreateDocumentArgs {
@@ -834,16 +833,16 @@ export interface DocumentMutationToUploadFileResolver<
   ): TResult;
 }
 
-export interface DocumentMutationToUploadLinkArgs {
+export interface DocumentMutationToUploadFromGDriveArgs {
   file: UploadLinkInputType;
 }
-export interface DocumentMutationToUploadLinkResolver<
+export interface DocumentMutationToUploadFromGDriveResolver<
   TParent = any,
   TResult = any
 > {
   (
     parent: TParent,
-    args: DocumentMutationToUploadLinkArgs,
+    args: DocumentMutationToUploadFromGDriveArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;

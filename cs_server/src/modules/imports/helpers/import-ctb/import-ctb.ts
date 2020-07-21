@@ -2,12 +2,14 @@ import imageThumbnail from 'image-thumbnail';
 import { Node } from '../../../node/entities/node.entity';
 import { NodeSqliteRepository } from './repositories/node.sqlite.repository';
 import { DocumentSqliteRepository } from './repositories/document.sqlite.repository';
-import { copyProperties } from '../../../document/helpers';
 import { Document } from '../../../document/entities/document.entity';
 import { Image } from '../../../image/entities/image.entity';
 import { ImageSqliteRepository } from './repositories/image.sqlite.repository';
 import { nodeTitleStyle } from './rendering/node-meta/node-title-style';
 import { FileMeta } from '../download/create-dowload-task/create-gdrive-download-task';
+import { User } from '../../../user/entities/user.entity';
+import { OwnershipLevel } from '../../../document/entities/document.owner.entity';
+import { CreateNodeDTO } from '../../../node/dto/mutate-node.dto';
 
 type NodeDateMap = Map<number, { createdAt: Date; updatedAt: Date }>;
 type NodeDatesMap = NodeDateMap;
@@ -24,7 +26,10 @@ export class ImportCTB {
   private readonly documentSqliteRepository: DocumentSqliteRepository;
   private readonly nodeSqliteRepository: NodeSqliteRepository;
   private readonly imageSqliteRepository: ImageSqliteRepository;
-  constructor() {
+  constructor(
+    private nodeCreator: (dto: CreateNodeDTO) => Promise<Node>,
+    private user: User,
+  ) {
     this.documentSqliteRepository = new DocumentSqliteRepository();
     this.nodeSqliteRepository = new NodeSqliteRepository(
       this.documentSqliteRepository,
@@ -86,12 +91,16 @@ export class ImportCTB {
         is_ro: nodeRaw.is_ro,
       });
 
-      const node = new Node();
-      copyProperties(nodeRaw, node, { createdAt: true, updatedAt: true });
-      node.document = newDocument;
-      node.user = newDocument.user;
+      const node = await this.nodeCreator({
+        getNodeDTO: {
+          ownership: OwnershipLevel.OWNER,
+          documentId: newDocument.id,
+          userId: this.user.id,
+          node_id: nodeRaw.node_id,
+        },
+        data: { ...nodeRaw, createdAt: 0, updatedAt: 0 },
+      });
       nodesMap.set(node.node_id, node);
-      await node.save();
       nodeDatesMap.set(node.node_id, {
         createdAt: new Date(nodeRaw.createdAt),
         updatedAt: new Date(nodeRaw.updatedAt),
@@ -150,12 +159,13 @@ export class ImportCTB {
     document: Document;
   }) {
     for (const node of Array.from(nodesMap.values())) {
-      node.ahtml = JSON.stringify(
-        await this.nodeSqliteRepository.getAHtml(
-          String(node.node_id),
-          node_idImagesMap.get(node.node_id),
-        ),
+      const node_id = String(node.node_id);
+      const imagesIds = node_idImagesMap.get(node.node_id);
+      const ahtml = await this.nodeSqliteRepository.getAHtml(
+        node_id,
+        imagesIds,
       );
+      node.ahtml = JSON.stringify(ahtml);
       node.updateAhtmlTxt();
       node.createdAt = nodeDatesMap.get(node.node_id).createdAt;
       node.updatedAt = nodeDatesMap.get(node.node_id).updatedAt;

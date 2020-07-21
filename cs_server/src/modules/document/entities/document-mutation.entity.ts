@@ -7,9 +7,6 @@ export class DocumentMutation {
   uploadFile: boolean;
 
   @Field()
-  uploadLink: boolean;
-
-  @Field()
   deleteDocument: string;
 
   @Field()

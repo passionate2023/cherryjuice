@@ -14,6 +14,7 @@ import { GqlAuthGuard } from '../user/guards/graphql.guard';
 import { UseGuards } from '@nestjs/common';
 import { GetUserGql } from '../user/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
+import { OwnershipLevel } from './entities/document.owner.entity';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Document)
@@ -29,8 +30,18 @@ export class DocumentQueriesResolver {
     @GetUserGql() user: User,
   ): Promise<Document[]> {
     return file_id
-      ? [await this.documentService.getDocumentMetaById(user, file_id)]
-      : this.documentService.getDocumentsMeta(user);
+      ? [
+          await this.documentService.getDocumentById({
+            documentId: file_id,
+            ownership: OwnershipLevel.READER,
+            userId: user.id,
+          }),
+        ]
+      : this.documentService.getDocuments({
+          documentId: file_id,
+          ownership: OwnershipLevel.READER,
+          userId: user.id,
+        });
   }
 
   @ResolveField(() => [Node])
@@ -41,12 +52,19 @@ export class DocumentQueriesResolver {
   ) {
     return node_id
       ? [
-          await this.nodeService.getNodeMetaById({
-            user,
+          await this.nodeService.getNodeById({
             node_id,
+            userId: user.id,
             documentId: document.id,
+            ownership: OwnershipLevel.READER,
+            publicAccess: false,
           }),
         ]
-      : this.nodeService.getNodesMeta(document.id);
+      : await this.nodeService.getNodes({
+          userId: user.id,
+          documentId: document.id,
+          ownership: OwnershipLevel.READER,
+          publicAccess: false,
+        });
   }
 }

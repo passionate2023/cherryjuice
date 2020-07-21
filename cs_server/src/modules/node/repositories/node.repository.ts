@@ -1,78 +1,118 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Node } from '../entities/node.entity';
 import { Injectable } from '@nestjs/common';
-import { SaveAhtmlDto } from '../dto/save-ahtml.dto';
-import { NodeMetaDto } from '../dto/node-meta.dto';
-import { CreateNodeDto } from '../dto/create-node.dto';
+import {
+  CreateNodeDTO,
+  GetNodeDTO,
+  GetNodesDTO,
+  MutateNodeContentDTO,
+  MutateNodeMetaDTO,
+} from '../dto/mutate-node.dto';
 import { copyProperties } from '../../document/helpers';
-import { DeleteNodeDto } from '../dto/delete-node.dto';
-import { GetNodeByNodeIdIt } from '../dto/get-node-by-node-id.it';
-import { SaveHtmlIt } from '../dto/save-html.it';
-import { NodeMetaIt } from '../dto/node-meta.it';
+import { SaveHtmlIt } from '../it/save-html.it';
+import { NodeMetaIt } from '../it/node-meta.it';
 import { AHtmlLine } from '../helpers/rendering/ahtml-to-html';
 import { NodeSearchDto } from '../../search/dto/node-search.dto';
 import { NodeSearchResultEntity } from '../../search/entities/node.search-result.entity';
 import { SearchTarget, SearchType } from '../../search/it/node-search.it';
 import { nodeSearch } from '../../search/helpers/pg-queries/node-search';
+import { OwnershipLevel } from '../../document/entities/document.owner.entity';
+import { NodeOwner } from '../entities/node.owner.entity';
+
+const nodeMeta = [
+  `n.id`,
+  `n.name`,
+  `n.node_id`,
+  `n.fatherId`,
+  `n.father_id`,
+  `n.child_nodes`,
+  `n.createdAt`,
+  `n.updatedAt`,
+  `n.node_title_styles`,
+  `n.read_only`,
+  `n.hash`,
+  `n.documentId`,
+];
+const nodeAhtml = ['n.ahtml'];
+const fullNode = [...nodeMeta, ...nodeAhtml];
+const select = (target: NodeSelection): string[] =>
+  target === 'meta-and-ahtml'
+    ? fullNode
+    : target === 'ahtml'
+    ? nodeAhtml
+    : nodeMeta;
+type NodeSelection = 'meta' | 'ahtml' | 'meta-and-ahtml';
 
 @Injectable()
 @EntityRepository(Node)
 export class NodeRepository extends Repository<Node> {
-  async createNode({ meta, documentId, user }: CreateNodeDto): Promise<Node> {
+  async getNodes(
+    { documentId, ownership, userId, publicAccess }: GetNodesDTO,
+    target: NodeSelection = 'meta',
+  ): Promise<Node[]> {
+    return await this.createQueryBuilder('n')
+      .leftJoin(NodeOwner, 'n_o', 'n_o."nodeId" = n.id ')
+      .select(select(target))
+      .andWhere(
+        `( (n_o."userId" = :userId AND n_o."ownershipLevel" >= :ownership)  ${
+          publicAccess ? 'OR n_o."public" = true' : ''
+        })`,
+        { userId, ownership },
+      )
+      .andWhere('n_o."documentId" = :documentId', { documentId })
+      .getMany();
+  }
+
+  async getNodeById(
+    { userId, ownership, documentId, node_id, publicAccess }: GetNodeDTO,
+    target: NodeSelection = 'meta',
+  ): Promise<Node> {
+    return this.createQueryBuilder('n')
+      .leftJoin(NodeOwner, 'n_o', 'n_o."nodeId" = n.id ')
+      .select(select(target))
+      .andWhere(
+        `( (n_o."userId" = :userId AND n_o."ownershipLevel" >= :ownership)  ${
+          publicAccess ? 'OR n_o."public" = true' : ''
+        })`,
+        { userId, ownership },
+      )
+      .andWhere('n_o."documentId" = :documentId', { documentId })
+      .andWhere('n_o."node_id" = :node_id', { node_id })
+      .getOne();
+  }
+
+  async getAHtml(dto: GetNodeDTO): Promise<AHtmlLine[]> {
+    return await this.getNodeById(dto, 'ahtml').then(node =>
+      JSON.parse(node.ahtml),
+    );
+  }
+
+  async createNode({
+    data,
+    getNodeDTO: { userId, documentId },
+  }: CreateNodeDTO): Promise<Node> {
     const node = new Node();
-    copyProperties(meta, node, {});
+    copyProperties(data, node, {});
     node.documentId = documentId;
-    node.createdAt = new Date(meta.createdAt);
-    node.updatedAt = new Date(meta.updatedAt);
-    node.user = user;
+    node.createdAt = new Date(data.createdAt);
+    node.updatedAt = new Date(data.updatedAt);
     if (node.father_id !== -1) {
-      node.father = await this.getNodeMetaById({
+      node.father = await this.getNodeById({
         node_id: node.father_id,
         documentId,
-        user,
+        userId,
+        ownership: OwnershipLevel.WRITER,
       });
     }
     await this.save(node);
     return node;
   }
 
-  getAHtml(node_id: string, documentId: string): Promise<AHtmlLine[]> {
-    return this.createQueryBuilder('node')
-      .select('node.ahtml')
-      .where('node.documentId = :documentId', { documentId })
-      .andWhere('node.node_id = :node_id', { node_id })
-      .getOne()
-      .then(node => JSON.parse(node.ahtml));
-  }
-
-  async getNodesMeta(documentId: string): Promise<Node[]> {
-    return await this.createQueryBuilder('node')
-      .where('node.documentId = :documentId', { documentId })
-      .getMany();
-  }
-
-  async getNodeMetaById({
-    documentId,
-    node_id,
-  }: GetNodeByNodeIdIt): Promise<Node> {
-    return this.findOneOrFail({
-      where: {
-        node_id,
-        documentId,
-      },
-    });
-  }
-
-  private async updateNode({
-    attributes,
-    node_id,
-    documentId,
-  }: {
-    node_id: number;
-    documentId: string;
-    attributes: SaveHtmlIt | NodeMetaIt;
-  }): Promise<Node> {
-    const node = await this.findOneOrFail({ node_id, documentId });
+  private async updateNode(
+    attributes: SaveHtmlIt | NodeMetaIt,
+    dto: GetNodeDTO,
+  ): Promise<Node> {
+    const node = await this.getNodeById(dto);
     if (typeof attributes.updatedAt === 'number')
       attributes.updatedAt = (new Date(attributes.updatedAt) as unknown) as any;
     Object.entries(attributes).forEach(([k, v]) => {
@@ -83,38 +123,19 @@ export class NodeRepository extends Repository<Node> {
     return node;
   }
 
-  async setAHtml({ data, node_id, documentId }: SaveAhtmlDto): Promise<Node> {
-    const node = await this.updateNode({
-      node_id,
-      documentId,
-      attributes: data,
-    });
-    return node;
+  async setAHtml({ data, getNodeDTO }: MutateNodeContentDTO): Promise<Node> {
+    return await this.updateNode(data, getNodeDTO);
   }
 
-  async setMeta({ documentId, node_id, meta }: NodeMetaDto): Promise<Node> {
-    const node = await this.updateNode({
-      attributes: meta,
-      node_id,
-      documentId,
-    });
-
-    return node;
+  async setMeta({ data, getNodeDTO }: MutateNodeMetaDTO): Promise<Node> {
+    return await this.updateNode(data, getNodeDTO);
   }
-
-  async deleteNode({ documentId, node_id }: DeleteNodeDto): Promise<string> {
-    return await this.createQueryBuilder('node')
-      .delete()
-      .where({ node_id, documentId })
-      .execute()
-      .then(res => JSON.stringify(res));
+  async deleteNode(dto: GetNodeDTO): Promise<string> {
+    const node = await this.getNodeById(dto);
+    return await this.remove(node).then(res => JSON.stringify(res));
   }
-
-  async getNodesMetaAndAHtml(documentId: string): Promise<Node[]> {
-    return await this.createQueryBuilder('node')
-      .where('node.documentId = :documentId', { documentId })
-      .addSelect('node.ahtml')
-      .getMany();
+  async getNodesMetaAndAHtml(dto: GetNodesDTO): Promise<Node[]> {
+    return await this.getNodes(dto, 'meta-and-ahtml');
   }
 
   async findNodes({

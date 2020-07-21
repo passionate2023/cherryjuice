@@ -1,5 +1,3 @@
-import { CreateNodeDto } from '../dto/create-node.dto';
-
 import { createNodeTestHelpers, NodeTH } from '../../shared/test-helpers/node';
 import {
   createDocumentTestHelpers,
@@ -11,7 +9,7 @@ const user: User = ({
   id: '8112ec49-7d15-4971-80d7-2a536e937d65',
 } as unknown) as User;
 
-const createNodeDto: CreateNodeDto = {
+const createNodeDto = {
   documentId: 'doc1',
   node_id: 2,
   meta: {
