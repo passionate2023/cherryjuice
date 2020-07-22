@@ -49,7 +49,7 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
         ) : (
           <footer className={modInfoBar.infoBar}>
             <span className={modInfoBar.infoBar__placeHolder}>
-              {!documentId && router.location.pathname === '/'
+              {!documentId && router.get.location.pathname === '/'
                 ? 'No selected document'
                 : 'No selected node'}
             </span>

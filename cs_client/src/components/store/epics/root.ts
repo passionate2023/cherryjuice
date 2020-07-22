@@ -13,8 +13,10 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
   const { fetchDocumentsListEpic } = await import(
     '::root/store/epics/fetch-documents-list'
   );
+  const { authEpic } = await import('::root/store/epics/auth/auth');
   return action$ =>
     combineEpics(
+      authEpic,
       fetchNodesEpic,
       saveEpic,
       fetchDocumentsListEpic,

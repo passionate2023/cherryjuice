@@ -1,5 +1,4 @@
-import { useContext, useEffect } from 'react';
-import { RootContext } from '::root/root-context';
+import { useEffect } from 'react';
 import { useSubscription } from '@apollo/react-hooks';
 import { SUBSCRIPTION_DOCUMENT } from '::graphql/subscriptions';
 import { DocumentSubscription } from '::types/graphql/generated';
@@ -10,10 +9,9 @@ const getOperationCategory = (
 ): 'exports' | 'imports' =>
   document.status.startsWith('EXPORT') ? 'exports' : 'imports';
 
-const useGetActiveOperations = () => {
-  const { session } = useContext(RootContext);
+const useGetActiveOperations = (userId: string) => {
   const { data } = useSubscription(SUBSCRIPTION_DOCUMENT.query, {
-    variables: { userId: session.user.id },
+    variables: { userId },
   });
   useEffect(() => {
     const document = SUBSCRIPTION_DOCUMENT.path(data);

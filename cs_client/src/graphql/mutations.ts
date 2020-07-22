@@ -1,5 +1,10 @@
 import gql from 'graphql-tag';
-import { AuthUser, CreateNodeIt } from '::types/graphql/generated';
+import {
+  AuthUser,
+  CreateNodeIt,
+  SignInCredentials,
+  SignUpCredentials,
+} from '::types/graphql/generated';
 import { FRAGMENT_USER } from '::graphql/fragments';
 
 const DOCUMENT_MUTATION = {
@@ -131,7 +136,29 @@ const DOCUMENT_MUTATION = {
 };
 
 const USER_MUTATION = {
+  refreshToken: {
+    args: (): void => undefined,
+    path: (data): AuthUser | undefined => data?.user?.signIn,
+    query: gql`
+      mutation refreshToekn {
+        user {
+          refreshToken {
+            token
+            user {
+              ...UserInfo
+            }
+            secrets {
+              google_api_key
+              google_client_id
+            }
+          }
+        }
+      }
+      ${FRAGMENT_USER.userInfo}
+    `,
+  },
   signIn: {
+    args: (input: SignInCredentials) => ({ input }),
     path: (data): AuthUser | undefined => data?.user?.signIn,
     query: gql`
       mutation signin($input: SignInCredentials!) {
@@ -141,6 +168,10 @@ const USER_MUTATION = {
             user {
               ...UserInfo
             }
+            secrets {
+              google_api_key
+              google_client_id
+            }
           }
         }
       }
@@ -148,6 +179,7 @@ const USER_MUTATION = {
     `,
   },
   signUp: {
+    args: (input: SignUpCredentials) => ({ input }),
     path: (data): AuthUser | undefined => data?.user?.signUp,
     query: gql`
       mutation signup($input: SignUpCredentials!) {
@@ -156,6 +188,10 @@ const USER_MUTATION = {
             token
             user {
               ...UserInfo
+            }
+            secrets {
+              google_api_key
+              google_client_id
             }
           }
         }

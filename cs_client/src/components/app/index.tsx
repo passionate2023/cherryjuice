@@ -3,22 +3,20 @@ import * as React from 'react';
 import { useEffect, Suspense } from 'react';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { formattingBarUnmountAnimationDelay } from './editor/tool-bar/groups/formatting-buttons';
-import { AuthUser } from '::types/graphql/generated';
 import { useOnWindowResize } from '::hooks/use-on-window-resize';
 import { appModule } from '::sass-modules/index';
-import { useLazyQuery } from '@apollo/react-hooks';
-import { QUERY_USER } from '::graphql/queries';
-import { rootActionCreators } from '::root/root.reducer';
 import { useDocumentEditedIndicator } from '::app/hooks/document-edited-indicator';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { useHandleRouting } from '::app/hooks/handle-routing/handle-routing';
 import { joinClassNames } from '::helpers/dom/join-class-names';
+import { isDocumentOwner } from '::root/store/selectors/document/is-document-owner';
+import { router } from '::root/router/router';
 
 const Menus = React.lazy(() => import('::app/menus'));
 const Editor = React.lazy(() => import('::app/editor'));
 
-type Props = { session: AuthUser };
+type Props = {};
 
 const updateBreakpointState = ({ breakpoint, callback }) => {
   let previousState = undefined;
@@ -32,13 +30,14 @@ const updateBreakpointState = ({ breakpoint, callback }) => {
 };
 
 const useUpdateCssVariables = (
+  isDocumentOwner: boolean,
   showFormattingButtons: boolean,
   showTree: boolean,
   treeWidth: number,
 ) => {
   useEffect(() => {
     cssVariables.setTreeWidth(showTree ? treeWidth : 0);
-    if (showFormattingButtons) {
+    if (isDocumentOwner && showFormattingButtons) {
       cssVariables.setFormattingBar(40);
     } else {
       (async () => {
@@ -49,27 +48,22 @@ const useUpdateCssVariables = (
   }, [showFormattingButtons, showTree]);
 };
 
-const useRefreshToken = ({ token }) => {
-  const [fetch, { data, error }] = useLazyQuery(QUERY_USER.query, {
-    fetchPolicy: 'network-only',
-  });
-  useEffect(() => {
-    if (token) fetch();
-  }, []);
-  useEffect(() => {
-    const session = QUERY_USER.path(data);
-    if (session) {
-      rootActionCreators.setSession(session.session);
-      rootActionCreators.setSecrets(session.secrets);
-    } else if (error) {
-      rootActionCreators.setSession({ user: undefined, token: '' });
-      rootActionCreators.setSecrets({
-        google_api_key: undefined,
-        google_client_id: undefined,
-      });
-    }
-  }, [data, error]);
-};
+// const useRefreshToken = ({ token }) => {
+//   const [fetch, { data, error }] = useLazyQuery(QUERY_USER.query, {
+//     fetchPolicy: 'network-only',
+//   });
+//   useEffect(() => {
+//     if (token) fetch();
+//   }, []);
+//   useEffect(() => {
+//     const session = QUERY_USER.path(data);
+//     if (session) {
+//       ac.auth.setSession(session);
+//     } else if (error) {
+//       ac.auth.clearSession();
+//     }
+//   }, [data, error]);
+// };
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
@@ -78,19 +72,22 @@ const mapState = (state: Store) => ({
   documentHasUnsavedChanges: state.document.hasUnsavedChanges,
   showFormattingButtons: state.editor.showFormattingButtons,
   dockedDialog: state.root.dockedDialog,
+  isDocumentOwner: isDocumentOwner(state),
+  userId: state.auth.user?.id,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const App: React.FC<Props & PropsFromRedux> = ({
-  session,
   documentId,
   showTree,
   treeWidth,
   documentHasUnsavedChanges,
   showFormattingButtons,
   dockedDialog,
+  isDocumentOwner,
+  userId,
 }) => {
   useOnWindowResize([
     updateBreakpointState({
@@ -100,8 +97,18 @@ const App: React.FC<Props & PropsFromRedux> = ({
   ]);
   useDocumentEditedIndicator(documentHasUnsavedChanges);
   useHandleRouting(documentId);
-  useUpdateCssVariables(showFormattingButtons, showTree, treeWidth);
-  useRefreshToken({ token: session.token });
+  useUpdateCssVariables(
+    isDocumentOwner,
+    showFormattingButtons,
+    showTree,
+    treeWidth,
+  );
+  // useRefreshToken({ token });
+  useEffect(() => {
+    if (!userId && router.get.location.pathname === '/') {
+      router.goto.login();
+    }
+  }, [userId, documentId, router.get.location.pathname]);
   return (
     <div
       className={joinClassNames([

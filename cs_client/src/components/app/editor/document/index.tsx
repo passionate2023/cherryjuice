@@ -57,13 +57,13 @@ const Document: React.FC<Props & PropsFromRedux> = ({
     setHighestNodeId(nodes);
   }, [nodes]);
   useEffect(() => {
-    if (selectedNode.node_id) router.node(file_id, selectedNode.node_id);
+    if (selectedNode.node_id) router.goto.node(file_id, selectedNode.node_id);
   }, [selectedNode.node_id, file_id]);
   useTrackDocumentChanges({ cacheTimeStamp, documentId: file_id });
   useEffect(() => {
-    if (router.location.pathname.endsWith(file_id))
+    if (router.get.location.pathname.endsWith(file_id))
       ac.document.clearSelectedNode();
-  }, [router.location.pathname]);
+  }, [router.get.location.pathname]);
 
   useEffect(() => {
     ac.document.setDocumentId(file_id);

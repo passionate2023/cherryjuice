@@ -3,12 +3,14 @@ import { from } from 'rxjs';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { GqlDataPath } from '::types/misc';
 
-type OperationArguments<Data, Variables> = {
+type GqlOperationArguments<Data, Variables> = {
   query: DocumentNode;
   path: GqlDataPath<Data>;
   variables: Variables;
 };
-const gqlQuery = <Variables, Data>(args: OperationArguments<Data, Variables>) =>
+const gqlQuery = <Variables, Data>(
+  args: GqlOperationArguments<Data, Variables>,
+) =>
   from(
     apolloCache.client.query<Variables, Data>({
       ...args,
@@ -16,7 +18,7 @@ const gqlQuery = <Variables, Data>(args: OperationArguments<Data, Variables>) =>
     }),
   );
 const gqlMutation = <Variables, Data>(
-  args: OperationArguments<Data, Variables>,
+  args: GqlOperationArguments<Data, Variables>,
 ) =>
   from(
     apolloCache.client.mutate<Variables, Data>({
@@ -25,3 +27,4 @@ const gqlMutation = <Variables, Data>(
   );
 
 export { gqlQuery, gqlMutation };
+export { GqlOperationArguments };

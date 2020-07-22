@@ -8,11 +8,13 @@ import {
 import { Store } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { SearchScope as TSearchScope } from '::types/graphql/generated';
+import { isDocumentOwner } from '::root/store/selectors/document/is-document-owner';
 
 const mapState = (state: Store) => ({
   selectedScope: state.search.searchScope,
   selectedNode: state.document.selectedNode,
   documentId: state.document.documentId,
+  isDocumentOwner: isDocumentOwner(state),
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -24,12 +26,13 @@ const SearchScope: React.FC<Props & PropsFromRedux> = ({
   selectedScope,
   selectedNode,
   documentId,
+  isDocumentOwner,
 }) => {
   const noSelectedDocument = !documentId;
   const noSelectedNode = noSelectedDocument || !selectedNode.node_id;
 
   const scopes: Omit<ScopeProps, 'selectedScope'>[] = [
-    { scope: TSearchScope.allDocuments, disabled: false },
+    { scope: TSearchScope.allDocuments, disabled: !isDocumentOwner },
     {
       scope: TSearchScope.currentDocument,
       disabled: noSelectedDocument,

@@ -25,7 +25,7 @@ const useSelectNode = ({
       nodeOverlay.updateWidth();
       nodeOverlay.updateLeft(componentRef);
       updateCachedHtmlAndImages();
-      router.node(file_id, node_id);
+      router.router.goto(file_id, node_id);
     },
     [nodePath],
   );

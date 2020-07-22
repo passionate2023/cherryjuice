@@ -29,7 +29,11 @@ export class UserService {
     const { user, payload } = await this.userRepository.signUp(
       authCredentialsDto,
     );
-    return { token: this.jwtService.sign(payload), user };
+    return {
+      token: this.jwtService.sign(payload),
+      user,
+      secrets: this.getSecrets(),
+    };
   }
   async signIn(authCredentialsDto: SignInCredentials): Promise<AuthUser> {
     const { user, payload } = await this.userRepository.validateUserPassword(
@@ -38,6 +42,7 @@ export class UserService {
     return {
       token: this.jwtService.sign(payload),
       user,
+      secrets: this.getSecrets(),
     };
   }
 
@@ -46,6 +51,7 @@ export class UserService {
     return {
       token: this.jwtService.sign(payload),
       user,
+      secrets: this.getSecrets(),
     };
   }
   getSecrets(): Secrets {

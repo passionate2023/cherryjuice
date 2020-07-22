@@ -10,7 +10,9 @@ import { Node } from './node.entity';
 import { OwnershipLevel } from '../../document/entities/document.owner.entity';
 import { User } from '../../user/entities/user.entity';
 import { Document } from '../../document/entities/document.entity';
+import { Field, ObjectType } from '@nestjs/graphql';
 
+@ObjectType()
 @Unique(['nodeId', 'documentId'])
 @Unique(['node_id', 'documentId'])
 @Entity()
@@ -33,6 +35,7 @@ export class NodeOwner extends BaseEntity {
     { onDelete: 'CASCADE' },
   )
   user: User;
+  @Field()
   @Column()
   userId: string;
 
@@ -45,12 +48,14 @@ export class NodeOwner extends BaseEntity {
   @Column()
   documentId: string;
 
+  @Field()
   @Column({
     type: 'enum',
     enum: OwnershipLevel,
   })
   ownershipLevel: OwnershipLevel;
 
+  @Field()
   @Column('boolean')
   public: boolean;
   /// - unique to NodeOwner

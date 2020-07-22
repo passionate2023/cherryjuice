@@ -7,4 +7,6 @@ export class UserMutation {
   signIn: AuthUser;
   @Field(() => AuthUser)
   signUp: AuthUser;
+  @Field(() => AuthUser)
+  refreshToken: AuthUser;
 }

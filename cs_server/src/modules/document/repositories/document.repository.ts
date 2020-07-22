@@ -26,8 +26,10 @@ const documentMetaFields = [
   `d.createdAt`,
   `d.updatedAt`,
   `d.status`,
-  `d.nodes`,
   `d.hash`,
+  `d_o.userId`,
+  `d_o.ownershipLevel`,
+  `d_o.public`,
 ];
 const select = () => documentMetaFields;
 
@@ -46,15 +48,22 @@ export class DocumentRepository extends Repository<Document> {
     publicAccess,
   }: GetDocumentDTO): Promise<Document> {
     const document = await this.createQueryBuilder('d')
-      .leftJoin(DocumentOwner, 'n_o', 'n_o."documentId" = d.id ')
+      .leftJoinAndMapOne(
+        'd.owner',
+        DocumentOwner,
+        'd_o',
+        'd_o."documentId" = d.id ',
+      )
       .select(select())
       .andWhere(
-        `( (n_o."userId" = :userId AND n_o."ownershipLevel" >= :ownership)  ${
-          publicAccess ? 'OR n_o."public" = true' : ''
+        `( (d_o."userId" = :userId AND d_o."ownershipLevel" >= :ownership)  ${
+          publicAccess
+            ? `OR (d_o."public" = true AND  d_o."ownershipLevel"= '2')`
+            : ''
         })`,
         { userId, ownership },
       )
-      .andWhere('n_o."documentId" = :documentId', { documentId })
+      .andWhere('d_o."documentId" = :documentId', { documentId })
       .getOne();
     if (!document)
       throw new NotFoundException(
@@ -69,11 +78,16 @@ export class DocumentRepository extends Repository<Document> {
     publicAccess,
   }: GetDocumentDTO): Promise<Document[]> {
     return await this.createQueryBuilder('d')
-      .leftJoin(DocumentOwner, 'n_o', 'n_o."documentId" = d.id ')
+      .leftJoinAndMapOne(
+        'd.owner',
+        DocumentOwner,
+        'd_o',
+        'd_o."documentId" = d.id ',
+      )
       .select(select())
       .andWhere(
-        `( (n_o."userId" = :userId AND n_o."ownershipLevel" >= :ownership)  ${
-          publicAccess ? 'OR n_o."public" = true' : ''
+        `( (d_o."userId" = :userId AND d_o."ownershipLevel" >= :ownership)  ${
+          publicAccess ? 'OR d_o."public" = true' : ''
         })`,
         { userId, ownership },
       )

@@ -37,16 +37,9 @@ export class ExportsService {
     }, 30 * 60 * 1000);
   };
 
-  exportDocument = async ({
-    documentId,
-    userId,
-    ownership,
-  }: GetDocumentDTO): Promise<string> => {
-    const document = await this.documentService.getDocumentById({
-      ownership,
-      documentId,
-      userId,
-    });
+  exportDocument = async (dto: GetDocumentDTO): Promise<string> => {
+    const { userId, ownership } = dto;
+    const document = await this.documentService.getDocumentById(dto);
     const exportCTB = new ExportCTB({
       id: document.id,
       name: document.name,

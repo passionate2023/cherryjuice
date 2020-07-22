@@ -20,9 +20,9 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const Editor: React.FC<PropsFromRedux> = ({ documentId, alert }) => {
   useEffect(() => {
-    if (!alert && !documentId && router.location.pathname === '/')
+    if (!alert && !documentId && router.get.location.pathname === '/')
       ac.dialogs.showDocumentList();
-  }, [documentId, router.location.pathname, alert]);
+  }, [documentId, router.get.location.pathname, alert]);
 
   return (
     <>
@@ -31,7 +31,7 @@ const Editor: React.FC<PropsFromRedux> = ({ documentId, alert }) => {
           <ToolBar />
         </Suspense>
       </ErrorBoundary>
-      {!documentId && router.location.pathname === '/' ? (
+      {!documentId && router.get.location.pathname === '/' ? (
         <></>
       ) : (
         <Route

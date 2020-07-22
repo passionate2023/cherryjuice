@@ -1,37 +1,12 @@
 import gql from 'graphql-tag';
 import {
-  AuthUser,
   DOCUMENT_SUBSCRIPTIONS as DS,
   Image,
   NodeSearchIt,
   NodeSearchResults,
-  Secrets,
 } from '::types/graphql/generated';
-import { FRAGMENT_USER } from '::graphql/fragments';
-import { NodeHtml, NodeMeta, DocumentMeta } from '::types/graphql/adapters';
-
-const QUERY_NODE_META = {
-  path: (data): NodeMeta[] | undefined => data?.document[0]?.node,
-  query: gql`
-    query node_meta($file_id: String!) {
-      document(file_id: $file_id) {
-        id
-        node {
-          id
-          documentId
-          node_id
-          father_id
-          fatherId
-          name
-          child_nodes
-          createdAt
-          updatedAt
-          node_title_styles
-        }
-      }
-    }
-  `,
-};
+import { NodeHtml, DocumentMeta } from '::types/graphql/adapters';
+import { DOCUMENT_OWNER } from '::graphql/fragments';
 
 const QUERY_NODE_CONTENT = {
   png: {
@@ -87,8 +62,10 @@ const QUERY_DOCUMENTS = {
           createdAt
           updatedAt
           folder
+          ...DocumentOwner
         }
       }
+      ${DOCUMENT_OWNER}
     `,
   },
   currentImports: {
@@ -107,24 +84,6 @@ const QUERY_DOCUMENTS = {
   },
 };
 
-const QUERY_USER = {
-  path: (data): { session: AuthUser; secrets: Secrets } => data,
-  query: gql`
-    query user {
-      session: user {
-        user {
-          ...UserInfo
-        }
-        token
-      }
-      secrets {
-        google_api_key
-        google_client_id
-      }
-    }
-    ${FRAGMENT_USER.userInfo}
-  `,
-};
 const QUERY_SEARCH = {
   searchNode: {
     path: (data): NodeSearchResults => data?.search.node,
@@ -158,10 +117,4 @@ const QUERY_SEARCH = {
 const QUERY = {
   SEARCH: QUERY_SEARCH,
 };
-export {
-  QUERY,
-  QUERY_DOCUMENTS,
-  QUERY_NODE_META,
-  QUERY_NODE_CONTENT,
-  QUERY_USER,
-};
+export { QUERY, QUERY_DOCUMENTS, QUERY_NODE_CONTENT };

@@ -7,6 +7,7 @@ schema {
 }
 
 type AuthUser {
+    secrets: Secrets!
     token: String!
     user: User!
 }
@@ -18,6 +19,7 @@ type Document {
     id: String!
     name: String!
     node(node_id: Int): [Node]!
+    owner: DocumentOwner!
     size: Int!
     status: String
     updatedAt: Float!
@@ -31,6 +33,12 @@ type DocumentMutation {
     node(node_id: Int!): NodeMutation!
     uploadFile(files: [CTBUpload!]!): Boolean!
     uploadFromGDrive(file: UploadLinkInputType!): Boolean!
+}
+
+type DocumentOwner {
+    ownershipLevel: OwnershipLevel!
+    public: Boolean!
+    userId: String!
 }
 
 type DocumentSubscription {
@@ -63,6 +71,7 @@ type Node {
     name: String!
     node_id: Int!
     node_title_styles: String
+    owner: NodeOwner!
     read_only: Int!
     updatedAt: Float!
 }
@@ -73,6 +82,12 @@ type NodeMutation {
     meta(meta: NodeMetaIt!): String!
     saveAHtml(data: SaveHtmlIt!): String!
     uploadImage(images: [ImageUpload!]!): [[String!]!]!
+}
+
+type NodeOwner {
+    ownershipLevel: Float!
+    public: Boolean!
+    userId: String!
 }
 
 type NodeSearchResultEntity {
@@ -96,8 +111,6 @@ type NodeSearchResults {
 type Query {
     document(file_id: String): [Document]!
     search: SearchResultEntity!
-    secrets: Secrets!
-    user: AuthUser!
 }
 
 type SearchResultEntity {
@@ -130,6 +143,7 @@ type User {
 }
 
 type UserMutation {
+    refreshToken: AuthUser!
     signIn(credentials: SignInCredentials!): AuthUser!
     signUp(credentials: SignUpCredentials!): AuthUser!
 }
@@ -148,6 +162,12 @@ enum DOCUMENT_SUBSCRIPTIONS {
     IMPORT_PENDING
     IMPORT_PREPARING
     IMPORT_STARTED
+}
+
+enum OwnershipLevel {
+    OWNER
+    READER
+    WRITER
 }
 
 enum SearchScope {

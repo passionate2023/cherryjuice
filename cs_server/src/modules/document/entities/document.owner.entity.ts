@@ -8,13 +8,18 @@ import {
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { Document } from './document.entity';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 
 export enum OwnershipLevel {
   READER,
   WRITER,
   OWNER,
 }
+registerEnumType(OwnershipLevel, {
+  name: 'OwnershipLevel',
+});
 
+@ObjectType()
 @Unique(['userId', 'documentId'])
 @Entity()
 export class DocumentOwner extends BaseEntity {
@@ -34,6 +39,7 @@ export class DocumentOwner extends BaseEntity {
     { onDelete: 'CASCADE' },
   )
   user: User;
+  @Field()
   @Column()
   userId: string;
 
@@ -46,12 +52,14 @@ export class DocumentOwner extends BaseEntity {
   @Column()
   documentId: string;
 
+  @Field(() => OwnershipLevel)
   @Column({
     type: 'enum',
     enum: OwnershipLevel,
   })
   ownershipLevel: OwnershipLevel;
 
+  @Field()
   @Column('boolean')
   public: boolean;
 }

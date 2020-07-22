@@ -32,6 +32,9 @@ const nodeMeta = [
   `n.read_only`,
   `n.hash`,
   `n.documentId`,
+  `n_o.userId`,
+  `n_o.ownershipLevel`,
+  `n_o.public`,
 ];
 const nodeAhtml = ['n.ahtml'];
 const fullNode = [...nodeMeta, ...nodeAhtml];
@@ -51,7 +54,7 @@ export class NodeRepository extends Repository<Node> {
     target: NodeSelection = 'meta',
   ): Promise<Node[]> {
     return await this.createQueryBuilder('n')
-      .leftJoin(NodeOwner, 'n_o', 'n_o."nodeId" = n.id ')
+      .leftJoinAndMapOne('n.owner', NodeOwner, 'n_o', 'n_o."nodeId" = n.id ')
       .select(select(target))
       .andWhere(
         `( (n_o."userId" = :userId AND n_o."ownershipLevel" >= :ownership)  ${
@@ -141,9 +144,9 @@ export class NodeRepository extends Repository<Node> {
   async findNodes({
     it,
     user,
-    privateAccess
+    publicAccess,
   }: NodeSearchDto): Promise<NodeSearchResultEntity[]> {
-    const { query, variables } = nodeSearch({ it, user ,privateAccess});
+    const { query, variables } = nodeSearch({ it, user, publicAccess });
 
     let searchResults: NodeSearchResultEntity[] = await this.manager.query(
       query,

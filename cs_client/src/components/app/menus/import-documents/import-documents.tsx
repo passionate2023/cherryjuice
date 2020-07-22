@@ -10,6 +10,7 @@ import { ac, Store } from '::root/store/store';
 
 const mapState = (state: Store) => ({
   show: state.dialogs.showImportDocuments,
+  secrets: state.auth.secrets,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -17,7 +18,10 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const ImportDocuments: React.FC<Props & PropsFromRedux> = ({ show }) => {
+const ImportDocuments: React.FC<Props & PropsFromRedux> = ({
+  show,
+  secrets,
+}) => {
   return (
     <ComponentWithTransition
       show={show}
@@ -30,7 +34,7 @@ const ImportDocuments: React.FC<Props & PropsFromRedux> = ({ show }) => {
           Import from
         </span>
         <UploadFile />
-        <GoogleDrivePicker />
+        <GoogleDrivePicker secrets={secrets} />
       </div>
     </ComponentWithTransition>
   );

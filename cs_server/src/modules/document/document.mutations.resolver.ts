@@ -97,7 +97,8 @@ export class DocumentMutationsResolver {
     return await this.exportsService.exportDocument({
       userId: user.id,
       documentId: parent.id,
-      ownership: OwnershipLevel.OWNER,
+      ownership: OwnershipLevel.READER,
+      publicAccess: true,
     });
   }
   @ResolveField(() => [NodeMutation])

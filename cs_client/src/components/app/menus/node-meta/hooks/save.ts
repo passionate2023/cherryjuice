@@ -86,7 +86,7 @@ const useSave = ({
         },
       });
       updateCachedHtmlAndImages();
-      router.node(node.documentId, node.node_id);
+      router.goto.node(node.documentId, node.node_id);
     } else {
       if (Object.keys(res).length)
         apolloCache.node.mutate({ nodeId, meta: res });

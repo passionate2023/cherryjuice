@@ -7,19 +7,21 @@ const ToolbarButton: React.FC<{
   className?: string;
   disabled?: boolean;
   testId?: string;
-}> = ({ onClick, children, active, className, disabled, testId }) => (
-  <div
-    disabled={disabled}
-    className={`${toolbarMod.toolBar__icon} ${
-      active ? toolbarMod.toolBar__iconActive : ''
-    } ${className ? className : ''} ${
-      disabled ? toolbarMod.toolBar__iconDisabled : ''
-    }`}
-    {...(!disabled && onClick && { onClick })}
-    {...(testId && { 'data-testid': testId })}
-  >
-    {children && children}
-  </div>
-);
+  dontMount?: boolean;
+}> = ({ dontMount, onClick, children, active, className, disabled, testId }) =>
+  !dontMount && (
+    <div
+      disabled={disabled}
+      className={`${toolbarMod.toolBar__icon} ${
+        active ? toolbarMod.toolBar__iconActive : ''
+      } ${className ? className : ''} ${
+        disabled ? toolbarMod.toolBar__iconDisabled : ''
+      }`}
+      {...(!disabled && onClick && { onClick })}
+      {...(testId && { 'data-testid': testId })}
+    >
+      {children && children}
+    </div>
+  );
 
 export { ToolbarButton };

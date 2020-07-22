@@ -26,7 +26,7 @@ const deleteNode = (node: NodeCached) => {
       nodeId: node.id,
     });
     ac.document.clearSelectedNode({ removeChildren: true });
-    router.document(node.documentId);
+    router.goto.document(node.documentId);
   };
 };
 

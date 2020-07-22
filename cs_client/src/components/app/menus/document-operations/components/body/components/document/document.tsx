@@ -5,20 +5,28 @@ import { ac } from '::root/store/store';
 import { useDeleteFile } from '::app/menus/select-file/hooks/delete-documents/delete-file';
 import { mapEventType } from './helpers/map-event-type';
 import { ActionButton } from './components/action-button';
-import { useContext } from 'react';
-import { RootContext } from '::root/root-context';
 
-const Document: React.FC<DocumentSubscription> = document => {
-  const { name, status, id } = document;
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({
+  user: state.auth.user,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const Document: React.FC<DocumentSubscription & PropsFromRedux> = ({
+  name,
+  status,
+  id,
+  user,
+}) => {
   const { deleteDocument } = useDeleteFile({ IDs: [id] });
   const open = () => {
     ac.document.setDocumentId(id);
   };
-  const {
-    session: {
-      user: { id: userId },
-    },
-  } = useContext(RootContext);
+
   return (
     <div className={modDocumentOperations.documentOperations__document}>
       <div className={modDocumentOperations.documentOperations__document__name}>
@@ -29,9 +37,10 @@ const Document: React.FC<DocumentSubscription> = document => {
       >
         {mapEventType(status)}
       </div>
-      <ActionButton {...{ open, deleteDocument, document, userId }} />
+      <ActionButton {...{ open, deleteDocument, document, userId: user?.id }} />
     </div>
   );
 };
 
-export { Document };
+const _ = connector(Document);
+export { _ as Document };

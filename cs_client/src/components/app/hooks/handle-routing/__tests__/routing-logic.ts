@@ -3,17 +3,19 @@ import { routingLogic } from '::app/hooks/handle-routing/helpers/routing-logic';
 jest.mock('::root/router/router', () => {
   return {
     router: {
-      document: jest.fn(),
-      home: jest.fn(),
+      goto: {
+        document: jest.fn(),
+        home: jest.fn(),
+      },
     },
   };
 });
 describe('app component routing logic', () => {
   beforeEach(() => {
     // @ts-ignore
-    router.document.mockReset();
+    router.goto.document.mockReset();
     // @ts-ignore
-    router.home.mockReset();
+    router.goto.home.mockReset();
   });
   it('/  x -> x', () => {
     const test = {
@@ -21,8 +23,8 @@ describe('app component routing logic', () => {
       documentId: 'x',
     };
     routingLogic(test);
-    expect(router.document).toHaveBeenCalledWith(test.documentId);
-    expect(router.home).not.toHaveBeenCalled();
+    expect(router.goto.document).toHaveBeenCalledWith(test.documentId);
+    expect(router.goto.home).not.toHaveBeenCalled();
   });
   it('x z -> z', () => {
     const test = {
@@ -30,8 +32,8 @@ describe('app component routing logic', () => {
       documentId: 'z',
     };
     routingLogic(test);
-    expect(router.document).toHaveBeenCalledWith(test.documentId);
-    expect(router.home).not.toHaveBeenCalled();
+    expect(router.goto.document).toHaveBeenCalledWith(test.documentId);
+    expect(router.goto.home).not.toHaveBeenCalled();
   });
   it('x empty (first) -> -', () => {
     const test = {
@@ -40,8 +42,8 @@ describe('app component routing logic', () => {
       isFirstCall: true,
     };
     routingLogic(test);
-    expect(router.document).not.toHaveBeenCalled();
-    expect(router.home).not.toHaveBeenCalled();
+    expect(router.goto.document).not.toHaveBeenCalled();
+    expect(router.goto.home).not.toHaveBeenCalled();
   });
   it('x empty -> /', () => {
     const test = {
@@ -49,8 +51,8 @@ describe('app component routing logic', () => {
       documentId: '',
     };
     routingLogic(test);
-    expect(router.document).not.toHaveBeenCalled();
-    expect(router.home).toHaveBeenCalled();
+    expect(router.goto.document).not.toHaveBeenCalled();
+    expect(router.goto.home).toHaveBeenCalled();
   });
   it('x x -> -', () => {
     const test = {
@@ -58,7 +60,7 @@ describe('app component routing logic', () => {
       documentId: 'x',
     };
     routingLogic(test);
-    expect(router.document).not.toHaveBeenCalled();
-    expect(router.home).not.toHaveBeenCalled();
+    expect(router.goto.document).not.toHaveBeenCalled();
+    expect(router.goto.home).not.toHaveBeenCalled();
   });
 });

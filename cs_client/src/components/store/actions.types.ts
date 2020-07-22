@@ -6,9 +6,11 @@ import { editorActionCreators } from './ducks/editor';
 import { documentsListActionCreators } from './ducks/documents-list';
 import { rootActionCreators } from '::root/store/ducks/root';
 import { searchActionCreators } from '::root/store/ducks/search';
+import { authActionCreators } from '::root/store/ducks/auth';
 
 type t1 = typeof documentActionCreators &
   typeof dialogsActionCreators &
+  typeof authActionCreators &
   typeof editorActionCreators &
   typeof documentsListActionCreators &
   typeof searchActionCreators &

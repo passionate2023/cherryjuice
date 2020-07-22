@@ -5,15 +5,14 @@ import { Icons } from '::shared-components/icon/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { TextInput, TextInputProps } from '::shared-components/form/text-input';
 import { patterns } from '::auth/helpers/form-validation';
-import { useMutation } from '@apollo/react-hooks';
-import { USER_MUTATION } from '::graphql/mutations';
 import { AuthScreen } from '::auth/auth-screen';
-import { createRef, useEffect, useRef } from 'react';
-import { AuthUser } from '::types/graphql/generated';
+import { createRef, useRef } from 'react';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { Link } from 'react-router-dom';
-import { rootActionCreators } from '::root/root.reducer';
 import { useDefaultValues } from '::hooks/use-default-form-values';
+import { connect, ConnectedProps } from 'react-redux';
+import { ac, Store } from '::root/store/store';
+import { SignUpCredentials } from '::types/graphql/generated';
 
 const inputs: TextInputProps[] = [
   {
@@ -68,13 +67,16 @@ const inputs: TextInputProps[] = [
   },
 ];
 
-type Props = {
-  session: AuthUser;
-};
-const SignUpForm: React.FC<Props> = () => {
-  const [mutate, { loading, error, data }] = useMutation(
-    USER_MUTATION.signUp.query,
-  );
+const mapState = (state: Store) => ({
+  loading: state.auth.ongoingOperation !== 'idle',
+  alert: state.auth.alert,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = {};
+const SignUpForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
   const formRef = useRef<HTMLFormElement>();
   const signUp = (e?: any) => {
     if (formRef.current.checkValidity()) {
@@ -86,18 +88,10 @@ const SignUpForm: React.FC<Props> = () => {
           inputRef?.current.value,
         ]),
       );
-      mutate({
-        variables: {
-          input: variables,
-        },
-      });
+      ac.auth.signUp(variables as SignUpCredentials);
     }
   };
 
-  useEffect(() => {
-    const session = USER_MUTATION.signUp.path(data);
-    if (session?.token) rootActionCreators.setSession(session);
-  }, [data]);
   useDefaultValues(inputs);
   useModalKeyboardEvents({
     modalSelector: '.' + modLogin.login__card,
@@ -106,7 +100,7 @@ const SignUpForm: React.FC<Props> = () => {
     onConfirmModal: signUp,
   });
   return (
-    <AuthScreen error={error}>
+    <AuthScreen error={alert}>
       <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
@@ -137,4 +131,5 @@ const SignUpForm: React.FC<Props> = () => {
   );
 };
 
-export { SignUpForm };
+const _ = connector(SignUpForm);
+export { _ as SignUpForm };

@@ -15,6 +15,7 @@ type Props = {
   file_id;
   node_id;
   processLinks;
+  isDocumentOwner: boolean;
 };
 
 const ContentEditable = ({
@@ -24,6 +25,7 @@ const ContentEditable = ({
   file_id,
   node_id,
   processLinks,
+  isDocumentOwner,
 }: Props) => {
   const { pastedImages } = useContext(DocumentContext);
   useSetupStuff(node_id);
@@ -46,6 +48,7 @@ const ContentEditable = ({
   });
   return (
     <div
+      data-is-document-owner={isDocumentOwner}
       ref={ref}
       key={node_id}
       className={modRichText.richText}

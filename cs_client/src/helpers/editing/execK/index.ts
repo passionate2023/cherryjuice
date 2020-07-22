@@ -31,6 +31,7 @@ const execK = ({
   const editor: HTMLDivElement = document.querySelector('#rich-text ');
   const ogHtml = editor.innerHTML;
   try {
+    if (editor.dataset.isDocumentOwner !== 'true' && !testSample) return;
     if (editor.contentEditable !== 'true' && !testSample)
       throw new FormattingError('Editing is disabled');
     let { startElement, endElement, startOffset, endOffset } =

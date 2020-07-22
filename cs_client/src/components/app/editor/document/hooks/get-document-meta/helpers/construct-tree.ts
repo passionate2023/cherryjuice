@@ -1,14 +1,14 @@
-import { NodeMeta } from '::types/graphql/adapters';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { nodesMetaMap } from '::types/misc';
+import { QNodeMeta } from '::graphql/queries/query-document';
 
 type Props = {
-  nodes: NodeMeta[];
+  nodes: QNodeMeta[];
 };
 const constructTree = ({
   nodes: nodesArray = [],
-}: Props): Map<number, NodeMeta> | undefined => {
-  let nodes: Map<number, NodeMeta> = new Map();
+}: Props): Map<number, QNodeMeta> | undefined => {
+  let nodes: Map<number, QNodeMeta> = new Map();
   if (nodesArray.length) {
     nodes = new Map(nodesArray.map(node => [node.node_id, node]));
   }

@@ -12,6 +12,7 @@ import { Store } from '::root/store/store';
 const mapState = (state: Store) => ({
   imports: Object.values(state.documentOperations.imports),
   exports: Object.values(state.documentOperations.exports),
+  user: state.auth.user,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -21,12 +22,13 @@ type Props = {};
 const DocumentOperations: React.FC<Props & PropsFromRedux> = ({
   imports,
   exports,
+  user,
 }) => {
   const [collapsed, setCollapsed] = useState(false);
   const toggleCollapsed = () => setCollapsed(!collapsed);
 
   useGetPreviousOperations();
-  useGetActiveOperations();
+  useGetActiveOperations(user?.id);
 
   return imports.length || exports.length ? (
     <div

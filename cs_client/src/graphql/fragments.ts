@@ -13,4 +13,14 @@ const FRAGMENT_USER = {
   `,
 };
 
+export const DOCUMENT_OWNER = gql`
+  fragment DocumentOwner on Document {
+    owner {
+      public
+      userId
+      ownershipLevel
+    }
+  }
+`;
+
 export { FRAGMENT_USER };

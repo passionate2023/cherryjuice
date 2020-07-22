@@ -11,6 +11,7 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 import { router } from '::root/router/router';
+import { isDocumentOwner } from '::root/store/selectors/document/is-document-owner';
 
 type Props = {
   file_id: string;
@@ -21,6 +22,7 @@ const mapState = (state: Store) => ({
   fetchNodesStarted: state.document.fetchNodesStarted,
   contentEditable: state.editor.contentEditable || !state.root.isOnMobile,
   processLinks: state.node.processLinks,
+  isDocumentOwner: isDocumentOwner(state),
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -31,6 +33,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   nodes,
   processLinks,
   fetchNodesStarted,
+  isDocumentOwner,
 }) => {
   const match = useRouteMatch();
   // @ts-ignore
@@ -52,7 +55,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   useEffect(() => {
     const nodeIsNew = apolloCache.changes.isNodeNew(nodeId);
     if (htmlError && !nodeIsNew) {
-      router.document(file_id);
+      router.goto.document(file_id);
     }
   }, [htmlError]);
 
@@ -60,6 +63,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
     <div className={modRichText.richText__container}>
       {html?.htmlRaw && !fetchNodesStarted ? (
         <ContentEditable
+          isDocumentOwner={isDocumentOwner}
           contentEditable={contentEditable}
           html={html.htmlRaw}
           nodeId={nodes.get(node_id)?.id}

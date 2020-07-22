@@ -50,7 +50,7 @@ const RecentNodes: React.FC<Props & PropsFromRedux> = ({
     e => {
       updateCachedHtmlAndImages();
       const node_id = e.target.dataset.id;
-      router.node(file_id, node_id);
+      router.goto.node(file_id, node_id);
     },
     [file_id],
   );

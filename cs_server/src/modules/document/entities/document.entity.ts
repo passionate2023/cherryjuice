@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { randomUUID10 } from '../../shared';
 import hash from 'object-hash';
+import { DocumentOwner } from './document.owner.entity';
 
 export type NodesHash = { [node_id: number]: { hash: string } };
 
@@ -68,4 +69,7 @@ export class Document extends BaseEntity {
     const fields = [this.name, this.nodes];
     this.hash = hash(fields);
   }
+
+  @Field(() => DocumentOwner)
+  owner: DocumentOwner;
 }
