@@ -25,8 +25,7 @@ const nodeQueries = {
   `,
     node_meta: (node_id?: number) => `
   SELECT 
-    n.node_id, n.name, n.is_ro, 
-    n.is_richtxt, n.has_image, n.has_codebox,
+    n.node_id, n.name, n.is_richtxt, n.has_image, n.has_codebox,
     n.has_table,n.ts_creation as createdAt,n.ts_lastsave as updatedAt, 
     c.father_id,c.sequence, n.is_ro as read_only
    FROM node as n INNER JOIN children AS c
@@ -40,5 +39,21 @@ const nodeQueries = {
     WHERE node_id = ${node_id}`,
   },
 };
+type SqliteNodeMeta = {
+  name: string;
+  node_id: number;
+  is_ro: number;
+  is_richtxt: number;
+  has_image: number;
+  has_codebox: number;
+  has_table: number;
+  ts_creation: number;
+  createdAt: number;
+  updatedAt: number;
+  father_id: number;
+  sequence: number;
+  read_only: number;
+};
 
 export { nodeQueries };
+export { SqliteNodeMeta };

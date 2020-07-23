@@ -16,28 +16,32 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const Document: React.FC<DocumentSubscription & PropsFromRedux> = ({
-  name,
-  status,
-  id,
-  user,
-}) => {
-  const { deleteDocument } = useDeleteFile({ IDs: [id] });
+const Document: React.FC<{
+  document: DocumentSubscription;
+} & PropsFromRedux> = ({ document, user }) => {
+  const { deleteDocument } = useDeleteFile({ IDs: [document.id] });
   const open = () => {
-    ac.document.setDocumentId(id);
+    ac.document.setDocumentId(document.id);
   };
 
   return (
     <div className={modDocumentOperations.documentOperations__document}>
       <div className={modDocumentOperations.documentOperations__document__name}>
-        {name}
+        {document.name}
       </div>
       <div
         className={modDocumentOperations.documentOperations__document__status}
       >
-        {mapEventType(status)}
+        {mapEventType(document.status)}
       </div>
-      <ActionButton {...{ open, deleteDocument, document, userId: user?.id }} />
+      <ActionButton
+        {...{
+          open,
+          deleteDocument,
+          document: document,
+          userId: user?.id,
+        }}
+      />
     </div>
   );
 };

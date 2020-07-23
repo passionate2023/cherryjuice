@@ -10,9 +10,16 @@ import { FileMeta } from '../download/create-dowload-task/create-gdrive-download
 import { User } from '../../../user/entities/user.entity';
 import { OwnershipLevel } from '../../../document/entities/document.owner.entity';
 import { CreateNodeDTO } from '../../../node/dto/mutate-node.dto';
-
+import { convertTime } from './rendering/node-meta/convert-time';
+import { SqliteNodeMeta } from './repositories/queries/node';
+type SqliteNodeMetaPreProcessed = SqliteNodeMeta & {
+  child_nodes: number[];
+  is_empty: number;
+  node_title_styles: string;
+};
 type NodeDateMap = Map<number, { createdAt: Date; updatedAt: Date }>;
 type NodeDatesMap = NodeDateMap;
+type SqliteNodeNode_idMap = Map<number, SqliteNodeMetaPreProcessed>;
 type NodeNode_idMap = Map<number, Node>;
 
 const sortBySequence = rawNodesMap => (a, b) =>
@@ -47,10 +54,8 @@ export class ImportCTB {
     fileMeta: FileMeta;
   }): Promise<void> {
     await this.documentSqliteRepository.openDB(fileMeta.location.path);
-    const rawNodes = (await this.nodeSqliteRepository.getNodesMeta()) as (Node & {
-      is_ro;
-      has_image;
-    })[];
+    const rawNodes = await this.nodeSqliteRepository.getNodesMeta();
+
     const { nodeImagesMap, nodesMap, nodeDatesMap } = await this.saveNodesMeta(
       document,
       rawNodes,
@@ -67,7 +72,7 @@ export class ImportCTB {
 
   async saveNodesMeta(
     newDocument: Document,
-    rawNodes: (Node & { is_ro; has_image })[],
+    rawNodes: SqliteNodeMeta[],
   ): Promise<{
     nodesMap: NodeNode_idMap;
     nodeImagesMap: NodeImagesMap;
@@ -76,11 +81,21 @@ export class ImportCTB {
     const nodeImagesMap: NodeImagesMap = [];
     const nodesMap = new Map<number, Node>();
     const nodeDatesMap: NodeDatesMap = new Map();
-    const rawNodesMap: NodeNode_idMap = new Map(
-      rawNodes.map(node => [node.node_id, node]),
+    const rawNodesMap: SqliteNodeNode_idMap = new Map(
+      rawNodes.map(node => [
+        node.node_id,
+        {
+          ...node,
+          child_nodes: [],
+          is_empty: 0,
+          createdAt: convertTime(node.createdAt),
+          updatedAt: convertTime(node.updatedAt),
+          node_title_styles: '',
+        },
+      ]),
     );
 
-    for (const nodeRaw of rawNodes) {
+    for (const nodeRaw of rawNodesMap.values()) {
       const parentNode = rawNodesMap.get(nodeRaw.father_id);
       if (parentNode) {
         parentNode.child_nodes.push(nodeRaw.node_id);
@@ -91,15 +106,26 @@ export class ImportCTB {
         is_ro: nodeRaw.is_ro,
       });
 
-      const node = await this.nodeCreator({
+      const dto: CreateNodeDTO = {
         getNodeDTO: {
           ownership: OwnershipLevel.OWNER,
           documentId: newDocument.id,
           userId: this.user.id,
           node_id: nodeRaw.node_id,
         },
-        data: { ...nodeRaw, createdAt: 0, updatedAt: 0 },
-      });
+        data: {
+          ...nodeRaw,
+          createdAt: 0,
+          updatedAt: 0,
+          owner: {
+            public: false,
+            userId: this.user.id,
+            ownershipLevel: OwnershipLevel.OWNER,
+          },
+          fatherId: undefined,
+        },
+      };
+      const node = await this.nodeCreator(dto);
       nodesMap.set(node.node_id, node);
       nodeDatesMap.set(node.node_id, {
         createdAt: new Date(nodeRaw.createdAt),

@@ -22,11 +22,11 @@ const createLocalRequest = (
   file_id: string,
 ): Observable<ObservedValueOf<Promise<QDocumentMeta>>> => {
   const nodes = new Promise<QDocumentMeta>(res => {
-    const { owner, id, node } = apolloCache.document.get(file_id);
-    if (!node) {
+    const document = apolloCache.document.get(file_id);
+    if (!document?.node) {
       throw new Error(file_id + ' does not exist');
     }
-    res({ owner, id, node: node as QNodeMeta[] });
+    res({ ...document, node: document.node as QNodeMeta[] });
   });
   return from(nodes);
 };

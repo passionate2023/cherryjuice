@@ -2,13 +2,11 @@ import { DocumentSqliteRepository } from './document.sqlite.repository';
 import { Image as RawImage } from '../entities/Image';
 import { Grid } from '../entities/Grid';
 import { Codebox } from '../entities/Codebox';
-import { Node } from '../../../../node/entities/node.entity';
 import { getPNGSize } from '../rendering/image/get-image-size';
 import { parseXml } from '../../../../node/helpers/xml';
 import { ctbToAHtml } from '../rendering/ctb-to-ahtml';
 import { AHtmlLine } from '../../../../node/helpers/rendering/ahtml-to-html';
-import { nodeQueries } from './queries/node';
-import { convertTime } from '../rendering/node-meta/convert-time';
+import { nodeQueries, SqliteNodeMeta } from './queries/node';
 import { generateRootNode } from '../rendering/node-meta/generate-root-node';
 
 export class NodeSqliteRepository {
@@ -36,18 +34,11 @@ export class NodeSqliteRepository {
     };
   }
 
-  async getNodesMeta(node_id?: number): Promise<Node[]> {
-    const data: Node[] = await this.documentSqliteRepository
-      .sqliteAll(nodeQueries.read.node_meta(node_id))
-      .then(data =>
-        data.map(node => ({
-          ...node,
-          child_nodes: [],
-          is_empty: 0,
-          createdAt: convertTime(node.createdAt),
-          updatedAt: convertTime(node.updatedAt),
-        })),
-      );
+  async getNodesMeta(node_id?: number): Promise<SqliteNodeMeta[]> {
+    const data: SqliteNodeMeta[] = await this.documentSqliteRepository.sqliteAll(
+      nodeQueries.read.node_meta(node_id),
+    );
+
     data.push(generateRootNode());
     return data;
   }

@@ -4,6 +4,7 @@ import { createActionPrefixer } from './helpers/shared';
 import { TAlert } from '::types/react';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { rootActionCreators } from '::root/store/ducks/root';
+import { authActionCreators } from '::root/store/ducks/auth';
 
 const ap = createActionPrefixer('dialogs');
 
@@ -226,6 +227,16 @@ const reducer = createReducer(initialState, _ => [
           snackbar: undefined,
         } as State),
     ),
+  ],
+  ...[
+    _(authActionCreators.signIn, state => ({
+      ...state,
+      showUserPopup: false,
+    })),
+    _(authActionCreators.signUp, state => ({
+      ...state,
+      showUserPopup: false,
+    })),
   ],
 ]);
 
