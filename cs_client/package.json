@@ -2,6 +2,7 @@
   "name": "cherryscript-react-client",
   "version": "0.1.0",
   "scripts": {
+    "link:graphql-types": "cd types/graphql && npm link",
     "dev": "webpack-dev-server --color --progress --config .webpack/webpack.dev.js ",
     "dev:server": "cd ../cs_server/ && yarn run watch:server:nest",
     "build": "webpack --config .webpack/webpack.prod.js",
@@ -13,7 +14,7 @@
     "test:client": "jest .",
     "test:server": "cd ../cs_server && jest",
     "test": "run-p test:client test:server && lint-staged",
-    "generate-types-for-graphql": "cd scripts && node graphql-schema-typescript.js",
+    "generate-types-for-graphql": "cd scripts && node graphql-schema-typescript.js && yarn link:graphql-types",
     "storybook": "start-storybook -p 1237",
     "build-storybook": "build-storybook -c .storybook -o .storybook-static"
   },

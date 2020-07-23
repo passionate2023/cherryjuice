@@ -1,5 +1,7 @@
-import { NodeCached } from '::types/graphql/adapters';
+import { NodeCached } from '::types/graphql-adapters';
 import { calculateState } from '::app/menus/node-meta/helpers/calculate-state';
+import { QNodeMeta } from '::graphql/queries/query-document';
+import { NodeOwnerOt } from '::types/graphql/generated';
 
 const initialState = {
   name: '',
@@ -9,8 +11,27 @@ const initialState = {
   hasCustomIcon: false,
   isBold: false,
   isReadOnly: false,
+  owner: NodeOwnerOt,
 };
 
+type ResetToCreateProps = {
+  fatherNode?: QNodeMeta;
+};
+const resetToCreate = ({ fatherNode }: ResetToCreateProps): TState => {
+  return {
+    ...initialState,
+    owner: fatherNode?.owner,
+  };
+};
+type ResetToEditProps = {
+  node: QNodeMeta;
+};
+const resetToEdit = ({ node }: ResetToEditProps): TState => {
+  return {
+    ...initialState,
+    owner: calculateState(node as NodeCached),
+  };
+};
 type TState = typeof initialState;
 
 enum actions {
@@ -21,7 +42,8 @@ enum actions {
   setHasCustomIcon,
   setIsBold,
   setIsReadOnly,
-  reset,
+  resetToEdit,
+  resetToCreate,
 }
 
 const actionCreators = (() => {
@@ -42,8 +64,10 @@ const actionCreators = (() => {
     setIsBold: value => state.dispatch({ type: actions.setIsBold, value }),
     setIsReadOnly: value =>
       state.dispatch({ type: actions.setIsReadOnly, value }),
-    reset: (value: NodeCached) =>
-      state.dispatch({ type: actions.reset, value }),
+    resetToEdit: (value: ResetToEditProps) =>
+      state.dispatch({ type: actions.resetToEdit, value }),
+    resetToCreate: (value: ResetToCreateProps) =>
+      state.dispatch({ type: actions.resetToCreate, value }),
   };
 })();
 
@@ -69,8 +93,10 @@ const reducer = (
       return { ...state, isReadOnly: action.value };
     case actions.setName:
       return { ...state, name: action.value };
-    case actions.reset:
-      return action.value ? calculateState(action.value) : initialState;
+    case actions.resetToEdit:
+      return resetToEdit(action.value);
+    case actions.resetToCreate:
+      return resetToCreate(action.value);
     default:
       throw new Error(action.type + ' action not supported');
   }

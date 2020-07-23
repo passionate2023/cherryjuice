@@ -24,17 +24,22 @@ registerEnumType(OwnershipLevel, {
   name: 'OwnershipLevel',
 });
 
-@ObjectType()
+@ObjectType('DocumentOwnerOt')
 @InputType('DocumentOwnerIt')
 @Unique(['userId', 'documentId'])
 @Entity()
 export class DocumentOwner extends BaseEntity {
-  constructor(user: User, document: Document, ownershipLevel: OwnershipLevel) {
+  constructor(
+    userId: string,
+    documentId: string,
+    ownershipLevel: OwnershipLevel,
+    isPublic: boolean,
+  ) {
     super();
-    this.user = user;
-    this.document = document;
+    this.userId = userId;
+    this.documentId = documentId;
     this.ownershipLevel = ownershipLevel;
-    this.public = false;
+    this.public = isPublic;
   }
   @PrimaryGeneratedColumn('uuid')
   id: string;

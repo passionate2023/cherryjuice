@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modSelectFile } from '::sass-modules/index';
-import { DocumentMeta } from '::types/graphql/adapters';
+import { DocumentMeta } from '::types/graphql-adapters';
 import { Document } from './components/document';
 
 const DocumentGroup = ({

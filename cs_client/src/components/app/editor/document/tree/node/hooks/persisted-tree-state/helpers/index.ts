@@ -1,4 +1,4 @@
-import { NodeMeta } from '::types/graphql/adapters';
+import { NodeMeta } from '::types/graphql-adapters';
 
 const getTree = () => {
   const savedState = localStorage.getItem('treeState');

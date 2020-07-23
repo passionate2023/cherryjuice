@@ -1,6 +1,6 @@
 {
   "name": "cherryscript server",
-  "schemaPath": "types/graphql/schema.graphql",
+  "schemaPath": "./schema.graphql",
   "extensions": {
     "endpoints": {
       "Default GraphQL Endpoint": {

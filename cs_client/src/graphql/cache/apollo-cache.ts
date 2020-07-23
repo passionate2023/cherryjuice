@@ -14,12 +14,7 @@ const apolloCache = (() => {
     ...cloneObj<CacheState>(cacheInitialState),
   };
   return {
-    __state: (() => ({
-      get modifications() {
-        return state.modifications;
-      },
-      cache: state.cache,
-    }))(),
+    __state__: state,
     client: {
       resetCache: async () => await state.cache.reset(),
       set: (client: ApolloClient<any>) => {

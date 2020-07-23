@@ -2,7 +2,7 @@ import { modRichText } from '::sass-modules/index';
 import * as React from 'react';
 import { useRouteMatch } from 'react-router';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
-import { NodeMeta } from '::types/graphql/adapters';
+import { NodeMeta } from '::types/graphql-adapters';
 import { useGetNodeHtml } from '::app/editor/document/rich-text/hooks/get-node-html';
 import { useSetCurrentNode } from '::app/editor/document/rich-text/hooks/set-current-node';
 import { ContentEditable } from '::app/editor/document/rich-text/content-editable';

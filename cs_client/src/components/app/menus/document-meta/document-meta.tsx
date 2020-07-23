@@ -85,15 +85,21 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
     try {
       updateCachedHtmlAndImages();
       const document = generateNewDocument(state);
-      const rootNode = generateRootNode({ documentId: document.id });
+      const rootNode = generateRootNode({
+        documentId: document.id,
+        owner: document.owner,
+      });
       document.node.push(rootNode);
       apolloCache.changes.initDocumentChangesState(document.id);
       apolloCache.node.create(rootNode);
       apolloCache.document.create(document.id, document);
       ac.document.setDocumentId(document.id);
-      if (typeof document?.owner?.public === 'boolean') {
-        ac.cache.updateDocumentOwner(document?.owner?.public);
-      }
+      // if (document.owner.public) {
+      //   apolloCache.document.mutate({
+      //     documentId: document.id,
+      //     meta: { owner: document.owner },
+      //   });
+      // }
     } catch (e) {
       ac.dialogs.setAlert({
         title: 'Could not create a document',

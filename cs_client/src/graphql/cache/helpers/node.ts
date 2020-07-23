@@ -1,4 +1,4 @@
-import { NodeCached } from '::types/graphql/adapters';
+import { NodeCached } from '::types/graphql-adapters';
 import { NodeMetaIt } from '::types/graphql/generated';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { CacheState } from '::graphql/cache/initial-state';

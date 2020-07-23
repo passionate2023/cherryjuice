@@ -1,4 +1,4 @@
-import { NodeCached } from '::types/graphql/adapters';
+import { NodeCached } from '::types/graphql-adapters';
 
 const calculateState = (node: NodeCached) => {
   const { node_title_styles, read_only, name } = node;

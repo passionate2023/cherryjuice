@@ -13,19 +13,24 @@ import { Document } from '../../document/entities/document.entity';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 
 @InputType('NodeOwnerIt')
-@ObjectType()
+@ObjectType('NodeOwnerOt')
 @Unique(['nodeId', 'documentId'])
 @Unique(['node_id', 'documentId'])
 @Entity()
 export class NodeOwner extends BaseEntity {
   /// - inherited from DocumentOwner
   // had to paste code instead of direct inheritence because inheritance brought unique constraints
-  constructor(user: User, document: Document, ownershipLevel: OwnershipLevel) {
+  constructor(
+    userId: string,
+    documentId: string,
+    ownershipLevel: OwnershipLevel,
+    isPublic: boolean,
+  ) {
     super();
-    this.user = user;
-    this.document = document;
+    this.userId = userId;
+    this.documentId = documentId;
     this.ownershipLevel = ownershipLevel;
-    this.public = false;
+    this.public = isPublic;
   }
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -49,7 +54,7 @@ export class NodeOwner extends BaseEntity {
   @Column()
   documentId: string;
 
-  @Field()
+  @Field(() => OwnershipLevel)
   @Column({
     type: 'enum',
     enum: OwnershipLevel,

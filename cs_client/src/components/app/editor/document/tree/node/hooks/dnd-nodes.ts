@@ -1,5 +1,5 @@
 import nodeMod from '::sass-modules/tree/node.scss';
-import { NodeMeta } from '::types/graphql/adapters';
+import { NodeMeta } from '::types/graphql-adapters';
 import { MutableRefObject, useMemo } from 'react';
 import { AlertType } from '::types/react';
 import { modTree } from '::sass-modules/index';

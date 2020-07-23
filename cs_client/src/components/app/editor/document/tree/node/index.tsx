@@ -1,6 +1,6 @@
 import nodeMod from '::sass-modules/tree/node.scss';
 import modIcons from '::sass-modules/tree/node.scss';
-import { NodeMeta } from '::types/graphql/adapters';
+import { NodeMeta } from '::types/graphql-adapters';
 import * as React from 'react';
 import { useCallback, useRef, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';

@@ -48,11 +48,14 @@ export class NodeService {
       hash: node.hash,
       node_id: node.node_id,
     });
+    const { public: isPublic } = dto.data.owner;
     await this.nodeOwnerRepository.createOwnership({
-      document,
-      user: user,
+      documentId: document.id,
+      userId: user.id,
+      isPublic,
       ownershipLevel: OwnershipLevel.OWNER,
-      node,
+      nodeId: node.id,
+      node_id: node.node_id,
     });
     return node;
   }

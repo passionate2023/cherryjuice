@@ -1,7 +1,7 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { AsyncOperation } from './document';
-import { DocumentMeta } from '::types/graphql/adapters';
+import { DocumentMeta } from '::types/graphql-adapters';
 import {
   addUnsavedDocuments,
   editedDocuments,

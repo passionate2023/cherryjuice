@@ -2,12 +2,12 @@ import {
   calculateCreatedDocumentState,
   calculateEditedDocumentState,
 } from './helpers/calculate-state';
-import { DocumentOwner, OwnershipLevel } from '::types/graphql/generated';
+import { DocumentOwnerOt, OwnershipLevel } from '::types/graphql/generated';
 import { QDocumentMeta } from '::graphql/queries/query-document';
 
 type TState = {
   name: string;
-  owner: DocumentOwner;
+  owner: DocumentOwnerOt;
 };
 const initialState: TState = {
   name: 'new document',

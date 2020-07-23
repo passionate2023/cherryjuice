@@ -1,4 +1,4 @@
-import { NodeMeta } from '::types/graphql/adapters';
+import { NodeMeta } from '::types/graphql-adapters';
 import gql from 'graphql-tag';
 import { DOCUMENT_OWNER } from '::graphql/fragments';
 import { Document } from '::types/graphql/generated';
@@ -23,7 +23,8 @@ type QDocumentMeta = Pick<Document, 'id' | 'name' | 'folder' | 'owner'> & {
   node: QNodeMeta[];
 };
 
-const QUERY_DOCUMENT = ({ file_id }: { file_id: string }) => ({
+type Args = { file_id: string };
+const QUERY_DOCUMENT = ({ file_id }: Args) => ({
   variables: { file_id },
   path: (data): QDocumentMeta | undefined => data?.document[0],
   query: gql`

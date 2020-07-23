@@ -1,5 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { Timestamp } from '../../document/helpers/graphql-types/timestamp';
+import { NodeOwnerIt } from '@cs/graphql-types';
+import { NodeOwner } from '../entities/node.owner.entity';
 
 @InputType()
 export class CreateNodeIt {
@@ -29,4 +31,7 @@ export class CreateNodeIt {
 
   @Field(() => Int)
   read_only: number;
+
+  @Field(() => NodeOwner)
+  owner: NodeOwnerIt;
 }

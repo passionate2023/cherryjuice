@@ -96,8 +96,10 @@ export class DocumentRepository extends Repository<Document> {
       .getMany();
   }
 
-  async createDocument({ name, size }: CreateDocumentDTO): Promise<Document> {
-    const document = new Document(name, size);
+  async createDocument({
+    data: { name },
+  }: CreateDocumentDTO): Promise<Document> {
+    const document = new Document(name);
     await document.save();
     return document;
   }

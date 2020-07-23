@@ -49,11 +49,11 @@ export class DocumentMutationsResolver {
       name: 'document',
       type: () => CreateDocumentIt,
     })
-    { name }: CreateDocumentIt,
+    createDocumentIt: CreateDocumentIt,
     @GetUserGql() user: User,
   ): Promise<string> {
     const document = await this.documentService.createDocument({
-      name,
+      data: createDocumentIt,
       user,
     });
     return document.id;

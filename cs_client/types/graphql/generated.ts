@@ -23,7 +23,7 @@ export interface Document {
   id: string;
   name: string;
   node: Array<Node | null>;
-  owner: DocumentOwner;
+  owner: DocumentOwnerOt;
   size: number;
   status?: string;
   updatedAt: number;
@@ -42,7 +42,7 @@ export interface Node {
   name: string;
   node_id: number;
   node_title_styles?: string;
-  owner: NodeOwner;
+  owner: NodeOwnerOt;
   read_only: number;
   updatedAt: number;
 }
@@ -52,13 +52,7 @@ export interface Image {
   id: string;
 }
 
-export interface NodeOwner {
-  ownershipLevel: number;
-  public: boolean;
-  userId: string;
-}
-
-export interface DocumentOwner {
+export interface NodeOwnerOt {
   ownershipLevel: OwnershipLevel;
   public: boolean;
   userId: string;
@@ -68,6 +62,12 @@ export enum OwnershipLevel {
   OWNER = 'OWNER',
   READER = 'READER',
   WRITER = 'WRITER',
+}
+
+export interface DocumentOwnerOt {
+  ownershipLevel: OwnershipLevel;
+  public: boolean;
+  userId: string;
 }
 
 export interface SearchResultEntity {
@@ -188,6 +188,13 @@ export interface DocumentMutation {
 
 export interface CreateDocumentIt {
   name: string;
+  owner: DocumentOwnerIt;
+}
+
+export interface DocumentOwnerIt {
+  ownershipLevel: OwnershipLevel;
+  public: boolean;
+  userId: string;
 }
 
 export interface DeleteDocumentInputType {
@@ -198,12 +205,6 @@ export interface EditDocumentIt {
   name?: string;
   owner?: DocumentOwnerIt;
   updatedAt: Timestamp;
-}
-
-export interface DocumentOwnerIt {
-  ownershipLevel: OwnershipLevel;
-  public?: boolean;
-  userId: string;
 }
 
 export interface NodeMutation {
@@ -222,8 +223,15 @@ export interface CreateNodeIt {
   name: string;
   node_id: number;
   node_title_styles?: string;
+  owner: NodeOwnerIt;
   read_only: number;
   updatedAt: Timestamp;
+}
+
+export interface NodeOwnerIt {
+  ownershipLevel: OwnershipLevel;
+  public: boolean;
+  userId: string;
 }
 
 export interface NodeMetaIt {
@@ -238,12 +246,6 @@ export interface NodeMetaIt {
   read_only?: number;
   sequence?: number;
   updatedAt: Timestamp;
-}
-
-export interface NodeOwnerIt {
-  ownershipLevel: number;
-  public?: boolean;
-  userId: string;
 }
 
 export interface SaveHtmlIt {
@@ -350,8 +352,8 @@ export interface Resolver {
   Document?: DocumentTypeResolver;
   Node?: NodeTypeResolver;
   Image?: ImageTypeResolver;
-  NodeOwner?: NodeOwnerTypeResolver;
-  DocumentOwner?: DocumentOwnerTypeResolver;
+  NodeOwnerOt?: NodeOwnerOtTypeResolver;
+  DocumentOwnerOt?: DocumentOwnerOtTypeResolver;
   SearchResultEntity?: SearchResultEntityTypeResolver;
   Timestamp?: GraphQLScalarType;
   NodeSearchResults?: NodeSearchResultsTypeResolver;
@@ -550,45 +552,45 @@ export interface ImageToIdResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface NodeOwnerTypeResolver<TParent = any> {
-  ownershipLevel?: NodeOwnerToOwnershipLevelResolver<TParent>;
-  public?: NodeOwnerToPublicResolver<TParent>;
-  userId?: NodeOwnerToUserIdResolver<TParent>;
+export interface NodeOwnerOtTypeResolver<TParent = any> {
+  ownershipLevel?: NodeOwnerOtToOwnershipLevelResolver<TParent>;
+  public?: NodeOwnerOtToPublicResolver<TParent>;
+  userId?: NodeOwnerOtToUserIdResolver<TParent>;
 }
 
-export interface NodeOwnerToOwnershipLevelResolver<
+export interface NodeOwnerOtToOwnershipLevelResolver<
   TParent = any,
   TResult = any
 > {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface NodeOwnerToPublicResolver<TParent = any, TResult = any> {
+export interface NodeOwnerOtToPublicResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface NodeOwnerToUserIdResolver<TParent = any, TResult = any> {
+export interface NodeOwnerOtToUserIdResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface DocumentOwnerTypeResolver<TParent = any> {
-  ownershipLevel?: DocumentOwnerToOwnershipLevelResolver<TParent>;
-  public?: DocumentOwnerToPublicResolver<TParent>;
-  userId?: DocumentOwnerToUserIdResolver<TParent>;
+export interface DocumentOwnerOtTypeResolver<TParent = any> {
+  ownershipLevel?: DocumentOwnerOtToOwnershipLevelResolver<TParent>;
+  public?: DocumentOwnerOtToPublicResolver<TParent>;
+  userId?: DocumentOwnerOtToUserIdResolver<TParent>;
 }
 
-export interface DocumentOwnerToOwnershipLevelResolver<
+export interface DocumentOwnerOtToOwnershipLevelResolver<
   TParent = any,
   TResult = any
 > {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface DocumentOwnerToPublicResolver<TParent = any, TResult = any> {
+export interface DocumentOwnerOtToPublicResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface DocumentOwnerToUserIdResolver<TParent = any, TResult = any> {
+export interface DocumentOwnerOtToUserIdResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 

@@ -1,4 +1,4 @@
-import { NodeCached } from '::types/graphql/adapters';
+import { NodeCached } from '::types/graphql-adapters';
 import { TNodeMetaState } from '::app/menus/node-meta/reducer/reducer';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
@@ -63,22 +63,29 @@ const useSave = ({
   previous_sibling_node_id,
 }: UseSaveProps) => {
   return useDelayedCallback(ac.dialogs.hideNodeMeta, () => {
-    const res = calculateDiff({
+    const nodeToSave = calculateDiff({
       isNewNode: newNode,
       node,
       state,
     });
     if (newNode) {
-      const fatherNode = apolloCache.node.get(res.fatherId);
+      const fatherNode = apolloCache.node.get(nodeToSave.fatherId);
+      // const fatherNodeOwner = fatherNode.id.startsWith('TEMP')
+      //   ? fatherNode.owner
+      //   : apolloCache.__state__.cache.data.get(
+      //       (apolloCache.node.get(nodeToSave.fatherId).owner as any).id,
+      //     );
+      // nodeToSave.owner = fatherNodeOwner;
       const position =
         previous_sibling_node_id === -1
           ? -1
           : fatherNode.child_nodes.indexOf(previous_sibling_node_id) + 1;
-      if (!fatherNode.child_nodes.includes(res.node_id))
+      if (!fatherNode.child_nodes.includes(nodeToSave.node_id))
         position === -1
-          ? fatherNode.child_nodes.push(res.node_id)
-          : fatherNode.child_nodes.splice(position, 0, res.node_id);
-      apolloCache.node.create(res);
+          ? fatherNode.child_nodes.push(nodeToSave.node_id)
+          : fatherNode.child_nodes.splice(position, 0, nodeToSave.node_id);
+      nodeToSave.owner = state.owner;
+      apolloCache.node.create(nodeToSave);
       apolloCache.node.mutate({
         nodeId: fatherNode.id,
         meta: {
@@ -88,8 +95,8 @@ const useSave = ({
       updateCachedHtmlAndImages();
       router.goto.node(node.documentId, node.node_id);
     } else {
-      if (Object.keys(res).length)
-        apolloCache.node.mutate({ nodeId, meta: res });
+      if (Object.keys(nodeToSave).length)
+        apolloCache.node.mutate({ nodeId, meta: nodeToSave });
     }
   });
 };

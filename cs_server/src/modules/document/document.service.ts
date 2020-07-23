@@ -57,9 +57,10 @@ export class DocumentService {
   async createDocument(dto: CreateDocumentDTO): Promise<Document> {
     const document = await this.documentRepository.createDocument(dto);
     await this.documentOwnerRepository.createOwnership({
-      document,
-      user: dto.user,
-      ownershipLevel: OwnershipLevel.OWNER,
+      userId: dto.user.id,
+      documentId: document.id,
+      isPublic: dto.data.owner.public,
+      ownershipLevel: dto.data.owner.ownershipLevel,
     });
     return document;
   }

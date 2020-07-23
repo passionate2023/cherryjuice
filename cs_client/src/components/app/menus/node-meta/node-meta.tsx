@@ -21,9 +21,11 @@ import { ac, Store } from '::root/store/store';
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
   nodeId: state.document.selectedNode.id,
+  node_id: state.document.selectedNode.node_id,
   highestNode_id: state.document.highestNode_id,
   showDialog: state.dialogs.showNodeMetaDialog,
   isOnMobile: state.root.isOnMobile,
+  nodes: state.document.nodes,
 });
 const mapDispatch = {
   onClose: ac.dialogs.hideNodeMeta,
@@ -41,6 +43,8 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
   onClose,
   documentId,
   highestNode_id,
+  nodes,
+  node_id,
 }) => {
   const [state, dispatch] = useReducer(nodeMetaReducer, nodeMetaInitialState);
   useEffect(() => {
@@ -53,10 +57,15 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
     highestNode_id,
   });
 
+  const fatherNode = nodes ? nodes.get(node_id) : undefined;
   useEffect(() => {
-    if (showDialog === 'edit') nodeMetaActionCreators.reset(node);
-    else nodeMetaActionCreators.reset(undefined);
-  }, [nodeId, showDialog]);
+    if (showDialog === 'edit') nodeMetaActionCreators.resetToEdit({ node });
+    else {
+      nodeMetaActionCreators.resetToCreate({
+        fatherNode,
+      });
+    }
+  }, [nodeId, showDialog, fatherNode]);
   const onSave = useSave({
     nodeId,
     node,
@@ -146,6 +155,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       onConfirm={onSave}
       rightHeaderButtons={[]}
       small={true}
+      docked={false}
     >
       <ErrorBoundary>
         <MetaForm inputs={inputs} />

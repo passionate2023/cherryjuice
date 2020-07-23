@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { modRecentNodes } from '::sass-modules/index';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { router } from '::root/router/router';
-import { NodeMeta } from '::types/graphql/adapters';
+import { NodeMeta } from '::types/graphql-adapters';
 import { nodesMetaMap } from '::types/misc';
 
 import { connect, ConnectedProps } from 'react-redux';

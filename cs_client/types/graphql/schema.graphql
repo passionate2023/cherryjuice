@@ -19,7 +19,7 @@ type Document {
     id: String!
     name: String!
     node(node_id: Int): [Node]!
-    owner: DocumentOwner!
+    owner: DocumentOwnerOt!
     size: Int!
     status: String
     updatedAt: Float!
@@ -35,7 +35,7 @@ type DocumentMutation {
     uploadFromGDrive(file: UploadLinkInputType!): Boolean!
 }
 
-type DocumentOwner {
+type DocumentOwnerOt {
     ownershipLevel: OwnershipLevel!
     public: Boolean!
     userId: String!
@@ -71,7 +71,7 @@ type Node {
     name: String!
     node_id: Int!
     node_title_styles: String
-    owner: NodeOwner!
+    owner: NodeOwnerOt!
     read_only: Int!
     updatedAt: Float!
 }
@@ -84,8 +84,8 @@ type NodeMutation {
     uploadImage(images: [ImageUpload!]!): [[String!]!]!
 }
 
-type NodeOwner {
-    ownershipLevel: Float!
+type NodeOwnerOt {
+    ownershipLevel: OwnershipLevel!
     public: Boolean!
     userId: String!
 }
@@ -212,6 +212,7 @@ enum TimeRange {
 
 input CreateDocumentIt {
     name: String!
+    owner: DocumentOwnerIt!
 }
 
 input CreateNodeIt {
@@ -222,6 +223,7 @@ input CreateNodeIt {
     name: String!
     node_id: Int!
     node_title_styles: String
+    owner: NodeOwnerIt!
     read_only: Int!
     updatedAt: Timestamp!
 }
@@ -232,7 +234,7 @@ input DeleteDocumentInputType {
 
 input DocumentOwnerIt {
     ownershipLevel: OwnershipLevel!
-    public: Boolean = false
+    public: Boolean!
     userId: String!
 }
 
@@ -257,8 +259,8 @@ input NodeMetaIt {
 }
 
 input NodeOwnerIt {
-    ownershipLevel: Float!
-    public: Boolean = false
+    ownershipLevel: OwnershipLevel!
+    public: Boolean!
     userId: String!
 }
 

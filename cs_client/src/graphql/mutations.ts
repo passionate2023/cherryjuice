@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 import {
   AuthUser,
-  CreateNodeIt,
   SignInCredentials,
   SignUpCredentials,
 } from '::types/graphql/generated';
@@ -67,24 +66,7 @@ const DOCUMENT_MUTATION = {
       }
     `,
   },
-  createNode: {
-    args: (args: { file_id: string; node_id: number; meta: CreateNodeIt }) =>
-      args,
-    path: (data): string => data?.document?.node?.createNode,
-    query: gql`
-      mutation createNode(
-        $file_id: String!
-        $node_id: Int!
-        $meta: CreateNodeIt!
-      ) {
-        document(file_id: $file_id) {
-          node(node_id: $node_id) {
-            createNode(meta: $meta)
-          }
-        }
-      }
-    `,
-  },
+
   deleteNode: {
     path: (data): string => data?.document?.node?.deleteNode,
     query: gql`
@@ -97,16 +79,7 @@ const DOCUMENT_MUTATION = {
       }
     `,
   },
-  createDocument: {
-    path: (data): string => data?.document?.createDocument,
-    query: gql`
-      mutation createDocument($document: CreateDocumentIt!) {
-        document {
-          createDocument(document: $document)
-        }
-      }
-    `,
-  },
+
   uploadImages: {
     path: (data): [string, string][] => data?.document?.node?.uploadImage,
     query: gql`

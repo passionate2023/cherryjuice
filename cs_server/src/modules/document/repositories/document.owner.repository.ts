@@ -3,25 +3,30 @@ import {
   DocumentOwner,
   OwnershipLevel,
 } from '../entities/document.owner.entity';
-import { User } from '../../user/entities/user.entity';
-import { Document } from '../entities/document.entity';
 import { EditDocumentDTO } from './document.repository';
 import { UnauthorizedException } from '@nestjs/common';
 
 export type CreateDocumentOwnershipDTO = {
-  user: User;
-  document: Document;
+  userId: string;
+  documentId: string;
   ownershipLevel: OwnershipLevel;
+  isPublic: boolean;
 };
 
 @EntityRepository(DocumentOwner)
 export class DocumentOwnerRepository extends Repository<DocumentOwner> {
   createOwnership = async ({
-    user,
-    document,
+    userId,
+    documentId,
     ownershipLevel,
+    isPublic,
   }: CreateDocumentOwnershipDTO): Promise<DocumentOwner> => {
-    const documentOwner = new DocumentOwner(user, document, ownershipLevel);
+    const documentOwner = new DocumentOwner(
+      userId,
+      documentId,
+      ownershipLevel,
+      isPublic,
+    );
     await documentOwner.save();
     return documentOwner;
   };

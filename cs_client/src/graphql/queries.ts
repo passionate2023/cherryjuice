@@ -5,7 +5,7 @@ import {
   NodeSearchIt,
   NodeSearchResults,
 } from '::types/graphql/generated';
-import { NodeHtml, DocumentMeta } from '::types/graphql/adapters';
+import { NodeHtml, DocumentMeta } from '::types/graphql-adapters';
 import { DOCUMENT_OWNER } from '::graphql/fragments';
 
 const QUERY_NODE_CONTENT = {

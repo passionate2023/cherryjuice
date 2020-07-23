@@ -2,7 +2,7 @@ import {
   SaveOperationProps,
   SaveOperationState,
 } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
-import { NodeCached } from '::types/graphql/adapters';
+import { NodeCached } from '::types/graphql-adapters';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { NodeMetaIt } from '::types/graphql/generated';
 import { updateDocumentId } from '::app/editor/document/hooks/save-document/helpers/shared';

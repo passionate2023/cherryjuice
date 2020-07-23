@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { nodeOverlay } from '::app/editor/document/tree/node/helpers/node-overlay';
-import { NodeMeta } from '::types/graphql/adapters';
+import { NodeMeta } from '::types/graphql-adapters';
 import { collapseAll, persistedTreeState } from './helpers';
 
 type Props = {

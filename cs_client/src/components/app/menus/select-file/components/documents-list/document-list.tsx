@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DocumentMeta } from '::types/graphql/adapters';
+import { DocumentMeta } from '::types/graphql-adapters';
 import { modSelectFile } from '::sass-modules/index';
 import { DocumentGroup } from './document-group';
 import { SpinnerCircle } from '::shared-components/spinner-circle';

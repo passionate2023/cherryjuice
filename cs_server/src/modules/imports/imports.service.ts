@@ -19,9 +19,10 @@ import {
 import { createGqlDownloadTask } from './helpers/download/create-dowload-task/create-gql-download-task';
 import { deleteFolder } from '../shared/fs/delete-folder';
 import { paths } from '../shared/fs/paths';
+import { CreateDocumentIt } from '../document/input-types/create-document.it';
+import { OwnershipLevel } from '../document/entities/document.owner.entity';
 export type CreateDocumentDTO = {
-  name: string;
-  size?: number;
+  data: CreateDocumentIt;
   user: User;
 };
 
@@ -125,7 +126,14 @@ export class ImportsService {
       try {
         const downloadTask = await taskCreator(file);
         document = await this.documentService.createDocument({
-          name: downloadTask.fileMeta.fileName,
+          data: {
+            name: downloadTask.fileMeta.fileName,
+            owner: {
+              userId: user.id,
+              ownershipLevel: OwnershipLevel.OWNER,
+              public: false,
+            },
+          },
           user,
         });
 

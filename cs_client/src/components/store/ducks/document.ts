@@ -9,7 +9,7 @@ import {
   getFallbackNode,
 } from './helpers/document';
 import { rootActionCreators } from '::root/store/ducks/root';
-import { DocumentOwner } from '::types/graphql/generated';
+import { DocumentOwnerOt } from '::types/graphql/generated';
 
 const ap = createActionPrefixer('document');
 const ac = {
@@ -25,7 +25,7 @@ const ac = {
   fetchNodesStarted: _('fetchNodesStarted'),
   fetchNodesFulfilled: _(
     'fetchNodesFulfilled',
-    _ => (args: { nodes: nodesMetaMap; owner: DocumentOwner }) => _(args),
+    _ => (args: { nodes: nodesMetaMap; owner: DocumentOwnerOt }) => _(args),
   ),
   setCacheTimeStamp: _(
     'setCacheTimeStamp',
@@ -68,7 +68,7 @@ type NodeId = {
 type AsyncOperation = 'in-progress' | 'idle' | 'pending';
 type State = {
   nodes?: nodesMetaMap;
-  owner: DocumentOwner;
+  owner: DocumentOwnerOt;
   fetchNodesStarted?: number;
   documentId: string;
   cacheTimeStamp: number;

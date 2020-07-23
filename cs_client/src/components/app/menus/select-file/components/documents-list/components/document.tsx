@@ -4,7 +4,7 @@ import { dateToFormattedString } from '::helpers/time';
 import { EventHandler } from 'react';
 import { ThreeDotsButton } from './components/three-dots-button';
 import { ac } from '::root/store/store';
-import { DocumentMeta } from '::types/graphql/adapters';
+import { DocumentMeta } from '::types/graphql-adapters';
 type Props = {
   selectedIDs: string[];
   documentId: string;

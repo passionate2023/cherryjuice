@@ -1,11 +1,13 @@
-import { NodeCached } from '::types/graphql/adapters';
-import { Document, DocumentOwner } from '::types/graphql/generated';
+import { NodeCached } from '::types/graphql-adapters';
+import { Document, DocumentOwnerOt } from '::types/graphql/generated';
 
 type GenerateRootNodeProps = {
   documentId: string;
+  owner: DocumentOwnerOt;
 };
 const generateRootNode = ({
   documentId,
+  owner,
 }: GenerateRootNodeProps): NodeCached => ({
   id: `TEMP:${documentId}:${0}`,
   documentId,
@@ -20,11 +22,12 @@ const generateRootNode = ({
   node_title_styles: '',
   read_only: 0,
   image: [],
+  owner,
 });
 
 type GenerateNewDocumentProps = {
   name: string;
-  owner: DocumentOwner;
+  owner: DocumentOwnerOt;
 };
 const generateNewDocument = ({
   name,
