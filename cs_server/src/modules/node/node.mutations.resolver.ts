@@ -42,20 +42,25 @@ export class NodeMutationsResolver {
   }
 
   @ResolveField()
-  async meta(
+  async editMeta(
     @Parent() node: Node,
-    @Args({ name: 'meta', type: () => NodeMetaIt }) data: NodeMetaIt,
+    @Args({ name: 'meta', type: () => [NodeMetaIt] }) nodeMetaIts: NodeMetaIt[],
     @GetUserGql() user: User,
-  ): Promise<string> {
-    return await this.nodeService.setMeta({
-      data,
-      getNodeDTO: {
-        userId: user.id,
-        node_id: node.node_id,
-        documentId: node.documentId,
-        ownership: OwnershipLevel.WRITER,
-      },
-    });
+  ): Promise<string[]> {
+    const editedNodesIds: string[] = [];
+    for await (const data of nodeMetaIts) {
+      const id = await this.nodeService.editMeta({
+        data,
+        getNodeDTO: {
+          node_id: data.node_id,
+          userId: user.id,
+          documentId: node.documentId,
+          ownership: OwnershipLevel.WRITER,
+        },
+      });
+      editedNodesIds.push(id);
+    }
+    return editedNodesIds;
   }
   @ResolveField()
   async createNode(

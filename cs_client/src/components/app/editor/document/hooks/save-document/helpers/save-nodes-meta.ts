@@ -7,7 +7,8 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 import { NodeMetaIt } from '::types/graphql/generated';
 import { updateDocumentId } from '::app/editor/document/hooks/save-document/helpers/shared';
 import { collectDanglingNodes } from '::app/editor/document/hooks/save-document/helpers/save-new-nodes';
-import { DOCUMENT_MUTATION } from '::graphql/mutations';
+import { EDIT_NODE_META } from '::graphql/mutations/edit-node-meta';
+import { unFlatMap } from '::helpers/array-helpers';
 
 const swapNodeIdIfApplies = (state: SaveOperationState) => (nodeId: string) =>
   state.swappedNodeIds[nodeId] ? state.swappedNodeIds[nodeId] : nodeId;
@@ -24,9 +25,13 @@ const saveNodesMeta = async ({ state, documentId }: SaveOperationProps) => {
     .document(documentId)
     .node.meta.filter(([id]): boolean => !state.deletedNodes[id]);
 
-  for await (let [nodeId, editedAttributes] of editedNodeMeta) {
+  const nodeMetaIts: NodeMetaIt[] = [];
+  for await (const [nodeId, editedAttributes] of editedNodeMeta) {
     const node = apolloCache.node.get(swapNodeIdIfApplies(state)(nodeId));
-    const meta: NodeMetaIt = { updatedAt: node.updatedAt };
+    const meta: NodeMetaIt = {
+      updatedAt: node.updatedAt,
+      node_id: node.node_id,
+    };
     editedAttributes.forEach(attribute => {
       meta[attribute] = node[attribute];
     });
@@ -35,14 +40,15 @@ const saveNodesMeta = async ({ state, documentId }: SaveOperationProps) => {
     swapFatherIdIfApplies(state)(node);
     if (collectDanglingNodes(state)(node)) continue;
     updateDocumentId(state)(node);
-    await apolloCache.client.mutate({
-      ...DOCUMENT_MUTATION.meta,
-      variables: {
-        file_id: node.documentId,
-        node_id: node.node_id,
-        meta,
-      },
-    });
+    nodeMetaIts.push(meta);
+  }
+  for await (const chunk of unFlatMap(200)<NodeMetaIt>()(nodeMetaIts)) {
+    await apolloCache.client.mutate(
+      EDIT_NODE_META({
+        file_id: documentId,
+        meta: chunk,
+      }),
+    );
   }
 };
 

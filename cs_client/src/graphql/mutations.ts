@@ -54,18 +54,7 @@ const DOCUMENT_MUTATION = {
       }
     `,
   },
-  meta: {
-    path: (data): string => data?.document?.node?.meta,
-    query: gql`
-      mutation meta($file_id: String!, $node_id: Int!, $meta: NodeMetaIt!) {
-        document(file_id: $file_id) {
-          node(node_id: $node_id) {
-            meta(meta: $meta)
-          }
-        }
-      }
-    `,
-  },
+
 
   deleteNode: {
     path: (data): string => data?.document?.node?.deleteNode,

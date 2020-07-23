@@ -105,7 +105,7 @@ export class DocumentMutationsResolver {
   @ResolveField(() => [NodeMutation])
   async node(
     @Parent() { id: documentId },
-    @Args('node_id', { type: () => Int }) node_id: number,
+    @Args('node_id', { type: () => Int, nullable: true }) node_id: number,
   ) {
     return { node_id, documentId };
   }

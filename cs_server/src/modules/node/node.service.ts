@@ -72,7 +72,7 @@ export class NodeService {
     });
     return node.id;
   }
-  async setMeta(dto: MutateNodeMetaDTO): Promise<string> {
+  async editMeta(dto: MutateNodeMetaDTO): Promise<string> {
     if (typeof dto.data?.owner?.public === 'boolean') {
       await this.nodeOwnerRepository.updateOwnership(dto);
       delete dto.data.owner;

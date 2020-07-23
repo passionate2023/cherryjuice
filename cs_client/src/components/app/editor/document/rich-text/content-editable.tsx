@@ -48,11 +48,10 @@ const ContentEditable = ({
   });
   return (
     <div
-      data-is-document-owner={isDocumentOwner}
       ref={ref}
       key={node_id}
       className={modRichText.richText}
-      contentEditable={contentEditable}
+      contentEditable={contentEditable && isDocumentOwner}
       dangerouslySetInnerHTML={{ __html: html }}
       data-id={nodeId}
       data-node_id={node_id}

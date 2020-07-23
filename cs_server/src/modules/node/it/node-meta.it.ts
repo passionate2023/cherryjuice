@@ -5,6 +5,9 @@ import { NodeOwnerIt } from '@cs/graphql-types';
 
 @InputType()
 export class NodeMetaIt {
+  @Field(() => Int)
+  node_id: number;
+
   @Field({ nullable: true })
   father_id: number;
 

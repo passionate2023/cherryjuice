@@ -1,12 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class NodeMutation {
   @Field()
   saveAHtml: string;
 
-  @Field()
-  meta: string;
+  @Field(() => [ID])
+  editMeta: string[];
 
   @Field()
   createNode: string;

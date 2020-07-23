@@ -30,7 +30,7 @@ type DocumentMutation {
     deleteDocument(documents: DeleteDocumentInputType!): String!
     editDocument(meta: EditDocumentIt!): String!
     exportDocument: String!
-    node(node_id: Int!): NodeMutation!
+    node(node_id: Int): NodeMutation!
     uploadFile(files: [CTBUpload!]!): Boolean!
     uploadFromGDrive(file: UploadLinkInputType!): Boolean!
 }
@@ -79,7 +79,7 @@ type Node {
 type NodeMutation {
     createNode(meta: CreateNodeIt!): String!
     deleteNode: String!
-    meta(meta: NodeMetaIt!): String!
+    editMeta(meta: [NodeMetaIt!]!): String!
     saveAHtml(data: SaveHtmlIt!): String!
     uploadImage(images: [ImageUpload!]!): [[String!]!]!
 }
@@ -250,6 +250,7 @@ input NodeMetaIt {
     father_id: Float
     is_richtxt: Int
     name: String
+    node_id: Int!
     node_title_styles: String
     owner: NodeOwnerIt
     position: Int
