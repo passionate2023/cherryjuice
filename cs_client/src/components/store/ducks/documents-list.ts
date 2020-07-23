@@ -8,6 +8,7 @@ import {
 } from '../epics/fetch-documents-list/layers/unsaved-documents';
 import { rootActionCreators } from '::root/store/ducks/root';
 import { cloneObj } from '::helpers/editing/execK/helpers';
+import { QDocumentMeta } from '::graphql/queries/query-document';
 
 const ap = createActionPrefixer('document-list');
 
@@ -33,7 +34,7 @@ const ac = {
 type State = {
   focusedDocumentId?: string;
   fetchDocuments: AsyncOperation;
-  documents: DocumentMeta[];
+  documents: QDocumentMeta[];
 };
 
 const initialState: State = {

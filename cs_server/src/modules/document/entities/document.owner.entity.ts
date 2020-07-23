@@ -8,7 +8,12 @@ import {
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { Document } from './document.entity';
-import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import {
+  Field,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 
 export enum OwnershipLevel {
   READER,
@@ -20,6 +25,7 @@ registerEnumType(OwnershipLevel, {
 });
 
 @ObjectType()
+@InputType('DocumentOwnerIt')
 @Unique(['userId', 'documentId'])
 @Entity()
 export class DocumentOwner extends BaseEntity {

@@ -8,7 +8,7 @@ import { NodeIdDocumentId } from './image';
 type MutateNodeProps = {
   nodeId: string;
   meta:
-    | (NodeMetaIt & { updatedAt?: number })
+    | Omit<NodeMetaIt, 'updatedAt'>
     | { html?: string }
     | { updatedAt?: string };
 };

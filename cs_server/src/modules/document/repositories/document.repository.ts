@@ -13,6 +13,7 @@ import {
   DocumentOwner,
   OwnershipLevel,
 } from '../entities/document.owner.entity';
+import { EditDocumentIt } from '../input-types/edit-document.it';
 
 const nullableEvents = [
   DS.IMPORT_FINISHED,
@@ -27,6 +28,7 @@ const documentMetaFields = [
   `d.updatedAt`,
   `d.status`,
   `d.hash`,
+  `d.nodes`, // nodes hash
   `d_o.userId`,
   `d_o.ownershipLevel`,
   `d_o.public`,
@@ -35,7 +37,7 @@ const select = () => documentMetaFields;
 
 export type EditDocumentDTO = {
   getDocumentDTO: GetDocumentDTO;
-  meta: Record<string, any>;
+  meta: EditDocumentIt;
   updater?: (document: Document) => Document;
 };
 

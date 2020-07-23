@@ -8,6 +8,8 @@ const saveDocumentMeta = async ({ state, documentId }: SaveOperationProps) => {
   const editedAttributes = Object.fromEntries(
     Array.from(apolloCache.changes.document(documentId).meta),
   );
+  if (editedAttributes.owner?.__typename)
+    delete editedAttributes.owner.__typename;
 
   if (!editedAttributes.updatedAt)
     editedAttributes.updatedAt = new Date().getTime();

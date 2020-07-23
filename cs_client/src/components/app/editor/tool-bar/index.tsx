@@ -12,6 +12,28 @@ import { NavBar } from '::app/editor/tool-bar/groups/nav-bar/nav-bar';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 import { isDocumentOwner } from '::root/store/selectors/document/is-document-owner';
+import { useEffect, useState } from 'react';
+
+const Portal: React.FC<{ targetSelector: string }> = ({
+  targetSelector,
+  children,
+}) => {
+  const [targetMounted, serTargetMounted] = useState(false);
+  useEffect(() => {
+    const handle = setInterval(() => {
+      if (document.querySelector(targetSelector)) {
+        clearInterval(handle);
+        serTargetMounted(true);
+      }
+      return () => clearInterval(handle);
+    }, 100);
+  }, []);
+  return targetMounted ? (
+    createPortal(children, document.querySelector(targetSelector))
+  ) : (
+    <></>
+  );
+};
 
 const mapState = (state: Store) => ({
   isOnMobile: state.root.isOnMobile,
@@ -35,10 +57,9 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
       <MobileButtons />
       {isDocumentOwner &&
         (isOnMobile ? (
-          createPortal(
-            <FormattingButtonsWithTransition show={showFormattingButtons} />,
-            document.querySelector('.' + appModule.app),
-          )
+          <Portal targetSelector={'.' + appModule.app}>
+            <FormattingButtonsWithTransition show={showFormattingButtons} />
+          </Portal>
         ) : (
           <FormattingButtons />
         ))}

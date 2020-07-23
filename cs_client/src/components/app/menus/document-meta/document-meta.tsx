@@ -28,6 +28,7 @@ const mapState = (state: Store) => ({
   focusedDocumentId: state.documentsList.focusedDocumentId,
   documents: state.documentsList.documents,
   isOnMobile: state.root.isOnMobile,
+  userId: state.auth.user?.id,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -43,7 +44,11 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   isOnMobile,
   focusedDocumentId,
   documents,
+  userId,
 }) => {
+  const document = documents.find(
+    document => document.id === focusedDocumentId,
+  );
   const [state, dispatch] = useReducer(
     documentMetaReducer,
     documentMetaInitialState,
@@ -51,13 +56,14 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   useEffect(() => {
     documentMetaActionCreators.__setDispatch(dispatch);
   }, []);
-  const document = documents.find(
-    document => document.id === focusedDocumentId,
-  );
+
   useEffect(() => {
-    if (showDialog === 'edit') documentMetaActionCreators.reset(document);
-    else documentMetaActionCreators.reset();
-  }, [showDialog, focusedDocumentId]);
+    if (showDialog === 'edit')
+      documentMetaActionCreators.resetToEdit({
+        document,
+      });
+    else documentMetaActionCreators.resetToCreate({ userId });
+  }, [showDialog, focusedDocumentId, userId]);
 
   const inputs: FormInputProps[] = [
     {
@@ -67,6 +73,12 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       label: 'Document name',
       lazyAutoFocus: 400,
       testId: testIds.documentMeta__documentName,
+    },
+    {
+      onChange: documentMetaActionCreators.toggleIsPublic,
+      value: state.owner.public,
+      type: 'checkbox',
+      label: 'public',
     },
   ];
   const createDocument = () => {
@@ -79,6 +91,9 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       apolloCache.node.create(rootNode);
       apolloCache.document.create(document.id, document);
       ac.document.setDocumentId(document.id);
+      if (typeof document?.owner?.public === 'boolean') {
+        ac.cache.updateDocumentOwner(document?.owner?.public);
+      }
     } catch (e) {
       ac.dialogs.setAlert({
         title: 'Could not create a document',
@@ -91,12 +106,20 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   const editDocument = () => {
     const meta = Object.fromEntries(
       Object.entries(state).reduce((entries, [k, v]) => {
-        if (document[k] !== v) entries.push([k, v]);
+        const notEqual =
+          typeof v === 'string'
+            ? document[k] !== v
+            : JSON.stringify(Object.entries(document[k]).sort()) !==
+              JSON.stringify(Object.entries(v).sort());
+        if (notEqual) entries.push([k, v]);
         return entries;
       }, []),
     );
     apolloCache.changes.initDocumentChangesState(focusedDocumentId);
     apolloCache.document.mutate({ documentId: focusedDocumentId, meta });
+    if (typeof meta?.owner?.public === 'boolean') {
+      ac.cache.updateDocumentOwner(meta.owner.public);
+    }
     ac.documentsList.fetchDocuments();
   };
   const apply = useDelayedCallback(
@@ -128,6 +151,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       rightHeaderButtons={[]}
       small={true}
       isShownOnTopOfDialog={true}
+      docked={false}
     >
       <ErrorBoundary>
         <MetaForm inputs={inputs} />

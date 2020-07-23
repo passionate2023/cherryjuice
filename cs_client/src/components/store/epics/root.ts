@@ -4,6 +4,9 @@ import { Observable } from 'rxjs';
 const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
   const { fetchNodesEpic } = await import('::root/store/epics/fetch-nodes');
   const { saveEpic } = await import('::root/store/epics/save');
+  const { updateNodeOwner } = await import(
+    '::root/store/epics/cache/update-node-owner'
+  );
   const { searchNodesEpic } = await import(
     '::root/store/epics/search/search-nodes'
   );
@@ -16,6 +19,7 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
   const { authEpic } = await import('::root/store/epics/auth/auth');
   return action$ =>
     combineEpics(
+      updateNodeOwner,
       authEpic,
       fetchNodesEpic,
       saveEpic,

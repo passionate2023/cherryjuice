@@ -196,7 +196,14 @@ export interface DeleteDocumentInputType {
 
 export interface EditDocumentIt {
   name?: string;
+  owner?: DocumentOwnerIt;
   updatedAt: Timestamp;
+}
+
+export interface DocumentOwnerIt {
+  ownershipLevel: OwnershipLevel;
+  public?: boolean;
+  userId: string;
 }
 
 export interface NodeMutation {
@@ -226,10 +233,17 @@ export interface NodeMetaIt {
   is_richtxt?: number;
   name?: string;
   node_title_styles?: string;
+  owner?: NodeOwnerIt;
   position?: number;
   read_only?: number;
   sequence?: number;
   updatedAt: Timestamp;
+}
+
+export interface NodeOwnerIt {
+  ownershipLevel: number;
+  public?: boolean;
+  userId: string;
 }
 
 export interface SaveHtmlIt {

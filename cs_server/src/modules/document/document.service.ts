@@ -16,6 +16,7 @@ import {
   CreateDocumentOwnershipDTO,
   DocumentOwnerRepository,
 } from './repositories/document.owner.repository';
+import { EditDocumentIt } from './input-types/edit-document.it';
 
 export type GetDocumentDTO = {
   userId: string;
@@ -64,6 +65,10 @@ export class DocumentService {
   }
 
   async editDocument(dto: EditDocumentDTO): Promise<Document> {
+    if (typeof dto.meta?.owner?.public === 'boolean') {
+      await this.documentOwnerRepository.updateOwnership(dto);
+      delete dto.meta.owner;
+    }
     return await this.documentRepository.editDocument(dto);
   }
   async deleteDocuments(
@@ -115,7 +120,7 @@ export class DocumentService {
         userId,
         ownership,
       },
-      meta: {},
+      meta: ({} as unknown) as EditDocumentIt,
       updater: document => {
         document.nodes[node_id] = { hash };
         return document;

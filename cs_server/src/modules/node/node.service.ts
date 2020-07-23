@@ -69,13 +69,17 @@ export class NodeService {
     });
     return node.id;
   }
-  async setMeta(args: MutateNodeMetaDTO): Promise<string> {
-    const node = await this.nodeRepository.setMeta(args);
+  async setMeta(dto: MutateNodeMetaDTO): Promise<string> {
+    if (typeof dto.data?.owner?.public === 'boolean') {
+      await this.nodeOwnerRepository.updateOwnership(dto);
+      delete dto.data.owner;
+    }
+    const node = await this.nodeRepository.setMeta(dto);
     await this.documentService.updateNodesHash({
-      documentId: args.getNodeDTO.documentId,
+      documentId: dto.getNodeDTO.documentId,
       node_id: node.node_id,
       hash: node.hash,
-      userId: args.getNodeDTO.userId,
+      userId: dto.getNodeDTO.userId,
       ownership: OwnershipLevel.WRITER,
     });
     return node.id;

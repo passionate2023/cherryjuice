@@ -230,8 +230,15 @@ input DeleteDocumentInputType {
     IDs: [String!]!
 }
 
+input DocumentOwnerIt {
+    ownershipLevel: OwnershipLevel!
+    public: Boolean = false
+    userId: String!
+}
+
 input EditDocumentIt {
     name: String
+    owner: DocumentOwnerIt
     updatedAt: Timestamp!
 }
 
@@ -242,10 +249,17 @@ input NodeMetaIt {
     is_richtxt: Int
     name: String
     node_title_styles: String
+    owner: NodeOwnerIt
     position: Int
     read_only: Int
     sequence: Float
     updatedAt: Timestamp!
+}
+
+input NodeOwnerIt {
+    ownershipLevel: Float!
+    public: Boolean = false
+    userId: String!
 }
 
 input NodeSearchIt {

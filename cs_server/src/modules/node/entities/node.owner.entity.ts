@@ -10,8 +10,9 @@ import { Node } from './node.entity';
 import { OwnershipLevel } from '../../document/entities/document.owner.entity';
 import { User } from '../../user/entities/user.entity';
 import { Document } from '../../document/entities/document.entity';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 
+@InputType('NodeOwnerIt')
 @ObjectType()
 @Unique(['nodeId', 'documentId'])
 @Unique(['node_id', 'documentId'])

@@ -5,6 +5,8 @@ import {
 } from '../entities/document.owner.entity';
 import { User } from '../../user/entities/user.entity';
 import { Document } from '../entities/document.entity';
+import { EditDocumentDTO } from './document.repository';
+import { UnauthorizedException } from '@nestjs/common';
 
 export type CreateDocumentOwnershipDTO = {
   user: User;
@@ -23,4 +25,19 @@ export class DocumentOwnerRepository extends Repository<DocumentOwner> {
     await documentOwner.save();
     return documentOwner;
   };
+
+  async updateOwnership({
+    getDocumentDTO: { documentId, userId },
+    meta,
+  }: EditDocumentDTO): Promise<void> {
+    const ownership = await this.findOneOrFail({
+      userId,
+      documentId,
+    });
+    if (ownership.ownershipLevel !== OwnershipLevel.OWNER)
+      throw new UnauthorizedException();
+
+    ownership.public = meta.owner.public;
+    await this.save(ownership);
+  }
 }
