@@ -1,26 +1,25 @@
 import { SaveHtmlIt } from '../it/save-html.it';
 import { NodeMetaIt } from '../it/node-meta.it';
 import { CreateNodeIt } from '../it/create-node.it';
-import { GetDocumentDTO } from '../../document/document.service';
+import { GetDocumentDTO } from '../../document/dto/document.dto';
 
-export type GetNodeDTO = GetDocumentDTO & {
+export type GetNodeDTO = Omit<GetDocumentDTO, 'minimumGuestAccessLevel'> & {
   node_id: number;
-  publicAccess?: boolean;
 };
 export type GetNodesDTO = Omit<GetNodeDTO, 'node_id'>;
 
-export class MutateNodeDTO {
+export type MutateNodeDTO = {
   getNodeDTO: GetNodeDTO;
-}
-
-export class MutateNodeContentDTO extends MutateNodeDTO {
+};
+export type DeleteNodeDTO = MutateNodeDTO;
+export type MutateNodeContentDTO = MutateNodeDTO & {
   data: SaveHtmlIt;
-}
+};
 
-export class MutateNodeMetaDTO extends MutateNodeDTO {
+export type MutateNodeMetaDTO = MutateNodeDTO & {
   data: NodeMetaIt;
-}
+};
 
-export class CreateNodeDTO extends MutateNodeDTO {
+export type CreateNodeDTO = MutateNodeDTO & {
   data: CreateNodeIt;
-}
+};

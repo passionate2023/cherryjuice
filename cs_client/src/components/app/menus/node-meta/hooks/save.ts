@@ -84,7 +84,7 @@ const useSave = ({
         position === -1
           ? fatherNode.child_nodes.push(nodeToSave.node_id)
           : fatherNode.child_nodes.splice(position, 0, nodeToSave.node_id);
-      nodeToSave.owner = state.owner;
+      nodeToSave.privacy = state.privacy;
       apolloCache.node.create(nodeToSave);
       apolloCache.node.mutate({
         nodeId: fatherNode.id,

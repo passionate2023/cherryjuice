@@ -7,7 +7,6 @@ import { NodeRepository } from './repositories/node.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NodeMutationsResolver } from './node.mutations.resolver';
 import { ImportsModule } from '../imports/imports.module';
-import { NodeOwnerRepository } from './repositories/node.owner.repository';
 
 @Module({
   providers: [NodeService, NodeResolver, NodeMutationsResolver],
@@ -15,7 +14,7 @@ import { NodeOwnerRepository } from './repositories/node.owner.repository';
   imports: [
     forwardRef(() => DocumentModule),
     ImageModule,
-    TypeOrmModule.forFeature([NodeRepository, NodeOwnerRepository]),
+    TypeOrmModule.forFeature([NodeRepository]),
     ImportsModule,
   ],
 })

@@ -1,7 +1,6 @@
-import { NodeCached } from '::types/graphql-adapters';
 import { calculateState } from '::app/menus/node-meta/helpers/calculate-state';
-import { QNodeMeta } from '::graphql/queries/query-document';
-import { NodeOwnerOt } from '::types/graphql/generated';
+import { QNodeMeta } from '::graphql/queries/document-meta';
+import { Privacy } from '::types/graphql/generated';
 
 const initialState = {
   name: '',
@@ -11,7 +10,7 @@ const initialState = {
   hasCustomIcon: false,
   isBold: false,
   isReadOnly: false,
-  owner: NodeOwnerOt,
+  privacy: Privacy.PRIVATE,
 };
 
 type ResetToCreateProps = {
@@ -20,17 +19,14 @@ type ResetToCreateProps = {
 const resetToCreate = ({ fatherNode }: ResetToCreateProps): TState => {
   return {
     ...initialState,
-    owner: fatherNode?.owner,
+    privacy: fatherNode?.privacy,
   };
 };
 type ResetToEditProps = {
   node: QNodeMeta;
 };
 const resetToEdit = ({ node }: ResetToEditProps): TState => {
-  return {
-    ...initialState,
-    owner: calculateState(node as NodeCached),
-  };
+  return calculateState(node);
 };
 type TState = typeof initialState;
 

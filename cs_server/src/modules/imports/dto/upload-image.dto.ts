@@ -10,6 +10,7 @@ export class UploadImageDto extends UploadImageIt {
   @Field()
   user: User;
 }
-export class AddImageDTO extends MutateNodeDTO {
+
+export type AddImageDTO = MutateNodeDTO & {
   images: FileUpload[];
-}
+};

@@ -1,19 +1,24 @@
 import { EntityRepository, Repository, UpdateResult } from 'typeorm';
-import { Document } from '../entities/document.entity';
+import { Document, Privacy } from '../entities/document.entity';
 import { User } from '../../user/entities/user.entity';
 import {
   DOCUMENT_SUBSCRIPTIONS as DS,
   DOCUMENT_SUBSCRIPTIONS,
 } from '../entities/document-subscription.entity';
-import { CreateDocumentDTO } from '../../imports/imports.service';
 import { NotFoundException } from '@nestjs/common';
 import { createErrorDescription } from '../../shared/errors/create-error-description';
-import { GetDocumentDTO } from '../document.service';
+import { DocumentGuest } from '../entities/document-guest.entity';
 import {
-  DocumentOwner,
-  OwnershipLevel,
-} from '../entities/document.owner.entity';
-import { EditDocumentIt } from '../input-types/edit-document.it';
+  CreateDocumentDTO,
+  EditDocumentDTO,
+  GetDocumentDTO,
+  GetDocumentsDTO,
+} from '../dto/document.dto';
+import {
+  andGroup,
+  orGroup,
+} from '../../search/helpers/pg-queries/helpers/clause-builder';
+import { RunFirst } from '../../node/repositories/node.repository';
 
 const nullableEvents = [
   DS.IMPORT_FINISHED,
@@ -29,77 +34,80 @@ const documentMetaFields = [
   `d.status`,
   `d.hash`,
   `d.nodes`, // nodes hash
-  `d_o.userId`,
-  `d_o.ownershipLevel`,
-  `d_o.public`,
+  `d.userId`,
+  `d.privacy`,
+  `g.userId`,
+  `g.accessLevel`,
 ];
 const select = () => documentMetaFields;
 
-export type EditDocumentDTO = {
-  getDocumentDTO: GetDocumentDTO;
-  meta: EditDocumentIt;
-  updater?: (document: Document) => Document;
-};
-
 @EntityRepository(Document)
 export class DocumentRepository extends Repository<Document> {
-  async getDocumentById({
-    userId,
-    documentId,
-    ownership,
-    publicAccess,
-  }: GetDocumentDTO): Promise<Document> {
-    const document = await this.createQueryBuilder('d')
-      .leftJoinAndMapOne(
-        'd.owner',
-        DocumentOwner,
-        'd_o',
-        'd_o."documentId" = d.id ',
+  baseQueryBuilder = (
+    {
+      userId,
+      minimumGuestAccessLevel,
+      minimumPrivacy,
+    }: GetDocumentsDTO & { minimumPrivacy: Privacy },
+    runFirst?: RunFirst,
+  ) => {
+    let queryBuilder = this.createQueryBuilder('d')
+      .leftJoinAndMapMany(
+        'd.guest',
+        DocumentGuest,
+        'g',
+        'g."documentId" = d.id ',
       )
-      .select(select())
-      .andWhere(
-        `( (d_o."userId" = :userId AND d_o."ownershipLevel" >= :ownership)  ${
-          publicAccess
-            ? `OR (d_o."public" = true AND  d_o."ownershipLevel"= '2')`
-            : ''
-        })`,
-        { userId, ownership },
-      )
-      .andWhere('d_o."documentId" = :documentId', { documentId })
-      .getOne();
+      .select(select());
+    if (runFirst) queryBuilder = runFirst<Document>(queryBuilder);
+    return queryBuilder.andWhere(
+      orGroup()
+        .or(`d."userId" = :userId`)
+        .orIf(
+          minimumPrivacy === Privacy.PUBLIC,
+          `(d."privacy"  >= :minimumPrivacy)`,
+        )
+        .orIf(
+          minimumPrivacy >= Privacy.GUESTS_ONLY,
+          andGroup()
+            .and(`g."userId" = :userId `)
+            .and(`g."accessLevel" >= :minimumGuestAccessLevel`)
+            .and(`d."privacy"  >= :minimumPrivacy`)
+            .get(),
+        )
+        .get(),
+      { userId, minimumGuestAccessLevel, minimumPrivacy },
+    );
+  };
+  async getDocumentById(dto: GetDocumentDTO): Promise<Document> {
+    const document = await this.baseQueryBuilder(dto, queryBuilder =>
+      queryBuilder.andWhere('d."id" = :documentId', {
+        documentId: dto.documentId,
+      }),
+    ).getOne();
     if (!document)
       throw new NotFoundException(
-        createErrorDescription.documentNotExist(documentId),
+        createErrorDescription.documentNotExist(dto.documentId),
       );
     return document;
   }
 
   async getDocuments({
     userId,
-    ownership,
-    publicAccess,
-  }: GetDocumentDTO): Promise<Document[]> {
-    return await this.createQueryBuilder('d')
-      .leftJoinAndMapOne(
-        'd.owner',
-        DocumentOwner,
-        'd_o',
-        'd_o."documentId" = d.id ',
-      )
-      .select(select())
-      .andWhere(
-        `( (d_o."userId" = :userId AND d_o."ownershipLevel" >= :ownership)  ${
-          publicAccess ? 'OR d_o."public" = true' : ''
-        })`,
-        { userId, ownership },
-      )
-      .getMany();
+    minimumGuestAccessLevel,
+  }: GetDocumentsDTO): Promise<Document[]> {
+    return await this.baseQueryBuilder({
+      userId,
+      minimumGuestAccessLevel,
+      minimumPrivacy: Privacy.GUESTS_ONLY,
+    }).getMany();
   }
 
   async createDocument({
-    data: { name },
+    data: { name, privacy },
+    userId,
   }: CreateDocumentDTO): Promise<Document> {
-    const document = new Document(name);
+    const document = new Document({ name, userId, privacy });
     await document.save();
     return document;
   }
@@ -141,7 +149,6 @@ export class DocumentRepository extends Repository<Document> {
         this.getDocumentById({
           userId: user.id,
           documentId,
-          ownership: OwnershipLevel.OWNER,
         } as GetDocumentDTO),
       ),
     );

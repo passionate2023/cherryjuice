@@ -35,8 +35,7 @@ const saveNodesMeta = async ({ state, documentId }: SaveOperationProps) => {
     editedAttributes.forEach(attribute => {
       meta[attribute] = node[attribute];
     });
-    if (meta.owner && '__typename' in meta.owner)
-      delete meta.owner['__typename'];
+
     swapFatherIdIfApplies(state)(node);
     if (collectDanglingNodes(state)(node)) continue;
     updateDocumentId(state)(node);
@@ -45,7 +44,7 @@ const saveNodesMeta = async ({ state, documentId }: SaveOperationProps) => {
   for await (const chunk of unFlatMap(200)<NodeMetaIt>()(nodeMetaIts)) {
     await apolloCache.client.mutate(
       EDIT_NODE_META({
-        file_id: documentId,
+        file_id: state.swappedDocumentIds[documentId] || documentId,
         meta: chunk,
       }),
     );

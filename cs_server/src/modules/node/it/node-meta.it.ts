@@ -1,7 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { Timestamp } from '../../document/helpers/graphql-types/timestamp';
-import { NodeOwner } from '../entities/node.owner.entity';
-import { NodeOwnerIt } from '@cs/graphql-types';
+import { Privacy } from '../../document/entities/document.entity';
 
 @InputType()
 export class NodeMetaIt {
@@ -37,6 +36,6 @@ export class NodeMetaIt {
   @Field(() => Timestamp)
   updatedAt: number;
 
-  @Field(() => NodeOwner, { nullable: true })
-  owner: NodeOwnerIt;
+  @Field(() => Privacy, { nullable: true })
+  privacy?: Privacy;
 }

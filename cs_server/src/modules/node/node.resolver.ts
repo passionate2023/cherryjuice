@@ -3,9 +3,9 @@ import { NodeService } from './node.service';
 import { Node } from './entities/node.entity';
 import { ImageService } from '../image/image.service';
 import { Image } from '../image/entities/image.entity';
-import { OwnershipLevel } from '../document/entities/document.owner.entity';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
+import { Privacy } from '../document/entities/document.entity';
 import { GetUserGql } from '../user/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
 
@@ -18,15 +18,14 @@ export class NodeResolver {
   ) {}
 
   @ResolveField()
-  async html(@Parent() node: Node, @GetUserGql() user: User): Promise<string> {
+  async html(@GetUserGql() user: User, @Parent() node: Node): Promise<string> {
     return node.node_id === 0
       ? ''
       : this.nodeService.getHtml({
-          userId: user.id,
           documentId: node.documentId,
           node_id: node.node_id,
-          ownership: OwnershipLevel.READER,
-          publicAccess: true,
+          minimumPrivacy: Privacy.PUBLIC,
+          userId: user.id,
         });
   }
   @ResolveField(() => [Image])

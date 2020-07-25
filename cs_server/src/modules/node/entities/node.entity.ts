@@ -11,10 +11,9 @@ import {
   BeforeUpdate,
   BeforeInsert,
 } from 'typeorm';
-import { Document } from '../../document/entities/document.entity';
+import { Document, Privacy } from '../../document/entities/document.entity';
 import { Image } from '../../image/entities/image.entity';
 import hash from 'object-hash';
-import { NodeOwner } from './node.owner.entity';
 
 @Unique(['node_id', 'documentId'])
 @Entity()
@@ -127,6 +126,11 @@ export class Node extends BaseEntity {
     this.hash = hash(fields);
   }
 
-  @Field(() => NodeOwner)
-  owner: NodeOwner;
+  @Field(() => Privacy, { nullable: true })
+  @Column({
+    type: 'enum',
+    enum: Privacy,
+    nullable: true,
+  })
+  privacy?: Privacy;
 }

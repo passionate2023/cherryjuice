@@ -1,6 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { Timestamp } from '../helpers/graphql-types/timestamp';
-import { DocumentOwner } from '../entities/document.owner.entity';
+import { DocumentGuest } from '../entities/document-guest.entity';
+import { Privacy } from '../entities/document.entity';
 
 @InputType()
 export class EditDocumentIt {
@@ -8,6 +9,8 @@ export class EditDocumentIt {
   name: string;
   @Field(() => Timestamp)
   updatedAt: Date;
-  @Field(() => DocumentOwner, { nullable: true })
-  owner: DocumentOwner;
+  @Field(() => [DocumentGuest], { nullable: 'items' })
+  guests: DocumentGuest[];
+  @Field(() => Privacy, { nullable: true })
+  privacy: Privacy;
 }

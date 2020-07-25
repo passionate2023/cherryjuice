@@ -1,8 +1,7 @@
 import { NodeMeta } from '::types/graphql-adapters';
 import gql from 'graphql-tag';
-import { DOCUMENT_OWNER } from '::graphql/fragments';
+import { DOCUMENT_GUEST } from '::graphql/fragments';
 import { Document } from '::types/graphql/generated';
-import { NODE_OWNER } from '::graphql/fragments/node-owner';
 
 type QNodeMeta = Pick<
   NodeMeta,
@@ -16,15 +15,18 @@ type QNodeMeta = Pick<
   | 'createdAt'
   | 'updatedAt'
   | 'node_title_styles'
-  | 'owner'
+  | 'privacy'
 >;
 
-type QDocumentMeta = Pick<Document, 'id' | 'name' | 'folder' | 'owner'> & {
+type QDocumentMeta = Pick<
+  Document,
+  'id' | 'name' | 'folder' | 'guests' | 'privacy' | 'userId'
+> & {
   node: QNodeMeta[];
 };
 
 type Args = { file_id: string };
-const QUERY_DOCUMENT = ({ file_id }: Args) => ({
+const DOCUMENT_META = ({ file_id }: Args) => ({
   variables: { file_id },
   path: (data): QDocumentMeta | undefined => data?.document[0],
   query: gql`
@@ -33,7 +35,9 @@ const QUERY_DOCUMENT = ({ file_id }: Args) => ({
         id
         name
         folder
-        ...DocumentOwner
+        privacy
+        userId
+        ...DocumentGuest
         node {
           id
           documentId
@@ -45,14 +49,13 @@ const QUERY_DOCUMENT = ({ file_id }: Args) => ({
           createdAt
           updatedAt
           node_title_styles
-          ...NodeOwner
+          privacy
         }
       }
     }
-    ${DOCUMENT_OWNER}
-    ${NODE_OWNER}
+    ${DOCUMENT_GUEST}
   `,
 });
 
-export { QUERY_DOCUMENT };
+export { DOCUMENT_META };
 export { QNodeMeta, QDocumentMeta };

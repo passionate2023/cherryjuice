@@ -1,7 +1,7 @@
-import { NodeCached } from '::types/graphql-adapters';
+import { QNodeMeta } from '::graphql/queries/document-meta';
 
-const calculateState = (node: NodeCached) => {
-  const { node_title_styles, read_only, name } = node;
+const calculateState = (node: QNodeMeta) => {
+  const { node_title_styles, name } = node;
   const style = JSON.parse(node_title_styles) || {};
   const isBold = style.fontWeight === 'bold';
   const hasCustomColor = Boolean(
@@ -11,11 +11,12 @@ const calculateState = (node: NodeCached) => {
   return {
     isBold,
     hasCustomIcon,
-    isReadOnly: Boolean(read_only),
+    isReadOnly: false,
     customIcon: style.icon_id || 1,
     hasCustomColor,
     customColor: style.color || '#ffffff',
     name,
+    privacy: node.privacy,
   };
 };
 

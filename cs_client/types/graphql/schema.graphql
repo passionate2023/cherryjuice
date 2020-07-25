@@ -15,14 +15,21 @@ type AuthUser {
 type Document {
     createdAt: Float!
     folder: String
+    guests: [DocumentGuestOt]
     hash: String
     id: String!
     name: String!
     node(node_id: Int): [Node]!
-    owner: DocumentOwnerOt!
+    privacy: Privacy!
     size: Int!
     status: String
     updatedAt: Float!
+    userId: String!
+}
+
+type DocumentGuestOt {
+    accessLevel: AccessLevel!
+    userId: String!
 }
 
 type DocumentMutation {
@@ -33,12 +40,6 @@ type DocumentMutation {
     node(node_id: Int): NodeMutation!
     uploadFile(files: [CTBUpload!]!): Boolean!
     uploadFromGDrive(file: UploadLinkInputType!): Boolean!
-}
-
-type DocumentOwnerOt {
-    ownershipLevel: OwnershipLevel!
-    public: Boolean!
-    userId: String!
 }
 
 type DocumentSubscription {
@@ -71,7 +72,7 @@ type Node {
     name: String!
     node_id: Int!
     node_title_styles: String
-    owner: NodeOwnerOt!
+    privacy: Privacy
     read_only: Int!
     updatedAt: Float!
 }
@@ -79,15 +80,9 @@ type Node {
 type NodeMutation {
     createNode(meta: CreateNodeIt!): String!
     deleteNode: String!
-    editMeta(meta: [NodeMetaIt!]!): String!
+    editMeta(meta: [NodeMetaIt!]!): [ID!]!
     saveAHtml(data: SaveHtmlIt!): String!
     uploadImage(images: [ImageUpload!]!): [[String!]!]!
-}
-
-type NodeOwnerOt {
-    ownershipLevel: OwnershipLevel!
-    public: Boolean!
-    userId: String!
 }
 
 type NodeSearchResultEntity {
@@ -148,6 +143,11 @@ type UserMutation {
     signUp(credentials: SignUpCredentials!): AuthUser!
 }
 
+enum AccessLevel {
+    READER
+    WRITER
+}
+
 enum DOCUMENT_SUBSCRIPTIONS {
     DELETED
     EXPORT_FAILED
@@ -164,10 +164,10 @@ enum DOCUMENT_SUBSCRIPTIONS {
     IMPORT_STARTED
 }
 
-enum OwnershipLevel {
-    OWNER
-    READER
-    WRITER
+enum Privacy {
+    GUESTS_ONLY
+    PRIVATE
+    PUBLIC
 }
 
 enum SearchScope {
@@ -211,8 +211,9 @@ enum TimeRange {
 }
 
 input CreateDocumentIt {
+    guests: [DocumentGuestIt]!
     name: String!
-    owner: DocumentOwnerIt!
+    privacy: Privacy!
 }
 
 input CreateNodeIt {
@@ -223,7 +224,7 @@ input CreateNodeIt {
     name: String!
     node_id: Int!
     node_title_styles: String
-    owner: NodeOwnerIt!
+    privacy: Privacy
     read_only: Int!
     updatedAt: Timestamp!
 }
@@ -232,15 +233,15 @@ input DeleteDocumentInputType {
     IDs: [String!]!
 }
 
-input DocumentOwnerIt {
-    ownershipLevel: OwnershipLevel!
-    public: Boolean!
+input DocumentGuestIt {
+    accessLevel: AccessLevel!
     userId: String!
 }
 
 input EditDocumentIt {
+    guests: [DocumentGuestIt]!
     name: String
-    owner: DocumentOwnerIt
+    privacy: Privacy
     updatedAt: Timestamp!
 }
 
@@ -252,17 +253,11 @@ input NodeMetaIt {
     name: String
     node_id: Int!
     node_title_styles: String
-    owner: NodeOwnerIt
     position: Int
+    privacy: Privacy
     read_only: Int
     sequence: Float
     updatedAt: Timestamp!
-}
-
-input NodeOwnerIt {
-    ownershipLevel: OwnershipLevel!
-    public: Boolean!
-    userId: String!
 }
 
 input NodeSearchIt {

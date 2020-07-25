@@ -1,11 +1,14 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { DocumentOwner } from '../entities/document.owner.entity';
-import { DocumentOwnerIt } from '@cs/graphql-types';
+import { DocumentGuest } from '../entities/document-guest.entity';
+import { Privacy } from '../entities/document.entity';
 @InputType()
 export class CreateDocumentIt {
   @Field()
   name: string;
 
-  @Field(() => DocumentOwner)
-  owner: DocumentOwnerIt;
+  @Field(() => Privacy)
+  privacy: Privacy;
+
+  @Field(() => [DocumentGuest], { nullable: 'items' })
+  guests: DocumentGuest[];
 }

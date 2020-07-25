@@ -9,7 +9,7 @@ import {
   getFallbackNode,
 } from './helpers/document';
 import { rootActionCreators } from '::root/store/ducks/root';
-import { DocumentOwnerOt } from '::types/graphql/generated';
+import { DocumentGuestOt, Privacy } from '::types/graphql/generated';
 
 const ap = createActionPrefixer('document');
 const ac = {
@@ -25,7 +25,12 @@ const ac = {
   fetchNodesStarted: _('fetchNodesStarted'),
   fetchNodesFulfilled: _(
     'fetchNodesFulfilled',
-    _ => (args: { nodes: nodesMetaMap; owner: DocumentOwnerOt }) => _(args),
+    _ => (args: {
+      nodes: nodesMetaMap;
+      privacy: Privacy;
+      guests: DocumentGuestOt[];
+      userId: string;
+    }) => _(args),
   ),
   setCacheTimeStamp: _(
     'setCacheTimeStamp',
@@ -68,7 +73,9 @@ type NodeId = {
 type AsyncOperation = 'in-progress' | 'idle' | 'pending';
 type State = {
   nodes?: nodesMetaMap;
-  owner: DocumentOwnerOt;
+  privacy: Privacy;
+  guests: DocumentGuestOt[];
+  userId: string;
   fetchNodesStarted?: number;
   documentId: string;
   cacheTimeStamp: number;
@@ -81,8 +88,10 @@ type State = {
 };
 
 const initialState: State = {
+  userId: undefined,
   nodes: undefined,
-  owner: undefined,
+  privacy: Privacy.PRIVATE,
+  guests: [],
   fetchNodesStarted: 0,
   documentId: '',
   cacheTimeStamp: 0,
@@ -111,7 +120,9 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     ...state,
     fetchNodesStarted: 0,
     nodes: payload.nodes,
-    owner: payload.owner,
+    guests: payload.guests,
+    privacy: payload.privacy,
+    userId: payload.userId,
     cacheTimeStamp: 0,
   })),
   _(ac.fetchNodesStarted, state => ({

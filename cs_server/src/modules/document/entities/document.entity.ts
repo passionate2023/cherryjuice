@@ -1,4 +1,10 @@
-import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
+import {
+  Field,
+  Float,
+  Int,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 import { Node } from '../../node/entities/node.entity';
 import {
   BaseEntity,
@@ -7,24 +13,45 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { randomUUID10 } from '../../shared';
 import hash from 'object-hash';
-import { DocumentOwner } from './document.owner.entity';
+import { DocumentGuest } from './document-guest.entity';
+import { User } from '../../user/entities/user.entity';
 
 export type NodesHash = { [node_id: number]: { hash: string } };
+export enum Privacy {
+  PRIVATE = 1,
+  GUESTS_ONLY,
+  PUBLIC,
+}
+registerEnumType(Privacy, {
+  name: 'Privacy',
+});
+type DocumentConstructorProps = {
+  userId: string;
+  name: string;
+  size?: number;
+  privacy: Privacy;
+};
 
 @Entity()
 @ObjectType()
 export class Document extends BaseEntity {
-  constructor(name: string, size = 0) {
+  constructor(args: DocumentConstructorProps) {
     super();
-    this.id = randomUUID10();
-    this.name = name;
-    this.size = size;
-    this.hash = '';
+    if (args?.userId) {
+      const { name, size, userId, privacy } = args;
+      this.id = randomUUID10();
+      this.name = name;
+      this.size = size || 0;
+      this.userId = userId;
+      this.privacy = privacy;
+      this.hash = '';
+    }
   }
   @PrimaryColumn()
   @Field()
@@ -70,6 +97,23 @@ export class Document extends BaseEntity {
     this.hash = hash(fields);
   }
 
-  @Field(() => DocumentOwner)
-  owner: DocumentOwner;
+  @ManyToOne(
+    () => User,
+    user => user.id,
+    { onDelete: 'CASCADE' },
+  )
+  user: User;
+  @Field()
+  @Column()
+  userId: string;
+
+  @Field(() => Privacy)
+  @Column({
+    type: 'enum',
+    enum: Privacy,
+  })
+  privacy: Privacy;
+
+  @Field(() => [DocumentGuest], { nullable: 'itemsAndList' })
+  guests: DocumentGuest[];
 }

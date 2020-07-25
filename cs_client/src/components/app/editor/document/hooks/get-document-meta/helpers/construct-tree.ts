@@ -1,6 +1,6 @@
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { nodesMetaMap } from '::types/misc';
-import { QNodeMeta } from '::graphql/queries/query-document';
+import { QNodeMeta } from '::graphql/queries/document-meta';
 
 type Props = {
   nodes: QNodeMeta[];

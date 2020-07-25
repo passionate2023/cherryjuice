@@ -7,14 +7,14 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { DocumentService } from './document.service';
-import { Document } from './entities/document.entity';
+import { Document, Privacy } from './entities/document.entity';
 import { Node } from '../node/entities/node.entity';
 import { NodeService } from '../node/node.service';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
 import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { GetUserGql } from '../user/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
-import { OwnershipLevel } from './entities/document.owner.entity';
+import { AccessLevel } from './entities/document-guest.entity';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Document)
@@ -33,16 +33,16 @@ export class DocumentQueriesResolver {
     return file_id
       ? [
           await this.documentService.getDocumentById({
-            documentId: file_id,
-            ownership: OwnershipLevel.READER,
             userId: user.id,
-            publicAccess: true,
+            documentId: file_id,
+            minimumGuestAccessLevel: AccessLevel.READER,
+            minimumPrivacy: Privacy.PUBLIC,
           }),
         ]
       : this.documentService.getDocuments({
-          documentId: file_id,
-          ownership: OwnershipLevel.READER,
           userId: user.id,
+          documentId: file_id,
+          minimumGuestAccessLevel: AccessLevel.READER,
         });
   }
 
@@ -56,17 +56,15 @@ export class DocumentQueriesResolver {
       ? [
           await this.nodeService.getNodeById({
             node_id,
-            userId: user.id,
             documentId: document.id,
-            ownership: OwnershipLevel.READER,
-            publicAccess: true,
+            minimumPrivacy: Privacy.PUBLIC,
+            userId: user.id,
           }),
         ]
       : await this.nodeService.getNodes({
-          userId: user.id,
           documentId: document.id,
-          ownership: OwnershipLevel.READER,
-          publicAccess: true,
+          minimumPrivacy: Privacy.PUBLIC,
+          userId: user.id,
         });
   }
 }

@@ -10,8 +10,8 @@ import { CreateNodeIt } from './it/create-node.it';
 import { ImportsService } from '../imports/imports.service';
 import { FileUpload, GraphQLUpload } from '../document/helpers/graphql';
 import { SaveHtmlIt } from './it/save-html.it';
-import { OwnershipLevel } from '../document/entities/document.owner.entity';
 import { Node } from './entities/node.entity';
+import { Privacy } from '../document/entities/document.entity';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => NodeMutation)
@@ -35,7 +35,7 @@ export class NodeMutationsResolver {
         userId: user.id,
         node_id: node.node_id,
         documentId: node.documentId,
-        ownership: OwnershipLevel.WRITER,
+        minimumPrivacy: Privacy.GUESTS_ONLY,
       },
     });
     return '';
@@ -53,9 +53,9 @@ export class NodeMutationsResolver {
         data,
         getNodeDTO: {
           node_id: data.node_id,
-          userId: user.id,
           documentId: node.documentId,
-          ownership: OwnershipLevel.WRITER,
+          minimumPrivacy: Privacy.GUESTS_ONLY,
+          userId: user.id,
         },
       });
       editedNodesIds.push(id);
@@ -68,18 +68,15 @@ export class NodeMutationsResolver {
     @Parent() node: Node,
     @GetUserGql() user: User,
   ): Promise<string> {
-    const createdNode = await this.nodeService.createNode(
-      {
-        getNodeDTO: {
-          documentId: node.documentId,
-          userId: user.id,
-          ownership: OwnershipLevel.WRITER,
-          node_id: node.node_id,
-        },
-        data,
+    const createdNode = await this.nodeService.createNode({
+      getNodeDTO: {
+        documentId: node.documentId,
+        node_id: node.node_id,
+        minimumPrivacy: Privacy.PRIVATE,
+        userId: user.id,
       },
-      user,
-    );
+      data,
+    });
     return createdNode.id;
   }
 
@@ -89,10 +86,12 @@ export class NodeMutationsResolver {
     @GetUserGql() user: User,
   ): Promise<string> {
     return await this.nodeService.deleteNode({
-      ownership: OwnershipLevel.WRITER,
-      node_id: node.node_id,
-      documentId: node.documentId,
-      userId: user.id,
+      getNodeDTO: {
+        node_id: node.node_id,
+        documentId: node.documentId,
+        minimumPrivacy: Privacy.GUESTS_ONLY,
+        userId: user.id,
+      },
     });
   }
   @ResolveField(() => [[String]])
@@ -110,8 +109,8 @@ export class NodeMutationsResolver {
       getNodeDTO: {
         node_id: node.node_id,
         documentId: node.documentId,
+        minimumPrivacy: Privacy.GUESTS_ONLY,
         userId: user.id,
-        ownership: OwnershipLevel.WRITER,
       },
     });
   }

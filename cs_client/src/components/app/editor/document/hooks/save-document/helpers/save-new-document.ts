@@ -8,7 +8,11 @@ const saveNewDocument = async ({ state, documentId }: SaveOperationProps) => {
     if (document.folder === 'Unsaved') document.folder = null;
     const permanentDocumentId = await apolloCache.client.mutate(
       CREATE_DOCUMENT({
-        document: { name: document.name, owner: document.owner },
+        document: {
+          name: document.name,
+          guests: [],
+          privacy: document.privacy,
+        },
       }),
     );
 

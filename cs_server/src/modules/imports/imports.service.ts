@@ -3,7 +3,7 @@ import { performDownload } from './helpers/download/perform-download/perform-dow
 import { User } from '../user/entities/user.entity';
 import { ImageService } from '../image/image.service';
 import { DocumentService } from '../document/document.service';
-import { Document } from '../document/entities/document.entity';
+import { Document, Privacy } from '../document/entities/document.entity';
 import { FileUpload } from '../document/helpers/graphql';
 import { AddImageDTO } from './dto/upload-image.dto';
 import { NodeService } from '../node/node.service';
@@ -19,12 +19,6 @@ import {
 import { createGqlDownloadTask } from './helpers/download/create-dowload-task/create-gql-download-task';
 import { deleteFolder } from '../shared/fs/delete-folder';
 import { paths } from '../shared/fs/paths';
-import { CreateDocumentIt } from '../document/input-types/create-document.it';
-import { OwnershipLevel } from '../document/entities/document.owner.entity';
-export type CreateDocumentDTO = {
-  data: CreateDocumentIt;
-  user: User;
-};
 
 @Injectable()
 export class ImportsService {
@@ -49,7 +43,7 @@ export class ImportsService {
     fileMeta: FileMeta;
   }): Promise<void> {
     const importCTB = new ImportCTB(
-      dto => this.nodeService.createNode(dto, user),
+      dto => this.nodeService.createNode(dto),
       user,
     );
     await importCTB.saveDocument({
@@ -128,13 +122,10 @@ export class ImportsService {
         document = await this.documentService.createDocument({
           data: {
             name: downloadTask.fileMeta.fileName,
-            owner: {
-              userId: user.id,
-              ownershipLevel: OwnershipLevel.OWNER,
-              public: false,
-            },
+            privacy: Privacy.PRIVATE,
+            guests: [],
           },
-          user,
+          userId: user.id,
         });
 
         documents.push({

@@ -1,13 +1,6 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { Node } from '../entities/node.entity';
 import { Injectable } from '@nestjs/common';
-import {
-  CreateNodeDTO,
-  GetNodeDTO,
-  GetNodesDTO,
-  MutateNodeContentDTO,
-  MutateNodeMetaDTO,
-} from '../dto/mutate-node.dto';
 import { copyProperties } from '../../document/helpers';
 import { SaveHtmlIt } from '../it/save-html.it';
 import { NodeMetaIt } from '../it/node-meta.it';
@@ -16,8 +9,20 @@ import { NodeSearchDto } from '../../search/dto/node-search.dto';
 import { NodeSearchResultEntity } from '../../search/entities/node.search-result.entity';
 import { SearchTarget, SearchType } from '../../search/it/node-search.it';
 import { nodeSearch } from '../../search/helpers/pg-queries/node-search';
-import { OwnershipLevel } from '../../document/entities/document.owner.entity';
-import { NodeOwner } from '../entities/node.owner.entity';
+import { Document, Privacy } from '../../document/entities/document.entity';
+import {
+  CreateNodeDTO,
+  DeleteNodeDTO,
+  GetNodeDTO,
+  GetNodesDTO,
+  MutateNodeContentDTO,
+  MutateNodeMetaDTO,
+} from '../dto/mutate-node.dto';
+import {
+  andGroup,
+  orGroup,
+} from '../../search/helpers/pg-queries/helpers/clause-builder';
+import { DocumentGuest } from '../../document/entities/document-guest.entity';
 
 const nodeMeta = [
   `n.id`,
@@ -32,9 +37,7 @@ const nodeMeta = [
   `n.read_only`,
   `n.hash`,
   `n.documentId`,
-  `n_o.userId`,
-  `n_o.ownershipLevel`,
-  `n_o.public`,
+  `n.privacy`,
 ];
 const nodeAhtml = ['n.ahtml'];
 const fullNode = [...nodeMeta, ...nodeAhtml];
@@ -46,42 +49,55 @@ const select = (target: NodeSelection): string[] =>
     : nodeMeta;
 type NodeSelection = 'meta' | 'ahtml' | 'meta-and-ahtml';
 
+export type RunFirst = <T>(q: SelectQueryBuilder<T>) => SelectQueryBuilder<T>;
+
 @Injectable()
 @EntityRepository(Node)
 export class NodeRepository extends Repository<Node> {
   async getNodes(
-    { documentId, ownership, userId, publicAccess }: GetNodesDTO,
+    dto: GetNodesDTO,
     target: NodeSelection = 'meta',
   ): Promise<Node[]> {
-    return await this.createQueryBuilder('n')
-      .leftJoinAndMapOne('n.owner', NodeOwner, 'n_o', 'n_o."nodeId" = n.id ')
-      .select(select(target))
-      .andWhere(
-        `( (n_o."userId" = :userId AND n_o."ownershipLevel" >= :ownership)  ${
-          publicAccess ? 'OR n_o."public" = true' : ''
-        })`,
-        { userId, ownership },
-      )
-      .andWhere('n_o."documentId" = :documentId', { documentId })
-      .getMany();
+    return await this.baseQueryBuilder(dto, target).getMany();
   }
-
+  baseQueryBuilder = (
+    { documentId, minimumPrivacy, userId }: GetNodeDTO | GetNodesDTO,
+    target: NodeSelection = 'meta',
+    runFirst?: RunFirst,
+  ) => {
+    let queryBuilder = this.createQueryBuilder('n')
+      .leftJoin(Document, 'd', 'n."documentId" = d.id ')
+      .leftJoin(DocumentGuest, 'g', 'n."documentId" = g."documentId"')
+      .select(select(target));
+    if (runFirst) queryBuilder = runFirst<Node>(queryBuilder);
+    return queryBuilder
+      .andWhere('n."documentId" = :documentId', { documentId })
+      .andWhere(
+        orGroup()
+          .or(`d.userId = :userId`)
+          .or(`n.privacy isnull`)
+          .orIf(
+            minimumPrivacy === Privacy.PUBLIC,
+            `(n."privacy"  >= :minimumPrivacy)`,
+          )
+          .orIf(
+            minimumPrivacy >= Privacy.GUESTS_ONLY,
+            andGroup()
+              .and(`g."userId" = :userId `)
+              .and(`n."privacy"  >= :minimumPrivacy`)
+              .get(),
+          )
+          .get(),
+        { userId, minimumPrivacy },
+      );
+  };
   async getNodeById(
-    { userId, ownership, documentId, node_id, publicAccess }: GetNodeDTO,
+    dto: GetNodeDTO,
     target: NodeSelection = 'meta',
   ): Promise<Node> {
-    return this.createQueryBuilder('n')
-      .leftJoin(NodeOwner, 'n_o', 'n_o."nodeId" = n.id ')
-      .select(select(target))
-      .andWhere(
-        `( (n_o."userId" = :userId AND n_o."ownershipLevel" >= :ownership)  ${
-          publicAccess ? 'OR n_o."public" = true' : ''
-        })`,
-        { userId, ownership },
-      )
-      .andWhere('n_o."documentId" = :documentId', { documentId })
-      .andWhere('n_o."node_id" = :node_id', { node_id })
-      .getOne();
+    return this.baseQueryBuilder(dto, target, queryBuilder =>
+      queryBuilder.andWhere('n."node_id" = :node_id', { node_id: dto.node_id }),
+    ).getOne();
   }
 
   async getAHtml(dto: GetNodeDTO): Promise<AHtmlLine[]> {
@@ -90,21 +106,16 @@ export class NodeRepository extends Repository<Node> {
     );
   }
 
-  async createNode({
-    data,
-    getNodeDTO: { userId, documentId },
-  }: CreateNodeDTO): Promise<Node> {
+  async createNode({ data, getNodeDTO }: CreateNodeDTO): Promise<Node> {
     const node = new Node();
     copyProperties(data, node, {});
-    node.documentId = documentId;
+    node.documentId = getNodeDTO.documentId;
     node.createdAt = new Date(data.createdAt);
     node.updatedAt = new Date(data.updatedAt);
     if (node.father_id !== -1) {
       node.father = await this.getNodeById({
+        ...getNodeDTO,
         node_id: node.father_id,
-        documentId,
-        userId,
-        ownership: OwnershipLevel.WRITER,
       });
     }
     await this.save(node);
@@ -118,6 +129,7 @@ export class NodeRepository extends Repository<Node> {
     const node = await this.getNodeById(dto);
     if (typeof attributes.updatedAt === 'number')
       attributes.updatedAt = (new Date(attributes.updatedAt) as unknown) as any;
+    if ('node_id' in attributes) delete attributes.node_id;
     Object.entries(attributes).forEach(([k, v]) => {
       node[k] = v;
     });
@@ -133,8 +145,8 @@ export class NodeRepository extends Repository<Node> {
   async setMeta({ data, getNodeDTO }: MutateNodeMetaDTO): Promise<Node> {
     return await this.updateNode(data, getNodeDTO);
   }
-  async deleteNode(dto: GetNodeDTO): Promise<string> {
-    const node = await this.getNodeById(dto);
+  async deleteNode(dto: DeleteNodeDTO): Promise<string> {
+    const node = await this.getNodeById(dto.getNodeDTO);
     return await this.remove(node).then(res => JSON.stringify(res));
   }
   async getNodesMetaAndAHtml(dto: GetNodesDTO): Promise<Node[]> {
@@ -143,10 +155,9 @@ export class NodeRepository extends Repository<Node> {
 
   async findNodes({
     it,
-    user,
-    publicAccess,
+    userId,
   }: NodeSearchDto): Promise<NodeSearchResultEntity[]> {
-    const { query, variables } = nodeSearch({ it, user, publicAccess });
+    const { query, variables } = nodeSearch({ it, userId });
 
     let searchResults: NodeSearchResultEntity[] = await this.manager.query(
       query,

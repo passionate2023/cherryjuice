@@ -1,15 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DocumentService, GetDocumentDTO } from '../document/document.service';
+import { DocumentService } from '../document/document.service';
 import { NodeService } from '../node/node.service';
 import { ExportCTB } from './helpers/export-ctb';
 import fs, { ReadStream } from 'fs';
 import { ImageService } from '../image/image.service';
 import { DocumentSubscriptionsService } from '../document/document.subscriptions.service';
-import { Document } from '../document/entities/document.entity';
+import { Document, Privacy } from '../document/entities/document.entity';
 import { deleteFolder } from '../shared/fs/delete-folder';
-import Timeout = NodeJS.Timeout;
 import { paths } from '../shared/fs/paths';
 import { resolveFileLocation } from '../shared/fs/resolve-file-location';
+import { GetDocumentDTO } from '../document/dto/document.dto';
+import Timeout = NodeJS.Timeout;
 
 @Injectable()
 export class ExportsService {
@@ -38,7 +39,7 @@ export class ExportsService {
   };
 
   exportDocument = async (dto: GetDocumentDTO): Promise<string> => {
-    const { userId, ownership } = dto;
+    const { userId } = dto;
     const document = await this.documentService.getDocumentById(dto);
     const exportCTB = new ExportCTB({
       id: document.id,
@@ -50,8 +51,8 @@ export class ExportsService {
       await this.subscriptionsService.export.pending(document, userId);
       await this.subscriptionsService.export.preparing(document, userId);
       const nodes = await this.nodeService.getNodesMetaAndAHtml({
-        ownership,
         documentId: document.id,
+        minimumPrivacy: Privacy.GUESTS_ONLY,
         userId,
       });
       await exportCTB.createCtb();

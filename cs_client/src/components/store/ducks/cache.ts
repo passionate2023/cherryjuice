@@ -4,8 +4,8 @@ import { createActionPrefixer } from './helpers/shared';
 const ap = createActionPrefixer('cache');
 
 const ac = {
-  updateDocumentOwner: _(
-    ap('update-document-owner'),
+  updateDocumentPrivacy: _(
+    ap('update-document-privacy'),
     _ => (isPublic: boolean) => _(isPublic),
   ),
 };

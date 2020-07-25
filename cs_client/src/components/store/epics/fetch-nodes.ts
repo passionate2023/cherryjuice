@@ -15,8 +15,8 @@ import { createErrorHandler } from './shared/create-error-handler';
 import {
   QDocumentMeta,
   QNodeMeta,
-  QUERY_DOCUMENT,
-} from '::graphql/queries/query-document';
+  DOCUMENT_META,
+} from '::graphql/queries/document-meta';
 
 const createLocalRequest = (
   file_id: string,
@@ -43,7 +43,7 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
       const isNewDocument = file_id?.startsWith('new-document');
       const request = (isNewDocument
         ? createLocalRequest(file_id)
-        : gqlQuery(QUERY_DOCUMENT({ file_id }))
+        : gqlQuery(DOCUMENT_META({ file_id }))
       ).pipe(
         tap(() => {
           apolloCache.changes.initDocumentChangesState(file_id);
@@ -54,7 +54,12 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
             nodes: fetchedNodes,
             file_id,
           });
-          return { nodes, owner: document.owner };
+          return {
+            nodes,
+            privacy: document.privacy,
+            guests: document.guests,
+            userId: document.userId,
+          };
         }),
         map(ac.__.document.fetchNodesFulfilled),
       );

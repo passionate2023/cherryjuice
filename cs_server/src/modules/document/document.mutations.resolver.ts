@@ -21,8 +21,8 @@ import { NodeMutation } from '../node/entities/node-mutation.entity';
 import { CreateDocumentIt } from './input-types/create-document.it';
 import { EditDocumentIt } from './input-types/edit-document.it';
 import { ExportsService } from '../exports/exports.service';
-import { OwnershipLevel } from './entities/document.owner.entity';
-import { Document } from './entities/document.entity';
+import { AccessLevel } from './entities/document-guest.entity';
+import { Document, Privacy } from './entities/document.entity';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => DocumentMutation)
@@ -40,7 +40,14 @@ export class DocumentMutationsResolver {
     @Args('file_id', { nullable: true }) file_id?: string,
   ) {
     if (!user) throw new UnauthorizedException();
-    return { id: file_id };
+    return file_id
+      ? this.documentService.getDocumentById({
+          userId: user.id,
+          documentId: file_id,
+          minimumGuestAccessLevel: AccessLevel.WRITER,
+          minimumPrivacy: Privacy.GUESTS_ONLY,
+        })
+      : { id: undefined };
   }
 
   @ResolveField(() => String)
@@ -54,7 +61,7 @@ export class DocumentMutationsResolver {
   ): Promise<string> {
     const document = await this.documentService.createDocument({
       data: createDocumentIt,
-      user,
+      userId: user.id,
     });
     return document.id;
   }
@@ -73,7 +80,8 @@ export class DocumentMutationsResolver {
       getDocumentDTO: {
         documentId: document.id,
         userId: user.id,
-        ownership: OwnershipLevel.OWNER,
+        minimumPrivacy: Privacy.GUESTS_ONLY,
+        minimumGuestAccessLevel: AccessLevel.WRITER,
       },
     });
     return node.id;
@@ -98,8 +106,8 @@ export class DocumentMutationsResolver {
     return await this.exportsService.exportDocument({
       userId: user.id,
       documentId: parent.id,
-      ownership: OwnershipLevel.READER,
-      publicAccess: true,
+      minimumGuestAccessLevel: AccessLevel.READER,
+      minimumPrivacy: Privacy.GUESTS_ONLY,
     });
   }
   @ResolveField(() => [NodeMutation])

@@ -7,9 +7,9 @@ type Variables = {
 };
 const EDIT_NODE_META = (variables: Variables) => ({
   variables,
-  path: (data): string => data?.document?.node?.meta,
+  path: (data): string[] => data?.document?.node?.editMeta,
   query: gql`
-    mutation edit_node_meta($file_id: String!,  $meta: [NodeMetaIt!]!) {
+    mutation edit_node_meta($file_id: String!, $meta: [NodeMetaIt!]!) {
       document(file_id: $file_id) {
         node {
           editMeta(meta: $meta)

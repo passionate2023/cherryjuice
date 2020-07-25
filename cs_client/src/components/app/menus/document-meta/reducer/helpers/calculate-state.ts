@@ -1,26 +1,19 @@
 import {
-  ResetToCreateProps,
   ResetToEditProps,
   TDocumentMetaState,
 } from '::app/menus/document-meta/reducer/reducer';
-import { OwnershipLevel } from '::types/graphql/generated';
+import { Privacy } from '::types/graphql/generated';
 
 const calculateEditedDocumentState = ({
-  document: { name, owner },
+  document: { name, privacy },
 }: ResetToEditProps): TDocumentMetaState => ({
   name,
-  owner,
+  privacy,
 });
-const calculateCreatedDocumentState = ({
-  userId,
-}: ResetToCreateProps): TDocumentMetaState => {
+const calculateCreatedDocumentState = (): TDocumentMetaState => {
   return {
     name: 'new document',
-    owner: {
-      userId,
-      public: false,
-      ownershipLevel: OwnershipLevel.OWNER,
-    },
+    privacy: Privacy.PRIVATE,
   };
 };
 

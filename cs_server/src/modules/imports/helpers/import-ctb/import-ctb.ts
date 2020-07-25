@@ -2,16 +2,16 @@ import imageThumbnail from 'image-thumbnail';
 import { Node } from '../../../node/entities/node.entity';
 import { NodeSqliteRepository } from './repositories/node.sqlite.repository';
 import { DocumentSqliteRepository } from './repositories/document.sqlite.repository';
-import { Document } from '../../../document/entities/document.entity';
+import { Document, Privacy } from '../../../document/entities/document.entity';
 import { Image } from '../../../image/entities/image.entity';
 import { ImageSqliteRepository } from './repositories/image.sqlite.repository';
 import { nodeTitleStyle } from './rendering/node-meta/node-title-style';
 import { FileMeta } from '../download/create-dowload-task/create-gdrive-download-task';
 import { User } from '../../../user/entities/user.entity';
-import { OwnershipLevel } from '../../../document/entities/document.owner.entity';
 import { CreateNodeDTO } from '../../../node/dto/mutate-node.dto';
 import { convertTime } from './rendering/node-meta/convert-time';
 import { SqliteNodeMeta } from './repositories/queries/node';
+
 type SqliteNodeMetaPreProcessed = SqliteNodeMeta & {
   child_nodes: number[];
   is_empty: number;
@@ -108,20 +108,15 @@ export class ImportCTB {
 
       const dto: CreateNodeDTO = {
         getNodeDTO: {
-          ownership: OwnershipLevel.OWNER,
           documentId: newDocument.id,
-          userId: this.user.id,
           node_id: nodeRaw.node_id,
+          minimumPrivacy: Privacy.PRIVATE,
+          userId: this.user.id,
         },
         data: {
           ...nodeRaw,
           createdAt: 0,
           updatedAt: 0,
-          owner: {
-            public: false,
-            userId: this.user.id,
-            ownershipLevel: OwnershipLevel.OWNER,
-          },
           fatherId: undefined,
         },
       };

@@ -55,7 +55,6 @@ const DOCUMENT_MUTATION = {
     `,
   },
 
-
   deleteNode: {
     path: (data): string => data?.document?.node?.deleteNode,
     query: gql`
@@ -81,16 +80,6 @@ const DOCUMENT_MUTATION = {
           node(node_id: $node_id) {
             uploadImage(images: $images)
           }
-        }
-      }
-    `,
-  },
-  editDocument: {
-    path: (data): string => data?.document?.editDocument,
-    query: gql`
-      mutation editDocument($file_id: String!, $meta: EditDocumentIt!) {
-        document(file_id: $file_id) {
-          editDocument(meta: $meta)
         }
       }
     `,

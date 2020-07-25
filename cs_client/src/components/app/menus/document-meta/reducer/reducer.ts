@@ -2,20 +2,16 @@ import {
   calculateCreatedDocumentState,
   calculateEditedDocumentState,
 } from './helpers/calculate-state';
-import { DocumentOwnerOt, OwnershipLevel } from '::types/graphql/generated';
-import { QDocumentMeta } from '::graphql/queries/query-document';
+import { Privacy } from '::types/graphql/generated';
+import { QDocumentsListItem } from '::graphql/queries/documents-list';
 
 type TState = {
   name: string;
-  owner: DocumentOwnerOt;
+  privacy: Privacy;
 };
 const initialState: TState = {
   name: 'new document',
-  owner: {
-    public: false,
-    ownershipLevel: OwnershipLevel.OWNER,
-    userId: undefined,
-  },
+  privacy: Privacy.PRIVATE,
 };
 
 enum actions {
@@ -25,8 +21,8 @@ enum actions {
   toggleIsPublic,
 }
 
-export type ResetToCreateProps = { userId: string };
-export type ResetToEditProps = { document: QDocumentMeta };
+export type ResetToCreateProps = {};
+export type ResetToEditProps = { document: QDocumentsListItem };
 const actionCreators = (() => {
   const state = {
     dispatch: undefined,
@@ -59,10 +55,8 @@ const reducer = (
     case actions.toggleIsPublic:
       return {
         ...state,
-        owner: {
-          ...state.owner,
-          public: !state.owner.public,
-        },
+        privacy:
+          state.privacy === Privacy.PRIVATE ? Privacy.PUBLIC : Privacy.PRIVATE,
       };
     default:
       throw new Error(action.type + ' action not supported');

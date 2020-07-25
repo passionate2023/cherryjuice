@@ -1,4 +1,4 @@
-import { QNodeMeta } from '::graphql/queries/query-document';
+import { QNodeMeta } from '::graphql/queries/document-meta';
 
 export type Function<T, U> = (a: T) => U;
 export type nodesMetaMap = Map<number, QNodeMeta>;

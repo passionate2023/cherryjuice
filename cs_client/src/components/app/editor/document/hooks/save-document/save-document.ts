@@ -11,7 +11,9 @@ import { saveImages } from '::app/editor/document/hooks/save-document/helpers/sa
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { saveDocumentMeta } from './helpers/save-document-meta';
 
-const saveDocument = async (state: SaveOperationState) => {
+const saveDocument = async (
+  state: SaveOperationState,
+): Promise<SaveOperationState> => {
   const editedDocuments = apolloCache.changes.document().unsaved;
   for (const documentId of editedDocuments) {
     await saveNewDocument({ state, documentId });

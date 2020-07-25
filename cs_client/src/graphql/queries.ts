@@ -5,8 +5,7 @@ import {
   NodeSearchIt,
   NodeSearchResults,
 } from '::types/graphql/generated';
-import { NodeHtml, DocumentMeta } from '::types/graphql-adapters';
-import { DOCUMENT_OWNER } from '::graphql/fragments';
+import { NodeHtml } from '::types/graphql-adapters';
 
 const QUERY_NODE_CONTENT = {
   png: {
@@ -50,24 +49,6 @@ const QUERY_NODE_CONTENT = {
 };
 
 const QUERY_DOCUMENTS = {
-  documentMeta: {
-    path: (data): DocumentMeta[] => data?.document || [],
-    query: gql`
-      query documents_meta($file_id: String) {
-        document(file_id: $file_id) {
-          id
-          name
-          size
-          hash
-          createdAt
-          updatedAt
-          folder
-          ...DocumentOwner
-        }
-      }
-      ${DOCUMENT_OWNER}
-    `,
-  },
   currentImports: {
     query: gql`
       query {

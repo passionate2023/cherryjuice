@@ -4,7 +4,7 @@
   "scripts": {
     "link:graphql-types": "cd types/graphql && npm link",
     "dev": "webpack-dev-server --color --progress --config .webpack/webpack.dev.js ",
-    "dev:server": "cd ../cs_server/ && yarn run watch:server:nest",
+    "dev:server": "cd ../cs_server/ && yarn dev",
     "build": "webpack --config .webpack/webpack.prod.js",
     "postinstall": "npm link @cs/ahtml-to-html",
     "commit": "git-cz",

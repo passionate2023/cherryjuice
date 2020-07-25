@@ -19,7 +19,7 @@ const adapt = ({
   read_only,
   updatedAt,
   fatherId,
-  owner,
+  privacy,
 }: NodeCached): CreateNodeIt => ({
   child_nodes,
   createdAt,
@@ -30,7 +30,7 @@ const adapt = ({
   read_only,
   updatedAt,
   fatherId,
-  owner,
+  privacy,
 });
 
 const collectDanglingNodes = (state: SaveOperationState) => (

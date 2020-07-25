@@ -15,31 +15,24 @@ import {
   registerEnumType,
 } from '@nestjs/graphql';
 
-export enum OwnershipLevel {
-  READER,
+export enum AccessLevel {
+  READER = 1,
   WRITER,
-  OWNER,
 }
-registerEnumType(OwnershipLevel, {
-  name: 'OwnershipLevel',
+registerEnumType(AccessLevel, {
+  name: 'AccessLevel',
 });
 
-@ObjectType('DocumentOwnerOt')
-@InputType('DocumentOwnerIt')
+@ObjectType('DocumentGuestOt')
+@InputType('DocumentGuestIt')
 @Unique(['userId', 'documentId'])
 @Entity()
-export class DocumentOwner extends BaseEntity {
-  constructor(
-    userId: string,
-    documentId: string,
-    ownershipLevel: OwnershipLevel,
-    isPublic: boolean,
-  ) {
+export class DocumentGuest extends BaseEntity {
+  constructor(userId: string, documentId: string, accessLevel: AccessLevel) {
     super();
     this.userId = userId;
     this.documentId = documentId;
-    this.ownershipLevel = ownershipLevel;
-    this.public = isPublic;
+    this.accessLevel = accessLevel;
   }
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -63,14 +56,10 @@ export class DocumentOwner extends BaseEntity {
   @Column()
   documentId: string;
 
-  @Field(() => OwnershipLevel)
+  @Field(() => AccessLevel)
   @Column({
     type: 'enum',
-    enum: OwnershipLevel,
+    enum: AccessLevel,
   })
-  ownershipLevel: OwnershipLevel;
-
-  @Field()
-  @Column('boolean')
-  public: boolean;
+  accessLevel: AccessLevel;
 }

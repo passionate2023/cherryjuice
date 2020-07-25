@@ -1,8 +1,8 @@
 import * as React from 'react';
+import { useEffect, useReducer } from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { MetaForm } from '::shared-components/form/meta-form/meta-form';
-import { useReducer, useEffect } from 'react';
 import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { AlertType } from '::types/react';
@@ -12,7 +12,7 @@ import {
 } from '::app/menus/document-meta/helpers/new-document';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
-import { ac } from '::root/store/store';
+import { ac, Store } from '::root/store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import {
   documentMetaActionCreators,
@@ -20,8 +20,8 @@ import {
   documentMetaReducer,
 } from './reducer/reducer';
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store/store';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
+import { Privacy } from '::types/graphql/generated';
 
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showDocumentMetaDialog,
@@ -58,11 +58,11 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    if (showDialog === 'edit')
+    if (showDialog === 'edit') {
       documentMetaActionCreators.resetToEdit({
         document,
       });
-    else documentMetaActionCreators.resetToCreate({ userId });
+    } else documentMetaActionCreators.resetToCreate({ userId });
   }, [showDialog, focusedDocumentId, userId]);
 
   const inputs: FormInputProps[] = [
@@ -76,7 +76,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
     },
     {
       onChange: documentMetaActionCreators.toggleIsPublic,
-      value: state.owner.public,
+      value: state.privacy === Privacy.PUBLIC,
       type: 'checkbox',
       label: 'public',
     },
@@ -84,10 +84,9 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   const createDocument = () => {
     try {
       updateCachedHtmlAndImages();
-      const document = generateNewDocument(state);
+      const document = generateNewDocument({ ...state, userId });
       const rootNode = generateRootNode({
         documentId: document.id,
-        owner: document.owner,
       });
       document.node.push(rootNode);
       apolloCache.changes.initDocumentChangesState(document.id);
@@ -123,9 +122,6 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
     );
     apolloCache.changes.initDocumentChangesState(focusedDocumentId);
     apolloCache.document.mutate({ documentId: focusedDocumentId, meta });
-    if (typeof meta?.owner?.public === 'boolean') {
-      ac.cache.updateDocumentOwner(meta.owner.public);
-    }
     ac.documentsList.fetchDocuments();
   };
   const apply = useDelayedCallback(
