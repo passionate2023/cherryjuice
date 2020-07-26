@@ -70,7 +70,8 @@ export class ExportsService {
       return exportCTB.getFileLocation.relativePath;
     } catch (e) {
       await this.subscriptionsService.export.failed(document, userId);
-      await exportCTB.closeCtb();
+      // eslint-disable-next-line no-console
+      await exportCTB.closeCtb().catch(console.error);
       // eslint-disable-next-line no-console
       console.error(e);
       throw e;

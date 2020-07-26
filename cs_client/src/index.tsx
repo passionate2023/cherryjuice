@@ -22,3 +22,10 @@ if (process.env.NODE_ENV === 'development') {
   window.__APOLLO_CACHE__ = apolloCache;
   attachTestCallbacks();
 }
+if (process.env.NODE_ENV !== 'development') {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = '//fonts.googleapis.com/css?family=Roboto:400';
+  document.head.appendChild(link);
+}

@@ -8,7 +8,6 @@ import { ac } from '::root/store/store';
 import { router } from '::root/router/router';
 import { User as TUser } from '::types/graphql/generated';
 import { UserInfo } from '::app/menus/user/components/user-info';
-
 type UserProps = {
   onClose: Function;
   user: TUser;

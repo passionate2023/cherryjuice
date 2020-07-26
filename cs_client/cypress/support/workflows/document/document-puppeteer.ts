@@ -75,6 +75,7 @@ const documentPuppeteer = {
     cy.reload();
     login();
     cy.visit(`/document/${document.meta.id}`);
+    cy.get('.tree', { timeout: 20000 });
   },
   exportDocument(document: DocumentAst) {
     documentPuppeteer.goToDocument(document);
