@@ -1,4 +1,4 @@
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { store, ac } from '::root/store/store';
@@ -12,7 +12,6 @@ import {
   SignInCredentials,
   SignUpCredentials,
 } from '::types/graphql/generated';
-import { router } from '::root/router/router';
 
 const signIn = (payload: SignInCredentials) =>
   gqlMutation({
@@ -47,12 +46,7 @@ const authEpic = (action$: Observable<Actions>) => {
 
       return concat(
         ip,
-        authenticate.pipe(
-          map(ac.__.auth.setAuthenticationSucceeded),
-          tap(() => {
-            router.goto.home();
-          }),
-        ),
+        authenticate.pipe(map(ac.__.auth.setAuthenticationSucceeded)),
       ).pipe(
         createTimeoutHandler({
           alertDetails: {

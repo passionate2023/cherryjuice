@@ -51,7 +51,7 @@ const reducer = (
     case actions.resetToEdit:
       return calculateEditedDocumentState(action.value);
     case actions.resetToCreate:
-      return calculateCreatedDocumentState(action.value);
+      return calculateCreatedDocumentState();
     case actions.toggleIsPublic:
       return {
         ...state,

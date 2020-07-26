@@ -44,7 +44,7 @@ import { Store } from '::root/store/store';
 const mapState = (state: Store) => ({
   loading: state.auth.ongoingOperation !== 'idle',
   alert: state.auth.alert,
-  token: state.auth.token,
+  userId: state.auth.user?.id,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -52,7 +52,11 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
+const LoginForm: React.FC<Props & PropsFromRedux> = ({
+  loading,
+  alert,
+  userId,
+}) => {
   const formRef = useRef<HTMLFormElement>();
   const staySignedRef = useRef<HTMLInputElement>();
   const login = (e?: any) => {
@@ -81,7 +85,7 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
   });
 
   return (
-    <AuthScreen error={alert}>
+    <AuthScreen error={alert} userId={userId}>
       <div className={modLogin.login__card}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>

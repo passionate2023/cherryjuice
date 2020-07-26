@@ -9,6 +9,7 @@ import {
 } from '::types/graphql/generated';
 import { AsyncOperation } from '::root/store/ducks/document';
 import { ApolloError } from 'apollo-client';
+import { rootActionCreators } from '::root/store/ducks/root';
 
 const ap = createActionPrefixer('auth');
 
@@ -17,7 +18,6 @@ const ac = {
     setStorageType: _(ap('set-storage-type'), _ => (storageType: StorageType) =>
       _(storageType),
     ),
-    clearSession: _(ap('clear-session')),
   },
   ...{
     signIn: _(ap('sign-in'), _ => (credentials: SignInCredentials) =>
@@ -95,7 +95,7 @@ const reducer = createReducer(initialState, _ => [
     })),
   ],
   ...[
-    _(ac.clearSession, () => ({
+    _(rootActionCreators.resetState, () => ({
       ...initialState,
     })),
     _(ac.setStorageType, (state, { payload }) => ({

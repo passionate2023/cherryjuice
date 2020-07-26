@@ -23,7 +23,7 @@ const User: React.FC<UserProps & { style }> = ({ onClose, style, user }) => {
     cb: onClose,
   });
   const signOut = useCallback(() => {
-    ac.auth.clearSession();
+    ac.root.resetState();
     router.goto.login();
   }, []);
   const loggedIn = !!user;

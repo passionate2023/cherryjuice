@@ -41,7 +41,6 @@ export class DocumentQueriesResolver {
         ]
       : this.documentService.getDocuments({
           userId: user.id,
-          documentId: file_id,
           minimumGuestAccessLevel: AccessLevel.READER,
         });
   }
