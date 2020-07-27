@@ -5,7 +5,7 @@ import {
   DOCUMENT_SUBSCRIPTIONS as DS,
   DOCUMENT_SUBSCRIPTIONS,
 } from '../entities/document-subscription.entity';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { createErrorDescription } from '../../shared/errors/create-error-description';
 import { AccessLevel, DocumentGuest } from '../entities/document-guest.entity';
 import {
@@ -91,7 +91,7 @@ export class DocumentRepository extends Repository<Document> {
     }).getOne();
     if (!document)
       throw new NotFoundException(
-        createErrorDescription.documentNotExist(dto.documentId),
+        createErrorDescription.document.doesNotExist(dto.documentId),
       );
     return document;
   }
@@ -123,6 +123,12 @@ export class DocumentRepository extends Repository<Document> {
     updater,
   }: EditDocumentDTO): Promise<Document> {
     let document = await this.getWDocumentById(getDocumentDTO);
+    if (document.userId !== getDocumentDTO.userId)
+      throw new NotFoundException(
+        createErrorDescription.document.notEnoughAccessLevel(
+          getDocumentDTO.documentId,
+        ),
+      );
     Object.entries(meta).forEach(([k, v]) => {
       document[k] = v;
     });
@@ -156,9 +162,12 @@ export class DocumentRepository extends Repository<Document> {
           documentId,
         } as GetDocumentDTO),
       ),
-    ).then(documents =>
-      documents.filter(document => document.userId === user.id),
     );
+
+    if (documents.some(document => document.userId !== user.id))
+      throw new UnauthorizedException(
+        createErrorDescription.document.notEnoughAccessLevel(),
+      );
     await this.remove(documents);
     return IDs;
   }

@@ -7,7 +7,7 @@ import { OperationTypes } from '../helpers/operation-types';
 import { uri } from '::graphql/apollo';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
-const ActionButton = ({ document, deleteDocument, open, userId }) => {
+const ActionButton = ({ document, open, userId }) => {
   const { id, status, hash, name } = document;
   const props = {
     onClick: undefined,
@@ -17,6 +17,7 @@ const ActionButton = ({ document, deleteDocument, open, userId }) => {
       return <>{children}</>;
     },
   };
+  const deleteDocument = () => ac.documentsList.deleteDocument(document.id);
   if (OperationTypes.import.active[status]) {
     props.iconName = Icons.material.stop;
     props.onClick = deleteDocument;

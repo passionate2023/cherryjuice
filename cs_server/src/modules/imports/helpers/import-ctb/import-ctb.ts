@@ -2,7 +2,7 @@ import imageThumbnail from 'image-thumbnail';
 import { Node } from '../../../node/entities/node.entity';
 import { NodeSqliteRepository } from './repositories/node.sqlite.repository';
 import { DocumentSqliteRepository } from './repositories/document.sqlite.repository';
-import { Document, Privacy } from '../../../document/entities/document.entity';
+import { Document } from '../../../document/entities/document.entity';
 import { Image } from '../../../image/entities/image.entity';
 import { ImageSqliteRepository } from './repositories/image.sqlite.repository';
 import { nodeTitleStyle } from './rendering/node-meta/node-title-style';
@@ -110,7 +110,6 @@ export class ImportCTB {
         getNodeDTO: {
           documentId: newDocument.id,
           node_id: nodeRaw.node_id,
-          minimumPrivacy: Privacy.PRIVATE,
           userId: this.user.id,
         },
         data: {

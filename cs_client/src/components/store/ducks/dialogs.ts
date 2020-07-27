@@ -34,11 +34,13 @@ const actionCreators = {
       if (alert?.error && process.env.NODE_ENV === 'development')
         // eslint-disable-next-line no-console
         console.error(alert);
-      if (alert.error?.message.includes('cs::')) {
-        const [, message] = alert.error.message
-          .replace(/^.*cs::/, '')
-          .split('::');
-        alert.description = message;
+      if (alert.error?.message.includes('errorId')) {
+        // @ts-ignore
+        const { graphQLErrors } = alert.error;
+        if (graphQLErrors?.length) {
+          const { description } = JSON.parse(graphQLErrors[0].message);
+          alert.description = description;
+        }
       }
       return _(alert);
     }),

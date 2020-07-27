@@ -21,13 +21,7 @@ const DOCUMENT_MUTATION = {
       }
     }
   `,
-  deleteDocument: gql`
-    mutation deleteDocument($documents: DeleteDocumentInputType!) {
-      document {
-        deleteDocument(documents: $documents)
-      }
-    }
-  `,
+
   exportDocument: {
     path: data => data?.document?.exportDocument,
     query: gql`
@@ -91,7 +85,7 @@ const USER_MUTATION = {
     args: (): void => undefined,
     path: (data): AuthUser | undefined => data?.user?.signIn,
     query: gql`
-      mutation refreshToekn {
+      query refreshToekn {
         user {
           refreshToken {
             token

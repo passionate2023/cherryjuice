@@ -40,6 +40,7 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
                 icon={<Icon name={button.icon} />}
                 key={button.icon}
                 className={button.className}
+                disabled={button.disabled}
               />
             ),
         )}

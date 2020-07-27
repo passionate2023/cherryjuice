@@ -5,12 +5,11 @@ import { DocumentGroup } from './document-group';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
 
 const DocumentList = ({
-  selectedIDs,
-  onSelect,
-  documentId,
+  // selectedIDs,
+  // onSelect,
   documentsMeta,
   loading,
-  deleteMode,
+  // deleteMode,
 }) => {
   const filesPerFolders: [string, DocumentMeta[]][] = [
     documentsMeta.reduce((acc, val) => {
@@ -29,11 +28,10 @@ const DocumentList = ({
       ) : (
         filesPerFolders.map(([folder, files]) => (
           <DocumentGroup
-            deleteMode={deleteMode}
+            // deleteMode={deleteMode}
             key={folder}
-            selectedIDs={selectedIDs}
-            documentId={documentId}
-            onSelect={onSelect}
+            // selectedIDs={selectedIDs}
+            // onSelect={onSelect}
             folder={folder}
             files={files}
           />

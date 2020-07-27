@@ -55,11 +55,18 @@ export class DocumentService {
   }
 
   async editDocument(dto: EditDocumentDTO): Promise<Document> {
+    const state = { guests: undefined };
     if (dto.meta.guests) {
-      await this.documentGuestRepository.setGuests(dto);
+      state.guests = dto.meta.guests;
       delete dto.meta.guests;
     }
-    return await this.documentRepository.editDocument(dto);
+    const document = await this.documentRepository.editDocument(dto);
+    if (state.guests)
+      await this.documentGuestRepository.setGuests({
+        guests: state.guests,
+        documentId: document.id,
+      });
+    return document;
   }
   async deleteDocuments(
     IDs: string[],
@@ -126,13 +133,10 @@ export class DocumentService {
     documentId: string;
     node_id: number;
   }): Promise<void> {
-    const document = await this.getWDocumentById(
-      {
-        documentId: documentId,
-        userId,
-      },
-      false,
-    );
+    const document = await this.getWDocumentById({
+      documentId: documentId,
+      userId,
+    });
     delete document.nodes[node_id].hash;
     if (Object.keys(document.nodes[node_id]).length === 0)
       delete document.nodes[node_id];

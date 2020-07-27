@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { DialogWithTransition } from '::shared-components/dialog';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { DocumentList } from './components/documents-list/document-list';
 import { modDialog } from '::sass-modules/index';
 import { Icons } from '::shared-components/icon/icon';
-import { useDeleteFile } from './hooks/delete-documents/delete-file';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { ac, Store } from '::root/store/store';
@@ -57,6 +56,8 @@ const mapState = (state: Store) => ({
   documents: state.documentsList.documents,
   loading: state.documentsList.fetchDocuments === 'in-progress',
   isOnMobile: state.root.isOnMobile,
+  deletionMode: state.documentsList.deletionMode,
+  selectedIDs: state.documentsList.selectedIDs,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -67,84 +68,56 @@ const SelectFile: React.FC<PropsFromRedux> = ({
   isOnMobile,
   documents,
   loading,
+  deletionMode,
+  selectedIDs,
 }) => {
   useEffect(() => {
     if (showDocumentList) ac.documentsList.fetchDocuments();
   }, [showDocumentList]);
-  const [selectedIDs, setSelectedIDs] = useState([]);
   const close = ac.dialogs.hideDocumentList;
   const open = () => {
     updateCachedHtmlAndImages();
     ac.document.setDocumentId(selectedIDs[0]);
   };
-  const [deleteMode, setDeleteMode] = useState<boolean>(false);
   const { buttonsLeft, buttonsRight } = createButtons({
     selectedIDs,
     documentId,
     close,
     open,
-    deleteMode: deleteMode,
+    deleteMode: deletionMode,
   });
 
-  const { deleteDocument } = useDeleteFile({
-    IDs: selectedIDs,
-    onCompleted: () => {
-      ac.documentsList.fetchDocuments();
-      if (selectedIDs.includes(documentId)) {
-        ac.document.setDocumentId(undefined);
-      }
-      setDeleteMode(false);
-      setSelectedIDs([]);
-    },
-  });
-
+  const showDeletionButtons = !documents.length || !deletionMode;
   const rightHeaderButtons: DialogHeaderButton[] = [
     {
-      hidden: !documents.length || deleteMode,
+      hidden: !documents.length || deletionMode,
       className: modDialog.dialog__header__fileButton,
-      onClick: () => {
-        setDeleteMode(true);
-        setSelectedIDs([]);
-      },
+      onClick: ac.documentsList.enableDeletionMode,
       icon: Icons.material['delete-sweep'],
       testId: testIds.dialogs__selectDocument__header__buttons__deleteSweep,
     },
     {
-      hidden: !documents.length || !deleteMode,
+      hidden: showDeletionButtons,
       className: modDialog.dialog__header__fileButton,
-      onClick: () => {
-        setSelectedIDs([selectedIDs.pop()]);
-        setDeleteMode(false);
-      },
+      onClick: ac.documentsList.disableDeletionMode,
       icon: Icons.material.cancel,
     },
     {
-      hidden: !documents.length || !deleteMode,
+      hidden: showDeletionButtons,
       className: modDialog.dialog__header__fileButton,
-      onClick: () => {
-        setSelectedIDs(documents.map(document => document.id));
-      },
+      onClick: ac.documentsList.selectAllDocuments,
       icon: Icons.material['select-all'],
     },
     {
-      hidden: !documents.length || !deleteMode,
+      hidden: showDeletionButtons,
       className: modDialog.dialog__header__fileButton,
-      onClick: deleteDocument,
+      onClick: ac.documentsList.deleteDocuments,
       icon: Icons.material['delete'],
       testId: testIds.dialogs__selectDocument__header__buttons__delete,
-      disabled: !selectedIDs.length,
+      disabled: selectedIDs.length === 0,
     },
   ];
-  const onSelect = ({ id }) => {
-    const unselectElement = selectedIDs.includes(id);
-    if (deleteMode) {
-      if (unselectElement)
-        setSelectedIDs(selectedIDs => [...selectedIDs.filter(x => x !== id)]);
-      else setSelectedIDs(selectedIDs => [...selectedIDs, id]);
-    } else {
-      setSelectedIDs([id]);
-    }
-  };
+
   return (
     <DialogWithTransition
       dialogTitle={'Select Document'}
@@ -154,16 +127,10 @@ const SelectFile: React.FC<PropsFromRedux> = ({
       show={showDocumentList}
       onClose={close}
       rightHeaderButtons={rightHeaderButtons}
+      docked={false}
     >
       <ErrorBoundary>
-        <DocumentList
-          deleteMode={deleteMode}
-          onSelect={onSelect}
-          selectedIDs={selectedIDs}
-          documentId={documentId}
-          documentsMeta={documents}
-          loading={loading}
-        />
+        <DocumentList documentsMeta={documents} loading={loading} />
       </ErrorBoundary>
     </DialogWithTransition>
   );

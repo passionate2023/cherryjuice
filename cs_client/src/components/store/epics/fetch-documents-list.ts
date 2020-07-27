@@ -10,7 +10,10 @@ import { DOCUMENTS_LIST } from '::graphql/queries/documents-list';
 
 const fetchDocumentsListEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
-    ofType([ac.__.documentsList.fetchDocuments]),
+    ofType([
+      ac.__.documentsList.fetchDocuments,
+      ac.__.documentsList.deleteDocumentsFulfilled,
+    ]),
     filter(() => store.getState().documentsList.fetchDocuments === 'idle'),
     switchMap(() => {
       const request = gqlQuery(DOCUMENTS_LIST()).pipe(

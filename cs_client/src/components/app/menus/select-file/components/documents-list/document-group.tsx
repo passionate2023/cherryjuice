@@ -6,10 +6,9 @@ import { Document } from './components/document';
 const DocumentGroup = ({
   folder,
   files,
-  selectedIDs,
-  documentId,
-  onSelect,
-  deleteMode,
+  // selectedIDs,
+  // onSelect,
+  // deleteMode,
 }) => {
   return (
     <div className={modSelectFile.selectFile__fileFolder}>
@@ -21,10 +20,9 @@ const DocumentGroup = ({
           <Document
             documentMeta={fileProps}
             key={fileProps.id}
-            onSelect={onSelect}
-            selectedIDs={selectedIDs}
-            documentId={documentId}
-            deleteMode={deleteMode}
+            // onSelect={onSelect}
+            // selectedIDs={selectedIDs}
+            // deleteMode={deleteMode}
           />
         ))}
       </span>

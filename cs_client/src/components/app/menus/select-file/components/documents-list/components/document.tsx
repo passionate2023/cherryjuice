@@ -1,40 +1,45 @@
 import * as React from 'react';
 import { modSelectFile } from '::sass-modules/index';
 import { dateToFormattedString } from '::helpers/time';
-import { EventHandler } from 'react';
 import { ThreeDotsButton } from './components/three-dots-button';
 import { ac } from '::root/store/store';
 import { DocumentMeta } from '::types/graphql-adapters';
 type Props = {
-  selectedIDs: string[];
-  documentId: string;
-  onSelect: EventHandler<any>;
+  // selectedIDs: string[];
+  // onSelect: EventHandler<any>;
   documentMeta: DocumentMeta;
-  deleteMode: boolean;
 };
 
-const Document: React.FC<Props> = ({
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+
+const mapState = (state: Store, props: Props) => ({
+  isSelected: state.documentsList.selectedIDs.includes(props.documentMeta.id),
+  deletionMode: state.documentsList.deletionMode,
+  openDocumentId: state.document.documentId,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const Document: React.FC<Props & PropsFromRedux> = ({
   documentMeta: { size, id, name, updatedAt, hash },
-  selectedIDs,
-  documentId,
-  onSelect,
-  deleteMode,
+  isSelected,
+  // selectedIDs,
+  openDocumentId,
+  // onSelect,
+  deletionMode,
 }) => {
   return (
     <div
       className={`${modSelectFile.selectFile__file} ${
-        selectedIDs.includes(id)
-          ? modSelectFile.selectFile__fileSelectedCandidate
-          : ''
+        isSelected ? modSelectFile.selectFile__fileSelectedCandidate : ''
       } ${
-        !deleteMode && documentId === id
+        !deletionMode && openDocumentId === id
           ? modSelectFile.selectFile__fileSelected
           : ''
       }`}
-      onClick={() => {
-        onSelect({ id });
-        ac.documentsList.setFocusedDocumentId(id);
-      }}
+      onClick={() => ac.documentsList.selectDocument(id)}
       key={id}
       tabIndex={0}
     >
@@ -59,4 +64,5 @@ const Document: React.FC<Props> = ({
   );
 };
 
-export { Document };
+const _ = connector(Document);
+export { _ as Document };

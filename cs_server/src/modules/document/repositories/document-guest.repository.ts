@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { AccessLevel, DocumentGuest } from '../entities/document-guest.entity';
-import { EditDocumentDTO } from '../dto/document.dto';
+import { DocumentGuestIt } from '@cs/graphql-types';
 
 export type AddGuestDTO = {
   userId: string;
@@ -21,9 +21,12 @@ export class DocumentGuestRepository extends Repository<DocumentGuest> {
     await this.delete({ userId, documentId });
   };
   async setGuests({
-    meta: { guests },
-    getDocumentDTO: { documentId },
-  }: EditDocumentDTO): Promise<void> {
+    guests,
+    documentId,
+  }: {
+    guests: DocumentGuestIt[];
+    documentId: string;
+  }): Promise<void> {
     const existingGuests = Object.fromEntries(
       (
         await this.find({
