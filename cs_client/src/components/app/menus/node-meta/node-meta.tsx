@@ -17,6 +17,7 @@ import { testIds } from '::cypress/support/helpers/test-ids';
 
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
+import { SelectPrivacy } from '::app/menus/document-meta/components/select-privacy/select-privacy';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
@@ -26,6 +27,9 @@ const mapState = (state: Store) => ({
   showDialog: state.dialogs.showNodeMetaDialog,
   isOnMobile: state.root.isOnMobile,
   nodes: state.document.nodes,
+  documents: state.documentsList.documents,
+  userId: state.auth.user?.id,
+  documentUserId: state.document.userId,
 });
 const mapDispatch = {
   onClose: ac.dialogs.hideNodeMeta,
@@ -45,7 +49,10 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
   highestNode_id,
   nodes,
   node_id,
+  userId,
+  documentUserId,
 }) => {
+  const isOwnerOfDocument = documentUserId === userId;
   const [state, dispatch] = useReducer(nodeMetaReducer, nodeMetaInitialState);
   useEffect(() => {
     nodeMetaActionCreators.__setDispatch(dispatch);
@@ -143,7 +150,18 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       label: 'Read only',
     },
   ];
-
+  if (isOwnerOfDocument) {
+    inputs.push({
+      customInput: (
+        <SelectPrivacy
+          privacy={state.privacy}
+          onChange={nodeMetaActionCreators.setPrivacy}
+          useNodeOptions={true}
+        />
+      ),
+      label: 'visibility',
+    });
+  }
   return (
     <DialogWithTransition
       dialogTitle={'Node Properties'}

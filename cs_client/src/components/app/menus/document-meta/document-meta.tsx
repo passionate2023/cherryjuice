@@ -31,6 +31,7 @@ const mapState = (state: Store) => ({
   documents: state.documentsList.documents,
   isOnMobile: state.root.isOnMobile,
   userId: state.auth.user?.id,
+  documentUserId: state.document.userId,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -80,7 +81,12 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   ];
   if (isOwnerOfFocusedDocument || showDialog === 'create') {
     inputs.push({
-      customInput: <SelectPrivacy privacy={state.privacy} />,
+      customInput: (
+        <SelectPrivacy
+          privacy={state.privacy}
+          onChange={documentMetaActionCreators.setPrivacy}
+        />
+      ),
       label: 'visibility',
     });
     if (state.privacy !== Privacy.PRIVATE || showDialog === 'create') {

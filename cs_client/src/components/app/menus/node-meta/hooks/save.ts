@@ -5,19 +5,10 @@ import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpe
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { router } from '::root/router/router';
 import { ac } from '::root/store/store';
+import { NodePrivacy, Privacy } from '::types/graphql/generated';
 
-const calculateDiff = ({
-  isNewNode,
-  node,
-  state,
-}: {
-  isNewNode: boolean;
-  node: NodeCached;
-  state: TNodeMetaState;
-}) => {
-  const { name, node_title_styles, read_only } = node;
-  const style = JSON.parse(node_title_styles);
-  const newStyle = JSON.stringify({
+const calculateNewStyle = (state: TNodeMetaState): string => {
+  return JSON.stringify({
     ...(state.hasCustomColor && {
       color: state.customColor,
     }),
@@ -26,26 +17,55 @@ const calculateDiff = ({
       icon_id: state.customIcon === '0' ? '1' : state.customIcon,
     }),
   });
-  let res;
-  if (isNewNode) {
-    res = {
-      ...node,
-      name: state.name || '?',
-      node_title_styles: newStyle,
-      read_only: state.isReadOnly ? 1 : 0,
-      child_nodes: [...node.child_nodes],
-    };
-  } else {
-    res = {};
-    if (state.name !== name) res.name = state.name;
-    if (newStyle !== JSON.stringify(style)) {
-      const noChanges = newStyle === '{}' && !style;
-      if (!noChanges) res.node_title_styles = newStyle;
-    }
-    if (state.isReadOnly !== Boolean(read_only))
-      res.read_only = state.isReadOnly ? 1 : 0;
+};
+
+const generateNewNode = ({
+  node,
+  newStyle,
+  state,
+}: {
+  node: NodeCached;
+  state: TNodeMetaState;
+  newStyle: string;
+}) => {
+  return {
+    ...node,
+    name: state.name || '?',
+    node_title_styles: newStyle,
+    read_only: state.isReadOnly ? 1 : 0,
+    child_nodes: [...node.child_nodes],
+    privacy: state.privacy,
+  };
+};
+
+type EditedNodeAttributes = {
+  name?: string;
+  node_title_styles?: string;
+  read_only?: number;
+  privacy?: Privacy | NodePrivacy;
+};
+const calculateEditedAttribute = ({
+  state,
+  node,
+  newStyle,
+}: {
+  node: NodeCached;
+  state: TNodeMetaState;
+  newStyle: string;
+}): EditedNodeAttributes => {
+  const diff: EditedNodeAttributes = {};
+  const { node_title_styles } = node;
+  const style = JSON.parse(node_title_styles);
+
+  if (state.name !== node.name) diff.name = state.name;
+  if (newStyle !== JSON.stringify(style)) {
+    const noChanges = newStyle === '{}' && !style;
+    if (!noChanges) diff.node_title_styles = newStyle;
   }
-  return res;
+  if (state.isReadOnly !== Boolean(node.read_only))
+    diff.read_only = state.isReadOnly ? 1 : 0;
+  if (state.privacy !== node.privacy) diff.privacy = state.privacy;
+  return diff;
 };
 
 type UseSaveProps = {
@@ -63,19 +83,10 @@ const useSave = ({
   previous_sibling_node_id,
 }: UseSaveProps) => {
   return useDelayedCallback(ac.dialogs.hideNodeMeta, () => {
-    const nodeToSave = calculateDiff({
-      isNewNode: newNode,
-      node,
-      state,
-    });
+    const newStyle = calculateNewStyle(state);
     if (newNode) {
+      const nodeToSave = generateNewNode({ node, state, newStyle });
       const fatherNode = apolloCache.node.get(nodeToSave.fatherId);
-      // const fatherNodeOwner = fatherNode.id.startsWith('TEMP')
-      //   ? fatherNode.owner
-      //   : apolloCache.__state__.cache.data.get(
-      //       (apolloCache.node.get(nodeToSave.fatherId).owner as any).id,
-      //     );
-      // nodeToSave.owner = fatherNodeOwner;
       const position =
         previous_sibling_node_id === -1
           ? -1
@@ -84,7 +95,6 @@ const useSave = ({
         position === -1
           ? fatherNode.child_nodes.push(nodeToSave.node_id)
           : fatherNode.child_nodes.splice(position, 0, nodeToSave.node_id);
-      nodeToSave.privacy = state.privacy;
       apolloCache.node.create(nodeToSave);
       apolloCache.node.mutate({
         nodeId: fatherNode.id,
@@ -95,8 +105,13 @@ const useSave = ({
       updateCachedHtmlAndImages();
       router.goto.node(node.documentId, node.node_id);
     } else {
-      if (Object.keys(nodeToSave).length)
-        apolloCache.node.mutate({ nodeId, meta: nodeToSave });
+      const editedAttribute = calculateEditedAttribute({
+        state,
+        node,
+        newStyle,
+      });
+      if (Object.keys(editedAttribute).length)
+        apolloCache.node.mutate({ nodeId, meta: editedAttribute });
     }
   });
 };

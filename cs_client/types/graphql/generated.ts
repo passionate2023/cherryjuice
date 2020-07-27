@@ -19,6 +19,7 @@ export interface Query {
 
 export interface Document {
   createdAt: number;
+  exportDocument: string;
   folder?: string;
   guests?: Array<DocumentGuestOt | null>;
   hash?: string;
@@ -56,7 +57,7 @@ export interface Node {
   name: string;
   node_id: number;
   node_title_styles?: string;
-  privacy?: Privacy;
+  privacy?: NodePrivacy;
   read_only: number;
   updatedAt: number;
 }
@@ -64,6 +65,13 @@ export interface Node {
 export interface Image {
   base64: string;
   id: string;
+}
+
+export enum NodePrivacy {
+  DEFAULT = 'DEFAULT',
+  GUESTS_ONLY = 'GUESTS_ONLY',
+  PRIVATE = 'PRIVATE',
+  PUBLIC = 'PUBLIC',
 }
 
 export enum Privacy {
@@ -209,7 +217,6 @@ export interface DocumentMutation {
   createDocument: string;
   deleteDocument: string;
   editDocument: string;
-  exportDocument: string;
   node: NodeMutation;
   uploadFile: boolean;
   uploadFromGDrive: boolean;
@@ -268,7 +275,7 @@ export interface NodeMetaIt {
   node_id: number;
   node_title_styles?: string;
   position?: number;
-  privacy?: Privacy;
+  privacy?: NodePrivacy;
   read_only?: number;
   sequence?: number;
   updatedAt: Timestamp;
@@ -402,6 +409,7 @@ export interface QueryToUserResolver<TParent = any, TResult = any> {
 
 export interface DocumentTypeResolver<TParent = any> {
   createdAt?: DocumentToCreatedAtResolver<TParent>;
+  exportDocument?: DocumentToExportDocumentResolver<TParent>;
   folder?: DocumentToFolderResolver<TParent>;
   guests?: DocumentToGuestsResolver<TParent>;
   hash?: DocumentToHashResolver<TParent>;
@@ -416,6 +424,13 @@ export interface DocumentTypeResolver<TParent = any> {
 }
 
 export interface DocumentToCreatedAtResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentToExportDocumentResolver<
+  TParent = any,
+  TResult = any
+> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -851,7 +866,6 @@ export interface DocumentMutationTypeResolver<TParent = any> {
   createDocument?: DocumentMutationToCreateDocumentResolver<TParent>;
   deleteDocument?: DocumentMutationToDeleteDocumentResolver<TParent>;
   editDocument?: DocumentMutationToEditDocumentResolver<TParent>;
-  exportDocument?: DocumentMutationToExportDocumentResolver<TParent>;
   node?: DocumentMutationToNodeResolver<TParent>;
   uploadFile?: DocumentMutationToUploadFileResolver<TParent>;
   uploadFromGDrive?: DocumentMutationToUploadFromGDriveResolver<TParent>;
@@ -900,13 +914,6 @@ export interface DocumentMutationToEditDocumentResolver<
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
-}
-
-export interface DocumentMutationToExportDocumentResolver<
-  TParent = any,
-  TResult = any
-> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface DocumentMutationToNodeArgs {

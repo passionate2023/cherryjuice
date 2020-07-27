@@ -1,4 +1,5 @@
 import { QNodeMeta } from '::graphql/queries/document-meta';
+import { NodePrivacy } from '::types/graphql/generated';
 
 const calculateState = (node: QNodeMeta) => {
   const { node_title_styles, name } = node;
@@ -16,7 +17,7 @@ const calculateState = (node: QNodeMeta) => {
     hasCustomColor,
     customColor: style.color || '#ffffff',
     name,
-    privacy: node.privacy,
+    privacy: node.privacy || NodePrivacy.DEFAULT,
   };
 };
 

@@ -35,7 +35,6 @@ const saveNodesMeta = async ({ state, documentId }: SaveOperationProps) => {
     editedAttributes.forEach(attribute => {
       meta[attribute] = node[attribute];
     });
-
     swapFatherIdIfApplies(state)(node);
     if (collectDanglingNodes(state)(node)) continue;
     updateDocumentId(state)(node);

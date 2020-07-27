@@ -3,7 +3,7 @@ import { Node } from '../entities/node.entity';
 import { Injectable } from '@nestjs/common';
 import { copyProperties } from '../../document/helpers';
 import { SaveHtmlIt } from '../it/save-html.it';
-import { NodeMetaIt } from '../it/node-meta.it';
+import { NodeMetaIt, NodePrivacy } from '../it/node-meta.it';
 import { AHtmlLine } from '../helpers/rendering/ahtml-to-html';
 import { NodeSearchDto } from '../../search/dto/node-search.dto';
 import { NodeSearchResultEntity } from '../../search/entities/node.search-result.entity';
@@ -136,6 +136,7 @@ export class NodeRepository extends Repository<Node> {
 
   async createNode({ data, getNodeDTO }: CreateNodeDTO): Promise<Node> {
     const node = new Node();
+    if (data.privacy === NodePrivacy.DEFAULT) delete data.privacy;
     copyProperties(data, node, {});
     node.documentId = getNodeDTO.documentId;
     node.createdAt = new Date(data.createdAt);
@@ -158,6 +159,10 @@ export class NodeRepository extends Repository<Node> {
     if (typeof attributes.updatedAt === 'number')
       attributes.updatedAt = (new Date(attributes.updatedAt) as unknown) as any;
     if ('node_id' in attributes) delete attributes.node_id;
+    if (attributes['privacy'] === NodePrivacy.DEFAULT) {
+      delete attributes['privacy'];
+      node.privacy = null;
+    }
     Object.entries(attributes).forEach(([k, v]) => {
       node[k] = v;
     });

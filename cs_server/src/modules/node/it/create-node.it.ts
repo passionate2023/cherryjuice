@@ -1,6 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { Timestamp } from '../../document/helpers/graphql-types/timestamp';
-import { Privacy } from '../../document/entities/document.entity';
+import { NodePrivacy } from './node-meta.it';
 
 @InputType()
 export class CreateNodeIt {
@@ -31,6 +31,6 @@ export class CreateNodeIt {
   @Field(() => Int)
   read_only: number;
 
-  @Field(() => Privacy, { nullable: true })
-  privacy?: Privacy;
+  @Field(() => NodePrivacy, { nullable: true })
+  privacy?: NodePrivacy;
 }

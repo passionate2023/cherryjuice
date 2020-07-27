@@ -1,7 +1,16 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType, Int, registerEnumType } from '@nestjs/graphql';
 import { Timestamp } from '../../document/helpers/graphql-types/timestamp';
-import { Privacy } from '../../document/entities/document.entity';
 
+export enum NodePrivacy {
+  PRIVATE = 1,
+  GUESTS_ONLY,
+  PUBLIC,
+  DEFAULT,
+}
+
+registerEnumType(NodePrivacy, {
+  name: 'NodePrivacy',
+});
 @InputType()
 export class NodeMetaIt {
   @Field(() => Int)
@@ -35,7 +44,6 @@ export class NodeMetaIt {
 
   @Field(() => Timestamp)
   updatedAt: number;
-
-  @Field(() => Privacy, { nullable: true })
-  privacy?: Privacy;
+  @Field(() => NodePrivacy, { nullable: true })
+  privacy?: NodePrivacy;
 }
