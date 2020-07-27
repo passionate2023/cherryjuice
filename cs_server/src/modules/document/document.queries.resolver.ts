@@ -14,6 +14,7 @@ import { GqlAuthGuard } from '../user/guards/graphql.guard';
 import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { GetUserGql } from '../user/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
+import { ExportsService } from '../exports/exports.service';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Document)
@@ -21,6 +22,7 @@ export class DocumentQueriesResolver {
   constructor(
     private nodeService: NodeService,
     private documentService: DocumentService,
+    private exportsService: ExportsService,
   ) {}
 
   @Query(() => [Document], { nullable: 'items' })
@@ -59,5 +61,15 @@ export class DocumentQueriesResolver {
           documentId: document.id,
           userId: user.id,
         });
+  }
+  @ResolveField(() => String)
+  async exportDocument(
+    @Parent() parent,
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    return await this.exportsService.exportDocument({
+      userId: user.id,
+      documentId: parent.id,
+    });
   }
 }

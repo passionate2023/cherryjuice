@@ -14,6 +14,7 @@ type AuthUser {
 
 type Document {
     createdAt: Float!
+    exportDocument: String!
     folder: String
     guests: [DocumentGuestOt]
     hash: String
@@ -37,7 +38,6 @@ type DocumentMutation {
     createDocument(document: CreateDocumentIt!): String!
     deleteDocument(documents: DeleteDocumentInputType!): String!
     editDocument(meta: EditDocumentIt!): String!
-    exportDocument: String!
     node(node_id: Int): NodeMutation!
     uploadFile(files: [CTBUpload!]!): Boolean!
     uploadFromGDrive(file: UploadLinkInputType!): Boolean!

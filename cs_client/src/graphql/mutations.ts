@@ -22,16 +22,7 @@ const DOCUMENT_MUTATION = {
     }
   `,
 
-  exportDocument: {
-    path: data => data?.document?.exportDocument,
-    query: gql`
-      mutation exportDocument($file_id: String!) {
-        document(file_id: $file_id) {
-          exportDocument
-        }
-      }
-    `,
-  },
+
   ahtml: {
     path: (data): string => data?.document?.node?.saveAHtml,
     query: gql`

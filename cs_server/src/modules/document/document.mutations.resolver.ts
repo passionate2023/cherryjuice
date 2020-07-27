@@ -20,7 +20,6 @@ import { ImportsService } from '../imports/imports.service';
 import { NodeMutation } from '../node/entities/node-mutation.entity';
 import { CreateDocumentIt } from './input-types/create-document.it';
 import { EditDocumentIt } from './input-types/edit-document.it';
-import { ExportsService } from '../exports/exports.service';
 import { Document } from './entities/document.entity';
 
 @UseGuards(GqlAuthGuard)
@@ -30,7 +29,6 @@ export class DocumentMutationsResolver {
     private nodeService: NodeService,
     private importsService: ImportsService,
     private documentService: DocumentService,
-    private exportsService: ExportsService,
   ) {}
 
   @Mutation(() => DocumentMutation)
@@ -93,16 +91,7 @@ export class DocumentMutationsResolver {
     const deleteResult = await this.documentService.deleteDocuments(IDs, user);
     return JSON.stringify(deleteResult);
   }
-  @ResolveField(() => String)
-  async exportDocument(
-    @Parent() parent,
-    @GetUserGql() user: User,
-  ): Promise<string> {
-    return await this.exportsService.exportDocument({
-      userId: user.id,
-      documentId: parent.id,
-    });
-  }
+
   @ResolveField(() => [NodeMutation])
   async node(
     @Parent() { id: documentId },

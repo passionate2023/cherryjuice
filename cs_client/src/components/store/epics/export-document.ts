@@ -2,10 +2,10 @@ import { concat, Observable, of } from 'rxjs';
 import { Actions } from '../actions.types';
 import { ac, store } from '../store';
 import { map, switchMap, take } from 'rxjs/operators';
-import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { ofType } from 'deox';
 import { gqlMutation } from './shared/gql-query';
 import { createErrorHandler } from './shared/create-error-handler';
+import { EXPORT_DOCUMENT } from '::graphql/queries/export-document';
 
 const exportDocumentEpic = (action$: Observable<Actions>) => {
   const selectedDocumentId = () => store.getState().document.documentId;
@@ -19,12 +19,11 @@ const exportDocumentEpic = (action$: Observable<Actions>) => {
         action$.pipe(
           ofType([ac.__.document.saveFulfilled]),
           take(1),
-          switchMap(() => {
-            return gqlMutation({
-              ...DOCUMENT_MUTATION.exportDocument,
-              variables: { file_id: selectedDocumentId() },
-            }).pipe(map(ac.__.document.exportFulfilled));
-          }),
+          switchMap(() =>
+            gqlMutation(
+              EXPORT_DOCUMENT({ file_id: selectedDocumentId() }),
+            ).pipe(map(ac.__.document.exportFulfilled)),
+          ),
         ),
       ).pipe(
         createErrorHandler({
