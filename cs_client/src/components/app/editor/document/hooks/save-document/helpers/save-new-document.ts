@@ -10,7 +10,7 @@ const saveNewDocument = async ({ state, documentId }: SaveOperationProps) => {
       CREATE_DOCUMENT({
         document: {
           name: document.name,
-          guests: [],
+          guests: document.guests,
           privacy: document.privacy,
         },
       }),

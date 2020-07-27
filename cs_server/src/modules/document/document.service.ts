@@ -51,7 +51,12 @@ export class DocumentService {
   }
 
   async createDocument(dto: CreateDocumentDTO): Promise<Document> {
-    return await this.documentRepository.createDocument(dto);
+    const document = await this.documentRepository.createDocument(dto);
+    await this.documentGuestRepository.setGuests({
+      guests: dto.data.guests,
+      documentId: document.id,
+    });
+    return document;
   }
 
   async editDocument(dto: EditDocumentDTO): Promise<Document> {
