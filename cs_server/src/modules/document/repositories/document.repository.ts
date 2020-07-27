@@ -89,6 +89,12 @@ export class DocumentRepository extends Repository<Document> {
           documentId: dto.documentId,
         }),
     }).getOne();
+
+    return document;
+  }
+
+  async getDocumentById(dto: GetDocumentDTO): Promise<Document> {
+    const document = await this._getDocumentById(dto, false);
     if (!document)
       throw new NotFoundException(
         createErrorDescription.document.doesNotExist(dto.documentId),
@@ -96,12 +102,13 @@ export class DocumentRepository extends Repository<Document> {
     return document;
   }
 
-  async getDocumentById(dto: GetDocumentDTO): Promise<Document> {
-    return this._getDocumentById(dto, false);
-  }
-
   async getWDocumentById(dto: GetDocumentDTO): Promise<Document> {
-    return this._getDocumentById(dto, true);
+    const document = await this._getDocumentById(dto, true);
+    if (!document)
+      throw new NotFoundException(
+        createErrorDescription.document.notEnoughAccessLevel(dto.documentId),
+      );
+    return document;
   }
 
   async getDocuments(dto: GetDocumentsDTO): Promise<Document[]> {
@@ -120,19 +127,21 @@ export class DocumentRepository extends Repository<Document> {
   private async updateDocument({
     meta,
     getDocumentDTO,
-    updater,
   }: EditDocumentDTO): Promise<Document> {
-    let document = await this.getWDocumentById(getDocumentDTO);
-    if (document.userId !== getDocumentDTO.userId)
+    const entries = Object.entries(meta);
+    const document = await this.getWDocumentById(getDocumentDTO);
+    const isDocumentOwner = document.userId === getDocumentDTO.userId;
+    const onlyATimeStampEdit =
+      entries.length === 1 && entries[0][0] === 'updatedAt';
+    if (!isDocumentOwner && !onlyATimeStampEdit)
       throw new NotFoundException(
         createErrorDescription.document.notEnoughAccessLevel(
           getDocumentDTO.documentId,
         ),
       );
-    Object.entries(meta).forEach(([k, v]) => {
+    entries.forEach(([k, v]) => {
       document[k] = v;
     });
-    if (updater) document = updater(document);
     document.size = await this.getSize({
       documentId: getDocumentDTO.documentId,
     });
@@ -142,7 +151,6 @@ export class DocumentRepository extends Repository<Document> {
   async editDocument({
     getDocumentDTO,
     meta,
-    updater,
   }: EditDocumentDTO): Promise<Document> {
     return await this.updateDocument({
       getDocumentDTO,
@@ -150,7 +158,6 @@ export class DocumentRepository extends Repository<Document> {
         ...meta,
         updatedAt: meta.updatedAt ? new Date(meta.updatedAt) : new Date(),
       },
-      updater,
     });
   }
 

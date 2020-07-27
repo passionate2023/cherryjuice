@@ -22,7 +22,6 @@ const DOCUMENT_MUTATION = {
     }
   `,
 
-
   ahtml: {
     path: (data): string => data?.document?.node?.saveAHtml,
     query: gql`

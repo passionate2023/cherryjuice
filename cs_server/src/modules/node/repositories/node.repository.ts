@@ -86,7 +86,11 @@ export class NodeRepository extends Repository<Node> {
           .or(
             and_()
               .and(`g."userId" = :userId `)
-              .and(`n."privacy"  >= :guestOnlyPrivacy`)
+              .and(
+                or_()
+                  .or(`n.privacy isnull`)
+                  .or(`n."privacy"  >= :guestOnlyPrivacy`),
+              )
               .andIf(write, `g."accessLevel" >= :writeAccessLevel`),
           )
           .get(),

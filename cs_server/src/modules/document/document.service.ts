@@ -4,12 +4,7 @@ import { DocumentRepository } from './repositories/document.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { DocumentSubscriptionsService } from './document.subscriptions.service';
-import { DocumentGuest } from './entities/document-guest.entity';
-import {
-  AddGuestDTO,
-  DocumentGuestRepository,
-} from './repositories/document-guest.repository';
-import { EditDocumentIt } from './input-types/edit-document.it';
+import { DocumentGuestRepository } from './repositories/document-guest.repository';
 import {
   CreateDocumentDTO,
   EditDocumentDTO,
@@ -94,9 +89,6 @@ export class DocumentService {
       });
     return deleteResult;
   }
-  addGuest = async (args: AddGuestDTO): Promise<DocumentGuest> => {
-    return this.documentGuestRepository.addGuest(args);
-  };
   async findDocumentByHash(hash: string): Promise<Document> {
     return await this.documentRepository.findOne({
       where: { hash },
@@ -114,19 +106,9 @@ export class DocumentService {
     node_id: number;
     hash: string;
   }): Promise<Document> {
-    const document = await this.editDocument({
-      getDocumentDTO: {
-        documentId: documentId,
-        userId,
-      },
-      meta: ({} as unknown) as EditDocumentIt,
-      updater: document => {
-        document.nodes[node_id] = { hash };
-        return document;
-      },
-    });
-    // document.nodes[node_id] = { hash };
-    // await document.save();
+    const document = await this.getWDocumentById({ documentId, userId });
+    document.nodes[node_id] = { hash };
+    await document.save();
     return document;
   }
   async deleteNodesHash({
