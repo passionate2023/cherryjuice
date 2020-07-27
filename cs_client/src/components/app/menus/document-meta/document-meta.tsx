@@ -23,6 +23,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
 import { Guests } from '::app/menus/document-meta/components/guests/guests';
 import { SelectPrivacy } from '::app/menus/document-meta/components/select-privacy/select-privacy';
+import { Privacy } from '::types/graphql/generated';
 
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showDocumentMetaDialog,
@@ -47,9 +48,10 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   documents,
   userId,
 }) => {
-  const document = documents.find(
+  const focusedDocument = documents.find(
     document => document.id === focusedDocumentId,
   );
+  const isOwnerOfFocusedDocument = focusedDocument?.userId === userId;
   const [state, dispatch] = useReducer(
     documentMetaReducer,
     documentMetaInitialState,
@@ -61,7 +63,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   useEffect(() => {
     if (showDialog === 'edit') {
       documentMetaActionCreators.resetToEdit({
-        document,
+        document: focusedDocument,
       });
     } else documentMetaActionCreators.resetToCreate({ userId });
   }, [showDialog, focusedDocumentId, userId]);
@@ -75,15 +77,19 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       lazyAutoFocus: 400,
       testId: testIds.documentMeta__documentName,
     },
-    {
+  ];
+  if (isOwnerOfFocusedDocument) {
+    inputs.push({
       customInput: <SelectPrivacy privacy={state.privacy} />,
       label: 'visibility',
-    },
-    {
-      monolithComponent: <Guests guests={state.guests} userId={userId} />,
-      label: 'guests',
-    },
-  ];
+    });
+    if (state.privacy !== Privacy.PRIVATE) {
+      inputs.push({
+        monolithComponent: <Guests guests={state.guests} userId={userId} />,
+        label: 'guests',
+      });
+    }
+  }
   const createDocument = () => {
     try {
       updateCachedHtmlAndImages();
@@ -116,10 +122,11 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       Object.entries(state).reduce((entries, [k, v]) => {
         const notEqual =
           typeof v === 'string'
-            ? document[k] !== v
+            ? focusedDocument[k] !== v
             : Array.isArray(v)
-            ? JSON.stringify(v.sort()) !== JSON.stringify(document[k]?.sort())
-            : JSON.stringify(Object.entries(document[k]).sort()) !==
+            ? JSON.stringify(v.sort()) !==
+              JSON.stringify(focusedDocument[k]?.sort())
+            : JSON.stringify(Object.entries(focusedDocument[k]).sort()) !==
               JSON.stringify(Object.entries(v).sort());
         if (notEqual) entries.push([k, v]);
         return entries;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback, useRef, useState } from 'react';
-import { modGuests, modTextInput } from '::sass-modules/';
+import { modGuests, modNodeMeta, modTextInput } from '::sass-modules/';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { patterns } from '::auth/helpers/form-validation';
@@ -59,6 +59,7 @@ const AddGuest: React.FC<Props> = ({ userId }) => {
   return (
     <div className={modGuests.guests__addGuest}>
       <div className={modGuests.guests__addGuest__inputs}>
+        <span className={modNodeMeta.nodeMeta__input__label}>guests</span>
         <input
           ref={inputRef}
           value={inputValue}
