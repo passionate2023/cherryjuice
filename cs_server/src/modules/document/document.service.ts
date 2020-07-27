@@ -4,7 +4,7 @@ import { DocumentRepository } from './repositories/document.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { DocumentSubscriptionsService } from './document.subscriptions.service';
-import { AccessLevel, DocumentGuest } from './entities/document-guest.entity';
+import { DocumentGuest } from './entities/document-guest.entity';
 import {
   AddGuestDTO,
   DocumentGuestRepository,
@@ -46,11 +46,19 @@ export class DocumentService {
     return this.documentRepository.getDocumentById(dto);
   }
 
+  async getWDocumentById(dto: GetDocumentDTO): Promise<Document> {
+    return this.documentRepository.getWDocumentById(dto);
+  }
+
   async createDocument(dto: CreateDocumentDTO): Promise<Document> {
     return await this.documentRepository.createDocument(dto);
   }
 
   async editDocument(dto: EditDocumentDTO): Promise<Document> {
+    if (dto.meta.guests) {
+      await this.documentGuestRepository.setGuests(dto);
+      delete dto.meta.guests;
+    }
     return await this.documentRepository.editDocument(dto);
   }
   async deleteDocuments(
@@ -98,8 +106,6 @@ export class DocumentService {
       getDocumentDTO: {
         documentId: documentId,
         userId,
-        minimumGuestAccessLevel: AccessLevel.WRITER,
-        minimumPrivacy: Privacy.GUESTS_ONLY,
       },
       meta: ({} as unknown) as EditDocumentIt,
       updater: document => {
@@ -120,12 +126,13 @@ export class DocumentService {
     documentId: string;
     node_id: number;
   }): Promise<void> {
-    const document = await this.getDocumentById({
-      documentId: documentId,
-      userId,
-      minimumGuestAccessLevel: AccessLevel.WRITER,
-      minimumPrivacy: Privacy.GUESTS_ONLY,
-    });
+    const document = await this.getWDocumentById(
+      {
+        documentId: documentId,
+        userId,
+      },
+      false,
+    );
     delete document.nodes[node_id].hash;
     if (Object.keys(document.nodes[node_id]).length === 0)
       delete document.nodes[node_id];

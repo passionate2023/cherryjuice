@@ -19,10 +19,14 @@ import {
   MutateNodeMetaDTO,
 } from '../dto/mutate-node.dto';
 import {
-  andGroup,
-  orGroup,
+  and_,
+  or_,
 } from '../../search/helpers/pg-queries/helpers/clause-builder';
-import { DocumentGuest } from '../../document/entities/document-guest.entity';
+import {
+  AccessLevel,
+  DocumentGuest,
+} from '../../document/entities/document-guest.entity';
+import { GetterSettings } from '../../document/repositories/document.repository';
 
 const nodeMeta = [
   `n.id`,
@@ -58,12 +62,14 @@ export class NodeRepository extends Repository<Node> {
     dto: GetNodesDTO,
     target: NodeSelection = 'meta',
   ): Promise<Node[]> {
-    return await this.baseQueryBuilder(dto, target).getMany();
+    return await this.baseQueryBuilder(dto, target, {
+      write: false,
+    }).getMany();
   }
   baseQueryBuilder = (
-    { documentId, minimumPrivacy, userId }: GetNodeDTO | GetNodesDTO,
+    { documentId, userId }: GetNodeDTO | GetNodesDTO,
     target: NodeSelection = 'meta',
-    runFirst?: RunFirst,
+    { runFirst, write }: GetterSettings,
   ) => {
     let queryBuilder = this.createQueryBuilder('n')
       .leftJoin(Document, 'd', 'n."documentId" = d.id ')
@@ -73,33 +79,51 @@ export class NodeRepository extends Repository<Node> {
     return queryBuilder
       .andWhere('n."documentId" = :documentId', { documentId })
       .andWhere(
-        orGroup()
-          .or(`d.userId = :userId`)
-          .or(`n.privacy isnull`)
-          .orIf(
-            minimumPrivacy === Privacy.PUBLIC,
-            `(n."privacy"  >= :minimumPrivacy)`,
-          )
-          .orIf(
-            minimumPrivacy >= Privacy.GUESTS_ONLY,
-            andGroup()
+        or_()
+          .or(`d."userId" = :userId`)
+          .orIf(!write, `n.privacy isnull`)
+          .orIf(!write, `n."privacy"  >= :publicPrivacy`)
+          .or(
+            and_()
               .and(`g."userId" = :userId `)
-              .and(`n."privacy"  >= :minimumPrivacy`)
-              .get(),
+              .and(`n."privacy"  >= :guestOnlyPrivacy`)
+              .andIf(write, `g."accessLevel" >= :writeAccessLevel`),
           )
           .get(),
-        { userId, minimumPrivacy },
+        {
+          userId,
+          publicPrivacy: Privacy.PUBLIC,
+          guestOnlyPrivacy: Privacy.GUESTS_ONLY,
+          writeAccessLevel: AccessLevel.WRITER,
+        },
       );
   };
+  async _getNodeById(
+    dto: GetNodeDTO,
+    target: NodeSelection = 'meta',
+    write: boolean,
+  ): Promise<Node> {
+    return this.baseQueryBuilder(dto, target, {
+      runFirst: queryBuilder =>
+        queryBuilder.andWhere('n."node_id" = :node_id', {
+          node_id: dto.node_id,
+        }),
+      write,
+    }).getOne();
+  }
+
   async getNodeById(
     dto: GetNodeDTO,
     target: NodeSelection = 'meta',
   ): Promise<Node> {
-    return this.baseQueryBuilder(dto, target, queryBuilder =>
-      queryBuilder.andWhere('n."node_id" = :node_id', { node_id: dto.node_id }),
-    ).getOne();
+    return this._getNodeById(dto, target, false);
   }
-
+  async getWNodeById(
+    dto: GetNodeDTO,
+    target: NodeSelection = 'meta',
+  ): Promise<Node> {
+    return this._getNodeById(dto, target, true);
+  }
   async getAHtml(dto: GetNodeDTO): Promise<AHtmlLine[]> {
     return await this.getNodeById(dto, 'ahtml').then(node =>
       JSON.parse(node.ahtml),
@@ -126,7 +150,7 @@ export class NodeRepository extends Repository<Node> {
     attributes: SaveHtmlIt | NodeMetaIt,
     dto: GetNodeDTO,
   ): Promise<Node> {
-    const node = await this.getNodeById(dto);
+    const node = await this.getWNodeById(dto);
     if (typeof attributes.updatedAt === 'number')
       attributes.updatedAt = (new Date(attributes.updatedAt) as unknown) as any;
     if ('node_id' in attributes) delete attributes.node_id;
@@ -146,7 +170,7 @@ export class NodeRepository extends Repository<Node> {
     return await this.updateNode(data, getNodeDTO);
   }
   async deleteNode(dto: DeleteNodeDTO): Promise<string> {
-    const node = await this.getNodeById(dto.getNodeDTO);
+    const node = await this.getWNodeById(dto.getNodeDTO);
     return await this.remove(node).then(res => JSON.stringify(res));
   }
   async getNodesMetaAndAHtml(dto: GetNodesDTO): Promise<Node[]> {

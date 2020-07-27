@@ -18,6 +18,7 @@ export const DOCUMENT_GUEST = gql`
     guests {
       userId
       accessLevel
+      email
     }
   }
 `;

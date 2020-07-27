@@ -18,7 +18,6 @@ type Props = {
   timeFilterAC: TimeFilterAC;
   timeFilter: TimeFilter;
 };
-
 const SelectRange: React.FC<Props> = ({ timeFilterAC, timeFilter }) => {
   const ref = useRef<HTMLSelectElement>();
   useEffect(() => {

@@ -11,7 +11,7 @@ import {
 import { NavBar } from '::app/editor/tool-bar/groups/nav-bar/nav-bar';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
-import { isDocumentOwner } from '::root/store/selectors/document/is-document-owner';
+import { hasWriteAccessToDocument } from '::root/store/selectors/document/has-write-access-to-document';
 import { useEffect, useState } from 'react';
 
 const Portal: React.FC<{ targetSelector: string }> = ({
@@ -38,7 +38,7 @@ const Portal: React.FC<{ targetSelector: string }> = ({
 const mapState = (state: Store) => ({
   isOnMobile: state.root.isOnMobile,
   showFormattingButtons: state.editor.showFormattingButtons,
-  isDocumentOwner: isDocumentOwner(state),
+  isDocumentOwner: hasWriteAccessToDocument(state),
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);

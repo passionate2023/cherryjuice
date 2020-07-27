@@ -9,12 +9,12 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 import { Search } from '::app/editor/tool-bar/groups/nav-bar/components/search/search';
 import { User } from '::types/graphql/generated';
-import { isDocumentOwner } from '::root/store/selectors/document/is-document-owner';
+import { hasWriteAccessToDocument } from '::root/store/selectors/document/has-write-access-to-document';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
   user: state.auth.user,
-  isDocumentOwner: isDocumentOwner(state),
+  isDocumentOwner: hasWriteAccessToDocument(state),
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);

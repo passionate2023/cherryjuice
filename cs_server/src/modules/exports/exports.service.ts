@@ -5,7 +5,7 @@ import { ExportCTB } from './helpers/export-ctb';
 import fs, { ReadStream } from 'fs';
 import { ImageService } from '../image/image.service';
 import { DocumentSubscriptionsService } from '../document/document.subscriptions.service';
-import { Document, Privacy } from '../document/entities/document.entity';
+import { Document } from '../document/entities/document.entity';
 import { deleteFolder } from '../shared/fs/delete-folder';
 import { paths } from '../shared/fs/paths';
 import { resolveFileLocation } from '../shared/fs/resolve-file-location';
@@ -52,7 +52,6 @@ export class ExportsService {
       await this.subscriptionsService.export.preparing(document, userId);
       const nodes = await this.nodeService.getNodesMetaAndAHtml({
         documentId: document.id,
-        minimumPrivacy: Privacy.GUESTS_ONLY,
         userId,
       });
       await exportCTB.createCtb();

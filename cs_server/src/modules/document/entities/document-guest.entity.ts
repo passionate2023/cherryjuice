@@ -14,6 +14,7 @@ import {
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
+import { AddGuestDTO } from '../repositories/document-guest.repository';
 
 export enum AccessLevel {
   READER = 1,
@@ -28,11 +29,14 @@ registerEnumType(AccessLevel, {
 @Unique(['userId', 'documentId'])
 @Entity()
 export class DocumentGuest extends BaseEntity {
-  constructor(userId: string, documentId: string, accessLevel: AccessLevel) {
+  constructor(dto: AddGuestDTO) {
     super();
-    this.userId = userId;
-    this.documentId = documentId;
-    this.accessLevel = accessLevel;
+    if (dto) {
+      this.userId = dto.userId;
+      this.documentId = dto.documentId;
+      this.accessLevel = dto.accessLevel;
+      this.email = dto.email;
+    }
   }
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -62,4 +66,8 @@ export class DocumentGuest extends BaseEntity {
     enum: AccessLevel,
   })
   accessLevel: AccessLevel;
+
+  @Column()
+  @Field()
+  email: string;
 }

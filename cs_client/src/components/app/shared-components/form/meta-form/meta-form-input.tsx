@@ -3,13 +3,15 @@ import { modNodeMeta, modTextInput } from '::sass-modules/index';
 import { useEffect, useRef } from 'react';
 
 type FormInputProps = {
-  type: 'checkbox' | 'text';
+  type?: 'checkbox' | 'text';
   label: string;
   testId?: string;
-  onChange: Function;
-  value;
+  onChange?: Function;
+  value?;
   additionalInput?: JSX.Element;
+  monolithComponent?: JSX.Element;
   lazyAutoFocus?: number;
+  customInput?: JSX.Element;
 };
 
 const MetaFormInput: React.FC<FormInputProps> = ({
@@ -20,6 +22,8 @@ const MetaFormInput: React.FC<FormInputProps> = ({
   additionalInput,
   lazyAutoFocus,
   testId,
+  monolithComponent,
+  customInput,
 }) => {
   const inputName = label.replace(/[^A-Za-z]/g, '-').toLowerCase();
   const onChangeCheckbox = e => onChange(e.target.checked);
@@ -30,24 +34,30 @@ const MetaFormInput: React.FC<FormInputProps> = ({
     if (lazyAutoFocus) inputRef.current.focus();
   }, []);
 
-  return (
+  return monolithComponent ? (
+    monolithComponent
+  ) : (
     <label htmlFor={inputName} className={modNodeMeta.nodeMeta__input}>
       <span className={modNodeMeta.nodeMeta__input__label}>{label}</span>
-      <input
-        className={`${modTextInput.textInput} ${
-          type === 'text'
-            ? modNodeMeta.nodeMeta__input__textInput
-            : modNodeMeta.nodeMeta__input__checkbox
-        }`}
-        ref={inputRef}
-        type={type}
-        name={inputName}
-        {...{
-          onChange: type === 'checkbox' ? onChangeCheckbox : onChangeText,
-          [type === 'checkbox' ? 'checked' : 'value']: value,
-        }}
-        {...(testId && { 'data-testid': testId })}
-      />
+      {customInput ? (
+        customInput
+      ) : (
+        <input
+          className={`${modTextInput.textInput} ${
+            type === 'text'
+              ? modNodeMeta.nodeMeta__input__textInput
+              : modNodeMeta.nodeMeta__input__checkbox
+          }`}
+          ref={inputRef}
+          type={type}
+          name={inputName}
+          {...{
+            onChange: type === 'checkbox' ? onChangeCheckbox : onChangeText,
+            [type === 'checkbox' ? 'checked' : 'value']: value,
+          }}
+          {...(testId && { 'data-testid': testId })}
+        />
+      )}
       {additionalInput ? additionalInput : <></>}
     </label>
   );

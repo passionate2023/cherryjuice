@@ -4,8 +4,6 @@ import { AuthUser } from './entities/auth.user';
 import { UserMutation } from './entities/user.mutation.entity';
 import { SignUpCredentials } from './dto/sign-up-credentials.dto';
 import { SignInCredentials } from './dto/sign-in-credentials.dto';
-import { GetUserGql } from './decorators/get-user.decorator';
-import { User } from './entities/user.entity';
 
 @Resolver(() => UserMutation)
 export class UserMutationsResolver {
@@ -28,10 +26,5 @@ export class UserMutationsResolver {
     signInInput: SignUpCredentials,
   ): Promise<AuthUser> {
     return this.userService.signUp(signInInput);
-  }
-
-  @ResolveField(() => AuthUser)
-  async refreshToken(@GetUserGql() user: User): Promise<AuthUser> {
-    return this.userService.getAuthUser(user);
   }
 }

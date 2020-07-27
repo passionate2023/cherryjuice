@@ -5,7 +5,7 @@ import { Icon, Icons } from '::shared-components/icon/icon';
 import { Separator } from '::app/editor/tool-bar/separator';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
-import { isDocumentOwner } from '::root/store/selectors/document/is-document-owner';
+import { hasWriteAccessToDocument } from '::root/store/selectors/document/has-write-access-to-document';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
@@ -13,7 +13,7 @@ const mapState = (state: Store) => ({
   contentEditable: state.editor.contentEditable,
   showRecentNodesBar: state.editor.showRecentNodesBar,
   showInfoBar: state.editor.showInfoBar,
-  isDocumentOwner: isDocumentOwner(state),
+  isDocumentOwner: hasWriteAccessToDocument(state),
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);

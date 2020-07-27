@@ -14,6 +14,7 @@ import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
 export interface Query {
   document: Array<Document | null>;
   search: SearchResultEntity;
+  user: UserQuery;
 }
 
 export interface Document {
@@ -33,6 +34,7 @@ export interface Document {
 
 export interface DocumentGuestOt {
   accessLevel: AccessLevel;
+  email: string;
   userId: string;
 }
 
@@ -171,6 +173,33 @@ export interface NodeSearchResultEntity {
   updatedAt: Timestamp;
 }
 
+export interface UserQuery {
+  refreshToken: AuthUser;
+  userExists?: string;
+}
+
+export interface AuthUser {
+  secrets: Secrets;
+  token: string;
+  user: User;
+}
+
+export interface Secrets {
+  google_api_key: string;
+  google_client_id: string;
+}
+
+export interface User {
+  email: string;
+  email_verified: boolean;
+  firstName: string;
+  id: string;
+  lastName: string;
+  picture?: string;
+  thirdPartyId?: string;
+  username: string;
+}
+
 export interface Mutation {
   document: DocumentMutation;
   user: UserMutation;
@@ -194,6 +223,7 @@ export interface CreateDocumentIt {
 
 export interface DocumentGuestIt {
   accessLevel: AccessLevel;
+  email: string;
   userId: string;
 }
 
@@ -202,7 +232,7 @@ export interface DeleteDocumentInputType {
 }
 
 export interface EditDocumentIt {
-  guests: Array<DocumentGuestIt | null>;
+  guests?: Array<DocumentGuestIt | null>;
   name?: string;
   privacy?: Privacy;
   updatedAt: Timestamp;
@@ -266,31 +296,8 @@ export interface UploadLinkInputType {
 }
 
 export interface UserMutation {
-  refreshToken: AuthUser;
   signIn: AuthUser;
   signUp: AuthUser;
-}
-
-export interface AuthUser {
-  secrets: Secrets;
-  token: string;
-  user: User;
-}
-
-export interface Secrets {
-  google_api_key: string;
-  google_client_id: string;
-}
-
-export interface User {
-  email: string;
-  email_verified: boolean;
-  firstName: string;
-  id: string;
-  lastName: string;
-  picture?: string;
-  thirdPartyId?: string;
-  username: string;
 }
 
 export interface SignInCredentials {
@@ -354,21 +361,23 @@ export interface Resolver {
   NodeSearchResults?: NodeSearchResultsTypeResolver;
   SearchResultMeta?: SearchResultMetaTypeResolver;
   NodeSearchResultEntity?: NodeSearchResultEntityTypeResolver;
+  UserQuery?: UserQueryTypeResolver;
+  AuthUser?: AuthUserTypeResolver;
+  Secrets?: SecretsTypeResolver;
+  User?: UserTypeResolver;
   Mutation?: MutationTypeResolver;
   DocumentMutation?: DocumentMutationTypeResolver;
   NodeMutation?: NodeMutationTypeResolver;
   ImageUpload?: GraphQLScalarType;
   CTBUpload?: GraphQLScalarType;
   UserMutation?: UserMutationTypeResolver;
-  AuthUser?: AuthUserTypeResolver;
-  Secrets?: SecretsTypeResolver;
-  User?: UserTypeResolver;
   Subscription?: SubscriptionTypeResolver;
   DocumentSubscription?: DocumentSubscriptionTypeResolver;
 }
 export interface QueryTypeResolver<TParent = any> {
   document?: QueryToDocumentResolver<TParent>;
   search?: QueryToSearchResolver<TParent>;
+  user?: QueryToUserResolver<TParent>;
 }
 
 export interface QueryToDocumentArgs {
@@ -384,6 +393,10 @@ export interface QueryToDocumentResolver<TParent = any, TResult = any> {
 }
 
 export interface QueryToSearchResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface QueryToUserResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -460,6 +473,7 @@ export interface DocumentToUserIdResolver<TParent = any, TResult = any> {
 
 export interface DocumentGuestOtTypeResolver<TParent = any> {
   accessLevel?: DocumentGuestOtToAccessLevelResolver<TParent>;
+  email?: DocumentGuestOtToEmailResolver<TParent>;
   userId?: DocumentGuestOtToUserIdResolver<TParent>;
 }
 
@@ -467,6 +481,10 @@ export interface DocumentGuestOtToAccessLevelResolver<
   TParent = any,
   TResult = any
 > {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentGuestOtToEmailResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -710,6 +728,104 @@ export interface NodeSearchResultEntityToUpdatedAtResolver<
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface UserQueryTypeResolver<TParent = any> {
+  refreshToken?: UserQueryToRefreshTokenResolver<TParent>;
+  userExists?: UserQueryToUserExistsResolver<TParent>;
+}
+
+export interface UserQueryToRefreshTokenResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserQueryToUserExistsArgs {
+  email: string;
+}
+export interface UserQueryToUserExistsResolver<TParent = any, TResult = any> {
+  (
+    parent: TParent,
+    args: UserQueryToUserExistsArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface AuthUserTypeResolver<TParent = any> {
+  secrets?: AuthUserToSecretsResolver<TParent>;
+  token?: AuthUserToTokenResolver<TParent>;
+  user?: AuthUserToUserResolver<TParent>;
+}
+
+export interface AuthUserToSecretsResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface AuthUserToTokenResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface AuthUserToUserResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface SecretsTypeResolver<TParent = any> {
+  google_api_key?: SecretsToGoogle_api_keyResolver<TParent>;
+  google_client_id?: SecretsToGoogle_client_idResolver<TParent>;
+}
+
+export interface SecretsToGoogle_api_keyResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface SecretsToGoogle_client_idResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserTypeResolver<TParent = any> {
+  email?: UserToEmailResolver<TParent>;
+  email_verified?: UserToEmail_verifiedResolver<TParent>;
+  firstName?: UserToFirstNameResolver<TParent>;
+  id?: UserToIdResolver<TParent>;
+  lastName?: UserToLastNameResolver<TParent>;
+  picture?: UserToPictureResolver<TParent>;
+  thirdPartyId?: UserToThirdPartyIdResolver<TParent>;
+  username?: UserToUsernameResolver<TParent>;
+}
+
+export interface UserToEmailResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserToEmail_verifiedResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserToFirstNameResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserToIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserToLastNameResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserToPictureResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserToThirdPartyIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserToUsernameResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface MutationTypeResolver<TParent = any> {
   document?: MutationToDocumentResolver<TParent>;
   user?: MutationToUserResolver<TParent>;
@@ -905,16 +1021,8 @@ export interface NodeMutationToUploadImageResolver<
 }
 
 export interface UserMutationTypeResolver<TParent = any> {
-  refreshToken?: UserMutationToRefreshTokenResolver<TParent>;
   signIn?: UserMutationToSignInResolver<TParent>;
   signUp?: UserMutationToSignUpResolver<TParent>;
-}
-
-export interface UserMutationToRefreshTokenResolver<
-  TParent = any,
-  TResult = any
-> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface UserMutationToSignInArgs {
@@ -939,83 +1047,6 @@ export interface UserMutationToSignUpResolver<TParent = any, TResult = any> {
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
-}
-
-export interface AuthUserTypeResolver<TParent = any> {
-  secrets?: AuthUserToSecretsResolver<TParent>;
-  token?: AuthUserToTokenResolver<TParent>;
-  user?: AuthUserToUserResolver<TParent>;
-}
-
-export interface AuthUserToSecretsResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface AuthUserToTokenResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface AuthUserToUserResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface SecretsTypeResolver<TParent = any> {
-  google_api_key?: SecretsToGoogle_api_keyResolver<TParent>;
-  google_client_id?: SecretsToGoogle_client_idResolver<TParent>;
-}
-
-export interface SecretsToGoogle_api_keyResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface SecretsToGoogle_client_idResolver<
-  TParent = any,
-  TResult = any
-> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserTypeResolver<TParent = any> {
-  email?: UserToEmailResolver<TParent>;
-  email_verified?: UserToEmail_verifiedResolver<TParent>;
-  firstName?: UserToFirstNameResolver<TParent>;
-  id?: UserToIdResolver<TParent>;
-  lastName?: UserToLastNameResolver<TParent>;
-  picture?: UserToPictureResolver<TParent>;
-  thirdPartyId?: UserToThirdPartyIdResolver<TParent>;
-  username?: UserToUsernameResolver<TParent>;
-}
-
-export interface UserToEmailResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserToEmail_verifiedResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserToFirstNameResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserToIdResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserToLastNameResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserToPictureResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserToThirdPartyIdResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserToUsernameResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface SubscriptionTypeResolver<TParent = any> {

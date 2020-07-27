@@ -5,15 +5,17 @@ import {
 import { Privacy } from '::types/graphql/generated';
 
 const calculateEditedDocumentState = ({
-  document: { name, privacy },
+  document: { name, privacy, guests },
 }: ResetToEditProps): TDocumentMetaState => ({
   name,
   privacy,
+  guests: guests || [],
 });
 const calculateCreatedDocumentState = (): TDocumentMetaState => {
   return {
     name: 'new document',
     privacy: Privacy.PRIVATE,
+    guests: [],
   };
 };
 

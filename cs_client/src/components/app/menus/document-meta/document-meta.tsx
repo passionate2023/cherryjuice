@@ -21,7 +21,8 @@ import {
 } from './reducer/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { updateCachedHtmlAndImages } from '::app/editor/document/tree/node/helpers/apollo-cache';
-import { Privacy } from '::types/graphql/generated';
+import { Guests } from '::app/menus/document-meta/components/guests/guests';
+import { SelectPrivacy } from '::app/menus/document-meta/components/select-privacy/select-privacy';
 
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showDocumentMetaDialog,
@@ -75,16 +76,18 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       testId: testIds.documentMeta__documentName,
     },
     {
-      onChange: documentMetaActionCreators.toggleIsPublic,
-      value: state.privacy === Privacy.PUBLIC,
-      type: 'checkbox',
-      label: 'public',
+      customInput: <SelectPrivacy privacy={state.privacy} />,
+      label: 'visibility',
+    },
+    {
+      monolithComponent: <Guests guests={state.guests} userId={userId} />,
+      label: 'guests',
     },
   ];
   const createDocument = () => {
     try {
       updateCachedHtmlAndImages();
-      const document = generateNewDocument({ ...state, userId });
+      const document = generateNewDocument({ state, userId });
       const rootNode = generateRootNode({
         documentId: document.id,
       });
@@ -114,6 +117,8 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
         const notEqual =
           typeof v === 'string'
             ? document[k] !== v
+            : Array.isArray(v)
+            ? JSON.stringify(v.sort()) !== JSON.stringify(document[k]?.sort())
             : JSON.stringify(Object.entries(document[k]).sort()) !==
               JSON.stringify(Object.entries(v).sort());
         if (notEqual) entries.push([k, v]);

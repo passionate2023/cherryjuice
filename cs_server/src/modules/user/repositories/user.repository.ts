@@ -26,6 +26,8 @@ const pickNonSensitiveFields = (user: User): User => {
   return _user;
 };
 
+export type UserExistsDTO = { email: string };
+
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
   static getAuthUser = (
@@ -152,6 +154,10 @@ class UserRepository extends Repository<User> {
     }
 
     return UserRepository.getAuthUser(user);
+  }
+
+  async userExists({ email }: UserExistsDTO): Promise<string | undefined> {
+    return await this.findOne({ where: { email } }).then(user => user?.id);
   }
 }
 

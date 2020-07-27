@@ -2,23 +2,32 @@ import {
   calculateCreatedDocumentState,
   calculateEditedDocumentState,
 } from './helpers/calculate-state';
-import { Privacy } from '::types/graphql/generated';
+import {
+  AccessLevel,
+  DocumentGuestOt,
+  Privacy,
+} from '::types/graphql/generated';
 import { QDocumentsListItem } from '::graphql/queries/documents-list';
 
 type TState = {
   name: string;
   privacy: Privacy;
+  guests: DocumentGuestOt[];
 };
 const initialState: TState = {
   name: 'new document',
   privacy: Privacy.PRIVATE,
+  guests: [],
 };
 
 enum actions {
   setName,
   resetToEdit,
   resetToCreate,
-  toggleIsPublic,
+  setPrivacy,
+  toggleUserAccessLevel,
+  addGuest,
+  removeGuest,
 }
 
 export type ResetToCreateProps = {};
@@ -34,7 +43,14 @@ const actionCreators = (() => {
       state.dispatch({ type: actions.resetToEdit, value }),
     resetToCreate: (value: ResetToCreateProps) =>
       state.dispatch({ type: actions.resetToCreate, value }),
-    toggleIsPublic: () => state.dispatch({ type: actions.toggleIsPublic }),
+    toggleUserAccessLevel: (userId: string) =>
+      state.dispatch({ type: actions.toggleUserAccessLevel, value: userId }),
+    addGuest: (value: DocumentGuestOt) =>
+      state.dispatch({ type: actions.addGuest, value }),
+    removeGuest: (userId: string) =>
+      state.dispatch({ type: actions.removeGuest, value: userId }),
+    setPrivacy: (value: Privacy) =>
+      state.dispatch({ type: actions.setPrivacy, value }),
   };
 })();
 
@@ -52,11 +68,37 @@ const reducer = (
       return calculateEditedDocumentState(action.value);
     case actions.resetToCreate:
       return calculateCreatedDocumentState();
-    case actions.toggleIsPublic:
+    case actions.setPrivacy:
       return {
         ...state,
-        privacy:
-          state.privacy === Privacy.PRIVATE ? Privacy.PUBLIC : Privacy.PRIVATE,
+        privacy: action.value,
+      };
+    case actions.addGuest:
+      return {
+        ...state,
+        guests: state.guests.some(guest => guest.userId === action.value.userId)
+          ? state.guests
+          : [...state.guests, action.value],
+      };
+    case actions.toggleUserAccessLevel:
+      return {
+        ...state,
+        guests: state.guests.map(guest =>
+          guest.userId === action.value
+            ? {
+                ...guest,
+                accessLevel:
+                  guest.accessLevel === AccessLevel.WRITER
+                    ? AccessLevel.READER
+                    : AccessLevel.WRITER,
+              }
+            : guest,
+        ),
+      };
+    case actions.removeGuest:
+      return {
+        ...state,
+        guests: state.guests.filter(guest => guest.userId !== action.value),
       };
     default:
       throw new Error(action.type + ' action not supported');

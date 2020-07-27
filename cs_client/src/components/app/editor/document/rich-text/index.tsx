@@ -11,7 +11,7 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 import { router } from '::root/router/router';
-import { isDocumentOwner } from '::root/store/selectors/document/is-document-owner';
+import { hasWriteAccessToDocument } from '::root/store/selectors/document/has-write-access-to-document';
 
 type Props = {
   file_id: string;
@@ -22,7 +22,7 @@ const mapState = (state: Store) => ({
   fetchNodesStarted: state.document.fetchNodesStarted,
   contentEditable: state.editor.contentEditable || !state.root.isOnMobile,
   processLinks: state.node.processLinks,
-  isDocumentOwner: isDocumentOwner(state),
+  isDocumentOwner: hasWriteAccessToDocument(state),
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);

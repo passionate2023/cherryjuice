@@ -11,7 +11,6 @@ import { ImportsService } from '../imports/imports.service';
 import { FileUpload, GraphQLUpload } from '../document/helpers/graphql';
 import { SaveHtmlIt } from './it/save-html.it';
 import { Node } from './entities/node.entity';
-import { Privacy } from '../document/entities/document.entity';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => NodeMutation)
@@ -35,7 +34,6 @@ export class NodeMutationsResolver {
         userId: user.id,
         node_id: node.node_id,
         documentId: node.documentId,
-        minimumPrivacy: Privacy.GUESTS_ONLY,
       },
     });
     return '';
@@ -54,7 +52,6 @@ export class NodeMutationsResolver {
         getNodeDTO: {
           node_id: data.node_id,
           documentId: node.documentId,
-          minimumPrivacy: Privacy.GUESTS_ONLY,
           userId: user.id,
         },
       });
@@ -72,7 +69,6 @@ export class NodeMutationsResolver {
       getNodeDTO: {
         documentId: node.documentId,
         node_id: node.node_id,
-        minimumPrivacy: Privacy.PRIVATE,
         userId: user.id,
       },
       data,
@@ -89,7 +85,6 @@ export class NodeMutationsResolver {
       getNodeDTO: {
         node_id: node.node_id,
         documentId: node.documentId,
-        minimumPrivacy: Privacy.GUESTS_ONLY,
         userId: user.id,
       },
     });
@@ -109,7 +104,6 @@ export class NodeMutationsResolver {
       getNodeDTO: {
         node_id: node.node_id,
         documentId: node.documentId,
-        minimumPrivacy: Privacy.GUESTS_ONLY,
         userId: user.id,
       },
     });

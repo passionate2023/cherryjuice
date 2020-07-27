@@ -30,7 +30,9 @@ export class NodeService {
   async getNodeById(dto: GetNodeDTO): Promise<Node> {
     return await this.nodeRepository.getNodeById(dto);
   }
-
+  async getWNodeById(dto: GetNodeDTO): Promise<Node> {
+    return await this.nodeRepository.getWNodeById(dto);
+  }
   async getHtml(dto: GetNodeDTO): Promise<string> {
     const ahtml = await this.nodeRepository.getAHtml(dto);
     return aHtmlToHtml(ahtml);

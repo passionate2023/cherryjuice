@@ -7,7 +7,7 @@ import {
 } from '../entities/document-subscription.entity';
 import { NotFoundException } from '@nestjs/common';
 import { createErrorDescription } from '../../shared/errors/create-error-description';
-import { DocumentGuest } from '../entities/document-guest.entity';
+import { AccessLevel, DocumentGuest } from '../entities/document-guest.entity';
 import {
   CreateDocumentDTO,
   EditDocumentDTO,
@@ -15,8 +15,8 @@ import {
   GetDocumentsDTO,
 } from '../dto/document.dto';
 import {
-  andGroup,
-  orGroup,
+  and_,
+  or_,
 } from '../../search/helpers/pg-queries/helpers/clause-builder';
 import { RunFirst } from '../../node/repositories/node.repository';
 
@@ -38,22 +38,21 @@ const documentMetaFields = [
   `d.privacy`,
   `g.userId`,
   `g.accessLevel`,
+  `g.email`,
 ];
 const select = () => documentMetaFields;
+
+export type GetterSettings = { write: boolean; runFirst?: RunFirst };
 
 @EntityRepository(Document)
 export class DocumentRepository extends Repository<Document> {
   baseQueryBuilder = (
-    {
-      userId,
-      minimumGuestAccessLevel,
-      minimumPrivacy,
-    }: GetDocumentsDTO & { minimumPrivacy: Privacy },
-    runFirst?: RunFirst,
+    { userId }: GetDocumentsDTO,
+    { write, runFirst }: GetterSettings,
   ) => {
     let queryBuilder = this.createQueryBuilder('d')
       .leftJoinAndMapMany(
-        'd.guest',
+        'd.guests',
         DocumentGuest,
         'g',
         'g."documentId" = d.id ',
@@ -61,30 +60,35 @@ export class DocumentRepository extends Repository<Document> {
       .select(select());
     if (runFirst) queryBuilder = runFirst<Document>(queryBuilder);
     return queryBuilder.andWhere(
-      orGroup()
+      or_()
         .or(`d."userId" = :userId`)
-        .orIf(
-          minimumPrivacy === Privacy.PUBLIC,
-          `(d."privacy"  >= :minimumPrivacy)`,
-        )
-        .orIf(
-          minimumPrivacy >= Privacy.GUESTS_ONLY,
-          andGroup()
+        .orIf(!write, `(d."privacy"  >= :publicPrivacy)`)
+        .or(
+          and_()
             .and(`g."userId" = :userId `)
-            .and(`g."accessLevel" >= :minimumGuestAccessLevel`)
-            .and(`d."privacy"  >= :minimumPrivacy`)
-            .get(),
+            .and(`d."privacy"  >= :guestOnlyPrivacy`)
+            .andIf(write, `g."accessLevel" >= :writeAccessLevel`),
         )
         .get(),
-      { userId, minimumGuestAccessLevel, minimumPrivacy },
+      {
+        userId,
+        publicPrivacy: Privacy.PUBLIC,
+        guestOnlyPrivacy: Privacy.GUESTS_ONLY,
+        writeAccessLevel: AccessLevel.WRITER,
+      },
     );
   };
-  async getDocumentById(dto: GetDocumentDTO): Promise<Document> {
-    const document = await this.baseQueryBuilder(dto, queryBuilder =>
-      queryBuilder.andWhere('d."id" = :documentId', {
-        documentId: dto.documentId,
-      }),
-    ).getOne();
+  private async _getDocumentById(
+    dto: GetDocumentDTO,
+    write: boolean,
+  ): Promise<Document> {
+    const document = await this.baseQueryBuilder(dto, {
+      write,
+      runFirst: queryBuilder =>
+        queryBuilder.andWhere('d."id" = :documentId', {
+          documentId: dto.documentId,
+        }),
+    }).getOne();
     if (!document)
       throw new NotFoundException(
         createErrorDescription.documentNotExist(dto.documentId),
@@ -92,15 +96,16 @@ export class DocumentRepository extends Repository<Document> {
     return document;
   }
 
-  async getDocuments({
-    userId,
-    minimumGuestAccessLevel,
-  }: GetDocumentsDTO): Promise<Document[]> {
-    return await this.baseQueryBuilder({
-      userId,
-      minimumGuestAccessLevel,
-      minimumPrivacy: Privacy.GUESTS_ONLY,
-    }).getMany();
+  async getDocumentById(dto: GetDocumentDTO): Promise<Document> {
+    return this._getDocumentById(dto, false);
+  }
+
+  async getWDocumentById(dto: GetDocumentDTO): Promise<Document> {
+    return this._getDocumentById(dto, true);
+  }
+
+  async getDocuments(dto: GetDocumentsDTO): Promise<Document[]> {
+    return await this.baseQueryBuilder(dto, { write: false }).getMany();
   }
 
   async createDocument({
@@ -117,7 +122,7 @@ export class DocumentRepository extends Repository<Document> {
     getDocumentDTO,
     updater,
   }: EditDocumentDTO): Promise<Document> {
-    let document = await this.getDocumentById(getDocumentDTO);
+    let document = await this.getWDocumentById(getDocumentDTO);
     Object.entries(meta).forEach(([k, v]) => {
       document[k] = v;
     });
@@ -146,11 +151,13 @@ export class DocumentRepository extends Repository<Document> {
   async deleteDocuments(IDs: string[], user: User): Promise<string[]> {
     const documents = await Promise.all(
       IDs.map(documentId =>
-        this.getDocumentById({
+        this.getWDocumentById({
           userId: user.id,
           documentId,
         } as GetDocumentDTO),
       ),
+    ).then(documents =>
+      documents.filter(document => document.userId === user.id),
     );
     await this.remove(documents);
     return IDs;

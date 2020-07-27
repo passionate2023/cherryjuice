@@ -5,7 +5,6 @@ import { ImageService } from '../image/image.service';
 import { Image } from '../image/entities/image.entity';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
-import { Privacy } from '../document/entities/document.entity';
 import { GetUserGql } from '../user/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
 
@@ -24,7 +23,6 @@ export class NodeResolver {
       : this.nodeService.getHtml({
           documentId: node.documentId,
           node_id: node.node_id,
-          minimumPrivacy: Privacy.PUBLIC,
           userId: user.id,
         });
   }

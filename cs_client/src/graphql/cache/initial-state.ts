@@ -1,8 +1,13 @@
 import { ApolloClient } from 'apollo-client';
+import { DocumentGuestOt } from '::types/graphql/generated';
 
+export type EditedDocumentMeta = Map<
+  'name' | 'privacy' | 'guests' | 'updatedAt',
+  string | DocumentGuestOt[] | number
+>;
 type DocumentChanges = {
   isNew: boolean;
-  meta: Map<string, any>;
+  meta: EditedDocumentMeta;
   node: {
     deleted: Set<string>;
     meta: Map<string, Set<string>>;
@@ -25,7 +30,7 @@ type CacheState = {
 };
 const getInitialDocumentState = (): DocumentChanges => ({
   isNew: false,
-  meta: new Map<string, any>(),
+  meta: new Map(),
   node: {
     deleted: new Set<string>(),
     meta: new Map<string, Set<string>>(),

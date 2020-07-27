@@ -5,14 +5,14 @@ import { modToolbar } from '::sass-modules/index';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
-import { isDocumentOwner } from '::root/store/selectors/document/is-document-owner';
+import { hasWriteAccessToDocument } from '::root/store/selectors/document/has-write-access-to-document';
 const mapState = (state: Store) => ({
   showTree: state.editor.showTree,
   documentHasUnsavedChanges: state.document.hasUnsavedChanges,
   selectedNode_id: state.document.selectedNode.node_id,
   documentId: state.document.documentId,
   hasUnsavedChanges: state.document.hasUnsavedChanges,
-  isDocumentOwner: isDocumentOwner(state),
+  isDocumentOwner: hasWriteAccessToDocument(state),
 });
 
 const connector = connect(mapState);

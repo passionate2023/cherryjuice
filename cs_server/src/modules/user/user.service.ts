@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from './repositories/user.repository';
+import { UserExistsDTO, UserRepository } from './repositories/user.repository';
 import { SignUpCredentials } from './dto/sign-up-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import { SignInCredentials } from './dto/sign-in-credentials.dto';
@@ -80,5 +80,9 @@ export class UserService {
     } catch (err) {
       throw new InternalServerErrorException('validateOAuthLogin', err.message);
     }
+  }
+
+  async userExists(dto: UserExistsDTO): Promise<string | undefined> {
+    return this.userRepository.userExists(dto);
   }
 }

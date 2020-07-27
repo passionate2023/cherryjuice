@@ -21,7 +21,7 @@ class OperatorGroup {
     this.builder = createClauseBuilder(joiningOperator);
   }
 
-  add = (condition: string | ConditionCreator) => {
+  protected add = (condition: string | ConditionCreator) => {
     this.builder.push(
       typeof condition === 'string'
         ? condition
@@ -31,7 +31,10 @@ class OperatorGroup {
     );
     return this;
   };
-  addIf = (predicate: boolean, condition: string | ConditionCreator) => {
+  protected addIf = (
+    predicate: boolean,
+    condition: string | ConditionCreator,
+  ) => {
     if (predicate) {
       this.builder.push(
         typeof condition === 'string'
@@ -64,7 +67,7 @@ class AndGroup extends OperatorGroup {
   and = this.add;
   andIf = this.addIf;
 }
-const orGroup = (label?: string) => new OrGroup(label);
-const andGroup = (label?: string) => new AndGroup(label);
+const or_ = (label?: string) => new OrGroup(label);
+const and_ = (label?: string) => new AndGroup(label);
 
-export { orGroup, andGroup };
+export { or_, and_ };

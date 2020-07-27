@@ -1,0 +1,58 @@
+@import '../../vars/vars';
+.guests {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto
+}
+.guests__list {
+  display: flex;
+  padding: 10px;
+  gap: 5px;
+  flex-wrap: wrap;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.guests__add-guest {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.guests__add-guest__inputs {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.guests__add-guest__input {
+  display: flex;
+  flex: 1;
+  &:invalid {
+    color: darkred;
+  }
+}
+.guests__add-guest__add-button {
+}
+.guests__messages {
+  height: 15px;
+  padding: 0px 15px;
+  opacity: 0;
+  transition: opacity 200ms linear;
+}
+.guests__messages--visible {
+  opacity: 1;
+}
+.guests__guest {
+  border-radius: 5px;
+  color: $primary;
+  border: 1px solid $primary;
+  box-shadow: $box-shadow2;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+.guests__guest__email {
+  margin-left: 5px;
+}

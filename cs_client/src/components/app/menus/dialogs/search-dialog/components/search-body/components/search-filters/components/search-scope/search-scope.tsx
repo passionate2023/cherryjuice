@@ -8,13 +8,13 @@ import {
 import { Store } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { SearchScope as TSearchScope } from '::types/graphql/generated';
-import { isDocumentOwner } from '::root/store/selectors/document/is-document-owner';
+import { hasWriteAccessToDocument } from '::root/store/selectors/document/has-write-access-to-document';
 
 const mapState = (state: Store) => ({
   selectedScope: state.search.searchScope,
   selectedNode: state.document.selectedNode,
   documentId: state.document.documentId,
-  isDocumentOwner: isDocumentOwner(state),
+  isDocumentOwner: hasWriteAccessToDocument(state),
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);

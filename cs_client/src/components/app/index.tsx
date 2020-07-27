@@ -10,7 +10,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { useHandleRouting } from '::app/hooks/handle-routing/handle-routing';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { isDocumentOwner } from '::root/store/selectors/document/is-document-owner';
+import { hasWriteAccessToDocument } from '::root/store/selectors/document/has-write-access-to-document';
 import { router } from '::root/router/router';
 
 const Menus = React.lazy(() => import('::app/menus'));
@@ -72,7 +72,7 @@ const mapState = (state: Store) => ({
   documentHasUnsavedChanges: state.document.hasUnsavedChanges,
   showFormattingButtons: state.editor.showFormattingButtons,
   dockedDialog: state.root.dockedDialog,
-  isDocumentOwner: isDocumentOwner(state),
+  isDocumentOwner: hasWriteAccessToDocument(state),
   userId: state.auth.user?.id,
 });
 const mapDispatch = {};

@@ -29,6 +29,7 @@ type Document {
 
 type DocumentGuestOt {
     accessLevel: AccessLevel!
+    email: String!
     userId: String!
 }
 
@@ -106,6 +107,7 @@ type NodeSearchResults {
 type Query {
     document(file_id: String): [Document]!
     search: SearchResultEntity!
+    user: UserQuery!
 }
 
 type SearchResultEntity {
@@ -138,9 +140,13 @@ type User {
 }
 
 type UserMutation {
-    refreshToken: AuthUser!
     signIn(credentials: SignInCredentials!): AuthUser!
     signUp(credentials: SignUpCredentials!): AuthUser!
+}
+
+type UserQuery {
+    refreshToken: AuthUser!
+    userExists(email: String!): String
 }
 
 enum AccessLevel {
@@ -235,11 +241,12 @@ input DeleteDocumentInputType {
 
 input DocumentGuestIt {
     accessLevel: AccessLevel!
+    email: String!
     userId: String!
 }
 
 input EditDocumentIt {
-    guests: [DocumentGuestIt]!
+    guests: [DocumentGuestIt]
     name: String
     privacy: Privacy
     updatedAt: Timestamp!

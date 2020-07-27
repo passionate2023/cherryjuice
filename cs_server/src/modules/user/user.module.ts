@@ -9,6 +9,7 @@ import { jwtConfig } from '../../config/jwt.config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { UserMutationsResolver } from './user.mutations.resolver';
+import { UserQueriesResolver } from './user.queries.resolver';
 
 @Module({
   imports: [
@@ -24,7 +25,13 @@ import { UserMutationsResolver } from './user.mutations.resolver';
     TypeOrmModule.forFeature([UserRepository]),
   ],
   controllers: [UserController],
-  providers: [UserService, JwtStrategy, GoogleStrategy, UserMutationsResolver],
+  providers: [
+    UserService,
+    JwtStrategy,
+    GoogleStrategy,
+    UserMutationsResolver,
+    UserQueriesResolver,
+  ],
   exports: [PassportModule, JwtStrategy, UserService, GoogleStrategy],
 })
 export class UserModule {}
