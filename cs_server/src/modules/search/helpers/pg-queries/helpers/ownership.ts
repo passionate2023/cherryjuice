@@ -15,15 +15,15 @@ const ownershipWC = ({ userId, state }: OwnershipProps): string =>
         .and(
           or_()
             .or('n.privacy isnull')
-            .or(`n.privacy >= $${state.variables.length}`),
+            .or(
+              `n.privacy::text::document_privacy_enum >= $${state.variables.length}`,
+            ),
         ),
     )
     .orIf(
       Boolean(userId),
       or_('auth users')
-        .tap(() => {
-          if (userId) return state.variables.push(userId);
-        })
+        .tap(() => state.variables.push(userId))
         .or(`d."userId" = $${state.variables.length}`)
         .or(
           and_('guest users')
@@ -36,7 +36,9 @@ const ownershipWC = ({ userId, state }: OwnershipProps): string =>
             .and(
               or_()
                 .or('n.privacy isnull')
-                .or(`n.privacy >= $${state.variables.length}`),
+                .or(
+                  `n.privacy::text::document_privacy_enum >= $${state.variables.length}`,
+                ),
             ),
         ),
     )
