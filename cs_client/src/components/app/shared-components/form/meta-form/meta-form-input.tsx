@@ -31,7 +31,16 @@ const MetaFormInput: React.FC<FormInputProps> = ({
 
   const inputRef = useRef<HTMLInputElement>();
   useEffect(() => {
-    if (lazyAutoFocus) inputRef.current.focus();
+    if (lazyAutoFocus) {
+      const handle = setTimeout(() => {
+        inputRef.current.focus();
+        clearTimeout(handle);
+      }, lazyAutoFocus);
+      return () => {
+        inputRef.current.blur();
+        clearTimeout(handle);
+      };
+    }
   }, []);
 
   return monolithComponent ? (

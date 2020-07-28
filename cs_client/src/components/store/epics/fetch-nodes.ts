@@ -26,7 +26,7 @@ const createLocalRequest = (
     if (!document?.node) {
       throw new Error(file_id + ' does not exist');
     }
-    res({ ...document, node: document.node as QNodeMeta[] });
+    res({ ...document, node: document.node as QNodeMeta[], privateNodes: [] });
   });
   return from(nodes);
 };

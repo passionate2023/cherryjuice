@@ -14,14 +14,14 @@ const ap = createActionPrefixer('document-list');
 
 const ac = {
   ...{
-    fetchDocuments: _(ap('fetchDocuments')),
-    fetchDocumentsPending: _(ap('fetchDocumentsPending')),
-    fetchDocumentsInProgress: _(ap('fetchDocumentsInProgress')),
+    fetchDocuments: _(ap('fetch-documents')),
+    fetchDocumentsPending: _(ap('fetch-documents-pending')),
+    fetchDocumentsInProgress: _(ap('fetch-documents-in-progress')),
     fetchDocumentsFulfilled: _(
-      ap('fetchDocumentsFulfilled'),
+      ap('fetch-documents-fulfilled'),
       _ => (documents: DocumentMeta[]) => _(documents),
     ),
-    fetchDocumentsFailed: _(ap('fetchDocumentsFailed')),
+    fetchDocumentsFailed: _(ap('fetch-documents-failed')),
   },
   ...{
     deleteDocuments: _(ap('delete-documents')),

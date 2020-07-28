@@ -3,7 +3,7 @@ import { Privacy } from '../../../../document/entities/document.entity';
 import { NodePrivacy } from '../../../../node/it/node-meta.it';
 
 type QueryCreatorState = {
-  variables: (string | Date | Privacy| NodePrivacy)[];
+  variables: (string | Date | Privacy | NodePrivacy)[];
 };
 
 type TimeFilterWCProps = {

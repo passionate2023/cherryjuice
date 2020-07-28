@@ -13,12 +13,13 @@ type Props = {};
 
 const mapState = (state: Store) => ({
   nodes: state.document.nodes,
+  documentPrivacy: state.document.privacy,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const Tree: React.FC<Props & PropsFromRedux> = ({ nodes }) => {
+const Tree: React.FC<Props & PropsFromRedux> = ({ nodes, documentPrivacy }) => {
   useEffect(onStart, []);
   const componentRef = useRef();
   const rootTreeDndProps = useDnDNodes({
@@ -42,18 +43,19 @@ const Tree: React.FC<Props & PropsFromRedux> = ({ nodes }) => {
             ref={componentRef}
           >
             {nodes &&
-              nodes
-                .get(0)
-                .child_nodes.map(node_id => nodes.get(node_id))
-                .map(node => (
+              nodes.get(0).child_nodes.map(node_id => {
+                const node = nodes.get(node_id);
+                return (
                   <Node
                     key={node.node_id}
                     node_id={node.node_id}
                     nodes={nodes}
                     depth={0}
                     node_title_styles={node.node_title_styles}
+                    documentPrivacy={documentPrivacy}
                   />
-                ))}
+                );
+              })}
           </ul>
         </div>
       </ErrorBoundary>

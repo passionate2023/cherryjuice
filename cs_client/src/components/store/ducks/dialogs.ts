@@ -138,7 +138,7 @@ const reducer = createReducer(initialState, _ => [
   _(actionCreators.showDocumentList, state => ({
     ...state,
     showDocumentList: true,
-    reloadDocumentList: new Date().getTime(),
+
   })),
   _(actionCreators.hideDocumentList, state => ({
     ...state,

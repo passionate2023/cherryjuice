@@ -35,7 +35,10 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   useEffect(() => {
     if (lazyAutoFocus) {
       const handle = setTimeout(() => ref.current.focus(), lazyAutoFocus);
-      return () => clearTimeout(handle);
+      return () => {
+        ref.current.blur();
+        clearTimeout(handle);
+      };
     }
   }, []);
   return (

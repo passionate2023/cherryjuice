@@ -57,6 +57,12 @@
 .node__title-button--hidden {
   visibility: hidden;
 }
+.node__title-privacy {
+  z-index: $ZI-node-elements;
+  svg {
+    fill: #dbdbdb;
+  }
+}
 .node__title-cherry {
   min-width: 14px;
   width: 14px;

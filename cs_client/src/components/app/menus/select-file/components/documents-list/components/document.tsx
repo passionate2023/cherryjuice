@@ -12,6 +12,7 @@ type Props = {
 
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
+import { VisibilityIcon } from '::app/editor/info-bar/components/components/visibility-icon';
 
 const mapState = (state: Store, props: Props) => ({
   isSelected: state.documentsList.selectedIDs.includes(props.documentMeta.id),
@@ -23,7 +24,7 @@ const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const Document: React.FC<Props & PropsFromRedux> = ({
-  documentMeta: { size, id, name, updatedAt, hash },
+  documentMeta: { size, id, name, updatedAt, hash, privacy },
   isSelected,
   // selectedIDs,
   openDocumentId,
@@ -46,10 +47,14 @@ const Document: React.FC<Props & PropsFromRedux> = ({
       <span className={`${modSelectFile.selectFile__file__name} `}>
         {id.startsWith('new-document') ? `*${name}` : name}
       </span>
-      <ThreeDotsButton documentId={id} />
+      <ThreeDotsButton documentId={id} privacy={privacy} />
 
       <span className={`${modSelectFile.selectFile__file__details} `}>
-        <span>{size}kb</span>
+        <span className={modSelectFile.selectFile__file__details__visibility}>
+          <VisibilityIcon privacy={privacy} />
+          <span>{size}kb</span>
+        </span>
+
         <div>
           <span className={`${modSelectFile.selectFile__file__details__id}`}>
             {id}

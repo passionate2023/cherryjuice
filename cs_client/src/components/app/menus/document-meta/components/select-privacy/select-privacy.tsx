@@ -1,9 +1,18 @@
 import * as React from 'react';
 import { modNodeMeta } from '::sass-modules/';
 import { Privacy } from '::types/graphql/generated';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { NodePrivacy } from '::types/graphql/generated';
 
+const privacyWeights = {
+  [Privacy.PRIVATE]: 1,
+  [Privacy.GUESTS_ONLY]: 2,
+  [Privacy.PUBLIC]: 3,
+};
+
+const isBelowPrivacy = (a: Privacy | NodePrivacy) => (
+  b: Privacy | NodePrivacy,
+) => privacyWeights[a] <= privacyWeights[b];
 const options = [
   {
     value: Privacy.PRIVATE,
@@ -21,12 +30,16 @@ type Props = {
   privacy: Privacy | NodePrivacy;
   onChange: (privacy: Privacy | NodePrivacy) => void;
   useNodeOptions?: boolean;
+  disabled?: boolean;
+  maximumPrivacy?: Privacy;
 };
 
 const SelectPrivacy: React.FC<Props> = ({
   privacy,
   onChange,
   useNodeOptions,
+  disabled,
+  maximumPrivacy,
 }) => {
   const ref = useRef<HTMLSelectElement>();
   useEffect(() => {
@@ -35,15 +48,23 @@ const SelectPrivacy: React.FC<Props> = ({
   const onChangeM = useCallback(e => {
     onChange(e.target.value as Privacy);
   }, []);
+  const isBelowDocumentPrivacy = useMemo(() => {
+    return isBelowPrivacy(maximumPrivacy);
+  }, [maximumPrivacy]);
   return (
     <select
       ref={ref}
       className={modNodeMeta.nodeMeta__input__select}
       onChange={onChangeM}
       defaultValue={privacy}
+      disabled={disabled}
     >
       {(useNodeOptions ? nodeOptions : options).map(({ value, label }) => (
-        <option value={value} key={value}>
+        <option
+          value={value}
+          key={value}
+          disabled={isBelowDocumentPrivacy(value)}
+        >
           {label}
         </option>
       ))}

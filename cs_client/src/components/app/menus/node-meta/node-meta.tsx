@@ -14,10 +14,10 @@ import { modNodeMeta } from '::sass-modules/index';
 import { IconPicker } from '::app/menus/node-meta/components/icon-picker';
 import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
 import { testIds } from '::cypress/support/helpers/test-ids';
-
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { SelectPrivacy } from '::app/menus/document-meta/components/select-privacy/select-privacy';
+import { Privacy } from '::types/graphql/generated';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
@@ -30,6 +30,7 @@ const mapState = (state: Store) => ({
   documents: state.documentsList.documents,
   userId: state.auth.user?.id,
   documentUserId: state.document.userId,
+  documentPrivacy: state.document.privacy,
 });
 const mapDispatch = {
   onClose: ac.dialogs.hideNodeMeta,
@@ -51,6 +52,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
   node_id,
   userId,
   documentUserId,
+  documentPrivacy,
 }) => {
   const isOwnerOfDocument = documentUserId === userId;
   const [state, dispatch] = useReducer(nodeMetaReducer, nodeMetaInitialState);
@@ -100,7 +102,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       value: state.name,
       type: 'text',
       label: 'Node name',
-      lazyAutoFocus: 400,
+      lazyAutoFocus: 500,
       testId: testIds.nodeMeta__nodeName,
     },
     {
@@ -154,8 +156,10 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
     inputs.push({
       customInput: (
         <SelectPrivacy
+          disabled={documentPrivacy === Privacy.PRIVATE}
           privacy={state.privacy}
           onChange={nodeMetaActionCreators.setPrivacy}
+          maximumPrivacy={documentPrivacy}
           useNodeOptions={true}
         />
       ),

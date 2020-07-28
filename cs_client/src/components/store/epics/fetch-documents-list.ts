@@ -13,6 +13,7 @@ const fetchDocumentsListEpic = (action$: Observable<Actions>) => {
     ofType([
       ac.__.documentsList.fetchDocuments,
       ac.__.documentsList.deleteDocumentsFulfilled,
+      ac.__.document.saveFulfilled,
     ]),
     filter(() => store.getState().documentsList.fetchDocuments === 'idle'),
     switchMap(() => {

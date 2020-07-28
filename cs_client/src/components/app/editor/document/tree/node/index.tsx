@@ -10,12 +10,15 @@ import { useScrollNodeIntoView } from '::app/editor/document/tree/node/hooks/scr
 import { persistedTreeState } from '::app/editor/document/tree/node/hooks/persisted-tree-state/helpers';
 import { usePersistedTreeState } from '::app/editor/document/tree/node/hooks/persisted-tree-state/persisted-tree-state';
 import { nodesMetaMap } from '::types/misc';
+import { VisibilityIcon } from '::app/editor/info-bar/components/components/visibility-icon';
+import { NodePrivacy, Privacy } from '::types/graphql/generated';
 
 type Props = {
   node_id: number;
   nodes?: nodesMetaMap;
   depth: number;
   node_title_styles: string;
+  documentPrivacy: Privacy;
 };
 
 const Node: React.FC<Props> = ({
@@ -23,8 +26,9 @@ const Node: React.FC<Props> = ({
   nodes,
   depth,
   node_title_styles = '{}',
+  documentPrivacy,
 }) => {
-  const { child_nodes, name } = nodes.get(node_id);
+  const { child_nodes, name, privacy } = nodes.get(node_id);
   const match = useRouteMatch<{ file_id: string }>();
   const { file_id } = match.params;
   const nodePath = `/document/${file_id}/node/${node_id}`;
@@ -104,6 +108,17 @@ const Node: React.FC<Props> = ({
           className={modIcons.node__titleCherry}
           testId={'cherry' + (icon_id || 0)}
         />
+        {documentPrivacy !== Privacy.PRIVATE &&
+          privacy !== NodePrivacy.PRIVATE && (
+            <VisibilityIcon
+              privacy={
+                privacy && privacy !== NodePrivacy.DEFAULT
+                  ? privacy
+                  : documentPrivacy
+              }
+              className={modIcons.node__titlePrivacy}
+            />
+          )}
         <div
           className={nodeMod.node__title}
           style={{ ...nodeStyle }}
@@ -127,17 +142,19 @@ const Node: React.FC<Props> = ({
           }}
           ref={listRef}
         >
-          {child_nodes
-            .map(node_id => nodes.get(node_id))
-            .map(node => (
+          {child_nodes.map(node_id => {
+            const node = nodes.get(node_id);
+            return (
               <Node
                 key={node.node_id}
                 node_id={node.node_id}
                 nodes={nodes}
                 depth={depth + 1}
                 node_title_styles={node.node_title_styles}
+                documentPrivacy={documentPrivacy}
               />
-            ))}
+            );
+          })}
         </ul>
       )}
     </>

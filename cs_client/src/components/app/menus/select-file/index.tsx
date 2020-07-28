@@ -38,6 +38,7 @@ const createButtons = ({
       onClick: close,
       disabled: false,
       testId: 'close-document-select',
+      lazyAutoFocus: 1200,
     },
     {
       label: 'open',
@@ -58,6 +59,7 @@ const mapState = (state: Store) => ({
   isOnMobile: state.root.isOnMobile,
   deletionMode: state.documentsList.deletionMode,
   selectedIDs: state.documentsList.selectedIDs,
+  fetchDocuments: state.documentsList.fetchDocuments,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -70,9 +72,15 @@ const SelectFile: React.FC<PropsFromRedux> = ({
   loading,
   deletionMode,
   selectedIDs,
+  fetchDocuments,
 }) => {
   useEffect(() => {
-    if (showDocumentList) ac.documentsList.fetchDocuments();
+    if (showDocumentList) {
+      const handle = setTimeout(ac.documentsList.fetchDocuments, 500);
+      return () => {
+        clearInterval(handle);
+      };
+    }
   }, [showDocumentList]);
   const close = ac.dialogs.hideDocumentList;
   const open = () => {
@@ -128,6 +136,7 @@ const SelectFile: React.FC<PropsFromRedux> = ({
       onClose={close}
       rightHeaderButtons={rightHeaderButtons}
       docked={false}
+      loading={fetchDocuments!=='idle'}
     >
       <ErrorBoundary>
         <DocumentList documentsMeta={documents} loading={loading} />
