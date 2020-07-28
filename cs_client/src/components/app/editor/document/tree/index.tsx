@@ -2,17 +2,23 @@ import treeModule from '::sass-modules/tree/tree.scss';
 import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import { Node } from './node';
-import { NodeMeta } from '::types/graphql-adapters';
 import { ErrorBoundary } from '::shared-components/error-boundary';
 import { Resizable } from 're-resizable';
 import { onResize, onResizeStop, onStart } from './helpers';
 import { useDnDNodes } from '::app/editor/document/tree/node/hooks/dnd-nodes';
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
 
-type Props = {
-  nodes: Map<number, NodeMeta>;
-};
+type Props = {};
 
-const Tree: React.FC<Props> = ({ nodes }) => {
+const mapState = (state: Store) => ({
+  nodes: state.document.nodes,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const Tree: React.FC<Props & PropsFromRedux> = ({ nodes }) => {
   useEffect(onStart, []);
   const componentRef = useRef();
   const rootTreeDndProps = useDnDNodes({
@@ -54,4 +60,5 @@ const Tree: React.FC<Props> = ({ nodes }) => {
     </Resizable>
   );
 };
-export { Tree };
+const _ = connector(Tree);
+export { _ as Tree };

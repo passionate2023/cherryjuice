@@ -20,7 +20,7 @@ type QNodeMeta = Pick<
 
 type QDocumentMeta = Pick<
   Document,
-  'id' | 'name' | 'folder' | 'guests' | 'privacy' | 'userId'
+  'id' | 'name' | 'folder' | 'guests' | 'privacy' | 'userId' | 'privateNodes'
 > & {
   node: QNodeMeta[];
 };
@@ -37,6 +37,10 @@ const DOCUMENT_META = ({ file_id }: Args) => ({
         folder
         privacy
         userId
+        privateNodes {
+          father_id
+          node_id
+        }
         ...DocumentGuest
         node {
           id

@@ -1,4 +1,4 @@
-import { NodeMeta } from '::types/graphql-adapters';
+import { nodesMetaMap } from '::types/misc';
 
 const getTree = () => {
   const savedState = localStorage.getItem('treeState');
@@ -30,7 +30,7 @@ const persistedTreeState = (() => {
 const collapseAll = (
   id: number,
   treeState: Record<string, boolean>,
-  nodes: Map<number, NodeMeta>,
+  nodes: nodesMetaMap,
 ) => {
   delete treeState[id];
   nodes.get(id)?.child_nodes.forEach(id => {

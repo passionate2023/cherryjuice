@@ -14,6 +14,7 @@ import { ImageService } from '../image/image.service';
 import { DocumentService } from '../document/document.service';
 import { NodeSearchDto } from '../search/dto/node-search.dto';
 import { NodeSearchResultEntity } from '../search/entities/node.search-result.entity';
+import { PrivateNode } from './entities/private-node.ot';
 
 @Injectable()
 export class NodeService {
@@ -85,5 +86,9 @@ export class NodeService {
 
   async findNode(searchDto: NodeSearchDto): Promise<NodeSearchResultEntity[]> {
     return await this.nodeRepository.findNodes(searchDto);
+  }
+
+  async getPrivateNodes(dto: GetNodesDTO): Promise<PrivateNode[]> {
+    return await this.nodeRepository.getPrivateNodes(dto);
   }
 }

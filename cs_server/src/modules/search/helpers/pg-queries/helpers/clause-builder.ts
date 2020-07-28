@@ -25,8 +25,8 @@ class OperatorGroup {
     this.builder.push(
       typeof condition === 'string'
         ? condition
-        : 'get' in condition
-        ? condition.get()
+        : '_' in condition
+        ? condition._()
         : condition(),
     );
     return this;
@@ -36,17 +36,11 @@ class OperatorGroup {
     condition: string | ConditionCreator,
   ) => {
     if (predicate) {
-      this.builder.push(
-        typeof condition === 'string'
-          ? condition
-          : 'get' in condition
-          ? condition.get()
-          : condition(),
-      );
+      this.add(condition);
     }
     return this;
   };
-  get = () => this.builder.get();
+  _ = () => this.builder.get();
   tap = (func: () => void) => {
     func();
     return this;

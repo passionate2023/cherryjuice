@@ -69,7 +69,6 @@ const Document: React.FC<Props & PropsFromRedux> = ({
     ac.document.setDocumentId(file_id);
     ac.document.clearSelectedNode();
   }, [file_id]);
-
   return (
     <DocumentContext.Provider value={documentState}>
       <LinearProgress
@@ -88,20 +87,14 @@ const Document: React.FC<Props & PropsFromRedux> = ({
           )}
           {showTree && (
             <ErrorBoundary>
-              <Tree nodes={nodes} />
+              <Tree />
             </ErrorBoundary>
           )}
 
           <Route
             exact
             path={`/document/:file_id/node/:node_id/`}
-            render={props => {
-              return (
-                <ErrorBoundary>
-                  <RichText {...props} nodes={nodes} file_id={file_id} />
-                </ErrorBoundary>
-              );
-            }}
+            component={RichText}
           />
         </Fragment>
       )}

@@ -15,6 +15,7 @@ import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { GetUserGql } from '../user/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
 import { ExportsService } from '../exports/exports.service';
+import { PrivateNode } from '../node/entities/private-node.ot';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Document)
@@ -41,6 +42,17 @@ export class DocumentQueriesResolver {
       : this.documentService.getDocuments({
           userId: user.id,
         });
+  }
+
+  @ResolveField(() => [PrivateNode])
+  async privateNodes(
+    @Parent() document,
+    @GetUserGql() user: User,
+  ): Promise<PrivateNode[]> {
+    return this.nodeService.getPrivateNodes({
+      documentId: document.id,
+      userId: user.id,
+    });
   }
 
   @ResolveField(() => [Node])

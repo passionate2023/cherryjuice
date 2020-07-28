@@ -49,7 +49,10 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
           apolloCache.changes.initDocumentChangesState(file_id);
         }),
         map(document => {
-          const fetchedNodes = constructTree({ nodes: document.node });
+          const fetchedNodes = constructTree({
+            nodes: document.node,
+            privateNodes: document.privateNodes,
+          });
           const nodes = applyLocalModifications({
             nodes: fetchedNodes,
             file_id,
@@ -59,6 +62,7 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
             privacy: document.privacy,
             guests: document.guests,
             userId: document.userId,
+            privateNodes: document.privateNodes,
           };
         }),
         map(ac.__.document.fetchNodesFulfilled),

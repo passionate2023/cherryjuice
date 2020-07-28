@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { nodeOverlay } from '::app/editor/document/tree/node/helpers/node-overlay';
-import { NodeMeta } from '::types/graphql-adapters';
 import { collapseAll, persistedTreeState } from './helpers';
+import { nodesMetaMap } from '::types/misc';
 
 type Props = {
   node_id: number;
   file_id: string;
   showChildren: boolean;
-  nodes: Map<number, NodeMeta>;
+  nodes: nodesMetaMap;
 };
 const usePersistedTreeState = ({
   node_id,

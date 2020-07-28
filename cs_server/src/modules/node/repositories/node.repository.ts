@@ -27,7 +27,7 @@ import {
   DocumentGuest,
 } from '../../document/entities/document-guest.entity';
 import { GetterSettings } from '../../document/repositories/document.repository';
-
+import { PrivateNode } from '../entities/private-node.ot';
 const nodeMeta = [
   `n.id`,
   `n.name`,
@@ -45,13 +45,19 @@ const nodeMeta = [
 ];
 const nodeAhtml = ['n.ahtml'];
 const fullNode = [...nodeMeta, ...nodeAhtml];
-const select = (target: NodeSelection): string[] =>
-  target === 'meta-and-ahtml'
-    ? fullNode
-    : target === 'ahtml'
-    ? nodeAhtml
-    : nodeMeta;
-type NodeSelection = 'meta' | 'ahtml' | 'meta-and-ahtml';
+const nodePrivacy = ['n.privacy', 'n.father_id', 'n.node_id'];
+const select = (target: NodeSelection): string[] => {
+  if (target === 'meta-and-ahtml') {
+    return fullNode;
+  } else if (target === 'ahtml') {
+    return nodeAhtml;
+  } else if (target === 'meta') {
+    return nodeMeta;
+  } else if (target === 'privacy') {
+    return nodePrivacy;
+  }
+};
+type NodeSelection = 'meta' | 'ahtml' | 'meta-and-ahtml' | 'privacy';
 
 export type RunFirst = <T>(q: SelectQueryBuilder<T>) => SelectQueryBuilder<T>;
 
@@ -62,52 +68,68 @@ export class NodeRepository extends Repository<Node> {
     dto: GetNodesDTO,
     target: NodeSelection = 'meta',
   ): Promise<Node[]> {
-    return await this.baseQueryBuilder(dto, target, {
+    return await this.getNodesQueryBuilder(dto, target, {
       write: false,
     }).getMany();
   }
-  baseQueryBuilder = (
+
+  baseQueryBuilder(
+    documentId: string,
+    target: 'privacy',
+  ): SelectQueryBuilder<PrivateNode>;
+  baseQueryBuilder(
+    documentId: string,
+    target?: NodeSelection,
+  ): SelectQueryBuilder<Node>;
+  baseQueryBuilder(
+    documentId,
+    target,
+  ): SelectQueryBuilder<Node> | SelectQueryBuilder<PrivateNode> {
+    return this.createQueryBuilder('n')
+      .leftJoin(Document, 'd', 'n."documentId" = d.id ')
+      .leftJoin(DocumentGuest, 'g', 'n."documentId" = g."documentId"')
+      .select(select(target))
+      .where('n."documentId" = :documentId', { documentId });
+  }
+
+  private getNodesQueryBuilder = (
     { documentId, userId }: GetNodeDTO | GetNodesDTO,
     target: NodeSelection = 'meta',
     { runFirst, write }: GetterSettings,
   ) => {
-    let queryBuilder = this.createQueryBuilder('n')
-      .leftJoin(Document, 'd', 'n."documentId" = d.id ')
-      .leftJoin(DocumentGuest, 'g', 'n."documentId" = g."documentId"')
-      .select(select(target));
+    let queryBuilder = this.baseQueryBuilder(documentId, target);
     if (runFirst) queryBuilder = runFirst<Node>(queryBuilder);
-    return queryBuilder
-      .andWhere('n."documentId" = :documentId', { documentId })
-      .andWhere(
-        or_()
-          .or(`d."userId" = :userId`)
-          .orIf(!write, `n.privacy isnull`)
-          .orIf(!write, `n."privacy"  >= :publicPrivacy`)
-          .or(
-            and_()
-              .and(`g."userId" = :userId `)
-              .and(
-                or_()
-                  .or(`n.privacy isnull`)
-                  .or(`n."privacy"  >= :guestOnlyPrivacy`),
-              )
-              .andIf(write, `g."accessLevel" >= :writeAccessLevel`),
-          )
-          .get(),
-        {
-          userId,
-          publicPrivacy: Privacy.PUBLIC,
-          guestOnlyPrivacy: Privacy.GUESTS_ONLY,
-          writeAccessLevel: AccessLevel.WRITER,
-        },
-      );
+    return queryBuilder.andWhere(
+      or_()
+        .or(`d."userId" = :userId`)
+        .orIf(!write, `n.privacy isnull`)
+        .orIf(!write, `n."privacy"  >= :publicPrivacy`)
+        .or(
+          and_()
+            .and(`g."userId" = :userId `)
+            .and(
+              or_()
+                .or(`n.privacy isnull`)
+                .or(`n."privacy"  >= :guestOnlyPrivacy`),
+            )
+            .andIf(write, `g."accessLevel" >= :writeAccessLevel`),
+        )
+        ._(),
+      {
+        userId,
+        publicPrivacy: Privacy.PUBLIC,
+        guestOnlyPrivacy: Privacy.GUESTS_ONLY,
+        writeAccessLevel: AccessLevel.WRITER,
+      },
+    );
   };
+
   async _getNodeById(
     dto: GetNodeDTO,
     target: NodeSelection = 'meta',
     write: boolean,
   ): Promise<Node> {
-    return this.baseQueryBuilder(dto, target, {
+    return this.getNodesQueryBuilder(dto, target, {
       runFirst: queryBuilder =>
         queryBuilder.andWhere('n."node_id" = :node_id', {
           node_id: dto.node_id,
@@ -211,5 +233,34 @@ export class NodeRepository extends Repository<Node> {
       });
     }
     return searchResults;
+  }
+
+  async getPrivateNodes({
+    userId,
+    documentId,
+  }: GetNodesDTO): Promise<PrivateNode[]> {
+    let queryBuilder = this.baseQueryBuilder(documentId, 'privacy');
+    if (userId)
+      queryBuilder = queryBuilder.andWhere(`d."userId" != :userId`, {
+        userId,
+      });
+    return queryBuilder
+      .andWhere(
+        or_()
+          .orIf(!userId, 'n.privacy <= :guestOnlyPrivacy ')
+          .or(
+            and_()
+              .and('g."userId" = :userId')
+              .and('n.privacy < :guestOnlyPrivacy'),
+          )
+          ._(),
+        {
+          userId,
+          publicPrivacy: Privacy.PUBLIC,
+          guestOnlyPrivacy: Privacy.GUESTS_ONLY,
+          writeAccessLevel: AccessLevel.WRITER,
+        },
+      )
+      .getMany();
   }
 }

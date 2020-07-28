@@ -9,7 +9,11 @@ import {
   getFallbackNode,
 } from './helpers/document';
 import { rootActionCreators } from '::root/store/ducks/root';
-import { DocumentGuestOt, Privacy } from '::types/graphql/generated';
+import {
+  DocumentGuestOt,
+  Privacy,
+  PrivateNode,
+} from '::types/graphql/generated';
 
 const ap = createActionPrefixer('document');
 const ac = {
@@ -30,6 +34,7 @@ const ac = {
       privacy: Privacy;
       guests: DocumentGuestOt[];
       userId: string;
+      privateNodes: PrivateNode[];
     }) => _(args),
   ),
   setCacheTimeStamp: _(
@@ -71,8 +76,10 @@ type NodeId = {
   node_id: number;
 };
 type AsyncOperation = 'in-progress' | 'idle' | 'pending';
+export type privateNodesMap = Map<number, PrivateNode>;
 type State = {
   nodes?: nodesMetaMap;
+  privateNodes: privateNodesMap;
   privacy: Privacy;
   guests: DocumentGuestOt[];
   userId: string;
@@ -88,6 +95,7 @@ type State = {
 };
 
 const initialState: State = {
+  privateNodes: new Map(),
   userId: undefined,
   nodes: undefined,
   privacy: Privacy.PRIVATE,
@@ -124,6 +132,9 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     privacy: payload.privacy,
     userId: payload.userId,
     cacheTimeStamp: 0,
+    privateNodes: new Map(
+      payload.privateNodes.map(node => [node.node_id, node]),
+    ),
   })),
   _(ac.fetchNodesStarted, state => ({
     ...state,

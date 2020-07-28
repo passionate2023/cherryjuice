@@ -22,6 +22,7 @@ type Document {
     name: String!
     node(node_id: Int): [Node]!
     privacy: Privacy!
+    privateNodes: [PrivateNode!]!
     size: Int!
     status: String
     updatedAt: Float!
@@ -102,6 +103,12 @@ type NodeSearchResultEntity {
 type NodeSearchResults {
     meta: SearchResultMeta!
     results: [NodeSearchResultEntity]!
+}
+
+type PrivateNode {
+    father_id: Float!
+    node_id: Float!
+    privacy: NodePrivacy!
 }
 
 type Query {
@@ -237,7 +244,7 @@ input CreateNodeIt {
     name: String!
     node_id: Int!
     node_title_styles: String
-    privacy: Privacy
+    privacy: NodePrivacy
     read_only: Int!
     updatedAt: Timestamp!
 }

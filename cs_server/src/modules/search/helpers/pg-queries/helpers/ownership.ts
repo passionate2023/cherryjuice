@@ -40,6 +40,6 @@ const ownershipWC = ({ userId, state }: OwnershipProps): string =>
             ),
         ),
     )
-    .get();
+    ._();
 
 export { ownershipWC };

@@ -5,6 +5,7 @@ import { AlertType } from '::types/react';
 import { modTree } from '::sass-modules/index';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { ac } from '::root/store/store';
+import { nodesMetaMap } from '::types/misc';
 
 const updateCache = ({ fatherOfDroppedNode, targetNode, droppedNode }) => {
   apolloCache.node.mutate({
@@ -78,7 +79,7 @@ const getFatherIdChain = (
 type Props = {
   node_id: number;
   componentRef: MutableRefObject<HTMLDivElement>;
-  nodes?: Map<number, NodeMeta>;
+  nodes?: nodesMetaMap;
   draggable?: boolean;
   afterDrop?: Function;
 };

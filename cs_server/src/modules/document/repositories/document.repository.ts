@@ -69,7 +69,7 @@ export class DocumentRepository extends Repository<Document> {
             .and(`d."privacy"  >= :guestOnlyPrivacy`)
             .andIf(write, `g."accessLevel" >= :writeAccessLevel`),
         )
-        .get(),
+        ._(),
       {
         userId,
         publicPrivacy: Privacy.PUBLIC,

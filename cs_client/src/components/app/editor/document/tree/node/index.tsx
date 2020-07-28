@@ -1,6 +1,5 @@
 import nodeMod from '::sass-modules/tree/node.scss';
 import modIcons from '::sass-modules/tree/node.scss';
-import { NodeMeta } from '::types/graphql-adapters';
 import * as React from 'react';
 import { useCallback, useRef, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
@@ -10,10 +9,11 @@ import { useSelectNode } from '::app/editor/document/tree/node/hooks/select-node
 import { useScrollNodeIntoView } from '::app/editor/document/tree/node/hooks/scroll-node-into-view';
 import { persistedTreeState } from '::app/editor/document/tree/node/hooks/persisted-tree-state/helpers';
 import { usePersistedTreeState } from '::app/editor/document/tree/node/hooks/persisted-tree-state/persisted-tree-state';
+import { nodesMetaMap } from '::types/misc';
 
 type Props = {
   node_id: number;
-  nodes?: Map<number, NodeMeta>;
+  nodes?: nodesMetaMap;
   depth: number;
   node_title_styles: string;
 };

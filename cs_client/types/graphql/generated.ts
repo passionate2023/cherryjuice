@@ -27,6 +27,7 @@ export interface Document {
   name: string;
   node: Array<Node | null>;
   privacy: Privacy;
+  privateNodes: Array<PrivateNode>;
   size: number;
   status?: string;
   updatedAt: number;
@@ -78,6 +79,12 @@ export enum Privacy {
   GUESTS_ONLY = 'GUESTS_ONLY',
   PRIVATE = 'PRIVATE',
   PUBLIC = 'PUBLIC',
+}
+
+export interface PrivateNode {
+  father_id: number;
+  node_id: number;
+  privacy: NodePrivacy;
 }
 
 export interface SearchResultEntity {
@@ -261,7 +268,7 @@ export interface CreateNodeIt {
   name: string;
   node_id: number;
   node_title_styles?: string;
-  privacy?: Privacy;
+  privacy?: NodePrivacy;
   read_only: number;
   updatedAt: Timestamp;
 }
@@ -363,6 +370,7 @@ export interface Resolver {
   DocumentGuestOt?: DocumentGuestOtTypeResolver;
   Node?: NodeTypeResolver;
   Image?: ImageTypeResolver;
+  PrivateNode?: PrivateNodeTypeResolver;
   SearchResultEntity?: SearchResultEntityTypeResolver;
   Timestamp?: GraphQLScalarType;
   NodeSearchResults?: NodeSearchResultsTypeResolver;
@@ -417,6 +425,7 @@ export interface DocumentTypeResolver<TParent = any> {
   name?: DocumentToNameResolver<TParent>;
   node?: DocumentToNodeResolver<TParent>;
   privacy?: DocumentToPrivacyResolver<TParent>;
+  privateNodes?: DocumentToPrivateNodesResolver<TParent>;
   size?: DocumentToSizeResolver<TParent>;
   status?: DocumentToStatusResolver<TParent>;
   updatedAt?: DocumentToUpdatedAtResolver<TParent>;
@@ -467,6 +476,10 @@ export interface DocumentToNodeResolver<TParent = any, TResult = any> {
 }
 
 export interface DocumentToPrivacyResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentToPrivateNodesResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -603,6 +616,24 @@ export interface ImageToBase64Resolver<TParent = any, TResult = any> {
 }
 
 export interface ImageToIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface PrivateNodeTypeResolver<TParent = any> {
+  father_id?: PrivateNodeToFather_idResolver<TParent>;
+  node_id?: PrivateNodeToNode_idResolver<TParent>;
+  privacy?: PrivateNodeToPrivacyResolver<TParent>;
+}
+
+export interface PrivateNodeToFather_idResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface PrivateNodeToNode_idResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface PrivateNodeToPrivacyResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
