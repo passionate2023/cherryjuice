@@ -9,10 +9,14 @@ const privacyWeights = {
   [Privacy.GUESTS_ONLY]: 2,
   [Privacy.PUBLIC]: 3,
 };
-
-const isBelowPrivacy = (a: Privacy | NodePrivacy) => (
+export const privacyIsBelow = (a: Privacy | NodePrivacy) => (
+  b: Privacy | NodePrivacy,
+) => privacyWeights[a] < privacyWeights[b];
+export const privacyIsBelowOrEqual = (a: Privacy | NodePrivacy) => (
   b: Privacy | NodePrivacy,
 ) => privacyWeights[a] <= privacyWeights[b];
+export const lowestPrivacy = (a, b) =>
+  privacyWeights[a] < privacyWeights[b] ? a : b;
 const options = [
   {
     value: Privacy.PRIVATE,
@@ -47,9 +51,9 @@ const SelectPrivacy: React.FC<Props> = ({
   }, [privacy]);
   const onChangeM = useCallback(e => {
     onChange(e.target.value as Privacy);
-  }, []);
+  }, [onChange]);
   const isBelowDocumentPrivacy = useMemo(() => {
-    return isBelowPrivacy(maximumPrivacy);
+    return privacyIsBelowOrEqual(maximumPrivacy);
   }, [maximumPrivacy]);
   return (
     <select

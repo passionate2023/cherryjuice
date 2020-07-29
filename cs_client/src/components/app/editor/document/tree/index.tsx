@@ -8,6 +8,7 @@ import { onResize, onResizeStop, onStart } from './helpers';
 import { useDnDNodes } from '::app/editor/document/tree/node/hooks/dnd-nodes';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
+import { NodePrivacy } from '::types/graphql/generated';
 
 type Props = {};
 
@@ -53,6 +54,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({ nodes, documentPrivacy }) => {
                     depth={0}
                     node_title_styles={node.node_title_styles}
                     documentPrivacy={documentPrivacy}
+                    parentPrivacy={NodePrivacy.DEFAULT}
                   />
                 );
               })}

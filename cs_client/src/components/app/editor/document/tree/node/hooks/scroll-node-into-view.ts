@@ -3,7 +3,10 @@ import { nodeOverlay } from '::app/editor/document/tree/node/helpers/node-overla
 import { scrollIntoToolbar } from '::helpers/ui';
 import { SelectNodeProps } from '::app/editor/document/tree/node/hooks/select-node';
 
-const useScrollNodeIntoView = ({ componentRef, nodePath }: SelectNodeProps) => {
+const useScrollNodeIntoView = ({
+  componentRef,
+  nodePath,
+}: SelectNodeProps & { nodePath: string }) => {
   useEffect(() => {
     if (location.pathname === nodePath) {
       nodeOverlay.updateLeft(componentRef);
@@ -13,7 +16,7 @@ const useScrollNodeIntoView = ({ componentRef, nodePath }: SelectNodeProps) => {
       scrollIntoToolbar();
       // --
     }
-  }, [nodePath]);
+  }, [nodePath,componentRef]);
 };
 
 export { useScrollNodeIntoView };

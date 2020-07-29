@@ -1,5 +1,4 @@
 import nodeMod from '::sass-modules/tree/node.scss';
-import { NodeMeta } from '::types/graphql-adapters';
 import { MutableRefObject, useMemo } from 'react';
 import { AlertType } from '::types/react';
 import { modTree } from '::sass-modules/index';
@@ -67,7 +66,7 @@ const calculateDroppingPosition = (e): number => {
   return position;
 };
 const getFatherIdChain = (
-  nodes: Map<number, NodeMeta>,
+  nodes: nodesMetaMap,
   node_id: number,
   father_id_chain: number[] = [],
 ) => {
@@ -105,6 +104,7 @@ const useDnDNodes = ({
       nodeTitle.parentElement.removeAttribute('data-dragged');
     };
     return { addClass, removeClass };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { setId, moveNode } = useMemo(
@@ -160,7 +160,7 @@ const useDnDNodes = ({
         }
       },
     }),
-    [target_node_id, nodes],
+    [target_node_id, nodes, afterDrop, removeClass],
   );
 
   return {

@@ -57,6 +57,11 @@
 .node__title-button--hidden {
   visibility: hidden;
 }
+.node__title-privacy--disabled {
+  svg {
+    opacity: 0.3;
+  }
+}
 .node__title-privacy {
   z-index: $ZI-node-elements;
   svg {

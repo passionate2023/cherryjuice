@@ -239,26 +239,39 @@ export class NodeRepository extends Repository<Node> {
     userId,
     documentId,
   }: GetNodesDTO): Promise<PrivateNode[]> {
-    let queryBuilder = this.baseQueryBuilder(documentId, 'privacy');
-    if (userId)
-      queryBuilder = queryBuilder.andWhere(`d."userId" != :userId`, {
-        userId,
-      });
-    return queryBuilder
+    return this.baseQueryBuilder(documentId, 'privacy')
       .andWhere(
-        or_()
-          .orIf(!userId, 'n.privacy <= :guestOnlyPrivacy ')
-          .or(
-            and_()
-              .and('g."userId" = :userId')
-              .and('n.privacy < :guestOnlyPrivacy'),
+        and_()
+          .andIf(Boolean(userId), `d."userId" != :userId`)
+          .and(
+            or_()
+              .orIf(
+                !userId,
+                // user not logged in, document public, some nodes not public
+                and_()
+                  .and('d."privacy" = :publicPrivacy')
+                  .and('n.privacy < :publicPrivacy '),
+              )
+              .or(
+                and_()
+                  // user logged in (guest), document is for guests only, some nodes are private
+                  .and('d.privacy = :guestOnlyPrivacy')
+                  .and('g."userId" = :userId')
+                  .and('n.privacy < :guestOnlyPrivacy'),
+              )
+              .or(
+                // user logged in (NOT guest), document is public, some nodes are private
+                and_()
+                  .and('d."privacy" = :publicPrivacy')
+                  .and('g."userId"  is null')
+                  .and('n.privacy < :guestOnlyPrivacy'),
+              ),
           )
           ._(),
         {
           userId,
-          publicPrivacy: Privacy.PUBLIC,
-          guestOnlyPrivacy: Privacy.GUESTS_ONLY,
-          writeAccessLevel: AccessLevel.WRITER,
+          publicPrivacy: NodePrivacy.PUBLIC,
+          guestOnlyPrivacy: NodePrivacy.GUESTS_ONLY,
         },
       )
       .getMany();
