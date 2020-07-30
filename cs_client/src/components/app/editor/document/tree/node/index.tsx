@@ -22,6 +22,7 @@ export type NodeProps = {
   node_title_styles: string;
   documentPrivacy: Privacy;
   parentPrivacy: NodePrivacy;
+  expand?: number;
 };
 
 const Node: React.FC<NodeProps> = ({
@@ -31,6 +32,7 @@ const Node: React.FC<NodeProps> = ({
   node_title_styles = '{}',
   documentPrivacy,
   parentPrivacy,
+  expand,
 }) => {
   const { child_nodes, name, privacy } = nodes.get(node_id);
   const match = useRouteMatch<{ file_id: string }>();
@@ -42,7 +44,9 @@ const Node: React.FC<NodeProps> = ({
 
   const [showChildren, setShowChildren] = useState(() => {
     const tree = persistedTreeState.get(file_id);
-    return tree[node_id] || file_id.startsWith('new-document');
+    return (
+      expand > depth || tree[node_id] || file_id.startsWith('new-document')
+    );
   });
   const toggleChildren = useCallback(() => {
     setShowChildren(!showChildren);
@@ -119,6 +123,7 @@ const Node: React.FC<NodeProps> = ({
           nodeDndProps={nodeDndProps}
           parentPrivacy={parentPrivacy}
           privacy={privacy}
+          expand={expand}
         />
       )}
     </>

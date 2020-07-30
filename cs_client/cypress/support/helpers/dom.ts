@@ -1,6 +1,5 @@
-export const getTreeInDom = ({ document, tree }) => {
+export const getTreeInDom = ({ document, nOfLevels }) => {
   const treeElement = document.querySelector('.tree');
-  const nOfLevels = tree.filter(level => Boolean(level.length)).length;
   return Array.from({ length: nOfLevels })
     .map(
       (_, i) =>
@@ -19,6 +18,7 @@ const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
 
 export const setColorInputValue = ({ input, color }) => {
   nativeInputValueSetter.call(input, color);
+  // @ts-ignore
   input.dispatchEvent(new Event('change', { value: color, bubbles: true }));
 };
 

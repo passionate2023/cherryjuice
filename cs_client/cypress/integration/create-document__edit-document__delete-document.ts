@@ -1,131 +1,98 @@
 import { assertNodeText } from '../support/assertions/content/node-text';
 import { dialogs } from '../support/workflows/dialogs/dialogs';
-import { editor } from '../support/workflows/editor/editor';
-import { generateDocument } from '../fixtures/document/generate-document';
-import { documentPuppeteer } from '../support/workflows/document/document-puppeteer';
+import { puppeteer } from '../support/workflows/document/puppeteer';
+import { generateDocuments } from '../fixtures/document/generate-documents';
+import { users } from '../fixtures/auth/login-credentials';
+import { tn } from '../support/workflows/tests-names';
+import { assert } from '../support/assertions/assertions';
+import { inspect } from '../support/inspect/inspect';
 
 describe('create document > edit-document > delete-document', () => {
-  const documentBaseName = `test-${Math.floor(Math.random() * 100000)}`;
   const treeConfig = {
     nodesPerLevel: [[1]],
     includeText: true,
     randomStyle: false,
   };
-  const documents = [
-    {
-      documentConfig: {
-        name: `${documentBaseName}-doc-1`,
-      },
-      treeConfig,
-    },
-    {
-      documentConfig: {
-        name: `${documentBaseName}-doc-2`,
-      },
-      treeConfig,
-    },
-  ].map(generateDocument);
-  const additionalDocuments = [
-    {
-      documentConfig: {
-        name: `${documentBaseName}-doc-3`,
-      },
-      treeConfig,
-    },
-  ].map(generateDocument);
+  const docAsts = generateDocuments({
+    numberOfDocuments: 2,
+    treeConfig,
+  });
 
-  const state = {
-    numberOfDocuments: 0,
-  };
+  const additionalDocuments = generateDocuments({
+    numberOfDocuments: 1,
+    treeConfig,
+  });
+
   before(() => {
-    documentPuppeteer.goToHomeScreen();
+    puppeteer.auth.signIn(users.user0);
+    puppeteer.manage.deleteDocuments([], true);
   });
 
-  it('perform: remember number of documents', () => {
-    documentPuppeteer.inspect.getNumberOfDocuments().then(n => {
-      state.numberOfDocuments = n;
-    });
-  });
-  documents.forEach(docAst => {
-    it(`perform: create document[${docAst.meta.name}]`, () => {
-      dialogs.documentMeta.create(docAst.meta);
-    });
-    it(`perform: create nodes[${docAst.meta.name}]`, () => {
-      documentPuppeteer.createTree(docAst);
-    });
-    it(`perform: write text[${docAst.meta.name}]`, () => {
-      editor.keyboard.typeText(docAst.tree[0]);
+  docAsts.forEach(docAst => {
+    it(tn.p.createDocument(docAst), () => {
+      puppeteer.manage.createDocument(docAst);
     });
   });
 
-  it('perform: save document', () => {
-    documentPuppeteer.saveDocument(documents);
-  });
-
-  it('perform: get hash of each created document', () => {
-    documentPuppeteer.inspect.getDocumentsHash(documents);
+  it(tn.p.saveDocuments(), () => {
+    puppeteer.manage.saveDocument(docAsts);
+    inspect.assignDocumentHashAndIdToAst(docAsts);
   });
 
   it('assert: each document has unique hash', () => {
-    expect(documents[0].meta.hash).to.not.be.empty;
-    expect(documents[1].meta.hash).to.not.be.empty;
-    expect(documents[0].meta.hash).to.not.equal(documents[1].meta.hash);
+    expect(docAsts[0].meta.hash).to.not.be.empty;
+    expect(docAsts[1].meta.hash).to.not.be.empty;
+    expect(docAsts[0].meta.hash).to.not.equal(docAsts[1].meta.hash);
   });
 
-  documents.forEach(document => {
-    it(`assert: content of document[${document.meta.name}]`, () => {
-      documentPuppeteer.goToDocument(document);
-      document.tree[0].forEach(node => {
-        assertNodeText({ node, text: node.text });
-      });
+  docAsts.forEach(docAst => {
+    it(tn.a.docContent(docAst), () => {
+      assert.documentContent(docAst);
     });
   });
 
   it('perform: rename document', () => {
-    documentPuppeteer.renameDocument(documents[0], documents[1].meta.name);
+    const docAst = docAsts[0];
+    const newName = docAsts[1].meta.name;
+    puppeteer.auth.signIn(users.user0);
+    puppeteer.navigate.goToDocument(docAst);
+    puppeteer.manage.renameDocument(docAst, newName);
   });
 
-  it('perform: save document', () => {
-    documentPuppeteer.saveDocument(documents);
+  it(tn.p.saveDocuments(), () => {
+    puppeteer.manage.saveDocument(docAsts);
+    inspect.assignDocumentHashAndIdToAst(docAsts);
   });
-  it('perform: get documents hash', () => {
-    documentPuppeteer.inspect.getDocumentsHash(documents);
-  });
+
   it('assert: documents have same hash', () => {
-    expect(documents[0].meta.hash).to.equal(documents[1].meta.hash);
+    expect(docAsts[0].meta.hash).to.equal(docAsts[1].meta.hash);
   });
 
   additionalDocuments.forEach(docAst => {
-    it(`perform: create document[${docAst.meta.name}]`, () => {
-      dialogs.documentMeta.create(docAst.meta);
-    });
-    it(`perform: create nodes[${docAst.meta.name}]`, () => {
-      documentPuppeteer.createTree(docAst);
-    });
-    it(`perform: write text[${docAst.meta.name}]`, () => {
-      editor.keyboard.typeText(docAst.tree[0]);
+    it(tn.p.createDocument(docAst), () => {
+      puppeteer.manage.createDocument(docAst);
     });
   });
 
   it('perform: get documents hash', () => {
-    documentPuppeteer.inspect.getDocumentsHash(additionalDocuments);
+    inspect.assignDocumentHashAndIdToAst(additionalDocuments);
   });
   it('perform: delete saved and unsaved documents', () => {
-    documentPuppeteer.deleteDocuments([documents[0], additionalDocuments[0]]);
+    puppeteer.manage.deleteDocuments([docAsts[0], additionalDocuments[0]]);
   });
   it('assert: delete saved and unsaved documents', () => {
     cy.get('.selectFile__file__name ').then(documents => {
-      expect(documents.length).to.be.equal(state.numberOfDocuments + 1);
+      expect(documents.length).to.be.equal(1);
     });
     dialogs.documentsList.close();
   });
   it('perform: export document', () => {
-    documentPuppeteer.exportDocument(documents[1]);
+    puppeteer.io.exportDocument(docAsts[1], users.user0);
   });
 
   it('perform: import and open exported document', () => {
-    const document = documents[1];
-    documentPuppeteer.importLocalFile({
+    const document = docAsts[1];
+    puppeteer.io.importLocalFile({
       suffix: 'exported',
       extension: 'ctb',
       name: `${document.meta.name}`,
@@ -133,7 +100,7 @@ describe('create document > edit-document > delete-document', () => {
     });
   });
   it('assert: imported document content', () => {
-    const document = documents[1];
+    const document = docAsts[1];
     document.tree[0].forEach(node => {
       assertNodeText({ node, text: node.text });
     });

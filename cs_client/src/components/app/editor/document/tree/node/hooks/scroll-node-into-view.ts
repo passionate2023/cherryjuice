@@ -16,7 +16,7 @@ const useScrollNodeIntoView = ({
       scrollIntoToolbar();
       // --
     }
-  }, [nodePath,componentRef]);
+  }, [nodePath, componentRef]);
 };
 
 export { useScrollNodeIntoView };

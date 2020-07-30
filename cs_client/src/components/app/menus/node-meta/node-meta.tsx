@@ -161,6 +161,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
           onChange={nodeMetaActionCreators.setPrivacy}
           maximumPrivacy={documentPrivacy}
           useNodeOptions={true}
+          testId={testIds.nodeMeta__privacy}
         />
       ),
       label: 'visibility',

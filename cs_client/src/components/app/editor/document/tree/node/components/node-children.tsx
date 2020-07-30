@@ -15,6 +15,7 @@ type Props = Pick<
   nodeDndProps: Record<string, any>;
   child_nodes: number[];
   privacy: NodePrivacy;
+  expand?: number;
 };
 
 const NodeChildren: React.FC<Props> = ({
@@ -27,6 +28,7 @@ const NodeChildren: React.FC<Props> = ({
   depth,
   documentPrivacy,
   parentPrivacy,
+  expand,
 }) => {
   const lowestPrivacyInChain = useMemo(() => {
     const b =
@@ -55,6 +57,7 @@ const NodeChildren: React.FC<Props> = ({
             node_title_styles={node.node_title_styles}
             documentPrivacy={documentPrivacy}
             parentPrivacy={lowestPrivacyInChain}
+            expand={expand}
           />
         );
       })}

@@ -5,7 +5,7 @@ import { tree } from '../../../tree/tree';
 
 const edit = ({ editedNode, newAttributes }) => {
   tree.interactions.selectNode(editedNode);
-  wait.s1();
+  wait.s1;
   cy.findByTestId(testIds.toolBar__main__editNodeMeta).click();
   wait.ms500();
   setNodeMeta({ node: newAttributes });

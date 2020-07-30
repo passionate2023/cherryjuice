@@ -1,8 +1,8 @@
 import { wait } from '../../../../../helpers/cypress-helpers';
 
 const close = () => {
-  cy.findByTestId('close-document-select', { timeout: 20000 }).click();
-  wait.ms500();
+  cy.get('body').type('{esc}');
+  wait.s1;
 };
 
 export { close };

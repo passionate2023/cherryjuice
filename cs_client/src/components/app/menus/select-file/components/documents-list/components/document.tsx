@@ -47,7 +47,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
       <span className={`${modSelectFile.selectFile__file__name} `}>
         {id.startsWith('new-document') ? `*${name}` : name}
       </span>
-      <ThreeDotsButton documentId={id} privacy={privacy} />
+      <ThreeDotsButton documentId={id} />
 
       <span className={`${modSelectFile.selectFile__file__details} `}>
         <span className={modSelectFile.selectFile__file__details__visibility}>

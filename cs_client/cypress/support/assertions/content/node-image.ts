@@ -47,5 +47,5 @@ export const assertNodeImage = ({ node, images }: AssertNodeImage) => {
       });
     });
   });
-  wait.s1();
+  wait.s1;
 };

@@ -8,6 +8,7 @@ import {
   ImageAst,
 } from './generate-node-content/image/generate-image';
 import { generateNodeText } from './generate-node-content/text/generate-text';
+import { NodePrivacy } from '../../../types/graphql/generated';
 
 const generateImage = createImageGenerator([
   'pink',
@@ -28,6 +29,7 @@ type NodeAst = {
   parent?: NodeAst;
   text: string;
   images: ImageAst[];
+  privacy?: NodePrivacy;
 };
 const createNameGenerator = base => {
   const state = { count: 1 };

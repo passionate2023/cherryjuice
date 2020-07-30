@@ -106,7 +106,7 @@ const App: React.FC<Props & PropsFromRedux> = ({
   // useRefreshToken({ token });
   useEffect(() => {
     if (!userId && router.get.location.pathname === '/') {
-      router.goto.login();
+      router.goto.signIn();
     }
   }, [userId, documentId, router.get.location.pathname]);
   return (

@@ -4,6 +4,7 @@ import { Guest } from '::app/menus/document-meta/components/guests/components/gu
 import { modGuests } from '::sass-modules/';
 import { AddGuest } from '::app/menus/document-meta/components/guests/components/add-guest';
 import { joinClassNames } from '::helpers/dom/join-class-names';
+import { testIds } from '::cypress/support/helpers/test-ids';
 
 type Props = {
   guests: DocumentGuestOt[];
@@ -14,7 +15,10 @@ const Guests: React.FC<Props> = ({ guests, userId }) => {
   return (
     <div className={joinClassNames([modGuests.guests])}>
       <AddGuest userId={userId} />
-      <div className={modGuests.guests__list}>
+      <div
+        className={modGuests.guests__list}
+        data-testid={testIds.documentMeta__guestList}
+      >
         {guests.map(guest => (
           <Guest key={guest.email} guest={guest} />
         ))}

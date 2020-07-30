@@ -1,6 +1,7 @@
 const testIds = {
   documentMeta__apply: 'documentMeta__apply',
   documentMeta__documentName: 'documentMeta__documentName',
+  documentMeta__documentPrivacy: 'documentMeta__documentPrivacy',
   toolBar__main__createSiblingNode: 'toolBar__main__createSiblingNode',
   toolBar__main__createChildNode: 'toolBar__main__createChildNode',
   nodeMeta__nodeName: 'nodeMeta__nodeName',
@@ -11,6 +12,7 @@ const testIds = {
   nodeMeta__hasCustomIcon: 'nodeMeta__hasCustomIcon',
   nodeMeta__customIcon: 'nodeMeta__customIcon',
   nodeMeta__customIconList: 'nodeMeta__customIconList',
+  nodeMeta__privacy: 'nodeMeta__privacy',
   toolBar__main__editNodeMeta: 'toolBar__main__editNodeMeta',
   toolBar__main__deleteNode: 'toolBar__main__deleteNode',
   toolBar__main__saveDocument: 'toolBar__main__saveDocument',
@@ -20,6 +22,10 @@ const testIds = {
     'dialogs__selectDocument__header__buttons__delete',
   dialogs__selectDocument__header__buttons__deleteSweep:
     'dialogs__selectDocument__header__buttons__deleteSweep',
+  dialogs__selectDocument__footerRight__open:
+    'dialogs__selectDocument__footerRight__open',
+  dialogs__selectDocument__header__buttons__deleteAll:
+    'dialogs__selectDocument__header__buttons__deleteAll',
   dialogs__selectDocument__footerLeft__import:
     'dialogs__selectDocument__footerLeft__import',
   dialogs__importDocument__fileInput: 'dialogs__importDocument__fileInput',
@@ -31,6 +37,13 @@ const testIds = {
   popups__documentOperations__clearAllFinished:
     'popups__documentOperations__clearAllFinished',
   dialogs__scrim: 'dialogs__scrim',
+  documentMeta__addGuest__input: 'documentMeta__addGuest__input',
+  documentMeta__addGuest__addButton: 'documentMeta__addGuest__addButton',
+  documentMeta__guestList__writeButton: 'documentMeta__guestList__writeButton',
+  documentMeta__guestList: 'documentMeta__guestList',
+  toolBar__userPopup__signOut: 'toolBar__userPopup__signOut',
+  toolBar__userPopup__signIn: 'toolBar__userPopup__signIn',
+  toolBar__navBar__userButton: 'toolBar__navBar__userButton',
 };
 
 export { testIds };

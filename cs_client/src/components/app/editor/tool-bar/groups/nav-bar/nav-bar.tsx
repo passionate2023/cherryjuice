@@ -68,7 +68,11 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
       >
         <Icon name={Icons.material.settings} />
       </ToolbarButton>
-      <ToolbarButton onClick={ac.dialogs.showUserPopup} active={showUserPopup}>
+      <ToolbarButton
+        onClick={ac.dialogs.showUserPopup}
+        active={showUserPopup}
+        testId={testIds.toolBar__navBar__userButton}
+      >
         {(user as User)?.picture ? (
           <img
             src={user.picture}

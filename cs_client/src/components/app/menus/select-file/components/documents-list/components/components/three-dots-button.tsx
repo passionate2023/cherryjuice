@@ -4,14 +4,12 @@ import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
 import { modSelectFile } from '::sass-modules/index';
 import { ThreeDotsPopup } from './three-dots-popup';
 import { Icon, Icons } from '::shared-components/icon/icon';
-import { VisibilityIcon } from '::app/editor/info-bar/components/components/visibility-icon';
 
 type Props = {
   documentId: string;
-  privacy: Privac;
 };
 
-const ThreeDotsButton: React.FC<Props> = ({ documentId, privacy }) => {
+const ThreeDotsButton: React.FC<Props> = ({ documentId }) => {
   const [showModal, setShowModal] = useState(false);
   useClickOutsideModal({
     cb: () => setShowModal(false),

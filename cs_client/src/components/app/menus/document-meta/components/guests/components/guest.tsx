@@ -5,6 +5,7 @@ import { ButtonCircle } from '::shared-components/buttons/button-circle/button-c
 import { Icons } from '::shared-components/icon/icon';
 import { useCallback } from 'react';
 import { documentMetaActionCreators } from '::app/menus/document-meta/reducer/reducer';
+import { testIds } from '::cypress/support/helpers/test-ids';
 
 type Props = {
   guest: DocumentGuestOt;
@@ -24,6 +25,7 @@ const Guest: React.FC<Props> = ({ guest: { email, accessLevel, userId } }) => {
         iconName={Icons.material.edit}
         active={accessLevel === AccessLevel.WRITER}
         onClick={toggleAccessLevelM}
+        testId={testIds.documentMeta__guestList__writeButton}
       />
       <ButtonCircle iconName={Icons.material.clear} onClick={removeGuestM} />
     </div>

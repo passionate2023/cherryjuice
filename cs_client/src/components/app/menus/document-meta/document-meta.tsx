@@ -83,13 +83,14 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
     inputs.push({
       customInput: (
         <SelectPrivacy
+          testId={testIds.documentMeta__documentPrivacy}
           privacy={state.privacy}
           onChange={documentMetaActionCreators.setPrivacy}
         />
       ),
       label: 'visibility',
     });
-    if (state.privacy !== Privacy.PRIVATE || showDialog === 'create') {
+    if (state.privacy !== Privacy.PRIVATE) {
       inputs.push({
         monolithComponent: <Guests guests={state.guests} userId={userId} />,
         label: 'guests',

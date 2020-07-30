@@ -36,6 +36,7 @@ type Props = {
   useNodeOptions?: boolean;
   disabled?: boolean;
   maximumPrivacy?: Privacy;
+  testId?: string;
 };
 
 const SelectPrivacy: React.FC<Props> = ({
@@ -44,14 +45,18 @@ const SelectPrivacy: React.FC<Props> = ({
   useNodeOptions,
   disabled,
   maximumPrivacy,
+  testId,
 }) => {
   const ref = useRef<HTMLSelectElement>();
   useEffect(() => {
     ref.current.value = privacy;
   }, [privacy]);
-  const onChangeM = useCallback(e => {
-    onChange(e.target.value as Privacy);
-  }, [onChange]);
+  const onChangeM = useCallback(
+    e => {
+      onChange(e.target.value as Privacy);
+    },
+    [onChange],
+  );
   const isBelowDocumentPrivacy = useMemo(() => {
     return privacyIsBelowOrEqual(maximumPrivacy);
   }, [maximumPrivacy]);
@@ -62,6 +67,7 @@ const SelectPrivacy: React.FC<Props> = ({
       onChange={onChangeM}
       defaultValue={privacy}
       disabled={disabled}
+      data-testid={testId}
     >
       {(useNodeOptions ? nodeOptions : options).map(({ value, label }) => (
         <option

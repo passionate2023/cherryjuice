@@ -8,6 +8,7 @@ import { ac } from '::root/store/store';
 import { router } from '::root/router/router';
 import { User as TUser } from '::types/graphql/generated';
 import { UserInfo } from '::app/menus/user/components/user-info';
+import { testIds } from '::cypress/support/helpers/test-ids';
 type UserProps = {
   onClose: Function;
   user: TUser;
@@ -23,7 +24,7 @@ const User: React.FC<UserProps & { style }> = ({ onClose, style, user }) => {
   });
   const signOut = useCallback(() => {
     ac.root.resetState();
-    router.goto.login();
+    router.goto.signIn();
   }, []);
   const loggedIn = !!user;
   return (
@@ -37,15 +38,17 @@ const User: React.FC<UserProps & { style }> = ({ onClose, style, user }) => {
               onClick={signOut}
               dark={true}
               text={'sign out'}
+              testId={testIds.toolBar__userPopup__signOut}
             />
           </>
         ) : (
           <>
             <ButtonSquare
               className={modUserPopup.user__actions__signOut}
-              onClick={router.goto.login}
+              onClick={router.goto.signIn}
               dark={true}
               text={'sign in'}
+              testId={testIds.toolBar__userPopup__signIn}
             />
           </>
         )}

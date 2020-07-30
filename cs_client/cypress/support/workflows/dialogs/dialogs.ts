@@ -5,9 +5,21 @@ import { showDocumentsList } from './helpers/documents-list/interact/show';
 import { close } from './helpers/documents-list/interact/close';
 import { showDocumentMetaDialog } from './helpers/documents-list/interact/show-document-meta-dialog';
 import { getDocumentInfo } from './helpers/documents-list/inspect/get-document-info';
-import { createDocument } from './helpers/document/interact/create';
-import { renameDocument } from './helpers/document/interact/rename';
 import { showImportDocument } from './helpers/import-document/show';
+import { DocumentAst } from '../../../fixtures/document/generate-document';
+import {
+  applyDocumentMeta,
+  setDocumentName,
+} from './helpers/document/interact/helpers';
+import { Privacy } from '../../../../types/graphql/generated';
+import { testIds } from '../../helpers/test-ids';
+import { GuestAst } from '../document/helpers/document/set-document-privacy';
+
+export const getDocumentSelector = (docAst: DocumentAst): string => {
+  return docAst.meta.id
+    ? docAst.meta.id
+    : `${docAst.meta.unsaved ? '*' : ''}${docAst.meta.name}`;
+};
 
 const dialogs = {
   importDocument: {
@@ -19,13 +31,33 @@ const dialogs = {
     delete: deleteNode,
   },
   documentMeta: {
-    create: createDocument,
-    rename: renameDocument,
+    setName: setDocumentName,
+    // create: createDocument,
+    show: showDocumentMetaDialog,
+    apply: applyDocumentMeta,
+    setPrivacy(privacy: Privacy) {
+      cy.findByTestId(testIds.documentMeta__documentPrivacy).select(privacy);
+
+      // cy.findByText(privacy.toLowerCase().replace('_', ' ')).click();
+    },
+    getGuestLabel(email: string) {
+      return cy
+        .findByTestId(testIds.documentMeta__guestList)
+        .findByText(email)
+        .findByTestId(testIds.documentMeta__guestList__writeButton);
+    },
+    addGuest({ user: { email }, writeAccess }: GuestAst) {
+      cy.findByTestId(testIds.documentMeta__addGuest__input).type(email);
+      cy.findByTestId(testIds.documentMeta__addGuest__addButton).click();
+      dialogs.documentMeta.getGuestLabel(email);
+      if (writeAccess) {
+        dialogs.documentMeta.getGuestLabel(email).click();
+      }
+    },
   },
   documentsList: {
     show: showDocumentsList,
     close,
-    showDocumentMetaDialog,
     inspect: {
       getDocumentInfo,
       getNumberOfDocuments: () => {
@@ -36,6 +68,9 @@ const dialogs = {
           });
         });
       },
+    },
+    selectDocument(docAst: DocumentAst) {
+      cy.findByText(getDocumentSelector(docAst)).click();
     },
   },
 };

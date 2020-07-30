@@ -9,6 +9,16 @@ import { useDnDNodes } from '::app/editor/document/tree/node/hooks/dnd-nodes';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 import { NodePrivacy } from '::types/graphql/generated';
+import { router } from '../../../../router/router';
+
+const getParamsFromLocation = () => {
+  const params = { expand: undefined };
+  const expand = /expand=(\d+)/.exec(router.get.location.search);
+  if (expand) {
+    params.expand = expand[1];
+  }
+  return params;
+};
 
 type Props = {};
 
@@ -29,6 +39,9 @@ const Tree: React.FC<Props & PropsFromRedux> = ({ nodes, documentPrivacy }) => {
     node_id: 0,
     draggable: false,
   });
+
+  const params = getParamsFromLocation();
+
   return (
     <Resizable
       enable={{ right: true }}
@@ -55,6 +68,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({ nodes, documentPrivacy }) => {
                     node_title_styles={node.node_title_styles}
                     documentPrivacy={documentPrivacy}
                     parentPrivacy={NodePrivacy.DEFAULT}
+                    expand={params.expand}
                   />
                 );
               })}

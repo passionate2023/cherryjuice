@@ -15,7 +15,10 @@ export const assertNodeTitleStyle = ({ nodeInDom }) => ({ node }) => {
 
 export const assertNodesTitleStyle = ({ tree }) => {
   cy.document().then(document => {
-    const treeInDom = getTreeInDom({ document, tree });
+    const treeInDom = getTreeInDom({
+      document,
+      nOfLevels: tree.filter(level => Boolean(level.length)).length,
+    });
     treeInDom.forEach((nodesLevel, indexOfLevel) => {
       nodesLevel.forEach((nodeInDom, indexOfNode) => {
         const node = tree[indexOfLevel][indexOfNode];

@@ -49,7 +49,7 @@ const importLocalFile = ({
       });
     });
   cy.contains('finished');
-  wait.s1();
+  wait.s1;
   cy.findByTestId(testIds.dialogs__scrim).click({ force: true });
   cy.findByTestId(
     `${testIds.popups__documentOperations__openDownloadedDocument}`,

@@ -18,7 +18,7 @@ export const dndNode = ({ tree }: DndNodeProps) => {
   const targetNode = randomArrayElement(newParentLevel);
   cy.findAllByText(draggedNode.name).then(target$ => {
     cy.findAllByText(targetNode.name).then(dragged$ => {
-      wait.s1();
+      wait.s1;
       const targetSelector = getElementPath(target$[1], 'tree');
       const draggedSelector = getElementPath(dragged$[1], 'tree');
       // @ts-ignore

@@ -3,10 +3,12 @@ import { setColorInputValue } from '../../../../helpers/dom';
 import { wait } from '../../../../helpers/cypress-helpers';
 
 const setNodeMeta = ({ node }) => {
-  const { isBold, color, name, icon } = node;
-  cy.findByTestId(testIds.nodeMeta__nodeName)
-    .clear()
-    .type(name);
+  const { isBold, color, name, icon, privacy } = node;
+  if (name) {
+    cy.findByTestId(testIds.nodeMeta__nodeName)
+      .clear()
+      .type(name);
+  }
   if (isBold) {
     cy.findByTestId(testIds.nodeMeta__isBold).uncheck();
     cy.findByTestId(testIds.nodeMeta__isBold).click();
@@ -29,6 +31,10 @@ const setNodeMeta = ({ node }) => {
       const child = element.children[icon - 1] as HTMLDivElement;
       child.click();
     });
+  }
+
+  if (privacy) {
+    cy.findByTestId(testIds.nodeMeta__privacy).select(privacy);
   }
   cy.findByTestId(testIds.nodeMeta__apply).click();
 };

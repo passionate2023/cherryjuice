@@ -10,6 +10,7 @@ import { documentMetaActionCreators } from '::app/menus/document-meta/reducer/re
 import { AccessLevel } from '::types/graphql/generated';
 import { AlertType } from '::types/react';
 import { ac } from '::root/store/store';
+import { testIds } from '::cypress/support/helpers/test-ids';
 
 const useTextInput: () => [string, (e) => void] = () => {
   const [inputValue, setInputValue] = useState('');
@@ -38,12 +39,14 @@ const AddGuest: React.FC<Props> = ({ userId }) => {
               title: "you can't add yourself as a guest",
               description: 'try a different email',
             });
-          } else
+          } else {
             documentMetaActionCreators.addGuest({
               accessLevel: AccessLevel.READER,
               email,
               userId: guestUserId,
             });
+            setInputValue({ target: { value: '' } });
+          }
         } else {
           ac.dialogs.setAlert({
             type: AlertType.Neutral,
@@ -53,7 +56,7 @@ const AddGuest: React.FC<Props> = ({ userId }) => {
         }
       });
     }
-  }, []);
+  }, [userId]);
 
   const pattern = patterns.email;
   return (
@@ -71,12 +74,14 @@ const AddGuest: React.FC<Props> = ({ userId }) => {
             modTextInput.textInput,
           ])}
           placeholder={'email'}
+          data-testid={testIds.documentMeta__addGuest__input}
         />
         <ButtonSquare
           text={'add guest'}
           className={modGuests.guests__addGuest__addButton}
           onClick={addGuestM}
           disabled={!inputRef.current?.checkValidity() || !inputValue}
+          testId={testIds.documentMeta__addGuest__addButton}
         />
       </div>
     </div>

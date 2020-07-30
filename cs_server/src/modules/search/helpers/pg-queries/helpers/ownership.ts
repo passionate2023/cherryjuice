@@ -23,7 +23,9 @@ const ownershipWC = ({ userId, state }: OwnershipProps): string =>
     .orIf(
       Boolean(userId),
       or_('auth users')
-        .tap(() => state.variables.push(userId))
+        .tap(() => {
+          if (userId) state.variables.push(userId)
+        })
         .or(`d."userId" = $${state.variables.length}`)
         .or(
           and_('guest users')

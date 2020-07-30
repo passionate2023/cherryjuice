@@ -245,26 +245,26 @@ export class NodeRepository extends Repository<Node> {
           .andIf(Boolean(userId), `d."userId" != :userId`)
           .and(
             or_()
+              // user not logged in, document public, some nodes not public
               .orIf(
                 !userId,
-                // user not logged in, document public, some nodes not public
                 and_()
                   .and('d."privacy" = :publicPrivacy')
                   .and('n.privacy < :publicPrivacy '),
               )
               .or(
+                // user logged in (guest), document is for guests only, some nodes are private
                 and_()
-                  // user logged in (guest), document is for guests only, some nodes are private
-                  .and('d.privacy = :guestOnlyPrivacy')
                   .and('g."userId" = :userId')
+                  .and('d.privacy = :guestOnlyPrivacy')
                   .and('n.privacy < :guestOnlyPrivacy'),
               )
               .or(
                 // user logged in (NOT guest), document is public, some nodes are private
                 and_()
-                  .and('d."privacy" = :publicPrivacy')
                   .and('g."userId"  is null')
-                  .and('n.privacy < :guestOnlyPrivacy'),
+                  .and('d."privacy" = :publicPrivacy')
+                  .and('n.privacy < :publicPrivacy'),
               ),
           )
           ._(),

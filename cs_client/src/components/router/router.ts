@@ -18,7 +18,7 @@ const router = {
     home: () => {
       history.push(`/`);
     },
-    login: () => history.push(`/login`),
+    signIn: () => history.push(`/login`),
     hash: (fullLink: string) => {
       history.push(fullLink);
     },

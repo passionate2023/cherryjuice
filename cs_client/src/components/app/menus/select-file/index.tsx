@@ -41,6 +41,7 @@ const createButtons = ({
       lazyAutoFocus: 1200,
     },
     {
+      testId: testIds.dialogs__selectDocument__footerRight__open,
       label: 'open',
       onClick: open,
       disabled:
@@ -115,6 +116,7 @@ const SelectFile: React.FC<PropsFromRedux> = ({
       className: modDialog.dialog__header__fileButton,
       onClick: ac.documentsList.selectAllDocuments,
       icon: Icons.material['select-all'],
+      testId: testIds.dialogs__selectDocument__header__buttons__deleteAll,
     },
     {
       hidden: showDeletionButtons,
@@ -136,7 +138,7 @@ const SelectFile: React.FC<PropsFromRedux> = ({
       onClose={close}
       rightHeaderButtons={rightHeaderButtons}
       docked={false}
-      loading={fetchDocuments!=='idle'}
+      loading={fetchDocuments !== 'idle'}
     >
       <ErrorBoundary>
         <DocumentList documentsMeta={documents} loading={loading} />

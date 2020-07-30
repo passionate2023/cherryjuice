@@ -42,13 +42,17 @@ const documentMetaFields = [
 ];
 const select = () => documentMetaFields;
 
-export type GetterSettings = { write: boolean; runFirst?: RunFirst };
+export type GetterSettings = {
+  write: boolean;
+  runFirst?: RunFirst;
+  single?: boolean;
+};
 
 @EntityRepository(Document)
 export class DocumentRepository extends Repository<Document> {
   baseQueryBuilder = (
     { userId }: GetDocumentsDTO,
-    { write, runFirst }: GetterSettings,
+    { write, runFirst, single }: GetterSettings,
   ) => {
     let queryBuilder = this.createQueryBuilder('d')
       .leftJoinAndMapMany(
@@ -62,7 +66,7 @@ export class DocumentRepository extends Repository<Document> {
     return queryBuilder.andWhere(
       or_()
         .or(`d."userId" = :userId`)
-        .orIf(!write, `(d."privacy"  >= :publicPrivacy)`)
+        .orIf(!write && single, `(d."privacy"  >= :publicPrivacy)`)
         .or(
           and_()
             .and(`g."userId" = :userId `)
@@ -84,6 +88,7 @@ export class DocumentRepository extends Repository<Document> {
   ): Promise<Document> {
     const document = await this.baseQueryBuilder(dto, {
       write,
+      single: true,
       runFirst: queryBuilder =>
         queryBuilder.andWhere('d."id" = :documentId', {
           documentId: dto.documentId,
@@ -112,7 +117,10 @@ export class DocumentRepository extends Repository<Document> {
   }
 
   async getDocuments(dto: GetDocumentsDTO): Promise<Document[]> {
-    return await this.baseQueryBuilder(dto, { write: false }).getMany();
+    return await this.baseQueryBuilder(dto, {
+      write: false,
+      single: false,
+    }).getMany();
   }
 
   async createDocument({
