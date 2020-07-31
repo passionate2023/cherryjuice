@@ -1,11 +1,10 @@
-import { dndNode } from '../../support/workflows/tree/helpers/dnd-node';
 import { testIds } from '../../support/helpers/test-ids';
-import { dialogs } from '../../support/workflows/dialogs/dialogs';
-import { puppeteer } from '../../support/workflows/document/puppeteer';
+import { puppeteer } from '../../support/test-utils/puppeteer/puppeteer';
 import { users } from '../../fixtures/auth/login-credentials';
-import { tn } from '../../support/workflows/tests-names';
+import { tn } from '../../support/helpers/tests-names';
 import { assert } from '../../support/test-utils/assert/assert';
 import { generateDocuments } from '../../fixtures/document/generate-documents';
+import { interact } from '../../support/test-utils/interact/interact';
 
 const bootstrap = () => {
   const treeConfig = {
@@ -44,7 +43,7 @@ describe('create document > create nodes > dnd > edit', () => {
   });
 
   it('perform: dnd node', () => {
-    dndNode(docAst);
+    interact.tree.dndNode(docAst);
   });
 
   it(tn.a.docContent(docAst), () => {
@@ -52,7 +51,10 @@ describe('create document > create nodes > dnd > edit', () => {
   });
 
   it('perform: delete node', () => {
-    dialogs.nodeMeta.delete({ tree: docAst.tree, nodeCoordinates: [0, 0] });
+    puppeteer.content.nodeMeta.delete({
+      tree: docAst.tree,
+      nodeCoordinates: [0, 0],
+    });
   });
 
   it(tn.a.docContent(docAst), () => {
@@ -60,7 +62,7 @@ describe('create document > create nodes > dnd > edit', () => {
   });
 
   it('perform: edit node meta', () => {
-    dialogs.nodeMeta.edit({
+    puppeteer.content.nodeMeta.edit({
       editedNode: docAst.tree[0][0],
       newAttributes: newNodeAttributes,
     });

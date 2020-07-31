@@ -2,8 +2,8 @@ import { generateDocuments } from '../../fixtures/document/generate-documents';
 import { Privacy } from '../../../types/graphql/generated';
 import { users } from '../../fixtures/auth/login-credentials';
 import { fixScrolling } from '../../support/helpers/cypress-helpers';
-import { puppeteer } from '../../support/workflows/document/puppeteer';
-import { tn } from '../../support/workflows/tests-names';
+import { puppeteer } from '../../support/test-utils/puppeteer/puppeteer';
+import { tn } from '../../support/helpers/tests-names';
 import { assert } from '../../support/test-utils/assert/assert';
 
 const bootstrap = () => {

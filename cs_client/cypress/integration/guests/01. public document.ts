@@ -1,8 +1,8 @@
 import { generateDocuments } from '../../fixtures/document/generate-documents';
 import { Privacy } from '../../../types/graphql/generated';
-import { puppeteer } from '../../support/workflows/document/puppeteer';
+import { puppeteer } from '../../support/test-utils/puppeteer/puppeteer';
 import { users } from '../../fixtures/auth/login-credentials';
-import { tn } from '../../support/workflows/tests-names';
+import { tn } from '../../support/helpers/tests-names';
 import { assert } from '../../support/test-utils/assert/assert';
 import { fixScrolling } from '../../support/helpers/cypress-helpers';
 

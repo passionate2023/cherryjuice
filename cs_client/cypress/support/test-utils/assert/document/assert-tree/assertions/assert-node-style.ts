@@ -1,7 +1,7 @@
 import { rgbToHex } from '../../../../../helpers/javascript-utils';
 import { AssertNodeMeta } from './assert-node-name';
 
-export const assertNodeTitleStyle = ({nodeAst,domNode}: AssertNodeMeta)  => {
+export const assertNodeTitleStyle = ({ nodeAst, domNode }: AssertNodeMeta) => {
   const nodeTitle: HTMLDivElement = domNode.querySelector('.node__title');
   const { fontWeight } = nodeTitle.style;
   expect(fontWeight).equal(nodeAst.isBold ? 'bold' : '');

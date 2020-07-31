@@ -2,10 +2,10 @@ import { generateDocuments } from '../../fixtures/document/generate-documents';
 import { NodePrivacy, Privacy } from '../../../types/graphql/generated';
 import { users } from '../../fixtures/auth/login-credentials';
 import { fixScrolling } from '../../support/helpers/cypress-helpers';
-import { puppeteer } from '../../support/workflows/document/puppeteer';
-import { tn } from '../../support/workflows/tests-names';
+import { puppeteer } from '../../support/test-utils/puppeteer/puppeteer';
+import { tn } from '../../support/helpers/tests-names';
 import { assert } from '../../support/test-utils/assert/assert';
-import { GuestAst } from '../../support/workflows/document/helpers/document/set-document-privacy';
+import { GuestAst } from '../../support/test-utils/puppeteer/epics/document/set-document-privacy';
 
 export type DocumentPrivacy = { privacy: Privacy; guests: GuestAst[] };
 const bootstrap = () => {

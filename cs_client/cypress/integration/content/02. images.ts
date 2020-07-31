@@ -1,8 +1,8 @@
-import { puppeteer } from '../../support/workflows/document/puppeteer';
-import { tn } from '../../support/workflows/tests-names';
+import { puppeteer } from '../../support/test-utils/puppeteer/puppeteer';
+import { tn } from '../../support/helpers/tests-names';
 import { assert } from '../../support/test-utils/assert/assert';
 import { users } from '../../fixtures/auth/login-credentials';
-import { inspect } from '../../support/inspect/inspect';
+import { inspect } from '../../support/test-utils/inspect/inspect';
 import { generateDocuments } from '../../fixtures/document/generate-documents';
 
 const bootstrap = () => {

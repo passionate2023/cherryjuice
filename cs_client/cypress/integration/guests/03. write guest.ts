@@ -2,10 +2,9 @@ import { generateDocuments } from '../../fixtures/document/generate-documents';
 import { Privacy } from '../../../types/graphql/generated';
 import { users } from '../../fixtures/auth/login-credentials';
 import { fixScrolling } from '../../support/helpers/cypress-helpers';
-import { puppeteer } from '../../support/workflows/document/puppeteer';
-import { tn } from '../../support/workflows/tests-names';
+import { puppeteer } from '../../support/test-utils/puppeteer/puppeteer';
+import { tn } from '../../support/helpers/tests-names';
 import { assert } from '../../support/test-utils/assert/assert';
-import { dialogs } from '../../support/workflows/dialogs/dialogs';
 
 const bootstrap = () => {
   const treeConfig = {
@@ -89,13 +88,13 @@ describe('write guest', function() {
     puppeteer.auth.signIn(user);
     puppeteer.manage.selectDocument(docAst);
 
-    dialogs.nodeMeta.edit({
+    puppeteer.content.nodeMeta.edit({
       editedNode: docAst.tree[0][0],
       newAttributes: newNodeAttributes,
     });
-    dialogs.nodeMeta.delete({ tree: docAst.tree, nodeCoordinates: [0, 1] });
+    puppeteer.content.nodeMeta.delete({ tree: docAst.tree, nodeCoordinates: [0, 1] });
     docAst.tree[0].push(additionalNode);
-    dialogs.nodeMeta.create({
+    puppeteer.content.nodeMeta.create({
       node: additionalNode,
     });
     puppeteer.content.setDocumentText(docAst, true);

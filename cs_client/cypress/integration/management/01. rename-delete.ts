@@ -1,10 +1,10 @@
-import { dialogs } from '../../support/workflows/dialogs/dialogs';
-import { puppeteer } from '../../support/workflows/document/puppeteer';
+import { puppeteer } from '../../support/test-utils/puppeteer/puppeteer';
 import { generateDocuments } from '../../fixtures/document/generate-documents';
 import { users } from '../../fixtures/auth/login-credentials';
-import { tn } from '../../support/workflows/tests-names';
+import { tn } from '../../support/helpers/tests-names';
 import { assert } from '../../support/test-utils/assert/assert';
-import { inspect } from '../../support/inspect/inspect';
+import { inspect } from '../../support/test-utils/inspect/inspect';
+import { interact } from '../../support/test-utils/interact/interact';
 
 const bootstrap = () => {
   const treeConfig = {
@@ -88,7 +88,6 @@ describe('create document > edit-document > delete-document', () => {
     cy.get('.selectFile__file__name ').then(documents => {
       expect(documents.length).to.be.equal(1);
     });
-    dialogs.documentsList.close();
+    interact.documentsList.close();
   });
-
 });

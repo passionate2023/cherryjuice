@@ -3,7 +3,7 @@ import {
   GenerateTreeProps,
   TreeAst,
 } from '../tree/generate-tree';
-import { GuestAst } from '../../support/workflows/document/helpers/document/set-document-privacy';
+import { GuestAst } from '../../support/test-utils/puppeteer/epics/document/set-document-privacy';
 import { Privacy } from '../../../types/graphql/generated';
 
 type GenerateDocumentProps = {
