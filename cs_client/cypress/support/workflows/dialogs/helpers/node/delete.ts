@@ -17,8 +17,8 @@ const deleteNode = ({
   cy.findByTestId(testIds.toolBar__main__deleteNode).click();
   wait.ms500();
   cy.findByTestId(testIds.modal__deleteNode__confirm).click();
-
   deleteNodeAndItsChildren(treeAst)(treeMap)(nodeToDelete);
+  wait.s1
 };
 
 export { deleteNode };

@@ -7,7 +7,9 @@ const resolveTempFixturePath = ({
   tempSubFolder,
   extension,
   suffix,
-}: ImportLocalFile) => {
+}: ImportLocalFile & {
+  tempSubFolder: string;
+}) => {
   const folder = `temp/ctb/${tempSubFolder}/`;
   const path = `${folder}/${name}-${suffix}.${extension}`;
   return { folder, path };
@@ -15,16 +17,11 @@ const resolveTempFixturePath = ({
 
 type ImportLocalFile = {
   name: string;
-  tempSubFolder: string;
   extension: string;
   suffix: string;
 };
-const importLocalFile = ({
-  name,
-  tempSubFolder,
-  extension,
-  suffix,
-}: ImportLocalFile) => {
+const importLocalFile = ({ name, extension, suffix }: ImportLocalFile) => {
+  const tempSubFolder = new Date().getTime().toString();
   cy.task('copyDownloadedFile', {
     name,
     tempSubFolder,
@@ -54,6 +51,7 @@ const importLocalFile = ({
   cy.findByTestId(
     `${testIds.popups__documentOperations__openDownloadedDocument}`,
   ).click();
+  wait.s1;
 };
 
 export { importLocalFile };

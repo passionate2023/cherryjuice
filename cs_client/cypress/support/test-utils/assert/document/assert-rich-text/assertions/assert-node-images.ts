@@ -1,7 +1,6 @@
-import { selectNode } from '../../workflows/tree/helpers/select-node';
-import { wait } from '../../helpers/cypress-helpers';
-import { NodeAst } from '../../../fixtures/node/generate-node';
-import { ImageAst } from '../../../fixtures/node/generate-node-content/image/generate-image';
+import { wait } from '../../../../../helpers/cypress-helpers';
+import { NodeAst } from '../../../../../../fixtures/node/generate-node';
+import { ImageAst } from '../../../../../../fixtures/node/generate-node-content/image/generate-image';
 
 const anyImageBase64ToPngBase64 = (image: HTMLImageElement): string => {
   const canvas = document.createElement('canvas');
@@ -17,8 +16,7 @@ type AssertNodeImage = {
   images: ImageAst[];
 };
 export const assertNodeImage = ({ node, images }: AssertNodeImage) => {
-  selectNode(node);
-  wait.ms500();
+  cy.log('assert-node-images');
   cy.get('#rich-text').then(editor$ => {
     const editor = editor$[0];
     const imagesInDom: HTMLImageElement[] = Array.from(

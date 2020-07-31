@@ -9,7 +9,9 @@ export const getTreeInDom = ({ document, nOfLevels }) => {
           .join('') +
         'div',
     )
-    .map(sel => Array.from(treeElement.querySelectorAll(sel)));
+    .map(sel =>
+      Array.from(treeElement.querySelectorAll(sel) as HTMLDivElement[]),
+    );
 };
 const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
   window.HTMLInputElement.prototype,

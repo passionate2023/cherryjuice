@@ -36,7 +36,6 @@ const setNodeMeta = ({ node }) => {
   if (privacy) {
     cy.findByTestId(testIds.nodeMeta__privacy).select(privacy);
   }
-  cy.findByTestId(testIds.nodeMeta__apply).click();
 };
 
 export { setNodeMeta };

@@ -1,22 +1,26 @@
-import { generateDocument } from '../fixtures/document/generate-document';
-import { puppeteer } from '../support/workflows/document/puppeteer';
-import { tn } from '../support/workflows/tests-names';
-import { assert } from '../support/assertions/assertions';
-import { users } from '../fixtures/auth/login-credentials';
-import { inspect } from '../support/inspect/inspect';
+import { puppeteer } from '../../support/workflows/document/puppeteer';
+import { tn } from '../../support/workflows/tests-names';
+import { assert } from '../../support/test-utils/assert/assert';
+import { users } from '../../fixtures/auth/login-credentials';
+import { inspect } from '../../support/inspect/inspect';
+import { generateDocuments } from '../../fixtures/document/generate-documents';
 
-const docAst = generateDocument({
-  treeConfig: {
-    nodesPerLevel: [[2]],
-    includeText: true,
-    numberOfImages: [2, 5],
-  },
-  documentConfig: {
-    name: new Date().toString(),
-  },
-});
-
+const bootstrap = () => {
+  const docAsts = generateDocuments({
+    numberOfDocuments: 1,
+    treeConfig: {
+      nodesPerLevel: [[2]],
+      includeText: true,
+      numberOfImages: [2, 5],
+    },
+  });
+  return { docAsts };
+};
 describe('create document > create nodes', () => {
+  const {
+    docAsts: [docAst],
+  } = bootstrap();
+
   before(() => {
     puppeteer.auth.signIn(users.user0);
   });
@@ -32,6 +36,7 @@ describe('create document > create nodes', () => {
     puppeteer.manage.saveDocument([docAst]);
     inspect.assignDocumentHashAndIdToAst([docAst]);
   });
+
   it(tn.a.docContent(docAst), () => {
     assert.documentContent(docAst);
   });

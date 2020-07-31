@@ -12,7 +12,6 @@ export const createDocument = (docAst: DocumentAst) => {
   if (docAst.meta.privacy !== Privacy.PRIVATE)
     dialogs.documentMeta.setPrivacy(docAst.meta.privacy);
   dialogs.documentMeta.apply();
-  // dialogs.documentMeta.create(docAst.meta);
   puppeteer.content.createTree(docAst);
   docAst.tree.forEach(level =>
     level

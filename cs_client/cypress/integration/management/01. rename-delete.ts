@@ -1,13 +1,12 @@
-import { assertNodeText } from '../support/assertions/content/node-text';
-import { dialogs } from '../support/workflows/dialogs/dialogs';
-import { puppeteer } from '../support/workflows/document/puppeteer';
-import { generateDocuments } from '../fixtures/document/generate-documents';
-import { users } from '../fixtures/auth/login-credentials';
-import { tn } from '../support/workflows/tests-names';
-import { assert } from '../support/assertions/assertions';
-import { inspect } from '../support/inspect/inspect';
+import { dialogs } from '../../support/workflows/dialogs/dialogs';
+import { puppeteer } from '../../support/workflows/document/puppeteer';
+import { generateDocuments } from '../../fixtures/document/generate-documents';
+import { users } from '../../fixtures/auth/login-credentials';
+import { tn } from '../../support/workflows/tests-names';
+import { assert } from '../../support/test-utils/assert/assert';
+import { inspect } from '../../support/inspect/inspect';
 
-describe('create document > edit-document > delete-document', () => {
+const bootstrap = () => {
   const treeConfig = {
     nodesPerLevel: [[1]],
     includeText: true,
@@ -23,6 +22,11 @@ describe('create document > edit-document > delete-document', () => {
     treeConfig,
   });
 
+  return { docAsts, docAsts2: additionalDocuments };
+};
+
+describe('create document > edit-document > delete-document', () => {
+  const { docAsts, docAsts2 } = bootstrap();
   before(() => {
     puppeteer.auth.signIn(users.user0);
     puppeteer.manage.deleteDocuments([], true);
@@ -68,17 +72,17 @@ describe('create document > edit-document > delete-document', () => {
     expect(docAsts[0].meta.hash).to.equal(docAsts[1].meta.hash);
   });
 
-  additionalDocuments.forEach(docAst => {
+  docAsts2.forEach(docAst => {
     it(tn.p.createDocument(docAst), () => {
       puppeteer.manage.createDocument(docAst);
     });
   });
 
   it('perform: get documents hash', () => {
-    inspect.assignDocumentHashAndIdToAst(additionalDocuments);
+    inspect.assignDocumentHashAndIdToAst(docAsts2);
   });
   it('perform: delete saved and unsaved documents', () => {
-    puppeteer.manage.deleteDocuments([docAsts[0], additionalDocuments[0]]);
+    puppeteer.manage.deleteDocuments([docAsts[0], docAsts2[0]]);
   });
   it('assert: delete saved and unsaved documents', () => {
     cy.get('.selectFile__file__name ').then(documents => {
@@ -86,23 +90,5 @@ describe('create document > edit-document > delete-document', () => {
     });
     dialogs.documentsList.close();
   });
-  it('perform: export document', () => {
-    puppeteer.io.exportDocument(docAsts[1], users.user0);
-  });
 
-  it('perform: import and open exported document', () => {
-    const document = docAsts[1];
-    puppeteer.io.importLocalFile({
-      suffix: 'exported',
-      extension: 'ctb',
-      name: `${document.meta.name}`,
-      tempSubFolder: new Date().getTime().toString(),
-    });
-  });
-  it('assert: imported document content', () => {
-    const document = docAsts[1];
-    document.tree[0].forEach(node => {
-      assertNodeText({ node, text: node.text });
-    });
-  });
 });

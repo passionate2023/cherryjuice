@@ -2,6 +2,7 @@ import { wait } from '../../../../helpers/cypress-helpers';
 import { testIds } from '../../../../helpers/test-ids';
 import { setNodeMeta } from './helpers';
 import { tree } from '../../../tree/tree';
+import { dialogs } from '../../dialogs';
 
 const edit = ({ editedNode, newAttributes }) => {
   tree.interactions.selectNode(editedNode);
@@ -12,6 +13,7 @@ const edit = ({ editedNode, newAttributes }) => {
   Object.entries(newAttributes).forEach(([key, value]) => {
     editedNode[key] = value;
   });
+  dialogs.nodeMeta.apply();
 };
 
 export { edit };

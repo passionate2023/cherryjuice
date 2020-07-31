@@ -3,7 +3,7 @@ import { Privacy } from '../../../types/graphql/generated';
 import { puppeteer } from '../../support/workflows/document/puppeteer';
 import { users } from '../../fixtures/auth/login-credentials';
 import { tn } from '../../support/workflows/tests-names';
-import { assert } from '../../support/assertions/assertions';
+import { assert } from '../../support/test-utils/assert/assert';
 import { fixScrolling } from '../../support/helpers/cypress-helpers';
 
 const bootstrap = () => {

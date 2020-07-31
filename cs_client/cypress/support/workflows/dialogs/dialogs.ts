@@ -14,6 +14,7 @@ import {
 import { Privacy } from '../../../../types/graphql/generated';
 import { testIds } from '../../helpers/test-ids';
 import { GuestAst } from '../document/helpers/document/set-document-privacy';
+import { wait } from '../../helpers/cypress-helpers';
 
 export const getDocumentSelector = (docAst: DocumentAst): string => {
   return docAst.meta.id
@@ -29,6 +30,11 @@ const dialogs = {
     create: createNode,
     edit,
     delete: deleteNode,
+    apply: () => {
+      cy.findByTestId(testIds.nodeMeta__apply).click();
+      wait.s1;
+      wait.ms500();
+    },
   },
   documentMeta: {
     setName: setDocumentName,
