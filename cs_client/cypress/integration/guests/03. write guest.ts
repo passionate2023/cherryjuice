@@ -92,7 +92,10 @@ describe('write guest', function() {
       editedNode: docAst.tree[0][0],
       newAttributes: newNodeAttributes,
     });
-    puppeteer.content.nodeMeta.delete({ tree: docAst.tree, nodeCoordinates: [0, 1] });
+    puppeteer.content.nodeMeta.delete({
+      tree: docAst.tree,
+      nodeCoordinates: [0, 1],
+    });
     docAst.tree[0].push(additionalNode);
     puppeteer.content.nodeMeta.create({
       node: additionalNode,

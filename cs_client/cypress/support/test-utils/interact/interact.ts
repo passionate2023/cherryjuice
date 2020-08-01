@@ -11,5 +11,5 @@ export const interact = {
   importDocument,
   nodeMeta,
   tree,
-  editor
+  editor,
 };
