@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ExportDocumentDto } from './dto/export-document.dto';
 import { DocumentService } from '../document/document.service';
 import { NodeService } from '../node/node.service';
 import { ExportCTB } from './helpers/export-ctb';
@@ -8,9 +7,10 @@ import { ImageService } from '../image/image.service';
 import { DocumentSubscriptionsService } from '../document/document.subscriptions.service';
 import { Document } from '../document/entities/document.entity';
 import { deleteFolder } from '../shared/fs/delete-folder';
-import Timeout = NodeJS.Timeout;
 import { paths } from '../shared/fs/paths';
 import { resolveFileLocation } from '../shared/fs/resolve-file-location';
+import { GetDocumentDTO } from '../document/dto/document.dto';
+import Timeout = NodeJS.Timeout;
 
 @Injectable()
 export class ExportsService {
@@ -38,35 +38,39 @@ export class ExportsService {
     }, 30 * 60 * 1000);
   };
 
-  exportDocument = async ({
-    documentId,
-    user,
-  }: ExportDocumentDto): Promise<string> => {
-    const document = await this.documentService.getDocumentMetaById(
-      user,
-      documentId,
-    );
-    const exportCTB = new ExportCTB(document);
+  exportDocument = async (dto: GetDocumentDTO): Promise<string> => {
+    const { userId } = dto;
+    const document = await this.documentService.getDocumentById(dto);
+    const exportCTB = new ExportCTB({
+      id: document.id,
+      name: document.name,
+      hash: document.hash,
+      userId,
+    });
     try {
-      await this.subscriptionsService.export.pending(document);
-      await this.subscriptionsService.export.preparing(document);
-      const nodes = await this.nodeService.getNodesMetaAndAHtml(documentId);
+      await this.subscriptionsService.export.pending(document, userId);
+      await this.subscriptionsService.export.preparing(document, userId);
+      const nodes = await this.nodeService.getNodesMetaAndAHtml({
+        documentId: document.id,
+        userId,
+      });
       await exportCTB.createCtb();
       await exportCTB.createTables();
-      await this.subscriptionsService.export.nodesStarted(document);
+      await this.subscriptionsService.export.nodesStarted(document, userId);
       const imagesPerNode = await exportCTB.writeAHtmls(nodes);
-      await this.subscriptionsService.export.imagesStarted(document);
+      await this.subscriptionsService.export.imagesStarted(document, userId);
       await exportCTB.writeNodesImages({
         imagesPerNode,
         getNodeImages: this.imageService.getLoadedImages,
       });
       await exportCTB.closeCtb();
       await this.scheduleDeletion(document, exportCTB);
-      await this.subscriptionsService.export.finished(document);
+      await this.subscriptionsService.export.finished(document, userId);
       return exportCTB.getFileLocation.relativePath;
     } catch (e) {
-      await this.subscriptionsService.export.failed(document);
-      await exportCTB.closeCtb();
+      await this.subscriptionsService.export.failed(document, userId);
+      // eslint-disable-next-line no-console
+      await exportCTB.closeCtb().catch(console.error);
       // eslint-disable-next-line no-console
       console.error(e);
       throw e;

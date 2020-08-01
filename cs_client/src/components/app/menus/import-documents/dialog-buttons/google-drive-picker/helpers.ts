@@ -44,8 +44,10 @@ const googlePickerHelpers = ({
     return !!window.google.picker;
   };
   const onApiLoad = () => {
-    window.gapi.load('auth', undefined);
-    window.gapi.load('picker', undefined);
+    if (window.gapi) {
+      window.gapi.load('auth', undefined);
+      window.gapi.load('picker', undefined);
+    }
   };
   const doAuth = ({ callback, clientId, scope, authImmediate }) => {
     window.gapi.auth.authorize(

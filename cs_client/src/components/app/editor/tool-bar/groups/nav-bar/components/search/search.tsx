@@ -18,7 +18,7 @@ const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {
-  className: string;
+  className?: string;
   navBar?: boolean;
 };
 

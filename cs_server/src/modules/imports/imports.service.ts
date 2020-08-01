@@ -3,9 +3,9 @@ import { performDownload } from './helpers/download/perform-download/perform-dow
 import { User } from '../user/entities/user.entity';
 import { ImageService } from '../image/image.service';
 import { DocumentService } from '../document/document.service';
-import { Document } from '../document/entities/document.entity';
+import { Document, Privacy } from '../document/entities/document.entity';
 import { FileUpload } from '../document/helpers/graphql';
-import { UploadImageDto } from './dto/upload-image.dto';
+import { AddImageDTO } from './dto/upload-image.dto';
 import { NodeService } from '../node/node.service';
 import { ImportCTB } from './helpers/import-ctb/import-ctb';
 import { DocumentSubscriptionsService } from '../document/document.subscriptions.service';
@@ -19,11 +19,6 @@ import {
 import { createGqlDownloadTask } from './helpers/download/create-dowload-task/create-gql-download-task';
 import { deleteFolder } from '../shared/fs/delete-folder';
 import { paths } from '../shared/fs/paths';
-export type DocumentDTO = {
-  name: string;
-  size: number;
-  user: User;
-};
 
 @Injectable()
 export class ImportsService {
@@ -47,8 +42,10 @@ export class ImportsService {
     user: User;
     fileMeta: FileMeta;
   }): Promise<void> {
-    document.user = user;
-    const importCTB = new ImportCTB();
+    const importCTB = new ImportCTB(
+      dto => this.nodeService.createNode(dto),
+      user,
+    );
     await importCTB.saveDocument({
       document,
       fileMeta,
@@ -84,10 +81,8 @@ export class ImportsService {
 
   async importImages({
     images,
-    node_id,
-    user,
-    documentId,
-  }: UploadImageDto): Promise<[string, string][]> {
+    getNodeDTO,
+  }: AddImageDTO): Promise<[string, string][]> {
     const imageIDs: string[] = [];
     const pngs: { png: Buffer; hash: string }[] = [];
     for (const file of images) {
@@ -102,14 +97,12 @@ export class ImportsService {
       imageIDs.push(filename);
     }
 
-    const node = await this.nodeService.getNodeMetaById({
-      documentId,
-      node_id,
-      user,
-    });
+    const node = await this.nodeService.getNodeById(getNodeDTO);
 
     const { node_idImagesMap } = await ImportCTB.saveImages([[node, pngs]]);
-    return node_idImagesMap.get(node_id).map((id, i) => [imageIDs[i], id]);
+    return node_idImagesMap
+      .get(getNodeDTO.node_id)
+      .map((id, i) => [imageIDs[i], id]);
   }
 
   async importDocument(
@@ -127,48 +120,50 @@ export class ImportsService {
       try {
         const downloadTask = await taskCreator(file);
         document = await this.documentService.createDocument({
-          name: downloadTask.fileMeta.fileName,
-          size: 0,
-          user,
+          data: {
+            name: downloadTask.fileMeta.fileName,
+            privacy: Privacy.PRIVATE,
+            guests: [],
+          },
+          userId: user.id,
         });
 
         documents.push({
           document,
           downloadTask,
         });
-        await this.subscriptionsService.import.pending(document);
+        await this.subscriptionsService.import.pending(document, user.id);
       } catch (e) {
-        await this.subscriptionsService.import.failed(document);
+        await this.subscriptionsService.import.failed(document, user.id);
         throw e;
       }
     }
     for (const { document, downloadTask } of documents) {
       try {
-        await this.subscriptionsService.import.preparing(document);
+        await this.subscriptionsService.import.preparing(document, user.id);
         const { hash } = await performDownload(downloadTask, async () => {
           await document.reload();
         });
         const documentWithSameHash = await this.documentService.findDocumentByHash(
           hash,
-          user,
         );
         if (documentWithSameHash) {
-          await this.subscriptionsService.import.duplicate(document);
+          await this.subscriptionsService.import.duplicate(document, user.id);
           await this.documentService.deleteDocuments([document.id], user, {
             notifySubscribers: false,
           });
         } else {
-          await this.subscriptionsService.import.started(document);
+          await this.subscriptionsService.import.started(document, user.id);
           await this.saveDocument({
             document,
             user,
             fileMeta: downloadTask.fileMeta,
           });
-          await this.subscriptionsService.import.finished(document);
+          await this.subscriptionsService.import.finished(document, user.id);
           await deleteFolder(downloadTask.fileMeta.location.folder);
         }
       } catch (e) {
-        await this.subscriptionsService.import.failed(document);
+        await this.subscriptionsService.import.failed(document, user.id);
         await deleteFolder(downloadTask.fileMeta.location.folder);
         throw e;
       }

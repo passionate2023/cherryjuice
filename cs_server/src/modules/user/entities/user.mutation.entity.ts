@@ -8,3 +8,10 @@ export class UserMutation {
   @Field(() => AuthUser)
   signUp: AuthUser;
 }
+@ObjectType()
+export class UserQuery {
+  @Field(() => AuthUser)
+  refreshToken: AuthUser;
+  @Field(() => String, { nullable: true })
+  userExists: string;
+}

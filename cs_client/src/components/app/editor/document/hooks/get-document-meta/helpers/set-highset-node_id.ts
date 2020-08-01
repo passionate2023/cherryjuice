@@ -1,7 +1,7 @@
-import { NodeMeta } from '::types/graphql/adapters';
 import { ac } from '::root/store/store';
+import { nodesMetaMap } from '::types/misc';
 
-const setHighestNodeId = (nodes: Map<number, NodeMeta>) => {
+const setHighestNodeId = (nodes: nodesMetaMap) => {
   if (nodes) {
     const SET_HIGHEST_NODE_ID = Array.from(nodes.keys())
       .sort((a, b) => a - b)

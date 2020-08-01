@@ -3,11 +3,14 @@ import {
   GenerateTreeProps,
   TreeAst,
 } from '../tree/generate-tree';
+import { GuestAst } from '../../support/test-utils/puppeteer/epics/document/set-document-privacy';
+import { Privacy } from '../../../types/graphql/generated';
 
-type CreateDocumentProps = {
+type GenerateDocumentProps = {
   treeConfig: GenerateTreeProps;
   documentConfig: {
     name: string;
+    privacy?: Privacy;
   };
 };
 
@@ -17,20 +20,24 @@ type DocumentAst = {
     id: string;
     hash: string;
     unsaved: boolean;
+    guests: GuestAst[];
+    privacy: Privacy;
   };
   tree: TreeAst;
 };
 
 const generateDocument = ({
   treeConfig,
-  documentConfig: { name },
-}: CreateDocumentProps): DocumentAst => {
+  documentConfig: { name, privacy },
+}: GenerateDocumentProps): DocumentAst => {
   return {
     meta: {
       name,
       id: '',
       hash: '',
       unsaved: true,
+      guests: [],
+      privacy: privacy || Privacy.PRIVATE,
     },
     tree: generateTree(treeConfig),
   };

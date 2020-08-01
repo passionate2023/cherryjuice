@@ -6,7 +6,7 @@ import { NodeService } from '../node/node.service';
 @Injectable()
 export class SearchService {
   constructor(private nodeService: NodeService) {}
-  async nodeSearch(args: NodeSearchDto): Promise<NodeSearchResultEntity[]> {
-    return this.nodeService.findNode(args);
+  async nodeSearch(dto: NodeSearchDto): Promise<NodeSearchResultEntity[]> {
+    return this.nodeService.findNode(dto);
   }
 }

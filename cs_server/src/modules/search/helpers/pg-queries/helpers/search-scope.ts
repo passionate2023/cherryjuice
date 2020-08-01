@@ -1,8 +1,9 @@
 import { SearchScope } from '../../../it/node-search.it';
+import { QueryCreatorState } from './time-filter';
 
 type Props = {
   searchScope: SearchScope;
-  variables: string[];
+  state: QueryCreatorState;
   nodeId: string;
   documentId: string;
 };
@@ -10,21 +11,21 @@ const searchScopeWC = ({
   searchScope,
   nodeId,
   documentId,
-  variables,
+  state,
 }: Props): string => {
   let res = '';
   switch (searchScope) {
     case 'current-node':
-      variables.push(nodeId);
-      res = 'n."id" = $' + variables.length;
+      state.variables.push(nodeId);
+      res = 'n."id" = $' + state.variables.length;
       break;
     case 'child-nodes':
-      variables.push(nodeId);
-      res = 'n."fatherId" = $' + variables.length;
+      state.variables.push(nodeId);
+      res = 'n."fatherId" = $' + state.variables.length;
       break;
     case 'current-document':
-      variables.push(documentId);
-      res = 'n."documentId" = $' + variables.length;
+      state.variables.push(documentId);
+      res = 'n."documentId" = $' + state.variables.length;
       break;
   }
   return res;

@@ -1,75 +1,64 @@
 import * as React from 'react';
 import { useApolloClient } from '::graphql/apollo';
 import { LoginForm } from '::auth/login-form';
-import { Suspense, useEffect, useReducer } from 'react';
-import { Route } from 'react-router';
+import { Suspense } from 'react';
+import { Route, Switch } from 'react-router';
 import { Provider } from 'react-redux';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { App } from '::root/app';
 import { SignUpForm } from '::auth/signup-form';
-import { RootContext } from './root-context';
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import { useOnWindowResize } from '::hooks/use-on-window-resize';
-import {
-  rootActionCreators,
-  rootInitialState,
-  rootReducer,
-} from '::root/root.reducer';
 import { store } from '::root/store/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { useLoadEpics } from './hooks/load-epics';
-import { useProtectedRoutes } from './hooks/protected-routes';
 import { useSetupHotKeys } from '::helpers/hotkeys/hooks/setup-hotkeys';
-
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
   })),
 );
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
 
-const persistor = persistStore(store);
+const mapState = (state: Store) => ({
+  token: state.auth.token,
+  user: state.auth.user,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const Root: React.FC<Props> = () => {
+const Root: React.FC<Props & PropsFromRedux> = ({ token, user }) => {
   useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
-  const [state, dispatch] = useReducer(rootReducer, rootInitialState);
-  useEffect(() => {
-    rootActionCreators.setDispatch(dispatch);
-  }, []);
-  useApolloClient(state.session);
-  useProtectedRoutes({ session: state.session });
+  const client = useApolloClient(token, user?.id);
   useSetupHotKeys();
   const { loadedEpics } = useLoadEpics();
   return (
+    <Suspense fallback={<Void />}>
+      {client && loadedEpics && (
+        <ApolloProvider client={client}>
+          <Switch>
+            <Route path={'/login'} render={() => <LoginForm />} />{' '}
+            <Route path={'/signup'} render={() => <SignUpForm />} />
+            <Route path={'/*'} render={() => <App />} />
+          </Switch>
+        </ApolloProvider>
+      )}
+    </Suspense>
+  );
+};
+const ConnectedRoot = connector(Root);
+const RootWithRedux: React.FC = props => {
+  return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <RootContext.Provider value={state}>
-          <Suspense fallback={<Void />}>
-            {state.apolloClient && (
-              <ApolloProvider client={state.apolloClient}>
-                {state.session.token && loadedEpics && (
-                  <Route
-                    path={'/'}
-                    render={() => <App session={state.session} />}
-                  />
-                )}
-                <Route
-                  path={'/login'}
-                  render={() => <LoginForm session={state.session} />}
-                />{' '}
-                <Route
-                  path={'/signup'}
-                  render={() => <SignUpForm session={state.session} />}
-                />
-              </ApolloProvider>
-            )}
-          </Suspense>
-        </RootContext.Provider>
+      <PersistGate loading={null} persistor={persistStore(store)}>
+        <ConnectedRoot {...props} />
       </PersistGate>
     </Provider>
   );
 };
-
-export { Root };
+export { RootWithRedux as Root };

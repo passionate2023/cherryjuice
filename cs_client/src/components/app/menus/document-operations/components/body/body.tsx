@@ -15,14 +15,14 @@ const Body: React.FC<Props> = ({ imports, exports }) => {
         className={modDocumentOperations.documentOperations__documentsContainer}
       >
         {imports.map(document => (
-          <Document key={document.id} {...document} />
+          <Document key={document.id} document={document} />
         ))}
       </div>
       <div
         className={modDocumentOperations.documentOperations__documentsContainer}
       >
         {exports.map(document => (
-          <Document key={document.id} {...document} />
+          <Document key={document.id} document={document} />
         ))}
       </div>
     </>

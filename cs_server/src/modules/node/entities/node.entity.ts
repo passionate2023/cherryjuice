@@ -14,7 +14,7 @@ import {
 import { Document } from '../../document/entities/document.entity';
 import { Image } from '../../image/entities/image.entity';
 import hash from 'object-hash';
-import { User } from '../../user/entities/user.entity';
+import { NodePrivacy } from '../it/node-meta.it';
 
 @Unique(['node_id', 'documentId'])
 @Entity()
@@ -41,15 +41,6 @@ export class Node extends BaseEntity {
   @Column({ nullable: true })
   @Field({ nullable: true })
   fatherId: string;
-
-  @ManyToOne(
-    () => User,
-    user => user.id,
-    { onDelete: 'CASCADE' },
-  )
-  user: User;
-  @Column()
-  userId: string;
 
   @Field()
   @PrimaryGeneratedColumn('uuid')
@@ -103,7 +94,7 @@ export class Node extends BaseEntity {
   @Column({ select: false, default: '' })
   ahtml_txt: string;
 
-  updateAhtmlTxt() {
+  updateAhtmlTxt(): void {
     if (this.ahtml)
       this.ahtml_txt = JSON.parse(this.ahtml).reduce((acc, val) => {
         acc += `${val[0]
@@ -135,4 +126,12 @@ export class Node extends BaseEntity {
     ];
     this.hash = hash(fields);
   }
+
+  @Field(() => NodePrivacy, { nullable: true })
+  @Column({
+    type: 'enum',
+    enum: NodePrivacy,
+    nullable: true,
+  })
+  privacy?: NodePrivacy;
 }

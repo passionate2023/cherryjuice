@@ -10,12 +10,13 @@ import { DocumentSubscriptionsResolver } from './document.subscriptions.resolver
 import { ImportsModule } from '../imports/imports.module';
 import { ExportsModule } from '../exports/exports.module';
 import { DocumentSubscriptionsService } from './document.subscriptions.service';
+import { DocumentGuestRepository } from './repositories/document-guest.repository';
 
 @Module({
   imports: [
     NodeModule,
     ImageModule,
-    TypeOrmModule.forFeature([DocumentRepository]),
+    TypeOrmModule.forFeature([DocumentRepository, DocumentGuestRepository]),
     ImportsModule,
     ExportsModule,
   ],

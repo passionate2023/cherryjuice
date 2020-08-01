@@ -16,6 +16,8 @@ import { rootActionCreators } from './ducks/root';
 import { searchActionCreators } from '::root/store/ducks/search';
 import { cssVariablesActionCreators } from '::root/store/ducks/css-variables';
 import { setCssVariables } from '::root/store/middleware/set-css-variables';
+import { authActionCreators } from '::root/store/ducks/auth';
+import { cacheActionCreators } from '::root/store/ducks/cache';
 
 type Store = ReturnType<typeof reducer>;
 
@@ -45,11 +47,14 @@ const ac = {
     root: rootActionCreators,
     search: searchActionCreators,
     cssVariables: cssVariablesActionCreators,
+    auth: authActionCreators,
+    cache: cacheActionCreators,
   },
   document: bindActionCreators(documentActionCreators, store.dispatch),
   dialogs: bindActionCreators(dialogsActionCreators, store.dispatch),
   node: bindActionCreators(nodeActionCreators, store.dispatch),
   editor: bindActionCreators(editorActionCreators, store.dispatch),
+  auth: bindActionCreators(authActionCreators, store.dispatch),
   documentsList: bindActionCreators(
     documentsListActionCreators,
     store.dispatch,
@@ -59,6 +64,7 @@ const ac = {
     store.dispatch,
   ),
   root: bindActionCreators(rootActionCreators, store.dispatch),
+  cache: bindActionCreators(cacheActionCreators, store.dispatch),
   search: bindActionCreators(searchActionCreators, store.dispatch),
   cssVariables: bindActionCreators(cssVariablesActionCreators, store.dispatch),
 };

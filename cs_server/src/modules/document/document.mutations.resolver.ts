@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
 import {
   Args,
@@ -20,7 +20,7 @@ import { ImportsService } from '../imports/imports.service';
 import { NodeMutation } from '../node/entities/node-mutation.entity';
 import { CreateDocumentIt } from './input-types/create-document.it';
 import { EditDocumentIt } from './input-types/edit-document.it';
-import { ExportsService } from '../exports/exports.service';
+import { Document } from './entities/document.entity';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => DocumentMutation)
@@ -29,40 +29,56 @@ export class DocumentMutationsResolver {
     private nodeService: NodeService,
     private importsService: ImportsService,
     private documentService: DocumentService,
-    private exportsService: ExportsService,
   ) {}
 
   @Mutation(() => DocumentMutation)
-  document(@Args('file_id', { nullable: true }) file_id?: string): {} {
-    return { id: file_id };
-  }
-
-  @ResolveField(() => Boolean)
-  async uploadFile(
-    @Args({
-      name: 'files',
-      type: () => [GraphQLUpload(['application/x-sqlite3'], 'CTBUpload')],
-    })
-    files: FileUpload[],
+  async document(
     @GetUserGql() user: User,
-  ): Promise<boolean> {
-    await this.importsService.importFromGraphqlClient(files, user);
-    return true;
+    @Args('file_id', { nullable: true }) file_id?: string,
+  ) {
+    if (!user) throw new UnauthorizedException();
+    return file_id
+      ? this.documentService.getWDocumentById({
+          userId: user.id,
+          documentId: file_id,
+        })
+      : { id: undefined };
   }
 
-  @ResolveField(() => Boolean)
-  async uploadLink(
+  @ResolveField(() => String)
+  async createDocument(
     @Args({
-      name: 'file',
-      type: () => UploadLinkInputType,
+      name: 'document',
+      type: () => CreateDocumentIt,
     })
-    { IDs, access_token }: UploadLinkInputType,
+    createDocumentIt: CreateDocumentIt,
     @GetUserGql() user: User,
-  ): Promise<boolean> {
-    this.importsService.importDocumentsFromGDrive(IDs, user, access_token);
-    return true;
+  ): Promise<string> {
+    const document = await this.documentService.createDocument({
+      data: createDocumentIt,
+      userId: user.id,
+    });
+    return document.id;
   }
-
+  @ResolveField(() => String)
+  async editDocument(
+    @Args({
+      name: 'meta',
+      type: () => EditDocumentIt,
+    })
+    meta: EditDocumentIt,
+    @Parent() document: Document,
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    const node = await this.documentService.editDocument({
+      meta,
+      getDocumentDTO: {
+        documentId: document.id,
+        userId: user.id,
+      },
+    });
+    return node.id;
+  }
   @ResolveField(() => String)
   async deleteDocument(
     @Args({
@@ -76,56 +92,37 @@ export class DocumentMutationsResolver {
     return JSON.stringify(deleteResult);
   }
 
-  @ResolveField(() => String)
-  async createDocument(
-    @Args({
-      name: 'document',
-      type: () => CreateDocumentIt,
-    })
-    { name }: CreateDocumentIt,
-    @GetUserGql() user: User,
-  ): Promise<string> {
-    const createResult = await this.documentService.createDocument({
-      name,
-      size: 0,
-      user,
-    });
-    return createResult.id;
-  }
-  @ResolveField(() => String)
-  async editDocument(
-    @Args({
-      name: 'meta',
-      type: () => EditDocumentIt,
-    })
-    meta: EditDocumentIt,
-    @Parent() parent,
-    @GetUserGql() user: User,
-  ): Promise<string> {
-    const res = await this.documentService.editDocument({
-      meta,
-      user,
-      documentId: parent.id,
-    });
-    return res;
-  }
-  @ResolveField(() => String)
-  async exportDocument(
-    @Parent() parent,
-    @GetUserGql() user: User,
-  ): Promise<string> {
-    return await this.exportsService.exportDocument({
-      user,
-      documentId: parent.id,
-    });
-  }
   @ResolveField(() => [NodeMutation])
   async node(
-    @Parent() parent,
-    @Args('node_id', { type: () => Int }) node_id: number,
-    @GetUserGql() user: User,
+    @Parent() { id: documentId },
+    @Args('node_id', { type: () => Int, nullable: true }) node_id: number,
   ) {
-    await this.documentService.getDocumentMetaById(user, parent.id);
-    return { node_id, documentId: parent.id };
+    return { node_id, documentId };
+  }
+
+  @ResolveField(() => Boolean)
+  async uploadFromGDrive(
+    @Args({
+      name: 'file',
+      type: () => UploadLinkInputType,
+    })
+    { IDs, access_token }: UploadLinkInputType,
+    @GetUserGql() user: User,
+  ): Promise<boolean> {
+    this.importsService.importDocumentsFromGDrive(IDs, user, access_token);
+    return true;
+  }
+
+  @ResolveField(() => Boolean)
+  async uploadFile(
+    @Args({
+      name: 'files',
+      type: () => [GraphQLUpload(['application/x-sqlite3'], 'CTBUpload')],
+    })
+    files: FileUpload[],
+    @GetUserGql() user: User,
+  ): Promise<boolean> {
+    await this.importsService.importFromGraphqlClient(files, user);
+    return true;
   }
 }

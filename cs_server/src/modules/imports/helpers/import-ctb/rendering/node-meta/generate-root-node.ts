@@ -1,4 +1,4 @@
-import { Node } from '../../../../../node/entities/node.entity';
+import { SqliteNodeMeta } from '../../repositories/queries/node';
 
 const generateRootNode = () =>
   (({
@@ -11,12 +11,11 @@ const generateRootNode = () =>
     has_codebox: 0,
     has_table: 0,
     sequence: 0,
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    child_nodes: [],
+    createdAt: new Date().getTime() / 1000,
+    updatedAt: new Date().getTime() / 1000,
     is_empty: 0,
     node_title_styles: '',
     read_only: 0,
-  } as unknown) as Node);
+  } as unknown) as SqliteNodeMeta);
 
 export { generateRootNode };

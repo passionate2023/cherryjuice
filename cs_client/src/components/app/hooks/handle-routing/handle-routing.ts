@@ -7,11 +7,11 @@ const useHandleRouting = (documentId: string) => {
   useEffect(() => {
     routingLogic({
       documentId,
-      pathname: router.location.pathname,
+      pathname: router.get.location.pathname,
       isFirstCall: initialCall.current,
     });
     initialCall.current = false;
-  }, [documentId, router.location.pathname]);
+  }, [documentId, router.get.location.pathname]);
 };
 
 export { useHandleRouting };

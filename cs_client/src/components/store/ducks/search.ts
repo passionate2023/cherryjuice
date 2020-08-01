@@ -83,7 +83,10 @@ const EmptyTimeFilter = {
   rangeStart: 0,
   rangeEnd: 0,
 };
-const EmptySearchResults = { results: [], meta: { elapsedTimeMs: -1 } };
+const EmptySearchResults = {
+  results: [],
+  meta: { elapsedTimeMs: -1, timestamp: 0 },
+};
 const initialState: State = {
   query: '',
   searchState: 'idle',

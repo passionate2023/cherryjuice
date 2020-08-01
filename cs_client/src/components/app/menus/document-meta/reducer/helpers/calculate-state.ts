@@ -1,3 +1,22 @@
-const calculateState = state => state;
+import {
+  ResetToEditProps,
+  TDocumentMetaState,
+} from '::app/menus/document-meta/reducer/reducer';
+import { Privacy } from '::types/graphql/generated';
 
-export { calculateState };
+const calculateEditedDocumentState = ({
+  document: { name, privacy, guests },
+}: ResetToEditProps): TDocumentMetaState => ({
+  name,
+  privacy,
+  guests: guests || [],
+});
+const calculateCreatedDocumentState = (): TDocumentMetaState => {
+  return {
+    name: 'new document',
+    privacy: Privacy.PRIVATE,
+    guests: [],
+  };
+};
+
+export { calculateEditedDocumentState, calculateCreatedDocumentState };

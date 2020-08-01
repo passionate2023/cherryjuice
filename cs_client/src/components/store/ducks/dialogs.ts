@@ -4,6 +4,7 @@ import { createActionPrefixer } from './helpers/shared';
 import { TAlert } from '::types/react';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { rootActionCreators } from '::root/store/ducks/root';
+import { authActionCreators } from '::root/store/ducks/auth';
 
 const ap = createActionPrefixer('dialogs');
 
@@ -33,11 +34,13 @@ const actionCreators = {
       if (alert?.error && process.env.NODE_ENV === 'development')
         // eslint-disable-next-line no-console
         console.error(alert);
-      if (alert.error?.message.includes('cs::')) {
-        const [, message] = alert.error.message
-          .replace(/^.*cs::/, '')
-          .split('::');
-        alert.description = message;
+      if (alert.error?.message.includes('errorId')) {
+        // @ts-ignore
+        const { graphQLErrors } = alert.error;
+        if (graphQLErrors?.length) {
+          const { description } = JSON.parse(graphQLErrors[0].message);
+          alert.description = description;
+        }
       }
       return _(alert);
     }),
@@ -135,7 +138,7 @@ const reducer = createReducer(initialState, _ => [
   _(actionCreators.showDocumentList, state => ({
     ...state,
     showDocumentList: true,
-    reloadDocumentList: new Date().getTime(),
+
   })),
   _(actionCreators.hideDocumentList, state => ({
     ...state,
@@ -226,6 +229,16 @@ const reducer = createReducer(initialState, _ => [
           snackbar: undefined,
         } as State),
     ),
+  ],
+  ...[
+    _(authActionCreators.signIn, state => ({
+      ...state,
+      showUserPopup: false,
+    })),
+    _(authActionCreators.signUp, state => ({
+      ...state,
+      showUserPopup: false,
+    })),
   ],
 ]);
 

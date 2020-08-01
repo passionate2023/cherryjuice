@@ -1,4 +1,8 @@
-import { getInitialDocumentState, CacheState } from '../initial-state';
+import {
+  getInitialDocumentState,
+  CacheState,
+  EditedDocumentMeta,
+} from '../initial-state';
 
 const changesHelpers = (state: CacheState) => ({
   document: (documentId?: string) => {
@@ -21,7 +25,7 @@ const changesHelpers = (state: CacheState) => ({
           ),
         );
       },
-      get meta(): Map<string, any> {
+      get meta(): EditedDocumentMeta {
         return state.modifications.document[documentId].meta;
       },
       node: {

@@ -12,7 +12,7 @@ const patterns: { [k: string]: TPattern } = {
   email: {
     // https://stackoverflow.com/a/201447/6549728
     // eslint-disable-next-line no-useless-escape
-    pattern: "^\S+@\S+\.\S+$",
+    pattern: '^\\S+@\\S{2,}\\.\\S{2,}$',
     description: 'invalid email',
   },
   name: {
@@ -23,7 +23,7 @@ const patterns: { [k: string]: TPattern } = {
   },
   password: {
     // eslint-disable-next-line no-useless-escape
-    pattern: "((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$",
+    pattern: '((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$',
     description: `password must have at least: 1 upper case letter, 1 lower case letter, 1 number or special character`,
   },
 };

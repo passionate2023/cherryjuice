@@ -1,4 +1,4 @@
-import { NodeCached } from '::types/graphql/adapters';
+import { NodeCached } from '::types/graphql-adapters';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 

@@ -2,17 +2,17 @@ import * as React from 'react';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { Icon, Icons } from '::shared-components/icon/icon';
 import { modToolbar } from '::sass-modules/index';
-import { useContext } from 'react';
-import { RootContext } from '::root/root-context';
 import { ac } from '::root/store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 import { Search } from '::app/editor/tool-bar/groups/nav-bar/components/search/search';
+import { User } from '::types/graphql/generated';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
+  user: state.auth.user,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -25,12 +25,9 @@ type Props = {
 const NavBar: React.FC<Props & PropsFromRedux> = ({
   showUserPopup,
   documentId,
+  user,
 }) => {
-  const {
-    session: {
-      user: { picture: userPicture },
-    },
-  } = useContext(RootContext);
+  const isLoggedIn = user?.id;
   const noDocumentIsSelected = !documentId;
   return (
     <div
@@ -40,6 +37,7 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
     >
       <Search />
       <ToolbarButton
+        dontMount={!isLoggedIn}
         onClick={ac.dialogs.showCreateDocumentDialog}
         testId={'new-document'}
       >
@@ -48,25 +46,36 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
       <ToolbarButton
         onClick={ac.document.export}
         disabled={noDocumentIsSelected}
+        dontMount={!isLoggedIn}
       >
         <Icon
           name={Icons.material.export}
           testId={testIds.toolBar__navBar__exportDocument}
         />
       </ToolbarButton>
-      <ToolbarButton onClick={ac.dialogs.showDocumentList}>
+      <ToolbarButton
+        onClick={ac.dialogs.showDocumentList}
+        dontMount={!isLoggedIn}
+      >
         <Icon
           name={Icons.material.folder}
           testId={testIds.toolBar__navBar__showDocumentList}
         />
       </ToolbarButton>
-      <ToolbarButton onClick={ac.dialogs.showSettingsDialog}>
+      <ToolbarButton
+        onClick={ac.dialogs.showSettingsDialog}
+        dontMount={!isLoggedIn}
+      >
         <Icon name={Icons.material.settings} />
       </ToolbarButton>
-      <ToolbarButton onClick={ac.dialogs.showUserPopup} active={showUserPopup}>
-        {userPicture ? (
+      <ToolbarButton
+        onClick={ac.dialogs.showUserPopup}
+        active={showUserPopup}
+        testId={testIds.toolBar__navBar__userButton}
+      >
+        {(user as User)?.picture ? (
           <img
-            src={userPicture}
+            src={user.picture}
             alt="user profile picture"
             className={modToolbar.toolBar__groupNavBar__profilePicture}
           />

@@ -7,6 +7,7 @@ import { fts, HeadlineProps } from './helpers/fts';
 import { regex } from './helpers/regex';
 import { simple } from './helpers/simple';
 import { ForbiddenException } from '@nestjs/common';
+import { QueryCreatorState } from '../time-filter';
 type PGHeadline = { nodeNameHeadline?: string; ahtmlHeadline?: string };
 const searchTargetsToColumnName = {
   [SearchTarget.nodeTitle]: {
@@ -38,7 +39,7 @@ const createHeadlineGenerator = ({
 };
 
 type Props = {
-  variables: string[];
+  state: QueryCreatorState;
   query: string;
   searchType: SearchType;
   searchOptions: SearchOptions;
@@ -48,10 +49,10 @@ const searchTargetWC = ({
   searchOptions,
   searchType,
   query,
-  variables,
+  state: qState,
   searchTarget,
 }: Props): { orWhereClauses: string; headline?: PGHeadline } => {
-  variables.push(query);
+  qState.variables.push(query);
   const state = {
     whereClause: '',
   };
@@ -61,7 +62,7 @@ const searchTargetWC = ({
   };
 
   const headlineGenerator = createHeadlineGenerator({
-    numberOfVariables: variables.length,
+    numberOfVariables: qState.variables.length,
     searchTarget,
     searchOptions,
   });
@@ -69,21 +70,21 @@ const searchTargetWC = ({
     case SearchType.FullText:
       state.whereClause = fts.whereClause({
         searchOptions,
-        variableIndex: variables.length,
+        variableIndex: qState.variables.length,
       });
       res.headline = headlineGenerator(fts.headline);
       break;
     case SearchType.Regex:
       state.whereClause = regex.whereClause({
         searchOptions,
-        variableIndex: variables.length,
+        variableIndex: qState.variables.length,
       });
       res.headline = headlineGenerator(regex.headline);
       break;
     case SearchType.Simple:
       state.whereClause = simple.whereClause({
         searchOptions,
-        variableIndex: variables.length,
+        variableIndex: qState.variables.length,
       });
 
       break;

@@ -2,36 +2,46 @@ import * as React from 'react';
 import { modDocumentOperations } from '::sass-modules/index';
 import { DocumentSubscription } from '::types/graphql/generated';
 import { ac } from '::root/store/store';
-import { useDeleteFile } from '::app/menus/select-file/hooks/delete-documents/delete-file';
 import { mapEventType } from './helpers/map-event-type';
 import { ActionButton } from './components/action-button';
-import { useContext } from 'react';
-import { RootContext } from '::root/root-context';
 
-const Document: React.FC<DocumentSubscription> = document => {
-  const { name, status, id } = document;
-  const { deleteDocument } = useDeleteFile({ IDs: [id] });
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
+
+const mapState = (state: Store) => ({
+  user: state.auth.user,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const Document: React.FC<{
+  document: DocumentSubscription;
+} & PropsFromRedux> = ({ document, user }) => {
   const open = () => {
-    ac.document.setDocumentId(id);
+    ac.document.setDocumentId(document.id);
   };
-  const {
-    session: {
-      user: { id: userId },
-    },
-  } = useContext(RootContext);
+
   return (
     <div className={modDocumentOperations.documentOperations__document}>
       <div className={modDocumentOperations.documentOperations__document__name}>
-        {name}
+        {document.name}
       </div>
       <div
         className={modDocumentOperations.documentOperations__document__status}
       >
-        {mapEventType(status)}
+        {mapEventType(document.status)}
       </div>
-      <ActionButton {...{ open, deleteDocument, document, userId }} />
+      <ActionButton
+        {...{
+          open,
+          document: document,
+          userId: user?.id,
+        }}
+      />
     </div>
   );
 };
 
-export { Document };
+const _ = connector(Document);
+export { _ as Document };

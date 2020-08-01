@@ -1,4 +1,4 @@
-import { DocumentMeta } from '::types/graphql/adapters';
+import { DocumentMeta } from '::types/graphql-adapters';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 
 const addUnsavedDocuments = (documents: DocumentMeta[]): DocumentMeta[] => {

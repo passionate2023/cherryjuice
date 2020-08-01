@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createRef, useEffect, useRef } from 'react';
+import { createRef, useRef } from 'react';
 import { modLogin } from '::sass-modules/index';
 import { Checkbox } from '::shared-components/checkbox';
 import { GoogleOauthButton } from '::shared-components/buttons/google-oauth-button';
@@ -8,16 +8,13 @@ import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import { TextInput, TextInputProps } from '::shared-components/form/text-input';
 import { FormSeparator } from '::shared-components/form/form-separator';
 import { patterns } from '::auth/helpers/form-validation';
-import { useMutation } from '@apollo/react-hooks';
-import { USER_MUTATION } from '::graphql/mutations';
 import { AuthScreen } from '::auth/auth-screen';
-import { AuthUser } from '::types/graphql/generated';
+import { SignInCredentials } from '::types/graphql/generated';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { Link } from 'react-router-dom';
 import { openConsentWindow } from '::auth/helpers/oauth';
 import { useDefaultValues } from '::hooks/use-default-form-values';
-import { localSessionManager } from '::auth/helpers/auth-state';
-import { rootActionCreators } from '::root/root.reducer';
+import { ac } from '::root/store/store';
 
 const inputs: TextInputProps[] = [
   {
@@ -41,16 +38,26 @@ const inputs: TextInputProps[] = [
   },
 ];
 
-type Props = {
-  session: AuthUser;
-};
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
 
-const LoginForm: React.FC<Props> = () => {
-  const [mutate, { loading, error, data }] = useMutation(
-    USER_MUTATION.signIn.query,
-  );
+const mapState = (state: Store) => ({
+  loading: state.auth.ongoingOperation !== 'idle',
+  alert: state.auth.alert,
+  userId: state.auth.user?.id,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = {};
+
+const LoginForm: React.FC<Props & PropsFromRedux> = ({
+  loading,
+  alert,
+  userId,
+}) => {
   const formRef = useRef<HTMLFormElement>();
-
   const staySignedRef = useRef<HTMLInputElement>();
   const login = (e?: any) => {
     if (formRef.current.checkValidity()) {
@@ -62,20 +69,12 @@ const LoginForm: React.FC<Props> = () => {
           inputRef?.current.value,
         ]),
       );
-      mutate({
-        variables: {
-          input: variables,
-        },
-      });
+      ac.auth.signIn(variables as SignInCredentials);
+      ac.auth.setStorageType(
+        staySignedRef.current.checked ? 'localStorage' : 'sessionStorage',
+      );
     }
   };
-  useEffect(() => {
-    const session = USER_MUTATION.signIn.path(data);
-    if (session?.token) {
-      localSessionManager.setStorageType(staySignedRef.current.checked);
-      rootActionCreators.setSession(session);
-    }
-  }, [data]);
 
   useDefaultValues(inputs);
   useModalKeyboardEvents({
@@ -84,8 +83,9 @@ const LoginForm: React.FC<Props> = () => {
     onConfirmModal: login,
     focusableElementsSelector: ['a', 'input[type="submit"]', '#google-btn'],
   });
+
   return (
-    <AuthScreen error={error}>
+    <AuthScreen error={alert} userId={userId}>
       <div className={modLogin.login__card}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
@@ -95,7 +95,7 @@ const LoginForm: React.FC<Props> = () => {
                 (process.env.graphqlAPI
                   ? `http://${process.env.graphqlAPI}`
                   : '') + '/auth/google/callback',
-              onAuth: rootActionCreators.setSession,
+              onAuth: ac.auth.setAuthenticationSucceeded,
             })}
           />
           <FormSeparator text={'or'} />
@@ -138,4 +138,5 @@ const LoginForm: React.FC<Props> = () => {
   );
 };
 
-export { LoginForm };
+const _ = connector(LoginForm);
+export { _ as LoginForm };

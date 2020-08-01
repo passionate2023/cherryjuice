@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from './repositories/user.repository';
+import { UserExistsDTO, UserRepository } from './repositories/user.repository';
 import { SignUpCredentials } from './dto/sign-up-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import { SignInCredentials } from './dto/sign-in-credentials.dto';
@@ -29,7 +29,11 @@ export class UserService {
     const { user, payload } = await this.userRepository.signUp(
       authCredentialsDto,
     );
-    return { token: this.jwtService.sign(payload), user };
+    return {
+      token: this.jwtService.sign(payload),
+      user,
+      secrets: this.getSecrets(),
+    };
   }
   async signIn(authCredentialsDto: SignInCredentials): Promise<AuthUser> {
     const { user, payload } = await this.userRepository.validateUserPassword(
@@ -38,6 +42,7 @@ export class UserService {
     return {
       token: this.jwtService.sign(payload),
       user,
+      secrets: this.getSecrets(),
     };
   }
 
@@ -46,6 +51,7 @@ export class UserService {
     return {
       token: this.jwtService.sign(payload),
       user,
+      secrets: this.getSecrets(),
     };
   }
   getSecrets(): Secrets {
@@ -74,5 +80,9 @@ export class UserService {
     } catch (err) {
       throw new InternalServerErrorException('validateOAuthLogin', err.message);
     }
+  }
+
+  async userExists(dto: UserExistsDTO): Promise<string | undefined> {
+    return this.userRepository.userExists(dto);
   }
 }

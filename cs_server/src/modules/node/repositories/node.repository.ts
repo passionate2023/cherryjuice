@@ -1,80 +1,190 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { Node } from '../entities/node.entity';
 import { Injectable } from '@nestjs/common';
-import { SaveAhtmlDto } from '../dto/save-ahtml.dto';
-import { NodeMetaDto } from '../dto/node-meta.dto';
-import { CreateNodeDto } from '../dto/create-node.dto';
 import { copyProperties } from '../../document/helpers';
-import { DeleteNodeDto } from '../dto/delete-node.dto';
-import { GetNodeByNodeIdIt } from '../dto/get-node-by-node-id.it';
-import { SaveHtmlIt } from '../dto/save-html.it';
-import { NodeMetaIt } from '../dto/node-meta.it';
+import { SaveHtmlIt } from '../it/save-html.it';
+import { NodeMetaIt, NodePrivacy } from '../it/node-meta.it';
 import { AHtmlLine } from '../helpers/rendering/ahtml-to-html';
 import { NodeSearchDto } from '../../search/dto/node-search.dto';
 import { NodeSearchResultEntity } from '../../search/entities/node.search-result.entity';
 import { SearchTarget, SearchType } from '../../search/it/node-search.it';
 import { nodeSearch } from '../../search/helpers/pg-queries/node-search';
+import { Document, Privacy } from '../../document/entities/document.entity';
+import {
+  CreateNodeDTO,
+  DeleteNodeDTO,
+  GetNodeDTO,
+  GetNodesDTO,
+  MutateNodeContentDTO,
+  MutateNodeMetaDTO,
+} from '../dto/mutate-node.dto';
+import {
+  and_,
+  or_,
+} from '../../search/helpers/pg-queries/helpers/clause-builder';
+import {
+  AccessLevel,
+  DocumentGuest,
+} from '../../document/entities/document-guest.entity';
+import { GetterSettings } from '../../document/repositories/document.repository';
+import { PrivateNode } from '../entities/private-node.ot';
+const nodeMeta = [
+  `n.id`,
+  `n.name`,
+  `n.node_id`,
+  `n.fatherId`,
+  `n.father_id`,
+  `n.child_nodes`,
+  `n.createdAt`,
+  `n.updatedAt`,
+  `n.node_title_styles`,
+  `n.read_only`,
+  `n.hash`,
+  `n.documentId`,
+  `n.privacy`,
+];
+const nodeAhtml = ['n.ahtml'];
+const fullNode = [...nodeMeta, ...nodeAhtml];
+const nodePrivacy = ['n.privacy', 'n.father_id', 'n.node_id'];
+const select = (target: NodeSelection): string[] => {
+  if (target === 'meta-and-ahtml') {
+    return fullNode;
+  } else if (target === 'ahtml') {
+    return nodeAhtml;
+  } else if (target === 'meta') {
+    return nodeMeta;
+  } else if (target === 'privacy') {
+    return nodePrivacy;
+  }
+};
+type NodeSelection = 'meta' | 'ahtml' | 'meta-and-ahtml' | 'privacy';
+
+export type RunFirst = <T>(q: SelectQueryBuilder<T>) => SelectQueryBuilder<T>;
 
 @Injectable()
 @EntityRepository(Node)
 export class NodeRepository extends Repository<Node> {
-  async createNode({ meta, documentId, user }: CreateNodeDto): Promise<Node> {
+  async getNodes(
+    dto: GetNodesDTO,
+    target: NodeSelection = 'meta',
+  ): Promise<Node[]> {
+    return await this.getNodesQueryBuilder(dto, target, {
+      write: false,
+    }).getMany();
+  }
+
+  baseQueryBuilder(
+    documentId: string,
+    target: 'privacy',
+  ): SelectQueryBuilder<PrivateNode>;
+  baseQueryBuilder(
+    documentId: string,
+    target?: NodeSelection,
+  ): SelectQueryBuilder<Node>;
+  baseQueryBuilder(
+    documentId,
+    target,
+  ): SelectQueryBuilder<Node> | SelectQueryBuilder<PrivateNode> {
+    return this.createQueryBuilder('n')
+      .leftJoin(Document, 'd', 'n."documentId" = d.id ')
+      .leftJoin(DocumentGuest, 'g', 'n."documentId" = g."documentId"')
+      .select(select(target))
+      .where('n."documentId" = :documentId', { documentId });
+  }
+
+  private getNodesQueryBuilder = (
+    { documentId, userId }: GetNodeDTO | GetNodesDTO,
+    target: NodeSelection = 'meta',
+    { runFirst, write }: GetterSettings,
+  ) => {
+    let queryBuilder = this.baseQueryBuilder(documentId, target);
+    if (runFirst) queryBuilder = runFirst<Node>(queryBuilder);
+    return queryBuilder.andWhere(
+      or_()
+        .or(`d."userId" = :userId`)
+        .orIf(!write, `n.privacy isnull`)
+        .orIf(!write, `n."privacy"  >= :publicPrivacy`)
+        .or(
+          and_()
+            .and(`g."userId" = :userId `)
+            .and(
+              or_()
+                .or(`n.privacy isnull`)
+                .or(`n."privacy"  >= :guestOnlyPrivacy`),
+            )
+            .andIf(write, `g."accessLevel" >= :writeAccessLevel`),
+        )
+        ._(),
+      {
+        userId,
+        publicPrivacy: Privacy.PUBLIC,
+        guestOnlyPrivacy: Privacy.GUESTS_ONLY,
+        writeAccessLevel: AccessLevel.WRITER,
+      },
+    );
+  };
+
+  async _getNodeById(
+    dto: GetNodeDTO,
+    target: NodeSelection = 'meta',
+    write: boolean,
+  ): Promise<Node> {
+    return this.getNodesQueryBuilder(dto, target, {
+      runFirst: queryBuilder =>
+        queryBuilder.andWhere('n."node_id" = :node_id', {
+          node_id: dto.node_id,
+        }),
+      write,
+    }).getOne();
+  }
+
+  async getNodeById(
+    dto: GetNodeDTO,
+    target: NodeSelection = 'meta',
+  ): Promise<Node> {
+    return this._getNodeById(dto, target, false);
+  }
+  async getWNodeById(
+    dto: GetNodeDTO,
+    target: NodeSelection = 'meta',
+  ): Promise<Node> {
+    return this._getNodeById(dto, target, true);
+  }
+  async getAHtml(dto: GetNodeDTO): Promise<AHtmlLine[]> {
+    return await this.getNodeById(dto, 'ahtml').then(node =>
+      JSON.parse(node.ahtml),
+    );
+  }
+
+  async createNode({ data, getNodeDTO }: CreateNodeDTO): Promise<Node> {
     const node = new Node();
-    copyProperties(meta, node, {});
-    node.documentId = documentId;
-    node.createdAt = new Date(meta.createdAt);
-    node.updatedAt = new Date(meta.updatedAt);
-    node.user = user;
+    if (data.privacy === NodePrivacy.DEFAULT) delete data.privacy;
+    copyProperties(data, node, {});
+    node.documentId = getNodeDTO.documentId;
+    node.createdAt = new Date(data.createdAt);
+    node.updatedAt = new Date(data.updatedAt);
     if (node.father_id !== -1) {
-      node.father = await this.getNodeMetaById({
+      node.father = await this.getNodeById({
+        ...getNodeDTO,
         node_id: node.father_id,
-        documentId,
-        user,
       });
     }
     await this.save(node);
     return node;
   }
 
-  getAHtml(node_id: string, documentId: string): Promise<AHtmlLine[]> {
-    return this.createQueryBuilder('node')
-      .select('node.ahtml')
-      .where('node.documentId = :documentId', { documentId })
-      .andWhere('node.node_id = :node_id', { node_id })
-      .getOne()
-      .then(node => JSON.parse(node.ahtml));
-  }
-
-  async getNodesMeta(documentId: string): Promise<Node[]> {
-    return await this.createQueryBuilder('node')
-      .where('node.documentId = :documentId', { documentId })
-      .getMany();
-  }
-
-  async getNodeMetaById({
-    documentId,
-    node_id,
-  }: GetNodeByNodeIdIt): Promise<Node> {
-    return this.findOneOrFail({
-      where: {
-        node_id,
-        documentId,
-      },
-    });
-  }
-
-  private async updateNode({
-    attributes,
-    node_id,
-    documentId,
-  }: {
-    node_id: number;
-    documentId: string;
-    attributes: SaveHtmlIt | NodeMetaIt;
-  }): Promise<Node> {
-    const node = await this.findOneOrFail({ node_id, documentId });
+  private async updateNode(
+    attributes: SaveHtmlIt | NodeMetaIt,
+    dto: GetNodeDTO,
+  ): Promise<Node> {
+    const node = await this.getWNodeById(dto);
     if (typeof attributes.updatedAt === 'number')
       attributes.updatedAt = (new Date(attributes.updatedAt) as unknown) as any;
+    if ('node_id' in attributes) delete attributes.node_id;
+    if (attributes['privacy'] === NodePrivacy.DEFAULT) {
+      delete attributes['privacy'];
+      node.privacy = null;
+    }
     Object.entries(attributes).forEach(([k, v]) => {
       node[k] = v;
     });
@@ -83,45 +193,26 @@ export class NodeRepository extends Repository<Node> {
     return node;
   }
 
-  async setAHtml({ data, node_id, documentId }: SaveAhtmlDto): Promise<Node> {
-    const node = await this.updateNode({
-      node_id,
-      documentId,
-      attributes: data,
-    });
-    return node;
+  async setAHtml({ data, getNodeDTO }: MutateNodeContentDTO): Promise<Node> {
+    return await this.updateNode(data, getNodeDTO);
   }
 
-  async setMeta({ documentId, node_id, meta }: NodeMetaDto): Promise<Node> {
-    const node = await this.updateNode({
-      attributes: meta,
-      node_id,
-      documentId,
-    });
-
-    return node;
+  async setMeta({ data, getNodeDTO }: MutateNodeMetaDTO): Promise<Node> {
+    return await this.updateNode(data, getNodeDTO);
   }
-
-  async deleteNode({ documentId, node_id }: DeleteNodeDto): Promise<string> {
-    return await this.createQueryBuilder('node')
-      .delete()
-      .where({ node_id, documentId })
-      .execute()
-      .then(res => JSON.stringify(res));
+  async deleteNode(dto: DeleteNodeDTO): Promise<string> {
+    const node = await this.getWNodeById(dto.getNodeDTO);
+    return await this.remove(node).then(res => JSON.stringify(res));
   }
-
-  async getNodesMetaAndAHtml(documentId: string): Promise<Node[]> {
-    return await this.createQueryBuilder('node')
-      .where('node.documentId = :documentId', { documentId })
-      .addSelect('node.ahtml')
-      .getMany();
+  async getNodesMetaAndAHtml(dto: GetNodesDTO): Promise<Node[]> {
+    return await this.getNodes(dto, 'meta-and-ahtml');
   }
 
   async findNodes({
     it,
-    user,
+    userId,
   }: NodeSearchDto): Promise<NodeSearchResultEntity[]> {
-    const { query, variables } = nodeSearch({ it, user });
+    const { query, variables } = nodeSearch({ it, userId });
 
     let searchResults: NodeSearchResultEntity[] = await this.manager.query(
       query,
@@ -142,5 +233,47 @@ export class NodeRepository extends Repository<Node> {
       });
     }
     return searchResults;
+  }
+
+  async getPrivateNodes({
+    userId,
+    documentId,
+  }: GetNodesDTO): Promise<PrivateNode[]> {
+    return this.baseQueryBuilder(documentId, 'privacy')
+      .andWhere(
+        and_()
+          .andIf(Boolean(userId), `d."userId" != :userId`)
+          .and(
+            or_()
+              // user not logged in, document public, some nodes not public
+              .orIf(
+                !userId,
+                and_()
+                  .and('d."privacy" = :publicPrivacy')
+                  .and('n.privacy < :publicPrivacy '),
+              )
+              .or(
+                // user logged in (guest), document is for guests only, some nodes are private
+                and_()
+                  .and('g."userId" = :userId')
+                  .and('d.privacy = :guestOnlyPrivacy')
+                  .and('n.privacy < :guestOnlyPrivacy'),
+              )
+              .or(
+                // user logged in (NOT guest), document is public, some nodes are private
+                and_()
+                  .and('g."userId"  is null')
+                  .and('d."privacy" = :publicPrivacy')
+                  .and('n.privacy < :publicPrivacy'),
+              ),
+          )
+          ._(),
+        {
+          userId,
+          publicPrivacy: NodePrivacy.PUBLIC,
+          guestOnlyPrivacy: NodePrivacy.GUESTS_ONLY,
+        },
+      )
+      .getMany();
   }
 }

@@ -23,6 +23,7 @@ const ThreeDotsButton: React.FC<Props> = ({ documentId }) => {
   return (
     <>
       <div className={`${modSelectFile.selectFile__file__threeDotsButton} `}>
+        {/*<VisibilityIcon privacy={privacy} />*/}
         <Icon
           name={Icons.material.menu}
           loadAsInlineSVG={'force'}

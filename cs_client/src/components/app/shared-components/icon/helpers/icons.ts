@@ -56,6 +56,7 @@ const Icons = {
     lock: 'lock',
     username: 'username',
     email: 'email',
+    globe: 'globe',
   },
   misc: {
     'google-g': 'google-g',

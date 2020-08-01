@@ -24,7 +24,8 @@ type GetNodeImages = (
 ) => Promise<LoadedImages>;
 
 type DocumentMeta = { name: string; hash: string; userId: string; id: string };
-
+export const escapeUnsafeCharacters = (text: string): string =>
+  text.replace(/([/\\:*?"<>|])/g, '_');
 class ExportCTB {
   private db: sqlite.Database;
   private readonly documentFolder;

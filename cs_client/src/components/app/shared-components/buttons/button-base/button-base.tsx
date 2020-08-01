@@ -2,6 +2,7 @@ import * as React from 'react';
 import { modButton } from '::sass-modules/index';
 import { EventHandler, useEffect, useRef } from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
+import { Icon } from '::shared-components/icon/icon';
 
 type ButtonBaseProps = {
   className?: string;
@@ -14,6 +15,7 @@ type ButtonBaseProps = {
   active?: boolean;
   text?: string;
   icon?: JSX.Element;
+  iconName?: string;
 };
 
 const ButtonBase: React.FC<ButtonBaseProps> = ({
@@ -27,12 +29,16 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   text,
   active,
   icon,
+  iconName,
 }) => {
   const ref = useRef<HTMLButtonElement>();
   useEffect(() => {
     if (lazyAutoFocus) {
       const handle = setTimeout(() => ref.current.focus(), lazyAutoFocus);
-      return () => clearTimeout(handle);
+      return () => {
+        ref.current.blur();
+        clearTimeout(handle);
+      };
     }
   }, []);
   return (
@@ -50,7 +56,13 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
       autoFocus={autoFocus}
       {...(testId && { 'data-testid': testId })}
     >
-      {icon}
+      {iconName ? (
+        <Icon name={iconName} loadAsInlineSVG={'force'} />
+      ) : icon ? (
+        icon
+      ) : (
+        <></>
+      )}
       {text}
     </button>
   );

@@ -1,7 +1,9 @@
 import { TimeFilter, TimeRange } from '../../../it/node-search.it';
+import { Privacy } from '../../../../document/entities/document.entity';
+import { NodePrivacy } from '../../../../node/it/node-meta.it';
 
 type QueryCreatorState = {
-  variables: (string | Date)[];
+  variables: (string | Date | Privacy | NodePrivacy)[];
 };
 
 type TimeFilterWCProps = {

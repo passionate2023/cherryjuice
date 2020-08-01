@@ -1,16 +1,28 @@
-import { NodeMeta } from '::types/graphql/adapters';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { nodesMetaMap } from '::types/misc';
+import { QNodeMeta } from '::graphql/queries/document-meta';
+import { PrivateNode } from '::types/graphql/generated';
 
 type Props = {
-  nodes: NodeMeta[];
+  nodes: QNodeMeta[];
+  privateNodes: PrivateNode[];
 };
 const constructTree = ({
   nodes: nodesArray = [],
-}: Props): Map<number, NodeMeta> | undefined => {
-  let nodes: Map<number, NodeMeta> = new Map();
+  privateNodes,
+}: Props): Map<number, QNodeMeta> | undefined => {
+  let nodes: Map<number, QNodeMeta> = new Map();
   if (nodesArray.length) {
     nodes = new Map(nodesArray.map(node => [node.node_id, node]));
+    privateNodes.forEach(({ node_id, father_id }) => {
+      const fatherNode = nodes.get(father_id);
+      if (fatherNode) {
+        const indexOfChildNode = fatherNode.child_nodes.indexOf(node_id);
+        if (indexOfChildNode !== -1) {
+          fatherNode.child_nodes.splice(indexOfChildNode, 1);
+        }
+      }
+    });
   }
   return nodes;
 };

@@ -1,6 +1,5 @@
-export const getTreeInDom = ({ document, tree }) => {
+export const getTreeInDom = ({ document, nOfLevels }) => {
   const treeElement = document.querySelector('.tree');
-  const nOfLevels = tree.filter(level => Boolean(level.length)).length;
   return Array.from({ length: nOfLevels })
     .map(
       (_, i) =>
@@ -10,7 +9,9 @@ export const getTreeInDom = ({ document, tree }) => {
           .join('') +
         'div',
     )
-    .map(sel => Array.from(treeElement.querySelectorAll(sel)));
+    .map(sel =>
+      Array.from(treeElement.querySelectorAll(sel) as HTMLDivElement[]),
+    );
 };
 const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
   window.HTMLInputElement.prototype,
@@ -19,6 +20,7 @@ const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
 
 export const setColorInputValue = ({ input, color }) => {
   nativeInputValueSetter.call(input, color);
+  // @ts-ignore
   input.dispatchEvent(new Event('change', { value: color, bubbles: true }));
 };
 

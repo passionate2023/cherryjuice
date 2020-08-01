@@ -2,7 +2,6 @@ import { modRichText } from '::sass-modules/index';
 import * as React from 'react';
 import { useRouteMatch } from 'react-router';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
-import { NodeMeta } from '::types/graphql/adapters';
 import { useGetNodeHtml } from '::app/editor/document/rich-text/hooks/get-node-html';
 import { useSetCurrentNode } from '::app/editor/document/rich-text/hooks/set-current-node';
 import { ContentEditable } from '::app/editor/document/rich-text/content-editable';
@@ -11,16 +10,18 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 import { router } from '::root/router/router';
+import { hasWriteAccessToDocument } from '::root/store/selectors/document/has-write-access-to-document';
+import { ErrorBoundary } from '::shared-components/error-boundary';
 
-type Props = {
-  file_id: string;
-  nodes: Map<number, NodeMeta>;
-};
+type Props = {};
 
 const mapState = (state: Store) => ({
   fetchNodesStarted: state.document.fetchNodesStarted,
   contentEditable: state.editor.contentEditable || !state.root.isOnMobile,
   processLinks: state.node.processLinks,
+  isDocumentOwner: hasWriteAccessToDocument(state),
+  nodes: state.document.nodes,
+  file_id: state.document.documentId,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -31,6 +32,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   nodes,
   processLinks,
   fetchNodesStarted,
+  isDocumentOwner,
 }) => {
   const match = useRouteMatch();
   // @ts-ignore
@@ -52,25 +54,28 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   useEffect(() => {
     const nodeIsNew = apolloCache.changes.isNodeNew(nodeId);
     if (htmlError && !nodeIsNew) {
-      router.document(file_id);
+      router.goto.document(file_id);
     }
   }, [htmlError]);
 
   return (
-    <div className={modRichText.richText__container}>
-      {html?.htmlRaw && !fetchNodesStarted ? (
-        <ContentEditable
-          contentEditable={contentEditable}
-          html={html.htmlRaw}
-          nodeId={nodes.get(node_id)?.id}
-          file_id={file_id}
-          node_id={node_id}
-          processLinks={[processLinksDueToHtmlChange, processLinks]}
-        />
-      ) : (
-        !htmlError && <SpinnerCircle />
-      )}
-    </div>
+    <ErrorBoundary>
+      <div className={modRichText.richText__container}>
+        {html?.htmlRaw && !fetchNodesStarted ? (
+          <ContentEditable
+            isDocumentOwner={isDocumentOwner}
+            contentEditable={contentEditable}
+            html={html.htmlRaw}
+            nodeId={nodes.get(node_id)?.id}
+            file_id={file_id}
+            node_id={node_id}
+            processLinks={[processLinksDueToHtmlChange, processLinks]}
+          />
+        ) : (
+          !htmlError && <SpinnerCircle />
+        )}
+      </div>
+    </ErrorBoundary>
   );
 };
 const _ = connector(RichText);

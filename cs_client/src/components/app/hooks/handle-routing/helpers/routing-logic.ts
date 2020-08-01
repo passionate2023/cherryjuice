@@ -8,10 +8,10 @@ const routingLogic = ({ documentId, pathname = '/', isFirstCall = false }) => {
   const newDocument = Boolean(documentId) && documentId !== docIdInPath;
   if (newDocumentIsEmpty) {
     if (!isFirstCall) {
-      router.home();
+      router.goto.home();
     }
   } else if (newDocument) {
-    router.document(documentId);
+    router.goto.document(documentId);
   }
 };
 

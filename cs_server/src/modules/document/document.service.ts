@@ -1,21 +1,25 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Document } from './entities/document.entity';
+import { Document, Privacy } from './entities/document.entity';
 import { DocumentRepository } from './repositories/document.repository';
-import { IDocumentService } from './interfaces/document.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
-import { DeleteResult } from 'typeorm';
-import { DocumentDTO } from '../imports/imports.service';
-import { EditDocumentDto } from './input-types/edit-document.dto';
 import { DocumentSubscriptionsService } from './document.subscriptions.service';
+import { DocumentGuestRepository } from './repositories/document-guest.repository';
+import {
+  CreateDocumentDTO,
+  EditDocumentDTO,
+  GetDocumentDTO,
+  GetDocumentsDTO,
+} from './dto/document.dto';
 
 @Injectable()
-export class DocumentService implements IDocumentService {
+export class DocumentService {
   logger = new Logger('document-service');
   constructor(
     @InjectRepository(DocumentRepository)
     private documentRepository: DocumentRepository,
     private subscriptionsService: DocumentSubscriptionsService,
+    private documentGuestRepository: DocumentGuestRepository,
   ) {}
   async onModuleInit(): Promise<void> {
     await this.documentRepository
@@ -29,70 +33,97 @@ export class DocumentService implements IDocumentService {
       );
   }
 
-  async getDocumentsMeta(user: User): Promise<Document[]> {
-    return this.documentRepository.getDocumentsMeta(user);
+  async getDocuments(dto: GetDocumentsDTO): Promise<Document[]> {
+    return this.documentRepository.getDocuments(dto);
   }
 
-  async getDocumentMetaById(user: User, file_id: string): Promise<Document> {
-    return this.documentRepository.getDocumentMetaById(user, file_id);
+  async getDocumentById(dto: GetDocumentDTO): Promise<Document> {
+    return this.documentRepository.getDocumentById(dto);
   }
 
-  async createDocument(documentDTO: DocumentDTO): Promise<Document> {
-    return await this.documentRepository.createDocument(documentDTO);
+  async getWDocumentById(dto: GetDocumentDTO): Promise<Document> {
+    return this.documentRepository.getWDocumentById(dto);
+  }
+
+  async createDocument(dto: CreateDocumentDTO): Promise<Document> {
+    const document = await this.documentRepository.createDocument(dto);
+    await this.documentGuestRepository.setGuests({
+      guests: dto.data.guests,
+      documentId: document.id,
+    });
+    return document;
+  }
+
+  async editDocument(dto: EditDocumentDTO): Promise<Document> {
+    const state = { guests: undefined };
+    if (dto.meta.guests) {
+      state.guests = dto.meta.guests;
+      delete dto.meta.guests;
+    }
+    const document = await this.documentRepository.editDocument(dto);
+    if (state.guests)
+      await this.documentGuestRepository.setGuests({
+        guests: state.guests,
+        documentId: document.id,
+      });
+    return document;
   }
   async deleteDocuments(
     IDs: string[],
     user: User,
     { notifySubscribers } = { notifySubscribers: true },
-  ): Promise<DeleteResult> {
+  ): Promise<string[]> {
     const deleteResult = await this.documentRepository.deleteDocuments(
       IDs,
       user,
     );
     if (notifySubscribers)
       IDs.forEach(id => {
-        const document = new Document(user, '', 0);
+        const document = new Document({
+          name: '',
+          userId: '',
+          privacy: Privacy.PRIVATE,
+        });
         document.id = id;
-        document.userId = user.id;
-        this.subscriptionsService.import.deleted(document);
+        this.subscriptionsService.import.deleted(document, user.id);
       });
     return deleteResult;
   }
-  async findDocumentByHash(hash: string, user: User): Promise<Document> {
+  async findDocumentByHash(hash: string): Promise<Document> {
     return await this.documentRepository.findOne({
-      where: { userId: user.id, hash },
+      where: { hash },
     });
   }
 
-  async editDocument(args: EditDocumentDto): Promise<string> {
-    return await this.documentRepository.editDocument(args);
-  }
-
   async updateNodesHash({
-    user,
     documentId,
     node_id,
     hash,
+    userId,
   }: {
-    user: User;
+    userId: string;
     documentId: string;
     node_id: number;
     hash: string;
-  }): Promise<void> {
-    const document = await this.getDocumentMetaById(user, documentId);
+  }): Promise<Document> {
+    const document = await this.getWDocumentById({ documentId, userId });
     document.nodes[node_id] = { hash };
     await document.save();
+    return document;
   }
   async deleteNodesHash({
-    user,
     documentId,
     node_id,
+    userId,
   }: {
-    node_id: number;
-    user: User;
+    userId: string;
     documentId: string;
+    node_id: number;
   }): Promise<void> {
-    const document = await this.getDocumentMetaById(user, documentId);
+    const document = await this.getWDocumentById({
+      documentId: documentId,
+      userId,
+    });
     delete document.nodes[node_id].hash;
     if (Object.keys(document.nodes[node_id]).length === 0)
       delete document.nodes[node_id];

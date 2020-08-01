@@ -11,9 +11,11 @@ import { Document } from './entities/document.entity';
 import { Node } from '../node/entities/node.entity';
 import { NodeService } from '../node/node.service';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
-import { UseGuards } from '@nestjs/common';
+import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { GetUserGql } from '../user/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
+import { ExportsService } from '../exports/exports.service';
+import { PrivateNode } from '../node/entities/private-node.ot';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Document)
@@ -21,6 +23,7 @@ export class DocumentQueriesResolver {
   constructor(
     private nodeService: NodeService,
     private documentService: DocumentService,
+    private exportsService: ExportsService,
   ) {}
 
   @Query(() => [Document], { nullable: 'items' })
@@ -28,9 +31,28 @@ export class DocumentQueriesResolver {
     @Args('file_id', { nullable: true }) file_id: string | undefined,
     @GetUserGql() user: User,
   ): Promise<Document[]> {
+    if (!file_id && !user) throw new UnauthorizedException();
     return file_id
-      ? [await this.documentService.getDocumentMetaById(user, file_id)]
-      : this.documentService.getDocumentsMeta(user);
+      ? [
+          await this.documentService.getDocumentById({
+            userId: user.id,
+            documentId: file_id,
+          }),
+        ]
+      : this.documentService.getDocuments({
+          userId: user.id,
+        });
+  }
+
+  @ResolveField(() => [PrivateNode])
+  async privateNodes(
+    @Parent() document,
+    @GetUserGql() user: User,
+  ): Promise<PrivateNode[]> {
+    return this.nodeService.getPrivateNodes({
+      documentId: document.id,
+      userId: user.id,
+    });
   }
 
   @ResolveField(() => [Node])
@@ -41,12 +63,25 @@ export class DocumentQueriesResolver {
   ) {
     return node_id
       ? [
-          await this.nodeService.getNodeMetaById({
-            user,
+          await this.nodeService.getNodeById({
             node_id,
             documentId: document.id,
+            userId: user.id,
           }),
         ]
-      : this.nodeService.getNodesMeta(document.id);
+      : await this.nodeService.getNodes({
+          documentId: document.id,
+          userId: user.id,
+        });
+  }
+  @ResolveField(() => String)
+  async exportDocument(
+    @Parent() parent,
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    return await this.exportsService.exportDocument({
+      userId: user.id,
+      documentId: parent.id,
+    });
   }
 }

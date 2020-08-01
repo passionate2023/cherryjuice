@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { EventHandler, useMemo, useCallback } from 'react';
-import { NodeCached } from '::types/graphql/adapters';
+import { NodeCached } from '::types/graphql-adapters';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { deleteNode } from '::app/menus/modals/delete-node/helpers/delete-node';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';

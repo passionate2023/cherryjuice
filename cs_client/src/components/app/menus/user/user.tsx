@@ -1,20 +1,20 @@
 import * as React from 'react';
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 import { modToolbar, modUserPopup } from '::sass-modules/index';
 import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
-import { TransitionWrapper } from '::shared-components/transition-wrapper';
 import { animated } from 'react-spring';
-import { RootContext } from '::root/root-context';
-import { rootActionCreators } from '::root/root.reducer';
-import { Icon, Icons } from '::shared-components/icon/icon';
+import { ac } from '::root/store/store';
 import { router } from '::root/router/router';
-
-type Props = {
+import { User as TUser } from '::types/graphql/generated';
+import { UserInfo } from '::app/menus/user/components/user-info';
+import { testIds } from '::cypress/support/helpers/test-ids';
+type UserProps = {
   onClose: Function;
+  user: TUser;
 };
 
-const User: React.FC<Props & { style }> = ({ onClose, style }) => {
+const User: React.FC<UserProps & { style }> = ({ onClose, style, user }) => {
   useClickOutsideModal({
     selectorsToIgnore: [
       '.' + modUserPopup.user__card,
@@ -22,83 +22,40 @@ const User: React.FC<Props & { style }> = ({ onClose, style }) => {
     ],
     cb: onClose,
   });
-  const { session } = useContext(RootContext);
   const signOut = useCallback(() => {
-    rootActionCreators.setSession({ token: '', user: undefined });
-    router.login();
+    ac.root.resetState();
+    router.goto.signIn();
   }, []);
-  const { picture, email, firstName, lastName } = session.user;
+  const loggedIn = !!user;
   return (
     <animated.div className={modUserPopup.user__card} style={style}>
-      <div className={modUserPopup.user__info}>
-        {picture ? (
-          <img
-            src={picture}
-            alt="profile-picture"
-            className={modUserPopup.user__info__picture}
-          />
-        ) : (
-          <Icon
-            {...{
-              name: Icons.material['person-circle'],
-              size: 40,
-              className: modUserPopup.user__info__picture,
-            }}
-          />
-        )}
-
-        <span className={modUserPopup.user__info__name}>
-          {firstName} {lastName}
-        </span>
-        <span className={modUserPopup.user__info__email}>{email}</span>
-      </div>
+      {loggedIn && <UserInfo user={user} />}
       <div className={modUserPopup.user__actions}>
-        <ButtonSquare
-          className={modUserPopup.user__actions__signOut}
-          onClick={signOut}
-          dark={true}
-          text={'sign out'}
-        />
+        {loggedIn ? (
+          <>
+            <ButtonSquare
+              className={modUserPopup.user__actions__signOut}
+              onClick={signOut}
+              dark={true}
+              text={'sign out'}
+              testId={testIds.toolBar__userPopup__signOut}
+            />
+          </>
+        ) : (
+          <>
+            <ButtonSquare
+              className={modUserPopup.user__actions__signOut}
+              onClick={router.goto.signIn}
+              dark={true}
+              text={'sign in'}
+              testId={testIds.toolBar__userPopup__signIn}
+            />
+          </>
+        )}
       </div>
     </animated.div>
   );
 };
 
-import { connect, ConnectedProps } from 'react-redux';
-import { ac, Store } from '::root/store/store';
-
-const mapState = (state: Store) => ({ show: state.dialogs.showUserPopup });
-const mapDispatch = { onClose: ac.dialogs.hideUserPopup };
-const connector = connect(mapState, mapDispatch);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-const UserWithTransition: React.FC<Props & PropsFromRedux> = ({
-  show,
-  ...props
-}) => {
-  return (
-    <TransitionWrapper<Props>
-      Component={User}
-      show={show}
-      transitionValues={{
-        from: {
-          transformOrigin: 'top right',
-          opacity: 0.5,
-          transform: 'scale(0)',
-        },
-        enter: {
-          opacity: 1,
-          transform: 'scale(1)',
-        },
-        leave: { opacity: 0.5, transform: 'scale(0)' },
-        config: {
-          tension: 370,
-        },
-      }}
-      componentProps={props}
-    />
-  );
-};
-
-const _ = connector(UserWithTransition);
-export default _;
+export { User };
+export { UserProps };

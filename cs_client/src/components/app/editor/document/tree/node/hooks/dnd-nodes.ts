@@ -1,10 +1,10 @@
 import nodeMod from '::sass-modules/tree/node.scss';
-import { NodeMeta } from '::types/graphql/adapters';
 import { MutableRefObject, useMemo } from 'react';
 import { AlertType } from '::types/react';
 import { modTree } from '::sass-modules/index';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { ac } from '::root/store/store';
+import { nodesMetaMap } from '::types/misc';
 
 const updateCache = ({ fatherOfDroppedNode, targetNode, droppedNode }) => {
   apolloCache.node.mutate({
@@ -66,7 +66,7 @@ const calculateDroppingPosition = (e): number => {
   return position;
 };
 const getFatherIdChain = (
-  nodes: Map<number, NodeMeta>,
+  nodes: nodesMetaMap,
   node_id: number,
   father_id_chain: number[] = [],
 ) => {
@@ -78,7 +78,7 @@ const getFatherIdChain = (
 type Props = {
   node_id: number;
   componentRef: MutableRefObject<HTMLDivElement>;
-  nodes?: Map<number, NodeMeta>;
+  nodes?: nodesMetaMap;
   draggable?: boolean;
   afterDrop?: Function;
 };
@@ -104,6 +104,7 @@ const useDnDNodes = ({
       nodeTitle.parentElement.removeAttribute('data-dragged');
     };
     return { addClass, removeClass };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { setId, moveNode } = useMemo(
@@ -159,7 +160,7 @@ const useDnDNodes = ({
         }
       },
     }),
-    [target_node_id, nodes],
+    [target_node_id, nodes, afterDrop, removeClass],
   );
 
   return {

@@ -14,20 +14,35 @@ import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
 export interface Query {
   document: Array<Document | null>;
   search: SearchResultEntity;
-  secrets: Secrets;
-  user: AuthUser;
+  user: UserQuery;
 }
 
 export interface Document {
   createdAt: number;
+  exportDocument: string;
   folder?: string;
+  guests?: Array<DocumentGuestOt | null>;
   hash?: string;
   id: string;
   name: string;
   node: Array<Node | null>;
+  privacy: Privacy;
+  privateNodes: Array<PrivateNode>;
   size: number;
   status?: string;
   updatedAt: number;
+  userId: string;
+}
+
+export interface DocumentGuestOt {
+  accessLevel: AccessLevel;
+  email: string;
+  userId: string;
+}
+
+export enum AccessLevel {
+  READER = 'READER',
+  WRITER = 'WRITER',
 }
 
 export interface Node {
@@ -43,6 +58,7 @@ export interface Node {
   name: string;
   node_id: number;
   node_title_styles?: string;
+  privacy?: NodePrivacy;
   read_only: number;
   updatedAt: number;
 }
@@ -50,6 +66,25 @@ export interface Node {
 export interface Image {
   base64: string;
   id: string;
+}
+
+export enum NodePrivacy {
+  DEFAULT = 'DEFAULT',
+  GUESTS_ONLY = 'GUESTS_ONLY',
+  PRIVATE = 'PRIVATE',
+  PUBLIC = 'PUBLIC',
+}
+
+export enum Privacy {
+  GUESTS_ONLY = 'GUESTS_ONLY',
+  PRIVATE = 'PRIVATE',
+  PUBLIC = 'PUBLIC',
+}
+
+export interface PrivateNode {
+  father_id: number;
+  node_id: number;
+  privacy: NodePrivacy;
 }
 
 export interface SearchResultEntity {
@@ -153,14 +188,20 @@ export interface NodeSearchResultEntity {
   updatedAt: Timestamp;
 }
 
-export interface Secrets {
-  google_api_key: string;
-  google_client_id: string;
+export interface UserQuery {
+  refreshToken: AuthUser;
+  userExists?: string;
 }
 
 export interface AuthUser {
+  secrets: Secrets;
   token: string;
   user: User;
+}
+
+export interface Secrets {
+  google_api_key: string;
+  google_client_id: string;
 }
 
 export interface User {
@@ -183,14 +224,21 @@ export interface DocumentMutation {
   createDocument: string;
   deleteDocument: string;
   editDocument: string;
-  exportDocument: string;
   node: NodeMutation;
   uploadFile: boolean;
-  uploadLink: boolean;
+  uploadFromGDrive: boolean;
 }
 
 export interface CreateDocumentIt {
+  guests: Array<DocumentGuestIt | null>;
   name: string;
+  privacy: Privacy;
+}
+
+export interface DocumentGuestIt {
+  accessLevel: AccessLevel;
+  email: string;
+  userId: string;
 }
 
 export interface DeleteDocumentInputType {
@@ -198,14 +246,16 @@ export interface DeleteDocumentInputType {
 }
 
 export interface EditDocumentIt {
+  guests?: Array<DocumentGuestIt | null>;
   name?: string;
+  privacy?: Privacy;
   updatedAt: Timestamp;
 }
 
 export interface NodeMutation {
   createNode: string;
   deleteNode: string;
-  meta: string;
+  editMeta: Array<string>;
   saveAHtml: string;
   uploadImage: Array<Array<string>>;
 }
@@ -213,12 +263,12 @@ export interface NodeMutation {
 export interface CreateNodeIt {
   child_nodes: Array<number>;
   createdAt: Timestamp;
-  documentId: string;
   fatherId?: string;
   father_id: number;
   name: string;
   node_id: number;
   node_title_styles?: string;
+  privacy?: NodePrivacy;
   read_only: number;
   updatedAt: Timestamp;
 }
@@ -229,8 +279,10 @@ export interface NodeMetaIt {
   father_id?: number;
   is_richtxt?: number;
   name?: string;
+  node_id: number;
   node_title_styles?: string;
   position?: number;
+  privacy?: NodePrivacy;
   read_only?: number;
   sequence?: number;
   updatedAt: Timestamp;
@@ -315,15 +367,18 @@ export enum DOCUMENT_SUBSCRIPTIONS {
 export interface Resolver {
   Query?: QueryTypeResolver;
   Document?: DocumentTypeResolver;
+  DocumentGuestOt?: DocumentGuestOtTypeResolver;
   Node?: NodeTypeResolver;
   Image?: ImageTypeResolver;
+  PrivateNode?: PrivateNodeTypeResolver;
   SearchResultEntity?: SearchResultEntityTypeResolver;
   Timestamp?: GraphQLScalarType;
   NodeSearchResults?: NodeSearchResultsTypeResolver;
   SearchResultMeta?: SearchResultMetaTypeResolver;
   NodeSearchResultEntity?: NodeSearchResultEntityTypeResolver;
-  Secrets?: SecretsTypeResolver;
+  UserQuery?: UserQueryTypeResolver;
   AuthUser?: AuthUserTypeResolver;
+  Secrets?: SecretsTypeResolver;
   User?: UserTypeResolver;
   Mutation?: MutationTypeResolver;
   DocumentMutation?: DocumentMutationTypeResolver;
@@ -337,7 +392,6 @@ export interface Resolver {
 export interface QueryTypeResolver<TParent = any> {
   document?: QueryToDocumentResolver<TParent>;
   search?: QueryToSearchResolver<TParent>;
-  secrets?: QueryToSecretsResolver<TParent>;
   user?: QueryToUserResolver<TParent>;
 }
 
@@ -357,31 +411,43 @@ export interface QueryToSearchResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface QueryToSecretsResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
 export interface QueryToUserResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface DocumentTypeResolver<TParent = any> {
   createdAt?: DocumentToCreatedAtResolver<TParent>;
+  exportDocument?: DocumentToExportDocumentResolver<TParent>;
   folder?: DocumentToFolderResolver<TParent>;
+  guests?: DocumentToGuestsResolver<TParent>;
   hash?: DocumentToHashResolver<TParent>;
   id?: DocumentToIdResolver<TParent>;
   name?: DocumentToNameResolver<TParent>;
   node?: DocumentToNodeResolver<TParent>;
+  privacy?: DocumentToPrivacyResolver<TParent>;
+  privateNodes?: DocumentToPrivateNodesResolver<TParent>;
   size?: DocumentToSizeResolver<TParent>;
   status?: DocumentToStatusResolver<TParent>;
   updatedAt?: DocumentToUpdatedAtResolver<TParent>;
+  userId?: DocumentToUserIdResolver<TParent>;
 }
 
 export interface DocumentToCreatedAtResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface DocumentToExportDocumentResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface DocumentToFolderResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentToGuestsResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -409,6 +475,14 @@ export interface DocumentToNodeResolver<TParent = any, TResult = any> {
   ): TResult;
 }
 
+export interface DocumentToPrivacyResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentToPrivateNodesResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface DocumentToSizeResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
@@ -418,6 +492,31 @@ export interface DocumentToStatusResolver<TParent = any, TResult = any> {
 }
 
 export interface DocumentToUpdatedAtResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentToUserIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentGuestOtTypeResolver<TParent = any> {
+  accessLevel?: DocumentGuestOtToAccessLevelResolver<TParent>;
+  email?: DocumentGuestOtToEmailResolver<TParent>;
+  userId?: DocumentGuestOtToUserIdResolver<TParent>;
+}
+
+export interface DocumentGuestOtToAccessLevelResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentGuestOtToEmailResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentGuestOtToUserIdResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -434,6 +533,7 @@ export interface NodeTypeResolver<TParent = any> {
   name?: NodeToNameResolver<TParent>;
   node_id?: NodeToNode_idResolver<TParent>;
   node_title_styles?: NodeToNode_title_stylesResolver<TParent>;
+  privacy?: NodeToPrivacyResolver<TParent>;
   read_only?: NodeToRead_onlyResolver<TParent>;
   updatedAt?: NodeToUpdatedAtResolver<TParent>;
 }
@@ -494,6 +594,10 @@ export interface NodeToNode_title_stylesResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface NodeToPrivacyResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface NodeToRead_onlyResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
@@ -512,6 +616,24 @@ export interface ImageToBase64Resolver<TParent = any, TResult = any> {
 }
 
 export interface ImageToIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface PrivateNodeTypeResolver<TParent = any> {
+  father_id?: PrivateNodeToFather_idResolver<TParent>;
+  node_id?: PrivateNodeToNode_idResolver<TParent>;
+  privacy?: PrivateNodeToPrivacyResolver<TParent>;
+}
+
+export interface PrivateNodeToFather_idResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface PrivateNodeToNode_idResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface PrivateNodeToPrivacyResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -652,6 +774,45 @@ export interface NodeSearchResultEntityToUpdatedAtResolver<
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface UserQueryTypeResolver<TParent = any> {
+  refreshToken?: UserQueryToRefreshTokenResolver<TParent>;
+  userExists?: UserQueryToUserExistsResolver<TParent>;
+}
+
+export interface UserQueryToRefreshTokenResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserQueryToUserExistsArgs {
+  email: string;
+}
+export interface UserQueryToUserExistsResolver<TParent = any, TResult = any> {
+  (
+    parent: TParent,
+    args: UserQueryToUserExistsArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface AuthUserTypeResolver<TParent = any> {
+  secrets?: AuthUserToSecretsResolver<TParent>;
+  token?: AuthUserToTokenResolver<TParent>;
+  user?: AuthUserToUserResolver<TParent>;
+}
+
+export interface AuthUserToSecretsResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface AuthUserToTokenResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface AuthUserToUserResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface SecretsTypeResolver<TParent = any> {
   google_api_key?: SecretsToGoogle_api_keyResolver<TParent>;
   google_client_id?: SecretsToGoogle_client_idResolver<TParent>;
@@ -665,19 +826,6 @@ export interface SecretsToGoogle_client_idResolver<
   TParent = any,
   TResult = any
 > {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface AuthUserTypeResolver<TParent = any> {
-  token?: AuthUserToTokenResolver<TParent>;
-  user?: AuthUserToUserResolver<TParent>;
-}
-
-export interface AuthUserToTokenResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface AuthUserToUserResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -749,10 +897,9 @@ export interface DocumentMutationTypeResolver<TParent = any> {
   createDocument?: DocumentMutationToCreateDocumentResolver<TParent>;
   deleteDocument?: DocumentMutationToDeleteDocumentResolver<TParent>;
   editDocument?: DocumentMutationToEditDocumentResolver<TParent>;
-  exportDocument?: DocumentMutationToExportDocumentResolver<TParent>;
   node?: DocumentMutationToNodeResolver<TParent>;
   uploadFile?: DocumentMutationToUploadFileResolver<TParent>;
-  uploadLink?: DocumentMutationToUploadLinkResolver<TParent>;
+  uploadFromGDrive?: DocumentMutationToUploadFromGDriveResolver<TParent>;
 }
 
 export interface DocumentMutationToCreateDocumentArgs {
@@ -800,15 +947,8 @@ export interface DocumentMutationToEditDocumentResolver<
   ): TResult;
 }
 
-export interface DocumentMutationToExportDocumentResolver<
-  TParent = any,
-  TResult = any
-> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
 export interface DocumentMutationToNodeArgs {
-  node_id: number;
+  node_id?: number;
 }
 export interface DocumentMutationToNodeResolver<TParent = any, TResult = any> {
   (
@@ -834,16 +974,16 @@ export interface DocumentMutationToUploadFileResolver<
   ): TResult;
 }
 
-export interface DocumentMutationToUploadLinkArgs {
+export interface DocumentMutationToUploadFromGDriveArgs {
   file: UploadLinkInputType;
 }
-export interface DocumentMutationToUploadLinkResolver<
+export interface DocumentMutationToUploadFromGDriveResolver<
   TParent = any,
   TResult = any
 > {
   (
     parent: TParent,
-    args: DocumentMutationToUploadLinkArgs,
+    args: DocumentMutationToUploadFromGDriveArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
@@ -852,7 +992,7 @@ export interface DocumentMutationToUploadLinkResolver<
 export interface NodeMutationTypeResolver<TParent = any> {
   createNode?: NodeMutationToCreateNodeResolver<TParent>;
   deleteNode?: NodeMutationToDeleteNodeResolver<TParent>;
-  meta?: NodeMutationToMetaResolver<TParent>;
+  editMeta?: NodeMutationToEditMetaResolver<TParent>;
   saveAHtml?: NodeMutationToSaveAHtmlResolver<TParent>;
   uploadImage?: NodeMutationToUploadImageResolver<TParent>;
 }
@@ -879,13 +1019,13 @@ export interface NodeMutationToDeleteNodeResolver<
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface NodeMutationToMetaArgs {
-  meta: NodeMetaIt;
+export interface NodeMutationToEditMetaArgs {
+  meta: Array<NodeMetaIt>;
 }
-export interface NodeMutationToMetaResolver<TParent = any, TResult = any> {
+export interface NodeMutationToEditMetaResolver<TParent = any, TResult = any> {
   (
     parent: TParent,
-    args: NodeMutationToMetaArgs,
+    args: NodeMutationToEditMetaArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;

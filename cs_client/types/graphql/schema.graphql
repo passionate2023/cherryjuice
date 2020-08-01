@@ -7,30 +7,41 @@ schema {
 }
 
 type AuthUser {
+    secrets: Secrets!
     token: String!
     user: User!
 }
 
 type Document {
     createdAt: Float!
+    exportDocument: String!
     folder: String
+    guests: [DocumentGuestOt]
     hash: String
     id: String!
     name: String!
     node(node_id: Int): [Node]!
+    privacy: Privacy!
+    privateNodes: [PrivateNode!]!
     size: Int!
     status: String
     updatedAt: Float!
+    userId: String!
+}
+
+type DocumentGuestOt {
+    accessLevel: AccessLevel!
+    email: String!
+    userId: String!
 }
 
 type DocumentMutation {
     createDocument(document: CreateDocumentIt!): String!
     deleteDocument(documents: DeleteDocumentInputType!): String!
     editDocument(meta: EditDocumentIt!): String!
-    exportDocument: String!
-    node(node_id: Int!): NodeMutation!
+    node(node_id: Int): NodeMutation!
     uploadFile(files: [CTBUpload!]!): Boolean!
-    uploadLink(file: UploadLinkInputType!): Boolean!
+    uploadFromGDrive(file: UploadLinkInputType!): Boolean!
 }
 
 type DocumentSubscription {
@@ -63,6 +74,7 @@ type Node {
     name: String!
     node_id: Int!
     node_title_styles: String
+    privacy: NodePrivacy
     read_only: Int!
     updatedAt: Float!
 }
@@ -70,7 +82,7 @@ type Node {
 type NodeMutation {
     createNode(meta: CreateNodeIt!): String!
     deleteNode: String!
-    meta(meta: NodeMetaIt!): String!
+    editMeta(meta: [NodeMetaIt!]!): [ID!]!
     saveAHtml(data: SaveHtmlIt!): String!
     uploadImage(images: [ImageUpload!]!): [[String!]!]!
 }
@@ -93,11 +105,16 @@ type NodeSearchResults {
     results: [NodeSearchResultEntity]!
 }
 
+type PrivateNode {
+    father_id: Float!
+    node_id: Float!
+    privacy: NodePrivacy!
+}
+
 type Query {
     document(file_id: String): [Document]!
     search: SearchResultEntity!
-    secrets: Secrets!
-    user: AuthUser!
+    user: UserQuery!
 }
 
 type SearchResultEntity {
@@ -134,6 +151,16 @@ type UserMutation {
     signUp(credentials: SignUpCredentials!): AuthUser!
 }
 
+type UserQuery {
+    refreshToken: AuthUser!
+    userExists(email: String!): String
+}
+
+enum AccessLevel {
+    READER
+    WRITER
+}
+
 enum DOCUMENT_SUBSCRIPTIONS {
     DELETED
     EXPORT_FAILED
@@ -148,6 +175,19 @@ enum DOCUMENT_SUBSCRIPTIONS {
     IMPORT_PENDING
     IMPORT_PREPARING
     IMPORT_STARTED
+}
+
+enum NodePrivacy {
+    DEFAULT
+    GUESTS_ONLY
+    PRIVATE
+    PUBLIC
+}
+
+enum Privacy {
+    GUESTS_ONLY
+    PRIVATE
+    PUBLIC
 }
 
 enum SearchScope {
@@ -191,18 +231,20 @@ enum TimeRange {
 }
 
 input CreateDocumentIt {
+    guests: [DocumentGuestIt]!
     name: String!
+    privacy: Privacy!
 }
 
 input CreateNodeIt {
     child_nodes: [Int!]!
     createdAt: Timestamp!
-    documentId: String!
     fatherId: String
     father_id: Float!
     name: String!
     node_id: Int!
     node_title_styles: String
+    privacy: NodePrivacy
     read_only: Int!
     updatedAt: Timestamp!
 }
@@ -211,8 +253,16 @@ input DeleteDocumentInputType {
     IDs: [String!]!
 }
 
+input DocumentGuestIt {
+    accessLevel: AccessLevel!
+    email: String!
+    userId: String!
+}
+
 input EditDocumentIt {
+    guests: [DocumentGuestIt]
     name: String
+    privacy: Privacy
     updatedAt: Timestamp!
 }
 
@@ -222,8 +272,10 @@ input NodeMetaIt {
     father_id: Float
     is_richtxt: Int
     name: String
+    node_id: Int!
     node_title_styles: String
     position: Int
+    privacy: NodePrivacy
     read_only: Int
     sequence: Float
     updatedAt: Timestamp!

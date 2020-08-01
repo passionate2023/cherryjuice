@@ -13,4 +13,14 @@ const FRAGMENT_USER = {
   `,
 };
 
+export const DOCUMENT_GUEST = gql`
+  fragment DocumentGuest on Document {
+    guests {
+      userId
+      accessLevel
+      email
+    }
+  }
+`;
+
 export { FRAGMENT_USER };

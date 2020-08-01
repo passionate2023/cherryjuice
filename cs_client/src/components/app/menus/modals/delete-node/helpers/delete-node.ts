@@ -1,5 +1,5 @@
 import { apolloCache } from '::graphql/cache/apollo-cache';
-import { NodeCached } from '::types/graphql/adapters';
+import { NodeCached } from '::types/graphql-adapters';
 import { router } from '::root/router/router';
 import { ac } from '::root/store/store';
 
@@ -26,7 +26,7 @@ const deleteNode = (node: NodeCached) => {
       nodeId: node.id,
     });
     ac.document.clearSelectedNode({ removeChildren: true });
-    router.document(node.documentId);
+    router.goto.document(node.documentId);
   };
 };
 

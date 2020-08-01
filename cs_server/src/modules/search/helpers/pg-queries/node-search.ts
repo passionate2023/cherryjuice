@@ -4,10 +4,11 @@ import { searchTargetWC } from './helpers/search-target/search-target';
 import { timeFilterWC } from './helpers/time-filter';
 import { orderBy } from './helpers/order-by/order-by';
 import { SearchTarget } from '../../it/node-search.it';
+import { ownershipWC } from './helpers/ownership';
 
 const nodeSearch = ({
   it,
-  user,
+  userId,
 }: NodeSearchDto): { query: string; variables: string[] } => {
   const {
     searchTarget,
@@ -21,26 +22,26 @@ const nodeSearch = ({
     updatedAtTimeFilter,
     sortOptions,
   } = it;
-  const variables = [];
+  const state = { variables: [] };
   const andWhereClauses: string[] = [];
-  variables.push(user.id);
-  andWhereClauses.push('n."userId" = $' + variables.length);
+
+  andWhereClauses.push(ownershipWC({ state, userId }));
 
   andWhereClauses.push(
     ...timeFilterWC({
-      state: { variables },
+      state,
       createdAtTimeFilter,
       updatedAtTimeFilter,
     }),
   );
   andWhereClauses.push(
-    searchScopeWC({ variables, searchScope, nodeId, documentId }),
+    searchScopeWC({ state, searchScope, nodeId, documentId }),
   );
 
   const { headline, orWhereClauses } = searchTargetWC({
     searchTarget,
     searchType,
-    variables,
+    state,
     searchOptions,
     query,
   });
@@ -63,13 +64,14 @@ const nodeSearch = ({
         from node as n
         inner join document as d
         on d.id = n."documentId"
+        left join document_guest g on d.id = g."documentId"
         where ${andWhereClauses.filter(Boolean).join(' and ')}
         ${orderBy({ sortOptions })};
   `;
 
   return {
     query: searchQuery,
-    variables,
+    variables: state.variables,
   };
 };
 

@@ -14,16 +14,23 @@ import { modNodeMeta } from '::sass-modules/index';
 import { IconPicker } from '::app/menus/node-meta/components/icon-picker';
 import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
 import { testIds } from '::cypress/support/helpers/test-ids';
-
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
+import { SelectPrivacy } from '::app/menus/document-meta/components/select-privacy/select-privacy';
+import { Privacy } from '::types/graphql/generated';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
   nodeId: state.document.selectedNode.id,
+  node_id: state.document.selectedNode.node_id,
   highestNode_id: state.document.highestNode_id,
   showDialog: state.dialogs.showNodeMetaDialog,
   isOnMobile: state.root.isOnMobile,
+  nodes: state.document.nodes,
+  documents: state.documentsList.documents,
+  userId: state.auth.user?.id,
+  documentUserId: state.document.userId,
+  documentPrivacy: state.document.privacy,
 });
 const mapDispatch = {
   onClose: ac.dialogs.hideNodeMeta,
@@ -41,7 +48,13 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
   onClose,
   documentId,
   highestNode_id,
+  nodes,
+  node_id,
+  userId,
+  documentUserId,
+  documentPrivacy,
 }) => {
+  const isOwnerOfDocument = documentUserId === userId;
   const [state, dispatch] = useReducer(nodeMetaReducer, nodeMetaInitialState);
   useEffect(() => {
     nodeMetaActionCreators.__setDispatch(dispatch);
@@ -53,10 +66,15 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
     highestNode_id,
   });
 
+  const fatherNode = nodes ? nodes.get(node_id) : undefined;
   useEffect(() => {
-    if (showDialog === 'edit') nodeMetaActionCreators.reset(node);
-    else nodeMetaActionCreators.reset(undefined);
-  }, [nodeId, showDialog]);
+    if (showDialog === 'edit') nodeMetaActionCreators.resetToEdit({ node });
+    else {
+      nodeMetaActionCreators.resetToCreate({
+        fatherNode,
+      });
+    }
+  }, [nodeId, showDialog, fatherNode]);
   const onSave = useSave({
     nodeId,
     node,
@@ -84,7 +102,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       value: state.name,
       type: 'text',
       label: 'Node name',
-      lazyAutoFocus: 400,
+      lazyAutoFocus: 500,
       testId: testIds.nodeMeta__nodeName,
     },
     {
@@ -134,7 +152,21 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       label: 'Read only',
     },
   ];
-
+  if (isOwnerOfDocument) {
+    inputs.push({
+      customInput: (
+        <SelectPrivacy
+          disabled={documentPrivacy === Privacy.PRIVATE}
+          privacy={state.privacy}
+          onChange={nodeMetaActionCreators.setPrivacy}
+          maximumPrivacy={documentPrivacy}
+          useNodeOptions={true}
+          testId={testIds.nodeMeta__privacy}
+        />
+      ),
+      label: 'visibility',
+    });
+  }
   return (
     <DialogWithTransition
       dialogTitle={'Node Properties'}
@@ -146,6 +178,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       onConfirm={onSave}
       rightHeaderButtons={[]}
       small={true}
+      docked={false}
     >
       <ErrorBoundary>
         <MetaForm inputs={inputs} />

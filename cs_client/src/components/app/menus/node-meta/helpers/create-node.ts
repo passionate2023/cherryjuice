@@ -1,5 +1,5 @@
 import { NodeMetaIt } from '::types/graphql/generated';
-import { NodeNew } from '::types/graphql/adapters';
+import { NodeNew } from '::types/graphql-adapters';
 
 const defaultNode = {
   name: '',

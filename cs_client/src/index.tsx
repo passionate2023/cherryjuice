@@ -12,7 +12,7 @@ import { router } from '::root/router/router';
 import { attachTestCallbacks } from '::helpers/attach-test-callbacks';
 
 render(
-  <Router history={router.__history}>
+  <Router history={router.get.__history}>
     <Root />
   </Router>,
   document.querySelector('#cs'),
@@ -20,5 +20,12 @@ render(
 if (process.env.NODE_ENV === 'development') {
   // @ts-ignore
   window.__APOLLO_CACHE__ = apolloCache;
-  attachTestCallbacks()
+  attachTestCallbacks();
+}
+if (process.env.NODE_ENV !== 'development') {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = '//fonts.googleapis.com/css?family=Roboto:400';
+  document.head.appendChild(link);
 }

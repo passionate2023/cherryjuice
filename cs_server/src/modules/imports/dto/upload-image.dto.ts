@@ -1,7 +1,8 @@
 import { User } from '../../user/entities/user.entity';
-import { UploadImageIt } from '../../node/dto/upload-image.it';
+import { UploadImageIt } from '../../node/it/upload-image.it';
 import { Field } from '@nestjs/graphql';
 import { FileUpload } from '../../document/helpers/graphql';
+import { MutateNodeDTO } from '../../node/dto/mutate-node.dto';
 
 export class UploadImageDto extends UploadImageIt {
   node_id: number;
@@ -9,3 +10,7 @@ export class UploadImageDto extends UploadImageIt {
   @Field()
   user: User;
 }
+
+export type AddImageDTO = MutateNodeDTO & {
+  images: FileUpload[];
+};

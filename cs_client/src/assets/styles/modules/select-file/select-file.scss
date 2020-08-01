@@ -18,8 +18,15 @@
     background-color: $primary-light;
   }
   transition: background-color 0.3s ease;
+  svg {
+    fill: grey;
+  }
 }
 .selectFile__file__three-dots-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   position: absolute;
   right: 10px;
   top: 10px;
@@ -53,6 +60,11 @@
 .selectFile__file__name__tick {
   position: absolute;
   margin-right: 5px;
+}
+.selectFile__file__details__visibility {
+  display: flex;
+  gap: 5px;
+  align-items: center;
 }
 .selectFile__file__details__hash,
 .selectFile__file__details__id {

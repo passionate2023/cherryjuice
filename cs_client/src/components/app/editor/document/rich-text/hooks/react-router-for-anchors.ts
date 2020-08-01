@@ -38,7 +38,7 @@ const useReactRouterForAnchors = ({
           const isLocalLink = url.host === location.host;
           const isWebLink = !isLocalLink && url.protocol.startsWith('http');
           if (isLocalLink) {
-            router.hash(url.pathname + url.hash);
+            router.goto.hash(url.pathname + url.hash);
             e.preventDefault();
           } else if (isWebLink) {
             window.open(url.href, '_blank');

@@ -1,5 +1,6 @@
-import { NodeCached } from '::types/graphql/adapters';
+import { NodeCached } from '::types/graphql-adapters';
 import { Document } from '::types/graphql/generated';
+import { TDocumentMetaState } from '::app/menus/document-meta/reducer/reducer';
 
 type GenerateRootNodeProps = {
   documentId: string;
@@ -13,24 +14,30 @@ const generateRootNode = ({
   father_id: -1,
   name: 'root',
   html: '<?xml version="1.0" ?><node><rich_text></rich_text></node>',
-  is_richtxt: 0,
   createdAt: new Date().getTime(),
   updatedAt: new Date().getTime(),
   child_nodes: [],
-  is_empty: 0,
   node_title_styles: '',
   read_only: 0,
   image: [],
+  hash: '',
 });
 
 type GenerateNewDocumentProps = {
-  name: string;
+  state: TDocumentMetaState;
+  userId: string;
 };
-const generateNewDocument = ({ name }: GenerateNewDocumentProps): Document => {
+const generateNewDocument = ({
+  userId,
+  state: { guests, privacy, name },
+}: GenerateNewDocumentProps): Document => {
   return {
+    userId,
+    privacy,
+    name,
+    guests,
     id: `new-document-${new Date().getTime()}`,
     node: [],
-    name,
     size: 0,
     hash: '',
     folder: 'Unsaved',

@@ -1,5 +1,9 @@
 import gql from 'graphql-tag';
-import { AuthUser } from '::types/graphql/generated';
+import {
+  AuthUser,
+  SignInCredentials,
+  SignUpCredentials,
+} from '::types/graphql/generated';
 import { FRAGMENT_USER } from '::graphql/fragments';
 
 const DOCUMENT_MUTATION = {
@@ -13,27 +17,11 @@ const DOCUMENT_MUTATION = {
   grdrive: gql`
     mutation($file: UploadLinkInputType!) {
       document {
-        uploadLink(file: $file)
+        uploadFromGDrive(file: $file)
       }
     }
   `,
-  deleteDocument: gql`
-    mutation deleteDocument($documents: DeleteDocumentInputType!) {
-      document {
-        deleteDocument(documents: $documents)
-      }
-    }
-  `,
-  exportDocument: {
-    path: data => data?.document?.exportDocument,
-    query: gql`
-      mutation exportDocument($file_id: String!) {
-        document(file_id: $file_id) {
-          exportDocument
-        }
-      }
-    `,
-  },
+
   ahtml: {
     path: (data): string => data?.document?.node?.saveAHtml,
     query: gql`
@@ -50,34 +38,7 @@ const DOCUMENT_MUTATION = {
       }
     `,
   },
-  meta: {
-    path: (data): string => data?.document?.node?.meta,
-    query: gql`
-      mutation meta($file_id: String!, $node_id: Int!, $meta: NodeMetaIt!) {
-        document(file_id: $file_id) {
-          node(node_id: $node_id) {
-            meta(meta: $meta)
-          }
-        }
-      }
-    `,
-  },
-  createNode: {
-    path: (data): string => data?.document?.node?.createNode,
-    query: gql`
-      mutation createNode(
-        $file_id: String!
-        $node_id: Int!
-        $meta: CreateNodeIt!
-      ) {
-        document(file_id: $file_id) {
-          node(node_id: $node_id) {
-            createNode(meta: $meta)
-          }
-        }
-      }
-    `,
-  },
+
   deleteNode: {
     path: (data): string => data?.document?.node?.deleteNode,
     query: gql`
@@ -90,16 +51,7 @@ const DOCUMENT_MUTATION = {
       }
     `,
   },
-  createDocument: {
-    path: (data): string => data?.document?.createDocument,
-    query: gql`
-      mutation createDocument($document: CreateDocumentIt!) {
-        document {
-          createDocument(document: $document)
-        }
-      }
-    `,
-  },
+
   uploadImages: {
     path: (data): [string, string][] => data?.document?.node?.uploadImage,
     query: gql`
@@ -116,20 +68,32 @@ const DOCUMENT_MUTATION = {
       }
     `,
   },
-  editDocument: {
-    path: (data): string => data?.document?.editDocument,
-    query: gql`
-      mutation editDocument($file_id: String!, $meta: EditDocumentIt!) {
-        document(file_id: $file_id) {
-          editDocument(meta: $meta)
-        }
-      }
-    `,
-  },
 };
 
 const USER_MUTATION = {
+  refreshToken: {
+    args: (): void => undefined,
+    path: (data): AuthUser | undefined => data?.user?.signIn,
+    query: gql`
+      query refreshToekn {
+        user {
+          refreshToken {
+            token
+            user {
+              ...UserInfo
+            }
+            secrets {
+              google_api_key
+              google_client_id
+            }
+          }
+        }
+      }
+      ${FRAGMENT_USER.userInfo}
+    `,
+  },
   signIn: {
+    args: (input: SignInCredentials) => ({ input }),
     path: (data): AuthUser | undefined => data?.user?.signIn,
     query: gql`
       mutation signin($input: SignInCredentials!) {
@@ -139,6 +103,10 @@ const USER_MUTATION = {
             user {
               ...UserInfo
             }
+            secrets {
+              google_api_key
+              google_client_id
+            }
           }
         }
       }
@@ -146,6 +114,7 @@ const USER_MUTATION = {
     `,
   },
   signUp: {
+    args: (input: SignUpCredentials) => ({ input }),
     path: (data): AuthUser | undefined => data?.user?.signUp,
     query: gql`
       mutation signup($input: SignUpCredentials!) {
@@ -154,6 +123,10 @@ const USER_MUTATION = {
             token
             user {
               ...UserInfo
+            }
+            secrets {
+              google_api_key
+              google_client_id
             }
           }
         }

@@ -31,18 +31,18 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
       <h2 className={modDialog.dialog__header__title}>{dialogTitle}</h2>
       <span className={modDialog.dialog__header__subTitle} />
       <div className={modDialog.dialog__header__buttons}>
-        {rightHeaderButtons.map(button =>
-          button.hidden ? (
-            <></>
-          ) : (
-            <ButtonCircle
-              onClick={button.onClick}
-              testId={button.testId}
-              icon={<Icon name={button.icon} />}
-              key={button.icon}
-              className={button.className}
-            />
-          ),
+        {rightHeaderButtons.map(
+          button =>
+            !button.hidden && (
+              <ButtonCircle
+                onClick={button.onClick}
+                testId={button.testId}
+                icon={<Icon name={button.icon} />}
+                key={button.icon}
+                className={button.className}
+                disabled={button.disabled}
+              />
+            ),
         )}
 
         <ButtonCircle

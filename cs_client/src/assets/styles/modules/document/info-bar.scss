@@ -12,7 +12,7 @@
   }
   @include respond-to($md-down) {
     min-width: calc(100vw - 20px);
-    height: calc(var(--vh) * 0.12);
+    height: 60px;
   }
   // position
   z-index: $ZI-info-bar;
@@ -26,15 +26,16 @@
   }
   // display
   display: flex;
+  justify-content: space-between;
   // children
   @include respond-to($md-down) {
-    flex-direction: column;
     justify-content: space-between;
     padding: 10px 10px;
     overflow: auto;
   }
   @include respond-to($md-up) {
-    padding-left: 3px;
+    //padding-left: 3px;
+    padding: 0px 5px;
     align-items: center;
   }
   // style
@@ -54,6 +55,13 @@
   @include respond-to($md-down) {
     display: none;
   }
+  margin-left: -1px;
+  margin-right: -1px;
+  width: 1px;
+  background-color: grey;
+  height: 10px;
+  opacity: 1;
+  align-self: center;
 }
 .info-bar__place-holder {
   @include respond-to($md-down) {
@@ -62,4 +70,24 @@
     align-items: center;
     justify-content: center;
   }
+}
+.info-bar__group {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  svg {
+    fill: grey;
+  }
+}
+
+.info-bar__document-privacy {
+  display: inline;
+}
+.info-bar__timestamp {
+  @include respond-to($md-down) {
+    flex-direction: column;
+  }
+  display: flex;
+  flex: 1;
+  gap: 10px;
 }

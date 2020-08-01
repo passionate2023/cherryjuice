@@ -1,4 +1,4 @@
-import { NodeCached } from '::types/graphql/adapters';
+import { NodeCached } from '::types/graphql-adapters';
 import { NodeMetaIt } from '::types/graphql/generated';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { CacheState } from '::graphql/cache/initial-state';
@@ -8,7 +8,7 @@ import { NodeIdDocumentId } from './image';
 type MutateNodeProps = {
   nodeId: string;
   meta:
-    | (NodeMetaIt & { updatedAt?: number })
+    | Omit<NodeMetaIt, 'updatedAt', 'node_id'>
     | { html?: string }
     | { updatedAt?: string };
 };
