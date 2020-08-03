@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { modSearchFilter } from '::sass-modules/';
+import { modSearchFilter } from '::sass-modules';
 import {
   Scope,
   ScopeProps,

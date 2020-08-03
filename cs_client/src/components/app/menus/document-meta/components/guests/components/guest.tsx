@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AccessLevel, DocumentGuestOt } from '::types/graphql/generated';
-import { modGuests } from '::sass-modules/';
+import { modGuests } from '::sass-modules';
 import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
 import { Icons } from '::shared-components/icon/icon';
 import { useCallback } from 'react';

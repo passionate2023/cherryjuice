@@ -84,7 +84,6 @@ export enum Privacy {
 export interface PrivateNode {
   father_id: number;
   node_id: number;
-  privacy: NodePrivacy;
 }
 
 export interface SearchResultEntity {
@@ -312,6 +311,7 @@ export interface UploadLinkInputType {
 export interface UserMutation {
   signIn: AuthUser;
   signUp: AuthUser;
+  updateUserProfile: string;
 }
 
 export interface SignInCredentials {
@@ -325,6 +325,11 @@ export interface SignUpCredentials {
   lastName: string;
   password: string;
   username: string;
+}
+
+export interface UpdateUserProfileIt {
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface Subscription {
@@ -622,7 +627,6 @@ export interface ImageToIdResolver<TParent = any, TResult = any> {
 export interface PrivateNodeTypeResolver<TParent = any> {
   father_id?: PrivateNodeToFather_idResolver<TParent>;
   node_id?: PrivateNodeToNode_idResolver<TParent>;
-  privacy?: PrivateNodeToPrivacyResolver<TParent>;
 }
 
 export interface PrivateNodeToFather_idResolver<TParent = any, TResult = any> {
@@ -630,10 +634,6 @@ export interface PrivateNodeToFather_idResolver<TParent = any, TResult = any> {
 }
 
 export interface PrivateNodeToNode_idResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface PrivateNodeToPrivacyResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -1061,6 +1061,7 @@ export interface NodeMutationToUploadImageResolver<
 export interface UserMutationTypeResolver<TParent = any> {
   signIn?: UserMutationToSignInResolver<TParent>;
   signUp?: UserMutationToSignUpResolver<TParent>;
+  updateUserProfile?: UserMutationToUpdateUserProfileResolver<TParent>;
 }
 
 export interface UserMutationToSignInArgs {
@@ -1082,6 +1083,21 @@ export interface UserMutationToSignUpResolver<TParent = any, TResult = any> {
   (
     parent: TParent,
     args: UserMutationToSignUpArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMutationToUpdateUserProfileArgs {
+  userProfile: UpdateUserProfileIt;
+}
+export interface UserMutationToUpdateUserProfileResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToUpdateUserProfileArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;

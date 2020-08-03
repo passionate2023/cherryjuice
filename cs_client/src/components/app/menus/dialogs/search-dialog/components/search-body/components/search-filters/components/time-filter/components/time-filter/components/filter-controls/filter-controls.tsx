@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { modTimeFilter } from '::sass-modules/';
+import { modTimeFilter } from '::sass-modules';
 import { CustomRange } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/filter-controls/components/custom-range';
 import { SelectRange } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/filter-controls/components/select-range';
 import { TimeFilter, TimeRange } from '::types/graphql/generated';

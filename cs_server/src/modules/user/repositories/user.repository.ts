@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtPayloadInterface } from '../interfaces/jwt-payload.interface';
 import { SignInCredentials } from '../dto/sign-in-credentials.dto';
 import { OauthJson } from '../user.service';
+import { UpdateUserProfileIt } from '../input-types/update-user-profile.it';
 
 const hashPassword = (password: string, salt: string): Promise<string> => {
   return bcrypt.hash(password, salt);
@@ -27,6 +28,11 @@ const pickNonSensitiveFields = (user: User): User => {
 };
 
 export type UserExistsDTO = { email: string };
+
+export type UpdateUserProfileDTO = {
+  input: UpdateUserProfileIt;
+  username: string;
+};
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
@@ -158,6 +164,25 @@ class UserRepository extends Repository<User> {
 
   async userExists({ email }: UserExistsDTO): Promise<string | undefined> {
     return await this.findOne({ where: { email } }).then(user => user?.id);
+  }
+
+  private async updateUser(
+    user: User,
+    data: UpdateUserProfileIt,
+  ): Promise<void> {
+    Object.entries(data).forEach(([key, value]) => {
+      user[key] = value;
+    });
+    await this.save(user);
+  }
+
+  async updateUserProfile({
+    username,
+    input,
+  }: UpdateUserProfileDTO): Promise<string> {
+    const user = await this.getUser({ emailOrUsername: username });
+    await this.updateUser(user, input);
+    return user.id;
   }
 }
 

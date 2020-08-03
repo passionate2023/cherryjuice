@@ -11,7 +11,7 @@ const ImportProgress = React.lazy(() =>
 const ImportDocuments = React.lazy(() =>
   import('./import-documents/import-documents'),
 );
-const Settings = React.lazy(() => import('::app/menus/settings'));
+const Settings = React.lazy(() => import('::app/menus/settings/settings'));
 const SelectFile = React.lazy(() => import('::app/menus/select-file'));
 const NodeMeta = React.lazy(() => import('::app/menus/node-meta/node-meta'));
 const DocumentMeta = React.lazy(() =>

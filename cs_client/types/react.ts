@@ -15,4 +15,5 @@ export type TAlert = {
   description: string;
   error?: Error;
   action?: AlertAction;
+  dismissAction?: AlertAction;
 };

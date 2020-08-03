@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modSearchDialog } from '::sass-modules/';
+import { modSearchDialog } from '::sass-modules';
 import { SearchTarget } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/search-target';
 import { SearchOptions } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-options/search-options';
 import { SearchScope } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-scope/search-scope';

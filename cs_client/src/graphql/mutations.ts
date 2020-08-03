@@ -73,7 +73,7 @@ const DOCUMENT_MUTATION = {
 const USER_MUTATION = {
   refreshToken: {
     args: (): void => undefined,
-    path: (data): AuthUser | undefined => data?.user?.signIn,
+    path: (data): AuthUser | undefined => data?.user?.refreshToken,
     query: gql`
       query refreshToekn {
         user {

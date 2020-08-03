@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modPickTimeRange } from '::sass-modules/';
+import { modPickTimeRange } from '::sass-modules';
 import { EventHandler, useEffect, useRef } from 'react';
 import { mapTimestampToDateString } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/helpers/map-time-stamp-to-date-string';
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modSearchFilter } from '::sass-modules/';
+import { modSearchFilter } from '::sass-modules';
 import { SearchType as TSearchType } from '::types/graphql/generated';
 import { Store } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';

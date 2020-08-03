@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MainButtons } from '::app/editor/tool-bar/groups/main-buttons';
-import { appModule, modToolbar } from '::sass-modules/index.ts';
+import { appModule, modToolbar } from '::sass-modules';
 import { MobileButtons } from './groups/mobile-buttons';
 import { Separator } from '::app/editor/tool-bar/separator';
 import { createPortal } from 'react-dom';

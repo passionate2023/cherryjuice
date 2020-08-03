@@ -1,6 +1,10 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserExistsDTO, UserRepository } from './repositories/user.repository';
+import {
+  UpdateUserProfileDTO,
+  UserExistsDTO,
+  UserRepository,
+} from './repositories/user.repository';
 import { SignUpCredentials } from './dto/sign-up-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import { SignInCredentials } from './dto/sign-in-credentials.dto';
@@ -84,5 +88,9 @@ export class UserService {
 
   async userExists(dto: UserExistsDTO): Promise<string | undefined> {
     return this.userRepository.userExists(dto);
+  }
+
+  async updateUserProfile(dto: UpdateUserProfileDTO): Promise<string> {
+    return this.userRepository.updateUserProfile(dto);
   }
 }

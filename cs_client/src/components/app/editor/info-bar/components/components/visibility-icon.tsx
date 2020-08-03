@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { NodePrivacy, Privacy } from '::types/graphql/generated';
-import { modInfoBar } from '::sass-modules/';
+import { modInfoBar } from '::sass-modules';
 import { Icon, Icons } from '::shared-components/icon/icon';
 
 const mapPrivacyToIcon = (privacy: NodePrivacy | Privacy) => {

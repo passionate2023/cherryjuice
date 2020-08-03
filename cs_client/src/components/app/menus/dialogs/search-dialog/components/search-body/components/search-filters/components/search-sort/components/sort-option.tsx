@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useCallback } from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { modSearchFilter, modUtility } from '::sass-modules/';
+import { modSearchFilter, modUtility } from '::sass-modules';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import {
   SearchSortOptions,

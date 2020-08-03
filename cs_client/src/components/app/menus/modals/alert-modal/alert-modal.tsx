@@ -23,16 +23,9 @@ const AlertModal: React.FC<Props & PropsFromRedux> = ({
   show,
   alert,
 }) => {
-  const buttons = [
-    {
-      label: 'Dismiss',
-      onClick: onClose,
-      disabled: false,
-      lazyAutoFocus: 300,
-    },
-  ];
+  const buttons = [];
   if (alert?.action) {
-    buttons.unshift({
+    buttons.push({
       label: alert.action.name,
       // @ts-ignore
       onClick: () => {
@@ -43,6 +36,18 @@ const AlertModal: React.FC<Props & PropsFromRedux> = ({
       disabled: false,
     });
   }
+
+  buttons.push({
+    label: alert?.dismissAction ? alert?.dismissAction.name : 'Dismiss',
+    onClick: alert?.dismissAction
+      ? () => {
+          onClose();
+          alert.dismissAction.callbacks.forEach(action => action());
+        }
+      : onClose,
+    disabled: false,
+    lazyAutoFocus: 300,
+  });
   return (
     <ConfirmationModal
       show={show}

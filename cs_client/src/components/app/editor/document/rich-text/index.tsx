@@ -1,4 +1,4 @@
-import { modRichText } from '::sass-modules/index';
+import { modRichText } from '::sass-modules';
 import * as React from 'react';
 import { useRouteMatch } from 'react-router';
 import { SpinnerCircle } from '::shared-components/spinner-circle';

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { TextInputProps } from '::shared-components/form/text-input';
+import { ValidatedTextInputProps } from '::shared-components/form/validated-text-input';
 
-const useDefaultValues = (inputs: TextInputProps[]): void => {
+const useDefaultValues = (inputs: ValidatedTextInputProps[]): void => {
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
       (inputs.length > 2

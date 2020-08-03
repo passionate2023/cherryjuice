@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { modSearchFilter } from '::sass-modules/';
+import { modSearchFilter } from '::sass-modules';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { SearchScope } from '::types/graphql/generated';
 import { ac } from '::root/store/store';

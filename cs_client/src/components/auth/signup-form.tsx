@@ -3,7 +3,10 @@ import * as React from 'react';
 import { modLogin } from '::sass-modules/index';
 import { Icons } from '::shared-components/icon/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
-import { TextInput, TextInputProps } from '::shared-components/form/text-input';
+import {
+  ValidatedTextInput,
+  ValidatedTextInputProps,
+} from '::shared-components/form/validated-text-input';
 import { patterns } from '::auth/helpers/form-validation';
 import { AuthScreen } from '::auth/auth-screen';
 import { createRef, useRef } from 'react';
@@ -14,7 +17,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { SignUpCredentials } from '::types/graphql/generated';
 
-const inputs: TextInputProps[] = [
+const idPrefix = 'sign-up';
+const inputs: ValidatedTextInputProps[] = [
   {
     label: 'first name',
     icon: [Icons.material['person-circle']],
@@ -23,7 +27,7 @@ const inputs: TextInputProps[] = [
     required: true,
     variableName: 'firstName',
     inputRef: createRef(),
-    idPrefix: 'sign-up',
+    idPrefix,
   },
   {
     label: 'last name',
@@ -33,7 +37,7 @@ const inputs: TextInputProps[] = [
     required: true,
     variableName: 'lastName',
     inputRef: createRef(),
-    idPrefix: 'sign-up',
+    idPrefix,
   },
   {
     label: 'username',
@@ -43,7 +47,7 @@ const inputs: TextInputProps[] = [
     required: true,
     variableName: 'username',
     inputRef: createRef(),
-    idPrefix: 'sign-up',
+    idPrefix,
   },
   {
     label: 'email',
@@ -52,7 +56,7 @@ const inputs: TextInputProps[] = [
     required: true,
     variableName: 'email',
     inputRef: createRef(),
-    idPrefix: 'sign-up',
+    idPrefix,
   },
   {
     inputRef: createRef(),
@@ -63,7 +67,7 @@ const inputs: TextInputProps[] = [
     icon: [Icons.material.lock],
     minLength: 8,
     required: true,
-    idPrefix: 'sign-up',
+    idPrefix,
   },
 ];
 
@@ -110,7 +114,7 @@ const SignUpForm: React.FC<Props & PropsFromRedux> = ({
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
           {inputs.map(inputProps => (
-            <TextInput {...inputProps} key={inputProps.variableName} />
+            <ValidatedTextInput {...inputProps} key={inputProps.variableName} />
           ))}
 
           <input

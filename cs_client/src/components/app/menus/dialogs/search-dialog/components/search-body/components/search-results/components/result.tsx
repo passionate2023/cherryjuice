@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modSearchResult, modSelectFile } from '::sass-modules/';
+import { modSearchResult, modSelectFile } from '::sass-modules';
 import { NodeSearchResultEntity } from '::types/graphql/generated';
 import { Link } from 'react-router-dom';
 import { useHeadline } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/headline';

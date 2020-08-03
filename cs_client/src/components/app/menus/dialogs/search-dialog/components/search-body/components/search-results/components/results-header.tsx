@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { modSearchDialog } from '::sass-modules/';
+import { modSearchDialog } from '::sass-modules';
 import { NodeSearchResults } from '::types/graphql/generated';
 
 type Props = {

@@ -4,7 +4,7 @@ import { useEffect, Suspense } from 'react';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { formattingBarUnmountAnimationDelay } from './editor/tool-bar/groups/formatting-buttons';
 import { useOnWindowResize } from '::hooks/use-on-window-resize';
-import { appModule } from '::sass-modules/index';
+import { appModule } from '::sass-modules';
 import { useDocumentEditedIndicator } from '::app/hooks/document-edited-indicator';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { execK } from '::helpers/editing/execK';
 import { ColorInput } from '::app/editor/tool-bar/groups/formatting-buttons/color-input';
-import { modToolbar } from '::sass-modules/index';
+import { modToolbar } from '::sass-modules';
 import { Icon } from '::shared-components/icon/icon';
 import { TransitionWrapper } from '::shared-components/transition-wrapper';
 import { animated } from 'react-spring';

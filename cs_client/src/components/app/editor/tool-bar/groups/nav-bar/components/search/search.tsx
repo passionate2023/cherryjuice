@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { modSearch } from '::sass-modules/';
+import { modSearch } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';

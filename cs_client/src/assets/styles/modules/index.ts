@@ -31,6 +31,7 @@ import modPickTimeRange from './search/search-dialog/pick-time-range.scss';
 import modTimeFilter from './search/search-dialog/time-filter.scss';
 import modUtility from './utility.scss';
 import modGuests from './document-meta/guests.scss';
+import modUserProfile from './user/user-profile.scss';
 
 export {
   appModule,
@@ -66,4 +67,5 @@ export {
   modPickTimeRange,
   modUtility,
   modGuests,
+  modUserProfile,
 };

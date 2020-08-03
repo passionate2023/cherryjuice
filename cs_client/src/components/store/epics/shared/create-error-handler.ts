@@ -8,7 +8,7 @@ import { CreateAlertHandler } from './create-timeout-handler';
 type CreateErrorHandler = CreateAlertHandler & { dontShowAlert?: boolean };
 
 const createErrorHandler = ({
-  alertDetails: { title, description, action },
+  alertDetails: { title, description, action, descriptionFactory },
   actionCreators = [],
   dontShowAlert,
 }: CreateErrorHandler) =>
@@ -19,7 +19,9 @@ const createErrorHandler = ({
           of(
             ac.__.dialogs.setAlert({
               title,
-              description,
+              description: descriptionFactory
+                ? descriptionFactory(error)
+                : description,
               type: AlertType.Error,
               error,
               ...(action && { action }),

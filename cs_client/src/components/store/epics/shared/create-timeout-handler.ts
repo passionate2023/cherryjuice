@@ -7,7 +7,8 @@ import { Actions } from '::root/store/actions.types';
 
 type AlertDetails = {
   title: string;
-  description: string;
+  description?: string;
+  descriptionFactory?: (Error) => string;
   action?: AlertAction;
 };
 type CreateAlertHandler = {

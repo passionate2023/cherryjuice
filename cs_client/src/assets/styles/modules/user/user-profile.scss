@@ -1,0 +1,20 @@
+.user-profile {
+  display: flex;
+}
+
+.user-profile__personal-information {
+  max-width: 600px;
+  color: black;
+  display: flex;
+  flex-direction: column;
+}
+.user-profile__personal-information__label {
+  display: flex;
+  color: black;
+}
+.user-profile__personal-information__value {
+  input{
+    width: 300px
+  }
+
+}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback, useRef, useState } from 'react';
-import { modGuests, modNodeMeta, modTextInput } from '::sass-modules/';
+import { modGuests, modNodeMeta, modTextInput } from '::sass-modules';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { patterns } from '::auth/helpers/form-validation';

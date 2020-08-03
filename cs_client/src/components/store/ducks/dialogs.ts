@@ -95,7 +95,7 @@ const initialState: State = {
   showDeleteNode: false,
   showNodeMetaDialog: undefined,
   showUserPopup: false,
-  showSettingsDialog: false,
+  showSettingsDialog: true,
   snackbar: undefined,
 };
 
@@ -138,7 +138,6 @@ const reducer = createReducer(initialState, _ => [
   _(actionCreators.showDocumentList, state => ({
     ...state,
     showDocumentList: true,
-
   })),
   _(actionCreators.hideDocumentList, state => ({
     ...state,
@@ -210,6 +209,7 @@ const reducer = createReducer(initialState, _ => [
     _(actionCreators.showSettingsDialog, state => ({
       ...state,
       showSettingsDialog: true,
+      showUserPopup: false,
     })),
     _(actionCreators.hideSettingsDialog, state => ({
       ...state,

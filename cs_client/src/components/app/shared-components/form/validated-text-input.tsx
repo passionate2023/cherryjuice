@@ -5,7 +5,7 @@ import { Ref } from 'react';
 import { patternToString, TPattern } from '::auth/helpers/form-validation';
 import { useCustomValidityMessage } from '::hooks/use-custom-validation-message';
 
-export type TextInputProps = {
+export type ValidatedTextInputProps = {
   label: string;
   inputRef: Ref<HTMLInputElement>;
   variableName: string;
@@ -17,9 +17,11 @@ export type TextInputProps = {
   required?: boolean;
   autoComplete?: boolean;
   idPrefix: string;
+  value?: string;
+  onChange?: (string) => void;
 };
 
-const TextInput: React.FC<TextInputProps & {
+const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
   highlightInvalidInput?: boolean;
 }> = ({
   label,
@@ -33,8 +35,10 @@ const TextInput: React.FC<TextInputProps & {
   autoComplete,
   idPrefix,
   highlightInvalidInput = true,
+  value,
+  onChange,
 }) => {
-  useCustomValidityMessage({ inputRef, patterns });
+  const { onInput, onInvalid } = useCustomValidityMessage(patterns);
   const id = `${idPrefix}-${label.replace(' ', '-')}`;
   return (
     <div className={modLogin.login__form__input}>
@@ -60,6 +64,9 @@ const TextInput: React.FC<TextInputProps & {
         autoComplete={Boolean(autoComplete).toString()}
         aria-label={ariaLabel || label}
         id={id}
+        {...(onChange && { value, onChange: e => onChange(e.target.value) })}
+        onInvalid={onInvalid}
+        onInput={onInput}
       />
       <label htmlFor={id} className={modLogin.login__form__input__label}>
         {label}
@@ -68,4 +75,4 @@ const TextInput: React.FC<TextInputProps & {
   );
 };
 
-export { TextInput };
+export { ValidatedTextInput };

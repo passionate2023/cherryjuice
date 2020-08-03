@@ -18,6 +18,7 @@ import { cssVariablesActionCreators } from '::root/store/ducks/css-variables';
 import { setCssVariables } from '::root/store/middleware/set-css-variables';
 import { authActionCreators } from '::root/store/ducks/auth';
 import { cacheActionCreators } from '::root/store/ducks/cache';
+import { settingsActionCreators } from '::root/store/ducks/settings';
 
 type Store = ReturnType<typeof reducer>;
 
@@ -49,6 +50,7 @@ const ac = {
     cssVariables: cssVariablesActionCreators,
     auth: authActionCreators,
     cache: cacheActionCreators,
+    settings: settingsActionCreators,
   },
   document: bindActionCreators(documentActionCreators, store.dispatch),
   dialogs: bindActionCreators(dialogsActionCreators, store.dispatch),
@@ -67,6 +69,7 @@ const ac = {
   cache: bindActionCreators(cacheActionCreators, store.dispatch),
   search: bindActionCreators(searchActionCreators, store.dispatch),
   cssVariables: bindActionCreators(cssVariablesActionCreators, store.dispatch),
+  settings: bindActionCreators(settingsActionCreators, store.dispatch),
 };
 
 export { store, ac, epicMiddleware };

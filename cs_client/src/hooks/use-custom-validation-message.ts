@@ -1,37 +1,34 @@
-import { useEffect } from 'react';
+import { useCallback } from 'react';
 import { TPattern } from '::auth/helpers/form-validation';
-
-const useCustomValidityMessage = ({
-  inputRef,
-  patterns,
-}: {
-  inputRef;
-  patterns: TPattern[];
-}) => {
-  useEffect(() => {
-    const validatePattern = value => {
+const useCustomValidityMessage = (patterns: TPattern[]) => {
+  const validatePattern = useCallback(
+    e => {
+      const value = e.target.value;
       let valid = true;
       for (const { pattern, description } of patterns) {
-        if (!new RegExp(pattern).test(value)) {
-          inputRef.current.setCustomValidity(description);
+        if (value && !new RegExp(pattern).test(value)) {
+          e.target?.setCustomValidity(description);
           valid = false;
           break;
         }
       }
       return valid;
-    };
-    inputRef.current.oninvalid = ({ target }: { target: HTMLInputElement }) => {
-      const validity = target.validity;
-      if (!validity.valid) {
-        if (validity.patternMismatch && !validity.valueMissing) {
-          validatePattern(target.value);
-        }
+    },
+    [patterns],
+  );
+  const onInvalid = e => {
+    const validity = e.target.validity;
+    if (!validity.valid) {
+      if (validity.patternMismatch && !validity.valueMissing) {
+        validatePattern(e);
       }
-    };
-    inputRef.current.oninput = e => {
-      e.target.setCustomValidity('');
-    };
-  }, []);
+    }
+  };
+  const onInput = e => {
+    e.target.setCustomValidity('');
+  };
+
+  return { onInvalid, onInput };
 };
 
 export { useCustomValidityMessage };

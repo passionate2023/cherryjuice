@@ -13,6 +13,7 @@ import { searchReducer, SearchReducerState } from '::root/store/ducks/search';
 import { cssVariablesReducer } from '::root/store/ducks/css-variables';
 import { authReducer } from '::root/store/ducks/auth';
 import { cacheReducer } from '::root/store/ducks/cache';
+import { settingsReducer } from './ducks/settings';
 
 const reducer = combineReducers({
   document: persistReducer(
@@ -30,6 +31,14 @@ const reducer = combineReducers({
       storage,
     },
     editorReducer,
+  ),
+  settings: persistReducer(
+    {
+      key: 'settings',
+      storage,
+      whitelist: ['selectedScreen'],
+    },
+    settingsReducer,
   ),
   dialogs: dialogsReducer,
   auth: persistReducer(

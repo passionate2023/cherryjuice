@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modInfoBar } from '::sass-modules/';
+import { modInfoBar } from '::sass-modules';
 
 type Props = {
   noSelectedDocument: boolean;

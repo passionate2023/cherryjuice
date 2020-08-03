@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { User } from '::types/graphql/generated';
-import { modUserPopup } from '::sass-modules/';
+import { modUserPopup } from '::sass-modules';
 import { Icon, Icons } from '::shared-components/icon/icon';
 
 type Props = { user: User };

@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 
-const regex = {
+export const patterns = {
   password: {
     pattern: /^((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
     description: `password: at least 1 upper case letter, at least 1 lower case letter, at least 1 number or special character`,
@@ -19,12 +19,12 @@ const regex = {
       'username: only a-zA-Z0-9._ allowed, no _ or . at teh beginning, no __ or _. or ._ or .. inside,  no _ or . at the end',
   },
   firstName: {
-    pattern: /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/,
-    description: 'first-name: only letters',
+    pattern: /^([a-zA-Z'\-,.]|[^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]){2,}$/,
+    description: 'first-name: letters only',
   },
   lastName: {
-    pattern: /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/,
-    description: 'last-name: only letters',
+    pattern: /^([a-zA-Z'\-,.]|[^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]){2,}$/,
+    description: 'last-name: letters only',
   },
 };
 
@@ -34,28 +34,36 @@ export class SignUpCredentials {
   @IsString()
   @IsNotEmpty()
   @MaxLength(30)
-  @Matches(regex.firstName.pattern, { message: regex.firstName.description })
+  @Matches(patterns.firstName.pattern, {
+    message: patterns.firstName.description,
+  })
   firstName: string;
 
   @Field()
   @IsString()
   @IsNotEmpty()
   @MaxLength(30)
-  @Matches(regex.lastName.pattern, { message: regex.lastName.description })
+  @Matches(patterns.lastName.pattern, {
+    message: patterns.lastName.description,
+  })
   lastName: string;
 
   @Field()
   @IsString()
   @MinLength(4)
   @MaxLength(20)
-  @Matches(regex.username.pattern, { message: regex.username.description })
+  @Matches(patterns.username.pattern, {
+    message: patterns.username.description,
+  })
   username: string;
 
   @Field()
   @IsString()
   @MinLength(8)
   @MaxLength(20)
-  @Matches(regex.password.pattern, { message: regex.password.description })
+  @Matches(patterns.password.pattern, {
+    message: patterns.password.description,
+  })
   password: string;
 
   @Field()

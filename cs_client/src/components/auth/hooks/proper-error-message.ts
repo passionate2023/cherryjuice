@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-client';
-const useProperErrorMessage = (error: ApolloError): string => {
+const properErrorMessage = (error: ApolloError): string => {
   let message;
   if (error) {
     if (error.graphQLErrors.length) {
@@ -16,4 +16,4 @@ const useProperErrorMessage = (error: ApolloError): string => {
   return message;
 };
 
-export { useProperErrorMessage };
+export { properErrorMessage };

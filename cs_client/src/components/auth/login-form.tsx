@@ -5,7 +5,10 @@ import { Checkbox } from '::shared-components/checkbox';
 import { GoogleOauthButton } from '::shared-components/buttons/google-oauth-button';
 import { Icons } from '::shared-components/icon/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
-import { TextInput, TextInputProps } from '::shared-components/form/text-input';
+import {
+  ValidatedTextInput,
+  ValidatedTextInputProps,
+} from '::shared-components/form/validated-text-input';
 import { FormSeparator } from '::shared-components/form/form-separator';
 import { patterns } from '::auth/helpers/form-validation';
 import { AuthScreen } from '::auth/auth-screen';
@@ -16,7 +19,7 @@ import { openConsentWindow } from '::auth/helpers/oauth';
 import { useDefaultValues } from '::hooks/use-default-form-values';
 import { ac } from '::root/store/store';
 
-const inputs: TextInputProps[] = [
+const inputs: ValidatedTextInputProps[] = [
   {
     label: 'username',
     icon: [Icons.material.username],
@@ -100,7 +103,7 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({
           />
           <FormSeparator text={'or'} />
           {inputs.map(inputProps => (
-            <TextInput
+            <ValidatedTextInput
               {...inputProps}
               key={inputProps.variableName}
               highlightInvalidInput={false}

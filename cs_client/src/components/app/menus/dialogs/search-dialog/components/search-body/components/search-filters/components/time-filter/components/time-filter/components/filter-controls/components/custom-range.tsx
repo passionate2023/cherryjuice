@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modTimeFilter } from '::sass-modules/';
+import { modTimeFilter } from '::sass-modules';
 import { ButtonCircle } from '::shared-components/buttons/button-circle/button-circle';
 import { Icon, Icons } from '::shared-components/icon/icon';
 import { TimeFilter } from '::types/graphql/generated';

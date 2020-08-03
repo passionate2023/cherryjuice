@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modDocumentOperations } from '::sass-modules/';
+import { modDocumentOperations } from '::sass-modules';
 import { OperationsStats } from '../header';
 
 type Props = {
