@@ -47,6 +47,7 @@ const authEpic = (action$: Observable<Actions>) => {
       return concat(
         ip,
         authenticate.pipe(map(ac.__.auth.setAuthenticationSucceeded)),
+        of(ac.__.dialogs.clearAlert()),
       ).pipe(
         createTimeoutHandler({
           alertDetails: {

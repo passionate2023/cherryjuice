@@ -33,16 +33,17 @@ export class UserMutationsResolver {
     return this.userService.signUp(signInInput);
   }
 
-  @ResolveField(() => String)
+  @ResolveField(() => AuthUser)
   async updateUserProfile(
     @GetUserGql() user: User,
     @Args({ name: 'userProfile', type: () => UpdateUserProfileIt })
     input: UpdateUserProfileIt,
-  ): Promise<string> {
+  ): Promise<AuthUser> {
     if (!user) throw new UnauthorizedException();
-    return this.userService.updateUserProfile({
+    await this.userService.updateUserProfile({
       input,
       username: user.username,
     });
+    return this.userService.refreshUser(user.id);
   }
 }

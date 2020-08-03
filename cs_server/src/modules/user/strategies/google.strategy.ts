@@ -23,17 +23,22 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     done: Function,
   ): Promise<void> {
     try {
-      let token;
-      const authUser = await this.authService.oauthLogin(
+      const user = await this.authService.oauthLogin(
         profile.id,
         profile.provider,
         profile._json,
       );
-      if (authUser.payload) {
-        token = sign(authUser.payload, process.env.JWT_SECRET, {
-          expiresIn: process.env.JWT_EXPIRES_IN,
+      if (user) {
+        done(null, {
+          token: sign(
+            UserService.createJWTPayload(user),
+            process.env.JWT_SECRET,
+            {
+              expiresIn: process.env.JWT_EXPIRES_IN,
+            },
+          ),
+          user,
         });
-        done(null, { token, user: authUser.user });
       } else done(undefined, false);
     } catch (err) {
       done(err, false);

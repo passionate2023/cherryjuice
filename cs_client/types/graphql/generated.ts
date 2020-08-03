@@ -311,7 +311,7 @@ export interface UploadLinkInputType {
 export interface UserMutation {
   signIn: AuthUser;
   signUp: AuthUser;
-  updateUserProfile: string;
+  updateUserProfile: AuthUser;
 }
 
 export interface SignInCredentials {
@@ -330,6 +330,7 @@ export interface SignUpCredentials {
 export interface UpdateUserProfileIt {
   firstName?: string;
   lastName?: string;
+  username?: string;
 }
 
 export interface Subscription {

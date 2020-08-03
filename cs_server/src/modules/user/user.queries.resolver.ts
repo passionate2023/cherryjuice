@@ -18,7 +18,7 @@ export class UserQueriesResolver {
 
   @ResolveField(() => AuthUser)
   async refreshToken(@GetUserGql() user: User): Promise<AuthUser> {
-    return this.userService.getAuthUser(user);
+    return this.userService.refreshUser(user.id);
   }
   @ResolveField(() => String, { nullable: true })
   async userExists(

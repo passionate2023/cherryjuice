@@ -59,10 +59,17 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({ currentSettings }) => {
       value: state.lastName,
       onChange: userSettingsActionCreators.setLastName,
     },
-    // {
-    //   label: 'user name',
-    //   value: state.username,
-    //   type: 'component',
+    {
+      label: 'username',
+      patterns: [patterns.userName],
+      minLength: 4,
+      required: true,
+      variableName: 'username',
+      inputRef: createRef(),
+      idPrefix,
+      value: state.username,
+      onChange: userSettingsActionCreators.setUserName,
+    },
     //   component: <div>update username</div>,
     // },
     // {
@@ -92,7 +99,7 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({ currentSettings }) => {
     if (validity && Object.keys(changes).length) {
       ac.settings.setUserProfileChanges(changes);
     } else ac.settings.clearUserProfileChanges();
-  }, [state.firstName, state.lastName]);
+  }, [state.firstName, state.lastName, state.username]);
   return (
     <div className={modUserProfile}>
       <div className={modUserProfile.userProfile__personalInformation}>

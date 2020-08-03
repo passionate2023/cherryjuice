@@ -12,6 +12,7 @@ import { AuthUser } from './entities/auth.user';
 import { User } from './entities/user.entity';
 import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 import { Secrets } from './entities/secrets';
+import { classToPlain } from 'class-transformer';
 
 export type OauthJson = {
   sub: string;
@@ -29,58 +30,66 @@ export class UserService {
     @InjectRepository(UserRepository) private userRepository: UserRepository,
     private jwtService: JwtService,
   ) {}
-  async signUp(authCredentialsDto: SignUpCredentials): Promise<AuthUser> {
-    const { user, payload } = await this.userRepository.signUp(
-      authCredentialsDto,
-    );
-    return {
-      token: this.jwtService.sign(payload),
-      user,
-      secrets: this.getSecrets(),
-    };
+
+  static createJWTPayload(user: User): JwtPayloadInterface {
+    return { id: user.id };
   }
-  async signIn(authCredentialsDto: SignInCredentials): Promise<AuthUser> {
-    const { user, payload } = await this.userRepository.validateUserPassword(
-      authCredentialsDto,
-    );
+  private packageAuthUser(user: User): AuthUser {
+    console.log('before', user);
     return {
-      token: this.jwtService.sign(payload),
+      token: this.jwtService.sign(UserService.createJWTPayload(user)),
       user,
       secrets: this.getSecrets(),
     };
   }
 
-  async getAuthUser(user_: User): Promise<AuthUser> {
-    const { user, payload } = await UserRepository.getAuthUser(user_);
-    return {
-      token: this.jwtService.sign(payload),
-      user,
-      secrets: this.getSecrets(),
-    };
+  async signUp(authCredentialsDto: SignUpCredentials): Promise<AuthUser> {
+    const user = await this.userRepository.signUp(authCredentialsDto);
+    return this.packageAuthUser(user);
   }
+  async signIn(authCredentialsDto: SignInCredentials): Promise<AuthUser> {
+    const user = await this.userRepository.validateUserPassword(
+      authCredentialsDto,
+    );
+    return this.packageAuthUser(user);
+  }
+
+  async getUserById(userId: string): Promise<User> {
+    return await this.userRepository.getUser(undefined, userId);
+  }
+
+  async refreshUser(userId: string): Promise<AuthUser> {
+    const user = await this.getUserById(userId);
+    return this.packageAuthUser(user);
+  }
+
   getSecrets(): Secrets {
     return {
       google_api_key: process.env.OAUTH_GOOGLE_DEVELOPER_KEY,
       google_client_id: process.env.OAUTH_GOOGLE_CLIENT_ID,
     };
   }
+
   async oauthLogin(
     thirdPartyId: string,
     provider: string,
     _json: OauthJson,
-  ): Promise<{ user: User; payload: JwtPayloadInterface }> {
+  ): Promise<User> {
     try {
       const existingUser = await this.userRepository.findOneByThirdPartyId(
         thirdPartyId,
         provider,
+        _json.email,
       );
-      return !existingUser
-        ? await this.userRepository.registerOAuthUser(
-            thirdPartyId,
-            provider,
-            _json,
-          )
-        : await UserRepository.getAuthUser(existingUser);
+      if (existingUser) {
+        return await this.userRepository.getUser(existingUser.email);
+      } else {
+        return await this.userRepository.registerOAuthUser(
+          thirdPartyId,
+          provider,
+          _json,
+        );
+      }
     } catch (err) {
       throw new InternalServerErrorException('validateOAuthLogin', err.message);
     }

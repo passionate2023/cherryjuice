@@ -2,7 +2,10 @@ import { ApolloError } from 'apollo-client';
 const properErrorMessage = (error: ApolloError): string => {
   let message;
   if (error) {
-    if (error.graphQLErrors.length) {
+    if (
+      error.graphQLErrors.length &&
+      error.graphQLErrors[0]?.extensions?.exception?.response?.message
+    ) {
       message = error.graphQLErrors[0].extensions.exception.response.message;
       if (Array.isArray(message)) message = message[0];
       if (message.startsWith('username:')) message = 'Invalid username';

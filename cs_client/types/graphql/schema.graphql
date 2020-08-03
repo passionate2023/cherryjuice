@@ -148,7 +148,7 @@ type User {
 type UserMutation {
     signIn(credentials: SignInCredentials!): AuthUser!
     signUp(credentials: SignUpCredentials!): AuthUser!
-    updateUserProfile(userProfile: UpdateUserProfileIt!): String!
+    updateUserProfile(userProfile: UpdateUserProfileIt!): AuthUser!
 }
 
 type UserQuery {
@@ -332,6 +332,7 @@ input TimeFilter {
 input UpdateUserProfileIt {
     firstName: String
     lastName: String
+    username: String
 }
 
 input UploadLinkInputType {

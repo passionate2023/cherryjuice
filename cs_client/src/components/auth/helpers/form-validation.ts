@@ -1,5 +1,5 @@
 type TPattern = { pattern: string; description: string };
-const patterns: { [k: string]: TPattern } = {
+const patterns = {
   notEmpty: {
     pattern: '^.{1,}',
     description: 'Please fill out this field',

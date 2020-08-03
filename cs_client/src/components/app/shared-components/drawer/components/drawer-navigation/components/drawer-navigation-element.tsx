@@ -27,7 +27,7 @@ const DrawerNavigationElement: React.FC<DrawerNavigationElementProps &
         title: 'apply changes',
         description: `${selectedScreenTitle} has unsaved changes`,
         action: {
-          name: 'apply',
+          name: 'save',
           callbacks: [
             () => {
               ac.settings.save(title);

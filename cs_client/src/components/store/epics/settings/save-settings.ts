@@ -1,4 +1,4 @@
-import { filter, mapTo, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { store, ac } from '::root/store/store';
@@ -29,7 +29,7 @@ const saveSettingsEpic = (action$: Observable<Actions>) => {
         const { userProfileChanges } = store.getState().settings;
         const updateUserProfile = gqlMutation(
           UPDATE_USER_PROFILE({ userProfile: userProfileChanges }),
-        ).pipe(mapTo(ac.__.auth.refreshToken()));
+        ).pipe(map(ac.__.auth.setAuthenticationSucceeded));
 
         return concat(loading, updateUserProfile, fulfilled, snackbar).pipe(
           createTimeoutHandler({

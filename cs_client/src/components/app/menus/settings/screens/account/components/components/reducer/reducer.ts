@@ -16,6 +16,7 @@ const initialState: State = {
 enum actions {
   setFirstName,
   setLastName,
+  setUserName,
   reset,
 }
 
@@ -31,6 +32,8 @@ const actionCreators = (() => {
       state.dispatch({ type: actions.setFirstName, value }),
     setLastName: (value: string) =>
       state.dispatch({ type: actions.setLastName, value }),
+    setUserName: (value: string) =>
+      state.dispatch({ type: actions.setUserName, value }),
   };
 })();
 
@@ -46,6 +49,8 @@ const reducer = (
       return { ...state, firstName: action.value };
     case actions.setLastName:
       return { ...state, lastName: action.value };
+    case actions.setUserName:
+      return { ...state, username: action.value };
     default:
       throw new Error(action.type + ' action not supported');
   }

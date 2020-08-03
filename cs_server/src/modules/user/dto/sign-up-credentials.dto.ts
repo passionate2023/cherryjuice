@@ -33,6 +33,7 @@ export class SignUpCredentials {
   @Field()
   @IsString()
   @IsNotEmpty()
+  @MinLength(2)
   @MaxLength(30)
   @Matches(patterns.firstName.pattern, {
     message: patterns.firstName.description,
@@ -42,6 +43,7 @@ export class SignUpCredentials {
   @Field()
   @IsString()
   @IsNotEmpty()
+  @MinLength(2)
   @MaxLength(30)
   @Matches(patterns.lastName.pattern, {
     message: patterns.lastName.description,

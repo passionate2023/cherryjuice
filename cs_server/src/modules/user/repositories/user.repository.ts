@@ -6,26 +6,10 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import { JwtPayloadInterface } from '../interfaces/jwt-payload.interface';
 import { SignInCredentials } from '../dto/sign-in-credentials.dto';
 import { OauthJson } from '../user.service';
 import { UpdateUserProfileIt } from '../input-types/update-user-profile.it';
-
-const hashPassword = (password: string, salt: string): Promise<string> => {
-  return bcrypt.hash(password, salt);
-};
-const pickNonSensitiveFields = (user: User): User => {
-  let _user = new User(
-    user.username,
-    user.email,
-    user.lastName,
-    user.firstName,
-  );
-  _user.id = user.id;
-  _user.picture = user.picture;
-  return _user;
-};
+import { classToClass } from 'class-transformer';
 
 export type UserExistsDTO = { email: string };
 
@@ -36,31 +20,54 @@ export type UpdateUserProfileDTO = {
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
-  static getAuthUser = (
-    user: User,
-  ): {
-    user: User;
-    payload: JwtPayloadInterface;
-  } => {
-    return {
-      payload: { username: user.username },
-      user: pickNonSensitiveFields(user),
-    };
-  };
+  async _getUser(emailOrUsername?: string, id?: string): Promise<User> {
+    const user = id
+      ? await this.findOne(id)
+      : await this.findOne({
+          where: [
+            { username: emailOrUsername },
+            {
+              email: emailOrUsername,
+            },
+          ],
+        });
+    if (!user) throw new InternalServerErrorException('Invalid credentials');
+    return user;
+  }
+  async getUser(emailOrUsername?: string, id?: string): Promise<User> {
+    const user = await this._getUser(emailOrUsername, id);
+    return classToClass(user);
+  }
+  async findOneByThirdPartyId(
+    thirdPartyId: string,
+    thirdParty: string,
+    email: string,
+  ): Promise<User | undefined> {
+    const user = await this.findOne({
+      where: [
+        { email },
+        { thirdPartyId },
+        {
+          thirdParty,
+        },
+      ],
+    });
+    return classToClass(user);
+  }
+
+  async userExists({ email }: UserExistsDTO): Promise<string | undefined> {
+    return await this.findOne({ where: { email } }).then(user => user?.id);
+  }
+
   async signUp({
     username,
     password,
     email,
     firstName,
     lastName,
-  }: SignUpCredentials): Promise<{
-    user: User;
-    payload: JwtPayloadInterface;
-  }> {
-    const salt = await bcrypt.genSalt();
-    const user = new User(username, email, lastName, firstName);
-    user.salt = salt;
-    user.password = await hashPassword(password, salt);
+  }: SignUpCredentials): Promise<User> {
+    const user = new User({ username, email, lastName, firstName });
+    await user.setPassword(password);
 
     try {
       await user.save();
@@ -72,60 +79,19 @@ class UserRepository extends Repository<User> {
       }
     }
 
-    return UserRepository.getAuthUser(user);
+    return classToClass(user);
   }
-
   async validateUserPassword({
     password,
     emailOrUsername,
-  }: SignInCredentials): Promise<{
-    user: User;
-    payload: JwtPayloadInterface;
-  }> {
-    let hash: string;
-    const user = await this.getUser({ emailOrUsername });
-    if (user) {
-      if (!user.salt && user.thirdParty) {
-        throw new UnauthorizedException(
-          `Please use ${user.thirdParty} to login`,
-        );
-      }
-      hash = await hashPassword(password, user.salt);
-    }
-    if (!(hash && hash === user.password)) {
-      return undefined;
-    } else return UserRepository.getAuthUser(user);
-  }
+  }: SignInCredentials): Promise<User> {
+    const user = await this._getUser(emailOrUsername);
+    if (!user) throw new UnauthorizedException();
+    if (user.thirdParty)
+      throw new UnauthorizedException(`Please use ${user.thirdParty} to login`);
 
-  async getUser({
-    emailOrUsername,
-  }: {
-    emailOrUsername: string;
-  }): Promise<User> {
-    const user = await this.findOne({
-      where: [
-        { username: emailOrUsername },
-        {
-          email: emailOrUsername,
-        },
-      ],
-    });
-    if (!user) throw new InternalServerErrorException('Invalid credentials');
-    return user;
-  }
-
-  async findOneByThirdPartyId(
-    thirdPartyId: string,
-    thirdParty: string,
-  ): Promise<User | undefined> {
-    return await this.findOne({
-      where: [
-        { thirdPartyId },
-        {
-          thirdParty,
-        },
-      ],
-    });
+    await user.validatePassword(password);
+    return classToClass(user);
   }
 
   async registerOAuthUser(
@@ -139,15 +105,18 @@ class UserRepository extends Repository<User> {
       family_name: lastName,
       email_verified,
     }: OauthJson,
-  ): Promise<{ user: User; payload: JwtPayloadInterface }> {
-    const userName = /(^.*)@/.exec(email)[1];
-    const user = new User(userName, email, lastName, firstName);
-    user.salt = '';
-    user.password = '';
-    user.thirdPartyId = sub;
-    user.thirdParty = provider;
-    user.email_verified = email_verified;
-    user.picture = picture;
+  ): Promise<User> {
+    const username = /(^.*)@/.exec(email)[1];
+    const user = new User({
+      username,
+      email,
+      lastName,
+      firstName,
+      thirdPartyId: sub,
+      thirdParty: provider,
+      email_verified,
+      picture,
+    });
 
     try {
       await user.save();
@@ -159,11 +128,7 @@ class UserRepository extends Repository<User> {
       }
     }
 
-    return UserRepository.getAuthUser(user);
-  }
-
-  async userExists({ email }: UserExistsDTO): Promise<string | undefined> {
-    return await this.findOne({ where: { email } }).then(user => user?.id);
+    return classToClass(user);
   }
 
   private async updateUser(
@@ -173,14 +138,22 @@ class UserRepository extends Repository<User> {
     Object.entries(data).forEach(([key, value]) => {
       user[key] = value;
     });
-    await this.save(user);
+    try {
+      await this.save(user);
+    } catch (e) {
+      if (e.code === '23505') {
+        if (data.username) throw new ConflictException('username exists');
+      } else {
+        throw new InternalServerErrorException('Database error');
+      }
+    }
   }
 
   async updateUserProfile({
     username,
     input,
   }: UpdateUserProfileDTO): Promise<string> {
-    const user = await this.getUser({ emailOrUsername: username });
+    const user = await this.getUser(username);
     await this.updateUser(user, input);
     return user.id;
   }
