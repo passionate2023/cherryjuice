@@ -39,4 +39,15 @@ export class UpdateUserProfileIt {
   @MaxLength(20)
   @Field({ nullable: true })
   username: string;
+
+  @IsOptional()
+  @Field()
+  @IsString()
+  @MinLength(8)
+  @MaxLength(20)
+  @Matches(patterns.password.pattern, {
+    message: patterns.password.description,
+  })
+  @Field({ nullable: true })
+  newPassword: string;
 }

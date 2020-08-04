@@ -12,7 +12,6 @@ import { AuthUser } from './entities/auth.user';
 import { User } from './entities/user.entity';
 import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
 import { Secrets } from './entities/secrets';
-import { classToPlain } from 'class-transformer';
 
 export type OauthJson = {
   sub: string;
@@ -35,7 +34,6 @@ export class UserService {
     return { id: user.id };
   }
   private packageAuthUser(user: User): AuthUser {
-    console.log('before', user);
     return {
       token: this.jwtService.sign(UserService.createJWTPayload(user)),
       user,

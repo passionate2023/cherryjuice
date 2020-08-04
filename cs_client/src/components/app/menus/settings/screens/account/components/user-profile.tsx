@@ -70,6 +70,7 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({ currentSettings }) => {
       value: state.username,
       onChange: userSettingsActionCreators.setUserName,
     },
+
     //   component: <div>update username</div>,
     // },
     // {
@@ -85,25 +86,72 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({ currentSettings }) => {
     //   component: <div>update password</div>,
     // },
   ];
+  const changePassword = [
+    {
+      inputRef: createRef(),
+      variableName: 'newPassword',
+      patterns: [patterns.password],
+      label: 'new password',
+      type: 'password',
+      minLength: 8,
+      required: true,
+      idPrefix,
+      value: state.newPassword,
+      onChange: userSettingsActionCreators.setNewPassword,
+    },
+    {
+      inputRef: createRef(),
+      variableName: 'newPasswordConfirmation',
+      patterns: [patterns.password],
+      label: 'confirm new password',
+      type: 'password',
+      minLength: 8,
+      required: true,
+      idPrefix,
+      value: state.newPasswordConfirmation,
+      onChange: userSettingsActionCreators.setNewPasswordConfirmation,
+    },
+  ];
   useEffect(() => {
     const changes: UpdateUserProfileIt = {};
     let validity = true;
-    personalInformation.forEach(({ variableName, inputRef }) => {
+    const validate = ({ variableName, inputRef }) => {
       const localValue = state[variableName];
       // @ts-ignore
       validity = validity && inputRef?.current?.checkValidity();
       if (validity && localValue !== currentSettings[variableName]) {
         changes[variableName] = localValue;
       }
-    });
+    };
+    personalInformation.forEach(validate);
+
+    if (
+      state.newPassword &&
+      state.newPassword === state.newPasswordConfirmation
+    ) {
+      changes.newPassword = state.newPassword;
+      // @ts-ignore
+      validity =
+        validity && changePassword[0].inputRef?.current?.checkValidity();
+    }
+
     if (validity && Object.keys(changes).length) {
       ac.settings.setUserProfileChanges(changes);
     } else ac.settings.clearUserProfileChanges();
-  }, [state.firstName, state.lastName, state.username]);
+  }, [
+    state.firstName,
+    state.lastName,
+    state.username,
+    state.newPassword,
+    state.newPasswordConfirmation,
+  ]);
   return (
     <div className={modUserProfile}>
       <div className={modUserProfile.userProfile__personalInformation}>
         {personalInformation.map(po => (
+          <ValidatedTextInput key={po.label} {...po} />
+        ))}
+        {changePassword.map(po => (
           <ValidatedTextInput key={po.label} {...po} />
         ))}
       </div>

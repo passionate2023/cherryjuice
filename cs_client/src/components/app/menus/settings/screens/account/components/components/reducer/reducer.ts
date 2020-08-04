@@ -5,18 +5,24 @@ type State = {
   lastName: string;
   email: string;
   username: string;
+  newPassword?: string;
+  newPasswordConfirmation?: string;
 };
 const initialState: State = {
   firstName: '',
   lastName: '',
   email: '',
   username: '',
+  newPassword: '',
+  newPasswordConfirmation: '',
 };
 
 enum actions {
   setFirstName,
   setLastName,
   setUserName,
+  setNewPassword,
+  setNewPasswordConfirmation,
   reset,
 }
 
@@ -32,6 +38,10 @@ const actionCreators = (() => {
       state.dispatch({ type: actions.setFirstName, value }),
     setLastName: (value: string) =>
       state.dispatch({ type: actions.setLastName, value }),
+    setNewPassword: (value: string) =>
+      state.dispatch({ type: actions.setNewPassword, value }),
+    setNewPasswordConfirmation: (value: string) =>
+      state.dispatch({ type: actions.setNewPasswordConfirmation, value }),
     setUserName: (value: string) =>
       state.dispatch({ type: actions.setUserName, value }),
   };
@@ -51,6 +61,10 @@ const reducer = (
       return { ...state, lastName: action.value };
     case actions.setUserName:
       return { ...state, username: action.value };
+    case actions.setNewPassword:
+      return { ...state, newPassword: action.value };
+    case actions.setNewPasswordConfirmation:
+      return { ...state, newPasswordConfirmation: action.value };
     default:
       throw new Error(action.type + ' action not supported');
   }

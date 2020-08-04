@@ -78,12 +78,13 @@ class User extends BaseEntity {
 
   async validatePassword(passwordToValidate: string): Promise<void> {
     const hash = await bcrypt.hash(passwordToValidate, this.salt);
-    if (hash !== this.passwordHash) throw new UnauthorizedException();
+    if (hash !== this.passwordHash)
+      throw new UnauthorizedException('invalid password');
   }
 
   async setPassword(password: string): Promise<void> {
     this.salt = await bcrypt.genSalt();
-    this.passwordHash = bcrypt.hash(password, this.salt);
+    this.passwordHash = await bcrypt.hash(password, this.salt);
   }
 }
 

@@ -210,7 +210,6 @@ export interface User {
   id: string;
   lastName: string;
   picture?: string;
-  thirdPartyId?: string;
   username: string;
 }
 
@@ -330,6 +329,7 @@ export interface SignUpCredentials {
 export interface UpdateUserProfileIt {
   firstName?: string;
   lastName?: string;
+  newPassword?: string;
   username?: string;
 }
 
@@ -837,7 +837,6 @@ export interface UserTypeResolver<TParent = any> {
   id?: UserToIdResolver<TParent>;
   lastName?: UserToLastNameResolver<TParent>;
   picture?: UserToPictureResolver<TParent>;
-  thirdPartyId?: UserToThirdPartyIdResolver<TParent>;
   username?: UserToUsernameResolver<TParent>;
 }
 
@@ -862,10 +861,6 @@ export interface UserToLastNameResolver<TParent = any, TResult = any> {
 }
 
 export interface UserToPictureResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserToThirdPartyIdResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 

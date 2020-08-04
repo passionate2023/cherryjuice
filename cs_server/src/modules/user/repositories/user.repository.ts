@@ -31,7 +31,7 @@ class UserRepository extends Repository<User> {
             },
           ],
         });
-    if (!user) throw new InternalServerErrorException('Invalid credentials');
+    if (!user) throw new UnauthorizedException(`user not found`);
     return user;
   }
   async getUser(emailOrUsername?: string, id?: string): Promise<User> {
@@ -75,6 +75,8 @@ class UserRepository extends Repository<User> {
       if (e.code === '23505') {
         throw new ConflictException('Username or email exists');
       } else {
+        // eslint-disable-next-line no-console
+        console.log(e);
         throw new InternalServerErrorException('Database error');
       }
     }
@@ -124,6 +126,8 @@ class UserRepository extends Repository<User> {
       if (e.code === '23505') {
         throw new ConflictException(e.detail);
       } else {
+        // eslint-disable-next-line no-console
+        console.log(e);
         throw new InternalServerErrorException('Database error');
       }
     }
@@ -144,6 +148,8 @@ class UserRepository extends Repository<User> {
       if (e.code === '23505') {
         if (data.username) throw new ConflictException('username exists');
       } else {
+        // eslint-disable-next-line no-console
+        console.log(e);
         throw new InternalServerErrorException('Database error');
       }
     }
@@ -153,7 +159,11 @@ class UserRepository extends Repository<User> {
     username,
     input,
   }: UpdateUserProfileDTO): Promise<string> {
-    const user = await this.getUser(username);
+    const user = await this._getUser(username);
+    if (input.newPassword) {
+      await user.setPassword(input.newPassword);
+      delete input.newPassword;
+    }
     await this.updateUser(user, input);
     return user.id;
   }
