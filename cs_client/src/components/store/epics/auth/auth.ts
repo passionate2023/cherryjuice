@@ -9,6 +9,7 @@ import { createErrorHandler } from '::root/store/epics/shared/create-error-handl
 import { AsyncOperation } from '::root/store/ducks/document';
 import { USER_MUTATION } from '::graphql/mutations';
 import {
+  OauthSignUpCredentials,
   SignInCredentials,
   SignUpCredentials,
 } from '::types/graphql/generated';
@@ -23,6 +24,11 @@ const signUp = (payload: SignUpCredentials) =>
     ...USER_MUTATION.signUp,
     variables: USER_MUTATION.signUp.args(payload),
   });
+const oauthSignUp = (payload: OauthSignUpCredentials) =>
+  gqlMutation({
+    ...USER_MUTATION.oauthSignUp,
+    variables: USER_MUTATION.oauthSignUp.args(payload),
+  });
 const refreshToken = () =>
   gqlMutation({
     ...USER_MUTATION.refreshToken,
@@ -36,10 +42,12 @@ const authEpic = (action$: Observable<Actions>) => {
     switchMap(action => {
       let authenticate;
       if ('payload' in action) {
-        const { type, payload } = action;
+        const { type, payload, meta } = action;
         if (type === ac.__.auth.signIn.type) authenticate = signIn(payload);
-        else if (type === ac.__.auth.signUp.type)
-          authenticate = signUp(payload);
+        else if (type === ac.__.auth.signUp.type) {
+          if (meta && meta['oauth']) authenticate = oauthSignUp(payload);
+          else authenticate = signUp(payload);
+        }
       } else authenticate = refreshToken();
 
       const ip = of(ac.__.auth.setAuthenticationInProgress());

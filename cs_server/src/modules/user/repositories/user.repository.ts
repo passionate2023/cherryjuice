@@ -10,12 +10,17 @@ import { SignInCredentials } from '../dto/sign-in-credentials.dto';
 import { OauthJson } from '../user.service';
 import { UpdateUserProfileIt } from '../input-types/update-user-profile.it';
 import { classToClass } from 'class-transformer';
+import { OauthSignUpCredentials } from '../dto/oauth-sign-up-credentials.dto';
 
 export type UserExistsDTO = { email: string };
 
 export type UpdateUserProfileDTO = {
   input: UpdateUserProfileIt;
   username: string;
+};
+export type OauthSignupDTO = {
+  input: OauthSignUpCredentials;
+  userId: string;
 };
 
 @EntityRepository(User)
@@ -89,7 +94,7 @@ class UserRepository extends Repository<User> {
   }: SignInCredentials): Promise<User> {
     const user = await this._getUser(emailOrUsername);
     if (!user) throw new UnauthorizedException();
-    if (user.thirdParty)
+    if (user.thirdParty && !user.hasPassword)
       throw new UnauthorizedException(`Please use ${user.thirdParty} to login`);
 
     await user.validatePassword(password);
@@ -137,7 +142,7 @@ class UserRepository extends Repository<User> {
 
   private async updateUser(
     user: User,
-    data: UpdateUserProfileIt,
+    data: UpdateUserProfileIt | Omit<OauthSignUpCredentials, 'password'>,
   ): Promise<void> {
     Object.entries(data).forEach(([key, value]) => {
       user[key] = value;
@@ -167,6 +172,15 @@ class UserRepository extends Repository<User> {
     }
     await this.updateUser(user, input);
     return user.id;
+  }
+
+  async oauthSignUp({ input, userId }: OauthSignupDTO): Promise<User> {
+    const user = await this._getUser(undefined, userId);
+    if (user.hasPassword) throw new UnauthorizedException('user has password');
+    await user.setPassword(input.password);
+    delete input.password;
+    await this.updateUser(user, input);
+    return classToClass(user);
   }
 }
 

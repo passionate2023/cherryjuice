@@ -207,6 +207,7 @@ export interface User {
   email: string;
   email_verified: boolean;
   firstName: string;
+  hasPassword: boolean;
   id: string;
   lastName: string;
   picture?: string;
@@ -308,9 +309,15 @@ export interface UploadLinkInputType {
 }
 
 export interface UserMutation {
+  oauthSignUp: AuthUser;
   signIn: AuthUser;
   signUp: AuthUser;
   updateUserProfile: AuthUser;
+}
+
+export interface OauthSignUpCredentials {
+  password: string;
+  username: string;
 }
 
 export interface SignInCredentials {
@@ -835,6 +842,7 @@ export interface UserTypeResolver<TParent = any> {
   email?: UserToEmailResolver<TParent>;
   email_verified?: UserToEmail_verifiedResolver<TParent>;
   firstName?: UserToFirstNameResolver<TParent>;
+  hasPassword?: UserToHasPasswordResolver<TParent>;
   id?: UserToIdResolver<TParent>;
   lastName?: UserToLastNameResolver<TParent>;
   picture?: UserToPictureResolver<TParent>;
@@ -850,6 +858,10 @@ export interface UserToEmail_verifiedResolver<TParent = any, TResult = any> {
 }
 
 export interface UserToFirstNameResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserToHasPasswordResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -1056,9 +1068,25 @@ export interface NodeMutationToUploadImageResolver<
 }
 
 export interface UserMutationTypeResolver<TParent = any> {
+  oauthSignUp?: UserMutationToOauthSignUpResolver<TParent>;
   signIn?: UserMutationToSignInResolver<TParent>;
   signUp?: UserMutationToSignUpResolver<TParent>;
   updateUserProfile?: UserMutationToUpdateUserProfileResolver<TParent>;
+}
+
+export interface UserMutationToOauthSignUpArgs {
+  credentials: OauthSignUpCredentials;
+}
+export interface UserMutationToOauthSignUpResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToOauthSignUpArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
 }
 
 export interface UserMutationToSignInArgs {

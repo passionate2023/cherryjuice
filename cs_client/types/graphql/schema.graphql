@@ -138,6 +138,7 @@ type User {
     email: String!
     email_verified: Boolean!
     firstName: String!
+    hasPassword: Boolean!
     id: String!
     lastName: String!
     picture: String
@@ -145,6 +146,7 @@ type User {
 }
 
 type UserMutation {
+    oauthSignUp(credentials: OauthSignUpCredentials!): AuthUser!
     signIn(credentials: SignInCredentials!): AuthUser!
     signUp(credentials: SignUpCredentials!): AuthUser!
     updateUserProfile(userProfile: UpdateUserProfileIt!): AuthUser!
@@ -291,6 +293,11 @@ input NodeSearchIt {
     searchType: SearchType!
     sortOptions: SearchSortOptions!
     updatedAtTimeFilter: TimeFilter!
+}
+
+input OauthSignUpCredentials {
+    password: String!
+    username: String!
 }
 
 input SaveHtmlIt {

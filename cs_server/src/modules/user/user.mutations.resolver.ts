@@ -9,6 +9,7 @@ import { User } from './entities/user.entity';
 import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { GetUserGql } from './decorators/get-user.decorator';
 import { GqlAuthGuard } from './guards/graphql.guard';
+import { OauthSignUpCredentials } from './dto/oauth-sign-up-credentials.dto';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => UserMutation)
 export class UserMutationsResolver {
@@ -32,7 +33,14 @@ export class UserMutationsResolver {
   ): Promise<AuthUser> {
     return this.userService.signUp(signInInput);
   }
-
+  @ResolveField(() => AuthUser)
+  async oauthSignUp(
+    @GetUserGql() user: User,
+    @Args({ name: 'credentials', type: () => OauthSignUpCredentials })
+    input: OauthSignUpCredentials,
+  ): Promise<AuthUser> {
+    return this.userService.oauthSignUp({ userId: user.id, input });
+  }
   @ResolveField(() => AuthUser)
   async updateUserProfile(
     @GetUserGql() user: User,

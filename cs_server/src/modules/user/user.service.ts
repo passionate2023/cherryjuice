@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  OauthSignupDTO,
   UpdateUserProfileDTO,
   UserExistsDTO,
   UserRepository,
@@ -45,6 +46,12 @@ export class UserService {
     const user = await this.userRepository.signUp(authCredentialsDto);
     return this.packageAuthUser(user);
   }
+
+  async oauthSignUp(dto: OauthSignupDTO): Promise<AuthUser> {
+    const user = await this.userRepository.oauthSignUp(dto);
+    return this.packageAuthUser(user);
+  }
+
   async signIn(authCredentialsDto: SignInCredentials): Promise<AuthUser> {
     const user = await this.userRepository.validateUserPassword(
       authCredentialsDto,
@@ -80,7 +87,7 @@ export class UserService {
         _json.email,
       );
       if (existingUser) {
-        return await this.userRepository.getUser(existingUser.email);
+        return existingUser;
       } else {
         return await this.userRepository.registerOAuthUser(
           thirdPartyId,

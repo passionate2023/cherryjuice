@@ -9,6 +9,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { UnauthorizedException } from '@nestjs/common';
+import { AfterLoad } from 'typeorm/index';
 
 type UserConstructorProps = {
   username: string;
@@ -26,6 +27,10 @@ class User extends BaseEntity {
   constructor(props: Partial<User> & UserConstructorProps) {
     super();
     Object.assign(this, props);
+    if (props) {
+      this.salt = '';
+      this.passwordHash = '';
+    }
   }
 
   @Field()
@@ -72,6 +77,9 @@ class User extends BaseEntity {
   @Column({ default: false })
   email_verified: boolean;
 
+  @Field(() => Boolean)
+  hasPassword = false;
+
   async validatePassword(passwordToValidate: string): Promise<void> {
     const hash = await bcrypt.hash(passwordToValidate, this.salt);
     if (hash !== this.passwordHash)
@@ -81,6 +89,12 @@ class User extends BaseEntity {
   async setPassword(password: string): Promise<void> {
     this.salt = await bcrypt.genSalt();
     this.passwordHash = await bcrypt.hash(password, this.salt);
+    this.hasPassword = Boolean(this.passwordHash);
+  }
+
+  @AfterLoad()
+  setHashPassword() {
+    this.hasPassword = Boolean(this.passwordHash);
   }
 }
 

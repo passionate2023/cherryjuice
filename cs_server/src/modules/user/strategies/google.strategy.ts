@@ -11,6 +11,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientSecret: process.env.OAUTH_GOOGLE_CLIENT_SECRET,
       callbackURL: process.env.OAUTH_CALLBACK_URL,
       passReqToCallback: true,
+      prompt: 'select_account',
       scope: ['profile', 'email', 'openid'],
     });
   }

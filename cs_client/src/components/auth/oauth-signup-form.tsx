@@ -9,35 +9,15 @@ import {
 } from '::shared-components/form/validated-text-input';
 import { patterns } from '::auth/helpers/form-validation';
 import { AuthScreen } from '::auth/auth-screen';
-import { createRef, useRef } from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
 import { LinearProgress } from '::shared-components/linear-progress';
-import { Link } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
-import { SignUpCredentials } from '::types/graphql/generated';
+import { OauthSignUpCredentials } from '::types/graphql/generated';
+import { router } from '::root/router/router';
 
-const idPrefix = 'sign-up';
+const idPrefix = 'oauth-sign-up';
 const inputs: ValidatedTextInputProps[] = [
-  {
-    label: 'first name',
-    icon: [Icons.material['person-circle']],
-    patterns: [patterns.name],
-    minLength: 2,
-    required: true,
-    variableName: 'firstName',
-    inputRef: createRef(),
-    idPrefix,
-  },
-  {
-    label: 'last name',
-    icon: [Icons.material['person-circle']],
-    patterns: [patterns.name],
-    minLength: 2,
-    required: true,
-    variableName: 'lastName',
-    inputRef: createRef(),
-    idPrefix,
-  },
   {
     label: 'username',
     icon: [Icons.material.username],
@@ -45,15 +25,6 @@ const inputs: ValidatedTextInputProps[] = [
     minLength: 4,
     required: true,
     variableName: 'username',
-    inputRef: createRef(),
-    idPrefix,
-  },
-  {
-    label: 'email',
-    icon: [Icons.material.email],
-    type: 'email',
-    required: true,
-    variableName: 'email',
     inputRef: createRef(),
     idPrefix,
   },
@@ -68,74 +39,93 @@ const inputs: ValidatedTextInputProps[] = [
     required: true,
     idPrefix,
   },
+  {
+    inputRef: createRef(),
+    variableName: undefined,
+    patterns: [patterns.password],
+    label: 'confirm password',
+    type: 'password',
+    icon: [Icons.material.lock],
+    minLength: 8,
+    required: true,
+    idPrefix,
+  },
 ];
 
 const mapState = (state: Store) => ({
   loading: state.auth.ongoingOperation !== 'idle',
   alert: state.auth.alert,
+  userId: state.auth.user?.id,
+  username: state.auth.user?.username,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
-const SignUpForm: React.FC<Props & PropsFromRedux> = ({
+const OauthSignUpForm: React.FC<Props & PropsFromRedux> = ({
   loading,
   alert,
+  username,
 }) => {
+  const [passwordValid, setPasswordValid] = useState(false);
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  inputs[0].defaultValue = username;
+  inputs[1].value = password;
+  inputs[1].onChange = setPassword;
+  inputs[1].setValid = setPasswordValid;
+  inputs[2].value = passwordConfirmation;
+  inputs[2].onChange = setPasswordConfirmation;
   const formRef = useRef<HTMLFormElement>();
   const signUp = (e?: any) => {
     if (formRef.current.checkValidity()) {
       if (e) e.preventDefault();
       const variables = Object.fromEntries(
-        inputs.map(({ variableName, inputRef }) => [
-          variableName,
-          // @ts-ignore
-          inputRef?.current.value,
-        ]),
+        inputs
+          .filter(input => input.variableName)
+          .map(({ variableName, inputRef }) => [
+            variableName,
+            // @ts-ignore
+            inputRef?.current.value,
+          ]),
       );
-      ac.auth.signUp(variables as SignUpCredentials);
+      ac.auth.signUp(variables as OauthSignUpCredentials, true);
     }
   };
-
-  // useDefaultValues(inputs);
+  useEffect(() => {
+    if (!username) router.goto.signIn();
+  }, []);
   useModalKeyboardEvents({
     modalSelector: '.' + modLogin.login__card,
     focusableElementsSelector: ['a', 'input[type="submit"]'],
     onCloseModal: () => undefined,
     onConfirmModal: signUp,
   });
+  const disableSignupButton =
+    loading || !passwordValid || password !== passwordConfirmation;
   return (
     <AuthScreen error={alert}>
       <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
           {inputs.map(inputProps => (
-            <ValidatedTextInput {...inputProps} key={inputProps.variableName} />
+            <ValidatedTextInput {...inputProps} key={inputProps.label} />
           ))}
 
           <input
             type={'submit'}
-            value={'Sign up'}
+            value={'Finish Sign up'}
             className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
             onClick={signUp}
-            disabled={loading}
+            disabled={disableSignupButton}
             style={{ marginTop: 20 }}
           />
-          <span className={modLogin.login__form__createAccount}>
-            already a member?{' '}
-            <Link
-              to="/login"
-              className={modLogin.login__form__createAccount__icon}
-            >
-              log in
-            </Link>
-          </span>
         </form>
       </div>
     </AuthScreen>
   );
 };
 
-const _ = connector(SignUpForm);
-export { _ as SignUpForm };
+const _ = connector(OauthSignUpForm);
+export { _ as OauthSignUpForm };

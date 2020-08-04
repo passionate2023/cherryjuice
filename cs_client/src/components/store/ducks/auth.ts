@@ -2,6 +2,7 @@ import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import {
   AuthUser,
+  OauthSignUpCredentials,
   Secrets,
   SignInCredentials,
   SignUpCredentials,
@@ -23,9 +24,14 @@ const ac = {
     signIn: _(ap('sign-in'), _ => (credentials: SignInCredentials) =>
       _(credentials),
     ),
-    signUp: _(ap('sign-up'), _ => (credentials: SignUpCredentials) =>
-      _(credentials),
+    signUp: _(
+      ap('sign-up'),
+      _ => (
+        credentials: SignUpCredentials | OauthSignUpCredentials,
+        oauth = false,
+      ) => _(credentials, { oauth }),
     ),
+
     refreshToken: _(ap('refresh-token')),
   },
   ...{

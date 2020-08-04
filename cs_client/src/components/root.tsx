@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useApolloClient } from '::graphql/apollo';
 import { LoginForm } from '::auth/login-form';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Route, Switch } from 'react-router';
 import { Provider } from 'react-redux';
 import { Void } from '::shared-components/suspense-fallback/void';
@@ -21,10 +21,13 @@ const ApolloProvider = React.lazy(() =>
 );
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
+import { OauthSignUpForm } from '::auth/oauth-signup-form';
+import { router } from '::root/router/router';
 
 const mapState = (state: Store) => ({
   token: state.auth.token,
-  user: state.auth.user,
+  userId: state.auth.user?.id,
+  hasPassword: state.auth.user?.hasPassword,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -32,11 +35,26 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const Root: React.FC<Props & PropsFromRedux> = ({ token, user }) => {
+const Root: React.FC<Props & PropsFromRedux> = ({
+  token,
+  userId,
+  hasPassword,
+}) => {
   useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
-  const client = useApolloClient(token, user?.id);
+  const client = useApolloClient(token, userId);
   useSetupHotKeys();
   const { loadedEpics } = useLoadEpics();
+
+  useEffect(() => {
+    if (userId) {
+      if (hasPassword === false) {
+        router.goto.oauthSignup();
+      } else {
+        router.goto.home();
+      }
+    }
+  }, [userId, hasPassword]);
+
   return (
     <Suspense fallback={<Void />}>
       {client && loadedEpics && (
@@ -44,6 +62,7 @@ const Root: React.FC<Props & PropsFromRedux> = ({ token, user }) => {
           <Switch>
             <Route path={'/login'} render={() => <LoginForm />} />{' '}
             <Route path={'/signup'} render={() => <SignUpForm />} />
+            <Route path={'/signup-oauth'} render={() => <OauthSignUpForm />} />
             <Route path={'/*'} render={() => <App />} />
           </Switch>
         </ApolloProvider>

@@ -8,7 +8,7 @@ import { useCustomValidityMessage } from '::hooks/use-custom-validation-message'
 export type ValidatedTextInputProps = {
   label: string;
   inputRef: Ref<HTMLInputElement>;
-  variableName: string;
+  variableName?: string;
   type?: string;
   icon?: string | [string];
   ariaLabel?: string;
@@ -20,6 +20,7 @@ export type ValidatedTextInputProps = {
   value?: string;
   onChange?: (string) => void;
   setValid?: (boolean) => void;
+  defaultValue?: string;
 };
 
 const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
@@ -39,6 +40,7 @@ const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
   value,
   onChange,
   setValid,
+  defaultValue,
 }) => {
   const { onInput, onInvalid } = useCustomValidityMessage(patterns, setValid);
   const id = `${idPrefix}-${label.replace(' ', '-')}`;
@@ -69,6 +71,7 @@ const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
         {...(onChange && { value, onChange: e => onChange(e.target.value) })}
         onInvalid={onInvalid}
         onInput={onInput}
+        defaultValue={defaultValue}
       />
       <label htmlFor={id} className={modLogin.login__form__input__label}>
         {label}
