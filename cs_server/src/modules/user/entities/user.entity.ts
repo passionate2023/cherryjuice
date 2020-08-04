@@ -25,11 +25,7 @@ type UserConstructorProps = {
 class User extends BaseEntity {
   constructor(props: Partial<User> & UserConstructorProps) {
     super();
-    if (props) {
-      Object.assign(this, props);
-      this.salt = '';
-      this.passwordHash = '';
-    }
+    Object.assign(this, props);
   }
 
   @Field()

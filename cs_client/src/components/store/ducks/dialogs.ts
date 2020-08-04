@@ -30,6 +30,14 @@ const actionCreators = {
     hideDocumentList: _(ap('hideDocumentList')),
   },
   ...{
+    showPasswordModal: _(ap('show-password-modal')),
+    hidePasswordModal: _(ap('hide-password-modal')),
+    confirmPasswordModal: _(
+      ap('confirm-password-modal'),
+      _ => (password: string) => _(password),
+    ),
+  },
+  ...{
     setAlert: _(ap('setAlert'), _ => (alert: TAlert) => {
       if (alert?.error && process.env.NODE_ENV === 'development')
         // eslint-disable-next-line no-console
@@ -77,6 +85,7 @@ type Snackbar = { message: string };
 type State = {
   showReloadDocument: boolean;
   alert?: TAlert;
+  showPasswordModal: boolean;
   showImportDocuments: boolean;
   showDocumentList: boolean;
   showDocumentMetaDialog?: 'edit' | 'create';
@@ -94,6 +103,7 @@ const initialState: State = {
   alert: undefined,
   showDeleteNode: false,
   showNodeMetaDialog: undefined,
+  showPasswordModal: false,
   showUserPopup: false,
   showSettingsDialog: true,
   snackbar: undefined,
@@ -203,6 +213,20 @@ const reducer = createReducer(initialState, _ => [
     _(actionCreators.hideUserPopup, state => ({
       ...state,
       showUserPopup: false,
+    })),
+  ],
+  ...[
+    _(actionCreators.showPasswordModal, state => ({
+      ...state,
+      showPasswordModal: true,
+    })),
+    _(actionCreators.hidePasswordModal, state => ({
+      ...state,
+      showPasswordModal: false,
+    })),
+    _(actionCreators.confirmPasswordModal, state => ({
+      ...state,
+      showPasswordModal: false,
     })),
   ],
   ...[

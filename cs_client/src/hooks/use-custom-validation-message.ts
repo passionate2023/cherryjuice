@@ -1,6 +1,9 @@
 import { useCallback } from 'react';
 import { TPattern } from '::auth/helpers/form-validation';
-const useCustomValidityMessage = (patterns: TPattern[]) => {
+const useCustomValidityMessage = (
+  patterns: TPattern[],
+  setValid?: (boolean) => void,
+) => {
   const validatePattern = useCallback(
     e => {
       const value = e.target.value;
@@ -26,6 +29,7 @@ const useCustomValidityMessage = (patterns: TPattern[]) => {
   };
   const onInput = e => {
     e.target.setCustomValidity('');
+    if (setValid) setValid(e.target.validity.valid);
   };
 
   return { onInvalid, onInput };

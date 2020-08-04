@@ -19,6 +19,7 @@ export type ValidatedTextInputProps = {
   idPrefix: string;
   value?: string;
   onChange?: (string) => void;
+  setValid?: (boolean) => void;
 };
 
 const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
@@ -37,8 +38,9 @@ const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
   highlightInvalidInput = true,
   value,
   onChange,
+  setValid,
 }) => {
-  const { onInput, onInvalid } = useCustomValidityMessage(patterns);
+  const { onInput, onInvalid } = useCustomValidityMessage(patterns, setValid);
   const id = `${idPrefix}-${label.replace(' ', '-')}`;
   return (
     <div className={modLogin.login__form__input}>

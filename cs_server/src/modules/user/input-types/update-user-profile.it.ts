@@ -10,6 +10,9 @@ import { patterns } from '../dto/sign-up-credentials.dto';
 
 @InputType('UpdateUserProfileIt')
 export class UpdateUserProfileIt {
+  @Field()
+  currentPassword: string;
+
   @IsOptional()
   @IsString()
   @MaxLength(30)

@@ -327,6 +327,7 @@ export interface SignUpCredentials {
 }
 
 export interface UpdateUserProfileIt {
+  currentPassword: string;
   firstName?: string;
   lastName?: string;
   newPassword?: string;

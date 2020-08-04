@@ -1,15 +1,11 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { Document } from '../modules/document/entities/document.entity';
-import { Node } from '../modules/node/entities/node.entity';
-import { Image } from '../modules/image/entities/image.entity';
-import { User } from '../modules/user/entities/user.entity';
-import { DocumentGuest } from '../modules/document/entities/document-guest.entity';
 import path from 'path';
+import { getMetadataArgsStorage } from 'typeorm/index';
 
 const config: TypeOrmModuleOptions = {
   type: 'postgres',
   url: process.env.DATABASE_URL,
-  entities: [Document, Node, Image, User, DocumentGuest],
+  entities: getMetadataArgsStorage().tables.map(tbl => tbl.target),
   migrations: [path.resolve(__dirname, '../../migrations/**/*.ts')],
   cli: {
     migrationsDir: 'migrations',

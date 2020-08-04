@@ -1,5 +1,3 @@
-import { QDocumentsListItem } from '::graphql/queries/documents-list';
-
 type State = {
   firstName: string;
   lastName: string;
@@ -7,14 +5,6 @@ type State = {
   username: string;
   newPassword?: string;
   newPasswordConfirmation?: string;
-};
-const initialState: State = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  username: '',
-  newPassword: '',
-  newPasswordConfirmation: '',
 };
 
 enum actions {
@@ -26,8 +16,6 @@ enum actions {
   reset,
 }
 
-export type ResetToCreateProps = {};
-export type ResetToEditProps = { document: QDocumentsListItem };
 const actionCreators = (() => {
   const state = {
     dispatch: undefined,
@@ -44,6 +32,9 @@ const actionCreators = (() => {
       state.dispatch({ type: actions.setNewPasswordConfirmation, value }),
     setUserName: (value: string) =>
       state.dispatch({ type: actions.setUserName, value }),
+    reset(value: Omit<State, 'newPassword' | 'newPasswordConfirmation'>) {
+      state.dispatch({ type: actions.reset, value });
+    },
   };
 })();
 
@@ -65,6 +56,8 @@ const reducer = (
       return { ...state, newPassword: action.value };
     case actions.setNewPasswordConfirmation:
       return { ...state, newPasswordConfirmation: action.value };
+    case actions.reset:
+      return { ...action.value, newPassword: '', newPasswordConfirmation: '' };
     default:
       throw new Error(action.type + ' action not supported');
   }
@@ -72,7 +65,6 @@ const reducer = (
 
 export {
   actionCreators as userSettingsActionCreators,
-  initialState as userSettingsInitialState,
   reducer as userSettingsReducer,
   State as TUserSettingsMetaState,
 };

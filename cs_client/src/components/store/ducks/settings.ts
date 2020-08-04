@@ -3,6 +3,7 @@ import { createActionPrefixer } from './helpers/shared';
 import { screens } from '::app/menus/settings/screens';
 import { AsyncOperation } from '::root/store/ducks/document';
 import { UpdateUserProfileIt } from '::types/graphql/generated';
+import { dialogsActionCreators } from '::root/store/ducks/dialogs';
 
 const ap = createActionPrefixer('settings');
 
@@ -88,6 +89,10 @@ const reducer = createReducer(initialState, _ => [
         } as State),
     ),
     _(ac.saveFailed, state => ({
+      ...state,
+      saveOperation: 'idle',
+    })),
+    _(dialogsActionCreators.hidePasswordModal, state => ({
       ...state,
       saveOperation: 'idle',
     })),

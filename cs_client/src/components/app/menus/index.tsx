@@ -4,6 +4,9 @@ import { Void } from '::shared-components/suspense-fallback/void';
 import ReloadDocument from '::app/menus/modals/reload-document/reload-document';
 import { Snackbar } from '::shared-components/snackbar/snackbar';
 const AlertModal = React.lazy(() => import('./modals/alert-modal/alert-modal'));
+const PasswordModal = React.lazy(() =>
+  import('./modals/password-modal/password-modal'),
+);
 const UserPopup = React.lazy(() => import('./user/user-with-transition'));
 const ImportProgress = React.lazy(() =>
   import('./document-operations/document-operations'),
@@ -65,6 +68,9 @@ const Menus: React.FC<Props & PropsFromRedux> = () => {
       </Suspense>
       <Suspense fallback={<Void />}>
         <Snackbar />
+      </Suspense>
+      <Suspense fallback={<Void />}>
+        <PasswordModal />
       </Suspense>
       <SearchDialog />
     </>

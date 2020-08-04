@@ -160,6 +160,7 @@ class UserRepository extends Repository<User> {
     input,
   }: UpdateUserProfileDTO): Promise<string> {
     const user = await this._getUser(username);
+    await user.validatePassword(input.currentPassword);
     if (input.newPassword) {
       await user.setPassword(input.newPassword);
       delete input.newPassword;

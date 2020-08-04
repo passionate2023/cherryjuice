@@ -89,9 +89,10 @@ $navigation-width: 200px;
 
 .drawer__content {
   padding: 5px 5px;
-  height: 100%;
+  height: calc(100% - 10px);
   @include respond-to('md') {
     padding: 10px 30px;
+    height: calc(100% - 20px);
   }
 }
 

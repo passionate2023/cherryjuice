@@ -329,6 +329,7 @@ input TimeFilter {
 }
 
 input UpdateUserProfileIt {
+    currentPassword: String!
     firstName: String
     lastName: String
     newPassword: String

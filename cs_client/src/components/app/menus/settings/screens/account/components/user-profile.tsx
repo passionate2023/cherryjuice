@@ -16,6 +16,7 @@ import {
 import { patterns } from '::auth/helpers/form-validation';
 
 const mapState = (state: Store) => ({
+  token: state.auth?.token,
   currentSettings: {
     firstName: state.auth.user.firstName,
     lastName: state.auth.user.lastName,
@@ -29,12 +30,18 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const UserProfile: React.FC<Props & PropsFromRedux> = ({ currentSettings }) => {
+const UserProfile: React.FC<Props & PropsFromRedux> = ({
+  currentSettings,
+  token,
+}) => {
   const [state, dispatch] = useReducer(userSettingsReducer, currentSettings);
   useEffect(() => {
     userSettingsActionCreators.__setDispatch(dispatch);
   }, []);
 
+  useEffect(() => {
+    userSettingsActionCreators.reset(currentSettings);
+  }, [token]);
   const idPrefix = 'sign-up';
   const personalInformation: ValidatedTextInputProps[] = [
     {
@@ -70,23 +77,14 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({ currentSettings }) => {
       value: state.username,
       onChange: userSettingsActionCreators.setUserName,
     },
-
-    //   component: <div>update username</div>,
-    // },
     // {
     //   label: 'email',
     //   value: state.email,
     //   type: 'component',
     //   component: <div>update email</div>,
     // },
-    // {
-    //   label: 'password',
-    //   value: '',
-    //   type: 'component',
-    //   component: <div>update password</div>,
-    // },
   ];
-  const changePassword = [
+  const changePassword: ValidatedTextInputProps[] = [
     {
       inputRef: createRef(),
       variableName: 'newPassword',
@@ -96,7 +94,7 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({ currentSettings }) => {
       minLength: 8,
       required: true,
       idPrefix,
-      value: state.newPassword,
+      value: state.newPassword || '',
       onChange: userSettingsActionCreators.setNewPassword,
     },
     {
@@ -108,12 +106,12 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({ currentSettings }) => {
       minLength: 8,
       required: true,
       idPrefix,
-      value: state.newPasswordConfirmation,
+      value: state.newPasswordConfirmation || '',
       onChange: userSettingsActionCreators.setNewPasswordConfirmation,
     },
   ];
   useEffect(() => {
-    const changes: UpdateUserProfileIt = {};
+    const changes: Omit<UpdateUserProfileIt, 'currentPassword'> = {};
     let validity = true;
     const validate = ({ variableName, inputRef }) => {
       const localValue = state[variableName];
@@ -124,19 +122,19 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({ currentSettings }) => {
       }
     };
     personalInformation.forEach(validate);
-
     if (
       state.newPassword &&
       state.newPassword === state.newPasswordConfirmation
     ) {
       changes.newPassword = state.newPassword;
-      // @ts-ignore
+      const newPassword = changePassword[0];
       validity =
-        validity && changePassword[0].inputRef?.current?.checkValidity();
+        // @ts-ignore
+        validity && newPassword.inputRef?.current?.checkValidity();
     }
 
     if (validity && Object.keys(changes).length) {
-      ac.settings.setUserProfileChanges(changes);
+      ac.settings.setUserProfileChanges({ ...changes, currentPassword: '' });
     } else ac.settings.clearUserProfileChanges();
   }, [
     state.firstName,

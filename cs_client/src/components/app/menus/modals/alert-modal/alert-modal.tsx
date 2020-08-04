@@ -34,6 +34,7 @@ const AlertModal: React.FC<Props & PropsFromRedux> = ({
         });
       },
       disabled: false,
+      lazyAutoFocus: 300,
     });
   }
 
@@ -46,8 +47,9 @@ const AlertModal: React.FC<Props & PropsFromRedux> = ({
         }
       : onClose,
     disabled: false,
-    lazyAutoFocus: 300,
+    lazyAutoFocus: alert?.action ? undefined : 300,
   });
+
   return (
     <ConfirmationModal
       show={show}
