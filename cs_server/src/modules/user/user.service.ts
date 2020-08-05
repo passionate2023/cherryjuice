@@ -24,6 +24,8 @@ export type OauthJson = {
   email_verified: boolean;
   locale: string;
 };
+export type DeleteAccountDTO = { userId: string; currentPassword: string };
+
 @Injectable()
 export class UserService {
   constructor(
@@ -106,5 +108,9 @@ export class UserService {
 
   async updateUserProfile(dto: UpdateUserProfileDTO): Promise<string> {
     return this.userRepository.updateUserProfile(dto);
+  }
+
+  async deleteAccount(dto: DeleteAccountDTO): Promise<string> {
+    return this.userRepository.deleteAccount(dto);
   }
 }

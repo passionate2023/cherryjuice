@@ -309,6 +309,7 @@ export interface UploadLinkInputType {
 }
 
 export interface UserMutation {
+  deleteAccount: string;
   oauthSignUp: AuthUser;
   signIn: AuthUser;
   signUp: AuthUser;
@@ -1068,10 +1069,26 @@ export interface NodeMutationToUploadImageResolver<
 }
 
 export interface UserMutationTypeResolver<TParent = any> {
+  deleteAccount?: UserMutationToDeleteAccountResolver<TParent>;
   oauthSignUp?: UserMutationToOauthSignUpResolver<TParent>;
   signIn?: UserMutationToSignInResolver<TParent>;
   signUp?: UserMutationToSignUpResolver<TParent>;
   updateUserProfile?: UserMutationToUpdateUserProfileResolver<TParent>;
+}
+
+export interface UserMutationToDeleteAccountArgs {
+  currentPassword: string;
+}
+export interface UserMutationToDeleteAccountResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToDeleteAccountArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
 }
 
 export interface UserMutationToOauthSignUpArgs {

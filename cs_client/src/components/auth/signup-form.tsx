@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { SignUpCredentials } from '::types/graphql/generated';
+import { useDefaultValues } from '::hooks/use-default-form-values';
 
 const idPrefix = 'sign-up';
 const inputs: ValidatedTextInputProps[] = [
@@ -79,10 +80,7 @@ const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
-const SignUpForm: React.FC<Props & PropsFromRedux> = ({
-  loading,
-  alert,
-}) => {
+const SignUpForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
   const formRef = useRef<HTMLFormElement>();
   const signUp = (e?: any) => {
     if (formRef.current.checkValidity()) {
@@ -98,7 +96,7 @@ const SignUpForm: React.FC<Props & PropsFromRedux> = ({
     }
   };
 
-  // useDefaultValues(inputs);
+  useDefaultValues(inputs);
   useModalKeyboardEvents({
     modalSelector: '.' + modLogin.login__card,
     focusableElementsSelector: ['a', 'input[type="submit"]'],

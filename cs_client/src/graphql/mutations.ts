@@ -135,6 +135,19 @@ const USER_MUTATION = {
       ${FRAGMENT_USER.userInfo}
     `,
   },
+  deleteAccount: {
+    args: (currentPassword: string) => ({
+      currentPassword,
+    }),
+    path: (data): string => data?.user?.deleteAccount,
+    query: gql`
+      mutation delete_account($currentPassword: String!) {
+        user {
+          deleteAccount(currentPassword: $currentPassword)
+        }
+      }
+    `,
+  },
   oauthSignUp: {
     args: (input: OauthSignUpCredentials) => ({ input }),
     path: (data): AuthUser | undefined => data?.user?.oauthSignUp,

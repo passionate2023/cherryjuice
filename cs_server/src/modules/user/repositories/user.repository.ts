@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { SignInCredentials } from '../dto/sign-in-credentials.dto';
-import { OauthJson } from '../user.service';
+import { DeleteAccountDTO, OauthJson } from '../user.service';
 import { UpdateUserProfileIt } from '../input-types/update-user-profile.it';
 import { classToClass } from 'class-transformer';
 import { OauthSignUpCredentials } from '../dto/oauth-sign-up-credentials.dto';
@@ -181,6 +181,16 @@ class UserRepository extends Repository<User> {
     delete input.password;
     await this.updateUser(user, input);
     return classToClass(user);
+  }
+
+  async deleteAccount({
+    userId,
+    currentPassword,
+  }: DeleteAccountDTO): Promise<string> {
+    const user = await this._getUser(undefined, userId);
+    await user.validatePassword(currentPassword);
+    await this.remove(user);
+    return userId;
   }
 }
 

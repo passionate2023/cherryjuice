@@ -1,5 +1,23 @@
 @import '../../vars/vars';
 @import '../../vars/colors';
+
+@mixin button-variant($color, $bg-color, $br-base, $br-step) {
+  color: $color;
+  background-color: $bg-color;
+  filter: brightness($br-base);
+  &:hover:not([disabled]) {
+    filter: brightness(#{$br-base + $br-step});
+    background-color: $bg-color;
+    color: $color;
+  }
+  &:active:not([disabled]) {
+    filter: brightness(#{$br-base + 2 * $br-step});
+    background-color: $bg-color;
+    color: $color;
+    box-shadow: $box-shadow1;
+  }
+}
+
 .button {
   user-select: none;
   border: none;
@@ -47,22 +65,14 @@
 .button--square {
   border-radius: 5px;
 }
-.button--dark {
-  color: white;
-  background-color: $dark-grey;
-  filter: brightness(0.85);
-  &:hover:not([disabled]) {
-    filter: brightness(1.1);
-    background-color: $dark-grey ;
-    color: white ;
-  }
-  &:active:not([disabled]) {
-    filter: brightness(1.2);
-    background-color: $dark-grey;
-    color: white;
-    box-shadow: $box-shadow1;
-  }
+
+.button--danger {
+  @include button-variant(white, #d60000, 1, 0.1);
 }
+.button--dark {
+  @include button-variant(white, $dark-grey, 0.85, 0.1);
+}
+
 .button--pressed {
   background-color: $primary !important;
   color: white !important;

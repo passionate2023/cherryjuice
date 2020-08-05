@@ -146,6 +146,7 @@ type User {
 }
 
 type UserMutation {
+    deleteAccount(currentPassword: String!): String!
     oauthSignUp(credentials: OauthSignUpCredentials!): AuthUser!
     signIn(credentials: SignInCredentials!): AuthUser!
     signUp(credentials: SignUpCredentials!): AuthUser!

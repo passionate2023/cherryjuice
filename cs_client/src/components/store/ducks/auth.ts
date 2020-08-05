@@ -33,6 +33,7 @@ const ac = {
     ),
 
     refreshToken: _(ap('refresh-token')),
+    deleteAccount: _(ap('delete-account')),
   },
   ...{
     setAuthenticationInProgress: _(ap('set-authentication-in-progress')),

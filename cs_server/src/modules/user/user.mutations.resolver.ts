@@ -14,6 +14,7 @@ import { OauthSignUpCredentials } from './dto/oauth-sign-up-credentials.dto';
 @Resolver(() => UserMutation)
 export class UserMutationsResolver {
   constructor(private userService: UserService) {}
+
   @Mutation(() => UserMutation)
   async user(): Promise<{}> {
     return {};
@@ -26,6 +27,7 @@ export class UserMutationsResolver {
   ): Promise<AuthUser> {
     return this.userService.signIn(signInInput);
   }
+
   @ResolveField(() => AuthUser)
   async signUp(
     @Args({ name: 'credentials', type: () => SignUpCredentials })
@@ -33,6 +35,7 @@ export class UserMutationsResolver {
   ): Promise<AuthUser> {
     return this.userService.signUp(signInInput);
   }
+
   @ResolveField(() => AuthUser)
   async oauthSignUp(
     @GetUserGql() user: User,
@@ -41,6 +44,7 @@ export class UserMutationsResolver {
   ): Promise<AuthUser> {
     return this.userService.oauthSignUp({ userId: user.id, input });
   }
+
   @ResolveField(() => AuthUser)
   async updateUserProfile(
     @GetUserGql() user: User,
@@ -53,5 +57,14 @@ export class UserMutationsResolver {
       username: user.username,
     });
     return this.userService.refreshUser(user.id);
+  }
+
+  @ResolveField(() => String)
+  async deleteAccount(
+    @GetUserGql() user: User,
+    @Args({ name: 'currentPassword', type: () => String })
+    currentPassword: string,
+  ): Promise<string> {
+    return this.userService.deleteAccount({ userId: user.id, currentPassword });
   }
 }

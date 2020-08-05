@@ -14,6 +14,7 @@ import {
   ValidatedTextInputProps,
 } from '::shared-components/form/validated-text-input';
 import { patterns } from '::auth/helpers/form-validation';
+import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 
 const mapState = (state: Store) => ({
   token: state.auth?.token,
@@ -152,6 +153,13 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
         {changePassword.map(po => (
           <ValidatedTextInput key={po.label} {...po} />
         ))}
+        <div>
+          <ButtonSquare
+            text={'delete account'}
+            onClick={ac.auth.deleteAccount}
+            variant={'danger'}
+          />
+        </div>
       </div>
     </div>
   );
