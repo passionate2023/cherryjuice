@@ -29,6 +29,7 @@
   transition: opacity 200ms linear;
 }
 .banner__text {
+  text-align: center;
   color: white;
   @include respond-to($md-down) {
     color: rgba($primary-dark2, 0.8);

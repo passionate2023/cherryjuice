@@ -110,6 +110,12 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
             <span className={modLogin.login__form__rememberMe__text}>
               Keep me logged-in
             </span>
+            <Link
+              to="/forgot-password"
+              className={modLogin.login__form__rememberMe__text}
+            >
+              forgot password
+            </Link>
           </span>
 
           <input

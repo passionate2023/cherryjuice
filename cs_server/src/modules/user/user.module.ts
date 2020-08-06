@@ -10,6 +10,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { UserMutationsResolver } from './user.mutations.resolver';
 import { UserQueriesResolver } from './user.queries.resolver';
+import { UserTokenRepository } from './repositories/user-token.repository';
+import { EmailService } from './email.service';
 
 @Module({
   imports: [
@@ -22,11 +24,12 @@ import { UserQueriesResolver } from './user.queries.resolver';
         expiresIn: jwtConfig.expiresIn,
       },
     }),
-    TypeOrmModule.forFeature([UserRepository]),
+    TypeOrmModule.forFeature([UserRepository, UserTokenRepository]),
   ],
   controllers: [UserController],
   providers: [
     UserService,
+    EmailService,
     JwtStrategy,
     GoogleStrategy,
     UserMutationsResolver,

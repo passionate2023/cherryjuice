@@ -1,6 +1,11 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  CreatePasswordResetTokenDTO,
   OauthSignupDTO,
   UpdateUserProfileDTO,
   UserExistsDTO,
@@ -11,8 +16,15 @@ import { JwtService } from '@nestjs/jwt';
 import { SignInCredentials } from './dto/sign-in-credentials.dto';
 import { AuthUser } from './entities/auth.user';
 import { User } from './entities/user.entity';
-import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
+import {
+  AuthnPayloadToken,
+  PasswordResetPayloadToken,
+} from './interfaces/jwt-payload.interface';
 import { Secrets } from './entities/secrets';
+import { UserTokenRepository } from './repositories/user-token.repository';
+import { UserToken, UserTokenType } from './entities/user-token.entity';
+import { ResetPasswordIt } from './input-types/reset-password.it';
+import { EmailService } from './email.service';
 
 export type OauthJson = {
   sub: string;
@@ -26,19 +38,34 @@ export type OauthJson = {
 };
 export type DeleteAccountDTO = { userId: string; currentPassword: string };
 
+export const createJWTPayload = {
+  authn: (user: User): AuthnPayloadToken => ({
+    id: user.id,
+  }),
+  passwordReset: (user: User, token: UserToken): PasswordResetPayloadToken => ({
+    id: token.id,
+    userId: user.id,
+    type: token.type,
+  }),
+};
+
+export type ResetPasswordDTO = {
+  input: ResetPasswordIt;
+};
+
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserRepository) private userRepository: UserRepository,
+    @InjectRepository(UserTokenRepository)
+    private userTokenRepository: UserTokenRepository,
     private jwtService: JwtService,
+    private emailService: EmailService,
   ) {}
 
-  static createJWTPayload(user: User): JwtPayloadInterface {
-    return { id: user.id };
-  }
   private packageAuthUser(user: User): AuthUser {
     return {
-      token: this.jwtService.sign(UserService.createJWTPayload(user)),
+      token: this.jwtService.sign(createJWTPayload.authn(user)),
       user,
       secrets: this.getSecrets(),
     };
@@ -112,5 +139,43 @@ export class UserService {
 
   async deleteAccount(dto: DeleteAccountDTO): Promise<string> {
     return this.userRepository.deleteAccount(dto);
+  }
+
+  async createPasswordResetToken(
+    dto: CreatePasswordResetTokenDTO,
+  ): Promise<void> {
+    const user = await this.userRepository.getUser(dto.email);
+    if (user.username !== dto.username) {
+      throw new UnauthorizedException(`user not found`);
+    }
+    const userToken = await this.userTokenRepository.createToken({
+      userId: user.id,
+      type: UserTokenType.PASSWORD_RESET,
+    });
+    const token = this.jwtService.sign(
+      createJWTPayload.passwordReset(user, userToken),
+      { expiresIn: '6h' },
+    );
+    this.emailService.sendPasswordResetEmail({ token });
+  }
+
+  async resetPassword({
+    input: { newPassword, token },
+  }: ResetPasswordDTO): Promise<void> {
+    const tokenPayload: PasswordResetPayloadToken = this.jwtService.verify(
+      token,
+    );
+    await this.userRepository.resetPassword({
+      userId: tokenPayload.userId,
+      password: newPassword,
+    });
+    await this.userTokenRepository.consumeToken(tokenPayload);
+  }
+
+  async verifyToken(token: string): Promise<void> {
+    const tokenPayload: PasswordResetPayloadToken = this.jwtService.verify(
+      token,
+    );
+    await this.userTokenRepository.verifyToken(tokenPayload);
   }
 }

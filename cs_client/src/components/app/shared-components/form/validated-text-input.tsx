@@ -21,6 +21,7 @@ export type ValidatedTextInputProps = {
   onChange?: (string) => void;
   setValid?: (boolean) => void;
   defaultValue?: string;
+  disabled?: boolean;
 };
 
 const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
@@ -41,11 +42,12 @@ const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
   onChange,
   setValid,
   defaultValue,
+  disabled,
 }) => {
   const { onInput, onInvalid } = useCustomValidityMessage(patterns, setValid);
   const id = `${idPrefix}-${label.replace(' ', '-')}`;
   return (
-    <div className={modLogin.login__form__input}>
+    <div className={modLogin.login__form__input} disabled={disabled}>
       {icon && (
         <Icon
           loadAsInlineSVG={'force'}
@@ -67,6 +69,7 @@ const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
         required={required}
         autoComplete={Boolean(autoComplete).toString()}
         aria-label={ariaLabel || label}
+        disabled={disabled}
         id={id}
         {...(onChange && { value, onChange: e => onChange(e.target.value) })}
         onInvalid={onInvalid}

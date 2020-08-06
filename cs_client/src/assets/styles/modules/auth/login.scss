@@ -46,6 +46,13 @@
   margin-top: 2px;
   @include form-element-size();
   max-height: 50px;
+  &[disabled] {
+    opacity: 0.5;
+    input,
+    label {
+      cursor: not-allowed;
+    }
+  }
 }
 
 .login__form__input:focus {
@@ -126,6 +133,7 @@
   display: flex;
   color: grey;
   margin-left: -10px;
+  text-decoration: none;
 }
 
 .login__separator {

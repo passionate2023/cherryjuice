@@ -1,8 +1,13 @@
 import { ApolloError } from 'apollo-client';
-const properErrorMessage = (error: ApolloError): string => {
+
+type ErrorOptions = { persistent?: boolean };
+export type LocalError = { localMessage: string } & ErrorOptions;
+export type AsyncError = (ApolloError & ErrorOptions) | LocalError;
+const properErrorMessage = (error: AsyncError): string => {
   let message;
   if (error) {
-    if (
+    if ('localMessage' in error) message = error.localMessage;
+    else if (
       error.graphQLErrors.length &&
       error.graphQLErrors[0]?.extensions?.exception?.response?.message
     ) {

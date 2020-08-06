@@ -23,6 +23,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 import { OauthSignUpForm } from '::auth/oauth-signup-form';
 import { router } from '::root/router/router';
+import { ForgotPassword } from '::auth/forgot-password';
+import { ResetPassword } from '::auth/reset-password';
 
 const mapState = (state: Store) => ({
   token: state.auth.token,
@@ -60,9 +62,11 @@ const Root: React.FC<Props & PropsFromRedux> = ({
       {client && loadedEpics && (
         <ApolloProvider client={client}>
           <Switch>
-            <Route path={'/login'} render={() => <LoginForm />} />{' '}
-            <Route path={'/signup'} render={() => <SignUpForm />} />
-            <Route path={'/signup-oauth'} render={() => <OauthSignUpForm />} />
+            <Route path={'/login'} component={LoginForm} />
+            <Route path={'/signup'} component={SignUpForm} />
+            <Route path={'/signup-oauth'} component={OauthSignUpForm} />
+            <Route path={'/reset-password'} component={ResetPassword} />
+            <Route path={'/forgot-password'} component={ForgotPassword} />
             <Route path={'/*'} render={() => <App />} />
           </Switch>
         </ApolloProvider>

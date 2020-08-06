@@ -146,8 +146,10 @@ type User {
 }
 
 type UserMutation {
+    createPasswordResetToken(email: String!, username: String!): Timestamp!
     deleteAccount(currentPassword: String!): String!
     oauthSignUp(credentials: OauthSignUpCredentials!): AuthUser!
+    resetPassword(input: ResetPasswordIt!): Timestamp!
     signIn(credentials: SignInCredentials!): AuthUser!
     signUp(credentials: SignUpCredentials!): AuthUser!
     updateUserProfile(userProfile: UpdateUserProfileIt!): AuthUser!
@@ -156,6 +158,7 @@ type UserMutation {
 type UserQuery {
     refreshToken: AuthUser!
     userExists(email: String!): String
+    verifyToken(token: String!): Timestamp!
 }
 
 enum AccessLevel {
@@ -299,6 +302,11 @@ input NodeSearchIt {
 input OauthSignUpCredentials {
     password: String!
     username: String!
+}
+
+input ResetPasswordIt {
+    newPassword: String!
+    token: String!
 }
 
 input SaveHtmlIt {

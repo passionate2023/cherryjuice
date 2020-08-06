@@ -1,4 +1,4 @@
-import { Repository, EntityRepository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import { SignUpCredentials } from '../dto/sign-up-credentials.dto';
 import { User } from '../entities/user.entity';
 import {
@@ -13,6 +13,7 @@ import { classToClass } from 'class-transformer';
 import { OauthSignUpCredentials } from '../dto/oauth-sign-up-credentials.dto';
 
 export type UserExistsDTO = { email: string };
+export type CreatePasswordResetTokenDTO = { email: string; username: string };
 
 export type UpdateUserProfileDTO = {
   input: UpdateUserProfileIt;
@@ -25,7 +26,7 @@ export type OauthSignupDTO = {
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
-  async _getUser(emailOrUsername?: string, id?: string): Promise<User> {
+  private async _getUser(emailOrUsername?: string, id?: string): Promise<User> {
     const user = id
       ? await this.findOne(id)
       : await this.findOne({
@@ -58,10 +59,6 @@ class UserRepository extends Repository<User> {
       ],
     });
     return classToClass(user);
-  }
-
-  async userExists({ email }: UserExistsDTO): Promise<string | undefined> {
-    return await this.findOne({ where: { email } }).then(user => user?.id);
   }
 
   async signUp({
@@ -174,6 +171,18 @@ class UserRepository extends Repository<User> {
     return user.id;
   }
 
+  async resetPassword({
+    userId,
+    password,
+  }: {
+    userId: string;
+    password: string;
+  }): Promise<void> {
+    const user = await this._getUser(undefined, userId);
+    await user.setPassword(password);
+    await this.save(user);
+  }
+
   async oauthSignUp({ input, userId }: OauthSignupDTO): Promise<User> {
     const user = await this._getUser(undefined, userId);
     if (user.hasPassword) throw new UnauthorizedException('user has password');
@@ -191,6 +200,12 @@ class UserRepository extends Repository<User> {
     await user.validatePassword(currentPassword);
     await this.remove(user);
     return userId;
+  }
+
+  async userExists(dto: UserExistsDTO): Promise<string | undefined> {
+    return await this.findOne({
+      where: dto,
+    }).then(user => user?.id);
   }
 }
 

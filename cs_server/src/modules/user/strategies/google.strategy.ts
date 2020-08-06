@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-oauth20';
-import { UserService } from '../user.service';
+import { createJWTPayload, UserService } from '../user.service';
 import { sign } from 'jsonwebtoken';
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -31,13 +31,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       );
       if (user) {
         done(null, {
-          token: sign(
-            UserService.createJWTPayload(user),
-            process.env.JWT_SECRET,
-            {
-              expiresIn: process.env.JWT_EXPIRES_IN,
-            },
-          ),
+          token: sign(createJWTPayload.authn(user), process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN,
+          }),
           user,
         });
       } else done(undefined, false);

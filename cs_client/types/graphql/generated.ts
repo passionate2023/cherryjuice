@@ -190,6 +190,7 @@ export interface NodeSearchResultEntity {
 export interface UserQuery {
   refreshToken: AuthUser;
   userExists?: string;
+  verifyToken: Timestamp;
 }
 
 export interface AuthUser {
@@ -309,8 +310,10 @@ export interface UploadLinkInputType {
 }
 
 export interface UserMutation {
+  createPasswordResetToken: Timestamp;
   deleteAccount: string;
   oauthSignUp: AuthUser;
+  resetPassword: Timestamp;
   signIn: AuthUser;
   signUp: AuthUser;
   updateUserProfile: AuthUser;
@@ -319,6 +322,11 @@ export interface UserMutation {
 export interface OauthSignUpCredentials {
   password: string;
   username: string;
+}
+
+export interface ResetPasswordIt {
+  newPassword: string;
+  token: string;
 }
 
 export interface SignInCredentials {
@@ -787,6 +795,7 @@ export interface NodeSearchResultEntityToUpdatedAtResolver<
 export interface UserQueryTypeResolver<TParent = any> {
   refreshToken?: UserQueryToRefreshTokenResolver<TParent>;
   userExists?: UserQueryToUserExistsResolver<TParent>;
+  verifyToken?: UserQueryToVerifyTokenResolver<TParent>;
 }
 
 export interface UserQueryToRefreshTokenResolver<TParent = any, TResult = any> {
@@ -800,6 +809,18 @@ export interface UserQueryToUserExistsResolver<TParent = any, TResult = any> {
   (
     parent: TParent,
     args: UserQueryToUserExistsArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserQueryToVerifyTokenArgs {
+  token: string;
+}
+export interface UserQueryToVerifyTokenResolver<TParent = any, TResult = any> {
+  (
+    parent: TParent,
+    args: UserQueryToVerifyTokenArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
@@ -1069,11 +1090,31 @@ export interface NodeMutationToUploadImageResolver<
 }
 
 export interface UserMutationTypeResolver<TParent = any> {
+  createPasswordResetToken?: UserMutationToCreatePasswordResetTokenResolver<
+    TParent
+  >;
   deleteAccount?: UserMutationToDeleteAccountResolver<TParent>;
   oauthSignUp?: UserMutationToOauthSignUpResolver<TParent>;
+  resetPassword?: UserMutationToResetPasswordResolver<TParent>;
   signIn?: UserMutationToSignInResolver<TParent>;
   signUp?: UserMutationToSignUpResolver<TParent>;
   updateUserProfile?: UserMutationToUpdateUserProfileResolver<TParent>;
+}
+
+export interface UserMutationToCreatePasswordResetTokenArgs {
+  email: string;
+  username: string;
+}
+export interface UserMutationToCreatePasswordResetTokenResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToCreatePasswordResetTokenArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
 }
 
 export interface UserMutationToDeleteAccountArgs {
@@ -1101,6 +1142,21 @@ export interface UserMutationToOauthSignUpResolver<
   (
     parent: TParent,
     args: UserMutationToOauthSignUpArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMutationToResetPasswordArgs {
+  input: ResetPasswordIt;
+}
+export interface UserMutationToResetPasswordResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToResetPasswordArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;

@@ -10,6 +10,8 @@ import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { GetUserGql } from './decorators/get-user.decorator';
 import { GqlAuthGuard } from './guards/graphql.guard';
 import { OauthSignUpCredentials } from './dto/oauth-sign-up-credentials.dto';
+import { ResetPasswordIt } from './input-types/reset-password.it';
+import { Timestamp } from '../document/helpers/graphql-types/timestamp';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => UserMutation)
 export class UserMutationsResolver {
@@ -66,5 +68,29 @@ export class UserMutationsResolver {
     currentPassword: string,
   ): Promise<string> {
     return this.userService.deleteAccount({ userId: user.id, currentPassword });
+  }
+
+  @ResolveField(() => Timestamp)
+  async createPasswordResetToken(
+    @Args({ name: 'email', type: () => String }) email: string,
+    @Args({ name: 'username', type: () => String })
+    username: string,
+  ): Promise<number> {
+    await this.userService.createPasswordResetToken({
+      email,
+      username,
+    });
+    return Date.now();
+  }
+
+  @ResolveField(() => Timestamp)
+  async resetPassword(
+    @Args({ name: 'input', type: () => ResetPasswordIt })
+    input: ResetPasswordIt,
+  ): Promise<number> {
+    await this.userService.resetPassword({
+      input,
+    });
+    return Date.now();
   }
 }
