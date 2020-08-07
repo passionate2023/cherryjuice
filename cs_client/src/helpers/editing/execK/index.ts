@@ -6,14 +6,9 @@ import { restoreSelection } from '::helpers/editing/execK/steps/restore-selectio
 import { AlertType } from '::types/react';
 import { FormattingError } from '::types/errors';
 import { ac } from '::root/store/store';
+import { ExecKCommand } from '::helpers/editing/execK/execk-commands';
 
-enum ExecKCommand {
-  clear = 'clear',
-  justifyLeft = 'left',
-  justifyFill = 'fill',
-  justifyCenter = 'center',
-  justifyRight = 'right',
-}
+
 const isJustificationCommand = command =>
   command && command != ExecKCommand.clear;
 
@@ -93,4 +88,3 @@ const execK = ({
 };
 
 export { execK };
-export { ExecKCommand };

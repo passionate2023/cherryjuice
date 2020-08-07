@@ -160,8 +160,8 @@ export class UserService {
       createJWTPayload.passwordReset(user, userToken),
       { expiresIn: '6h' },
     );
-    const url = `http://localhost:1236/reset-password#token=${token}`;
-    await this.emailService.sendPasswordReset({ url, email: user.email });
+
+    await this.emailService.sendPasswordReset({ token, email: user.email });
   }
 
   async createEmailVerificationToken(user: User): Promise<void> {
@@ -173,8 +173,8 @@ export class UserService {
       createJWTPayload.passwordReset(user, userToken),
       { expiresIn: '48h' },
     );
-    const url = `http://localhost:1236/verify-email#token=${token}`;
-    await this.emailService.sendEmailVerification({ url, email: user.email });
+
+    await this.emailService.sendEmailVerification({ token, email: user.email });
   }
 
   async resetPassword({

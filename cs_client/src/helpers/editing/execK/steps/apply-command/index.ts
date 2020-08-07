@@ -2,7 +2,7 @@ import { cloneObj } from '::helpers/editing/execK/helpers';
 import { applyStyle } from '::helpers/editing/execK/steps/apply-command/apply-style';
 import { applyTag } from '::helpers/editing/execK/steps/apply-command/apply-tag';
 import { removeFormatting } from '::helpers/editing/execK/steps/apply-command/remove-formatting';
-import { ExecKCommand } from '::helpers/editing/execK';
+import { ExecKCommand } from '::helpers/editing/execK/execk-commands';
 import {
   justify,
   TLineStyle,

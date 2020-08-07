@@ -3,14 +3,15 @@ import { MailerService } from '@nestjs-modules/mailer';
 
 type SendEmailDTO = {
   email: string;
-  url: string;
+  token: string;
 };
 
 @Injectable()
 export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
 
-  async sendPasswordReset({ email, url }: SendEmailDTO): Promise<void> {
+  async sendPasswordReset({ email, token }: SendEmailDTO): Promise<void> {
+    const url = `${process.env.ASSETS_URL}/reset-password#token=${token}`;
     await this.mailerService.sendMail({
       to: email,
       subject: 'Password reset',
@@ -22,7 +23,8 @@ export class EmailService {
     });
   }
 
-  async sendEmailVerification({ email, url }: SendEmailDTO): Promise<void> {
+  async sendEmailVerification({ email, token }: SendEmailDTO): Promise<void> {
+    const url = `${process.env.ASSETS_URL}/verify-email#token=${token}`;
     await this.mailerService.sendMail({
       to: email,
       subject: 'Verify your email',
