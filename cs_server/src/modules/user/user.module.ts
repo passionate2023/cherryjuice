@@ -11,10 +11,11 @@ import { GoogleStrategy } from './strategies/google.strategy';
 import { UserMutationsResolver } from './user.mutations.resolver';
 import { UserQueriesResolver } from './user.queries.resolver';
 import { UserTokenRepository } from './repositories/user-token.repository';
-import { EmailService } from './email.service';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
+    EmailModule,
     PassportModule.register({
       defaultStrategy: ['jwt', 'google'],
     }),
@@ -29,7 +30,6 @@ import { EmailService } from './email.service';
   controllers: [UserController],
   providers: [
     UserService,
-    EmailService,
     JwtStrategy,
     GoogleStrategy,
     UserMutationsResolver,

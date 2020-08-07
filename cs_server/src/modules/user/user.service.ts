@@ -26,8 +26,8 @@ import { Secrets } from './entities/secrets';
 import { UserTokenRepository } from './repositories/user-token.repository';
 import { UserToken, UserTokenType } from './entities/user-token.entity';
 import { ResetPasswordIt } from './input-types/reset-password.it';
-import { EmailService } from './email.service';
 import { VerifyEmailIt } from './input-types/verify-email.it';
+import { EmailService } from '../email/email.service';
 
 export type OauthJson = {
   sub: string;
@@ -160,7 +160,8 @@ export class UserService {
       createJWTPayload.passwordReset(user, userToken),
       { expiresIn: '6h' },
     );
-    this.emailService.sendPasswordResetEmail({ token });
+    const url = `http://localhost:1236/reset-password#token=${token}`;
+    await this.emailService.sendPasswordReset({ url, email: user.email });
   }
 
   async createEmailVerificationToken(user: User): Promise<void> {
@@ -172,7 +173,8 @@ export class UserService {
       createJWTPayload.passwordReset(user, userToken),
       { expiresIn: '48h' },
     );
-    this.emailService.sendEmailVerificationEmail({ token });
+    const url = `http://localhost:1236/verify-email#token=${token}`;
+    await this.emailService.sendEmailVerification({ url, email: user.email });
   }
 
   async resetPassword({

@@ -159,7 +159,7 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
         {changePassword.map(po => (
           <ValidatedTextInput key={po.label} {...po} />
         ))}
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
           {emailVerified ? (
             <span>email verified</span>
           ) : (
