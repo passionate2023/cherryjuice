@@ -1,10 +1,11 @@
 import { UserTokenType } from '../entities/user-token.entity';
 
-export interface AuthnPayloadToken {
+export interface AuthenticatedUserTp {
   id: string;
 }
-export interface PasswordResetPayloadToken {
+export interface PasswordResetTp {
   id: string;
   userId: string;
   type: UserTokenType;
 }
+export type VerifyEmailTp = PasswordResetTp;

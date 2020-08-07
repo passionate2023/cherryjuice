@@ -15,6 +15,7 @@ import {
 } from '::shared-components/form/validated-text-input';
 import { patterns } from '::auth/helpers/form-validation';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
+import { VerifyEmail } from '::app/menus/settings/screens/account/components/components/components/verify-email';
 
 const mapState = (state: Store) => ({
   token: state.auth?.token,
@@ -24,6 +25,8 @@ const mapState = (state: Store) => ({
     email: state.auth.user.email,
     username: state.auth.user.username,
   },
+  emailVerification: state.auth.emailVerification,
+  emailVerified: state.auth.user?.email_verified,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -34,6 +37,8 @@ type Props = {};
 const UserProfile: React.FC<Props & PropsFromRedux> = ({
   currentSettings,
   token,
+  emailVerified,
+  emailVerification,
 }) => {
   const [state, dispatch] = useReducer(userSettingsReducer, currentSettings);
   useEffect(() => {
@@ -122,6 +127,7 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
         changes[variableName] = localValue;
       }
     };
+    // @ts-ignore
     personalInformation.forEach(validate);
     if (
       state.newPassword &&
@@ -154,6 +160,14 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
           <ValidatedTextInput key={po.label} {...po} />
         ))}
         <div>
+          {emailVerified ? (
+            <span>email verified</span>
+          ) : (
+            <VerifyEmail
+              emailVerification={emailVerification}
+              email={currentSettings.email}
+            />
+          )}
           <ButtonSquare
             text={'delete account'}
             onClick={ac.auth.deleteAccount}

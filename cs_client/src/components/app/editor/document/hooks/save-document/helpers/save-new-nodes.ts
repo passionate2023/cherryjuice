@@ -7,7 +7,7 @@ import {
 import { CreateNodeIt } from '::types/graphql/generated';
 import { updateDocumentId } from '::app/editor/document/hooks/save-document/helpers/shared';
 import { swapFatherIdIfApplies } from '::app/editor/document/hooks/save-document/helpers/save-nodes-meta';
-import { CREATE_NODE } from '::graphql/mutations/create-node';
+import { CREATE_NODE } from '::graphql/mutations/document/create-node';
 
 const adapt = ({
   child_nodes,

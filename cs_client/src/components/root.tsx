@@ -25,6 +25,7 @@ import { OauthSignUpForm } from '::auth/oauth-signup-form';
 import { router } from '::root/router/router';
 import { ForgotPassword } from '::auth/forgot-password';
 import { ResetPassword } from '::auth/reset-password';
+import { VerifyEmail } from '::auth/verify-email';
 
 const mapState = (state: Store) => ({
   token: state.auth.token,
@@ -48,7 +49,10 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   const { loadedEpics } = useLoadEpics();
 
   useEffect(() => {
-    if (userId) {
+    const staticRoute = ['/verify-email'].some(route =>
+      router.get.location.pathname.startsWith(route),
+    );
+    if (!staticRoute && userId) {
       if (hasPassword === false) {
         router.goto.oauthSignup();
       } else {
@@ -67,7 +71,10 @@ const Root: React.FC<Props & PropsFromRedux> = ({
             <Route path={'/signup-oauth'} component={OauthSignUpForm} />
             <Route path={'/reset-password'} component={ResetPassword} />
             <Route path={'/forgot-password'} component={ForgotPassword} />
-            <Route path={'/*'} render={() => <App />} />
+            <>
+              <Route path={'/verify-email'} component={VerifyEmail} />
+              <Route path={'/*'} component={App} />
+            </>
           </Switch>
         </ApolloProvider>
       )}

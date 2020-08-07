@@ -146,6 +146,7 @@ type User {
 }
 
 type UserMutation {
+    createEmailVerificationToken: Timestamp!
     createPasswordResetToken(email: String!, username: String!): Timestamp!
     deleteAccount(currentPassword: String!): String!
     oauthSignUp(credentials: OauthSignUpCredentials!): AuthUser!
@@ -153,12 +154,13 @@ type UserMutation {
     signIn(credentials: SignInCredentials!): AuthUser!
     signUp(credentials: SignUpCredentials!): AuthUser!
     updateUserProfile(userProfile: UpdateUserProfileIt!): AuthUser!
+    verifyEmail(input: VerifyEmailIt!): Timestamp!
 }
 
 type UserQuery {
     refreshToken: AuthUser!
     userExists(email: String!): String
-    verifyToken(token: String!): Timestamp!
+    verifyTokenValidity(token: String!): Timestamp!
 }
 
 enum AccessLevel {
@@ -355,6 +357,10 @@ input UpdateUserProfileIt {
 input UploadLinkInputType {
     IDs: [String!]!
     access_token: String!
+}
+
+input VerifyEmailIt {
+    token: String!
 }
 
 

@@ -6,12 +6,17 @@ import { SignUpCredentials } from './dto/sign-up-credentials.dto';
 import { SignInCredentials } from './dto/sign-in-credentials.dto';
 import { UpdateUserProfileIt } from './input-types/update-user-profile.it';
 import { User } from './entities/user.entity';
-import { UnauthorizedException, UseGuards } from '@nestjs/common';
+import {
+  ForbiddenException,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { GetUserGql } from './decorators/get-user.decorator';
 import { GqlAuthGuard } from './guards/graphql.guard';
 import { OauthSignUpCredentials } from './dto/oauth-sign-up-credentials.dto';
 import { ResetPasswordIt } from './input-types/reset-password.it';
 import { Timestamp } from '../document/helpers/graphql-types/timestamp';
+import { VerifyEmailIt } from './input-types/verify-email.it';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => UserMutation)
 export class UserMutationsResolver {
@@ -89,6 +94,28 @@ export class UserMutationsResolver {
     input: ResetPasswordIt,
   ): Promise<number> {
     await this.userService.resetPassword({
+      input,
+    });
+    return Date.now();
+  }
+
+  @ResolveField(() => Timestamp)
+  async createEmailVerificationToken(
+    @GetUserGql() user: User,
+  ): Promise<number> {
+    if (!user?.id) throw new UnauthorizedException();
+    if (user.email_verified)
+      throw new ForbiddenException('email already verified');
+    await this.userService.createEmailVerificationToken(user);
+    return Date.now();
+  }
+
+  @ResolveField(() => Timestamp)
+  async verifyEmail(
+    @Args({ name: 'input', type: () => VerifyEmailIt })
+    input: VerifyEmailIt,
+  ): Promise<number> {
+    await this.userService.verifyEmail({
       input,
     });
     return Date.now();

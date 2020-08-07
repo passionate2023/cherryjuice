@@ -1,6 +1,6 @@
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { SaveOperationProps } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
-import { CREATE_DOCUMENT } from '::graphql/mutations/create-document';
+import { CREATE_DOCUMENT } from '::graphql/mutations/document/create-document';
 
 const saveNewDocument = async ({ state, documentId }: SaveOperationProps) => {
   if (apolloCache.changes.document(documentId).created.includes(documentId)) {

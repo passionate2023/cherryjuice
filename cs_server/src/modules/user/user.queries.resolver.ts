@@ -33,10 +33,10 @@ export class UserQueriesResolver {
   }
 
   @ResolveField(() => Timestamp)
-  async verifyToken(
+  async verifyTokenValidity(
     @Args({ name: 'token', type: () => String }) token: string,
   ): Promise<number> {
-    await this.userService.verifyToken(token);
+    await this.userService.verifyTokenValidity(token);
     return Date.now();
   }
 }

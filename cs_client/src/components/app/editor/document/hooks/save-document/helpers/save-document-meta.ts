@@ -1,7 +1,7 @@
 import { SaveOperationProps } from '::app/editor/document/hooks/save-document/helpers/save-deleted-nodes';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { DocumentGuestOt, EditDocumentIt } from '::types/graphql/generated';
-import { EDIT_DOCUMENT_META } from '::graphql/mutations/edit-document-meta';
+import { EDIT_DOCUMENT_META } from '::graphql/mutations/document/edit-document-meta';
 
 type MutationVariables = { file_id: string; meta: EditDocumentIt };
 const saveDocumentMeta = async ({ state, documentId }: SaveOperationProps) => {

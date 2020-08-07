@@ -190,7 +190,7 @@ export interface NodeSearchResultEntity {
 export interface UserQuery {
   refreshToken: AuthUser;
   userExists?: string;
-  verifyToken: Timestamp;
+  verifyTokenValidity: Timestamp;
 }
 
 export interface AuthUser {
@@ -310,6 +310,7 @@ export interface UploadLinkInputType {
 }
 
 export interface UserMutation {
+  createEmailVerificationToken: Timestamp;
   createPasswordResetToken: Timestamp;
   deleteAccount: string;
   oauthSignUp: AuthUser;
@@ -317,6 +318,7 @@ export interface UserMutation {
   signIn: AuthUser;
   signUp: AuthUser;
   updateUserProfile: AuthUser;
+  verifyEmail: Timestamp;
 }
 
 export interface OauthSignUpCredentials {
@@ -348,6 +350,10 @@ export interface UpdateUserProfileIt {
   lastName?: string;
   newPassword?: string;
   username?: string;
+}
+
+export interface VerifyEmailIt {
+  token: string;
 }
 
 export interface Subscription {
@@ -795,7 +801,7 @@ export interface NodeSearchResultEntityToUpdatedAtResolver<
 export interface UserQueryTypeResolver<TParent = any> {
   refreshToken?: UserQueryToRefreshTokenResolver<TParent>;
   userExists?: UserQueryToUserExistsResolver<TParent>;
-  verifyToken?: UserQueryToVerifyTokenResolver<TParent>;
+  verifyTokenValidity?: UserQueryToVerifyTokenValidityResolver<TParent>;
 }
 
 export interface UserQueryToRefreshTokenResolver<TParent = any, TResult = any> {
@@ -814,13 +820,16 @@ export interface UserQueryToUserExistsResolver<TParent = any, TResult = any> {
   ): TResult;
 }
 
-export interface UserQueryToVerifyTokenArgs {
+export interface UserQueryToVerifyTokenValidityArgs {
   token: string;
 }
-export interface UserQueryToVerifyTokenResolver<TParent = any, TResult = any> {
+export interface UserQueryToVerifyTokenValidityResolver<
+  TParent = any,
+  TResult = any
+> {
   (
     parent: TParent,
-    args: UserQueryToVerifyTokenArgs,
+    args: UserQueryToVerifyTokenValidityArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
@@ -1090,6 +1099,9 @@ export interface NodeMutationToUploadImageResolver<
 }
 
 export interface UserMutationTypeResolver<TParent = any> {
+  createEmailVerificationToken?: UserMutationToCreateEmailVerificationTokenResolver<
+    TParent
+  >;
   createPasswordResetToken?: UserMutationToCreatePasswordResetTokenResolver<
     TParent
   >;
@@ -1099,6 +1111,14 @@ export interface UserMutationTypeResolver<TParent = any> {
   signIn?: UserMutationToSignInResolver<TParent>;
   signUp?: UserMutationToSignUpResolver<TParent>;
   updateUserProfile?: UserMutationToUpdateUserProfileResolver<TParent>;
+  verifyEmail?: UserMutationToVerifyEmailResolver<TParent>;
+}
+
+export interface UserMutationToCreateEmailVerificationTokenResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface UserMutationToCreatePasswordResetTokenArgs {
@@ -1196,6 +1216,21 @@ export interface UserMutationToUpdateUserProfileResolver<
   (
     parent: TParent,
     args: UserMutationToUpdateUserProfileArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMutationToVerifyEmailArgs {
+  input: VerifyEmailIt;
+}
+export interface UserMutationToVerifyEmailResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToVerifyEmailArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;

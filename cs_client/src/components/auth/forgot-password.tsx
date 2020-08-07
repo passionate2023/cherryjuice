@@ -12,7 +12,7 @@ import { LinearProgress } from '::shared-components/linear-progress';
 import { patterns } from '::auth/helpers/form-validation';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { AsyncError } from '::auth/hooks/proper-error-message';
-import { CREATE_PASSWORD_RESET_TOKEN } from '::graphql/mutations/create-password-reset-token';
+import { CREATE_PASSWORD_RESET_TOKEN } from '::graphql/mutations/user/create-password-reset-token';
 import { useStatefulValidatedInput } from '::auth/hooks/stateful-validated-input';
 
 const idPrefix = 'forgot-password';

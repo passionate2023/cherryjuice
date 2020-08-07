@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm/index';
 import { UserToken, UserTokenType } from '../entities/user-token.entity';
-import { PasswordResetPayloadToken } from '../interfaces/jwt-payload.interface';
+import { PasswordResetTp } from '../interfaces/jwt-payload.interface';
 import { NotFoundException } from '@nestjs/common';
 
 type CreateTokenDTO = {
@@ -10,10 +10,7 @@ type CreateTokenDTO = {
 
 @EntityRepository(UserToken)
 export class UserTokenRepository extends Repository<UserToken> {
-  private async _getToken({
-    id,
-    userId,
-  }: PasswordResetPayloadToken): Promise<UserToken> {
+  private async _getToken({ id, userId }: PasswordResetTp): Promise<UserToken> {
     const token = await this.findOne({ where: { id, userId } });
     if (!token) throw new NotFoundException('invalid token');
     return token;
@@ -30,11 +27,11 @@ export class UserTokenRepository extends Repository<UserToken> {
     return token;
   }
 
-  async verifyToken(dto: PasswordResetPayloadToken): Promise<void> {
+  async verifyToken(dto: PasswordResetTp): Promise<void> {
     await this._getToken(dto);
   }
 
-  async consumeToken(dto: PasswordResetPayloadToken): Promise<void> {
+  async deleteToken(dto: PasswordResetTp): Promise<void> {
     const token = await this._getToken(dto);
     await this.remove(token);
   }

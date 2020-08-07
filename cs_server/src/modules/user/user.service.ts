@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
@@ -17,14 +18,16 @@ import { SignInCredentials } from './dto/sign-in-credentials.dto';
 import { AuthUser } from './entities/auth.user';
 import { User } from './entities/user.entity';
 import {
-  AuthnPayloadToken,
-  PasswordResetPayloadToken,
+  AuthenticatedUserTp,
+  PasswordResetTp,
+  VerifyEmailTp,
 } from './interfaces/jwt-payload.interface';
 import { Secrets } from './entities/secrets';
 import { UserTokenRepository } from './repositories/user-token.repository';
 import { UserToken, UserTokenType } from './entities/user-token.entity';
 import { ResetPasswordIt } from './input-types/reset-password.it';
 import { EmailService } from './email.service';
+import { VerifyEmailIt } from './input-types/verify-email.it';
 
 export type OauthJson = {
   sub: string;
@@ -39,10 +42,10 @@ export type OauthJson = {
 export type DeleteAccountDTO = { userId: string; currentPassword: string };
 
 export const createJWTPayload = {
-  authn: (user: User): AuthnPayloadToken => ({
+  authn: (user: User): AuthenticatedUserTp => ({
     id: user.id,
   }),
-  passwordReset: (user: User, token: UserToken): PasswordResetPayloadToken => ({
+  passwordReset: (user: User, token: UserToken): PasswordResetTp => ({
     id: token.id,
     userId: user.id,
     type: token.type,
@@ -144,8 +147,9 @@ export class UserService {
   async createPasswordResetToken(
     dto: CreatePasswordResetTokenDTO,
   ): Promise<void> {
-    const user = await this.userRepository.getUser(dto.email);
-    if (user.username !== dto.username) {
+    const { email, username } = dto;
+    const user = await this.userRepository.getUser(email);
+    if (user.username !== username) {
       throw new UnauthorizedException(`user not found`);
     }
     const userToken = await this.userTokenRepository.createToken({
@@ -159,23 +163,51 @@ export class UserService {
     this.emailService.sendPasswordResetEmail({ token });
   }
 
+  async createEmailVerificationToken(user: User): Promise<void> {
+    const userToken = await this.userTokenRepository.createToken({
+      userId: user.id,
+      type: UserTokenType.EMAIL_VERIFICATION,
+    });
+    const token = this.jwtService.sign(
+      createJWTPayload.passwordReset(user, userToken),
+      { expiresIn: '48h' },
+    );
+    this.emailService.sendEmailVerificationEmail({ token });
+  }
+
   async resetPassword({
     input: { newPassword, token },
   }: ResetPasswordDTO): Promise<void> {
-    const tokenPayload: PasswordResetPayloadToken = this.jwtService.verify(
-      token,
-    );
+    const tokenPayload: PasswordResetTp = this.jwtService.verify(token);
+    await this.userTokenRepository.verifyToken(tokenPayload);
     await this.userRepository.resetPassword({
       userId: tokenPayload.userId,
       password: newPassword,
     });
-    await this.userTokenRepository.consumeToken(tokenPayload);
+    await this.userTokenRepository.deleteToken(tokenPayload);
   }
 
-  async verifyToken(token: string): Promise<void> {
-    const tokenPayload: PasswordResetPayloadToken = this.jwtService.verify(
-      token,
-    );
+  async verifyTokenValidity(token: string): Promise<void> {
+    const tokenPayload: PasswordResetTp = this.jwtService.verify(token);
     await this.userTokenRepository.verifyToken(tokenPayload);
+  }
+
+  verifyJwtToken(token: string): VerifyEmailTp {
+    try {
+      return this.jwtService.verify(token);
+    } catch {
+      throw new BadRequestException('invalid token');
+    }
+  }
+
+  async verifyEmail({
+    input: { token },
+  }: {
+    input: VerifyEmailIt;
+  }): Promise<void> {
+    const tokenPayload: VerifyEmailTp = this.verifyJwtToken(token);
+    await this.userTokenRepository.verifyToken(tokenPayload);
+    await this.userRepository.verifyEmail(tokenPayload);
+    await this.userTokenRepository.deleteToken(tokenPayload);
   }
 }

@@ -9,7 +9,13 @@ const assets = {
 };
 @Controller()
 export class AppController {
-  @Get(['/login*', '/signup*', '/document*', '/reset-password*'])
+  @Get([
+    '/login*',
+    '/signup*',
+    '/document*',
+    '/reset-password*',
+    '/verify-email*',
+  ])
   clientSideRoutes(@Res() res) {
     res.sendFile(assets['index.html']);
   }

@@ -18,7 +18,7 @@ const properErrorMessage = (error: AsyncError): string => {
       else if (message.startsWith('first-name:'))
         message = 'Invalid first name';
       else if (message.startsWith('last-name:')) message = 'Invalid last name';
-      else if (message.startsWith('email')) message = 'Invalid last email';
+      else if (message.startsWith('email:')) message = 'Invalid email';
     } else if (error.networkError) message = 'Network error';
   }
   return message;

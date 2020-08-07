@@ -7,7 +7,7 @@ const VERIFY_TOKEN = (variables: Variables) => ({
   query: gql`
     query verify_token($token: String!) {
       user {
-        verifyToken(token: $token)
+        verifyTokenValidity(token: $token)
       }
     }
   `,

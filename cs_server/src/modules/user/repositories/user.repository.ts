@@ -11,6 +11,7 @@ import { DeleteAccountDTO, OauthJson } from '../user.service';
 import { UpdateUserProfileIt } from '../input-types/update-user-profile.it';
 import { classToClass } from 'class-transformer';
 import { OauthSignUpCredentials } from '../dto/oauth-sign-up-credentials.dto';
+import { VerifyEmailTp } from '../interfaces/jwt-payload.interface';
 
 export type UserExistsDTO = { email: string };
 export type CreatePasswordResetTokenDTO = { email: string; username: string };
@@ -139,7 +140,10 @@ class UserRepository extends Repository<User> {
 
   private async updateUser(
     user: User,
-    data: UpdateUserProfileIt | Omit<OauthSignUpCredentials, 'password'>,
+    data:
+      | { email_verified: boolean }
+      | UpdateUserProfileIt
+      | Omit<OauthSignUpCredentials, 'password'>,
   ): Promise<void> {
     Object.entries(data).forEach(([key, value]) => {
       user[key] = value;
@@ -148,7 +152,7 @@ class UserRepository extends Repository<User> {
       await this.save(user);
     } catch (e) {
       if (e.code === '23505') {
-        if (data.username) throw new ConflictException('username exists');
+        if ('username' in data) throw new ConflictException('username exists');
       } else {
         // eslint-disable-next-line no-console
         console.log(e);
@@ -206,6 +210,11 @@ class UserRepository extends Repository<User> {
     return await this.findOne({
       where: dto,
     }).then(user => user?.id);
+  }
+
+  async verifyEmail({ userId }: VerifyEmailTp): Promise<void> {
+    const user = await this._getUser(undefined, userId);
+    await this.updateUser(user, { email_verified: true });
   }
 }
 

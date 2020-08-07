@@ -6,7 +6,7 @@ import { Actions } from '::root/store/actions.types';
 import { gqlMutation } from '::root/store/epics/shared/gql-query';
 import { createErrorHandler } from '::root/store/epics/shared/create-error-handler';
 import { AsyncOperation } from '::root/store/ducks/document';
-import { DELETE_DOCUMENT } from '::graphql/mutations/delete-document';
+import { DELETE_DOCUMENT } from '::graphql/mutations/document/delete-document';
 import { deleteLocalDocuments } from '::app/menus/select-file/hooks/delete-documents/helpers/delete-local-documents';
 
 const asyncStates: AsyncOperation[] = ['idle', 'pending'];

@@ -12,9 +12,9 @@ import { patterns } from '::auth/helpers/form-validation';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { AsyncError } from '::auth/hooks/proper-error-message';
 import { useStatefulValidatedInput } from '::auth/hooks/stateful-validated-input';
-import { RESET_PASSWORD } from '::graphql/mutations/reset-password';
+import { RESET_PASSWORD } from '::graphql/mutations/user/reset-password';
 import { router } from '::root/router/router';
-import { VERIFY_TOKEN } from '::graphql/mutations/verify-token';
+import { VERIFY_TOKEN } from '::graphql/mutations/user/verify-token';
 
 const idPrefix = 'reset--password';
 const inputs: ValidatedTextInputProps[] = [
@@ -40,10 +40,11 @@ const inputs: ValidatedTextInputProps[] = [
   },
 ];
 
-const getToken = () => {
+export const getToken = () => {
   const token = /token=([A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*)/.exec(
     router.get.location.hash,
   );
+  location.hash = '';
   return token ? token[1] : '';
 };
 
@@ -53,7 +54,6 @@ const useVerifyToken = setError => {
   useEffect(() => {
     token.current = getToken();
     if (token.current) {
-      location.hash = '';
       apolloCache.client
         .mutate(VERIFY_TOKEN({ token: token.current }))
         .then(() => {

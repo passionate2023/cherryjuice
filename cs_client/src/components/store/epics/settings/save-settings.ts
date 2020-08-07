@@ -7,7 +7,7 @@ import { gqlMutation } from '::root/store/epics/shared/gql-query';
 import { createTimeoutHandler } from '::root/store/epics/shared/create-timeout-handler';
 import { createErrorHandler } from '::root/store/epics/shared/create-error-handler';
 import { AsyncOperation } from '::root/store/ducks/document';
-import { UPDATE_USER_PROFILE } from '::graphql/mutations/update-user-information';
+import { UPDATE_USER_PROFILE } from '::graphql/mutations/user/update-user-information';
 import { properErrorMessage } from '::auth/hooks/proper-error-message';
 
 const savingState: AsyncOperation[] = ['idle', 'pending'];
