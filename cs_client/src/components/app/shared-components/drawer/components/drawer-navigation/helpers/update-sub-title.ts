@@ -1,4 +1,4 @@
-import { modDialog } from '::sass-modules/';
+import { modDialog } from '::sass-modules';
 
 const updateSubTitle = ({
   selectedScreenTitle,

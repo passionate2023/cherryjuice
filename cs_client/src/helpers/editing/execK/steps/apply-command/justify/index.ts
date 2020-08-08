@@ -1,4 +1,5 @@
-import { ExecKCommand } from '::helpers/editing/execK';
+import { ExecKCommand } from '::helpers/editing/execK/execk-commands';
+
 type TLineStyle = {
   line: { [p: string]: string };
   delete: string[];

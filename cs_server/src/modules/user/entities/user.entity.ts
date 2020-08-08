@@ -7,23 +7,30 @@ import {
 } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
+import { Exclude } from 'class-transformer';
+import { UnauthorizedException } from '@nestjs/common';
+import { AfterLoad } from 'typeorm/index';
+
+type UserConstructorProps = {
+  username: string;
+  email: string;
+  lastName: string;
+  firstName: string;
+  thirdPartyId?: string;
+};
 
 @ObjectType()
 @Unique(['username'])
 @Unique(['email'])
 @Entity()
 class User extends BaseEntity {
-  constructor(
-    username: string,
-    email: string,
-    lastName: string,
-    firstName: string,
-  ) {
+  constructor(props: Partial<User> & UserConstructorProps) {
     super();
-    this.username = username;
-    this.email = email;
-    this.lastName = lastName;
-    this.firstName = firstName;
+    Object.assign(this, props);
+    if (props) {
+      this.salt = '';
+      this.passwordHash = '';
+    }
   }
 
   @Field()
@@ -46,16 +53,19 @@ class User extends BaseEntity {
   @Column()
   firstName: string;
 
-  @Column()
-  password: string;
+  @Exclude()
+  @Column({ name: 'password' })
+  private passwordHash: string;
 
+  @Exclude()
   @Column()
-  salt: string;
+  private salt: string;
 
-  @Field({ nullable: true })
+  @Exclude()
   @Column({ nullable: true })
-  thirdPartyId: string;
+  private thirdPartyId: string;
 
+  @Exclude()
   @Column({ nullable: true })
   thirdParty: string;
 
@@ -67,13 +77,24 @@ class User extends BaseEntity {
   @Column({ default: false })
   email_verified: boolean;
 
-  async validatePassword(password: string): Promise<boolean> {
-    const hash = await this.hashPassword(password, this.salt);
-    return hash === this.password;
+  @Field(() => Boolean)
+  hasPassword = false;
+
+  async validatePassword(passwordToValidate: string): Promise<void> {
+    const hash = await bcrypt.hash(passwordToValidate, this.salt);
+    if (hash !== this.passwordHash)
+      throw new UnauthorizedException('invalid password');
   }
 
-  async hashPassword(password: string, salt: string): Promise<string> {
-    return bcrypt.hash(password, salt);
+  async setPassword(password: string): Promise<void> {
+    this.salt = await bcrypt.genSalt();
+    this.passwordHash = await bcrypt.hash(password, this.salt);
+    this.hasPassword = Boolean(this.passwordHash);
+  }
+
+  @AfterLoad()
+  setHashPassword() {
+    this.hasPassword = Boolean(this.passwordHash);
   }
 }
 

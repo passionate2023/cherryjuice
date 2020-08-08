@@ -2,6 +2,7 @@ import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import {
   AuthUser,
+  OauthSignUpCredentials,
   Secrets,
   SignInCredentials,
   SignUpCredentials,
@@ -23,10 +24,16 @@ const ac = {
     signIn: _(ap('sign-in'), _ => (credentials: SignInCredentials) =>
       _(credentials),
     ),
-    signUp: _(ap('sign-up'), _ => (credentials: SignUpCredentials) =>
-      _(credentials),
+    signUp: _(
+      ap('sign-up'),
+      _ => (
+        credentials: SignUpCredentials | OauthSignUpCredentials,
+        oauth = false,
+      ) => _(credentials, { oauth }),
     ),
+
     refreshToken: _(ap('refresh-token')),
+    deleteAccount: _(ap('delete-account')),
   },
   ...{
     setAuthenticationInProgress: _(ap('set-authentication-in-progress')),
@@ -39,9 +46,11 @@ const ac = {
       _ => (session: AuthUser) => _(session),
     ),
   },
+  setEmailVerificationPending: _(ap('set-email-verification-pending')),
 };
 
 type StorageType = 'localStorage' | 'sessionStorage';
+export type EmailVerification = 'idle' | 'pending';
 type State = {
   token: string;
   user: User;
@@ -49,6 +58,7 @@ type State = {
   storageType: StorageType;
   alert: ApolloError;
   ongoingOperation: AsyncOperation;
+  emailVerification: EmailVerification;
 };
 
 const initialState: State = {
@@ -58,6 +68,7 @@ const initialState: State = {
   secrets: undefined,
   storageType: 'localStorage',
   ongoingOperation: 'idle',
+  emailVerification: 'idle',
 };
 const reducer = createReducer(initialState, _ => [
   ...[
@@ -68,6 +79,15 @@ const reducer = createReducer(initialState, _ => [
         user: payload.user,
         secrets: payload.secrets,
         ongoingOperation: 'idle',
+        emailVerification: state.user?.email_verified
+          ? 'idle'
+          : state.emailVerification,
+      };
+    }),
+    _(ac.setEmailVerificationPending, state => {
+      return {
+        ...state,
+        emailVerification: 'pending',
       };
     }),
     _(ac.setAuthenticationFailed, (state, { payload }) => ({

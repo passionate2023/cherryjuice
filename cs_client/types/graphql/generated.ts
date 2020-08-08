@@ -84,7 +84,6 @@ export enum Privacy {
 export interface PrivateNode {
   father_id: number;
   node_id: number;
-  privacy: NodePrivacy;
 }
 
 export interface SearchResultEntity {
@@ -191,6 +190,7 @@ export interface NodeSearchResultEntity {
 export interface UserQuery {
   refreshToken: AuthUser;
   userExists?: string;
+  verifyTokenValidity: Timestamp;
 }
 
 export interface AuthUser {
@@ -208,10 +208,10 @@ export interface User {
   email: string;
   email_verified: boolean;
   firstName: string;
+  hasPassword: boolean;
   id: string;
   lastName: string;
   picture?: string;
-  thirdPartyId?: string;
   username: string;
 }
 
@@ -310,8 +310,25 @@ export interface UploadLinkInputType {
 }
 
 export interface UserMutation {
+  createEmailVerificationToken: Timestamp;
+  createPasswordResetToken: Timestamp;
+  deleteAccount: string;
+  oauthSignUp: AuthUser;
+  resetPassword: Timestamp;
   signIn: AuthUser;
   signUp: AuthUser;
+  updateUserProfile: AuthUser;
+  verifyEmail: Timestamp;
+}
+
+export interface OauthSignUpCredentials {
+  password: string;
+  username: string;
+}
+
+export interface ResetPasswordIt {
+  newPassword: string;
+  token: string;
 }
 
 export interface SignInCredentials {
@@ -325,6 +342,18 @@ export interface SignUpCredentials {
   lastName: string;
   password: string;
   username: string;
+}
+
+export interface UpdateUserProfileIt {
+  currentPassword: string;
+  firstName?: string;
+  lastName?: string;
+  newPassword?: string;
+  username?: string;
+}
+
+export interface VerifyEmailIt {
+  token: string;
 }
 
 export interface Subscription {
@@ -622,7 +651,6 @@ export interface ImageToIdResolver<TParent = any, TResult = any> {
 export interface PrivateNodeTypeResolver<TParent = any> {
   father_id?: PrivateNodeToFather_idResolver<TParent>;
   node_id?: PrivateNodeToNode_idResolver<TParent>;
-  privacy?: PrivateNodeToPrivacyResolver<TParent>;
 }
 
 export interface PrivateNodeToFather_idResolver<TParent = any, TResult = any> {
@@ -630,10 +658,6 @@ export interface PrivateNodeToFather_idResolver<TParent = any, TResult = any> {
 }
 
 export interface PrivateNodeToNode_idResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface PrivateNodeToPrivacyResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -777,6 +801,7 @@ export interface NodeSearchResultEntityToUpdatedAtResolver<
 export interface UserQueryTypeResolver<TParent = any> {
   refreshToken?: UserQueryToRefreshTokenResolver<TParent>;
   userExists?: UserQueryToUserExistsResolver<TParent>;
+  verifyTokenValidity?: UserQueryToVerifyTokenValidityResolver<TParent>;
 }
 
 export interface UserQueryToRefreshTokenResolver<TParent = any, TResult = any> {
@@ -790,6 +815,21 @@ export interface UserQueryToUserExistsResolver<TParent = any, TResult = any> {
   (
     parent: TParent,
     args: UserQueryToUserExistsArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserQueryToVerifyTokenValidityArgs {
+  token: string;
+}
+export interface UserQueryToVerifyTokenValidityResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserQueryToVerifyTokenValidityArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;
@@ -833,10 +873,10 @@ export interface UserTypeResolver<TParent = any> {
   email?: UserToEmailResolver<TParent>;
   email_verified?: UserToEmail_verifiedResolver<TParent>;
   firstName?: UserToFirstNameResolver<TParent>;
+  hasPassword?: UserToHasPasswordResolver<TParent>;
   id?: UserToIdResolver<TParent>;
   lastName?: UserToLastNameResolver<TParent>;
   picture?: UserToPictureResolver<TParent>;
-  thirdPartyId?: UserToThirdPartyIdResolver<TParent>;
   username?: UserToUsernameResolver<TParent>;
 }
 
@@ -852,6 +892,10 @@ export interface UserToFirstNameResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface UserToHasPasswordResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface UserToIdResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
@@ -861,10 +905,6 @@ export interface UserToLastNameResolver<TParent = any, TResult = any> {
 }
 
 export interface UserToPictureResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserToThirdPartyIdResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -1059,8 +1099,87 @@ export interface NodeMutationToUploadImageResolver<
 }
 
 export interface UserMutationTypeResolver<TParent = any> {
+  createEmailVerificationToken?: UserMutationToCreateEmailVerificationTokenResolver<
+    TParent
+  >;
+  createPasswordResetToken?: UserMutationToCreatePasswordResetTokenResolver<
+    TParent
+  >;
+  deleteAccount?: UserMutationToDeleteAccountResolver<TParent>;
+  oauthSignUp?: UserMutationToOauthSignUpResolver<TParent>;
+  resetPassword?: UserMutationToResetPasswordResolver<TParent>;
   signIn?: UserMutationToSignInResolver<TParent>;
   signUp?: UserMutationToSignUpResolver<TParent>;
+  updateUserProfile?: UserMutationToUpdateUserProfileResolver<TParent>;
+  verifyEmail?: UserMutationToVerifyEmailResolver<TParent>;
+}
+
+export interface UserMutationToCreateEmailVerificationTokenResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserMutationToCreatePasswordResetTokenArgs {
+  email: string;
+  username: string;
+}
+export interface UserMutationToCreatePasswordResetTokenResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToCreatePasswordResetTokenArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMutationToDeleteAccountArgs {
+  currentPassword: string;
+}
+export interface UserMutationToDeleteAccountResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToDeleteAccountArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMutationToOauthSignUpArgs {
+  credentials: OauthSignUpCredentials;
+}
+export interface UserMutationToOauthSignUpResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToOauthSignUpArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMutationToResetPasswordArgs {
+  input: ResetPasswordIt;
+}
+export interface UserMutationToResetPasswordResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToResetPasswordArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
 }
 
 export interface UserMutationToSignInArgs {
@@ -1082,6 +1201,36 @@ export interface UserMutationToSignUpResolver<TParent = any, TResult = any> {
   (
     parent: TParent,
     args: UserMutationToSignUpArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMutationToUpdateUserProfileArgs {
+  userProfile: UpdateUserProfileIt;
+}
+export interface UserMutationToUpdateUserProfileResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToUpdateUserProfileArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMutationToVerifyEmailArgs {
+  input: VerifyEmailIt;
+}
+export interface UserMutationToVerifyEmailResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToVerifyEmailArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;

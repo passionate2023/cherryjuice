@@ -16,6 +16,11 @@ type ButtonBaseProps = {
   text?: string;
   icon?: JSX.Element;
   iconName?: string;
+  variant?: 'danger';
+};
+
+const buttonVariants = {
+  danger: modButton.buttonDanger,
 };
 
 const ButtonBase: React.FC<ButtonBaseProps> = ({
@@ -30,6 +35,7 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   active,
   icon,
   iconName,
+  variant,
 }) => {
   const ref = useRef<HTMLButtonElement>();
   useEffect(() => {
@@ -45,6 +51,7 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
     <button
       className={joinClassNames([
         modButton.button,
+        buttonVariants[variant],
         [modButton.buttonDark, dark],
         [modButton.buttonText, text],
         [modButton.buttonPressed, active],

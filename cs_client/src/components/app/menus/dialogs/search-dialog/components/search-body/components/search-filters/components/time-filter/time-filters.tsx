@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modSearchFilter } from '::sass-modules/';
+import { modSearchFilter } from '::sass-modules';
 import { ac, Store } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import {

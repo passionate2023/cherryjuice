@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DocumentGuestOt } from '::types/graphql/generated';
 import { Guest } from '::app/menus/document-meta/components/guests/components/guest';
-import { modGuests } from '::sass-modules/';
+import { modGuests } from '::sass-modules';
 import { AddGuest } from '::app/menus/document-meta/components/guests/components/add-guest';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { testIds } from '::cypress/support/helpers/test-ids';

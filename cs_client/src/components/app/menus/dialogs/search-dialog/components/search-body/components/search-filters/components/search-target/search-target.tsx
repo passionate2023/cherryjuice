@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { SearchTarget as TSearchTarget } from '::types/graphql/generated';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { modSearchFilter } from '::sass-modules/';
+import { modSearchFilter } from '::sass-modules';
 import { Target } from './components/target';
 
 type Props = {};

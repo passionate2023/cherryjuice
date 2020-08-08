@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { useCallback } from 'react';
-import { modSearchFilter } from '::sass-modules/';
+import { modSearchFilter } from '::sass-modules';
 import { mapScopeToLabel } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';

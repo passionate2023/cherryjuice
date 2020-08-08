@@ -9,21 +9,14 @@ import { useMemo } from 'react';
 
 type SelectScreen = (title: string) => void;
 type DrawerNavigationProps = {
-  selectedScreenTitle: string;
-  setSelectedScreenTitle: SelectScreen;
   screens: DrawerScreens;
 };
 
-const DrawerNavigation: React.FC<DrawerNavigationProps> = ({
-  selectedScreenTitle,
-  setSelectedScreenTitle,
-  screens,
-}) => {
+const DrawerNavigation: React.FC<DrawerNavigationProps> = ({ screens }) => {
   const screensCategoriesMap = useMemo(
     () => groupScreensByCategory(screens),
     [],
   );
-
   return (
     <>
       <aside className={`${modDrawer.drawer__navigation}`}>
@@ -35,8 +28,6 @@ const DrawerNavigation: React.FC<DrawerNavigationProps> = ({
                 <DrawerNavigationElement
                   key={screen.name}
                   title={screen.name}
-                  selectedScreenTitle={selectedScreenTitle}
-                  selectScreen={setSelectedScreenTitle}
                 />
               ))}
             </React.Fragment>

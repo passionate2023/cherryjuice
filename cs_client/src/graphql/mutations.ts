@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import {
   AuthUser,
+  OauthSignUpCredentials,
   SignInCredentials,
   SignUpCredentials,
 } from '::types/graphql/generated';
@@ -73,7 +74,7 @@ const DOCUMENT_MUTATION = {
 const USER_MUTATION = {
   refreshToken: {
     args: (): void => undefined,
-    path: (data): AuthUser | undefined => data?.user?.signIn,
+    path: (data): AuthUser | undefined => data?.user?.refreshToken,
     query: gql`
       query refreshToekn {
         user {
@@ -120,6 +121,40 @@ const USER_MUTATION = {
       mutation signup($input: SignUpCredentials!) {
         user {
           signUp(credentials: $input) {
+            token
+            user {
+              ...UserInfo
+            }
+            secrets {
+              google_api_key
+              google_client_id
+            }
+          }
+        }
+      }
+      ${FRAGMENT_USER.userInfo}
+    `,
+  },
+  deleteAccount: {
+    args: (currentPassword: string) => ({
+      currentPassword,
+    }),
+    path: (data): string => data?.user?.deleteAccount,
+    query: gql`
+      mutation delete_account($currentPassword: String!) {
+        user {
+          deleteAccount(currentPassword: $currentPassword)
+        }
+      }
+    `,
+  },
+  oauthSignUp: {
+    args: (input: OauthSignUpCredentials) => ({ input }),
+    path: (data): AuthUser | undefined => data?.user?.oauthSignUp,
+    query: gql`
+      mutation oauth_signup($input: OauthSignUpCredentials!) {
+        user {
+          oauthSignUp(credentials: $input) {
             token
             user {
               ...UserInfo

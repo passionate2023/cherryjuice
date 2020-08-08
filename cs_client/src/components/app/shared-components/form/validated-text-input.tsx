@@ -5,10 +5,10 @@ import { Ref } from 'react';
 import { patternToString, TPattern } from '::auth/helpers/form-validation';
 import { useCustomValidityMessage } from '::hooks/use-custom-validation-message';
 
-export type TextInputProps = {
+export type ValidatedTextInputProps = {
   label: string;
   inputRef: Ref<HTMLInputElement>;
-  variableName: string;
+  variableName?: string;
   type?: string;
   icon?: string | [string];
   ariaLabel?: string;
@@ -17,9 +17,14 @@ export type TextInputProps = {
   required?: boolean;
   autoComplete?: boolean;
   idPrefix: string;
+  value?: string;
+  onChange?: (string) => void;
+  setValid?: (boolean) => void;
+  defaultValue?: string;
+  disabled?: boolean;
 };
 
-const TextInput: React.FC<TextInputProps & {
+const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
   highlightInvalidInput?: boolean;
 }> = ({
   label,
@@ -33,11 +38,16 @@ const TextInput: React.FC<TextInputProps & {
   autoComplete,
   idPrefix,
   highlightInvalidInput = true,
+  value,
+  onChange,
+  setValid,
+  defaultValue,
+  disabled,
 }) => {
-  useCustomValidityMessage({ inputRef, patterns });
+  const { onInput, onInvalid } = useCustomValidityMessage(patterns, setValid);
   const id = `${idPrefix}-${label.replace(' ', '-')}`;
   return (
-    <div className={modLogin.login__form__input}>
+    <div className={modLogin.login__form__input} disabled={disabled}>
       {icon && (
         <Icon
           loadAsInlineSVG={'force'}
@@ -59,7 +69,12 @@ const TextInput: React.FC<TextInputProps & {
         required={required}
         autoComplete={Boolean(autoComplete).toString()}
         aria-label={ariaLabel || label}
+        disabled={disabled}
         id={id}
+        {...(onChange && { value, onChange: e => onChange(e.target.value) })}
+        onInvalid={onInvalid}
+        onInput={onInput}
+        defaultValue={defaultValue}
       />
       <label htmlFor={id} className={modLogin.login__form__input__label}>
         {label}
@@ -68,4 +83,4 @@ const TextInput: React.FC<TextInputProps & {
   );
 };
 
-export { TextInput };
+export { ValidatedTextInput };

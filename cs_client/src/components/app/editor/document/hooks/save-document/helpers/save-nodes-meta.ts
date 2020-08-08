@@ -7,7 +7,7 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 import { NodeMetaIt } from '::types/graphql/generated';
 import { updateDocumentId } from '::app/editor/document/hooks/save-document/helpers/shared';
 import { collectDanglingNodes } from '::app/editor/document/hooks/save-document/helpers/save-new-nodes';
-import { EDIT_NODE_META } from '::graphql/mutations/edit-node-meta';
+import { EDIT_NODE_META } from '::graphql/mutations/document/edit-node-meta';
 import { unFlatMap } from '::helpers/array-helpers';
 
 const swapNodeIdIfApplies = (state: SaveOperationState) => (nodeId: string) =>

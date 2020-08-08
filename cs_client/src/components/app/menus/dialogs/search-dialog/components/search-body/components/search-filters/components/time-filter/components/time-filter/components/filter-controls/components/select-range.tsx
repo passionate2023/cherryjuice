@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TimeFilter, TimeRange } from '::types/graphql/generated';
-import { modTimeFilter } from '::sass-modules/';
+import { modTimeFilter } from '::sass-modules';
 import { mapScopeToLabel } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
 import { TimeFilterAC } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/reducer';
 import { useEffect, useRef } from 'react';

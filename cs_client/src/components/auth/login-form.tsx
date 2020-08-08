@@ -5,7 +5,10 @@ import { Checkbox } from '::shared-components/checkbox';
 import { GoogleOauthButton } from '::shared-components/buttons/google-oauth-button';
 import { Icons } from '::shared-components/icon/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
-import { TextInput, TextInputProps } from '::shared-components/form/text-input';
+import {
+  ValidatedTextInput,
+  ValidatedTextInputProps,
+} from '::shared-components/form/validated-text-input';
 import { FormSeparator } from '::shared-components/form/form-separator';
 import { patterns } from '::auth/helpers/form-validation';
 import { AuthScreen } from '::auth/auth-screen';
@@ -15,8 +18,10 @@ import { Link } from 'react-router-dom';
 import { openConsentWindow } from '::auth/helpers/oauth';
 import { useDefaultValues } from '::hooks/use-default-form-values';
 import { ac } from '::root/store/store';
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::root/store/store';
 
-const inputs: TextInputProps[] = [
+const inputs: ValidatedTextInputProps[] = [
   {
     label: 'username',
     icon: [Icons.material.username],
@@ -38,13 +43,9 @@ const inputs: TextInputProps[] = [
   },
 ];
 
-import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::root/store/store';
-
 const mapState = (state: Store) => ({
   loading: state.auth.ongoingOperation !== 'idle',
   alert: state.auth.alert,
-  userId: state.auth.user?.id,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -52,11 +53,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const LoginForm: React.FC<Props & PropsFromRedux> = ({
-  loading,
-  alert,
-  userId,
-}) => {
+const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
   const formRef = useRef<HTMLFormElement>();
   const staySignedRef = useRef<HTMLInputElement>();
   const login = (e?: any) => {
@@ -83,10 +80,9 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({
     onConfirmModal: login,
     focusableElementsSelector: ['a', 'input[type="submit"]', '#google-btn'],
   });
-
   return (
-    <AuthScreen error={alert} userId={userId}>
-      <div className={modLogin.login__card}>
+    <AuthScreen error={alert}>
+      <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
           <GoogleOauthButton
@@ -100,7 +96,7 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({
           />
           <FormSeparator text={'or'} />
           {inputs.map(inputProps => (
-            <TextInput
+            <ValidatedTextInput
               {...inputProps}
               key={inputProps.variableName}
               highlightInvalidInput={false}
@@ -112,8 +108,14 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({
               myRef={staySignedRef}
             />{' '}
             <span className={modLogin.login__form__rememberMe__text}>
-              Keep me logged-in
+              keep me logged-in
             </span>
+            <Link
+              to="/forgot-password"
+              className={modLogin.login__form__rememberMe__text}
+            >
+              forgot password
+            </Link>
           </span>
 
           <input

@@ -3,18 +3,34 @@ import * as React from 'react';
 import { modLogin } from '::sass-modules/index';
 import { Icons } from '::shared-components/icon/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
-import { TextInput, TextInputProps } from '::shared-components/form/text-input';
+import {
+  ValidatedTextInput,
+  ValidatedTextInputProps,
+} from '::shared-components/form/validated-text-input';
 import { patterns } from '::auth/helpers/form-validation';
 import { AuthScreen } from '::auth/auth-screen';
 import { createRef, useRef } from 'react';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { Link } from 'react-router-dom';
-import { useDefaultValues } from '::hooks/use-default-form-values';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { SignUpCredentials } from '::types/graphql/generated';
+import { useDefaultValues } from '::hooks/use-default-form-values';
 
-const inputs: TextInputProps[] = [
+export const ReturnToLoginPage: React.FC<{
+  text?: string;
+  linkText?: string;
+}> = ({ text, linkText }) => (
+  <span className={modLogin.login__form__createAccount}>
+    {text || 'already a member?'}{' '}
+    <Link to="/login" className={modLogin.login__form__createAccount__icon}>
+      {linkText || 'log in'}
+    </Link>
+  </span>
+);
+
+const idPrefix = 'sign-up';
+const inputs: ValidatedTextInputProps[] = [
   {
     label: 'first name',
     icon: [Icons.material['person-circle']],
@@ -23,7 +39,7 @@ const inputs: TextInputProps[] = [
     required: true,
     variableName: 'firstName',
     inputRef: createRef(),
-    idPrefix: 'sign-up',
+    idPrefix,
   },
   {
     label: 'last name',
@@ -33,7 +49,7 @@ const inputs: TextInputProps[] = [
     required: true,
     variableName: 'lastName',
     inputRef: createRef(),
-    idPrefix: 'sign-up',
+    idPrefix,
   },
   {
     label: 'username',
@@ -43,7 +59,7 @@ const inputs: TextInputProps[] = [
     required: true,
     variableName: 'username',
     inputRef: createRef(),
-    idPrefix: 'sign-up',
+    idPrefix,
   },
   {
     label: 'email',
@@ -52,7 +68,7 @@ const inputs: TextInputProps[] = [
     required: true,
     variableName: 'email',
     inputRef: createRef(),
-    idPrefix: 'sign-up',
+    idPrefix,
   },
   {
     inputRef: createRef(),
@@ -63,25 +79,20 @@ const inputs: TextInputProps[] = [
     icon: [Icons.material.lock],
     minLength: 8,
     required: true,
-    idPrefix: 'sign-up',
+    idPrefix,
   },
 ];
 
 const mapState = (state: Store) => ({
   loading: state.auth.ongoingOperation !== 'idle',
   alert: state.auth.alert,
-  userId: state.auth.user?.id,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
-const SignUpForm: React.FC<Props & PropsFromRedux> = ({
-  loading,
-  alert,
-  userId,
-}) => {
+const SignUpForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
   const formRef = useRef<HTMLFormElement>();
   const signUp = (e?: any) => {
     if (formRef.current.checkValidity()) {
@@ -105,12 +116,12 @@ const SignUpForm: React.FC<Props & PropsFromRedux> = ({
     onConfirmModal: signUp,
   });
   return (
-    <AuthScreen error={alert} userId={userId}>
+    <AuthScreen error={alert}>
       <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
           {inputs.map(inputProps => (
-            <TextInput {...inputProps} key={inputProps.variableName} />
+            <ValidatedTextInput {...inputProps} key={inputProps.variableName} />
           ))}
 
           <input
@@ -119,17 +130,9 @@ const SignUpForm: React.FC<Props & PropsFromRedux> = ({
             className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
             onClick={signUp}
             disabled={loading}
-            style={{ marginTop: 20 }}
+            style={{ marginTop: 5 }}
           />
-          <span className={modLogin.login__form__createAccount}>
-            already a member?{' '}
-            <Link
-              to="/login"
-              className={modLogin.login__form__createAccount__icon}
-            >
-              log in
-            </Link>
-          </span>
+          <ReturnToLoginPage />
         </form>
       </div>
     </AuthScreen>

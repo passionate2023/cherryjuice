@@ -1,9 +1,14 @@
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 
 const setCssVariables = () => next => action => {
-  if (action.type.startsWith('css-variables')) {
-    const variableName = action.type.replace('css-variables::set-', '');
-    cssVariables.setProperty(variableName)(action.payload);
+  try {
+    if (action?.type?.startsWith('css-variables')) {
+      const variableName = action.type.replace('css-variables::set-', '');
+      cssVariables.setProperty(variableName)(action.payload);
+    }
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error(e);
   }
   return next(action);
 };

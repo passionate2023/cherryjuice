@@ -108,7 +108,6 @@ type NodeSearchResults {
 type PrivateNode {
     father_id: Float!
     node_id: Float!
-    privacy: NodePrivacy!
 }
 
 type Query {
@@ -139,21 +138,29 @@ type User {
     email: String!
     email_verified: Boolean!
     firstName: String!
+    hasPassword: Boolean!
     id: String!
     lastName: String!
     picture: String
-    thirdPartyId: String
     username: String!
 }
 
 type UserMutation {
+    createEmailVerificationToken: Timestamp!
+    createPasswordResetToken(email: String!, username: String!): Timestamp!
+    deleteAccount(currentPassword: String!): String!
+    oauthSignUp(credentials: OauthSignUpCredentials!): AuthUser!
+    resetPassword(input: ResetPasswordIt!): Timestamp!
     signIn(credentials: SignInCredentials!): AuthUser!
     signUp(credentials: SignUpCredentials!): AuthUser!
+    updateUserProfile(userProfile: UpdateUserProfileIt!): AuthUser!
+    verifyEmail(input: VerifyEmailIt!): Timestamp!
 }
 
 type UserQuery {
     refreshToken: AuthUser!
     userExists(email: String!): String
+    verifyTokenValidity(token: String!): Timestamp!
 }
 
 enum AccessLevel {
@@ -294,6 +301,16 @@ input NodeSearchIt {
     updatedAtTimeFilter: TimeFilter!
 }
 
+input OauthSignUpCredentials {
+    password: String!
+    username: String!
+}
+
+input ResetPasswordIt {
+    newPassword: String!
+    token: String!
+}
+
 input SaveHtmlIt {
     ahtml: String!
     deletedImages: [String]!
@@ -329,9 +346,21 @@ input TimeFilter {
     rangeStart: Timestamp!
 }
 
+input UpdateUserProfileIt {
+    currentPassword: String!
+    firstName: String
+    lastName: String
+    newPassword: String
+    username: String
+}
+
 input UploadLinkInputType {
     IDs: [String!]!
     access_token: String!
+}
+
+input VerifyEmailIt {
+    token: String!
 }
 
 

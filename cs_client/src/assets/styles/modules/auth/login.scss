@@ -46,6 +46,13 @@
   margin-top: 2px;
   @include form-element-size();
   max-height: 50px;
+  &[disabled] {
+    opacity: 0.5;
+    input,
+    label {
+      cursor: not-allowed;
+    }
+  }
 }
 
 .login__form__input:focus {
@@ -101,6 +108,7 @@
 }
 .login__form__input--submit:disabled {
   filter: opacity(0.5);
+  cursor: not-allowed;
 }
 .login__form__remember-me {
   display: flex;
@@ -126,6 +134,7 @@
   display: flex;
   color: grey;
   margin-left: -10px;
+  text-decoration: none;
 }
 
 .login__separator {
@@ -147,10 +156,13 @@
   color: $primary-dark2;
 }
 .login__form__create-account {
-  margin-top: 30px;
+  margin-top: 20px;
   font-size: 1rem;
   color: $primary-dark2;
   text-decoration: none;
+  @include form-element-size();
+  min-width: auto;
+  margin-bottom: 15px;
 }
 .login__form__create-account__icon {
   text-decoration: none;

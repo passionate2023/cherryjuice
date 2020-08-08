@@ -16,9 +16,17 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
   const { deleteDocumentsEpic } = await import(
     '::root/store/epics/delete-documents/delete-documents'
   );
+  const { saveSettingsEpic } = await import(
+    '::root/store/epics/settings/save-settings'
+  );
   const { authEpic } = await import('::root/store/epics/auth/auth');
+  const { deleteAccountEpic } = await import(
+    '::root/store/epics/delete-account/delete-account'
+  );
+
   return action$ =>
     combineEpics(
+      saveSettingsEpic,
       deleteDocumentsEpic,
       authEpic,
       fetchNodesEpic,
@@ -26,6 +34,7 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
       fetchDocumentsListEpic,
       exportDocumentEpic,
       searchNodesEpic,
+      deleteAccountEpic,
     )(action$);
 };
 export { createRootEpic };

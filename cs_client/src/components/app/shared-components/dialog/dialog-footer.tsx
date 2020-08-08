@@ -15,7 +15,7 @@ export type TDialogFooterProps = {
   isOnMobile: boolean;
   dialogFooterLeftButtons: TDialogFooterButton[];
   dialogFooterRightButtons: TDialogFooterButton[];
-  docked: boolean;
+  docked?: boolean;
   rightHeaderButtons: DialogHeaderButton[];
 };
 

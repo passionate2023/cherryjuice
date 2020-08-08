@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { setupClipboard } from '::helpers/editing/clipboard';
 import { setupTabAndBackspaceHandler } from '::helpers/editing/typing';
-import { modRichText } from '::sass-modules/index';
+import { modRichText } from '::sass-modules';
 import { ac } from '::root/store/store';
 import { setupGesturesHandler } from '::shared-components/drawer/components/drawer-navigation/helpers/setup-gesture-handler';
 

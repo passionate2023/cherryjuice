@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DocumentSubscription } from '::types/graphql/generated';
-import { modDocumentOperations } from '::sass-modules/';
+import { modDocumentOperations } from '::sass-modules';
 import { Document } from './components/document/document';
 
 type Props = {

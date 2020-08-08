@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modInfoBar } from '::sass-modules/index';
+import { modInfoBar } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 import { router } from '::root/router/router';

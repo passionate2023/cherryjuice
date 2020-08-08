@@ -1,4 +1,4 @@
-import { modRichText } from '::sass-modules/index';
+import { modRichText } from '::sass-modules';
 import * as React from 'react';
 import { useRouteMatch } from 'react-router';
 import { SpinnerCircle } from '::shared-components/spinner-circle';
@@ -66,7 +66,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
             isDocumentOwner={isDocumentOwner}
             contentEditable={contentEditable}
             html={html.htmlRaw}
-            nodeId={nodes.get(node_id)?.id}
+            nodeId={nodeId}
             file_id={file_id}
             node_id={node_id}
             processLinks={[processLinksDueToHtmlChange, processLinks]}

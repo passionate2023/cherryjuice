@@ -1,4 +1,4 @@
-import { modToolbar } from '::sass-modules/index';
+import { modToolbar } from '::sass-modules';
 
 const scrollIntoToolbar = () => {
   // on mobile, scrolling the node into view causes toolbar to get invisible

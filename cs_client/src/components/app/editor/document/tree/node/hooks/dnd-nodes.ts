@@ -1,7 +1,7 @@
 import nodeMod from '::sass-modules/tree/node.scss';
 import { MutableRefObject, useMemo } from 'react';
 import { AlertType } from '::types/react';
-import { modTree } from '::sass-modules/index';
+import { modTree } from '::sass-modules';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { ac } from '::root/store/store';
 import { nodesMetaMap } from '::types/misc';

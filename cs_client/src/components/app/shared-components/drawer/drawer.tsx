@@ -1,9 +1,6 @@
 import modDrawer from '::sass-modules/shared-components/drawer.scss';
 import * as React from 'react';
-import {
-  DrawerNavigation,
-  SelectScreen,
-} from '::shared-components/drawer/components/drawer-navigation/drawer-navigation';
+import { DrawerNavigation } from '::shared-components/drawer/components/drawer-navigation/drawer-navigation';
 import { useEffect } from 'react';
 import { updateSubTitle } from '::shared-components/drawer/components/drawer-navigation/helpers/update-sub-title';
 import { setupGesturesHandler } from '::shared-components/drawer/components/drawer-navigation/helpers/setup-gesture-handler';
@@ -17,14 +14,12 @@ type DrawerScreens = {
 type DrawerProps = {
   screens: DrawerScreens;
   selectedScreenTitle: string;
-  setSelectedScreenTitle: SelectScreen;
   customDrawerBody?: JSX.Element;
 };
 
 const Drawer: React.FC<DrawerProps> = ({
   screens,
   selectedScreenTitle,
-  setSelectedScreenTitle,
   customDrawerBody,
 }) => {
   const toggleHandler = toggleDrawer;
@@ -37,11 +32,7 @@ const Drawer: React.FC<DrawerProps> = ({
   }, [selectedScreenTitle]);
   return (
     <div className={modDrawer.drawer}>
-      <DrawerNavigation
-        screens={screens}
-        setSelectedScreenTitle={setSelectedScreenTitle}
-        selectedScreenTitle={selectedScreenTitle}
-      />
+      <DrawerNavigation screens={screens} />
       <div className={`${modDrawer.drawer__content}`}>
         {customDrawerBody || screens[selectedScreenTitle].element}
       </div>

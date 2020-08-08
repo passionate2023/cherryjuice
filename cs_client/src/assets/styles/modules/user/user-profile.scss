@@ -1,0 +1,34 @@
+.user-profile {
+  display: flex;
+}
+
+.user-profile__group {
+  display: flex;
+  padding-top: 10px;
+  border-top: 1px solid #9958581f;
+}
+.user-profile__group__name {
+  padding: 10px;
+  width: 100px;
+}
+.userProfile__group__elements {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.user-profile__personal-information {
+  //max-width: 600px;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.user-profile__personal-information__label {
+  display: flex;
+  color: black;
+}
+.user-profile__personal-information__value {
+  input {
+    width: 300px;
+  }
+}

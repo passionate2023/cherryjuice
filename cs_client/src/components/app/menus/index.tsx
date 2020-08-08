@@ -4,6 +4,9 @@ import { Void } from '::shared-components/suspense-fallback/void';
 import ReloadDocument from '::app/menus/modals/reload-document/reload-document';
 import { Snackbar } from '::shared-components/snackbar/snackbar';
 const AlertModal = React.lazy(() => import('./modals/alert-modal/alert-modal'));
+const PasswordModal = React.lazy(() =>
+  import('./modals/password-modal/password-modal'),
+);
 const UserPopup = React.lazy(() => import('./user/user-with-transition'));
 const ImportProgress = React.lazy(() =>
   import('./document-operations/document-operations'),
@@ -11,7 +14,7 @@ const ImportProgress = React.lazy(() =>
 const ImportDocuments = React.lazy(() =>
   import('./import-documents/import-documents'),
 );
-const Settings = React.lazy(() => import('::app/menus/settings'));
+const Settings = React.lazy(() => import('::app/menus/settings/settings'));
 const SelectFile = React.lazy(() => import('::app/menus/select-file'));
 const NodeMeta = React.lazy(() => import('::app/menus/node-meta/node-meta'));
 const DocumentMeta = React.lazy(() =>
@@ -65,6 +68,9 @@ const Menus: React.FC<Props & PropsFromRedux> = () => {
       </Suspense>
       <Suspense fallback={<Void />}>
         <Snackbar />
+      </Suspense>
+      <Suspense fallback={<Void />}>
+        <PasswordModal />
       </Suspense>
       <SearchDialog />
     </>

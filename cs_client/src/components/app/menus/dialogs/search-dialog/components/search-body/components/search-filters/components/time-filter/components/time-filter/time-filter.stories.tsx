@@ -2,7 +2,7 @@
 import React, { useRef } from 'react';
 import { Filter } from '::app/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/time-filter';
 import { TimeRange } from '::types/graphql/generated';
-import { appModule } from '::sass-modules/';
+import { appModule } from '::sass-modules';
 
 const AppWrapper: React.FC = ({ children }) => {
   const mounted = useRef(false);

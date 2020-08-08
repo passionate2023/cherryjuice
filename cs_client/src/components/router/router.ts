@@ -22,6 +22,9 @@ const router = {
     hash: (fullLink: string) => {
       history.push(fullLink);
     },
+    oauthSignup() {
+      history.push(`/signup-oauth`);
+    },
   },
 };
 

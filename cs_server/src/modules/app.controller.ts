@@ -9,10 +9,18 @@ const assets = {
 };
 @Controller()
 export class AppController {
-  @Get(['/login*', '/signup*', '/document*'])
+  @Get([
+    '/login*',
+    '/signup*',
+    '/document*',
+    '/reset-password*',
+    '/verify-email*',
+    '/signup-oauth*',
+    '/forgot-password*',
+  ])
   clientSideRoutes(@Res() res) {
     res.sendFile(assets['index.html']);
   }
 }
 
-export {staticAssetsRootFolder}
+export { staticAssetsRootFolder };

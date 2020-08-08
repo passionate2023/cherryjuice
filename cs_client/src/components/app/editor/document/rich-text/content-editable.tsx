@@ -1,4 +1,4 @@
-import { modRichText } from '::sass-modules/index';
+import { modRichText } from '::sass-modules';
 import { default as React, useContext, useRef } from 'react';
 import { useSetupStuff } from '::app/editor/document/rich-text/hooks/setup-stuff';
 import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';

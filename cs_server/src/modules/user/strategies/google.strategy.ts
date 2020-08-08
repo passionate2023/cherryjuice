@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-oauth20';
-import { UserService } from '../user.service';
+import { createJWTPayload, UserService } from '../user.service';
 import { sign } from 'jsonwebtoken';
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -9,8 +9,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID: process.env.OAUTH_GOOGLE_CLIENT_ID,
       clientSecret: process.env.OAUTH_GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.OAUTH_CALLBACK_URL,
+      callbackURL: process.env.SERVER_URL + process.env.OAUTH_CALLBACK_PATH,
       passReqToCallback: true,
+      prompt: 'select_account',
       scope: ['profile', 'email', 'openid'],
     });
   }
@@ -23,17 +24,18 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     done: Function,
   ): Promise<void> {
     try {
-      let token;
-      const authUser = await this.authService.oauthLogin(
+      const user = await this.authService.oauthLogin(
         profile.id,
         profile.provider,
         profile._json,
       );
-      if (authUser.payload) {
-        token = sign(authUser.payload, process.env.JWT_SECRET, {
-          expiresIn: process.env.JWT_EXPIRES_IN,
+      if (user) {
+        done(null, {
+          token: sign(createJWTPayload.authn(user), process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN,
+          }),
+          user,
         });
-        done(null, { token, user: authUser.user });
       } else done(undefined, false);
     } catch (err) {
       done(err, false);

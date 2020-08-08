@@ -1,5 +1,5 @@
 type TPattern = { pattern: string; description: string };
-const patterns: { [k: string]: TPattern } = {
+const patterns = {
   notEmpty: {
     pattern: '^.{1,}',
     description: 'Please fill out this field',
@@ -18,7 +18,8 @@ const patterns: { [k: string]: TPattern } = {
   name: {
     // https://stackoverflow.com/a/45871742/6549728
     // eslint-disable-next-line no-useless-escape
-    pattern: "^[w'-,.][^0-9_!¡?÷?¿\\+=@#$%ˆ&*(){}|~<>;:[]]{2,}$",
+    pattern: "^([a-zA-Z'-,.]|[^0-9_!¡?÷?¿\\+=@#$%ˆ&*(){}|~<>;:\\[\\]]{2,})$",
+    // pattern: '^(?![_.])(?!.*[_.]{2})[a-zA-Z\'\\-,.]+(?<![_.])$',
     description: 'only letters',
   },
   password: {

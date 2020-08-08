@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ToolbarButton } from '::app/editor/tool-bar/tool-bar-button';
 import { Icon, Icons } from '::shared-components/icon/icon';
-import { modToolbar } from '::sass-modules/index';
+import { modToolbar } from '::sass-modules';
 import { ac } from '::root/store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
@@ -61,12 +61,6 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
           name={Icons.material.folder}
           testId={testIds.toolBar__navBar__showDocumentList}
         />
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={ac.dialogs.showSettingsDialog}
-        dontMount={!isLoggedIn}
-      >
-        <Icon name={Icons.material.settings} />
       </ToolbarButton>
       <ToolbarButton
         onClick={ac.dialogs.showUserPopup}

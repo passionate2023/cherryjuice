@@ -6,9 +6,11 @@ const FRAGMENT_USER = {
       username
       email
       lastName
+      email_verified
       firstName
       id
       picture
+      hasPassword
     }
   `,
 };
