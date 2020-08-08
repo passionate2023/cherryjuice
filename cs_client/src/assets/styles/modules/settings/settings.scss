@@ -9,13 +9,13 @@
 }
 
 .settings__setting-element {
-  height: 40px;
+  min-height: 40px;
+  flex-wrap: wrap;
   background-color: $grey-light;
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: center;
   padding: 10px 10px;
-  flex-direction: column;
   margin-bottom: 5px;
   @include respond-to('md') {
     flex-direction: row;

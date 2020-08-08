@@ -4,7 +4,7 @@ import { DrawerScreen } from '::shared-components/drawer/drawer';
 import { UserProfile } from '::app/menus/settings/screens/account/components/user-profile';
 
 const personalInformationScreen: DrawerScreen = {
-  name: 'personal information',
+  name: 'manage account',
   category: 'account',
   element: (
     <div className={modSettings.settings__screen}>

@@ -14,6 +14,7 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 import { AsyncError } from '::auth/hooks/proper-error-message';
 import { CREATE_PASSWORD_RESET_TOKEN } from '::graphql/mutations/user/create-password-reset-token';
 import { useStatefulValidatedInput } from '::auth/hooks/stateful-validated-input';
+import { ReturnToLoginPage } from '::auth/signup-form';
 
 const idPrefix = 'forgot-password';
 const inputs: ValidatedTextInputProps[] = [
@@ -86,6 +87,9 @@ const ForgotPassword: React.FC<Props> = () => {
       <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
+          <span className={modLogin.login__form__createAccount}>
+            Enter your email and username
+          </span>
           {inputs.map(inputProps => (
             <ValidatedTextInput {...inputProps} key={inputProps.label} />
           ))}
@@ -96,8 +100,9 @@ const ForgotPassword: React.FC<Props> = () => {
             className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
             onClick={signUp}
             disabled={disableSignupButton}
-            style={{ marginTop: 20 }}
+            style={{ marginTop: 5 }}
           />
+          <ReturnToLoginPage text={'return to'} linkText={'login page'} />
         </form>
       </div>
     </AuthScreen>

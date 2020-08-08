@@ -15,6 +15,7 @@ import { useStatefulValidatedInput } from '::auth/hooks/stateful-validated-input
 import { RESET_PASSWORD } from '::graphql/mutations/user/reset-password';
 import { router } from '::root/router/router';
 import { VERIFY_TOKEN } from '::graphql/mutations/user/verify-token';
+import { ReturnToLoginPage } from '::auth/signup-form';
 
 const idPrefix = 'reset--password';
 const inputs: ValidatedTextInputProps[] = [
@@ -119,6 +120,9 @@ const ResetPassword: React.FC<Props> = () => {
       <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
+          <span className={modLogin.login__form__createAccount}>
+            Enter your new password
+          </span>
           {inputs.map(inputProps => (
             <ValidatedTextInput
               {...inputProps}
@@ -126,24 +130,17 @@ const ResetPassword: React.FC<Props> = () => {
               disabled={token.valid === false}
             />
           ))}
-          {token.valid === false ? (
-            <input
-              type={'submit'}
-              value={'goto login'}
-              className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
-              onClick={router.goto.signIn}
-              style={{ marginTop: 20 }}
-            />
-          ) : (
+          {
             <input
               type={'submit'}
               value={'Reset password'}
               className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
               onClick={submit}
               disabled={!validPassword}
-              style={{ marginTop: 20 }}
+              style={{ marginTop: 5 }}
             />
-          )}
+          }
+          <ReturnToLoginPage text={'return to'} linkText={'login page'} />
         </form>
       </div>
     </AuthScreen>

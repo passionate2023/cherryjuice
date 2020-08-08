@@ -82,7 +82,7 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
   });
   return (
     <AuthScreen error={alert}>
-      <div className={modLogin.login__card}>
+      <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
           <GoogleOauthButton
@@ -108,7 +108,7 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
               myRef={staySignedRef}
             />{' '}
             <span className={modLogin.login__form__rememberMe__text}>
-              Keep me logged-in
+              keep me logged-in
             </span>
             <Link
               to="/forgot-password"

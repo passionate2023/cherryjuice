@@ -108,6 +108,7 @@
 }
 .login__form__input--submit:disabled {
   filter: opacity(0.5);
+  cursor: not-allowed;
 }
 .login__form__remember-me {
   display: flex;
@@ -155,10 +156,13 @@
   color: $primary-dark2;
 }
 .login__form__create-account {
-  margin-top: 30px;
+  margin-top: 20px;
   font-size: 1rem;
   color: $primary-dark2;
   text-decoration: none;
+  @include form-element-size();
+  min-width: auto;
+  margin-bottom: 15px;
 }
 .login__form__create-account__icon {
   text-decoration: none;

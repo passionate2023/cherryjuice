@@ -153,26 +153,45 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
   return (
     <div className={modUserProfile}>
       <div className={modUserProfile.userProfile__personalInformation}>
-        {personalInformation.map(po => (
-          <ValidatedTextInput key={po.label} {...po} />
-        ))}
-        {changePassword.map(po => (
-          <ValidatedTextInput key={po.label} {...po} />
-        ))}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-          {emailVerified ? (
-            <span>email verified</span>
-          ) : (
-            <VerifyEmail
-              emailVerification={emailVerification}
-              email={currentSettings.email}
+        <div className={modUserProfile.userProfile__group}>
+          <span className={modUserProfile.userProfile__group__name}>
+            profile
+          </span>
+          <div className={modUserProfile.userProfile__group__elements}>
+            {personalInformation.map(po => (
+              <ValidatedTextInput key={po.label} {...po} />
+            ))}
+            {emailVerified ? (
+              <></>
+            ) : (
+              <VerifyEmail
+                emailVerification={emailVerification}
+                email={currentSettings.email}
+              />
+            )}
+          </div>
+        </div>
+        <div className={modUserProfile.userProfile__group}>
+          <span className={modUserProfile.userProfile__group__name}>
+            password
+          </span>
+          <div className={modUserProfile.userProfile__group__elements}>
+            {changePassword.map(po => (
+              <ValidatedTextInput key={po.label} {...po} />
+            ))}
+          </div>
+        </div>
+        <div className={modUserProfile.userProfile__group}>
+          <span className={modUserProfile.userProfile__group__name}>
+            account
+          </span>
+          <div className={modUserProfile.userProfile__group__elements}>
+            <ButtonSquare
+              text={'delete account'}
+              onClick={ac.auth.deleteAccount}
+              variant={'danger'}
             />
-          )}
-          <ButtonSquare
-            text={'delete account'}
-            onClick={ac.auth.deleteAccount}
-            variant={'danger'}
-          />
+          </div>
         </div>
       </div>
     </div>

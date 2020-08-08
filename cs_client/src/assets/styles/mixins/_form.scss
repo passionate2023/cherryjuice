@@ -3,8 +3,4 @@
   max-width: $form-input-width;
   min-width: $form-input-width;
   box-sizing: border-box;
-  @include respond-to($md-down) {
-    max-width: $form-input-width * 1.2;
-    min-width: $form-input-width * 1.2;
-  }
 }

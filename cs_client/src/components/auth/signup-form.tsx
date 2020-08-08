@@ -17,6 +17,18 @@ import { ac, Store } from '::root/store/store';
 import { SignUpCredentials } from '::types/graphql/generated';
 import { useDefaultValues } from '::hooks/use-default-form-values';
 
+export const ReturnToLoginPage: React.FC<{
+  text?: string;
+  linkText?: string;
+}> = ({ text, linkText }) => (
+  <span className={modLogin.login__form__createAccount}>
+    {text || 'already a member?'}{' '}
+    <Link to="/login" className={modLogin.login__form__createAccount__icon}>
+      {linkText || 'log in'}
+    </Link>
+  </span>
+);
+
 const idPrefix = 'sign-up';
 const inputs: ValidatedTextInputProps[] = [
   {
@@ -118,17 +130,9 @@ const SignUpForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
             className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
             onClick={signUp}
             disabled={loading}
-            style={{ marginTop: 20 }}
+            style={{ marginTop: 5 }}
           />
-          <span className={modLogin.login__form__createAccount}>
-            already a member?{' '}
-            <Link
-              to="/login"
-              className={modLogin.login__form__createAccount__icon}
-            >
-              log in
-            </Link>
-          </span>
+          <ReturnToLoginPage />
         </form>
       </div>
     </AuthScreen>

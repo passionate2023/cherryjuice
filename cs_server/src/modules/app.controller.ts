@@ -15,6 +15,8 @@ export class AppController {
     '/document*',
     '/reset-password*',
     '/verify-email*',
+    '/signup-oauth*',
+    '/forgot-password*',
   ])
   clientSideRoutes(@Res() res) {
     res.sendFile(assets['index.html']);
