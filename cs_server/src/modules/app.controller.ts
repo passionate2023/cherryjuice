@@ -16,6 +16,7 @@ export class AppController {
     '/reset-password*',
     '/verify-email*',
     '/signup-oauth*',
+    '/change-email*',
     '/forgot-password*',
   ])
   clientSideRoutes(@Res() res) {

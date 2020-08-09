@@ -36,7 +36,7 @@ const VerifyEmail: React.FC<Props> = ({ emailVerification, email }) => {
       .finally(() => {
         setAsyncOperation('idle');
       });
-  }, []);
+  }, [email]);
   return (
     <ButtonSquare
       disabled={asyncOperation !== 'idle'}

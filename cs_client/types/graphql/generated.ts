@@ -310,6 +310,7 @@ export interface UploadLinkInputType {
 }
 
 export interface UserMutation {
+  changeEmail: Timestamp;
   createEmailVerificationToken: Timestamp;
   createPasswordResetToken: Timestamp;
   deleteAccount: string;
@@ -319,6 +320,10 @@ export interface UserMutation {
   signUp: AuthUser;
   updateUserProfile: AuthUser;
   verifyEmail: Timestamp;
+}
+
+export interface ConfirmEmailChangeIt {
+  token: string;
 }
 
 export interface OauthSignUpCredentials {
@@ -348,6 +353,7 @@ export interface UpdateUserProfileIt {
   currentPassword: string;
   firstName?: string;
   lastName?: string;
+  newEmail?: string;
   newPassword?: string;
   username?: string;
 }
@@ -1099,6 +1105,7 @@ export interface NodeMutationToUploadImageResolver<
 }
 
 export interface UserMutationTypeResolver<TParent = any> {
+  changeEmail?: UserMutationToChangeEmailResolver<TParent>;
   createEmailVerificationToken?: UserMutationToCreateEmailVerificationTokenResolver<
     TParent
   >;
@@ -1112,6 +1119,21 @@ export interface UserMutationTypeResolver<TParent = any> {
   signUp?: UserMutationToSignUpResolver<TParent>;
   updateUserProfile?: UserMutationToUpdateUserProfileResolver<TParent>;
   verifyEmail?: UserMutationToVerifyEmailResolver<TParent>;
+}
+
+export interface UserMutationToChangeEmailArgs {
+  input: ConfirmEmailChangeIt;
+}
+export interface UserMutationToChangeEmailResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToChangeEmailArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
 }
 
 export interface UserMutationToCreateEmailVerificationTokenResolver<

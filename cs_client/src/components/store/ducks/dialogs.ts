@@ -105,7 +105,7 @@ const initialState: State = {
   showNodeMetaDialog: undefined,
   showPasswordModal: false,
   showUserPopup: false,
-  showSettingsDialog: false,
+  showSettingsDialog: true,
   snackbar: undefined,
 };
 

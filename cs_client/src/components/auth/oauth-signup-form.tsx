@@ -15,6 +15,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { OauthSignUpCredentials } from '::types/graphql/generated';
 import { router } from '::root/router/router';
+import { ReturnToLoginPage } from '::auth/signup-form';
 
 const idPrefix = 'oauth-sign-up';
 const inputs: ValidatedTextInputProps[] = [
@@ -109,6 +110,9 @@ const OauthSignUpForm: React.FC<Props & PropsFromRedux> = ({
       <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
+          <span className={modLogin.login__form__createAccount}>
+            One last step
+          </span>
           {inputs.map(inputProps => (
             <ValidatedTextInput {...inputProps} key={inputProps.label} />
           ))}
@@ -119,8 +123,9 @@ const OauthSignUpForm: React.FC<Props & PropsFromRedux> = ({
             className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
             onClick={signUp}
             disabled={disableSignupButton}
-            style={{ marginTop: 20 }}
+            style={{ marginTop: 5 }}
           />
+          <ReturnToLoginPage text={'return to'} linkText={'login page'} />
         </form>
       </div>
     </AuthScreen>

@@ -11,14 +11,18 @@ import { DeleteAccountDTO, OauthJson } from '../user.service';
 import { UpdateUserProfileIt } from '../input-types/update-user-profile.it';
 import { classToClass } from 'class-transformer';
 import { OauthSignUpCredentials } from '../dto/oauth-sign-up-credentials.dto';
-import { VerifyEmailTp } from '../interfaces/jwt-payload.interface';
+import {
+  EmailChangeTp,
+  VerifyEmailTp,
+} from '../interfaces/jwt-payload.interface';
 
 export type UserExistsDTO = { email: string };
 export type CreatePasswordResetTokenDTO = { email: string; username: string };
 
 export type UpdateUserProfileDTO = {
   input: UpdateUserProfileIt;
-  username: string;
+  userId: string;
+  email: string;
 };
 export type OauthSignupDTO = {
   input: OauthSignUpCredentials;
@@ -142,7 +146,8 @@ class UserRepository extends Repository<User> {
     user: User,
     data:
       | { email_verified: boolean }
-      | UpdateUserProfileIt
+      | { email: string; email_verified: boolean }
+      | Omit<UpdateUserProfileIt, 'newEmail'>
       | Omit<OauthSignUpCredentials, 'password'>,
   ): Promise<void> {
     Object.entries(data).forEach(([key, value]) => {
@@ -162,10 +167,10 @@ class UserRepository extends Repository<User> {
   }
 
   async updateUserProfile({
-    username,
+    userId,
     input,
   }: UpdateUserProfileDTO): Promise<string> {
-    const user = await this._getUser(username);
+    const user = await this._getUser(undefined, userId);
     await user.validatePassword(input.currentPassword);
     if (input.newPassword) {
       await user.setPassword(input.newPassword);
@@ -215,6 +220,17 @@ class UserRepository extends Repository<User> {
   async verifyEmail({ userId }: VerifyEmailTp): Promise<void> {
     const user = await this._getUser(undefined, userId);
     await this.updateUser(user, { email_verified: true });
+  }
+
+  async changeEmail({
+    userId,
+    currentEmail,
+    newEmail,
+  }: EmailChangeTp): Promise<void> {
+    const user = await this._getUser(undefined, userId);
+    if (user.email !== currentEmail)
+      throw new UnauthorizedException('invalid token');
+    await this.updateUser(user, { email: newEmail, email_verified: false });
   }
 }
 

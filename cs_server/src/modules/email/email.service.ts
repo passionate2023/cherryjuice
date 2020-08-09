@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { UserTokenMeta } from '../user/entities/user-token.entity';
 
 type SendEmailDTO = {
   email: string;
@@ -28,12 +29,40 @@ export class EmailService {
     const url = `${process.env.ASSETS_URL}/verify-email#token=${token}`;
     await this.mailerService.sendMail({
       to: email,
-      subject: 'Confirm Your Email',
+      subject: 'Confirm your email',
       text: `Hello, to confirm your email, follow this link: ${url}`,
       context: {
         verifyEmailUrl: url,
       },
       template: 'verify-email',
+    });
+  }
+
+  async sendEmailChange({
+    email,
+    token,
+    tokenMeta,
+  }: SendEmailDTO & {
+    tokenMeta: UserTokenMeta;
+  }): Promise<void> {
+    const url = `${process.env.ASSETS_URL}/change-email#token=${token}`;
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Change your email address',
+      text: [
+        `Hello,`,
+        `We've received a request to change your email from ${tokenMeta.currentEmail} to ${tokenMeta.newEmail}.`,
+        `By clicking the following link, you are confirming this request.`,
+        ` ${url} `,
+        `If you didn't make this request, let us know`,
+        `Thanks`,
+      ].join('\n'),
+      context: {
+        changeEmailUrl: url,
+        currentEmail: tokenMeta.currentEmail,
+        newEmail: tokenMeta.newEmail,
+      },
+      template: 'change-email',
     });
   }
 }

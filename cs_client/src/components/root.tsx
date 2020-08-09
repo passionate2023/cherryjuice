@@ -26,6 +26,7 @@ import { router } from '::root/router/router';
 import { ForgotPassword } from '::auth/forgot-password';
 import { ResetPassword } from '::auth/reset-password';
 import { VerifyEmail } from '::auth/verify-email';
+import { ChangeEmail } from '::auth/change-email';
 
 const mapState = (state: Store) => ({
   token: state.auth.token,
@@ -49,7 +50,7 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   const { loadedEpics } = useLoadEpics();
 
   useEffect(() => {
-    const staticRoute = ['/verify-email'].some(route =>
+    const staticRoute = ['/verify-email', '/change-email'].some(route =>
       router.get.location.pathname.startsWith(route),
     );
     if (!staticRoute && userId) {
@@ -73,6 +74,7 @@ const Root: React.FC<Props & PropsFromRedux> = ({
             <Route path={'/forgot-password'} component={ForgotPassword} />
             <>
               <Route path={'/verify-email'} component={VerifyEmail} />
+              <Route path={'/change-email'} component={ChangeEmail} />
               <Route path={'/*'} component={App} />
             </>
           </Switch>

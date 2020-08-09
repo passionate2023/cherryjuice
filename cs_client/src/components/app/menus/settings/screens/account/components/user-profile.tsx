@@ -16,6 +16,7 @@ import {
 import { patterns } from '::auth/helpers/form-validation';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { VerifyEmail } from '::app/menus/settings/screens/account/components/components/components/verify-email';
+import { Icons } from '::shared-components/icon/helpers/icons';
 
 const mapState = (state: Store) => ({
   token: state.auth?.token,
@@ -116,10 +117,23 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
       onChange: userSettingsActionCreators.setNewPasswordConfirmation,
     },
   ];
+  const email: ValidatedTextInputProps[] = [
+    {
+      label: 'email',
+      icon: [Icons.material.email],
+      type: 'email',
+      required: true,
+      variableName: 'email',
+      inputRef: createRef(),
+      idPrefix,
+      value: state.email || '',
+      onChange: userSettingsActionCreators.setEmail,
+    },
+  ];
   useEffect(() => {
     const changes: Omit<UpdateUserProfileIt, 'currentPassword'> = {};
     let validity = true;
-    const validate = ({ variableName, inputRef }) => {
+    const validate = ({ variableName, inputRef }: ValidatedTextInputProps) => {
       const localValue = state[variableName];
       // @ts-ignore
       validity = validity && inputRef?.current?.checkValidity();
@@ -127,8 +141,8 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
         changes[variableName] = localValue;
       }
     };
-    // @ts-ignore
     personalInformation.forEach(validate);
+    email.forEach(validate);
     if (
       state.newPassword &&
       state.newPassword === state.newPasswordConfirmation
@@ -149,6 +163,7 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
     state.username,
     state.newPassword,
     state.newPasswordConfirmation,
+    state.email,
   ]);
   return (
     <div className={modUserProfile}>
@@ -159,6 +174,15 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
           </span>
           <div className={modUserProfile.userProfile__group__elements}>
             {personalInformation.map(po => (
+              <ValidatedTextInput key={po.label} {...po} />
+            ))}
+          </div>
+        </div>
+
+        <div className={modUserProfile.userProfile__group}>
+          <span className={modUserProfile.userProfile__group__name}>email</span>
+          <div className={modUserProfile.userProfile__group__elements}>
+            {email.map(po => (
               <ValidatedTextInput key={po.label} {...po} />
             ))}
             {emailVerified ? (

@@ -1,5 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import {
+  IsEmail,
   IsOptional,
   IsString,
   Matches,
@@ -44,7 +45,6 @@ export class UpdateUserProfileIt {
   username: string;
 
   @IsOptional()
-  @Field()
   @IsString()
   @MinLength(8)
   @MaxLength(20)
@@ -53,4 +53,9 @@ export class UpdateUserProfileIt {
   })
   @Field({ nullable: true })
   newPassword: string;
+
+  @IsOptional()
+  @IsEmail()
+  @Field({ nullable: true })
+  email: string;
 }

@@ -14,6 +14,7 @@ enum actions {
   setNewPassword,
   setNewPasswordConfirmation,
   reset,
+  setEmail,
 }
 
 const actionCreators = (() => {
@@ -32,6 +33,8 @@ const actionCreators = (() => {
       state.dispatch({ type: actions.setNewPasswordConfirmation, value }),
     setUserName: (value: string) =>
       state.dispatch({ type: actions.setUserName, value }),
+    setEmail: (value: string) =>
+      state.dispatch({ type: actions.setEmail, value }),
     reset(value: Omit<State, 'newPassword' | 'newPasswordConfirmation'>) {
       state.dispatch({ type: actions.reset, value });
     },
@@ -54,6 +57,8 @@ const reducer = (
       return { ...state, username: action.value };
     case actions.setNewPassword:
       return { ...state, newPassword: action.value };
+    case actions.setEmail:
+      return { ...state, email: action.value };
     case actions.setNewPasswordConfirmation:
       return { ...state, newPasswordConfirmation: action.value };
     case actions.reset:

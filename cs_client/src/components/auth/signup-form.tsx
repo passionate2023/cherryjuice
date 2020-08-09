@@ -21,7 +21,10 @@ export const ReturnToLoginPage: React.FC<{
   text?: string;
   linkText?: string;
 }> = ({ text, linkText }) => (
-  <span className={modLogin.login__form__createAccount}>
+  <span
+    className={modLogin.login__form__createAccount}
+    onClick={ac.root.resetState}
+  >
     {text || 'already a member?'}{' '}
     <Link to="/login" className={modLogin.login__form__createAccount__icon}>
       {linkText || 'log in'}

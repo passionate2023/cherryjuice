@@ -17,6 +17,7 @@ import { OauthSignUpCredentials } from './dto/oauth-sign-up-credentials.dto';
 import { ResetPasswordIt } from './input-types/reset-password.it';
 import { Timestamp } from '../document/helpers/graphql-types/timestamp';
 import { VerifyEmailIt } from './input-types/verify-email.it';
+import { ConfirmEmailChangeIt } from './input-types/confirm-email-change.it';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => UserMutation)
 export class UserMutationsResolver {
@@ -61,7 +62,8 @@ export class UserMutationsResolver {
     if (!user) throw new UnauthorizedException();
     await this.userService.updateUserProfile({
       input,
-      username: user.username,
+      userId: user.id,
+      email: user.email,
     });
     return this.userService.refreshUser(user.id);
   }
@@ -116,6 +118,17 @@ export class UserMutationsResolver {
     input: VerifyEmailIt,
   ): Promise<number> {
     await this.userService.verifyEmail({
+      input,
+    });
+    return Date.now();
+  }
+
+  @ResolveField(() => Timestamp)
+  async changeEmail(
+    @Args({ name: 'input', type: () => ConfirmEmailChangeIt })
+    input: ConfirmEmailChangeIt,
+  ): Promise<number> {
+    await this.userService.changeEmail({
       input,
     });
     return Date.now();

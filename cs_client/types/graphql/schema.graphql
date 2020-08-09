@@ -146,6 +146,7 @@ type User {
 }
 
 type UserMutation {
+    changeEmail(input: ConfirmEmailChangeIt!): Timestamp!
     createEmailVerificationToken: Timestamp!
     createPasswordResetToken(email: String!, username: String!): Timestamp!
     deleteAccount(currentPassword: String!): String!
@@ -235,6 +236,10 @@ enum TimeRange {
     PastMonth
     PastWeek
     PastYear
+}
+
+input ConfirmEmailChangeIt {
+    token: String!
 }
 
 input CreateDocumentIt {
@@ -350,6 +355,7 @@ input UpdateUserProfileIt {
     currentPassword: String!
     firstName: String
     lastName: String
+    newEmail: String
     newPassword: String
     username: String
 }

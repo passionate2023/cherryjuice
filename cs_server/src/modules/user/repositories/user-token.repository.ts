@@ -1,11 +1,16 @@
 import { EntityRepository, Repository } from 'typeorm/index';
-import { UserToken, UserTokenType } from '../entities/user-token.entity';
+import {
+  UserToken,
+  UserTokenMeta,
+  UserTokenType,
+} from '../entities/user-token.entity';
 import { PasswordResetTp } from '../interfaces/jwt-payload.interface';
 import { NotFoundException } from '@nestjs/common';
 
 type CreateTokenDTO = {
   userId: string;
   type: UserTokenType;
+  meta?: UserTokenMeta;
 };
 
 @EntityRepository(UserToken)
@@ -16,12 +21,17 @@ export class UserTokenRepository extends Repository<UserToken> {
     return token;
   }
 
-  async createToken({ userId, type }: CreateTokenDTO): Promise<UserToken> {
+  async createToken({
+    userId,
+    type,
+    meta,
+  }: CreateTokenDTO): Promise<UserToken> {
     const existingToken = await this.findOne({ where: { userId, type } });
     if (existingToken) await this.remove(existingToken);
     const token = new UserToken({
       userId,
       type,
+      meta,
     });
     await this.save(token);
     return token;

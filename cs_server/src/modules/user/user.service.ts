@@ -19,6 +19,7 @@ import { AuthUser } from './entities/auth.user';
 import { User } from './entities/user.entity';
 import {
   AuthenticatedUserTp,
+  EmailChangeTp,
   PasswordResetTp,
   VerifyEmailTp,
 } from './interfaces/jwt-payload.interface';
@@ -28,6 +29,7 @@ import { UserToken, UserTokenType } from './entities/user-token.entity';
 import { ResetPasswordIt } from './input-types/reset-password.it';
 import { VerifyEmailIt } from './input-types/verify-email.it';
 import { EmailService } from '../email/email.service';
+import { ConfirmEmailChangeIt } from './input-types/confirm-email-change.it';
 
 export type OauthJson = {
   sub: string;
@@ -49,6 +51,13 @@ export const createJWTPayload = {
     id: token.id,
     userId: user.id,
     type: token.type,
+  }),
+  emailChange: (userId: string, token: UserToken): EmailChangeTp => ({
+    id: token.id,
+    userId,
+    type: token.type,
+    currentEmail: token.meta.currentEmail,
+    newEmail: token.meta.newEmail,
   }),
 };
 
@@ -137,6 +146,14 @@ export class UserService {
   }
 
   async updateUserProfile(dto: UpdateUserProfileDTO): Promise<string> {
+    if (dto.input.email) {
+      await this.createEmailChangeToken({
+        userId: dto.userId,
+        newEmail: dto.input.email,
+        currentEmail: dto.email,
+      });
+      delete dto.input.email;
+    }
     return this.userRepository.updateUserProfile(dto);
   }
 
@@ -194,7 +211,7 @@ export class UserService {
     await this.userTokenRepository.verifyToken(tokenPayload);
   }
 
-  verifyJwtToken(token: string): VerifyEmailTp {
+  verifyJwtToken(token: string) {
     try {
       return this.jwtService.verify(token);
     } catch {
@@ -210,6 +227,43 @@ export class UserService {
     const tokenPayload: VerifyEmailTp = this.verifyJwtToken(token);
     await this.userTokenRepository.verifyToken(tokenPayload);
     await this.userRepository.verifyEmail(tokenPayload);
+    await this.userTokenRepository.deleteToken(tokenPayload);
+  }
+
+  async createEmailChangeToken({
+    newEmail,
+    userId,
+    currentEmail,
+  }: {
+    newEmail: string;
+    userId: string;
+    currentEmail: string;
+  }): Promise<void> {
+    const userToken = await this.userTokenRepository.createToken({
+      userId,
+      type: UserTokenType.EMAIL_CHANGE,
+      meta: { newEmail, currentEmail },
+    });
+    const token = this.jwtService.sign(
+      createJWTPayload.emailChange(userId, userToken),
+      { expiresIn: '12h' },
+    );
+
+    await this.emailService.sendEmailChange({
+      token,
+      email: currentEmail,
+      tokenMeta: userToken.meta,
+    });
+  }
+
+  async changeEmail({
+    input: { token },
+  }: {
+    input: ConfirmEmailChangeIt;
+  }): Promise<void> {
+    const tokenPayload: EmailChangeTp = this.verifyJwtToken(token);
+    await this.userTokenRepository.verifyToken(tokenPayload);
+    await this.userRepository.changeEmail(tokenPayload);
     await this.userTokenRepository.deleteToken(tokenPayload);
   }
 }
