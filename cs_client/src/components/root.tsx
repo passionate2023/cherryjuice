@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { useApolloClient } from '::graphql/apollo';
-import { LoginForm } from '::auth/login-form';
 import { Suspense, useEffect } from 'react';
 import { Route, Switch } from 'react-router';
 import { Provider } from 'react-redux';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { App } from '::root/app';
-import { SignUpForm } from '::auth/signup-form';
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import { useOnWindowResize } from '::hooks/use-on-window-resize';
 import { store } from '::root/store/store';
@@ -21,12 +19,10 @@ const ApolloProvider = React.lazy(() =>
 );
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
-import { OauthSignUpForm } from '::auth/oauth-signup-form';
 import { router } from '::root/router/router';
-import { ForgotPassword } from '::auth/forgot-password';
-import { ResetPassword } from '::auth/reset-password';
 import { VerifyEmail } from '::auth/verify-email';
 import { ChangeEmail } from '::auth/change-email';
+import { AuthScreen } from '::app/auth/auth-screen';
 
 const mapState = (state: Store) => ({
   token: state.auth.token,
@@ -50,16 +46,17 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   const { loadedEpics } = useLoadEpics();
 
   useEffect(() => {
-    const staticRoute = ['/verify-email', '/change-email'].some(route =>
-      router.get.location.pathname.startsWith(route),
-    );
-    if (!staticRoute && userId) {
-      if (hasPassword === false) {
-        router.goto.oauthSignup();
-      } else {
-        router.goto.home();
-      }
-    }
+    const pathnameStartsWith = route =>
+      router.get.location.pathname.startsWith(route);
+    const unfinishedOauthSignup =
+      userId &&
+      hasPassword === false &&
+      ['/verify-email', '/change-email'].some(pathnameStartsWith);
+    if (unfinishedOauthSignup) router.goto.oauthSignup();
+
+    const finishedLogin =
+      userId && ['/auth/login', '/auth/signup'].some(pathnameStartsWith);
+    if (finishedLogin) router.goto.home();
   }, [userId, hasPassword]);
 
   return (
@@ -67,11 +64,7 @@ const Root: React.FC<Props & PropsFromRedux> = ({
       {client && loadedEpics && (
         <ApolloProvider client={client}>
           <Switch>
-            <Route path={'/login'} component={LoginForm} />
-            <Route path={'/signup'} component={SignUpForm} />
-            <Route path={'/signup-oauth'} component={OauthSignUpForm} />
-            <Route path={'/reset-password'} component={ResetPassword} />
-            <Route path={'/forgot-password'} component={ForgotPassword} />
+            <Route path={'/auth'} component={AuthScreen} />
             <>
               <Route path={'/verify-email'} component={VerifyEmail} />
               <Route path={'/change-email'} component={ChangeEmail} />

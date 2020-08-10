@@ -1,20 +1,19 @@
 import * as React from 'react';
-import { modLogin } from '::sass-modules/index';
+import { modLogin } from '::sass-modules';
 import { Icons } from '::shared-components/icon/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
 } from '::shared-components/form/validated-text-input';
-import { AuthScreen } from '::auth/auth-screen';
 import { createRef, useRef, useState } from 'react';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { patterns } from '::auth/helpers/form-validation';
 import { apolloCache } from '::graphql/cache/apollo-cache';
-import { AsyncError } from '::auth/hooks/proper-error-message';
 import { CREATE_PASSWORD_RESET_TOKEN } from '::graphql/mutations/user/create-password-reset-token';
 import { useStatefulValidatedInput } from '::auth/hooks/stateful-validated-input';
-import { ReturnToLoginPage } from '::auth/signup-form';
+import { ReturnToLoginPage } from '::app/auth/components/signup-form';
+import { ac } from '::root/store/store';
 
 const idPrefix = 'forgot-password';
 const inputs: ValidatedTextInputProps[] = [
@@ -41,7 +40,6 @@ const inputs: ValidatedTextInputProps[] = [
 
 type Props = {};
 const ForgotPassword: React.FC<Props> = () => {
-  const [error, setError] = useState<AsyncError>();
   const [timestamp, setTimestamp] = useState(0);
   const [loading, setLoading] = useState(false);
   const email = useStatefulValidatedInput(inputs[0]);
@@ -61,12 +59,12 @@ const ForgotPassword: React.FC<Props> = () => {
           )
           .then(tokenTimestamp => {
             if (tokenTimestamp) {
-              setError({ localMessage: `an email was sent to ${email.value}` });
+              ac.auth.setAuthenticationFailed({ localMessage: `a verification email was sent to ${email.value}` });
               setTimestamp(tokenTimestamp);
             }
           })
           .catch(error => {
-            setError(error);
+            ac.auth.setAuthenticationFailed(error);
             setTimestamp(0);
           })
           .finally(() => {
@@ -83,29 +81,27 @@ const ForgotPassword: React.FC<Props> = () => {
   });
   const disableSignupButton = !email.valid || !username.valid;
   return (
-    <AuthScreen error={error}>
-      <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
-        <LinearProgress loading={loading} />
-        <form className={modLogin.login__form} ref={formRef}>
-          <span className={modLogin.login__form__createAccount}>
-            Enter your email and username
-          </span>
-          {inputs.map(inputProps => (
-            <ValidatedTextInput {...inputProps} key={inputProps.label} />
-          ))}
+    <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
+      <LinearProgress loading={loading} />
+      <form className={modLogin.login__form} ref={formRef}>
+        <span className={modLogin.login__form__createAccount}>
+          Enter your email and username
+        </span>
+        {inputs.map(inputProps => (
+          <ValidatedTextInput {...inputProps} key={inputProps.label} />
+        ))}
 
-          <input
-            type={'submit'}
-            value={timestamp ? 'Resend email' : 'Reset password'}
-            className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
-            onClick={signUp}
-            disabled={disableSignupButton}
-            style={{ marginTop: 5 }}
-          />
-          <ReturnToLoginPage text={'return to'} linkText={'login page'} />
-        </form>
-      </div>
-    </AuthScreen>
+        <input
+          type={'submit'}
+          value={timestamp ? 'Resend email' : 'Reset password'}
+          className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
+          onClick={signUp}
+          disabled={disableSignupButton}
+          style={{ marginTop: 5 }}
+        />
+        <ReturnToLoginPage text={'return to'} linkText={'login page'} />
+      </form>
+    </div>
   );
 };
 

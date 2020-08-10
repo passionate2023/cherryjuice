@@ -10,14 +10,14 @@ const assets = {
 @Controller()
 export class AppController {
   @Get([
-    '/login*',
-    '/signup*',
+    '/auth/login*',
+    '/auth/signup*',
     '/document*',
-    '/reset-password*',
+    '/auth/reset-password*',
     '/verify-email*',
-    '/signup-oauth*',
+    '/auth/signup-oauth*',
     '/change-email*',
-    '/forgot-password*',
+    '/auth/forgot-password*',
   ])
   clientSideRoutes(@Res() res) {
     res.sendFile(assets['index.html']);

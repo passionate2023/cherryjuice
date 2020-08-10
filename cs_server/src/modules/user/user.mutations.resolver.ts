@@ -67,7 +67,10 @@ export class UserMutationsResolver {
   @ResolveField(() => AuthUser)
   async updateUserProfile(
     @GetUserGql() user: User,
-    @Args({ name: 'userProfile', type: () => UpdateUserProfileIt }, RemoveGmailDots)
+    @Args(
+      { name: 'userProfile', type: () => UpdateUserProfileIt },
+      RemoveGmailDots,
+    )
     input: UpdateUserProfileIt,
   ): Promise<AuthUser> {
     if (!user) throw new UnauthorizedException();
@@ -142,7 +145,8 @@ export class UserMutationsResolver {
   @ResolveField(() => Timestamp)
   async createEmailChangeToken(
     @GetUserGql() user: User,
-    @Args({ name: 'input', type: () => ChangeEmailIt }, RemoveGmailDots) input: ChangeEmailIt,
+    @Args({ name: 'input', type: () => ChangeEmailIt }, RemoveGmailDots)
+    input: ChangeEmailIt,
   ): Promise<number> {
     if (!user?.id) throw new UnauthorizedException();
     if (!user.email_verified)

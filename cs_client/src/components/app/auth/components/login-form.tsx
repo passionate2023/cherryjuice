@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createRef, useRef } from 'react';
-import { modLogin } from '::sass-modules/index';
+import { modLogin } from '::sass-modules';
 import { Checkbox } from '::shared-components/checkbox';
 import { GoogleOauthButton } from '::shared-components/buttons/google-oauth-button';
 import { Icons } from '::shared-components/icon/icon';
@@ -11,7 +11,6 @@ import {
 } from '::shared-components/form/validated-text-input';
 import { FormSeparator } from '::shared-components/form/form-separator';
 import { patterns } from '::auth/helpers/form-validation';
-import { AuthScreen } from '::auth/auth-screen';
 import { SignInCredentials } from '::types/graphql/generated';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { Link } from 'react-router-dom';
@@ -45,7 +44,6 @@ const inputs: ValidatedTextInputProps[] = [
 
 const mapState = (state: Store) => ({
   loading: state.auth.ongoingOperation !== 'idle',
-  alert: state.auth.alert,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -53,7 +51,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
+const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading,  }) => {
   const formRef = useRef<HTMLFormElement>();
   const staySignedRef = useRef<HTMLInputElement>();
   const login = (e?: any) => {
@@ -81,62 +79,60 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
     focusableElementsSelector: ['a', 'input[type="submit"]', '#google-btn'],
   });
   return (
-    <AuthScreen error={alert}>
-      <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
-        <LinearProgress loading={loading} />
-        <form className={modLogin.login__form} ref={formRef}>
-          <GoogleOauthButton
-            onClick={openConsentWindow({
-              url:
-                (process.env.graphqlAPI
-                  ? `http://${process.env.graphqlAPI}`
-                  : '') + '/auth/google/callback',
-              onAuth: ac.auth.setAuthenticationSucceeded,
-            })}
+    <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
+      <LinearProgress loading={loading} />
+      <form className={modLogin.login__form} ref={formRef}>
+        <GoogleOauthButton
+          onClick={openConsentWindow({
+            url:
+              (process.env.graphqlAPI
+                ? `http://${process.env.graphqlAPI}`
+                : '') + '/auth/google/callback',
+            onAuth: ac.auth.setAuthenticationSucceeded,
+          })}
+        />
+        <FormSeparator text={'or'} />
+        {inputs.map(inputProps => (
+          <ValidatedTextInput
+            {...inputProps}
+            key={inputProps.variableName}
+            highlightInvalidInput={false}
           />
-          <FormSeparator text={'or'} />
-          {inputs.map(inputProps => (
-            <ValidatedTextInput
-              {...inputProps}
-              key={inputProps.variableName}
-              highlightInvalidInput={false}
-            />
-          ))}
-          <span className={modLogin.login__form__rememberMe}>
-            <Checkbox
-              className={modLogin.login__form__rememberMe__checkbox}
-              myRef={staySignedRef}
-            />{' '}
-            <span className={modLogin.login__form__rememberMe__text}>
-              keep me logged-in
-            </span>
-            <Link
-              to="/forgot-password"
-              className={modLogin.login__form__rememberMe__text}
-            >
-              forgot password
-            </Link>
+        ))}
+        <span className={modLogin.login__form__rememberMe}>
+          <Checkbox
+            className={modLogin.login__form__rememberMe__checkbox}
+            myRef={staySignedRef}
+          />{' '}
+          <span className={modLogin.login__form__rememberMe__text}>
+            keep me logged-in
           </span>
+          <Link
+            to="/auth/forgot-password"
+            className={modLogin.login__form__rememberMe__text}
+          >
+            forgot password
+          </Link>
+        </span>
 
-          <input
-            type={'submit'}
-            value={'Login'}
-            className={`${modLogin.login__form__input__input} ${modLogin.login__form__inputSubmit}`}
-            onClick={login}
-            disabled={loading}
-          />
-          <span className={modLogin.login__form__createAccount}>
-            or{' '}
-            <Link
-              to="/signup"
-              className={modLogin.login__form__createAccount__icon}
-            >
-              create an account
-            </Link>
-          </span>
-        </form>
-      </div>
-    </AuthScreen>
+        <input
+          type={'submit'}
+          value={'Login'}
+          className={`${modLogin.login__form__input__input} ${modLogin.login__form__inputSubmit}`}
+          onClick={login}
+          disabled={loading}
+        />
+        <span className={modLogin.login__form__createAccount}>
+          or{' '}
+          <Link
+            to="/auth/signup"
+            className={modLogin.login__form__createAccount__icon}
+          >
+            create an account
+          </Link>
+        </span>
+      </form>
+    </div>
   );
 };
 

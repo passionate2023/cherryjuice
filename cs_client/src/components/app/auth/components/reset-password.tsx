@@ -1,21 +1,21 @@
 import * as React from 'react';
 import { createRef, useEffect, useRef, useState } from 'react';
-import { modLogin } from '::sass-modules/index';
+import { modLogin } from '::sass-modules';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
 } from '::shared-components/form/validated-text-input';
-import { AuthScreen } from '::auth/auth-screen';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { patterns } from '::auth/helpers/form-validation';
 import { apolloCache } from '::graphql/cache/apollo-cache';
-import { AsyncError } from '::auth/hooks/proper-error-message';
 import { useStatefulValidatedInput } from '::auth/hooks/stateful-validated-input';
 import { RESET_PASSWORD } from '::graphql/mutations/user/reset-password';
 import { router } from '::root/router/router';
 import { VERIFY_TOKEN } from '::graphql/mutations/user/verify-token';
-import { ReturnToLoginPage } from '::auth/signup-form';
+import { ReturnToLoginPage } from '::app/auth/components/signup-form';
+import { ac } from '::root/store/store';
+import { useMutation } from '::hooks/graphql/use-mutation';
 
 const idPrefix = 'reset--password';
 const inputs: ValidatedTextInputProps[] = [
@@ -73,39 +73,30 @@ const useVerifyToken = setError => {
 
 type Props = {};
 const ResetPassword: React.FC<Props> = () => {
-  const [error, setError] = useState<AsyncError>();
-  const [loading, setLoading] = useState(false);
   const password = useStatefulValidatedInput(inputs[0]);
   const passwordConfirmation = useStatefulValidatedInput(inputs[1]);
   const formRef = useRef<HTMLFormElement>();
-  const { token } = useVerifyToken(setError);
+  const { token } = useVerifyToken(ac.auth.setAuthenticationFailed);
   const validPassword =
     token.valid &&
     password.valid &&
     password.value === passwordConfirmation.value;
+  const [resetPassword, resetPasswordState] = useMutation({
+    gqlPipe: RESET_PASSWORD,
+    variables: {
+      input: {
+        newPassword: password.value,
+        token: token.value,
+      },
+    },
+    onSuccess: router.goto.signIn,
+    onFailure: ac.auth.setAuthenticationFailed,
+  });
   const submit = (e?: any) => {
     if (formRef.current.checkValidity()) {
       if (e) e.preventDefault();
       if (validPassword) {
-        setLoading(true);
-        apolloCache.client
-          .mutate(
-            RESET_PASSWORD({
-              input: {
-                newPassword: password.value,
-                token: token.value,
-              },
-            }),
-          )
-          .then(() => {
-            router.goto.signIn();
-          })
-          .catch(error => {
-            setError(error);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
+        resetPassword();
       }
     }
   };
@@ -116,34 +107,32 @@ const ResetPassword: React.FC<Props> = () => {
     onConfirmModal: submit,
   });
   return (
-    <AuthScreen error={error}>
-      <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
-        <LinearProgress loading={loading} />
-        <form className={modLogin.login__form} ref={formRef}>
-          <span className={modLogin.login__form__createAccount}>
-            Enter your new password
-          </span>
-          {inputs.map(inputProps => (
-            <ValidatedTextInput
-              {...inputProps}
-              key={inputProps.label}
-              disabled={token.valid === false}
-            />
-          ))}
-          {
-            <input
-              type={'submit'}
-              value={'Reset password'}
-              className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
-              onClick={submit}
-              disabled={!validPassword}
-              style={{ marginTop: 5 }}
-            />
-          }
-          <ReturnToLoginPage text={'return to'} linkText={'login page'} />
-        </form>
-      </div>
-    </AuthScreen>
+    <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
+      <LinearProgress loading={resetPasswordState === 'in-progress'} />
+      <form className={modLogin.login__form} ref={formRef}>
+        <span className={modLogin.login__form__createAccount}>
+          Enter your new password
+        </span>
+        {inputs.map(inputProps => (
+          <ValidatedTextInput
+            {...inputProps}
+            key={inputProps.label}
+            disabled={token.valid === false}
+          />
+        ))}
+        {
+          <input
+            type={'submit'}
+            value={'Reset password'}
+            className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
+            onClick={submit}
+            disabled={!validPassword}
+            style={{ marginTop: 5 }}
+          />
+        }
+        <ReturnToLoginPage text={'return to'} linkText={'login page'} />
+      </form>
+    </div>
   );
 };
 

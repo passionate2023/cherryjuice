@@ -18,13 +18,16 @@ const useMutation: UseMutation = <T, U>({
 }) => {
   const [asyncOperation, setAsyncOperation] = useState<AsyncOperation>('idle');
   const mutate = useCallback(async () => {
-    apolloCache.client
-      .mutate(gqlPipe(variables))
-      .then(onSuccess)
-      .catch(onFailure)
-      .finally(() => {
-        setAsyncOperation('idle');
-      });
+    if (asyncOperation !== 'in-progress') {
+      apolloCache.client
+        .mutate(gqlPipe(variables))
+        .then(onSuccess)
+        .catch(onFailure)
+        .finally(() => {
+          setAsyncOperation('idle');
+        });
+      setAsyncOperation('in-progress');
+    }
   }, [variables, onSuccess, onFailure, gqlPipe]);
   return [mutate, asyncOperation];
 };

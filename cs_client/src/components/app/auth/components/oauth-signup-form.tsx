@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import * as React from 'react';
-import { modLogin } from '::sass-modules/index';
+import { modLogin } from '::sass-modules';
 import { Icons } from '::shared-components/icon/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import {
@@ -8,14 +8,13 @@ import {
   ValidatedTextInputProps,
 } from '::shared-components/form/validated-text-input';
 import { patterns } from '::auth/helpers/form-validation';
-import { AuthScreen } from '::auth/auth-screen';
 import { createRef, useEffect, useRef, useState } from 'react';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::root/store/store';
 import { OauthSignUpCredentials } from '::types/graphql/generated';
 import { router } from '::root/router/router';
-import { ReturnToLoginPage } from '::auth/signup-form';
+import { ReturnToLoginPage } from '::app/auth/components/signup-form';
 
 const idPrefix = 'oauth-sign-up';
 const inputs: ValidatedTextInputProps[] = [
@@ -66,7 +65,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = {};
 const OauthSignUpForm: React.FC<Props & PropsFromRedux> = ({
   loading,
-  alert,
   username,
 }) => {
   const [passwordValid, setPasswordValid] = useState(false);
@@ -106,7 +104,6 @@ const OauthSignUpForm: React.FC<Props & PropsFromRedux> = ({
   const disableSignupButton =
     loading || !passwordValid || password !== passwordConfirmation;
   return (
-    <AuthScreen error={alert}>
       <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
         <LinearProgress loading={loading} />
         <form className={modLogin.login__form} ref={formRef}>
@@ -128,7 +125,6 @@ const OauthSignUpForm: React.FC<Props & PropsFromRedux> = ({
           <ReturnToLoginPage text={'return to'} linkText={'login page'} />
         </form>
       </div>
-    </AuthScreen>
   );
 };
 

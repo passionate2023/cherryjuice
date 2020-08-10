@@ -30,12 +30,14 @@ const Drawer: React.FC<DrawerProps> = ({
       gestureZoneSelector: modDrawer.drawer,
     });
   }, [selectedScreenTitle]);
+  const element =
+    customDrawerBody ||
+    screens[selectedScreenTitle]?.element ||
+    Object.values(screens)[0].element;
   return (
     <div className={modDrawer.drawer}>
       <DrawerNavigation screens={screens} />
-      <div className={`${modDrawer.drawer__content}`}>
-        {customDrawerBody || screens[selectedScreenTitle].element}
-      </div>
+      <div className={`${modDrawer.drawer__content}`}>{element}</div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { apolloCache } from '::graphql/cache/apollo-cache';
-import { getToken } from '::auth/reset-password';
+import { getToken } from '::app/auth/components/reset-password';
 import { VERIFY_EMAIL } from '::graphql/mutations/user/verify-email';
 import { ac } from '::root/store/store';
 import { AlertType } from '::types/react';

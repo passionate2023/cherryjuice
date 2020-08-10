@@ -12,7 +12,7 @@ export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
 
   async sendPasswordReset({ email, token }: SendEmailDTO): Promise<void> {
-    const url = `${process.env.ASSETS_URL}/reset-password#token=${token}`;
+    const url = `${process.env.ASSETS_URL}/auth/reset-password#token=${token}`;
     await this.mailerService.sendMail({
       to: email,
       subject: 'Password reset request',

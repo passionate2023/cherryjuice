@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import * as React from 'react';
-import { modLogin } from '::sass-modules/index';
+import { modLogin } from '::sass-modules';
 import { Icons } from '::shared-components/icon/icon';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
 import {
@@ -8,7 +8,6 @@ import {
   ValidatedTextInputProps,
 } from '::shared-components/form/validated-text-input';
 import { patterns } from '::auth/helpers/form-validation';
-import { AuthScreen } from '::auth/auth-screen';
 import { createRef, useRef } from 'react';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { Link } from 'react-router-dom';
@@ -26,7 +25,7 @@ export const ReturnToLoginPage: React.FC<{
     onClick={ac.root.resetState}
   >
     {text || 'already a member?'}{' '}
-    <Link to="/login" className={modLogin.login__form__createAccount__icon}>
+    <Link to="/auth/login" className={modLogin.login__form__createAccount__icon}>
       {linkText || 'log in'}
     </Link>
   </span>
@@ -88,14 +87,13 @@ const inputs: ValidatedTextInputProps[] = [
 
 const mapState = (state: Store) => ({
   loading: state.auth.ongoingOperation !== 'idle',
-  alert: state.auth.alert,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
-const SignUpForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
+const SignUpForm: React.FC<Props & PropsFromRedux> = ({ loading }) => {
   const formRef = useRef<HTMLFormElement>();
   const signUp = (e?: any) => {
     if (formRef.current.checkValidity()) {
@@ -119,26 +117,24 @@ const SignUpForm: React.FC<Props & PropsFromRedux> = ({ loading, alert }) => {
     onConfirmModal: signUp,
   });
   return (
-    <AuthScreen error={alert}>
-      <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
-        <LinearProgress loading={loading} />
-        <form className={modLogin.login__form} ref={formRef}>
-          {inputs.map(inputProps => (
-            <ValidatedTextInput {...inputProps} key={inputProps.variableName} />
-          ))}
+    <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
+      <LinearProgress loading={loading} />
+      <form className={modLogin.login__form} ref={formRef}>
+        {inputs.map(inputProps => (
+          <ValidatedTextInput {...inputProps} key={inputProps.variableName} />
+        ))}
 
-          <input
-            type={'submit'}
-            value={'Sign up'}
-            className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
-            onClick={signUp}
-            disabled={loading}
-            style={{ marginTop: 5 }}
-          />
-          <ReturnToLoginPage />
-        </form>
-      </div>
-    </AuthScreen>
+        <input
+          type={'submit'}
+          value={'Sign up'}
+          className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
+          onClick={signUp}
+          disabled={loading}
+          style={{ marginTop: 5 }}
+        />
+        <ReturnToLoginPage />
+      </form>
+    </div>
   );
 };
 

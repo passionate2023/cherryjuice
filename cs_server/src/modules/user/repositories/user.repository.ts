@@ -116,7 +116,7 @@ class UserRepository extends Repository<User> {
       email_verified,
     }: OauthJson,
   ): Promise<User> {
-    email = removeDots(email)
+    email = removeDots(email);
     const username = /(^.*)@/.exec(email)[1];
     const user = new User({
       username,

@@ -9,8 +9,8 @@ import {
   User,
 } from '::types/graphql/generated';
 import { AsyncOperation } from '::root/store/ducks/document';
-import { ApolloError } from 'apollo-client';
 import { rootActionCreators } from '::root/store/ducks/root';
+import { AsyncError } from '::auth/hooks/proper-error-message';
 
 const ap = createActionPrefixer('auth');
 
@@ -39,7 +39,7 @@ const ac = {
     setAuthenticationInProgress: _(ap('set-authentication-in-progress')),
     setAuthenticationFailed: _(
       ap('set-authentication-failed'),
-      _ => (alert: ApolloError) => _(alert),
+      _ => (alert: AsyncError) => _(alert),
     ),
     setAuthenticationSucceeded: _(
       ap('set-authentication-succeeded'),
@@ -54,7 +54,7 @@ type State = {
   user: User;
   secrets: Secrets;
   storageType: StorageType;
-  alert: ApolloError;
+  alert: AsyncError;
   ongoingOperation: AsyncOperation;
 };
 
