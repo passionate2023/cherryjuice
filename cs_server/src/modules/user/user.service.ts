@@ -154,6 +154,10 @@ export class UserService {
 
   async updateUserProfile(dto: UpdateUserProfileDTO): Promise<string> {
     if (dto.input.email) {
+      if (dto.email === dto.input.email)
+        throw new UnauthorizedException(
+          'the new email is identical to current email',
+        );
       await this.createEmailChangeToken({
         userId: dto.userId,
         newEmail: dto.input.email,

@@ -22,6 +22,7 @@ import {
   CancelChangeEmailIt,
   ChangeEmailIt,
 } from './input-types/change-email.it';
+import { RemoveGmailDots } from './pipes/gmail-dots';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => UserMutation)
 export class UserMutationsResolver {
@@ -34,7 +35,10 @@ export class UserMutationsResolver {
 
   @ResolveField(() => AuthUser)
   async signIn(
-    @Args({ name: 'credentials', type: () => SignInCredentials })
+    @Args(
+      { name: 'credentials', type: () => SignInCredentials },
+      RemoveGmailDots,
+    )
     signInInput: SignInCredentials,
   ): Promise<AuthUser> {
     return this.userService.signIn(signInInput);
@@ -42,7 +46,10 @@ export class UserMutationsResolver {
 
   @ResolveField(() => AuthUser)
   async signUp(
-    @Args({ name: 'credentials', type: () => SignUpCredentials })
+    @Args(
+      { name: 'credentials', type: () => SignUpCredentials },
+      RemoveGmailDots,
+    )
     signInInput: SignUpCredentials,
   ): Promise<AuthUser> {
     return this.userService.signUp(signInInput);
@@ -60,7 +67,7 @@ export class UserMutationsResolver {
   @ResolveField(() => AuthUser)
   async updateUserProfile(
     @GetUserGql() user: User,
-    @Args({ name: 'userProfile', type: () => UpdateUserProfileIt })
+    @Args({ name: 'userProfile', type: () => UpdateUserProfileIt }, RemoveGmailDots)
     input: UpdateUserProfileIt,
   ): Promise<AuthUser> {
     if (!user) throw new UnauthorizedException();
@@ -135,7 +142,7 @@ export class UserMutationsResolver {
   @ResolveField(() => Timestamp)
   async createEmailChangeToken(
     @GetUserGql() user: User,
-    @Args({ name: 'input', type: () => ChangeEmailIt }) input: ChangeEmailIt,
+    @Args({ name: 'input', type: () => ChangeEmailIt }, RemoveGmailDots) input: ChangeEmailIt,
   ): Promise<number> {
     if (!user?.id) throw new UnauthorizedException();
     if (!user.email_verified)

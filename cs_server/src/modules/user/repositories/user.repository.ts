@@ -15,6 +15,7 @@ import {
   EmailChangeTp,
   VerifyEmailTp,
 } from '../interfaces/jwt-payload.interface';
+import { removeDots } from '../pipes/gmail-dots';
 
 export type UserExistsDTO = { email: string };
 export type CreatePasswordResetTokenDTO = { email: string; username: string };
@@ -115,6 +116,7 @@ class UserRepository extends Repository<User> {
       email_verified,
     }: OauthJson,
   ): Promise<User> {
+    email = removeDots(email)
     const username = /(^.*)@/.exec(email)[1];
     const user = new User({
       username,
