@@ -1,7 +1,8 @@
+export type ValidatedInputState = {value: string; valid: boolean}
 type State = {
   firstName: string;
   lastName: string;
-  email: string;
+  email: ValidatedInputState;
   username: string;
   newPassword?: string;
   newPasswordConfirmation?: string;
@@ -33,7 +34,7 @@ const actionCreators = (() => {
       state.dispatch({ type: actions.setNewPasswordConfirmation, value }),
     setUserName: (value: string) =>
       state.dispatch({ type: actions.setUserName, value }),
-    setEmail: (value: string) =>
+    setEmail: (value: ValidatedInputState) =>
       state.dispatch({ type: actions.setEmail, value }),
     reset(value: Omit<State, 'newPassword' | 'newPasswordConfirmation'>) {
       state.dispatch({ type: actions.reset, value });

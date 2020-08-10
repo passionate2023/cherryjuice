@@ -1,4 +1,4 @@
-import { Args, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { AuthUser } from './entities/auth.user';
 import { UserQuery } from './entities/user.mutation.entity';
@@ -7,6 +7,16 @@ import { User } from './entities/user.entity';
 import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from './guards/graphql.guard';
 import { Timestamp } from '../document/helpers/graphql-types/timestamp';
+import { UserToken } from './entities/user-token.entity';
+
+@Resolver(() => User)
+export class UserResolver {
+  constructor(private userService: UserService) {}
+  @ResolveField(() => [UserToken], { nullable: 'items' })
+  async tokens(@Parent() user: User): Promise<UserToken[]> {
+    return await this.userService.getTokens(user.id);
+  }
+}
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => UserQuery)

@@ -15,8 +15,7 @@ import {
 } from '::shared-components/form/validated-text-input';
 import { patterns } from '::auth/helpers/form-validation';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
-import { VerifyEmail } from '::app/menus/settings/screens/account/components/components/components/verify-email';
-import { Icons } from '::shared-components/icon/helpers/icons';
+import { Email } from '::app/menus/settings/screens/account/components/email/email';
 
 const mapState = (state: Store) => ({
   token: state.auth?.token,
@@ -26,8 +25,8 @@ const mapState = (state: Store) => ({
     email: state.auth.user.email,
     username: state.auth.user.username,
   },
-  emailVerification: state.auth.emailVerification,
   emailVerified: state.auth.user?.email_verified,
+  tokens: state.auth.user?.tokens,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -39,15 +38,21 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
   currentSettings,
   token,
   emailVerified,
-  emailVerification,
+  tokens,
 }) => {
-  const [state, dispatch] = useReducer(userSettingsReducer, currentSettings);
+  const [state, dispatch] = useReducer(userSettingsReducer, {
+    ...currentSettings,
+    email: { value: currentSettings.email, valid: true },
+  });
   useEffect(() => {
     userSettingsActionCreators.__setDispatch(dispatch);
   }, []);
 
   useEffect(() => {
-    userSettingsActionCreators.reset(currentSettings);
+    userSettingsActionCreators.reset({
+      ...currentSettings,
+      email: { value: currentSettings.email, valid: true },
+    });
   }, [token]);
   const idPrefix = 'sign-up';
   const personalInformation: ValidatedTextInputProps[] = [
@@ -84,12 +89,6 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
       value: state.username,
       onChange: userSettingsActionCreators.setUserName,
     },
-    // {
-    //   label: 'email',
-    //   value: state.email,
-    //   type: 'component',
-    //   component: <div>update email</div>,
-    // },
   ];
   const changePassword: ValidatedTextInputProps[] = [
     {
@@ -117,32 +116,29 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
       onChange: userSettingsActionCreators.setNewPasswordConfirmation,
     },
   ];
-  const email: ValidatedTextInputProps[] = [
-    {
-      label: 'email',
-      icon: [Icons.material.email],
-      type: 'email',
-      required: true,
-      variableName: 'email',
-      inputRef: createRef(),
-      idPrefix,
-      value: state.email || '',
-      onChange: userSettingsActionCreators.setEmail,
-    },
-  ];
+
   useEffect(() => {
     const changes: Omit<UpdateUserProfileIt, 'currentPassword'> = {};
     let validity = true;
     const validate = ({ variableName, inputRef }: ValidatedTextInputProps) => {
-      const localValue = state[variableName];
-      // @ts-ignore
-      validity = validity && inputRef?.current?.checkValidity();
+      let localValue,
+        validity = true;
+      if (typeof state[variableName] === 'object') {
+        localValue = state[variableName].value;
+        validity = validity && state[variableName].valid;
+      } else {
+        localValue = state[variableName];
+        // @ts-ignore
+        validity = validity && inputRef?.current?.checkValidity();
+      }
       if (validity && localValue !== currentSettings[variableName]) {
         changes[variableName] = localValue;
       }
     };
     personalInformation.forEach(validate);
-    email.forEach(validate);
+
+    // @ts-ignore
+    [{ variableName: 'email' }].forEach(validate);
     if (
       state.newPassword &&
       state.newPassword === state.newPasswordConfirmation
@@ -178,23 +174,12 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
             ))}
           </div>
         </div>
-
-        <div className={modUserProfile.userProfile__group}>
-          <span className={modUserProfile.userProfile__group__name}>email</span>
-          <div className={modUserProfile.userProfile__group__elements}>
-            {email.map(po => (
-              <ValidatedTextInput key={po.label} {...po} />
-            ))}
-            {emailVerified ? (
-              <></>
-            ) : (
-              <VerifyEmail
-                emailVerification={emailVerification}
-                email={currentSettings.email}
-              />
-            )}
-          </div>
-        </div>
+        <Email
+          currentEmail={currentSettings.email}
+          email={state.email}
+          emailVerified={emailVerified}
+          tokens={tokens}
+        />
         <div className={modUserProfile.userProfile__group}>
           <span className={modUserProfile.userProfile__group__name}>
             password

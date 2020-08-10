@@ -11,6 +11,14 @@ const FRAGMENT_USER = {
       id
       picture
       hasPassword
+      tokens {
+        type
+        id
+        meta {
+          currentEmail
+          newEmail
+        }
+      }
     }
   `,
 };

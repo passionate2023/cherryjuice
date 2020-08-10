@@ -142,11 +142,14 @@ type User {
     id: String!
     lastName: String!
     picture: String
+    tokens: [UserToken]!
     username: String!
 }
 
 type UserMutation {
+    cancelEmailChangeToken(input: CancelChangeEmailIt!): Timestamp!
     changeEmail(input: ConfirmEmailChangeIt!): Timestamp!
+    createEmailChangeToken(input: ChangeEmailIt!): Timestamp!
     createEmailVerificationToken: Timestamp!
     createPasswordResetToken(email: String!, username: String!): Timestamp!
     deleteAccount(currentPassword: String!): String!
@@ -162,6 +165,17 @@ type UserQuery {
     refreshToken: AuthUser!
     userExists(email: String!): String
     verifyTokenValidity(token: String!): Timestamp!
+}
+
+type UserToken {
+    id: String!
+    meta: UserTokenMeta
+    type: UserTokenType!
+}
+
+type UserTokenMeta {
+    currentEmail: String
+    newEmail: String
 }
 
 enum AccessLevel {
@@ -236,6 +250,20 @@ enum TimeRange {
     PastMonth
     PastWeek
     PastYear
+}
+
+enum UserTokenType {
+    EMAIL_CHANGE
+    EMAIL_VERIFICATION
+    PASSWORD_RESET
+}
+
+input CancelChangeEmailIt {
+    tokenId: String!
+}
+
+input ChangeEmailIt {
+    email: String!
 }
 
 input ConfirmEmailChangeIt {
@@ -353,9 +381,9 @@ input TimeFilter {
 
 input UpdateUserProfileIt {
     currentPassword: String!
+    email: String
     firstName: String
     lastName: String
-    newEmail: String
     newPassword: String
     username: String
 }

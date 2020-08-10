@@ -13,9 +13,14 @@ type CreateTokenDTO = {
   meta?: UserTokenMeta;
 };
 
+export type GetTokenDTO = {
+  id: string;
+  userId: string;
+};
+
 @EntityRepository(UserToken)
 export class UserTokenRepository extends Repository<UserToken> {
-  private async _getToken({ id, userId }: PasswordResetTp): Promise<UserToken> {
+  private async _getToken({ id, userId }: GetTokenDTO): Promise<UserToken> {
     const token = await this.findOne({ where: { id, userId } });
     if (!token) throw new NotFoundException('invalid token');
     return token;
@@ -41,12 +46,16 @@ export class UserTokenRepository extends Repository<UserToken> {
     await this._getToken(dto);
   }
 
-  async deleteToken(dto: PasswordResetTp): Promise<void> {
+  async deleteToken(dto: GetTokenDTO): Promise<void> {
     const token = await this._getToken(dto);
     await this.remove(token);
   }
 
   async deleteExpiredTokens(): Promise<void> {
     throw new Error('not implemented');
+  }
+
+  async getTokens(userId: string): Promise<UserToken[]> {
+    return await this.find({ where: { userId } });
   }
 }

@@ -9,10 +9,39 @@ import { ApolloClient } from 'apollo-client';
 import { FetchPolicy } from 'apollo-client/core/watchQueryOptions';
 import { GqlDataPath } from '::types/misc';
 
+export type GraphqlArgsPipe<T, U> = (
+  variables?: T,
+) => GraphqlMutationArgs<T, U> | GraphqlQueryArgs<T, U>;
+
+export type GraphqlMutationArgs<T, U> = {
+  path: GqlDataPath<U>;
+  query: DocumentNode;
+  variables: T;
+};
+export type GraphqlQueryArgs<T, U> = {
+  path: GqlDataPath<U>;
+  query: DocumentNode;
+  variables: T;
+  fetchPolicy: FetchPolicy;
+};
+export type GraphqlMutation = <T, U>(
+  args: GraphqlMutationArgs<T, U>,
+) => Promise<U>;
+export type GraphqlQuery = <T, U>(args: GraphqlQueryArgs<T, U>) => Promise<U>;
+
 const apolloCache = (() => {
   const state: CacheState = {
     ...cloneObj<CacheState>(cacheInitialState),
   };
+  const query: GraphqlQuery = args =>
+    state.client.query(args).then(({ data }) => args.path(data));
+  const mutate: GraphqlMutation = args =>
+    state.client
+      .mutate({
+        variables: args.variables,
+        mutation: args.query,
+      })
+      .then(({ data }) => args.path(data));
   return {
     __state__: state,
     client: {
@@ -21,24 +50,8 @@ const apolloCache = (() => {
         state.client = client;
         state.cache = client.cache;
       },
-      query: <T, U>(args: {
-        path: GqlDataPath<U>;
-        query: DocumentNode;
-        variables?: T;
-        fetchPolicy: FetchPolicy;
-      }): Promise<U> =>
-        state.client.query(args).then(({ data }) => args.path(data)),
-      mutate: <T, U>(args: {
-        path: (data: any) => U | undefined;
-        query: DocumentNode;
-        variables: T;
-      }): Promise<U> =>
-        state.client
-          .mutate({
-            variables: args.variables,
-            mutation: args.query,
-          })
-          .then(({ data }) => args.path(data)),
+      query,
+      mutate,
     },
     node: nodeHelpers(state),
     image: imageHelpers(state),

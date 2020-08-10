@@ -18,6 +18,10 @@ import { ResetPasswordIt } from './input-types/reset-password.it';
 import { Timestamp } from '../document/helpers/graphql-types/timestamp';
 import { VerifyEmailIt } from './input-types/verify-email.it';
 import { ConfirmEmailChangeIt } from './input-types/confirm-email-change.it';
+import {
+  CancelChangeEmailIt,
+  ChangeEmailIt,
+} from './input-types/change-email.it';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => UserMutation)
 export class UserMutationsResolver {
@@ -109,6 +113,38 @@ export class UserMutationsResolver {
     if (user.email_verified)
       throw new ForbiddenException('email already verified');
     await this.userService.createEmailVerificationToken(user);
+    return Date.now();
+  }
+
+  @ResolveField(() => Timestamp)
+  async cancelEmailChangeToken(
+    @GetUserGql() user: User,
+    @Args({ name: 'input', type: () => CancelChangeEmailIt })
+    input: CancelChangeEmailIt,
+  ): Promise<number> {
+    if (!user?.id) throw new UnauthorizedException();
+    if (!user.email_verified)
+      throw new ForbiddenException('email not verified');
+    await this.userService.cancelEmailChangeToken({
+      userId: user.id,
+      id: input.tokenId,
+    });
+    return Date.now();
+  }
+
+  @ResolveField(() => Timestamp)
+  async createEmailChangeToken(
+    @GetUserGql() user: User,
+    @Args({ name: 'input', type: () => ChangeEmailIt }) input: ChangeEmailIt,
+  ): Promise<number> {
+    if (!user?.id) throw new UnauthorizedException();
+    if (!user.email_verified)
+      throw new ForbiddenException('email not verified');
+    await this.userService.createEmailChangeToken({
+      userId: user.id,
+      currentEmail: user.email,
+      newEmail: input.email,
+    });
     return Date.now();
   }
 

@@ -5,22 +5,21 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 import { CREATE_EMAIL_VERIFICATION_TOKEN } from '::graphql/mutations/user/create-email-verification-token';
 import { ac } from '::root/store/store';
 import { AlertType } from '::types/react';
-import { EmailVerification } from '::root/store/ducks/auth';
 import { properErrorMessage } from '::auth/hooks/proper-error-message';
 import { AsyncOperation } from '::root/store/ducks/document';
 
 type Props = {
-  emailVerification: EmailVerification;
+  emailVerificationPending: boolean;
   email: string;
 };
 
-const VerifyEmail: React.FC<Props> = ({ emailVerification, email }) => {
+const VerifyEmail: React.FC<Props> = ({ emailVerificationPending, email }) => {
   const [asyncOperation, setAsyncOperation] = useState<AsyncOperation>('idle');
   const verifyEmail = useCallback(async () => {
     apolloCache.client
       .mutate(CREATE_EMAIL_VERIFICATION_TOKEN())
       .then(() => {
-        ac.auth.setEmailVerificationPending();
+        ac.auth.refreshToken();
         ac.dialogs.setSnackbar({
           message: 'email verification sent to ' + email,
         });
@@ -41,7 +40,7 @@ const VerifyEmail: React.FC<Props> = ({ emailVerification, email }) => {
     <ButtonSquare
       disabled={asyncOperation !== 'idle'}
       text={
-        emailVerification === 'idle'
+        emailVerificationPending === false
           ? 'verify email'
           : 'resend verification email'
       }

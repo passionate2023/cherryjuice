@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { UnauthorizedException } from '@nestjs/common';
 import { AfterLoad } from 'typeorm/index';
+import { UserToken } from './user-token.entity';
 
 type UserConstructorProps = {
   username: string;
@@ -79,6 +80,9 @@ class User extends BaseEntity {
 
   @Field(() => Boolean)
   hasPassword = false;
+
+  @Field(() => [UserToken], { nullable: 'items',  })
+  tokens: UserToken[];
 
   async validatePassword(passwordToValidate: string): Promise<void> {
     const hash = await bcrypt.hash(passwordToValidate, this.salt);

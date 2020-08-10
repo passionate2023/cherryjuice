@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm/index';
 import { SignUpCredentials } from '../dto/sign-up-credentials.dto';
 import { User } from '../entities/user.entity';
 import {

@@ -22,6 +22,7 @@ export type ValidatedTextInputProps = {
   setValid?: (boolean) => void;
   defaultValue?: string;
   disabled?: boolean;
+  sendValidStatusWithValue?: boolean;
 };
 
 const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
@@ -43,6 +44,7 @@ const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
   setValid,
   defaultValue,
   disabled,
+  sendValidStatusWithValue,
 }) => {
   const { onInput, onInvalid } = useCustomValidityMessage(patterns, setValid);
   const id = `${idPrefix}-${label.replace(' ', '-')}`;
@@ -71,7 +73,15 @@ const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
         aria-label={ariaLabel || label}
         disabled={disabled}
         id={id}
-        {...(onChange && { value, onChange: e => onChange(e.target.value) })}
+        {...(onChange && {
+          value,
+          onChange: e =>
+            onChange(
+              sendValidStatusWithValue
+                ? { value: e.target.value, valid: e.target.checkValidity() }
+                : e.target.value,
+            ),
+        })}
         onInvalid={onInvalid}
         onInput={onInput}
         defaultValue={defaultValue}

@@ -24,8 +24,15 @@ import {
   VerifyEmailTp,
 } from './interfaces/jwt-payload.interface';
 import { Secrets } from './entities/secrets';
-import { UserTokenRepository } from './repositories/user-token.repository';
-import { UserToken, UserTokenType } from './entities/user-token.entity';
+import {
+  GetTokenDTO,
+  UserTokenRepository,
+} from './repositories/user-token.repository';
+import {
+  UserToken,
+  UserTokenMeta,
+  UserTokenType,
+} from './entities/user-token.entity';
 import { ResetPasswordIt } from './input-types/reset-password.it';
 import { VerifyEmailIt } from './input-types/verify-email.it';
 import { EmailService } from '../email/email.service';
@@ -242,7 +249,7 @@ export class UserService {
     const userToken = await this.userTokenRepository.createToken({
       userId,
       type: UserTokenType.EMAIL_CHANGE,
-      meta: { newEmail, currentEmail },
+      meta: new UserTokenMeta({ emailChange: { newEmail, currentEmail } }),
     });
     const token = this.jwtService.sign(
       createJWTPayload.emailChange(userId, userToken),
@@ -265,5 +272,13 @@ export class UserService {
     await this.userTokenRepository.verifyToken(tokenPayload);
     await this.userRepository.changeEmail(tokenPayload);
     await this.userTokenRepository.deleteToken(tokenPayload);
+  }
+
+  async getTokens(userId: string): Promise<UserToken[]> {
+    return this.userTokenRepository.getTokens(userId);
+  }
+
+  async cancelEmailChangeToken(dto: GetTokenDTO): Promise<void> {
+    await this.userTokenRepository.deleteToken(dto);
   }
 }
