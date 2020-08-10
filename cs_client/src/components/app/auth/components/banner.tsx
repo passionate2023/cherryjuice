@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { modAuthBanner } from '::sass-modules/index';
+import { modAuthBanner } from '::sass-modules';
 import {
   AsyncError,
   properErrorMessage,
-} from '::auth/hooks/proper-error-message';
+} from '::app/auth/hooks/proper-error-message';
 import { useEffect, useRef, useState } from 'react';
 type Timer = ReturnType<typeof window.setTimeout>;
 type BannerProps = {

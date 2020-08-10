@@ -12,7 +12,7 @@ export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
 
   async sendPasswordReset({ email, token }: SendEmailDTO): Promise<void> {
-    const url = `${process.env.ASSETS_URL}/auth/reset-password#token=${token}`;
+    const url = `${process.env.ASSETS_URL}/#${token}`;
     await this.mailerService.sendMail({
       to: email,
       subject: 'Password reset request',
@@ -26,7 +26,7 @@ export class EmailService {
   }
 
   async sendEmailVerification({ email, token }: SendEmailDTO): Promise<void> {
-    const url = `${process.env.ASSETS_URL}/verify-email#token=${token}`;
+    const url = `${process.env.ASSETS_URL}/#${token}`;
     await this.mailerService.sendMail({
       to: email,
       subject: 'Confirm your email',
@@ -45,7 +45,7 @@ export class EmailService {
   }: SendEmailDTO & {
     tokenMeta: UserTokenMeta;
   }): Promise<void> {
-    const url = `${process.env.ASSETS_URL}/change-email#token=${token}`;
+    const url = `${process.env.ASSETS_URL}/#${token}`;
     await this.mailerService.sendMail({
       to: email,
       subject: 'Change your email address',

@@ -3,7 +3,7 @@ import { ButtonSquare } from '::shared-components/buttons/button-square/button-s
 import { CREATE_EMAIL_VERIFICATION_TOKEN } from '::graphql/mutations/user/create-email-verification-token';
 import { ac } from '::root/store/store';
 import { AlertType } from '::types/react';
-import { properErrorMessage } from '::auth/hooks/proper-error-message';
+import { properErrorMessage } from '::app/auth/hooks/proper-error-message';
 import { useMutation } from '::hooks/graphql/use-mutation';
 
 type Props = {

@@ -10,11 +10,11 @@ import {
   ValidatedTextInputProps,
 } from '::shared-components/form/validated-text-input';
 import { FormSeparator } from '::shared-components/form/form-separator';
-import { patterns } from '::auth/helpers/form-validation';
+import { patterns } from '::app/auth/helpers/form-validation';
 import { SignInCredentials } from '::types/graphql/generated';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { Link } from 'react-router-dom';
-import { openConsentWindow } from '::auth/helpers/oauth';
+import { openConsentWindow } from '::app/auth/helpers/oauth';
 import { useDefaultValues } from '::hooks/use-default-form-values';
 import { ac } from '::root/store/store';
 import { connect, ConnectedProps } from 'react-redux';
@@ -51,7 +51,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading,  }) => {
+const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading }) => {
   const formRef = useRef<HTMLFormElement>();
   const staySignedRef = useRef<HTMLInputElement>();
   const login = (e?: any) => {

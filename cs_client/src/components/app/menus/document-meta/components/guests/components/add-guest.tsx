@@ -3,7 +3,7 @@ import { useCallback, useRef, useState } from 'react';
 import { modGuests, modNodeMeta, modTextInput } from '::sass-modules';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { patterns } from '::auth/helpers/form-validation';
+import { patterns } from '::app/auth/helpers/form-validation';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { USER_EXISTS } from '::graphql/queries/user-exists';
 import { documentMetaActionCreators } from '::app/menus/document-meta/reducer/reducer';

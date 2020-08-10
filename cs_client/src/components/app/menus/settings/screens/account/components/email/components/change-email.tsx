@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
 import { ac } from '::root/store/store';
 import { AlertType } from '::types/react';
-import { properErrorMessage } from '::auth/hooks/proper-error-message';
+import { properErrorMessage } from '::app/auth/hooks/proper-error-message';
 import { CREATE_EMAIL_CHANGE_TOKEN } from '::graphql/mutations/user/create-email-change-token';
 import { UserToken } from '::types/graphql/generated';
 import { useMutation } from '::hooks/graphql/use-mutation';

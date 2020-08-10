@@ -7,9 +7,9 @@ import {
   ValidatedTextInputProps,
 } from '::shared-components/form/validated-text-input';
 import { LinearProgress } from '::shared-components/linear-progress';
-import { patterns } from '::auth/helpers/form-validation';
+import { patterns } from '::app/auth/helpers/form-validation';
 import { apolloCache } from '::graphql/cache/apollo-cache';
-import { useStatefulValidatedInput } from '::auth/hooks/stateful-validated-input';
+import { useStatefulValidatedInput } from '::app/auth/hooks/stateful-validated-input';
 import { RESET_PASSWORD } from '::graphql/mutations/user/reset-password';
 import { router } from '::root/router/router';
 import { VERIFY_TOKEN } from '::graphql/mutations/user/verify-token';
@@ -42,7 +42,7 @@ const inputs: ValidatedTextInputProps[] = [
 ];
 
 export const getToken = () => {
-  const token = /token=([A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*)/.exec(
+  const token = /#([A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*)/.exec(
     router.get.location.hash,
   );
   location.hash = '';

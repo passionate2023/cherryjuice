@@ -8,10 +8,10 @@ import {
 } from '::shared-components/form/validated-text-input';
 import { createRef, useRef, useState } from 'react';
 import { LinearProgress } from '::shared-components/linear-progress';
-import { patterns } from '::auth/helpers/form-validation';
+import { patterns } from '::app/auth/helpers/form-validation';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { CREATE_PASSWORD_RESET_TOKEN } from '::graphql/mutations/user/create-password-reset-token';
-import { useStatefulValidatedInput } from '::auth/hooks/stateful-validated-input';
+import { useStatefulValidatedInput } from '::app/auth/hooks/stateful-validated-input';
 import { ReturnToLoginPage } from '::app/auth/components/signup-form';
 import { ac } from '::root/store/store';
 
@@ -59,7 +59,9 @@ const ForgotPassword: React.FC<Props> = () => {
           )
           .then(tokenTimestamp => {
             if (tokenTimestamp) {
-              ac.auth.setAuthenticationFailed({ localMessage: `a verification email was sent to ${email.value}` });
+              ac.auth.setAuthenticationFailed({
+                localMessage: `a verification email was sent to ${email.value}`,
+              });
               setTimestamp(tokenTimestamp);
             }
           })

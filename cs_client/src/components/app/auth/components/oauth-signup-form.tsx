@@ -7,7 +7,7 @@ import {
   ValidatedTextInput,
   ValidatedTextInputProps,
 } from '::shared-components/form/validated-text-input';
-import { patterns } from '::auth/helpers/form-validation';
+import { patterns } from '::app/auth/helpers/form-validation';
 import { createRef, useEffect, useRef, useState } from 'react';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { connect, ConnectedProps } from 'react-redux';
@@ -104,27 +104,27 @@ const OauthSignUpForm: React.FC<Props & PropsFromRedux> = ({
   const disableSignupButton =
     loading || !passwordValid || password !== passwordConfirmation;
   return (
-      <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
-        <LinearProgress loading={loading} />
-        <form className={modLogin.login__form} ref={formRef}>
-          <span className={modLogin.login__form__createAccount}>
-            One last step
-          </span>
-          {inputs.map(inputProps => (
-            <ValidatedTextInput {...inputProps} key={inputProps.label} />
-          ))}
+    <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
+      <LinearProgress loading={loading} />
+      <form className={modLogin.login__form} ref={formRef}>
+        <span className={modLogin.login__form__createAccount}>
+          One last step
+        </span>
+        {inputs.map(inputProps => (
+          <ValidatedTextInput {...inputProps} key={inputProps.label} />
+        ))}
 
-          <input
-            type={'submit'}
-            value={'Finish Sign up'}
-            className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
-            onClick={signUp}
-            disabled={disableSignupButton}
-            style={{ marginTop: 5 }}
-          />
-          <ReturnToLoginPage text={'return to'} linkText={'login page'} />
-        </form>
-      </div>
+        <input
+          type={'submit'}
+          value={'Finish Sign up'}
+          className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
+          onClick={signUp}
+          disabled={disableSignupButton}
+          style={{ marginTop: 5 }}
+        />
+        <ReturnToLoginPage text={'return to'} linkText={'login page'} />
+      </form>
+    </div>
   );
 };
 

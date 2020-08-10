@@ -8,7 +8,7 @@ import { createTimeoutHandler } from '::root/store/epics/shared/create-timeout-h
 import { createErrorHandler } from '::root/store/epics/shared/create-error-handler';
 import { AsyncOperation } from '::root/store/ducks/document';
 import { USER_MUTATION } from '::graphql/mutations';
-import { properErrorMessage } from '::auth/hooks/proper-error-message';
+import { properErrorMessage } from '::app/auth/hooks/proper-error-message';
 
 const deleteAccount = (currentPassword: string) =>
   gqlMutation({

@@ -10,7 +10,7 @@ import {
 } from '::types/graphql/generated';
 import { AsyncOperation } from '::root/store/ducks/document';
 import { rootActionCreators } from '::root/store/ducks/root';
-import { AsyncError } from '::auth/hooks/proper-error-message';
+import { AsyncError } from '::auth/../../app/auth/hooks/proper-error-message';
 
 const ap = createActionPrefixer('auth');
 

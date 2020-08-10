@@ -25,6 +25,9 @@ const router = {
     oauthSignup() {
       history.push(`/auth/signup-oauth`);
     },
+    resetPassword(token: string) {
+      history.push(`/auth/reset-password#${token}`);
+    },
   },
 };
 

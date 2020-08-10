@@ -4,7 +4,7 @@ import {
   ValidatedTextInputProps,
 } from '::shared-components/form/validated-text-input';
 import { createRef } from 'react';
-import { patterns } from '::auth/helpers/form-validation';
+import { patterns } from '::app/auth/helpers/form-validation';
 import {
   userSettingsActionCreators,
   ValidatedInputState,

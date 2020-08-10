@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modAuthScreen } from '::sass-modules';
-import { Banner } from '::auth/banner';
+import { Banner } from '::app/auth/components/banner';
 import { Route, Switch } from 'react-router';
 import { LoginForm } from '::app/auth/components/login-form';
 import { SignUpForm } from '::app/auth/components/signup-form';

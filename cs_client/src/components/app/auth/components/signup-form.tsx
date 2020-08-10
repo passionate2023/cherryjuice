@@ -7,7 +7,7 @@ import {
   ValidatedTextInput,
   ValidatedTextInputProps,
 } from '::shared-components/form/validated-text-input';
-import { patterns } from '::auth/helpers/form-validation';
+import { patterns } from '::app/auth/helpers/form-validation';
 import { createRef, useRef } from 'react';
 import { LinearProgress } from '::shared-components/linear-progress';
 import { Link } from 'react-router-dom';
@@ -25,7 +25,10 @@ export const ReturnToLoginPage: React.FC<{
     onClick={ac.root.resetState}
   >
     {text || 'already a member?'}{' '}
-    <Link to="/auth/login" className={modLogin.login__form__createAccount__icon}>
+    <Link
+      to="/auth/login"
+      className={modLogin.login__form__createAccount__icon}
+    >
       {linkText || 'log in'}
     </Link>
   </span>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useApolloClient } from '::graphql/apollo';
 import { Suspense, useEffect } from 'react';
-import { Route, Switch } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router';
 import { Provider } from 'react-redux';
 import { Void } from '::shared-components/suspense-fallback/void';
 import { App } from '::root/app';
@@ -20,10 +20,11 @@ const ApolloProvider = React.lazy(() =>
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::root/store/store';
 import { router } from '::root/router/router';
-import { VerifyEmail } from '::auth/verify-email';
-import { ChangeEmail } from '::auth/change-email';
+import { useConsumeToken } from '::root/hooks/consume-token';
 import { AuthScreen } from '::app/auth/auth-screen';
 
+const pathnameStartsWith = route =>
+  router.get.location.pathname.startsWith(route);
 const mapState = (state: Store) => ({
   token: state.auth.token,
   userId: state.auth.user?.id,
@@ -43,47 +44,50 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
   const client = useApolloClient(token, userId);
   useSetupHotKeys();
-  const { loadedEpics } = useLoadEpics();
 
   useEffect(() => {
-    const pathnameStartsWith = route =>
-      router.get.location.pathname.startsWith(route);
-    const unfinishedOauthSignup =
-      userId &&
-      hasPassword === false &&
-      ['/verify-email', '/change-email'].some(pathnameStartsWith);
+    const unfinishedOauthSignup = userId && hasPassword === false;
     if (unfinishedOauthSignup) router.goto.oauthSignup();
 
     const finishedLogin =
-      userId && ['/auth/login', '/auth/signup'].some(pathnameStartsWith);
+      userId &&
+      hasPassword &&
+      ['/auth/login', '/auth/signup', '/auth/signup-oauth'].some(
+        pathnameStartsWith,
+      );
     if (finishedLogin) router.goto.home();
   }, [userId, hasPassword]);
 
+  useConsumeToken({ userId });
   return (
     <Suspense fallback={<Void />}>
-      {client && loadedEpics && (
+      {client && (
         <ApolloProvider client={client}>
           <Switch>
             <Route path={'/auth'} component={AuthScreen} />
-            <>
-              <Route path={'/verify-email'} component={VerifyEmail} />
-              <Route path={'/change-email'} component={ChangeEmail} />
-              <Route path={'/*'} component={App} />
-            </>
+            <Route path={'(/|/document/*)'} component={App} />
+            <Route
+              render={() => <Redirect to={userId ? '/' : 'auth/login'} />}
+            />
           </Switch>
         </ApolloProvider>
       )}
     </Suspense>
   );
 };
+
 const ConnectedRoot = connector(Root);
+
 const RootWithRedux: React.FC = props => {
+  const { loadedEpics } = useLoadEpics();
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistStore(store)}>
-        <ConnectedRoot {...props} />
-      </PersistGate>
-    </Provider>
+    loadedEpics && (
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistStore(store)}>
+          <ConnectedRoot {...props} />
+        </PersistGate>
+      </Provider>
+    )
   );
 };
 export { RootWithRedux as Root };

@@ -6,11 +6,7 @@ import { SignUpCredentials } from './dto/sign-up-credentials.dto';
 import { SignInCredentials } from './dto/sign-in-credentials.dto';
 import { UpdateUserProfileIt } from './input-types/update-user-profile.it';
 import { User } from './entities/user.entity';
-import {
-  ForbiddenException,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common';
+import { ForbiddenException, UseGuards } from '@nestjs/common';
 import { GetUserGql } from './decorators/get-user.decorator';
 import { GqlAuthGuard } from './guards/graphql.guard';
 import { OauthSignUpCredentials } from './dto/oauth-sign-up-credentials.dto';
@@ -66,14 +62,13 @@ export class UserMutationsResolver {
 
   @ResolveField(() => AuthUser)
   async updateUserProfile(
-    @GetUserGql() user: User,
+    @GetUserGql({ nullable: false }) user: User,
     @Args(
       { name: 'userProfile', type: () => UpdateUserProfileIt },
       RemoveGmailDots,
     )
     input: UpdateUserProfileIt,
   ): Promise<AuthUser> {
-    if (!user) throw new UnauthorizedException();
     await this.userService.updateUserProfile({
       input,
       userId: user.id,
@@ -117,9 +112,8 @@ export class UserMutationsResolver {
 
   @ResolveField(() => Timestamp)
   async createEmailVerificationToken(
-    @GetUserGql() user: User,
+    @GetUserGql({ nullable: false }) user: User,
   ): Promise<number> {
-    if (!user?.id) throw new UnauthorizedException();
     if (user.email_verified)
       throw new ForbiddenException('email already verified');
     await this.userService.createEmailVerificationToken(user);
@@ -128,11 +122,10 @@ export class UserMutationsResolver {
 
   @ResolveField(() => Timestamp)
   async cancelEmailChangeToken(
-    @GetUserGql() user: User,
+    @GetUserGql({ nullable: false }) user: User,
     @Args({ name: 'input', type: () => CancelChangeEmailIt })
     input: CancelChangeEmailIt,
   ): Promise<number> {
-    if (!user?.id) throw new UnauthorizedException();
     if (!user.email_verified)
       throw new ForbiddenException('email not verified');
     await this.userService.cancelEmailChangeToken({
@@ -144,11 +137,10 @@ export class UserMutationsResolver {
 
   @ResolveField(() => Timestamp)
   async createEmailChangeToken(
-    @GetUserGql() user: User,
+    @GetUserGql({ nullable: false }) user: User,
     @Args({ name: 'input', type: () => ChangeEmailIt }, RemoveGmailDots)
     input: ChangeEmailIt,
   ): Promise<number> {
-    if (!user?.id) throw new UnauthorizedException();
     if (!user.email_verified)
       throw new ForbiddenException('email not verified');
     await this.userService.createEmailChangeToken({

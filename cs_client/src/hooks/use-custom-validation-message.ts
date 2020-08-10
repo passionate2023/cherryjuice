@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { TPattern } from '::auth/helpers/form-validation';
+import { TPattern } from '::auth/../components/app/auth/helpers/form-validation';
 const useCustomValidityMessage = (
   patterns: TPattern[],
   setValid?: (boolean) => void,

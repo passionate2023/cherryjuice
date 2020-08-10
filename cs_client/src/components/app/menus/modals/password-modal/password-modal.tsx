@@ -11,7 +11,7 @@ import {
 } from '::shared-components/form/validated-text-input';
 import { AlertType } from '::types/react';
 import { createRef, useState } from 'react';
-import { patterns } from '::auth/helpers/form-validation';
+import { patterns } from '::app/auth/helpers/form-validation';
 
 const mapState = (state: Store) => ({
   show: Boolean(state.dialogs.showPasswordModal),

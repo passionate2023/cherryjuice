@@ -8,7 +8,7 @@ import { createTimeoutHandler } from '::root/store/epics/shared/create-timeout-h
 import { createErrorHandler } from '::root/store/epics/shared/create-error-handler';
 import { AsyncOperation } from '::root/store/ducks/document';
 import { UPDATE_USER_PROFILE } from '::graphql/mutations/user/update-user-information';
-import { properErrorMessage } from '::auth/hooks/proper-error-message';
+import { properErrorMessage } from '::app/auth/hooks/proper-error-message';
 
 const savingState: AsyncOperation[] = ['idle', 'pending'];
 const saveSettingsEpic = (action$: Observable<Actions>) => {
