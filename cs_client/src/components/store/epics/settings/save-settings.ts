@@ -1,4 +1,4 @@
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { store, ac } from '::root/store/store';
@@ -20,46 +20,45 @@ const saveSettingsEpic = (action$: Observable<Actions>) => {
         savingState.includes(store.getState().settings.saveOperation),
     ),
     switchMap(() => {
-      if (store.getState().settings.screenHasChanges) {
-        const showConfirmation = of(ac.__.dialogs.showPasswordModal());
-        const updateUserProfile = action$.pipe(
-          ofType([ac.__.dialogs.confirmPasswordModal]),
-          switchMap(action => {
-            const { userProfileChanges } = store.getState().settings;
-            userProfileChanges.currentPassword = action.payload;
-            const loading = of(ac.__.settings.saveStarted());
-            const fulfilled = of(ac.__.settings.saveFulfilled());
-            const snackbar = of(
-              ac.__.dialogs.setSnackbar({ message: 'settings saved' }),
-            );
-            return concat(
-              loading,
-              gqlMutation(
-                UPDATE_USER_PROFILE({ userProfile: userProfileChanges }),
-              ).pipe(map(ac.__.auth.setAuthenticationSucceeded)),
-              fulfilled,
-              snackbar,
-            ).pipe(
-              createTimeoutHandler({
-                alertDetails: {
-                  title: 'Saving is taking longer then expected',
-                  description: 'try refreshing the page',
-                },
-                due: 30000,
-              }),
-              createErrorHandler({
-                alertDetails: {
-                  title: 'Could not save',
-                  descriptionFactory: properErrorMessage,
-                },
-                actionCreators: [ac.settings.saveFailed],
-              }),
-            );
-          }),
-        );
+      const showConfirmation = of(ac.__.dialogs.showPasswordModal());
+      const updateUserProfile = action$.pipe(
+        ofType([ac.__.dialogs.confirmPasswordModal]),
+        take(1),
+        switchMap(action => {
+          const { userProfileChanges } = store.getState().settings;
+          userProfileChanges.currentPassword = action.payload;
+          const loading = of(ac.__.settings.saveStarted());
+          const fulfilled = of(ac.__.settings.saveFulfilled());
+          const snackbar = of(
+            ac.__.dialogs.setSnackbar({ message: 'settings saved' }),
+          );
+          return concat(
+            loading,
+            gqlMutation(
+              UPDATE_USER_PROFILE({ userProfile: userProfileChanges }),
+            ).pipe(map(ac.__.auth.setAuthenticationSucceeded)),
+            fulfilled,
+            snackbar,
+          ).pipe(
+            createTimeoutHandler({
+              alertDetails: {
+                title: 'Saving is taking longer then expected',
+                description: 'try refreshing the page',
+              },
+              due: 30000,
+            }),
+            createErrorHandler({
+              alertDetails: {
+                title: 'Could not save',
+                descriptionFactory: properErrorMessage,
+              },
+              actionCreators: [ac.settings.saveFailed],
+            }),
+          );
+        }),
+      );
 
-        return concat(showConfirmation, updateUserProfile);
-      }
+      return concat(showConfirmation, updateUserProfile);
     }),
   );
 };
