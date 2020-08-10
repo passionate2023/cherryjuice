@@ -1,0 +1,14 @@
+import { useEffect } from 'react';
+import { ac } from '::store/store';
+
+const useSetCurrentNode = (node_id, nodes) => {
+  useEffect(() => {
+    const node = nodes?.get(node_id);
+    if (node) {
+      const { id } = node;
+      ac.document.selectNode({ id, node_id });
+    }
+  }, [node_id, nodes]);
+};
+
+export { useSetCurrentNode };

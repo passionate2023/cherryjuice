@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { apolloCache } from '::graphql/cache/apollo-cache';
-import { getToken } from '::app/auth/components/reset-password';
+import { getToken } from '::root/components/auth/components/reset-password';
 import { VERIFY_EMAIL } from '::graphql/mutations/user/verify-email';
-import { ac } from '::root/store/store';
+import { ac } from '::store/store';
 import { AlertType } from '::types/react';
-import { properErrorMessage } from '::auth/../app/auth/hooks/proper-error-message';
+import { properErrorMessage } from '::root/components/auth/hooks/proper-error-message';
 import { router } from '::root/router/router';
 import { UserTokenType } from '::types/graphql/generated';
 import { CHANGE_EMAIL } from '::graphql/mutations/user/change-email';

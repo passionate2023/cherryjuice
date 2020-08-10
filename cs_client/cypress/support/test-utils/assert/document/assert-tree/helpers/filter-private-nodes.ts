@@ -3,7 +3,7 @@ import {
   Privacy,
 } from '../../../../../../../types/graphql/generated';
 import { NodeAst } from '../../../../../../fixtures/node/generate-node';
-import { privacyIsBelow } from '../../../../../../../src/components/app/menus/document-meta/components/select-privacy/select-privacy';
+import { privacyIsBelow } from '../../../../../../../src/components/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
 import { DocumentAst } from '../../../../../../fixtures/document/generate-document';
 import { TreeAst } from '../../../../../../fixtures/tree/generate-tree';
 

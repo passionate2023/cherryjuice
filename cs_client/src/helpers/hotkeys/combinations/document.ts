@@ -1,5 +1,5 @@
 import { HotKey } from '../helpers/hotkeys-manager';
-import { ac, store } from '::root/store/store';
+import { ac, store } from '::store/store';
 
 const hotKeys: HotKey[] = [
   {

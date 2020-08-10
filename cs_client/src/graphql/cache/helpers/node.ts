@@ -2,7 +2,7 @@ import { NodeCached } from '::types/graphql-adapters';
 import { NodeMetaIt } from '::types/graphql/generated';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { CacheState } from '::graphql/cache/initial-state';
-import { ac } from '::root/store/store';
+import { ac } from '::store/store';
 import { NodeIdDocumentId } from './image';
 
 type MutateNodeProps = {

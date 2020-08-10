@@ -1,0 +1,104 @@
+import {
+  filter,
+  ignoreElements,
+  switchMap,
+  switchMapTo,
+  tap,
+} from 'rxjs/operators';
+import { concat, defer, from, Observable, of } from 'rxjs';
+import { ofType } from 'deox';
+import { Actions } from '../actions.types';
+import { saveDocument } from '::root/components/app/components/editor/document/hooks/save-document/save-document';
+import { swapPersistedTreeStateDocumentId } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/persisted-tree-state/helpers';
+import { SnackbarMessages } from '::root/components/shared-components/snackbar/snackbar-messages';
+import { SaveOperationState } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-deleted-nodes';
+import { createErrorHandler } from './shared/create-error-handler';
+import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
+import { ac, store } from '../store';
+import { createTimeoutHandler } from './shared/create-timeout-handler';
+import { apolloCache } from '::graphql/cache/apollo-cache';
+
+const updateCachedHtmlAndImagesPromisified = () =>
+  new Promise(res => {
+    updateCachedHtmlAndImages();
+    res();
+  });
+
+const postSave = (state: SaveOperationState) => {
+  ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
+  const createdDocuments = Object.values(state.swappedDocumentIds);
+  if (createdDocuments.length)
+    swapPersistedTreeStateDocumentId(state.swappedDocumentIds);
+
+  if (location.pathname.startsWith('/document/new-document')) {
+    const newDocumentId = createdDocuments.pop();
+    return ac.__.document.setDocumentId(newDocumentId);
+  } else {
+    return ac.__.document.fetchNodes();
+  }
+};
+
+const saveEpic = (action$: Observable<Actions>) => {
+  return action$.pipe(
+    ofType([ac.__.document.save]),
+    filter(() => store.getState().document.saveInProgress === 'idle'),
+    switchMap(() => {
+      if (!store.getState().document.cacheTimeStamp) {
+        return of(ac.__.document.saveFulfilled());
+      } else {
+        const state: SaveOperationState = {
+          newFatherIds: {},
+          swappedDocumentIds: {},
+          swappedNodeIds: {},
+          swappedImageIds: {},
+          danglingNodes: {},
+          deletedNodes: {},
+        };
+
+        const updateCache = defer(() =>
+          of(updateCachedHtmlAndImagesPromisified()),
+        ).pipe(ignoreElements());
+        const save = defer(() =>
+          from(saveDocument(state)).pipe(
+            tap(async () => {
+              await apolloCache.client.resetCache();
+            }),
+            ignoreElements(),
+          ),
+        );
+        const sp = of(ac.__.document.savePending());
+        const sf = of(ac.__.document.saveFulfilled());
+        const sip = of(ac.__.document.saveInProgress());
+        const ps = defer(() => of(postSave(state)));
+        return concat(
+          sp,
+          updateCache,
+          sip,
+          save,
+          ps,
+          action$.pipe(
+            ofType([ac.__.document.fetchNodesFulfilled]),
+            switchMapTo(sf),
+          ),
+        ).pipe(
+          createTimeoutHandler({
+            alertDetails: {
+              title: 'Saving is taking longer then expected',
+              description: 'try refreshing the page',
+            },
+            due: 60000,
+          }),
+          createErrorHandler({
+            alertDetails: {
+              title: 'Could not save',
+              description: 'Check your network connection',
+            },
+            actionCreators: [ac.__.document.saveFailed],
+          }),
+        );
+      }
+    }),
+  );
+};
+
+export { saveEpic };

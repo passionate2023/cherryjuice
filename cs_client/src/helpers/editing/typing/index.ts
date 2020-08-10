@@ -1,7 +1,7 @@
 import { handleIndentation } from '::helpers/editing/typing/indentation';
 import { handleBackSpace } from './backspace';
 import { AlertType } from '::types/react';
-import { ac } from '::root/store/store';
+import { ac } from '::store/store';
 
 const setupTabAndBackspaceHandler = () => {
   const editor: HTMLDivElement = document.querySelector('#rich-text');

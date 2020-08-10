@@ -1,5 +1,5 @@
 import { CacheState } from '::graphql/cache/initial-state';
-import { documentActionCreators } from '::root/store/ducks/document';
+import { documentActionCreators } from '::store/ducks/document';
 
 type UnsavedImage = {
   base64?: string;

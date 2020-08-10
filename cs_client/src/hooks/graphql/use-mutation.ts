@@ -1,6 +1,6 @@
 import { apolloCache, GraphqlArgsPipe } from '::graphql/cache/apollo-cache';
 import { ApolloError } from 'apollo-client';
-import { AsyncOperation } from '::root/store/ducks/document';
+import { AsyncOperation } from '::store/ducks/document';
 import { useCallback, useState } from 'react';
 
 type UseMutation = <T, U>(args: {

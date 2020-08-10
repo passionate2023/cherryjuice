@@ -15,9 +15,9 @@ import {
 } from '::helpers/editing/execK/steps/pipe3';
 import { getDDOE } from '::helpers/editing/execK/steps/pipe1/ddoes';
 import { AlertType } from '::types/react';
-import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
+import { documentActionCreators } from '::root/components/app/components/editor/document/reducer/action-creators';
 import { isValidUrl, isNotPngBase64 } from '::helpers/misc';
-import { ac } from '::root/store/store';
+import { ac } from '::store/store';
 
 const blobToBase64 = (file: Blob): Promise<string> =>
   new Promise(resolve => {

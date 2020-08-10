@@ -14,6 +14,7 @@
       "::app/*": ["./src/components/app/*"],
       "::auth/*": ["./src/components/auth/*"],
       "::root/*": ["./src/components/*"],
+      "::store/*": ["./src/store/*"],
       "::cypress/*": ["./cypress/*"]
     },
     "target": "esnext",

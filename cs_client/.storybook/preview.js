@@ -28,7 +28,7 @@ addDecorator((storyFn, context) => {
 addDecorator(withA11y);
 addDecorator(withKnobs);
 import { Provider } from 'react-redux';
-import { store } from '::root/store/store';
+import { store } from '::root/../src/store/store';
 addDecorator(story => (
   <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
 ));
