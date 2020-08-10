@@ -22,7 +22,7 @@ const ChangeEmail: React.FC<Props> = ({
     variables: { input: { email: tokenMeta.newEmail } },
     onFailure: error => {
       ac.dialogs.setAlert({
-        title: 'could not refresh token',
+        title: 'could not refresh the request',
         description: properErrorMessage(error),
         error,
         type: AlertType.Error,
@@ -31,7 +31,7 @@ const ChangeEmail: React.FC<Props> = ({
     onSuccess: () => {
       ac.auth.refreshToken();
       ac.dialogs.setSnackbar({
-        message: 'email verification sent to ' + email,
+        message: 'verification email sent to ' + email,
       });
     },
   });
@@ -40,7 +40,7 @@ const ChangeEmail: React.FC<Props> = ({
     variables: { input: { tokenId } },
     onFailure: error => {
       ac.dialogs.setAlert({
-        title: 'could not refresh token',
+        title: 'could not refresh the request',
         description: properErrorMessage(error),
         error,
         type: AlertType.Error,
@@ -49,7 +49,7 @@ const ChangeEmail: React.FC<Props> = ({
     onSuccess: () => {
       ac.auth.refreshToken();
       ac.dialogs.setSnackbar({
-        message: 'email change canceled',
+        message: 'email change request canceled',
       });
     },
   });
@@ -58,7 +58,7 @@ const ChangeEmail: React.FC<Props> = ({
   return (
     <div className={modUserProfile.userProfile__changeEmail}>
       <span className={modUserProfile.userProfile__changeEmail__status}>
-        email change to <b>{tokenMeta.newEmail}</b> is pending
+        request to change email to <b>{tokenMeta.newEmail}</b> is pending
       </span>
       <div className={modUserProfile.userProfile__changeEmail__buttons}>
         <ButtonSquare

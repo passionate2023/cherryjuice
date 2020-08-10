@@ -6,7 +6,7 @@ const CREATE_EMAIL_VERIFICATION_TOKEN: GraphqlArgsPipe<
   number
 > = () => ({
   variables: undefined,
-  path: (data) => data?.user?.createPasswordResetToken,
+  path: data => data?.user?.createPasswordResetToken,
   query: gql`
     mutation create_email_verification_token {
       user {

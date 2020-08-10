@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { useCallback, useState } from 'react';
 import { ButtonSquare } from '::shared-components/buttons/button-square/button-square';
-import { apolloCache } from '::graphql/cache/apollo-cache';
 import { CREATE_EMAIL_VERIFICATION_TOKEN } from '::graphql/mutations/user/create-email-verification-token';
 import { ac } from '::root/store/store';
 import { AlertType } from '::types/react';
 import { properErrorMessage } from '::auth/hooks/proper-error-message';
-import { AsyncOperation } from '::root/store/ducks/document';
+import { useMutation } from '::hooks/graphql/use-mutation';
 
 type Props = {
   emailVerificationPending: boolean;
@@ -14,31 +12,26 @@ type Props = {
 };
 
 const VerifyEmail: React.FC<Props> = ({ emailVerificationPending, email }) => {
-  const [asyncOperation, setAsyncOperation] = useState<AsyncOperation>('idle');
-  const verifyEmail = useCallback(async () => {
-    apolloCache.client
-      .mutate(CREATE_EMAIL_VERIFICATION_TOKEN())
-      .then(() => {
-        ac.auth.refreshToken();
-        ac.dialogs.setSnackbar({
-          message: 'email verification sent to ' + email,
-        });
-      })
-      .catch(error =>
-        ac.dialogs.setAlert({
-          title: 'could not create an email verification token',
-          description: properErrorMessage(error),
-          error,
-          type: AlertType.Error,
-        }),
-      )
-      .finally(() => {
-        setAsyncOperation('idle');
+  const [verifyEmail, verifyEmailStatus] = useMutation({
+    gqlPipe: CREATE_EMAIL_VERIFICATION_TOKEN,
+    variables: undefined,
+    onFailure: error =>
+      ac.dialogs.setAlert({
+        title: 'could not create an email verification request',
+        description: properErrorMessage(error),
+        error,
+        type: AlertType.Error,
+      }),
+    onSuccess: () => {
+      ac.auth.refreshToken();
+      ac.dialogs.setSnackbar({
+        message: 'verification email sent to ' + email,
       });
-  }, [email]);
+    },
+  });
   return (
     <ButtonSquare
-      disabled={asyncOperation !== 'idle'}
+      disabled={verifyEmailStatus !== 'idle'}
       text={
         emailVerificationPending === false
           ? 'verify email'

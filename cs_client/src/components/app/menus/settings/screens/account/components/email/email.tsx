@@ -10,10 +10,11 @@ import { Icons } from '::shared-components/icon/helpers/icons';
 import {
   userSettingsActionCreators,
   ValidatedInputState,
-} from '::app/menus/settings/screens/account/components/components/reducer/reducer';
+} from '::app/menus/settings/screens/account/reducer/reducer';
 import { UserToken, UserTokenType } from '::types/graphql/generated';
 import { ChangeEmail } from '::app/menus/settings/screens/account/components/email/components/change-email';
 
+const idPrefix = 'settings::email';
 type Props = {
   currentEmail: string;
   email: ValidatedInputState;
@@ -37,7 +38,7 @@ const Email: React.FC<Props> = ({
     label: 'email',
     icon: [Icons.material.email],
     variableName: 'email',
-    idPrefix: 'email',
+    idPrefix: idPrefix,
     type: 'email',
     required: true,
     inputRef: createRef(),
@@ -54,10 +55,7 @@ const Email: React.FC<Props> = ({
 
         {emailVerified ? (
           changeEmailToken && (
-            <ChangeEmail
-              email={currentEmail}
-              token={changeEmailToken}
-            />
+            <ChangeEmail email={currentEmail} token={changeEmailToken} />
           )
         ) : (
           <VerifyEmail

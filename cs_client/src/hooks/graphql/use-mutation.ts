@@ -25,7 +25,7 @@ const useMutation: UseMutation = <T, U>({
       .finally(() => {
         setAsyncOperation('idle');
       });
-  }, [variables]);
+  }, [variables, onSuccess, onFailure, gqlPipe]);
   return [mutate, asyncOperation];
 };
 

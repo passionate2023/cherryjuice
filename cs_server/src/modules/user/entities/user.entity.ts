@@ -81,7 +81,7 @@ class User extends BaseEntity {
   @Field(() => Boolean)
   hasPassword = false;
 
-  @Field(() => [UserToken], { nullable: 'items',  })
+  @Field(() => [UserToken], { nullable: 'items' })
   tokens: UserToken[];
 
   async validatePassword(passwordToValidate: string): Promise<void> {

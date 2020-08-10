@@ -39,7 +39,7 @@ const PasswordModal: React.FC<ModalProps & PropsFromRedux> = ({
     type: 'password',
     minLength: 8,
     required: true,
-    idPrefix: 'login',
+    idPrefix: 'password-modal',
     value: currentPassword,
     onChange: setCurrentPassword,
     setValid,
