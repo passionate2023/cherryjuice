@@ -14,6 +14,7 @@ const mapState = (state: Store) => ({
   selectedScreen: state.settings.selectedScreen,
   screenHasChanges: state.settings.screenHasChanges,
   saveOperation: state.settings.saveOperation,
+  userId: state.auth.user?.id,
 });
 const mapDispatch = {
   onClose: ac.dialogs.hideSettingsDialog,
@@ -28,6 +29,7 @@ const Settings: React.FC<Props & PropsFromRedux> = ({
   onClose,
   apply,
   show,
+  userId,
   isOnMobile,
   selectedScreen,
   screenHasChanges,
@@ -51,7 +53,7 @@ const Settings: React.FC<Props & PropsFromRedux> = ({
       dialogFooterLeftButtons={[]}
       isOnMobile={isOnMobile}
       onClose={onClose}
-      show={show}
+      show={show && userId}
       rightHeaderButtons={[]}
     >
       <ErrorBoundary>

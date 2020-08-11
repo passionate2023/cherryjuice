@@ -3,7 +3,7 @@ import * as React from 'react';
 import { DrawerScreen } from '::root/components/shared-components/drawer/drawer';
 import { UserProfile } from '::root/components/app/components/menus/dialogs/settings/screens/account/components/user-profile';
 
-const personalInformationScreen: DrawerScreen = {
+const accountScreen: DrawerScreen = {
   name: 'manage account',
   category: 'account',
   element: (
@@ -13,4 +13,4 @@ const personalInformationScreen: DrawerScreen = {
   ),
 };
 
-export { personalInformationScreen };
+export { accountScreen };

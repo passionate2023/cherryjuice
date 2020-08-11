@@ -82,11 +82,15 @@ const reducer = createReducer(initialState, _ => [
       alert: payload,
       ongoingOperation: 'idle',
     })),
-    _(ac.setAuthenticationInProgress, state => ({
-      ...state,
-      ongoingOperation: 'in-progress',
-      alert: undefined
-    } as State)),
+    _(
+      ac.setAuthenticationInProgress,
+      state =>
+        ({
+          ...state,
+          ongoingOperation: 'in-progress',
+          alert: undefined,
+        } as State),
+    ),
   ],
   ...[
     _(ac.signIn, state => ({
