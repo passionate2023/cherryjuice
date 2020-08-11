@@ -134,20 +134,19 @@ export class UserService {
     _json: OauthJson,
   ): Promise<User> {
     try {
-      const existingUser = await this.userRepository.findOneByThirdPartyId(
+      let user = await this.userRepository.findOneByThirdPartyId(
         thirdPartyId,
         provider,
         _json.email,
       );
-      if (existingUser) {
-        return existingUser;
-      } else {
-        return await this.userRepository.registerOAuthUser(
+      if (!user)
+        user = await this.userRepository.registerOAuthUser(
           thirdPartyId,
           provider,
           _json,
         );
-      }
+      user.tokens = await this.getTokens(user.id)
+      return user
     } catch (err) {
       throw new InternalServerErrorException('validateOAuthLogin', err.message);
     }

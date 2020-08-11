@@ -55,6 +55,7 @@ class UserRepository extends Repository<User> {
     thirdParty: string,
     email: string,
   ): Promise<User | undefined> {
+    email = removeDots(email);
     const user = await this.findOne({
       where: [
         { email },
