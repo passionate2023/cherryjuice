@@ -10,7 +10,7 @@ import {
 } from '::types/graphql/generated';
 import { AsyncOperation } from './document';
 import { rootActionCreators } from './root';
-import { AsyncError } from '::auth/../../app/auth/hooks/proper-error-message';
+import { AsyncError } from '::root/components/auth/hooks/proper-error-message';
 
 const ap = createActionPrefixer('auth');
 
@@ -85,7 +85,8 @@ const reducer = createReducer(initialState, _ => [
     _(ac.setAuthenticationInProgress, state => ({
       ...state,
       ongoingOperation: 'in-progress',
-    })),
+      alert: undefined
+    } as State)),
   ],
   ...[
     _(ac.signIn, state => ({

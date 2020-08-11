@@ -12,16 +12,16 @@ type BannerProps = {
 };
 
 const Banner: React.FC<BannerProps> = ({ error, className = '' }) => {
-  const [showMessage, setShowMessage] = useState(true);
-  const message = properErrorMessage(error);
+  const [message, setMessage] = useState('');
   const timeoutHandler = useRef<Timer>();
   useEffect(() => {
     if (error) {
       clearTimeout(timeoutHandler.current);
-      setShowMessage(true);
+      const message = properErrorMessage(error);
+      setMessage(message);
       if (!('persistent' in error)) {
         timeoutHandler.current = setTimeout(() => {
-          setShowMessage(false);
+          setMessage('');
         }, 7000);
         return () => {
           clearTimeout(timeoutHandler.current);
@@ -33,7 +33,7 @@ const Banner: React.FC<BannerProps> = ({ error, className = '' }) => {
     <div className={modAuthBanner.banner__container}>
       <div
         className={`${className} ${modAuthBanner.banner} ${
-          message && showMessage ? modAuthBanner.bannerVisible : ''
+          message ? modAuthBanner.bannerVisible : ''
         }`}
       >
         <span className={modAuthBanner.banner__text}>{message}</span>
