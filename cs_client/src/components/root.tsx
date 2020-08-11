@@ -7,7 +7,7 @@ import { Void } from '::root/components/shared-components/react/void';
 import { App } from '::root/components/app/app';
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import { useOnWindowResize } from '::hooks/use-on-window-resize';
-import { store } from '::store/store';
+import { ac, store } from '::store/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { useLoadEpics } from './hooks/load-epics';
@@ -22,7 +22,16 @@ const ApolloProvider = React.lazy(() =>
     default: ApolloProvider,
   })),
 );
-
+const updateBreakpointState = ({ breakpoint, callback }) => {
+  let previousState = undefined;
+  return () => {
+    const newState = window.innerWidth <= breakpoint;
+    if (previousState != newState) {
+      previousState = newState;
+      callback(newState);
+    }
+  };
+};
 const pathnameStartsWith = route =>
   router.get.location.pathname.startsWith(route);
 const mapState = (state: Store) => ({
@@ -59,6 +68,12 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   }, [userId, hasPassword]);
 
   useConsumeToken({ userId });
+  useOnWindowResize([
+    updateBreakpointState({
+      breakpoint: 850,
+      callback: ac.root.setIsOnMobile,
+    }),
+  ]);
   return (
     <Suspense fallback={<Void />}>
       {client && (

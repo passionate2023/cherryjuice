@@ -3,17 +3,19 @@
 @import '../../mixins/form';
 .banner__container {
   position: absolute;
+  top: 10px;
   width: 100%;
-  margin-top: -70px;
   display: flex;
   align-items: center;
   justify-content: center;
-  @include respond-to($md-down) {
-    margin-top: 15px;
+  @include respond-to($md-up) {
+    height: 140px;
+    align-items: flex-end;
+    top: -150px;
   }
 }
 .banner {
-  height: 50px;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,6 +25,7 @@
     background-color: rgba($primary, 0.1);
   }
   @include form-element-size();
+  max-width: 400px;
   opacity: 0;
   border-radius: 10px;
   background-color: rgba(white, 0.2);

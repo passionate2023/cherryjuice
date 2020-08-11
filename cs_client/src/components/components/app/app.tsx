@@ -3,11 +3,10 @@ import * as React from 'react';
 import { useEffect, Suspense } from 'react';
 import { Void } from '::root/components/shared-components/react/void';
 import { formattingBarUnmountAnimationDelay } from './components/editor/tool-bar/components/groups/formatting-buttons/formatting-buttons';
-import { useOnWindowResize } from '::hooks/use-on-window-resize';
 import { appModule } from '::sass-modules';
 import { useDocumentEditedIndicator } from '::root/components/app/hooks/document-edited-indicator';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac, Store } from '::store/store';
+import { Store } from '::store/store';
 import { useHandleRouting } from '::root/components/app/hooks/handle-routing/handle-routing';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
@@ -21,17 +20,6 @@ const Editor = React.lazy(() =>
 );
 
 type Props = {};
-
-const updateBreakpointState = ({ breakpoint, callback }) => {
-  let previousState = undefined;
-  return () => {
-    const newState = window.innerWidth <= breakpoint;
-    if (previousState != newState) {
-      previousState = newState;
-      callback(newState);
-    }
-  };
-};
 
 const useUpdateCssVariables = (
   isDocumentOwner: boolean,
@@ -93,12 +81,6 @@ const App: React.FC<Props & PropsFromRedux> = ({
   isDocumentOwner,
   userId,
 }) => {
-  useOnWindowResize([
-    updateBreakpointState({
-      breakpoint: 850,
-      callback: ac.root.setIsOnMobile,
-    }),
-  ]);
   useDocumentEditedIndicator(documentHasUnsavedChanges);
   useHandleRouting(documentId);
   useUpdateCssVariables(
