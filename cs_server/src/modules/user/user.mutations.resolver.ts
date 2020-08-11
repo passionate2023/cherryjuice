@@ -116,7 +116,10 @@ export class UserMutationsResolver {
   ): Promise<number> {
     if (user.email_verified)
       throw new ForbiddenException('email already verified');
-    await this.userService.createEmailVerificationToken(user);
+    await this.userService.createEmailVerificationToken({
+      userId: user.id,
+      email: user.email,
+    });
     return Date.now();
   }
 

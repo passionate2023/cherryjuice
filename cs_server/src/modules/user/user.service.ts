@@ -54,9 +54,9 @@ export const createJWTPayload = {
   authn: (user: User): AuthenticatedUserTp => ({
     id: user.id,
   }),
-  passwordReset: (user: User, token: UserToken): PasswordResetTp => ({
+  passwordReset: (userId: string, token: UserToken): PasswordResetTp => ({
     id: token.id,
-    userId: user.id,
+    userId,
     type: token.type,
   }),
   emailChange: (userId: string, token: UserToken): EmailChangeTp => ({
@@ -92,6 +92,11 @@ export class UserService {
 
   async signUp(authCredentialsDto: SignUpCredentials): Promise<AuthUser> {
     const user = await this.userRepository.signUp(authCredentialsDto);
+    await this.createEmailVerificationToken({
+      userId: user.id,
+      email: user.email,
+      sendAsync: true,
+    });
     return this.packageAuthUser(user);
   }
 
@@ -185,24 +190,41 @@ export class UserService {
       type: UserTokenType.PASSWORD_RESET,
     });
     const token = this.jwtService.sign(
-      createJWTPayload.passwordReset(user, userToken),
+      createJWTPayload.passwordReset(user.id, userToken),
       { expiresIn: '6h' },
     );
 
     await this.emailService.sendPasswordReset({ token, email: user.email });
   }
 
-  async createEmailVerificationToken(user: User): Promise<void> {
+  async createEmailVerificationToken({
+    userId,
+    email,
+    sendAsync,
+  }: {
+    userId: string;
+    email: string;
+    sendAsync?: boolean;
+  }): Promise<void> {
     const userToken = await this.userTokenRepository.createToken({
-      userId: user.id,
+      userId: userId,
       type: UserTokenType.EMAIL_VERIFICATION,
     });
     const token = this.jwtService.sign(
-      createJWTPayload.passwordReset(user, userToken),
+      createJWTPayload.passwordReset(userId, userToken),
       { expiresIn: '48h' },
     );
-
-    await this.emailService.sendEmailVerification({ token, email: user.email });
+    if (sendAsync) {
+      this.emailService.sendEmailVerification({
+        token,
+        email,
+      });
+    } else {
+      await this.emailService.sendEmailVerification({
+        token,
+        email,
+      });
+    }
   }
 
   async resetPassword({
@@ -275,6 +297,10 @@ export class UserService {
     const tokenPayload: EmailChangeTp = this.verifyJwtToken(token);
     await this.userTokenRepository.verifyToken(tokenPayload);
     await this.userRepository.changeEmail(tokenPayload);
+    await this.createEmailVerificationToken({
+      userId: tokenPayload.userId,
+      email: tokenPayload.newEmail,
+    });
     await this.userTokenRepository.deleteToken(tokenPayload);
   }
 
