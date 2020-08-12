@@ -11,17 +11,17 @@ import { ExecKCommand } from '::helpers/editing/execK/execk-commands';
 const isJustificationCommand = command =>
   command && command != ExecKCommand.clear;
 
+export type ExecKProps = {
+  tagName?: string;
+  style?: { property: string; value: string };
+  command?: ExecKCommand;
+};
 const execK = ({
   tagName,
   style,
   command,
   testSample,
-}: {
-  tagName?: string;
-  style?: { property: string; value: string };
-  command?: ExecKCommand;
-  testSample?: any;
-}) => {
+}: ExecKProps & { testSample?: any }) => {
   const editor: HTMLDivElement = document.querySelector('#rich-text ');
   const ogHtml = editor.innerHTML;
   try {

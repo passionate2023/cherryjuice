@@ -3,32 +3,31 @@ import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/
 import { execK } from '::helpers/editing/execK';
 import { Icon } from '::root/components/shared-components/icon/icon';
 import { modToolbar } from '::sass-modules';
+import { HotKey } from '::helpers/hotkeys/hotkeys-manager';
+import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
 
 const ColorInput: React.FC<{
-  label: string;
-  cssProperty: string;
-  inputId: string;
-  icon: string;
-  disabled?: boolean;
-}> = ({ icon, label, cssProperty, inputId, disabled }) => {
+  hotKey: HotKey;
+  disabled: boolean;
+}> = ({ disabled, hotKey: { type } }) => {
+  const { icon, execCommandArguments } = formattingHotkeysProps[type];
   return (
     <ToolbarButton
       className={modToolbar.toolBar__iconStrictWidth}
       disabled={disabled}
     >
-      <label
-        htmlFor={label}
-        style={!disabled ? { cursor: 'pointer' } : {}}
-        id={inputId}
-      >
+      <label htmlFor={type} style={!disabled ? { cursor: 'pointer' } : {}}>
         <Icon name={icon} />
         <input
-          id={label}
+          id={type}
           type="color"
           style={{ display: 'none' }}
           onChange={e => {
             execK({
-              style: { property: `${cssProperty}`, value: `${e.target.value}` },
+              style: {
+                ...execCommandArguments.style,
+                value: `${e.target.value}`,
+              },
             });
           }}
         />

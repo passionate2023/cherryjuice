@@ -41,7 +41,7 @@ const actionCreators = (() => {
     dispatch: undefined,
   };
   return {
-    __setDispatch: dispatch => (state.dispatch = dispatch),
+    init: dispatch => (state.dispatch = dispatch),
     setFirstName: (value: ValidatedInputState) =>
       state.dispatch({ type: actions.setFirstName, value }),
     setLastName: (value: ValidatedInputState) =>

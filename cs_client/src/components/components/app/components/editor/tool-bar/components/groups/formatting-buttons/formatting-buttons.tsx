@@ -1,19 +1,20 @@
 import * as React from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
 import { execK } from '::helpers/editing/execK';
-import { ColorInput } from '::root/components/app/components/editor/tool-bar/components/groups/formatting-buttons/color-input';
+import { ColorInput } from '::root/components/app/components/editor/tool-bar/components/groups/formatting-buttons/components/color-input';
 import { modToolbar } from '::sass-modules';
 import { Icon } from '::root/components/shared-components/icon/icon';
 import { TransitionWrapper } from '::root/components/shared-components/transitions/transition-wrapper';
 import { animated } from 'react-spring';
-import { formattingHotKeys } from '::helpers/hotkeys/combinations/formatting';
-
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
+import { HotKeyActionType } from '::helpers/hotkeys/types';
+import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
 
 const mapState = (state: Store) => ({
   selectedNode_id: state.document.selectedNode.node_id,
   documentId: state.document.documentId,
+  formattingHotKeys: state.auth.settings.hotKeys.formatting.hotkeys,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -21,56 +22,31 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const Buttons: React.FC<PropsFromRedux> = ({ selectedNode_id, documentId }) => {
+const Buttons: React.FC<PropsFromRedux> = ({
+  selectedNode_id,
+  documentId,
+  formattingHotKeys,
+}) => {
   const disabled = !documentId || !selectedNode_id;
   return (
     <>
-      {formattingHotKeys.tagsAndStyles.map(
-        ({ icon, execCommandArguments }, i) => (
+      {formattingHotKeys.map(hotKey =>
+        hotKey.type === HotKeyActionType.FG_COLOR ||
+        hotKey.type === HotKeyActionType.BG_COLOR ? (
+          <ColorInput key={hotKey.type} hotKey={hotKey} disabled={disabled} />
+        ) : (
           <ToolbarButton
-            key={i}
+            key={hotKey.type}
             onClick={() =>
-              execK({
-                tagName: execCommandArguments.tagName,
-                // @ts-ignore
-                style: execCommandArguments?.style,
-                // @ts-ignore
-                command: execCommandArguments?.command,
-              })
+              execK(formattingHotkeysProps[hotKey.type].execCommandArguments)
             }
             className={modToolbar.toolBar__iconStrictWidth}
             disabled={disabled}
           >
-            <Icon name={icon} />
+            <Icon name={formattingHotkeysProps[hotKey.type].icon} />
           </ToolbarButton>
         ),
       )}
-      {formattingHotKeys.colors.map(({ icon, label, cssProperty, inputId }) => (
-        <ColorInput
-          key={label}
-          icon={icon}
-          {...{ label, cssProperty, inputId }}
-          disabled={disabled}
-        />
-      ))}
-      {formattingHotKeys.misc.map(({ icon, execCommandArguments }, i) => (
-        <ToolbarButton
-          key={i}
-          onClick={() =>
-            execK({
-              tagName: execCommandArguments.tagName,
-              // @ts-ignore
-              style: execCommandArguments?.style,
-              // @ts-ignore
-              command: execCommandArguments?.command,
-            })
-          }
-          className={modToolbar.toolBar__iconStrictWidth}
-          disabled={disabled}
-        >
-          <Icon name={icon} />
-        </ToolbarButton>
-      ))}
     </>
   );
 };

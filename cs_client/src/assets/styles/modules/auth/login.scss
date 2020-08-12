@@ -71,10 +71,13 @@
   padding-left: 35px;
   //margin-left: 10px;
   font-size: 1rem;
-  width: 100%;
+  //width: 100%;
   border: none;
   height: 50px;
   box-sizing: border-box;
+  &[type='submit'] {
+    width: 100%;
+  }
 }
 .login__form__input__input--highlight-invalid {
   &:invalid {

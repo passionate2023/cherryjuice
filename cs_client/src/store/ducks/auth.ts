@@ -11,6 +11,7 @@ import {
 import { AsyncOperation } from './document';
 import { rootActionCreators } from './root';
 import { AsyncError } from '::root/components/auth/hooks/proper-error-message';
+import { userHotkeys } from '::helpers/hotkeys/fetched';
 
 const ap = createActionPrefixer('auth');
 
@@ -52,6 +53,7 @@ type StorageType = 'localStorage' | 'sessionStorage';
 type State = {
   token: string;
   user: User;
+  settings: { hotKeys: UserHotkeys };
   secrets: Secrets;
   storageType: StorageType;
   alert: AsyncError;
@@ -65,6 +67,7 @@ const initialState: State = {
   secrets: undefined,
   storageType: 'localStorage',
   ongoingOperation: 'idle',
+  settings: { hotKeys: userHotkeys },
 };
 const reducer = createReducer(initialState, _ => [
   ...[

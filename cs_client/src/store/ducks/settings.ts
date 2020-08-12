@@ -1,6 +1,6 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
-import { screens } from '::root/components/app/components/menus/dialogs/settings/screens';
+import { screens } from '::root/components/app/components/menus/dialogs/settings/screens/screens';
 import { AsyncOperation } from './document';
 import { UpdateUserProfileIt } from '::types/graphql/generated';
 import { dialogsActionCreators } from './dialogs';

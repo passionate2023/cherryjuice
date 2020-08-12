@@ -58,7 +58,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
     documentMetaInitialState,
   );
   useEffect(() => {
-    documentMetaActionCreators.__setDispatch(dispatch);
+    documentMetaActionCreators.init(dispatch);
   }, []);
 
   useEffect(() => {

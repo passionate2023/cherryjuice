@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DialogWithTransition } from '::root/components/shared-components/dialog';
 import { Drawer } from '::root/components/shared-components/drawer/drawer';
-import { screens } from '::root/components/app/components/menus/dialogs/settings/screens';
+import { screens } from '::root/components/app/components/menus/dialogs/settings/screens/screens';
 import { DrawerToggle } from '::root/components/shared-components/drawer/components/drawer-toggle/drawer-toggle';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 

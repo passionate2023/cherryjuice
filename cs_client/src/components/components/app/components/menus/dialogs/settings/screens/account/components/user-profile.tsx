@@ -44,7 +44,7 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
     newPasswordConfirmation: { value: '', valid: false },
   });
   useEffect(() => {
-    userSettingsActionCreators.__setDispatch(dispatch);
+    userSettingsActionCreators.init(dispatch);
   }, []);
 
   useEffect(() => {
@@ -84,7 +84,7 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
     state.newPasswordConfirmation,
   ]);
   return (
-    <div className={modUserProfile}>
+    <div className={modUserProfile.userProfile}>
       <div className={modUserProfile.userProfile__personalInformation}>
         <Profile
           firstName={state.firstName}

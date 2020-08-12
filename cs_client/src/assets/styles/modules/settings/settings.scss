@@ -8,34 +8,3 @@
   color: black;
 }
 
-.settings__setting-element {
-  min-height: 40px;
-  flex-wrap: wrap;
-  background-color: $grey-light;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 10px;
-  margin-bottom: 5px;
-  @include respond-to('md') {
-    flex-direction: row;
-    align-items: center;
-  }
-}
-
-.settings__setting-element__name {
-  margin-bottom: 5px;
-  @include respond-to('md') {
-    margin-bottom: 0;
-  }
-  color: grey;
-}
-.settings__setting-element__value {
-  @include respond-to('md') {
-    margin-left: auto;
-  }
-  justify-self: center;
-  align-self: center;
-  //background-color: white;
-  //padding: 5px;
-}

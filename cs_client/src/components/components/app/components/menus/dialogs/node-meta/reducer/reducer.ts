@@ -57,7 +57,7 @@ const actionCreators = (() => {
     dispatch: undefined,
   };
   return {
-    __setDispatch: dispatch => (state.dispatch = dispatch),
+    init: dispatch => (state.dispatch = dispatch),
     setName: value => state.dispatch({ type: actions.setName, value }),
     setCustomColor: value =>
       state.dispatch({ type: actions.setCustomColor, value }),

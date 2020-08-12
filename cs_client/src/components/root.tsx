@@ -11,7 +11,7 @@ import { ac, store } from '::store/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { useLoadEpics } from './hooks/load-epics';
-import { useSetupHotKeys } from '::helpers/hotkeys/hooks/setup-hotkeys';
+import { useRegisterHotKeys } from '::helpers/hotkeys/hooks/register-hot-keys';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { router } from '::root/router/router';
@@ -38,6 +38,7 @@ const mapState = (state: Store) => ({
   token: state.auth.token,
   userId: state.auth.user?.id,
   hasPassword: state.auth.user?.hasPassword,
+  userHotKeys: state.auth.settings?.hotKeys,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -49,10 +50,11 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   token,
   userId,
   hasPassword,
+  userHotKeys,
 }) => {
   useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
   const client = useApolloClient(token, userId);
-  useSetupHotKeys();
+  useRegisterHotKeys(userHotKeys);
 
   useEffect(() => {
     const unfinishedOauthSignup = userId && hasPassword === false;

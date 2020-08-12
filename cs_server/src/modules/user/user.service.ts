@@ -145,8 +145,8 @@ export class UserService {
           provider,
           _json,
         );
-      user.tokens = await this.getTokens(user.id)
-      return user
+      user.tokens = await this.getTokens(user.id);
+      return user;
     } catch (err) {
       throw new InternalServerErrorException('validateOAuthLogin', err.message);
     }

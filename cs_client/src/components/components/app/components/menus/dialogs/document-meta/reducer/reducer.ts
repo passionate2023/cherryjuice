@@ -37,7 +37,7 @@ const actionCreators = (() => {
     dispatch: undefined,
   };
   return {
-    __setDispatch: dispatch => (state.dispatch = dispatch),
+    init: dispatch => (state.dispatch = dispatch),
     setName: value => state.dispatch({ type: actions.setName, value }),
     resetToEdit: (value: ResetToEditProps) =>
       state.dispatch({ type: actions.resetToEdit, value }),

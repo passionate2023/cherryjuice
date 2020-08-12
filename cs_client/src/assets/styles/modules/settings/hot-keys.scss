@@ -1,0 +1,15 @@
+.hotkeys__category {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid #9958581f;
+}
+
+.hotkeys__category__name {
+  padding: 15px;
+}
+
+.hotkeys__category__hotkeys-list {
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+}

@@ -57,7 +57,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
   const isOwnerOfDocument = documentUserId === userId;
   const [state, dispatch] = useReducer(nodeMetaReducer, nodeMetaInitialState);
   useEffect(() => {
-    nodeMetaActionCreators.__setDispatch(dispatch);
+    nodeMetaActionCreators.init(dispatch);
   }, []);
   const { node, isNewNode, previous_sibling_node_id } = getNode({
     documentId,
