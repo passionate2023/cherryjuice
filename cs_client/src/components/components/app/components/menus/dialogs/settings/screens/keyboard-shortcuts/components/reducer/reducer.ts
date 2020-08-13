@@ -34,8 +34,8 @@ const resetState = (userHotKeys: ResetStateProps): State => {
   return {
     hotKeys: Object.fromEntries(
       [
-        ...Object.values(userHotKeys.formatting.hotkeys),
-        ...Object.values(userHotKeys.document.hotkeys),
+        ...userHotKeys.formatting.hotkeys,
+        ...userHotKeys.document.hotkeys,
       ].map(hk => [hk.type, hk]),
     ),
     duplicates: undefined,

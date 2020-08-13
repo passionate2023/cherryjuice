@@ -14,9 +14,7 @@ import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/forma
 const mapState = (state: Store) => ({
   selectedNode_id: state.document.selectedNode.node_id,
   documentId: state.document.documentId,
-  formattingHotKeys: Object.values(
-    state.auth.settings.hotKeys.formatting.hotkeys,
-  ),
+  formattingHotKeys: state.auth.settings.hotKeys.formatting.hotkeys,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);

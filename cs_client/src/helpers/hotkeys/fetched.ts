@@ -12,7 +12,7 @@ export type HotKeyCategory = 'formatting' | 'document';
 export type UserHotkeys = {
   [category in HotKeyCategory]: {
     meta: HotKeyCategoryMeta;
-    hotkeys: HotKeyDict;
+    hotkeys: HotKey[];
   };
 };
 
@@ -25,7 +25,7 @@ export const userHotkeys: UserHotkeys = {
       name: 'formatting',
       target: HotKeyTarget.RICH_TEXT,
     },
-    hotkeys: hotKeysToDict([
+    hotkeys: [
       {
         type: HotKeyActionType.BOLD,
         keysCombination: { key: 'b', ctrlKey: true },
@@ -88,14 +88,14 @@ export const userHotkeys: UserHotkeys = {
         type: HotKeyActionType.REMOVE_STYLE,
         keysCombination: { key: `r`, altKey: true },
       },
-    ]),
+    ],
   },
   document: {
     meta: {
       name: 'document',
       target: HotKeyTarget.GLOBAL,
     },
-    hotkeys: hotKeysToDict([
+    hotkeys: [
       {
         keysCombination: { key: 's', ctrlKey: true },
         type: HotKeyActionType.SAVE_DOCUMENT,
@@ -120,6 +120,6 @@ export const userHotkeys: UserHotkeys = {
         keysCombination: { key: 'n', altKey: true },
         type: HotKeyActionType.SHOW_CREATE_SIBLING_NODE,
       },
-    ]),
+    ],
   },
 };

@@ -1,11 +1,10 @@
-import { Document, DocumentOwnerOt } from '::types/graphql/generated';
+import { Document,  } from '::types/graphql/generated';
 import { CacheState } from '::graphql/cache/initial-state';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { ac } from '::store/store';
 
 type DocumentMeta = {
   name?: string;
-  owner?: DocumentOwnerOt;
 };
 
 type MutateDocumentProps = {
