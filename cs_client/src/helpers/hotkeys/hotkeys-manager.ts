@@ -27,15 +27,22 @@ export type RegisteredHotKey = HotKey & {
 };
 
 type State = {
-  hotKeys: { [flay: string]: RegisteredHotKey };
+  hotKeys: { [flat: string]: RegisteredHotKey };
 };
 
 const createHotKeysManager = () => {
   const state: State = {
     hotKeys: {},
   };
-
+  const unregisterAllHotKeys = () => {
+    state.hotKeys = {};
+  };
   const registerHotKey = (hotKey: RegisteredHotKey) => {
+    Object.values(state.hotKeys).forEach(registerHotKey => {
+      if (registerHotKey.type === hotKey.type) {
+        delete state.hotKeys[flattenHotKey(registerHotKey.keysCombination)];
+      }
+    });
     const flat = flattenHotKey(hotKey.keysCombination);
     state.hotKeys[flat] = hotKey;
   };
@@ -57,7 +64,12 @@ const createHotKeysManager = () => {
     document.removeEventListener('keydown', eventHandler);
   };
 
-  return { startListening, stopListening, registerHotKey };
+  return {
+    startListening,
+    stopListening,
+    registerHotKey,
+    unregisterAllHotKeys,
+  };
 };
 const hotKeysManager = createHotKeysManager();
 

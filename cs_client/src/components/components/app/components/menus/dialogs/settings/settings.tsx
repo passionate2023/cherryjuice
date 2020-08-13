@@ -53,7 +53,7 @@ const Settings: React.FC<Props & PropsFromRedux> = ({
       dialogFooterLeftButtons={[]}
       isOnMobile={isOnMobile}
       onClose={onClose}
-      show={show && userId}
+      show={show && Boolean(userId)}
       rightHeaderButtons={[]}
     >
       <ErrorBoundary>

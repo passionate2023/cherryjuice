@@ -1,4 +1,4 @@
-import { HotKey, KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
+import { HotKey } from '::helpers/hotkeys/hotkeys-manager';
 import { UserHotkeys } from '::helpers/hotkeys/fetched';
 import { HotKeyActionType } from '::helpers/hotkeys/types';
 import {
@@ -12,10 +12,10 @@ const compose = (...fns) => {
   return fns.reduce((a, b) => (...args) => a(b(...args)));
 };
 
-type HotKeyDict = Record<HotKeyActionType, HotKey>;
+export type HotKeyDict = { [key in HotKeyActionType]?: HotKey };
 type HotKeyChangesDict = Record<
   HotKeyActionType,
-  { original: KeysCombination; changed: KeysCombination }
+  { original: HotKey; changed: HotKey }
 >;
 type DuplicateHotKeys = Record<HotKeyActionType, true>;
 type State = {
@@ -34,8 +34,8 @@ const resetState = (userHotKeys: ResetStateProps): State => {
   return {
     hotKeys: Object.fromEntries(
       [
-        ...userHotKeys.formatting.hotkeys,
-        ...userHotKeys.document.hotkeys,
+        ...Object.values(userHotKeys.formatting.hotkeys),
+        ...Object.values(userHotKeys.document.hotkeys),
       ].map(hk => [hk.type, hk]),
     ),
     duplicates: undefined,
@@ -103,10 +103,7 @@ const updateKey = (state: State) => ({ type, key }: SetKeyPayload): HotKey => {
   };
 };
 
-const mergeHotKey = (
-  state: State,
-  newHotKey: HotKey,
-): State => {
+const mergeHotKey = (state: State, newHotKey: HotKey): State => {
   return {
     ...state,
     hotKeys: {
@@ -125,7 +122,7 @@ const calculateChanges = (
   let equal: boolean;
   if (previousValue) {
     equal =
-      flattenHotKey(previousValue.original) ===
+      flattenHotKey(previousValue.original.keysCombination) ===
       flattenHotKey(newHotKey.keysCombination);
   }
   if (equal) delete changes[newHotKey.type];
@@ -133,8 +130,8 @@ const calculateChanges = (
     changes[newHotKey.type] = {
       original: previousValue
         ? previousValue.original
-        : state.hotKeys[newHotKey.type].keysCombination,
-      changed: newHotKey.keysCombination,
+        : state.hotKeys[newHotKey.type],
+      changed: newHotKey,
     };
 
   return { ...changes };

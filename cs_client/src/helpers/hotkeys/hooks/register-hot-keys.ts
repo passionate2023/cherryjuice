@@ -12,8 +12,9 @@ const useRegisterHotKeys = (userHotKeys: UserHotkeys) => {
     hotKeysManager.startListening();
   }, []);
   useEffect(() => {
-    registerDocumentHKs(userHotKeys?.document?.hotkeys);
-    registerFormattingHKs(userHotKeys?.formatting?.hotkeys);
+    hotKeysManager.unregisterAllHotKeys();
+    registerDocumentHKs(Object.values(userHotKeys?.document?.hotkeys));
+    registerFormattingHKs(Object.values(userHotKeys?.formatting?.hotkeys));
     registerDevHKs();
   }, [userHotKeys]);
 };

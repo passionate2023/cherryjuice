@@ -5,10 +5,11 @@ import { useEffect } from 'react';
 import { updateSubTitle } from '::root/components/shared-components/drawer/components/drawer-navigation/helpers/update-sub-title';
 import { setupGesturesHandler } from '::root/components/shared-components/drawer/components/drawer-navigation/helpers/setup-gesture-handler';
 import { toggleDrawer } from '::root/components/shared-components/drawer/components/drawer-toggle/helpers/create-toggle-handler';
+import { ScreenName } from '::root/components/app/components/menus/dialogs/settings/screens/screens';
 
 type DrawerScreen = { element: JSX.Element; category: string; name: string };
 type DrawerScreens = {
-  [screenName: string]: DrawerScreen;
+  [screenName in ScreenName]: DrawerScreen;
 };
 
 type DrawerProps = {

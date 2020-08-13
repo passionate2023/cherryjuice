@@ -1,6 +1,9 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
-import { screens } from '::root/components/app/components/menus/dialogs/settings/screens/screens';
+import {
+  ScreenName,
+  screens,
+} from '::root/components/app/components/menus/dialogs/settings/screens/screens';
 import { AsyncOperation } from './document';
 import { UpdateUserProfileIt } from '::types/graphql/generated';
 import { dialogsActionCreators } from './dialogs';
@@ -9,12 +12,14 @@ const ap = createActionPrefixer('settings');
 
 const ac = {
   ...{
-    selectScreen: _(ap('set-screen'), _ => (screenName: string) =>
+    selectScreen: _(ap('set-screen'), _ => (screenName: ScreenName) =>
       _(screenName),
     ),
+    setScreenHasChanges: _(ap('set-screen-has-changes')),
+    clearScreenHasChanges: _(ap('clear-screen-has-changes')),
   },
   ...{
-    save: _(ap('save'), _ => (nextScreen?: string) => _(nextScreen)),
+    save: _(ap('save'), _ => (nextScreen?: ScreenName) => _(nextScreen)),
     saveStarted: _(ap('save-started')),
     saveFulfilled: _(ap('save-fulfilled')),
     saveFailed: _(ap('save-failed')),
@@ -29,7 +34,7 @@ const ac = {
 };
 
 type State = {
-  selectedScreen: string;
+  selectedScreen: ScreenName;
   screenHasChanges: boolean;
   saveOperation: AsyncOperation;
   userProfileChanges: UpdateUserProfileIt;
@@ -37,7 +42,7 @@ type State = {
 };
 
 const initialState: State = {
-  selectedScreen: Object.keys(screens)[0],
+  selectedScreen: Object.keys(screens)[0] as ScreenName,
   screenHasChanges: false,
   saveOperation: 'idle',
   userProfileChanges: undefined,
@@ -48,6 +53,16 @@ const reducer = createReducer(initialState, _ => [
     _(ac.selectScreen, (state, { payload }) => ({
       ...state,
       selectedScreen: payload,
+      screenHasChanges: false,
+    })),
+  ],
+  ...[
+    _(ac.setScreenHasChanges, state => ({
+      ...state,
+      screenHasChanges: true,
+    })),
+    _(ac.clearScreenHasChanges, state => ({
+      ...state,
       screenHasChanges: false,
     })),
   ],

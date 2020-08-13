@@ -17,6 +17,7 @@ import { Store } from '::store/store';
 import { router } from '::root/router/router';
 import { useConsumeToken } from '::root/hooks/consume-token';
 import { Auth } from '::root/components/auth/auth';
+import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
@@ -38,7 +39,7 @@ const mapState = (state: Store) => ({
   token: state.auth.token,
   userId: state.auth.user?.id,
   hasPassword: state.auth.user?.hasPassword,
-  userHotKeys: state.auth.settings?.hotKeys,
+  userHotKeys: getHotkeys(state),
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);

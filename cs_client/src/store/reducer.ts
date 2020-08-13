@@ -16,6 +16,13 @@ import { cacheReducer } from './ducks/cache';
 import { settingsReducer } from './ducks/settings';
 
 const reducer = combineReducers({
+  cache: persistReducer(
+    {
+      key: 'cache',
+      storage,
+    },
+    cacheReducer,
+  ),
   document: persistReducer(
     {
       key: 'document',
@@ -49,7 +56,6 @@ const reducer = combineReducers({
     },
     authReducer,
   ),
-  cache: cacheReducer,
   node: nodeReducer,
   documentsList: documentsListReducer,
   documentOperations: documentOperationsReducer,

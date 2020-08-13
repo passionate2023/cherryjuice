@@ -24,7 +24,9 @@ const ResultsHeader: React.FC<Props> = ({ searchResults }) => {
     >
       {!!elapsedTimeS && (
         <>
-          <span>found {numberOfNodes} nodes</span>
+          <span>
+            found {numberOfNodes} node{numberOfNodes > 1 ? 's' : ''}
+          </span>
           {!!numberOfNodes && (
             <>
               <span>

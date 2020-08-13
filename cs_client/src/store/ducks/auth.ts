@@ -11,7 +11,7 @@ import {
 import { AsyncOperation } from './document';
 import { rootActionCreators } from './root';
 import { AsyncError } from '::root/components/auth/hooks/proper-error-message';
-import { userHotkeys } from '::helpers/hotkeys/fetched';
+import { UserHotkeys, userHotkeys } from '::helpers/hotkeys/fetched';
 
 const ap = createActionPrefixer('auth');
 

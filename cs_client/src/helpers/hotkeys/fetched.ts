@@ -1,19 +1,23 @@
 import { HotKey, HotKeyTarget } from '::helpers/hotkeys/hotkeys-manager';
 import { HotKeyActionType } from '::helpers/hotkeys/types';
+import { HotKeyDict } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/reducer/reducer';
 
 export type HotKeyCategoryMeta = {
   name: HotKeyCategory;
   target: HotKeyTarget;
 };
 
-type HotKeyCategory = 'formatting' | 'document';
+export type HotKeyCategory = 'formatting' | 'document';
 
 export type UserHotkeys = {
   [category in HotKeyCategory]: {
     meta: HotKeyCategoryMeta;
-    hotkeys: HotKey[];
+    hotkeys: HotKeyDict;
   };
 };
+
+export const hotKeysToDict = (hotKeys: HotKey[]): HotKeyDict =>
+  Object.fromEntries(hotKeys.map(hk => [hk.type, hk])) as HotKeyDict;
 
 export const userHotkeys: UserHotkeys = {
   formatting: {
@@ -21,7 +25,7 @@ export const userHotkeys: UserHotkeys = {
       name: 'formatting',
       target: HotKeyTarget.RICH_TEXT,
     },
-    hotkeys: [
+    hotkeys: hotKeysToDict([
       {
         type: HotKeyActionType.BOLD,
         keysCombination: { key: 'b', ctrlKey: true },
@@ -84,14 +88,14 @@ export const userHotkeys: UserHotkeys = {
         type: HotKeyActionType.REMOVE_STYLE,
         keysCombination: { key: `r`, altKey: true },
       },
-    ],
+    ]),
   },
   document: {
     meta: {
       name: 'document',
       target: HotKeyTarget.GLOBAL,
     },
-    hotkeys: [
+    hotkeys: hotKeysToDict([
       {
         keysCombination: { key: 's', ctrlKey: true },
         type: HotKeyActionType.SAVE_DOCUMENT,
@@ -116,6 +120,6 @@ export const userHotkeys: UserHotkeys = {
         keysCombination: { key: 'n', altKey: true },
         type: HotKeyActionType.SHOW_CREATE_SIBLING_NODE,
       },
-    ],
+    ]),
   },
 };
