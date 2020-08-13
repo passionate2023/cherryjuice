@@ -1,6 +1,10 @@
-import { HotKey } from '::helpers/hotkeys/hotkeys-manager';
+import { HotKey, KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
 import { UserHotkeys } from '::helpers/hotkeys/fetched';
 import { HotKeyActionType } from '::helpers/hotkeys/types';
+import {
+  findDuplicateHotkeys,
+  flattenHotKey,
+} from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/find-duplicate';
 
 const compose = (...fns) => {
   if (fns.length === 0) return arg => arg;
@@ -8,13 +12,21 @@ const compose = (...fns) => {
   return fns.reduce((a, b) => (...args) => a(b(...args)));
 };
 
+type HotKeyDict = Record<HotKeyActionType, HotKey>;
+type HotKeyChangesDict = Record<
+  HotKeyActionType,
+  { original: KeysCombination; changed: KeysCombination }
+>;
+type DuplicateHotKeys = Record<HotKeyActionType, true>;
 type State = {
-  hotKeys: Record<HotKeyActionType, HotKey>;
-  duplicateHotkeys: Record<HotKeyActionType, true>;
+  changes: HotKeyChangesDict;
+  hotKeys: HotKeyDict;
+  duplicates?: DuplicateHotKeys;
 };
 const initialState: State = {
+  changes: undefined,
   hotKeys: undefined,
-  duplicateHotkeys: undefined,
+  duplicates: undefined,
 };
 
 type ResetStateProps = UserHotkeys;
@@ -26,7 +38,8 @@ const resetState = (userHotKeys: ResetStateProps): State => {
         ...userHotKeys.document.hotkeys,
       ].map(hk => [hk.type, hk]),
     ),
-    duplicateHotkeys: {},
+    duplicates: undefined,
+    changes: {},
   } as State;
 };
 
@@ -39,6 +52,7 @@ enum actions {
   setDuplicateHotkeys,
 }
 
+type SetKeyPayload = { type: HotKeyActionType; key: string };
 const actionCreators = (() => {
   const state = {
     dispatch: undefined,
@@ -50,7 +64,7 @@ const actionCreators = (() => {
       const chain = middleware.map(middleware => middleware(state));
       state.enhancedDispatch = compose(...chain)(state.dispatch);
     },
-    setKey: (value: { type: HotKeyActionType; key: string }) => {
+    setKey: (value: SetKeyPayload) => {
       if (value.key) state.dispatch({ type: actions.setKey, value });
     },
     toggleCtrl: (value: HotKeyActionType) =>
@@ -65,24 +79,84 @@ const actionCreators = (() => {
       state.enhancedDispatch({ type: actions.reset, value }),
   };
 })();
-const fn = (
+
+const toggleMetaKey = (
   state: State,
   action: { type: actions; value: HotKeyActionType },
-) => (key: string): State => {
+) => (key: string): HotKey => {
+  return {
+    ...state.hotKeys[action.value],
+    keysCombination: {
+      ...state.hotKeys[action.value].keysCombination,
+      [key]: !state.hotKeys[action.value].keysCombination[key],
+    },
+  };
+};
+
+const updateKey = (state: State) => ({ type, key }: SetKeyPayload): HotKey => {
+  return {
+    ...state.hotKeys[type],
+    keysCombination: {
+      ...state.hotKeys[type].keysCombination,
+      key,
+    },
+  };
+};
+
+const mergeHotKey = (
+  state: State,
+  newHotKey: HotKey,
+): State => {
   return {
     ...state,
     hotKeys: {
       ...state.hotKeys,
-      [action.value]: {
-        ...state.hotKeys[action.value],
-        keysCombination: {
-          ...state.hotKeys[action.value].keysCombination,
-          [key]: !state.hotKeys[action.value].keysCombination[key],
-        },
-      },
+      [newHotKey.type]: newHotKey,
     },
   };
 };
+
+const calculateChanges = (
+  state: State,
+  newHotKey: HotKey,
+): HotKeyChangesDict => {
+  const changes = state.changes;
+  const previousValue = changes[newHotKey.type];
+  let equal: boolean;
+  if (previousValue) {
+    equal =
+      flattenHotKey(previousValue.original) ===
+      flattenHotKey(newHotKey.keysCombination);
+  }
+  if (equal) delete changes[newHotKey.type];
+  else
+    changes[newHotKey.type] = {
+      original: previousValue
+        ? previousValue.original
+        : state.hotKeys[newHotKey.type].keysCombination,
+      changed: newHotKey.keysCombination,
+    };
+
+  return { ...changes };
+};
+
+const findDuplicateHotKeys = (state: State): DuplicateHotKeys | undefined => {
+  const hotKeys = Object.values(state.hotKeys);
+  const duplicateHotKey = findDuplicateHotkeys(hotKeys);
+  if (duplicateHotKey) {
+    const flatDuplicate = flattenHotKey(duplicateHotKey.keysCombination);
+    const duplicateHotKeys = hotKeys.filter(
+      hk =>
+        hk.keysCombination &&
+        flattenHotKey(hk.keysCombination) === flatDuplicate,
+    );
+    duplicateHotKeys.push(duplicateHotKey);
+    return Object.fromEntries(
+      duplicateHotKeys.map(hk => [hk.type, true]),
+    ) as DuplicateHotKeys;
+  }
+};
+
 const reducer = (
   state: State,
   action: {
@@ -90,40 +164,24 @@ const reducer = (
     value: any;
   },
 ): State => {
-  switch (action.type) {
-    case actions.setKey:
-      return {
-        ...state,
-        hotKeys: {
-          ...state.hotKeys,
-          [action.value.type]: {
-            ...state.hotKeys[action.value.type],
-            keysCombination: {
-              ...state.hotKeys[action.value.type].keysCombination,
-              key: action.value.key,
-            },
-          },
-        },
-      };
-    case actions.toggleCtrl:
-      return fn(state, action)('ctrlKey');
-    case actions.toggleAlt:
-      return fn(state, action)('altKey');
-    case actions.toggleShift:
-      return fn(state, action)('shiftKey');
-    case actions.setDuplicateHotkeys:
-      return {
-        ...state,
-        // @ts-ignore
-        duplicateHotkeys: Object.fromEntries(
-          action.value.map(type => [type, true]),
-        ),
-      };
-    case actions.reset:
-      return resetState(action.value);
-    default:
-      throw new Error(action.type + ' action not supported');
+  let newHotKey;
+  if (action.type === actions.setKey) {
+    newHotKey = updateKey(state)(action.value as SetKeyPayload);
+  } else if (action.type === actions.toggleCtrl) {
+    newHotKey = toggleMetaKey(state, action)('ctrlKey');
+  } else if (action.type === actions.toggleAlt) {
+    newHotKey = toggleMetaKey(state, action)('altKey');
+  } else if (action.type === actions.toggleShift) {
+    newHotKey = toggleMetaKey(state, action)('shiftKey');
+  } else if (action.type === actions.reset) {
+    return resetState(action.value);
+  } else {
+    throw new Error(action.type + ' action not supported');
   }
+  const changes = calculateChanges(state, newHotKey);
+  state = mergeHotKey(state, newHotKey);
+  const duplicates = findDuplicateHotKeys(state);
+  return { ...state, duplicates: duplicates, changes };
 };
 
 export {

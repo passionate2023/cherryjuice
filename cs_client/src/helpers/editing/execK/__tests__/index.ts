@@ -3,7 +3,6 @@ import {
   testSamples,
   TTestSample,
 } from '::helpers/editing/execK/__tests__/__data__';
-import { formattingHotKeys } from '::helpers/hotkeys/combinations/formatting';
 
 beforeAll(() => {
   // @ts-ignore

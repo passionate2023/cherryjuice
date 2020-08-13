@@ -9,7 +9,6 @@ import {
 } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/reducer/reducer';
 import { useEffect, useReducer } from 'react';
 import { UserHotkeys } from '::helpers/hotkeys/fetched';
-import { useFindDuplicates } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/hooks/find-duplicates/find-duplicates';
 import { modHotKeys } from '::sass-modules';
 
 const mapState = (state: Store) => ({
@@ -31,7 +30,6 @@ const KeyboardShortcuts: React.FC<Props & PropsFromRedux> = ({
     hkActionCreators.init(dispatch);
   }, []);
 
-  useFindDuplicates({ state });
   useEffect(() => {
     hkActionCreators.reset(userHotKeys);
   }, [userHotKeys]);
@@ -45,7 +43,7 @@ const KeyboardShortcuts: React.FC<Props & PropsFromRedux> = ({
               <KeyboardShortcut
                 key={type}
                 hotKey={state.hotKeys[type]}
-                duplicate={state.duplicateHotkeys[type]}
+                duplicate={state.duplicates && state.duplicates[type]}
               />
             ))}
           </div>

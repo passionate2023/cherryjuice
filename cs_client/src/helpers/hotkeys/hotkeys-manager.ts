@@ -1,6 +1,6 @@
 import { richTextIsOnFocus } from '::helpers/hotkeys/helpers/richtext-is-focused';
 import { HotKeyActionType } from '::helpers/hotkeys/types';
-import { flattenHotKey } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/hooks/find-duplicates/helpers';
+import { flattenHotKey } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/find-duplicate';
 
 export type KeysCombination = {
   key?: string;
