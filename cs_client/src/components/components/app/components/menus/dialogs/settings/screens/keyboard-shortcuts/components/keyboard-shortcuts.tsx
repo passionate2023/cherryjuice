@@ -60,7 +60,11 @@ const KeyboardShortcuts: React.FC<Props & PropsFromRedux> = ({
     <>
       {Object.entries(userHotKeys).map(([, { hotkeys, meta }]) => (
         <div key={meta.name} className={modHotKeys.hotkeys__category}>
-          <div className={modHotKeys.hotkeys__category__name}>{meta.name}</div>
+          <div className={modHotKeys.hotkeys__category__nameContainer}>
+            <div className={modHotKeys.hotkeys__category__name}>
+              {meta.name}
+            </div>
+          </div>
           <div className={modHotKeys.hotkeys__category__hotkeysList}>
             {hotkeys.map(({ type }) => (
               <KeyboardShortcut

@@ -75,9 +75,7 @@
   border: none;
   height: 50px;
   box-sizing: border-box;
-  &[type='submit'] {
-    width: 100%;
-  }
+  width: 100%;
 }
 .login__form__input__input--highlight-invalid {
   &:invalid {
