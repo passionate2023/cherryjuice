@@ -1,9 +1,6 @@
-import { HotKey } from '::helpers/hotkeys/hotkeys-manager';
-import { UserHotkeys } from '::helpers/hotkeys/fetched';
-import { HotKeyActionType } from '::helpers/hotkeys/types';
-import {
-  findDuplicateHotkeys,
-} from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/find-duplicate';
+import { HotKey } from '::types/graphql/generated';
+import { HotKeyActionType, HotKeys } from '::types/graphql/generated';
+import { findDuplicateHotkeys } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/find-duplicate';
 
 const compose = (...fns) => {
   if (fns.length === 0) return arg => arg;
@@ -28,14 +25,11 @@ const initialState: State = {
   duplicates: undefined,
 };
 
-type ResetStateProps = UserHotkeys;
-const resetState = (userHotKeys: ResetStateProps): State => {
+type ResetStateProps = HotKeys;
+const resetState = (hotKeys: ResetStateProps): State => {
   return {
     hotKeys: Object.fromEntries(
-      [
-        ...userHotKeys.formatting.hotkeys,
-        ...userHotKeys.document.hotkeys,
-      ].map(hk => [hk.type, hk]),
+      [...hotKeys.formatting, ...hotKeys.general].map(hk => [hk.type, hk]),
     ),
     duplicates: undefined,
     changes: {},
@@ -74,7 +68,7 @@ const actionCreators = (() => {
       state.enhancedDispatch({ type: actions.toggleShift, value }),
     setDuplicateHotkeys: (value: HotKeyActionType[]) =>
       state.enhancedDispatch({ type: actions.setDuplicateHotkeys, value }),
-    reset: (value: UserHotkeys) =>
+    reset: (value: HotKeys) =>
       state.enhancedDispatch({ type: actions.reset, value }),
   };
 })();
@@ -131,8 +125,7 @@ const calculateChanges = (
   const previousValue = changes[newHotKey.type];
   let equal: boolean;
   if (previousValue) {
-    equal =
-      previousValue.original.keys === newHotKey.keys;
+    equal = previousValue.original.keys === newHotKey.keys;
   }
   if (equal) delete changes[newHotKey.type];
   else

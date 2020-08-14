@@ -1,4 +1,4 @@
-import { HotKeyActionType } from '::helpers/hotkeys/types';
+import { HotKeyActionType } from '::types/graphql/generated';
 import { ac, store } from '::store/store';
 
 export const documentHotkeysProps = {

@@ -195,6 +195,7 @@ export interface UserQuery {
 
 export interface AuthUser {
   secrets: Secrets;
+  settings: Settings;
   token: string;
   user: User;
 }
@@ -202,6 +203,48 @@ export interface AuthUser {
 export interface Secrets {
   google_api_key: string;
   google_client_id: string;
+}
+
+export interface Settings {
+  hotKeys: HotKeys;
+}
+
+export interface HotKeys {
+  formatting: Array<HotKey>;
+  general: Array<HotKey>;
+}
+
+export interface HotKey {
+  keys?: string;
+  type: HotKeyActionType;
+}
+
+export enum HotKeyActionType {
+  BG_COLOR = 'BG_COLOR',
+  BOLD = 'BOLD',
+  CREATE_TEST_SAMPLE = 'CREATE_TEST_SAMPLE',
+  FG_COLOR = 'FG_COLOR',
+  H1 = 'H1',
+  H2 = 'H2',
+  H3 = 'H3',
+  ITALIC = 'ITALIC',
+  JUSTIFY_CENTER = 'JUSTIFY_CENTER',
+  JUSTIFY_FILL = 'JUSTIFY_FILL',
+  JUSTIFY_LEFT = 'JUSTIFY_LEFT',
+  JUSTIFY_RIGHT = 'JUSTIFY_RIGHT',
+  LINE_THROUGH = 'LINE_THROUGH',
+  MONO = 'MONO',
+  RELOAD_DOCUMENT = 'RELOAD_DOCUMENT',
+  REMOVE_STYLE = 'REMOVE_STYLE',
+  SAVE_DOCUMENT = 'SAVE_DOCUMENT',
+  SHOW_CREATE_DOCUMENT = 'SHOW_CREATE_DOCUMENT',
+  SHOW_CREATE_SIBLING_NODE = 'SHOW_CREATE_SIBLING_NODE',
+  SHOW_DOCUMENTS_LIST = 'SHOW_DOCUMENTS_LIST',
+  SHOW_IMPORT_DOCUMENTS = 'SHOW_IMPORT_DOCUMENTS',
+  SMALL = 'SMALL',
+  SUB = 'SUB',
+  SUP = 'SUP',
+  UNDERLINE = 'UNDERLINE',
 }
 
 export interface User {
@@ -442,6 +485,9 @@ export interface Resolver {
   UserQuery?: UserQueryTypeResolver;
   AuthUser?: AuthUserTypeResolver;
   Secrets?: SecretsTypeResolver;
+  Settings?: SettingsTypeResolver;
+  HotKeys?: HotKeysTypeResolver;
+  HotKey?: HotKeyTypeResolver;
   User?: UserTypeResolver;
   UserToken?: UserTokenTypeResolver;
   UserTokenMeta?: UserTokenMetaTypeResolver;
@@ -873,11 +919,16 @@ export interface UserQueryToVerifyTokenValidityResolver<
 
 export interface AuthUserTypeResolver<TParent = any> {
   secrets?: AuthUserToSecretsResolver<TParent>;
+  settings?: AuthUserToSettingsResolver<TParent>;
   token?: AuthUserToTokenResolver<TParent>;
   user?: AuthUserToUserResolver<TParent>;
 }
 
 export interface AuthUserToSecretsResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface AuthUserToSettingsResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -902,6 +953,40 @@ export interface SecretsToGoogle_client_idResolver<
   TParent = any,
   TResult = any
 > {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface SettingsTypeResolver<TParent = any> {
+  hotKeys?: SettingsToHotKeysResolver<TParent>;
+}
+
+export interface SettingsToHotKeysResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface HotKeysTypeResolver<TParent = any> {
+  formatting?: HotKeysToFormattingResolver<TParent>;
+  general?: HotKeysToGeneralResolver<TParent>;
+}
+
+export interface HotKeysToFormattingResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface HotKeysToGeneralResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface HotKeyTypeResolver<TParent = any> {
+  keys?: HotKeyToKeysResolver<TParent>;
+  type?: HotKeyToTypeResolver<TParent>;
+}
+
+export interface HotKeyToKeysResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface HotKeyToTypeResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 

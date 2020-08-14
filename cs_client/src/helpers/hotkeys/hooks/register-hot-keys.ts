@@ -2,21 +2,21 @@ import { useEffect } from 'react';
 import { hotKeysManager } from '../hotkeys-manager';
 import {
   registerFormattingHKs,
-  registerDocumentHKs,
+  registerGeneralHKs,
   registerDevHKs,
 } from '../register-hot-keys';
-import { UserHotkeys } from '::helpers/hotkeys/fetched';
+import { HotKeys } from '::types/graphql/generated';
 
-const useRegisterHotKeys = (userHotKeys: UserHotkeys) => {
+const useRegisterHotKeys = (hotKeys: HotKeys) => {
   useEffect(() => {
     hotKeysManager.startListening();
   }, []);
   useEffect(() => {
     hotKeysManager.unregisterAllHotKeys();
-    registerDocumentHKs(userHotKeys?.document?.hotkeys);
-    registerFormattingHKs(userHotKeys?.formatting?.hotkeys);
+    registerGeneralHKs(hotKeys?.general);
+    registerFormattingHKs(hotKeys?.formatting);
     registerDevHKs();
-  }, [userHotKeys]);
+  }, [hotKeys]);
 };
 
 export { useRegisterHotKeys };

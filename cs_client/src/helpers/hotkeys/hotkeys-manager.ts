@@ -1,5 +1,5 @@
 import { richTextIsOnFocus } from '::helpers/hotkeys/helpers/richtext-is-focused';
-import { HotKeyActionType } from '::helpers/hotkeys/types';
+import { HotKey } from '::types/graphql/generated';
 import { flattenHotKey } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/flatten-hot-key';
 
 export type KeysCombination = {
@@ -8,11 +8,6 @@ export type KeysCombination = {
   shiftKey?: boolean;
   altKey?: boolean;
   metaKey?: boolean;
-};
-
-export type HotKey = {
-  keys?: string;
-  type: HotKeyActionType;
 };
 
 export enum HotKeyTarget {

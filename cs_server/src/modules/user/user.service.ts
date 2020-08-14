@@ -87,6 +87,7 @@ export class UserService {
       token: this.jwtService.sign(createJWTPayload.authn(user)),
       user,
       secrets: this.getSecrets(),
+      settings: user.settings,
     };
   }
 

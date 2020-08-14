@@ -1,4 +1,4 @@
-import { HotKey } from '::helpers/hotkeys/hotkeys-manager';
+import { HotKey } from '::types/graphql/generated';
 
 const findDuplicate = <T>(arr: T[]): { index: number } => {
   let index;

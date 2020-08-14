@@ -1,6 +1,7 @@
 import { User } from './user.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Secrets } from './secrets';
+import { Settings } from './settings/settings.entity';
 
 @ObjectType()
 export class AuthUser {
@@ -8,6 +9,9 @@ export class AuthUser {
   user: User;
   @Field()
   token: string;
+
+  @Field(() => Settings)
+  settings: Settings;
 
   @Field(() => Secrets)
   secrets: Secrets;

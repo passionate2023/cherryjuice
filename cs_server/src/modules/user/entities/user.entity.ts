@@ -11,6 +11,8 @@ import { Exclude } from 'class-transformer';
 import { UnauthorizedException } from '@nestjs/common';
 import { AfterLoad } from 'typeorm/index';
 import { UserToken } from './user-token.entity';
+import { Settings } from './settings/settings.entity';
+import { getDefaultSettings } from './settings/helpers/default-settings/default-settings';
 
 type UserConstructorProps = {
   username: string;
@@ -31,6 +33,7 @@ class User extends BaseEntity {
     if (props) {
       this.salt = '';
       this.passwordHash = '';
+      this.settings = getDefaultSettings();
     }
   }
 
@@ -100,6 +103,9 @@ class User extends BaseEntity {
   setHashPassword() {
     this.hasPassword = Boolean(this.passwordHash);
   }
+
+  @Column('json')
+  settings: Settings;
 }
 
 export { User };

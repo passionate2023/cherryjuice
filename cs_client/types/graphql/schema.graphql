@@ -8,6 +8,7 @@ schema {
 
 type AuthUser {
     secrets: Secrets!
+    settings: Settings!
     token: String!
     user: User!
 }
@@ -49,6 +50,16 @@ type DocumentSubscription {
     id: ID!
     name: ID!
     status: DOCUMENT_SUBSCRIPTIONS!
+}
+
+type HotKey {
+    keys: String
+    type: HotKeyActionType!
+}
+
+type HotKeys {
+    formatting: [HotKey!]!
+    general: [HotKey!]!
 }
 
 type Image {
@@ -130,6 +141,10 @@ type Secrets {
     google_client_id: String!
 }
 
+type Settings {
+    hotKeys: HotKeys!
+}
+
 type Subscription {
     document(userId: String!): DocumentSubscription!
 }
@@ -197,6 +212,34 @@ enum DOCUMENT_SUBSCRIPTIONS {
     IMPORT_PENDING
     IMPORT_PREPARING
     IMPORT_STARTED
+}
+
+enum HotKeyActionType {
+    BG_COLOR
+    BOLD
+    CREATE_TEST_SAMPLE
+    FG_COLOR
+    H1
+    H2
+    H3
+    ITALIC
+    JUSTIFY_CENTER
+    JUSTIFY_FILL
+    JUSTIFY_LEFT
+    JUSTIFY_RIGHT
+    LINE_THROUGH
+    MONO
+    RELOAD_DOCUMENT
+    REMOVE_STYLE
+    SAVE_DOCUMENT
+    SHOW_CREATE_DOCUMENT
+    SHOW_CREATE_SIBLING_NODE
+    SHOW_DOCUMENTS_LIST
+    SHOW_IMPORT_DOCUMENTS
+    SMALL
+    SUB
+    SUP
+    UNDERLINE
 }
 
 enum NodePrivacy {

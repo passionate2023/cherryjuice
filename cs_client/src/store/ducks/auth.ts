@@ -4,6 +4,7 @@ import {
   AuthUser,
   OauthSignUpCredentials,
   Secrets,
+  Settings,
   SignInCredentials,
   SignUpCredentials,
   User,
@@ -11,7 +12,6 @@ import {
 import { AsyncOperation } from './document';
 import { rootActionCreators } from './root';
 import { AsyncError } from '::root/components/auth/hooks/proper-error-message';
-import { UserHotkeys, userHotkeys } from '::helpers/hotkeys/fetched';
 
 const ap = createActionPrefixer('auth');
 
@@ -53,13 +53,14 @@ type StorageType = 'localStorage' | 'sessionStorage';
 type State = {
   token: string;
   user: User;
-  settings: { hotKeys: UserHotkeys };
+  settings: Settings;
   secrets: Secrets;
   storageType: StorageType;
   alert: AsyncError;
   ongoingOperation: AsyncOperation;
 };
 
+const emptySettings = { hotKeys: { formatting: [], general: [] } };
 const initialState: State = {
   alert: undefined,
   token: undefined,
@@ -67,7 +68,7 @@ const initialState: State = {
   secrets: undefined,
   storageType: 'localStorage',
   ongoingOperation: 'idle',
-  settings: { hotKeys: userHotkeys },
+  settings: emptySettings,
 };
 const reducer = createReducer(initialState, _ => [
   ...[
@@ -77,6 +78,10 @@ const reducer = createReducer(initialState, _ => [
         token: payload.token,
         user: payload.user,
         secrets: payload.secrets,
+        settings: (() => {
+          delete payload.settings.hotKeys['__typename'];
+          return payload.settings;
+        })(),
         ongoingOperation: 'idle',
       };
     }),

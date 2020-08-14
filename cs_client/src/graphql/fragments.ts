@@ -23,6 +23,34 @@ const FRAGMENT_USER = {
   `,
 };
 
+const FRAGMENT_AUTH_USER = {
+  authUser: gql`
+    fragment AuthUser on AuthUser {
+      token
+      user {
+        ...UserInfo
+      }
+      secrets {
+        google_api_key
+        google_client_id
+      }
+      settings {
+        hotKeys {
+          formatting {
+            keys
+            type
+          }
+          general {
+            keys
+            type
+          }
+        }
+      }
+    }
+    ${FRAGMENT_USER.userInfo}
+  `,
+};
+
 export const DOCUMENT_GUEST = gql`
   fragment DocumentGuest on Document {
     guests {
@@ -33,4 +61,4 @@ export const DOCUMENT_GUEST = gql`
   }
 `;
 
-export { FRAGMENT_USER };
+export { FRAGMENT_USER, FRAGMENT_AUTH_USER };

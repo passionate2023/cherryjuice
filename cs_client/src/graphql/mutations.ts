@@ -5,7 +5,7 @@ import {
   SignInCredentials,
   SignUpCredentials,
 } from '::types/graphql/generated';
-import { FRAGMENT_USER } from '::graphql/fragments';
+import { FRAGMENT_AUTH_USER } from '::graphql/fragments';
 
 const DOCUMENT_MUTATION = {
   file: gql`
@@ -79,18 +79,11 @@ const USER_MUTATION = {
       query refreshToekn {
         user {
           refreshToken {
-            token
-            user {
-              ...UserInfo
-            }
-            secrets {
-              google_api_key
-              google_client_id
-            }
+            ...AuthUser
           }
         }
       }
-      ${FRAGMENT_USER.userInfo}
+      ${FRAGMENT_AUTH_USER.authUser}
     `,
   },
   signIn: {
@@ -100,18 +93,11 @@ const USER_MUTATION = {
       mutation signin($input: SignInCredentials!) {
         user {
           signIn(credentials: $input) {
-            token
-            user {
-              ...UserInfo
-            }
-            secrets {
-              google_api_key
-              google_client_id
-            }
+            ...AuthUser
           }
         }
       }
-      ${FRAGMENT_USER.userInfo}
+      ${FRAGMENT_AUTH_USER.authUser}
     `,
   },
   signUp: {
@@ -121,18 +107,11 @@ const USER_MUTATION = {
       mutation signup($input: SignUpCredentials!) {
         user {
           signUp(credentials: $input) {
-            token
-            user {
-              ...UserInfo
-            }
-            secrets {
-              google_api_key
-              google_client_id
-            }
+            ...AuthUser
           }
         }
       }
-      ${FRAGMENT_USER.userInfo}
+      ${FRAGMENT_AUTH_USER.authUser}
     `,
   },
   deleteAccount: {
@@ -154,19 +133,10 @@ const USER_MUTATION = {
     query: gql`
       mutation oauth_signup($input: OauthSignUpCredentials!) {
         user {
-          oauthSignUp(credentials: $input) {
-            token
-            user {
-              ...UserInfo
-            }
-            secrets {
-              google_api_key
-              google_client_id
-            }
-          }
+          ...AuthUser
         }
       }
-      ${FRAGMENT_USER.userInfo}
+      ${FRAGMENT_AUTH_USER.authUser}
     `,
   },
 };

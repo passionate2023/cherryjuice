@@ -1,6 +1,5 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
-import { HotKeyCategory } from '::helpers/hotkeys/fetched';
 import { HotKeyDict } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/reducer/reducer';
 
 const ap = createActionPrefixer('cache');
@@ -8,28 +7,20 @@ const ap = createActionPrefixer('cache');
 const ac = {
   updateHotkeys: _(
     ap('update-hotkeys'),
-    _ => (changes: HotKeysChanges | undefined) => _(changes),
+    _ => (changes: HotKeyDict | undefined) => _(changes),
   ),
   clearHotkeys: _(ap('clear-hotkeys')),
   syncHotKeysWithCache: _(ap('sync-hot-keys-with-cache')),
 };
 
-export type HotKeysChanges = {
-  [category in HotKeyCategory]: HotKeyDict;
-};
-
 type State = {
   settings: {
-    [setting in 'hotKeys']: HotKeysChanges;
-  } & {
+    hotKeys: HotKeyDict;
     syncHotKeysWithCache: number;
   };
 };
 
-const initialHotKeysChanges = {
-  formatting: {},
-  document: {},
-};
+const initialHotKeysChanges = {};
 const initialState: State = {
   settings: {
     hotKeys: initialHotKeysChanges,
@@ -42,14 +33,8 @@ const reducer = createReducer(initialState, _ => [
     settings: {
       ...state.settings,
       hotKeys: {
-        formatting: {
-          ...state.settings.hotKeys.formatting,
-          ...payload.formatting,
-        },
-        document: {
-          ...state.settings.hotKeys.document,
-          ...payload.document,
-        },
+        ...state.settings.hotKeys,
+        ...payload,
       },
       syncHotKeysWithCache: undefined,
     },

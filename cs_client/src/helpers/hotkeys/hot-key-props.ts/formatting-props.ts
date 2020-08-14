@@ -1,7 +1,7 @@
 import { ExecKCommand } from '::helpers/editing/execK/execk-commands';
 import { Icons } from '::root/components/shared-components/icon/icon';
 import { ExecKProps } from '::helpers/editing/execK';
-import { HotKeyActionType } from '::helpers/hotkeys/types';
+import { HotKeyActionType } from '::types/graphql/generated';
 
 export type FormattingHotProps = {
   icon: string;

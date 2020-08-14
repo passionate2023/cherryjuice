@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { HotKey, KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
+import { KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
 import { useCallback, useMemo } from 'react';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
 import { modButton, modHotKey } from '::sass-modules';
@@ -7,6 +7,7 @@ import { TextInput } from '::root/components/shared-components/form/text-input';
 import { keyEventToValidShortcut } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/components/keyboard-shortcut/helpers';
 import { hkActionCreators } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/reducer/reducer';
 import { joinClassNames } from '::helpers/dom/join-class-names';
+import { HotKey } from '::types/graphql/generated';
 
 const enumToString = (word: string): string =>
   word.replace(/_/g, ' ').toLocaleLowerCase();

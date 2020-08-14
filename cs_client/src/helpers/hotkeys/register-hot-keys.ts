@@ -1,9 +1,9 @@
 import { execK } from '::helpers/editing/execK';
 import { createTestSample } from '::helpers/editing/execK/__tests__/__helpers__/create-test-sample';
-import { HotKey, hotKeysManager, HotKeyTarget } from './hotkeys-manager';
+import { hotKeysManager, HotKeyTarget } from './hotkeys-manager';
 import { documentHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/document-props';
 import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
-import { HotKeyActionType } from '::helpers/hotkeys/types';
+import { HotKey, HotKeyActionType } from '::types/graphql/generated';
 import { flattenHotKey } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/flatten-hot-key';
 
 const registerFormattingHKs = (hotKeys: HotKey[] = []) => {
@@ -37,7 +37,7 @@ const registerFormattingHKs = (hotKeys: HotKey[] = []) => {
     });
 };
 
-const registerDocumentHKs = (hotKeys: HotKey[] = []) => {
+const registerGeneralHKs = (hotKeys: HotKey[] = []) => {
   hotKeys
     .filter(hotKey => hotKey.keys)
     .forEach(({ keys, type }) => {
@@ -59,4 +59,4 @@ const registerDevHKs = () => {
   });
 };
 
-export { registerDevHKs, registerFormattingHKs, registerDocumentHKs };
+export { registerDevHKs, registerFormattingHKs, registerGeneralHKs };

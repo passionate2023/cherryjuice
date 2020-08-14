@@ -39,7 +39,7 @@ const mapState = (state: Store) => ({
   token: state.auth.token,
   userId: state.auth.user?.id,
   hasPassword: state.auth.user?.hasPassword,
-  userHotKeys: getHotkeys(state),
+  hotKeys: getHotkeys(state),
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -51,11 +51,11 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   token,
   userId,
   hasPassword,
-  userHotKeys,
+  hotKeys,
 }) => {
   useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
   const client = useApolloClient(token, userId);
-  useRegisterHotKeys(userHotKeys);
+  useRegisterHotKeys(hotKeys);
 
   useEffect(() => {
     const unfinishedOauthSignup = userId && hasPassword === false;

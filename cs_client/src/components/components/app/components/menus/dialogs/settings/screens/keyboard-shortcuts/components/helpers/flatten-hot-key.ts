@@ -1,4 +1,5 @@
-import { HotKey, KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
+import { KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
+import { HotKey } from '::types/graphql/generated';
 
 const flattenHotKey = (value: KeysCombination | KeyboardEvent) =>
   value.key +
