@@ -80,6 +80,11 @@ const reducer = createReducer(initialState, _ => [
         secrets: payload.secrets,
         settings: (() => {
           delete payload.settings.hotKeys['__typename'];
+          Object.values(payload.settings.hotKeys).forEach(hks => {
+            hks.forEach(object => {
+              delete object['__typename'];
+            });
+          });
           return payload.settings;
         })(),
         ongoingOperation: 'idle',

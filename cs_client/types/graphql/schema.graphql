@@ -173,6 +173,7 @@ type UserMutation {
     signIn(credentials: SignInCredentials!): AuthUser!
     signUp(credentials: SignUpCredentials!): AuthUser!
     updateUserProfile(userProfile: UpdateUserProfileIt!): AuthUser!
+    updateUserSettings(userSettings: UpdateUserSettingsIt!): AuthUser!
     verifyEmail(input: VerifyEmailIt!): Timestamp!
 }
 
@@ -349,6 +350,16 @@ input EditDocumentIt {
     updatedAt: Timestamp!
 }
 
+input HotKeyIt {
+    keys: String
+    type: HotKeyActionType!
+}
+
+input HotKeysIt {
+    formatting: [HotKeyIt!]!
+    general: [HotKeyIt!]!
+}
+
 input NodeMetaIt {
     child_nodes: [Int]
     fatherId: String
@@ -429,6 +440,10 @@ input UpdateUserProfileIt {
     lastName: String
     newPassword: String
     username: String
+}
+
+input UpdateUserSettingsIt {
+    hotKeys: HotKeysIt
 }
 
 input UploadLinkInputType {

@@ -1,6 +1,7 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { HotKeyDict } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/reducer/reducer';
+import { authActionCreators } from '::store/ducks/auth';
 
 const ap = createActionPrefixer('cache');
 
@@ -40,6 +41,13 @@ const reducer = createReducer(initialState, _ => [
     },
   })),
   _(ac.clearHotkeys, state => ({
+    ...state,
+    settings: {
+      ...state.settings,
+      hotKeys: initialHotKeysChanges,
+    },
+  })),
+  _(authActionCreators.setAuthenticationSucceeded, state => ({
     ...state,
     settings: {
       ...state.settings,

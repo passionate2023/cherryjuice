@@ -1,4 +1,4 @@
-import { filter, map, switchMap, take } from 'rxjs/operators';
+import { filter, flatMap, map,  switchMap, take } from 'rxjs/operators';
 import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { store, ac } from '../../store';
@@ -7,8 +7,11 @@ import { gqlMutation } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { AsyncOperation } from '../../ducks/document';
-import { UPDATE_USER_PROFILE } from '::graphql/mutations/user/update-user-information';
+import { UPDATE_USER_PROFILE } from '::graphql/mutations/user/update-user-profile';
 import { properErrorMessage } from '::root/components/auth/hooks/proper-error-message';
+import { UPDATE_USER_SETTINGS } from '::graphql/mutations/user/update-user-settings';
+import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
+import { HotKeysOt } from '::types/graphql/generated';
 
 const timeoutHandler = () =>
   createTimeoutHandler({
@@ -45,17 +48,35 @@ const saveSettingsEpic = (action$: Observable<Actions>) => {
       );
       if (selectedScreen === 'keyboard shortcuts') {
         const requestUpdateHotkeys = of(ac.__.cache.syncHotKeysWithCache());
-        const saveHotKeys = action$.pipe(
-          ofType([ac.__.cache.updateHotkeys]),
-          take(1),
-          switchMap(action => {
-            // eslint-disable-next-line no-console
-            console.log(action);
-            return fulfilled;
+        const waitForCacheMerge = of(
+          new Promise<HotKeysOt>(res => {
+            const interval = setInterval(() => {
+              const updatesMerged = !store.getState().cache.settings
+                .syncHotKeysWithCache;
+              if (updatesMerged) {
+                clearInterval(interval);
+                res(getHotkeys(store.getState()));
+              }
+            }, 10);
           }),
+        ).pipe(
+          flatMap(async hotKeys =>
+            gqlMutation(
+              UPDATE_USER_SETTINGS({
+                input: { hotKeys: await hotKeys },
+              }),
+            ),
+          ),
+          flatMap(o => o.pipe(map(ac.__.auth.setAuthenticationSucceeded))),
         );
 
-        return concat(requestUpdateHotkeys, saveHotKeys);
+        return concat(
+          loading,
+          requestUpdateHotkeys,
+          waitForCacheMerge,
+          fulfilled,
+          snackbar,
+        ).pipe(timeoutHandler(), errorHandler());
       } else if (selectedScreen === 'manage account') {
         const showConfirmation = of(ac.__.dialogs.showPasswordModal());
         const updateUserProfile = action$.pipe(

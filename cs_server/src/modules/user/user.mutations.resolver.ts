@@ -19,6 +19,7 @@ import {
   ChangeEmailIt,
 } from './input-types/change-email.it';
 import { RemoveGmailDots } from './pipes/gmail-dots';
+import { UpdateUserSettingsIt } from './input-types/update-user-settings.it';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => UserMutation)
 export class UserMutationsResolver {
@@ -73,6 +74,22 @@ export class UserMutationsResolver {
       input,
       userId: user.id,
       email: user.email,
+    });
+    return this.userService.refreshUser(user.id);
+  }
+
+  @ResolveField(() => AuthUser)
+  async updateUserSettings(
+    @GetUserGql({ nullable: false }) user: User,
+    @Args(
+      { name: 'userSettings', type: () => UpdateUserSettingsIt },
+      RemoveGmailDots,
+    )
+    input: UpdateUserSettingsIt,
+  ): Promise<AuthUser> {
+    await this.userService.updateUserSettings({
+      input,
+      userId: user.id,
     });
     return this.userService.refreshUser(user.id);
   }

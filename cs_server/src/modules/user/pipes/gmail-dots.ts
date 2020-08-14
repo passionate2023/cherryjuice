@@ -1,4 +1,4 @@
-import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
+import { PipeTransform, Injectable } from '@nestjs/common';
 import { SignInCredentials } from '../dto/sign-in-credentials.dto';
 import { SignUpCredentials } from '../dto/sign-up-credentials.dto';
 import { UpdateUserProfileIt } from '../input-types/update-user-profile.it';
@@ -24,7 +24,7 @@ export class RemoveGmailDots<
       value['emailOrUsername'] = removeDots(value['emailOrUsername']);
     } else if ('email' in value) {
       value['email'] = removeDots(value['email']);
-    } else throw new BadRequestException('unsupported DTO');
+    }
 
     return value;
   }

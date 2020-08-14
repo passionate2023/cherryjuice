@@ -1,4 +1,9 @@
-import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import {
+  Field,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 
 export enum HotKeyActionType {
   SAVE_DOCUMENT = 'SAVE_DOCUMENT',
@@ -31,7 +36,8 @@ registerEnumType(HotKeyActionType, {
   name: 'HotKeyActionType',
 });
 
-@ObjectType()
+@InputType('HotKeyIt')
+@ObjectType('HotKey')
 export class HotKey {
   @Field(() => HotKeyActionType)
   type: HotKeyActionType;

@@ -9,6 +9,7 @@ import {
   CreatePasswordResetTokenDTO,
   OauthSignupDTO,
   UpdateUserProfileDTO,
+  UpdateUserSettingsDTO,
   UserExistsDTO,
   UserRepository,
 } from './repositories/user.repository';
@@ -171,6 +172,10 @@ export class UserService {
       delete dto.input.email;
     }
     return this.userRepository.updateUserProfile(dto);
+  }
+
+  async updateUserSettings(dto: UpdateUserSettingsDTO): Promise<string> {
+    return await this.userRepository.updateUserSettings(dto);
   }
 
   async deleteAccount(dto: DeleteAccountDTO): Promise<string> {

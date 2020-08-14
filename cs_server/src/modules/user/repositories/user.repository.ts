@@ -16,6 +16,8 @@ import {
   VerifyEmailTp,
 } from '../interfaces/jwt-payload.interface';
 import { removeDots } from '../pipes/gmail-dots';
+import { UpdateUserSettingsIt } from '../input-types/update-user-settings.it';
+import { Settings } from '../entities/settings/settings.entity';
 
 export type UserExistsDTO = { email: string };
 export type CreatePasswordResetTokenDTO = { email: string; username: string };
@@ -24,6 +26,10 @@ export type UpdateUserProfileDTO = {
   input: UpdateUserProfileIt;
   userId: string;
   email: string;
+};
+export type UpdateUserSettingsDTO = {
+  input: UpdateUserSettingsIt;
+  userId: string;
 };
 export type OauthSignupDTO = {
   input: OauthSignUpCredentials;
@@ -151,7 +157,8 @@ class UserRepository extends Repository<User> {
       | { email_verified: boolean }
       | { email: string; email_verified: boolean }
       | Omit<UpdateUserProfileIt, 'newEmail'>
-      | Omit<OauthSignUpCredentials, 'password'>,
+      | Omit<OauthSignUpCredentials, 'password'>
+      | { settings: Settings },
   ): Promise<void> {
     Object.entries(data).forEach(([key, value]) => {
       user[key] = value;
@@ -180,6 +187,15 @@ class UserRepository extends Repository<User> {
       delete input.newPassword;
     }
     await this.updateUser(user, input);
+    return user.id;
+  }
+
+  async updateUserSettings({
+    userId,
+    input,
+  }: UpdateUserSettingsDTO): Promise<string> {
+    const user = await this._getUser(undefined, userId);
+    await this.updateUser(user, { settings: { ...user.settings, ...input } });
     return user.id;
   }
 
