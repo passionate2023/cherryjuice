@@ -3,7 +3,6 @@ import { UserHotkeys } from '::helpers/hotkeys/fetched';
 import { HotKeyActionType } from '::helpers/hotkeys/types';
 import {
   findDuplicateHotkeys,
-  flattenHotKey,
 } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/find-duplicate';
 
 const compose = (...fns) => {
@@ -80,26 +79,37 @@ const actionCreators = (() => {
   };
 })();
 
+const metaKeysPositions = {
+  ctrlKey: 2,
+  altKey: 1,
+  shiftKey: 0,
+};
+
 const toggleMetaKey = (
   state: State,
   action: { type: actions; value: HotKeyActionType },
-) => (key: string): HotKey => {
+) => (key: 'ctrlKey' | 'altKey' | 'shiftKey'): HotKey => {
+  const length = state.hotKeys[action.value].keys.length;
+  const flagPosition = length - metaKeysPositions[key] - 1;
+  const keys = state.hotKeys[action.value].keys;
+  let newComb = '';
+  for (let i = 0; i < length; i++) {
+    if (i === flagPosition) {
+      newComb += +!+keys[i];
+    } else newComb += keys[i];
+  }
   return {
     ...state.hotKeys[action.value],
-    keysCombination: {
-      ...state.hotKeys[action.value].keysCombination,
-      [key]: !state.hotKeys[action.value].keysCombination[key],
-    },
+    keys: newComb,
   };
 };
 
 const updateKey = (state: State) => ({ type, key }: SetKeyPayload): HotKey => {
+  const keys = state.hotKeys[type].keys;
+  const length = keys.length;
   return {
     ...state.hotKeys[type],
-    keysCombination: {
-      ...state.hotKeys[type].keysCombination,
-      key,
-    },
+    keys: key + keys.substring(length - 3),
   };
 };
 
@@ -122,8 +132,7 @@ const calculateChanges = (
   let equal: boolean;
   if (previousValue) {
     equal =
-      flattenHotKey(previousValue.original.keysCombination) ===
-      flattenHotKey(newHotKey.keysCombination);
+      previousValue.original.keys === newHotKey.keys;
   }
   if (equal) delete changes[newHotKey.type];
   else
@@ -141,11 +150,9 @@ const findDuplicateHotKeys = (state: State): DuplicateHotKeys | undefined => {
   const hotKeys = Object.values(state.hotKeys);
   const duplicateHotKey = findDuplicateHotkeys(hotKeys);
   if (duplicateHotKey) {
-    const flatDuplicate = flattenHotKey(duplicateHotKey.keysCombination);
+    const flatDuplicate = duplicateHotKey.keys;
     const duplicateHotKeys = hotKeys.filter(
-      hk =>
-        hk.keysCombination &&
-        flattenHotKey(hk.keysCombination) === flatDuplicate,
+      hk => hk.keys && hk.keys === flatDuplicate,
     );
     duplicateHotKeys.push(duplicateHotKey);
     return Object.fromEntries(

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { HotKey } from '::helpers/hotkeys/hotkeys-manager';
-import { useCallback } from 'react';
+import { HotKey, KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
+import { useCallback, useMemo } from 'react';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
 import { modButton, modHotKey } from '::sass-modules';
 import { TextInput } from '::root/components/shared-components/form/text-input';
@@ -10,10 +10,29 @@ import { joinClassNames } from '::helpers/dom/join-class-names';
 
 const enumToString = (word: string): string =>
   word.replace(/_/g, ' ').toLocaleLowerCase();
-
+const emptyCombination = {
+  key: '',
+  ctrlKey: false,
+  altKey: false,
+  shiftKey: false,
+};
+const unFlattenHotKey = (hotkey: string): KeysCombination => {
+  const res = /^(.*)(\d{3})$/.exec(hotkey);
+  if (res) {
+    const meta = res[2];
+    return {
+      key: res[1],
+      ctrlKey: Boolean(+meta[0]),
+      altKey: Boolean(+meta[1]),
+      shiftKey: Boolean(+meta[2]),
+    };
+  } else {
+    return emptyCombination;
+  }
+};
 const onChange = () => undefined;
 const KeyboardShortcut = ({
-  hotKey: { keysCombination, type },
+  hotKey: { keys, type },
   duplicate,
 }: {
   hotKey: HotKey;
@@ -30,6 +49,10 @@ const KeyboardShortcut = ({
       }),
     [],
   );
+  const { ctrlKey, altKey, shiftKey, key } = useMemo(
+    () => unFlattenHotKey(keys),
+    [keys],
+  );
   return (
     <span
       className={joinClassNames([
@@ -38,32 +61,26 @@ const KeyboardShortcut = ({
       ])}
     >
       <span className={modHotKey.hotKey__name}>{enumToString(type)}</span>
-      {keysCombination && (
+      {keys && (
         <span className={modHotKey.hotKey__keys}>
           <ButtonSquare
-            className={`${
-              keysCombination.ctrlKey ? modButton.buttonPressed : ''
-            }`}
+            className={`${ctrlKey ? modButton.buttonPressed : ''}`}
             onClick={toggleCtrl}
             text={'ctrl'}
           />
           <ButtonSquare
-            className={`${
-              keysCombination.altKey ? modButton.buttonPressed : ''
-            }`}
+            className={`${altKey ? modButton.buttonPressed : ''}`}
             onClick={toggleAlt}
             text={'alt'}
           />
           <ButtonSquare
-            className={`${
-              keysCombination.shiftKey ? modButton.buttonPressed : ''
-            }`}
+            className={`${shiftKey ? modButton.buttonPressed : ''}`}
             onClick={toggleShift}
             text={'shift'}
           />
           <TextInput
             topLevelClassName={modHotKey.hotKey__field}
-            value={keysCombination.key === ' ' ? 'space' : keysCombination.key}
+            value={key === ' ' ? 'space' : key}
             onKeyUp={setKey}
             onChange={onChange}
           />

@@ -1,6 +1,6 @@
 import { richTextIsOnFocus } from '::helpers/hotkeys/helpers/richtext-is-focused';
 import { HotKeyActionType } from '::helpers/hotkeys/types';
-import { flattenHotKey } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/find-duplicate';
+import { flattenHotKey } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/flatten-hot-key';
 
 export type KeysCombination = {
   key?: string;
@@ -11,7 +11,7 @@ export type KeysCombination = {
 };
 
 export type HotKey = {
-  keysCombination?: KeysCombination;
+  keys?: string;
   type: HotKeyActionType;
 };
 
@@ -40,11 +40,10 @@ const createHotKeysManager = () => {
   const registerHotKey = (hotKey: RegisteredHotKey) => {
     Object.values(state.hotKeys).forEach(registerHotKey => {
       if (registerHotKey.type === hotKey.type) {
-        delete state.hotKeys[flattenHotKey(registerHotKey.keysCombination)];
+        delete state.hotKeys[registerHotKey.keys];
       }
     });
-    const flat = flattenHotKey(hotKey.keysCombination);
-    state.hotKeys[flat] = hotKey;
+    state.hotKeys[hotKey.keys] = hotKey;
   };
   const eventHandler = (e: KeyboardEvent) => {
     const correspondingHotKey = state.hotKeys[flattenHotKey(e)];

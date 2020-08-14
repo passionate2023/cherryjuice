@@ -4,18 +4,19 @@ import { HotKey, hotKeysManager, HotKeyTarget } from './hotkeys-manager';
 import { documentHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/document-props';
 import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
 import { HotKeyActionType } from '::helpers/hotkeys/types';
+import { flattenHotKey } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/flatten-hot-key';
 
 const registerFormattingHKs = (hotKeys: HotKey[] = []) => {
   hotKeys
-    .filter(hotKey => hotKey.keysCombination)
-    .forEach(({ keysCombination, type }) => {
+    .filter(hotKey => hotKey.keys)
+    .forEach(({ keys, type }) => {
       if (
         type === HotKeyActionType.FG_COLOR ||
         type === HotKeyActionType.BG_COLOR
       )
         hotKeysManager.registerHotKey({
           type,
-          keysCombination: keysCombination,
+          keys: keys,
           callback: () => {
             (document.querySelector(`#${type}`) as HTMLInputElement).click();
           },
@@ -26,7 +27,7 @@ const registerFormattingHKs = (hotKeys: HotKey[] = []) => {
       else
         hotKeysManager.registerHotKey({
           type,
-          keysCombination: keysCombination,
+          keys: keys,
           callback: () =>
             execK(formattingHotkeysProps[type].execCommandArguments),
           options: {
@@ -38,11 +39,11 @@ const registerFormattingHKs = (hotKeys: HotKey[] = []) => {
 
 const registerDocumentHKs = (hotKeys: HotKey[] = []) => {
   hotKeys
-    .filter(hotKey => hotKey.keysCombination)
-    .forEach(({ keysCombination, type }) => {
+    .filter(hotKey => hotKey.keys)
+    .forEach(({ keys, type }) => {
       hotKeysManager.registerHotKey({
         type,
-        keysCombination: keysCombination,
+        keys: keys,
         callback: documentHotkeysProps[type],
         options: { target: HotKeyTarget.GLOBAL },
       });
@@ -51,7 +52,7 @@ const registerDocumentHKs = (hotKeys: HotKey[] = []) => {
 
 const registerDevHKs = () => {
   hotKeysManager.registerHotKey({
-    keysCombination: { key: '¤', ctrlKey: true, altKey: true },
+    keys: flattenHotKey({ key: '¤', ctrlKey: true, altKey: true }),
     callback: createTestSample,
     options: { target: HotKeyTarget.GLOBAL },
     type: HotKeyActionType.CREATE_TEST_SAMPLE,

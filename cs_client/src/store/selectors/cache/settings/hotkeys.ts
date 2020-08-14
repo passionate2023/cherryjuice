@@ -17,6 +17,6 @@ export const getHotkeys = createSelector(
         current[category].hotkeys[i] = hotKey;
       });
     });
-    return current;
+    return {...current};
   },
 );

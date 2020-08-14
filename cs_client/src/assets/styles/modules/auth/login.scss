@@ -6,7 +6,7 @@
   position: relative;
   width: 400px;
   height: 435px;
-  @include respond-to($md-down) {
+  @include respond-to($mb-down) {
     width: 100%;
     height: 100%;
   }
@@ -21,7 +21,7 @@
   align-items: center;
 }
 .login__card--sign-up {
-  @include respond-to($md-up) {
+  @include respond-to($mb-up) {
     height: 465px;
   }
 }

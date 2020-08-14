@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  @include respond-to($md-up) {
+  @include respond-to($mb-up) {
     height: 140px;
     align-items: flex-end;
     top: -150px;
@@ -21,7 +21,7 @@
   justify-content: center;
   z-index: 1;
 
-  @include respond-to($md-down) {
+  @include respond-to($mb-down) {
     background-color: rgba($primary, 0.1);
   }
   @include form-element-size();
@@ -34,7 +34,7 @@
 .banner__text {
   text-align: center;
   color: white;
-  @include respond-to($md-down) {
+  @include respond-to($mb-down) {
     color: rgba($primary-dark2, 0.8);
   }
 }
