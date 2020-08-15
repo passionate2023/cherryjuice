@@ -105,7 +105,7 @@ const initialState: State = {
   showNodeMetaDialog: undefined,
   showPasswordModal: false,
   showUserPopup: false,
-  showSettingsDialog: true && process.env.NODE_ENV === 'development',
+  showSettingsDialog: false,
   snackbar: undefined,
 };
 

@@ -1,4 +1,4 @@
-import { filter, flatMap, map,  switchMap, take } from 'rxjs/operators';
+import { filter, flatMap, map, switchMap, take } from 'rxjs/operators';
 import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { store, ac } from '../../store';
