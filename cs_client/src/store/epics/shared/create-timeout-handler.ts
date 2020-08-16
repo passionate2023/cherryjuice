@@ -4,6 +4,7 @@ import { timeoutWith } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ac } from '::store/store';
 import { Actions } from '../../actions.types';
+import { virtualTimeScheduler } from '::store/epics/shared/test-helpers';
 
 type AlertDetails = {
   title: string;
@@ -33,6 +34,7 @@ const createTimeoutHandler = ({
         }),
       ),
       ...actionCreators.map(action => of(action())),
+      process.env.NODE_ENV === 'test' && virtualTimeScheduler,
     ),
   );
 

@@ -12,10 +12,10 @@ type TimeFilterWCProps = {
   createdAtTimeFilter: TimeFilter;
 };
 const timeFilterWC = ({
-  state,
-  createdAtTimeFilter,
-  updatedAtTimeFilter,
-}: TimeFilterWCProps): string[] => {
+                        state,
+                        createdAtTimeFilter,
+                        updatedAtTimeFilter,
+                      }: TimeFilterWCProps): string[] => {
   const query: string[] = [];
   [
     { name: 'createdAt', filter: createdAtTimeFilter },

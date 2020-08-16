@@ -34,7 +34,11 @@ const createLocalRequest = (
 const fetchNodesEpic = (action$: Observable<Actions>) => {
   const selectedDocumentId = () => store.getState().document.documentId;
   return action$.pipe(
-    ofType([ac.__.document.fetchNodes, ac.__.document.setDocumentId]),
+    ofType([
+      ac.__.document.fetchNodes,
+      ac.__.document.setDocumentId,
+      ac.__.document.saveFulfilled,
+    ]),
     map(action =>
       'payload' in action ? action.payload : selectedDocumentId(),
     ),

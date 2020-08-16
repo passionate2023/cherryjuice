@@ -1,5 +1,5 @@
 import { apolloCache } from '::graphql/cache/apollo-cache';
-import { SaveOperationProps } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-deleted-nodes';
+import { SaveOperationProps } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
 import { CREATE_DOCUMENT } from '::graphql/mutations/document/create-document';
 
 const saveNewDocument = async ({ state, documentId }: SaveOperationProps) => {

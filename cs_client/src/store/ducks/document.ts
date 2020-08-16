@@ -47,6 +47,8 @@ const ac = {
     saveFulfilled: _('saveFulfilled'),
     saveInProgress: _('saveInProgress'),
     saveFailed: _('saveFailed'),
+    nodeCached: _('node-cached'),
+    cacheReset: _('cache-reset'),
   },
   ...{
     export: _('export'),

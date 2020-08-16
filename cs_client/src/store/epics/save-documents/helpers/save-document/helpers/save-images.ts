@@ -1,7 +1,7 @@
-import { SaveOperationProps } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-deleted-nodes';
+import { SaveOperationProps } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
-import { swapNodeIdIfApplies } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-nodes-meta';
+import { swapNodeIdIfApplies } from '::store/epics/save-documents/helpers/save-document/helpers/save-nodes-meta';
 const base64toBlob = ({ url, name }): Promise<Blob> =>
   fetch(url).then(async res => {
     if (url) {

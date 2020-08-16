@@ -1,12 +1,12 @@
 import {
   SaveOperationProps,
   SaveOperationState,
-} from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-deleted-nodes';
+} from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
 import { NodeCached } from '::types/graphql-adapters';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { NodeMetaIt } from '::types/graphql/generated';
-import { updateDocumentId } from '::root/components/app/components/editor/document/hooks/save-document/helpers/shared';
-import { collectDanglingNodes } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-new-nodes';
+import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
+import { collectDanglingNodes } from '::store/epics/save-documents/helpers/save-document/helpers/save-new-nodes';
 import { EDIT_NODE_META } from '::graphql/mutations/document/edit-node-meta';
 import { unFlatMap } from '::helpers/array-helpers';
 

@@ -11,7 +11,7 @@ import { UPDATE_USER_PROFILE } from '::graphql/mutations/user/update-user-profil
 import { properErrorMessage } from '::root/components/auth/hooks/proper-error-message';
 import { UPDATE_USER_SETTINGS } from '::graphql/mutations/user/update-user-settings';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
-import { HotKeysOt } from '::types/graphql/generated';
+import { HotKeys } from '::types/graphql/generated';
 
 const timeoutHandler = () =>
   createTimeoutHandler({
@@ -49,7 +49,7 @@ const saveSettingsEpic = (action$: Observable<Actions>) => {
       if (selectedScreen === 'keyboard shortcuts') {
         const requestUpdateHotkeys = of(ac.__.cache.syncHotKeysWithCache());
         const waitForCacheMerge = of(
-          new Promise<HotKeysOt>(res => {
+          new Promise<HotKeys>(res => {
             const interval = setInterval(() => {
               const updatesMerged = !store.getState().cache.settings
                 .syncHotKeysWithCache;

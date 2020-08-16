@@ -1,10 +1,10 @@
-import { SaveOperationProps } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-deleted-nodes';
+import { SaveOperationProps } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { stringToMultipleElements } from '::helpers/editing/execK/helpers';
 import { getAHtml } from '::helpers/rendering/html-to-ahtml';
-import { updateDocumentId } from '::root/components/app/components/editor/document/hooks/save-document/helpers/shared';
-import { swapNodeIdIfApplies } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-nodes-meta';
-import { collectDanglingNodes } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-new-nodes';
+import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
+import { swapNodeIdIfApplies } from '::store/epics/save-documents/helpers/save-document/helpers/save-nodes-meta';
+import { collectDanglingNodes } from '::store/epics/save-documents/helpers/save-document/helpers/save-new-nodes';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 
 const saveNodesContent = async ({ state, documentId }: SaveOperationProps) => {

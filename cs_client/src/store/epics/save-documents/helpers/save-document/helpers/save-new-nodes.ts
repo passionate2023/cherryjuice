@@ -3,10 +3,10 @@ import { apolloCache } from '::graphql/cache/apollo-cache';
 import {
   SaveOperationProps,
   SaveOperationState,
-} from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-deleted-nodes';
+} from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
 import { CreateNodeIt } from '::types/graphql/generated';
-import { updateDocumentId } from '::root/components/app/components/editor/document/hooks/save-document/helpers/shared';
-import { swapFatherIdIfApplies } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-nodes-meta';
+import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
+import { swapFatherIdIfApplies } from '::store/epics/save-documents/helpers/save-document/helpers/save-nodes-meta';
 import { CREATE_NODE } from '::graphql/mutations/document/create-node';
 
 const adapt = ({

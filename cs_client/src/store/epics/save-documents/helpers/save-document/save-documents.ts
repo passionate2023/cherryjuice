@@ -1,17 +1,17 @@
-import { saveNodesMeta } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-nodes-meta';
-import { saveNewNodes } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-new-nodes';
+import { saveNodesMeta } from '::store/epics/save-documents/helpers/save-document/helpers/save-nodes-meta';
+import { saveNewNodes } from '::store/epics/save-documents/helpers/save-document/helpers/save-new-nodes';
 import {
   deleteDanglingNodes,
   saveDeletedNodes,
   SaveOperationState,
-} from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-deleted-nodes';
-import { saveNodesContent } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-nodes-content';
-import { saveNewDocument } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-new-document';
-import { saveImages } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-images';
+} from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
+import { saveNodesContent } from '::store/epics/save-documents/helpers/save-document/helpers/save-nodes-content';
+import { saveNewDocument } from '::store/epics/save-documents/helpers/save-document/helpers/save-new-document';
+import { saveImages } from '::store/epics/save-documents/helpers/save-document/helpers/save-images';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { saveDocumentMeta } from './helpers/save-document-meta';
 
-const saveDocument = async (
+const saveDocuments = async (
   state: SaveOperationState,
 ): Promise<SaveOperationState> => {
   const editedDocuments = apolloCache.changes.document().unsaved;
@@ -30,4 +30,4 @@ const saveDocument = async (
   return state;
 };
 
-export { saveDocument };
+export { saveDocuments };

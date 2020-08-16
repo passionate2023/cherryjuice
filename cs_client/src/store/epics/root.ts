@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
   const { fetchNodesEpic } = await import('./fetch-nodes');
-  const { saveEpic } = await import('./save');
+  const { saveDocumentsEpic } = await import('./save-documents/save-documents');
   const { searchNodesEpic } = await import('./search/search-nodes');
   const { exportDocumentEpic } = await import('./export-document');
   const { fetchDocumentsListEpic } = await import('./fetch-documents-list');
@@ -20,7 +20,7 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
       deleteDocumentsEpic,
       authEpic,
       fetchNodesEpic,
-      saveEpic,
+      saveDocumentsEpic,
       fetchDocumentsListEpic,
       exportDocumentEpic,
       searchNodesEpic,

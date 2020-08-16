@@ -1,4 +1,4 @@
-import { SaveOperationProps } from '::root/components/app/components/editor/document/hooks/save-document/helpers/save-deleted-nodes';
+import { SaveOperationProps } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
 import { apolloCache } from '::graphql/cache/apollo-cache';
 import { DocumentGuestOt, EditDocumentIt } from '::types/graphql/generated';
 import { EDIT_DOCUMENT_META } from '::graphql/mutations/document/edit-document-meta';
