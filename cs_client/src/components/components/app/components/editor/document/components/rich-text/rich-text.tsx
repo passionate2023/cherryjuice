@@ -2,7 +2,6 @@ import { modRichText } from '::sass-modules';
 import * as React from 'react';
 import { useRouteMatch } from 'react-router';
 import { SpinnerCircle } from '::root/components/shared-components/loading-indicator/spinner-circle';
-import { useSetCurrentNode } from '::root/components/app/components/editor/document/components/rich-text/hooks/set-current-node';
 import { ContentEditable } from '::root/components/app/components/editor/document/components/rich-text/components/content-editable';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
@@ -40,7 +39,6 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   const nodeId = node?.id;
   const html = node?.html;
   const images = node?.image;
-  useSetCurrentNode(node_id, nodes, file_id);
 
   return (
     <ErrorBoundary>

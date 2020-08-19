@@ -18,9 +18,14 @@ const createLocalRequest = (
     if (!document?.nodes) {
       throw new Error(file_id + ' does not exist');
     }
-    document.node = Object.values(document.nodes);
+    const node = Object.values(document.nodes);
     delete document.nodes;
-    res(document);
+
+    const rawDocument: QDocumentMeta = {
+      ...document,
+      node: node,
+    };
+    res(rawDocument);
   });
   return from(document);
 };
@@ -76,6 +81,7 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
             handleFetchError({
               documentIdBeingFetched: file_id,
               previousDocumentId: selectedDocumentId(),
+              userId: store.getState().auth.user?.id,
             }),
           ],
         }),

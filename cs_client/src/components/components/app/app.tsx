@@ -7,7 +7,6 @@ import { appModule } from '::sass-modules';
 import { useDocumentEditedIndicator } from '::root/components/app/hooks/document-edited-indicator';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { useHandleRouting } from '::root/components/app/hooks/handle-routing/handle-routing';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { router } from '::root/router/router';
@@ -83,7 +82,6 @@ const App: React.FC<Props & PropsFromRedux> = ({
   userId,
 }) => {
   useDocumentEditedIndicator(documentHasUnsavedChanges);
-  useHandleRouting(documentId);
   useUpdateCssVariables(
     isDocumentOwner,
     showFormattingButtons,

@@ -2,9 +2,8 @@ import * as React from 'react';
 import { useCallback } from 'react';
 import { modRecentNodes } from '::sass-modules';
 import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
-import { router } from '::root/router/router';
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::store/store';
+import { ac, Store } from '::store/store';
 import { NodesDict, QFullNode } from '::store/ducks/cache/document-cache';
 
 const mapState = (state: Store) => ({
@@ -47,8 +46,8 @@ const RecentNodes: React.FC<Props & PropsFromRedux> = ({
   const goToNode = useCallback(
     e => {
       updateCachedHtmlAndImages();
-      const node_id = e.target.dataset.id;
-      router.goto.node(file_id, node_id);
+      const node_id = +e.target.dataset.id;
+      ac.document.selectNode({ documentId: file_id, node_id });
     },
     [file_id],
   );

@@ -2,7 +2,7 @@ import { MutableRefObject, useCallback, useState } from 'react';
 import nodeMod from '::sass-modules/tree/node.scss';
 import { nodeOverlay } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/node-overlay';
 import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
-import { router } from '::root/router/router';
+import { ac } from '::store/store';
 
 type SelectNodeProps = {
   componentRef: MutableRefObject<HTMLDivElement>;
@@ -21,7 +21,7 @@ const useSelectNode = ({ componentRef, node_id, file_id }: SelectNodeProps) => {
       nodeOverlay.updateWidth();
       nodeOverlay.updateLeft(componentRef);
       updateCachedHtmlAndImages();
-      router.goto.node(file_id, node_id);
+      ac.document.selectNode({ documentId: file_id, node_id });
     },
     [file_id, node_id, componentRef],
   );

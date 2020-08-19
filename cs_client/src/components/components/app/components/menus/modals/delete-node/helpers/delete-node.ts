@@ -1,4 +1,3 @@
-import { router } from '::root/router/router';
 import { ac } from '::store/store';
 import { QFullNode } from '::store/ducks/cache/document-cache';
 import { getNode } from '::store/selectors/cache/document/node';
@@ -35,7 +34,6 @@ const deleteNode = (node: QFullNode) => {
       removeChildren: true,
       documentId: node.documentId,
     });
-    router.goto.document(node.documentId);
   };
 };
 

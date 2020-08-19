@@ -2,7 +2,6 @@ import { NodeCached } from '::types/graphql-adapters';
 import { TNodeMetaState } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
 import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
-import { router } from '::root/router/router';
 import { ac } from '::store/store';
 import { NodePrivacy } from '::types/graphql/generated';
 import { getNode } from '::store/selectors/cache/document/node';
@@ -126,18 +125,11 @@ const useSave = ({
                 ),
               },
             });
-            router.goto.node(node.documentId, node.node_id);
+            ac.document.selectNode(node);
           }),
         )
         .subscribe();
-      // apolloCache.node.create(nodeToSave);
 
-      // apolloCache.node.mutate({
-      //   nodeId: fatherNode.id,
-      //   meta: {
-      //     child_nodes: fatherNode.child_nodes,
-      //   },
-      // });
       updateCachedHtmlAndImages();
     } else {
       const editedAttribute = calculateEditedAttribute({

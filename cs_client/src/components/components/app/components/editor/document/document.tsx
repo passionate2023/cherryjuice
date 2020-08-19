@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Fragment, useEffect, useReducer } from 'react';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { Tree } from './components/tree/tree';
-import { Route, useRouteMatch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
 import { RecentNodes } from './components/recent-nodes/recent-nodes';
 import { RichText } from '::root/components/app/components/editor/document/components/rich-text/rich-text';
@@ -13,8 +13,6 @@ import { DocumentContext } from './reducer/context';
 import { useTrackDocumentChanges } from '::root/components/app/components/editor/document/hooks/track-document-changes';
 import { Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac } from '::store/store';
-import { router } from '::root/router/router';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const mapState = (state: Store) => {
@@ -57,24 +55,9 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   useEffect(() => {
     documentActionCreators.setDispatch(dispatch);
   }, []);
-  const match = useRouteMatch<{ file_id: string }>();
-  const { file_id } = match.params;
 
-  useEffect(() => {
-    if (selectedNode_id > 0) router.goto.node(documentId, selectedNode_id);
-  }, [selectedNode_id, documentId]);
   useTrackDocumentChanges({ updatedAt, localUpdatedAt });
-  useEffect(() => {
-    if (router.get.location.pathname.endsWith(file_id))
-      ac.document.clearSelectedNode({
-        removeChildren: false,
-        documentId: file_id,
-      });
-  }, [router.get.location.pathname]);
 
-  useEffect(() => {
-    ac.document.setDocumentId(file_id);
-  }, [file_id]);
   return (
     <DocumentContext.Provider value={documentState}>
       <LinearProgress
@@ -85,7 +68,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
           {Boolean(selectedNode_id) && (
             <RecentNodes
               showRecentNodes={showRecentNodesBar}
-              file_id={file_id}
+              file_id={documentId}
               recentNodes={recentNodes}
               selectedNode_id={selectedNode_id}
               nodes={nodes}
