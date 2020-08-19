@@ -3,11 +3,9 @@ import { useCallback } from 'react';
 import { modRecentNodes } from '::sass-modules';
 import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
 import { router } from '::root/router/router';
-import { NodeMeta } from '::types/graphql-adapters';
-import { nodesMetaMap } from '::types/misc';
-
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
+import { NodesDict, QFullNode } from '::store/ducks/cache/document-cache';
 
 const mapState = (state: Store) => ({
   isOnMobile: state.root.isOnMobile,
@@ -19,7 +17,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = {
   recentNodes: number[];
   selectedNode_id: number;
-  nodes: nodesMetaMap;
+  nodes: NodesDict;
   file_id: string;
   showRecentNodes: boolean;
 };
@@ -34,17 +32,17 @@ const RecentNodes: React.FC<Props & PropsFromRedux> = ({
   selectedNode_id,
   nodes,
 }) => {
-  const selectedNode = nodes.get(selectedNode_id);
+  const selectedNode = nodes[selectedNode_id];
   const recentNodesOther = recentNodes.filter(
     node_id => +node_id !== selectedNode.node_id,
   );
-  const lastN: NodeMeta[] = recentNodesOther
+  const lastN: QFullNode[] = recentNodesOther
     .slice(
       recentNodesOther.length > config.recentNodesN
         ? recentNodesOther.length - config.recentNodesN
         : 0,
     )
-    .map(node_id => nodes.get(node_id));
+    .map(node_id => nodes[node_id]);
 
   const goToNode = useCallback(
     e => {

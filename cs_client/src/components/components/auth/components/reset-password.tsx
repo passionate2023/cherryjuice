@@ -8,7 +8,7 @@ import {
 } from '::root/components/shared-components/form/validated-text-input';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
 import { patterns } from '::root/components/auth/helpers/form-validation';
-import { apolloCache } from '::graphql/cache/apollo-cache';
+import { apolloClient } from '::graphql/client/apollo-client';
 import { useStatefulValidatedInput } from '::root/components/auth/hooks/stateful-validated-input';
 import { RESET_PASSWORD } from '::graphql/mutations/user/reset-password';
 import { router } from '::root/router/router';
@@ -55,7 +55,7 @@ const useVerifyToken = setError => {
   useEffect(() => {
     token.current = getToken();
     if (token.current) {
-      apolloCache.client
+      apolloClient
         .mutate(VERIFY_TOKEN({ token: token.current }))
         .then(() => {
           setValid(true);

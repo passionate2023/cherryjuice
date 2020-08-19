@@ -1,10 +1,13 @@
-import { apolloCache } from '::graphql/cache/apollo-cache';
-import { NodeCached } from '::types/graphql-adapters';
 import { router } from '::root/router/router';
 import { ac } from '::store/store';
+import { QFullNode } from '::store/ducks/cache/document-cache';
+import { getNode } from '::store/selectors/cache/document/node';
 
-const updateFatherNode = (deletedNode: NodeCached) => {
-  const fatherNode = apolloCache.node.get(deletedNode.fatherId);
+const updateFatherNode = (deletedNode: QFullNode) => {
+  const fatherNode = getNode({
+    node_id: deletedNode.father_id,
+    documentId: deletedNode.documentId,
+  });
   const nodeIndexInParentNodeChildNodes = fatherNode.child_nodes.indexOf(
     deletedNode.node_id,
   );
@@ -12,20 +15,26 @@ const updateFatherNode = (deletedNode: NodeCached) => {
   return fatherNode;
 };
 
-const deleteNode = (node: NodeCached) => {
+const deleteNode = (node: QFullNode) => {
   return () => {
     const fatherNode = updateFatherNode(node);
-    apolloCache.node.mutate({
-      nodeId: fatherNode.id,
-      meta: {
+    ac.documentCache.mutateNode({
+      node_id: fatherNode.node_id,
+      documentId: fatherNode.documentId,
+      data: {
         child_nodes: fatherNode.child_nodes,
       },
     });
-    apolloCache.node.delete.soft({
+
+    ac.documentCache.deleteNode({
       documentId: node.documentId,
-      nodeId: node.id,
+      node_id: node.node_id,
+      mode: 'soft',
     });
-    ac.document.clearSelectedNode({ removeChildren: true });
+    ac.document.clearSelectedNode({
+      removeChildren: true,
+      documentId: node.documentId,
+    });
     router.goto.document(node.documentId);
   };
 };

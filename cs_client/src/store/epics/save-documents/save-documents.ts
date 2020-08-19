@@ -25,49 +25,45 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
           ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
         }),
       );
-      if (!store.getState().document.cacheTimeStamp) {
-        return saveFulfilled$;
-      } else {
-        const state: SaveOperationState = createSaveState();
-        const savePending$ = of(ac.__.document.savePending());
-        const cacheCurrentNode$ = defer(() =>
-          of(cacheCurrentNode()).pipe(mapTo(ac.__.document.nodeCached())),
-        );
-        const saveInProgress$ = of(ac.__.document.saveInProgress());
-        const saveDocuments$ = defer(() =>
-          from(saveDocuments(state)).pipe(
-            tap(resetCache),
-            tap(swapPersistedTreeDocumentIds),
-            mapTo(ac.__.document.cacheReset()),
-          ),
-        );
-        const maybeRedirectToNewDocument$ = defer(() =>
-          redirectToNewDocumentId$(state),
-        );
-        return concat(
-          savePending$,
-          cacheCurrentNode$,
-          saveInProgress$,
-          saveDocuments$,
-          maybeRedirectToNewDocument$,
-          saveFulfilled$,
-        ).pipe(
-          createTimeoutHandler({
-            alertDetails: {
-              title: 'Saving is taking longer then expected',
-              description: 'try refreshing the page',
-            },
-            due: 5 * 60000,
-          }),
-          createErrorHandler({
-            alertDetails: {
-              title: 'Could not save',
-              description: 'Check your network connection',
-            },
-            actionCreators: [ac.__.document.saveFailed],
-          }),
-        );
-      }
+      const state: SaveOperationState = createSaveState();
+      const savePending$ = of(ac.__.document.savePending());
+      const cacheCurrentNode$ = defer(() =>
+        of(cacheCurrentNode()).pipe(mapTo(ac.__.document.nodeCached())),
+      );
+      const saveInProgress$ = of(ac.__.document.saveInProgress());
+      const saveDocuments$ = defer(() =>
+        from(saveDocuments(state)).pipe(
+          tap(resetCache),
+          tap(swapPersistedTreeDocumentIds),
+          mapTo(ac.__.document.cacheReset()),
+        ),
+      );
+      const maybeRedirectToNewDocument$ = defer(() =>
+        redirectToNewDocumentId$(state),
+      );
+      return concat(
+        savePending$,
+        cacheCurrentNode$,
+        saveInProgress$,
+        saveDocuments$,
+        saveFulfilled$,
+        maybeRedirectToNewDocument$,
+      ).pipe(
+        createTimeoutHandler({
+          alertDetails: {
+            title: 'Saving is taking longer then expected',
+            description: 'try refreshing the page',
+          },
+          due: 5 * 60000,
+        }),
+        createErrorHandler({
+          alertDetails: {
+            title: 'Could not save',
+            description: 'Check your network connection',
+          },
+          actionCreators: [ac.__.document.saveFailed],
+        }),
+      );
     }),
   );
 };

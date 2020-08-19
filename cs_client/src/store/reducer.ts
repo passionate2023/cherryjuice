@@ -12,8 +12,9 @@ import { rootReducer, RootReducerState } from './ducks/root';
 import { searchReducer, SearchReducerState } from './ducks/search';
 import { cssVariablesReducer } from './ducks/css-variables';
 import { authReducer } from './ducks/auth';
-import { cacheReducer } from './ducks/cache';
+import { cacheReducer } from './ducks/cache/cache';
 import { settingsReducer } from './ducks/settings';
+import { documentCacheReducer } from '::store/ducks/cache/document-cache';
 
 const reducer = combineReducers({
   cache: persistReducer(
@@ -23,11 +24,12 @@ const reducer = combineReducers({
     },
     cacheReducer,
   ),
+  documentCache: documentCacheReducer,
   document: persistReducer(
     {
       key: 'document',
       storage,
-      blacklist: ['nodes', 'cacheTimeStamp', 'hasUnsavedChanges'],
+      blacklist: [],
       transforms: documentTransforms,
     },
     documentReducer,

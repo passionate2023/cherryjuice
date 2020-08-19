@@ -2,13 +2,9 @@ import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { AsyncOperation } from './document';
 import { DocumentMeta } from '::types/graphql-adapters';
-import {
-  addUnsavedDocuments,
-  editedDocuments,
-} from '../epics/fetch-documents-list/layers/unsaved-documents';
 import { rootActionCreators } from './root';
 import { cloneObj } from '::helpers/editing/execK/helpers';
-import { QDocumentsListItem } from '::graphql/queries/documents-list';
+import { CachedDocument } from '::store/ducks/cache/document-cache';
 
 const ap = createActionPrefixer('document-list');
 
@@ -38,7 +34,10 @@ const ac = {
   },
   ...{
     selectDocument: _(ap('select-document'), _ => (id: string) => _(id)),
-    selectAllDocuments: _(ap('select-all-documents')),
+    selectAllDocuments: _(
+      ap('select-all-documents'),
+      _ => (documents: CachedDocument[]) => _(documents),
+    ),
   },
 };
 
@@ -46,7 +45,6 @@ type State = {
   focusedDocumentId?: string;
   fetchDocuments: AsyncOperation;
   deleteDocuments: AsyncOperation;
-  documents: QDocumentsListItem[];
   selectedIDs: string[];
   deletionMode: boolean;
 };
@@ -54,7 +52,6 @@ type State = {
 const initialState: State = {
   fetchDocuments: 'idle',
   deleteDocuments: 'idle',
-  documents: [],
   selectedIDs: [],
   deletionMode: false,
 };
@@ -62,13 +59,6 @@ const reducer = createReducer(initialState, _ => [
   ...[
     _(rootActionCreators.resetState, () => ({
       ...cloneObj(initialState),
-    })),
-  ],
-  ...[
-    _(ac.fetchDocumentsFulfilled, (state, { payload }) => ({
-      ...state,
-      documents: editedDocuments(addUnsavedDocuments(payload)),
-      fetchDocuments: 'idle',
     })),
   ],
   ...[
@@ -110,12 +100,12 @@ const reducer = createReducer(initialState, _ => [
     })),
   ],
   ...[
-    _(ac.selectAllDocuments, state => ({
+    _(ac.selectAllDocuments, (state, { payload }) => ({
       ...state,
       selectedIDs:
-        state.selectedIDs.length === state.documents.length
+        state.selectedIDs.length === payload.length
           ? []
-          : state.documents.map(document => document.id),
+          : payload.map(document => document.id),
     })),
     _(ac.selectDocument, (state, { payload }) => ({
       ...state,

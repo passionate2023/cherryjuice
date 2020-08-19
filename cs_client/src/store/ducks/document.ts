@@ -1,23 +1,13 @@
 import { createActionCreator as _, createReducer } from 'deox';
-import { nodesMetaMap } from '::types/misc';
-import { applyLocalModifications } from '::root/components/app/components/editor/document/hooks/get-document-meta/helpers/construct-tree';
 import { createActionPrefixer } from './helpers/shared';
 import { cloneObj } from '::helpers/editing/execK/helpers';
-import {
-  calcRecentNodes,
-  defaultRootNode,
-  getFallbackNode,
-} from './helpers/document';
 import { rootActionCreators } from './root';
-import {
-  DocumentGuestOt,
-  Privacy,
-  PrivateNode,
-} from '::types/graphql/generated';
+import { QDocumentMeta } from '::graphql/queries/document-meta';
+import { SelectNodeParams } from '::store/ducks/cache/document-cache/helpers/document/select-node';
+import { ClearSelectedNodeParams } from '::store/ducks/cache/document-cache/helpers/node/clear-selected-node';
 
 const ap = createActionPrefixer('document');
 const ac = {
-  // document
   fetchNodes: _('fetchNodes', _ => () => {
     return _();
   }),
@@ -27,15 +17,8 @@ const ac = {
     _(unsaved),
   ),
   fetchNodesStarted: _('fetchNodesStarted'),
-  fetchNodesFulfilled: _(
-    'fetchNodesFulfilled',
-    _ => (args: {
-      nodes: nodesMetaMap;
-      privacy: Privacy;
-      guests: DocumentGuestOt[];
-      userId: string;
-      privateNodes: PrivateNode[];
-    }) => _(args),
+  fetchNodesFulfilled: _('fetchNodesFulfilled', _ => (args: QDocumentMeta) =>
+    _(args),
   ),
   setCacheTimeStamp: _(
     'setCacheTimeStamp',
@@ -55,22 +38,27 @@ const ac = {
     exportFulfilled: _('exportFulfilled'),
   },
   // node
-  selectNode: _(ap('selectNode'), _ => (node: NodeId) => _(node)),
-  selectRootNode: _(ap('selectRootNode'), _ => (node: NodeId) => _(node)),
+  selectNode: _(ap('selectNode'), _ => (payload: SelectNodeParams) =>
+    _(payload),
+  ),
+  selectRootNode: _(
+    ap('selectRootNode'),
+    _ => (node: NodeId, documentId: string) => _(node, { documentId }),
+  ),
   removeNodeFromRecentNodes: _(
     ap('removeNodeFromRecentNodes'),
     _ => (node_id: number) => _(node_id),
   ),
   clearSelectedNode: _(
     ap('clearSelectedNode'),
-    _ => (payload: { removeChildren: boolean } = { removeChildren: false }) =>
-      _(payload),
+    _ => (payload: ClearSelectedNodeParams) => _(payload),
   ),
   fetch: _(ap('fetch')),
   fetchStarted: _(ap('fetchStarted')),
   fetchFulfilled: _(ap('fetchFulfilled'), _ => (html: string) => _(html)),
-  setHighestNode_id: _(ap('setHighestNode_id'), _ => (node_id: number) =>
-    _(node_id),
+  setHighestNode_id: _(
+    ap('setHighestNode_id'),
+    _ => (node_id: number, documentId: string) => _(node_id, { documentId }),
   ),
 };
 type NodeId = {
@@ -78,40 +66,19 @@ type NodeId = {
   node_id: number;
 };
 type AsyncOperation = 'in-progress' | 'idle' | 'pending';
-export type privateNodesMap = Map<number, PrivateNode>;
+
 type State = {
-  nodes?: nodesMetaMap;
-  privateNodes: privateNodesMap;
-  privacy: Privacy;
-  guests: DocumentGuestOt[];
-  userId: string;
-  fetchNodesStarted?: number;
   documentId: string;
-  cacheTimeStamp: number;
+  fetchNodesStarted?: number;
   saveInProgress: AsyncOperation;
-  selectedNode?: NodeId;
-  rootNode?: NodeId;
-  recentNodes: number[];
-  highestNode_id: number;
-  hasUnsavedChanges: boolean;
 };
 
 const initialState: State = {
-  privateNodes: new Map(),
-  userId: undefined,
-  nodes: undefined,
-  privacy: Privacy.PRIVATE,
-  guests: [],
-  fetchNodesStarted: 0,
   documentId: '',
-  cacheTimeStamp: 0,
+  fetchNodesStarted: 0,
   saveInProgress: 'idle',
-  selectedNode: defaultRootNode,
-  rootNode: defaultRootNode,
-  recentNodes: [],
-  highestNode_id: -1,
-  hasUnsavedChanges: false,
 };
+
 const reducer = createReducer(cloneObj(initialState), _ => [
   ...[
     _(rootActionCreators.resetState, () => ({
@@ -122,38 +89,14 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     ...cloneObj(initialState),
     documentId: payload,
   })),
-  _(ac.hasUnsavedChanges, (state, { payload }) => ({
-    ...state,
-    hasUnsavedChanges: payload,
-  })),
-  _(ac.fetchNodesFulfilled, (state, { payload }) => ({
+  _(ac.fetchNodesFulfilled, state => ({
     ...state,
     fetchNodesStarted: 0,
-    nodes: payload.nodes,
-    guests: payload.guests,
-    privacy: payload.privacy,
-    userId: payload.userId,
-    cacheTimeStamp: 0,
-    privateNodes: new Map(
-      payload.privateNodes.map(node => [node.node_id, node]),
-    ),
   })),
   _(ac.fetchNodesStarted, state => ({
     ...state,
     fetchNodesStarted: new Date().getTime(),
   })),
-  _(ac.setCacheTimeStamp, (state, { payload }) =>
-    state.saveInProgress !== 'idle'
-      ? state
-      : {
-          ...state,
-          cacheTimeStamp: payload,
-          nodes: applyLocalModifications({
-            nodes: state.nodes,
-            file_id: state.documentId,
-          }),
-        },
-  ),
   _(ac.fetchFailed, () => ({
     ...initialState,
   })),
@@ -172,37 +115,6 @@ const reducer = createReducer(cloneObj(initialState), _ => [
   _(ac.saveFailed, state => ({
     ...state,
     saveInProgress: 'idle',
-  })),
-  _(ac.selectNode, (state, { payload: node }) => ({
-    ...state,
-    selectedNode: node,
-    recentNodes: [
-      ...state.recentNodes.filter(node_id => node_id !== node.node_id),
-      node.node_id,
-    ],
-  })),
-  _(ac.selectRootNode, (state, { payload: node }) => ({
-    ...state,
-    rootNode: node,
-    selectedNode: state.selectedNode.id
-      ? state.selectedNode
-      : getFallbackNode(state.nodes),
-  })),
-  _(ac.clearSelectedNode, (state, { payload: { removeChildren } }) => {
-    return {
-      ...state,
-      recentNodes: calcRecentNodes({
-        nodes: state.nodes,
-        recentNodes: state.recentNodes,
-        removeChildren,
-        selectedNode_id: state.selectedNode.node_id,
-      }),
-      selectedNode: getFallbackNode(state.nodes),
-    };
-  }),
-  _(ac.setHighestNode_id, (state, { payload: node_id }) => ({
-    ...state,
-    highestNode_id: node_id,
   })),
 ]);
 

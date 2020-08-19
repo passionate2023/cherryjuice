@@ -7,7 +7,7 @@ import { documentsListActionCreators } from './ducks/documents-list';
 import { rootActionCreators } from './ducks/root';
 import { searchActionCreators } from './ducks/search';
 import { authActionCreators } from './ducks/auth';
-import { cacheActionCreators } from './ducks/cache';
+import { cacheActionCreators } from './ducks/cache/cache';
 
 type t1 = typeof documentActionCreators &
   typeof dialogsActionCreators &

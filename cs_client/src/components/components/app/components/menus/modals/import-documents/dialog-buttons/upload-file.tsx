@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { modImportDocument } from '::sass-modules';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
-import { apolloCache } from '::graphql/cache/apollo-cache';
+import { apolloClient } from '::graphql/client/apollo-client';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
 const UploadFile: React.FC<{}> = () => {
@@ -12,7 +12,7 @@ const UploadFile: React.FC<{}> = () => {
 
   const onChange = ({ target: { validity, files } }) => {
     if (validity.valid) {
-      apolloCache.client.mutate({
+      apolloClient.mutate({
         query: DOCUMENT_MUTATION.file,
         path: () => undefined,
         variables: { files },

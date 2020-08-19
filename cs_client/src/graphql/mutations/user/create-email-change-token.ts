@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { GraphqlArgsPipe } from '::graphql/cache/apollo-cache';
+import { GraphqlArgsPipe } from '../../client/apollo-client';
 import { ChangeEmailIt } from '::types/graphql/generated';
 
 type Variables = {

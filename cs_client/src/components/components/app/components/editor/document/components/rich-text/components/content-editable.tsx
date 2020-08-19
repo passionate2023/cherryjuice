@@ -7,6 +7,7 @@ import { useAttachImagesToHtml } from '::root/components/app/components/editor/d
 import { useHandleContentChanges } from '::root/components/app/components/editor/document/components/rich-text/hooks/handle-content-changes';
 import { useAddMetaToPastedImages } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 import { DocumentContext } from '::root/components/app/components/editor/document/reducer/context';
+import { Image } from '::types/graphql/generated';
 
 type Props = {
   contentEditable;
@@ -16,6 +17,7 @@ type Props = {
   node_id;
   processLinks;
   isDocumentOwner: boolean;
+  images: Image[];
 };
 
 const ContentEditable = ({
@@ -26,18 +28,20 @@ const ContentEditable = ({
   node_id,
   processLinks,
   isDocumentOwner,
+  images,
 }: Props) => {
   const { pastedImages } = useContext(DocumentContext);
   useSetupStuff(node_id);
 
   const ref = useRef();
-  useHandleContentChanges({ nodeId, ref });
+  useHandleContentChanges({ node_id, documentId: file_id, ref });
   useAddMetaToPastedImages({ requestId: pastedImages });
   useAttachImagesToHtml({
     node_id,
     file_id,
     nodeId,
     html,
+    images,
   });
   useScrollToHashElement({ html: html });
 
@@ -55,6 +59,7 @@ const ContentEditable = ({
       dangerouslySetInnerHTML={{ __html: html }}
       data-id={nodeId}
       data-node_id={node_id}
+      data-document-id={file_id}
       id={'rich-text'}
     />
   );

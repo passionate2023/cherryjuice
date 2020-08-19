@@ -1,4 +1,4 @@
-import { apolloCache } from '::graphql/cache/apollo-cache';
+import { apolloClient } from '::graphql/client/apollo-client';
 import { QUERY_DOCUMENTS } from '::graphql/queries';
 import { useEffect } from 'react';
 import { getOperationCategory } from './get-active-operations';
@@ -6,9 +6,10 @@ import { ac } from '::store/store';
 
 const useGetPreviousOperations = () => {
   useEffect(() => {
-    apolloCache.client
+    apolloClient
       .query({
         ...QUERY_DOCUMENTS.currentImports,
+        variables: undefined,
         fetchPolicy: 'network-only',
       })
       .then(data => {

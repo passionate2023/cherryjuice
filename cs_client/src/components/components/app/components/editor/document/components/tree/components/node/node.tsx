@@ -7,17 +7,17 @@ import { useSelectNode } from '::root/components/app/components/editor/document/
 import { useScrollNodeIntoView } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/scroll-node-into-view';
 import { persistedTreeState } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/persisted-tree-state/helpers';
 import { usePersistedTreeState } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/persisted-tree-state/persisted-tree-state';
-import { nodesMetaMap } from '::types/misc';
 import { NodePrivacy, Privacy } from '::types/graphql/generated';
 import { NodeIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-icon';
 import { ToggleChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/toggle-children';
 import { NodeVisibilityIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/visibility-icon';
 import { NodeOverlay } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-overlay';
 import { NodeChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-children';
+import { NodesDict } from '::store/ducks/cache/document-cache';
 
 export type NodeProps = {
   node_id: number;
-  nodes?: nodesMetaMap;
+  nodes?: NodesDict;
   depth: number;
   node_title_styles: string;
   documentPrivacy: Privacy;
@@ -34,7 +34,7 @@ const Node: React.FC<NodeProps> = ({
   parentPrivacy,
   expand,
 }) => {
-  const { child_nodes, name, privacy } = nodes.get(node_id);
+  const { child_nodes, name, privacy } = nodes[node_id];
   const match = useRouteMatch<{ file_id: string }>();
   const { file_id } = match.params;
   const nodePath = `/document/${file_id}/node/${node_id}`;

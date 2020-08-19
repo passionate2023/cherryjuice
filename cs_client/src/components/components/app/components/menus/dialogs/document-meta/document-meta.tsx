@@ -4,7 +4,6 @@ import { DialogWithTransition } from '::root/components/shared-components/dialog
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { MetaForm } from '::root/components/shared-components/form/meta-form/meta-form';
 import { FormInputProps } from '::root/components/shared-components/form/meta-form/meta-form-input';
-import { apolloCache } from '::graphql/cache/apollo-cache';
 import { AlertType } from '::types/react';
 import {
   generateNewDocument,
@@ -24,14 +23,18 @@ import { updateCachedHtmlAndImages } from '::root/components/app/components/edit
 import { Guests } from '::root/components/app/components/menus/dialogs/document-meta/components/guests/guests';
 import { SelectPrivacy } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
 import { Privacy } from '::types/graphql/generated';
+import {
+  getDocumentsList,
+  getDocumentUserId,
+} from '::store/selectors/cache/document/document';
 
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showDocumentMetaDialog,
   focusedDocumentId: state.documentsList.focusedDocumentId,
-  documents: state.documentsList.documents,
+  documents: getDocumentsList(state),
   isOnMobile: state.root.isOnMobile,
   userId: state.auth.user?.id,
-  documentUserId: state.document.userId,
+  documentUserId: getDocumentUserId(state),
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -104,17 +107,11 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       const rootNode = generateRootNode({
         documentId: document.id,
       });
-      document.node.push(rootNode);
-      apolloCache.changes.initDocumentChangesState(document.id);
-      apolloCache.node.create(rootNode);
-      apolloCache.document.create(document.id, document);
+      document.nodes = {
+        0: rootNode,
+      };
+      ac.documentCache.createDocument(document);
       ac.document.setDocumentId(document.id);
-      // if (document.owner.public) {
-      //   apolloCache.document.mutate({
-      //     documentId: document.id,
-      //     meta: { owner: document.owner },
-      //   });
-      // }
     } catch (e) {
       ac.dialogs.setAlert({
         title: 'Could not create a document',
@@ -139,8 +136,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
         return entries;
       }, []),
     );
-    apolloCache.changes.initDocumentChangesState(focusedDocumentId);
-    apolloCache.document.mutate({ documentId: focusedDocumentId, meta });
+    ac.documentCache.mutateDocument({ documentId: focusedDocumentId, meta });
     ac.documentsList.fetchDocuments();
   };
   const apply = useDelayedCallback(

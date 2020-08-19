@@ -17,8 +17,9 @@ import { searchActionCreators } from './ducks/search';
 import { cssVariablesActionCreators } from './ducks/css-variables';
 import { setCssVariables } from './middleware/set-css-variables';
 import { authActionCreators } from './ducks/auth';
-import { cacheActionCreators } from './ducks/cache';
+import { cacheActionCreators } from './ducks/cache/cache';
 import { settingsActionCreators } from './ducks/settings';
+import { documentCacheActionCreators } from '::store/ducks/cache/document-cache';
 
 type Store = ReturnType<typeof reducer>;
 
@@ -51,12 +52,17 @@ const ac = {
     auth: authActionCreators,
     cache: cacheActionCreators,
     settings: settingsActionCreators,
+    documentCache: documentCacheActionCreators,
   },
   document: bindActionCreators(documentActionCreators, store.dispatch),
   dialogs: bindActionCreators(dialogsActionCreators, store.dispatch),
   node: bindActionCreators(nodeActionCreators, store.dispatch),
   editor: bindActionCreators(editorActionCreators, store.dispatch),
   auth: bindActionCreators(authActionCreators, store.dispatch),
+  documentCache: bindActionCreators(
+    documentCacheActionCreators,
+    store.dispatch,
+  ),
   documentsList: bindActionCreators(
     documentsListActionCreators,
     store.dispatch,

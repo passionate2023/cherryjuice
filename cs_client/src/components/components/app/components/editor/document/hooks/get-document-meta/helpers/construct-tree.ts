@@ -1,7 +1,6 @@
-import { apolloCache } from '::graphql/cache/apollo-cache';
-import { nodesMetaMap } from '::types/misc';
 import { QNodeMeta } from '::graphql/queries/document-meta';
 import { PrivateNode } from '::types/graphql/generated';
+import { NodesDict } from '::store/ducks/cache/document-cache';
 
 type Props = {
   nodes: QNodeMeta[];
@@ -10,12 +9,21 @@ type Props = {
 const constructTree = ({
   nodes: nodesArray = [],
   privateNodes,
-}: Props): Map<number, QNodeMeta> | undefined => {
-  let nodes: Map<number, QNodeMeta> = new Map();
+}: Props): NodesDict => {
+  let nodes: NodesDict;
   if (nodesArray.length) {
-    nodes = new Map(nodesArray.map(node => [node.node_id, node]));
+    nodes = Object.fromEntries(
+      nodesArray.map(node => [
+        node.node_id,
+        {
+          ...node,
+          child_nodes: [...node.child_nodes],
+          image: [...(node['image'] || [])],
+        },
+      ]),
+    );
     privateNodes.forEach(({ node_id, father_id }) => {
-      const fatherNode = nodes.get(father_id);
+      const fatherNode = nodes[father_id];
       if (fatherNode) {
         const indexOfChildNode = fatherNode.child_nodes.indexOf(node_id);
         if (indexOfChildNode !== -1) {
@@ -26,32 +34,5 @@ const constructTree = ({
   }
   return nodes;
 };
-const applyLocalModifications = ({
-  nodes,
-  file_id,
-}: {
-  file_id: string;
-  nodes?: nodesMetaMap;
-}) => {
-  if (nodes) {
-    apolloCache.changes.initDocumentChangesState(file_id);
-    nodes = new Map(nodes);
-    const modifiedNodes = [
-      ...apolloCache.changes
-        .document(file_id)
-        .node.meta.map(([nodeId]) => nodeId),
-      ...apolloCache.changes.document(file_id).node.html,
-      ...apolloCache.changes.document(file_id).node.created,
-    ];
-    for (const nodeId of modifiedNodes) {
-      const node = apolloCache.node.get(nodeId);
-      if (node?.documentId === file_id) {
-        const cacheOutOfSyncWithLocalChanges = !node;
-        if (cacheOutOfSyncWithLocalChanges) return undefined;
-        nodes.set(node.node_id, node);
-      }
-    }
-  }
-  return nodes;
-};
-export { constructTree, applyLocalModifications };
+
+export { constructTree };

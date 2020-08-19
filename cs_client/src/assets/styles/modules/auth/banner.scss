@@ -3,8 +3,8 @@
 @import '../../mixins/form';
 .banner__container {
   position: absolute;
-  top: 10px;
-  width: 100%;
+  width: calc(100% - 15px);
+  padding: 7.5px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,6 +12,8 @@
     height: 140px;
     align-items: flex-end;
     top: -150px;
+    width: 100%;
+    padding: 0;
   }
 }
 .banner {
@@ -23,6 +25,7 @@
 
   @include respond-to($mb-down) {
     background-color: rgba($primary, 0.1);
+    width: 100%;
   }
   @include form-element-size();
   max-width: 400px;

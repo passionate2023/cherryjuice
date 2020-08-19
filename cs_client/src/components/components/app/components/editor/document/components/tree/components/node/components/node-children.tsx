@@ -47,7 +47,7 @@ const NodeChildren: React.FC<Props> = ({
       ref={listRef}
     >
       {child_nodes.map(node_id => {
-        const node = nodes.get(node_id);
+        const node = nodes[node_id];
         return (
           <Node
             key={node.node_id}

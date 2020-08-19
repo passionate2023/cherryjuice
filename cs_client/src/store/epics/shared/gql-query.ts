@@ -1,6 +1,6 @@
 import { DocumentNode } from 'graphql';
 import { from } from 'rxjs';
-import { apolloCache } from '::graphql/cache/apollo-cache';
+import { apolloClient } from '::graphql/client/apollo-client';
 import { GqlDataPath } from '::types/misc';
 
 type GqlOperationArguments<Data, Variables> = {
@@ -12,7 +12,7 @@ const gqlQuery = <Variables, Data>(
   args: GqlOperationArguments<Data, Variables>,
 ) =>
   from(
-    apolloCache.client.query<Variables, Data>({
+    apolloClient.query<Variables, Data>({
       ...args,
       fetchPolicy: 'network-only',
     }),
@@ -21,7 +21,7 @@ const gqlMutation = <Variables, Data>(
   args: GqlOperationArguments<Data, Variables>,
 ) =>
   from(
-    apolloCache.client.mutate<Variables, Data>({
+    apolloClient.mutate<Variables, Data>({
       ...args,
     }),
   );

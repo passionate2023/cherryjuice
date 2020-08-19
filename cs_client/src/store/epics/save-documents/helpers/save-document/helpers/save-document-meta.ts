@@ -1,18 +1,18 @@
 import { SaveOperationProps } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
-import { apolloCache } from '::graphql/cache/apollo-cache';
-import { DocumentGuestOt, EditDocumentIt } from '::types/graphql/generated';
+import { apolloClient } from '::graphql/client/apollo-client';
+import { DocumentGuestOt } from '::types/graphql/generated';
 import { EDIT_DOCUMENT_META } from '::graphql/mutations/document/edit-document-meta';
 
-type MutationVariables = { file_id: string; meta: EditDocumentIt };
-const saveDocumentMeta = async ({ state, documentId }: SaveOperationProps) => {
+const saveDocumentMeta = async ({ document, state }: SaveOperationProps) => {
   const editedAttributes = Object.fromEntries(
-    Array.from(apolloCache.changes.document(documentId).meta),
+    document.state.editedAttributes.map(attribute => [
+      attribute,
+      document[attribute],
+    ]),
   );
-
   if (!editedAttributes.updatedAt)
     editedAttributes.updatedAt = new Date().getTime();
   if (editedAttributes.guests)
-    // remove apollo's __typename
     editedAttributes.guests = editedAttributes.guests.map(
       ({ userId, email, accessLevel }) =>
         ({
@@ -21,9 +21,9 @@ const saveDocumentMeta = async ({ state, documentId }: SaveOperationProps) => {
           accessLevel,
         } as DocumentGuestOt),
     );
-  await apolloCache.client.mutate(
+  await apolloClient.mutate(
     EDIT_DOCUMENT_META({
-      file_id: state.swappedDocumentIds[documentId] || documentId,
+      file_id: state.swappedDocumentIds[document.id] || document.id,
       meta: {
         ...editedAttributes,
         updatedAt: editedAttributes.updatedAt,

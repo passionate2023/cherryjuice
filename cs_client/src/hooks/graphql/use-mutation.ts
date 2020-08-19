@@ -1,4 +1,4 @@
-import { apolloCache, GraphqlArgsPipe } from '::graphql/cache/apollo-cache';
+import { apolloClient, GraphqlArgsPipe } from '::graphql/client/apollo-client';
 import { ApolloError } from 'apollo-client';
 import { AsyncOperation } from '::store/ducks/document';
 import { useCallback, useState } from 'react';
@@ -19,7 +19,7 @@ const useMutation: UseMutation = <T, U>({
   const [asyncOperation, setAsyncOperation] = useState<AsyncOperation>('idle');
   const mutate = useCallback(async () => {
     if (asyncOperation !== 'in-progress') {
-      apolloCache.client
+      apolloClient
         .mutate(gqlPipe(variables))
         .then(onSuccess)
         .catch(onFailure)

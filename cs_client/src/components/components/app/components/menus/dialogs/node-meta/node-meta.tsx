@@ -18,20 +18,22 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { SelectPrivacy } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
 import { Privacy } from '::types/graphql/generated';
+import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
-const mapState = (state: Store) => ({
-  documentId: state.document.documentId,
-  nodeId: state.document.selectedNode.id,
-  node_id: state.document.selectedNode.node_id,
-  highestNode_id: state.document.highestNode_id,
-  showDialog: state.dialogs.showNodeMetaDialog,
-  isOnMobile: state.root.isOnMobile,
-  nodes: state.document.nodes,
-  documents: state.documentsList.documents,
-  userId: state.auth.user?.id,
-  documentUserId: state.document.userId,
-  documentPrivacy: state.document.privacy,
-});
+const mapState = (state: Store) => {
+  const document = getCurrentDocument(state);
+  return {
+    document,
+    documentId: state.document.documentId,
+    node_id: document?.state?.selectedNode_id,
+    nodes: document?.nodes,
+    documentUserId: document?.userId,
+    documentPrivacy: document?.privacy,
+    showDialog: state.dialogs.showNodeMetaDialog,
+    isOnMobile: state.root.isOnMobile,
+    userId: state.auth.user?.id,
+  };
+};
 const mapDispatch = {
   onClose: ac.dialogs.hideNodeMeta,
 };
@@ -44,10 +46,8 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
   PropsFromRedux> = ({
   showDialog,
   isOnMobile,
-  nodeId,
   onClose,
-  documentId,
-  highestNode_id,
+  document,
   nodes,
   node_id,
   userId,
@@ -60,13 +60,12 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
     nodeMetaActionCreators.init(dispatch);
   }, []);
   const { node, isNewNode, previous_sibling_node_id } = getNode({
-    documentId,
     showDialog,
-    nodeId,
-    highestNode_id,
+    document,
+    node_id,
   });
 
-  const fatherNode = nodes ? nodes.get(node_id) : undefined;
+  const fatherNode = nodes ? nodes[node_id] : undefined;
   useEffect(() => {
     if (showDialog === 'edit') nodeMetaActionCreators.resetToEdit({ node });
     else {
@@ -74,9 +73,8 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
         fatherNode,
       });
     }
-  }, [nodeId, showDialog, fatherNode]);
+  }, [node_id, showDialog, fatherNode]);
   const onSave = useSave({
-    nodeId,
     node,
     newNode: isNewNode,
     state,

@@ -11,12 +11,15 @@ import { Store } from '::store/store';
 import { HotKeyActionType } from '::types/graphql/generated';
 import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
+import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
-const mapState = (state: Store) => ({
-  selectedNode_id: state.document.selectedNode.node_id,
-  documentId: state.document.documentId,
-  formattingHotKeys: getHotkeys(state).formatting,
-});
+const mapState = (state: Store) => {
+  return {
+    selectedNode_id: getCurrentDocument(state)?.state?.selectedNode_id,
+    documentId: state.document.documentId,
+    formattingHotKeys: getHotkeys(state).formatting,
+  };
+};
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;

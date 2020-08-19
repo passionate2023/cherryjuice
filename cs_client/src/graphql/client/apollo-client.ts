@@ -1,9 +1,5 @@
 import { cloneObj } from '::helpers/editing/execK/helpers';
-import { nodeHelpers } from '::graphql/cache/helpers/node';
-import { cacheInitialState, CacheState } from '::graphql/cache/initial-state';
-import { changesHelpers } from '::graphql/cache/helpers/changes';
-import { documentHelpers } from '::graphql/cache/helpers/document';
-import { imageHelpers } from '::graphql/cache/helpers/image';
+import { cacheInitialState, CacheState } from '::graphql/client/initial-state';
 import { DocumentNode } from 'graphql';
 import { ApolloClient } from 'apollo-client';
 import { FetchPolicy } from 'apollo-client/core/watchQueryOptions';
@@ -29,9 +25,9 @@ export type GraphqlMutation = <T, U>(
 ) => Promise<U>;
 export type GraphqlQuery = <T, U>(args: GraphqlQueryArgs<T, U>) => Promise<U>;
 
-const apolloCache = (() => {
+const apolloClient = (() => {
   const state: CacheState = {
-    ...cloneObj<CacheState>(cacheInitialState),
+    ...cloneObj(cacheInitialState),
   };
   const query: GraphqlQuery = args =>
     state.client.query(args).then(({ data }) => args.path(data));
@@ -43,21 +39,14 @@ const apolloCache = (() => {
       })
       .then(({ data }) => args.path(data));
   return {
-    __state__: state,
-    client: {
-      resetCache: async () => await state.cache.reset(),
-      set: (client: ApolloClient<any>) => {
-        state.client = client;
-        state.cache = client.cache;
-      },
-      query,
-      mutate,
+    query,
+    mutate,
+    resetCache: async () => await state.cache.reset(),
+    setClient: (client: ApolloClient<any>) => {
+      state.client = client;
+      state.cache = client.cache;
     },
-    node: nodeHelpers(state),
-    image: imageHelpers(state),
-    document: documentHelpers(state),
-    changes: changesHelpers(state),
   };
 })();
 
-export { apolloCache };
+export { apolloClient };

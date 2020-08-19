@@ -1,21 +1,19 @@
-import { nodesMetaMap } from '::types/misc';
 import { NodeId } from '../document';
+import { NodesDict } from '::store/ducks/cache/document-cache';
 const defaultRootNode = { node_id: 0, id: '' };
-const getFallbackNode = (nodes: nodesMetaMap): NodeId => {
-  if (!nodes?.size) return defaultRootNode;
-  const root = nodes.get(0);
+const getFallbackNode = (nodes: NodesDict): NodeId => {
+  if (!Object.keys(nodes)?.length) return defaultRootNode;
+  const root = nodes[0];
   const firstNode_id = root.child_nodes.sort((a, b) => a - b)[0];
-  const { id, node_id } = firstNode_id ? nodes.get(firstNode_id) : root;
+  const { id, node_id } = firstNode_id ? nodes[firstNode_id] : root;
   return { id, node_id };
 };
 const getFlatListOfChildrenTree = (arr: number[] = []) => (
-  nodes: nodesMetaMap,
+  nodes: NodesDict,
 ) => (node_id: number) => {
-  nodes
-    .get(node_id)
-    ?.child_nodes.forEach(
-      getFlatListOfChildrenTree((arr.push(node_id), arr))(nodes),
-    );
+  nodes[node_id]?.child_nodes.forEach(
+    getFlatListOfChildrenTree((arr.push(node_id), arr))(nodes),
+  );
   return arr;
 };
 const calcRecentNodes = ({
@@ -24,7 +22,7 @@ const calcRecentNodes = ({
   recentNodes,
   nodes,
 }: {
-  nodes: nodesMetaMap;
+  nodes: NodesDict;
   recentNodes: number[];
   selectedNode_id: number;
   removeChildren: boolean;

@@ -1,12 +1,13 @@
 import { HotKeyActionType } from '::types/graphql/generated';
 import { ac, store } from '::store/store';
+import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 export const documentHotkeysProps = {
   [HotKeyActionType.SAVE_DOCUMENT]: () => {
     ac.document.save();
   },
   [HotKeyActionType.RELOAD_DOCUMENT]: () => {
-    store.getState().document.hasUnsavedChanges
+    getCurrentDocument(store.getState()).hasUnsavedChanges
       ? ac.dialogs.showReloadDocument()
       : ac.document.fetchNodes();
   },

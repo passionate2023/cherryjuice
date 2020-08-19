@@ -4,6 +4,9 @@ import { useEffect } from 'react';
 import { replaceImageUrlWithBase64 } from '::helpers/editing/clipboard';
 import { AlertType } from '::types/react';
 import { ac } from '::store/store';
+
+export const newImagePrefix = 'ni::';
+
 type AddMetaToPastedImagesProps = {
   requestId: string | number;
 };
@@ -20,7 +23,10 @@ const useAddMetaToPastedImages = ({
           replaceImageUrlWithBase64(image)
             .then(() => {
               image.classList.add('rich-text__image');
-              image.setAttribute('data-id', (baseId++).toString());
+              image.setAttribute(
+                'data-id',
+                (newImagePrefix + baseId++).toString(),
+              );
             })
             .catch(error => {
               image.remove();

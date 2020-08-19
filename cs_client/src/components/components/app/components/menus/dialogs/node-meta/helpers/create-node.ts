@@ -1,5 +1,5 @@
 import { NodeMetaIt } from '::types/graphql/generated';
-import { NodeNew } from '::types/graphql-adapters';
+import { QFullNode } from '::store/ducks/cache/document-cache';
 
 const defaultNode = {
   name: '',
@@ -7,9 +7,7 @@ const defaultNode = {
   html: '<span class="rich-text__line"/>',
   read_only: 0,
   child_nodes: [],
-  is_richtxt: 1,
-  'image({"thumbnail":false})': [],
-  'image({"thumbnail":true})': [],
+  image: [],
 };
 const createNode = ({
   highestNode_id,
@@ -22,7 +20,7 @@ const createNode = ({
   meta?: NodeMetaIt;
   father_id: number;
   fatherId: string;
-}): NodeNew => {
+}): QFullNode => {
   const node_id = highestNode_id + 1;
   return {
     ...defaultNode,

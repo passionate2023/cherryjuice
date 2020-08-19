@@ -1,34 +1,28 @@
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { concat, from, Observable, ObservedValueOf, of } from 'rxjs';
 import { ofType } from 'deox';
-import { apolloCache } from '::graphql/cache/apollo-cache';
 import { store, ac } from '../store';
-import {
-  constructTree,
-  applyLocalModifications,
-} from '::root/components/app/components/editor/document/hooks/get-document-meta/helpers/construct-tree';
 import { Actions } from '../actions.types';
 import { handleFetchError } from '::root/components/app/components/editor/document/hooks/get-document-meta/helpers/handle-fetch-error';
 import { gqlQuery } from './shared/gql-query';
 import { createTimeoutHandler } from './shared/create-timeout-handler';
 import { createErrorHandler } from './shared/create-error-handler';
-import {
-  QDocumentMeta,
-  QNodeMeta,
-  DOCUMENT_META,
-} from '::graphql/queries/document-meta';
+import { QDocumentMeta, DOCUMENT_META } from '::graphql/queries/document-meta';
+import { getDocuments } from '::store/selectors/cache/document/document';
 
 const createLocalRequest = (
   file_id: string,
 ): Observable<ObservedValueOf<Promise<QDocumentMeta>>> => {
-  const nodes = new Promise<QDocumentMeta>(res => {
-    const document = apolloCache.document.get(file_id);
-    if (!document?.node) {
+  const document = new Promise<QDocumentMeta>(res => {
+    const document = getDocuments(store.getState())[file_id];
+    if (!document?.nodes) {
       throw new Error(file_id + ' does not exist');
     }
-    res({ ...document, node: document.node as QNodeMeta[], privateNodes: [] });
+    document.node = Object.values(document.nodes);
+    delete document.nodes;
+    res(document);
   });
-  return from(nodes);
+  return from(document);
 };
 
 const fetchNodesEpic = (action$: Observable<Actions>) => {
@@ -39,6 +33,15 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
       ac.__.document.setDocumentId,
       ac.__.document.saveFulfilled,
     ]),
+    filter(action => {
+      if (action.type === ac.__.document.setDocumentId.type) {
+        const document = store.getState().documentCache[action.payload];
+        if (document?.nodes && document?.nodes[0]) {
+          return false;
+        }
+      }
+      return true;
+    }),
     map(action =>
       'payload' in action ? action.payload : selectedDocumentId(),
     ),
@@ -48,29 +51,7 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
       const request = (isNewDocument
         ? createLocalRequest(file_id)
         : gqlQuery(DOCUMENT_META({ file_id }))
-      ).pipe(
-        tap(() => {
-          apolloCache.changes.initDocumentChangesState(file_id);
-        }),
-        map(document => {
-          const fetchedNodes = constructTree({
-            nodes: document.node,
-            privateNodes: document.privateNodes,
-          });
-          const nodes = applyLocalModifications({
-            nodes: fetchedNodes,
-            file_id,
-          });
-          return {
-            nodes,
-            privacy: document.privacy,
-            guests: document.guests,
-            userId: document.userId,
-            privateNodes: document.privateNodes,
-          };
-        }),
-        map(ac.__.document.fetchNodesFulfilled),
-      );
+      ).pipe(map(ac.__.document.fetchNodesFulfilled));
 
       const loading = of(ac.__.document.fetchNodesStarted());
       return concat(loading, request).pipe(

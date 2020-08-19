@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { apolloCache } from '::graphql/cache/apollo-cache';
+import { apolloClient } from '::graphql/client/apollo-client';
 import { getToken } from '::root/components/auth/components/reset-password';
 import { VERIFY_EMAIL } from '::graphql/mutations/user/verify-email';
 import { ac } from '::store/store';
@@ -10,7 +10,7 @@ import { UserTokenType } from '::types/graphql/generated';
 import { CHANGE_EMAIL } from '::graphql/mutations/user/change-email';
 
 const verifyEmail = (token: string, userId: string) =>
-  apolloCache.client
+  apolloClient
     .mutate(VERIFY_EMAIL({ input: { token } }))
     .then(() => {
       if (userId) {
@@ -36,7 +36,7 @@ const verifyEmail = (token: string, userId: string) =>
     });
 
 const confirmEmailChange = (token: string, userId) =>
-  apolloCache.client
+  apolloClient
     .mutate(CHANGE_EMAIL({ input: { token } }))
     .then(() => {
       if (userId) {

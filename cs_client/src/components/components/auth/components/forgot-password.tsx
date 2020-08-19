@@ -9,7 +9,7 @@ import {
 import { createRef, useRef, useState } from 'react';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
 import { patterns } from '::root/components/auth/helpers/form-validation';
-import { apolloCache } from '::graphql/cache/apollo-cache';
+import { apolloClient } from '::graphql/client/apollo-client';
 import { CREATE_PASSWORD_RESET_TOKEN } from '::graphql/mutations/user/create-password-reset-token';
 import { useStatefulValidatedInput } from '::root/components/auth/hooks/stateful-validated-input';
 import { ReturnToLoginPage } from '::root/components/auth/components/signup-form';
@@ -50,7 +50,7 @@ const ForgotPassword: React.FC<Props> = () => {
       if (e) e.preventDefault();
       if (username && email) {
         setLoading(true);
-        apolloCache.client
+        apolloClient
           .mutate(
             CREATE_PASSWORD_RESET_TOKEN({
               email: email.value,

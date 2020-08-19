@@ -1,22 +1,20 @@
 import { SaveOperationProps } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
-import { apolloCache } from '::graphql/cache/apollo-cache';
+import { apolloClient } from '::graphql/client/apollo-client';
 import { stringToMultipleElements } from '::helpers/editing/execK/helpers';
 import { getAHtml } from '::helpers/rendering/html-to-ahtml';
 import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
-import { swapNodeIdIfApplies } from '::store/epics/save-documents/helpers/save-document/helpers/save-nodes-meta';
-import { collectDanglingNodes } from '::store/epics/save-documents/helpers/save-document/helpers/save-new-nodes';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 
-const saveNodesContent = async ({ state, documentId }: SaveOperationProps) => {
-  const editedNodeContent = apolloCache.changes
-    .document(documentId)
-    .node.html.filter(id => !state.deletedNodes[id])
-    .map(swapNodeIdIfApplies(state))
-    .map(id => apolloCache.node.get(id));
-  for await (const node of editedNodeContent) {
-    if (collectDanglingNodes(state)(node)) continue;
-    const deletedImages = apolloCache.changes.document(documentId).image
-      .deleted[node.id];
+const saveNodesContent = async ({ document, state }: SaveOperationProps) => {
+  const nodes = Object.entries(document.state.editedNodes.edited)
+    .filter(
+      ([node_id, attributes]): boolean =>
+        attributes.includes('html') &&
+        !state.deletedNodes[document.id][node_id],
+    )
+    .map(([node_id]) => document.nodes[node_id]);
+
+  for await (const node of nodes) {
     updateDocumentId(state)(node);
     const DDOEs = stringToMultipleElements(node.html);
     const { abstractHtml, DDOEsAHtml } = getAHtml({
@@ -30,7 +28,7 @@ const saveNodesContent = async ({ state, documentId }: SaveOperationProps) => {
       },
     });
     const aHtml = DDOEsAHtml.map((ddoe, i) => [abstractHtml[i], ddoe.style]);
-    await apolloCache.client.mutate({
+    await apolloClient.mutate({
       ...DOCUMENT_MUTATION.ahtml,
       variables: {
         file_id: node.documentId,
@@ -40,7 +38,7 @@ const saveNodesContent = async ({ state, documentId }: SaveOperationProps) => {
             aHtml.length === 1 && aHtml[0][0].length === 0
               ? '[]'
               : JSON.stringify(aHtml),
-          deletedImages: deletedImages || [],
+          deletedImages: [],
           updatedAt: node.updatedAt,
         },
       },

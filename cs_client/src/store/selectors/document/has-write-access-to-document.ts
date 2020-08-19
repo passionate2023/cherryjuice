@@ -1,17 +1,33 @@
-import { Store } from '::store/store';
 import { AccessLevel } from '::types/graphql/generated';
-const isDocumentOwner = (state: Store): boolean =>
-  state.auth.user &&
-  (state.document.userId ? state.auth.user.id === state.document.userId : true);
-const hasWriteAccessToDocument = (state: Store): boolean =>
-  state.auth.user &&
-  (state.document.userId
-    ? state.auth.user.id === state.document.userId ||
-      state.document.guests.some(
-        guest =>
-          guest.userId === state.auth.user.id &&
-          guest.accessLevel === AccessLevel.WRITER,
-      )
-    : true);
+import { createSelector } from 'reselect';
+import { getCurrentDocument } from '::store/selectors/cache/document/document';
+
+const getAuthUser = state => state.auth.user;
+
+const isDocumentOwner = createSelector(
+  getAuthUser,
+  getCurrentDocument,
+  (user, document) => {
+    return user && (document?.userId ? user.id === document.userId : true);
+  },
+);
+
+const hasWriteAccessToDocument = createSelector(
+  getAuthUser,
+  getCurrentDocument,
+  (user, document) => {
+    return (
+      user &&
+      (document?.userId
+        ? user.id === document.userId ||
+          document.guests.some(
+            guest =>
+              guest.userId === user.id &&
+              guest.accessLevel === AccessLevel.WRITER,
+          )
+        : true)
+    );
+  },
+);
 
 export { hasWriteAccessToDocument, isDocumentOwner };

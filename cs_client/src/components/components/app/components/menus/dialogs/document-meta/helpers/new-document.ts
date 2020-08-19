@@ -1,6 +1,6 @@
 import { NodeCached } from '::types/graphql-adapters';
-import { Document } from '::types/graphql/generated';
 import { TDocumentMetaState } from '::root/components/app/components/menus/dialogs/document-meta/reducer/reducer';
+import { CreateDocumentParams } from '::store/ducks/cache/document-cache/helpers/document/create-document';
 
 type GenerateRootNodeProps = {
   documentId: string;
@@ -30,20 +30,20 @@ type GenerateNewDocumentProps = {
 const generateNewDocument = ({
   userId,
   state: { guests, privacy, name },
-}: GenerateNewDocumentProps): Document => {
+}: GenerateNewDocumentProps): CreateDocumentParams => {
   return {
     userId,
     privacy,
     name,
     guests,
     id: `new-document-${new Date().getTime()}`,
-    node: [],
     size: 0,
     hash: '',
     folder: 'Unsaved',
-    status: undefined,
     createdAt: new Date().getTime(),
     updatedAt: new Date().getTime(),
+    privateNodes: [],
+    nodes: {},
   };
 };
 

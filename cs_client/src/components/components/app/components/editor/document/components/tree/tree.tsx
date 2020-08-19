@@ -9,7 +9,8 @@ import { useDnDNodes } from '::root/components/app/components/editor/document/co
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { NodePrivacy } from '::types/graphql/generated';
-import { router } from '../../../../../../../router/router';
+import { router } from '::root/router/router';
+import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -22,10 +23,13 @@ const getParamsFromLocation = () => {
 
 type Props = {};
 
-const mapState = (state: Store) => ({
-  nodes: state.document.nodes,
-  documentPrivacy: state.document.privacy,
-});
+const mapState = (state: Store) => {
+  const document = getCurrentDocument(state);
+  return {
+    nodes: document.nodes,
+    documentPrivacy: document.privacy,
+  };
+};
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -57,8 +61,8 @@ const Tree: React.FC<Props & PropsFromRedux> = ({ nodes, documentPrivacy }) => {
             ref={componentRef}
           >
             {nodes &&
-              nodes.get(0).child_nodes.map(node_id => {
-                const node = nodes.get(node_id);
+              nodes[0].child_nodes.map(node_id => {
+                const node = nodes[node_id];
                 return (
                   <Node
                     key={node.node_id}

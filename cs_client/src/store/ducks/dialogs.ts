@@ -41,7 +41,10 @@ const actionCreators = {
     setAlert: _(ap('setAlert'), _ => (alert: TAlert) => {
       if (alert?.error && process.env.NODE_ENV === 'development')
         // eslint-disable-next-line no-console
-        console.error(alert);
+        // console.error(alert);
+        setTimeout(() => {
+          throw alert.error;
+        });
       if (alert.error?.message.includes('errorId')) {
         // @ts-ignore
         const { graphQLErrors } = alert.error;

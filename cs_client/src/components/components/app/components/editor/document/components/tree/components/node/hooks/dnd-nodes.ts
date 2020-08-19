@@ -2,27 +2,48 @@ import nodeMod from '::sass-modules/tree/node.scss';
 import { MutableRefObject, useMemo } from 'react';
 import { AlertType } from '::types/react';
 import { modTree } from '::sass-modules';
-import { apolloCache } from '::graphql/cache/apollo-cache';
 import { ac } from '::store/store';
-import { nodesMetaMap } from '::types/misc';
+import { NodesDict } from '::store/ducks/cache/document-cache';
 
 const updateCache = ({ fatherOfDroppedNode, targetNode, droppedNode }) => {
-  apolloCache.node.mutate({
-    nodeId: droppedNode.id,
-    meta: {
+  // apolloCache.node.mutate({
+  //   nodeId: droppedNode.id,
+  //   meta: {
+  //     father_id: targetNode.node_id,
+  //     fatherId: targetNode.id,
+  //   },
+  // });
+  ac.documentCache.mutateNode({
+    node_id: droppedNode.node_id,
+    documentId: droppedNode.documentId,
+    data: {
       father_id: targetNode.node_id,
       fatherId: targetNode.id,
     },
   });
-  apolloCache.node.mutate({
-    nodeId: fatherOfDroppedNode.id,
-    meta: {
+  // apolloCache.node.mutate({
+  //   nodeId: fatherOfDroppedNode.id,
+  //   meta: {
+  //     child_nodes: fatherOfDroppedNode.child_nodes,
+  //   },
+  // });
+  ac.documentCache.mutateNode({
+    node_id: fatherOfDroppedNode.node_id,
+    documentId: fatherOfDroppedNode.documentId,
+    data: {
       child_nodes: fatherOfDroppedNode.child_nodes,
     },
   });
-  apolloCache.node.mutate({
-    nodeId: targetNode.id,
-    meta: {
+  // apolloCache.node.mutate({
+  //   nodeId: targetNode.id,
+  //   meta: {
+  //     child_nodes: targetNode.child_nodes,
+  //   },
+  // });
+  ac.documentCache.mutateNode({
+    node_id: targetNode.node_id,
+    documentId: targetNode.documentId,
+    data: {
       child_nodes: targetNode.child_nodes,
     },
   });
@@ -66,11 +87,11 @@ const calculateDroppingPosition = (e): number => {
   return position;
 };
 const getFatherIdChain = (
-  nodes: nodesMetaMap,
+  nodes: NodesDict,
   node_id: number,
   father_id_chain: number[] = [],
 ) => {
-  const father_id = nodes.get(node_id).father_id;
+  const father_id = nodes[node_id].father_id;
   return father_id === 0
     ? [...father_id_chain, 0]
     : getFatherIdChain(nodes, father_id, [...father_id_chain, father_id]);
@@ -78,7 +99,7 @@ const getFatherIdChain = (
 type Props = {
   node_id: number;
   componentRef: MutableRefObject<HTMLDivElement>;
-  nodes?: nodesMetaMap;
+  nodes?: NodesDict;
   draggable?: boolean;
   afterDrop?: Function;
 };
@@ -125,9 +146,9 @@ const useDnDNodes = ({
         } else removeClass(e);
         const dropped_node_id = e.dataTransfer.getData('text/plain');
         if (dropped_node_id !== '' + target_node_id) {
-          const droppedNode = nodes.get(Number(dropped_node_id));
-          const fatherOfDroppedNode = nodes.get(droppedNode.father_id);
-          const targetNode = nodes.get(target_node_id);
+          const droppedNode = nodes[Number(dropped_node_id)];
+          const fatherOfDroppedNode = nodes[droppedNode.father_id];
+          const targetNode = nodes[target_node_id];
           const father_id_chain = new Set(
             target_node_id === 0
               ? [0]

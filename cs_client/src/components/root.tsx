@@ -53,8 +53,14 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   hasPassword,
   hotKeys,
 }) => {
-  useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
   const client = useApolloClient(token, userId);
+  useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
+  useOnWindowResize([
+    updateBreakpointState({
+      breakpoint: 850,
+      callback: ac.root.setIsOnMobile,
+    }),
+  ]);
   useRegisterHotKeys(hotKeys);
 
   useEffect(() => {
@@ -71,12 +77,6 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   }, [userId, hasPassword]);
 
   useConsumeToken({ userId });
-  useOnWindowResize([
-    updateBreakpointState({
-      breakpoint: 850,
-      callback: ac.root.setIsOnMobile,
-    }),
-  ]);
   return (
     <Suspense fallback={<Void />}>
       {client && (

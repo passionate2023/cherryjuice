@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { GraphqlArgsPipe } from '::graphql/cache/apollo-cache';
+import { GraphqlArgsPipe } from '../../client/apollo-client';
 
 const CREATE_EMAIL_VERIFICATION_TOKEN: GraphqlArgsPipe<
   undefined,

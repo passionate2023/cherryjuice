@@ -4,7 +4,7 @@ import { modGuests, modNodeMeta, modTextInput } from '::sass-modules';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { patterns } from '::root/components/auth/helpers/form-validation';
-import { apolloCache } from '::graphql/cache/apollo-cache';
+import { apolloClient } from '::graphql/client/apollo-client';
 import { USER_EXISTS } from '::graphql/queries/user-exists';
 import { documentMetaActionCreators } from '::root/components/app/components/menus/dialogs/document-meta/reducer/reducer';
 import { AccessLevel } from '::types/graphql/generated';
@@ -31,7 +31,7 @@ const AddGuest: React.FC<Props> = ({ userId }) => {
   const addGuestM = useCallback(() => {
     if (inputRef.current.checkValidity()) {
       const email = inputRef.current.value;
-      apolloCache.client.mutate(USER_EXISTS({ email })).then(guestUserId => {
+      apolloClient.mutate(USER_EXISTS({ email })).then(guestUserId => {
         if (guestUserId) {
           if (guestUserId === userId) {
             ac.dialogs.setAlert({

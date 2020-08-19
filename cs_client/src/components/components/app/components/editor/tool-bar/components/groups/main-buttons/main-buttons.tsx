@@ -6,14 +6,20 @@ import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
-const mapState = (state: Store) => ({
-  showTree: state.editor.showTree,
-  documentHasUnsavedChanges: state.document.hasUnsavedChanges,
-  selectedNode_id: state.document.selectedNode.node_id,
-  documentId: state.document.documentId,
-  hasUnsavedChanges: state.document.hasUnsavedChanges,
-  isDocumentOwner: hasWriteAccessToDocument(state),
-});
+import {
+  getCurrentDocument,
+  getDocumentHasUnsavedChanges,
+} from '::store/selectors/cache/document/document';
+const mapState = (state: Store) => {
+  const document = getCurrentDocument(state);
+  return {
+    showTree: state.editor.showTree,
+    documentHasUnsavedChanges: getDocumentHasUnsavedChanges(state),
+    selectedNode_id: document?.state?.selectedNode_id,
+    documentId: state.document.documentId,
+    isDocumentOwner: hasWriteAccessToDocument(state),
+  };
+};
 
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -25,11 +31,11 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
   documentHasUnsavedChanges,
   selectedNode_id,
   documentId,
-  hasUnsavedChanges,
   isDocumentOwner,
 }) => {
   const noDocumentIsSelected = !documentId;
   const noNodeIsSelected = !selectedNode_id;
+  const newDocument = documentId?.startsWith('new');
   return (
     <div className={modToolbar.toolBar__group}>
       <ToolbarButton
@@ -81,7 +87,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         dontMount={!isDocumentOwner}
         onClick={ac.document.save}
         testId={testIds.toolBar__main__saveDocument}
-        disabled={!hasUnsavedChanges || noDocumentIsSelected}
+        disabled={!documentHasUnsavedChanges || noDocumentIsSelected}
       >
         <Icon name={Icons.material.save} />
       </ToolbarButton>
@@ -91,7 +97,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
             ? ac.dialogs.showReloadDocument
             : ac.document.fetchNodes
         }
-        disabled={noDocumentIsSelected}
+        disabled={noDocumentIsSelected || newDocument}
       >
         <Icon name={Icons.material.refresh} />
       </ToolbarButton>

@@ -3,10 +3,12 @@ import { MutableRefObject, useCallback } from 'react';
 import { ac } from '::store/store';
 
 const useHandleContentChanges = ({
-  nodeId,
+  node_id,
+  documentId,
   ref,
 }: {
-  nodeId: string;
+  node_id: number;
+  documentId: string;
   ref: MutableRefObject<HTMLDivElement>;
 }) => {
   useMutationObserver(
@@ -23,11 +25,16 @@ const useHandleContentChanges = ({
         );
         if (userMutations.length) {
           ref.current.setAttribute('data-edited', String(new Date().getTime()));
-          ac.document.setCacheTimeStamp();
+          ac.documentCache.mutateNode({
+            node_id,
+            documentId,
+            data: { html: '' },
+            meta: { mode: 'update-key-only' },
+          });
           observer.disconnect();
         }
       },
-      [nodeId],
+      [node_id, documentId],
     ),
   );
 };

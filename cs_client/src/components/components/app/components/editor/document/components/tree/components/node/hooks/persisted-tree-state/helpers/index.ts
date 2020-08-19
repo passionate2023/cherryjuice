@@ -1,4 +1,4 @@
-import { nodesMetaMap } from '::types/misc';
+import { NodesDict } from '::store/ducks/cache/document-cache';
 
 const getTree = () => {
   const savedState = localStorage.getItem('treeState');
@@ -30,10 +30,10 @@ const persistedTreeState = (() => {
 const collapseAll = (
   id: number,
   treeState: Record<string, boolean>,
-  nodes: nodesMetaMap,
+  nodes: NodesDict,
 ) => {
   delete treeState[id];
-  nodes.get(id)?.child_nodes.forEach(id => {
+  nodes[id]?.child_nodes.forEach(id => {
     collapseAll(id, treeState, nodes);
   });
 };

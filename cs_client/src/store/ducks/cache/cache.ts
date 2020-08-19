@@ -1,5 +1,5 @@
 import { createActionCreator as _, createReducer } from 'deox';
-import { createActionPrefixer } from './helpers/shared';
+import { createActionPrefixer } from '../helpers/shared';
 import { HotKeyDict } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/reducer/reducer';
 import { authActionCreators } from '::store/ducks/auth';
 
@@ -29,38 +29,40 @@ const initialState: State = {
   },
 };
 const reducer = createReducer(initialState, _ => [
-  _(ac.updateHotkeys, (state, { payload }) => ({
-    ...state,
-    settings: {
-      ...state.settings,
-      hotKeys: {
-        ...state.settings.hotKeys,
-        ...payload,
+  ...[
+    _(authActionCreators.setAuthenticationSucceeded, state => ({
+      ...state,
+      settings: {
+        ...state.settings,
+        hotKeys: initialHotKeysChanges,
       },
-      syncHotKeysWithCache: undefined,
-    },
-  })),
-  _(ac.clearHotkeys, state => ({
-    ...state,
-    settings: {
-      ...state.settings,
-      hotKeys: initialHotKeysChanges,
-    },
-  })),
-  _(authActionCreators.setAuthenticationSucceeded, state => ({
-    ...state,
-    settings: {
-      ...state.settings,
-      hotKeys: initialHotKeysChanges,
-    },
-  })),
-  _(ac.syncHotKeysWithCache, state => ({
-    ...state,
-    settings: {
-      ...state.settings,
-      syncHotKeysWithCache: Date.now(),
-    },
-  })),
+    })),
+    _(ac.updateHotkeys, (state, { payload }) => ({
+      ...state,
+      settings: {
+        ...state.settings,
+        hotKeys: {
+          ...state.settings.hotKeys,
+          ...payload,
+        },
+        syncHotKeysWithCache: undefined,
+      },
+    })),
+    _(ac.clearHotkeys, state => ({
+      ...state,
+      settings: {
+        ...state.settings,
+        hotKeys: initialHotKeysChanges,
+      },
+    })),
+    _(ac.syncHotKeysWithCache, state => ({
+      ...state,
+      settings: {
+        ...state.settings,
+        syncHotKeysWithCache: Date.now(),
+      },
+    })),
+  ],
 ]);
 
 export { reducer as cacheReducer, ac as cacheActionCreators };

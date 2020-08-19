@@ -1,19 +1,19 @@
 import * as React from 'react';
 import { EventHandler, useMemo, useCallback } from 'react';
-import { NodeCached } from '::types/graphql-adapters';
-import { apolloCache } from '::graphql/cache/apollo-cache';
 import { deleteNode } from '::root/components/app/components/menus/modals/delete-node/helpers/delete-node';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ConfirmationModal } from '::root/components/shared-components/modal/confirmation-modal';
 import { AlertType } from '::types/react';
 import { testIds } from '::cypress/support/helpers/test-ids';
-
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
+import { getCurrentDocument } from '::store/selectors/cache/document/document';
+import { getNode } from '::store/selectors/cache/document/node';
 
 const mapState = (state: Store) => ({
-  nodeId: state.document.selectedNode.id,
+  node_id: getCurrentDocument(state)?.state?.selectedNode_id,
+  documentId: state.document.documentId,
   show: state.dialogs.showDeleteNode,
 });
 const mapDispatch = {
@@ -30,14 +30,15 @@ export type Props = {
 const DeleteNode: React.FC<Props & PropsFromRedux> = ({
   onClose,
   show,
-  nodeId,
+  node_id,
+  documentId,
 }) => {
-  const node: NodeCached = useMemo(() => apolloCache.node.get(nodeId), [
-    nodeId,
-  ]);
+  const node = useMemo(() => {
+    return getNode({ node_id, documentId });
+  }, [node_id]);
   const deleteSelectedNode = useDelayedCallback(
     ac.dialogs.hideDeleteNode,
-    useCallback(deleteNode(node), [nodeId]),
+    useCallback(deleteNode(node), [node_id]),
   );
 
   const buttons: TDialogFooterButton[] = [

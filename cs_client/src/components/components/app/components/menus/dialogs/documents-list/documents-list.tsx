@@ -11,6 +11,7 @@ import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { DialogHeaderButton } from '::root/components/shared-components/dialog/dialog-header';
+import { getDocumentsList } from '::store/selectors/cache/document/document';
 
 const createButtons = ({
   selectedIDs,
@@ -55,7 +56,7 @@ const mapState = (state: Store) => ({
   documentId: state.document.documentId,
   showImportDocuments: state.dialogs.showImportDocuments,
   showDocumentList: state.dialogs.showDocumentList,
-  documents: state.documentsList.documents,
+  documents: getDocumentsList(state),
   loading: state.documentsList.fetchDocuments === 'in-progress',
   isOnMobile: state.root.isOnMobile,
   deletionMode: state.documentsList.deletionMode,
@@ -77,7 +78,7 @@ const DocumentsList: React.FC<PropsFromRedux> = ({
 }) => {
   useEffect(() => {
     if (showDocumentList) {
-      const handle = setTimeout(ac.documentsList.fetchDocuments, 500);
+      const handle = setTimeout(ac.documentsList.fetchDocuments, 1500);
       return () => {
         clearInterval(handle);
       };
@@ -114,7 +115,7 @@ const DocumentsList: React.FC<PropsFromRedux> = ({
     {
       hidden: showDeletionButtons,
       className: modDialog.dialog__header__fileButton,
-      onClick: ac.documentsList.selectAllDocuments,
+      onClick: () => ac.documentsList.selectAllDocuments(documents),
       icon: Icons.material['select-all'],
       testId: testIds.dialogs__selectDocument__header__buttons__deleteAll,
     },

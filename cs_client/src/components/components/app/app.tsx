@@ -11,6 +11,7 @@ import { useHandleRouting } from '::root/components/app/hooks/handle-routing/han
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { router } from '::root/router/router';
+import { getDocumentHasUnsavedChanges } from '::store/selectors/cache/document/document';
 
 const Menus = React.lazy(() =>
   import('::root/components/app/components/menus/menus'),
@@ -61,7 +62,7 @@ const mapState = (state: Store) => ({
   documentId: state.document.documentId,
   showTree: state.editor.showTree,
   treeWidth: state.editor.treeWidth,
-  documentHasUnsavedChanges: state.document.hasUnsavedChanges,
+  documentHasUnsavedChanges: getDocumentHasUnsavedChanges(state),
   showFormattingButtons: state.editor.showFormattingButtons,
   dockedDialog: state.root.dockedDialog,
   isDocumentOwner: hasWriteAccessToDocument(state),

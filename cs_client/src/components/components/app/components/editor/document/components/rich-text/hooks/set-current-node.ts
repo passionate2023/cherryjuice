@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { ac } from '::store/store';
 
-const useSetCurrentNode = (node_id, nodes) => {
+const useSetCurrentNode = (node_id, nodes, documentId) => {
   useEffect(() => {
-    const node = nodes?.get(node_id);
-    if (node) {
-      const { id } = node;
-      ac.document.selectNode({ id, node_id });
+    const node = nodes[node_id];
+    if (node && node_id) {
+      ac.document.selectNode({ documentId, node_id });
     }
   }, [node_id, nodes]);
 };

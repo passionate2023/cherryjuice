@@ -8,6 +8,7 @@ import { gqlQuery } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { SearchState } from '../../ducks/search';
+import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const searchStates: SearchState[] = ['stand-by', 'idle'];
 const searchNodesEpic = (action$: Observable<Actions>) => {
@@ -28,10 +29,9 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
           updatedAtTimeFilter,
           sortOptions,
         } = store.getState().search;
-        const {
-          documentId,
-          selectedNode: { id: nodeId },
-        } = store.getState().document;
+        const document = getCurrentDocument(store.getState());
+        const documentId = document.id;
+        const nodeId = document.nodes[document.state.selectedNode_id].id;
         const request = gqlQuery({
           ...QUERY.SEARCH.searchNode,
           variables: QUERY.SEARCH.searchNode.args({

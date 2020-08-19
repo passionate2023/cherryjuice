@@ -1,5 +1,7 @@
-import { apolloCache } from '::graphql/cache/apollo-cache';
 import { getEditor } from '::root/components/app/components/editor/document/components/rich-text/hooks/get-node-images';
+import { ac, store } from '::store/store';
+import { getNode } from '::store/selectors/cache/document/node';
+import { getDocuments } from '::store/selectors/cache/document/document';
 
 const unsetImagesAttributes = (images: HTMLImageElement[]) => {
   const imageAttributesTempContainer = [];
@@ -26,7 +28,7 @@ const setImageAttributes = attributes => {
   });
 };
 const getEditorContentWithoutImages = () => {
-  let html, id, node_id, edited;
+  let html, id, node_id, documentId, edited;
   const editor: HTMLDivElement = document.querySelector('#rich-text');
   let imageAttributesTempContainer: any[] = [];
   if (editor) {
@@ -35,6 +37,7 @@ const getEditorContentWithoutImages = () => {
     html = editor.innerHTML;
     id = editor.dataset.id;
     edited = editor.dataset.edited;
+    documentId = editor.dataset.documentId;
     node_id = editor.dataset.node_id;
     setImageAttributes(imageAttributesTempContainer);
   }
@@ -43,37 +46,33 @@ const getEditorContentWithoutImages = () => {
     id,
     node_id,
     edited,
+    documentId,
     imageIDs: imageAttributesTempContainer.map(({ dataId }) => dataId),
   };
 };
-const getNodeImageIDsFromCache = ({ nodeId }): string[] => {
-  return apolloCache.node.get(nodeId)[
-    // eslint-disable-next-line no-unexpected-multiline
-    'image({"thumbnail":true})'
-  ].map(({ id }) => /:(.+)$/.exec(id)[1]);
+const getNodeImageIDsFromCache = ({ node_id, documentId }): string[] => {
+  const document = getDocuments(store.getState())[documentId];
+  return document.nodes[node_id].image.map(image => image.id);
 };
 
-const updatedCachedHtml = ({ nodeId, html }) => {
-  apolloCache.node.mutate({
-    nodeId,
-    meta: {
-      html,
-    },
-  });
+const updatedCachedHtml = ({ node_id, documentId, html }) => {
+  ac.documentCache.mutateNode({ node_id, documentId, data: { html } });
 };
 
 const updateCachedImages = ({
-  nodeId,
+  node_id,
+  documentId,
   deletedImageIDs,
   newImageIDs,
   imageIDsInDom,
 }: {
-  nodeId;
+  node_id;
+  documentId;
   deletedImageIDs: string[];
   newImageIDs: string[];
   imageIDsInDom: string[];
 }) => {
-  const node = apolloCache.node.get(nodeId);
+  const node = getNode({ node_id, documentId });
 
   const editor = getEditor();
   const newImages = newImageIDs.reduce((acc, id) => {
@@ -88,28 +87,34 @@ const updateCachedImages = ({
     });
     return acc;
   }, []);
-
-  deletedImageIDs.forEach(
-    apolloCache.image.delete.hard({
-      nodeId: node.id,
+  if (deletedImageIDs.length)
+    ac.documentCache.mutateNode({
+      node_id: node.node_id,
       documentId: node.documentId,
-    }),
-  );
-  newImages.forEach(
-    apolloCache.image.create({ nodeId: node.id, documentId: node.documentId }),
-  );
+      data: {},
+      meta: {
+        deletedImages: deletedImageIDs,
+      },
+    });
+
+  ac.documentCache.mutateNode({
+    node_id: node.node_id,
+    documentId: node.documentId,
+    data: { image: newImages },
+  });
 };
 const updateCachedHtmlAndImages = () => {
   const {
     html,
-    id,
     edited,
     imageIDs: imageIDsInDom,
+    node_id,
+    documentId,
   } = getEditorContentWithoutImages();
   let deletedImageIDs = [];
   let newImageIDs = [];
   if (edited) {
-    const imageIDsInCache = getNodeImageIDsFromCache({ nodeId: id });
+    const imageIDsInCache = getNodeImageIDsFromCache({ node_id, documentId });
     const sets = {
       imageIDsInDom: new Set(imageIDsInDom),
       imageIDsInCache: new Set(imageIDsInCache),
@@ -118,12 +123,13 @@ const updateCachedHtmlAndImages = () => {
     newImageIDs = imageIDsInDom.filter(id => !sets.imageIDsInCache.has(id));
     if (deletedImageIDs.length || newImageIDs.length)
       updateCachedImages({
-        nodeId: id,
+        node_id,
+        documentId,
         deletedImageIDs,
         newImageIDs,
         imageIDsInDom,
       });
-    updatedCachedHtml({ nodeId: id, html });
+    updatedCachedHtml({ node_id, documentId, html });
   }
 };
 export {

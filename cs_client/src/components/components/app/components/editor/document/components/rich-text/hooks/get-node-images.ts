@@ -1,43 +1,24 @@
-import { usePng } from '::hooks/use-png';
 import { useEffect } from 'react';
-import { apolloCache } from '::graphql/cache/apollo-cache';
-import { UnsavedImage } from '::graphql/cache/helpers/image';
+import { Image } from '::types/graphql/generated';
 export const getEditor = () => document.querySelector('#rich-text');
 const useAttachImagesToHtml = ({
-  file_id,
   node_id,
-  nodeId,
   html,
+  images: nodeImages,
 }: {
   file_id;
   node_id;
   nodeId;
   html;
+  images: Image[];
 }) => {
-  const all_png_base64 = usePng({
-    file_id,
-    node_id,
-  });
   useEffect(() => {
-    let images = {
+    const images = {
       current: undefined,
     };
-    if (all_png_base64?.pngs?.length && all_png_base64?.node_id === node_id) {
+    if (nodeImages) {
       images.current = new Map<string, string>();
-      all_png_base64.pngs.forEach(image => {
-        images.current.set(image.id, image.base64);
-      });
-    }
-    const pastedImages = apolloCache.changes
-      .document(file_id)
-      .image.created?.filter(([imageNodeId]) => nodeId === imageNodeId)
-      .flatMap(([, imagesIds]) =>
-        Array.from(imagesIds).map(apolloCache.image.get),
-      );
-
-    if (pastedImages?.length) {
-      if (!images.current) images.current = new Map<string, string>();
-      pastedImages.forEach((image: UnsavedImage) => {
+      nodeImages.forEach(image => {
         images.current.set(image.id, image.base64);
       });
     }
@@ -59,7 +40,7 @@ const useAttachImagesToHtml = ({
         }
       });
     }
-  }, [all_png_base64?.pngs, node_id, html]);
+  }, [nodeImages, node_id, html]);
 };
 
 export { useAttachImagesToHtml };

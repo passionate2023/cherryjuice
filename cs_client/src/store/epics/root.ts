@@ -13,6 +13,7 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
   const { saveSettingsEpic } = await import('./settings/save-settings');
   const { authEpic } = await import('./auth/auth');
   const { deleteAccountEpic } = await import('./delete-account/delete-account');
+  const { fetchHtmlEpic } = await import('./fetch-html.epic');
 
   return action$ =>
     combineEpics(
@@ -25,6 +26,7 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
       exportDocumentEpic,
       searchNodesEpic,
       deleteAccountEpic,
+      fetchHtmlEpic,
     )(action$);
 };
 export { createRootEpic };

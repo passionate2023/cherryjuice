@@ -1,7 +1,9 @@
 import { SaveOperationProps } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
-import { apolloCache } from '::graphql/cache/apollo-cache';
+import { apolloClient } from '::graphql/client/apollo-client';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
-import { swapNodeIdIfApplies } from '::store/epics/save-documents/helpers/save-document/helpers/save-nodes-meta';
+import { newImagePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
+import { Image } from '::types/graphql/generated';
+
 const base64toBlob = ({ url, name }): Promise<Blob> =>
   fetch(url).then(async res => {
     if (url) {
@@ -12,15 +14,27 @@ const base64toBlob = ({ url, name }): Promise<Blob> =>
     }
   });
 type SaveImagesProps = SaveOperationProps & {};
-const saveImages = async ({ state, documentId }: SaveImagesProps) => {
-  const newImagesPerNode = apolloCache.changes.document(documentId).image
-    .created;
-  const nodes = newImagesPerNode.filter(([id]) => !state.deletedNodes[id]);
-  for await (const [nodeId, base64] of nodes) {
-    const node = apolloCache.node.get(swapNodeIdIfApplies(state)(nodeId));
+const saveImages = async ({ document, state }: SaveImagesProps) => {
+  const nodes: [number, Image[]][] = Object.entries(
+    document.state.editedNodes.edited,
+  ).reduce((acc, [node_id, attributes]) => {
+    if (
+      attributes.includes('image') &&
+      !state.deletedNodes[document.id][node_id]
+    ) {
+      const images = document.nodes[node_id].image.filter(({ id }) =>
+        id.startsWith(newImagePrefix),
+      );
+      if (images.length) {
+        acc.push([node_id, images]);
+      }
+    }
+    return acc;
+  }, []);
+  for await (const [node_id, images_] of nodes) {
+    const node = document.nodes[node_id];
     const images: Blob[] = await Promise.all(
-      Array.from(base64)
-        .map(id => apolloCache.image.get(id))
+      Array.from(images_)
         .map(
           ({ id, base64 }) =>
             base64 && {
@@ -31,7 +45,7 @@ const saveImages = async ({ state, documentId }: SaveImagesProps) => {
         .map(base64toBlob)
         .filter(Boolean),
     );
-    const imageIdsTuples: [string, string][] = await apolloCache.client.mutate({
+    const imageIdsTuples: [string, string][] = await apolloClient.mutate({
       query: DOCUMENT_MUTATION.uploadImages.query,
       variables: {
         node_id: node.node_id,
