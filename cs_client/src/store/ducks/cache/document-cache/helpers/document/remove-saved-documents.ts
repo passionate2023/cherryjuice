@@ -5,19 +5,21 @@ export const removeSavedDocuments = (
   state: DocumentCacheState,
 ): DocumentCacheState => {
   return Object.fromEntries(
-    Object.entries(state).map(([, document]) => {
-      const uneditedDocument =
-        document.updatedAt > document.state.localUpdatedAt;
-      return uneditedDocument
-        ? [document.id, document]
-        : [
-            document.id,
-            {
-              ...document,
-              nodes: {},
-              state: getDefaultState({ existingState: document.state }),
-            },
-          ];
-    }),
+    Object.entries(state)
+      .filter(([id]) => !id.startsWith('new-document'))
+      .map(([, document]) => {
+        const uneditedDocument =
+          document.updatedAt > document.state.localUpdatedAt;
+        return uneditedDocument
+          ? [document.id, document]
+          : [
+              document.id,
+              {
+                ...document,
+                nodes: {},
+                state: getDefaultState({ existingState: document.state }),
+              },
+            ];
+      }),
   );
 };

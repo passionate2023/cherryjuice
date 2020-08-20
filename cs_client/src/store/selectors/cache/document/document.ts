@@ -36,6 +36,4 @@ export const getDocumentHasUnsavedChanges = createSelector(
     }
   },
 );
-export const getNewDocuments = createSelector(getDocumentsList, documents => {
-  return Object.values(documents).filter(({ id }) => id.startsWith('new'));
-});
+

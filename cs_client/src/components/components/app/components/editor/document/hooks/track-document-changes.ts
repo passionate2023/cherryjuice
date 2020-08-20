@@ -1,21 +1,25 @@
 import { useEffect } from 'react';
-import { getEditor } from '::root/components/app/components/editor/document/components/rich-text/hooks/get-node-images';
 import { onBeforeUnload } from '::helpers/dom/on-before-unload';
 
 type Props = {
-  updatedAt: number;
-  localUpdatedAt: number;
+  userHasUnsavedChanges: boolean;
+  documentName?: string;
 };
-const useTrackDocumentChanges = ({ updatedAt, localUpdatedAt }: Props) => {
+const useTrackDocumentChanges = ({
+  userHasUnsavedChanges,
+  documentName,
+}: Props) => {
   useEffect(() => {
-    const documentHasUnsavedNodes =
-      Boolean(getEditor()?.getAttribute('data-edited')) ||
-      localUpdatedAt > updatedAt;
-    if (documentHasUnsavedNodes) {
+    const title = `cherryscript${documentName ? ' - ' + documentName : ''}`;
+    if (userHasUnsavedChanges) {
+      document.title = '*' + title;
       onBeforeUnload.attach();
-    } else onBeforeUnload.remove();
+    } else {
+      onBeforeUnload.remove();
+      document.title = title;
+    }
     return onBeforeUnload.remove;
-  }, [updatedAt, localUpdatedAt]);
+  }, [userHasUnsavedChanges, documentName]);
 };
 
 export { useTrackDocumentChanges };

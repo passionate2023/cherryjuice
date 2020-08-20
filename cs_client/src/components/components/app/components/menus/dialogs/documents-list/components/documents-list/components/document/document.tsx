@@ -3,19 +3,16 @@ import { modSelectFile } from '::sass-modules';
 import { dateToFormattedString } from '::helpers/time';
 import { ThreeDotsButton } from './components/three-dots-button';
 import { ac } from '::store/store';
-import { DocumentMeta } from '::types/graphql-adapters';
-type Props = {
-  // selectedIDs: string[];
-  // onSelect: EventHandler<any>;
-  documentMeta: DocumentMeta;
-};
-
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { VisibilityIcon } from '::root/components/app/components/editor/info-bar/components/components/visibility-icon';
+import { CachedDocument } from '::store/ducks/cache/document-cache';
+
+export const documentHasUnsavedChanges = (document: CachedDocument) =>
+  document?.state?.localUpdatedAt > document?.updatedAt;
 
 const mapState = (state: Store, props: Props) => ({
-  isSelected: state.documentsList.selectedIDs.includes(props.documentMeta.id),
+  isSelected: state.documentsList.selectedIDs.includes(props.document.id),
   deletionMode: state.documentsList.deletionMode,
   openDocumentId: state.document.documentId,
 });
@@ -23,14 +20,16 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
+type Props = {
+  document: CachedDocument;
+};
 const Document: React.FC<Props & PropsFromRedux> = ({
-  documentMeta: { size, id, name, updatedAt, hash, privacy },
+  document,
   isSelected,
-  // selectedIDs,
   openDocumentId,
-  // onSelect,
   deletionMode,
 }) => {
+  const { size, id, name, updatedAt, hash, privacy } = document;
   return (
     <div
       className={`${modSelectFile.selectFile__file} ${
@@ -45,7 +44,9 @@ const Document: React.FC<Props & PropsFromRedux> = ({
       tabIndex={0}
     >
       <span className={`${modSelectFile.selectFile__file__name} `}>
-        {id.startsWith('new-document') ? `*${name}` : name}
+        {id.startsWith('new-document') || documentHasUnsavedChanges(document)
+          ? `*${name}`
+          : name}
       </span>
       <ThreeDotsButton documentId={id} />
 

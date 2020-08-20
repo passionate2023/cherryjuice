@@ -8,13 +8,18 @@ import { ac, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import {
   getCurrentDocument,
-  getDocumentHasUnsavedChanges,
+  getDocumentsList,
 } from '::store/selectors/cache/document/document';
+import { documentHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
+
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
   return {
     showTree: state.editor.showTree,
-    documentHasUnsavedChanges: getDocumentHasUnsavedChanges(state),
+    userHasUnsavedChanges: getDocumentsList(state).some(
+      documentHasUnsavedChanges,
+    ),
+    documentHasUnsavedChanges: documentHasUnsavedChanges(document),
     selectedNode_id: document?.state?.selectedNode_id,
     documentId: state.document.documentId,
     isDocumentOwner: hasWriteAccessToDocument(state),
@@ -28,6 +33,7 @@ type Props = {};
 
 const MainButtons: React.FC<Props & PropsFromRedux> = ({
   showTree,
+  userHasUnsavedChanges,
   documentHasUnsavedChanges,
   selectedNode_id,
   documentId,
@@ -87,7 +93,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         dontMount={!isDocumentOwner}
         onClick={ac.document.save}
         testId={testIds.toolBar__main__saveDocument}
-        disabled={!documentHasUnsavedChanges || noDocumentIsSelected}
+        disabled={!userHasUnsavedChanges }
       >
         <Icon name={Icons.material.save} />
       </ToolbarButton>

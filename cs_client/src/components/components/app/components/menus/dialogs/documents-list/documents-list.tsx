@@ -147,7 +147,7 @@ const DocumentsList: React.FC<PropsFromRedux> = ({
       loading={fetchDocuments !== 'idle'}
     >
       <ErrorBoundary>
-        <DocumentList documentsMeta={documents} loading={loading} />
+        <DocumentList documents={documents} loading={loading} />
       </ErrorBoundary>
     </DialogWithTransition>
   );

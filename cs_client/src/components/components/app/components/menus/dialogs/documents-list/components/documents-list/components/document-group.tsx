@@ -1,29 +1,21 @@
 import * as React from 'react';
 import { modSelectFile } from '::sass-modules';
-import { DocumentMeta } from '::types/graphql-adapters';
 import { Document } from './document/document';
+import { CachedDocument } from '::store/ducks/cache/document-cache';
 
-const DocumentGroup = ({
-  folder,
-  files,
-  // selectedIDs,
-  // onSelect,
-  // deleteMode,
-}) => {
+type DocumentGroupProps = {
+  documents: CachedDocument[];
+  folder: string;
+};
+const DocumentGroup = ({ folder, documents }: DocumentGroupProps) => {
   return (
     <div className={modSelectFile.selectFile__fileFolder}>
       <span className={modSelectFile.selectFile__fileFolder__name}>
         {folder}
       </span>
       <span className={modSelectFile.selectFile__fileFolder__files}>
-        {files.map((fileProps: DocumentMeta) => (
-          <Document
-            documentMeta={fileProps}
-            key={fileProps.id}
-            // onSelect={onSelect}
-            // selectedIDs={selectedIDs}
-            // deleteMode={deleteMode}
-          />
+        {documents.map((document) => (
+          <Document document={document} key={document.id} />
         ))}
       </span>
     </div>

@@ -10,7 +10,6 @@ import { documentReducer } from '::root/components/app/components/editor/documen
 import { documentInitialState } from '::root/components/app/components/editor/document/reducer/initial-state';
 import { documentActionCreators } from '::root/components/app/components/editor/document/reducer/action-creators';
 import { DocumentContext } from './reducer/context';
-import { useTrackDocumentChanges } from '::root/components/app/components/editor/document/hooks/track-document-changes';
 import { Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
@@ -19,8 +18,6 @@ const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
   return {
     documentId: document?.id,
-    updatedAt: document?.updatedAt,
-    localUpdatedAt: document?.state?.localUpdatedAt,
     nodes: document?.nodes,
     fetchDocumentInProgress:
       state.document.asyncOperations.fetch === 'in-progress',
@@ -38,8 +35,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = {};
 
 const Document: React.FC<Props & PropsFromRedux> = ({
-  updatedAt,
-  localUpdatedAt,
   nodes,
   fetchDocumentInProgress,
   saveInProgress,
@@ -56,8 +51,6 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   useEffect(() => {
     documentActionCreators.setDispatch(dispatch);
   }, []);
-
-  useTrackDocumentChanges({ updatedAt, localUpdatedAt });
 
   return (
     <DocumentContext.Provider value={documentState}>
