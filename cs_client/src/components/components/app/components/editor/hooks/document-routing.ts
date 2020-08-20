@@ -32,13 +32,14 @@ const useDocumentRouting = (
     ac.document.setDocumentId(documentId);
   }, []);
   const pendingNode_id = useRef(false);
-  const pathnameParams = useRef(false);
+  const pendingPathnameRedirect = useRef(false);
   useEffect(() => {
     const {
       documentId: file_id,
       node_id,
     } = getDocumentIdAndNode_idFromPathname();
-    if (file_id) pathnameParams.current = true;
+    if (file_id?.startsWith('new-document')) return;
+    if (file_id) pendingPathnameRedirect.current = true;
     if (file_id && file_id !== documentId) ac.document.setDocumentId(file_id);
     if (node_id && node_id !== selectedNode_id) {
       pendingNode_id.current = true;
@@ -48,7 +49,7 @@ const useDocumentRouting = (
           take(1),
           tap(() => {
             pendingNode_id.current = false;
-            pathnameParams.current = false;
+            pendingPathnameRedirect.current = false;
             ac.node.select({ documentId: file_id, node_id });
           }),
         )
@@ -61,7 +62,10 @@ const useDocumentRouting = (
 
   useEffect(() => {
     if (documentId) {
-      if (selectedNode_id) {
+      if (documentId?.startsWith('new-document') && document)
+        if (selectedNode_id) router.goto.node(documentId, selectedNode_id);
+        else router.goto.document(documentId);
+      else if (selectedNode_id) {
         if (!pendingNode_id.current) {
           router.goto.node(documentId, selectedNode_id);
         }
@@ -74,7 +78,7 @@ const useDocumentRouting = (
           node_id: getDefaultSelectedNode_id(document.nodes),
         });
       }
-    } else if (!pathnameParams.current) router.goto.home();
+    } else if (!pendingPathnameRedirect.current) router.goto.home();
   }, [documentId, selectedNode_id, document?.nodes]);
 };
 

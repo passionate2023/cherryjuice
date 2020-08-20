@@ -36,6 +36,8 @@ import { selectNode } from '::store/ducks/cache/document-cache/helpers/document/
 import { clearSelectedNode } from '::store/ducks/cache/document-cache/helpers/node/clear-selected-node';
 import { removeSavedDocuments } from '::store/ducks/cache/document-cache/helpers/document/remove-saved-documents';
 import { nodeActionCreators } from '::store/ducks/node';
+import { rootActionCreators } from '::store/ducks/root';
+import { cloneObj } from '::helpers/editing/execK/helpers';
 
 const ap = createActionPrefixer('document-cache');
 
@@ -94,6 +96,11 @@ type State = {
 
 const initialState: State = {};
 const reducer = createReducer(initialState, _ => [
+  ...[
+    _(rootActionCreators.resetState, () => ({
+      ...cloneObj(initialState),
+    })),
+  ],
   ...[
     _(dac.fetchFulfilled, (state, { payload }) => loadDocument(state, payload)),
     _(ac.createDocument, (state, { payload }) =>

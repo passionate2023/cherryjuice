@@ -9,6 +9,7 @@ export const selectNode = (
   state: DocumentCacheState,
   { documentId, node_id }: SelectNodeParams,
 ): DocumentCacheState => {
+  if (!state[documentId]?.nodes[node_id]) return;
   return {
     ...state,
     [documentId]: {

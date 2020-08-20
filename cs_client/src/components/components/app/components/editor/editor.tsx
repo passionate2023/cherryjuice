@@ -32,11 +32,14 @@ const Editor: React.FC<PropsFromRedux> = ({
   document,
   documentId: currentDocumentId,
 }) => {
-  const documentId = document?.id;
   useEffect(() => {
-    if (!alert && !documentId && router.get.location.pathname === '/')
-      ac.dialogs.showDocumentList();
-  }, [documentId, alert]);
+    if (!alert)
+      if (
+        (!currentDocumentId && router.get.location.pathname === '/') ||
+        router.get.location.pathname.startsWith('/new-document')
+      )
+        ac.dialogs.showDocumentList();
+  }, [currentDocumentId, alert, router.get.location.pathname]);
 
   useDocumentRouting(document, currentDocumentId);
   return (
@@ -48,7 +51,7 @@ const Editor: React.FC<PropsFromRedux> = ({
       </ErrorBoundary>
       {document?.nodes && document.nodes[0] && (
         <>
-          {!documentId && router.get.location.pathname === '/' ? (
+          {!currentDocumentId && router.get.location.pathname === '/' ? (
             <></>
           ) : (
             <Route
