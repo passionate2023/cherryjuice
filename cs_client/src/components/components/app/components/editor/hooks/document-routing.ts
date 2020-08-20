@@ -7,14 +7,16 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { router } from '::root/router/router';
 import { getDefaultSelectedNode_id } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-selected-node_id';
 
-const getDocumentIdAndNode_idFromPathname = () => {
-  const params = /\/document\/([^/]*)\/node\/([\d]*)/.exec(location.pathname);
+export const getDocumentIdAndNode_idFromPathname = (
+  pathname = location.pathname,
+) => {
+  const params = /\/document\/([^/]*)\/node\/([\d]*)/.exec(pathname);
   if (params) {
     const documentId = params && params[1];
     const node_id = params && +params[2];
     return { documentId, node_id };
   } else {
-    const params = /\/document\/([^/]*)/.exec(location.pathname);
+    const params = /\/document\/([^/]*)/.exec(pathname);
     const documentId = params && params[1];
     return { documentId, node_id: 0 };
   }

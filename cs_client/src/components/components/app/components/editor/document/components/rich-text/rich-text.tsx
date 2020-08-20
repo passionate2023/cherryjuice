@@ -62,6 +62,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
             node_id={node_id}
             processLinks={[processLinks]}
             images={images}
+            fetchNodeStarted={fetchNodeStarted}
           />
         ) : (
           <SpinnerCircle />

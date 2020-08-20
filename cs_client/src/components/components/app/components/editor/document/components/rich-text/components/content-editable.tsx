@@ -17,6 +17,7 @@ type Props = {
   node_id;
   processLinks;
   isDocumentOwner: boolean;
+  fetchNodeStarted: boolean;
   images: Image[];
 };
 
@@ -29,6 +30,7 @@ const ContentEditable = ({
   processLinks,
   isDocumentOwner,
   images,
+  fetchNodeStarted,
 }: Props) => {
   const { pastedImages } = useContext(DocumentContext);
   useSetupStuff(node_id);
@@ -43,12 +45,13 @@ const ContentEditable = ({
     html,
     images,
   });
-  useScrollToHashElement({ html: html });
+  useScrollToHashElement({ fetchNodeStarted });
 
   useReactRouterForAnchors({
     file_id,
     processLinks: processLinks,
     node_id,
+    fetchNodeStarted,
   });
   return (
     <div
