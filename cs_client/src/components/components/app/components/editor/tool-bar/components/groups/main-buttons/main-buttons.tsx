@@ -95,7 +95,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         onClick={
           documentHasUnsavedChanges
             ? ac.dialogs.showReloadDocument
-            : ac.document.fetchNodes
+            : ac.document.fetch
         }
         disabled={noDocumentIsSelected || newDocument}
       >

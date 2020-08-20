@@ -47,7 +47,7 @@ const RecentNodes: React.FC<Props & PropsFromRedux> = ({
     e => {
       updateCachedHtmlAndImages();
       const node_id = +e.target.dataset.id;
-      ac.document.selectNode({ documentId: file_id, node_id });
+      ac.node.select({ documentId: file_id, node_id });
     },
     [file_id],
   );

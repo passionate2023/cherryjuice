@@ -126,7 +126,7 @@ const reducer = createReducer(initialState, _ => [
     ...state,
     showReloadDocument: false,
   })),
-  _(documentActionCreators.fetchNodesFulfilled, state => ({
+  _(documentActionCreators.fetchFulfilled, state => ({
     ...state,
     showReloadDocument: false,
   })),

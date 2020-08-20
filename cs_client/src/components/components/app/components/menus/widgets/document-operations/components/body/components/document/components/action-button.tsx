@@ -4,7 +4,7 @@ import { ButtonCircle } from '::root/components/shared-components/buttons/button
 import { modDocumentOperations } from '::sass-modules';
 import { ac } from '::store/store';
 import { OperationTypes } from '../helpers/operation-types';
-import { uri } from '::graphql/apollo';
+import { uri } from '::graphql/client/hooks/apollo-client';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
 const ActionButton = ({ document, open, userId }) => {

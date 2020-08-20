@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useApolloClient } from '::graphql/apollo';
+import { useApolloClient } from '::graphql/client/hooks/apollo-client';
 import { Suspense, useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router';
 import { Provider } from 'react-redux';

@@ -1,19 +1,23 @@
 import { concatMap, filter, map } from 'rxjs/operators';
 import { concat, defer, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
-import { ac } from '::store/store';
-import { Actions } from '../actions.types';
+import { ac, store } from '::store/store';
+import { Actions } from '../../actions.types';
 import { gqlQuery } from '::store/epics/shared/gql-query';
 import { createErrorHandler } from '::store/epics/shared/create-error-handler';
 import { NODE_HTML } from '::graphql/queries/node-html';
 import { getNode } from '::store/selectors/cache/document/node';
 import { FETCH_NODE_IMAGES } from '::graphql/queries/node-images';
 
-const fetchHtmlEpic = (action$: Observable<Actions>) => {
+const fetchNodeEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
-    ofType([ac.__.document.selectNode]),
+    ofType([ac.__.node.fetch]),
     filter(({ payload: { node_id, documentId } }) => {
-      return !!node_id && !getNode({ documentId, node_id })?.html;
+      const nodeHasNoHtml = !getNode({ documentId, node_id })?.html;
+      const nodeFetchIdle =
+        store.getState().node.asyncOperations.fetch[node_id] !== 'in-progress';
+      const validNode_id = node_id > 0;
+      return validNode_id && nodeFetchIdle && nodeHasNoHtml;
     }),
     concatMap(({ payload: { node_id, documentId } }) => {
       const fetchHtml = gqlQuery(
@@ -66,8 +70,8 @@ const fetchHtmlEpic = (action$: Observable<Actions>) => {
           ),
         ),
       );
-      const loading = of(ac.__.node.fetchStarted());
-      const fulfilled = of(ac.__.node.fetchFulfilled());
+      const loading = of(ac.__.node.fetchInProgress(node_id));
+      const fulfilled = of(ac.__.node.fetchFulfilled(node_id));
       return concat(
         loading,
         fetchHtml,
@@ -87,4 +91,4 @@ const fetchHtmlEpic = (action$: Observable<Actions>) => {
   );
 };
 
-export { fetchHtmlEpic };
+export { fetchNodeEpic };

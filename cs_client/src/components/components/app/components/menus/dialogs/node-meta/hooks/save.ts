@@ -125,7 +125,7 @@ const useSave = ({
                 ),
               },
             });
-            ac.document.selectNode(node);
+            ac.node.select(node);
           }),
         )
         .subscribe();

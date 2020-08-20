@@ -18,7 +18,7 @@ import { SnackbarMessages } from '::root/components/shared-components/snackbar/s
 const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
   return action$.pipe(
     ofType([ac.__.document.save]),
-    filter(() => store.getState().document.saveInProgress === 'idle'),
+    filter(() => store.getState().document.asyncOperations.save === 'idle'),
     switchMap(() => {
       const saveFulfilled$ = of(ac.__.document.saveFulfilled()).pipe(
         tap(() => {

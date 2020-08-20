@@ -21,7 +21,7 @@ const useSelectNode = ({ componentRef, node_id, file_id }: SelectNodeProps) => {
       nodeOverlay.updateWidth();
       nodeOverlay.updateLeft(componentRef);
       updateCachedHtmlAndImages();
-      ac.document.selectNode({ documentId: file_id, node_id });
+      ac.node.select({ documentId: file_id, node_id });
     },
     [file_id, node_id, componentRef],
   );

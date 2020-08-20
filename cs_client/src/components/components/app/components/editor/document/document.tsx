@@ -22,8 +22,9 @@ const mapState = (state: Store) => {
     updatedAt: document?.updatedAt,
     localUpdatedAt: document?.state?.localUpdatedAt,
     nodes: document?.nodes,
-    fetchNodesStarted: state.document.fetchNodesStarted,
-    saveInProgress: state.document.saveInProgress,
+    fetchDocumentInProgress:
+      state.document.asyncOperations.fetch === 'in-progress',
+    saveInProgress: state.document.asyncOperations.save === 'in-progress',
     selectedNode_id: document.state?.selectedNode_id,
     recentNodes: document.state?.recentNodes,
     showTree: state.editor.showTree,
@@ -40,7 +41,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   updatedAt,
   localUpdatedAt,
   nodes,
-  fetchNodesStarted,
+  fetchDocumentInProgress,
   saveInProgress,
   selectedNode_id,
   recentNodes,
@@ -60,9 +61,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
 
   return (
     <DocumentContext.Provider value={documentState}>
-      <LinearProgress
-        loading={Boolean(fetchNodesStarted) || saveInProgress !== 'idle'}
-      />
+      <LinearProgress loading={fetchDocumentInProgress || saveInProgress} />
       {nodes && (
         <Fragment>
           {Boolean(selectedNode_id) && (

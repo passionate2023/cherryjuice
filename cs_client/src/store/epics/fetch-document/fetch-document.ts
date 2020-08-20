@@ -1,12 +1,12 @@
 import { filter, map, switchMap } from 'rxjs/operators';
 import { concat, from, Observable, ObservedValueOf, of } from 'rxjs';
 import { ofType } from 'deox';
-import { store, ac } from '../store';
-import { Actions } from '../actions.types';
+import { store, ac } from '../../store';
+import { Actions } from '../../actions.types';
 import { handleFetchError } from '::root/components/app/components/editor/document/hooks/get-document-meta/helpers/handle-fetch-error';
-import { gqlQuery } from './shared/gql-query';
-import { createTimeoutHandler } from './shared/create-timeout-handler';
-import { createErrorHandler } from './shared/create-error-handler';
+import { gqlQuery } from '../shared/gql-query';
+import { createTimeoutHandler } from '../shared/create-timeout-handler';
+import { createErrorHandler } from '../shared/create-error-handler';
 import { QDocumentMeta, DOCUMENT_META } from '::graphql/queries/document-meta';
 import { getDocuments } from '::store/selectors/cache/document/document';
 
@@ -30,11 +30,11 @@ const createLocalRequest = (
   return from(document);
 };
 
-const fetchNodesEpic = (action$: Observable<Actions>) => {
+const fetchDocumentEpic = (action$: Observable<Actions>) => {
   const selectedDocumentId = () => store.getState().document.documentId;
   return action$.pipe(
     ofType([
-      ac.__.document.fetchNodes,
+      ac.__.document.fetch,
       ac.__.document.setDocumentId,
       ac.__.document.saveFulfilled,
     ]),
@@ -56,9 +56,9 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
       const request = (isNewDocument
         ? createLocalRequest(file_id)
         : gqlQuery(DOCUMENT_META({ file_id }))
-      ).pipe(map(ac.__.document.fetchNodesFulfilled));
+      ).pipe(map(ac.__.document.fetchFulfilled));
 
-      const loading = of(ac.__.document.fetchNodesStarted());
+      const loading = of(ac.__.document.fetchInProgress());
       return concat(loading, request).pipe(
         createTimeoutHandler({
           alertDetails: {
@@ -90,4 +90,4 @@ const fetchNodesEpic = (action$: Observable<Actions>) => {
   );
 };
 
-export { fetchNodesEpic };
+export { fetchDocumentEpic };

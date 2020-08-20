@@ -25,7 +25,7 @@ const ReloadDocument: React.FC<Props & PropsFromRedux> = ({ show }) => {
     },
     {
       label: 'Reload',
-      onClick: ac.document.fetchNodes,
+      onClick: ac.document.fetch,
       disabled: false,
     },
   ];

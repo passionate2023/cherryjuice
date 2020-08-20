@@ -2,7 +2,7 @@ import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 
 const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
-  const { fetchNodesEpic } = await import('./fetch-nodes');
+  const { fetchDocumentEpic } = await import('./fetch-document/fetch-document');
   const { saveDocumentsEpic } = await import('./save-documents/save-documents');
   const { searchNodesEpic } = await import('./search/search-nodes');
   const { exportDocumentEpic } = await import('./export-document');
@@ -13,20 +13,20 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
   const { saveSettingsEpic } = await import('./settings/save-settings');
   const { authEpic } = await import('./auth/auth');
   const { deleteAccountEpic } = await import('./delete-account/delete-account');
-  const { fetchHtmlEpic } = await import('./fetch-html.epic');
+  const { fetchNodeEpic } = await import('./fetch-node/fetch-node');
 
   return action$ =>
     combineEpics(
       saveSettingsEpic,
       deleteDocumentsEpic,
       authEpic,
-      fetchNodesEpic,
+      fetchDocumentEpic,
       saveDocumentsEpic,
       fetchDocumentsListEpic,
       exportDocumentEpic,
       searchNodesEpic,
       deleteAccountEpic,
-      fetchHtmlEpic,
+      fetchNodeEpic,
     )(action$);
 };
 export { createRootEpic };

@@ -6,7 +6,7 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import { useEffect, useState } from 'react';
-import { apolloClient } from './client/apollo-client';
+import { apolloClient } from '../apollo-client';
 
 if (process.env.NODE_ENV === 'development')
   localStorage.setItem('graphqlAPIHost', 'localhost:1230');

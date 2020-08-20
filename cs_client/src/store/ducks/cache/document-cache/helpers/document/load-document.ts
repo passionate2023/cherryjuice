@@ -2,8 +2,6 @@ import { constructTree } from '::root/components/app/components/editor/document/
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
 import { QDocumentMeta } from '::graphql/queries/document-meta';
 import { getDefaultState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-state';
-import { getDefaultSelectedNode_id } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-selected-node_id';
-import { getDefaultHighestNode_id } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-highest-node_id';
 
 export const loadDocument = (
   state: DocumentCacheState,
@@ -14,18 +12,19 @@ export const loadDocument = (
     privateNodes: payload.privateNodes,
   });
 
-  delete payload.node;
+  const existingState = state[payload.id]?.state;
 
+  const document = {
+    ...payload,
+    nodes,
+    state: getDefaultState({
+      existingState,
+      nodes,
+    }),
+  };
+  delete document.node;
   return {
     ...state,
-    [payload.id]: {
-      ...payload,
-      nodes,
-      state: {
-        ...getDefaultState(),
-        selectedNode_id: getDefaultSelectedNode_id(nodes),
-        highestNode_id: getDefaultHighestNode_id(nodes),
-      },
-    },
+    [payload.id]: document,
   };
 };

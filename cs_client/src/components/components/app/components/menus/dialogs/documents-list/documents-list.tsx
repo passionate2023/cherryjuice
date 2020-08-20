@@ -77,6 +77,9 @@ const DocumentsList: React.FC<PropsFromRedux> = ({
   fetchDocuments,
 }) => {
   useEffect(() => {
+    ac.documentsList.fetchDocuments();
+  }, []);
+  useEffect(() => {
     if (showDocumentList) {
       const handle = setTimeout(ac.documentsList.fetchDocuments, 1500);
       return () => {

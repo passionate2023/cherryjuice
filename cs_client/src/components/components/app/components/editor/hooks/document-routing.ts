@@ -47,7 +47,7 @@ const useDocumentRouting = (
           tap(() => {
             pendingNode_id.current = false;
             pathnameParams.current = false;
-            ac.document.selectNode({ documentId: file_id, node_id });
+            ac.node.select({ documentId: file_id, node_id });
           }),
         )
         .subscribe();
@@ -61,18 +61,13 @@ const useDocumentRouting = (
     if (documentId) {
       if (selectedNode_id) {
         if (!pendingNode_id.current) {
-          // select the node_id to trigger fetching html on the first run
-          ac.document.selectNode({
-            documentId,
-            node_id: selectedNode_id,
-          });
           router.goto.node(documentId, selectedNode_id);
         }
       } else if (
         document?.nodes &&
         document.nodes[0]?.child_nodes?.length > 0
       ) {
-        ac.document.selectNode({
+        ac.node.select({
           documentId,
           node_id: getDefaultSelectedNode_id(document.nodes),
         });

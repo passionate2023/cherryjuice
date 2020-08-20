@@ -1,6 +1,6 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from '../helpers/shared';
-import { documentActionCreators } from '::store/ducks/document';
+import { documentActionCreators as dac } from '::store/ducks/document';
 import { QDocumentMeta, QNodeMeta } from '::graphql/queries/document-meta';
 import { documentsListActionCreators } from '::store/ducks/documents-list';
 import {
@@ -35,27 +35,26 @@ import {
 import { selectNode } from '::store/ducks/cache/document-cache/helpers/document/select-node';
 import { clearSelectedNode } from '::store/ducks/cache/document-cache/helpers/node/clear-selected-node';
 import { removeSavedDocuments } from '::store/ducks/cache/document-cache/helpers/document/remove-saved-documents';
+import { nodeActionCreators } from '::store/ducks/node';
 
 const ap = createActionPrefixer('document-cache');
 
 const ac = {
-  ...{
-    createDocument: _(
-      ap('create-document'),
-      _ => (params: CreateDocumentParams) => _(params),
-    ),
-    mutateDocument: _(
-      ap('mutate-document'),
-      _ => (changes: MutateDocumentProps) => _(changes),
-    ),
-    deleteDocument: _(ap('delete-document'), _ => (documentId: string) =>
-      _(documentId),
-    ),
-    swapDocumentId: _(
-      ap('swap-document-id'),
-      _ => (Ids: { oldId: string; newId: string }) => _(Ids),
-    ),
-  },
+  createDocument: _(
+    ap('create-document'),
+    _ => (params: CreateDocumentParams) => _(params),
+  ),
+  mutateDocument: _(
+    ap('mutate-document'),
+    _ => (changes: MutateDocumentProps) => _(changes),
+  ),
+  deleteDocument: _(ap('delete-document'), _ => (documentId: string) =>
+    _(documentId),
+  ),
+  swapDocumentId: _(
+    ap('swap-document-id'),
+    _ => (Ids: { oldId: string; newId: string }) => _(Ids),
+  ),
 
   createNode: _(ap('create-node'), _ => (node: CreateNodeParams) => _(node)),
   addFetchedFields: _(ap('add-fetched-fields'), _ => (node: AddHtmlParams) =>
@@ -96,9 +95,7 @@ type State = {
 const initialState: State = {};
 const reducer = createReducer(initialState, _ => [
   ...[
-    _(documentActionCreators.fetchNodesFulfilled, (state, { payload }) =>
-      loadDocument(state, payload),
-    ),
+    _(dac.fetchFulfilled, (state, { payload }) => loadDocument(state, payload)),
     _(ac.createDocument, (state, { payload }) =>
       createDocument(state, payload),
     ),
@@ -116,22 +113,19 @@ const reducer = createReducer(initialState, _ => [
     ),
   ],
   ...[
-    _(documentActionCreators.selectNode, (state, { payload }) =>
+    _(nodeActionCreators.select, (state, { payload }) =>
       selectNode(state, payload),
     ),
-    _(documentActionCreators.clearSelectedNode, (state, { payload }) =>
+    _(nodeActionCreators.unselect, (state, { payload }) =>
       clearSelectedNode(state, payload),
     ),
-    _(
-      documentActionCreators.saveFulfilled,
-      (state): State => removeSavedDocuments(state),
-    ),
+    _(dac.saveFulfilled, (state): State => removeSavedDocuments(state)),
   ],
   ...[
     _(
       documentsListActionCreators.fetchDocumentsFulfilled,
       (state, { payload: documents }) => {
-        const cachedDocuments = Object.fromEntries(
+        const fetchedDocuments = Object.fromEntries(
           documents.map(document => [
             document.id,
             {
@@ -143,11 +137,11 @@ const reducer = createReducer(initialState, _ => [
           ]),
         );
         Object.keys(state).forEach(documentId => {
-          if (!cachedDocuments[documentId] && !documentId.startsWith('new'))
+          if (!fetchedDocuments[documentId] && !documentId.startsWith('new'))
             delete state[documentId];
         });
         return {
-          ...cachedDocuments,
+          ...fetchedDocuments,
           ...state,
         };
       },

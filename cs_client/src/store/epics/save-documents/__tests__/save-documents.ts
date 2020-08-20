@@ -35,7 +35,6 @@ describe('save-documents epic', function() {
       output: undefined,
     };
     state.output = await new Promise(res => {
-      ac.document.setCacheTimeStamp();
       const save = ActionsObservable.of(ac.__.document.save);
       const obs$ = saveDocumentsEpic(save, undefined, undefined).pipe(
         toArray(),

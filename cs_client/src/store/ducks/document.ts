@@ -3,63 +3,30 @@ import { createActionPrefixer } from './helpers/shared';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { rootActionCreators } from './root';
 import { QDocumentMeta } from '::graphql/queries/document-meta';
-import { SelectNodeParams } from '::store/ducks/cache/document-cache/helpers/document/select-node';
-import { ClearSelectedNodeParams } from '::store/ducks/cache/document-cache/helpers/node/clear-selected-node';
 
 const ap = createActionPrefixer('document');
 const ac = {
-  fetchNodes: _('fetchNodes', _ => () => {
-    return _();
-  }),
-  fetchFailed: _('fetchFailed'),
-  setDocumentId: _('setDocumentId', _ => (documentId: string) => _(documentId)),
-  hasUnsavedChanges: _('hasUnsavedChanges', _ => (unsaved: boolean) =>
-    _(unsaved),
+  setDocumentId: _(ap('setDocumentId'), _ => (documentId: string) =>
+    _(documentId),
   ),
-  fetchNodesStarted: _('fetchNodesStarted'),
-  fetchNodesFulfilled: _('fetchNodesFulfilled', _ => (args: QDocumentMeta) =>
+
+  fetch: _(ap('fetch')),
+  fetchInProgress: _(ap('fetch-in-progress')),
+  fetchFulfilled: _(ap('fetch-fulfilled'), _ => (args: QDocumentMeta) =>
     _(args),
   ),
-  setCacheTimeStamp: _(
-    'setCacheTimeStamp',
-    _ => (timeStamp: number = new Date().getTime()) => _(timeStamp),
-  ),
-  ...{
-    save: _('save'),
-    savePending: _('savePending'),
-    saveFulfilled: _('saveFulfilled'),
-    saveInProgress: _('saveInProgress'),
-    saveFailed: _('saveFailed'),
-    nodeCached: _('node-cached'),
-    cacheReset: _('cache-reset'),
-  },
-  ...{
-    export: _('export'),
-    exportFulfilled: _('exportFulfilled'),
-  },
-  // node
-  selectNode: _(ap('selectNode'), _ => (payload: SelectNodeParams) =>
-    _(payload),
-  ),
-  selectRootNode: _(
-    ap('selectRootNode'),
-    _ => (node: NodeId, documentId: string) => _(node, { documentId }),
-  ),
-  removeNodeFromRecentNodes: _(
-    ap('removeNodeFromRecentNodes'),
-    _ => (node_id: number) => _(node_id),
-  ),
-  clearSelectedNode: _(
-    ap('clearSelectedNode'),
-    _ => (payload: ClearSelectedNodeParams) => _(payload),
-  ),
-  fetch: _(ap('fetch')),
-  fetchStarted: _(ap('fetchStarted')),
-  fetchFulfilled: _(ap('fetchFulfilled'), _ => (html: string) => _(html)),
-  setHighestNode_id: _(
-    ap('setHighestNode_id'),
-    _ => (node_id: number, documentId: string) => _(node_id, { documentId }),
-  ),
+  fetchFailed: _(ap('fetch-failed')),
+
+  save: _(ap('save')),
+  savePending: _(ap('save-pending')),
+  saveFulfilled: _(ap('save-fulfilled')),
+  saveInProgress: _(ap('save-in-progress')),
+  saveFailed: _(ap('save-failed')),
+  nodeCached: _(ap('node-cached')),
+  cacheReset: _(ap('cache-reset')),
+
+  export: _(ap('export')),
+  exportFulfilled: _(ap('exportFulfilled')),
 };
 type NodeId = {
   id: string;
@@ -69,14 +36,18 @@ type AsyncOperation = 'in-progress' | 'idle' | 'pending';
 
 type State = {
   documentId: string;
-  fetchNodesStarted?: number;
-  saveInProgress: AsyncOperation;
+  asyncOperations: {
+    fetch: AsyncOperation;
+    save: AsyncOperation;
+  };
 };
 
 const initialState: State = {
   documentId: '',
-  fetchNodesStarted: 0,
-  saveInProgress: 'idle',
+  asyncOperations: {
+    fetch: 'idle',
+    save: 'idle',
+  },
 };
 
 const reducer = createReducer(cloneObj(initialState), _ => [
@@ -86,35 +57,59 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     })),
   ],
   _(ac.setDocumentId, (state, { payload }) => ({
-    ...cloneObj(initialState),
+    ...state,
     documentId: payload,
   })),
-  _(ac.fetchNodesFulfilled, state => ({
+
+  _(ac.fetchInProgress, state => ({
     ...state,
-    fetchNodesStarted: 0,
+    asyncOperations: {
+      ...state.asyncOperations,
+      fetch: 'in-progress',
+    },
   })),
-  _(ac.fetchNodesStarted, state => ({
+  _(ac.fetchFulfilled, state => ({
     ...state,
-    fetchNodesStarted: new Date().getTime(),
+    asyncOperations: {
+      ...state.asyncOperations,
+      fetch: 'idle',
+    },
   })),
-  _(ac.fetchFailed, () => ({
-    ...initialState,
+  _(ac.fetchFailed, state => ({
+    ...state,
+    asyncOperations: {
+      ...state.asyncOperations,
+      fetch: 'idle',
+    },
   })),
+
   _(ac.savePending, state => ({
     ...state,
-    saveInProgress: 'pending',
+    asyncOperations: {
+      ...state.asyncOperations,
+      save: 'pending',
+    },
   })),
   _(ac.saveInProgress, state => ({
     ...state,
-    saveInProgress: 'in-progress',
+    asyncOperations: {
+      ...state.asyncOperations,
+      save: 'in-progress',
+    },
   })),
   _(ac.saveFulfilled, state => ({
     ...state,
-    saveInProgress: 'idle',
+    asyncOperations: {
+      ...state.asyncOperations,
+      save: 'idle',
+    },
   })),
   _(ac.saveFailed, state => ({
     ...state,
-    saveInProgress: 'idle',
+    asyncOperations: {
+      ...state.asyncOperations,
+      save: 'idle',
+    },
   })),
 ]);
 

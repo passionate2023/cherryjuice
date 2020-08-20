@@ -14,7 +14,7 @@ export const createDocument = (
   [document.id]: {
     ...document,
     state: {
-      ...getDefaultState(true),
+      ...getDefaultState({ newDocument: true }),
     },
   },
 });

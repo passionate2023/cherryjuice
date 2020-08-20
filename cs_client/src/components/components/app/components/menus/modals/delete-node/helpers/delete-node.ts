@@ -30,7 +30,7 @@ const deleteNode = (node: QFullNode) => {
       node_id: node.node_id,
       mode: 'soft',
     });
-    ac.document.clearSelectedNode({
+    ac.node.unselect({
       removeChildren: true,
       documentId: node.documentId,
     });
