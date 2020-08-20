@@ -18,6 +18,7 @@ type SaveOperationState = {
       [node_id: number]: boolean;
     };
   };
+  newSelectedDocumentId?: string;
 };
 type SaveOperationProps = {
   state: SaveOperationState;

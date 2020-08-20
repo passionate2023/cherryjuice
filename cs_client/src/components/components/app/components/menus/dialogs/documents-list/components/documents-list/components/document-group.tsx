@@ -14,7 +14,7 @@ const DocumentGroup = ({ folder, documents }: DocumentGroupProps) => {
         {folder}
       </span>
       <span className={modSelectFile.selectFile__fileFolder__files}>
-        {documents.map((document) => (
+        {documents.map(document => (
           <Document document={document} key={document.id} />
         ))}
       </span>

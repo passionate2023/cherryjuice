@@ -19,7 +19,10 @@ const ac = {
 
   save: _(ap('save')),
   savePending: _(ap('save-pending')),
-  saveFulfilled: _(ap('save-fulfilled')),
+  saveFulfilled: _(
+    ap('save-fulfilled'),
+    _ => (newSelectedDocumentId?: string) => _(newSelectedDocumentId),
+  ),
   saveInProgress: _(ap('save-in-progress')),
   saveFailed: _(ap('save-failed')),
   nodeCached: _(ap('node-cached')),

@@ -13,7 +13,6 @@ import { getEditedDocuments } from '::store/selectors/cache/document/document';
 const saveDocuments = async (
   state: SaveOperationState,
 ): Promise<SaveOperationState> => {
-
   const editedDocuments = getEditedDocuments();
   for (const document of editedDocuments) {
     state.deletedNodes[document.id] = {};
@@ -26,6 +25,10 @@ const saveDocuments = async (
     await saveDocumentMeta({ state, document });
   }
 
+  if (location.pathname.startsWith('/document/new-document')) {
+    const createdDocuments = Object.values(state.swappedDocumentIds);
+    state.newSelectedDocumentId = createdDocuments.pop();
+  }
   return state;
 };
 

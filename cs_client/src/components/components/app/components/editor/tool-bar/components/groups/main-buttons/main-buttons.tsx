@@ -93,7 +93,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         dontMount={!isDocumentOwner}
         onClick={ac.document.save}
         testId={testIds.toolBar__main__saveDocument}
-        disabled={!userHasUnsavedChanges }
+        disabled={!userHasUnsavedChanges}
       >
         <Icon name={Icons.material.save} />
       </ToolbarButton>

@@ -1,5 +1,5 @@
-import { filter, mapTo, switchMap, tap } from 'rxjs/operators';
-import { concat, defer, from, Observable, of } from 'rxjs';
+import { filter, ignoreElements, mapTo, switchMap, tap } from 'rxjs/operators';
+import { concat, defer, EMPTY, from, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { Actions } from '../../actions.types';
 import { SaveOperationState } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
@@ -7,7 +7,6 @@ import { createErrorHandler } from '../shared/create-error-handler';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { saveDocuments } from '::store/epics/save-documents/helpers/save-document/save-documents';
 import { ac, store } from '../../store';
-import { redirectToNewDocumentId$ } from '::store/epics/save-documents/helpers/redirect-to-new-document-id$';
 import { createSaveState } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 import { resetCache } from '::store/epics/save-documents/helpers/reset-cache';
 import { cacheCurrentNode } from '::store/epics/save-documents/helpers/cache-current-node';
@@ -20,12 +19,14 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
     ofType([ac.__.document.save]),
     filter(() => store.getState().document.asyncOperations.save === 'idle'),
     switchMap(() => {
-      const saveFulfilled$ = of(ac.__.document.saveFulfilled()).pipe(
-        tap(() => {
-          ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
-        }),
-      );
       const state: SaveOperationState = createSaveState();
+      const saveFulfilled$ = defer(() =>
+        of(ac.__.document.saveFulfilled(state.newSelectedDocumentId)).pipe(
+          tap(() => {
+            ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
+          }),
+        ),
+      );
       const savePending$ = of(ac.__.document.savePending());
       const cacheCurrentNode$ = defer(() =>
         of(cacheCurrentNode()).pipe(mapTo(ac.__.document.nodeCached())),
@@ -38,9 +39,11 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
           mapTo(ac.__.document.cacheReset()),
         ),
       );
-      const maybeRedirectToNewDocument$ = defer(() =>
-        redirectToNewDocumentId$(state),
-      );
+      const maybeRedirectToNewDocument$ = defer(() => {
+        if (state.newSelectedDocumentId) {
+          return of(ac.__.document.setDocumentId(state.newSelectedDocumentId));
+        } else return EMPTY.pipe(ignoreElements());
+      });
       return concat(
         savePending$,
         cacheCurrentNode$,
