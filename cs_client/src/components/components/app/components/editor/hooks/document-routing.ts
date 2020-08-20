@@ -22,6 +22,24 @@ export const getDocumentIdAndNode_idFromPathname = (
   }
 };
 
+export const waitForDocumentToLoad = (
+  documentId: string,
+  callback: () => void,
+) =>
+  interval(5)
+    .pipe(
+      filter(() => {
+        const currentDocument = getCurrentDocument(store.getState());
+        return (
+          currentDocument?.id === documentId &&
+          currentDocument?.nodes &&
+          Boolean(currentDocument.nodes[0])
+        );
+      }),
+      take(1),
+      tap(callback),
+    )
+    .subscribe();
 const useDocumentRouting = (
   document: CachedDocument,
   currentDocumentId: string,
@@ -40,22 +58,16 @@ const useDocumentRouting = (
     } = getDocumentIdAndNode_idFromPathname();
     if (file_id?.startsWith('new-document')) return;
     if (file_id && file_id !== documentId) {
-      if (file_id) pendingPathnameRedirect.current = true;
+      pendingPathnameRedirect.current = true;
       ac.document.setDocumentId(file_id);
     }
     if (node_id && node_id !== selectedNode_id) {
       pendingNode_id.current = true;
-      const selectNode = interval(5)
-        .pipe(
-          filter(() => getCurrentDocument(store.getState())?.id === file_id),
-          take(1),
-          tap(() => {
-            pendingNode_id.current = false;
-            pendingPathnameRedirect.current = false;
-            ac.node.select({ documentId: file_id, node_id });
-          }),
-        )
-        .subscribe();
+      const selectNode = waitForDocumentToLoad(file_id, () => {
+        pendingNode_id.current = false;
+        pendingPathnameRedirect.current = false;
+        ac.node.select({ documentId: file_id, node_id });
+      });
       return () => {
         selectNode.unsubscribe();
       };

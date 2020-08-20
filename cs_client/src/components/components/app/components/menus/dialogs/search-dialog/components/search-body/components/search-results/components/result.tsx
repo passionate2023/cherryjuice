@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { modSearchResult, modSelectFile } from '::sass-modules';
 import { NodeSearchResultEntity } from '::types/graphql/generated';
-import { Link } from 'react-router-dom';
 import { useHeadline } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/headline';
 import { SearchContext } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/helpers/generate-headline';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { HighlightedHeadline } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/components/highlighted-headline';
+import { ac } from '::store/store';
+import { waitForDocumentToLoad } from '::root/components/app/components/editor/hooks/document-routing';
 
 type Props = {
   result: NodeSearchResultEntity;
@@ -23,16 +24,21 @@ const Result: React.FC<Props> = ({ result, searchContext }) => {
         <div className={modSearchResult.searchResult__location__documentName}>
           {result.documentName}
         </div>
-        <Link
+        <div
           className={modSearchResult.searchResult__location__nodeName}
-          to={`/document/${result.documentId}/node/${result.node_id}`}
+          onClick={() => {
+            ac.document.setDocumentId(result.documentId);
+            waitForDocumentToLoad(result.documentId, () => {
+              ac.node.select(result);
+            });
+          }}
         >
           {headline?.nodeNameHeadline ? (
             <HighlightedHeadline headline={headline.nodeNameHeadline} />
           ) : (
             result.nodeName
           )}
-        </Link>
+        </div>
       </div>
       <span className={modSearchResult.searchResult__headline}>
         {headline?.ahtmlHeadline ? (

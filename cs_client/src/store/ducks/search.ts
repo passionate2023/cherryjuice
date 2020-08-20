@@ -12,6 +12,7 @@ import {
   TimeFilter,
   TimeRange,
 } from '::types/graphql/generated';
+import { documentCacheActionCreators } from '::store/ducks/cache/document-cache';
 
 const ap = createActionPrefixer('search');
 
@@ -120,6 +121,11 @@ const reducer = createReducer(initialState, _ => [
     })),
   ],
   ...[
+    _(documentCacheActionCreators.createDocument, state => ({
+      ...state,
+      searchState: 'idle',
+      searchResults: EmptySearchResults,
+    })),
     _(ac.setSearchIdle, state => ({
       ...state,
       searchState: 'idle',

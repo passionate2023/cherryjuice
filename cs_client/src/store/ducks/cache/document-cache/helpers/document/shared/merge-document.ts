@@ -15,7 +15,8 @@ export const mergeDocument = (
   const existingState = existingDocument?.state;
   const existingNodesDict = existingDocument?.nodes;
 
-  const existingWasInDocsListOnly = existingNodesDict && !existingNodesDict[0];
+  const existingWasInDocsListOnly =
+    !existingNodesDict || (existingNodesDict && !existingNodesDict[0]);
   const existingDocHasChanges =
     existingState && existingState.localUpdatedAt > existingDocument.updatedAt;
   if (existingWasInDocsListOnly && existingDocHasChanges) {
