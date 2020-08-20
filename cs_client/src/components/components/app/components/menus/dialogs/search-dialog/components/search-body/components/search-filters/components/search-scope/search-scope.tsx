@@ -1,19 +1,23 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modSearchFilter } from '::sass-modules';
 import {
   Scope,
   ScopeProps,
 } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-scope/components/scope';
-import { Store } from '::store/store';
+import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
-import { SearchScope as TSearchScope } from '::types/graphql/generated';
+import {
+  SearchScope as TSearchScope,
+  SearchScope as ESearchScope,
+} from '::types/graphql/generated';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const mapState = (state: Store) => ({
   selectedScope: state.search.searchScope,
-  selectedNode_id: getCurrentDocument(state).state.selectedNode_id,
+  selectedNode_id: getCurrentDocument(state)?.state?.selectedNode_id,
   documentId: state.document.documentId,
   isDocumentOwner: hasWriteAccessToDocument(state),
 });
@@ -44,7 +48,11 @@ const SearchScope: React.FC<Props & PropsFromRedux> = ({
       disabled: noSelectedNode,
     },
   ];
-
+  useEffect(() => {
+    if (noSelectedDocument || noSelectedNode) {
+      ac.search.setSearchScope(ESearchScope.allDocuments);
+    }
+  }, [noSelectedNode, noSelectedDocument]);
   return (
     <div className={joinClassNames([modSearchFilter.searchFilter])}>
       <span className={modSearchFilter.searchFilter__label}>search scope</span>

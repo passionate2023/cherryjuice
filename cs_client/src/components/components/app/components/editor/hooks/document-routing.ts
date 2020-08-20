@@ -57,19 +57,25 @@ const useDocumentRouting = (
       node_id,
     } = getDocumentIdAndNode_idFromPathname();
     if (file_id?.startsWith('new-document')) return;
-    if (file_id && file_id !== documentId) {
-      pendingPathnameRedirect.current = true;
-      ac.document.setDocumentId(file_id);
-    }
-    if (node_id && node_id !== selectedNode_id) {
+    if (file_id && node_id && node_id !== selectedNode_id) {
       pendingNode_id.current = true;
-      const selectNode = waitForDocumentToLoad(file_id, () => {
+      pendingPathnameRedirect.current = true;
+      const subscription = waitForDocumentToLoad(file_id, () => {
         pendingNode_id.current = false;
         pendingPathnameRedirect.current = false;
         ac.node.select({ documentId: file_id, node_id });
       });
       return () => {
-        selectNode.unsubscribe();
+        subscription.unsubscribe();
+      };
+    } else if (file_id && file_id !== documentId) {
+      pendingPathnameRedirect.current = true;
+      ac.document.setDocumentId(file_id);
+      const subscription = waitForDocumentToLoad(file_id, () => {
+        pendingPathnameRedirect.current = false;
+      });
+      return () => {
+        subscription.unsubscribe();
       };
     }
   }, []);
