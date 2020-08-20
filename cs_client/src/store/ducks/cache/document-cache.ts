@@ -2,7 +2,7 @@ import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from '../helpers/shared';
 import { documentActionCreators as dac } from '::store/ducks/document';
 import { QDocumentMeta, QNodeMeta } from '::graphql/queries/document-meta';
-import { documentsListActionCreators } from '::store/ducks/documents-list';
+import { documentsListActionCreators as dlac } from '::store/ducks/documents-list';
 import {
   createNode,
   CreateNodeParams,
@@ -27,7 +27,6 @@ import {
 } from '::store/ducks/cache/document-cache/helpers/document/mutate-document';
 import { SwapNodeIdParams } from '::store/ducks/cache/document-cache/helpers/node/swap-node-id';
 import { swapDocumentId } from '::store/ducks/cache/document-cache/helpers/document/swap-document-id';
-import { getDefaultState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-state';
 import {
   deleteNode,
   DeleteNodeParams,
@@ -38,6 +37,7 @@ import { removeSavedDocuments } from '::store/ducks/cache/document-cache/helpers
 import { nodeActionCreators } from '::store/ducks/node';
 import { rootActionCreators } from '::store/ducks/root';
 import { cloneObj } from '::helpers/editing/execK/helpers';
+import { loadDocumentsList } from '::store/ducks/cache/document-cache/helpers/document/load-documents-list';
 
 const ap = createActionPrefixer('document-cache');
 
@@ -129,29 +129,8 @@ const reducer = createReducer(initialState, _ => [
     _(dac.saveFulfilled, (state): State => removeSavedDocuments(state)),
   ],
   ...[
-    _(
-      documentsListActionCreators.fetchDocumentsFulfilled,
-      (state, { payload: documents }) => {
-        const fetchedDocuments = Object.fromEntries(
-          documents.map(document => [
-            document.id,
-            {
-              ...document,
-              nodes: {},
-              privateNodes: [],
-              state: getDefaultState(),
-            },
-          ]),
-        );
-        Object.keys(state).forEach(documentId => {
-          if (!fetchedDocuments[documentId] && !documentId.startsWith('new'))
-            delete state[documentId];
-        });
-        return {
-          ...fetchedDocuments,
-          ...state,
-        };
-      },
+    _(dlac.fetchDocumentsFulfilled, (state, { payload }) =>
+      loadDocumentsList(state, payload),
     ),
   ],
   ...[

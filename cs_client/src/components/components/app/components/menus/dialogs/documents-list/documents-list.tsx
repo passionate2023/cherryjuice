@@ -62,6 +62,7 @@ const mapState = (state: Store) => ({
   deletionMode: state.documentsList.deletionMode,
   selectedIDs: state.documentsList.selectedIDs,
   fetchDocuments: state.documentsList.fetchDocuments,
+  userId: state.auth.user?.id,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -75,9 +76,10 @@ const DocumentsList: React.FC<PropsFromRedux> = ({
   deletionMode,
   selectedIDs,
   fetchDocuments,
+  userId,
 }) => {
   useEffect(() => {
-    ac.documentsList.fetchDocuments();
+    if (userId) ac.documentsList.fetchDocuments();
   }, []);
   useEffect(() => {
     if (showDocumentList) {

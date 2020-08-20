@@ -1,10 +1,10 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { AsyncOperation } from './document';
-import { DocumentMeta } from '::types/graphql-adapters';
 import { rootActionCreators } from './root';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { CachedDocument } from '::store/ducks/cache/document-cache';
+import { LoadDocumentsListPayload } from '::store/ducks/cache/document-cache/helpers/document/load-documents-list';
 
 const ap = createActionPrefixer('document-list');
 
@@ -15,7 +15,7 @@ const ac = {
     fetchDocumentsInProgress: _(ap('fetch-documents-in-progress')),
     fetchDocumentsFulfilled: _(
       ap('fetch-documents-fulfilled'),
-      _ => (documents: DocumentMeta[]) => _(documents),
+      _ => (documents: LoadDocumentsListPayload) => _(documents),
     ),
     fetchDocumentsFailed: _(ap('fetch-documents-failed')),
   },
