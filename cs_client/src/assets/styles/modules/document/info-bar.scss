@@ -6,9 +6,10 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
   }
+  overflow: auto;
   // size
   @include respond-to($md-up) {
-    height: $info-bar-height-md;
+    height: var(--info-bar);
   }
   @include respond-to($md-down) {
     min-width: calc(100vw - 20px);

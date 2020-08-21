@@ -20,6 +20,7 @@ import { authActionCreators } from './ducks/auth';
 import { cacheActionCreators } from './ducks/cache/cache';
 import { settingsActionCreators } from './ducks/settings';
 import { documentCacheActionCreators } from '::store/ducks/cache/document-cache';
+import { animationActionCreators } from '::store/ducks/animations';
 
 type Store = ReturnType<typeof reducer>;
 
@@ -53,11 +54,13 @@ const ac = {
     cache: cacheActionCreators,
     settings: settingsActionCreators,
     documentCache: documentCacheActionCreators,
+    animation: animationActionCreators,
   },
   document: bindActionCreators(documentActionCreators, store.dispatch),
   dialogs: bindActionCreators(dialogsActionCreators, store.dispatch),
   node: bindActionCreators(nodeActionCreators, store.dispatch),
   editor: bindActionCreators(editorActionCreators, store.dispatch),
+  animation: bindActionCreators(animationActionCreators, store.dispatch),
   auth: bindActionCreators(authActionCreators, store.dispatch),
   documentCache: bindActionCreators(
     documentCacheActionCreators,

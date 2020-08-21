@@ -14,9 +14,11 @@ import { Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { useEffect, useState } from 'react';
 
-const Portal: React.FC<{ targetSelector: string }> = ({
+type PortalProps = { targetSelector: string; predicate?: boolean };
+export const Portal: React.FC<PortalProps> = ({
   targetSelector,
   children,
+  predicate = true,
 }) => {
   const [targetMounted, serTargetMounted] = useState(false);
   useEffect(() => {
@@ -28,10 +30,14 @@ const Portal: React.FC<{ targetSelector: string }> = ({
       return () => clearInterval(handle);
     }, 100);
   }, []);
-  return targetMounted ? (
-    createPortal(children, document.querySelector(targetSelector))
+  return predicate ? (
+    targetMounted ? (
+      createPortal(children, document.querySelector(targetSelector))
+    ) : (
+      <></>
+    )
   ) : (
-    <></>
+    <>{children}</>
   );
 };
 

@@ -21,7 +21,7 @@
       'tree recent-nodes '
       'tree rich-text '
       'info-bar info-bar';
-    grid-template-rows: $tool-bar-height-md $title-and-recent-bar-height-md 1fr $info-bar-height-md;
+    grid-template-rows: $tool-bar-height-md $title-and-recent-bar-height-md 1fr var(--info-bar);
   }
 
   overflow: hidden;

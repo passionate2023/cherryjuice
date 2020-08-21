@@ -1,5 +1,6 @@
 import { modDialog } from '::sass-modules';
 import * as React from 'react';
+import { EventHandler } from 'react';
 import {
   DialogFooter,
   TDialogFooterProps,
@@ -11,7 +12,6 @@ import {
 import { DialogBody } from '::root/components/shared-components/dialog/dialog-body/dialog-body';
 import { MeasurableDialogBody } from '::root/components/shared-components/dialog/dialog-body/measurable-dialog-body';
 import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
-import { EventHandler } from 'react';
 import { animated } from 'react-spring';
 import { TransitionWrapper } from '::root/components/shared-components/transitions/transition-wrapper';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';

@@ -2,10 +2,10 @@
 @import '../../mixins/breakpoints';
 @mixin tree-height() {
   height: calc(
-    var(--vh) - #{$info-bar-height+ $tool-bar-height} - var(--formatting-bar)
+    var(--vh) - #{$tool-bar-height} - var(--formatting-bar)
   );
   @include respond-to('md') {
-    height: calc(var(--vh) - #{$info-bar-height-md+ $tool-bar-height-md});
+    height: calc(var(--vh) - var(--info-bar) - #{$tool-bar-height-md});
   }
 }
 .tree {
@@ -14,6 +14,7 @@
   @include tree-height();
   overflow: auto;
   border-right: white 3px solid;
+  max-height: 100%;
 }
 .tree_root-list {
   margin: 0 0 0 -40px;
@@ -22,7 +23,7 @@
   height: auto;
 }
 .tree__resize-handle {
-  height: calc(100vh - #{$info-bar-height+ $tool-bar-height}) !important;
+  height: calc(100vh - var(--docked-dialog-height) - #{$tool-bar-height}) !important;
   span > div {
     min-width: 10px;
   }

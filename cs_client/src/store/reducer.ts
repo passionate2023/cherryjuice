@@ -15,6 +15,7 @@ import { authReducer } from './ducks/auth';
 import { cacheReducer } from './ducks/cache/cache';
 import { settingsReducer } from './ducks/settings';
 import { documentCacheReducer } from '::store/ducks/cache/document-cache';
+import { animationReducer } from '::store/ducks/animations';
 
 const reducer = combineReducers({
   cache: persistReducer(
@@ -25,6 +26,7 @@ const reducer = combineReducers({
     cacheReducer,
   ),
   documentCache: documentCacheReducer,
+  animation: animationReducer,
   document: persistReducer(
     {
       key: 'document',

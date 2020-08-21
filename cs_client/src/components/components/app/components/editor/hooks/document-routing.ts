@@ -60,6 +60,7 @@ const useDocumentRouting = (
     if (file_id && node_id && node_id !== selectedNode_id) {
       pendingNode_id.current = true;
       pendingPathnameRedirect.current = true;
+      ac.document.setDocumentId(file_id);
       const subscription = waitForDocumentToLoad(file_id, () => {
         pendingNode_id.current = false;
         pendingPathnameRedirect.current = false;

@@ -26,6 +26,8 @@ const mapState = (state: Store) => ({
   dockedDialog: state.root.dockedDialog,
   isDocumentOwner: hasWriteAccessToDocument(state),
   userId: state.auth.user?.id,
+  searchDialogIsShown:
+    state.root.dockedDialog && state.search.searchState !== 'idle',
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -39,12 +41,14 @@ const App: React.FC<Props & PropsFromRedux> = ({
   dockedDialog,
   isDocumentOwner,
   userId,
+  searchDialogIsShown,
 }) => {
   useUpdateCssVariables(
     isDocumentOwner,
     showFormattingButtons,
     showTree,
     treeWidth,
+    searchDialogIsShown,
   );
   // useRefreshToken({ token });
   useEffect(() => {
