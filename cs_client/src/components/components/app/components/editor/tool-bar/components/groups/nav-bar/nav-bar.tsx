@@ -9,6 +9,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { Search } from '::root/components/app/components/editor/tool-bar/components/groups/nav-bar/components/search/search';
 import { User } from '::types/graphql/generated';
+import { GeneratedAvatar } from '::root/components/app/components/menus/modals/user/components/components/generated-avatar';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
@@ -63,7 +64,7 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
         />
       </ToolbarButton>
       <ToolbarButton
-        onClick={ac.dialogs.showUserPopup}
+        onClick={ac.dialogs.toggleUserPopup}
         active={showUserPopup}
         testId={testIds.toolBar__navBar__userButton}
       >
@@ -72,6 +73,14 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
             src={user.picture}
             alt="user profile picture"
             className={modToolbar.toolBar__groupNavBar__profilePicture}
+          />
+        ) : user?.id ? (
+          <GeneratedAvatar
+            firstName={user.firstName}
+            lastName={user.lastName}
+            id={user.id}
+            size={18}
+            textSizeToWidthRatio={0.4}
           />
         ) : (
           <Icon name={Icons.material['person-circle']} />

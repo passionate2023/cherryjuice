@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { User } from '::types/graphql/generated';
 import { modUserPopup } from '::sass-modules';
+import { GeneratedAvatar } from '::root/components/app/components/menus/modals/user/components/components/generated-avatar';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 
 type Props = { user: User };
 
 const UserInfo: React.FC<Props> = ({ user }) => {
-  const { picture, email, firstName, lastName } = user;
+  const { picture, email, firstName, lastName, id } = user;
   return (
     <div className={modUserPopup.user__info}>
       {picture ? (
@@ -15,6 +16,8 @@ const UserInfo: React.FC<Props> = ({ user }) => {
           alt="profile-picture"
           className={modUserPopup.user__info__picture}
         />
+      ) : id ? (
+        <GeneratedAvatar firstName={firstName} lastName={lastName} id={id} />
       ) : (
         <Icon
           {...{

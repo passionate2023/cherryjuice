@@ -69,6 +69,7 @@ const actionCreators = {
   },
   ...{
     showUserPopup: _(ap('show-user-popup')),
+    toggleUserPopup: _(ap('toggle-user-popup')),
     hideUserPopup: _(ap('hide-user-popup')),
   },
   ...{
@@ -216,6 +217,10 @@ const reducer = createReducer(initialState, _ => [
     _(actionCreators.hideUserPopup, state => ({
       ...state,
       showUserPopup: false,
+    })),
+    _(actionCreators.toggleUserPopup, state => ({
+      ...state,
+      showUserPopup: !state.showUserPopup,
     })),
   ],
   ...[
