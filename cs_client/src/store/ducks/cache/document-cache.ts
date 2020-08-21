@@ -74,6 +74,7 @@ export type CachedNodesState = {
   created: number[];
   deleted: number[];
   edited: { [node_id: number]: string[] };
+  deletedImages: { [node_id: number]: string[] };
 };
 export type CachedDocumentState = {
   selectedNode_id?: number;

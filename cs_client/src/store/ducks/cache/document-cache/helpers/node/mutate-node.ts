@@ -3,6 +3,7 @@ import {
   QFullNode,
 } from '::store/ducks/cache/document-cache';
 import { removeDuplicates } from '::helpers/array-helpers';
+import { newImagePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 export type MutateNodeParams = {
   node_id: number;
   documentId: string;
@@ -23,15 +24,19 @@ export const mutateNode = (
     ...(editedNodes.edited[node_id] || []),
     ...Object.keys(data),
   ];
+  const nodeDeletedImages = [...(editedNodes.deletedImages[node_id] || [])];
   if (meta?.mode === 'update-key-only') {
     mutatedNode = node;
   } else {
     if (meta?.deletedImages) {
       mutatedNode = {
         ...node,
-        image: node.image.filter(({ id }) => meta.deletedImages.includes(id)),
+        image: node.image.filter(({ id }) => !meta.deletedImages.includes(id)),
         updatedAt: updatedAt,
       };
+      nodeDeletedImages.push(
+        ...meta.deletedImages.filter(id => !id.startsWith(newImagePrefix)),
+      );
     } else if (data.image) {
       mutatedNode = {
         ...node,
@@ -65,6 +70,10 @@ export const mutateNode = (
               ...(editedNodes.edited[node_id] || []),
               ...nodeEditedAttributes,
             ]),
+          },
+          deletedImages: {
+            ...editedNodes.deletedImages,
+            [node_id]: removeDuplicates(nodeDeletedImages),
           },
         },
       },

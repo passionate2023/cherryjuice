@@ -11,6 +11,7 @@ const _getDefaultState = (newDocument = false): CachedDocumentState => ({
     edited: {},
     created: newDocument ? [0] : [],
     deleted: [],
+    deletedImages: {},
   },
   highestNode_id: 0,
   selectedNode_id: 0,
