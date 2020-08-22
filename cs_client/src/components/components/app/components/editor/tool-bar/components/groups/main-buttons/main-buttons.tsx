@@ -49,7 +49,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         active={showTree}
         disabled={noDocumentIsSelected}
       >
-        <Icon name={Icons.cherrytree.additionalIcons['cherries']} size={20} />
+        <Icon name={Icons.material.tree} size={20} />
       </ToolbarButton>
       <ToolbarButton
         dontMount={!isDocumentOwner}
@@ -57,7 +57,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         disabled={noNodeIsSelected || noDocumentIsSelected}
         testId={testIds.toolBar__main__editNodeMeta}
       >
-        <Icon name={Icons.material.edit} />
+        <Icon name={Icons.material.edit} loadAsInlineSVG={'force'} />
       </ToolbarButton>
       <ToolbarButton
         dontMount={!isDocumentOwner}
@@ -65,7 +65,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         disabled={noNodeIsSelected || noDocumentIsSelected}
         testId={testIds.toolBar__main__deleteNode}
       >
-        <Icon name={Icons.material.delete} />
+        <Icon name={Icons.material.delete} loadAsInlineSVG={'force'} />
       </ToolbarButton>
       <ToolbarButton
         dontMount={!isDocumentOwner}
@@ -74,8 +74,9 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         disabled={noDocumentIsSelected}
       >
         <Icon
-          name={Icons.cherrytree.additionalIcons['tree-node-add']}
+          name={Icons.material['create-sibling']}
           size={20}
+          loadAsInlineSVG={'force'}
         />
       </ToolbarButton>
       <ToolbarButton
@@ -85,8 +86,9 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         disabled={noDocumentIsSelected}
       >
         <Icon
-          name={Icons.cherrytree.additionalIcons['tree-subnode-add']}
+          name={Icons.material['create-child']}
           size={20}
+          loadAsInlineSVG={'force'}
         />
       </ToolbarButton>
       <ToolbarButton
@@ -95,7 +97,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         testId={testIds.toolBar__main__saveDocument}
         disabled={!userHasUnsavedChanges}
       >
-        <Icon name={Icons.material.save} />
+        <Icon name={Icons.material.save} loadAsInlineSVG={'force'} />
       </ToolbarButton>
       <ToolbarButton
         onClick={
@@ -105,7 +107,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         }
         disabled={noDocumentIsSelected || newDocument}
       >
-        <Icon name={Icons.material.refresh} />
+        <Icon name={Icons.material.refresh} loadAsInlineSVG={'force'} />
       </ToolbarButton>
     </div>
   );

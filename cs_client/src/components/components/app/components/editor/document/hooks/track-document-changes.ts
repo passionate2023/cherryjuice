@@ -10,7 +10,7 @@ const useTrackDocumentChanges = ({
   documentName,
 }: Props) => {
   useEffect(() => {
-    const title = `cherryscript${documentName ? ' - ' + documentName : ''}`;
+    const title = `${documentName ? documentName + ' - ' : ''}Cherryscript`;
     if (userHasUnsavedChanges) {
       document.title = '*' + title;
       onBeforeUnload.attach();
@@ -18,7 +18,10 @@ const useTrackDocumentChanges = ({
       onBeforeUnload.remove();
       document.title = title;
     }
-    return onBeforeUnload.remove;
+    return () => {
+      document.title = 'Cherryscript';
+      onBeforeUnload.remove();
+    };
   }, [userHasUnsavedChanges, documentName]);
 };
 

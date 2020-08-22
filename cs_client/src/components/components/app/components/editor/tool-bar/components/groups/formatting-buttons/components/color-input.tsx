@@ -17,7 +17,7 @@ const ColorInput: React.FC<{
       disabled={disabled}
     >
       <label htmlFor={type} style={!disabled ? { cursor: 'pointer' } : {}}>
-        <Icon name={icon} />
+        <Icon name={icon} loadAsInlineSVG={'force'} />
         <input
           id={type}
           type="color"

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import modTheme from '::sass-modules/../themes/themes.scss';
 import { useApolloClient } from '::graphql/client/hooks/apollo-client';
 import { Suspense, useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router';
@@ -102,7 +103,9 @@ const RootWithRedux: React.FC = props => {
     loadedEpics && (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistStore(store)}>
-          <ConnectedRoot {...props} />
+          <div className={modTheme.lightTheme}>
+            <ConnectedRoot {...props} />
+          </div>
         </PersistGate>
       </Provider>
     )

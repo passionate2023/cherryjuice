@@ -1,5 +1,5 @@
-import { nodesMetaMap } from '::types/misc';
 import { getFlatListOfChildrenTree } from '../document';
+import { NodesDict } from '::store/ducks/cache/document-cache';
 
 const tree = {
   '0': {
@@ -30,14 +30,7 @@ const tree = {
 };
 describe('getFlatListOfChildrenTree', () => {
   it('should return an array of nested children recursively', () => {
-    const list = getFlatListOfChildrenTree()(
-      new Map(
-        (Object.entries(tree).map(([k, v]) => [
-          +k,
-          v,
-        ]) as unknown) as nodesMetaMap,
-      ),
-    )(1);
+    const list = getFlatListOfChildrenTree()(tree as NodesDict)(1);
     expect(list.sort()).toEqual([1, 2, 3]);
   });
 });

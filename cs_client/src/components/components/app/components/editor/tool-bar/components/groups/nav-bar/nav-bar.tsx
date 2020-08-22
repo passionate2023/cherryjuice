@@ -42,7 +42,7 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
         onClick={ac.dialogs.showCreateDocumentDialog}
         testId={'new-document'}
       >
-        <Icon name={Icons.material.document} />
+        <Icon name={Icons.material.document} loadAsInlineSVG={'force'} />
       </ToolbarButton>
       <ToolbarButton
         onClick={ac.document.export}
@@ -52,6 +52,7 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
         <Icon
           name={Icons.material.export}
           testId={testIds.toolBar__navBar__exportDocument}
+          loadAsInlineSVG={'force'}
         />
       </ToolbarButton>
       <ToolbarButton
@@ -61,6 +62,7 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
         <Icon
           name={Icons.material.folder}
           testId={testIds.toolBar__navBar__showDocumentList}
+          loadAsInlineSVG={'force'}
         />
       </ToolbarButton>
       <ToolbarButton

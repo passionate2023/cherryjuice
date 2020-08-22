@@ -47,7 +47,10 @@ const Buttons: React.FC<PropsFromRedux> = ({
             className={modToolbar.toolBar__iconStrictWidth}
             disabled={disabled}
           >
-            <Icon name={formattingHotkeysProps[hotKey.type].icon} />
+            <Icon
+              name={formattingHotkeysProps[hotKey.type].icon}
+              loadAsInlineSVG={'force'}
+            />
           </ToolbarButton>
         ),
       )}

@@ -22,18 +22,18 @@
   user-select: none;
   border: none;
   background-color: transparent;
-  color: $primary-dark;
+  color: var(--text-color-inverted);
   transition: background-color 0.3s ease, filter 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 1.25px;
   cursor: pointer;
   &:hover:not([disabled]) {
-    background-color: #f1e5e5;
-    color: $primary-dark;
+    background-color: var(--primary-color-hover);
+    color: var(--text-color-on-primary-hover);
   }
   &:active:not([disabled]) {
-    background-color: $primary-light;
-    color: $primary-dark;
+    background-color: var(--primary-color-active);
+    color: var(--text-color-on-primary-active);
     box-shadow: $box-shadow1;
   }
   &:disabled {
@@ -68,15 +68,15 @@
 }
 
 .button--danger {
-  @include button-variant(white, #d60000, 1, 0.1);
+  @include button-variant(var(--text-color-on-primary), #d60000, 1, 0.1);
 }
 .button--dark {
-  @include button-variant(white, $dark-grey, 0.85, 0.1);
+  @include button-variant(var(--text-color-on-primary), $dark-grey, 0.85, 0.1);
 }
 
 .button--pressed {
-  background-color: $primary !important;
-  color: white !important;
+  background-color: var(--primary-color) !important;
+  color: var(--text-color-on-primary) !important;
   box-shadow: $box-shadow1;
   svg {
     fill: white;

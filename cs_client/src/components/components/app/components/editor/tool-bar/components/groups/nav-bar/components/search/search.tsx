@@ -72,7 +72,12 @@ const Search: React.FC<Props & PropsFromRedux> = ({
         ])}
         disabled={searchImpossible}
         onClick={onClick}
-        icon={<Icon name={Icons.material.search} />}
+        icon={
+          <Icon
+            name={Icons.material.search}
+            loadAsInlineSVG={navBar ? 'force' : undefined}
+          />
+        }
       />
     </div>
   );
