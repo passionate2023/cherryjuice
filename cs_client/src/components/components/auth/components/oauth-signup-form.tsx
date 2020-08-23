@@ -16,7 +16,7 @@ import { OauthSignUpCredentials } from '::types/graphql/generated';
 import { router } from '::root/router/router';
 import { ReturnToLoginPage } from '::root/components/auth/components/signup-form';
 
-const idPrefix = 'oauth-sign-up';
+const idPrefix = 'oauth::sign-up';
 const inputs: ValidatedTextInputProps[] = [
   {
     label: 'username',
@@ -40,12 +40,12 @@ const inputs: ValidatedTextInputProps[] = [
     idPrefix,
   },
   {
+    icon: [Icons.material.lock],
     inputRef: createRef(),
     variableName: undefined,
     patterns: [patterns.password],
     label: 'confirm password',
     type: 'password',
-    icon: [Icons.material.lock],
     minLength: 8,
     required: true,
     idPrefix,

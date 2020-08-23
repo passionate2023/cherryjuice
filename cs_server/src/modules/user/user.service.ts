@@ -84,11 +84,13 @@ export class UserService {
   ) {}
 
   private packageAuthUser(user: User): AuthUser {
+    const settings = user.settings;
+    delete user.settings;
     return {
       token: this.jwtService.sign(createJWTPayload.authn(user)),
       user,
       secrets: this.getSecrets(),
-      settings: user.settings,
+      settings,
     };
   }
 
@@ -134,7 +136,7 @@ export class UserService {
     thirdPartyId: string,
     provider: string,
     _json: OauthJson,
-  ): Promise<User> {
+  ): Promise<AuthUser> {
     try {
       let user = await this.userRepository.findOneByThirdPartyId(
         thirdPartyId,
@@ -148,7 +150,7 @@ export class UserService {
           _json,
         );
       user.tokens = await this.getTokens(user.id);
-      return user;
+      return this.packageAuthUser(user);
     } catch (err) {
       throw new InternalServerErrorException('validateOAuthLogin', err.message);
     }

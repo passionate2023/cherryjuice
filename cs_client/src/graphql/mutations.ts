@@ -133,7 +133,9 @@ const USER_MUTATION = {
     query: gql`
       mutation oauth_signup($input: OauthSignUpCredentials!) {
         user {
-          ...AuthUser
+          oauthSignUp(credentials: $input) {
+            ...AuthUser
+          }
         }
       }
       ${FRAGMENT_AUTH_USER.authUser}
