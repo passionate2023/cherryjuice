@@ -1,29 +1,15 @@
-import { NodeMeta } from '::types/graphql-adapters';
 import gql from 'graphql-tag';
-import { DOCUMENT_GUEST } from '::graphql/fragments';
 import { Document } from '::types/graphql/generated';
+import { NODE_META, QNodeMeta } from '::graphql/fragments/node-meta';
+import {
+  DOCUMENT_LIST_ITEM,
+  QDocumentsListItem,
+} from '::graphql/fragments/document-list-item';
 
-type QNodeMeta = Pick<
-  NodeMeta,
-  | 'id'
-  | 'documentId'
-  | 'node_id'
-  | 'father_id'
-  | 'fatherId'
-  | 'name'
-  | 'child_nodes'
-  | 'createdAt'
-  | 'updatedAt'
-  | 'node_title_styles'
-  | 'privacy'
->;
-
-type QDocumentMeta = Pick<
-  Document,
-  'id' | 'name' | 'folder' | 'guests' | 'privacy' | 'userId' | 'privateNodes'
-> & {
-  node: QNodeMeta[];
-};
+type QDocumentMeta = QDocumentsListItem &
+  Pick<Document, 'privateNodes'> & {
+    node: QNodeMeta[];
+  };
 
 type Args = { file_id: string };
 const DOCUMENT_META = ({ file_id }: Args) => ({
@@ -32,32 +18,18 @@ const DOCUMENT_META = ({ file_id }: Args) => ({
   query: gql`
     query document_meta($file_id: String!) {
       document(file_id: $file_id) {
-        id
-        name
-        folder
-        privacy
-        userId
+        ...DocumentListItem
         privateNodes {
           father_id
           node_id
         }
-        ...DocumentGuest
         node {
-          id
-          documentId
-          node_id
-          father_id
-          fatherId
-          name
-          child_nodes
-          createdAt
-          updatedAt
-          node_title_styles
-          privacy
+          ...NodeMeta
         }
       }
     }
-    ${DOCUMENT_GUEST}
+    ${DOCUMENT_LIST_ITEM}
+    ${NODE_META}
   `,
 });
 

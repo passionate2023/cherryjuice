@@ -1,0 +1,39 @@
+:root {
+  --red: #790604;
+  --red-900: #f1e5e5;
+  --red-800: #dfc8c7;
+  --red-200: #4c0302;
+  --red-150: #3b0503;
+  --red-100: #270101;
+  --red-050: #180101;
+
+  --beige: #f7f3ec;
+
+  --neutral: #fff;
+  --neutral-700: #d2d2d2;
+  --neutral-600: #c4c4c4;
+  --neutral-300: #8a8a8a;
+  --neutral-200: #757575;
+  --neutral-050: #363636;
+}
+.light-theme {
+  --primary-color: var(--red);
+  --primary-color-hover: var(--red-900);
+  --primary-color-active: var(--red-800);
+
+  --text-color-on-primary: var(--neutral);
+  --text-color-on-primary-hover: var(--red-100);
+  --text-color-on-primary-active: var(--red-100);
+  --text-color-inverted: var(--red-100);
+
+  --danger: #d60000;
+  --danger-hover: #d20000;
+  --danger-active: #de0000;
+
+  // tool-bar
+  --tool-bar-background-color: var(--beige);
+  --tool-bar-icon-background-color: transparent;
+  --tool-bar-icon-background-color-on-hover: var(--neutral-700);
+  --tool-bar-icon-background-color-on-active: var(--neutral-700);
+  --tool-bar-icon-fill: var(--neutral-200);
+}

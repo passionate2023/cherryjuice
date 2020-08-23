@@ -1,4 +1,4 @@
-import { documentActionCreators } from '::app/editor/document/reducer/action-creators';
+import { documentActionCreators } from '::root/components/app/components/editor/document/reducer/action-creators';
 import { onpaste } from './editing/clipboard';
 
 const testCallbacks = {

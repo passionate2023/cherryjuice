@@ -18,12 +18,15 @@ const router = {
     home: () => {
       history.push(`/`);
     },
-    signIn: () => history.push(`/login`),
+    signIn: () => history.push(`/auth/login`),
     hash: (fullLink: string) => {
       history.push(fullLink);
     },
     oauthSignup() {
-      history.push(`/signup-oauth`);
+      history.push(`/auth/signup-oauth`);
+    },
+    resetPassword(token: string) {
+      history.push(`/auth/reset-password#${token}`);
     },
   },
 };

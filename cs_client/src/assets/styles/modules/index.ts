@@ -32,6 +32,8 @@ import modTimeFilter from './search/search-dialog/time-filter.scss';
 import modUtility from './utility.scss';
 import modGuests from './document-meta/guests.scss';
 import modUserProfile from './user/user-profile.scss';
+import modHotKey from './settings/hot-key.scss';
+import modHotKeys from './settings/hot-keys.scss';
 
 export {
   appModule,
@@ -68,4 +70,6 @@ export {
   modUtility,
   modGuests,
   modUserProfile,
+  modHotKey,
+  modHotKeys,
 };

@@ -195,6 +195,7 @@ export interface UserQuery {
 
 export interface AuthUser {
   secrets: Secrets;
+  settings: Settings;
   token: string;
   user: User;
 }
@@ -202,6 +203,48 @@ export interface AuthUser {
 export interface Secrets {
   google_api_key: string;
   google_client_id: string;
+}
+
+export interface Settings {
+  hotKeys: HotKeys;
+}
+
+export interface HotKeys {
+  formatting: Array<HotKey>;
+  general: Array<HotKey>;
+}
+
+export interface HotKey {
+  keys?: string;
+  type: HotKeyActionType;
+}
+
+export enum HotKeyActionType {
+  BG_COLOR = 'BG_COLOR',
+  BOLD = 'BOLD',
+  CREATE_TEST_SAMPLE = 'CREATE_TEST_SAMPLE',
+  FG_COLOR = 'FG_COLOR',
+  H1 = 'H1',
+  H2 = 'H2',
+  H3 = 'H3',
+  ITALIC = 'ITALIC',
+  JUSTIFY_CENTER = 'JUSTIFY_CENTER',
+  JUSTIFY_FILL = 'JUSTIFY_FILL',
+  JUSTIFY_LEFT = 'JUSTIFY_LEFT',
+  JUSTIFY_RIGHT = 'JUSTIFY_RIGHT',
+  LINE_THROUGH = 'LINE_THROUGH',
+  MONO = 'MONO',
+  RELOAD_DOCUMENT = 'RELOAD_DOCUMENT',
+  REMOVE_STYLE = 'REMOVE_STYLE',
+  SAVE_DOCUMENT = 'SAVE_DOCUMENT',
+  SHOW_CREATE_DOCUMENT = 'SHOW_CREATE_DOCUMENT',
+  SHOW_CREATE_SIBLING_NODE = 'SHOW_CREATE_SIBLING_NODE',
+  SHOW_DOCUMENTS_LIST = 'SHOW_DOCUMENTS_LIST',
+  SHOW_IMPORT_DOCUMENTS = 'SHOW_IMPORT_DOCUMENTS',
+  SMALL = 'SMALL',
+  SUB = 'SUB',
+  SUP = 'SUP',
+  UNDERLINE = 'UNDERLINE',
 }
 
 export interface User {
@@ -212,7 +255,25 @@ export interface User {
   id: string;
   lastName: string;
   picture?: string;
+  tokens: Array<UserToken | null>;
   username: string;
+}
+
+export interface UserToken {
+  id: string;
+  meta?: UserTokenMeta;
+  type: UserTokenType;
+}
+
+export interface UserTokenMeta {
+  currentEmail?: string;
+  newEmail?: string;
+}
+
+export enum UserTokenType {
+  EMAIL_CHANGE = 'EMAIL_CHANGE',
+  EMAIL_VERIFICATION = 'EMAIL_VERIFICATION',
+  PASSWORD_RESET = 'PASSWORD_RESET',
 }
 
 export interface Mutation {
@@ -310,6 +371,9 @@ export interface UploadLinkInputType {
 }
 
 export interface UserMutation {
+  cancelEmailChangeToken: Timestamp;
+  changeEmail: Timestamp;
+  createEmailChangeToken: Timestamp;
   createEmailVerificationToken: Timestamp;
   createPasswordResetToken: Timestamp;
   deleteAccount: string;
@@ -318,7 +382,20 @@ export interface UserMutation {
   signIn: AuthUser;
   signUp: AuthUser;
   updateUserProfile: AuthUser;
+  updateUserSettings: AuthUser;
   verifyEmail: Timestamp;
+}
+
+export interface CancelChangeEmailIt {
+  tokenId: string;
+}
+
+export interface ConfirmEmailChangeIt {
+  token: string;
+}
+
+export interface ChangeEmailIt {
+  email: string;
 }
 
 export interface OauthSignUpCredentials {
@@ -346,10 +423,25 @@ export interface SignUpCredentials {
 
 export interface UpdateUserProfileIt {
   currentPassword: string;
+  email?: string;
   firstName?: string;
   lastName?: string;
   newPassword?: string;
   username?: string;
+}
+
+export interface UpdateUserSettingsIt {
+  hotKeys?: HotKeysIt;
+}
+
+export interface HotKeysIt {
+  formatting: Array<HotKeyIt>;
+  general: Array<HotKeyIt>;
+}
+
+export interface HotKeyIt {
+  keys?: string;
+  type: HotKeyActionType;
 }
 
 export interface VerifyEmailIt {
@@ -408,7 +500,12 @@ export interface Resolver {
   UserQuery?: UserQueryTypeResolver;
   AuthUser?: AuthUserTypeResolver;
   Secrets?: SecretsTypeResolver;
+  Settings?: SettingsTypeResolver;
+  HotKeys?: HotKeysTypeResolver;
+  HotKey?: HotKeyTypeResolver;
   User?: UserTypeResolver;
+  UserToken?: UserTokenTypeResolver;
+  UserTokenMeta?: UserTokenMetaTypeResolver;
   Mutation?: MutationTypeResolver;
   DocumentMutation?: DocumentMutationTypeResolver;
   NodeMutation?: NodeMutationTypeResolver;
@@ -837,11 +934,16 @@ export interface UserQueryToVerifyTokenValidityResolver<
 
 export interface AuthUserTypeResolver<TParent = any> {
   secrets?: AuthUserToSecretsResolver<TParent>;
+  settings?: AuthUserToSettingsResolver<TParent>;
   token?: AuthUserToTokenResolver<TParent>;
   user?: AuthUserToUserResolver<TParent>;
 }
 
 export interface AuthUserToSecretsResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface AuthUserToSettingsResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -869,6 +971,40 @@ export interface SecretsToGoogle_client_idResolver<
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface SettingsTypeResolver<TParent = any> {
+  hotKeys?: SettingsToHotKeysResolver<TParent>;
+}
+
+export interface SettingsToHotKeysResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface HotKeysTypeResolver<TParent = any> {
+  formatting?: HotKeysToFormattingResolver<TParent>;
+  general?: HotKeysToGeneralResolver<TParent>;
+}
+
+export interface HotKeysToFormattingResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface HotKeysToGeneralResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface HotKeyTypeResolver<TParent = any> {
+  keys?: HotKeyToKeysResolver<TParent>;
+  type?: HotKeyToTypeResolver<TParent>;
+}
+
+export interface HotKeyToKeysResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface HotKeyToTypeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface UserTypeResolver<TParent = any> {
   email?: UserToEmailResolver<TParent>;
   email_verified?: UserToEmail_verifiedResolver<TParent>;
@@ -877,6 +1013,7 @@ export interface UserTypeResolver<TParent = any> {
   id?: UserToIdResolver<TParent>;
   lastName?: UserToLastNameResolver<TParent>;
   picture?: UserToPictureResolver<TParent>;
+  tokens?: UserToTokensResolver<TParent>;
   username?: UserToUsernameResolver<TParent>;
 }
 
@@ -908,7 +1045,45 @@ export interface UserToPictureResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface UserToTokensResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface UserToUsernameResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserTokenTypeResolver<TParent = any> {
+  id?: UserTokenToIdResolver<TParent>;
+  meta?: UserTokenToMetaResolver<TParent>;
+  type?: UserTokenToTypeResolver<TParent>;
+}
+
+export interface UserTokenToIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserTokenToMetaResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserTokenToTypeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserTokenMetaTypeResolver<TParent = any> {
+  currentEmail?: UserTokenMetaToCurrentEmailResolver<TParent>;
+  newEmail?: UserTokenMetaToNewEmailResolver<TParent>;
+}
+
+export interface UserTokenMetaToCurrentEmailResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserTokenMetaToNewEmailResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -1099,6 +1274,13 @@ export interface NodeMutationToUploadImageResolver<
 }
 
 export interface UserMutationTypeResolver<TParent = any> {
+  cancelEmailChangeToken?: UserMutationToCancelEmailChangeTokenResolver<
+    TParent
+  >;
+  changeEmail?: UserMutationToChangeEmailResolver<TParent>;
+  createEmailChangeToken?: UserMutationToCreateEmailChangeTokenResolver<
+    TParent
+  >;
   createEmailVerificationToken?: UserMutationToCreateEmailVerificationTokenResolver<
     TParent
   >;
@@ -1111,7 +1293,53 @@ export interface UserMutationTypeResolver<TParent = any> {
   signIn?: UserMutationToSignInResolver<TParent>;
   signUp?: UserMutationToSignUpResolver<TParent>;
   updateUserProfile?: UserMutationToUpdateUserProfileResolver<TParent>;
+  updateUserSettings?: UserMutationToUpdateUserSettingsResolver<TParent>;
   verifyEmail?: UserMutationToVerifyEmailResolver<TParent>;
+}
+
+export interface UserMutationToCancelEmailChangeTokenArgs {
+  input: CancelChangeEmailIt;
+}
+export interface UserMutationToCancelEmailChangeTokenResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToCancelEmailChangeTokenArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMutationToChangeEmailArgs {
+  input: ConfirmEmailChangeIt;
+}
+export interface UserMutationToChangeEmailResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToChangeEmailArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMutationToCreateEmailChangeTokenArgs {
+  input: ChangeEmailIt;
+}
+export interface UserMutationToCreateEmailChangeTokenResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToCreateEmailChangeTokenArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
 }
 
 export interface UserMutationToCreateEmailVerificationTokenResolver<
@@ -1216,6 +1444,21 @@ export interface UserMutationToUpdateUserProfileResolver<
   (
     parent: TParent,
     args: UserMutationToUpdateUserProfileArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMutationToUpdateUserSettingsArgs {
+  userSettings: UpdateUserSettingsIt;
+}
+export interface UserMutationToUpdateUserSettingsResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMutationToUpdateUserSettingsArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;

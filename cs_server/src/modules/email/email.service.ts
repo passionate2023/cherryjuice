@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { UserTokenMeta } from '../user/entities/user-token.entity';
 
 type SendEmailDTO = {
   email: string;
@@ -11,7 +12,7 @@ export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
 
   async sendPasswordReset({ email, token }: SendEmailDTO): Promise<void> {
-    const url = `${process.env.ASSETS_URL}/reset-password#token=${token}`;
+    const url = `${process.env.ASSETS_URL}/#${token}`;
     await this.mailerService.sendMail({
       to: email,
       subject: 'Password reset request',
@@ -25,15 +26,43 @@ export class EmailService {
   }
 
   async sendEmailVerification({ email, token }: SendEmailDTO): Promise<void> {
-    const url = `${process.env.ASSETS_URL}/verify-email#token=${token}`;
+    const url = `${process.env.ASSETS_URL}/#${token}`;
     await this.mailerService.sendMail({
       to: email,
-      subject: 'Confirm Your Email',
+      subject: 'Confirm your email',
       text: `Hello, to confirm your email, follow this link: ${url}`,
       context: {
         verifyEmailUrl: url,
       },
       template: 'verify-email',
+    });
+  }
+
+  async sendEmailChange({
+    email,
+    token,
+    tokenMeta,
+  }: SendEmailDTO & {
+    tokenMeta: UserTokenMeta;
+  }): Promise<void> {
+    const url = `${process.env.ASSETS_URL}/#${token}`;
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Change your email address',
+      text: [
+        `Hello,`,
+        `We've received a request to change your email from ${tokenMeta.currentEmail} to ${tokenMeta.newEmail}.`,
+        `By clicking the following link, you are confirming this request.`,
+        ` ${url} `,
+        `If you didn't make this request, let us know`,
+        `Thanks`,
+      ].join('\n'),
+      context: {
+        changeEmailUrl: url,
+        currentEmail: tokenMeta.currentEmail,
+        newEmail: tokenMeta.newEmail,
+      },
+      template: 'change-email',
     });
   }
 }

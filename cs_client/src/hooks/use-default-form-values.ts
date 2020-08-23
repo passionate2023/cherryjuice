@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ValidatedTextInputProps } from '::shared-components/form/validated-text-input';
+import { ValidatedTextInputProps } from '::root/components/shared-components/form/validated-text-input';
 
 const useDefaultValues = (inputs: ValidatedTextInputProps[]): void => {
   useEffect(() => {

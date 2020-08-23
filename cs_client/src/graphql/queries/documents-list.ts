@@ -1,20 +1,8 @@
 import gql from 'graphql-tag';
-import { DOCUMENT_GUEST } from '::graphql/fragments';
-import { Document } from '::types/graphql/generated';
-
-export type QDocumentsListItem = Pick<
-  Document,
-  | 'id'
-  | 'userId'
-  | 'name'
-  | 'size'
-  | 'hash'
-  | 'createdAt'
-  | 'updatedAt'
-  | 'folder'
-  | 'guests'
-  | 'privacy'
->;
+import {
+  DOCUMENT_LIST_ITEM,
+  QDocumentsListItem,
+} from '::graphql/fragments/document-list-item';
 
 export const DOCUMENTS_LIST = () => ({
   variables: undefined,
@@ -22,18 +10,9 @@ export const DOCUMENTS_LIST = () => ({
   query: gql`
     query documents_meta($file_id: String) {
       document(file_id: $file_id) {
-        id
-        userId
-        name
-        size
-        hash
-        createdAt
-        updatedAt
-        folder
-        privacy
-        ...DocumentGuest
+        ...DocumentListItem
       }
     }
-    ${DOCUMENT_GUEST}
+    ${DOCUMENT_LIST_ITEM}
   `,
 });

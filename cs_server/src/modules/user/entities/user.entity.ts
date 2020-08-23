@@ -10,6 +10,9 @@ import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { UnauthorizedException } from '@nestjs/common';
 import { AfterLoad } from 'typeorm/index';
+import { UserToken } from './user-token.entity';
+import { Settings } from './settings/settings.entity';
+import { getDefaultSettings } from './settings/helpers/default-settings/default-settings';
 
 type UserConstructorProps = {
   username: string;
@@ -30,6 +33,7 @@ class User extends BaseEntity {
     if (props) {
       this.salt = '';
       this.passwordHash = '';
+      this.settings = getDefaultSettings();
     }
   }
 
@@ -80,6 +84,9 @@ class User extends BaseEntity {
   @Field(() => Boolean)
   hasPassword = false;
 
+  @Field(() => [UserToken], { nullable: 'items' })
+  tokens: UserToken[];
+
   async validatePassword(passwordToValidate: string): Promise<void> {
     const hash = await bcrypt.hash(passwordToValidate, this.salt);
     if (hash !== this.passwordHash)
@@ -96,6 +103,9 @@ class User extends BaseEntity {
   setHashPassword() {
     this.hasPassword = Boolean(this.passwordHash);
   }
+
+  @Column('json')
+  settings: Settings;
 }
 
 export { User };

@@ -6,17 +6,20 @@ import { SignUpCredentials } from './dto/sign-up-credentials.dto';
 import { SignInCredentials } from './dto/sign-in-credentials.dto';
 import { UpdateUserProfileIt } from './input-types/update-user-profile.it';
 import { User } from './entities/user.entity';
-import {
-  ForbiddenException,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common';
+import { ForbiddenException, UseGuards } from '@nestjs/common';
 import { GetUserGql } from './decorators/get-user.decorator';
 import { GqlAuthGuard } from './guards/graphql.guard';
 import { OauthSignUpCredentials } from './dto/oauth-sign-up-credentials.dto';
 import { ResetPasswordIt } from './input-types/reset-password.it';
 import { Timestamp } from '../document/helpers/graphql-types/timestamp';
 import { VerifyEmailIt } from './input-types/verify-email.it';
+import { ConfirmEmailChangeIt } from './input-types/confirm-email-change.it';
+import {
+  CancelChangeEmailIt,
+  ChangeEmailIt,
+} from './input-types/change-email.it';
+import { RemoveGmailDots } from './pipes/gmail-dots';
+import { UpdateUserSettingsIt } from './input-types/update-user-settings.it';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => UserMutation)
 export class UserMutationsResolver {
@@ -29,7 +32,10 @@ export class UserMutationsResolver {
 
   @ResolveField(() => AuthUser)
   async signIn(
-    @Args({ name: 'credentials', type: () => SignInCredentials })
+    @Args(
+      { name: 'credentials', type: () => SignInCredentials },
+      RemoveGmailDots,
+    )
     signInInput: SignInCredentials,
   ): Promise<AuthUser> {
     return this.userService.signIn(signInInput);
@@ -37,7 +43,10 @@ export class UserMutationsResolver {
 
   @ResolveField(() => AuthUser)
   async signUp(
-    @Args({ name: 'credentials', type: () => SignUpCredentials })
+    @Args(
+      { name: 'credentials', type: () => SignUpCredentials },
+      RemoveGmailDots,
+    )
     signInInput: SignUpCredentials,
   ): Promise<AuthUser> {
     return this.userService.signUp(signInInput);
@@ -54,14 +63,33 @@ export class UserMutationsResolver {
 
   @ResolveField(() => AuthUser)
   async updateUserProfile(
-    @GetUserGql() user: User,
-    @Args({ name: 'userProfile', type: () => UpdateUserProfileIt })
+    @GetUserGql({ nullable: false }) user: User,
+    @Args(
+      { name: 'userProfile', type: () => UpdateUserProfileIt },
+      RemoveGmailDots,
+    )
     input: UpdateUserProfileIt,
   ): Promise<AuthUser> {
-    if (!user) throw new UnauthorizedException();
     await this.userService.updateUserProfile({
       input,
-      username: user.username,
+      userId: user.id,
+      email: user.email,
+    });
+    return this.userService.refreshUser(user.id);
+  }
+
+  @ResolveField(() => AuthUser)
+  async updateUserSettings(
+    @GetUserGql({ nullable: false }) user: User,
+    @Args(
+      { name: 'userSettings', type: () => UpdateUserSettingsIt },
+      RemoveGmailDots,
+    )
+    input: UpdateUserSettingsIt,
+  ): Promise<AuthUser> {
+    await this.userService.updateUserSettings({
+      input,
+      userId: user.id,
     });
     return this.userService.refreshUser(user.id);
   }
@@ -101,12 +129,45 @@ export class UserMutationsResolver {
 
   @ResolveField(() => Timestamp)
   async createEmailVerificationToken(
-    @GetUserGql() user: User,
+    @GetUserGql({ nullable: false }) user: User,
   ): Promise<number> {
-    if (!user?.id) throw new UnauthorizedException();
     if (user.email_verified)
       throw new ForbiddenException('email already verified');
-    await this.userService.createEmailVerificationToken(user);
+    await this.userService.createEmailVerificationToken({
+      userId: user.id,
+      email: user.email,
+    });
+    return Date.now();
+  }
+
+  @ResolveField(() => Timestamp)
+  async cancelEmailChangeToken(
+    @GetUserGql({ nullable: false }) user: User,
+    @Args({ name: 'input', type: () => CancelChangeEmailIt })
+    input: CancelChangeEmailIt,
+  ): Promise<number> {
+    if (!user.email_verified)
+      throw new ForbiddenException('email not verified');
+    await this.userService.cancelEmailChangeToken({
+      userId: user.id,
+      id: input.tokenId,
+    });
+    return Date.now();
+  }
+
+  @ResolveField(() => Timestamp)
+  async createEmailChangeToken(
+    @GetUserGql({ nullable: false }) user: User,
+    @Args({ name: 'input', type: () => ChangeEmailIt }, RemoveGmailDots)
+    input: ChangeEmailIt,
+  ): Promise<number> {
+    if (!user.email_verified)
+      throw new ForbiddenException('email not verified');
+    await this.userService.createEmailChangeToken({
+      userId: user.id,
+      currentEmail: user.email,
+      newEmail: input.email,
+    });
     return Date.now();
   }
 
@@ -116,6 +177,17 @@ export class UserMutationsResolver {
     input: VerifyEmailIt,
   ): Promise<number> {
     await this.userService.verifyEmail({
+      input,
+    });
+    return Date.now();
+  }
+
+  @ResolveField(() => Timestamp)
+  async changeEmail(
+    @Args({ name: 'input', type: () => ConfirmEmailChangeIt })
+    input: ConfirmEmailChangeIt,
+  ): Promise<number> {
+    await this.userService.changeEmail({
       input,
     });
     return Date.now();

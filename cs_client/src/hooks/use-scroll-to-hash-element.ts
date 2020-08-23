@@ -1,9 +1,13 @@
 import { useEffect } from 'react';
 import { scrollIntoToolbar } from '::helpers/ui';
 
-const useScrollToHashElement = ({ html }: { html: string }) => {
+const useScrollToHashElement = ({
+  fetchNodeStarted,
+}: {
+  fetchNodeStarted: boolean;
+}) => {
   useEffect(() => {
-    if (location.hash) {
+    if (location.hash && !fetchNodeStarted) {
       const redirectedFromServer = location.pathname === '/';
       if (!redirectedFromServer) {
         document
@@ -12,7 +16,7 @@ const useScrollToHashElement = ({ html }: { html: string }) => {
         scrollIntoToolbar();
       }
     }
-  }, [location.hash, html]);
+  }, [location.hash, fetchNodeStarted]);
 };
 
 export { useScrollToHashElement };

@@ -1,0 +1,20 @@
+.hotkeys__category {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid #9958581f;
+}
+
+.hotkeys__category__name {
+  padding: 10px;
+  border-radius: 5px;
+  text-transform: capitalize;
+}
+.hotkeys__category__name-container {
+  display: flex;
+}
+
+.hotkeys__category__hotkeys-list {
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+}

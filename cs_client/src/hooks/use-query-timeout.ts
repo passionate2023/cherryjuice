@@ -1,7 +1,7 @@
 import { useTimeout } from './use-timeout';
 import { useEffect } from 'react';
 import { AlertType } from '::types/react';
-import { ac } from '::root/store/store';
+import { ac } from '::store/store';
 
 const useQueryTimeout = (
   { queryData, queryError, queryVariables },

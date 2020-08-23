@@ -23,6 +23,12 @@ const cssVariables = {
   setFormattingBar: (x: number) => {
     root.style.setProperty('--formatting-bar', `${x}px`);
   },
+  setInfoBar: (x: number) => {
+    root.style.setProperty('--info-bar', `${x}px`);
+  },
+  setDockedDialogHeight(vh: number) {
+    root.style.setProperty('--docked-dialog-height', `${vh}vh`);
+  },
 };
 
 export { cssVariables };

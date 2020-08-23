@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { createRootEpic } from '::root/store/epics/root';
-import { epicMiddleware } from '::root/store/store';
+import { createRootEpic } from '::store/epics/root';
+import { epicMiddleware } from '::store/store';
 
 const useLoadEpics = () => {
   const [loadedEpics, setLoadedEpics] = useState(false);

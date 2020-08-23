@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-oauth20';
-import { createJWTPayload, UserService } from '../user.service';
-import { sign } from 'jsonwebtoken';
+import {  UserService } from '../user.service';
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(private readonly authService: UserService) {
@@ -24,17 +23,14 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     done: Function,
   ): Promise<void> {
     try {
-      const user = await this.authService.oauthLogin(
+      const authUser = await this.authService.oauthLogin(
         profile.id,
         profile.provider,
         profile._json,
       );
-      if (user) {
+      if (authUser) {
         done(null, {
-          token: sign(createJWTPayload.authn(user), process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRES_IN,
-          }),
-          user,
+          authUser,
         });
       } else done(undefined, false);
     } catch (err) {

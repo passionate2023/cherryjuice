@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm/index';
 import { SignUpCredentials } from '../dto/sign-up-credentials.dto';
 import { User } from '../entities/user.entity';
 import {
@@ -11,14 +11,25 @@ import { DeleteAccountDTO, OauthJson } from '../user.service';
 import { UpdateUserProfileIt } from '../input-types/update-user-profile.it';
 import { classToClass } from 'class-transformer';
 import { OauthSignUpCredentials } from '../dto/oauth-sign-up-credentials.dto';
-import { VerifyEmailTp } from '../interfaces/jwt-payload.interface';
+import {
+  EmailChangeTp,
+  VerifyEmailTp,
+} from '../interfaces/jwt-payload.interface';
+import { removeDots } from '../pipes/gmail-dots';
+import { UpdateUserSettingsIt } from '../input-types/update-user-settings.it';
+import { Settings } from '../entities/settings/settings.entity';
 
 export type UserExistsDTO = { email: string };
 export type CreatePasswordResetTokenDTO = { email: string; username: string };
 
 export type UpdateUserProfileDTO = {
   input: UpdateUserProfileIt;
-  username: string;
+  userId: string;
+  email: string;
+};
+export type UpdateUserSettingsDTO = {
+  input: UpdateUserSettingsIt;
+  userId: string;
 };
 export type OauthSignupDTO = {
   input: OauthSignUpCredentials;
@@ -50,6 +61,7 @@ class UserRepository extends Repository<User> {
     thirdParty: string,
     email: string,
   ): Promise<User | undefined> {
+    email = removeDots(email);
     const user = await this.findOne({
       where: [
         { email },
@@ -111,6 +123,7 @@ class UserRepository extends Repository<User> {
       email_verified,
     }: OauthJson,
   ): Promise<User> {
+    email = removeDots(email);
     const username = /(^.*)@/.exec(email)[1];
     const user = new User({
       username,
@@ -142,8 +155,10 @@ class UserRepository extends Repository<User> {
     user: User,
     data:
       | { email_verified: boolean }
-      | UpdateUserProfileIt
-      | Omit<OauthSignUpCredentials, 'password'>,
+      | { email: string; email_verified: boolean }
+      | Omit<UpdateUserProfileIt, 'newEmail'>
+      | Omit<OauthSignUpCredentials, 'password'>
+      | { settings: Settings },
   ): Promise<void> {
     Object.entries(data).forEach(([key, value]) => {
       user[key] = value;
@@ -162,16 +177,25 @@ class UserRepository extends Repository<User> {
   }
 
   async updateUserProfile({
-    username,
+    userId,
     input,
   }: UpdateUserProfileDTO): Promise<string> {
-    const user = await this._getUser(username);
+    const user = await this._getUser(undefined, userId);
     await user.validatePassword(input.currentPassword);
     if (input.newPassword) {
       await user.setPassword(input.newPassword);
       delete input.newPassword;
     }
     await this.updateUser(user, input);
+    return user.id;
+  }
+
+  async updateUserSettings({
+    userId,
+    input,
+  }: UpdateUserSettingsDTO): Promise<string> {
+    const user = await this._getUser(undefined, userId);
+    await this.updateUser(user, { settings: { ...user.settings, ...input } });
     return user.id;
   }
 
@@ -215,6 +239,17 @@ class UserRepository extends Repository<User> {
   async verifyEmail({ userId }: VerifyEmailTp): Promise<void> {
     const user = await this._getUser(undefined, userId);
     await this.updateUser(user, { email_verified: true });
+  }
+
+  async changeEmail({
+    userId,
+    currentEmail,
+    newEmail,
+  }: EmailChangeTp): Promise<void> {
+    const user = await this._getUser(undefined, userId);
+    if (user.email !== currentEmail)
+      throw new UnauthorizedException('invalid token');
+    await this.updateUser(user, { email: newEmail, email_verified: false });
   }
 }
 

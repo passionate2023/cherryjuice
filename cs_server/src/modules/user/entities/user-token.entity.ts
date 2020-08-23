@@ -19,9 +19,29 @@ registerEnumType(UserTokenType, {
   name: 'UserTokenType',
 });
 
+@ObjectType()
+export class UserTokenMeta {
+  constructor({
+    emailChange,
+  }: {
+    emailChange?: { newEmail: string; currentEmail: string };
+  }) {
+    if (emailChange) {
+      this.newEmail = emailChange.newEmail;
+      this.currentEmail = emailChange.currentEmail;
+    }
+  }
+
+  @Field({ nullable: true })
+  newEmail?: string;
+  @Field({ nullable: true })
+  currentEmail?: string;
+}
+
 type ConstructorProps = {
   userId: string;
   type: UserTokenType;
+  meta?: UserTokenMeta;
 };
 
 @ObjectType()
@@ -33,11 +53,12 @@ export class UserToken extends BaseEntity {
     if (props) {
       this.userId = props.userId;
       this.type = props.type;
+      if (props.meta) this.meta = props.meta;
     }
   }
 
-  @PrimaryGeneratedColumn('uuid')
   @Field()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ManyToOne(
@@ -47,7 +68,6 @@ export class UserToken extends BaseEntity {
   )
   user: User;
   @Column()
-  @Field()
   userId: string;
 
   @Column({
@@ -59,4 +79,8 @@ export class UserToken extends BaseEntity {
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
   private createdAt: number;
+
+  @Field(() => UserTokenMeta, { nullable: true })
+  @Column('json', { nullable: true })
+  meta: UserTokenMeta;
 }

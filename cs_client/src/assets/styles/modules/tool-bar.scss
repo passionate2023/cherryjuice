@@ -16,7 +16,7 @@
   overflow-x: auto;
   overflow-y: hidden;
   // style
-  background-color: $toolbar-bg-light;
+  background-color: var(--tool-bar-background-color);
   user-select: none;
 }
 .tool-bar__group {
@@ -71,15 +71,19 @@
   @include respond-to($md-down) {
     box-shadow: $box-shadow1;
     opacity: 0.95;
-    background-color: $toolbar-bg-light;
+    background-color: var(--tool-bar-background-color);
   }
 }
 .tool-bar__icon {
+  svg {
+    fill: var(--tool-bar-icon-fill);
+  }
   display: flex;
   align-items: center;
   justify-content: center;
   width: $tool-bar-height;
   height: $tool-bar-height;
+  background-color: var(--tool-bar-icon-background-color);
   @include respond-to($md-up) {
     height: $tool-bar-height-md;
     width: $tool-bar-height-md;
@@ -90,7 +94,7 @@
 
   @include respond-to($md-up) {
     &:hover:not([disabled]) {
-      background-color: lightgrey;
+      background-color: var(--tool-bar-icon-background-color-on-hover);
     }
   }
   &[disabled] {
@@ -107,7 +111,7 @@
 .tool-bar__icon--active {
   @include respond-to($md-down) {
     &:not([disabled]) {
-      background-color: lightgrey;
+      background-color: var(--tool-bar-icon-background-color-on-active);
     }
   }
 }

@@ -1,52 +1,9 @@
 import gql from 'graphql-tag';
 import {
   DOCUMENT_SUBSCRIPTIONS as DS,
-  Image,
   NodeSearchIt,
   NodeSearchResults,
 } from '::types/graphql/generated';
-import { NodeHtml } from '::types/graphql-adapters';
-
-const QUERY_NODE_CONTENT = {
-  png: {
-    path: (data): { node_id: number; image: Image[]; id: string } | undefined =>
-      data?.document[0]?.node[0],
-    query: gql`
-      query node_content__png(
-        $file_id: String!
-        $node_id: Int!
-        $thumbnail: Boolean
-      ) {
-        document(file_id: $file_id) {
-          id
-          node(node_id: $node_id) {
-            id
-            node_id
-            image(thumbnail: $thumbnail) {
-              base64
-              id
-            }
-          }
-        }
-      }
-    `,
-  },
-  html: {
-    path: (data): NodeHtml => data?.document[0]?.node[0],
-    query: gql`
-      query node_content__html($file_id: String!, $node_id: Int!) {
-        document(file_id: $file_id) {
-          id
-          node(node_id: $node_id) {
-            id
-            html
-            node_id
-          }
-        }
-      }
-    `,
-  },
-};
 
 const QUERY_DOCUMENTS = {
   currentImports: {
@@ -98,4 +55,4 @@ const QUERY_SEARCH = {
 const QUERY = {
   SEARCH: QUERY_SEARCH,
 };
-export { QUERY, QUERY_DOCUMENTS, QUERY_NODE_CONTENT };
+export { QUERY, QUERY_DOCUMENTS };

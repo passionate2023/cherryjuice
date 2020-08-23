@@ -3,7 +3,7 @@ import {
   testSamples,
   TTestSample,
 } from '::helpers/editing/execK/__tests__/__data__';
-import { formattingHotKeys } from '::helpers/hotkeys/combinations/formatting';
+import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
 
 beforeAll(() => {
   // @ts-ignore
@@ -42,7 +42,7 @@ describe('execK snapshot tests', () => {
   const predicate = filter => ({ meta: { name } }) =>
     filter ? name === filter : name;
   testSamples.filter(predicate(undefined)).forEach(sample => {
-    [...formattingHotKeys.tagsAndStyles, ...formattingHotKeys.misc].forEach(
+    Object.values(formattingHotkeysProps).forEach(
       ({ execCommandArguments }) => {
         test(sample, execCommandArguments);
       },

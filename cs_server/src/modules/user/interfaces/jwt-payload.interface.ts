@@ -9,3 +9,7 @@ export interface PasswordResetTp {
   type: UserTokenType;
 }
 export type VerifyEmailTp = PasswordResetTp;
+export type EmailChangeTp = PasswordResetTp & {
+  newEmail: string;
+  currentEmail: string;
+};

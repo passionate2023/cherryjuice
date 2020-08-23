@@ -6,7 +6,7 @@
   flex-direction: column;
   position: absolute;
   right: 5px;
-  bottom: calc(#{$info-bar-height-md} + 5px);
+  bottom: calc(var(--info-bar) + 5px);
   @include respond-to($md-down) {
     bottom: 5px;
   }

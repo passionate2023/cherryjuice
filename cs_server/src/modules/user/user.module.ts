@@ -9,7 +9,7 @@ import { jwtConfig } from '../../config/jwt.config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { UserMutationsResolver } from './user.mutations.resolver';
-import { UserQueriesResolver } from './user.queries.resolver';
+import { UserQueriesResolver, UserResolver } from './user.queries.resolver';
 import { UserTokenRepository } from './repositories/user-token.repository';
 import { EmailModule } from '../email/email.module';
 
@@ -34,6 +34,7 @@ import { EmailModule } from '../email/email.module';
     GoogleStrategy,
     UserMutationsResolver,
     UserQueriesResolver,
+    UserResolver,
   ],
   exports: [PassportModule, JwtStrategy, UserService, GoogleStrategy],
 })

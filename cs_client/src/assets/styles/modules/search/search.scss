@@ -65,6 +65,9 @@ $text-color: grey;
   height: 100%;
   border-radius: 0;
   width: 50px;
+  svg {
+    fill: var(--tool-bar-icon-fill);
+  }
 }
 
 .search__search-button--nav-bar {
