@@ -17,18 +17,16 @@ export const addFetchedFields = (
 ): DocumentCacheState => {
   const node = state[documentId].nodes[node_id];
 
-  if (data['html']) {
-    if (node.html) {
-      return state;
-    } else node.html = data['html'];
-  } else if (data['image']) node.image = data['image'];
+  if (data['html'] && node.html) {
+    return state;
+  }
   return {
     ...state,
     [documentId]: {
       ...state[documentId],
       nodes: {
         ...state[documentId].nodes,
-        [node_id]: { ...node },
+        [node_id]: { ...node, ...data },
       },
     },
   };

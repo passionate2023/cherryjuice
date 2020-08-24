@@ -4,7 +4,6 @@ import { CREATE_DOCUMENT } from '::graphql/mutations/document/create-document';
 
 const saveNewDocument = async ({ state, document }: SaveOperationProps) => {
   if (document.id.startsWith('new-document')) {
-    if (document.folder === 'Unsaved') document.folder = null;
     const permanentDocumentId = await apolloClient.mutate(
       CREATE_DOCUMENT({
         document: {

@@ -56,7 +56,7 @@ const getNodeImageIDsFromCache = ({ node_id, documentId }): string[] => {
 };
 
 const updatedCachedHtml = ({ node_id, documentId, html }) => {
-  ac.documentCache.mutateNode({ node_id, documentId, data: { html } });
+  ac.documentCache.mutateNodeContent({ node_id, documentId, data: { html } });
 };
 
 const updateCachedImages = ({
@@ -88,7 +88,7 @@ const updateCachedImages = ({
     return acc;
   }, []);
   if (deletedImageIDs.length)
-    ac.documentCache.mutateNode({
+    ac.documentCache.mutateNodeContent({
       node_id: node.node_id,
       documentId: node.documentId,
       data: {},
@@ -97,7 +97,7 @@ const updateCachedImages = ({
       },
     });
 
-  ac.documentCache.mutateNode({
+  ac.documentCache.mutateNodeContent({
     node_id: node.node_id,
     documentId: node.documentId,
     data: { image: newImages },

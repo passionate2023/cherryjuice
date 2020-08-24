@@ -5,67 +5,43 @@ import { modTree } from '::sass-modules';
 import { ac } from '::store/store';
 import { NodesDict } from '::store/ducks/cache/document-cache';
 
-const updateCache = ({ fatherOfDroppedNode, targetNode, droppedNode }) => {
-  // apolloCache.node.mutate({
-  //   nodeId: droppedNode.id,
-  //   meta: {
-  //     father_id: targetNode.node_id,
-  //     fatherId: targetNode.id,
-  //   },
-  // });
-  ac.documentCache.mutateNode({
-    node_id: droppedNode.node_id,
-    documentId: droppedNode.documentId,
-    data: {
-      father_id: targetNode.node_id,
-      fatherId: targetNode.id,
-    },
-  });
-  // apolloCache.node.mutate({
-  //   nodeId: fatherOfDroppedNode.id,
-  //   meta: {
-  //     child_nodes: fatherOfDroppedNode.child_nodes,
-  //   },
-  // });
-  ac.documentCache.mutateNode({
-    node_id: fatherOfDroppedNode.node_id,
-    documentId: fatherOfDroppedNode.documentId,
-    data: {
-      child_nodes: fatherOfDroppedNode.child_nodes,
-    },
-  });
-  // apolloCache.node.mutate({
-  //   nodeId: targetNode.id,
-  //   meta: {
-  //     child_nodes: targetNode.child_nodes,
-  //   },
-  // });
-  ac.documentCache.mutateNode({
-    node_id: targetNode.node_id,
-    documentId: targetNode.documentId,
-    data: {
-      child_nodes: targetNode.child_nodes,
-    },
-  });
-};
-
 const switchParent = ({
   fatherOfDroppedNode,
   targetNode,
   droppedNode,
   position,
 }) => {
-  const ogIndexOfDroppedNode = fatherOfDroppedNode.child_nodes.indexOf(
-    Number(droppedNode.node_id),
-  );
-  fatherOfDroppedNode.child_nodes.splice(ogIndexOfDroppedNode, 1);
-  if (!targetNode.child_nodes.includes(Number(droppedNode.node_id)))
+  const targetNodeChildNodes = [...targetNode.child_nodes];
+  if (!targetNodeChildNodes.includes(Number(droppedNode.node_id)))
     position === -1
-      ? targetNode.child_nodes.push(Number(droppedNode.node_id))
-      : targetNode.child_nodes.splice(position, 0, Number(droppedNode.node_id));
-  droppedNode.father_id = targetNode.node_id;
-  droppedNode.fatherId = targetNode.id;
-  droppedNode.position = targetNode.child_nodes.length - 1;
+      ? targetNodeChildNodes.push(Number(droppedNode.node_id))
+      : targetNodeChildNodes.splice(position, 0, Number(droppedNode.node_id));
+  ac.documentCache.mutateNodeMeta([
+    {
+      node_id: fatherOfDroppedNode.node_id,
+      documentId: fatherOfDroppedNode.documentId,
+      data: {
+        child_nodes: fatherOfDroppedNode.child_nodes.filter(
+          node_id => node_id !== droppedNode.node_id,
+        ),
+      },
+    },
+    {
+      node_id: targetNode.node_id,
+      documentId: targetNode.documentId,
+      data: {
+        child_nodes: targetNodeChildNodes,
+      },
+    },
+    {
+      node_id: droppedNode.node_id,
+      documentId: droppedNode.documentId,
+      data: {
+        father_id: targetNode.node_id,
+        fatherId: targetNode.id,
+      },
+    },
+  ]);
 };
 
 const calculateDroppingPosition = (e): number => {
@@ -165,16 +141,12 @@ const useDnDNodes = ({
             });
           else {
             const position = calculateDroppingPosition(e);
+
             switchParent({
               targetNode,
               fatherOfDroppedNode,
               droppedNode,
               position,
-            });
-            updateCache({
-              targetNode,
-              fatherOfDroppedNode,
-              droppedNode,
             });
             if (afterDrop) afterDrop({ e, node_id: droppedNode.node_id });
           }

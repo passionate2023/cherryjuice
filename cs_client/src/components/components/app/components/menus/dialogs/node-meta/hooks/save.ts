@@ -74,7 +74,7 @@ const addToFatherChild_nodes = (
   saved_node_id: number,
   previous_sibling_node_id: number,
 ) => {
-  const child_nodes = father_child_nodes;
+  const child_nodes = [...father_child_nodes];
   const position =
     previous_sibling_node_id === -1
       ? -1
@@ -83,7 +83,7 @@ const addToFatherChild_nodes = (
     position === -1
       ? child_nodes.push(saved_node_id)
       : child_nodes.splice(position, 0, saved_node_id);
-  return [...child_nodes];
+  return child_nodes;
 };
 
 type UseSaveProps = {
@@ -114,7 +114,7 @@ const useSave = ({
               documentId: nodeToSave.documentId,
             });
 
-            ac.documentCache.mutateNode({
+            ac.documentCache.mutateNodeMeta({
               node_id: fatherNode.node_id,
               documentId: fatherNode.documentId,
               data: {
@@ -138,7 +138,7 @@ const useSave = ({
         newStyle,
       });
       if (Object.keys(editedAttribute).length) {
-        ac.documentCache.mutateNode({
+        ac.documentCache.mutateNodeMeta({
           node_id: node.node_id,
           documentId: node.documentId,
           data: editedAttribute,

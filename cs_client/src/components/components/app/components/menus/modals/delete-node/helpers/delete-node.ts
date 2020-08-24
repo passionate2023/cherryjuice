@@ -17,7 +17,7 @@ const updateFatherNode = (deletedNode: QFullNode) => {
 const deleteNode = (node: QFullNode) => {
   return () => {
     const fatherNode = updateFatherNode(node);
-    ac.documentCache.mutateNode({
+    ac.documentCache.mutateNodeMeta({
       node_id: fatherNode.node_id,
       documentId: fatherNode.documentId,
       data: {

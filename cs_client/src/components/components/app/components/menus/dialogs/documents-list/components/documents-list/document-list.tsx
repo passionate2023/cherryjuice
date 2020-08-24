@@ -11,9 +11,10 @@ type DocumentsListProps = {
 const DocumentList = ({ documents, loading }: DocumentsListProps) => {
   const filesPerFolders: [string, CachedDocument[]][] = [
     documents.reduce((acc, val) => {
-      if (!val.folder) val.folder = 'Default group';
-      if (acc[val.folder]) acc[val.folder].push(val);
-      else acc[val.folder] = [val];
+      const folder = val.folder || 'Default group';
+      if (acc[folder]) {
+        acc[folder].push(val);
+      } else acc[folder] = [val];
 
       return acc;
     }, {}),

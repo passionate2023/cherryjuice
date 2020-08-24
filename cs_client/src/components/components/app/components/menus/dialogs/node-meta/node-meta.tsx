@@ -177,6 +177,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       rightHeaderButtons={[]}
       small={true}
       docked={false}
+      isShownOnTopOfDialog={true}
     >
       <ErrorBoundary>
         <MetaForm inputs={inputs} />

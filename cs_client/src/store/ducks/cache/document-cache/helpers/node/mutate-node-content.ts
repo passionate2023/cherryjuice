@@ -4,15 +4,16 @@ import {
 } from '::store/ducks/cache/document-cache';
 import { removeDuplicates } from '::helpers/array-helpers';
 import { newImagePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
-export type MutateNodeParams = {
+
+export type MutateNodeContentParams = {
   node_id: number;
   documentId: string;
-  data: Partial<QFullNode>;
+  data: Partial<Pick<QFullNode, 'html' | 'image'>>;
   meta?: { deletedImages?: string[]; mode?: 'update-key-only' };
 };
-export const mutateNode = (
+export const mutateNodeContent = (
   state: DocumentCacheState,
-  { meta, documentId, node_id, data }: MutateNodeParams,
+  { meta, documentId, node_id, data }: MutateNodeContentParams,
 ): DocumentCacheState => {
   const document = state[documentId];
   const node = document.nodes[node_id];
@@ -43,7 +44,7 @@ export const mutateNode = (
         image: [...node.image, ...data.image],
         updatedAt: updatedAt,
       };
-    } else {
+    } else if (data.html) {
       mutatedNode = {
         ...node,
         ...data,

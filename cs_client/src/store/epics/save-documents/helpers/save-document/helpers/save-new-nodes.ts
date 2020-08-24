@@ -34,9 +34,9 @@ const saveNewNodes = async ({ state, document }: SaveOperationProps) => {
     .filter(node_id => !state.deletedNodes[document.id][node_id])
     .map(node_id => document.nodes[node_id])
     .sort((a, b) => a.node_id - b.node_id);
-  for await (const node of newNodes) {
-    swapFatherIdIfApplies(state)(node);
-    updateDocumentId(state)(node);
+  for await (let node of newNodes) {
+    node = swapFatherIdIfApplies(state)(node);
+    node = updateDocumentId(state)(node);
     const meta: CreateNodeIt = adapt(node);
     const permanentNodeId = await apolloClient.mutate(
       CREATE_NODE({

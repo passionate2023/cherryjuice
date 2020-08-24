@@ -33,7 +33,7 @@ const RecentNodes: React.FC<Props & PropsFromRedux> = ({
 }) => {
   const selectedNode = nodes[selectedNode_id];
   const recentNodesOther = recentNodes.filter(
-    node_id => +node_id !== selectedNode.node_id,
+    node_id => +node_id !== selectedNode?.node_id,
   );
   const lastN: QFullNode[] = recentNodesOther
     .slice(

@@ -15,7 +15,7 @@ type TimelineFrames = {
   [position: number]: TimelineFrame;
 };
 
-export class DocumentMetaTimeline {
+export class Timeline {
   private position: number;
   private frames: TimelineFrames;
 

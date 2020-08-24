@@ -24,9 +24,13 @@ export const generalHotKeysProps = {
     ac.dialogs.showCreateSiblingNode();
   },
   [HotKeyActionType.UNDO]: () => {
-    ac.documentCache.undoDocumentMeta();
+    if (store.getState().dialogs.showDocumentList)
+      ac.documentCache.undoDocumentMeta();
+    else ac.documentCache.undoNodeMeta();
   },
   [HotKeyActionType.REDO]: () => {
-    ac.documentCache.redoDocumentMeta();
+    if (store.getState().dialogs.showDocumentList)
+      ac.documentCache.redoDocumentMeta();
+    else ac.documentCache.redoNodeMeta();
   },
 };
