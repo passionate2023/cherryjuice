@@ -2,7 +2,7 @@ import { HotKeyActionType } from '::types/graphql/generated';
 import { ac, store } from '::store/store';
 import { getDocumentHasUnsavedChanges } from '::store/selectors/cache/document/document';
 
-export const documentHotkeysProps = {
+export const generalHotKeysProps = {
   [HotKeyActionType.SAVE_DOCUMENT]: () => {
     ac.document.save();
   },
@@ -22,5 +22,11 @@ export const documentHotkeysProps = {
   },
   [HotKeyActionType.SHOW_CREATE_SIBLING_NODE]: () => {
     ac.dialogs.showCreateSiblingNode();
+  },
+  [HotKeyActionType.UNDO]: () => {
+    ac.documentCache.undoDocumentMeta();
+  },
+  [HotKeyActionType.REDO]: () => {
+    ac.documentCache.redoDocumentMeta();
   },
 };

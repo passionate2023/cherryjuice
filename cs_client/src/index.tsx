@@ -10,7 +10,8 @@ import { Root } from '::root/root';
 import { apolloClient } from './graphql/client/apollo-client';
 import { router } from '::root/router/router';
 import { attachTestCallbacks } from '::helpers/attach-test-callbacks';
-
+import { enablePatches } from 'immer';
+enablePatches();
 render(
   <Router history={router.get.__history}>
     <Root />

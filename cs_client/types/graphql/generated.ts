@@ -234,6 +234,7 @@ export enum HotKeyActionType {
   JUSTIFY_RIGHT = 'JUSTIFY_RIGHT',
   LINE_THROUGH = 'LINE_THROUGH',
   MONO = 'MONO',
+  REDO = 'REDO',
   RELOAD_DOCUMENT = 'RELOAD_DOCUMENT',
   REMOVE_STYLE = 'REMOVE_STYLE',
   SAVE_DOCUMENT = 'SAVE_DOCUMENT',
@@ -245,6 +246,7 @@ export enum HotKeyActionType {
   SUB = 'SUB',
   SUP = 'SUP',
   UNDERLINE = 'UNDERLINE',
+  UNDO = 'UNDO',
 }
 
 export interface User {

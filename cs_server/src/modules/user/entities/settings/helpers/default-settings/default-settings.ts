@@ -25,6 +25,8 @@ export const getDefaultSettings = (): Settings => ({
     ],
     general: [
       { type: HotKeyActionType.SAVE_DOCUMENT, keys: 's100' },
+      { type: HotKeyActionType.UNDO, keys: 'z100' },
+      { type: HotKeyActionType.REDO, keys: 'z101' },
       { type: HotKeyActionType.RELOAD_DOCUMENT, keys: 'r100' },
       { type: HotKeyActionType.SHOW_DOCUMENTS_LIST, keys: 'o100' },
       { type: HotKeyActionType.SHOW_IMPORT_DOCUMENTS, keys: 'i010' },

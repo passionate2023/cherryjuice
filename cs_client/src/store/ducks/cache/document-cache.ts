@@ -38,6 +38,8 @@ import { nodeActionCreators } from '::store/ducks/node';
 import { rootActionCreators } from '::store/ducks/root';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { loadDocumentsList } from '::store/ducks/cache/document-cache/helpers/document/load-documents-list';
+import produce from 'immer';
+import { DocumentMetaTimeline } from '::store/ducks/cache/document-cache/helpers/document/timeline';
 
 const ap = createActionPrefixer('document-cache');
 
@@ -65,6 +67,8 @@ const ac = {
   mutateNode: _(ap('mutate-node'), _ => (props: MutateNodeParams) => _(props)),
   swapNodeId: _(ap('swap-node-id'), _ => (param: SwapNodeIdParams) => _(param)),
   deleteNode: _(ap('delete-node'), _ => (param: DeleteNodeParams) => _(param)),
+  undoDocumentMeta: _(ap('undo-document-meta')),
+  redoDocumentMeta: _(ap('redo-document-meta')),
 };
 
 export type NodesDict = { [node_id: number]: QFullNode };
@@ -96,6 +100,7 @@ type State = {
 };
 
 const initialState: State = {};
+const dmtl = new DocumentMetaTimeline();
 const reducer = createReducer(initialState, _ => [
   ...[
     _(rootActionCreators.resetState, () => ({
@@ -108,13 +113,17 @@ const reducer = createReducer(initialState, _ => [
       createDocument(state, payload),
     ),
     _(ac.mutateDocument, (state, { payload }) =>
-      mutateDocument(state, payload),
+      produce(
+        state,
+        draft => mutateDocument(draft, payload),
+        dmtl.add({ documentId: payload.documentId }),
+      ),
     ),
-    _(ac.deleteDocument, (state, { payload }) => {
-      delete state[payload];
-      return {
-        ...state,
-      };
+    _(ac.deleteDocument, (state, { payload: documentId }) => {
+      dmtl.resetDocument(documentId);
+      return produce(state, draft => {
+        delete draft[documentId];
+      });
     }),
     _(ac.swapDocumentId, (state, { payload }) =>
       swapDocumentId(state, payload),
@@ -127,7 +136,13 @@ const reducer = createReducer(initialState, _ => [
     _(nodeActionCreators.unselect, (state, { payload }) =>
       clearSelectedNode(state, payload),
     ),
-    _(dac.saveFulfilled, (state): State => removeSavedDocuments(state)),
+    _(
+      dac.saveFulfilled,
+      (state): State => {
+        dmtl.resetAll();
+        return removeSavedDocuments(state);
+      },
+    ),
   ],
   ...[
     _(dlac.fetchDocumentsFulfilled, (state, { payload }) =>
@@ -158,6 +173,8 @@ const reducer = createReducer(initialState, _ => [
       },
     })),
     _(ac.deleteNode, (state, { payload }) => deleteNode(state, payload)),
+    _(ac.undoDocumentMeta, state => dmtl.undo(state)),
+    _(ac.redoDocumentMeta, state => dmtl.redo(state)),
   ],
 ]);
 
