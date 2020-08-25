@@ -8,12 +8,15 @@ import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-a
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { useLayoutEffect } from 'react';
+import { QFullNode } from '::store/ducks/cache/document-cache';
 
-type Props = {};
+type Props = {
+  node: QFullNode;
+};
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
-  const node_id = document.state.selectedNode_id;
+  const node_id = document?.state?.selectedNode_id;
   return {
     fetchDocumentInProgress:
       state.document.asyncOperations.fetch === 'in-progress',
@@ -22,33 +25,26 @@ const mapState = (state: Store) => {
     contentEditable: state.editor.contentEditable || !state.root.isOnMobile,
     processLinks: state.node.processLinks,
     isDocumentOwner: hasWriteAccessToDocument(state),
-    nodes: document.nodes,
-    file_id: state.document.documentId,
-    node_id: node_id,
   };
 };
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 const RichText: React.FC<Props & PropsFromRedux> = ({
-  file_id,
   contentEditable,
-  nodes,
   processLinks,
   fetchDocumentInProgress,
   fetchNodeStarted,
   isDocumentOwner,
-  node_id,
+  node,
 }) => {
-  const node = nodes[node_id];
+  useLayoutEffect(() => {
+    if (!fetchDocumentInProgress) ac.node.fetch(node);
+  }, [node.node_id, node.documentId, fetchDocumentInProgress]);
   const nodeId = node?.id;
   const html = node?.html;
   const images = node?.image;
 
-  useLayoutEffect(() => {
-    if (!fetchDocumentInProgress)
-      ac.node.fetch({ documentId: file_id, node_id });
-  }, [node_id, file_id, fetchDocumentInProgress]);
   return (
     <ErrorBoundary>
       <div className={modRichText.richText__container}>
@@ -58,8 +54,8 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
             contentEditable={contentEditable}
             html={html}
             nodeId={nodeId}
-            file_id={file_id}
-            node_id={node_id}
+            file_id={node.documentId}
+            node_id={node.node_id}
             processLinks={[processLinks]}
             images={images}
             fetchNodeStarted={fetchNodeStarted}

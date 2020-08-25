@@ -57,7 +57,7 @@ const useDocumentRouting = (
       node_id,
     } = getDocumentIdAndNode_idFromPathname();
     if (file_id?.startsWith('new-document')) return;
-    if (file_id && node_id && node_id !== selectedNode_id) {
+    if (file_id && node_id ) {
       pendingNode_id.current = true;
       pendingPathnameRedirect.current = true;
       ac.document.setDocumentId(file_id);

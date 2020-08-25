@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { makeCancelable } from '::helpers/misc';
-type FecthedSVG = { svg: string; path: string };
 
 const useFetchSVG = (path: string): string => {
   const [fetched, setFetched] = useState('');
@@ -8,11 +7,10 @@ const useFetchSVG = (path: string): string => {
     const { cancel, promise } = makeCancelable(
       import(`::assets/icons/${path}.svg`).then(module => module.default),
     );
-    promise.then(setFetched);
+    promise.then(setFetched).catch(() => undefined);
     return cancel;
   }, [path]);
   return fetched;
 };
 
 export { useFetchSVG };
-export { FecthedSVG };

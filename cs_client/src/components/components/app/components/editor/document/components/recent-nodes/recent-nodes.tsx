@@ -50,7 +50,8 @@ const RecentNodes: React.FC<Props & PropsFromRedux> = ({
         ? recentNodesOther.length - config.recentNodesN
         : 0,
     )
-    .map(node_id => nodes[node_id]);
+    .map(node_id => nodes[node_id])
+    .filter(Boolean);
 
   return (
     <div className={modRecentNodes.titleAndRecentNodes}>

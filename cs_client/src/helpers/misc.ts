@@ -18,11 +18,9 @@ const makeCancelable = <T>(
 ): { cancel: Function; promise: Promise<T> } => {
   let isCanceled = false;
   const wrappedPromise = new Promise<T>((resolve, reject) => {
-    promise
-      .then(val => (isCanceled ? reject(new Error('canceled')) : resolve(val)))
-      .catch(error =>
-        isCanceled ? reject(new Error('canceled')) : reject(error),
-      );
+    promise.then(val =>
+      isCanceled ? reject(new Error('canceled')) : resolve(val),
+    );
   });
   return {
     promise: wrappedPromise,
