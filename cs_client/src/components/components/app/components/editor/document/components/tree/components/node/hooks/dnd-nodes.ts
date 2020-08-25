@@ -62,15 +62,13 @@ const calculateDroppingPosition = (e): number => {
   }
   return position;
 };
-const getFatherIdChain = (
+const getFatherIdChain = (father_id_chain: number[] = []) => (
   nodes: NodesDict,
-  node_id: number,
-  father_id_chain: number[] = [],
-) => {
+) => (node_id: number) => {
   const father_id = nodes[node_id].father_id;
   return father_id === 0
     ? [...father_id_chain, 0]
-    : getFatherIdChain(nodes, father_id, [...father_id_chain, father_id]);
+    : getFatherIdChain([...father_id_chain, father_id])(nodes)(father_id);
 };
 type Props = {
   node_id: number;
@@ -125,15 +123,15 @@ const useDnDNodes = ({
           const droppedNode = nodes[Number(dropped_node_id)];
           const fatherOfDroppedNode = nodes[droppedNode.father_id];
           const targetNode = nodes[target_node_id];
-          const father_id_chain = new Set(
+          const target_node_father_id_chain = new Set(
             target_node_id === 0
               ? [0]
-              : getFatherIdChain(nodes, target_node_id),
+              : getFatherIdChain([target_node_id])(nodes)(target_node_id),
           );
-          const fatherDroppedToChild = droppedNode.child_nodes.some(
-            child_node => father_id_chain.has(child_node),
+          const nodeDroppedToItsChild = droppedNode.child_nodes.some(
+            child_node => target_node_father_id_chain.has(child_node),
           );
-          if (fatherDroppedToChild)
+          if (nodeDroppedToItsChild)
             ac.dialogs.setAlert({
               title: 'forbidden operation',
               type: AlertType.Warning,
