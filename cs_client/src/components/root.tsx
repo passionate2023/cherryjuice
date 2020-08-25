@@ -19,11 +19,18 @@ import { router } from '::root/router/router';
 import { useConsumeToken } from '::root/hooks/consume-token';
 import { Auth } from '::root/components/auth/auth';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
+import { useTrackDocumentChanges } from '::root/hooks/track-document-changes';
+import {
+  getCurrentDocument,
+  getDocumentsList,
+} from '::store/selectors/cache/document/document';
+import { documentHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
   })),
 );
+
 const updateBreakpointState = ({ breakpoint, callback }) => {
   let previousState = undefined;
   return () => {
@@ -41,6 +48,10 @@ const mapState = (state: Store) => ({
   userId: state.auth.user?.id,
   hasPassword: state.auth.user?.hasPassword,
   hotKeys: getHotkeys(state),
+  document: getCurrentDocument(state),
+  userHasUnsavedChanges: getDocumentsList(state).some(
+    documentHasUnsavedChanges,
+  ),
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -53,6 +64,8 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   userId,
   hasPassword,
   hotKeys,
+  document,
+  userHasUnsavedChanges,
 }) => {
   const client = useApolloClient(token, userId);
   useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
@@ -63,7 +76,11 @@ const Root: React.FC<Props & PropsFromRedux> = ({
     }),
   ]);
   useRegisterHotKeys(hotKeys);
-
+  useTrackDocumentChanges({
+    userHasUnsavedChanges,
+    documentName: document?.name,
+    userId
+  });
   useEffect(() => {
     const unfinishedOauthSignup = userId && hasPassword === false;
     if (unfinishedOauthSignup) router.goto.oauthSignup();
