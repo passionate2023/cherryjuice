@@ -79,7 +79,7 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   useTrackDocumentChanges({
     userHasUnsavedChanges,
     documentName: document?.name,
-    userId
+    userId,
   });
   useEffect(() => {
     const unfinishedOauthSignup = userId && hasPassword === false;

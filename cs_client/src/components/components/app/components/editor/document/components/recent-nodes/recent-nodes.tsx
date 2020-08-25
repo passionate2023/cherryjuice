@@ -31,7 +31,16 @@ const RecentNodes: React.FC<Props & PropsFromRedux> = ({
   selectedNode_id,
   nodes,
 }) => {
+  const goToNode = useCallback(
+    e => {
+      updateCachedHtmlAndImages();
+      const node_id = +e.target.dataset.id;
+      ac.node.select({ documentId: file_id, node_id });
+    },
+    [file_id],
+  );
   const selectedNode = nodes[selectedNode_id];
+  if(!selectedNode) return <></>
   const recentNodesOther = recentNodes.filter(
     node_id => +node_id !== selectedNode?.node_id,
   );
@@ -43,14 +52,6 @@ const RecentNodes: React.FC<Props & PropsFromRedux> = ({
     )
     .map(node_id => nodes[node_id]);
 
-  const goToNode = useCallback(
-    e => {
-      updateCachedHtmlAndImages();
-      const node_id = +e.target.dataset.id;
-      ac.node.select({ documentId: file_id, node_id });
-    },
-    [file_id],
-  );
   return (
     <div className={modRecentNodes.titleAndRecentNodes}>
       {(!isOnMobile || showRecentNodes) && (
