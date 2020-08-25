@@ -40,7 +40,7 @@ const RecentNodes: React.FC<Props & PropsFromRedux> = ({
     [file_id],
   );
   const selectedNode = nodes[selectedNode_id];
-  if(!selectedNode) return <></>
+  if (!selectedNode) return <></>;
   const recentNodesOther = recentNodes.filter(
     node_id => +node_id !== selectedNode?.node_id,
   );

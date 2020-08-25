@@ -77,7 +77,7 @@ type Props = {
   componentRef: MutableRefObject<HTMLDivElement>;
   nodes?: NodesDict;
   draggable?: boolean;
-  afterDrop?: Function;
+  afterDrop?: (params: { node_id: number }) => void;
 };
 const useDnDNodes = ({
   node_id: target_node_id,
@@ -148,7 +148,7 @@ const useDnDNodes = ({
               droppedNode,
               position,
             });
-            if (afterDrop) afterDrop({ e, node_id: droppedNode.node_id });
+            if (afterDrop) afterDrop({ node_id: droppedNode.node_id });
           }
         }
       },
