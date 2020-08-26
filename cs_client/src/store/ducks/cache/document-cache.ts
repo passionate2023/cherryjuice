@@ -32,10 +32,9 @@ import {
   DeleteNodeParams,
 } from './document-cache/helpers/node/delete-node';
 import { selectNode } from '::store/ducks/cache/document-cache/helpers/document/select-node';
-import { clearSelectedNode } from '::store/ducks/cache/document-cache/helpers/node/clear-selected-node';
 import { removeSavedDocuments } from '::store/ducks/cache/document-cache/helpers/document/remove-saved-documents';
-import { nodeActionCreators } from '::store/ducks/node';
-import { rootActionCreators } from '::store/ducks/root';
+import { nodeActionCreators as nac } from '::store/ducks/node';
+import { rootActionCreators as rac } from '::store/ducks/root';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { loadDocumentsList } from '::store/ducks/cache/document-cache/helpers/document/load-documents-list';
 import produce from 'immer';
@@ -116,11 +115,10 @@ const initialState: State = {};
 const timelinesManager = new TimelinesManager();
 const reducer = createReducer(initialState, _ => [
   ...[
-    _(rootActionCreators.resetState, () => ({
+    // non undoable actions
+    _(rac.resetState, () => ({
       ...cloneObj(initialState),
     })),
-  ],
-  ...[
     _(dac.setDocumentId, (state, { payload }) => {
       timelinesManager.setCurrentNodeMetaTimeline(payload);
       return state;
@@ -136,28 +134,13 @@ const reducer = createReducer(initialState, _ => [
     _(ac.swapDocumentId, (state, { payload }) =>
       swapDocumentId(state, payload),
     ),
-  ],
-  ...[
-    _(nodeActionCreators.select, (state, { payload }) =>
-      selectNode(state, payload),
-    ),
-    _(nodeActionCreators.unselect, (state, { payload }) =>
-      clearSelectedNode(state, payload),
-    ),
-  ],
-  ...[
+    _(nac.select, (state, { payload }) => selectNode(state, payload)),
     _(dlac.fetchDocumentsFulfilled, (state, { payload }) =>
       loadDocumentsList(state, payload),
     ),
-  ],
-  ...[
-    _(ac.addFetchedFields, (state, { payload }) => {
-      return addFetchedFields(state, payload);
-    }),
-    _(ac.createNode, (state, { payload }) => {
-      return createNode(state, payload);
-    }),
-
+    _(ac.addFetchedFields, (state, { payload }) =>
+      addFetchedFields(state, payload),
+    ),
     _(ac.swapNodeId, (state, { payload: { node_id, documentId, newId } }) => ({
       ...state,
       [documentId]: {
@@ -171,28 +154,8 @@ const reducer = createReducer(initialState, _ => [
         },
       },
     })),
-    _(ac.deleteNode, (state, { payload }) => deleteNode(state, payload)),
     _(ac.mutateNodeContent, (state, { payload }) =>
       mutateNodeContent(state, payload),
-    ),
-    _(ac.mutateNodeMeta, (state, { payload }) => {
-      const documentId = Array.isArray(payload)
-        ? payload[0].documentId
-        : payload.documentId;
-      return produce(
-        state,
-        draft => mutateNodeMeta(draft, payload),
-        timelinesManager.nodeMeta.add({
-          documentId: documentId,
-        }),
-      );
-    }),
-    _(ac.mutateDocument, (state, { payload }) =>
-      produce(
-        state,
-        draft => mutateDocument(draft, payload),
-        timelinesManager.documentMeta.add({ documentId: payload.documentId }),
-      ),
     ),
     _(ac.deleteDocument, (state, { payload: documentId }) => {
       timelinesManager.documentMeta.resetDocument(documentId);
@@ -213,6 +176,45 @@ const reducer = createReducer(initialState, _ => [
     _(ac.redoDocumentMeta, state => timelinesManager.documentMeta.redo(state)),
     _(ac.undoNodeMeta, state => timelinesManager.nodeMeta.undo(state)),
     _(ac.redoNodeMeta, state => timelinesManager.nodeMeta.redo(state)),
+  ],
+  ...[
+    // undoable actions
+    _(ac.createNode, (state, { payload }) =>
+      produce(
+        state,
+        draft => createNode(draft, payload),
+        timelinesManager.nodeMeta.add({
+          documentId: payload.createdNode.documentId,
+        }),
+      ),
+    ),
+    _(ac.deleteNode, (state, { payload }) =>
+      produce(
+        state,
+        draft => deleteNode(draft, payload),
+        timelinesManager.nodeMeta.add({
+          documentId: payload.documentId,
+        }),
+      ),
+    ),
+    _(ac.mutateNodeMeta, (state, { payload }) =>
+      produce(
+        state,
+        draft => mutateNodeMeta(draft, payload),
+        timelinesManager.nodeMeta.add({
+          documentId: Array.isArray(payload)
+            ? payload[0].documentId
+            : payload.documentId,
+        }),
+      ),
+    ),
+    _(ac.mutateDocument, (state, { payload }) =>
+      produce(
+        state,
+        draft => mutateDocument(draft, payload),
+        timelinesManager.documentMeta.add({ documentId: payload.documentId }),
+      ),
+    ),
   ],
 ]);
 

@@ -1,11 +1,31 @@
 import {
+  CachedDocument,
   DocumentCacheState,
   QFullNode,
 } from '::store/ducks/cache/document-cache';
+
+export const listNodeEditedAttributes = ({
+  document,
+  attributes,
+  node_id,
+}: {
+  document: CachedDocument;
+  attributes: string[];
+  node_id: number;
+}) => {
+  const editedNodes = document.state.editedNodes;
+  if (!editedNodes.edited[node_id]) editedNodes.edited[node_id] = [];
+  attributes.forEach(k => {
+    if (!editedNodes.edited[node_id].includes(k))
+      editedNodes.edited[node_id].push(k);
+  });
+};
+
+type MutateNodeData = Partial<Omit<QFullNode, 'html' | 'image'>>;
 export type MutateNodeMetaParams = {
   node_id: number;
   documentId: string;
-  data: Partial<Omit<QFullNode, 'html' | 'image'>>;
+  data: MutateNodeData;
   meta?: { deletedImages?: string[]; mode?: 'update-key-only' };
 };
 export const mutateNodeMeta = (
@@ -22,14 +42,10 @@ export const mutateNodeMeta = (
   params.forEach(({ node_id, data }) => {
     const node = document.nodes[node_id];
     const updatedAt = Date.now();
-
-    const editedNodes = document.state.editedNodes;
-    if (!editedNodes.edited[node_id]) editedNodes.edited[node_id] = [];
     Object.entries(data).forEach(([k, v]) => {
       node[k] = v;
-      if (!editedNodes.edited[node_id].includes(k))
-        editedNodes.edited[node_id].push(k);
     });
+    listNodeEditedAttributes({ document, attributes: Object.keys(data), node_id });
     node.updatedAt = updatedAt;
     document.state.localUpdatedAt = updatedAt;
   });

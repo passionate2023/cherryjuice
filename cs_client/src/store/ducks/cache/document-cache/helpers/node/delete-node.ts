@@ -1,4 +1,7 @@
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
+import { calcRecentNodes } from '::store/ducks/helpers/document';
+import { listNodeEditedAttributes } from '::store/ducks/cache/document-cache/helpers/node/mutate-node-meta';
+import { getDefaultHighestNode_id } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-highest-node_id';
 
 export type DeleteNodeParams = {
   node_id: number;
@@ -10,22 +13,28 @@ export const deleteNode = (
   { node_id, documentId, mode }: DeleteNodeParams,
 ): DocumentCacheState => {
   const document = state[documentId];
+  const node = document.nodes[node_id];
   if (mode !== 'soft') delete document.nodes[node_id];
-  return {
-    ...state,
-    [documentId]: {
-      ...document,
-      nodes: {
-        ...document.nodes,
-      },
-      state: {
-        ...document.state,
-        localUpdatedAt: Date.now(),
-        editedNodes: {
-          ...document.state.editedNodes,
-          deleted: [...document.state.editedNodes.deleted, node_id],
-        },
-      },
-    },
-  };
+
+  const fatherNode = document.nodes[node.father_id];
+  fatherNode.child_nodes = fatherNode.child_nodes.filter(
+    node_id => node.node_id !== node_id,
+  );
+
+  listNodeEditedAttributes({
+    document,
+    node_id: fatherNode.node_id,
+    attributes: ['child_nodes'],
+  });
+  document.state.editedNodes.deleted.push(node_id);
+  if (document.state.highestNode_id === node_id)
+    document.state.highestNode_id = getDefaultHighestNode_id(document.nodes);
+  document.state.recentNodes = calcRecentNodes({
+    nodes: document.nodes,
+    recentNodes: state[documentId].state.recentNodes,
+    node_id,
+  });
+  document.state.selectedNode_id = fatherNode.node_id;
+  document.state.localUpdatedAt = Date.now();
+  return state;
 };
