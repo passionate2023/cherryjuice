@@ -75,14 +75,12 @@ type Props = {
   componentRef: MutableRefObject<HTMLDivElement>;
   nodes?: NodesDict;
   draggable?: boolean;
-  afterDrop?: (params: { node_id: number }) => void;
 };
 const useDnDNodes = ({
   node_id: target_node_id,
   componentRef,
   nodes,
   draggable = true,
-  afterDrop,
 }: Props) => {
   const { addClass, removeClass } = useMemo(() => {
     const addClass = e => {
@@ -111,10 +109,10 @@ const useDnDNodes = ({
         e.preventDefault();
         e.stopPropagation();
         const actualTarget = e.currentTarget;
-        if (
+        const b =
           actualTarget.localName === 'ul' &&
-          !actualTarget.classList.contains(modTree.tree_rootList)
-        ) {
+          !actualTarget.classList.contains(modTree.tree_rootList);
+        if (b) {
           const nodeTitle = actualTarget.previousSibling.lastChild;
           removeClass(e, nodeTitle);
         } else removeClass(e);
@@ -131,6 +129,7 @@ const useDnDNodes = ({
           const nodeDroppedToItsChild = droppedNode.child_nodes.some(
             child_node => target_node_father_id_chain.has(child_node),
           );
+          if (fatherOfDroppedNode.node_id === target_node_id) return;
           if (nodeDroppedToItsChild)
             ac.dialogs.setAlert({
               title: 'forbidden operation',
@@ -139,19 +138,17 @@ const useDnDNodes = ({
             });
           else {
             const position = calculateDroppingPosition(e);
-
             switchParent({
               targetNode,
               fatherOfDroppedNode,
               droppedNode,
               position,
             });
-            if (afterDrop) afterDrop({ node_id: droppedNode.node_id });
           }
         }
       },
     }),
-    [target_node_id, nodes, afterDrop, removeClass],
+    [target_node_id, nodes, removeClass],
   );
 
   return {

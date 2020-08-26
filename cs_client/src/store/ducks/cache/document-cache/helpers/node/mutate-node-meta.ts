@@ -45,7 +45,11 @@ export const mutateNodeMeta = (
     Object.entries(data).forEach(([k, v]) => {
       node[k] = v;
     });
-    listNodeEditedAttributes({ document, attributes: Object.keys(data), node_id });
+    listNodeEditedAttributes({
+      document,
+      attributes: Object.keys(data),
+      node_id,
+    });
     node.updatedAt = updatedAt;
     document.state.localUpdatedAt = updatedAt;
   });

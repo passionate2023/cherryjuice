@@ -17,7 +17,6 @@ const ac = {
   processLinks: _(ap('process-links')),
 
   select: _(ap('select'), _ => (payload: SelectNodeParams) => _(payload)),
-
 };
 
 type State = {

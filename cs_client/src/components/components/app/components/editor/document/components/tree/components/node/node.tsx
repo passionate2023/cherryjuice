@@ -64,10 +64,6 @@ const Node: React.FC<NodeProps> = ({
     node_id,
     componentRef: titleRef,
     nodes,
-    afterDrop: ({ node_id }) => {
-      selectNode({ node_id, file_id });
-      setShowChildren(true);
-    },
   });
   const listDndProps = useDnDNodes({
     componentRef: listRef,
