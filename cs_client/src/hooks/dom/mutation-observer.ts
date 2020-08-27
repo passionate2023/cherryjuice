@@ -4,6 +4,8 @@ const config: MutationObserverInit = {
   characterData: true,
   subtree: true,
   childList: true,
+  attributeOldValue: true,
+  characterDataOldValue: true,
 };
 type TCallbackOptions = {
   disconnectAfter: number;

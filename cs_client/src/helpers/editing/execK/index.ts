@@ -7,6 +7,7 @@ import { AlertType } from '::types/react';
 import { FormattingError } from '::types/errors';
 import { ac } from '::store/store';
 import { ExecKCommand } from '::helpers/editing/execK/execk-commands';
+import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 
 const isJustificationCommand = command =>
   command && command != ExecKCommand.clear;
@@ -29,6 +30,7 @@ const execK = ({
       throw new FormattingError('Editing is disabled');
     let { startElement, endElement, startOffset, endOffset } =
       testSample || getSelection({ selectAdjacentWordIfNoneIsSelected: true });
+    snapBackManager.current.formattingStarted();
     const {
       startAnchor,
       endAnchor,
@@ -61,19 +63,17 @@ const execK = ({
       { left, right, modifiedSelected, lineStyle },
       { startDDOE, endDDOE, endAnchor, startAnchor },
     );
-    {
-      restoreSelection({
-        modifiedSelection: {
-          childrenElementsOfStartDDOE,
-          childrenElementsOfEndDDOE,
-          adjacentElementsOfStartDDOE,
-        },
-        selected,
-        ogSelection: { startElement, endElement, startOffset, endOffset },
-        options: { collapse: isJustificationCommand(command) },
-      });
-      if (selectionContainsLinks) ac.node.processLinks(new Date().getTime());
-    }
+    restoreSelection({
+      modifiedSelection: {
+        childrenElementsOfStartDDOE,
+        childrenElementsOfEndDDOE,
+        adjacentElementsOfStartDDOE,
+      },
+      selected,
+      ogSelection: { startElement, endElement, startOffset, endOffset },
+      options: { collapse: isJustificationCommand(command) },
+    });
+    if (selectionContainsLinks) ac.node.processLinks(new Date().getTime());
   } catch (e) {
     document.querySelector('#rich-text ').innerHTML = ogHtml;
     ac.dialogs.setAlert({

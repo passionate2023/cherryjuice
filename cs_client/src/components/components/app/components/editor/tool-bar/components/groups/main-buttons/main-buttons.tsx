@@ -11,6 +11,7 @@ import {
   getDocumentsList,
 } from '::store/selectors/cache/document/document';
 import { documentHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
+import { UndoRedo } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -109,6 +110,12 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
       >
         <Icon name={Icons.material.refresh} loadAsInlineSVG={'force'} />
       </ToolbarButton>
+      <UndoRedo
+        node_id={selectedNode_id}
+        documentId={documentId}
+        noDocumentIsSelected={noDocumentIsSelected}
+        noNodeIsSelected={noNodeIsSelected}
+      />
     </div>
   );
 };

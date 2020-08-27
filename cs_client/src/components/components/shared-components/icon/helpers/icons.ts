@@ -4,6 +4,8 @@ const Icons = {
     pin: 'pin',
     close: 'close',
     menu: 'menu',
+    redo: 'redo',
+    undo: 'undo',
     tune: 'tune',
     export: 'export',
     remove: 'remove',
