@@ -1,161 +1,142 @@
-type EnhancedMutationRecord = MutationRecord & {
-  newValue?: string;
-};
-type NextFrame = {
-  formatting: boolean;
-  mutations: (EnhancedMutationRecord | EnhancedMutationRecord[])[];
-};
+import {
+  endsWithDelimiter,
+  isMutationOnPreviousNode,
+  removeDelimiter,
+} from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/character-data';
+import { applyMutations } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/apply-mutations';
 
 type Frame = { mutations: EnhancedMutationRecord[] };
 
-const removeNode = (node: Node): void => {
-  node.parentNode.removeChild(node);
+type SnapBackState = {
+  formatting: boolean;
+  framePointer: number;
+  enabled: boolean;
+  frames: Frame[];
 };
 
-const insertSibling = (nextSibling: HTMLElement) => (node: Node) => {
-  nextSibling.parentNode.insertBefore(node, nextSibling);
+export type EnhancedMutationRecord = MutationRecord & {
+  newValue?: string;
 };
-
-const insertChild = (target: HTMLElement) => (node: Node) => {
-  target.appendChild(node);
-};
-
 export type NumberOfFrames = { undo: number; redo: number };
 export type OnFrameChange = (frames: NumberOfFrames) => void;
-
 export type ElementGetter = () => Promise<HTMLDivElement>;
 
 // inspired from https://github.com/lohfu/snapback
 export class SnapBack {
   private observer;
-  private enabled = false;
-  private framePointer: number;
-  private frames: Frame[];
-  private nextFrame: NextFrame;
+  private state: SnapBackState;
   constructor(
     private id: string,
     private options: MutationObserverInit,
     private elementGetter: ElementGetter,
     private onFrameChange: OnFrameChange,
   ) {
-    this.observer = new MutationObserver(mutations => {
-      if (this.enabled) {
-        // eslint-disable-next-line no-console
-        if (process.env.NODE_ENV === 'development') console.log(mutations);
-
-        if (this.nextFrame.formatting) {
-          this.nextFrame.mutations.push(mutations);
-          this.saveFrame();
-          this.nextFrame.formatting = false;
-        } else mutations.forEach(this.addMutation);
-      }
-    });
-    this.resetFrames();
+    this.observer = new MutationObserver(this.handleMutations);
+    this.resetState();
   }
 
-  disable = (): void => {
-    this.observer.disconnect();
-    this.enabled = false;
-  };
+  private get latestFrame(): EnhancedMutationRecord[] {
+    return this.state.frames[this.state.frames.length - 1]?.mutations || [];
+  }
+  private get numberOfFrames(): NumberOfFrames {
+    const numberOfFrames = this.state.frames.length - 1;
+    const redo = numberOfFrames - this.state.framePointer;
+    const undo = this.state.framePointer + 1;
+    return { redo, undo };
+  }
 
-  resetFrames = (): void => {
-    this.nextFrame = {
-      formatting: false,
-      mutations: [],
-    };
-    this.frames = [];
-    this.framePointer = -1;
-  };
+  private handleMutations = (mutations: MutationRecord[]): void => {
+    if (this.state.enabled) {
+      // eslint-disable-next-line no-console
+      if (process.env.NODE_ENV === 'development') console.log(mutations);
 
-  enable = (): void => {
-    if (!this.enabled) {
-      this.enabled = true;
-      this.elementGetter().then(element => {
-        this.observer.observe(element, this.options);
-        this.onFrameChange(this.numberOfFrames);
-      });
+      if (this.state.formatting) {
+        this.saveFrame(mutations);
+        this.state.formatting = false;
+      } else mutations.forEach(this.addMutation);
     }
   };
 
-  formattingStarted = (): void => {
-    this.nextFrame.formatting = true;
-    this.saveFrame();
-  };
+  private addMutation = (mutation: EnhancedMutationRecord): void => {
+    if (mutation.type === 'characterData') {
+      mutation.newValue = mutation.target.textContent;
+      const latestFrame = this.latestFrame;
+      const latestMutation = latestFrame[latestFrame.length - 1];
+      const valueEndsWithDelimiter = endsWithDelimiter(mutation.newValue);
+      const { additiveMutation, noopMutation } = isMutationOnPreviousNode(
+        latestMutation,
+        mutation,
+      );
 
-  addMutation = (mutation: EnhancedMutationRecord): void => {
-    {
-      let previousMutation;
-      if (mutation.type === 'characterData') {
-        const newValue: string = mutation.target.textContent;
-        previousMutation = this.nextFrame.mutations[
-          this.nextFrame.mutations.length - 1
-        ];
-        const textMutationOnSameNode =
-          previousMutation &&
-          previousMutation.type === 'characterData' &&
-          previousMutation.target === mutation.target &&
-          previousMutation.newValue === mutation.oldValue;
-        if (textMutationOnSameNode) {
-          previousMutation.newValue = newValue;
-        } else {
-          mutation.newValue = newValue;
-          this.nextFrame.mutations.push(mutation);
-          if (/.+[\s,.]$/.test(newValue)) this.saveFrame();
-        }
-      } else if (
-        mutation.type === 'attributes' &&
-        mutation.target.nodeType === Node.ELEMENT_NODE
-      ) {
-        mutation.newValue = (mutation.target as HTMLElement).getAttribute(
-          mutation.attributeName,
-        );
-        if (String(mutation.newValue) !== String(mutation.newValue)) {
-          this.nextFrame.mutations.push(mutation);
-          this.saveFrame();
-        }
-      } else if (mutation.type === 'childList') {
-        this.nextFrame.mutations.push(mutation);
-        this.saveFrame();
+      if (noopMutation) {
+        return;
+      } else if (additiveMutation && !valueEndsWithDelimiter)
+        latestMutation.newValue = mutation.newValue;
+      else if (additiveMutation && valueEndsWithDelimiter) {
+        mutation.newValue = removeDelimiter(mutation.newValue);
+        latestMutation.newValue = mutation.newValue;
+        this.saveFrame([]);
+      } else {
+        this.saveFrame([mutation]);
       }
+    } else if (
+      mutation.type === 'attributes' &&
+      mutation.target.nodeType === Node.ELEMENT_NODE &&
+      mutation.attributeName !== 'data-edited'
+    ) {
+      mutation.newValue = (mutation.target as HTMLElement).getAttribute(
+        mutation.attributeName,
+      );
+      if (String(mutation.oldValue) !== String(mutation.newValue)) {
+        this.saveFrame([mutation]);
+      }
+    } else if (mutation.type === 'childList') {
+      const frame = this.latestFrame;
+      frame.push(mutation);
     }
   };
 
-  saveFrame = (): void => {
-    const nextFrameHasMutations = this.nextFrame.mutations.length > 0;
+  private saveFrame = (mutations: EnhancedMutationRecord[]): void => {
+    const nextFrameHasMutations = mutations.length > 0;
     if (nextFrameHasMutations) {
-      const obsoleteFutureFrames = this.framePointer < this.frames.length - 1;
+      const obsoleteFutureFrames =
+        this.state.framePointer < this.state.frames.length - 1;
       if (obsoleteFutureFrames) {
-        this.frames = this.frames.slice(0, this.framePointer + 1);
+        this.state.frames = this.state.frames.slice(
+          0,
+          this.state.framePointer + 1,
+        );
       }
 
-      this.frames.push({
-        mutations: this.nextFrame.mutations.flatMap(x => x),
+      this.state.frames.push({
+        mutations: mutations.flatMap(x => x),
       });
-      this.nextFrame.mutations = [];
-      this.framePointer = this.frames.length - 1;
+      // this.nextFrame.mutations = [];
+      this.state.framePointer = this.state.frames.length - 1;
       this.onFrameChange(this.numberOfFrames);
     }
   };
 
-  get numberOfFrames(): NumberOfFrames {
-    const numberOfFrames = this.frames.length - 1;
-    const redo = numberOfFrames - this.framePointer;
-    const undo = this.framePointer >= 0 ? this.framePointer : 0;
-    return { redo, undo };
-  }
+  private applyFrame = (
+    mutations: EnhancedMutationRecord[],
+    undo = false,
+  ): void => {
+    this.disable();
+    applyMutations(mutations, undo);
+    this.enable();
+  };
 
-  redo = () => {
-    if (this.enabled && this.numberOfFrames.redo) {
-      const mutations = this.frames[++this.framePointer].mutations;
+  redo = (): void => {
+    if (this.state.enabled && this.numberOfFrames.redo) {
+      const mutations = this.state.frames[++this.state.framePointer].mutations;
       this.applyFrame(mutations, false);
       this.onFrameChange(this.numberOfFrames);
     }
   };
 
-  undo = () => {
-    this.saveFrame();
-    if (this.enabled && this.numberOfFrames.undo) {
-      const mutations = this.frames[this.framePointer--].mutations
+  undo = (): void => {
+    if (this.state.enabled && this.numberOfFrames.undo) {
+      const mutations = this.state.frames[this.state.framePointer--].mutations
         .slice(0)
         .reverse();
       this.applyFrame(mutations, true);
@@ -163,44 +144,32 @@ export class SnapBack {
     }
   };
 
-  applyFrame = (mutations: EnhancedMutationRecord[], undo = false) => {
-    this.disable();
+  resetState = (): void => {
+    this.state = {
+      formatting: false,
+      enabled: false,
+      framePointer: -1,
+      frames: [],
+    };
+  };
 
-    mutations.forEach(mutation => {
-      const target = mutation.target as HTMLElement;
-      if (mutation.type === 'characterData') {
-        mutation.target.textContent = undo
-          ? mutation.oldValue
-          : mutation.newValue;
-      } else if (mutation.type === 'attributes') {
-        const value = (undo ? mutation.oldValue : mutation.newValue) as
-          | string
-          | boolean
-          | number;
-        if (value || value === false || value === 0) {
-          target.setAttribute(mutation.attributeName, String(value));
-        } else {
-          target.removeAttribute(mutation.attributeName);
-        }
-      } else if (mutation.type === 'childList') {
-        const addNodes: NodeList = undo
-          ? mutation.removedNodes
-          : mutation.addedNodes;
-        const removeNodes: NodeList = undo
-          ? mutation.addedNodes
-          : mutation.removedNodes;
-        const nextSibling = mutation.nextSibling as HTMLElement;
+  disable = (): void => {
+    this.observer.disconnect();
+    this.state.enabled = false;
+  };
 
-        Array.from(addNodes).forEach(
-          nextSibling
-            ? insertSibling(nextSibling)
-            : insertChild(target as HTMLElement),
-        );
+  enable = (): void => {
+    if (!this.state.enabled) {
+      this.state.enabled = true;
+      this.elementGetter().then(element => {
+        this.observer.observe(element, this.options);
+        this.onFrameChange(this.numberOfFrames);
+        element.focus();
+      });
+    }
+  };
 
-        Array.from(removeNodes).forEach(removeNode);
-      }
-    });
-
-    this.enable();
+  formattingStarted = (): void => {
+    this.state.formatting = true;
   };
 }

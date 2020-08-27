@@ -25,13 +25,15 @@ export const generalHotKeysProps = {
     ac.dialogs.showCreateSiblingNode();
   },
   [HotKeyActionType.UNDO]: () => {
-    if (document.activeElement.id === 'rich-text') snapBackManager.current.undo();
+    if (document.activeElement.id === 'rich-text')
+      snapBackManager.current.undo();
     else if (store.getState().dialogs.showDocumentList)
       ac.documentCache.undoDocumentMeta();
     else ac.documentCache.undoNodeMeta();
   },
   [HotKeyActionType.REDO]: () => {
-    if (document.activeElement.id === 'rich-text') snapBackManager.current.redo();
+    if (document.activeElement.id === 'rich-text')
+      snapBackManager.current.redo();
     else if (store.getState().dialogs.showDocumentList)
       ac.documentCache.redoDocumentMeta();
     else ac.documentCache.redoNodeMeta();

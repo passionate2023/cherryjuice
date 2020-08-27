@@ -3,7 +3,14 @@ import {
   OnFrameChange,
   SnapBack,
 } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback';
-
+export const mutationObserverOptions: MutationObserverInit = {
+  attributes: true,
+  characterData: true,
+  subtree: true,
+  childList: true,
+  attributeOldValue: true,
+  characterDataOldValue: true,
+};
 export class SnapBackManager {
   private readonly snapBacks: { [id: string]: SnapBack } = {};
   current: SnapBack;
@@ -18,25 +25,24 @@ export class SnapBackManager {
   }
 
   setCurrent = (id: string): void => {
-    if (!this.snapBacks[id])
+    if (!this.snapBacks[id]) {
+
       this.snapBacks[id] = new SnapBack(
         id,
-        {
-          attributes: true,
-          characterData: true,
-          subtree: true,
-          childList: true,
-          attributeOldValue: true,
-          characterDataOldValue: true,
-        },
+        mutationObserverOptions,
         this.elementGetter,
         this.onFrameChange,
       );
+    }
     Object.values(this.snapBacks).forEach(snapBack => {
       snapBack.disable();
     });
     this.current = this.snapBacks[id];
-    this.current.resetFrames();
+    if (process.env.NODE_ENV === 'development') {
+      // @ts-ignore
+      window.snapBack = this.current;
+    }
+    this.current.resetState();
     this.current.enable();
   };
 }
