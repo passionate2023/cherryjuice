@@ -2,9 +2,9 @@ import { cloneObj } from '::helpers/editing/execK/helpers';
 const Stamps = {
   start: 'selection-start',
   end: 'selection-end',
-  genStamps: () => {
-    Stamps.start = `selection-start-${new Date().getTime()}`;
-    Stamps.end = `selection-end-${new Date().getTime()}`;
+  genStamps: (stampPrefix = '') => {
+    Stamps.start = `${stampPrefix}selection-start-${new Date().getTime()}`;
+    Stamps.end = `${stampPrefix}selection-end-${new Date().getTime()}`;
   },
 };
 const helpers = {
@@ -15,11 +15,13 @@ const helpers = {
 const applyTemporaryStamps = ({
   startElement,
   endElement,
+  stampPrefix,
 }: {
   startElement?: Element;
   endElement?: Element;
+  stampPrefix?: string;
 }) => {
-  Stamps.genStamps();
+  Stamps.genStamps(stampPrefix);
   startElement && startElement.setAttribute(Stamps.start, 'true');
   endElement && endElement.setAttribute(Stamps.end, 'true');
   return { start: Stamps.start, end: Stamps.end };

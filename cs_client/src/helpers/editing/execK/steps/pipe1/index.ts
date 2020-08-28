@@ -22,6 +22,7 @@ const pipe1 = ({
   selectionEndElement,
   startOffset,
   endOffset,
+  stampPrefix = '',
 }) => {
   let startDDOE = getDDOE(selectionStartElement);
   let endDDOE = getDDOE(selectionEndElement);
@@ -49,6 +50,7 @@ const pipe1 = ({
   applyTemporaryStamps({
     startElement: selectionStartElement,
     endElement: selectionEndElement,
+    stampPrefix,
   });
   const { selectedDDOEs } = getSelectedDDOEs({ startDDOE, endDDOE });
   const {

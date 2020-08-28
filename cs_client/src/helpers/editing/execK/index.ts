@@ -7,7 +7,6 @@ import { AlertType } from '::types/react';
 import { FormattingError } from '::types/errors';
 import { ac } from '::store/store';
 import { ExecKCommand } from '::helpers/editing/execK/execk-commands';
-import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 
 const isJustificationCommand = command =>
   command && command != ExecKCommand.clear;
@@ -30,7 +29,6 @@ const execK = ({
       throw new FormattingError('Editing is disabled');
     let { startElement, endElement, startOffset, endOffset } =
       testSample || getSelection({ selectAdjacentWordIfNoneIsSelected: true });
-    snapBackManager.current.formattingStarted();
     const {
       startAnchor,
       endAnchor,

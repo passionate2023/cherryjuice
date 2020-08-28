@@ -152,6 +152,7 @@ const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
       selectionEndElement: endElement,
       startOffset,
       endOffset,
+      stampPrefix: 'p',
     });
 
     const leftAHtmlsMultiLine = splitAHtmlsToMultipleLines({

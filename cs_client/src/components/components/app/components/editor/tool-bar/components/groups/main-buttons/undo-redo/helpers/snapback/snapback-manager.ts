@@ -2,7 +2,7 @@ import {
   ElementGetter,
   OnFrameChange,
   SnapBack,
-} from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback';
+} from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
 export const mutationObserverOptions: MutationObserverInit = {
   attributes: true,
   characterData: true,
@@ -26,7 +26,6 @@ export class SnapBackManager {
 
   setCurrent = (id: string): void => {
     if (!this.snapBacks[id]) {
-
       this.snapBacks[id] = new SnapBack(
         id,
         mutationObserverOptions,
