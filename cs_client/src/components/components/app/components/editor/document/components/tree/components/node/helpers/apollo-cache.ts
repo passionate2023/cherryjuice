@@ -2,6 +2,7 @@ import { getEditor } from '::root/components/app/components/editor/document/comp
 import { ac, store } from '::store/store';
 import { getNode } from '::store/selectors/cache/document/node';
 import { getDocuments } from '::store/selectors/cache/document/document';
+import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 
 const unsetImagesAttributes = (images: HTMLImageElement[]) => {
   const imageAttributesTempContainer = [];
@@ -114,6 +115,7 @@ const updateCachedHtmlAndImages = () => {
   let deletedImageIDs = [];
   let newImageIDs = [];
   if (edited) {
+    snapBackManager.current.reset();
     const imageIDsInCache = getNodeImageIDsFromCache({ node_id, documentId });
     const sets = {
       imageIDsInDom: new Set(imageIDsInDom),
@@ -130,6 +132,9 @@ const updateCachedHtmlAndImages = () => {
         imageIDsInDom,
       });
     updatedCachedHtml({ node_id, documentId, html });
+    setTimeout(() => {
+      snapBackManager.current.enable();
+    }, 1000);
   }
 };
 export {

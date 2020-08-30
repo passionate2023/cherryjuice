@@ -1,4 +1,4 @@
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { concat, from, Observable, ObservedValueOf, of } from 'rxjs';
 import { ofType } from 'deox';
 import { store, ac } from '../../store';
@@ -9,6 +9,7 @@ import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { QDocumentMeta, DOCUMENT_META } from '::graphql/queries/document-meta';
 import { getDocuments } from '::store/selectors/cache/document/document';
+import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 
 const createLocalRequest = (
   file_id: string,
@@ -40,7 +41,7 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
     ]),
     filter(action => {
       if (action.type === ac.__.document.setDocumentId.type) {
-        const document = store.getState().documentCache[action.payload];
+        const document = store.getState().documentCache[action['payload']];
         if (document?.nodes && document?.nodes[0]) {
           return false;
         }
@@ -48,7 +49,7 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
       return true;
     }),
     map(action =>
-      'payload' in action ? action.payload : selectedDocumentId(),
+      'payload' in action ? action['payload'] : selectedDocumentId(),
     ),
     filter(Boolean),
     switchMap((file_id: string) => {
@@ -56,7 +57,13 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
       const request = (isNewDocument
         ? createLocalRequest(file_id)
         : gqlQuery(DOCUMENT_META({ file_id }))
-      ).pipe(map(ac.__.document.fetchFulfilled));
+      ).pipe(
+        tap(() => {
+          snapBackManager.resetAll();
+          snapBackManager.current?.enable();
+        }),
+        map(ac.__.document.fetchFulfilled),
+      );
 
       const loading = of(ac.__.document.fetchInProgress());
       return concat(loading, request).pipe(

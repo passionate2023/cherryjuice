@@ -24,14 +24,18 @@ export type ElementGetter = () => Promise<HTMLDivElement>;
 export class SnapBack {
   private observer;
   private state: SnapBackState;
+  private readonly onFrameChange: () => void;
   constructor(
     private id: string,
     private options: MutationObserverInit,
     private elementGetter: ElementGetter,
-    private onFrameChange: OnFrameChange,
+    onFrameChange: OnFrameChange,
   ) {
+    this.onFrameChange = () => {
+      onFrameChange(this.numberOfFrames);
+    };
     this.observer = new MutationObserver(this.handleMutations);
-    this.resetState();
+    this.reset();
   }
 
   private get latestFrame(): Frame {
@@ -76,7 +80,7 @@ export class SnapBack {
         type,
       });
       this.state.pointer = this.state.frames.length - 1;
-      this.onFrameChange(this.numberOfFrames);
+      this.onFrameChange();
     }
   };
 
@@ -93,7 +97,7 @@ export class SnapBack {
     if (this.state.enabled && this.numberOfFrames.redo) {
       const mutations = this.state.frames[++this.state.pointer].mutations;
       this.applyFrame(mutations, false);
-      this.onFrameChange(this.numberOfFrames);
+      this.onFrameChange();
     }
   };
 
@@ -103,16 +107,17 @@ export class SnapBack {
         .slice(0)
         .reverse();
       this.applyFrame(mutations, true);
-      this.onFrameChange(this.numberOfFrames);
+      this.onFrameChange();
     }
   };
 
-  resetState = (): void => {
+  reset = (): void => {
     this.state = {
       enabled: false,
       pointer: -1,
       frames: [],
     };
+    this.onFrameChange();
   };
 
   disable = (): void => {
@@ -125,7 +130,7 @@ export class SnapBack {
       this.state.enabled = true;
       this.elementGetter().then(element => {
         this.observer.observe(element, this.options);
-        this.onFrameChange(this.numberOfFrames);
+        this.onFrameChange();
         element.focus();
       });
     }
