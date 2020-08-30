@@ -20,6 +20,13 @@ export type NumberOfFrames = { undo: number; redo: number };
 export type OnFrameChange = (frames: NumberOfFrames) => void;
 export type ElementGetter = () => Promise<HTMLDivElement>;
 
+const assignValue = (mrs: EnhancedMutationRecord[]): void =>
+  mrs.forEach(mr => {
+    if (mr.type === 'characterData') mr.newValue = mr.target.textContent;
+    else if (mr.type === 'attributes')
+      mr.newValue = (mr.target as HTMLElement).getAttribute(mr.attributeName);
+  });
+
 // inspired from https://github.com/lohfu/snapback
 export class SnapBack {
   private observer;
@@ -50,6 +57,7 @@ export class SnapBack {
 
   private handleMutations = (mutations: MutationRecord[]): void => {
     if (this.state.enabled) {
+      assignValue(mutations);
       const type = detectMutationType(mutations);
       if (type === MutationType.text) {
         mutations.forEach(mutation => {
@@ -58,7 +66,7 @@ export class SnapBack {
         });
       } else if (type === MutationType.pastedImageMeta) {
         const latestFrame = this.latestFrame;
-        if (latestFrame.type === MutationType.pasting)
+        if (latestFrame?.type === MutationType.pasting)
           latestFrame.mutations.push(...mutations);
       } else if (type) {
         this.addFrame({ mutations, type });

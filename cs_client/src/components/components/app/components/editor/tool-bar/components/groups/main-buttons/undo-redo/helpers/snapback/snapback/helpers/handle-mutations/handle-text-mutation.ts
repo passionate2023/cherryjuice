@@ -21,8 +21,7 @@ const isMutationOnPreviousNode = (
   const n_oldValue = newMutation.oldValue;
   const n_newValue = newMutation.newValue;
 
-  const textMutation =
-    (o_newValue === n_oldValue || (n_oldValue && !o_newValue));
+  const textMutation = o_newValue === n_oldValue || (n_oldValue && !o_newValue);
   const additiveMutation =
     textMutation && n_newValue.length > n_oldValue.length;
   const subtractiveMutation =
@@ -45,7 +44,7 @@ export const handleTextMutation = (
   newMutation: EnhancedMutationRecord,
   latestFrame: Frame,
 ): Frame | undefined => {
-  newMutation.newValue = newMutation.target.textContent;
+
   const valueEndsWithDelimiter = endsWithDelimiter(newMutation.newValue);
   const latestFrameMutations = latestFrame?.mutations || [];
   const latestMutation = latestFrameMutations[latestFrameMutations.length - 1];
