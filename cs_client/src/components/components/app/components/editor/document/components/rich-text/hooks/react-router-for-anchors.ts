@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
 import { router } from '::root/router/router';
-import { getDocumentIdAndNode_idFromPathname } from '::root/components/app/components/editor/hooks/document-routing';
 import { ac } from '::store/store';
+import { extractDocumentFromPathname } from '::root/components/app/components/editor/hooks/document-routing/helpers/extract-document-from-pathname';
 
 type Props = {
   file_id: string;
@@ -43,7 +43,7 @@ const useReactRouterForAnchors = ({
           const isLocalLink = url.host === location.host;
           const isWebLink = !isLocalLink && url.protocol.startsWith('http');
           if (isLocalLink) {
-            const { documentId, node_id } = getDocumentIdAndNode_idFromPathname(
+            const { documentId, node_id } = extractDocumentFromPathname(
               url.pathname,
             );
             if (node_id > 0) {

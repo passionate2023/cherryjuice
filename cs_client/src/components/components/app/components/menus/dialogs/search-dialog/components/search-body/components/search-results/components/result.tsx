@@ -6,7 +6,7 @@ import { SearchContext } from '::root/components/app/components/menus/dialogs/se
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { HighlightedHeadline } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/components/highlighted-headline';
 import { ac } from '::store/store';
-import { waitForDocumentToLoad } from '::root/components/app/components/editor/hooks/document-routing';
+import { waitForDocumentToLoad } from '::root/components/app/components/editor/hooks/document-routing/helpers/wait-for-document-to-load';
 
 type Props = {
   result: NodeSearchResultEntity;

@@ -7,7 +7,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { router } from '::root/router/router';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { useDocumentRouting } from '::root/components/app/components/editor/hooks/document-routing';
+import { useDocumentRouting } from '::root/components/app/components/editor/hooks/document-routing/document-routing';
+
 const Document = React.lazy(() =>
   import('::root/components/app/components/editor/document/document'),
 );

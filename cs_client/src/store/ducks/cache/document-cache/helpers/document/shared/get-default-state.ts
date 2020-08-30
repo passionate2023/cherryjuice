@@ -33,12 +33,13 @@ export const getDefaultState = ({
   newDocument,
   nodes,
 }: GetDefaultStateParams = defaultParams): CachedDocumentState => {
-  if (existingState) {
+  if (existingState && nodes ) {
     return {
       ..._getDefaultState(),
       recentNodes: existingState.recentNodes,
-      selectedNode_id: existingState.selectedNode_id,
-      highestNode_id: existingState.highestNode_id,
+      selectedNode_id:
+        existingState.selectedNode_id || getDefaultSelectedNode_id(nodes),
+      highestNode_id: getDefaultSelectedNode_id(nodes),
     };
   } else if (nodes)
     return {
