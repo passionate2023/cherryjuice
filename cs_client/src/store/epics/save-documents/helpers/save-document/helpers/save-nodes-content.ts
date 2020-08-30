@@ -14,8 +14,8 @@ const saveNodesContent = async ({ document, state }: SaveOperationProps) => {
     )
     .map(([node_id]) => document.nodes[node_id]);
 
-  for await (const node of nodes) {
-    updateDocumentId(state)(node);
+  for await (let node of nodes) {
+    node = updateDocumentId(state)(node);
     const DDOEs = stringToMultipleElements(node.html);
     const { abstractHtml, DDOEsAHtml } = getAHtml({
       DDOEs: DDOEs as Node[],

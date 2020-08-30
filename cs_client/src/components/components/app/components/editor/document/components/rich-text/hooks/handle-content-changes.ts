@@ -25,7 +25,7 @@ const useHandleContentChanges = ({
         );
         if (userMutations.length) {
           ref.current.setAttribute('data-edited', String(new Date().getTime()));
-          ac.documentCache.mutateNode({
+          ac.documentCache.mutateNodeContent({
             node_id,
             documentId,
             data: { html: '' },

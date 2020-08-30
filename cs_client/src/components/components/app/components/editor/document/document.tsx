@@ -75,7 +75,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
           <Route
             exact
             path={`/document/:file_id/node/:node_id/`}
-            component={RichText}
+            render={() => <RichText node={nodes[selectedNode_id]} />}
           />
         </Fragment>
       )}

@@ -85,24 +85,26 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
   ]);
   return (
     <div className={modUserProfile.userProfile}>
-      <div className={modUserProfile.userProfile__personalInformation}>
-        <Profile
-          firstName={state.firstName}
-          lastName={state.lastName}
-          username={state.username}
-        />
-        <Email
-          currentEmail={currentSettings.email}
-          email={state.email}
-          emailVerified={emailVerified}
-          tokens={tokens}
-        />
-        <Password
-          newPassword={state.newPassword}
-          newPasswordConfirmation={state.newPasswordConfirmation}
-        />
-        <ManageAccount />
-      </div>
+      {tokens && (
+        <div className={modUserProfile.userProfile__personalInformation}>
+          <Profile
+            firstName={state.firstName}
+            lastName={state.lastName}
+            username={state.username}
+          />
+          <Email
+            currentEmail={currentSettings.email}
+            email={state.email}
+            emailVerified={emailVerified}
+            tokens={tokens}
+          />
+          <Password
+            newPassword={state.newPassword}
+            newPasswordConfirmation={state.newPasswordConfirmation}
+          />
+          <ManageAccount />
+        </div>
+      )}
     </div>
   );
 };

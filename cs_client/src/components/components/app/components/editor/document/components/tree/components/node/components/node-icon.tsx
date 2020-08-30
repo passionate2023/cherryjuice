@@ -9,13 +9,12 @@ type Props = {
 };
 
 const NodeIcon: React.FC<Props> = memo(function NodeIcon({ icon_id, depth }) {
+  const name = icon_id
+    ? Icons.cherrytree.custom_icons[icon_id]
+    : Icons.cherrytree.cherries[depth >= 11 ? 11 : depth];
   return (
     <Icon
-      name={
-        icon_id
-          ? Icons.cherrytree.custom_icons[icon_id]
-          : Icons.cherrytree.cherries[depth >= 11 ? 11 : depth]
-      }
+      name={name}
       size={14}
       className={modIcons.node__titleCherry}
       testId={'cherry' + (icon_id || 0)}

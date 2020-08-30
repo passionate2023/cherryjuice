@@ -44,7 +44,7 @@ module.exports = {
         },
       },
       {
-        test: /\.(js|ts|tsx)$/,
+        test: /\.(mjs|js|ts|tsx)$/,
         use: [
           {
             loader: 'babel-loader',

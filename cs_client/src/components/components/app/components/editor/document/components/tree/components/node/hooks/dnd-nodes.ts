@@ -5,67 +5,43 @@ import { modTree } from '::sass-modules';
 import { ac } from '::store/store';
 import { NodesDict } from '::store/ducks/cache/document-cache';
 
-const updateCache = ({ fatherOfDroppedNode, targetNode, droppedNode }) => {
-  // apolloCache.node.mutate({
-  //   nodeId: droppedNode.id,
-  //   meta: {
-  //     father_id: targetNode.node_id,
-  //     fatherId: targetNode.id,
-  //   },
-  // });
-  ac.documentCache.mutateNode({
-    node_id: droppedNode.node_id,
-    documentId: droppedNode.documentId,
-    data: {
-      father_id: targetNode.node_id,
-      fatherId: targetNode.id,
-    },
-  });
-  // apolloCache.node.mutate({
-  //   nodeId: fatherOfDroppedNode.id,
-  //   meta: {
-  //     child_nodes: fatherOfDroppedNode.child_nodes,
-  //   },
-  // });
-  ac.documentCache.mutateNode({
-    node_id: fatherOfDroppedNode.node_id,
-    documentId: fatherOfDroppedNode.documentId,
-    data: {
-      child_nodes: fatherOfDroppedNode.child_nodes,
-    },
-  });
-  // apolloCache.node.mutate({
-  //   nodeId: targetNode.id,
-  //   meta: {
-  //     child_nodes: targetNode.child_nodes,
-  //   },
-  // });
-  ac.documentCache.mutateNode({
-    node_id: targetNode.node_id,
-    documentId: targetNode.documentId,
-    data: {
-      child_nodes: targetNode.child_nodes,
-    },
-  });
-};
-
 const switchParent = ({
   fatherOfDroppedNode,
   targetNode,
   droppedNode,
   position,
 }) => {
-  const ogIndexOfDroppedNode = fatherOfDroppedNode.child_nodes.indexOf(
-    Number(droppedNode.node_id),
-  );
-  fatherOfDroppedNode.child_nodes.splice(ogIndexOfDroppedNode, 1);
-  if (!targetNode.child_nodes.includes(Number(droppedNode.node_id)))
+  const targetNodeChildNodes = [...targetNode.child_nodes];
+  if (!targetNodeChildNodes.includes(Number(droppedNode.node_id)))
     position === -1
-      ? targetNode.child_nodes.push(Number(droppedNode.node_id))
-      : targetNode.child_nodes.splice(position, 0, Number(droppedNode.node_id));
-  droppedNode.father_id = targetNode.node_id;
-  droppedNode.fatherId = targetNode.id;
-  droppedNode.position = targetNode.child_nodes.length - 1;
+      ? targetNodeChildNodes.push(Number(droppedNode.node_id))
+      : targetNodeChildNodes.splice(position, 0, Number(droppedNode.node_id));
+  ac.documentCache.mutateNodeMeta([
+    {
+      node_id: fatherOfDroppedNode.node_id,
+      documentId: fatherOfDroppedNode.documentId,
+      data: {
+        child_nodes: fatherOfDroppedNode.child_nodes.filter(
+          node_id => node_id !== droppedNode.node_id,
+        ),
+      },
+    },
+    {
+      node_id: targetNode.node_id,
+      documentId: targetNode.documentId,
+      data: {
+        child_nodes: targetNodeChildNodes,
+      },
+    },
+    {
+      node_id: droppedNode.node_id,
+      documentId: droppedNode.documentId,
+      data: {
+        father_id: targetNode.node_id,
+        fatherId: targetNode.id,
+      },
+    },
+  ]);
 };
 
 const calculateDroppingPosition = (e): number => {
@@ -86,29 +62,25 @@ const calculateDroppingPosition = (e): number => {
   }
   return position;
 };
-const getFatherIdChain = (
+const getFatherIdChain = (father_id_chain: number[] = []) => (
   nodes: NodesDict,
-  node_id: number,
-  father_id_chain: number[] = [],
-) => {
+) => (node_id: number) => {
   const father_id = nodes[node_id].father_id;
   return father_id === 0
     ? [...father_id_chain, 0]
-    : getFatherIdChain(nodes, father_id, [...father_id_chain, father_id]);
+    : getFatherIdChain([...father_id_chain, father_id])(nodes)(father_id);
 };
 type Props = {
   node_id: number;
   componentRef: MutableRefObject<HTMLDivElement>;
   nodes?: NodesDict;
   draggable?: boolean;
-  afterDrop?: Function;
 };
 const useDnDNodes = ({
   node_id: target_node_id,
   componentRef,
   nodes,
   draggable = true,
-  afterDrop,
 }: Props) => {
   const { addClass, removeClass } = useMemo(() => {
     const addClass = e => {
@@ -137,10 +109,10 @@ const useDnDNodes = ({
         e.preventDefault();
         e.stopPropagation();
         const actualTarget = e.currentTarget;
-        if (
+        const b =
           actualTarget.localName === 'ul' &&
-          !actualTarget.classList.contains(modTree.tree_rootList)
-        ) {
+          !actualTarget.classList.contains(modTree.tree_rootList);
+        if (b) {
           const nodeTitle = actualTarget.previousSibling.lastChild;
           removeClass(e, nodeTitle);
         } else removeClass(e);
@@ -149,15 +121,16 @@ const useDnDNodes = ({
           const droppedNode = nodes[Number(dropped_node_id)];
           const fatherOfDroppedNode = nodes[droppedNode.father_id];
           const targetNode = nodes[target_node_id];
-          const father_id_chain = new Set(
+          const target_node_father_id_chain = new Set(
             target_node_id === 0
               ? [0]
-              : getFatherIdChain(nodes, target_node_id),
+              : getFatherIdChain([target_node_id])(nodes)(target_node_id),
           );
-          const fatherDroppedToChild = droppedNode.child_nodes.some(
-            child_node => father_id_chain.has(child_node),
+          const nodeDroppedToItsChild = droppedNode.child_nodes.some(
+            child_node => target_node_father_id_chain.has(child_node),
           );
-          if (fatherDroppedToChild)
+          if (fatherOfDroppedNode.node_id === target_node_id) return;
+          if (nodeDroppedToItsChild)
             ac.dialogs.setAlert({
               title: 'forbidden operation',
               type: AlertType.Warning,
@@ -171,17 +144,11 @@ const useDnDNodes = ({
               droppedNode,
               position,
             });
-            updateCache({
-              targetNode,
-              fatherOfDroppedNode,
-              droppedNode,
-            });
-            if (afterDrop) afterDrop({ e, node_id: droppedNode.node_id });
           }
         }
       },
     }),
-    [target_node_id, nodes, afterDrop, removeClass],
+    [target_node_id, nodes, removeClass],
   );
 
   return {

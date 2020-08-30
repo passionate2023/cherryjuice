@@ -22,9 +22,7 @@ const mapDispatch = {
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type ModalProps = Omit<BaseModalProps, 'buttons'> & {
-  inputProps: ValidatedTextInputProps;
-};
+type ModalProps = Omit<BaseModalProps, 'buttons'> & {};
 const PasswordModal: React.FC<ModalProps & PropsFromRedux> = ({
   show,
   onClose,

@@ -1,10 +1,9 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { cloneObj } from '::helpers/editing/execK/helpers';
-import { rootActionCreators } from './root';
+import { rootActionCreators as rac } from './root';
 import { AsyncOperation } from '::store/ducks/document';
 import { SelectNodeParams } from '::store/ducks/cache/document-cache/helpers/document/select-node';
-import { ClearSelectedNodeParams } from '::store/ducks/cache/document-cache/helpers/node/clear-selected-node';
 
 const ap = createActionPrefixer('node');
 const ac = {
@@ -18,9 +17,6 @@ const ac = {
   processLinks: _(ap('process-links')),
 
   select: _(ap('select'), _ => (payload: SelectNodeParams) => _(payload)),
-  unselect: _(ap('unselect'), _ => (payload: ClearSelectedNodeParams) =>
-    _(payload),
-  ),
 };
 
 type State = {
@@ -40,7 +36,7 @@ const initialState: State = cloneObj<State>({
 });
 const reducer = createReducer(initialState, _ => [
   ...[
-    _(rootActionCreators.resetState, () => ({
+    _(rac.resetState, () => ({
       ...cloneObj(initialState),
     })),
   ],

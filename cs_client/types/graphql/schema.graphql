@@ -230,6 +230,7 @@ enum HotKeyActionType {
     JUSTIFY_RIGHT
     LINE_THROUGH
     MONO
+    REDO
     RELOAD_DOCUMENT
     REMOVE_STYLE
     SAVE_DOCUMENT
@@ -241,6 +242,7 @@ enum HotKeyActionType {
     SUB
     SUP
     UNDERLINE
+    UNDO
 }
 
 enum NodePrivacy {

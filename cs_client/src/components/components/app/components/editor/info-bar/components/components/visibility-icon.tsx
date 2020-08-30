@@ -20,15 +20,12 @@ type Props = {
 };
 
 const VisibilityIcon: React.FC<Props> = ({ privacy, className }) => {
+  const name = mapPrivacyToIcon(privacy);
   return (
     <div
       className={modInfoBar.infoBar__documentPrivacy + ' ' + (className || '')}
     >
-      <Icon
-        name={mapPrivacyToIcon(privacy)}
-        loadAsInlineSVG={'force'}
-        size={14}
-      />
+      {name && <Icon name={name} loadAsInlineSVG={'force'} size={14} />}
     </div>
   );
 };

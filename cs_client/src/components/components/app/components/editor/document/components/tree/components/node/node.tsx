@@ -4,7 +4,6 @@ import { useCallback, useRef, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { useDnDNodes } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/dnd-nodes';
 import { useSelectNode } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/select-node';
-import { useScrollNodeIntoView } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/scroll-node-into-view';
 import { persistedTreeState } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/persisted-tree-state/helpers';
 import { usePersistedTreeState } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/persisted-tree-state/persisted-tree-state';
 import { NodePrivacy, Privacy } from '::types/graphql/generated';
@@ -52,11 +51,9 @@ const Node: React.FC<NodeProps> = ({
     setShowChildren(!showChildren);
   }, [showChildren]);
   const { clickTimestamp, selectNode } = useSelectNode({
-    componentRef,
     file_id,
     node_id,
   });
-  useScrollNodeIntoView({ nodePath, componentRef });
   usePersistedTreeState({
     showChildren,
     node_id,
@@ -67,10 +64,6 @@ const Node: React.FC<NodeProps> = ({
     node_id,
     componentRef: titleRef,
     nodes,
-    afterDrop: ({ e }) => {
-      selectNode(e);
-      setShowChildren(true);
-    },
   });
   const listDndProps = useDnDNodes({
     componentRef: listRef,
@@ -110,7 +103,11 @@ const Node: React.FC<NodeProps> = ({
         >
           {name}
         </div>
-        <NodeOverlay nodePath={nodePath} clickTimestamp={clickTimestamp} />
+        <NodeOverlay
+          nodePath={nodePath}
+          clickTimestamp={clickTimestamp}
+          nodeComponentRef={componentRef}
+        />
       </div>
       {showChildren && (
         <NodeChildren

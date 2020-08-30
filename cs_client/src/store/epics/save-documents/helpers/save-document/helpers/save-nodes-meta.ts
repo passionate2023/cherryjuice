@@ -13,10 +13,12 @@ const swapNodeIdIfApplies = (state: SaveOperationState) => (nodeId: string) =>
   state.swappedNodeIds[nodeId] ? state.swappedNodeIds[nodeId] : nodeId;
 const swapFatherIdIfApplies = (state: SaveOperationState) => (
   node: QFullNode,
-) => {
+): QFullNode => {
+  let fatherId = node.fatherId;
   if (state.swappedNodeIds[node.fatherId]) {
-    node.fatherId = state.swappedNodeIds[node.fatherId];
+    fatherId = state.swappedNodeIds[node.fatherId];
   }
+  return { ...node, fatherId };
 };
 
 const saveNodesMeta = async ({ state, document }: SaveOperationProps) => {
@@ -25,9 +27,9 @@ const saveNodesMeta = async ({ state, document }: SaveOperationProps) => {
   ).filter(([id]): boolean => !state.deletedNodes[document.id][id]);
   const nodeMetaIts: NodeMetaIt[] = [];
   for await (const [node_id, editedAttributes] of editedNodeMeta) {
-    const node = document.nodes[node_id];
-    swapFatherIdIfApplies(state)(node);
-    updateDocumentId(state)(node);
+    let node = document.nodes[node_id];
+    node = swapFatherIdIfApplies(state)(node);
+    node = updateDocumentId(state)(node);
     const meta: NodeMetaIt = {
       updatedAt: node.updatedAt,
       node_id: node.node_id,

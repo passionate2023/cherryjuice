@@ -61,19 +61,17 @@ const execK = ({
       { left, right, modifiedSelected, lineStyle },
       { startDDOE, endDDOE, endAnchor, startAnchor },
     );
-    {
-      restoreSelection({
-        modifiedSelection: {
-          childrenElementsOfStartDDOE,
-          childrenElementsOfEndDDOE,
-          adjacentElementsOfStartDDOE,
-        },
-        selected,
-        ogSelection: { startElement, endElement, startOffset, endOffset },
-        options: { collapse: isJustificationCommand(command) },
-      });
-      if (selectionContainsLinks) ac.node.processLinks(new Date().getTime());
-    }
+    restoreSelection({
+      modifiedSelection: {
+        childrenElementsOfStartDDOE,
+        childrenElementsOfEndDDOE,
+        adjacentElementsOfStartDDOE,
+      },
+      selected,
+      ogSelection: { startElement, endElement, startOffset, endOffset },
+      options: { collapse: isJustificationCommand(command) },
+    });
+    if (selectionContainsLinks) ac.node.processLinks(new Date().getTime());
   } catch (e) {
     document.querySelector('#rich-text ').innerHTML = ogHtml;
     ac.dialogs.setAlert({

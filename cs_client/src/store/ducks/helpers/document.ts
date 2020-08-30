@@ -17,21 +17,16 @@ const getFlatListOfChildrenTree = (arr: number[] = []) => (
   return arr;
 };
 const calcRecentNodes = ({
-  removeChildren,
-  selectedNode_id,
+  node_id,
   recentNodes,
   nodes,
 }: {
   nodes: NodesDict;
   recentNodes: number[];
-  selectedNode_id: number;
-  removeChildren: boolean;
+  node_id: number;
 }): number[] => {
   const toRemoveFromRecentNodes = Object.fromEntries(
-    (removeChildren
-      ? getFlatListOfChildrenTree()(nodes)(selectedNode_id)
-      : [selectedNode_id]
-    ).map(node_id => [node_id, true]),
+    getFlatListOfChildrenTree()(nodes)(node_id).map(node_id => [node_id, true]),
   );
 
   return recentNodes.filter(node_id => !toRemoveFromRecentNodes[node_id]);

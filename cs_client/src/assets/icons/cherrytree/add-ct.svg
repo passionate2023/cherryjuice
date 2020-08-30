@@ -1,1 +1,9 @@
-<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="d" x1="15.26" x2="38.4" y1=".9" y2="42.306" gradientTransform="translate(-1.264 -1.33) scale(1.0725)" gradientUnits="userSpaceOnUse"><stop stop-color="#fff" offset="0"/><stop stop-color="#fff" stop-opacity="0" offset="1"/></linearGradient><linearGradient id="c" x1="22.143" x2="22" y1="5" y2="42.571" gradientUnits="userSpaceOnUse"><stop stop-color="#789e2d" offset="0"/><stop stop-color="#42770c" offset="1"/></linearGradient><linearGradient id="a" x1="23.563" x2="23.563" y1="31.488" y2="36.893" gradientTransform="matrix(1.145 0 0 1.8605 -2.979 -40.5)" gradientUnits="userSpaceOnUse"><stop stop-opacity=".314" offset="0"/><stop stop-opacity=".31" offset="1"/></linearGradient><radialGradient id="b" cx="24" cy="5" r="19" gradientTransform="matrix(0 2.2594 -4.0027 0 44.013 -49.226)" gradientUnits="userSpaceOnUse"><stop stop-color="#b8d67a" offset="0"/><stop stop-color="#a7cc5c" offset=".25"/><stop stop-color="#789e2d" offset=".68"/><stop stop-color="#42770c" offset="1"/></radialGradient></defs><path d="M6 17c-1.98.022-1.978 0-2 2v10c.066 1.935.065 1.978 2 2h11v11c-.04 1.948.052 2 2 2h10c2.037 0 2.04 0 2-2V31h11c2 0 2 .045 2-2V19c.044-1.957.046-1.978-2-2H31V6c0-1.854 0-2-2-2H19c-1.854 0-1.958 0-2 2v11H6z" display="block" fill="url(#a)" opacity=".3"/><path d="M18.5 18.5v-13h11v13h13v11h-13v13h-11v-13h-13v-11h13z" fill="url(#b)" fill-rule="evenodd" stroke="url(#c)" stroke-linejoin="round"/><path d="M19.5 19.5v-13h9v13h13v9h-13v13h-9v-13h-13v-9h13z" fill="none" opacity=".5" stroke="url(#d)" stroke-linejoin="round"/></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+	 viewBox="0 0 48 48" style="enable-background:new 0 0 48 48;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#2DC62E;}
+</style>
+<path class="st0" d="M18.5,18.5v-13h11v13h13v11h-13v13h-11v-13h-13v-11H18.5z"/>
+</svg>

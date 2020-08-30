@@ -4,9 +4,6 @@ import { updateCachedHtmlAndImages } from '::root/components/app/components/edit
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { ac } from '::store/store';
 import { NodePrivacy } from '::types/graphql/generated';
-import { getNode } from '::store/selectors/cache/document/node';
-import { interval } from 'rxjs';
-import { filter, take, tap } from 'rxjs/operators';
 
 const calculateNewStyle = (state: TNodeMetaState): string => {
   return JSON.stringify({
@@ -69,23 +66,6 @@ const calculateEditedAttribute = ({
   return diff;
 };
 
-const addToFatherChild_nodes = (
-  father_child_nodes: number[],
-  saved_node_id: number,
-  previous_sibling_node_id: number,
-) => {
-  const child_nodes = father_child_nodes;
-  const position =
-    previous_sibling_node_id === -1
-      ? -1
-      : child_nodes.indexOf(previous_sibling_node_id) + 1;
-  if (!child_nodes.includes(saved_node_id))
-    position === -1
-      ? child_nodes.push(saved_node_id)
-      : child_nodes.splice(position, 0, saved_node_id);
-  return [...child_nodes];
-};
-
 type UseSaveProps = {
   node: NodeCached;
   newNode: boolean;
@@ -101,36 +81,9 @@ const useSave = ({
   return useDelayedCallback(ac.dialogs.hideNodeMeta, () => {
     const newStyle = calculateNewStyle(state);
     if (newNode) {
-      const nodeToSave = generateNewNode({ node, state, newStyle });
-
-      ac.documentCache.createNode(nodeToSave);
-      interval(1)
-        .pipe(
-          filter(() => !!getNode(nodeToSave)),
-          take(1),
-          tap(() => {
-            const fatherNode = getNode({
-              node_id: nodeToSave.father_id,
-              documentId: nodeToSave.documentId,
-            });
-
-            ac.documentCache.mutateNode({
-              node_id: fatherNode.node_id,
-              documentId: fatherNode.documentId,
-              data: {
-                child_nodes: addToFatherChild_nodes(
-                  fatherNode.child_nodes,
-                  nodeToSave.node_id,
-                  previous_sibling_node_id,
-                ),
-              },
-            });
-            ac.node.select(node);
-          }),
-        )
-        .subscribe();
-
       updateCachedHtmlAndImages();
+      const createdNode = generateNewNode({ node, state, newStyle });
+      ac.documentCache.createNode({ createdNode, previous_sibling_node_id });
     } else {
       const editedAttribute = calculateEditedAttribute({
         state,
@@ -138,7 +91,7 @@ const useSave = ({
         newStyle,
       });
       if (Object.keys(editedAttribute).length) {
-        ac.documentCache.mutateNode({
+        ac.documentCache.mutateNodeMeta({
           node_id: node.node_id,
           documentId: node.documentId,
           data: editedAttribute,

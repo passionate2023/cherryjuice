@@ -3,7 +3,7 @@ const getEnvVariable = (prefix: string) => (variable: string) =>
 
 const transporterConfig = (options: { useTrap?: boolean } = {}) => {
   const propertyPrefix =
-    options.useTrap && process.env.NODE_ENV === 'development' ? 'TRAP2_' : '';
+    options.useTrap && process.env.NODE_ENV === 'development' ? 'TRAP_' : '';
   const _ = getEnvVariable(propertyPrefix);
   const secure = _('EMAIL_SECURE') === 'true';
   return {

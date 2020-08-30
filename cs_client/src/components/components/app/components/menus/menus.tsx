@@ -40,7 +40,24 @@ const DeleteNode = React.lazy(() =>
 
 import { connect, ConnectedProps } from 'react-redux';
 import { SearchDialog } from '::root/components/app/components/menus/dialogs/search-dialog/search-dialog';
+import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 
+const components = [
+  <ImportProgress key={'ImportProgress'} />,
+  <UserPopup key={'UserPopup'} />,
+  <DocumentsList key={'DocumentsList'} />,
+  <Settings key={'Settings'} />,
+  <SearchDialog key={'PasswordModal'} />,
+  <DocumentMeta key={'DocumentMeta'} />,
+  <NodeMeta key={'NodeMeta'} />,
+  <ImportDocuments key={'ImportDocuments'} />,
+  <ReloadDocument key={'ReloadDocument'} />,
+  <DeleteNode key={'DeleteNode'} />,
+  // @ts-ignore
+  <PasswordModal key={'PasswordModal'} />,
+  <AlertModal key={'AlertModal'} />,
+  <Snackbar key={'Snackbar'} />,
+];
 const mapState = () => ({});
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -50,43 +67,11 @@ type Props = {};
 const Menus: React.FC<Props & PropsFromRedux> = () => {
   return (
     <>
-      <Suspense fallback={<Void />}>
-        <DocumentsList />
-      </Suspense>
-      <Suspense fallback={<Void />}>
-        <Settings />
-      </Suspense>
-      <Suspense fallback={<Void />}>
-        <AlertModal />
-      </Suspense>
-      <Suspense fallback={<Void />}>
-        <ImportDocuments />
-      </Suspense>
-      <Suspense fallback={<Void />}>
-        <UserPopup />
-      </Suspense>
-      <Suspense fallback={<Void />}>
-        <ImportProgress />
-      </Suspense>
-      <Suspense fallback={<Void />}>
-        <NodeMeta />
-      </Suspense>
-      <Suspense fallback={<Void />}>
-        <DocumentMeta />
-      </Suspense>
-      <Suspense fallback={<Void />}>
-        <DeleteNode />
-      </Suspense>
-      <Suspense fallback={<Void />}>
-        <ReloadDocument />
-      </Suspense>
-      <Suspense fallback={<Void />}>
-        <Snackbar />
-      </Suspense>
-      <Suspense fallback={<Void />}>
-        <PasswordModal />
-      </Suspense>
-      <SearchDialog />
+      {components.map((component, i) => (
+        <ErrorBoundary key={i}>
+          <Suspense fallback={<Void />}>{component}</Suspense>
+        </ErrorBoundary>
+      ))}
     </>
   );
 };

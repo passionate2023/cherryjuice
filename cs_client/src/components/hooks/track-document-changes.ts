@@ -4,13 +4,17 @@ import { onBeforeUnload } from '::helpers/dom/on-before-unload';
 type Props = {
   userHasUnsavedChanges: boolean;
   documentName?: string;
+  userId?: string;
 };
+
 const useTrackDocumentChanges = ({
   userHasUnsavedChanges,
   documentName,
+  userId,
 }: Props) => {
   useEffect(() => {
-    const title = `${documentName ? documentName + ' - ' : ''}Cherryscript`;
+    const prefix = userId && documentName ? `${documentName} - ` : '';
+    const title = `${prefix}Cherryscript`;
     if (userHasUnsavedChanges) {
       document.title = '*' + title;
       onBeforeUnload.attach();
@@ -18,11 +22,7 @@ const useTrackDocumentChanges = ({
       onBeforeUnload.remove();
       document.title = title;
     }
-    return () => {
-      document.title = 'Cherryscript';
-      onBeforeUnload.remove();
-    };
-  }, [userHasUnsavedChanges, documentName]);
+  }, [userHasUnsavedChanges, documentName, userId]);
 };
 
 export { useTrackDocumentChanges };

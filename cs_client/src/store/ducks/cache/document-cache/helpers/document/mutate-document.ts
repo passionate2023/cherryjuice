@@ -1,8 +1,9 @@
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
-import { removeDuplicates } from '::helpers/array-helpers';
+import { Privacy } from '::types/graphql/generated';
 
 type DocumentMeta = {
   name?: string;
+  privacy?: Privacy;
 };
 export type MutateDocumentProps = {
   documentId: string;
@@ -13,19 +14,12 @@ export const mutateDocument = (
   state: DocumentCacheState,
   payload: MutateDocumentProps,
 ): DocumentCacheState => {
-  return {
-    ...state,
-    [payload.documentId]: {
-      ...state[payload.documentId],
-      ...payload.meta,
-      state: {
-        ...state[payload.documentId].state,
-        localUpdatedAt: Date.now(),
-        editedAttributes: removeDuplicates([
-          ...state[payload.documentId].state.editedAttributes,
-          ...Object.keys(payload.meta),
-        ]),
-      },
-    },
-  };
+  const document = state[payload.documentId];
+  Object.entries(payload.meta).forEach(([key, value]) => {
+    document[key] = value;
+    if (!document.state.editedAttributes.includes(key))
+      document.state.editedAttributes.push(key);
+  });
+  document.state.localUpdatedAt = Date.now();
+  return state;
 };
