@@ -33,7 +33,7 @@ export const getDefaultState = ({
   newDocument,
   nodes,
 }: GetDefaultStateParams = defaultParams): CachedDocumentState => {
-  if (existingState && nodes ) {
+  if (existingState && nodes) {
     return {
       ..._getDefaultState(),
       recentNodes: existingState.recentNodes,
