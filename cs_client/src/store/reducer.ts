@@ -16,6 +16,7 @@ import { cacheReducer } from './ducks/cache/cache';
 import { settingsReducer } from './ducks/settings';
 import { documentCacheReducer } from '::store/ducks/cache/document-cache';
 import { animationReducer } from '::store/ducks/animations';
+import { timelinesReducer } from '::store/ducks/timelines';
 
 const reducer = combineReducers({
   cache: persistReducer(
@@ -63,6 +64,7 @@ const reducer = combineReducers({
   node: nodeReducer,
   documentsList: documentsListReducer,
   documentOperations: documentOperationsReducer,
+  timelines: timelinesReducer,
   root: persistReducer(
     {
       key: 'root',

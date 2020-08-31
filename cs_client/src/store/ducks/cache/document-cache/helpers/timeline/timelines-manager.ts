@@ -1,39 +1,36 @@
+import { OnFrameChange } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
 import { Timeline } from '::store/ducks/cache/document-cache/helpers/timeline/timeline';
 
 export class TimelinesManager {
-  private nodeMetaTimelines: { [documentId: string]: Timeline };
-  private readonly documentMetaTimeline: Timeline;
-  private documentId: string;
-
+  private timelines: { [id: string]: Timeline };
+  current: Timeline;
+  private onFrameChange: OnFrameChange;
   constructor() {
-    this.nodeMetaTimelines = {};
-    this.documentMetaTimeline = new Timeline();
+    this.timelines = {};
   }
 
-  addNodeMetaTimeline = (documentId: string): void => {
-    this.nodeMetaTimelines[documentId] = new Timeline();
-  };
-
-  setCurrentNodeMetaTimeline = (documentId: string): void => {
-    this.documentId = documentId;
-  };
-
-  resetDocumentMetaTimeline = () => {
-    this.documentMeta.resetAll();
-  };
-  resetNodeMetaTimelines = () => {
-    this.nodeMetaTimelines = {};
-  };
-
-  get nodeMeta(): Timeline {
-    return this.nodeMetaTimelines[this.documentId];
-  }
-  get documentMeta(): Timeline {
-    return this.documentMetaTimeline;
+  setOnFrameChangeFactory(
+    onFrameChangeFactory?: () => Promise<OnFrameChange>,
+  ): void {
+    onFrameChangeFactory().then(
+      onFrameChange => (this.onFrameChange = onFrameChange),
+    );
   }
 
-  resetNodeMetaTimeline = (documentId: string): void => {
-    delete this.nodeMetaTimelines[documentId];
-    if (this.documentId === documentId) this.documentId = undefined;
+  private addTimeline = (id: string): void => {
+    this.timelines[id] = new Timeline(this.onFrameChange);
+  };
+
+  setCurrent = (id: string): void => {
+    if (!this.timelines[id]) this.addTimeline(id);
+    this.current = this.timelines[id];
+  };
+
+  resetAll = () => {
+    this.timelines = {};
+  };
+
+  resetTimeline = (id: string): void => {
+    delete this.timelines[id];
   };
 }

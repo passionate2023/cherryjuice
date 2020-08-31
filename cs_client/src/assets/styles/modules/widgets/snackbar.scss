@@ -26,5 +26,11 @@
   display: block;
 }
 
-.snackbar__close-button {
+.snackbar__buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    fill: grey;
+  }
 }

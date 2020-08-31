@@ -1,27 +1,47 @@
 import { applyPatches, Patch } from 'immer';
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
+import {
+  NumberOfFrames,
+  OnFrameChange,
+} from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
 
 type TimelineFrameMeta = {
   documentId: string;
 };
 
-type TimelineFrame = {
+type Frame = {
   redo: Patch[];
   undo: Patch[];
   meta: TimelineFrameMeta;
 };
 
-type TimelineFrames = {
-  [position: number]: TimelineFrame;
+type Frames = {
+  [position: number]: Frame;
 };
+
+const noop = () => undefined;
 
 export class Timeline {
   private position: number;
-  private frames: TimelineFrames;
+  private frames: Frames;
+  private readonly _onFrameChange: () => void = noop;
 
-  constructor() {
+  constructor(onFrameChange?: OnFrameChange) {
+    if (onFrameChange)
+      this._onFrameChange = () => {
+        setTimeout(() => {
+          onFrameChange(this.numberOfFrames);
+        }, 10);
+      };
     this.position = -1;
     this.frames = {};
+  }
+
+  private get numberOfFrames(): NumberOfFrames {
+    const numberOfFrames = Object.keys(this.frames).length - 1;
+    const redo = numberOfFrames - this.position;
+    const undo = this.position + 1;
+    return { redo, undo };
   }
 
   private deleteFutureFrames = () => {
@@ -47,6 +67,7 @@ export class Timeline {
     };
     this.deleteFutureFrames();
     this.deleteOldFrames();
+    this._onFrameChange();
   };
 
   redo = (state: DocumentCacheState): DocumentCacheState => {
@@ -56,6 +77,7 @@ export class Timeline {
       const patches: Patch[] = frame.redo;
       const newState = applyPatches(state, patches);
       this.position += 1;
+      this._onFrameChange();
       return newState;
     }
   };
@@ -66,6 +88,7 @@ export class Timeline {
       const patches: Patch[] = frame.undo;
       const newState = applyPatches(state, patches);
       this.position -= 1;
+      this._onFrameChange();
       return newState;
     }
   };
@@ -73,6 +96,7 @@ export class Timeline {
   resetAll = () => {
     this.frames = {};
     this.position = -1;
+    this._onFrameChange();
   };
 
   resetDocument = (documentId: string) => {
@@ -85,5 +109,6 @@ export class Timeline {
       this.frames[position] = frame;
     });
     this.position -= originalFrames.length - frames.length;
+    this._onFrameChange();
   };
 }

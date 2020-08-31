@@ -21,6 +21,7 @@ import { cacheActionCreators } from './ducks/cache/cache';
 import { settingsActionCreators } from './ducks/settings';
 import { documentCacheActionCreators } from '::store/ducks/cache/document-cache';
 import { animationActionCreators } from '::store/ducks/animations';
+import { timelinesActionCreators } from '::store/ducks/timelines';
 
 type Store = ReturnType<typeof reducer>;
 
@@ -55,6 +56,7 @@ const ac = {
     settings: settingsActionCreators,
     documentCache: documentCacheActionCreators,
     animation: animationActionCreators,
+    timelines: timelinesActionCreators
   },
   document: bindActionCreators(documentActionCreators, store.dispatch),
   dialogs: bindActionCreators(dialogsActionCreators, store.dispatch),
@@ -62,6 +64,7 @@ const ac = {
   editor: bindActionCreators(editorActionCreators, store.dispatch),
   animation: bindActionCreators(animationActionCreators, store.dispatch),
   auth: bindActionCreators(authActionCreators, store.dispatch),
+  timelines: bindActionCreators(timelinesActionCreators, store.dispatch),
   documentCache: bindActionCreators(
     documentCacheActionCreators,
     store.dispatch,

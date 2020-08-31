@@ -112,7 +112,17 @@ type State = {
 };
 
 const initialState: State = {};
-const timelinesManager = new TimelinesManager();
+export const nmTM = new TimelinesManager();
+nmTM.setOnFrameChangeFactory(() =>
+  import('::store/store').then(module => module.ac.timelines.setNodeMetaStatus),
+);
+export const dmTM = new TimelinesManager();
+dmTM.setOnFrameChangeFactory(() =>
+  import('::store/store').then(
+    module => module.ac.timelines.setDocumentMetaStatus,
+  ),
+);
+
 const reducer = createReducer(initialState, _ => [
   ...[
     // non undoable actions
@@ -120,15 +130,15 @@ const reducer = createReducer(initialState, _ => [
       ...cloneObj(initialState),
     })),
     _(dac.setDocumentId, (state, { payload }) => {
-      timelinesManager.setCurrentNodeMetaTimeline(payload);
+      nmTM.setCurrent(payload);
       return state;
     }),
     _(dac.fetchFulfilled, (state, { payload }) => {
-      timelinesManager.addNodeMetaTimeline(payload.id);
+      nmTM.setCurrent(payload.id);
       return loadDocument(state, payload);
     }),
     _(ac.createDocument, (state, { payload }) => {
-      timelinesManager.addNodeMetaTimeline(payload.id);
+      nmTM.setCurrent(payload.id);
       return createDocument(state, payload);
     }),
     _(ac.swapDocumentId, (state, { payload }) =>
@@ -158,8 +168,8 @@ const reducer = createReducer(initialState, _ => [
       mutateNodeContent(state, payload),
     ),
     _(ac.deleteDocument, (state, { payload: documentId }) => {
-      timelinesManager.documentMeta.resetDocument(documentId);
-      timelinesManager.resetNodeMetaTimeline(documentId);
+      dmTM.current.resetDocument(documentId);
+      nmTM.resetTimeline(documentId);
       return produce(state, draft => {
         delete draft[documentId];
       });
@@ -167,15 +177,15 @@ const reducer = createReducer(initialState, _ => [
     _(
       dac.saveFulfilled,
       (state): State => {
-        timelinesManager.resetDocumentMetaTimeline();
-        timelinesManager.resetNodeMetaTimelines();
+        dmTM.current.resetAll();
+        nmTM.resetAll();
         return removeSavedDocuments(state);
       },
     ),
-    _(ac.undoDocumentMeta, state => timelinesManager.documentMeta.undo(state)),
-    _(ac.redoDocumentMeta, state => timelinesManager.documentMeta.redo(state)),
-    _(ac.undoNodeMeta, state => timelinesManager.nodeMeta.undo(state)),
-    _(ac.redoNodeMeta, state => timelinesManager.nodeMeta.redo(state)),
+    _(ac.undoDocumentMeta, state => dmTM.current.undo(state)),
+    _(ac.redoDocumentMeta, state => dmTM.current.redo(state)),
+    _(ac.undoNodeMeta, state => nmTM.current.undo(state)),
+    _(ac.redoNodeMeta, state => nmTM.current.redo(state)),
   ],
   ...[
     // undoable actions
@@ -183,7 +193,7 @@ const reducer = createReducer(initialState, _ => [
       produce(
         state,
         draft => createNode(draft, payload),
-        timelinesManager.nodeMeta.add({
+        nmTM.current.add({
           documentId: payload.createdNode.documentId,
         }),
       ),
@@ -192,7 +202,7 @@ const reducer = createReducer(initialState, _ => [
       produce(
         state,
         draft => deleteNode(draft, payload),
-        timelinesManager.nodeMeta.add({
+        nmTM.current.add({
           documentId: payload.documentId,
         }),
       ),
@@ -201,7 +211,7 @@ const reducer = createReducer(initialState, _ => [
       produce(
         state,
         draft => mutateNodeMeta(draft, payload),
-        timelinesManager.nodeMeta.add({
+        nmTM.current.add({
           documentId: Array.isArray(payload)
             ? payload[0].documentId
             : payload.documentId,
@@ -212,7 +222,7 @@ const reducer = createReducer(initialState, _ => [
       produce(
         state,
         draft => mutateDocument(draft, payload),
-        timelinesManager.documentMeta.add({ documentId: payload.documentId }),
+        dmTM.current.add({ documentId: payload.documentId }),
       ),
     ),
   ],
