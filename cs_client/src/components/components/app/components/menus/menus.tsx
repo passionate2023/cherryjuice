@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Suspense } from 'react';
 import { Void } from '::root/components/shared-components/react/void';
 import ReloadDocument from '::root/components/app/components/menus/modals/reload-document/reload-document';
-import { Snackbar } from '::root/components/shared-components/snackbar/snackbar';
 const AlertModal = React.lazy(() => import('./modals/alert-modal/alert-modal'));
 const PasswordModal = React.lazy(() =>
   import('./modals/password-modal/password-modal'),
@@ -10,9 +9,7 @@ const PasswordModal = React.lazy(() =>
 const UserPopup = React.lazy(() =>
   import('./modals/user/user-with-transition'),
 );
-const ImportProgress = React.lazy(() =>
-  import('./widgets/document-operations/document-operations'),
-);
+
 const ImportDocuments = React.lazy(() =>
   import('./modals/import-documents/import-documents'),
 );
@@ -41,9 +38,9 @@ const DeleteNode = React.lazy(() =>
 import { connect, ConnectedProps } from 'react-redux';
 import { SearchDialog } from '::root/components/app/components/menus/dialogs/search-dialog/search-dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
+import { Widgets } from '::root/components/app/components/menus/widgets/widgets';
 
 const components = [
-  <ImportProgress key={'ImportProgress'} />,
   <UserPopup key={'UserPopup'} />,
   <DocumentsList key={'DocumentsList'} />,
   <Settings key={'Settings'} />,
@@ -56,7 +53,7 @@ const components = [
   // @ts-ignore
   <PasswordModal key={'PasswordModal'} />,
   <AlertModal key={'AlertModal'} />,
-  <Snackbar key={'Snackbar'} />,
+  <Widgets key={'Widgets'} />,
 ];
 const mapState = () => ({});
 const mapDispatch = {};

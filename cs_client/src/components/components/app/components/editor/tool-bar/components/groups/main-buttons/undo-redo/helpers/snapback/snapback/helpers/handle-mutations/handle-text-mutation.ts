@@ -44,7 +44,6 @@ export const handleTextMutation = (
   newMutation: EnhancedMutationRecord,
   latestFrame: Frame,
 ): Frame | undefined => {
-
   const valueEndsWithDelimiter = endsWithDelimiter(newMutation.newValue);
   const latestFrameMutations = latestFrame?.mutations || [];
   const latestMutation = latestFrameMutations[latestFrameMutations.length - 1];

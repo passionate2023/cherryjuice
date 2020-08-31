@@ -1,20 +1,8 @@
 @import '../../vars/vars';
 @import '../../mixins/breakpoints';
-.snackbar__container {
-  position: absolute;
-  height: var(--vh);
-  z-index: $ZI-snackbar;
-}
+
 .snackbar {
-  position: absolute;
-  bottom: 0.6rem;
-  left: 0.5rem;
-
-  @include respond-to($md-down) {
-    bottom: 0.5rem;
-  }
-
-  width: 250px;
+  width: 300px;
   height: 45px;
   box-sizing: border-box;
 

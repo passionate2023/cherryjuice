@@ -12,7 +12,7 @@ import { resetCache } from '::store/epics/save-documents/helpers/reset-cache';
 import { cacheCurrentNode } from '::store/epics/save-documents/helpers/cache-current-node';
 import { Epic } from 'redux-observable';
 import { swapPersistedTreeDocumentIds } from '::store/epics/save-documents/helpers/swap-persisted-tree-document-ids';
-import { SnackbarMessages } from '::root/components/shared-components/snackbar/snackbar-messages';
+import { SnackbarMessages } from '::root/components/app/components/menus/widgets/components/snackbar/snackbar-messages';
 
 const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
   return action$.pipe(

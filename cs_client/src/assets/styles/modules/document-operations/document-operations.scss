@@ -1,23 +1,18 @@
 @import '../../vars/colors';
 @import '../../vars/vars';
 .document-operations {
-  z-index: $ZI-document-operations;
   display: flex;
   flex-direction: column;
-  position: absolute;
-  right: 5px;
-  bottom: calc(var(--info-bar) + 5px);
-  @include respond-to($md-down) {
-    bottom: 5px;
-  }
   width: 300px;
   min-height: 0px;
-  background-color: white;
-  border-radius: 5px;
+  box-shadow: $box-shadow1;
 }
 .document-operations--collapsed {
   height: 40px;
-  width: 100px;
+  .document-operations__header {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
 }
 .document-operations__header {
   background-color: $dark-grey;
@@ -26,6 +21,8 @@
   align-items: center;
   justify-content: center;
   padding: 5px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 .document-operations__header__text {
   margin-left: 5px;
@@ -56,17 +53,22 @@
   width: 100%;
   overflow-y: auto;
   max-height: 123px;
+  background-color: rgb(250, 250, 250);
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 
 .document-operations__document {
   height: 20px;
   width: calc(100% - 20px);
   padding: 10px;
-  background-color: white;
   border-bottom: 1px solid rgba(grey, 0.3);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: rgb(250, 250, 250);
+  color: black;
+  border-radius: 3px;
 }
 .document-operations__document__name {
   color: black;

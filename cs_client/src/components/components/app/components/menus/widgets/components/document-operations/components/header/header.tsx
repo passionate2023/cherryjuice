@@ -32,16 +32,11 @@ type Props = {
   exports: DocumentSubscription[];
   collapsed: boolean;
 };
-const Header: React.FC<Props> = ({
-  toggleCollapsed,
-  imports,
-  exports,
-  collapsed,
-}) => {
+const Header: React.FC<Props> = ({ collapsed,toggleCollapsed, imports, exports }) => {
   const stats = getStats(imports, exports);
   return (
     <div className={modDocumentOperations.documentOperations__header}>
-      <HeaderText collapsed={collapsed} stats={stats} />
+      <HeaderText collapsed={false} stats={stats} />
       <HeaderButtons
         toggleCollapsed={toggleCollapsed}
         collapsed={collapsed}

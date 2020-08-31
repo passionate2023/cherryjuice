@@ -19,7 +19,7 @@ const HeaderButtons: React.FC<Props> = ({
 }) => {
   return (
     <span className={modDocumentOperations.documentOperations__header__buttons}>
-      {!stats.active && !collapsed && (
+      {!stats.active && (
         <ButtonCircle
           dark={true}
           onClick={ac.documentOperations.clearFinished}

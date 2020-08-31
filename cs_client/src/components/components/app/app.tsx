@@ -8,6 +8,8 @@ import { joinClassNames } from '::helpers/dom/join-class-names';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { router } from '::root/router/router';
 import { useUpdateCssVariables } from '::root/components/app/hooks/update-css-variables';
+import { useGetPreviousOperations } from '::root/components/app/components/menus/widgets/components/document-operations/hooks/get-previous-operations';
+import { useGetActiveOperations } from '::root/components/app/components/menus/widgets/components/document-operations/hooks/get-active-operations';
 
 const Menus = React.lazy(() =>
   import('::root/components/app/components/menus/menus'),
@@ -56,6 +58,8 @@ const App: React.FC<Props & PropsFromRedux> = ({
       router.goto.signIn();
     }
   }, [userId, documentId, router.get.location.pathname]);
+  useGetPreviousOperations();
+  useGetActiveOperations(userId);
   return (
     <div
       className={joinClassNames([

@@ -21,7 +21,6 @@ import modIconPicker from './node-meta/icon-picker.scss';
 import modTreeNode from './tree/node.scss';
 import modTree from './tree/tree.scss';
 import modDeleteNode from './delete-node.scss';
-import modSnackbar from './shared-components/snackbar.scss';
 import modSearch from './search/search.scss';
 import modSearchDialog from './search/search-dialog.scss';
 import modSearchFilter from './search/search-dialog/search-filter.scss';
@@ -34,6 +33,9 @@ import modGuests from './document-meta/guests.scss';
 import modUserProfile from './user/user-profile.scss';
 import modHotKey from './settings/hot-key.scss';
 import modHotKeys from './settings/hot-keys.scss';
+import modSnackbar from './widgets/snackbar.scss';
+import modUndoAction from './widgets/undo-action.scss';
+import modWidgets from './widgets/widgets.scss';
 
 export {
   appModule,
@@ -72,4 +74,6 @@ export {
   modUserProfile,
   modHotKey,
   modHotKeys,
+  modUndoAction,
+  modWidgets,
 };

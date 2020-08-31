@@ -8,9 +8,9 @@ import { render } from 'react-dom';
 import { Router } from 'react-router-dom';
 import { Root } from '::root/root';
 import { router } from '::root/router/router';
-import { enablePatches } from 'immer';
+import { enablePatches, setAutoFreeze } from 'immer';
 import '::helpers/attach-test-callbacks';
-
+setAutoFreeze(false);
 enablePatches();
 render(
   <Router history={router.get.__history}>
