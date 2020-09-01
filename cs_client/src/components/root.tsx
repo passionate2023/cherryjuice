@@ -72,7 +72,11 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   useOnWindowResize([
     updateBreakpointState({
       breakpoint: 850,
-      callback: ac.root.setIsOnMobile,
+      callback: ac.root.setIsOnMd,
+    }),
+    updateBreakpointState({
+      breakpoint: 425,
+      callback: ac.root.setIsOnMb,
     }),
   ]);
   useRegisterHotKeys(hotKeys);

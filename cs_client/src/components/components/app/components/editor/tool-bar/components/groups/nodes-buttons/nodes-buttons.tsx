@@ -11,6 +11,7 @@ import {
   getDocumentsList,
 } from '::store/selectors/cache/document/document';
 import { documentHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
+import { joinClassNames } from '::helpers/dom/join-class-names';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -20,6 +21,7 @@ const mapState = (state: Store) => {
       documentHasUnsavedChanges,
     ),
     documentHasUnsavedChanges: documentHasUnsavedChanges(document),
+    selectedNode_id: document?.state?.selectedNode_id,
     documentId: state.document.documentId,
     isDocumentOwner: hasWriteAccessToDocument(state),
   };
@@ -30,44 +32,64 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const MainButtons: React.FC<Props & PropsFromRedux> = ({
-  showTree,
-  userHasUnsavedChanges,
-  documentHasUnsavedChanges,
+const NodesButtons: React.FC<Props & PropsFromRedux> = ({
+  selectedNode_id,
   documentId,
   isDocumentOwner,
+  children,
 }) => {
   const noDocumentIsSelected = !documentId;
-  const newDocument = documentId?.startsWith('new');
+  const noNodeIsSelected = !selectedNode_id;
   return (
-    <div className={modToolbar.toolBar__group}>
+    <div
+      className={joinClassNames([
+        modToolbar.toolBar__group,
+        modToolbar.toolBar__groupMainBar,
+      ])}
+    >
       <ToolbarButton
-        onClick={ac.editor.toggleTree}
-        active={showTree}
+        dontMount={!isDocumentOwner}
+        onClick={ac.dialogs.showCreateSiblingNode}
+        testId={testIds.toolBar__main__createSiblingNode}
         disabled={noDocumentIsSelected}
       >
-        <Icon name={Icons.material.tree} size={20} />
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={
-          documentHasUnsavedChanges
-            ? ac.dialogs.showReloadDocument
-            : ac.document.fetch
-        }
-        disabled={noDocumentIsSelected || newDocument}
-      >
-        <Icon name={Icons.material.refresh} loadAsInlineSVG={'force'} />
+        <Icon
+          name={Icons.material['create-sibling']}
+          size={20}
+          loadAsInlineSVG={'force'}
+        />
       </ToolbarButton>
       <ToolbarButton
         dontMount={!isDocumentOwner}
-        onClick={ac.document.save}
-        testId={testIds.toolBar__main__saveDocument}
-        disabled={!userHasUnsavedChanges}
+        onClick={ac.dialogs.showCreateChildNode}
+        testId={testIds.toolBar__main__createChildNode}
+        disabled={noDocumentIsSelected}
       >
-        <Icon name={Icons.material.save} loadAsInlineSVG={'force'} />
+        <Icon
+          name={Icons.material['create-child']}
+          size={20}
+          loadAsInlineSVG={'force'}
+        />
       </ToolbarButton>
+      <ToolbarButton
+        dontMount={!isDocumentOwner}
+        onClick={ac.dialogs.showEditNode}
+        disabled={noNodeIsSelected || noDocumentIsSelected}
+        testId={testIds.toolBar__main__editNodeMeta}
+      >
+        <Icon name={Icons.material.edit} loadAsInlineSVG={'force'} />
+      </ToolbarButton>
+      <ToolbarButton
+        dontMount={!isDocumentOwner}
+        onClick={ac.dialogs.showDeleteNode}
+        disabled={noNodeIsSelected || noDocumentIsSelected}
+        testId={testIds.toolBar__main__deleteNode}
+      >
+        <Icon name={Icons.material.delete} loadAsInlineSVG={'force'} />
+      </ToolbarButton>
+      {children}
     </div>
   );
 };
-const _ = connector(MainButtons);
-export { _ as MainButtons };
+const _ = connector(NodesButtons);
+export { _ as NodesButtons };

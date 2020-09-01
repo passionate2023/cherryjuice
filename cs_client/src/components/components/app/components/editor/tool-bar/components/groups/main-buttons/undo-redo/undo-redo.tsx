@@ -7,12 +7,19 @@ import { SnapBackManager } from '::root/components/app/components/editor/tool-ba
 
 export const snapBackManager = new SnapBackManager();
 
-type Props = {
-  noDocumentIsSelected: boolean;
-  noNodeIsSelected: boolean;
-  node_id: number;
-  documentId: string;
-};
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::store/store';
+import { getCurrentDocument } from '::store/selectors/cache/document/document';
+
+const mapState = (state: Store) => ({
+  node_id: getCurrentDocument(state)?.state?.selectedNode_id,
+  documentId: state.document.documentId,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = {};
 
 const getEditor = async (): Promise<HTMLDivElement> =>
   new Promise(res => {
@@ -24,11 +31,11 @@ const getEditor = async (): Promise<HTMLDivElement> =>
       }
     }, 100);
   });
-const UndoRedo: React.FC<Props> = ({
-  noDocumentIsSelected,
+const UndoRedo: React.FC<Props & PropsFromRedux> = ({
   node_id,
   documentId,
 }) => {
+  const noDocumentIsSelected = !documentId;
   const [numberOfFrames, setNumberOfFrames] = useState<NumberOfFrames>({
     redo: 0,
     undo: 0,
@@ -62,5 +69,5 @@ const UndoRedo: React.FC<Props> = ({
     </>
   );
 };
-
-export { UndoRedo };
+const _ = connector(UndoRedo);
+export { _ as UndoRedo };

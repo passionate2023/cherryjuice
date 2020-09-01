@@ -21,7 +21,8 @@ const ToolBar = React.lazy(() =>
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
-  isOnMobile: state.root.isOnMobile,
+  isOnMobile: state.root.isOnMd,
+  docking: state.root.docking,
   document: getCurrentDocument(state),
 });
 const connector = connect(mapState);
@@ -30,6 +31,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 const Editor: React.FC<PropsFromRedux> = ({
   document,
   documentId: currentDocumentId,
+  docking,
 }) => {
   useDocumentRouting(document, currentDocumentId);
 
@@ -56,9 +58,7 @@ const Editor: React.FC<PropsFromRedux> = ({
           )}
         </>
       )}
-      <Suspense fallback={<Void />}>
-        <InfoBar />
-      </Suspense>
+      <Suspense fallback={<Void />}>{!docking && <InfoBar />}</Suspense>
     </>
   );
 };

@@ -7,7 +7,7 @@ import { ac, Store } from '::store/store';
 import { NodesDict, QFullNode } from '::store/ducks/cache/document-cache';
 
 const mapState = (state: Store) => ({
-  isOnMobile: state.root.isOnMobile,
+  isOnMobile: state.root.isOnMd,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);

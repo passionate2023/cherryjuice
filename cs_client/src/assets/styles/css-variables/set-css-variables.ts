@@ -26,6 +26,9 @@ const cssVariables = {
   setInfoBar: (x: number) => {
     root.style.setProperty('--info-bar', `${x}px`);
   },
+  setNodesBar: (x: number) => {
+    root.style.setProperty('--nodes-bar', `${x}px`);
+  },
   setDockedDialogHeight(vh: number) {
     root.style.setProperty('--docked-dialog-height', `${vh}vh`);
   },

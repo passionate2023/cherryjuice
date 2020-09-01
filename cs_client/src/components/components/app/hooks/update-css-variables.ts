@@ -4,6 +4,7 @@ import { formattingBarUnmountAnimationDelay } from '::root/components/app/compon
 import { filter, tap } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { modDialog } from '::sass-modules';
+import { ac } from '::store/store';
 
 export const useUpdateCssVariables = (
   isDocumentOwner: boolean,
@@ -26,16 +27,16 @@ export const useUpdateCssVariables = (
 
   useEffect(() => {
     if (searchDialogIsShown) {
-      cssVariables.setInfoBar(18);
       cssVariables.setDockedDialogHeight(50);
+      ac.root.setDocking(false);
     } else {
-      cssVariables.setInfoBar(0);
+      ac.root.setDocking(true);
       cssVariables.setDockedDialogHeight(0);
       interval(50)
         .pipe(
           filter(() => !document.querySelector('.' + modDialog.dialogDocked)),
           tap(() => {
-            cssVariables.setInfoBar(18);
+            ac.root.setDocking(false);
           }),
         )
         .subscribe();

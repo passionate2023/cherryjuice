@@ -16,7 +16,7 @@ const mapState = (state: Store) => {
   return {
     node,
     documentId: state.document.documentId,
-    isOnMobile: state.root.isOnMobile,
+    isOnMobile: state.root.isOnMd,
     showInfoBar: state.editor.showInfoBar,
     documentPrivacy: document?.privacy,
   };

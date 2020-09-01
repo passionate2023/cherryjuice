@@ -12,15 +12,15 @@
     height: var(--info-bar);
   }
   @include respond-to($md-down) {
-    min-width: calc(100vw - 20px);
+    min-width: calc(100vw - 10px);
     height: 60px;
   }
   // position
   z-index: $ZI-info-bar;
   @include respond-to($md-down) {
-    left: 10px;
+    left: 5px;
     position: absolute;
-    bottom: calc(10px + var(--formatting-bar));
+    bottom: calc(5px + var(--nodes-bar) + var(--formatting-bar));
   }
   @include respond-to($md-up) {
     grid-area: info-bar;

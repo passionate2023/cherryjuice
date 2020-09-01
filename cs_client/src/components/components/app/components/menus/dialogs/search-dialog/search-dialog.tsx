@@ -9,7 +9,7 @@ import { SearchBody } from '::root/components/app/components/menus/dialogs/searc
 
 const mapState = (state: Store) => ({
   searchState: state.search.searchState,
-  isOnMobile: state.root.isOnMobile,
+  isOnMobile: state.root.isOnMd,
   docked: state.root.dockedDialog,
 });
 const mapDispatch = {};

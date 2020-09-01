@@ -33,7 +33,7 @@ $bubble-width: 35px;
   @media (pointer: coarse) {
     position: absolute;
     left: -#{$bubble-width * 0.4};
-    top: 70%;
+    top: 65%;
     opacity: 0.3;
     height: $bubble-width;
     width: $bubble-width;

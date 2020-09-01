@@ -32,7 +32,7 @@ const mapState = (state: Store) => ({
   showDialog: state.dialogs.showDocumentMetaDialog,
   focusedDocumentId: state.documentsList.focusedDocumentId,
   documents: getDocumentsList(state),
-  isOnMobile: state.root.isOnMobile,
+  isOnMobile: state.root.isOnMd,
   userId: state.auth.user?.id,
   documentUserId: getDocumentUserId(state),
 });

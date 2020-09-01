@@ -22,7 +22,7 @@ const mapState = (state: Store) => {
       state.document.asyncOperations.fetch === 'in-progress',
     fetchNodeStarted:
       state.node.asyncOperations.fetch[node_id] === 'in-progress',
-    contentEditable: state.editor.contentEditable || !state.root.isOnMobile,
+    contentEditable: state.editor.contentEditable || !state.root.isOnMd,
     processLinks: state.node.processLinks,
     isDocumentOwner: hasWriteAccessToDocument(state),
   };

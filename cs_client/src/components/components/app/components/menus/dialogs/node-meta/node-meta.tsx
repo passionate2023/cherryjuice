@@ -30,7 +30,7 @@ const mapState = (state: Store) => {
     documentUserId: document?.userId,
     documentPrivacy: document?.privacy,
     showDialog: state.dialogs.showNodeMetaDialog,
-    isOnMobile: state.root.isOnMobile,
+    isOnMobile: state.root.isOnMd,
     userId: state.auth.user?.id,
   };
 };

@@ -18,7 +18,7 @@ const mapState = (state: Store) => ({
   exports: Object.values(state.documentOperations.exports),
   message: state.dialogs.snackbar?.message,
   dialogIsOpen:
-    state.root.isOnMobile &&
+    state.root.isOnMd &&
     (state.dialogs.showDocumentList ||
       state.dialogs.showSettingsDialog ||
       state.dialogs.showDocumentMetaDialog ||

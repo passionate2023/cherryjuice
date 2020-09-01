@@ -11,9 +11,10 @@
     'tool-bar tool-bar '
     'tree recent-nodes '
     'tree rich-text '
-    'formatting-bar formatting-bar';
+    'formatting-bar formatting-bar'
+    'main-bar main-bar';
   grid-template-columns: var(--tree-width) 1fr;
-  grid-template-rows: $tool-bar-height $title-and-recent-bar-height 1fr var(--formatting-bar);
+  grid-template-rows: $tool-bar-height $title-and-recent-bar-height 1fr var(--formatting-bar) var(--nodes-bar);
 
   @include respond-to($md-up) {
     grid-template-areas:
@@ -37,6 +38,7 @@
     'tree recent-nodes '
     'tree rich-text '
     'formatting-bar formatting-bar'
+    'main-bar main-bar'
     'dialog dialog';
   @include respond-to($md-up) {
     grid-template-areas:
