@@ -56,7 +56,7 @@ const ac = {
     settings: settingsActionCreators,
     documentCache: documentCacheActionCreators,
     animation: animationActionCreators,
-    timelines: timelinesActionCreators
+    timelines: timelinesActionCreators,
   },
   document: bindActionCreators(documentActionCreators, store.dispatch),
   dialogs: bindActionCreators(dialogsActionCreators, store.dispatch),

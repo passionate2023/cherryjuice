@@ -49,25 +49,11 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
       component: <Snackbar message={message} />,
       key: 'Snackbar',
     });
-  if (showNodeMetaUndoAction) {
-    widgets.push({
-      component: (
-        <UndoAction
-          actionName={'undo node modification'}
-          numberOfFrames={nodeMetaNumberOfFrames}
-          undo={ac.documentCache.undoNodeMeta}
-          redo={ac.documentCache.redoNodeMeta}
-          hide={ac.timelines.hideNodeMetaUndoAction}
-        />
-      ),
-      key: 'UndoNodeMeta',
-    });
-  }
   if (showDocumentMetaUndoAction) {
     widgets.push({
       component: (
         <UndoAction
-          actionName={'undo document modification'}
+          actionName={'undo action'}
           numberOfFrames={documentMetaNumberOfFrames}
           undo={ac.documentCache.undoDocumentMeta}
           redo={ac.documentCache.redoDocumentMeta}
@@ -75,6 +61,20 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
         />
       ),
       key: 'UndoDocumentMeta',
+    });
+  }
+  else if (showNodeMetaUndoAction) {
+    widgets.push({
+      component: (
+        <UndoAction
+          actionName={'undo action'}
+          numberOfFrames={nodeMetaNumberOfFrames}
+          undo={ac.documentCache.undoNodeMeta}
+          redo={ac.documentCache.redoNodeMeta}
+          hide={ac.timelines.hideNodeMetaUndoAction}
+        />
+      ),
+      key: 'UndoNodeMeta',
     });
   }
   if (!dialogIsOpen && (imports.length || exports.length))

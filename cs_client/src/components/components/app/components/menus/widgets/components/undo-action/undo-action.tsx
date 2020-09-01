@@ -15,22 +15,25 @@ type Props = {
   hide: () => void;
 };
 const UndoAction: React.FC<Props> = ({
-  autoCloseDuration = 6000,
+  autoCloseDuration = 4000,
   actionName,
   numberOfFrames,
   undo,
   redo,
   hide,
 }) => {
+  const [mouseIn, setMouseIn] = useState(false);
   const [interactionTS, setInteractionTS] = useState(0);
   useEffect(() => {
-    const timer = setTimeout(() => {
-      hide();
-    }, autoCloseDuration);
-    return () => {
-      clearInterval(timer);
-    };
-  }, [interactionTS]);
+    if (!mouseIn) {
+      const timer = setTimeout(() => {
+        hide();
+      }, autoCloseDuration);
+      return () => {
+        clearInterval(timer);
+      };
+    }
+  }, [interactionTS, mouseIn]);
   const undoM = useCallback(() => {
     undo();
     setInteractionTS(Date.now());
@@ -40,7 +43,11 @@ const UndoAction: React.FC<Props> = ({
     setInteractionTS(Date.now());
   }, []);
   return (
-    <div className={modSnackbar.snackbar}>
+    <div
+      className={modSnackbar.snackbar}
+      onMouseEnter={() => setMouseIn(true)}
+      onMouseLeave={() => setMouseIn(false)}
+    >
       <span className={modSnackbar.snackbar__message}>{actionName}</span>
       <div className={modSnackbar.snackbar__buttons}>
         <ButtonCircle
