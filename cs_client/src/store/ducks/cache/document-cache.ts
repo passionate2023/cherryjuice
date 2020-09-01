@@ -195,6 +195,7 @@ const reducer = createReducer(initialState, _ => [
         draft => createNode(draft, payload),
         nmTM.current.add({
           documentId: payload.createdNode.documentId,
+          silent: true,
         }),
       ),
     ),

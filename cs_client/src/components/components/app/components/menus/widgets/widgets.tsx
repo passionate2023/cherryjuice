@@ -62,8 +62,7 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
       ),
       key: 'UndoDocumentMeta',
     });
-  }
-  else if (showNodeMetaUndoAction) {
+  } else if (showNodeMetaUndoAction) {
     widgets.push({
       component: (
         <UndoAction

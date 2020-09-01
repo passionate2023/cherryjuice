@@ -7,6 +7,7 @@ import {
 
 type TimelineFrameMeta = {
   documentId: string;
+  silent?: boolean;
 };
 
 type Frame = {
@@ -67,7 +68,7 @@ export class Timeline {
     };
     this.deleteFutureFrames();
     this.deleteOldFrames();
-    this._onFrameChange();
+    if (!meta.silent) this._onFrameChange();
   };
 
   redo = (state: DocumentCacheState): DocumentCacheState => {

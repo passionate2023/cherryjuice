@@ -15,7 +15,7 @@ type Props = {
   hide: () => void;
 };
 const UndoAction: React.FC<Props> = ({
-  autoCloseDuration = 4000,
+  autoCloseDuration = 2500,
   actionName,
   numberOfFrames,
   undo,

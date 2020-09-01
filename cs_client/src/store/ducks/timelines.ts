@@ -37,7 +37,7 @@ const reducer = createReducer(initialState, _ => [
   _(ac.setNodeMetaStatus, (state, { payload }) => ({
     ...state,
     nodeMetaNumberOfFrames: payload,
-    showNodeMetaUndoAction: true,
+    showNodeMetaUndoAction: Boolean(payload.undo || payload.redo),
   })),
   _(ac.showNodeMetaUndoAction, state => ({
     ...state,
@@ -51,7 +51,7 @@ const reducer = createReducer(initialState, _ => [
   _(ac.setDocumentMetaStatus, (state, { payload }) => ({
     ...state,
     documentMetaNumberOfFrames: payload,
-    showDocumentMetaUndoAction: true,
+    showDocumentMetaUndoAction: Boolean(payload.undo || payload.redo),
   })),
   _(ac.showDocumentMetaUndoAction, state => ({
     ...state,
