@@ -32,7 +32,7 @@ const reduxDevtoolsExtensionCompose =
 
 const composeEnhancers = reduxDevtoolsExtensionCompose
   ? reduxDevtoolsExtensionCompose({
-      maxAge: 10,
+      maxAge: 50,
     })
   : compose;
 

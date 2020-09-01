@@ -5,12 +5,6 @@ import { ActionsObservable } from 'redux-observable';
 import { toArray } from 'rxjs/operators';
 import { virtualTimeScheduler } from '::store/epics/shared/test-helpers';
 
-jest.mock('../helpers/cache-current-node', () => {
-  return {
-    cacheCurrentNode: jest.fn(() => Promise.resolve()),
-  };
-});
-
 jest.mock('../helpers/reset-cache', () => {
   return {
     resetCache: jest.fn(async () => undefined),

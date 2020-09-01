@@ -85,6 +85,7 @@ const reducer = createReducer(cloneObj(initialState), _ => [
       ...state.asyncOperations,
       fetch: 'idle',
     },
+    documentId: '',
   })),
 
   _(ac.savePending, state => ({

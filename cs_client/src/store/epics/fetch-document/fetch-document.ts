@@ -84,13 +84,9 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
               callbacks: [ac.dialogs.clearAlert, ac.dialogs.showDocumentList],
             },
           },
-          actionCreators: [
-            handleFetchError({
-              documentIdBeingFetched: file_id,
-              previousDocumentId: selectedDocumentId(),
-              userId: store.getState().auth.user?.id,
-            }),
-          ],
+          actionCreators: handleFetchError({
+            userId: store.getState().auth.user?.id,
+          }),
         }),
       );
     }),
