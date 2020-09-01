@@ -5,61 +5,36 @@ import { NumberOfFrames } from '::root/components/app/components/editor/tool-bar
 const ap = createActionPrefixer('timelines');
 
 const ac = {
-  setNodeMetaStatus: _(
-    ap('set-node-meta-status'),
+  setDocumentActionNOF: _(
+    ap('set-document-action-nof'),
     _ => (params: NumberOfFrames) => _(params),
   ),
-  showNodeMetaUndoAction: _(ap('show-node-meta-undo-action')),
-  hideNodeMetaUndoAction: _(ap('hide-node-meta-undo-action')),
-
-  setDocumentMetaStatus: _(
-    ap('set-document-meta-status'),
-    _ => (params: NumberOfFrames) => _(params),
-  ),
-  showDocumentMetaUndoAction: _(ap('show-document-meta-undo-action')),
-  hideDocumentMetaUndoAction: _(ap('hide-document-meta-undo-action')),
+  showUndoDocumentAction: _(ap('show-undo-document-action')),
+  hideUndoDocumentAction: _(ap('hide-undo-document-action')),
 };
 
 type State = {
-  nodeMetaNumberOfFrames: NumberOfFrames;
-  showNodeMetaUndoAction: boolean;
-  documentMetaNumberOfFrames: NumberOfFrames;
-  showDocumentMetaUndoAction: boolean;
+  documentActionNOF: NumberOfFrames;
+  showUndoDocumentAction: boolean;
 };
 
 const initialState: State = {
-  nodeMetaNumberOfFrames: { undo: 0, redo: 0 },
-  showNodeMetaUndoAction: false,
-  documentMetaNumberOfFrames: { undo: 0, redo: 0 },
-  showDocumentMetaUndoAction: false,
+  documentActionNOF: { undo: 0, redo: 0 },
+  showUndoDocumentAction: false,
 };
 const reducer = createReducer(initialState, _ => [
-  _(ac.setNodeMetaStatus, (state, { payload }) => ({
+  _(ac.setDocumentActionNOF, (state, { payload }) => ({
     ...state,
-    nodeMetaNumberOfFrames: payload,
-    showNodeMetaUndoAction: Boolean(payload.undo || payload.redo),
+    documentActionNOF: payload,
+    showUndoDocumentAction: Boolean(payload.undo || payload.redo),
   })),
-  _(ac.showNodeMetaUndoAction, state => ({
+  _(ac.showUndoDocumentAction, state => ({
     ...state,
-    showNodeMetaUndoAction: true,
+    showUndoDocumentAction: true,
   })),
-  _(ac.hideNodeMetaUndoAction, state => ({
+  _(ac.hideUndoDocumentAction, state => ({
     ...state,
-    showNodeMetaUndoAction: false,
-  })),
-
-  _(ac.setDocumentMetaStatus, (state, { payload }) => ({
-    ...state,
-    documentMetaNumberOfFrames: payload,
-    showDocumentMetaUndoAction: Boolean(payload.undo || payload.redo),
-  })),
-  _(ac.showDocumentMetaUndoAction, state => ({
-    ...state,
-    showDocumentMetaUndoAction: true,
-  })),
-  _(ac.hideDocumentMetaUndoAction, state => ({
-    ...state,
-    showDocumentMetaUndoAction: false,
+    showUndoDocumentAction: false,
   })),
 ]);
 

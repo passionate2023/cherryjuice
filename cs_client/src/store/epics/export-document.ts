@@ -19,9 +19,11 @@ const exportDocumentEpic = (action$: Observable<Actions>) => {
         action$.pipe(
           ofType([ac_.document.saveFulfilled, ac_.document.nothingToSave]),
           take(1),
-          switchMap((action) => {
+          switchMap(action => {
             return gqlMutation(
-              EXPORT_DOCUMENT({ file_id: action['payload'] || selectedDocumentId() }),
+              EXPORT_DOCUMENT({
+                file_id: action['payload'] || selectedDocumentId(),
+              }),
             ).pipe(map(ac_.document.exportFulfilled));
           }),
         ),

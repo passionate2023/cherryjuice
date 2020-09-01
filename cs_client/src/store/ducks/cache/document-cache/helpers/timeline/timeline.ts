@@ -5,8 +5,7 @@ import {
   OnFrameChange,
 } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
 
-type TimelineFrameMeta = {
-  documentId: string;
+export type TimelineFrameMeta = {
   silent?: boolean;
 };
 
@@ -100,11 +99,9 @@ export class Timeline {
     this._onFrameChange();
   };
 
-  resetDocument = (documentId: string) => {
+  removeFrames = (predicate: (frame: Frame) => boolean) => {
     const originalFrames = Object.values(this.frames);
-    const frames = originalFrames.filter(
-      frame => frame.meta.documentId !== documentId,
-    );
+    const frames = originalFrames.filter(frame => !predicate(frame));
     this.frames = {};
     frames.forEach((frame, position) => {
       this.frames[position] = frame;

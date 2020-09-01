@@ -10,7 +10,6 @@ import { router } from '::root/router/router';
 import { useUpdateCssVariables } from '::root/components/app/hooks/update-css-variables';
 import { useGetPreviousOperations } from '::root/components/app/components/menus/widgets/components/document-operations/hooks/get-previous-operations';
 import { useGetActiveOperations } from '::root/components/app/components/menus/widgets/components/document-operations/hooks/get-active-operations';
-import { dmTM } from '::store/ducks/cache/document-cache';
 
 const Menus = React.lazy(() =>
   import('::root/components/app/components/menus/menus'),
@@ -61,9 +60,7 @@ const App: React.FC<Props & PropsFromRedux> = ({
   }, [userId, documentId, router.get.location.pathname]);
   useGetPreviousOperations();
   useGetActiveOperations(userId);
-  useEffect(() => {
-    dmTM.setCurrent('user');
-  }, []);
+
   return (
     <div
       className={joinClassNames([

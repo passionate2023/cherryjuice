@@ -45,9 +45,7 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
         );
         const maybeRedirectToNewDocument$ = defer(() => {
           if (state.newSelectedDocumentId) {
-            return of(
-              ac_.document.setDocumentId(state.newSelectedDocumentId),
-            );
+            return of(ac_.document.setDocumentId(state.newSelectedDocumentId));
           } else return EMPTY.pipe(ignoreElements());
         });
         return concat(

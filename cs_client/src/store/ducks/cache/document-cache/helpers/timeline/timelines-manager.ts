@@ -1,5 +1,9 @@
 import { OnFrameChange } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
-import { Timeline } from '::store/ducks/cache/document-cache/helpers/timeline/timeline';
+import {
+  Timeline,
+  TimelineFrameMeta,
+} from '::store/ducks/cache/document-cache/helpers/timeline/timeline';
+import { Patch } from 'immer';
 
 export class TimelinesManager {
   private timelines: { [id: string]: Timeline };
@@ -20,8 +24,15 @@ export class TimelinesManager {
   private addTimeline = (id: string): void => {
     this.timelines[id] = new Timeline(this.onFrameChange);
   };
+  addFrame = (meta: TimelineFrameMeta & {timelineId: string}) => (
+    patches: Patch[],
+    reversePatches: Patch[],
+  ): void => {
+    this.setCurrent(meta.timelineId);
+    this.current.add(meta)(patches, reversePatches);
+  };
 
-  setCurrent = (id: string): void => {
+  private setCurrent = (id: string): void => {
     if (!this.timelines[id]) this.addTimeline(id);
     this.current = this.timelines[id];
   };

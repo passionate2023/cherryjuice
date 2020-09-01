@@ -23,10 +23,8 @@ const mapState = (state: Store) => ({
       state.dialogs.showSettingsDialog ||
       state.dialogs.showDocumentMetaDialog ||
       state.dialogs.showNodeMetaDialog),
-  showNodeMetaUndoAction: state.timelines.showNodeMetaUndoAction,
-  nodeMetaNumberOfFrames: state.timelines.nodeMetaNumberOfFrames,
-  showDocumentMetaUndoAction: state.timelines.showDocumentMetaUndoAction,
-  documentMetaNumberOfFrames: state.timelines.documentMetaNumberOfFrames,
+  showUndoDocumentAction: state.timelines.showUndoDocumentAction,
+  documentActionNOF: state.timelines.documentActionNOF,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -38,10 +36,8 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
   exports,
   message,
   dialogIsOpen,
-  nodeMetaNumberOfFrames,
-  showNodeMetaUndoAction,
-  showDocumentMetaUndoAction,
-  documentMetaNumberOfFrames,
+  showUndoDocumentAction,
+  documentActionNOF,
 }) => {
   const widgets: Widget[] = [];
   if (message)
@@ -49,31 +45,18 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
       component: <Snackbar message={message} />,
       key: 'Snackbar',
     });
-  if (showDocumentMetaUndoAction) {
+  if (showUndoDocumentAction) {
     widgets.push({
       component: (
         <UndoAction
           actionName={'undo action'}
-          numberOfFrames={documentMetaNumberOfFrames}
-          undo={ac.documentCache.undoDocumentMeta}
-          redo={ac.documentCache.redoDocumentMeta}
-          hide={ac.timelines.hideDocumentMetaUndoAction}
+          numberOfFrames={documentActionNOF}
+          undo={ac.documentCache.undoDocumentAction}
+          redo={ac.documentCache.redoDocumentAction}
+          hide={ac.timelines.hideUndoDocumentAction}
         />
       ),
-      key: 'UndoDocumentMeta',
-    });
-  } else if (showNodeMetaUndoAction) {
-    widgets.push({
-      component: (
-        <UndoAction
-          actionName={'undo action'}
-          numberOfFrames={nodeMetaNumberOfFrames}
-          undo={ac.documentCache.undoNodeMeta}
-          redo={ac.documentCache.redoNodeMeta}
-          hide={ac.timelines.hideNodeMetaUndoAction}
-        />
-      ),
-      key: 'UndoNodeMeta',
+      key: 'UndoDocumentAction',
     });
   }
   if (!dialogIsOpen && (imports.length || exports.length))
