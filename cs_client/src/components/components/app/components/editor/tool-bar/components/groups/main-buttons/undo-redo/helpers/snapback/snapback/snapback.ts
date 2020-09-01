@@ -133,14 +133,16 @@ export class SnapBack {
     this.state.enabled = false;
   };
 
-  enable = (): void => {
-    if (!this.state.enabled) {
-      this.state.enabled = true;
-      this.elementGetter().then(element => {
-        this.observer.observe(element, this.options);
-        this.onFrameChange();
-        element.focus();
-      });
-    }
+  enable = (delay = 0): void => {
+    setTimeout(() => {
+      if (!this.state.enabled) {
+        this.state.enabled = true;
+        this.elementGetter().then(element => {
+          this.observer.observe(element, this.options);
+          this.onFrameChange();
+          element.focus();
+        });
+      }
+    }, delay);
   };
 }

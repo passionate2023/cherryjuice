@@ -132,9 +132,7 @@ const updateCachedHtmlAndImages = () => {
         imageIDsInDom,
       });
     updatedCachedHtml({ node_id, documentId, html });
-    setTimeout(() => {
-      snapBackManager.current.enable();
-    }, 1000);
+    snapBackManager.current.enable(1000);
   }
 };
 export {

@@ -24,11 +24,12 @@ export class TimelinesManager {
   private addTimeline = (id: string): void => {
     this.timelines[id] = new Timeline(this.onFrameChange);
   };
-  addFrame = (meta: TimelineFrameMeta & {timelineId: string}) => (
+  addFrame = (meta: TimelineFrameMeta & { timelineId: string }) => (
     patches: Patch[],
     reversePatches: Patch[],
   ): void => {
     this.setCurrent(meta.timelineId);
+    delete meta.timelineId;
     this.current.add(meta)(patches, reversePatches);
   };
 

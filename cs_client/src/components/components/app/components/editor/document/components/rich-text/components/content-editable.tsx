@@ -1,5 +1,5 @@
 import { modRichText } from '::sass-modules';
-import { default as React, useContext, useRef } from 'react';
+import { default as React, useContext, useEffect, useRef } from 'react';
 import { useSetupStuff } from '::root/components/app/components/editor/document/components/rich-text/hooks/setup-stuff';
 import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
 import { useReactRouterForAnchors } from '::root/components/app/components/editor/document/components/rich-text/hooks/react-router-for-anchors';
@@ -8,6 +8,7 @@ import { useHandleContentChanges } from '::root/components/app/components/editor
 import { useAddMetaToPastedImages } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 import { DocumentContext } from '::root/components/app/components/editor/document/reducer/context';
 import { Image } from '::types/graphql/generated';
+import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 
 type Props = {
   contentEditable;
@@ -53,6 +54,10 @@ const ContentEditable = ({
     node_id,
     fetchNodeStarted,
   });
+  useEffect(() => {
+    snapBackManager.current.reset();
+    snapBackManager.current.enable(1000);
+  }, [html]);
   return (
     <div
       ref={ref}

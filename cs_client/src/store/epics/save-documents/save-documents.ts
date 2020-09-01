@@ -9,32 +9,22 @@ import { saveDocuments } from '::store/epics/save-documents/helpers/save-documen
 import { ac, ac_, store } from '../../store';
 import { createSaveState } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 import { resetCache } from '::store/epics/save-documents/helpers/reset-cache';
-import { cacheCurrentNode } from '::store/epics/save-documents/helpers/cache-current-node';
 import { Epic } from 'redux-observable';
 import { swapPersistedTreeDocumentIds } from '::store/epics/save-documents/helpers/swap-persisted-tree-document-ids';
 import { SnackbarMessages } from '::root/components/app/components/menus/widgets/components/snackbar/snackbar-messages';
 import { getEditedDocuments } from '::store/selectors/cache/document/document';
+import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
 
 const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
   return action$.pipe(
     ofType([ac_.document.save]),
     filter(() => store.getState().document.asyncOperations.save === 'idle'),
-    switchMap(() => {
+    switchMap( () => {
       const state: SaveOperationState = createSaveState();
+      updateCachedHtmlAndImages();
       const editedDocuments = getEditedDocuments();
       if (!editedDocuments.length) return of(ac_.document.nothingToSave());
       else {
-        const saveFulfilled$ = defer(() =>
-          of(ac_.document.saveFulfilled(state.newSelectedDocumentId)).pipe(
-            tap(() => {
-              ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
-            }),
-          ),
-        );
-        const savePending$ = of(ac_.document.savePending());
-        const cacheCurrentNode$ = defer(() =>
-          of(cacheCurrentNode()).pipe(mapTo(ac_.document.nodeCached())),
-        );
         const saveInProgress$ = of(ac_.document.saveInProgress());
         const saveDocuments$ = defer(() =>
           from(saveDocuments(state, editedDocuments)).pipe(
@@ -43,14 +33,19 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
             mapTo(ac_.document.cacheReset()),
           ),
         );
+        const saveFulfilled$ = defer(() =>
+          of(ac_.document.saveFulfilled(state.newSelectedDocumentId)).pipe(
+            tap(() => {
+              ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
+            }),
+          ),
+        );
         const maybeRedirectToNewDocument$ = defer(() => {
           if (state.newSelectedDocumentId) {
             return of(ac_.document.setDocumentId(state.newSelectedDocumentId));
           } else return EMPTY.pipe(ignoreElements());
         });
         return concat(
-          savePending$,
-          cacheCurrentNode$,
           saveInProgress$,
           saveDocuments$,
           saveFulfilled$,

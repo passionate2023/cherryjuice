@@ -5,13 +5,13 @@
   z-index: 1000;
   width: 300px;
   bottom: 22.5px;
-  right: 20px;
+  right: 5px;
   display: flex;
   flex-direction: column;
   gap: 5px;
 
   @include respond-to($md-down) {
-    bottom: 50px;
+    bottom: 45px;
   }
 }
 

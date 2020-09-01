@@ -25,8 +25,6 @@ import {
   mutateDocument,
   MutateDocumentProps,
 } from '::store/ducks/cache/document-cache/helpers/document/mutate-document';
-import { SwapNodeIdParams } from '::store/ducks/cache/document-cache/helpers/node/swap-node-id';
-import { swapDocumentId } from '::store/ducks/cache/document-cache/helpers/document/swap-document-id';
 import {
   deleteNode,
   DeleteNodeParams,
@@ -58,11 +56,6 @@ const ac = {
   deleteDocument: _(ap('delete-document'), _ => (documentId: string) =>
     _(documentId),
   ),
-  swapDocumentId: _(
-    ap('swap-document-id'),
-    _ => (Ids: { oldId: string; newId: string }) => _(Ids),
-  ),
-
   createNode: _(ap('create-node'), _ => (node: CreateNodeParams) => _(node)),
   addFetchedFields: _(ap('add-fetched-fields'), _ => (node: AddHtmlParams) =>
     _(node),
@@ -75,7 +68,6 @@ const ac = {
     ap('mutate-node-content'),
     _ => (props: MutateNodeContentParams) => _(props),
   ),
-  swapNodeId: _(ap('swap-node-id'), _ => (param: SwapNodeIdParams) => _(param)),
   deleteNode: _(ap('delete-node'), _ => (param: DeleteNodeParams) => _(param)),
   undoDocumentAction: _(ap('undo-document-action')),
   redoDocumentAction: _(ap('redo-document-action')),
@@ -124,32 +116,20 @@ const reducer = createReducer(initialState, _ => [
       ...cloneObj(initialState),
     })),
     _(dac.fetchFulfilled, (state, { payload }) => loadDocument(state, payload)),
-    _(ac.createDocument, (state, { payload }) => createDocument(state, payload)),
-    _(ac.swapDocumentId, (state, { payload }) =>
-      swapDocumentId(state, payload),
+    _(ac.createDocument, (state, { payload }) =>
+      createDocument(state, payload),
     ),
-    _(nac.select, (state, { payload }) => selectNode(state, payload)),
+    _(nac.select, (state, { payload }) =>
+      produce(
+        state,
+        draft => selectNode(draft, payload),
+      ),
+    ),
     _(dlac.fetchDocumentsFulfilled, (state, { payload }) =>
       loadDocumentsList(state, payload),
     ),
     _(ac.addFetchedFields, (state, { payload }) =>
       addFetchedFields(state, payload),
-    ),
-    _(ac.swapNodeId, (state, { payload: { node_id, documentId, newId } }) => ({
-      ...state,
-      [documentId]: {
-        ...state[documentId],
-        nodes: {
-          ...state[documentId].nodes,
-          [node_id]: {
-            ...state[documentId].nodes[node_id],
-            id: newId,
-          },
-        },
-      },
-    })),
-    _(ac.mutateNodeContent, (state, { payload }) =>
-      mutateNodeContent(state, payload),
     ),
     _(ac.deleteDocument, (state, { payload: documentId }) => {
       dTM.resetTimeline(documentId);
@@ -199,12 +179,26 @@ const reducer = createReducer(initialState, _ => [
         }),
       ),
     ),
+    _(ac.mutateNodeContent, (state, { payload }) =>
+      produce(
+        state,
+        draft => mutateNodeContent(draft, payload),
+        (p, rp) => {
+          if (payload.meta?.mode !== 'update-key-only')
+            dTM.addFrame({
+              timelineId: payload.documentId,
+              silent: true,
+            })(p, rp);
+        },
+      ),
+    ),
     _(ac.mutateDocument, (state, { payload }) =>
       produce(
         state,
         draft => mutateDocument(draft, payload),
-        dTM.addFrame({ timelineId: payload.documentId })
-      )),
+        dTM.addFrame({ timelineId: payload.documentId }),
+      ),
+    ),
   ],
 ]);
 
