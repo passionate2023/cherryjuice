@@ -1,36 +1,36 @@
 import { applyPatches, Patch } from 'immer';
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
-import {
-  NumberOfFrames,
-  OnFrameChange,
-} from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
+import { NumberOfFrames } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
 
-export type TimelineFrameMeta = {
+export type TimelineFrameMeta<T> = {
   silent?: boolean;
-};
+} & T;
 
-type Frame = {
+export type Frame<T> = {
   redo: Patch[];
   undo: Patch[];
-  meta: TimelineFrameMeta;
+  meta: TimelineFrameMeta<T>;
 };
 
-type Frames = {
-  [position: number]: Frame;
+type Frames<T> = {
+  [position: number]: Frame<T>;
 };
-
+export type OnFrameChange<T> = (
+  frames: NumberOfFrames,
+  frame: Frame<T>,
+) => void;
 const noop = () => undefined;
 
-export class Timeline {
+export class Timeline<T> {
   private position: number;
-  private frames: Frames;
-  private readonly _onFrameChange: () => void = noop;
+  private frames: Frames<T>;
+  private readonly _onFrameChange: (frame?: Frame<T>) => void = noop;
 
-  constructor(onFrameChange?: OnFrameChange) {
+  constructor(onFrameChange?: OnFrameChange<T>) {
     if (onFrameChange)
-      this._onFrameChange = () => {
+      this._onFrameChange = (frame): void => {
         setTimeout(() => {
-          onFrameChange(this.numberOfFrames);
+          onFrameChange(this.numberOfFrames, frame);
         }, 10);
       };
     this.position = -1;
@@ -56,7 +56,7 @@ export class Timeline {
     delete this.frames[this.position - 4];
   };
 
-  add = (meta: TimelineFrameMeta) => (
+  add = (meta: TimelineFrameMeta<T>) => (
     patches: Patch[],
     reversePatches: Patch[],
   ): void => {
@@ -77,7 +77,7 @@ export class Timeline {
       const patches: Patch[] = frame.redo;
       const newState = applyPatches(state, patches);
       this.position += 1;
-      this._onFrameChange();
+      this._onFrameChange(frame);
       return newState;
     }
   };
@@ -88,7 +88,7 @@ export class Timeline {
       const patches: Patch[] = frame.undo;
       const newState = applyPatches(state, patches);
       this.position -= 1;
-      this._onFrameChange();
+      this._onFrameChange(frame);
       return newState;
     }
   };
@@ -99,7 +99,7 @@ export class Timeline {
     this._onFrameChange();
   };
 
-  removeFrames = (predicate: (frame: Frame) => boolean) => {
+  removeFrames = (predicate: (frame: Frame<T>) => boolean) => {
     const originalFrames = Object.values(this.frames);
     const frames = originalFrames.filter(frame => !predicate(frame));
     this.frames = {};

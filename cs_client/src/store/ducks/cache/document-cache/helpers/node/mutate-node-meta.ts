@@ -30,9 +30,8 @@ export type MutateNodeMetaParams = {
 };
 export const mutateNodeMeta = (
   state: DocumentCacheState,
-  params: MutateNodeMetaParams | MutateNodeMetaParams[],
+  params: MutateNodeMetaParams[],
 ): DocumentCacheState => {
-  if (!Array.isArray(params)) params = [params];
   const document = state[params[0].documentId];
   if (
     params.length > 1 &&
