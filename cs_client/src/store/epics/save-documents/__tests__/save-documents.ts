@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { ac } from '::store/store';
+import { ac_ } from '::store/store';
 import { saveDocumentsEpic } from '::store/epics/save-documents/save-documents';
 import { ActionsObservable } from 'redux-observable';
 import { toArray } from 'rxjs/operators';
@@ -35,7 +35,7 @@ describe.skip('save-documents epic', function() {
       output: undefined,
     };
     state.output = await new Promise(res => {
-      const save = ActionsObservable.of(ac.__.document.save);
+      const save = ActionsObservable.of(ac_.document.save);
       const obs$ = saveDocumentsEpic(save, undefined, undefined).pipe(
         toArray(),
       );

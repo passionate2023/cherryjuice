@@ -23,6 +23,7 @@ const ac = {
     ap('save-fulfilled'),
     _ => (newSelectedDocumentId?: string) => _(newSelectedDocumentId),
   ),
+  nothingToSave: _(ap('nothing-to-save')),
   saveInProgress: _(ap('save-in-progress')),
   saveFailed: _(ap('save-failed')),
   nodeCached: _(ap('node-cached')),

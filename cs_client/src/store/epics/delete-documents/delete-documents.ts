@@ -1,7 +1,7 @@
 import { filter, ignoreElements, map, switchMap, tap } from 'rxjs/operators';
 import { concat, from, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
-import { ac, store } from '../../store';
+import { ac, ac_, store } from '../../store';
 import { Actions } from '../../actions.types';
 import { gqlMutation } from '../shared/gql-query';
 import { createErrorHandler } from '../shared/create-error-handler';
@@ -13,8 +13,8 @@ const asyncStates: AsyncOperation[] = ['idle', 'pending'];
 const deleteDocumentsEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
     ofType([
-      ac.__.documentsList.deleteDocuments,
-      ac.__.documentsList.deleteDocument,
+      ac_.documentsList.deleteDocuments,
+      ac_.documentsList.deleteDocument,
     ]),
     filter(() =>
       asyncStates.includes(store.getState().documentsList.deleteDocuments),
@@ -28,7 +28,7 @@ const deleteDocumentsEpic = (action$: Observable<Actions>) => {
       const fetchedDocuments = selectedIDs.filter(
         id => !id.startsWith('new-document'),
       );
-      const ip = of(ac.__.documentsList.deleteDocumentsInProgress());
+      const ip = of(ac_.documentsList.deleteDocumentsInProgress());
       const deleteFetchedDocuments = gqlMutation(
         DELETE_DOCUMENT({ documents: { IDs: fetchedDocuments } }),
       );
@@ -42,7 +42,7 @@ const deleteDocumentsEpic = (action$: Observable<Actions>) => {
         ip,
         deleteUnsavedDocuments.pipe(ignoreElements()),
         deleteFetchedDocuments.pipe(
-          map(ac.__.documentsList.deleteDocumentsFulfilled),
+          map(ac_.documentsList.deleteDocumentsFulfilled),
           tap(() => {
             if (
               store.getState().documentsList.selectedIDs.includes(documentId)
@@ -57,7 +57,7 @@ const deleteDocumentsEpic = (action$: Observable<Actions>) => {
             title: 'Could not perform the deletion',
             description: 'something went wrong',
           },
-          actionCreators: [ac.__.documentsList.deleteDocumentsFailed],
+          actionCreators: [ac_.documentsList.deleteDocumentsFailed],
         }),
       );
     }),

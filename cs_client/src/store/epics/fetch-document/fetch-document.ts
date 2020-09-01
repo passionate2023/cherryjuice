@@ -1,7 +1,7 @@
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { concat, from, Observable, ObservedValueOf, of } from 'rxjs';
 import { ofType } from 'deox';
-import { store, ac } from '../../store';
+import { store, ac_, ac } from '../../store';
 import { Actions } from '../../actions.types';
 import { handleFetchError } from '::root/components/app/components/editor/document/hooks/get-document-meta/helpers/handle-fetch-error';
 import { gqlQuery } from '../shared/gql-query';
@@ -35,12 +35,12 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
   const selectedDocumentId = () => store.getState().document.documentId;
   return action$.pipe(
     ofType([
-      ac.__.document.fetch,
-      ac.__.document.setDocumentId,
-      ac.__.document.saveFulfilled,
+      ac_.document.fetch,
+      ac_.document.setDocumentId,
+      ac_.document.saveFulfilled,
     ]),
     filter(action => {
-      if (action.type === ac.__.document.setDocumentId.type) {
+      if (action.type === ac_.document.setDocumentId.type) {
         const document = store.getState().documentCache[action['payload']];
         if (document?.nodes && document?.nodes[0]) {
           return false;
@@ -62,10 +62,10 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
           snapBackManager.resetAll();
           snapBackManager.current?.enable();
         }),
-        map(ac.__.document.fetchFulfilled),
+        map(ac_.document.fetchFulfilled),
       );
 
-      const loading = of(ac.__.document.fetchInProgress());
+      const loading = of(ac_.document.fetchInProgress());
       return concat(loading, request).pipe(
         createTimeoutHandler({
           alertDetails: {
