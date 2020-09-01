@@ -62,7 +62,7 @@ const UndoAction: React.FC<Props> = ({
         />
         <ButtonCircle
           key={Icons.material.delete}
-          onClick={ac.timelines.hideNodeMetaUndoAction}
+          onClick={ac.timelines.hideUndoDocumentAction}
           iconName={Icons.material.clear}
         />
       </div>

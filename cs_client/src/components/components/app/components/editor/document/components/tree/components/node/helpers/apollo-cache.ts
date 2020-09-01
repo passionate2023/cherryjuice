@@ -1,8 +1,8 @@
 import { getEditor } from '::root/components/app/components/editor/document/components/rich-text/hooks/get-node-images';
 import { ac, store } from '::store/store';
-import { getNode } from '::store/selectors/cache/document/node';
 import { getDocuments } from '::store/selectors/cache/document/document';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
+import { MutateNodeContentParams } from '::store/ducks/cache/document-cache/helpers/node/mutate-node-content';
 
 const unsetImagesAttributes = (images: HTMLImageElement[]) => {
   const imageAttributesTempContainer = [];
@@ -56,25 +56,17 @@ const getNodeImageIDsFromCache = ({ node_id, documentId }): string[] => {
   return document.nodes[node_id].image.map(image => image.id);
 };
 
-const updatedCachedHtml = ({ node_id, documentId, html }) => {
-  ac.documentCache.mutateNodeContent({ node_id, documentId, data: { html } });
-};
-
 const updateCachedImages = ({
-  node_id,
-  documentId,
   deletedImageIDs,
   newImageIDs,
   imageIDsInDom,
+  mutation,
 }: {
-  node_id;
-  documentId;
   deletedImageIDs: string[];
   newImageIDs: string[];
   imageIDsInDom: string[];
+  mutation: MutateNodeContentParams;
 }) => {
-  const node = getNode({ node_id, documentId });
-
   const editor = getEditor();
   const newImages = newImageIDs.reduce((acc, id) => {
     const imageInDom: HTMLImageElement = editor.querySelector(
@@ -88,21 +80,8 @@ const updateCachedImages = ({
     });
     return acc;
   }, []);
-  if (deletedImageIDs.length)
-    ac.documentCache.mutateNodeContent({
-      node_id: node.node_id,
-      documentId: node.documentId,
-      data: {},
-      meta: {
-        deletedImages: deletedImageIDs,
-      },
-    });
-
-  ac.documentCache.mutateNodeContent({
-    node_id: node.node_id,
-    documentId: node.documentId,
-    data: { image: newImages },
-  });
+  if (deletedImageIDs.length) mutation.meta.deletedImages = deletedImageIDs;
+  mutation.data.image = newImages;
 };
 const updateCachedHtmlAndImages = () => {
   const {
@@ -123,15 +102,24 @@ const updateCachedHtmlAndImages = () => {
     };
     deletedImageIDs = imageIDsInCache.filter(id => !sets.imageIDsInDom.has(id));
     newImageIDs = imageIDsInDom.filter(id => !sets.imageIDsInCache.has(id));
-    if (deletedImageIDs.length || newImageIDs.length)
+    const mutation: MutateNodeContentParams = {
+      node_id,
+      documentId,
+      data: {
+        html,
+        image: undefined,
+      },
+      meta: { deletedImages: undefined },
+    };
+    if (deletedImageIDs.length || newImageIDs.length) {
       updateCachedImages({
-        node_id,
-        documentId,
         deletedImageIDs,
         newImageIDs,
         imageIDsInDom,
+        mutation,
       });
-    updatedCachedHtml({ node_id, documentId, html });
+    }
+    ac.documentCache.mutateNodeContent(mutation);
     snapBackManager.current.enable(1000);
   }
 };
@@ -139,5 +127,4 @@ export {
   updateCachedHtmlAndImages,
   getNodeImageIDsFromCache,
   updateCachedImages,
-  updatedCachedHtml,
 };

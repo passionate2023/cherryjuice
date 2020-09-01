@@ -1,4 +1,5 @@
 import {
+  CachedDocument,
   DocumentCacheState,
   QFullNode,
 } from '::store/ducks/cache/document-cache';
@@ -11,6 +12,21 @@ export type MutateNodeContentParams = {
   data: Partial<Pick<QFullNode, 'html' | 'image'>>;
   meta?: { deletedImages?: string[]; mode?: 'update-key-only' };
 };
+
+const listDeletedImages = (
+  document: CachedDocument,
+  node_id,
+  deletedImages?: string[],
+) => {
+  if (deletedImages) {
+    if (!document.state.editedNodes.deletedImages[node_id])
+      document.state.editedNodes.deletedImages[node_id] = [];
+    document.state.editedNodes.deletedImages[node_id].push(
+      ...deletedImages.filter(id => !id.startsWith(newImagePrefix)),
+    );
+  }
+};
+
 export const mutateNodeContent = (
   state: DocumentCacheState,
   { meta, documentId, node_id, data }: MutateNodeContentParams,
@@ -19,20 +35,16 @@ export const mutateNodeContent = (
   const node = document.nodes[node_id];
   const updatedAt = Date.now();
 
-  const editedNodes = document.state.editedNodes;
   if (meta?.mode !== 'update-key-only') {
     if (meta?.deletedImages) {
       node.image = node.image.filter(
         ({ id }) => !meta.deletedImages.includes(id),
       );
-      if (!editedNodes.deletedImages[node_id])
-        editedNodes.deletedImages[node_id] = [];
-      editedNodes.deletedImages[node_id].push(
-        ...meta.deletedImages.filter(id => !id.startsWith(newImagePrefix)),
-      );
-    } else if (data.image) {
+    }
+    if (data.image) {
       node.image.push(...data.image);
-    } else if (data.html) {
+    }
+    if (data.html) {
       node.html = data.html;
     }
     node.updatedAt = updatedAt;
@@ -43,5 +55,6 @@ export const mutateNodeContent = (
     attributes: Object.keys(data),
     node_id,
   });
+  listDeletedImages(document, node_id, meta?.deletedImages);
   return state;
 };
