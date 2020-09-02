@@ -61,6 +61,7 @@ const writeChangesToDom = (
     lineStyle = { line: {}, delete: [], deleteAll: false },
   },
   { startAnchor, endAnchor },
+  options = { filterEmptyNodes: true },
 ) => {
   const startDDOE = getDDOE(startAnchor);
   const endDDOE = getDDOE(endAnchor);
@@ -76,9 +77,9 @@ const writeChangesToDom = (
     },
     { startDDOE },
   );
-  replaceElement(startAnchor)(childrenElementsOfStartDDOE);
+  replaceElement(startAnchor,options.filterEmptyNodes)(childrenElementsOfStartDDOE);
   startDDOE.after(...adjacentElementsOfStartDDOE);
-  replaceElement(endAnchor)(childrenElementsOfEndDDOE);
+  replaceElement(endAnchor,options.filterEmptyNodes)(childrenElementsOfEndDDOE);
   applyLineStyle({
     lineStyle,
     startDDOE,

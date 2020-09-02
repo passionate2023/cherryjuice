@@ -1,16 +1,19 @@
 import { handleIndentation } from '::helpers/editing/typing/indentation';
 import { handleBackSpace } from './backspace';
-import { AlertType } from '::types/react';
+import { handleEnter } from '::helpers/editing/typing/new-line/handle-enter';
 import { ac } from '::store/store';
+import { AlertType } from '::types/react';
 
 const setupTabAndBackspaceHandler = () => {
   const editor: HTMLDivElement = document.querySelector('#rich-text');
   editor.onkeydown = e => {
     try {
-      if (e.keyCode == 9) {
+      if (e.keyCode === 9) {
         handleIndentation(e);
-      } else if (e.keyCode == 8) {
+      } else if (e.keyCode === 8) {
         handleBackSpace(e);
+      } else if (e.keyCode === 13) {
+        handleEnter(e);
       }
     } catch (error) {
       ac.dialogs.setAlert({

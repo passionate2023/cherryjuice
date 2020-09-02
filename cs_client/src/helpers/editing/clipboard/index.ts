@@ -4,7 +4,6 @@ import { optimizeAHtml } from '::helpers/editing/clipboard/optimize-ahtml';
 import { getAHtml } from '::helpers/rendering/html-to-ahtml';
 import { pipe1 } from '::helpers/editing/execK/steps/pipe1';
 import {
-  getInnerText,
   isElementNonTextual,
   moveCursor,
   stringToSingleElement,
@@ -121,13 +120,12 @@ const processClipboard: { [p: string]: (str) => TAHtml[] } = {
 const putCursorAtTheEndOfPastedElement = ({ newEndElement }) => {
   const elementIsNonTextual = isElementNonTextual(newEndElement);
   if (!elementIsNonTextual) {
-    const innerText = getInnerText(newEndElement);
     setTextSelection(
       {
         startElement: newEndElement,
         endElement: newEndElement,
-        startOffset: innerText.length,
-        endOffset: innerText.length,
+        startOffset: 0,
+        endOffset: 0,
       },
       true,
     );
@@ -169,7 +167,7 @@ const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
       startDDOE.after(startDDOEShell);
       endAnchor = startDDOEShell.firstChild;
     }
-    const { childrenElementsOfStartDDOE } = writeChangesToDom(
+    const { childrenElementsOfEndDDOE } = writeChangesToDom(
       {
         childrenOfStartDDDE: leftAHtmlsMultiLine.shift(),
         midDDOEs: leftAHtmlsMultiLine,
@@ -178,10 +176,8 @@ const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
       { startAnchor, endAnchor },
     );
 
-    const newEndElement =
-      childrenElementsOfStartDDOE[childrenElementsOfStartDDOE.length - 1];
     putCursorAtTheEndOfPastedElement({
-      newEndElement,
+      newEndElement: childrenElementsOfEndDDOE[0],
     });
     if (pastedData.some(ahtml => (ahtml as any)?.type === 'png')) {
       documentActionCreators.pastedImages();
