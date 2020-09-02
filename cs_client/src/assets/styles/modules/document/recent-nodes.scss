@@ -13,7 +13,10 @@ $recent-nodes-width: $node-width * 2+ 10px;
   display: flex;
   // children
   align-items: center;
-  padding: 2px;
+  @include respond-to($md-up) {
+    padding: 2px;
+    padding-right: 0;
+  }
   // style
   background-color: black;
   color: white;
@@ -65,10 +68,12 @@ $recent-nodes-width: $node-width * 2+ 10px;
 .title-and-recent-nodes__title {
   flex: 4;
   overflow: auto;
-  height: 100%;
+  height: calc(100% - 6px);
   padding: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include respond-to($md-up) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   text-align: center;
 }

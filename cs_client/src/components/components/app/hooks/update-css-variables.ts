@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import { formattingBarUnmountAnimationDelay } from '::root/components/app/components/editor/tool-bar/components/groups/formatting-buttons/formatting-buttons';
-import { filter, tap } from 'rxjs/operators';
+import { filter, take, tap } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { modDialog } from '::sass-modules';
 import { ac } from '::store/store';
@@ -38,6 +38,7 @@ export const useUpdateCssVariables = (
           tap(() => {
             ac.root.setDocking(false);
           }),
+          take(1)
         )
         .subscribe();
     }

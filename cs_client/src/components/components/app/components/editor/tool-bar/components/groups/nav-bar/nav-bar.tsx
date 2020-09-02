@@ -38,13 +38,6 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
     >
       <Search />
       <ToolbarButton
-        dontMount={!isLoggedIn}
-        onClick={ac.dialogs.showCreateDocumentDialog}
-        testId={'new-document'}
-      >
-        <Icon name={Icons.material.document} loadAsInlineSVG={'force'} />
-      </ToolbarButton>
-      <ToolbarButton
         onClick={ac.document.export}
         disabled={noDocumentIsSelected}
         dontMount={!isLoggedIn}

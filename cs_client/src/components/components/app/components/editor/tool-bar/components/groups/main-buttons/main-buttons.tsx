@@ -22,6 +22,7 @@ const mapState = (state: Store) => {
     documentHasUnsavedChanges: documentHasUnsavedChanges(document),
     documentId: state.document.documentId,
     isDocumentOwner: hasWriteAccessToDocument(state),
+    userId: state.auth.user?.id,
   };
 };
 
@@ -36,9 +37,11 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
   documentHasUnsavedChanges,
   documentId,
   isDocumentOwner,
+  userId,
 }) => {
   const noDocumentIsSelected = !documentId;
   const newDocument = documentId?.startsWith('new');
+  const isLoggedIn = Boolean(userId);
   return (
     <div className={modToolbar.toolBar__group}>
       <ToolbarButton
@@ -65,6 +68,13 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         disabled={!userHasUnsavedChanges}
       >
         <Icon name={Icons.material.save} loadAsInlineSVG={'force'} />
+      </ToolbarButton>
+      <ToolbarButton
+        dontMount={!isLoggedIn}
+        onClick={ac.dialogs.showCreateDocumentDialog}
+        testId={'new-document'}
+      >
+        <Icon name={Icons.material.document} loadAsInlineSVG={'force'} />
       </ToolbarButton>
     </div>
   );

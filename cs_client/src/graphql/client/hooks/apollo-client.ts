@@ -8,7 +8,10 @@ import { getMainDefinition } from 'apollo-utilities';
 import { useEffect, useState } from 'react';
 import { apolloClient } from '../apollo-client';
 
-if (process.env.NODE_ENV === 'development')
+if (
+  process.env.NODE_ENV === 'development' &&
+  !localStorage.getItem('graphqlAPIHost')
+)
   localStorage.setItem('graphqlAPIHost', 'localhost:1230');
 
 const host = localStorage.getItem('graphqlAPIHost') || location.host;
