@@ -1,5 +1,5 @@
 import { documentActionCreators } from '::root/components/app/components/editor/document/reducer/action-creators';
-import { onpaste } from './editing/clipboard';
+import { onPaste } from './editing/clipboard';
 import { apolloClient } from '::graphql/client/apollo-client';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 import { dTM } from '::store/ducks/cache/document-cache';
@@ -9,7 +9,7 @@ const testCallbacks = {
     pastedImages: documentActionCreators.pastedImages,
   },
   clipboard: {
-    onpaste,
+    onpaste: onPaste,
   },
 };
 type TestCallbacks = typeof testCallbacks;

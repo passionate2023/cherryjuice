@@ -211,7 +211,7 @@ const handlePaste = async e => {
     }
   }
 };
-const onpaste = e => {
+const onPaste = e => {
   handlePaste(e).catch(error => {
     ac.dialogs.setAlert({
       title: 'Could not perform the paste',
@@ -221,14 +221,5 @@ const onpaste = e => {
     });
   });
 };
-const setupClipboard = () => {
-  const editableDiv = document.getElementById('rich-text');
-  editableDiv.onpaste = onpaste;
-};
 
-export {
-  setupClipboard,
-  replaceImageUrlWithBase64,
-  anyImageBase64ToPngBase64,
-  onpaste,
-};
+export { replaceImageUrlWithBase64, anyImageBase64ToPngBase64, onPaste };

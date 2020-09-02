@@ -1,6 +1,9 @@
 import { modRichText } from '::sass-modules';
 import { default as React, useContext, useEffect, useRef } from 'react';
-import { useSetupStuff } from '::root/components/app/components/editor/document/components/rich-text/hooks/setup-stuff';
+import {
+  EventHandler,
+  useSetupEventHandlers,
+} from '::hooks/dom/setup-event-handlers';
 import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
 import { useReactRouterForAnchors } from '::root/components/app/components/editor/document/components/rich-text/hooks/react-router-for-anchors';
 import { useAttachImagesToHtml } from '::root/components/app/components/editor/document/components/rich-text/hooks/get-node-images';
@@ -9,6 +12,24 @@ import { useAddMetaToPastedImages } from '::root/components/app/components/edito
 import { DocumentContext } from '::root/components/app/components/editor/document/reducer/context';
 import { Image } from '::types/graphql/generated';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
+import { createGesturesHandler } from '::root/components/shared-components/drawer/components/drawer-navigation/helpers/create-gestures-handler';
+import { ac } from '::store/store';
+import { onPaste } from '::helpers/editing/clipboard';
+import { onKeyDown } from '::helpers/editing/typing';
+
+const { onTouchEnd, onTouchStart } = createGesturesHandler({
+  onRight: ac.editor.showTree,
+  onLeft: ac.editor.hideTree,
+  onTap: ac.root.hidePopups,
+  minimumLength: 170,
+});
+
+const eventHandlers: EventHandler[] = [
+  { type: 'paste', listener: onPaste },
+  { type: 'keydown', listener: onKeyDown },
+  { type: 'ontouchstart', listener: onTouchStart },
+  { type: 'ontouchend', listener: onTouchEnd },
+];
 
 type Props = {
   contentEditable;
@@ -33,10 +54,9 @@ const ContentEditable = ({
   images,
   fetchNodeStarted,
 }: Props) => {
-  const { pastedImages } = useContext(DocumentContext);
-  useSetupStuff(node_id);
-
   const ref = useRef();
+  const { pastedImages } = useContext(DocumentContext);
+  useSetupEventHandlers(`.${modRichText.richText}`, eventHandlers);
   useHandleContentChanges({ node_id, documentId: file_id, ref });
   useAddMetaToPastedImages({ requestId: pastedImages });
   useAttachImagesToHtml({

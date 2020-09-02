@@ -77,9 +77,15 @@ const writeChangesToDom = (
     },
     { startDDOE },
   );
-  replaceElement(startAnchor,options.filterEmptyNodes)(childrenElementsOfStartDDOE);
+  replaceElement(
+    startAnchor,
+    options.filterEmptyNodes,
+  )(childrenElementsOfStartDDOE);
   startDDOE.after(...adjacentElementsOfStartDDOE);
-  replaceElement(endAnchor,options.filterEmptyNodes)(childrenElementsOfEndDDOE);
+  replaceElement(
+    endAnchor,
+    options.filterEmptyNodes,
+  )(childrenElementsOfEndDDOE);
   applyLineStyle({
     lineStyle,
     startDDOE,
