@@ -1,3 +1,5 @@
+import { escapeHtml } from '../../helpers/escape-html';
+
 type Props = {
   style: {
     justification: string;
@@ -38,7 +40,7 @@ const Code = ({
         width: ${width_raw}${is_width_pix ? 'px' : '%'};
         display: inline-block;"
     >
-      ${text}
+      ${escapeHtml(text)}
     </code><span>&#8203;</span>`;
 };
 
