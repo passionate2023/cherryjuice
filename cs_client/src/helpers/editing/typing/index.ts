@@ -1,5 +1,5 @@
 import { handleIndentation } from '::helpers/editing/typing/indentation';
-import { handleBackSpace } from './backspace';
+import { handleBackSpace } from '::helpers/editing/typing/handle-backspace/handle-backspace';
 import { handleEnter } from '::helpers/editing/typing/new-line/handle-enter';
 import { ac } from '::store/store';
 import { AlertType } from '::types/react';

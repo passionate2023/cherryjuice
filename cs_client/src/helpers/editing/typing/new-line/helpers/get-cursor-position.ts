@@ -1,4 +1,8 @@
 import { CustomRange } from '::helpers/editing/execK/steps/get-selection';
+import {
+  getDDOE,
+  getIndexOfSubDDOE,
+} from '::helpers/editing/execK/steps/pipe1/ddoes';
 
 const codeBoxDelimiter = '\u200B';
 const cursorIsAtBoxDelimiter = (range: CustomRange) => {
@@ -15,11 +19,18 @@ export type CursorPosition = {
   insideCodeBox: boolean;
   isAtBoxDelimiter: boolean;
   beforeCodeBox: boolean;
+  atStartOfDDOE: boolean;
 };
 export const getCursorPosition = (selection: CustomRange): CursorPosition => {
   const insideCodeBox = Boolean(
     selection.startElement.parentElement.closest('.rich-text__code'),
   );
+
+  const atStartOfDDOE =
+    getIndexOfSubDDOE({
+      DDOE: getDDOE(selection.startElement),
+      selectionElement: selection.startElement,
+    }) === 0 && selection.startOffset === 0;
 
   const isAtBoxDelimiter = cursorIsAtBoxDelimiter(selection);
   const beforeCodeBox =
@@ -50,5 +61,6 @@ export const getCursorPosition = (selection: CustomRange): CursorPosition => {
     beforeTable,
     insideTable,
     isAtBoxDelimiter,
+    atStartOfDDOE,
   };
 };

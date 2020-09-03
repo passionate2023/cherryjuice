@@ -1,9 +1,9 @@
 import {
   getDDOE,
   getSelectedDDOEs,
-  getIndexOfSelectionSubDDOEs,
   getIsolatedDDOESelection,
   deletedIsolatedSelection,
+  getIndexOfSubDDOE,
 } from '::helpers/editing/execK/steps/pipe1/ddoes';
 import { getAHtml } from '::helpers/rendering/html-to-ahtml';
 import {
@@ -77,14 +77,14 @@ const pipe1: Pipe1 = ({
     stampPrefix,
   });
   const { selectedDDOEs } = getSelectedDDOEs({ startDDOE, endDDOE });
-  const {
-    indexOfEndSubDDOE,
-    indexOfStartSubDDOE,
-  } = getIndexOfSelectionSubDDOEs({
-    endDDOE,
-    startDDOE,
-    selectionEndElement,
-    selectionStartElement,
+
+  const indexOfStartSubDDOE = getIndexOfSubDDOE({
+    DDOE: startDDOE,
+    selectionElement: selectionStartElement,
+  });
+  const indexOfEndSubDDOE = getIndexOfSubDDOE({
+    DDOE: endDDOE,
+    selectionElement: selectionEndElement,
   });
 
   const { isolatedSelection } = getIsolatedDDOESelection({

@@ -16,21 +16,11 @@ const getSelectedDDOEs = ({ startDDOE, endDDOE }) => {
   return { selectedDDOEs };
 };
 
-const getIndexOfSelectionSubDDOEs = ({
-  startDDOE,
-  endDDOE,
-  selectionStartElement,
-  selectionEndElement,
-}) => {
-  const indexOfStartSubDDOE = Array.from(startDDOE.childNodes).findIndex(
-    child => getSubDDOE(selectionStartElement) === child,
-  );
 
-  const indexOfEndSubDDOE = Array.from(endDDOE.childNodes).findIndex(
-    child => getSubDDOE(selectionEndElement) === child,
+const getIndexOfSubDDOE = ({ DDOE, selectionElement }) =>
+  Array.from(DDOE.childNodes).findIndex(
+    child => getSubDDOE(selectionElement) === child,
   );
-  return { indexOfStartSubDDOE, indexOfEndSubDDOE };
-};
 
 const getIsolatedDDOESelection = ({
   indexOfStartSubDDOE,
@@ -95,7 +85,7 @@ const deletedIsolatedSelection = ({
 export {
   getDDOE,
   getSelectedDDOEs,
-  getIndexOfSelectionSubDDOEs,
+  getIndexOfSubDDOE,
   getIsolatedDDOESelection,
   deletedIsolatedSelection,
 };
