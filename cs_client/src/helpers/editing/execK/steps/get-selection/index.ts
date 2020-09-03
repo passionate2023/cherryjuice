@@ -86,9 +86,21 @@ const createWordRange = ({ startElement, startOffset: caretOffset }) => {
   };
 };
 
-const getSelection = ({
+export type CustomRange = {
+  endOffset: number;
+  endElement: Text;
+  startOffset: number;
+  startElement: Text;
+  collapsed: boolean;
+};
+
+type GetSelection = ({
   selectAdjacentWordIfNoneIsSelected,
-}: { selectAdjacentWordIfNoneIsSelected?: boolean } = {}) => {
+}: {
+  selectAdjacentWordIfNoneIsSelected?: boolean;
+}) => CustomRange;
+
+const getSelection: GetSelection = ({ selectAdjacentWordIfNoneIsSelected }={}) => {
   const selection = document.getSelection();
   if (selection.rangeCount === 0)
     throw new FormattingError('Could not find the cursor');

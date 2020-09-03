@@ -1,5 +1,7 @@
 import { escapeHtml } from '../../helpers/escape-html';
 
+const objectDelimiter = '<span>&#8203;</span>';
+
 type Props = {
   style: {
     justification: string;
@@ -27,7 +29,7 @@ const Code = ({
     do_show_linenum,
   },
 }: Props) => {
-  return `<code
+  return `${objectDelimiter}<code
       class="rich-text__code"
       data-do_highl_bra="${do_highl_bra}" 
       data-is_width_pix="${is_width_pix}"
@@ -41,7 +43,7 @@ const Code = ({
         display: inline-block;"
     >
       ${escapeHtml(text)}
-    </code><span>&#8203;</span>`;
+    </code>${objectDelimiter}`;
 };
 
-export { Code };
+export { Code, objectDelimiter };
