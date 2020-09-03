@@ -1,5 +1,6 @@
 import { elementHasText } from '::helpers/editing/execK/helpers';
 import { getDeepestFirstChild } from '::helpers/editing/execK/steps/restore-selection';
+import { QUAD_SPACE } from '::helpers/rendering/escape-html';
 
 export const addTabToStart = ddoe => {
   const ddoeIsNotEmpty = elementHasText(ddoe);
@@ -10,10 +11,10 @@ export const addTabToStart = ddoe => {
     if (deepestFirstChild.nodeType === Node.ELEMENT_NODE) {
       (deepestFirstChild as Element).insertAdjacentHTML(
         'beforebegin',
-        '<span>\u00A0 \u00A0 </span>',
+        `<span>${QUAD_SPACE}</span>`,
       );
     } else {
-      (deepestFirstChild as Text).insertData(0, '\u00A0 \u00A0 ');
+      (deepestFirstChild as Text).insertData(0, QUAD_SPACE);
     }
   }
 };

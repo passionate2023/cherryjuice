@@ -1,5 +1,8 @@
 import { getDDOE } from '::helpers/editing/execK/steps/pipe1/ddoes';
-import { collectSiblings } from '::helpers/editing/typing/new-line/helpers/shared';
+import {
+  collectSiblings,
+  getSpaceAtStart,
+} from '::helpers/editing/typing/new-line/helpers/shared';
 import { CustomRange } from '::helpers/editing/execK/steps/get-selection';
 import { pipe1 } from '::helpers/editing/execK/steps/pipe1';
 import { writeChangesToDom } from '::helpers/editing/execK/steps/pipe3';
@@ -26,8 +29,13 @@ const insideCodeBox = (selection: CustomRange): Node => {
   return newChild;
 };
 
-const generic = (selection: CustomRange, position: CursorPosition): Node => {
+const generic = (
+  selection: CustomRange,
+  position: CursorPosition,
+  preserveIndentation: boolean,
+): [Node, number] => {
   const { startElement, endElement, startOffset, endOffset } = selection;
+  const spaceAtStart = getSpaceAtStart(getDDOE(startElement));
   const splitSelection = pipe1({
     selectionStartElement: startElement,
     selectionEndElement: endElement,
@@ -60,7 +68,12 @@ const generic = (selection: CustomRange, position: CursorPosition): Node => {
   );
   const firstElementOfNewLine = childrenElementsOfEndDDOE[0];
   firstElementOfNewLine.after(...siblings);
-  return firstElementOfNewLine;
+  if (preserveIndentation && spaceAtStart) {
+    const span = document.createElement('span');
+    span.innerText = spaceAtStart;
+    startDDOEShell.insertBefore(span, firstElementOfNewLine);
+    return [span, spaceAtStart.length];
+  } else return [firstElementOfNewLine, 0];
 };
 
 export const insertNewLine = {

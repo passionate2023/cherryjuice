@@ -5,3 +5,9 @@ export const collectSiblings = (array: Node[] = []) => (node: Node): Node[] => {
   }
   return array;
 };
+
+export const getSpaceAtStart = (element: Element): undefined | string => {
+  const execArray = /(^\s+)/.exec(element.firstChild.textContent);
+  if (execArray)
+    return execArray[1]
+};

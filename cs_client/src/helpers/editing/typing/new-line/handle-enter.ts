@@ -9,19 +9,26 @@ const handleEnter = (e: KeyboardEvent) => {
     selectAdjacentWordIfNoneIsSelected: false,
   });
   const position = getCursorPosition(selection);
+  const preserveIndentation = !e.shiftKey;
   let nextSelectionElement;
+  let offset = 0;
   if (position.insideTable) return;
   if (position.insideCodeBox)
     nextSelectionElement = insertNewLine.insideCodeBox(selection);
   else if (position.beforeTable)
     nextSelectionElement = insertNewLine.beforeTable(selection);
-  else nextSelectionElement = insertNewLine.generic(selection, position);
+  else
+    [nextSelectionElement, offset] = insertNewLine.generic(
+      selection,
+      position,
+      preserveIndentation,
+    );
   setTextSelection(
     {
       startElement: nextSelectionElement,
       endElement: nextSelectionElement,
-      startOffset: 0,
-      endOffset: 0,
+      startOffset: offset,
+      endOffset: offset,
     },
     true,
   );
