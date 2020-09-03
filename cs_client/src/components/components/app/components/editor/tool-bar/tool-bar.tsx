@@ -73,6 +73,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
           </NodesButtons>
         )}
       </Portal>
+      {isDocumentOwner && !isOnMd && <Separator />}
       {!docking && isDocumentOwner && (
         <Portal targetSelector={'.' + appModule.app} predicate={isOnMd}>
           {isOnMd ? (

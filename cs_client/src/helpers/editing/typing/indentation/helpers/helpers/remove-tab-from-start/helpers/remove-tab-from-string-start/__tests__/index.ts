@@ -1,4 +1,4 @@
-import { negativeIndent } from '::helpers/editing/typing/indentation/helpers/negative-indent';
+import { removeTabFromStringStart } from '::helpers/editing/typing/indentation/helpers/helpers/remove-tab-from-start/helpers/remove-tab-from-string-start/remove-tab-from-string-start';
 
 const testSamples = [
   {
@@ -19,7 +19,7 @@ const testSamples = [
 describe('negative indent', () => {
   testSamples.forEach(({ input: { texts }, output }) => {
     it(JSON.stringify(texts), () => {
-      const trimmedText = negativeIndent(texts);
+      const trimmedText = removeTabFromStringStart(texts);
       expect(trimmedText).toEqual(output);
     });
   });

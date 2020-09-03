@@ -1,33 +1,16 @@
 import { getInnerText } from '::helpers/editing/execK/helpers';
 
-const negativeIndent = (texts: string[]): string => {
-  const str = texts
-    .join('')
-    .replace(/\u00A0/g, ' ')
-    .replace(/\t/g, '    ');
-  const regex = /^([\s]+)([^\s]*)/.exec(str);
-  if (regex) {
-    const spaces = regex[1];
-    const remainingStr = str.replace(spaces, '');
-
-    const newSpaces = spaces.replace(/ {1,4}/, '');
-
-    return (newSpaces + remainingStr || '')
-      .replace(/ {2}/g, '\u00A0 ')
-      .replace(/\t/g, '\u00A0 \u00A0 ');
-  } else return str;
+type Params = {
+  textOfNodes: string[];
+  firstSubDDOEThatISNotFullOfSpaces: Element;
+  firstSubDDOEStartsWithSpace: boolean;
 };
-
 const deleteSubDDOEsThatStartWithSpaceAndGetTheirText = (
   ddoe: Element,
   {
     deleteFirstSubDDOEThatHasWords,
   }: { deleteFirstSubDDOEThatHasWords: boolean },
-): {
-  textOfNodes: string[];
-  firstSubDDOEThatISNotFullOfSpaces: Element;
-  firstSubDDOEStartsWithSpace: boolean;
-} => {
+): Params => {
   const textOfNodes = [];
   let firstSubDDOEThatISNotFullOfSpaces;
   let firstSubDDOEStartsWithSpace = false;
@@ -60,4 +43,4 @@ const deleteSubDDOEsThatStartWithSpaceAndGetTheirText = (
   };
 };
 
-export { negativeIndent, deleteSubDDOEsThatStartWithSpaceAndGetTheirText };
+export { deleteSubDDOEsThatStartWithSpaceAndGetTheirText };
