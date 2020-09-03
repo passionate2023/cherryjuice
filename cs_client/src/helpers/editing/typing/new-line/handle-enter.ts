@@ -15,7 +15,7 @@ const handleEnter = (e: KeyboardEvent) => {
     firstElementOfNewLine = insertNewLine.insideCodeBox(selection);
   else if (position.beforeTable)
     firstElementOfNewLine = insertNewLine.beforeTable(selection);
-  else firstElementOfNewLine = insertNewLine.generic(selection);
+  else firstElementOfNewLine = insertNewLine.generic(selection, position);
   setTextSelection(
     {
       startElement: firstElementOfNewLine,

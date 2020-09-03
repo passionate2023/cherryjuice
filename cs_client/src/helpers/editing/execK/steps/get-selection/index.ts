@@ -100,7 +100,9 @@ type GetSelection = ({
   selectAdjacentWordIfNoneIsSelected?: boolean;
 }) => CustomRange;
 
-const getSelection: GetSelection = ({ selectAdjacentWordIfNoneIsSelected }={}) => {
+const getSelection: GetSelection = ({
+  selectAdjacentWordIfNoneIsSelected,
+} = {}) => {
   const selection = document.getSelection();
   if (selection.rangeCount === 0)
     throw new FormattingError('Could not find the cursor');

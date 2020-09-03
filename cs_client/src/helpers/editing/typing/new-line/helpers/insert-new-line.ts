@@ -2,8 +2,8 @@ import { getDDOE } from '::helpers/editing/execK/steps/pipe1/ddoes';
 import { collectSiblings } from '::helpers/editing/typing/new-line/helpers/shared';
 import { CustomRange } from '::helpers/editing/execK/steps/get-selection';
 import { pipe1 } from '::helpers/editing/execK/steps/pipe1';
-import { cursorIsAtBoxDelimiter } from '::helpers/editing/typing/backspace';
 import { writeChangesToDom } from '::helpers/editing/execK/steps/pipe3';
+import { CursorPosition } from '::helpers/editing/typing/new-line/helpers/get-cursor-position';
 
 const beforeTable = (selection: CustomRange): Node => {
   const siblings = collectSiblings()(selection.startElement);
@@ -26,7 +26,7 @@ const insideCodeBox = (selection: CustomRange): Node => {
   return newChild;
 };
 
-const generic = (selection: CustomRange): Node => {
+const generic = (selection: CustomRange, position: CursorPosition): Node => {
   const { startElement, endElement, startOffset, endOffset } = selection;
   const splitSelection = pipe1({
     selectionStartElement: startElement,
@@ -36,8 +36,7 @@ const generic = (selection: CustomRange): Node => {
     stampPrefix: 'p',
   });
   const siblings = collectSiblings()(splitSelection.endAnchor);
-  const atBoxDelimiter = cursorIsAtBoxDelimiter(selection);
-  if (atBoxDelimiter.isAtBoxDelimiter)
+  if (position.beforeCodeBox)
     siblings.unshift(splitSelection.adjustedSelection.selectionStartElement);
   const startDDOE = getDDOE(splitSelection.startAnchor);
   const startDDOEShell = startDDOE.cloneNode();
