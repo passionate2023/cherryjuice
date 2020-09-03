@@ -61,11 +61,14 @@ const singleLineIndentation = ({
       moveCursor({ startElement: startElement, offset: startOffset + 4 });
     } else {
       const startDDOE = getDDOE(startElement);
-      const { removedCharactersLength } = removeATabFromTheStartOfTheLine(
+      const { nextSelectedElement } = removeATabFromTheStartOfTheLine(
         startDDOE,
       );
-      if (removedCharactersLength)
-        moveCursor({ startElement: startElement, offset: startOffset - 4 });
+      if (nextSelectedElement)
+        moveCursor({
+          startElement: nextSelectedElement,
+          offset: nextSelectedElement.textContent.length,
+        });
     }
   } else {
     if (positiveIndent) {
@@ -87,7 +90,7 @@ const singleLineIndentation = ({
     }
   }
 };
-const handleIndentation = e => {
+const handleTab = e => {
   e.preventDefault();
   const {
     collapsed,
@@ -123,4 +126,4 @@ const handleIndentation = e => {
     });
 };
 
-export { handleIndentation };
+export { handleTab };

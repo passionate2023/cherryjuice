@@ -1,13 +1,13 @@
-import { handleIndentation } from '::helpers/editing/typing/indentation';
 import { handleBackSpace } from '::helpers/editing/typing/handle-backspace/handle-backspace';
 import { handleEnter } from '::helpers/editing/typing/new-line/handle-enter';
 import { ac } from '::store/store';
 import { AlertType } from '::types/react';
+import { handleTab } from '::helpers/editing/typing/indentation/handle-tab';
 
 const onKeyDown = e => {
   try {
     if (e.keyCode === 9) {
-      handleIndentation(e);
+      handleTab(e);
     } else if (e.keyCode === 8) {
       handleBackSpace(e);
     } else if (e.keyCode === 13) {

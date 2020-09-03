@@ -51,7 +51,7 @@ export const useDocumentRouting = (
   const previousAlert = useRef<TAlert>();
   useEffect(() => {
     if (documentId) {
-      if (initialPathname.current.documentId !== documentId)
+      if (extractDocumentFromPathname().documentId !== documentId)
         router.goto.document(documentId);
     } else if (alert) {
       initialPathname.current = emptyPathname;

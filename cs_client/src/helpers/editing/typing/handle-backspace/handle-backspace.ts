@@ -8,21 +8,21 @@ const handleBackSpace = e => {
     selectAdjacentWordIfNoneIsSelected: false,
   });
   const position = getCursorPosition(selection);
-  let firstElementOfNewLine;
+  let nextSelectedElement;
   if (position.afterCodeBox) {
     e.preventDefault();
-    firstElementOfNewLine = doBackspace.codeBox(selection);
+    nextSelectedElement = doBackspace.codeBox(selection);
   } else if (position.atStartOfDDOE) {
     e.preventDefault();
-    firstElementOfNewLine = doBackspace.startOfDDOE(selection);
+    nextSelectedElement = doBackspace.startOfDDOE(selection);
   }
-  if (firstElementOfNewLine)
+  if (nextSelectedElement)
     setTextSelection(
       {
-        startElement: firstElementOfNewLine,
-        endElement: firstElementOfNewLine,
-        startOffset: firstElementOfNewLine.textContent.length,
-        endOffset: firstElementOfNewLine.textContent.length,
+        startElement: nextSelectedElement,
+        endElement: nextSelectedElement,
+        startOffset: nextSelectedElement.textContent.length,
+        endOffset: nextSelectedElement.textContent.length,
       },
       true,
     );

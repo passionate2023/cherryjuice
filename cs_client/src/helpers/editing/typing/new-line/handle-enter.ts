@@ -9,17 +9,17 @@ const handleEnter = (e: KeyboardEvent) => {
     selectAdjacentWordIfNoneIsSelected: false,
   });
   const position = getCursorPosition(selection);
-  let firstElementOfNewLine;
+  let nextSelectionElement;
   if (position.insideTable) return;
   if (position.insideCodeBox)
-    firstElementOfNewLine = insertNewLine.insideCodeBox(selection);
+    nextSelectionElement = insertNewLine.insideCodeBox(selection);
   else if (position.beforeTable)
-    firstElementOfNewLine = insertNewLine.beforeTable(selection);
-  else firstElementOfNewLine = insertNewLine.generic(selection, position);
+    nextSelectionElement = insertNewLine.beforeTable(selection);
+  else nextSelectionElement = insertNewLine.generic(selection, position);
   setTextSelection(
     {
-      startElement: firstElementOfNewLine,
-      endElement: firstElementOfNewLine,
+      startElement: nextSelectionElement,
+      endElement: nextSelectionElement,
       startOffset: 0,
       endOffset: 0,
     },

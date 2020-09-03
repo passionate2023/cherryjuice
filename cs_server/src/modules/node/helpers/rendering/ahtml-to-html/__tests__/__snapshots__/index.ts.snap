@@ -67,7 +67,7 @@ exports[`rich-text snapshot tests offset images, tables, and codebox 1`] = `
         alt=\\"\\"
         style=\\"width:100px; height:100px;\\"
         class=\\"rich-text__image\\"
-      /></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><span>&gt;string functions</span></span><span class=\\"rich-text__line\\"><span>a) </span><code ><small>str.match</small></code></span><span class=\\"rich-text__line\\"><em style=\\"color:#c792ea;\\">let </em><em >str </em><em style=\\"color:#89ddff;\\">= </em><em style=\\"color:#c3e88d;\\">\`Is this This?\`</em><em style=\\"color:#89ddff;\\">;</em></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><span>&gt;basic regex playground using </span><code ><small>str.replace</small></code></span><span class=\\"rich-text__line\\"><code
+      /></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><span>&gt;string functions</span></span><span class=\\"rich-text__line\\"><span>a) </span><code ><small>str.match</small></code></span><span class=\\"rich-text__line\\"><em style=\\"color:#c792ea;\\">let </em><em >str </em><em style=\\"color:#89ddff;\\">= </em><em style=\\"color:#c3e88d;\\">\`Is this This?\`</em><em style=\\"color:#89ddff;\\">;</em></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"></span><span class=\\"rich-text__line\\"><span>&gt;basic regex playground using </span><code ><small>str.replace</small></code></span><span class=\\"rich-text__line\\"><span>&#8203;</span><code
       class=\\"rich-text__code\\"
       data-do_highl_bra=\\"1\\" 
       data-is_width_pix=\\"1\\"
@@ -81,7 +81,7 @@ exports[`rich-text snapshot tests offset images, tables, and codebox 1`] = `
         display: inline-block;\\"
     >
       codebox0
-    </code><span>&#8203;</span></span><span class=\\"rich-text__line\\"><code
+    </code><span>&#8203;</span></span><span class=\\"rich-text__line\\"><span>&#8203;</span><code
       class=\\"rich-text__code\\"
       data-do_highl_bra=\\"1\\" 
       data-is_width_pix=\\"1\\"

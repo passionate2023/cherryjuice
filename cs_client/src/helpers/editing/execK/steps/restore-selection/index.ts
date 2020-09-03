@@ -1,13 +1,20 @@
-const getDeepestFirstChild = el =>
-  el.firstChild ? getDeepestFirstChild(el.firstChild) : el;
+import { trimOffset } from '::helpers/editing/execK/helpers';
+
+const getDeepestFirstChild = (el: Element): Node | Element =>
+  el?.firstChild
+    ? getDeepestFirstChild((el.firstChild as unknown) as Element)
+    : el;
 const setTextSelection = (
   { startElement, endElement, startOffset, endOffset },
   collapsed?: boolean,
 ) => {
   const range = document.createRange();
-  range.setStart(getDeepestFirstChild(startElement), startOffset);
+
+  range.setStart(
+    ...trimOffset(getDeepestFirstChild(startElement), startOffset),
+  );
   if (collapsed) range.collapse(true);
-  else range.setEnd(getDeepestFirstChild(endElement), endOffset);
+  else range.setEnd(...trimOffset(getDeepestFirstChild(endElement), endOffset));
   const sel = window.getSelection();
   sel.removeAllRanges();
   sel.addRange(range);
@@ -122,12 +129,14 @@ const restoreSelection = ({
     modifiedSelection: [a, ...m, b],
   });
   setTextSelection(
-    {
-      startElement,
-      endElement,
-      startOffset,
-      endOffset,
-    },
+    startElement
+      ? {
+          startElement: startElement,
+          endElement,
+          startOffset,
+          endOffset,
+        }
+      : ogSelection,
     collapse,
   );
 };
