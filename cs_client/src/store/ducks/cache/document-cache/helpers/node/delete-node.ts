@@ -2,6 +2,7 @@ import { DocumentCacheState } from '::store/ducks/cache/document-cache';
 import { calcRecentNodes } from '::store/ducks/helpers/document';
 import { listNodeEditedAttributes } from '::store/ducks/cache/document-cache/helpers/node/mutate-node-meta';
 import { getDefaultHighestNode_id } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-highest-node_id';
+import { getDefaultSelectedNode_id } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-selected-node_id';
 
 export type DeleteNodeParams = {
   node_id: number;
@@ -34,7 +35,8 @@ export const deleteNode = (
     recentNodes: state[documentId].state.recentNodes,
     node_id,
   });
-  document.state.selectedNode_id = fatherNode.node_id;
+  document.state.selectedNode_id =
+    fatherNode.node_id || getDefaultSelectedNode_id(document.nodes);
   document.state.localUpdatedAt = Date.now();
   return state;
 };

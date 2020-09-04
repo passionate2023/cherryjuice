@@ -11,6 +11,7 @@ type AlertDetails = {
   description?: string;
   descriptionFactory?: (Error) => string;
   action?: AlertAction;
+  dismissAction?: AlertAction;
 };
 type CreateAlertHandler = {
   alertDetails: AlertDetails;

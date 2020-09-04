@@ -8,6 +8,7 @@ import { rootActionCreators } from './ducks/root';
 import { searchActionCreators } from './ducks/search';
 import { authActionCreators } from './ducks/auth';
 import { cacheActionCreators } from './ducks/cache/cache';
+import { timelinesActionCreators } from '::store/ducks/timelines';
 
 type t1 = typeof documentActionCreators &
   typeof dialogsActionCreators &
@@ -17,6 +18,7 @@ type t1 = typeof documentActionCreators &
   typeof searchActionCreators &
   typeof documentOperationsActionCreators &
   typeof cacheActionCreators &
+  typeof timelinesActionCreators &
   typeof rootActionCreators &
   typeof nodeActionCreators;
 export type Actions = {

@@ -24,11 +24,11 @@ const deleteSelection = (selection: CustomRange): void => {
 const startOfDDOE = (selection: CustomRange): Node => {
   const currentDDOE: HTMLElement = getDDOE(selection.startElement);
   const previousDDOE = currentDDOE.previousElementSibling;
-  const nextSelected = previousDDOE.lastChild;
 
   if (!selection.collapsed) deleteSelection(selection);
 
   if (previousDDOE) {
+    const nextSelected = previousDDOE.lastChild;
     previousDDOE.append(...currentDDOE.childNodes);
     currentDDOE.remove();
     return nextSelected;

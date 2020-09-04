@@ -7,7 +7,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { router } from '::root/router/router';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { useDocumentRouting } from '::root/components/app/components/editor/hooks/document-routing/document-routing';
+import { useExtractInitialParams } from '::root/components/app/components/editor/hooks/document-routing/extract-initial-params';
 
 const Document = React.lazy(() =>
   import('::root/components/app/components/editor/document/document'),
@@ -30,10 +30,10 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const Editor: React.FC<PropsFromRedux> = ({
   document,
-  documentId: currentDocumentId,
+  documentId,
   docking,
 }) => {
-  useDocumentRouting(document, currentDocumentId);
+  useExtractInitialParams();
 
   return (
     <>
@@ -44,7 +44,7 @@ const Editor: React.FC<PropsFromRedux> = ({
       </ErrorBoundary>
       {document?.nodes && document.nodes[0] && (
         <>
-          {!currentDocumentId && router.get.location.pathname === '/' ? (
+          {!documentId && router.get.location.pathname === '/' ? (
             <></>
           ) : (
             <Route

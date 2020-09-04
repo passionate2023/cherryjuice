@@ -14,6 +14,7 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
   const { authEpic } = await import('./auth/auth');
   const { deleteAccountEpic } = await import('./delete-account/delete-account');
   const { fetchNodeEpic } = await import('./fetch-node/fetch-node');
+  const { routerEpic } = await import('./router/router');
 
   return action$ =>
     combineEpics(
@@ -27,6 +28,7 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
       searchNodesEpic,
       deleteAccountEpic,
       fetchNodeEpic,
+      routerEpic,
     )(action$);
 };
 export { createRootEpic };
