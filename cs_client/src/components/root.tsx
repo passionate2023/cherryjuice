@@ -68,8 +68,9 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   userHasUnsavedChanges,
 }) => {
   const client = useApolloClient(token, userId);
-  useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
   useOnWindowResize([
+    cssVariables.setVH,
+    cssVariables.setVW,
     updateBreakpointState({
       breakpoint: 850,
       callback: ac.root.setIsOnMd,

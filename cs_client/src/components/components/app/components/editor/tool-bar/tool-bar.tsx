@@ -68,7 +68,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
       <Portal targetSelector={'.' + appModule.app} predicate={isOnMd}>
         {!docking && (
           <NodesButtons>
-            <UndoRedo />
+            {isDocumentOwner && <UndoRedo />}
             <MobileButtons />
           </NodesButtons>
         )}

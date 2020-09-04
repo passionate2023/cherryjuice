@@ -30,7 +30,7 @@ const mapState = (state: Store) => {
     documentUserId: document?.userId,
     documentPrivacy: document?.privacy,
     showDialog: state.dialogs.showNodeMetaDialog,
-    isOnMobile: state.root.isOnMd,
+    isOnMd: state.root.isOnMd,
     userId: state.auth.user?.id,
   };
 };
@@ -45,7 +45,7 @@ type TNodeMetaModalProps = {};
 const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
   PropsFromRedux> = ({
   showDialog,
-  isOnMobile,
+  isOnMd,
   onClose,
   document,
   nodes,
@@ -100,7 +100,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       value: state.name,
       type: 'text',
       label: 'Node name',
-      lazyAutoFocus: 500,
+      lazyAutoFocus: isOnMd ? 0 : 500,
       testId: testIds.nodeMeta__nodeName,
     },
     {
@@ -170,7 +170,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       dialogTitle={'Node Properties'}
       dialogFooterLeftButtons={[]}
       dialogFooterRightButtons={buttonsRight}
-      isOnMobile={isOnMobile}
+      isOnMobile={isOnMd}
       show={Boolean(showDialog)}
       onClose={onClose}
       onConfirm={onSave}

@@ -13,10 +13,10 @@ const router = {
     document: (documentId: string) => {
       history.push(`/document/${documentId}/`);
     },
-    node: (documentId: string, node_id: number) => {
+    node: (documentId: string, node_id: number, hash = '') => {
       const c = extractDocumentFromPathname();
-      const existingPath = `/document/${c.documentId}/node/${c.node_id}`;
-      const newPath = `/document/${documentId}/node/${node_id}`;
+      const existingPath = `/document/${c.documentId}/node/${c.node_id}${hash}`;
+      const newPath = `/document/${documentId}/node/${node_id}${hash}`;
       if (existingPath !== newPath) {
         history.push(newPath);
       }
@@ -25,9 +25,6 @@ const router = {
       history.push(`/`);
     },
     signIn: () => history.push(`/auth/login`),
-    hash: (fullLink: string) => {
-      history.push(fullLink);
-    },
     oauthSignup() {
       history.push(`/auth/signup-oauth`);
     },

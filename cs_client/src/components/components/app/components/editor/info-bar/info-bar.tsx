@@ -2,7 +2,6 @@ import * as React from 'react';
 import { modInfoBar } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { router } from '::root/router/router';
 import { VisibilityIcon } from '::root/components/app/components/editor/info-bar/components/components/visibility-icon';
 import { Timestamps } from '::root/components/app/components/editor/info-bar/components/components/timestamp';
 import { NoSelectedDocument } from '::root/components/app/components/editor/info-bar/components/components/no-selected-document';
@@ -10,15 +9,15 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
-  const node = document?.nodes
-    ? document.nodes[document.state.selectedNode_id]
-    : undefined;
+  const selectedNode_id = document?.state?.selectedNode_id;
+  const node = document?.nodes ? document.nodes[selectedNode_id] : undefined;
   return {
     node,
     documentId: state.document.documentId,
     isOnMobile: state.root.isOnMd,
     showInfoBar: state.editor.showInfoBar,
     documentPrivacy: document?.privacy,
+    selectedNode_id,
   };
 };
 const mapDispatch = {};
@@ -33,14 +32,14 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
   isOnMobile,
   showInfoBar,
   documentPrivacy,
+  selectedNode_id,
 }) => {
   const showBar = !isOnMobile || showInfoBar;
-  const noSelectedDocument =
-    !documentId && router.get.location.pathname === '/';
+  const noSelectedDocument = !documentId;
   return showBar ? (
     <footer className={modInfoBar.infoBar}>
       <div className={modInfoBar.infoBar__group}>
-        {node?.createdAt ? (
+        {selectedNode_id ? (
           <Timestamps node={node} />
         ) : (
           <NoSelectedDocument noSelectedDocument={noSelectedDocument} />

@@ -4,6 +4,7 @@ import { getDefaultSelectedNode_id } from '::store/ducks/cache/document-cache/he
 export type SelectNodeParams = {
   documentId: string;
   node_id: number;
+  hash?: string;
 };
 
 export const selectNode = (

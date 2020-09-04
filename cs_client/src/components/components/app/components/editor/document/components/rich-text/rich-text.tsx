@@ -25,6 +25,7 @@ const mapState = (state: Store) => {
     contentEditable: state.editor.contentEditable || !state.root.isOnMd,
     processLinks: state.node.processLinks,
     isDocumentOwner: hasWriteAccessToDocument(state),
+    isOnMd: state.root.isOnMd,
   };
 };
 const mapDispatch = {};
@@ -37,6 +38,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   fetchNodeStarted,
   isDocumentOwner,
   node,
+  isOnMd,
 }) => {
   useLayoutEffect(() => {
     if (!fetchDocumentInProgress) ac.node.fetch(node);
@@ -59,6 +61,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
             processLinks={[processLinks]}
             images={images}
             fetchNodeStarted={fetchNodeStarted}
+            isOnMd={isOnMd}
           />
         ) : (
           <SpinnerCircle />

@@ -51,7 +51,11 @@ const routerEpic = (action$: Observable<Actions>) => {
   const nodeSelect$ = action$.pipe(
     ofType([ac_.node.select]),
     switchMap(action => {
-      router.goto.node(action.payload.documentId, action.payload.node_id);
+      router.goto.node(
+        action.payload.documentId,
+        action.payload.node_id,
+        action.payload.hash,
+      );
       return EMPTY.pipe(ignoreElements());
     }),
   );

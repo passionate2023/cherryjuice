@@ -140,7 +140,6 @@ export class SnapBack {
         this.elementGetter().then(element => {
           this.observer.observe(element, this.options);
           this.onFrameChange();
-          element.focus();
         });
       }
     }, delay);

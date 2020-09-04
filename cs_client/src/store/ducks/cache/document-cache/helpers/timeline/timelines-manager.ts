@@ -33,7 +33,7 @@ export class TimelinesManager<T> {
     this.current.add(meta)(patches, reversePatches);
   };
 
-  private setCurrent = (id: string): void => {
+  setCurrent = (id: string): void => {
     if (!this.timelines[id]) this.addTimeline(id);
     this.current = this.timelines[id];
   };

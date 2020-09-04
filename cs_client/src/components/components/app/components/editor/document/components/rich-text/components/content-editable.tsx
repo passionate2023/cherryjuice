@@ -4,7 +4,6 @@ import {
   EventHandler,
   useSetupEventHandlers,
 } from '::hooks/dom/setup-event-handlers';
-import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
 import { useReactRouterForAnchors } from '::root/components/app/components/editor/document/components/rich-text/hooks/react-router-for-anchors';
 import { useAttachImagesToHtml } from '::root/components/app/components/editor/document/components/rich-text/hooks/get-node-images';
 import { useHandleContentChanges } from '::root/components/app/components/editor/document/components/rich-text/hooks/handle-content-changes';
@@ -16,6 +15,7 @@ import { createGesturesHandler } from '::root/components/shared-components/drawe
 import { ac } from '::store/store';
 import { onPaste } from '::helpers/editing/clipboard';
 import { onKeyDown } from '::helpers/editing/typing';
+import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
 
 const { onTouchEnd, onTouchStart } = createGesturesHandler({
   onRight: ac.editor.showTree,
@@ -40,6 +40,7 @@ type Props = {
   processLinks;
   isDocumentOwner: boolean;
   fetchNodeStarted: boolean;
+  isOnMd: boolean;
   images: Image[];
 };
 
@@ -53,8 +54,9 @@ const ContentEditable = ({
   isDocumentOwner,
   images,
   fetchNodeStarted,
+  isOnMd,
 }: Props) => {
-  const ref = useRef();
+  const ref = useRef<HTMLDivElement>();
   const { pastedImages } = useContext(DocumentContext);
   useSetupEventHandlers(`.${modRichText.richText}`, eventHandlers);
   useHandleContentChanges({ node_id, documentId: file_id, ref });
@@ -66,7 +68,7 @@ const ContentEditable = ({
     html,
     images,
   });
-  useScrollToHashElement({ fetchNodeStarted });
+  useScrollToHashElement();
 
   useReactRouterForAnchors({
     file_id,
@@ -77,7 +79,11 @@ const ContentEditable = ({
   useEffect(() => {
     snapBackManager.current.reset();
     snapBackManager.current.enable(1000);
+    if (!isOnMd) {
+      ref.current.focus();
+    }
   }, [html]);
+
   return (
     <div
       ref={ref}

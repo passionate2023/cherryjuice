@@ -123,6 +123,10 @@ const reducer = createReducer(initialState, _ => [
       ...cloneObj(initialState),
     })),
     _(dac.fetchFulfilled, (state, { payload }) => loadDocument(state, payload)),
+    _(dac.setDocumentId, (state, { payload }) => {
+      dTM.setCurrent(payload);
+      return state;
+    }),
     _(ac.createDocument, (state, { payload }) =>
       createDocument(state, payload),
     ),

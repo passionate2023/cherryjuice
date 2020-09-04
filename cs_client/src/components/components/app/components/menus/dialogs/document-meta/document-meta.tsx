@@ -32,7 +32,7 @@ const mapState = (state: Store) => ({
   showDialog: state.dialogs.showDocumentMetaDialog,
   focusedDocumentId: state.documentsList.focusedDocumentId,
   documents: getDocumentsList(state),
-  isOnMobile: state.root.isOnMd,
+  isOnMd: state.root.isOnMd,
   userId: state.auth.user?.id,
   documentUserId: getDocumentUserId(state),
 });
@@ -47,7 +47,7 @@ type DocumentMetaDialogProps = {
 type Props = PropsFromRedux & DocumentMetaDialogProps;
 const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   showDialog,
-  isOnMobile,
+  isOnMd,
   focusedDocumentId,
   documents,
   userId,
@@ -78,7 +78,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       value: state.name,
       type: 'text',
       label: 'Document name',
-      lazyAutoFocus: 400,
+      lazyAutoFocus: isOnMd ? 0 : 500,
       testId: testIds.documentMeta__documentName,
     },
   ];
@@ -161,7 +161,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       dialogTitle={'Document Properties'}
       dialogFooterLeftButtons={[]}
       dialogFooterRightButtons={buttonsRight}
-      isOnMobile={isOnMobile}
+      isOnMobile={isOnMd}
       show={Boolean(showDialog)}
       onClose={ac.dialogs.hideDocumentMetaDialog}
       onConfirm={apply}

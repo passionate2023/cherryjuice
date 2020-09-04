@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
-
-import { router } from '::root/router/router';
 import { ac } from '::store/store';
 import { extractDocumentFromPathname } from '::root/components/app/components/editor/hooks/document-routing/helpers/extract-document-from-pathname';
+import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
 
 type Props = {
   file_id: string;
@@ -46,10 +45,8 @@ const useReactRouterForAnchors = ({
             const { documentId, node_id } = extractDocumentFromPathname(
               url.pathname,
             );
-            if (node_id > 0) {
-              ac.node.select({ documentId, node_id });
-            }
-            router.goto.hash(url.pathname + url.hash);
+            updateCachedHtmlAndImages();
+            ac.node.select({ documentId, node_id, hash: url.hash });
             e.preventDefault();
           } else if (isWebLink) {
             window.open(url.href, '_blank');
