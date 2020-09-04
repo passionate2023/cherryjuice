@@ -7,7 +7,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { router } from '::root/router/router';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { useExtractInitialParams } from '::root/components/app/components/editor/hooks/document-routing/extract-initial-params';
+import { useHistoryChange } from '::root/components/app/components/editor/hooks/document-routing/history-change';
 
 const Document = React.lazy(() =>
   import('::root/components/app/components/editor/document/document'),
@@ -33,7 +33,7 @@ const Editor: React.FC<PropsFromRedux> = ({
   documentId,
   docking,
 }) => {
-  useExtractInitialParams();
+  useHistoryChange();
 
   return (
     <>

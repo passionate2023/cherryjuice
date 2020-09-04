@@ -1,4 +1,5 @@
 import { createBrowserHistory } from 'history';
+import { extractDocumentFromPathname } from '::root/components/app/components/editor/hooks/document-routing/helpers/extract-document-from-pathname';
 
 const history = createBrowserHistory();
 const router = {
@@ -13,7 +14,12 @@ const router = {
       history.push(`/document/${documentId}/`);
     },
     node: (documentId: string, node_id: number) => {
-      history.push(`/document/${documentId}/node/${node_id}`);
+      const c = extractDocumentFromPathname();
+      const existingPath = `/document/${c.documentId}/node/${c.node_id}`;
+      const newPath = `/document/${documentId}/node/${node_id}`;
+      if (existingPath !== newPath) {
+        history.push(newPath);
+      }
     },
     home: () => {
       history.push(`/`);

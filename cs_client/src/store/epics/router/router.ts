@@ -42,7 +42,9 @@ const routerEpic = (action$: Observable<Actions>) => {
           ? nextNode.node_id
           : document.state.selectedNode_id,
       );
-      return concat(of(ac_.node.clearNext()), of(ac_.node.select(nextNode)));
+      return nextNode
+        ? concat(of(ac_.node.clearNext()), of(ac_.node.select(nextNode)))
+        : EMPTY.pipe(ignoreElements());
     }),
   );
 
@@ -66,7 +68,9 @@ const routerEpic = (action$: Observable<Actions>) => {
     ofType([ac_.documentCache.deleteNode]),
     switchMap(() => {
       const document = getCurrentDocument(store.getState());
-      router.goto.node(document.id, document.state.selectedNode_id);
+      if (document.state.selectedNode_id)
+        router.goto.node(document.id, document.state.selectedNode_id);
+      else router.goto.document(document.id);
       return EMPTY.pipe(ignoreElements());
     }),
   );
