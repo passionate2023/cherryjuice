@@ -7,7 +7,6 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { router } from '::root/router/router';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { useRouterEffect } from '::root/components/app/components/editor/hooks/router-effect/router-effect';
 
 const Document = React.lazy(() =>
   import('::root/components/app/components/editor/document/document'),
@@ -33,8 +32,6 @@ const Editor: React.FC<PropsFromRedux> = ({
   documentId,
   docking,
 }) => {
-  useRouterEffect();
-
   return (
     <>
       <ErrorBoundary>
@@ -44,7 +41,7 @@ const Editor: React.FC<PropsFromRedux> = ({
       </ErrorBoundary>
       {document?.nodes && document.nodes[0] && (
         <>
-          {!documentId && router.get.location.pathname === '/' ? (
+          {!documentId && location.pathname === '/' ? (
             <></>
           ) : (
             <Route

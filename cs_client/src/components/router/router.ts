@@ -4,10 +4,7 @@ import { extractDocumentFromPathname } from '::root/components/app/components/ed
 const history = createBrowserHistory();
 const router = {
   get: {
-    __history: history,
-    get location() {
-      return history.location;
-    },
+    history,
   },
   goto: {
     document: (documentId: string) => {

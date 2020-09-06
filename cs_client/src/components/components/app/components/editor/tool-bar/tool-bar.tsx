@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { NodesButtons } from '::root/components/app/components/editor/tool-bar/components/groups/nodes-buttons/nodes-buttons';
 import { UndoRedo } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
+import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 
 type PortalProps = { targetSelector: string; predicate?: boolean };
 export const Portal: React.FC<PortalProps> = ({
@@ -75,13 +76,15 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
       </Portal>
       {isDocumentOwner && !isOnMd && <Separator />}
       {!docking && isDocumentOwner && (
-        <Portal targetSelector={'.' + appModule.app} predicate={isOnMd}>
-          {isOnMd ? (
-            <FormattingButtonsWithTransition show={showFormattingButtons} />
-          ) : (
-            <FormattingButtons />
-          )}
-        </Portal>
+        <ErrorBoundary>
+          <Portal targetSelector={'.' + appModule.app} predicate={isOnMd}>
+            {isOnMd ? (
+              <FormattingButtonsWithTransition show={showFormattingButtons} />
+            ) : (
+              <FormattingButtons />
+            )}
+          </Portal>
+        </ErrorBoundary>
       )}
       <NavBar showUserPopup={false} />
     </div>

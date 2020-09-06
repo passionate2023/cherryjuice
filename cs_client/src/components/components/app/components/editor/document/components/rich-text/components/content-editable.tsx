@@ -77,8 +77,10 @@ const ContentEditable = ({
     fetchNodeStarted,
   });
   useEffect(() => {
-    snapBackManager.current.reset();
-    snapBackManager.current.enable(1000);
+    if (snapBackManager.current) {
+      snapBackManager.current.reset();
+      snapBackManager.current.enable(1000);
+    }
     if (!isOnMd) {
       ref.current.focus();
     }

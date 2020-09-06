@@ -24,7 +24,6 @@ const User: React.FC<UserProps & { style }> = ({ onClose, style, user }) => {
   });
   const signOut = useCallback(() => {
     ac.root.resetState();
-    router.goto.signIn();
   }, []);
   const loggedIn = !!user;
   return (

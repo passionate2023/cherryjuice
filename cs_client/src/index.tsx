@@ -13,7 +13,7 @@ import '::helpers/attach-test-callbacks';
 setAutoFreeze(false);
 enablePatches();
 render(
-  <Router history={router.get.__history}>
+  <Router history={router.get.history}>
     <Root />
   </Router>,
   document.querySelector('#cs'),

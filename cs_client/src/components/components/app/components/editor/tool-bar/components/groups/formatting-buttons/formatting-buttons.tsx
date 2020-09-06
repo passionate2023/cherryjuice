@@ -12,7 +12,6 @@ import { HotKeyActionType } from '::types/graphql/generated';
 import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 
 const mapState = (state: Store) => {
   return {
@@ -35,28 +34,26 @@ const Buttons: React.FC<PropsFromRedux> = ({
   const disabled = !documentId || !selectedNode_id;
   return (
     <>
-      <ErrorBoundary>
-        {formattingHotKeys.map(hotKey =>
-          hotKey.type === HotKeyActionType.FG_COLOR ||
-          hotKey.type === HotKeyActionType.BG_COLOR ? (
-            <ColorInput key={hotKey.type} hotKey={hotKey} disabled={disabled} />
-          ) : (
-            <ToolbarButton
-              key={hotKey.type}
-              onClick={() =>
-                execK(formattingHotkeysProps[hotKey.type].execCommandArguments)
-              }
-              className={modToolbar.toolBar__iconStrictWidth}
-              disabled={disabled}
-            >
-              <Icon
-                name={formattingHotkeysProps[hotKey.type].icon}
-                loadAsInlineSVG={'force'}
-              />
-            </ToolbarButton>
-          ),
-        )}
-      </ErrorBoundary>
+      {formattingHotKeys.map(hotKey =>
+        hotKey.type === HotKeyActionType.FG_COLOR ||
+        hotKey.type === HotKeyActionType.BG_COLOR ? (
+          <ColorInput key={hotKey.type} hotKey={hotKey} disabled={disabled} />
+        ) : (
+          <ToolbarButton
+            key={hotKey.type}
+            onClick={() =>
+              execK(formattingHotkeysProps[hotKey.type].execCommandArguments)
+            }
+            className={modToolbar.toolBar__iconStrictWidth}
+            disabled={disabled}
+          >
+            <Icon
+              name={formattingHotkeysProps[hotKey.type].icon}
+              loadAsInlineSVG={'force'}
+            />
+          </ToolbarButton>
+        ),
+      )}
     </>
   );
 };

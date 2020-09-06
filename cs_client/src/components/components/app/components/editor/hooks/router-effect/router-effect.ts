@@ -23,17 +23,23 @@ const change = () => {
 };
 
 const getRoute = createSelector(
-  (state: Store) => state.document.documentId,
+  (state: Store) => state.documentCache[state.document.documentId]?.id,
   (state: Store) =>
     state.documentCache[state.document.documentId]?.state?.selectedNode_id,
   (state: Store) => state.document.asyncOperations.fetch,
-  (documentId, selectedNode_id, fetch) => {
-    if (fetch === 'idle') {
+  (state: Store) => state.auth.user?.id,
+  (state: Store) => state.auth.user?.hasPassword,
+  (documentId, node_id, fetch, userId, hasPassword) => {
+    const unfinishedOauthSignup = userId && hasPassword === false;
+
+    if (unfinishedOauthSignup) router.goto.oauthSignup();
+    else if (fetch === 'idle') {
       if (documentId) {
-        if (selectedNode_id) {
-          router.goto.node(documentId, selectedNode_id);
+        if (node_id) {
+          router.goto.node(documentId, node_id);
         } else router.goto.document(documentId);
-      } else {
+      } else if (!userId) router.goto.signIn();
+      else {
         router.goto.home();
       }
     }

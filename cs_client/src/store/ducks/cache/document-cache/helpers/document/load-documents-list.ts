@@ -21,8 +21,11 @@ export const loadDocumentsList = (
       ]),
     );
     Object.keys(state).forEach(documentId => {
-      if (!fetchedDocuments[documentId] && !documentId.startsWith('new'))
-        delete state[documentId];
+      const intruder = !fetchedDocuments[documentId];
+      const ownedBySameUser =
+        fetchedDocuments[documentId]?.userId === state[documentId]?.userId;
+      const notNew = !documentId.startsWith('new');
+      if (intruder && notNew && ownedBySameUser) delete state[documentId];
     });
     return {
       ...fetchedDocuments,
