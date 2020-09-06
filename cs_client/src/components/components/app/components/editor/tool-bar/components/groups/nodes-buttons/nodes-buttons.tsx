@@ -63,7 +63,7 @@ const NodesButtons: React.FC<Props & PropsFromRedux> = ({
         dontMount={!isDocumentOwner}
         onClick={ac.dialogs.showCreateChildNode}
         testId={testIds.toolBar__main__createChildNode}
-        disabled={noDocumentIsSelected}
+        disabled={!selectedNode_id}
       >
         <Icon
           name={Icons.material['create-child']}

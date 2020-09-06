@@ -1,5 +1,5 @@
 import { createBrowserHistory } from 'history';
-import { extractDocumentFromPathname } from '::root/components/app/components/editor/hooks/document-routing/helpers/extract-document-from-pathname';
+import { extractDocumentFromPathname } from '::root/components/app/components/editor/hooks/router-effect/helpers/extract-document-from-pathname';
 
 const history = createBrowserHistory();
 const router = {

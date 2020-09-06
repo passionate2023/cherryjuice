@@ -122,7 +122,9 @@ const reducer = createReducer(initialState, _ => [
     _(rac.resetState, () => ({
       ...cloneObj(initialState),
     })),
-    _(dac.fetchFulfilled, (state, { payload }) => loadDocument(state, payload)),
+    _(dac.fetchFulfilled, (state, { payload }) =>
+      loadDocument(state, payload.document, payload.nextNode),
+    ),
     _(dac.setDocumentId, (state, { payload }) => {
       dTM.setCurrent(payload);
       return state;

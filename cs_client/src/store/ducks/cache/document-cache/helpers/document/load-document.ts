@@ -1,13 +1,15 @@
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
 import { QDocumentMeta } from '::graphql/queries/document-meta';
 import { mergeDocument } from '::store/ducks/cache/document-cache/helpers/document/shared/merge-document';
+import { SelectNodeParams } from '::store/ducks/cache/document-cache/helpers/document/select-node';
 
 export const loadDocument = (
   state: DocumentCacheState,
-  payload: QDocumentMeta,
+  document: QDocumentMeta,
+  next?: SelectNodeParams,
 ): DocumentCacheState => {
   return {
     ...state,
-    [payload.id]: mergeDocument(state[payload.id], payload),
+    [document.id]: mergeDocument(document, state[document.id], next),
   };
 };

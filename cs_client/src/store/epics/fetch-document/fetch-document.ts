@@ -1,4 +1,4 @@
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { filter, flatMap, map, switchMap, tap } from 'rxjs/operators';
 import { concat, from, Observable, ObservedValueOf, of } from 'rxjs';
 import { ofType } from 'deox';
 import { store, ac_, ac } from '../../store';
@@ -62,7 +62,15 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
           snapBackManager.resetAll();
           snapBackManager.current?.enable();
         }),
-        map(ac_.document.fetchFulfilled),
+        flatMap(document => {
+          const next = store.getState().node.next;
+          if (next && next.documentId === document.id)
+            return concat(
+              of(ac_.node.clearNext()),
+              of(ac_.document.fetchFulfilled(document, next))
+            );
+          else return of(ac_.document.fetchFulfilled(document))
+        }),
       );
 
       const loading = of(ac_.document.fetchInProgress());

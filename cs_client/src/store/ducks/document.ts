@@ -3,6 +3,7 @@ import { createActionPrefixer } from './helpers/shared';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { rootActionCreators } from './root';
 import { QDocumentMeta } from '::graphql/queries/document-meta';
+import { SelectNodeParams } from '::store/ducks/cache/document-cache/helpers/document/select-node';
 
 const ap = createActionPrefixer('document');
 const ac = {
@@ -12,8 +13,10 @@ const ac = {
 
   fetch: _(ap('fetch')),
   fetchInProgress: _(ap('fetch-in-progress')),
-  fetchFulfilled: _(ap('fetch-fulfilled'), _ => (args: QDocumentMeta) =>
-    _(args),
+  fetchFulfilled: _(
+    ap('fetch-fulfilled'),
+    _ => (document: QDocumentMeta, nextNode?: SelectNodeParams) =>
+      _({ document, nextNode }),
   ),
   fetchFailed: _(ap('fetch-failed')),
 
