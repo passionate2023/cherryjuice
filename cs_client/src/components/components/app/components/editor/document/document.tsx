@@ -4,7 +4,6 @@ import { ErrorBoundary } from '::root/components/shared-components/react/error-b
 import { Tree } from './components/tree/tree';
 import { Route } from 'react-router-dom';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
-import { RecentNodes } from './components/recent-nodes/recent-nodes';
 import { RichText } from '::root/components/app/components/editor/document/components/rich-text/rich-text';
 import { documentReducer } from '::root/components/app/components/editor/document/reducer/reducer';
 import { documentInitialState } from '::root/components/app/components/editor/document/reducer/initial-state';
@@ -13,19 +12,17 @@ import { DocumentContext } from './reducer/context';
 import { Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
+import { TitleAndRecentNodes } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/title-and-recent-nodes';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
   return {
-    documentId: document?.id,
     nodes: document?.nodes,
     fetchDocumentInProgress:
       state.document.asyncOperations.fetch === 'in-progress',
     saveInProgress: state.document.asyncOperations.save === 'in-progress',
     selectedNode_id: document.state?.selectedNode_id,
-    recentNodes: document.state?.recentNodes,
     showTree: state.editor.showTree,
-    showRecentNodesBar: state.editor.showRecentNodesBar,
   };
 };
 
@@ -39,10 +36,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   fetchDocumentInProgress,
   saveInProgress,
   selectedNode_id,
-  recentNodes,
   showTree,
-  showRecentNodesBar,
-  documentId,
 }) => {
   const [documentState, dispatch] = useReducer(
     documentReducer,
@@ -57,15 +51,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
       <LinearProgress loading={fetchDocumentInProgress || saveInProgress} />
       {nodes && (
         <Fragment>
-          {Boolean(selectedNode_id) && (
-            <RecentNodes
-              showRecentNodes={showRecentNodesBar}
-              file_id={documentId}
-              recentNodes={recentNodes}
-              selectedNode_id={selectedNode_id}
-              nodes={nodes}
-            />
-          )}
+          {Boolean(selectedNode_id) && <TitleAndRecentNodes />}
           {showTree && (
             <ErrorBoundary>
               <Tree />

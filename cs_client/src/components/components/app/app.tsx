@@ -21,6 +21,7 @@ type Props = {};
 
 const mapState = (state: Store) => ({
   showTree: state.editor.showTree,
+  showRecentNodes: state.editor.showRecentNodesBar,
   treeWidth: state.editor.treeWidth,
   showFormattingButtons: state.editor.showFormattingButtons,
   dockedDialog: state.root.dockedDialog,
@@ -41,6 +42,7 @@ const App: React.FC<Props & PropsFromRedux> = ({
   isDocumentOwner,
   userId,
   searchDialogIsShown,
+  showRecentNodes,
 }) => {
   useUpdateCssVariables(
     isDocumentOwner,
@@ -48,6 +50,7 @@ const App: React.FC<Props & PropsFromRedux> = ({
     showTree,
     treeWidth,
     searchDialogIsShown,
+    showRecentNodes,
   );
   // useRefreshToken({ token });
   useGetPreviousOperations();

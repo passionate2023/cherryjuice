@@ -20,7 +20,7 @@
   @include respond-to($md-down) {
     left: 5px;
     position: absolute;
-    bottom: calc(5px + var(--nodes-bar) + var(--formatting-bar));
+    bottom: calc(5px + var(--nodes-bar) + var(--formatting-bar) + var(--recent-nodes));
   }
   @include respond-to($md-up) {
     grid-area: info-bar;

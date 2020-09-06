@@ -11,7 +11,7 @@
   gap: 5px;
 
   @include respond-to($md-down) {
-    bottom: calc(5px + var(--nodes-bar) + var(--formatting-bar));
+    bottom: calc(5px + var(--nodes-bar) + var(--formatting-bar) + var(--recent-nodes));
   }
 }
 

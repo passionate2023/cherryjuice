@@ -12,6 +12,7 @@ export const useUpdateCssVariables = (
   showTree: boolean,
   treeWidth: number,
   searchDialogIsShown: boolean,
+  showRecentNodes: boolean,
 ) => {
   useEffect(() => {
     cssVariables.setTreeWidth(showTree ? treeWidth : 0);
@@ -24,6 +25,14 @@ export const useUpdateCssVariables = (
       })();
     }
   }, [showFormattingButtons, showTree]);
+
+  useEffect(() => {
+    if (showRecentNodes) {
+      cssVariables.setRecentNodes(40);
+    } else {
+      cssVariables.setRecentNodes(0);
+    }
+  }, [showRecentNodes]);
 
   useEffect(() => {
     if (searchDialogIsShown) {
