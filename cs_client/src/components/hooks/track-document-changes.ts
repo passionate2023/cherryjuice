@@ -14,7 +14,7 @@ const useTrackDocumentChanges = ({
 }: Props) => {
   useEffect(() => {
     const prefix = userId && documentName ? `${documentName} - ` : '';
-    const title = `${prefix}Cherryscript`;
+    const title = `${prefix}CherryJuice`;
     if (userHasUnsavedChanges) {
       document.title = '*' + title;
       onBeforeUnload.attach();

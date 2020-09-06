@@ -47,7 +47,7 @@ export const useUpdateCssVariables = (
           tap(() => {
             ac.root.setDocking(false);
           }),
-          take(1)
+          take(1),
         )
         .subscribe();
     }

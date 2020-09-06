@@ -16,7 +16,7 @@ export class EmailService {
     await this.mailerService.sendMail({
       to: email,
       subject: 'Password reset request',
-      text: `Hello, someone has requested a password reset for the Cherryscript account associated with ${email}\nto reset your password follow this link: ${url}\nIf you didn't make this request, ignore this email.`,
+      text: `Hello, someone has requested a password reset for the CherryJuice account associated with ${email}\nto reset your password follow this link: ${url}\nIf you didn't make this request, ignore this email.`,
       context: {
         resetPasswordUrl: url,
         email,

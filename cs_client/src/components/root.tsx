@@ -19,12 +19,18 @@ import { useConsumeToken } from '::root/hooks/consume-token';
 import { Auth } from '::root/components/auth/auth';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
 import { useTrackDocumentChanges } from '::root/hooks/track-document-changes';
+import { enablePatches, setAutoFreeze } from 'immer';
+import '::helpers/attach-test-callbacks';
+setAutoFreeze(false);
+enablePatches();
 import {
   getCurrentDocument,
   getDocumentsList,
 } from '::store/selectors/cache/document/document';
 import { documentHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
 import { useRouterEffect } from '::root/components/app/components/editor/hooks/router-effect/router-effect';
+import { Router } from 'react-router-dom';
+import { router } from '::root/router/router';
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
@@ -105,15 +111,17 @@ const ConnectedRoot = connector(Root);
 const RootWithRedux: React.FC = props => {
   const { loadedEpics } = useLoadEpics();
   return (
-    loadedEpics && (
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistStore(store)}>
-          <div className={modTheme.lightTheme}>
-            <ConnectedRoot {...props} />
-          </div>
-        </PersistGate>
-      </Provider>
-    )
+    <Router history={router.get.history}>
+      {loadedEpics && (
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistStore(store)}>
+            <div className={modTheme.lightTheme}>
+              <ConnectedRoot {...props} />
+            </div>
+          </PersistGate>
+        </Provider>
+      )}
+    </Router>
   );
 };
-export { RootWithRedux as Root };
+export default RootWithRedux;

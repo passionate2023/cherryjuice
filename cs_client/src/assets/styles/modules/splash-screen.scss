@@ -1,0 +1,13 @@
+@import '../vars/vars';
+.splash-screen{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $primary-dark3;
+  width: var(--vw);
+  height: var(--vh);
+}
+
+.splash-screen__logo{
+
+}
