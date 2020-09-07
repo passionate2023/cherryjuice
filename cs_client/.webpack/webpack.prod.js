@@ -8,12 +8,12 @@ const CompressionPlugin = require('compression-webpack-plugin');
 module.exports = merge(common, {
   mode: 'production',
   plugins: [
-    new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
     new CompressionPlugin({
       deleteOriginalAssets: true,
       filename: '[path].br[query]',
       algorithm: 'brotliCompress',
       test: /\.(js|css|svg)$/,
     }),
+    new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
   ],
 });

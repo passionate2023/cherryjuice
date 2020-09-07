@@ -24,6 +24,18 @@ export class SnapBackManager {
     this.onFrameChange = onFrameChange;
   }
 
+  disableAll = () => {
+    Object.values(this.snapBacks).forEach(snapBack => {
+      snapBack.disable();
+    });
+  };
+
+  resetAll = () => {
+    Object.values(this.snapBacks).forEach(snapBack => {
+      snapBack.reset();
+    });
+  };
+
   setCurrent = (id: string): void => {
     if (!this.snapBacks[id]) {
       this.snapBacks[id] = new SnapBack(
@@ -33,15 +45,9 @@ export class SnapBackManager {
         this.onFrameChange,
       );
     }
-    Object.values(this.snapBacks).forEach(snapBack => {
-      snapBack.disable();
-    });
+    this.disableAll();
     this.current = this.snapBacks[id];
-    if (process.env.NODE_ENV === 'development') {
-      // @ts-ignore
-      window.snapBack = this.current;
-    }
-    this.current.resetState();
+    this.current.reset();
     this.current.enable();
   };
 }

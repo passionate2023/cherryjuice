@@ -1,7 +1,7 @@
 import { filter, flatMap, map, switchMap, take } from 'rxjs/operators';
 import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
-import { store, ac } from '../../store';
+import { store, ac, ac_ } from '../../store';
 import { Actions } from '../../actions.types';
 import { gqlMutation } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
@@ -33,7 +33,7 @@ const errorHandler = () =>
 const savingState: AsyncOperation[] = ['idle', 'pending'];
 const saveSettingsEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
-    ofType([ac.__.settings.save]),
+    ofType([ac_.settings.save]),
     filter(
       () =>
         store.getState().settings.screenHasChanges &&
@@ -41,13 +41,13 @@ const saveSettingsEpic = (action$: Observable<Actions>) => {
     ),
     switchMap(() => {
       const selectedScreen = store.getState().settings.selectedScreen;
-      const loading = of(ac.__.settings.saveStarted());
-      const fulfilled = of(ac.__.settings.saveFulfilled());
+      const loading = of(ac_.settings.saveStarted());
+      const fulfilled = of(ac_.settings.saveFulfilled());
       const snackbar = of(
-        ac.__.dialogs.setSnackbar({ message: 'settings saved' }),
+        ac_.dialogs.setSnackbar({ message: 'settings saved' }),
       );
       if (selectedScreen === 'keyboard shortcuts') {
-        const requestUpdateHotkeys = of(ac.__.cache.syncHotKeysWithCache());
+        const requestUpdateHotkeys = of(ac_.cache.syncHotKeysWithCache());
         const waitForCacheMerge = of(
           new Promise<HotKeys>(res => {
             const interval = setInterval(() => {
@@ -67,7 +67,7 @@ const saveSettingsEpic = (action$: Observable<Actions>) => {
               }),
             ),
           ),
-          flatMap(o => o.pipe(map(ac.__.auth.setAuthenticationSucceeded))),
+          flatMap(o => o.pipe(map(ac_.auth.setAuthenticationSucceeded))),
         );
 
         return concat(
@@ -78,9 +78,9 @@ const saveSettingsEpic = (action$: Observable<Actions>) => {
           snackbar,
         ).pipe(timeoutHandler(), errorHandler());
       } else if (selectedScreen === 'manage account') {
-        const showConfirmation = of(ac.__.dialogs.showPasswordModal());
+        const showConfirmation = of(ac_.dialogs.showPasswordModal());
         const updateUserProfile = action$.pipe(
-          ofType([ac.__.dialogs.confirmPasswordModal]),
+          ofType([ac_.dialogs.confirmPasswordModal]),
           take(1),
           switchMap(action => {
             const { userProfileChanges } = store.getState().settings;
@@ -90,7 +90,7 @@ const saveSettingsEpic = (action$: Observable<Actions>) => {
               loading,
               gqlMutation(
                 UPDATE_USER_PROFILE({ userProfile: userProfileChanges }),
-              ).pipe(map(ac.__.auth.setAuthenticationSucceeded)),
+              ).pipe(map(ac_.auth.setAuthenticationSucceeded)),
               fulfilled,
               snackbar,
             ).pipe(timeoutHandler(), errorHandler());

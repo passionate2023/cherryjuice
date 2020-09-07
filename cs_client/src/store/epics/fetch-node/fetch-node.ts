@@ -1,7 +1,7 @@
 import { concatMap, filter, map } from 'rxjs/operators';
 import { concat, defer, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
-import { ac, store } from '::store/store';
+import { ac_, store } from '::store/store';
 import { Actions } from '../../actions.types';
 import { gqlQuery } from '::store/epics/shared/gql-query';
 import { createErrorHandler } from '::store/epics/shared/create-error-handler';
@@ -11,7 +11,7 @@ import { FETCH_NODE_IMAGES } from '::graphql/queries/node-images';
 
 const fetchNodeEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
-    ofType([ac.__.node.fetch]),
+    ofType([ac_.node.fetch]),
     filter(({ payload: { node_id, documentId } }) => {
       const nodeHasNoHtml = !getNode({ documentId, node_id })?.html;
       const nodeFetchIdle =
@@ -27,7 +27,7 @@ const fetchNodeEpic = (action$: Observable<Actions>) => {
         }),
       ).pipe(
         map(({ html }) =>
-          ac.__.documentCache.addFetchedFields({
+          ac_.documentCache.addFetchedFields({
             node_id,
             documentId,
             data: { html },
@@ -45,7 +45,7 @@ const fetchNodeEpic = (action$: Observable<Actions>) => {
         ).pipe(
           filter(({ image }) => !!image.length),
           map(({ image }) =>
-            ac.__.documentCache.addFetchedFields({
+            ac_.documentCache.addFetchedFields({
               node_id,
               documentId,
               data: { image },
@@ -62,7 +62,7 @@ const fetchNodeEpic = (action$: Observable<Actions>) => {
         ).pipe(
           filter(({ image }) => !!image.length),
           map(({ image }) =>
-            ac.__.documentCache.addFetchedFields({
+            ac_.documentCache.addFetchedFields({
               node_id,
               documentId,
               data: { image },
@@ -70,8 +70,8 @@ const fetchNodeEpic = (action$: Observable<Actions>) => {
           ),
         ),
       );
-      const loading = of(ac.__.node.fetchInProgress(node_id));
-      const fulfilled = of(ac.__.node.fetchFulfilled(node_id));
+      const loading = of(ac_.node.fetchInProgress(node_id));
+      const fulfilled = of(ac_.node.fetchFulfilled(node_id));
       return concat(
         loading,
         fetchHtml,
@@ -84,7 +84,7 @@ const fetchNodeEpic = (action$: Observable<Actions>) => {
             title: 'Could not fetch the node',
             description: 'Check your network connection',
           },
-          actionCreators: [ac.__.node.fetchFailed],
+          actionCreators: [ac_.node.fetchFailed],
         }),
       );
     }),

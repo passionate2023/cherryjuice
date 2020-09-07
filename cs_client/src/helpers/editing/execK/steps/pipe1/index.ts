@@ -1,9 +1,9 @@
 import {
   getDDOE,
   getSelectedDDOEs,
-  getIndexOfSelectionSubDDOEs,
   getIsolatedDDOESelection,
   deletedIsolatedSelection,
+  getIndexOfSubDDOE,
 } from '::helpers/editing/execK/steps/pipe1/ddoes';
 import { getAHtml } from '::helpers/rendering/html-to-ahtml';
 import {
@@ -17,7 +17,31 @@ import {
   guardAgainstSubDDOEIsTextNode,
 } from '::helpers/editing/execK/steps/pipe1/guards';
 
-const pipe1 = ({
+export type SplitSelection = {
+  adjustedSelection: { selectionEndElement: any; selectionStartElement: any };
+  left: any;
+  startDDOE: any;
+  startAnchor: any;
+  endAnchor: any;
+  endDDOE: any;
+  right: any;
+  selectionContainsLinks: boolean;
+  selected: { leftEdge: any; rightEdge: any; midNodes: any };
+};
+type Pipe1 = ({
+  selectionStartElement,
+  selectionEndElement,
+  startOffset,
+  endOffset,
+  stampPrefix,
+}: {
+  selectionStartElement: any;
+  selectionEndElement: any;
+  startOffset: any;
+  endOffset: any;
+  stampPrefix?: any;
+}) => SplitSelection;
+const pipe1: Pipe1 = ({
   selectionStartElement,
   selectionEndElement,
   startOffset,
@@ -53,14 +77,14 @@ const pipe1 = ({
     stampPrefix,
   });
   const { selectedDDOEs } = getSelectedDDOEs({ startDDOE, endDDOE });
-  const {
-    indexOfEndSubDDOE,
-    indexOfStartSubDDOE,
-  } = getIndexOfSelectionSubDDOEs({
-    endDDOE,
-    startDDOE,
-    selectionEndElement,
-    selectionStartElement,
+
+  const indexOfStartSubDDOE = getIndexOfSubDDOE({
+    DDOE: startDDOE,
+    selectionElement: selectionStartElement,
+  });
+  const indexOfEndSubDDOE = getIndexOfSubDDOE({
+    DDOE: endDDOE,
+    selectionElement: selectionEndElement,
   });
 
   const { isolatedSelection } = getIsolatedDDOESelection({

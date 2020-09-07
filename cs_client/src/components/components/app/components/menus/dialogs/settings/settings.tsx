@@ -10,7 +10,7 @@ import { ac, Store } from '::store/store';
 
 const mapState = (state: Store) => ({
   show: state.dialogs.showSettingsDialog,
-  isOnMobile: state.root.isOnMobile,
+  isOnMobile: state.root.isOnMd,
   selectedScreen: state.settings.selectedScreen,
   screenHasChanges: state.settings.screenHasChanges,
   saveOperation: state.settings.saveOperation,

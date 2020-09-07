@@ -1,7 +1,7 @@
 import { filter, map, switchMap } from 'rxjs/operators';
 import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
-import { store, ac } from '../../store';
+import { store, ac_ } from '../../store';
 import { Actions } from '../../actions.types';
 import { gqlMutation } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
@@ -19,14 +19,14 @@ const deleteAccount = (currentPassword: string) =>
 const asyncStates: AsyncOperation[] = ['idle', 'pending'];
 const deleteAccountEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
-    ofType([ac.__.auth.deleteAccount]),
+    ofType([ac_.auth.deleteAccount]),
     filter(() => asyncStates.includes(store.getState().auth.ongoingOperation)),
     switchMap(() => {
-      const showConfirmation = of(ac.__.dialogs.showPasswordModal());
+      const showConfirmation = of(ac_.dialogs.showPasswordModal());
       const updateUserProfile = action$.pipe(
-        ofType([ac.__.dialogs.confirmPasswordModal]),
+        ofType([ac_.dialogs.confirmPasswordModal]),
         switchMap(action => {
-          const ip = of(ac.__.auth.setAuthenticationInProgress());
+          const ip = of(ac_.auth.setAuthenticationInProgress());
           return concat(
             ip,
             deleteAccount(action.payload).pipe(
@@ -34,7 +34,7 @@ const deleteAccountEpic = (action$: Observable<Actions>) => {
                 if (data !== store.getState().auth.user.id) {
                   throw new Error('could not delete the account');
                 }
-                return ac.__.root.resetState();
+                return ac_.root.resetState();
               }),
             ),
           ).pipe(
@@ -50,7 +50,7 @@ const deleteAccountEpic = (action$: Observable<Actions>) => {
                 title: 'Could not perform the operation',
                 descriptionFactory: properErrorMessage,
               },
-              actionCreators: [ac.__.auth.setAuthenticationFailed],
+              actionCreators: [ac_.auth.setAuthenticationFailed],
             }),
           );
         }),

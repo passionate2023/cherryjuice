@@ -9,6 +9,15 @@ import { hkActionCreators } from '::root/components/app/components/menus/dialogs
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { HotKey } from '::types/graphql/generated';
 
+const keyToString = {
+  ' ': 'space',
+  arrowup: '↑',
+  arrowdown: '↓',
+  arrowleft: '←',
+  arrowright: '→',
+};
+const mapKeyToString = (key: string): string => keyToString[key] || key;
+
 const enumToString = (word: string): string =>
   word.replace(/_/g, ' ').toLocaleLowerCase();
 const emptyCombination = {
@@ -81,7 +90,7 @@ const KeyboardShortcut = ({
           />
           <TextInput
             topLevelClassName={modHotKey.hotKey__field}
-            value={key === ' ' ? 'space' : key}
+            value={mapKeyToString(key)}
             onKeyUp={setKey}
             onChange={onChange}
           />

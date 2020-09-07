@@ -1,10 +1,10 @@
 import { createActionCreator as _, createReducer } from 'deox';
-import { documentActionCreators } from './document';
+import { documentActionCreators as dac } from './document';
 import { createActionPrefixer } from './helpers/shared';
 import { TAlert } from '::types/react';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { rootActionCreators } from './root';
-import { authActionCreators } from './auth';
+import { authActionCreators as aac } from './auth';
 
 const ap = createActionPrefixer('dialogs');
 
@@ -127,9 +127,17 @@ const reducer = createReducer(initialState, _ => [
     ...state,
     showReloadDocument: false,
   })),
-  _(documentActionCreators.fetchFulfilled, state => ({
+  _(dac.fetchFulfilled, state => ({
     ...state,
     showReloadDocument: false,
+  })),
+  _(dac.setDocumentId, (state, { payload: documentId }) => ({
+    ...state,
+    showDocumentList: !documentId ? true : state.showDocumentList,
+  })),
+  _(aac.setAuthenticationSucceeded, state => ({
+    ...state,
+    showDocumentList: true,
   })),
   // alert
   _(actionCreators.setAlert, (state, { payload }) => ({
@@ -263,11 +271,11 @@ const reducer = createReducer(initialState, _ => [
     ),
   ],
   ...[
-    _(authActionCreators.signIn, state => ({
+    _(aac.signIn, state => ({
       ...state,
       showUserPopup: false,
     })),
-    _(authActionCreators.signUp, state => ({
+    _(aac.signUp, state => ({
       ...state,
       showUserPopup: false,
     })),

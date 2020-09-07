@@ -4,8 +4,11 @@
   background-color: darkslateblue;
   overflow: auto;
 }
-.rich-text__image{
+.rich-text__image {
   display: inline-block;
+  &[src=''] {
+    opacity: 0
+  }
 }
 .rich-text__table {
   display: inline-block;

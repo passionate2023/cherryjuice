@@ -7,7 +7,7 @@ const port = process.env.PORT || '3000';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   if (process.env.NODE_ENV === 'development') {
-    app.enableCors({ origin: ['http://localhost:1236'] });
+    app.enableCors();
   }
   await app.listen(port);
   // eslint-disable-next-line no-console

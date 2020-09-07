@@ -2,7 +2,7 @@ import { concat } from 'rxjs';
 import { AlertAction, AlertType } from '::types/react';
 import { timeoutWith } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { ac } from '::store/store';
+import { ac_ } from '::store/store';
 import { Actions } from '../../actions.types';
 import { virtualTimeScheduler } from '::store/epics/shared/test-helpers';
 
@@ -11,6 +11,7 @@ type AlertDetails = {
   description?: string;
   descriptionFactory?: (Error) => string;
   action?: AlertAction;
+  dismissAction?: AlertAction;
 };
 type CreateAlertHandler = {
   alertDetails: AlertDetails;
@@ -27,7 +28,7 @@ const createTimeoutHandler = ({
     due,
     concat(
       of(
-        ac.__.dialogs.setAlert({
+        ac_.dialogs.setAlert({
           title,
           description,
           type: AlertType.Warning,

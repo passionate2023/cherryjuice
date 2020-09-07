@@ -17,6 +17,10 @@ const ac = {
   processLinks: _(ap('process-links')),
 
   select: _(ap('select'), _ => (payload: SelectNodeParams) => _(payload)),
+  selectNext: _(ap('select-next'), _ => (payload: SelectNodeParams) =>
+    _(payload),
+  ),
+  clearNext: _(ap('clear-next')),
 };
 
 type State = {
@@ -26,6 +30,7 @@ type State = {
     };
   };
   processLinks: number;
+  next: SelectNodeParams;
 };
 
 const initialState: State = cloneObj<State>({
@@ -33,6 +38,7 @@ const initialState: State = cloneObj<State>({
     fetch: {},
   },
   processLinks: 0,
+  next: undefined,
 });
 const reducer = createReducer(initialState, _ => [
   ...[
@@ -40,7 +46,14 @@ const reducer = createReducer(initialState, _ => [
       ...cloneObj(initialState),
     })),
   ],
-
+  _(ac.selectNext, (state, { payload }) => ({
+    ...state,
+    next: payload,
+  })),
+  _(ac.clearNext, state => ({
+    ...state,
+    next: undefined,
+  })),
   _(ac.fetchInProgress, (state, { payload }) => ({
     ...state,
     asyncOperations: {

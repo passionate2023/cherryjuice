@@ -1,15 +1,9 @@
 /* eslint-disable no-console */
-import { ac } from '::store/store';
+import { ac_ } from '::store/store';
 import { saveDocumentsEpic } from '::store/epics/save-documents/save-documents';
 import { ActionsObservable } from 'redux-observable';
 import { toArray } from 'rxjs/operators';
 import { virtualTimeScheduler } from '::store/epics/shared/test-helpers';
-
-jest.mock('../helpers/cache-current-node', () => {
-  return {
-    cacheCurrentNode: jest.fn(() => Promise.resolve()),
-  };
-});
 
 jest.mock('../helpers/reset-cache', () => {
   return {
@@ -35,7 +29,7 @@ describe.skip('save-documents epic', function() {
       output: undefined,
     };
     state.output = await new Promise(res => {
-      const save = ActionsObservable.of(ac.__.document.save);
+      const save = ActionsObservable.of(ac_.document.save);
       const obs$ = saveDocumentsEpic(save, undefined, undefined).pipe(
         toArray(),
       );

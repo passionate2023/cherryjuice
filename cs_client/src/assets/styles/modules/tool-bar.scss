@@ -55,7 +55,6 @@
   }
   // position
   @include respond-to($md-down) {
-    bottom: 0;
     grid-area: formatting-bar;
   }
   // children
@@ -69,8 +68,21 @@
   }
   // style
   @include respond-to($md-down) {
-    box-shadow: $box-shadow1;
+    box-shadow: $box-shadow3;
     opacity: 0.95;
+    background-color: var(--tool-bar-background-color);
+  }
+}
+.tool-bar__group--main-bar {
+  user-select: none;
+  // position
+  @include respond-to($md-down) {
+    bottom: 0;
+    grid-area: main-bar;
+    z-index: #{$ZI-floating-scrollbar};
+  }
+  // style
+  @include respond-to($md-down) {
     background-color: var(--tool-bar-background-color);
   }
 }

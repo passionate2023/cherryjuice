@@ -43,7 +43,7 @@ const inputs: ValidatedTextInputProps[] = [
 
 export const getToken = () => {
   const token = /#([A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*)/.exec(
-    router.get.location.hash,
+    location.hash,
   );
   if (token) location.hash = '';
   return token ? token[1] : '';

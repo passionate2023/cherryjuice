@@ -58,7 +58,7 @@ const mapState = (state: Store) => ({
   showDocumentList: state.dialogs.showDocumentList,
   documents: getDocumentsList(state),
   loading: state.documentsList.fetchDocuments === 'in-progress',
-  isOnMobile: state.root.isOnMobile,
+  isOnMobile: state.root.isOnMd,
   deletionMode: state.documentsList.deletionMode,
   selectedIDs: state.documentsList.selectedIDs,
   fetchDocuments: state.documentsList.fetchDocuments,

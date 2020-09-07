@@ -1,27 +1,47 @@
 import { applyPatches, Patch } from 'immer';
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
+import { NumberOfFrames } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
 
-type TimelineFrameMeta = {
-  documentId: string;
-};
+export type TimelineFrameMeta<T> = {
+  silent?: boolean;
+} & T;
 
-type TimelineFrame = {
+export type Frame<T> = {
   redo: Patch[];
   undo: Patch[];
-  meta: TimelineFrameMeta;
+  meta: TimelineFrameMeta<T>;
 };
 
-type TimelineFrames = {
-  [position: number]: TimelineFrame;
+type Frames<T> = {
+  [position: number]: Frame<T>;
 };
+export type OnFrameChange<T> = (
+  frames: NumberOfFrames,
+  frame: Frame<T>,
+) => void;
+const noop = () => undefined;
 
-export class Timeline {
+export class Timeline<T> {
   private position: number;
-  private frames: TimelineFrames;
+  private frames: Frames<T>;
+  private readonly _onFrameChange: (frame?: Frame<T>) => void = noop;
 
-  constructor() {
+  constructor(onFrameChange?: OnFrameChange<T>) {
+    if (onFrameChange)
+      this._onFrameChange = (frame): void => {
+        setTimeout(() => {
+          onFrameChange(this.numberOfFrames, frame);
+        }, 10);
+      };
     this.position = -1;
     this.frames = {};
+  }
+
+  private get numberOfFrames(): NumberOfFrames {
+    const numberOfFrames = Object.keys(this.frames).length - 1;
+    const redo = numberOfFrames - this.position;
+    const undo = this.position + 1;
+    return { redo, undo };
   }
 
   private deleteFutureFrames = () => {
@@ -36,7 +56,7 @@ export class Timeline {
     delete this.frames[this.position - 4];
   };
 
-  add = (meta: TimelineFrameMeta) => (
+  add = (meta: TimelineFrameMeta<T>) => (
     patches: Patch[],
     reversePatches: Patch[],
   ): void => {
@@ -47,6 +67,7 @@ export class Timeline {
     };
     this.deleteFutureFrames();
     this.deleteOldFrames();
+    if (!meta.silent) this._onFrameChange();
   };
 
   redo = (state: DocumentCacheState): DocumentCacheState => {
@@ -56,6 +77,7 @@ export class Timeline {
       const patches: Patch[] = frame.redo;
       const newState = applyPatches(state, patches);
       this.position += 1;
+      this._onFrameChange(frame);
       return newState;
     }
   };
@@ -66,6 +88,7 @@ export class Timeline {
       const patches: Patch[] = frame.undo;
       const newState = applyPatches(state, patches);
       this.position -= 1;
+      this._onFrameChange(frame);
       return newState;
     }
   };
@@ -73,17 +96,17 @@ export class Timeline {
   resetAll = () => {
     this.frames = {};
     this.position = -1;
+    this._onFrameChange();
   };
 
-  resetDocument = (documentId: string) => {
+  removeFrames = (predicate: (frame: Frame<T>) => boolean) => {
     const originalFrames = Object.values(this.frames);
-    const frames = originalFrames.filter(
-      frame => frame.meta.documentId !== documentId,
-    );
+    const frames = originalFrames.filter(frame => !predicate(frame));
     this.frames = {};
     frames.forEach((frame, position) => {
       this.frames[position] = frame;
     });
     this.position -= originalFrames.length - frames.length;
+    this._onFrameChange();
   };
 }

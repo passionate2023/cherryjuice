@@ -27,15 +27,11 @@ export const generalHotKeysProps = {
   [HotKeyActionType.UNDO]: () => {
     if (document.activeElement.id === 'rich-text')
       snapBackManager.current.undo();
-    else if (store.getState().dialogs.showDocumentList)
-      ac.documentCache.undoDocumentMeta();
-    else ac.documentCache.undoNodeMeta();
+    else ac.documentCache.undoDocumentAction();
   },
   [HotKeyActionType.REDO]: () => {
     if (document.activeElement.id === 'rich-text')
       snapBackManager.current.redo();
-    else if (store.getState().dialogs.showDocumentList)
-      ac.documentCache.redoDocumentMeta();
-    else ac.documentCache.redoNodeMeta();
+    else ac.documentCache.redoDocumentAction();
   },
 };

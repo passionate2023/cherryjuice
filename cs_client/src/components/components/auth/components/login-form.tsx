@@ -19,6 +19,7 @@ import { useDefaultValues } from '::hooks/use-default-form-values';
 import { ac } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
+import { uri } from '::graphql/client/hooks/apollo-client';
 
 const inputs: ValidatedTextInputProps[] = [
   {
@@ -84,10 +85,7 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading }) => {
       <form className={modLogin.login__form} ref={formRef}>
         <GoogleOauthButton
           onClick={openConsentWindow({
-            url:
-              (process.env.graphqlAPI
-                ? `http://${process.env.graphqlAPI}`
-                : '') + '/auth/google/callback',
+            url: uri.httpBase + '/auth/google/callback',
             onAuth: ac.auth.setAuthenticationSucceeded,
           })}
         />

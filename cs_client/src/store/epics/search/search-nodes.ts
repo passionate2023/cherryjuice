@@ -2,7 +2,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { QUERY } from '::graphql/queries';
-import { store, ac } from '../../store';
+import { store, ac_, ac } from '../../store';
 import { Actions } from '../../actions.types';
 import { gqlQuery } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
@@ -13,11 +13,11 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 const searchStates: SearchState[] = ['stand-by', 'idle'];
 const searchNodesEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
-    ofType([ac.__.search.setSearchQueued]),
+    ofType([ac_.search.setSearchQueued]),
     filter(() => searchStates.includes(store.getState().search.searchState)),
     switchMap(() => {
       if (!store.getState().search.query)
-        return of(ac.__.search.setSearchStandBy());
+        return of(ac_.search.setSearchStandBy());
       else {
         const {
           query,
@@ -48,9 +48,9 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
               sortOptions,
             },
           }),
-        }).pipe(map(ac.__.search.setSearchFulfilled));
+        }).pipe(map(ac_.search.setSearchFulfilled));
 
-        const loading = of(ac.__.search.setSearchInProgress());
+        const loading = of(ac_.search.setSearchInProgress());
         return concat(loading, request).pipe(
           createTimeoutHandler({
             alertDetails: {

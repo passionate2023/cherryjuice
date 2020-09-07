@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const production = process.env.NODE_ENV === 'production';
 const styleLoader = production ? MiniCssExtractPlugin.loader : 'style-loader';
 module.exports = {
@@ -121,6 +122,18 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/assets/index.html',
     }),
+    new FaviconsWebpackPlugin(
+      {
+        logo: './src/assets/icons/material/cherry-juice.svg',
+        mode: 'webapp',
+        devMode: 'webapp',
+        favicons: {
+          appName: 'CherryJuice',
+          appDescription: 'Start building your knowledge base',
+          background: '#180101',
+          theme_color: '#180101',
+        }
+      }),
     new CopyPlugin([{ from: paths.icons, to: paths.iconsDist }]),
   ].filter(Boolean),
 };

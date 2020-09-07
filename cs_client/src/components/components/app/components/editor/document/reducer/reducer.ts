@@ -10,24 +10,13 @@ const reducer = (
 ): TDocumentState => {
   let newState = state;
   switch (action.type) {
-    case documentActions.setCacheUpdated:
-      newState = {
-        ...state,
-        cacheTimeStamp: action.value.reset ? undefined : new Date().getTime(),
-      };
-      break;
     case documentActions.pastedImages:
       newState = {
         ...state,
         pastedImages: new Date().getTime(),
       };
       break;
-    case documentActions.savingInProgress:
-      newState = {
-        ...state,
-        savingInProgress: action.value,
-      };
-      break;
+
     default:
       throw new Error('action not supported');
   }

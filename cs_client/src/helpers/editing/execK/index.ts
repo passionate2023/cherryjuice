@@ -7,6 +7,7 @@ import { AlertType } from '::types/react';
 import { FormattingError } from '::types/errors';
 import { ac } from '::store/store';
 import { ExecKCommand } from '::helpers/editing/execK/execk-commands';
+import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 
 const isJustificationCommand = command =>
   command && command != ExecKCommand.clear;
@@ -73,7 +74,9 @@ const execK = ({
     });
     if (selectionContainsLinks) ac.node.processLinks(new Date().getTime());
   } catch (e) {
+    snapBackManager.current.reset();
     document.querySelector('#rich-text ').innerHTML = ogHtml;
+    snapBackManager.current.enable(1000);
     ac.dialogs.setAlert({
       title: 'Could not apply formatting',
       description:

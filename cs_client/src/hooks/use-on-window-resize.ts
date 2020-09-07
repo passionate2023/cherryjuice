@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const useOnWindowResize = (callbacks: Function[], dependency1?: any) => {
+const useOnWindowResize = (callbacks: Function[]) => {
   useEffect(() => {
     const handle = () => {
       callbacks.forEach(callback => callback());
@@ -8,7 +8,7 @@ const useOnWindowResize = (callbacks: Function[], dependency1?: any) => {
     handle();
     window.addEventListener('resize', handle);
     return () => window.removeEventListener('resize', handle);
-  }, [callbacks, dependency1]);
+  }, []);
 };
 
 export { useOnWindowResize };

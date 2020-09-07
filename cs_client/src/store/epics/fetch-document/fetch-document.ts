@@ -1,7 +1,7 @@
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, flatMap, map, switchMap, tap } from 'rxjs/operators';
 import { concat, from, Observable, ObservedValueOf, of } from 'rxjs';
 import { ofType } from 'deox';
-import { store, ac } from '../../store';
+import { store, ac_, ac } from '../../store';
 import { Actions } from '../../actions.types';
 import { handleFetchError } from '::root/components/app/components/editor/document/hooks/get-document-meta/helpers/handle-fetch-error';
 import { gqlQuery } from '../shared/gql-query';
@@ -9,6 +9,7 @@ import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { QDocumentMeta, DOCUMENT_META } from '::graphql/queries/document-meta';
 import { getDocuments } from '::store/selectors/cache/document/document';
+import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 
 const createLocalRequest = (
   file_id: string,
@@ -34,13 +35,13 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
   const selectedDocumentId = () => store.getState().document.documentId;
   return action$.pipe(
     ofType([
-      ac.__.document.fetch,
-      ac.__.document.setDocumentId,
-      ac.__.document.saveFulfilled,
+      ac_.document.fetch,
+      ac_.document.setDocumentId,
+      ac_.document.saveFulfilled,
     ]),
     filter(action => {
-      if (action.type === ac.__.document.setDocumentId.type) {
-        const document = store.getState().documentCache[action.payload];
+      if (action.type === ac_.document.setDocumentId.type) {
+        const document = store.getState().documentCache[action['payload']];
         if (document?.nodes && document?.nodes[0]) {
           return false;
         }
@@ -48,7 +49,7 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
       return true;
     }),
     map(action =>
-      'payload' in action ? action.payload : selectedDocumentId(),
+      'payload' in action ? action['payload'] : selectedDocumentId(),
     ),
     filter(Boolean),
     switchMap((file_id: string) => {
@@ -56,9 +57,23 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
       const request = (isNewDocument
         ? createLocalRequest(file_id)
         : gqlQuery(DOCUMENT_META({ file_id }))
-      ).pipe(map(ac.__.document.fetchFulfilled));
+      ).pipe(
+        tap(() => {
+          snapBackManager.resetAll();
+          snapBackManager.current?.enable();
+        }),
+        flatMap(document => {
+          const next = store.getState().node.next;
+          if (next && next.documentId === document.id)
+            return concat(
+              of(ac_.node.clearNext()),
+              of(ac_.document.fetchFulfilled(document, next))
+            );
+          else return of(ac_.document.fetchFulfilled(document))
+        }),
+      );
 
-      const loading = of(ac.__.document.fetchInProgress());
+      const loading = of(ac_.document.fetchInProgress());
       return concat(loading, request).pipe(
         createTimeoutHandler({
           alertDetails: {
@@ -77,13 +92,9 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
               callbacks: [ac.dialogs.clearAlert, ac.dialogs.showDocumentList],
             },
           },
-          actionCreators: [
-            handleFetchError({
-              documentIdBeingFetched: file_id,
-              previousDocumentId: selectedDocumentId(),
-              userId: store.getState().auth.user?.id,
-            }),
-          ],
+          actionCreators: handleFetchError({
+            userId: store.getState().auth.user?.id,
+          }),
         }),
       );
     }),

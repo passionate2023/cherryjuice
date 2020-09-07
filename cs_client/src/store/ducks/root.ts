@@ -6,28 +6,38 @@ const ap = createActionPrefixer('root');
 const ac = {
   resetState: _(ap('reset-state')),
   hidePopups: _(ap('hide-popups')),
-  ...{
-    setIsOnMobile: _(ap('set-is-on-mobile'), _ => (isOnMobile: boolean) =>
-      _(isOnMobile),
-    ),
-  },
+  setIsOnMd: _(ap('set-is-on-md'), _ => (b: boolean) => _(b)),
+  setIsOnMb: _(ap('set-is-on-mb'), _ => (b: boolean) => _(b)),
+  setDocking: _(ap('set-docking'), _ => (b: boolean) => _(b)),
   toggleDockedDialog: _(ap('toggle-docked-dialog')),
 };
 
 type State = {
-  isOnMobile: boolean;
+  isOnMb: boolean;
+  isOnMd: boolean;
   dockedDialog: boolean;
+  docking: boolean;
 };
 
 const initialState: State = {
-  isOnMobile: false,
+  isOnMb: false,
+  isOnMd: false,
   dockedDialog: true,
+  docking: false,
 };
 const reducer = createReducer(initialState, _ => [
   ...[
-    _(ac.setIsOnMobile, (state, { payload }) => ({
+    _(ac.setIsOnMb, (state, { payload }) => ({
       ...state,
-      isOnMobile: payload,
+      isOnMb: payload,
+    })),
+    _(ac.setIsOnMd, (state, { payload }) => ({
+      ...state,
+      isOnMd: payload,
+    })),
+    _(ac.setDocking, (state, { payload }) => ({
+      ...state,
+      docking: payload,
     })),
     _(ac.toggleDockedDialog, state => ({
       ...state,

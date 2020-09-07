@@ -8,12 +8,13 @@ import { saveNodesContent } from '::store/epics/save-documents/helpers/save-docu
 import { saveNewDocument } from '::store/epics/save-documents/helpers/save-document/helpers/save-new-document';
 import { saveImages } from '::store/epics/save-documents/helpers/save-document/helpers/save-images';
 import { saveDocumentMeta } from './helpers/save-document-meta';
-import { getEditedDocuments } from '::store/selectors/cache/document/document';
+import { CachedDocument } from '::store/ducks/cache/document-cache';
 
 const saveDocuments = async (
   state: SaveOperationState,
+  editedDocuments: CachedDocument[],
 ): Promise<SaveOperationState> => {
-  const editedDocuments = getEditedDocuments();
+
   for (const document of editedDocuments) {
     state.deletedNodes[document.id] = {};
     await saveNewDocument({ state, document });

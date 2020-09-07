@@ -1,3 +1,5 @@
+import { getDeepestFirstChild } from '::helpers/editing/execK/steps/restore-selection';
+
 const stringToSingleElement = (singleElement: string): Element =>
   // https://stackoverflow.com/a/42448876
   new DOMParser().parseFromString(singleElement, 'text/html').body.children[0];
@@ -21,6 +23,12 @@ const getInnerText = node => {
   }
   return '';
 };
+
+export const trimOffset = (node: Node, offset: number): [Node, number] => [
+  node,
+  node.textContent.length < offset ? node.textContent.length : offset,
+];
+
 const elementHasText = el =>
   getInnerText(el).length || /(img)/.test(el.innerHTML);
 const moveCursor = (
@@ -28,10 +36,12 @@ const moveCursor = (
   { endOffset, endElement } = { endElement: undefined, endOffset: -1 },
 ) => {
   const range = document.createRange();
-  range.setStart(startElement, offset);
+  const node = getDeepestFirstChild(startElement);
+  range.setStart(...trimOffset(node, offset));
   if (!endElement) range.collapse(true);
   else {
-    range.setEnd(endElement, endOffset);
+    const endNode = getDeepestFirstChild(endElement);
+    range.setEnd(...trimOffset(endNode, endOffset));
   }
   const sel = window.getSelection();
   sel.removeAllRanges();

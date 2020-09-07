@@ -13,6 +13,7 @@ const mapState = (state: Store) => ({
   contentEditable: state.editor.contentEditable,
   showRecentNodesBar: state.editor.showRecentNodesBar,
   showInfoBar: state.editor.showInfoBar,
+  isOnMb: state.root.isOnMb,
   isDocumentOwner: hasWriteAccessToDocument(state),
 });
 const mapDispatch = {};
@@ -27,11 +28,13 @@ const MobileButtons: React.FC<Props & PropsFromRedux> = ({
   showInfoBar,
   documentId,
   isDocumentOwner,
+  isOnMb,
 }) => {
   const noDocumentIsSelected = !documentId;
   return (
     <>
-      {isDocumentOwner && <Separator />}
+      <div style={{ marginLeft: 'auto' }} />
+      {isDocumentOwner && isOnMb && <Separator />}
       <div
         className={[
           modToolbar.toolBar__group,
@@ -45,7 +48,6 @@ const MobileButtons: React.FC<Props & PropsFromRedux> = ({
         >
           <Icon name={Icons.material['justify-left']} />
         </ToolbarButton>
-        <Separator />
         <ToolbarButton
           onClick={ac.editor.toggleRecentNodesBar}
           active={showRecentNodesBar}

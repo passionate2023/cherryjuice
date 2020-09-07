@@ -5,24 +5,10 @@ import '::assets/styles/global-scope/google-picker.scss';
 import '::assets/styles/css-variables/css-variables.scss';
 import * as React from 'react';
 import { render } from 'react-dom';
-import { Router } from 'react-router-dom';
-import { Root } from '::root/root';
-import { apolloClient } from './graphql/client/apollo-client';
-import { router } from '::root/router/router';
-import { attachTestCallbacks } from '::helpers/attach-test-callbacks';
-import { enablePatches } from 'immer';
-enablePatches();
-render(
-  <Router history={router.get.__history}>
-    <Root />
-  </Router>,
-  document.querySelector('#cs'),
-);
-if (process.env.NODE_ENV === 'development') {
-  // @ts-ignore
-  window.__APOLLO_CACHE__ = apolloClient;
-  attachTestCallbacks();
-}
+import Root from '::root/root';
+
+render(<Root />, document.querySelector('#cs'));
+
 if (process.env.NODE_ENV !== 'development') {
   const link = document.createElement('link');
   link.rel = 'stylesheet';

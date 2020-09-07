@@ -2,7 +2,7 @@ import {
   applyMiddleware,
   createStore,
   compose,
-  bindActionCreators,
+  bindActionCreators as b,
 } from 'redux';
 import { reducer } from './reducer';
 import { documentActionCreators } from './ducks/document';
@@ -21,6 +21,7 @@ import { cacheActionCreators } from './ducks/cache/cache';
 import { settingsActionCreators } from './ducks/settings';
 import { documentCacheActionCreators } from '::store/ducks/cache/document-cache';
 import { animationActionCreators } from '::store/ducks/animations';
+import { timelinesActionCreators } from '::store/ducks/timelines';
 
 type Store = ReturnType<typeof reducer>;
 
@@ -31,55 +32,48 @@ const reduxDevtoolsExtensionCompose =
 
 const composeEnhancers = reduxDevtoolsExtensionCompose
   ? reduxDevtoolsExtensionCompose({
-      maxAge: 10,
+      maxAge: 50,
     })
   : compose;
 
 const epicMiddleware = createEpicMiddleware();
 const middleware = applyMiddleware(epicMiddleware, setCssVariables);
 const store = createStore(reducer, composeEnhancers(middleware));
-
+const ac_ = {
+  document: documentActionCreators,
+  dialogs: dialogsActionCreators,
+  node: nodeActionCreators,
+  editor: editorActionCreators,
+  documentsList: documentsListActionCreators,
+  documentOperations: documentOperationsActionCreators,
+  root: rootActionCreators,
+  search: searchActionCreators,
+  cssVariables: cssVariablesActionCreators,
+  auth: authActionCreators,
+  cache: cacheActionCreators,
+  settings: settingsActionCreators,
+  documentCache: documentCacheActionCreators,
+  animation: animationActionCreators,
+  timelines: timelinesActionCreators,
+};
+const dispatch = store.dispatch;
 const ac = {
-  __: {
-    document: documentActionCreators,
-    dialogs: dialogsActionCreators,
-    node: nodeActionCreators,
-    editor: editorActionCreators,
-    documentsList: documentsListActionCreators,
-    documentOperations: documentOperationsActionCreators,
-    root: rootActionCreators,
-    search: searchActionCreators,
-    cssVariables: cssVariablesActionCreators,
-    auth: authActionCreators,
-    cache: cacheActionCreators,
-    settings: settingsActionCreators,
-    documentCache: documentCacheActionCreators,
-    animation: animationActionCreators,
-  },
-  document: bindActionCreators(documentActionCreators, store.dispatch),
-  dialogs: bindActionCreators(dialogsActionCreators, store.dispatch),
-  node: bindActionCreators(nodeActionCreators, store.dispatch),
-  editor: bindActionCreators(editorActionCreators, store.dispatch),
-  animation: bindActionCreators(animationActionCreators, store.dispatch),
-  auth: bindActionCreators(authActionCreators, store.dispatch),
-  documentCache: bindActionCreators(
-    documentCacheActionCreators,
-    store.dispatch,
-  ),
-  documentsList: bindActionCreators(
-    documentsListActionCreators,
-    store.dispatch,
-  ),
-  documentOperations: bindActionCreators(
-    documentOperationsActionCreators,
-    store.dispatch,
-  ),
-  root: bindActionCreators(rootActionCreators, store.dispatch),
-  cache: bindActionCreators(cacheActionCreators, store.dispatch),
-  search: bindActionCreators(searchActionCreators, store.dispatch),
-  cssVariables: bindActionCreators(cssVariablesActionCreators, store.dispatch),
-  settings: bindActionCreators(settingsActionCreators, store.dispatch),
+  document: b(documentActionCreators, dispatch),
+  dialogs: b(dialogsActionCreators, dispatch),
+  node: b(nodeActionCreators, dispatch),
+  editor: b(editorActionCreators, dispatch),
+  animation: b(animationActionCreators, dispatch),
+  auth: b(authActionCreators, dispatch),
+  timelines: b(timelinesActionCreators, dispatch),
+  documentCache: b(documentCacheActionCreators, dispatch),
+  documentsList: b(documentsListActionCreators, dispatch),
+  documentOperations: b(documentOperationsActionCreators, dispatch),
+  root: b(rootActionCreators, dispatch),
+  cache: b(cacheActionCreators, dispatch),
+  search: b(searchActionCreators, dispatch),
+  cssVariables: b(cssVariablesActionCreators, dispatch),
+  settings: b(settingsActionCreators, dispatch),
 };
 
-export { store, ac, epicMiddleware };
+export { store, ac, ac_, epicMiddleware };
 export { Store };

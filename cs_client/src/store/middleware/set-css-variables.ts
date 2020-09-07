@@ -9,6 +9,7 @@ const setCssVariables = () => next => action => {
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(e);
+    // eslint-disable-next-line no-console
   }
   return next(action);
 };

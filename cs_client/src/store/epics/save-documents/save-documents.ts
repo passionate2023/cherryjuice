@@ -6,67 +6,67 @@ import { SaveOperationState } from '::store/epics/save-documents/helpers/save-do
 import { createErrorHandler } from '../shared/create-error-handler';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { saveDocuments } from '::store/epics/save-documents/helpers/save-document/save-documents';
-import { ac, store } from '../../store';
+import { ac, ac_, store } from '../../store';
 import { createSaveState } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 import { resetCache } from '::store/epics/save-documents/helpers/reset-cache';
-import { cacheCurrentNode } from '::store/epics/save-documents/helpers/cache-current-node';
 import { Epic } from 'redux-observable';
 import { swapPersistedTreeDocumentIds } from '::store/epics/save-documents/helpers/swap-persisted-tree-document-ids';
-import { SnackbarMessages } from '::root/components/shared-components/snackbar/snackbar-messages';
+import { SnackbarMessages } from '::root/components/app/components/menus/widgets/components/snackbar/snackbar-messages';
+import { getEditedDocuments } from '::store/selectors/cache/document/document';
+import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
 
 const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
   return action$.pipe(
-    ofType([ac.__.document.save]),
+    ofType([ac_.document.save]),
     filter(() => store.getState().document.asyncOperations.save === 'idle'),
-    switchMap(() => {
+    switchMap( () => {
       const state: SaveOperationState = createSaveState();
-      const saveFulfilled$ = defer(() =>
-        of(ac.__.document.saveFulfilled(state.newSelectedDocumentId)).pipe(
-          tap(() => {
-            ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
+      updateCachedHtmlAndImages();
+      const editedDocuments = getEditedDocuments();
+      if (!editedDocuments.length) return of(ac_.document.nothingToSave());
+      else {
+        const saveInProgress$ = of(ac_.document.saveInProgress());
+        const saveDocuments$ = defer(() =>
+          from(saveDocuments(state, editedDocuments)).pipe(
+            tap(resetCache),
+            tap(swapPersistedTreeDocumentIds),
+            mapTo(ac_.document.cacheReset()),
+          ),
+        );
+        const saveFulfilled$ = defer(() =>
+          of(ac_.document.saveFulfilled(state.newSelectedDocumentId)).pipe(
+            tap(() => {
+              ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
+            }),
+          ),
+        );
+        const maybeRedirectToNewDocument$ = defer(() => {
+          if (state.newSelectedDocumentId) {
+            return of(ac_.document.setDocumentId(state.newSelectedDocumentId));
+          } else return EMPTY.pipe(ignoreElements());
+        });
+        return concat(
+          saveInProgress$,
+          saveDocuments$,
+          saveFulfilled$,
+          maybeRedirectToNewDocument$,
+        ).pipe(
+          createTimeoutHandler({
+            alertDetails: {
+              title: 'Saving is taking longer then expected',
+              description: 'try refreshing the page',
+            },
+            due: 5 * 60000,
           }),
-        ),
-      );
-      const savePending$ = of(ac.__.document.savePending());
-      const cacheCurrentNode$ = defer(() =>
-        of(cacheCurrentNode()).pipe(mapTo(ac.__.document.nodeCached())),
-      );
-      const saveInProgress$ = of(ac.__.document.saveInProgress());
-      const saveDocuments$ = defer(() =>
-        from(saveDocuments(state)).pipe(
-          tap(resetCache),
-          tap(swapPersistedTreeDocumentIds),
-          mapTo(ac.__.document.cacheReset()),
-        ),
-      );
-      const maybeRedirectToNewDocument$ = defer(() => {
-        if (state.newSelectedDocumentId) {
-          return of(ac.__.document.setDocumentId(state.newSelectedDocumentId));
-        } else return EMPTY.pipe(ignoreElements());
-      });
-      return concat(
-        savePending$,
-        cacheCurrentNode$,
-        saveInProgress$,
-        saveDocuments$,
-        saveFulfilled$,
-        maybeRedirectToNewDocument$,
-      ).pipe(
-        createTimeoutHandler({
-          alertDetails: {
-            title: 'Saving is taking longer then expected',
-            description: 'try refreshing the page',
-          },
-          due: 5 * 60000,
-        }),
-        createErrorHandler({
-          alertDetails: {
-            title: 'Could not save',
-            description: 'Check your network connection',
-          },
-          actionCreators: [ac.__.document.saveFailed],
-        }),
-      );
+          createErrorHandler({
+            alertDetails: {
+              title: 'Could not save',
+              description: 'Check your network connection',
+            },
+            actionCreators: [ac_.document.saveFailed],
+          }),
+        );
+      }
     }),
   );
 };

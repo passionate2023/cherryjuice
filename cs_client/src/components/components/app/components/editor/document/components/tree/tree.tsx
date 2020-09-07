@@ -9,12 +9,11 @@ import { useDnDNodes } from '::root/components/app/components/editor/document/co
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { NodePrivacy } from '::types/graphql/generated';
-import { router } from '::root/router/router';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
-  const expand = /expand=(\d+)/.exec(router.get.location.search);
+  const expand = /expand=(\d+)/.exec(location.search);
   if (expand) {
     params.expand = expand[1];
   }

@@ -18,6 +18,14 @@ const switchParent = ({
       : targetNodeChildNodes.splice(position, 0, Number(droppedNode.node_id));
   ac.documentCache.mutateNodeMeta([
     {
+      node_id: droppedNode.node_id,
+      documentId: droppedNode.documentId,
+      data: {
+        father_id: targetNode.node_id,
+        fatherId: targetNode.id,
+      },
+    },
+    {
       node_id: fatherOfDroppedNode.node_id,
       documentId: fatherOfDroppedNode.documentId,
       data: {
@@ -31,14 +39,6 @@ const switchParent = ({
       documentId: targetNode.documentId,
       data: {
         child_nodes: targetNodeChildNodes,
-      },
-    },
-    {
-      node_id: droppedNode.node_id,
-      documentId: droppedNode.documentId,
-      data: {
-        father_id: targetNode.node_id,
-        fatherId: targetNode.id,
       },
     },
   ]);

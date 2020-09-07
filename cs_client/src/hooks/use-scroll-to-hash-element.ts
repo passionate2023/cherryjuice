@@ -1,22 +1,32 @@
 import { useEffect } from 'react';
+import { useHistory } from 'react-router';
 import { scrollIntoToolbar } from '::helpers/ui';
+import { interval } from 'rxjs';
+import { filter, map, take, tap } from 'rxjs/operators';
 
-const useScrollToHashElement = ({
-  fetchNodeStarted,
-}: {
-  fetchNodeStarted: boolean;
-}) => {
+const useScrollToHashElement = () => {
+  const history = useHistory();
   useEffect(() => {
-    if (location.hash && !fetchNodeStarted) {
-      const redirectedFromServer = location.pathname === '/';
-      if (!redirectedFromServer) {
-        document
-          .getElementById(`#${decodeURIComponent(location.hash.substr(1))}`)
-          ?.scrollIntoView();
-        scrollIntoToolbar();
-      }
+    if (history.location.hash) {
+      const subscribable = interval(100)
+        .pipe(
+          map(() =>
+            document.getElementById(decodeURIComponent(history.location.hash)),
+          ),
+          take(5),
+          filter(Boolean),
+          take(1),
+          tap(anchor => {
+            (anchor as HTMLElement).scrollIntoView();
+            scrollIntoToolbar();
+          }),
+        )
+        .subscribe();
+      return () => {
+        subscribable.unsubscribe();
+      };
     }
-  }, [location.hash, fetchNodeStarted]);
+  }, [history.location.hash]);
 };
 
 export { useScrollToHashElement };

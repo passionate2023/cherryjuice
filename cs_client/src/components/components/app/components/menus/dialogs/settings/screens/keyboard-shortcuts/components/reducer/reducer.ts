@@ -103,7 +103,7 @@ const updateKey = (state: State) => ({ type, key }: SetKeyPayload): HotKey => {
   const length = keys.length;
   return {
     ...state.hotKeys[type],
-    keys: key + keys.substring(length - 3),
+    keys: key.toLowerCase() + keys.substring(length - 3),
   };
 };
 

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { MainButtons } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/main-buttons';
 import { appModule, modToolbar } from '::sass-modules';
 import { MobileButtons } from './components/groups/mobile-buttons/mobile-buttons';
-import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
 import { createPortal } from 'react-dom';
 import {
   FormattingButtons,
@@ -13,6 +12,10 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { useEffect, useState } from 'react';
+import { NodesButtons } from '::root/components/app/components/editor/tool-bar/components/groups/nodes-buttons/nodes-buttons';
+import { UndoRedo } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
+import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
+import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 
 type PortalProps = { targetSelector: string; predicate?: boolean };
 export const Portal: React.FC<PortalProps> = ({
@@ -42,7 +45,8 @@ export const Portal: React.FC<PortalProps> = ({
 };
 
 const mapState = (state: Store) => ({
-  isOnMobile: state.root.isOnMobile,
+  isOnMd: state.root.isOnMd,
+  docking: state.root.docking,
   showFormattingButtons: state.editor.showFormattingButtons,
   isDocumentOwner: hasWriteAccessToDocument(state),
 });
@@ -53,23 +57,35 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = {};
 
 const ToolBar: React.FC<Props & PropsFromRedux> = ({
-  isOnMobile,
+  isOnMd,
   showFormattingButtons,
   isDocumentOwner,
+  docking,
 }) => {
   return (
     <div className={modToolbar.toolBar}>
       <MainButtons />
-      <MobileButtons />
-      {isDocumentOwner &&
-        (isOnMobile ? (
-          <Portal targetSelector={'.' + appModule.app}>
-            <FormattingButtonsWithTransition show={showFormattingButtons} />
+      {isDocumentOwner && !isOnMd && <Separator />}
+      <Portal targetSelector={'.' + appModule.app} predicate={isOnMd}>
+        {!docking && (
+          <NodesButtons>
+            {isDocumentOwner && <UndoRedo />}
+            <MobileButtons />
+          </NodesButtons>
+        )}
+      </Portal>
+      {isDocumentOwner && !isOnMd && <Separator />}
+      {!docking && isDocumentOwner && (
+        <ErrorBoundary>
+          <Portal targetSelector={'.' + appModule.app} predicate={isOnMd}>
+            {isOnMd ? (
+              <FormattingButtonsWithTransition show={showFormattingButtons} />
+            ) : (
+              <FormattingButtons />
+            )}
           </Portal>
-        ) : (
-          <FormattingButtons />
-        ))}
-      {isDocumentOwner && isOnMobile && <Separator />}
+        </ErrorBoundary>
+      )}
       <NavBar showUserPopup={false} />
     </div>
   );

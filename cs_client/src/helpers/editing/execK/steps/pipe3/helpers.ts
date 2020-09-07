@@ -13,10 +13,16 @@ const filterEmptyNodes: TFilterEmptyNodes = arr =>
       ),
   );
 
-type TReplaceElement = (el: Node) => (arr: Element[]) => void;
-const replaceElement: TReplaceElement = el => arr => {
+type TReplaceElement = (
+  el: Node,
+  doFilterEmptyNodes?: boolean,
+) => (arr: Element[]) => void;
+const replaceElement: TReplaceElement = (
+  el,
+  doFilterEmptyNodes = true,
+) => arr => {
   // @ts-ignore
-  const elementsTobePlaced = filterEmptyNodes(arr);
+  const elementsTobePlaced = doFilterEmptyNodes ? filterEmptyNodes(arr) : arr;
   // @ts-ignore
   el.replaceWith(...elementsTobePlaced);
   return elementsTobePlaced;

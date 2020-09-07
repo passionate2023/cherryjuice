@@ -2,13 +2,19 @@ import { concat } from 'rxjs';
 import { AlertType } from '::types/react';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { ac } from '::store/store';
+import { ac_ } from '::store/store';
 import { CreateAlertHandler } from './create-timeout-handler';
 
 type CreateErrorHandler = CreateAlertHandler & { dontShowAlert?: boolean };
 
 const createErrorHandler = ({
-  alertDetails: { title, description, action, descriptionFactory },
+  alertDetails: {
+    title,
+    description,
+    action,
+    descriptionFactory,
+    dismissAction,
+  },
   actionCreators = [],
   dontShowAlert,
 }: CreateErrorHandler) =>
@@ -17,14 +23,15 @@ const createErrorHandler = ({
       ...[
         !dontShowAlert &&
           of(
-            ac.__.dialogs.setAlert({
+            ac_.dialogs.setAlert({
               title,
               description: descriptionFactory
                 ? descriptionFactory(error)
                 : description,
               type: AlertType.Error,
               error,
-              ...(action && { action }),
+              dismissAction,
+              action,
             }),
           ),
       ].filter(Boolean),

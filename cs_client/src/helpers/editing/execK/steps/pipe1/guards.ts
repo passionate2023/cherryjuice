@@ -107,8 +107,8 @@ const guardAgainstEditorIsDDOE = ({
   if (editorIsStartDDOE) {
     const selectionElementIsTextNode =
       selectionStartElement.nodeType === Node.TEXT_NODE;
-    const spanElement = document.createElement('span');
     if (selectionElementIsTextNode) {
+      const spanElement = document.createElement('span');
       spanElement.innerHTML = `<span>${selectionStartElement.wholeText ||
         ''}</span>`;
       selectionStartElement.parentElement.replaceChild(
@@ -117,8 +117,11 @@ const guardAgainstEditorIsDDOE = ({
       );
       selectionStartElement = spanElement.firstChild;
     } else {
+      const spanElement = document.createElement('span');
       if (selectionStartElement.children.length) {
-        selectionStartElement = selectionStartElement.children[0];
+        const supposedChild = selectionStartElement.children[startOffset - 1];
+        selectionStartElement =
+          supposedChild || selectionStartElement.children[0];
       } else {
         selectionStartElement.appendChild(spanElement);
         selectionStartElement = spanElement;

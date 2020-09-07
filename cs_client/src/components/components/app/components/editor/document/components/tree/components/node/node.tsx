@@ -36,7 +36,6 @@ const Node: React.FC<NodeProps> = ({
   const { child_nodes, name, privacy } = nodes[node_id];
   const match = useRouteMatch<{ file_id: string }>();
   const { file_id } = match.params;
-  const nodePath = `/document/${file_id}/node/${node_id}`;
   const componentRef = useRef();
   const listRef = useRef();
   const titleRef = useRef();
@@ -104,9 +103,9 @@ const Node: React.FC<NodeProps> = ({
           {name}
         </div>
         <NodeOverlay
-          nodePath={nodePath}
           clickTimestamp={clickTimestamp}
           nodeComponentRef={componentRef}
+          node_id={node_id}
         />
       </div>
       {showChildren && (

@@ -13,7 +13,7 @@ const mapState = (state: Store) => ({
   searchResults: state.search.searchResults,
   searchFiltersHeight: state.cssVariables.searchFiltersHeight,
   dialogBodyHeight: state.cssVariables.dialogBodyHeight,
-  isOnMobile: state.root.isOnMobile,
+  isOnMobile: state.root.isOnMd,
   query: state.search.query,
   searchOptions: state.search.searchOptions,
   searchType: state.search.searchType,

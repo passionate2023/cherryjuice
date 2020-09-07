@@ -25,13 +25,14 @@ import {
   mutateDocument,
   MutateDocumentProps,
 } from '::store/ducks/cache/document-cache/helpers/document/mutate-document';
-import { SwapNodeIdParams } from '::store/ducks/cache/document-cache/helpers/node/swap-node-id';
-import { swapDocumentId } from '::store/ducks/cache/document-cache/helpers/document/swap-document-id';
 import {
   deleteNode,
   DeleteNodeParams,
 } from './document-cache/helpers/node/delete-node';
-import { selectNode } from '::store/ducks/cache/document-cache/helpers/document/select-node';
+import {
+  selectNode,
+  SelectNodeParams,
+} from '::store/ducks/cache/document-cache/helpers/document/select-node';
 import { removeSavedDocuments } from '::store/ducks/cache/document-cache/helpers/document/remove-saved-documents';
 import { nodeActionCreators as nac } from '::store/ducks/node';
 import { rootActionCreators as rac } from '::store/ducks/root';
@@ -43,6 +44,7 @@ import {
   MutateNodeMetaParams,
 } from '::store/ducks/cache/document-cache/helpers/node/mutate-node-meta';
 import { TimelinesManager } from '::store/ducks/cache/document-cache/helpers/timeline/timelines-manager';
+import { timelinesActionCreators as tac } from '::store/ducks/timelines';
 
 const ap = createActionPrefixer('document-cache');
 
@@ -58,11 +60,6 @@ const ac = {
   deleteDocument: _(ap('delete-document'), _ => (documentId: string) =>
     _(documentId),
   ),
-  swapDocumentId: _(
-    ap('swap-document-id'),
-    _ => (Ids: { oldId: string; newId: string }) => _(Ids),
-  ),
-
   createNode: _(ap('create-node'), _ => (node: CreateNodeParams) => _(node)),
   addFetchedFields: _(ap('add-fetched-fields'), _ => (node: AddHtmlParams) =>
     _(node),
@@ -75,12 +72,9 @@ const ac = {
     ap('mutate-node-content'),
     _ => (props: MutateNodeContentParams) => _(props),
   ),
-  swapNodeId: _(ap('swap-node-id'), _ => (param: SwapNodeIdParams) => _(param)),
   deleteNode: _(ap('delete-node'), _ => (param: DeleteNodeParams) => _(param)),
-  undoDocumentMeta: _(ap('undo-document-meta')),
-  redoDocumentMeta: _(ap('redo-document-meta')),
-  undoNodeMeta: _(ap('undo-node-meta')),
-  redoNodeMeta: _(ap('redo-node-meta')),
+  undoDocumentAction: _(ap('undo-document-action')),
+  redoDocumentAction: _(ap('redo-document-action')),
 };
 
 export type NodesDict = { [node_id: number]: QFullNode };
@@ -110,56 +104,57 @@ export type CachedDocument = Omit<QDocumentMeta, 'node'> & {
 type State = {
   [documentId: string]: CachedDocument;
 };
-
+export type DocumentTimeLineMeta = {
+  node_id?: number;
+  documentId?: string;
+};
 const initialState: State = {};
-const timelinesManager = new TimelinesManager();
+export const dTM = new TimelinesManager<DocumentTimeLineMeta>();
+dTM.setOnFrameChangeFactory(() =>
+  import('::store/store').then(
+    module => module.ac.timelines.setDocumentActionNOF,
+  ),
+);
+
 const reducer = createReducer(initialState, _ => [
   ...[
     // non undoable actions
     _(rac.resetState, () => ({
       ...cloneObj(initialState),
     })),
+    _(dac.fetchFulfilled, (state, { payload }) =>
+      loadDocument(state, payload.document, payload.nextNode),
+    ),
     _(dac.setDocumentId, (state, { payload }) => {
-      timelinesManager.setCurrentNodeMetaTimeline(payload);
+      dTM.setCurrent(payload);
       return state;
     }),
-    _(dac.fetchFulfilled, (state, { payload }) => {
-      timelinesManager.addNodeMetaTimeline(payload.id);
-      return loadDocument(state, payload);
-    }),
-    _(ac.createDocument, (state, { payload }) => {
-      timelinesManager.addNodeMetaTimeline(payload.id);
-      return createDocument(state, payload);
-    }),
-    _(ac.swapDocumentId, (state, { payload }) =>
-      swapDocumentId(state, payload),
+    _(ac.createDocument, (state, { payload }) =>
+      createDocument(state, payload),
     ),
-    _(nac.select, (state, { payload }) => selectNode(state, payload)),
+    _(nac.select, (state, { payload }) =>
+      produce(state, draft => selectNode(draft, payload)),
+    ),
+    _(tac.setDocumentActionNOF, (state, { payload }) =>
+      payload.frame?.meta?.documentId
+        ? produce(state, draft =>
+            selectNode(draft, payload.frame.meta as SelectNodeParams),
+          )
+        : state,
+    ),
     _(dlac.fetchDocumentsFulfilled, (state, { payload }) =>
       loadDocumentsList(state, payload),
     ),
     _(ac.addFetchedFields, (state, { payload }) =>
       addFetchedFields(state, payload),
     ),
-    _(ac.swapNodeId, (state, { payload: { node_id, documentId, newId } }) => ({
-      ...state,
-      [documentId]: {
-        ...state[documentId],
-        nodes: {
-          ...state[documentId].nodes,
-          [node_id]: {
-            ...state[documentId].nodes[node_id],
-            id: newId,
-          },
-        },
-      },
-    })),
-    _(ac.mutateNodeContent, (state, { payload }) =>
-      mutateNodeContent(state, payload),
-    ),
+    _(ac.undoDocumentAction, state => dTM.current.undo(state)),
+    _(ac.redoDocumentAction, state => dTM.current.redo(state)),
+  ],
+  ...[
+    // require cleanup
     _(ac.deleteDocument, (state, { payload: documentId }) => {
-      timelinesManager.documentMeta.resetDocument(documentId);
-      timelinesManager.resetNodeMetaTimeline(documentId);
+      dTM.resetTimeline(documentId);
       return produce(state, draft => {
         delete draft[documentId];
       });
@@ -167,15 +162,10 @@ const reducer = createReducer(initialState, _ => [
     _(
       dac.saveFulfilled,
       (state): State => {
-        timelinesManager.resetDocumentMetaTimeline();
-        timelinesManager.resetNodeMetaTimelines();
+        dTM.resetAll();
         return removeSavedDocuments(state);
       },
     ),
-    _(ac.undoDocumentMeta, state => timelinesManager.documentMeta.undo(state)),
-    _(ac.redoDocumentMeta, state => timelinesManager.documentMeta.redo(state)),
-    _(ac.undoNodeMeta, state => timelinesManager.nodeMeta.undo(state)),
-    _(ac.redoNodeMeta, state => timelinesManager.nodeMeta.redo(state)),
   ],
   ...[
     // undoable actions
@@ -183,28 +173,47 @@ const reducer = createReducer(initialState, _ => [
       produce(
         state,
         draft => createNode(draft, payload),
-        timelinesManager.nodeMeta.add({
+        dTM.addFrame({
+          timelineId: payload.createdNode.documentId,
+          silent: true,
+          node_id: payload.createdNode.node_id,
           documentId: payload.createdNode.documentId,
         }),
+      ),
+    ),
+    _(ac.mutateNodeMeta, (state, { payload }) => {
+      const params = Array.isArray(payload) ? payload : [payload];
+      return produce(
+        state,
+        draft => mutateNodeMeta(draft, params),
+        dTM.addFrame({
+          timelineId: params[0].documentId,
+          node_id: params[0].node_id,
+          documentId: params[0].documentId,
+        }),
+      );
+    }),
+    _(ac.mutateNodeContent, (state, { payload }) =>
+      produce(
+        state,
+        draft => mutateNodeContent(draft, payload),
+        (p, rp) => {
+          if (payload.meta?.mode !== 'update-key-only')
+            dTM.addFrame({
+              timelineId: payload.documentId,
+              silent: true,
+              node_id: payload.node_id,
+              documentId: payload.documentId,
+            })(p, rp);
+        },
       ),
     ),
     _(ac.deleteNode, (state, { payload }) =>
       produce(
         state,
         draft => deleteNode(draft, payload),
-        timelinesManager.nodeMeta.add({
-          documentId: payload.documentId,
-        }),
-      ),
-    ),
-    _(ac.mutateNodeMeta, (state, { payload }) =>
-      produce(
-        state,
-        draft => mutateNodeMeta(draft, payload),
-        timelinesManager.nodeMeta.add({
-          documentId: Array.isArray(payload)
-            ? payload[0].documentId
-            : payload.documentId,
+        dTM.addFrame({
+          timelineId: payload.documentId,
         }),
       ),
     ),
@@ -212,7 +221,7 @@ const reducer = createReducer(initialState, _ => [
       produce(
         state,
         draft => mutateDocument(draft, payload),
-        timelinesManager.documentMeta.add({ documentId: payload.documentId }),
+        dTM.addFrame({ timelineId: payload.documentId }),
       ),
     ),
   ],

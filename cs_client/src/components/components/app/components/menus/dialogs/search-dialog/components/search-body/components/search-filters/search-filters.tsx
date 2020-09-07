@@ -14,24 +14,18 @@ import { configs } from '::root/components/shared-components/transitions/transit
 import { TimeFilters } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/time-filters';
 import { SortOptions } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-sort/sort-options';
 
-export const useSetCssVariablesOnWindowResize = (
-  actionCreator,
-  dependency?: any,
-) => {
+export const useSetCssVariablesOnWindowResize = actionCreator => {
   const ref = useRef<HTMLDivElement>();
   const height = useRef(0);
-  useOnWindowResize(
-    [
-      () => {
-        const clientHeight = ref.current.clientHeight;
-        if (clientHeight !== height.current) {
-          height.current = clientHeight;
-          actionCreator(clientHeight);
-        }
-      },
-    ],
-    dependency,
-  );
+  useOnWindowResize([
+    () => {
+      const clientHeight = ref.current.clientHeight;
+      if (clientHeight !== height.current) {
+        height.current = clientHeight;
+        actionCreator(clientHeight);
+      }
+    },
+  ]);
   return ref;
 };
 

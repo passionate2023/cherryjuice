@@ -1,39 +1,48 @@
-import { Timeline } from '::store/ducks/cache/document-cache/helpers/timeline/timeline';
+import {
+  OnFrameChange,
+  Timeline,
+  TimelineFrameMeta,
+} from '::store/ducks/cache/document-cache/helpers/timeline/timeline';
+import { Patch } from 'immer';
 
-export class TimelinesManager {
-  private nodeMetaTimelines: { [documentId: string]: Timeline };
-  private readonly documentMetaTimeline: Timeline;
-  private documentId: string;
-
+export class TimelinesManager<T> {
+  private timelines: { [id: string]: Timeline<T> };
+  current: Timeline<T>;
+  private onFrameChange: OnFrameChange<T>;
   constructor() {
-    this.nodeMetaTimelines = {};
-    this.documentMetaTimeline = new Timeline();
+    this.timelines = {};
   }
 
-  addNodeMetaTimeline = (documentId: string): void => {
-    this.nodeMetaTimelines[documentId] = new Timeline();
-  };
-
-  setCurrentNodeMetaTimeline = (documentId: string): void => {
-    this.documentId = documentId;
-  };
-
-  resetDocumentMetaTimeline = () => {
-    this.documentMeta.resetAll();
-  };
-  resetNodeMetaTimelines = () => {
-    this.nodeMetaTimelines = {};
-  };
-
-  get nodeMeta(): Timeline {
-    return this.nodeMetaTimelines[this.documentId];
-  }
-  get documentMeta(): Timeline {
-    return this.documentMetaTimeline;
+  setOnFrameChangeFactory(
+    onFrameChangeFactory?: () => Promise<OnFrameChange<T>>,
+  ): void {
+    onFrameChangeFactory().then(
+      onFrameChange => (this.onFrameChange = onFrameChange),
+    );
   }
 
-  resetNodeMetaTimeline = (documentId: string): void => {
-    delete this.nodeMetaTimelines[documentId];
-    if (this.documentId === documentId) this.documentId = undefined;
+  private addTimeline = (id: string): void => {
+    this.timelines[id] = new Timeline(this.onFrameChange);
+  };
+  addFrame = (meta: TimelineFrameMeta<T> & { timelineId: string }) => (
+    patches: Patch[],
+    reversePatches: Patch[],
+  ): void => {
+    this.setCurrent(meta.timelineId);
+    delete meta.timelineId;
+    this.current.add(meta)(patches, reversePatches);
+  };
+
+  setCurrent = (id: string): void => {
+    if (!this.timelines[id]) this.addTimeline(id);
+    this.current = this.timelines[id];
+  };
+
+  resetAll = () => {
+    this.timelines = {};
+  };
+
+  resetTimeline = (id: string): void => {
+    delete this.timelines[id];
   };
 }

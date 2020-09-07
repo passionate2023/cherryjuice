@@ -1,6 +1,5 @@
 enum actions {
   pastedImages,
-  savingInProgress,
 }
 
 const actionCreators = (() => {

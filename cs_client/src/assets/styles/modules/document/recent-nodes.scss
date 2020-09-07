@@ -8,12 +8,15 @@ $node-left-margin: calc(
 $recent-nodes-width: $node-width * 2+ 10px;
 .title-and-recent-nodes {
   // position
-  grid-area: recent-nodes;
+  grid-area: title-and-recent-nodes;
   //display
   display: flex;
   // children
   align-items: center;
-  padding: 2px;
+  @include respond-to($md-up) {
+    padding: 2px;
+    padding-right: 0;
+  }
   // style
   background-color: black;
   color: white;
@@ -40,11 +43,11 @@ $recent-nodes-width: $node-width * 2+ 10px;
   align-items: center;
   // position
   @include respond-to($md-down) {
-    position: absolute;
+    grid-area: recent-nodes;
   }
   // style
   @include respond-to($md-down) {
-    background-color: black;
+    background-color: var(--tool-bar-background-color);
     opacity: 0.95;
   }
 }
@@ -65,7 +68,7 @@ $recent-nodes-width: $node-width * 2+ 10px;
 .title-and-recent-nodes__title {
   flex: 4;
   overflow: auto;
-  height: 100%;
+  height: calc(100% - 6px);
   padding: 3px;
   display: flex;
   align-items: center;

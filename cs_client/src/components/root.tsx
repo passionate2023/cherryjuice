@@ -1,8 +1,8 @@
 import * as React from 'react';
 import modTheme from '::sass-modules/../themes/themes.scss';
 import { useApolloClient } from '::graphql/client/hooks/apollo-client';
-import { Suspense, useEffect } from 'react';
-import { Redirect, Route, Switch } from 'react-router';
+import { Suspense } from 'react';
+import { Route, Switch } from 'react-router';
 import { Provider } from 'react-redux';
 import { Void } from '::root/components/shared-components/react/void';
 import { App } from '::root/components/app/app';
@@ -15,16 +15,22 @@ import { useLoadEpics } from './hooks/load-epics';
 import { useRegisterHotKeys } from '::helpers/hotkeys/hooks/register-hot-keys';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { router } from '::root/router/router';
 import { useConsumeToken } from '::root/hooks/consume-token';
 import { Auth } from '::root/components/auth/auth';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
 import { useTrackDocumentChanges } from '::root/hooks/track-document-changes';
+import { enablePatches, setAutoFreeze } from 'immer';
+import '::helpers/attach-test-callbacks';
+setAutoFreeze(false);
+enablePatches();
 import {
   getCurrentDocument,
   getDocumentsList,
 } from '::store/selectors/cache/document/document';
 import { documentHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
+import { useRouterEffect } from '::root/components/app/components/editor/hooks/router-effect/router-effect';
+import { Router } from 'react-router-dom';
+import { router } from '::root/router/router';
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
@@ -41,12 +47,10 @@ const updateBreakpointState = ({ breakpoint, callback }) => {
     }
   };
 };
-const pathnameStartsWith = route =>
-  router.get.location.pathname.startsWith(route);
+
 const mapState = (state: Store) => ({
   token: state.auth.token,
   userId: state.auth.user?.id,
-  hasPassword: state.auth.user?.hasPassword,
   hotKeys: getHotkeys(state),
   document: getCurrentDocument(state),
   userHasUnsavedChanges: getDocumentsList(state).some(
@@ -62,17 +66,21 @@ type Props = {};
 const Root: React.FC<Props & PropsFromRedux> = ({
   token,
   userId,
-  hasPassword,
   hotKeys,
   document,
   userHasUnsavedChanges,
 }) => {
   const client = useApolloClient(token, userId);
-  useOnWindowResize([cssVariables.setVH, cssVariables.setVW]);
   useOnWindowResize([
+    cssVariables.setVH,
+    cssVariables.setVW,
     updateBreakpointState({
       breakpoint: 850,
-      callback: ac.root.setIsOnMobile,
+      callback: ac.root.setIsOnMd,
+    }),
+    updateBreakpointState({
+      breakpoint: 425,
+      callback: ac.root.setIsOnMb,
     }),
   ]);
   useRegisterHotKeys(hotKeys);
@@ -81,18 +89,7 @@ const Root: React.FC<Props & PropsFromRedux> = ({
     documentName: document?.name,
     userId,
   });
-  useEffect(() => {
-    const unfinishedOauthSignup = userId && hasPassword === false;
-    if (unfinishedOauthSignup) router.goto.oauthSignup();
-
-    const finishedLogin =
-      userId &&
-      hasPassword &&
-      ['/auth/login', '/auth/signup', '/auth/signup-oauth'].some(
-        pathnameStartsWith,
-      );
-    if (finishedLogin) router.goto.home();
-  }, [userId, hasPassword]);
+  useRouterEffect();
 
   useConsumeToken({ userId });
   return (
@@ -102,9 +99,6 @@ const Root: React.FC<Props & PropsFromRedux> = ({
           <Switch>
             <Route path={'/auth'} component={Auth} />
             <Route path={'(/|/document/*)'} component={App} />
-            <Route
-              render={() => <Redirect to={userId ? '/' : 'auth/login'} />}
-            />
           </Switch>
         </ApolloProvider>
       )}
@@ -117,15 +111,17 @@ const ConnectedRoot = connector(Root);
 const RootWithRedux: React.FC = props => {
   const { loadedEpics } = useLoadEpics();
   return (
-    loadedEpics && (
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistStore(store)}>
-          <div className={modTheme.lightTheme}>
-            <ConnectedRoot {...props} />
-          </div>
-        </PersistGate>
-      </Provider>
-    )
+    <Router history={router.get.history}>
+      {loadedEpics && (
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistStore(store)}>
+            <div className={modTheme.lightTheme}>
+              <ConnectedRoot {...props} />
+            </div>
+          </PersistGate>
+        </Provider>
+      )}
+    </Router>
   );
 };
-export { RootWithRedux as Root };
+export default RootWithRedux;
