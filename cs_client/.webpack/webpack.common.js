@@ -126,7 +126,6 @@ module.exports = {
       {
         logo: './src/assets/icons/material/cherry-juice.svg',
         mode: 'webapp',
-        devMode: 'webapp',
         favicons: {
           appName: 'CherryJuice',
           appDescription: 'Start building your knowledge base',

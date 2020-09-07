@@ -45,10 +45,21 @@ import {
 } from '::store/ducks/cache/document-cache/helpers/node/mutate-node-meta';
 import { TimelinesManager } from '::store/ducks/cache/document-cache/helpers/timeline/timelines-manager';
 import { timelinesActionCreators as tac } from '::store/ducks/timelines';
+import {
+  collapseNode,
+  expandNode,
+} from '::store/ducks/cache/document-cache/helpers/node/expand-node/expand-node';
+import { TreeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
 
 const ap = createActionPrefixer('document-cache');
 
 const ac = {
+  expandNode: _(ap('expand-node'), _ => (params: SelectNodeParams) =>
+    _(params),
+  ),
+  collapseNode: _(ap('collapse-node'), _ => (params: SelectNodeParams) =>
+    _(params),
+  ),
   createDocument: _(
     ap('create-document'),
     _ => (params: CreateDocumentParams) => _(params),
@@ -86,6 +97,7 @@ export type CachedNodesState = {
   edited: { [node_id: number]: string[] };
   deletedImages: { [node_id: number]: string[] };
 };
+
 export type CachedDocumentState = {
   selectedNode_id?: number;
   recentNodes: number[];
@@ -93,6 +105,7 @@ export type CachedDocumentState = {
   editedAttributes: string[];
   editedNodes: CachedNodesState;
   localUpdatedAt: number;
+  treeState: TreeState;
 };
 
 export type CachedDocument = Omit<QDocumentMeta, 'node'> & {
@@ -150,6 +163,12 @@ const reducer = createReducer(initialState, _ => [
     ),
     _(ac.undoDocumentAction, state => dTM.current.undo(state)),
     _(ac.redoDocumentAction, state => dTM.current.redo(state)),
+    _(ac.expandNode, (state, { payload }) =>
+      produce(state, draft => expandNode(draft, payload)),
+    ),
+    _(ac.collapseNode, (state, { payload }) =>
+      produce(state, draft => collapseNode(draft, payload)),
+    ),
   ],
   ...[
     // require cleanup

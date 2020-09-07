@@ -27,13 +27,18 @@ const mapState = (state: Store) => {
   return {
     nodes: document.nodes,
     documentPrivacy: document.privacy,
+    treeState: document.state.treeState,
   };
 };
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const Tree: React.FC<Props & PropsFromRedux> = ({ nodes, documentPrivacy }) => {
+const Tree: React.FC<Props & PropsFromRedux> = ({
+  nodes,
+  documentPrivacy,
+  treeState,
+}) => {
   useEffect(onStart, []);
   const componentRef = useRef();
   const rootTreeDndProps = useDnDNodes({
@@ -64,6 +69,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({ nodes, documentPrivacy }) => {
                 const node = nodes[node_id];
                 return (
                   <Node
+                    fatherState={treeState[0]}
                     key={node.node_id}
                     node_id={node.node_id}
                     nodes={nodes}

@@ -10,7 +10,6 @@ import { ac, ac_, store } from '../../store';
 import { createSaveState } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 import { resetCache } from '::store/epics/save-documents/helpers/reset-cache';
 import { Epic } from 'redux-observable';
-import { swapPersistedTreeDocumentIds } from '::store/epics/save-documents/helpers/swap-persisted-tree-document-ids';
 import { SnackbarMessages } from '::root/components/app/components/menus/widgets/components/snackbar/snackbar-messages';
 import { getEditedDocuments } from '::store/selectors/cache/document/document';
 import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
@@ -29,7 +28,6 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
         const saveDocuments$ = defer(() =>
           from(saveDocuments(state, editedDocuments)).pipe(
             tap(resetCache),
-            tap(swapPersistedTreeDocumentIds),
             mapTo(ac_.document.cacheReset()),
           ),
         );

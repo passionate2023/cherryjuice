@@ -3,6 +3,7 @@ import { getDefaultState } from '::store/ducks/cache/document-cache/helpers/docu
 import { constructTree } from '::root/components/app/components/editor/document/hooks/get-document-meta/helpers/construct-tree';
 import { QDocumentMeta } from '::graphql/queries/document-meta';
 import { SelectNodeParams } from '::store/ducks/cache/document-cache/helpers/document/select-node';
+import { expandNode } from '::store/ducks/cache/document-cache/helpers/node/expand-node/expand-node';
 
 export const mergeDocument = (
   fetchedDocument: QDocumentMeta,
@@ -62,5 +63,14 @@ export const mergeDocument = (
   if (nextNode && newCachedDocument.nodes[nextNode.node_id]) {
     newCachedDocument.state.selectedNode_id = nextNode.node_id;
   }
+  const fatherOfSelectedNode =
+    newCachedDocument.nodes[newCachedDocument.state.selectedNode_id];
+  expandNode(
+    { [newCachedDocument.id]: newCachedDocument },
+    {
+      node_id: fatherOfSelectedNode.father_id,
+      documentId: newCachedDocument.id,
+    },
+  );
   return newCachedDocument;
 };

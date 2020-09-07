@@ -1,21 +1,28 @@
 import * as React from 'react';
 import nodeMod from '::sass-modules/tree/node.scss';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
-import { EventHandler, memo } from 'react';
+import { memo, useCallback } from 'react';
+import { ac } from '::store/store';
 
 type Props = {
   depth: number;
   child_nodes: number[];
   showChildren: boolean;
-  toggleChildren: EventHandler<any>;
+  node_id: number;
+  documentId: string;
 };
 
 const ToggleChildren: React.FC<Props> = memo(function ToggleChildren({
   depth,
   child_nodes,
   showChildren,
-  toggleChildren,
+  node_id,
+  documentId,
 }) {
+  const toggleChildren = useCallback(() => {
+    if (showChildren) ac.documentCache.collapseNode({ documentId, node_id });
+    else ac.documentCache.expandNode({ documentId, node_id });
+  }, [showChildren]);
   return (
     <>
       <div style={{ marginLeft: depth * 20 }} />

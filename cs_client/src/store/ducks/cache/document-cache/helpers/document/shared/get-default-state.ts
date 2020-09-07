@@ -17,6 +17,9 @@ const _getDefaultState = (newDocument = false): CachedDocumentState => ({
   selectedNode_id: 0,
   recentNodes: [],
   localUpdatedAt: newDocument ? Date.now() : 0,
+  treeState: {
+    '0': {},
+  },
 });
 
 type GetDefaultStateParams = {
