@@ -33,7 +33,7 @@ export class UserController {
       return `<html><body><script>window.opener.postMessage(${JSON.stringify({
         authUser,
       })},${
-        process.env.NODE_ENV === 'development' ? '*' : '/'
+        process.env.NODE_ENV === 'development' ? `'*'` : `'/'`
       });window.close()</script></body></html>`;
     } else {
       return 'There was a problem signing in...';
