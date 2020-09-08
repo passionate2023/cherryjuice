@@ -12,7 +12,7 @@ import { NodeOverlay } from '::root/components/app/components/editor/document/co
 import { NodeChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-children';
 import { NodesDict } from '::store/ducks/cache/document-cache';
 import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
-import { FilteredNodes } from '::store/ducks/cache/document-cache/helpers/node/filter-tree/filter-tree';
+import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
 import { NodeTitle } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-title';
 
 export type NodeProps = {
@@ -94,6 +94,8 @@ const Node: React.FC<NodeProps> = ({
           nodeStyle={nodeStyle}
           titleRef={titleRef}
           name={name}
+          documentId={file_id}
+          node_id={node_id}
         />
         <NodeOverlay
           clickTimestamp={clickTimestamp}

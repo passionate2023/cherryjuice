@@ -3,7 +3,7 @@ import { Actions } from '::store/actions.types';
 import { ofType } from 'deox';
 import { ac_, store } from '::store/store';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { filterTree } from '::store/ducks/cache/document-cache/helpers/node/filter-tree/filter-tree';
+import { filterTree } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const filterTreeEpic = (action$: Observable<Actions>) => {

@@ -4,7 +4,7 @@ import { cloneObj } from '::helpers/editing/execK/helpers';
 import { rootActionCreators } from './root';
 import { QDocumentMeta } from '::graphql/queries/document-meta';
 import { SelectNodeParams } from '::store/ducks/cache/document-cache/helpers/document/select-node';
-import { FilteredNodes } from '::store/ducks/cache/document-cache/helpers/node/filter-tree/filter-tree';
+import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
 
 const ap = createActionPrefixer('document');
 const ac = {

@@ -6,7 +6,7 @@ import { NodePrivacy } from '::types/graphql/generated';
 import { NodeProps } from '::root/components/app/components/editor/document/components/tree/components/node/node';
 import { Node } from '../node';
 import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
-import { FilteredNodes } from '::store/ducks/cache/document-cache/helpers/node/filter-tree/filter-tree';
+import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
 
 type Props = Pick<
   NodeProps,

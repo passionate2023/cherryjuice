@@ -13,7 +13,7 @@ const HNodeName: React.FC<Props> = ({ name, query }) => {
     searchContext: {
       query,
       searchType: SearchType.Simple,
-      searchOptions: { caseSensitive: true, fullWord: false },
+      searchOptions: { caseSensitive: false, fullWord: false },
       searchTarget: [SearchTarget.nodeTitle],
     },
     searchResult: { nodeName: name, nodeNameHeadline: query },
