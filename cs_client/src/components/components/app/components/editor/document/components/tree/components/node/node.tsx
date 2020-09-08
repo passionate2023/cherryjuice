@@ -97,6 +97,7 @@ const Node: React.FC<NodeProps> = ({
           clickTimestamp={clickTimestamp}
           nodeComponentRef={componentRef}
           node_id={node_id}
+          documentId={file_id}
         />
       </div>
       {showChildren && (

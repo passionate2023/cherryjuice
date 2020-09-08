@@ -1,0 +1,9 @@
+.tree-tool-bar {
+  width: var(--overlay-width);
+  display: flex;
+  align-items: center;
+  height: 30px;
+  padding: 2px 5px;
+  background-color: var(--tool-bar-background-color-transparent);
+  box-sizing: border-box;
+}

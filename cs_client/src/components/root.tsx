@@ -1,5 +1,10 @@
 import * as React from 'react';
 import modTheme from '::sass-modules/../themes/themes.scss';
+import '::assets/styles/global-scope/material-ui.scss';
+import '::assets/styles/base.scss';
+import '::assets/styles/global-scope/global-classes.scss';
+import '::assets/styles/global-scope/google-picker.scss';
+import '::assets/styles/css-variables/css-variables.scss';
 import { useApolloClient } from '::graphql/client/hooks/apollo-client';
 import { Suspense } from 'react';
 import { Route, Switch } from 'react-router';

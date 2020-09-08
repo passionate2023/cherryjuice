@@ -4,6 +4,7 @@ const Icons = {
     pin: 'pin',
     close: 'close',
     menu: 'menu',
+    focus: 'focus',
     redo: 'redo',
     undo: 'undo',
     tune: 'tune',

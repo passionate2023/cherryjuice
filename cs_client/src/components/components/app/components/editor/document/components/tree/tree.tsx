@@ -10,6 +10,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { NodePrivacy } from '::types/graphql/generated';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
+import { ToolBar } from './components/tool-bar/tool-bar';
 
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -59,6 +60,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
     >
       <ErrorBoundary>
         <div className={treeModule.tree}>
+          <ToolBar />
           <ul
             className={treeModule.tree_rootList}
             {...rootTreeDndProps}

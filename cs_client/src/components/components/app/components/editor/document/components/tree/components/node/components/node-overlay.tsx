@@ -2,20 +2,21 @@ import * as React from 'react';
 import nodeMod from '::sass-modules/tree/node.scss';
 import { MutableRefObject, useEffect, useRef } from 'react';
 import { nodeOverlay } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/node-overlay';
-import { scrollIntoToolbar } from '::helpers/ui';
 import { useSelector } from 'react-redux';
-import { Store } from '::store/store';
+import { ac, Store } from '::store/store';
 
 type Props = {
   clickTimestamp: number;
   node_id: number;
   nodeComponentRef: MutableRefObject<HTMLDivElement>;
+  documentId: string;
 };
 
 const NodeOverlay: React.FC<Props> = ({
   node_id,
   clickTimestamp,
   nodeComponentRef,
+  documentId,
 }) => {
   const selectedNode_id = useSelector<Store>(
     state =>
@@ -28,8 +29,7 @@ const NodeOverlay: React.FC<Props> = ({
     if (isSelected) {
       nodeOverlay.updateWidth();
       nodeOverlay.updateLeft(nodeComponentRef);
-      nodeComponentRef?.current?.scrollIntoView();
-      scrollIntoToolbar();
+      ac.documentCache.expandNode({ documentId, node_id });
     }
   }, [isSelected]);
 

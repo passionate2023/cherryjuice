@@ -122,17 +122,16 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/assets/index.html',
     }),
-    new FaviconsWebpackPlugin(
-      {
-        logo: './src/assets/icons/material/cherry-juice.svg',
-        mode: 'webapp',
-        favicons: {
-          appName: 'CherryJuice',
-          appDescription: 'Start building your knowledge base',
-          background: '#180101',
-          theme_color: '#180101',
-        }
-      }),
+    new FaviconsWebpackPlugin({
+      logo: './src/assets/icons/material/cherry-juice.svg',
+      mode: 'webapp',
+      favicons: {
+        appName: 'CherryJuice',
+        appDescription: 'Start building your knowledge base',
+        background: '#180101',
+        theme_color: '#180101',
+      },
+    }),
     new CopyPlugin([{ from: paths.icons, to: paths.iconsDist }]),
   ].filter(Boolean),
 };

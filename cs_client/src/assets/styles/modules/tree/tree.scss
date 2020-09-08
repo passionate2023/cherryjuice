@@ -1,7 +1,9 @@
 @import '../../vars/vars';
 @import '../../mixins/breakpoints';
 @mixin tree-height() {
-  height: calc(var(--vh) - #{2 * $tool-bar-height} - var(--formatting-bar) - var(--recent-nodes));
+  height: calc(
+    var(--vh) - #{2 * $tool-bar-height} - var(--formatting-bar) - var(--recent-nodes)
+  );
   @include respond-to('md') {
     height: calc(var(--vh) - var(--info-bar) - #{$tool-bar-height-md});
   }
