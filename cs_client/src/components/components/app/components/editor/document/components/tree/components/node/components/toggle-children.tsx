@@ -27,7 +27,7 @@ const ToggleChildren: React.FC<Props> = memo(function ToggleChildren({
     <>
       <div style={{ marginLeft: depth * 20 }} />
       <div
-        className={`${nodeMod.node__titleButton} ${
+        className={`${nodeMod.node__toggleChildren} ${
           child_nodes.length > 0 ? '' : nodeMod.node__titleButtonHidden
         }`}
       >

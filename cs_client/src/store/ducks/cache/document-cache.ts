@@ -146,7 +146,12 @@ const reducer = createReducer(initialState, _ => [
       createDocument(state, payload),
     ),
     _(nac.select, (state, { payload }) =>
-      produce(state, draft => selectNode(draft, payload)),
+      produce(state, draft =>
+        expandNode(selectNode(draft, payload), {
+          ...payload,
+          expandChildren: false,
+        }),
+      ),
     ),
     _(tac.setDocumentActionNOF, (state, { payload }) =>
       payload.frame?.meta?.documentId

@@ -30,9 +30,10 @@ export const expandNode = (
   nodes: NodesDict,
   tree: TreeState,
   node_id: number,
+  expandChildren = true,
 ) => {
   const father_ids = getParentsNode_ids(undefined, nodes, node_id).reverse();
-  father_ids.push(node_id);
+  if (expandChildren) father_ids.push(node_id);
   let fatherState: NodeState = tree['0'];
   father_ids.forEach(current_node_id => {
     if (!fatherState[current_node_id]) {

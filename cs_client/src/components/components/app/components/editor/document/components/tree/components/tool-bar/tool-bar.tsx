@@ -23,10 +23,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const ToolBar: React.FC<Props & PropsFromRedux> = ({
-                                                     node_id,
-  documentId,
-}) => {
+const ToolBar: React.FC<Props & PropsFromRedux> = ({ node_id, documentId }) => {
   const expandNode = useCallback(
     () =>
       ac.documentCache.expandNode({

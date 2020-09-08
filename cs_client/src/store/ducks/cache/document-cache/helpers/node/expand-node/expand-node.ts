@@ -5,13 +5,19 @@ import {
   expandNode as _expandNode,
 } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
 
+type ExpandNodeParams = SelectNodeParams & { expandChildren?: boolean };
 export const expandNode = (
   state: DocumentCacheState,
-  { documentId, node_id }: SelectNodeParams,
+  { documentId, node_id, expandChildren }: ExpandNodeParams,
 ): DocumentCacheState => {
   node_id = +node_id;
   const document = state[documentId];
-  _expandNode(document.nodes, document.state.treeState, node_id);
+  _expandNode(
+    document.nodes,
+    document.state.treeState,
+    node_id,
+    expandChildren,
+  );
   return state;
 };
 

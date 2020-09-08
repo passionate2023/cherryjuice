@@ -11,8 +11,8 @@ const useSelectNode = ({ node_id, file_id }: SelectNodeProps) => {
   const [clickTimestamp, setTimestamp] = useState(0);
   const selectNode = useCallback(
     e => {
-      const eventIsTriggeredByCollapseButton = e.target.classList.contains(
-        nodeMod.node__titleButton,
+      const eventIsTriggeredByCollapseButton = e.target.parentElement.classList.contains(
+        nodeMod.node__toggleChildren,
       );
       if (eventIsTriggeredByCollapseButton) return;
       setTimestamp(Date.now());

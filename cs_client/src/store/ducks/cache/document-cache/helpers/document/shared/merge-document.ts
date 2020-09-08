@@ -63,13 +63,12 @@ export const mergeDocument = (
   if (nextNode && newCachedDocument.nodes[nextNode.node_id]) {
     newCachedDocument.state.selectedNode_id = nextNode.node_id;
   }
-  const fatherOfSelectedNode =
-    newCachedDocument.nodes[newCachedDocument.state.selectedNode_id];
   expandNode(
     { [newCachedDocument.id]: newCachedDocument },
     {
-      node_id: fatherOfSelectedNode.father_id,
+      node_id: newCachedDocument.state.selectedNode_id,
       documentId: newCachedDocument.id,
+      expandChildren: false,
     },
   );
   return newCachedDocument;
