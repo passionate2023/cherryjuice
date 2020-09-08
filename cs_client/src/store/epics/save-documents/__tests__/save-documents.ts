@@ -11,12 +11,6 @@ jest.mock('../helpers/reset-cache', () => {
   };
 });
 
-jest.mock('../helpers/swap-persisted-tree-document-ids', () => {
-  return {
-    swapPersistedTreeDocumentIds: jest.fn(() => undefined),
-  };
-});
-
 jest.mock('../helpers/save-document/save-documents', () => {
   return {
     saveDocuments: jest.fn(async () => undefined),

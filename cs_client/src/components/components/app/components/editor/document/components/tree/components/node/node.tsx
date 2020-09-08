@@ -13,6 +13,7 @@ import { NodeChildren } from '::root/components/app/components/editor/document/c
 import { NodesDict } from '::store/ducks/cache/document-cache';
 import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
 import { FilteredNodes } from '::store/ducks/cache/document-cache/helpers/node/filter-tree/filter-tree';
+import { NodeTitle } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-title';
 
 export type NodeProps = {
   node_id: number;
@@ -88,14 +89,12 @@ const Node: React.FC<NodeProps> = ({
           parentPrivacy={parentPrivacy}
           privacy={privacy}
         />
-        <div
-          className={nodeMod.node__title}
-          style={{ ...nodeStyle }}
-          ref={titleRef}
-          {...nodeDndProps}
-        >
-          {name}
-        </div>
+        <NodeTitle
+          nodeDndProps={nodeDndProps}
+          nodeStyle={nodeStyle}
+          titleRef={titleRef}
+          name={name}
+        />
         <NodeOverlay
           clickTimestamp={clickTimestamp}
           nodeComponentRef={componentRef}
