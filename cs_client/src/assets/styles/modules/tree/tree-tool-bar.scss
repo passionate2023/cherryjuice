@@ -1,17 +1,22 @@
 .tree-tool-bar {
-  width: var(--overlay-width);
+  width: 100%;
   display: flex;
   align-items: center;
   background-color: var(--tool-bar-background-color-transparent);
+  margin-bottom: 1px;
+  opacity: 0.5;
+  &:hover {
+    opacity: 0.8;
+  }
+  transition: opacity 200ms linear;
 }
 .tree-tool-bar__controls {
   height: 30px;
   box-sizing: border-box;
-  padding: 2px 2px;
-  width: calc(var(--tree-width) - 10px);
+  padding: 2px;
+  width: 100%;
   display: flex;
   align-items: center;
-  opacity: 0.7;
   gap: 1px;
 }
 .tree__search-field-wrapper {
