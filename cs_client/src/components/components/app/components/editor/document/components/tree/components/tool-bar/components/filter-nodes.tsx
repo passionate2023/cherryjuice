@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { SearchInput } from '::root/components/shared-components/inputs/search-input';
 import { modTreeToolBar } from '::sass-modules';
+import { useEffect } from 'react';
 
 const mapState = (state: Store) => ({
   filter: state.document.nodesFilter,
@@ -14,6 +15,12 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = {};
 
 const FilterNodes: React.FC<Props & PropsFromRedux> = ({ filter }) => {
+  useEffect(() => {
+    const parent = document.querySelector('.' + modTreeToolBar.treeToolBar);
+    if (filter) {
+      parent.classList.add(modTreeToolBar.treeToolBarActive);
+    } else parent.classList.remove(modTreeToolBar.treeToolBarActive);
+  }, [filter]);
   return (
     <SearchInput
       value={filter}

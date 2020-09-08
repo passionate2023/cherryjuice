@@ -50,6 +50,10 @@ import {
   expandNode,
 } from '::store/ducks/cache/document-cache/helpers/node/expand-node/expand-node';
 import { TreeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import {
+  setScrollPosition,
+  SetScrollPositionParams,
+} from '::store/ducks/cache/document-cache/helpers/node/set-scroll-position';
 
 const ap = createActionPrefixer('document-cache');
 
@@ -84,6 +88,10 @@ const ac = {
     _ => (props: MutateNodeContentParams) => _(props),
   ),
   deleteNode: _(ap('delete-node'), _ => (param: DeleteNodeParams) => _(param)),
+  setScrollPosition: _(
+    ap('set-scroll-position'),
+    _ => (param: SetScrollPositionParams) => _(param),
+  ),
   undoDocumentAction: _(ap('undo-document-action')),
   redoDocumentAction: _(ap('redo-document-action')),
 };
@@ -98,6 +106,7 @@ export type CachedNodesState = {
   deletedImages: { [node_id: number]: string[] };
 };
 
+export type NodeScrollPosition = [number, number];
 export type CachedDocumentState = {
   selectedNode_id?: number;
   recentNodes: number[];
@@ -106,6 +115,9 @@ export type CachedDocumentState = {
   editedNodes: CachedNodesState;
   localUpdatedAt: number;
   treeState: TreeState;
+  scrollPositions: {
+    [node_id: number]: NodeScrollPosition;
+  };
 };
 
 export type CachedDocument = Omit<QDocumentMeta, 'node'> & {
@@ -173,6 +185,9 @@ const reducer = createReducer(initialState, _ => [
     ),
     _(ac.collapseNode, (state, { payload }) =>
       produce(state, draft => collapseNode(draft, payload)),
+    ),
+    _(ac.setScrollPosition, (state, { payload }) =>
+      produce(state, draft => setScrollPosition(draft, payload)),
     ),
   ],
   ...[

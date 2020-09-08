@@ -20,6 +20,7 @@ const _getDefaultState = (newDocument = false): CachedDocumentState => ({
   treeState: {
     '0': {},
   },
+  scrollPositions: {},
 });
 
 type GetDefaultStateParams = {

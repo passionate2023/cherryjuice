@@ -84,6 +84,9 @@ const updateCachedImages = ({
   mutation.data.image = newImages;
 };
 const updateCachedHtmlAndImages = () => {
+  const editor = getEditor();
+  let scrollTop: number, scrollLeft: number;
+  if (editor) ({ scrollTop, scrollLeft } = editor);
   const {
     html,
     edited,
@@ -91,6 +94,12 @@ const updateCachedHtmlAndImages = () => {
     node_id,
     documentId,
   } = getEditorContentWithoutImages();
+  if (editor)
+    ac.documentCache.setScrollPosition({
+      node_id,
+      documentId,
+      position: [scrollLeft, scrollTop],
+    });
   let deletedImageIDs = [];
   let newImageIDs = [];
   if (edited) {

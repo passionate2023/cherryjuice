@@ -6,10 +6,15 @@
   margin-bottom: 1px;
   opacity: 0.5;
   &:hover {
-    opacity: 0.8;
+    opacity: 0.9;
   }
   transition: opacity 200ms linear;
 }
+
+.tree-tool-bar--active {
+  opacity: 0.9;
+}
+
 .tree-tool-bar__controls {
   height: 30px;
   box-sizing: border-box;

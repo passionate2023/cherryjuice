@@ -16,6 +16,7 @@ import { ac } from '::store/store';
 import { onPaste } from '::helpers/editing/clipboard';
 import { onKeyDown } from '::helpers/editing/typing';
 import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
+import { NodeScrollPosition } from '::store/ducks/cache/document-cache';
 
 const { onTouchEnd, onTouchStart } = createGesturesHandler({
   onRight: ac.editor.showTree,
@@ -42,6 +43,7 @@ type Props = {
   fetchNodeStarted: boolean;
   isOnMd: boolean;
   images: Image[];
+  scrollPosition: NodeScrollPosition;
 };
 
 const ContentEditable = ({
@@ -55,6 +57,7 @@ const ContentEditable = ({
   images,
   fetchNodeStarted,
   isOnMd,
+  scrollPosition,
 }: Props) => {
   const ref = useRef<HTMLDivElement>();
   const { pastedImages } = useContext(DocumentContext);
@@ -85,7 +88,11 @@ const ContentEditable = ({
       ref.current.focus();
     }
   }, [html]);
-
+  useEffect(() => {
+    if (scrollPosition) {
+      ref.current.scrollTo(...scrollPosition);
+    }
+  }, [node_id]);
   return (
     <div
       ref={ref}

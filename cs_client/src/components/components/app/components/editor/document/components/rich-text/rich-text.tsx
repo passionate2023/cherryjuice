@@ -26,6 +26,9 @@ const mapState = (state: Store) => {
     processLinks: state.node.processLinks,
     isDocumentOwner: hasWriteAccessToDocument(state),
     isOnMd: state.root.isOnMd,
+    scrollPosition:
+      document?.state?.scrollPositions &&
+      document.state.scrollPositions[node_id],
   };
 };
 const mapDispatch = {};
@@ -39,6 +42,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   isDocumentOwner,
   node,
   isOnMd,
+  scrollPosition,
 }) => {
   useLayoutEffect(() => {
     if (!fetchDocumentInProgress) ac.node.fetch(node);
@@ -62,6 +66,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
             images={images}
             fetchNodeStarted={fetchNodeStarted}
             isOnMd={isOnMd}
+            scrollPosition={scrollPosition}
           />
         ) : (
           <SpinnerCircle />
