@@ -12,6 +12,7 @@ import { NodeOverlay } from '::root/components/app/components/editor/document/co
 import { NodeChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-children';
 import { NodesDict } from '::store/ducks/cache/document-cache';
 import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { FilteredNodes } from '::store/ducks/cache/document-cache/helpers/node/filter-tree/filter-tree';
 
 export type NodeProps = {
   node_id: number;
@@ -22,6 +23,7 @@ export type NodeProps = {
   parentPrivacy: NodePrivacy;
   expand?: number;
   fatherState: NodeState;
+  filteredNodes: FilteredNodes;
 };
 
 const Node: React.FC<NodeProps> = ({
@@ -33,6 +35,7 @@ const Node: React.FC<NodeProps> = ({
   parentPrivacy,
   expand,
   fatherState,
+  filteredNodes,
 }) => {
   const { child_nodes, name, privacy } = nodes[node_id];
   const match = useRouteMatch<{ file_id: string }>();
@@ -112,6 +115,7 @@ const Node: React.FC<NodeProps> = ({
           privacy={privacy}
           expand={expand}
           fatherState={fatherState && fatherState[node_id]}
+          filteredNodes={filteredNodes}
         />
       )}
     </>

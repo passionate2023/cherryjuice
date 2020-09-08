@@ -2,8 +2,34 @@
   width: var(--overlay-width);
   display: flex;
   align-items: center;
-  height: 30px;
-  padding: 2px 5px;
   background-color: var(--tool-bar-background-color-transparent);
+}
+.tree-tool-bar__controls {
+  height: 30px;
   box-sizing: border-box;
+  padding: 2px 2px;
+  width: calc(var(--tree-width) - 10px);
+  display: flex;
+  align-items: center;
+  opacity: 0.6;
+  gap: 1px;
+}
+.tree__search-field-wrapper {
+  opacity: 1 !important;
+  background-color: transparent;
+}
+.tree__search-field-container {
+  display: block;
+  overflow: hidden;
+  flex: 1;
+  background-color: transparent;
+  margin-right: 0;
+}
+.tree__search-button {
+  width: 30px;
+}
+.tree_focus-button {
+  height: 100%;
+  background-color: white;
+  border-radius: 0;
 }

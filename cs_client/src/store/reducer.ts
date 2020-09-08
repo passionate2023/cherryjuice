@@ -32,7 +32,7 @@ const reducer = combineReducers({
     {
       key: 'document',
       storage,
-      blacklist: [],
+      blacklist: ["nodesFilter"],
       transforms: documentTransforms,
     },
     documentReducer,

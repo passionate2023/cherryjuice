@@ -25,8 +25,10 @@ type Props = {};
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
+  const nodes = document.nodes;
   return {
-    nodes: document.nodes,
+    filteredNodes: state.document.filteredNodes,
+    nodes: nodes,
     documentPrivacy: document.privacy,
     treeState: document.state.treeState,
   };
@@ -39,6 +41,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
   nodes,
   documentPrivacy,
   treeState,
+  filteredNodes,
 }) => {
   useEffect(onStart, []);
   const componentRef = useRef();
@@ -69,19 +72,21 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
             {nodes &&
               nodes[0].child_nodes.map(node_id => {
                 const node = nodes[node_id];
-                return (
-                  <Node
-                    fatherState={treeState[0]}
-                    key={node.node_id}
-                    node_id={node.node_id}
-                    nodes={nodes}
-                    depth={0}
-                    node_title_styles={node.node_title_styles}
-                    documentPrivacy={documentPrivacy}
-                    parentPrivacy={NodePrivacy.DEFAULT}
-                    expand={params.expand}
-                  />
-                );
+                if (!filteredNodes || filteredNodes[node_id])
+                  return (
+                    <Node
+                      fatherState={treeState[0]}
+                      key={node.node_id}
+                      node_id={node.node_id}
+                      nodes={nodes}
+                      depth={0}
+                      node_title_styles={node.node_title_styles}
+                      documentPrivacy={documentPrivacy}
+                      parentPrivacy={NodePrivacy.DEFAULT}
+                      expand={params.expand}
+                      filteredNodes={filteredNodes}
+                    />
+                  );
               })}
           </ul>
         </div>
