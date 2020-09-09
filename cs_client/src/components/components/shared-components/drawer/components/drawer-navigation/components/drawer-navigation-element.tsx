@@ -1,26 +1,20 @@
 import modDrawer from '::sass-modules/shared-components/drawer.scss';
 import * as React from 'react';
 import { useCallback } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { AlertType } from '::types/react';
+import { ScreenName } from '::root/components/app/components/menus/dialogs/settings/screens/screens';
 
-const mapState = (state: Store) => ({
-  selectedScreenTitle: state.settings.selectedScreen,
-  screenHasChanges: state.settings.screenHasChanges,
-});
-const mapDispatch = {};
-const connector = connect(mapState, mapDispatch);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type DrawerNavigationElementProps = {
-  title: string;
-};
-
-const DrawerNavigationElement: React.FC<DrawerNavigationElementProps &
-  PropsFromRedux> = ({ title, selectedScreenTitle, screenHasChanges }) => {
-  const isSelected = selectedScreenTitle === title;
-  const onClick = useCallback(() => {
+type Func = () => void;
+const useUnsavedSettingsPrompt = (save: Func, discard: Func) => {
+  const screenHasChanges = useSelector(
+    (state: Store) => state.settings.screenHasChanges,
+  );
+  const selectedScreenTitle = useSelector(
+    (state: Store) => state.settings.selectedScreen,
+  );
+  return useCallback(() => {
     if (screenHasChanges) {
       ac.dialogs.setAlert({
         type: AlertType.Warning,
@@ -28,20 +22,35 @@ const DrawerNavigationElement: React.FC<DrawerNavigationElementProps &
         description: `${selectedScreenTitle} has unsaved changes`,
         action: {
           name: 'save',
-          callbacks: [
-            () => {
-              ac.settings.save(title);
-            },
-            ac.dialogs.clearAlert,
-          ],
+          callbacks: [save, ac.dialogs.clearAlert],
         },
         dismissAction: {
           name: 'discard',
-          callbacks: [() => ac.settings.selectScreen(title)],
+          callbacks: [discard],
         },
       });
-    } else ac.settings.selectScreen(title);
-  }, [screenHasChanges]);
+    } else discard();
+  }, [save, discard, screenHasChanges, selectedScreenTitle]);
+};
+
+const mapState = (state: Store) => ({
+  selectedScreenTitle: state.settings.selectedScreen,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type DrawerNavigationElementProps = {
+  title: ScreenName;
+};
+
+const DrawerNavigationElement: React.FC<DrawerNavigationElementProps &
+  PropsFromRedux> = ({ title, selectedScreenTitle }) => {
+  const onClick = useUnsavedSettingsPrompt(
+    () => ac.settings.save(title),
+    () => ac.settings.selectScreen(title),
+  );
+  const isSelected = selectedScreenTitle === title;
   return (
     <span
       className={`${modDrawer.drawer__navigation__element} ${
@@ -55,4 +64,4 @@ const DrawerNavigationElement: React.FC<DrawerNavigationElementProps &
 };
 
 const _ = connector(DrawerNavigationElement);
-export { _ as DrawerNavigationElement };
+export { _ as DrawerNavigationElement, useUnsavedSettingsPrompt };

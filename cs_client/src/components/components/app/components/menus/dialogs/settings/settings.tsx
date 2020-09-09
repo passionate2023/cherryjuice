@@ -7,6 +7,7 @@ import { ErrorBoundary } from '::root/components/shared-components/react/error-b
 
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
+import { useUnsavedSettingsPrompt } from '::root/components/shared-components/drawer/components/drawer-navigation/components/drawer-navigation-element';
 
 const mapState = (state: Store) => ({
   show: state.dialogs.showSettingsDialog,
@@ -16,18 +17,13 @@ const mapState = (state: Store) => ({
   saveOperation: state.settings.saveOperation,
   userId: state.auth.user?.id,
 });
-const mapDispatch = {
-  onClose: ac.dialogs.hideSettingsDialog,
-  apply: () => ac.settings.save(),
-};
-const connector = connect(mapState, mapDispatch);
+
+const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
 const Settings: React.FC<Props & PropsFromRedux> = ({
-  onClose,
-  apply,
   show,
   userId,
   isOnMobile,
@@ -37,6 +33,11 @@ const Settings: React.FC<Props & PropsFromRedux> = ({
 }) => {
   const savePending = saveOperation !== 'idle';
   const saveInProgress = saveOperation === 'in-progress';
+  const onClose = useUnsavedSettingsPrompt(
+    ac.settings.save,
+    ac.dialogs.hideSettingsDialog,
+  );
+  const apply = ac.settings.save;
   return (
     <DialogWithTransition
       menuButton={<DrawerToggle />}
