@@ -17,6 +17,7 @@ const mapState = (state: Store) => {
     isOnMobile: state.root.isOnMd,
     showInfoBar: state.editor.showInfoBar,
     documentPrivacy: document?.privacy,
+    numberOfGuests: document?.guests?.length,
     selectedNode_id,
   };
 };
@@ -33,6 +34,7 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
   showInfoBar,
   documentPrivacy,
   selectedNode_id,
+  numberOfGuests,
 }) => {
   const showBar = !isOnMobile || showInfoBar;
   const noSelectedDocument = !documentId;
@@ -46,7 +48,13 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
         )}
       </div>
       <div className={modInfoBar.infoBar__group}>
-        {!noSelectedDocument && <VisibilityIcon privacy={documentPrivacy} />}
+        {!noSelectedDocument && (
+          <VisibilityIcon
+            privacy={documentPrivacy}
+            numberOfGuests={numberOfGuests}
+            displayNumberOfGuestsAsBadge={false}
+          />
+        )}
       </div>
     </footer>
   ) : (

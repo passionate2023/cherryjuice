@@ -29,7 +29,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   openDocumentId,
   deletionMode,
 }) => {
-  const { size, id, name, updatedAt, hash, privacy } = document;
+  const { size, id, name, updatedAt, hash, privacy, guests } = document;
   return (
     <div
       className={`${modSelectFile.selectFile__file} ${
@@ -52,7 +52,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
 
       <span className={`${modSelectFile.selectFile__file__details} `}>
         <span className={modSelectFile.selectFile__file__details__visibility}>
-          <VisibilityIcon privacy={privacy} />
+          <VisibilityIcon privacy={privacy} numberOfGuests={guests.length} />
           <span>{size}kb</span>
         </span>
 
