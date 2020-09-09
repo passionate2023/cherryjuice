@@ -1,7 +1,7 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { documentActionCreators as dac } from './document';
 import { createActionPrefixer } from './helpers/shared';
-import { TAlert } from '::types/react';
+import { AlertType, TAlert } from '::types/react';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { rootActionCreators } from './root';
 import { authActionCreators as aac } from './auth';
@@ -85,7 +85,7 @@ const actionCreators = {
 };
 
 type NodeMetaDialogRole = 'edit' | 'create-child' | 'create-sibling';
-type Snackbar = { message: string };
+export type Snackbar = { message: string; type?: AlertType; lifeSpan?: number };
 type State = {
   showReloadDocument: boolean;
   alert?: TAlert;
