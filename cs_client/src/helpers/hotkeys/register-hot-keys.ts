@@ -10,10 +10,10 @@ const registerFormattingHKs = (hotKeys: HotKey[] = []) => {
   hotKeys
     .filter(hotKey => hotKey.keys)
     .forEach(({ keys, type }) => {
-      if (
+      const colorCommands =
         type === HotKeyActionType.FG_COLOR ||
-        type === HotKeyActionType.BG_COLOR
-      )
+        type === HotKeyActionType.BG_COLOR;
+      if (colorCommands)
         hotKeysManager.registerHotKey({
           type,
           keys: keys,
@@ -24,16 +24,21 @@ const registerFormattingHKs = (hotKeys: HotKey[] = []) => {
             target: HotKeyTarget.RICH_TEXT,
           },
         });
-      else
+      else {
+        const hotkeysProp = formattingHotkeysProps[type];
+        const callback =
+          'execCommandArguments' in hotkeysProp
+            ? () => execK(hotkeysProp.execCommandArguments)
+            : hotkeysProp.callback;
         hotKeysManager.registerHotKey({
           type,
           keys: keys,
-          callback: () =>
-            execK(formattingHotkeysProps[type].execCommandArguments),
+          callback,
           options: {
             target: HotKeyTarget.RICH_TEXT,
           },
         });
+      }
     });
 };
 

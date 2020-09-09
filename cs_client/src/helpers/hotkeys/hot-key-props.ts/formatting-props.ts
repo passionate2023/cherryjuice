@@ -2,12 +2,18 @@ import { ExecKCommand } from '::helpers/editing/execK/execk-commands';
 import { Icons } from '::root/components/shared-components/icon/icon';
 import { ExecKProps } from '::helpers/editing/execK';
 import { HotKeyActionType } from '::types/graphql/generated';
+import { paneLine } from '::helpers/editing/typing/pane-line/pane-line';
+import { deleteLine } from '::helpers/editing/typing/delete-line/delete-line';
 
 export type FormattingHotProps = {
-  icon: string;
-  execCommandArguments: ExecKProps;
   name?: string;
-};
+} & (
+  | {
+      icon: string;
+      execCommandArguments: ExecKProps;
+    }
+  | { callback: () => void }
+);
 
 export const formattingHotkeysProps: { [key: string]: FormattingHotProps } = {
   [HotKeyActionType.BOLD]: {
@@ -100,5 +106,18 @@ export const formattingHotkeysProps: { [key: string]: FormattingHotProps } = {
   [HotKeyActionType.REMOVE_STYLE]: {
     icon: Icons.material['clear-format'],
     execCommandArguments: { command: ExecKCommand.clear, tagName: undefined },
+    name: 'remove style',
+  },
+  [HotKeyActionType.MOVE_LINE_UP]: {
+    name: 'move line up',
+    callback: paneLine('up'),
+  },
+  [HotKeyActionType.MOVE_LINE_DOWN]: {
+    name: 'move line down',
+    callback: paneLine('down'),
+  },
+  [HotKeyActionType.DELETE_LINE]: {
+    name: 'delete line',
+    callback: deleteLine,
   },
 };

@@ -1,7 +1,9 @@
 const getDDOE = el =>
-  el.parentElement.getAttribute('id') === 'rich-text'
+  el?.parentElement?.getAttribute('id') === 'rich-text'
     ? el
-    : getDDOE(el.parentElement);
+    : el?.parentElement
+    ? getDDOE(el?.parentElement)
+    : undefined;
 const getSubDDOE = el =>
   el.parentElement.parentElement.getAttribute('id') === 'rich-text'
     ? el
@@ -15,7 +17,6 @@ const getSelectedDDOEs = ({ startDDOE, endDDOE }) => {
   const selectedDDOEs = allDDOEs.slice(startDDOEIndex, endDDOEIndex + 1);
   return { selectedDDOEs };
 };
-
 
 const getIndexOfSubDDOE = ({ DDOE, selectionElement }) =>
   Array.from(DDOE.childNodes).findIndex(

@@ -33,6 +33,9 @@ export enum HotKeyActionType {
   H3 = 'H3',
   UNDO = 'UNDO',
   REDO = 'REDO',
+  MOVE_LINE_DOWN = 'MOVE_LINE_DOWN',
+  MOVE_LINE_UP = 'MOVE_LINE_UP',
+  DELETE_LINE = 'DELETE_LINE',
 }
 registerEnumType(HotKeyActionType, {
   name: 'HotKeyActionType',

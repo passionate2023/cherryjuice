@@ -219,6 +219,7 @@ enum HotKeyActionType {
     BG_COLOR
     BOLD
     CREATE_TEST_SAMPLE
+    DELETE_LINE
     FG_COLOR
     H1
     H2
@@ -230,6 +231,8 @@ enum HotKeyActionType {
     JUSTIFY_RIGHT
     LINE_THROUGH
     MONO
+    MOVE_LINE_DOWN
+    MOVE_LINE_UP
     REDO
     RELOAD_DOCUMENT
     REMOVE_STYLE

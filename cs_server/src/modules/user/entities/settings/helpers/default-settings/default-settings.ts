@@ -22,6 +22,9 @@ export const getDefaultSettings = (): Settings => ({
       { type: HotKeyActionType.FG_COLOR, keys: ' 101' },
       { type: HotKeyActionType.BG_COLOR, keys: ' 110' },
       { type: HotKeyActionType.REMOVE_STYLE, keys: 'r010' },
+      { type: HotKeyActionType.DELETE_LINE, keys: 'k100' },
+      { type: HotKeyActionType.MOVE_LINE_UP, keys: 'arrowup010' },
+      { type: HotKeyActionType.MOVE_LINE_DOWN, keys: 'arrowdown010' },
     ],
     general: [
       { type: HotKeyActionType.SAVE_DOCUMENT, keys: 's100' },
