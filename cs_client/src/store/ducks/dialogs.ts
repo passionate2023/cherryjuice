@@ -20,6 +20,8 @@ const actionCreators = {
   ...{
     showReloadDocument: _(ap('showReloadDocument')),
     hideReloadDocument: _(ap('hideReloadDocument')),
+    showDeleteDocument: _(ap('show-delete-document')),
+    hideDeleteDocument: _(ap('hide-delete-document')),
   },
   ...{
     showImportDocument: _(ap('showImportDocument')),
@@ -88,6 +90,7 @@ type NodeMetaDialogRole = 'edit' | 'create-child' | 'create-sibling';
 export type Snackbar = { message: string; type?: AlertType; lifeSpan?: number };
 type State = {
   showReloadDocument: boolean;
+  showDeleteDocument: boolean;
   alert?: TAlert;
   showPasswordModal: boolean;
   showImportDocuments: boolean;
@@ -102,6 +105,7 @@ type State = {
 
 const initialState: State = {
   showReloadDocument: false,
+  showDeleteDocument: false,
   showImportDocuments: false,
   showDocumentList: false,
   alert: undefined,
@@ -119,6 +123,14 @@ const reducer = createReducer(initialState, _ => [
       ...cloneObj(initialState),
     })),
   ],
+  _(actionCreators.showDeleteDocument, state => ({
+    ...state,
+    showDeleteDocument: true,
+  })),
+  _(actionCreators.hideDeleteDocument, state => ({
+    ...state,
+    showDeleteDocument: false,
+  })),
   _(actionCreators.showReloadDocument, state => ({
     ...state,
     showReloadDocument: true,
@@ -130,6 +142,7 @@ const reducer = createReducer(initialState, _ => [
   _(dac.fetchFulfilled, state => ({
     ...state,
     showReloadDocument: false,
+    showDeleteDocument: false,
   })),
   _(dac.setDocumentId, (state, { payload: documentId }) => ({
     ...state,
