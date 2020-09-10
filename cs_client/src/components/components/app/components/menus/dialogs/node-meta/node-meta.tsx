@@ -25,7 +25,7 @@ const mapState = (state: Store) => {
   return {
     document,
     documentId: state.document.documentId,
-    node_id: document?.state?.selectedNode_id,
+    node_id: document?.persistedState?.selectedNode_id,
     nodes: document?.nodes,
     documentUserId: document?.userId,
     documentPrivacy: document?.privacy,

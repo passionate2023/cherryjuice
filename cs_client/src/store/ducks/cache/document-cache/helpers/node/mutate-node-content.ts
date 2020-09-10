@@ -19,9 +19,9 @@ const listDeletedImages = (
   deletedImages?: string[],
 ) => {
   if (deletedImages) {
-    if (!document.state.editedNodes.deletedImages[node_id])
-      document.state.editedNodes.deletedImages[node_id] = [];
-    document.state.editedNodes.deletedImages[node_id].push(
+    if (!document.localState.editedNodes.deletedImages[node_id])
+      document.localState.editedNodes.deletedImages[node_id] = [];
+    document.localState.editedNodes.deletedImages[node_id].push(
       ...deletedImages.filter(id => !id.startsWith(newImagePrefix)),
     );
   }
@@ -49,7 +49,7 @@ export const mutateNodeContent = (
     }
     node.updatedAt = updatedAt;
   }
-  document.state.localUpdatedAt = updatedAt;
+  document.localState.updatedAt = updatedAt;
   listNodeEditedAttributes({
     document,
     attributes: Object.keys(data),

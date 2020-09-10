@@ -14,8 +14,8 @@ const mapState = (state: Store) => {
     docking: state.root.docking,
     showRecentNodes: state.editor.showRecentNodesBar,
     nodes: document?.nodes,
-    selectedNode_id: document?.state?.selectedNode_id,
-    recentNodes: document?.state?.recentNodes,
+    selectedNode_id: document?.persistedState?.selectedNode_id,
+    recentNodes: document?.persistedState?.recentNodes,
     documentId: document?.id,
   };
 };

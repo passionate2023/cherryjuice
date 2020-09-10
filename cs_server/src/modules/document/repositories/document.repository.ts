@@ -12,7 +12,7 @@ import {
   CreateDocumentDTO,
   EditDocumentDTO,
   GetDocumentDTO,
-  GetDocumentsDTO,
+  GetDocumentsDTO, SetDocumentStateDTO,
 } from '../dto/document.dto';
 import {
   and_,
@@ -36,6 +36,7 @@ const documentMetaFields = [
   `d.nodes`, // nodes hash
   `d.userId`,
   `d.privacy`,
+  `d.state`,
   `g.userId`,
   `g.accessLevel`,
   `g.email`,
@@ -135,7 +136,7 @@ export class DocumentRepository extends Repository<Document> {
   private async updateDocument({
     meta,
     getDocumentDTO,
-  }: EditDocumentDTO): Promise<Document> {
+  }: EditDocumentDTO | SetDocumentStateDTO): Promise<Document> {
     const entries = Object.entries(meta);
     const document = await this.getWDocumentById(getDocumentDTO);
     const isDocumentOwner = document.userId === getDocumentDTO.userId;
@@ -164,7 +165,8 @@ export class DocumentRepository extends Repository<Document> {
       getDocumentDTO,
       meta: {
         ...meta,
-        updatedAt: meta.updatedAt ? new Date(meta.updatedAt) : new Date(),
+        updatedAt:
+          'updatedAt' in meta ? new Date(meta['updatedAt']) : new Date(),
       },
     });
   }
@@ -216,4 +218,14 @@ export class DocumentRepository extends Repository<Document> {
       await this.save(document);
     }
   };
+
+  async setState({
+    getDocumentDTO,
+    meta,
+  }: SetDocumentStateDTO): Promise<Document> {
+    return await this.updateDocument({
+      getDocumentDTO,
+      meta,
+    });
+  }
 }

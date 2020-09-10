@@ -49,11 +49,11 @@ import {
   collapseNode,
   expandNode,
 } from '::store/ducks/cache/document-cache/helpers/node/expand-node/expand-node';
-import { TreeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
 import {
   setScrollPosition,
   SetScrollPositionParams,
 } from '::store/ducks/cache/document-cache/helpers/node/set-scroll-position';
+import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
 
 const ap = createActionPrefixer('document-cache');
 
@@ -108,22 +108,25 @@ export type CachedNodesState = {
 
 export type NodeScrollPosition = [number, number];
 export type CachedDocumentState = {
-  selectedNode_id?: number;
-  recentNodes: number[];
   highestNode_id: number;
   editedAttributes: string[];
   editedNodes: CachedNodesState;
-  localUpdatedAt: number;
-  treeState: TreeState;
+  updatedAt: number;
+};
+export type PersistedDocumentState = {
+  selectedNode_id?: number;
+  treeState: NodeState;
   scrollPositions: {
     [node_id: number]: NodeScrollPosition;
   };
+  recentNodes: number[];
+  updatedAt: number;
 };
-
-export type CachedDocument = Omit<QDocumentMeta, 'node'> & {
+export type CachedDocument = Omit<QDocumentMeta, 'node' | 'state'> & {
   nodes: NodesDict;
   userId: string;
-  state: CachedDocumentState;
+  localState: CachedDocumentState;
+  persistedState: PersistedDocumentState;
 };
 
 type State = {

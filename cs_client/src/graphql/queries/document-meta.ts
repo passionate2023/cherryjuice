@@ -26,6 +26,7 @@ const DOCUMENT_META = ({ file_id }: Args) => ({
         node {
           ...NodeMeta
         }
+       
       }
     }
     ${DOCUMENT_LIST_ITEM}

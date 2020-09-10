@@ -9,7 +9,7 @@ import { VisibilityIcon } from '::root/components/app/components/editor/info-bar
 import { CachedDocument } from '::store/ducks/cache/document-cache';
 
 export const documentHasUnsavedChanges = (document: CachedDocument) =>
-  document?.state?.localUpdatedAt > document?.updatedAt;
+  document?.localState?.updatedAt > document?.updatedAt;
 
 const mapState = (state: Store, props: Props) => ({
   isSelected: state.documentsList.selectedIDs.includes(props.document.id),

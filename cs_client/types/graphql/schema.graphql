@@ -25,6 +25,7 @@ type Document {
     privacy: Privacy!
     privateNodes: [PrivateNode!]!
     size: Int!
+    state: DocumentState!
     status: String
     updatedAt: Float!
     userId: String!
@@ -41,8 +42,17 @@ type DocumentMutation {
     deleteDocument(documents: DeleteDocumentInputType!): String!
     editDocument(meta: EditDocumentIt!): String!
     node(node_id: Int): NodeMutation!
+    setState(state: DocumentStateIt!): String!
     uploadFile(files: [CTBUpload!]!): Boolean!
     uploadFromGDrive(file: UploadLinkInputType!): Boolean!
+}
+
+type DocumentState {
+    recentNodes: [Int!]!
+    scrollPositions: [NodeScrollPosition!]!
+    selectedNode_id: Int!
+    treeState: [Int!]!
+    updatedAt: Timestamp!
 }
 
 type DocumentSubscription {
@@ -96,6 +106,12 @@ type NodeMutation {
     editMeta(meta: [NodeMetaIt!]!): [ID!]!
     saveAHtml(data: SaveHtmlIt!): String!
     uploadImage(images: [ImageUpload!]!): [[String!]!]!
+}
+
+type NodeScrollPosition {
+    node_id: Int!
+    x: Int!
+    y: Int!
 }
 
 type NodeSearchResultEntity {
@@ -348,6 +364,14 @@ input DocumentGuestIt {
     userId: String!
 }
 
+input DocumentStateIt {
+    recentNodes: [Int!] = []
+    scrollPositions: [NodeScrollPositionIt!] = []
+    selectedNode_id: Int = 0
+    treeState: [Int!] = []
+    updatedAt: Timestamp = 1599733205281
+}
+
 input EditDocumentIt {
     guests: [DocumentGuestIt]
     name: String
@@ -378,6 +402,12 @@ input NodeMetaIt {
     read_only: Int
     sequence: Float
     updatedAt: Timestamp!
+}
+
+input NodeScrollPositionIt {
+    node_id: Int!
+    x: Int!
+    y: Int!
 }
 
 input NodeSearchIt {

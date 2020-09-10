@@ -7,6 +7,7 @@ import { ac, store } from '::store/store';
 import { Store } from '::store/store';
 import { useEffect } from 'react';
 import { getDocuments } from '::store/selectors/cache/document/document';
+import { testIds } from '::cypress/support/helpers/test-ids';
 
 const createAlert = (selectedDocumentIds: string[]): TAlert => {
   let numberOfNodes = 0;
@@ -67,6 +68,7 @@ const DeleteDocument: React.FC<Props & PropsFromRedux> = ({
           ? () => ac.documentsList.deleteDocument(selectedDocumentIds[0])
           : ac.documentsList.deleteDocuments,
       disabled: false,
+      testId: testIds.modal__deleteDocument__confirm
     },
   ];
   useEffect(() => {

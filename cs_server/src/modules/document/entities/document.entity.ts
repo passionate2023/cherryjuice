@@ -21,6 +21,7 @@ import { randomUUID10 } from '../../shared';
 import hash from 'object-hash';
 import { DocumentGuest } from './document-guest.entity';
 import { User } from '../../user/entities/user.entity';
+import { DocumentState } from './document-state.entity';
 
 export type NodesHash = { [node_id: number]: { hash: string } };
 export enum Privacy {
@@ -51,6 +52,7 @@ export class Document extends BaseEntity {
       this.userId = userId;
       this.privacy = privacy;
       this.hash = '';
+      this.state = new DocumentState()
     }
   }
   @PrimaryColumn()
@@ -116,4 +118,8 @@ export class Document extends BaseEntity {
 
   @Field(() => [DocumentGuest], { nullable: 'itemsAndList' })
   guests: DocumentGuest[];
+
+  @Column({ type: 'json' })
+  @Field(() => DocumentState)
+  state: DocumentState;
 }

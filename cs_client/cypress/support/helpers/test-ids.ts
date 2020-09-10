@@ -44,6 +44,7 @@ const testIds = {
   toolBar__userPopup__signOut: 'toolBar__userPopup__signOut',
   toolBar__userPopup__signIn: 'toolBar__userPopup__signIn',
   toolBar__navBar__userButton: 'toolBar__navBar__userButton',
+  modal__deleteDocument__confirm: 'modal__deleteDocument__confirm',
 };
 
 export { testIds };

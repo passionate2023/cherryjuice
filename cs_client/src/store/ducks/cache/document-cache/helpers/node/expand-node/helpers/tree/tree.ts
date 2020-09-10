@@ -1,14 +1,7 @@
 import { NodesDict } from '::store/ducks/cache/document-cache';
 
-export type NodeState =
-  | undefined
-  | false
-  | {
-      [node_id: number]: undefined | false | NodeState;
-    };
-
-export type TreeState = {
-  0: {
+export type NodeState = {
+  [node_id: number]: {
     [node_id: number]: NodeState;
   };
 };
@@ -28,7 +21,7 @@ export const getParentsNode_ids = (
 
 export const expandNode = (
   nodes: NodesDict,
-  tree: TreeState,
+  tree: NodeState,
   node_id: number,
   expandChildren = true,
 ) => {
@@ -45,7 +38,7 @@ export const expandNode = (
 
 export const collapseNode = (
   nodes: NodesDict,
-  tree: TreeState,
+  tree: NodeState,
   node_id: number,
 ) => {
   const father_ids = getParentsNode_ids(undefined, nodes, node_id).reverse();
@@ -60,4 +53,20 @@ export const collapseNode = (
       fatherState = fatherState[current_node_id];
     }
   }
+};
+
+export const flattenTree = (tree: NodeState, list: number[] = []): number[] => {
+  Object.entries(tree).forEach(([node_id, subTree]) => {
+    list.push(+node_id);
+    flattenTree(subTree, list);
+  });
+  return list;
+};
+
+export const unFlattenTree = (flat: number[], nodes: NodesDict): NodeState => {
+  const tree = { 0: {} };
+  flat.forEach(node_id => {
+    expandNode(nodes, tree, node_id);
+  });
+  return tree;
 };

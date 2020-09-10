@@ -14,6 +14,7 @@ export type QDocumentsListItem = Pick<
   | 'updatedAt'
   | 'guests'
   | 'privacy'
+  | 'state'
 >;
 
 export const DOCUMENT_LIST_ITEM = gql`
@@ -27,6 +28,17 @@ export const DOCUMENT_LIST_ITEM = gql`
     createdAt
     updatedAt
     privacy
+    state {
+      updatedAt
+      recentNodes
+      scrollPositions {
+        node_id
+        x
+        y
+      }
+      selectedNode_id
+      treeState
+    }
     ...DocumentGuest
   }
   ${DOCUMENT_GUEST}

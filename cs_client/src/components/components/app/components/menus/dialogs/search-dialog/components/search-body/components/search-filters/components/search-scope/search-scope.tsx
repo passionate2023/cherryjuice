@@ -17,7 +17,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const mapState = (state: Store) => ({
   selectedScope: state.search.searchScope,
-  selectedNode_id: getCurrentDocument(state)?.state?.selectedNode_id,
+  selectedNode_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
   documentId: state.document.documentId,
   isDocumentOwner: hasWriteAccessToDocument(state),
 });

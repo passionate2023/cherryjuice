@@ -31,7 +31,7 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
         } = store.getState().search;
         const document = getCurrentDocument(store.getState());
         const documentId = document.id;
-        const nodeId = document.nodes[document.state.selectedNode_id].id;
+        const nodeId = document.nodes[document.persistedState.selectedNode_id].id;
         const request = gqlQuery({
           ...QUERY.SEARCH.searchNode,
           variables: QUERY.SEARCH.searchNode.args({

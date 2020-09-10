@@ -28,6 +28,8 @@ export const deleteDocuments = (
       cy.findByTestId(
         testIds.dialogs__selectDocument__header__buttons__delete,
       ).click();
+      cy.findByTestId(testIds.modal__deleteDocument__confirm).click();
+      wait.s1;
       wait.s1;
       wait.s1;
     }

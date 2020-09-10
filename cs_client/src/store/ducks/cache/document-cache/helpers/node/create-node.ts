@@ -3,6 +3,7 @@ import {
   QFullNode,
 } from '::store/ducks/cache/document-cache';
 import { listNodeEditedAttributes } from '::store/ducks/cache/document-cache/helpers/node/mutate-node-meta';
+import { expandNode } from '::store/ducks/cache/document-cache/helpers/node/expand-node/expand-node';
 
 export type CreateNodeParams = {
   createdNode: QFullNode;
@@ -26,14 +27,23 @@ export const createNode = (
       ? fatherNode.child_nodes.push(node.node_id)
       : fatherNode.child_nodes.splice(position, 0, node.node_id);
 
-  document.state.editedNodes.created.push(node.node_id);
+  document.localState.editedNodes.created.push(node.node_id);
   listNodeEditedAttributes({
     document,
     node_id: node.father_id,
     attributes: ['child_nodes'],
   });
-  document.state.selectedNode_id = node.node_id;
-  document.state.localUpdatedAt = Date.now();
-  document.state.highestNode_id = node.node_id;
+  document.persistedState.selectedNode_id = node.node_id;
+  document.persistedState.updatedAt = Date.now();
+  document.localState.updatedAt = Date.now();
+  document.localState.highestNode_id = node.node_id;
+  expandNode(
+    { [document.id]: document },
+    {
+      node_id: document.persistedState.selectedNode_id,
+      documentId: document.id,
+      expandChildren: true,
+    },
+  );
   return state;
 };

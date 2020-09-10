@@ -21,7 +21,7 @@ const mapState = (state: Store) => {
       documentHasUnsavedChanges,
     ),
     documentHasUnsavedChanges: documentHasUnsavedChanges(document),
-    selectedNode_id: document?.state?.selectedNode_id,
+    selectedNode_id: document?.persistedState?.selectedNode_id,
     documentId: state.document.documentId,
     isDocumentOwner: hasWriteAccessToDocument(state),
   };

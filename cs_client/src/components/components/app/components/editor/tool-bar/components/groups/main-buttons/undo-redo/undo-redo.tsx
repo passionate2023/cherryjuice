@@ -12,7 +12,7 @@ import { Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const mapState = (state: Store) => ({
-  node_id: getCurrentDocument(state)?.state?.selectedNode_id,
+  node_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
   documentId: state.document.documentId,
 });
 const mapDispatch = {};

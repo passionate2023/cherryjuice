@@ -1,6 +1,8 @@
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
-import { getDefaultState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-state';
 import { DocumentMeta } from '::types/graphql-adapters';
+import { getDefaultPersistedState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-persisted-state';
+import { getDefaultLocalState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-local-state';
+import { pluckProperties } from '::store/ducks/cache/document-cache/helpers/document/shared/pluck-document-meta';
 
 export type LoadDocumentsListPayload = DocumentMeta[];
 
@@ -9,14 +11,15 @@ export const loadDocumentsList = (
   documents: LoadDocumentsListPayload,
 ): DocumentCacheState => {
   {
-    const fetchedDocuments = Object.fromEntries(
+    const fetchedDocuments: DocumentCacheState = Object.fromEntries(
       documents.map(document => [
         document.id,
         {
-          ...document,
+          ...pluckProperties(document),
           nodes: {},
           privateNodes: [],
-          state: getDefaultState(),
+          persistedState: getDefaultPersistedState(),
+          localState: getDefaultLocalState(document.id, undefined),
         },
       ]),
     );

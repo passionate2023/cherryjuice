@@ -9,7 +9,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
-  const selectedNode_id = document?.state?.selectedNode_id;
+  const selectedNode_id = document?.persistedState?.selectedNode_id;
   const node = document?.nodes ? document.nodes[selectedNode_id] : undefined;
   return {
     node,
@@ -41,7 +41,7 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
   return showBar ? (
     <footer className={modInfoBar.infoBar}>
       <div className={modInfoBar.infoBar__group}>
-        {selectedNode_id ? (
+        {selectedNode_id && node ? (
           <Timestamps node={node} />
         ) : (
           <NoSelectedDocument noSelectedDocument={noSelectedDocument} />

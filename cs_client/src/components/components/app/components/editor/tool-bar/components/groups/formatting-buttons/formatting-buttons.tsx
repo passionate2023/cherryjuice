@@ -15,7 +15,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const mapState = (state: Store) => {
   return {
-    selectedNode_id: getCurrentDocument(state)?.state?.selectedNode_id,
+    selectedNode_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
     documentId: state.document.documentId,
     formattingHotKeys: getHotkeys(state).formatting,
   };

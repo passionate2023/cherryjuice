@@ -14,7 +14,7 @@ export const expandNode = (
   const document = state[documentId];
   _expandNode(
     document.nodes,
-    document.state.treeState,
+    document.persistedState.treeState,
     node_id,
     expandChildren,
   );
@@ -27,6 +27,6 @@ export const collapseNode = (
 ): DocumentCacheState => {
   node_id = +node_id;
   const document = state[documentId];
-  _collapseNode(document.nodes, document.state.treeState, node_id);
+  _collapseNode(document.nodes, document.persistedState.treeState, node_id);
   return state;
 };

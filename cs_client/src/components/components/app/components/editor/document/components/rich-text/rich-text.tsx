@@ -16,7 +16,7 @@ type Props = {
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
-  const node_id = document?.state?.selectedNode_id;
+  const node_id = document?.persistedState?.selectedNode_id;
   return {
     fetchDocumentInProgress:
       state.document.asyncOperations.fetch === 'in-progress',
@@ -27,8 +27,8 @@ const mapState = (state: Store) => {
     isDocumentOwner: hasWriteAccessToDocument(state),
     isOnMd: state.root.isOnMd,
     scrollPosition:
-      document?.state?.scrollPositions &&
-      document.state.scrollPositions[node_id],
+      document?.persistedState?.scrollPositions &&
+      document.persistedState.scrollPositions[node_id],
   };
 };
 const mapDispatch = {};

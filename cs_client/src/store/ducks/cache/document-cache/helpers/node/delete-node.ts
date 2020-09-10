@@ -27,16 +27,19 @@ export const deleteNode = (
     node_id: fatherNode.node_id,
     attributes: ['child_nodes'],
   });
-  document.state.editedNodes.deleted.push(node_id);
-  if (document.state.highestNode_id === node_id)
-    document.state.highestNode_id = getDefaultHighestNode_id(document.nodes);
-  document.state.recentNodes = calcRecentNodes({
+  document.localState.editedNodes.deleted.push(node_id);
+  if (document.localState.highestNode_id === node_id)
+    document.localState.highestNode_id = getDefaultHighestNode_id(
+      document.nodes,
+    );
+  document.persistedState.recentNodes = calcRecentNodes({
     nodes: document.nodes,
-    recentNodes: state[documentId].state.recentNodes,
+    recentNodes: state[documentId].persistedState.recentNodes,
     node_id,
   });
-  document.state.selectedNode_id =
+  document.persistedState.selectedNode_id =
     fatherNode.node_id || getDefaultSelectedNode_id(document.nodes);
-  document.state.localUpdatedAt = Date.now();
+  document.localState.updatedAt = Date.now();
+  document.persistedState.updatedAt = Date.now();
   return state;
 };

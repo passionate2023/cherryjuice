@@ -13,7 +13,7 @@ export const listNodeEditedAttributes = ({
   attributes: string[];
   node_id: number;
 }) => {
-  const editedNodes = document.state.editedNodes;
+  const editedNodes = document.localState.editedNodes;
   if (!editedNodes.edited[node_id]) editedNodes.edited[node_id] = [];
   attributes.forEach(k => {
     if (!editedNodes.edited[node_id].includes(k))
@@ -50,7 +50,7 @@ export const mutateNodeMeta = (
       node_id,
     });
     node.updatedAt = updatedAt;
-    document.state.localUpdatedAt = updatedAt;
+    document.localState.updatedAt = updatedAt;
   });
 
   return state;

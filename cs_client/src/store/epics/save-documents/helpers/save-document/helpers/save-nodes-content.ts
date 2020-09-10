@@ -6,7 +6,7 @@ import { updateDocumentId } from '::store/epics/save-documents/helpers/save-docu
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 
 const saveNodesContent = async ({ document, state }: SaveOperationProps) => {
-  const nodes = Object.entries(document.state.editedNodes.edited)
+  const nodes = Object.entries(document.localState.editedNodes.edited)
     .filter(
       ([node_id, attributes]): boolean =>
         attributes.includes('html') &&
@@ -39,7 +39,7 @@ const saveNodesContent = async ({ document, state }: SaveOperationProps) => {
               ? '[]'
               : JSON.stringify(aHtml),
           deletedImages:
-            document.state.editedNodes.deletedImages[node.node_id] || [],
+            document.localState.editedNodes.deletedImages[node.node_id] || [],
           updatedAt: node.updatedAt,
         },
       },

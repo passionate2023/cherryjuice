@@ -30,7 +30,7 @@ const mapState = (state: Store) => {
     filteredNodes: state.document.filteredNodes,
     nodes: nodes,
     documentPrivacy: document.privacy,
-    treeState: document.state.treeState,
+    treeState: document.persistedState.treeState,
   };
 };
 const mapDispatch = {};

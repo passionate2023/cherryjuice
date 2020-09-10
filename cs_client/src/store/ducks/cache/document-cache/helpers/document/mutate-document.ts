@@ -17,9 +17,9 @@ export const mutateDocument = (
   const document = state[payload.documentId];
   Object.entries(payload.meta).forEach(([key, value]) => {
     document[key] = value;
-    if (!document.state.editedAttributes.includes(key))
-      document.state.editedAttributes.push(key);
+    if (!document.localState.editedAttributes.includes(key))
+      document.localState.editedAttributes.push(key);
   });
-  document.state.localUpdatedAt = Date.now();
+  document.localState.updatedAt = Date.now();
   return state;
 };

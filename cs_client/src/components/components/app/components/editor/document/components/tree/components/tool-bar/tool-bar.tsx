@@ -11,7 +11,7 @@ import { ButtonSquare } from '::root/components/shared-components/buttons/button
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
 
-  const selectedNodeId = document?.state?.selectedNode_id;
+  const selectedNodeId = document?.persistedState?.selectedNode_id;
   const father_id = document?.nodes && document.nodes[selectedNodeId].father_id;
   return {
     node_id: father_id,
