@@ -15,7 +15,6 @@ const saveDocuments = async (
   state: SaveOperationState,
   editedDocuments: CachedDocument[],
 ): Promise<SaveOperationState> => {
-
   for (const document of editedDocuments) {
     state.deletedNodes[document.id] = {};
     await saveNewDocument({ state, document });

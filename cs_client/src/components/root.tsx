@@ -36,6 +36,7 @@ import { documentHasUnsavedChanges } from '::root/components/app/components/menu
 import { useRouterEffect } from '::root/components/app/components/editor/hooks/router-effect/router-effect';
 import { Router } from 'react-router-dom';
 import { router } from '::root/router/router';
+import { useTasks } from '::root/hooks/tasks';
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
@@ -95,7 +96,7 @@ const Root: React.FC<Props & PropsFromRedux> = ({
     userId,
   });
   useRouterEffect();
-
+  useTasks();
   useConsumeToken({ userId });
   return (
     <Suspense fallback={<Void />}>

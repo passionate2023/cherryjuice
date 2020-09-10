@@ -66,7 +66,7 @@ export const flattenTree = (tree: NodeState, list: number[] = []): number[] => {
 export const unFlattenTree = (flat: number[], nodes: NodesDict): NodeState => {
   const tree = { 0: {} };
   flat.forEach(node_id => {
-    expandNode(nodes, tree, node_id);
+    if (node_id) expandNode(nodes, tree, node_id);
   });
   return tree;
 };

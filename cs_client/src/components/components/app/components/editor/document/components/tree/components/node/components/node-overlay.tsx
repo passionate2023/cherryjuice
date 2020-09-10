@@ -18,7 +18,8 @@ const NodeOverlay: React.FC<Props> = ({
 }) => {
   const selectedNode_id = useSelector<Store>(
     state =>
-      state.documentCache[state.document.documentId]?.persistedState?.selectedNode_id,
+      state.documentCache[state.document.documentId]?.persistedState
+        ?.selectedNode_id,
   );
   const clicks = useRef({ 0: true });
   const isSelected =

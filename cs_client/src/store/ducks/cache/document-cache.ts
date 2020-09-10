@@ -121,6 +121,7 @@ export type PersistedDocumentState = {
   };
   recentNodes: number[];
   updatedAt: number;
+  localUpdatedAt: number;
 };
 export type CachedDocument = Omit<QDocumentMeta, 'node' | 'state'> & {
   nodes: NodesDict;

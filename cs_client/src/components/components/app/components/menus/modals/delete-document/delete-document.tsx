@@ -68,7 +68,7 @@ const DeleteDocument: React.FC<Props & PropsFromRedux> = ({
           ? () => ac.documentsList.deleteDocument(selectedDocumentIds[0])
           : ac.documentsList.deleteDocuments,
       disabled: false,
-      testId: testIds.modal__deleteDocument__confirm
+      testId: testIds.modal__deleteDocument__confirm,
     },
   ];
   useEffect(() => {

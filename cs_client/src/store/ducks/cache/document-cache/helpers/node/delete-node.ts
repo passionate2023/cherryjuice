@@ -40,6 +40,6 @@ export const deleteNode = (
   document.persistedState.selectedNode_id =
     fatherNode.node_id || getDefaultSelectedNode_id(document.nodes);
   document.localState.updatedAt = Date.now();
-  document.persistedState.updatedAt = Date.now();
+  document.persistedState.localUpdatedAt = Date.now();
   return state;
 };

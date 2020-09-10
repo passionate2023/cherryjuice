@@ -23,7 +23,7 @@ export const selectNode = (
       ),
       node_id,
     ];
-    document.persistedState.updatedAt = Date.now();
+    document.persistedState.localUpdatedAt = Date.now();
   }
   return state;
 };

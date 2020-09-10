@@ -12,7 +12,8 @@ import {
   CreateDocumentDTO,
   EditDocumentDTO,
   GetDocumentDTO,
-  GetDocumentsDTO, SetDocumentStateDTO,
+  GetDocumentsDTO,
+  SetDocumentStateDTO,
 } from '../dto/document.dto';
 import {
   and_,

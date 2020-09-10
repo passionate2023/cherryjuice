@@ -13,6 +13,6 @@ export const setScrollPosition = (
 ) => {
   const document = state[documentId];
   document.persistedState.scrollPositions[node_id] = position;
-  document.persistedState.updatedAt = Date.now();
+  document.persistedState.localUpdatedAt = Date.now();
   return state;
 };

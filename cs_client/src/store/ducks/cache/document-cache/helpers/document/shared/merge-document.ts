@@ -49,7 +49,7 @@ export const mergeDocument = (
   }
   if (nextNode && newCachedDocument.nodes[nextNode.node_id]) {
     newCachedDocument.persistedState.selectedNode_id = nextNode.node_id;
-    newCachedDocument.persistedState.updatedAt = Date.now();
+    newCachedDocument.persistedState.localUpdatedAt = Date.now();
   }
   expandNode(
     { [newCachedDocument.id]: newCachedDocument },

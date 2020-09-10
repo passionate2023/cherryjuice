@@ -3,8 +3,6 @@ import { apolloClient } from '::graphql/client/apollo-client';
 import { SET_DOCUMENT_STATE } from '::graphql/mutations/document/set-document-state';
 import { adaptToPersistedState } from '::store/ducks/cache/document-cache/helpers/document/shared/adapt-persisted-state';
 
-
-
 const saveDocumentState = async ({ document, state }: SaveOperationProps) => {
   await apolloClient.mutate(
     SET_DOCUMENT_STATE({

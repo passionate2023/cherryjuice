@@ -52,7 +52,7 @@ export class Document extends BaseEntity {
       this.userId = userId;
       this.privacy = privacy;
       this.hash = '';
-      this.state = new DocumentState()
+      this.state = new DocumentState();
     }
   }
   @PrimaryColumn()

@@ -30,6 +30,7 @@ export const adaptFromPersistedState = ({
     ),
     selectedNode_id: selectedNode_id || getDefaultSelectedNode_id(nodes),
     updatedAt,
+    localUpdatedAt: updatedAt
   };
 };
 
@@ -38,10 +39,10 @@ export const adaptToPersistedState = ({
   selectedNode_id,
   treeState,
   scrollPositions,
-  updatedAt,
+  localUpdatedAt,
 }: PersistedDocumentState): DocumentState => {
   return {
-    updatedAt: new Date(updatedAt),
+    updatedAt: new Date(localUpdatedAt),
     recentNodes,
     selectedNode_id,
     treeState: flattenTree(treeState),
