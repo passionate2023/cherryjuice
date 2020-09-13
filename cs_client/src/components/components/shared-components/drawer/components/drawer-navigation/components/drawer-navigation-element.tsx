@@ -1,19 +1,19 @@
 import modDrawer from '::sass-modules/shared-components/drawer.scss';
 import * as React from 'react';
 import { useCallback } from 'react';
-import { connect, ConnectedProps, useSelector } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { AlertType } from '::types/react';
 import { ScreenName } from '::root/components/app/components/menus/dialogs/settings/screens/screens';
+import { screenHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/settings/settings';
 
 type Func = () => void;
-const useUnsavedSettingsPrompt = (save: Func, discard: Func) => {
-  const screenHasChanges = useSelector(
-    (state: Store) => state.settings.screenHasChanges,
-  );
-  const selectedScreenTitle = useSelector(
-    (state: Store) => state.settings.selectedScreen,
-  );
+const useUnsavedSettingsPrompt = (
+  screenHasChanges: boolean,
+  selectedScreenTitle: ScreenName,
+  save: Func,
+  discard: Func[],
+) => {
   return useCallback(() => {
     if (screenHasChanges) {
       ac.dialogs.setAlert({
@@ -26,15 +26,16 @@ const useUnsavedSettingsPrompt = (save: Func, discard: Func) => {
         },
         dismissAction: {
           name: 'discard',
-          callbacks: [discard],
+          callbacks: discard,
         },
       });
-    } else discard();
+    } else discard.forEach(discard => discard());
   }, [save, discard, screenHasChanges, selectedScreenTitle]);
 };
 
 const mapState = (state: Store) => ({
   selectedScreenTitle: state.settings.selectedScreen,
+  screenHasChanges: screenHasUnsavedChanges(state),
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -45,11 +46,14 @@ type DrawerNavigationElementProps = {
 };
 
 const DrawerNavigationElement: React.FC<DrawerNavigationElementProps &
-  PropsFromRedux> = ({ title, selectedScreenTitle }) => {
+  PropsFromRedux> = ({ title, selectedScreenTitle, screenHasChanges }) => {
   const onClick = useUnsavedSettingsPrompt(
+    screenHasChanges,
+    selectedScreenTitle,
     () => ac.settings.save(title),
-    () => ac.settings.selectScreen(title),
+    [() => ac.settings.selectScreen(title), ac.editorSettings.undoChanges],
   );
+
   const isSelected = selectedScreenTitle === title;
   return (
     <span

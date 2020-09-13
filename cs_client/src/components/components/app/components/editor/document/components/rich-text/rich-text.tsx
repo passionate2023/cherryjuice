@@ -45,8 +45,8 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   scrollPosition,
 }) => {
   useLayoutEffect(() => {
-    if (!fetchDocumentInProgress) ac.node.fetch(node);
-  }, [node.node_id, node.documentId, fetchDocumentInProgress]);
+    if (!node?.html && !fetchDocumentInProgress) ac.node.fetch(node);
+  }, [node?.node_id, node?.documentId, fetchDocumentInProgress]);
   const nodeId = node?.id;
   const html = node?.html;
   const images = node?.image;

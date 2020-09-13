@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { createRef } from 'react';
-import { modUserProfile } from '::sass-modules';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
@@ -13,6 +12,7 @@ import {
 } from '::root/components/app/components/menus/dialogs/settings/screens/account/reducer/reducer';
 import { UserToken, UserTokenType } from '::types/graphql/generated';
 import { ChangeEmail } from '::root/components/app/components/menus/dialogs/settings/screens/account/components/email/components/change-email';
+import { SettingsGroup } from '::root/components/app/components/menus/dialogs/settings/shared/settings-group';
 
 const idPrefix = 'settings::email';
 type Props = {
@@ -48,23 +48,20 @@ const Email: React.FC<Props> = ({
     disabled: !emailVerified,
   };
   return (
-    <div className={modUserProfile.userProfile__group}>
-      <span className={modUserProfile.userProfile__group__name}>email</span>
-      <div className={modUserProfile.userProfile__group__elements}>
-        <ValidatedTextInput {...inputProps} />
+    <SettingsGroup name={'email'}>
+      <ValidatedTextInput {...inputProps} />
 
-        {emailVerified ? (
-          changeEmailToken && (
-            <ChangeEmail email={currentEmail} token={changeEmailToken} />
-          )
-        ) : (
-          <VerifyEmail
-            emailVerificationPending={Boolean(verifyEmailToken)}
-            email={currentEmail}
-          />
-        )}
-      </div>
-    </div>
+      {emailVerified ? (
+        changeEmailToken && (
+          <ChangeEmail email={currentEmail} token={changeEmailToken} />
+        )
+      ) : (
+        <VerifyEmail
+          emailVerificationPending={Boolean(verifyEmailToken)}
+          email={currentEmail}
+        />
+      )}
+    </SettingsGroup>
   );
 };
 

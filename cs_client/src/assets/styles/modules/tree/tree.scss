@@ -21,6 +21,7 @@
   flex-direction: column;
   height: calc(100% - 30px);
   overflow: auto;
+  background-color: var(--treeBg);
 }
 .tree__resize-handle {
   height: calc(

@@ -24,13 +24,13 @@
 .node__title {
   padding: 7px 7px 7px 6px;
   text-decoration: none;
-  font-family: Verdana N, sans-serif;
-  color: white;
   text-align: left;
   font-weight: 400;
-  font-size: 18px;
   z-index: $ZI-node-elements;
   min-height: 21px;
+  color: var(--treeColor);
+  font-family: var(--treeFont);
+  font-size: var(--treeFontSize);
 }
 
 .node__toggle-children {

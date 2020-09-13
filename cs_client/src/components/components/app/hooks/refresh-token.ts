@@ -4,7 +4,7 @@ import { ac } from '::store/store';
 
 export const useRefreshToken = ({ token }) => {
   const [fetch, { data, error }] = useLazyQuery(QUERY_USER.query, {
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'no-cache',
   });
   useEffect(() => {
     if (token) fetch();

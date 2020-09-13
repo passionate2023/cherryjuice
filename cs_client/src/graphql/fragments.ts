@@ -45,6 +45,21 @@ const FRAGMENT_AUTH_USER = {
             type
           }
         }
+        editorSettings {
+          codeBg
+          codeFont
+          codeFontSize
+          monospaceBg
+          richTextBg
+          richTextColor
+          richTextFont
+          richTextFontSize
+          treeBg
+          treeColor
+          treeFont
+          treeFontSize
+          version
+        }
       }
     }
     ${FRAGMENT_USER.userInfo}

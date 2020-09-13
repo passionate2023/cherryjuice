@@ -22,7 +22,7 @@ type State = {
 const initialState: State = {
   isOnMb: false,
   isOnMd: false,
-  dockedDialog: true,
+  dockedDialog: false,
   docking: false,
 };
 const reducer = createReducer(initialState, _ => [

@@ -9,6 +9,7 @@ import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-a
 import { useUpdateCssVariables } from '::root/components/app/hooks/update-css-variables';
 import { useGetPreviousOperations } from '::root/components/app/components/menus/widgets/components/document-operations/hooks/get-previous-operations';
 import { useGetActiveOperations } from '::root/components/app/components/menus/widgets/components/document-operations/hooks/get-active-operations';
+import { useApplyEditorSettings } from '::root/components/app/hooks/apply-editor-settings';
 
 const Menus = React.lazy(() =>
   import('::root/components/app/components/menus/menus'),
@@ -27,8 +28,6 @@ const mapState = (state: Store) => ({
   dockedDialog: state.root.dockedDialog,
   isDocumentOwner: hasWriteAccessToDocument(state),
   userId: state.auth.user?.id,
-  searchDialogIsShown:
-    state.root.dockedDialog && state.search.searchState !== 'idle',
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -41,7 +40,6 @@ const App: React.FC<Props & PropsFromRedux> = ({
   dockedDialog,
   isDocumentOwner,
   userId,
-  searchDialogIsShown,
   showRecentNodes,
 }) => {
   useUpdateCssVariables(
@@ -49,13 +47,12 @@ const App: React.FC<Props & PropsFromRedux> = ({
     showFormattingButtons,
     showTree,
     treeWidth,
-    searchDialogIsShown,
     showRecentNodes,
   );
   // useRefreshToken({ token });
   useGetPreviousOperations();
   useGetActiveOperations(userId);
-
+  useApplyEditorSettings();
   return (
     <div
       className={joinClassNames([

@@ -48,6 +48,12 @@ const useApolloClient = (token: string, userId: string) => {
       },
     });
     const client = new ApolloClient({
+      defaultOptions: {
+        query: {
+          fetchPolicy: 'no-cache',
+          errorPolicy: 'all',
+        },
+      },
       cache: new InMemoryCache(),
       link: split(
         // split based on operation type

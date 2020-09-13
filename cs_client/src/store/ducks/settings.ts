@@ -69,7 +69,6 @@ const reducer = createReducer(initialState, _ => [
   ...[
     _(ac.setUserProfileChanges, (state, { payload }) => ({
       ...state,
-      screenHasChanges: true,
       userProfileChanges: payload,
     })),
     _(
@@ -77,7 +76,6 @@ const reducer = createReducer(initialState, _ => [
       state =>
         ({
           ...state,
-          screenHasChanges: false,
           userProfileChanges: undefined,
         } as State),
     ),

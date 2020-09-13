@@ -11,9 +11,6 @@ const onKeyDown = e => {
     } else if (e.keyCode === 8) {
       handleBackSpace(e);
     } else if (e.keyCode === 13) {
-      if (process.env.NODE_ENV === 'development')
-        // eslint-disable-next-line no-console
-        console.log('handling enter', new Date());
       handleEnter(e);
     }
   } catch (error) {

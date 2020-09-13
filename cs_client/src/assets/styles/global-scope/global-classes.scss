@@ -1,8 +1,10 @@
 @import '../mixins/misc';
 .rich-text__code {
   border: solid 1px bisque;
-  background-color: darkslateblue;
   overflow: auto;
+  background-color: var(--codeBg);
+  font-family: var(--codeFont);
+  font-size: var(--codeFontSize);
 }
 .rich-text__image {
   display: inline-block;

@@ -8,3 +8,18 @@
   color: black;
 }
 
+.settings__group-container {
+  display: flex;
+  color: black;
+  flex-direction: column;
+  width: 100%;
+}
+
+.settings-element {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.settings-element__name {
+  padding: 5px;
+}

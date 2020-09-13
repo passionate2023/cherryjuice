@@ -150,7 +150,7 @@ const reducer = createReducer(initialState, _ => [
   })),
   _(aac.setAuthenticationSucceeded, state => ({
     ...state,
-    showDocumentList: true,
+    showDocumentList: state.showSettingsDialog ? state.showDocumentList : true,
   })),
   // alert
   _(actionCreators.setAlert, (state, { payload }) => ({

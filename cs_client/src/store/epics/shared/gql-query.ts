@@ -14,7 +14,7 @@ const gqlQuery = <Variables, Data>(
   from(
     apolloClient.query<Variables, Data>({
       ...args,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
     }),
   );
 const gqlMutation = <Variables, Data>(

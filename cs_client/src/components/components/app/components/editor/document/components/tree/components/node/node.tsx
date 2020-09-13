@@ -65,7 +65,6 @@ const Node: React.FC<NodeProps> = ({
     draggable: false,
   });
   const nodeStyle = JSON.parse(node_title_styles || '{}');
-  if (!nodeStyle.color) nodeStyle.color = '#ffffff';
   const icon_id = +nodeStyle.icon_id;
   return (
     <>

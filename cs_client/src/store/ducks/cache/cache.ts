@@ -21,10 +21,9 @@ type State = {
   };
 };
 
-const initialHotKeysChanges = {};
 const initialState: State = {
   settings: {
-    hotKeys: initialHotKeysChanges,
+    hotKeys: {},
     syncHotKeysWithCache: undefined,
   },
 };
@@ -34,7 +33,7 @@ const reducer = createReducer(initialState, _ => [
       ...state,
       settings: {
         ...state.settings,
-        hotKeys: initialHotKeysChanges,
+        hotKeys: {},
       },
     })),
     _(ac.updateHotkeys, (state, { payload }) => ({
@@ -52,7 +51,7 @@ const reducer = createReducer(initialState, _ => [
       ...state,
       settings: {
         ...state.settings,
-        hotKeys: initialHotKeysChanges,
+        hotKeys: {},
       },
     })),
     _(ac.syncHotKeysWithCache, state => ({

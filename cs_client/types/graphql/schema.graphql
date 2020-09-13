@@ -62,6 +62,22 @@ type DocumentSubscription {
     status: DOCUMENT_SUBSCRIPTIONS!
 }
 
+type EditorSettings {
+    codeBg: String!
+    codeFont: String!
+    codeFontSize: String!
+    monospaceBg: String!
+    richTextBg: String!
+    richTextColor: String!
+    richTextFont: String!
+    richTextFontSize: String!
+    treeBg: String!
+    treeColor: String!
+    treeFont: String!
+    treeFontSize: String!
+    version: Float!
+}
+
 type HotKey {
     keys: String
     type: HotKeyActionType!
@@ -158,6 +174,7 @@ type Secrets {
 }
 
 type Settings {
+    editorSettings: EditorSettings!
     hotKeys: HotKeys!
 }
 
@@ -369,7 +386,7 @@ input DocumentStateIt {
     scrollPositions: [NodeScrollPositionIt!] = []
     selectedNode_id: Int = 0
     treeState: [Int!] = []
-    updatedAt: Timestamp = 1599733205281
+    updatedAt: Timestamp = 1599976788983
 }
 
 input EditDocumentIt {
@@ -377,6 +394,22 @@ input EditDocumentIt {
     name: String
     privacy: Privacy
     updatedAt: Timestamp!
+}
+
+input EditorSettingsIt {
+    codeBg: String!
+    codeFont: String!
+    codeFontSize: String!
+    monospaceBg: String!
+    richTextBg: String!
+    richTextColor: String!
+    richTextFont: String!
+    richTextFontSize: String!
+    treeBg: String!
+    treeColor: String!
+    treeFont: String!
+    treeFontSize: String!
+    version: Float!
 }
 
 input HotKeyIt {
@@ -478,6 +511,7 @@ input UpdateUserProfileIt {
 }
 
 input UpdateUserSettingsIt {
+    editorSettings: EditorSettingsIt
     hotKeys: HotKeysIt
 }
 

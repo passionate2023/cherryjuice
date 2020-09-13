@@ -1,7 +1,7 @@
-import { filter, flatMap, map, switchMap, take } from 'rxjs/operators';
-import { concat, Observable, of } from 'rxjs';
+import { filter, ignoreElements, map, switchMap, take } from 'rxjs/operators';
+import { concat, defer, EMPTY, interval, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
-import { store, ac, ac_ } from '../../store';
+import { ac, ac_, store } from '../../store';
 import { Actions } from '../../actions.types';
 import { gqlMutation } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
@@ -11,7 +11,7 @@ import { UPDATE_USER_PROFILE } from '::graphql/mutations/user/update-user-profil
 import { properErrorMessage } from '::root/components/auth/hooks/proper-error-message';
 import { UPDATE_USER_SETTINGS } from '::graphql/mutations/user/update-user-settings';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
-import { HotKeys } from '::types/graphql/generated';
+import { screenHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/settings/settings';
 
 const timeoutHandler = () =>
   createTimeoutHandler({
@@ -36,48 +36,51 @@ const saveSettingsEpic = (action$: Observable<Actions>) => {
     ofType([ac_.settings.save]),
     filter(
       () =>
-        store.getState().settings.screenHasChanges &&
+        screenHasUnsavedChanges(store.getState()) &&
         savingState.includes(store.getState().settings.saveOperation),
     ),
     switchMap(() => {
-      const selectedScreen = store.getState().settings.selectedScreen;
-      const loading = of(ac_.settings.saveStarted());
-      const fulfilled = of(ac_.settings.saveFulfilled());
-      const snackbar = of(
-        ac_.dialogs.setSnackbar({ message: 'settings saved' }),
+      const state = store.getState();
+      const changes = {
+        hk: state.settings.screenHasChanges,
+        editorSettings: !!state.editorSettings.previous,
+        manageAccount: !!state.settings.userProfileChanges,
+      };
+      const loading$ = of(ac_.settings.saveStarted());
+      const fulfilled$ = concat(
+        of(ac_.settings.saveFulfilled()),
+        of(ac_.dialogs.setSnackbar({ message: 'settings saved' })),
       );
-      if (selectedScreen === 'keyboard shortcuts') {
-        const requestUpdateHotkeys = of(ac_.cache.syncHotKeysWithCache());
-        const waitForCacheMerge = of(
-          new Promise<HotKeys>(res => {
-            const interval = setInterval(() => {
-              const updatesMerged = !store.getState().cache.settings
-                .syncHotKeysWithCache;
-              if (updatesMerged) {
-                clearInterval(interval);
-                res(getHotkeys(store.getState()));
-              }
-            }, 10);
-          }),
-        ).pipe(
-          flatMap(async hotKeys =>
-            gqlMutation(
-              UPDATE_USER_SETTINGS({
-                input: { hotKeys: await hotKeys },
-              }),
-            ),
+      if (changes.hk || changes.editorSettings) {
+        const syncHKState$ = changes.hk
+          ? concat(
+              of(ac_.cache.syncHotKeysWithCache()),
+              interval(10).pipe(
+                filter(
+                  () => !store.getState().cache.settings.syncHotKeysWithCache,
+                ),
+                take(1),
+                ignoreElements(),
+              ),
+            )
+          : EMPTY.pipe(ignoreElements());
+        const saveSettings$ = defer(() =>
+          gqlMutation(
+            UPDATE_USER_SETTINGS({
+              input: {
+                hotKeys: changes.hk ? getHotkeys(state) : undefined,
+                editorSettings: changes.editorSettings
+                  ? state.editorSettings.current
+                  : undefined,
+              },
+            }),
           ),
-          flatMap(o => o.pipe(map(ac_.auth.setAuthenticationSucceeded))),
+        ).pipe(map(ac_.auth.setAuthenticationSucceeded));
+        return concat(loading$, syncHKState$, saveSettings$, fulfilled$).pipe(
+          timeoutHandler(),
+          errorHandler(),
         );
-
-        return concat(
-          loading,
-          requestUpdateHotkeys,
-          waitForCacheMerge,
-          fulfilled,
-          snackbar,
-        ).pipe(timeoutHandler(), errorHandler());
-      } else if (selectedScreen === 'manage account') {
+      } else if (changes.manageAccount) {
         const showConfirmation = of(ac_.dialogs.showPasswordModal());
         const updateUserProfile = action$.pipe(
           ofType([ac_.dialogs.confirmPasswordModal]),
@@ -87,12 +90,11 @@ const saveSettingsEpic = (action$: Observable<Actions>) => {
             userProfileChanges.currentPassword = action.payload;
 
             return concat(
-              loading,
+              loading$,
               gqlMutation(
                 UPDATE_USER_PROFILE({ userProfile: userProfileChanges }),
               ).pipe(map(ac_.auth.setAuthenticationSucceeded)),
-              fulfilled,
-              snackbar,
+              fulfilled$,
             ).pipe(timeoutHandler(), errorHandler());
           }),
         );

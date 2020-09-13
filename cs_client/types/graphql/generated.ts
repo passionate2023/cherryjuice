@@ -101,6 +101,11 @@ export interface NodeScrollPosition {
   y: number;
 }
 
+/**
+ * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+ */
+export type Timestamp = any;
+
 export interface SearchResultEntity {
   node: NodeSearchResults;
 }
@@ -123,11 +128,6 @@ export interface TimeFilter {
   rangeName: TimeRange;
   rangeStart: Timestamp;
 }
-
-/**
- * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
- */
-export type Timestamp = any;
 
 export enum TimeRange {
   AnyTime = 'AnyTime',
@@ -221,7 +221,24 @@ export interface Secrets {
 }
 
 export interface Settings {
+  editorSettings: EditorSettings;
   hotKeys: HotKeys;
+}
+
+export interface EditorSettings {
+  codeBg: string;
+  codeFont: string;
+  codeFontSize: string;
+  monospaceBg: string;
+  richTextBg: string;
+  richTextColor: string;
+  richTextFont: string;
+  richTextFontSize: string;
+  treeBg: string;
+  treeColor: string;
+  treeFont: string;
+  treeFontSize: string;
+  version: number;
 }
 
 export interface HotKeys {
@@ -382,10 +399,11 @@ export interface SaveHtmlIt {
 export type ImageUpload = any;
 
 export interface DocumentStateIt {
-  recentNodes: Array<number>;
-  scrollPositions: Array<NodeScrollPositionIt>;
-  selectedNode_id: number;
-  treeState: Array<number>;
+  recentNodes?: Array<number>;
+  scrollPositions?: Array<NodeScrollPositionIt>;
+  selectedNode_id?: number;
+  treeState?: Array<number>;
+  updatedAt?: Timestamp;
 }
 
 export interface NodeScrollPositionIt {
@@ -465,7 +483,24 @@ export interface UpdateUserProfileIt {
 }
 
 export interface UpdateUserSettingsIt {
+  editorSettings?: EditorSettingsIt;
   hotKeys?: HotKeysIt;
+}
+
+export interface EditorSettingsIt {
+  codeBg: string;
+  codeFont: string;
+  codeFontSize: string;
+  monospaceBg: string;
+  richTextBg: string;
+  richTextColor: string;
+  richTextFont: string;
+  richTextFontSize: string;
+  treeBg: string;
+  treeColor: string;
+  treeFont: string;
+  treeFontSize: string;
+  version: number;
 }
 
 export interface HotKeysIt {
@@ -528,8 +563,8 @@ export interface Resolver {
   PrivateNode?: PrivateNodeTypeResolver;
   DocumentState?: DocumentStateTypeResolver;
   NodeScrollPosition?: NodeScrollPositionTypeResolver;
-  SearchResultEntity?: SearchResultEntityTypeResolver;
   Timestamp?: GraphQLScalarType;
+  SearchResultEntity?: SearchResultEntityTypeResolver;
   NodeSearchResults?: NodeSearchResultsTypeResolver;
   SearchResultMeta?: SearchResultMetaTypeResolver;
   NodeSearchResultEntity?: NodeSearchResultEntityTypeResolver;
@@ -537,6 +572,7 @@ export interface Resolver {
   AuthUser?: AuthUserTypeResolver;
   Secrets?: SecretsTypeResolver;
   Settings?: SettingsTypeResolver;
+  EditorSettings?: EditorSettingsTypeResolver;
   HotKeys?: HotKeysTypeResolver;
   HotKey?: HotKeyTypeResolver;
   User?: UserTypeResolver;
@@ -804,6 +840,7 @@ export interface DocumentStateTypeResolver<TParent = any> {
   scrollPositions?: DocumentStateToScrollPositionsResolver<TParent>;
   selectedNode_id?: DocumentStateToSelectedNode_idResolver<TParent>;
   treeState?: DocumentStateToTreeStateResolver<TParent>;
+  updatedAt?: DocumentStateToUpdatedAtResolver<TParent>;
 }
 
 export interface DocumentStateToRecentNodesResolver<
@@ -828,6 +865,13 @@ export interface DocumentStateToSelectedNode_idResolver<
 }
 
 export interface DocumentStateToTreeStateResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentStateToUpdatedAtResolver<
   TParent = any,
   TResult = any
 > {
@@ -1069,10 +1113,116 @@ export interface SecretsToGoogle_client_idResolver<
 }
 
 export interface SettingsTypeResolver<TParent = any> {
+  editorSettings?: SettingsToEditorSettingsResolver<TParent>;
   hotKeys?: SettingsToHotKeysResolver<TParent>;
 }
 
+export interface SettingsToEditorSettingsResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface SettingsToHotKeysResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsTypeResolver<TParent = any> {
+  codeBg?: EditorSettingsToCodeBgResolver<TParent>;
+  codeFont?: EditorSettingsToCodeFontResolver<TParent>;
+  codeFontSize?: EditorSettingsToCodeFontSizeResolver<TParent>;
+  monospaceBg?: EditorSettingsToMonospaceBgResolver<TParent>;
+  richTextBg?: EditorSettingsToRichTextBgResolver<TParent>;
+  richTextColor?: EditorSettingsToRichTextColorResolver<TParent>;
+  richTextFont?: EditorSettingsToRichTextFontResolver<TParent>;
+  richTextFontSize?: EditorSettingsToRichTextFontSizeResolver<TParent>;
+  treeBg?: EditorSettingsToTreeBgResolver<TParent>;
+  treeColor?: EditorSettingsToTreeColorResolver<TParent>;
+  treeFont?: EditorSettingsToTreeFontResolver<TParent>;
+  treeFontSize?: EditorSettingsToTreeFontSizeResolver<TParent>;
+  version?: EditorSettingsToVersionResolver<TParent>;
+}
+
+export interface EditorSettingsToCodeBgResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToCodeFontResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToCodeFontSizeResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToMonospaceBgResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToRichTextBgResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToRichTextColorResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToRichTextFontResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToRichTextFontSizeResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToTreeBgResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToTreeColorResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToTreeFontResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToTreeFontSizeResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToVersionResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
