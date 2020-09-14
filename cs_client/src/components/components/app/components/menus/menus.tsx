@@ -34,7 +34,11 @@ const DeleteNode = React.lazy(() =>
     '::root/components/app/components/menus/modals/delete-node/delete-node'
   ),
 );
-
+const DeleteDocument = React.lazy(() =>
+  import(
+    '::root/components/app/components/menus/modals/delete-document/delete-document'
+  ),
+);
 import { connect, ConnectedProps } from 'react-redux';
 import { SearchDialog } from '::root/components/app/components/menus/dialogs/search-dialog/search-dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
@@ -49,6 +53,7 @@ const components = [
   <NodeMeta key={'NodeMeta'} />,
   <ImportDocuments key={'ImportDocuments'} />,
   <ReloadDocument key={'ReloadDocument'} />,
+  <DeleteDocument key={'DeleteDocument'} />,
   <DeleteNode key={'DeleteNode'} />,
   // @ts-ignore
   <PasswordModal key={'PasswordModal'} />,

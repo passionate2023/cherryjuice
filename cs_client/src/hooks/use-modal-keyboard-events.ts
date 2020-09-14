@@ -91,7 +91,7 @@ const useModalKeyboardEvents = ({
       );
     }
     return () => cleanEventHandlers.forEach(cleanCallBack => cleanCallBack());
-  }, [onConfirmModal]);
+  }, [onConfirmModal, onCloseModal]);
 };
 
 export { useModalKeyboardEvents };

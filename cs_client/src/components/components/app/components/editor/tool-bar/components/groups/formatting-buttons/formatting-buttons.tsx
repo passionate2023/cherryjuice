@@ -15,7 +15,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const mapState = (state: Store) => {
   return {
-    selectedNode_id: getCurrentDocument(state)?.state?.selectedNode_id,
+    selectedNode_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
     documentId: state.document.documentId,
     formattingHotKeys: getHotkeys(state).formatting,
   };
@@ -34,26 +34,24 @@ const Buttons: React.FC<PropsFromRedux> = ({
   const disabled = !documentId || !selectedNode_id;
   return (
     <>
-      {formattingHotKeys.map(hotKey =>
-        hotKey.type === HotKeyActionType.FG_COLOR ||
-        hotKey.type === HotKeyActionType.BG_COLOR ? (
+      {formattingHotKeys.map(hotKey => {
+        const formattingHotkeysProp = formattingHotkeysProps[hotKey.type];
+        if (!('icon' in formattingHotkeysProp))
+          return <React.Fragment key={hotKey.type} />;
+        return hotKey.type === HotKeyActionType.FG_COLOR ||
+          hotKey.type === HotKeyActionType.BG_COLOR ? (
           <ColorInput key={hotKey.type} hotKey={hotKey} disabled={disabled} />
         ) : (
           <ToolbarButton
             key={hotKey.type}
-            onClick={() =>
-              execK(formattingHotkeysProps[hotKey.type].execCommandArguments)
-            }
+            onClick={() => execK(formattingHotkeysProp.execCommandArguments)}
             className={modToolbar.toolBar__iconStrictWidth}
             disabled={disabled}
           >
-            <Icon
-              name={formattingHotkeysProps[hotKey.type].icon}
-              loadAsInlineSVG={'force'}
-            />
+            <Icon name={formattingHotkeysProp.icon} loadAsInlineSVG={'force'} />
           </ToolbarButton>
-        ),
-      )}
+        );
+      })}
     </>
   );
 };

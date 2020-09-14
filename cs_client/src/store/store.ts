@@ -22,6 +22,7 @@ import { settingsActionCreators } from './ducks/settings';
 import { documentCacheActionCreators } from '::store/ducks/cache/document-cache';
 import { animationActionCreators } from '::store/ducks/animations';
 import { timelinesActionCreators } from '::store/ducks/timelines';
+import { editorSettingsActionCreators } from '::store/ducks/settings/editor-settings';
 
 type Store = ReturnType<typeof reducer>;
 
@@ -55,6 +56,7 @@ const ac_ = {
   documentCache: documentCacheActionCreators,
   animation: animationActionCreators,
   timelines: timelinesActionCreators,
+  editorSettings: editorSettingsActionCreators,
 };
 const dispatch = store.dispatch;
 const ac = {
@@ -73,6 +75,7 @@ const ac = {
   search: b(searchActionCreators, dispatch),
   cssVariables: b(cssVariablesActionCreators, dispatch),
   settings: b(settingsActionCreators, dispatch),
+  editorSettings: b(editorSettingsActionCreators, dispatch),
 };
 
 export { store, ac, ac_, epicMiddleware };

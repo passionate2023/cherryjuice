@@ -9,8 +9,8 @@ import {
   userSettingsActionCreators,
   ValidatedInputState,
 } from '::root/components/app/components/menus/dialogs/settings/screens/account/reducer/reducer';
-import { modUserProfile } from '::sass-modules';
 import { Icons } from '::root/components/shared-components/icon/helpers/icons';
+import { SettingsGroup } from '::root/components/app/components/menus/dialogs/settings/shared/settings-group';
 
 const idPrefix = 'settings::password';
 
@@ -53,14 +53,11 @@ const Password: React.FC<Props> = ({
     },
   ];
   return (
-    <div className={modUserProfile.userProfile__group}>
-      <span className={modUserProfile.userProfile__group__name}>password</span>
-      <div className={modUserProfile.userProfile__group__elements}>
-        {changePassword.map(po => (
-          <ValidatedTextInput key={po.label} {...po} />
-        ))}
-      </div>
-    </div>
+    <SettingsGroup name={'password'}>
+      {changePassword.map(po => (
+        <ValidatedTextInput key={po.label} {...po} />
+      ))}
+    </SettingsGroup>
   );
 };
 

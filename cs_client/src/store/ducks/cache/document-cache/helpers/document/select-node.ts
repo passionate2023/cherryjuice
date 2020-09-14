@@ -15,14 +15,15 @@ export const selectNode = (
   const document = state[documentId];
   if (!document?.nodes[node_id] && document.nodes && document.nodes[0])
     node_id = getDefaultSelectedNode_id(document.nodes);
-  if (document?.nodes[node_id]) {
-    document.state.selectedNode_id = node_id;
-    document.state.recentNodes = [
-      ...state[documentId].state.recentNodes.filter(
+  if (node_id && document?.nodes[node_id]) {
+    document.persistedState.selectedNode_id = node_id;
+    document.persistedState.recentNodes = [
+      ...state[documentId].persistedState.recentNodes.filter(
         _node_id => _node_id !== node_id,
       ),
       node_id,
     ];
+    document.persistedState.localUpdatedAt = Date.now();
   }
   return state;
 };

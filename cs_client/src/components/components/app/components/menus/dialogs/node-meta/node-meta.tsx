@@ -10,7 +10,6 @@ import {
   nodeMetaReducer,
 } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
 import { getNode } from '::root/components/app/components/menus/dialogs/node-meta/helpers/get-node';
-import { modNodeMeta } from '::sass-modules';
 import { IconPicker } from '::root/components/app/components/menus/dialogs/node-meta/components/icon-picker';
 import { FormInputProps } from '::root/components/shared-components/form/meta-form/meta-form-input';
 import { testIds } from '::cypress/support/helpers/test-ids';
@@ -19,13 +18,14 @@ import { ac, Store } from '::store/store';
 import { SelectPrivacy } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
 import { Privacy } from '::types/graphql/generated';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
+import { ColorInput } from '::root/components/shared-components/inputs/color-input';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
   return {
     document,
     documentId: state.document.documentId,
-    node_id: document?.state?.selectedNode_id,
+    node_id: document?.persistedState?.selectedNode_id,
     nodes: document?.nodes,
     documentUserId: document?.userId,
     documentPrivacy: document?.privacy,
@@ -117,15 +117,11 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       label: 'User selected color',
       testId: testIds.nodeMeta__hasCustomColor,
       additionalInput: (
-        <input
+        <ColorInput
           disabled={!state.hasCustomColor}
-          type={'color'}
-          onChange={e => nodeMetaActionCreators.setCustomColor(e.target.value)}
+          onChange={nodeMetaActionCreators.setCustomColor}
           value={state.customColor}
-          className={`${modNodeMeta.nodeMeta__input__colorInput} ${
-            !state.hasCustomColor ? modNodeMeta.nodeMeta__inputDisabled : ''
-          }`}
-          data-testid={testIds.nodeMeta__customColor}
+          testId={testIds.nodeMeta__customColor}
         />
       ),
     },

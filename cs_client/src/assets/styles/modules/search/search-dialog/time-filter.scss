@@ -28,6 +28,8 @@
   align-items: center;
 }
 .time-filter__select {
+  box-sizing: border-box;
+  height: 40px;
   padding: 10px 0px;
   border: none;
   background-color: #f9f9f9;

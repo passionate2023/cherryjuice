@@ -1,7 +1,7 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { documentActionCreators as dac } from './document';
 import { createActionPrefixer } from './helpers/shared';
-import { TAlert } from '::types/react';
+import { AlertType, TAlert } from '::types/react';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { rootActionCreators } from './root';
 import { authActionCreators as aac } from './auth';
@@ -20,6 +20,8 @@ const actionCreators = {
   ...{
     showReloadDocument: _(ap('showReloadDocument')),
     hideReloadDocument: _(ap('hideReloadDocument')),
+    showDeleteDocument: _(ap('show-delete-document')),
+    hideDeleteDocument: _(ap('hide-delete-document')),
   },
   ...{
     showImportDocument: _(ap('showImportDocument')),
@@ -85,9 +87,10 @@ const actionCreators = {
 };
 
 type NodeMetaDialogRole = 'edit' | 'create-child' | 'create-sibling';
-type Snackbar = { message: string };
+export type Snackbar = { message: string; type?: AlertType; lifeSpan?: number };
 type State = {
   showReloadDocument: boolean;
+  showDeleteDocument: boolean;
   alert?: TAlert;
   showPasswordModal: boolean;
   showImportDocuments: boolean;
@@ -102,6 +105,7 @@ type State = {
 
 const initialState: State = {
   showReloadDocument: false,
+  showDeleteDocument: false,
   showImportDocuments: false,
   showDocumentList: false,
   alert: undefined,
@@ -119,6 +123,14 @@ const reducer = createReducer(initialState, _ => [
       ...cloneObj(initialState),
     })),
   ],
+  _(actionCreators.showDeleteDocument, state => ({
+    ...state,
+    showDeleteDocument: true,
+  })),
+  _(actionCreators.hideDeleteDocument, state => ({
+    ...state,
+    showDeleteDocument: false,
+  })),
   _(actionCreators.showReloadDocument, state => ({
     ...state,
     showReloadDocument: true,
@@ -130,6 +142,7 @@ const reducer = createReducer(initialState, _ => [
   _(dac.fetchFulfilled, state => ({
     ...state,
     showReloadDocument: false,
+    showDeleteDocument: false,
   })),
   _(dac.setDocumentId, (state, { payload: documentId }) => ({
     ...state,
@@ -137,7 +150,7 @@ const reducer = createReducer(initialState, _ => [
   })),
   _(aac.setAuthenticationSucceeded, state => ({
     ...state,
-    showDocumentList: true,
+    showDocumentList: state.showSettingsDialog ? state.showDocumentList : true,
   })),
   // alert
   _(actionCreators.setAlert, (state, { payload }) => ({

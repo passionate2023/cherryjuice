@@ -77,12 +77,13 @@ const execK = ({
     snapBackManager.current.reset();
     document.querySelector('#rich-text ').innerHTML = ogHtml;
     snapBackManager.current.enable(1000);
-    ac.dialogs.setAlert({
-      title: 'Could not apply formatting',
-      description:
-        e instanceof FormattingError ? e.message : 'Please submit a bug report',
-      type: AlertType.Error,
-      error: e,
+    ac.dialogs.setSnackbar({
+      lifeSpan: 2000,
+      type: AlertType.Warning,
+      message:
+        e instanceof FormattingError
+          ? e.message
+          : 'Could not perform the action',
     });
   }
 };

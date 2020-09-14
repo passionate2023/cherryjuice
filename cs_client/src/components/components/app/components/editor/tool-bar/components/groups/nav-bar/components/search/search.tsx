@@ -1,13 +1,10 @@
 import * as React from 'react';
-import { useCallback } from 'react';
 import { modSearch } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
-import { joinClassNames } from '::helpers/dom/join-class-names';
 import { useRef } from 'react';
 import { useOnKeyPress } from '::hooks/use-on-key-up';
+import { SearchInput } from '::root/components/shared-components/inputs/search-input';
 
 const mapState = (state: Store) => ({
   query: state.search.query,
@@ -28,10 +25,6 @@ const Search: React.FC<Props & PropsFromRedux> = ({
   navBar = true,
   searchTarget,
 }) => {
-  const setQueryM = useCallback(e => ac.search.setQuery(e.target.value), []);
-  const clearLocalQueryM = useCallback(() => ac.search.clearQuery(), []);
-  const onClick = ac.search.setSearchQueued;
-
   const searchImpossible = !navBar && (!query || searchTarget.length === 0);
   const ref = useRef<HTMLDivElement>();
   useOnKeyPress({
@@ -40,46 +33,18 @@ const Search: React.FC<Props & PropsFromRedux> = ({
     onClick: ac.search.setSearchQueued,
   });
   return (
-    <div className={`${modSearch.search__container} ${className || ''}`}>
-      <div
-        className={`${modSearch.search__field} ${
-          navBar ? modSearch.search__fieldNavBar : ''
-        }`}
-        ref={ref}
-      >
-        <input
-          className={modSearch.search__field__input}
-          type="text"
-          placeholder={'search'}
-          value={query}
-          onChange={setQueryM}
-        />
-        <ButtonSquare
-          className={joinClassNames([
-            modSearch.search__searchButton,
-            [modSearch.search__searchButtonNavBar, navBar],
-            modSearch.search__field__clearTextButton,
-            [modSearch.search__clearTextButtonVisible, query.length],
-          ])}
-          onClick={clearLocalQueryM}
-          icon={<Icon name={Icons.material.clear} />}
-        />
-      </div>
-      <ButtonSquare
-        className={joinClassNames([
-          modSearch.search__searchButton,
-          [modSearch.search__searchButtonNavBar, navBar],
-        ])}
-        disabled={searchImpossible}
-        onClick={onClick}
-        icon={
-          <Icon
-            name={Icons.material.search}
-            loadAsInlineSVG={navBar ? 'force' : undefined}
-          />
-        }
-      />
-    </div>
+    <SearchInput
+      containerClassName={className}
+      fieldWrapperClassName={navBar ? modSearch.search__fieldNavBar : ''}
+      inputRef={ref}
+      placeHolder={'search'}
+      value={query}
+      onChange={ac.search.setQuery}
+      searchButtonClassName={navBar ? modSearch.search__searchButtonNavBar : ''}
+      onClear={ac.search.clearQuery}
+      searchImpossible={searchImpossible}
+      performSearch={ac.search.setSearchQueued}
+    />
   );
 };
 

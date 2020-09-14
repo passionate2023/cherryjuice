@@ -45,10 +45,25 @@ import {
 } from '::store/ducks/cache/document-cache/helpers/node/mutate-node-meta';
 import { TimelinesManager } from '::store/ducks/cache/document-cache/helpers/timeline/timelines-manager';
 import { timelinesActionCreators as tac } from '::store/ducks/timelines';
+import {
+  collapseNode,
+  expandNode,
+} from '::store/ducks/cache/document-cache/helpers/node/expand-node/expand-node';
+import {
+  setScrollPosition,
+  SetScrollPositionParams,
+} from '::store/ducks/cache/document-cache/helpers/node/set-scroll-position';
+import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
 
 const ap = createActionPrefixer('document-cache');
 
 const ac = {
+  expandNode: _(ap('expand-node'), _ => (params: SelectNodeParams) =>
+    _(params),
+  ),
+  collapseNode: _(ap('collapse-node'), _ => (params: SelectNodeParams) =>
+    _(params),
+  ),
   createDocument: _(
     ap('create-document'),
     _ => (params: CreateDocumentParams) => _(params),
@@ -73,6 +88,10 @@ const ac = {
     _ => (props: MutateNodeContentParams) => _(props),
   ),
   deleteNode: _(ap('delete-node'), _ => (param: DeleteNodeParams) => _(param)),
+  setScrollPosition: _(
+    ap('set-scroll-position'),
+    _ => (param: SetScrollPositionParams) => _(param),
+  ),
   undoDocumentAction: _(ap('undo-document-action')),
   redoDocumentAction: _(ap('redo-document-action')),
 };
@@ -86,19 +105,29 @@ export type CachedNodesState = {
   edited: { [node_id: number]: string[] };
   deletedImages: { [node_id: number]: string[] };
 };
+
+export type NodeScrollPosition = [number, number];
 export type CachedDocumentState = {
-  selectedNode_id?: number;
-  recentNodes: number[];
   highestNode_id: number;
   editedAttributes: string[];
   editedNodes: CachedNodesState;
+  updatedAt: number;
+};
+export type PersistedDocumentState = {
+  selectedNode_id?: number;
+  treeState: NodeState;
+  scrollPositions: {
+    [node_id: number]: NodeScrollPosition;
+  };
+  recentNodes: number[];
+  updatedAt: number;
   localUpdatedAt: number;
 };
-
-export type CachedDocument = Omit<QDocumentMeta, 'node'> & {
+export type CachedDocument = Omit<QDocumentMeta, 'node' | 'state'> & {
   nodes: NodesDict;
   userId: string;
-  state: CachedDocumentState;
+  localState: CachedDocumentState;
+  persistedState: PersistedDocumentState;
 };
 
 type State = {
@@ -133,7 +162,12 @@ const reducer = createReducer(initialState, _ => [
       createDocument(state, payload),
     ),
     _(nac.select, (state, { payload }) =>
-      produce(state, draft => selectNode(draft, payload)),
+      produce(state, draft =>
+        expandNode(selectNode(draft, payload), {
+          ...payload,
+          expandChildren: false,
+        }),
+      ),
     ),
     _(tac.setDocumentActionNOF, (state, { payload }) =>
       payload.frame?.meta?.documentId
@@ -150,6 +184,15 @@ const reducer = createReducer(initialState, _ => [
     ),
     _(ac.undoDocumentAction, state => dTM.current.undo(state)),
     _(ac.redoDocumentAction, state => dTM.current.redo(state)),
+    _(ac.expandNode, (state, { payload }) =>
+      produce(state, draft => expandNode(draft, payload)),
+    ),
+    _(ac.collapseNode, (state, { payload }) =>
+      produce(state, draft => collapseNode(draft, payload)),
+    ),
+    _(ac.setScrollPosition, (state, { payload }) =>
+      produce(state, draft => setScrollPosition(draft, payload)),
+    ),
   ],
   ...[
     // require cleanup

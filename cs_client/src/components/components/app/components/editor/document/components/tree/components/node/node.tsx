@@ -1,11 +1,9 @@
 import nodeMod from '::sass-modules/tree/node.scss';
 import * as React from 'react';
-import { useCallback, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { useDnDNodes } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/dnd-nodes';
 import { useSelectNode } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/select-node';
-import { persistedTreeState } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/persisted-tree-state/helpers';
-import { usePersistedTreeState } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/persisted-tree-state/persisted-tree-state';
 import { NodePrivacy, Privacy } from '::types/graphql/generated';
 import { NodeIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-icon';
 import { ToggleChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/toggle-children';
@@ -13,6 +11,9 @@ import { NodeVisibilityIcon } from '::root/components/app/components/editor/docu
 import { NodeOverlay } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-overlay';
 import { NodeChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-children';
 import { NodesDict } from '::store/ducks/cache/document-cache';
+import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
+import { NodeTitle } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-title';
 
 export type NodeProps = {
   node_id: number;
@@ -22,6 +23,8 @@ export type NodeProps = {
   documentPrivacy: Privacy;
   parentPrivacy: NodePrivacy;
   expand?: number;
+  fatherState: NodeState;
+  filteredNodes: FilteredNodes;
 };
 
 const Node: React.FC<NodeProps> = ({
@@ -32,6 +35,8 @@ const Node: React.FC<NodeProps> = ({
   documentPrivacy,
   parentPrivacy,
   expand,
+  fatherState,
+  filteredNodes,
 }) => {
   const { child_nodes, name, privacy } = nodes[node_id];
   const match = useRouteMatch<{ file_id: string }>();
@@ -40,25 +45,14 @@ const Node: React.FC<NodeProps> = ({
   const listRef = useRef();
   const titleRef = useRef();
 
-  const [showChildren, setShowChildren] = useState(() => {
-    const tree = persistedTreeState.get(file_id);
-    return (
-      expand > depth || tree[node_id] || file_id.startsWith('new-document')
-    );
-  });
-  const toggleChildren = useCallback(() => {
-    setShowChildren(!showChildren);
-  }, [showChildren]);
+  const showChildren =
+    expand > depth || !!(fatherState && fatherState[node_id]);
+
   const { clickTimestamp, selectNode } = useSelectNode({
     file_id,
     node_id,
   });
-  usePersistedTreeState({
-    showChildren,
-    node_id,
-    file_id,
-    nodes,
-  });
+
   const nodeDndProps = useDnDNodes({
     node_id,
     componentRef: titleRef,
@@ -71,7 +65,6 @@ const Node: React.FC<NodeProps> = ({
     draggable: false,
   });
   const nodeStyle = JSON.parse(node_title_styles || '{}');
-  if (!nodeStyle.color) nodeStyle.color = '#ffffff';
   const icon_id = +nodeStyle.icon_id;
   return (
     <>
@@ -84,9 +77,10 @@ const Node: React.FC<NodeProps> = ({
       >
         <ToggleChildren
           depth={depth}
-          toggleChildren={toggleChildren}
           child_nodes={child_nodes}
           showChildren={showChildren}
+          node_id={node_id}
+          documentId={file_id}
         />
         <NodeIcon depth={depth} icon_id={icon_id} />
         <NodeVisibilityIcon
@@ -94,14 +88,14 @@ const Node: React.FC<NodeProps> = ({
           parentPrivacy={parentPrivacy}
           privacy={privacy}
         />
-        <div
-          className={nodeMod.node__title}
-          style={{ ...nodeStyle }}
-          ref={titleRef}
-          {...nodeDndProps}
-        >
-          {name}
-        </div>
+        <NodeTitle
+          nodeDndProps={nodeDndProps}
+          nodeStyle={nodeStyle}
+          titleRef={titleRef}
+          name={name}
+          documentId={file_id}
+          node_id={node_id}
+        />
         <NodeOverlay
           clickTimestamp={clickTimestamp}
           nodeComponentRef={componentRef}
@@ -120,6 +114,8 @@ const Node: React.FC<NodeProps> = ({
           parentPrivacy={parentPrivacy}
           privacy={privacy}
           expand={expand}
+          fatherState={fatherState && fatherState[node_id]}
+          filteredNodes={filteredNodes}
         />
       )}
     </>

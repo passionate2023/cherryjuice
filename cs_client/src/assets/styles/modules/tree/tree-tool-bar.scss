@@ -1,0 +1,44 @@
+.tree-tool-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: var(--tool-bar-background-color-transparent);
+  opacity: 0.5;
+  &:hover {
+    opacity: 0.9;
+  }
+  transition: opacity 200ms linear;
+}
+
+.tree-tool-bar--active {
+  opacity: 0.9;
+}
+
+.tree-tool-bar__controls {
+  height: 30px;
+  box-sizing: border-box;
+  padding: 2px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+.tree__search-field-wrapper {
+  opacity: 1;
+  background-color: transparent;
+}
+.tree__search-field-container {
+  display: block;
+  overflow: hidden;
+  flex: 1;
+  background-color: transparent;
+  margin-right: 0;
+}
+.tree__search-button {
+  width: 30px;
+}
+.tree_focus-button {
+  height: 100%;
+  background-color: white;
+  border-radius: 0;
+}

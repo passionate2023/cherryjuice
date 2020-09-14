@@ -1,5 +1,8 @@
 const root = document.documentElement;
 const cssVariables = {
+  setVariable: (variableName: string, value: string) => {
+    root.style.setProperty('--' + variableName, value);
+  },
   setProperty: (propertyName: string) => (value: number) =>
     root.style.setProperty('--' + propertyName, value + 'px'),
   getProperty: (propertyName: string) => () =>

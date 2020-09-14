@@ -23,7 +23,7 @@ const swapFatherIdIfApplies = (state: SaveOperationState) => (
 
 const saveNodesMeta = async ({ state, document }: SaveOperationProps) => {
   const editedNodeMeta = Object.entries(
-    document.state.editedNodes.edited,
+    document.localState.editedNodes.edited,
   ).filter(([id]): boolean => !state.deletedNodes[document.id][id]);
   const nodeMetaIts: NodeMetaIt[] = [];
   for await (const [node_id, editedAttributes] of editedNodeMeta) {

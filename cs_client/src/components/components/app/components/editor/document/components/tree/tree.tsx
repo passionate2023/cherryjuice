@@ -10,6 +10,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { NodePrivacy } from '::types/graphql/generated';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
+import { ToolBar } from './components/tool-bar/tool-bar';
 
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -24,16 +25,24 @@ type Props = {};
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
+  const nodes = document.nodes;
   return {
-    nodes: document.nodes,
+    filteredNodes: state.document.filteredNodes,
+    nodes: nodes,
     documentPrivacy: document.privacy,
+    treeState: document.persistedState.treeState,
   };
 };
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const Tree: React.FC<Props & PropsFromRedux> = ({ nodes, documentPrivacy }) => {
+const Tree: React.FC<Props & PropsFromRedux> = ({
+  nodes,
+  documentPrivacy,
+  treeState,
+  filteredNodes,
+}) => {
   useEffect(onStart, []);
   const componentRef = useRef();
   const rootTreeDndProps = useDnDNodes({
@@ -54,6 +63,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({ nodes, documentPrivacy }) => {
     >
       <ErrorBoundary>
         <div className={treeModule.tree}>
+          <ToolBar />
           <ul
             className={treeModule.tree_rootList}
             {...rootTreeDndProps}
@@ -62,18 +72,21 @@ const Tree: React.FC<Props & PropsFromRedux> = ({ nodes, documentPrivacy }) => {
             {nodes &&
               nodes[0].child_nodes.map(node_id => {
                 const node = nodes[node_id];
-                return (
-                  <Node
-                    key={node.node_id}
-                    node_id={node.node_id}
-                    nodes={nodes}
-                    depth={0}
-                    node_title_styles={node.node_title_styles}
-                    documentPrivacy={documentPrivacy}
-                    parentPrivacy={NodePrivacy.DEFAULT}
-                    expand={params.expand}
-                  />
-                );
+                if (!filteredNodes || filteredNodes[node_id])
+                  return (
+                    <Node
+                      fatherState={treeState[0]}
+                      key={node.node_id}
+                      node_id={node.node_id}
+                      nodes={nodes}
+                      depth={0}
+                      node_title_styles={node.node_title_styles}
+                      documentPrivacy={documentPrivacy}
+                      parentPrivacy={NodePrivacy.DEFAULT}
+                      expand={params.expand}
+                      filteredNodes={filteredNodes}
+                    />
+                  );
               })}
           </ul>
         </div>

@@ -4,16 +4,23 @@ import { formattingBarUnmountAnimationDelay } from '::root/components/app/compon
 import { filter, take, tap } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { modDialog } from '::sass-modules';
-import { ac } from '::store/store';
+import { ac, Store } from '::store/store';
+import { useSelector } from 'react-redux';
 
 export const useUpdateCssVariables = (
   isDocumentOwner: boolean,
   showFormattingButtons: boolean,
   showTree: boolean,
   treeWidth: number,
-  searchDialogIsShown: boolean,
   showRecentNodes: boolean,
 ) => {
+  const dockedDialog = useSelector((state: Store) => state.root.dockedDialog);
+  const showSearchDialog = useSelector(
+    (state: Store) => state.search.searchState !== 'idle',
+  );
+  const showSettingsDialog = useSelector(
+    (state: Store) => state.dialogs.showSettingsDialog,
+  );
   useEffect(() => {
     cssVariables.setTreeWidth(showTree ? treeWidth : 0);
     if (isDocumentOwner && showFormattingButtons) {
@@ -35,7 +42,7 @@ export const useUpdateCssVariables = (
   }, [showRecentNodes]);
 
   useEffect(() => {
-    if (searchDialogIsShown) {
+    if (dockedDialog && (showSearchDialog || showSettingsDialog)) {
       cssVariables.setDockedDialogHeight(50);
       ac.root.setDocking(false);
     } else {
@@ -51,5 +58,5 @@ export const useUpdateCssVariables = (
         )
         .subscribe();
     }
-  }, [searchDialogIsShown]);
+  }, [dockedDialog, showSearchDialog, showSettingsDialog]);
 };

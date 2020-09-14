@@ -17,8 +17,16 @@ import { settingsReducer } from './ducks/settings';
 import { documentCacheReducer } from '::store/ducks/cache/document-cache';
 import { animationReducer } from '::store/ducks/animations';
 import { timelinesReducer } from '::store/ducks/timelines';
+import { editorSettingsReducer } from '::store/ducks/settings/editor-settings';
 
 const reducer = combineReducers({
+  editorSettings: persistReducer(
+    {
+      key: 'editorSettings',
+      storage,
+    },
+    editorSettingsReducer,
+  ),
   cache: persistReducer(
     {
       key: 'cache',
@@ -32,7 +40,7 @@ const reducer = combineReducers({
     {
       key: 'document',
       storage,
-      blacklist: [],
+      whitelist: ['documentId'],
       transforms: documentTransforms,
     },
     documentReducer,

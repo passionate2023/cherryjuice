@@ -21,7 +21,7 @@ const mapState = (state: Store) => {
     fetchDocumentInProgress:
       state.document.asyncOperations.fetch === 'in-progress',
     saveInProgress: state.document.asyncOperations.save === 'in-progress',
-    selectedNode_id: document.state?.selectedNode_id,
+    selectedNode_id: document.persistedState?.selectedNode_id,
     showTree: state.editor.showTree,
   };
 };

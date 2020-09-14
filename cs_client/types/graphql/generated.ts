@@ -29,6 +29,7 @@ export interface Document {
   privacy: Privacy;
   privateNodes: Array<PrivateNode>;
   size: number;
+  state: DocumentState;
   status?: string;
   updatedAt: number;
   userId: string;
@@ -86,6 +87,25 @@ export interface PrivateNode {
   node_id: number;
 }
 
+export interface DocumentState {
+  recentNodes: Array<number>;
+  scrollPositions: Array<NodeScrollPosition>;
+  selectedNode_id: number;
+  treeState: Array<number>;
+  updatedAt: Timestamp;
+}
+
+export interface NodeScrollPosition {
+  node_id: number;
+  x: number;
+  y: number;
+}
+
+/**
+ * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+ */
+export type Timestamp = any;
+
 export interface SearchResultEntity {
   node: NodeSearchResults;
 }
@@ -108,11 +128,6 @@ export interface TimeFilter {
   rangeName: TimeRange;
   rangeStart: Timestamp;
 }
-
-/**
- * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
- */
-export type Timestamp = any;
 
 export enum TimeRange {
   AnyTime = 'AnyTime',
@@ -206,7 +221,24 @@ export interface Secrets {
 }
 
 export interface Settings {
+  editorSettings: EditorSettings;
   hotKeys: HotKeys;
+}
+
+export interface EditorSettings {
+  codeBg: string;
+  codeFont: string;
+  codeFontSize: string;
+  monospaceBg: string;
+  richTextBg: string;
+  richTextColor: string;
+  richTextFont: string;
+  richTextFontSize: string;
+  treeBg: string;
+  treeColor: string;
+  treeFont: string;
+  treeFontSize: string;
+  version: number;
 }
 
 export interface HotKeys {
@@ -223,6 +255,7 @@ export enum HotKeyActionType {
   BG_COLOR = 'BG_COLOR',
   BOLD = 'BOLD',
   CREATE_TEST_SAMPLE = 'CREATE_TEST_SAMPLE',
+  DELETE_LINE = 'DELETE_LINE',
   FG_COLOR = 'FG_COLOR',
   H1 = 'H1',
   H2 = 'H2',
@@ -234,6 +267,8 @@ export enum HotKeyActionType {
   JUSTIFY_RIGHT = 'JUSTIFY_RIGHT',
   LINE_THROUGH = 'LINE_THROUGH',
   MONO = 'MONO',
+  MOVE_LINE_DOWN = 'MOVE_LINE_DOWN',
+  MOVE_LINE_UP = 'MOVE_LINE_UP',
   REDO = 'REDO',
   RELOAD_DOCUMENT = 'RELOAD_DOCUMENT',
   REMOVE_STYLE = 'REMOVE_STYLE',
@@ -288,6 +323,7 @@ export interface DocumentMutation {
   deleteDocument: string;
   editDocument: string;
   node: NodeMutation;
+  setState: string;
   uploadFile: boolean;
   uploadFromGDrive: boolean;
 }
@@ -362,6 +398,20 @@ export interface SaveHtmlIt {
  */
 export type ImageUpload = any;
 
+export interface DocumentStateIt {
+  recentNodes?: Array<number>;
+  scrollPositions?: Array<NodeScrollPositionIt>;
+  selectedNode_id?: number;
+  treeState?: Array<number>;
+  updatedAt?: Timestamp;
+}
+
+export interface NodeScrollPositionIt {
+  node_id: number;
+  x: number;
+  y: number;
+}
+
 /**
  * The CTBUpload scalar type represents a file upload.
  */
@@ -433,7 +483,24 @@ export interface UpdateUserProfileIt {
 }
 
 export interface UpdateUserSettingsIt {
+  editorSettings?: EditorSettingsIt;
   hotKeys?: HotKeysIt;
+}
+
+export interface EditorSettingsIt {
+  codeBg: string;
+  codeFont: string;
+  codeFontSize: string;
+  monospaceBg: string;
+  richTextBg: string;
+  richTextColor: string;
+  richTextFont: string;
+  richTextFontSize: string;
+  treeBg: string;
+  treeColor: string;
+  treeFont: string;
+  treeFontSize: string;
+  version: number;
 }
 
 export interface HotKeysIt {
@@ -494,8 +561,10 @@ export interface Resolver {
   Node?: NodeTypeResolver;
   Image?: ImageTypeResolver;
   PrivateNode?: PrivateNodeTypeResolver;
-  SearchResultEntity?: SearchResultEntityTypeResolver;
+  DocumentState?: DocumentStateTypeResolver;
+  NodeScrollPosition?: NodeScrollPositionTypeResolver;
   Timestamp?: GraphQLScalarType;
+  SearchResultEntity?: SearchResultEntityTypeResolver;
   NodeSearchResults?: NodeSearchResultsTypeResolver;
   SearchResultMeta?: SearchResultMetaTypeResolver;
   NodeSearchResultEntity?: NodeSearchResultEntityTypeResolver;
@@ -503,6 +572,7 @@ export interface Resolver {
   AuthUser?: AuthUserTypeResolver;
   Secrets?: SecretsTypeResolver;
   Settings?: SettingsTypeResolver;
+  EditorSettings?: EditorSettingsTypeResolver;
   HotKeys?: HotKeysTypeResolver;
   HotKey?: HotKeyTypeResolver;
   User?: UserTypeResolver;
@@ -555,6 +625,7 @@ export interface DocumentTypeResolver<TParent = any> {
   privacy?: DocumentToPrivacyResolver<TParent>;
   privateNodes?: DocumentToPrivateNodesResolver<TParent>;
   size?: DocumentToSizeResolver<TParent>;
+  state?: DocumentToStateResolver<TParent>;
   status?: DocumentToStatusResolver<TParent>;
   updatedAt?: DocumentToUpdatedAtResolver<TParent>;
   userId?: DocumentToUserIdResolver<TParent>;
@@ -612,6 +683,10 @@ export interface DocumentToPrivateNodesResolver<TParent = any, TResult = any> {
 }
 
 export interface DocumentToSizeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentToStateResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -757,6 +832,70 @@ export interface PrivateNodeToFather_idResolver<TParent = any, TResult = any> {
 }
 
 export interface PrivateNodeToNode_idResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentStateTypeResolver<TParent = any> {
+  recentNodes?: DocumentStateToRecentNodesResolver<TParent>;
+  scrollPositions?: DocumentStateToScrollPositionsResolver<TParent>;
+  selectedNode_id?: DocumentStateToSelectedNode_idResolver<TParent>;
+  treeState?: DocumentStateToTreeStateResolver<TParent>;
+  updatedAt?: DocumentStateToUpdatedAtResolver<TParent>;
+}
+
+export interface DocumentStateToRecentNodesResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentStateToScrollPositionsResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentStateToSelectedNode_idResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentStateToTreeStateResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentStateToUpdatedAtResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeScrollPositionTypeResolver<TParent = any> {
+  node_id?: NodeScrollPositionToNode_idResolver<TParent>;
+  x?: NodeScrollPositionToXResolver<TParent>;
+  y?: NodeScrollPositionToYResolver<TParent>;
+}
+
+export interface NodeScrollPositionToNode_idResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeScrollPositionToXResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeScrollPositionToYResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -974,10 +1113,116 @@ export interface SecretsToGoogle_client_idResolver<
 }
 
 export interface SettingsTypeResolver<TParent = any> {
+  editorSettings?: SettingsToEditorSettingsResolver<TParent>;
   hotKeys?: SettingsToHotKeysResolver<TParent>;
 }
 
+export interface SettingsToEditorSettingsResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface SettingsToHotKeysResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsTypeResolver<TParent = any> {
+  codeBg?: EditorSettingsToCodeBgResolver<TParent>;
+  codeFont?: EditorSettingsToCodeFontResolver<TParent>;
+  codeFontSize?: EditorSettingsToCodeFontSizeResolver<TParent>;
+  monospaceBg?: EditorSettingsToMonospaceBgResolver<TParent>;
+  richTextBg?: EditorSettingsToRichTextBgResolver<TParent>;
+  richTextColor?: EditorSettingsToRichTextColorResolver<TParent>;
+  richTextFont?: EditorSettingsToRichTextFontResolver<TParent>;
+  richTextFontSize?: EditorSettingsToRichTextFontSizeResolver<TParent>;
+  treeBg?: EditorSettingsToTreeBgResolver<TParent>;
+  treeColor?: EditorSettingsToTreeColorResolver<TParent>;
+  treeFont?: EditorSettingsToTreeFontResolver<TParent>;
+  treeFontSize?: EditorSettingsToTreeFontSizeResolver<TParent>;
+  version?: EditorSettingsToVersionResolver<TParent>;
+}
+
+export interface EditorSettingsToCodeBgResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToCodeFontResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToCodeFontSizeResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToMonospaceBgResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToRichTextBgResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToRichTextColorResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToRichTextFontResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToRichTextFontSizeResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToTreeBgResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToTreeColorResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToTreeFontResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToTreeFontSizeResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface EditorSettingsToVersionResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -1115,6 +1360,7 @@ export interface DocumentMutationTypeResolver<TParent = any> {
   deleteDocument?: DocumentMutationToDeleteDocumentResolver<TParent>;
   editDocument?: DocumentMutationToEditDocumentResolver<TParent>;
   node?: DocumentMutationToNodeResolver<TParent>;
+  setState?: DocumentMutationToSetStateResolver<TParent>;
   uploadFile?: DocumentMutationToUploadFileResolver<TParent>;
   uploadFromGDrive?: DocumentMutationToUploadFromGDriveResolver<TParent>;
 }
@@ -1171,6 +1417,21 @@ export interface DocumentMutationToNodeResolver<TParent = any, TResult = any> {
   (
     parent: TParent,
     args: DocumentMutationToNodeArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface DocumentMutationToSetStateArgs {
+  state: DocumentStateIt;
+}
+export interface DocumentMutationToSetStateResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: DocumentMutationToSetStateArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;

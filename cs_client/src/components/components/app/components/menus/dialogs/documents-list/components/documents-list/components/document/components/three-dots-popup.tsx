@@ -17,7 +17,7 @@ const ThreeDotsPopup: React.FC<Props> = ({ documentId }) => {
         },
         {
           itemName: 'delete',
-          onClick: () => ac.documentsList.deleteDocument(documentId),
+          onClick: () => ac.dialogs.showDeleteDocument(),
         },
       ].map(attributes => (
         <PopupItem key={attributes.itemName} {...attributes} />

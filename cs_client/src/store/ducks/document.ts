@@ -4,6 +4,7 @@ import { cloneObj } from '::helpers/editing/execK/helpers';
 import { rootActionCreators } from './root';
 import { QDocumentMeta } from '::graphql/queries/document-meta';
 import { SelectNodeParams } from '::store/ducks/cache/document-cache/helpers/document/select-node';
+import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
 
 const ap = createActionPrefixer('document');
 const ac = {
@@ -34,6 +35,12 @@ const ac = {
 
   export: _(ap('export')),
   exportFulfilled: _(ap('exportFulfilled')),
+  clearFilteredNodes: _(ap('clear-filtered-nodes')),
+  setFilteredNodes: _(ap('set-filtered-nodes'), _ => (params: FilteredNodes) =>
+    _(params),
+  ),
+  setNodesFilter: _(ap('set-nodes-filter'), _ => (filter: string) => _(filter)),
+  clearNodesFilter: _(ap('clear-nodes-filter')),
 };
 type NodeId = {
   id: string;
@@ -47,6 +54,8 @@ type State = {
     fetch: AsyncOperation;
     save: AsyncOperation;
   };
+  filteredNodes: FilteredNodes;
+  nodesFilter: string;
 };
 
 const initialState: State = {
@@ -55,6 +64,8 @@ const initialState: State = {
     fetch: 'idle',
     save: 'idle',
   },
+  filteredNodes: undefined,
+  nodesFilter: '',
 };
 
 const reducer = createReducer(cloneObj(initialState), _ => [
@@ -118,6 +129,26 @@ const reducer = createReducer(cloneObj(initialState), _ => [
       ...state.asyncOperations,
       save: 'idle',
     },
+  })),
+  _(ac.setFilteredNodes, (state, { payload }) => ({
+    ...state,
+    filteredNodes: payload,
+  })),
+  _(
+    ac.clearFilteredNodes,
+    state =>
+      ({
+        ...state,
+        filteredNodes: undefined,
+      } as State),
+  ),
+  _(ac.setNodesFilter, (state, { payload }) => ({
+    ...state,
+    nodesFilter: payload,
+  })),
+  _(ac.clearNodesFilter, state => ({
+    ...state,
+    nodesFilter: '',
   })),
 ]);
 

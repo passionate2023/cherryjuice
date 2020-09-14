@@ -9,7 +9,7 @@ import { VisibilityIcon } from '::root/components/app/components/editor/info-bar
 import { CachedDocument } from '::store/ducks/cache/document-cache';
 
 export const documentHasUnsavedChanges = (document: CachedDocument) =>
-  document?.state?.localUpdatedAt > document?.updatedAt;
+  document?.localState?.updatedAt > document?.updatedAt;
 
 const mapState = (state: Store, props: Props) => ({
   isSelected: state.documentsList.selectedIDs.includes(props.document.id),
@@ -29,7 +29,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   openDocumentId,
   deletionMode,
 }) => {
-  const { size, id, name, updatedAt, hash, privacy } = document;
+  const { size, id, name, updatedAt, hash, privacy, guests } = document;
   return (
     <div
       className={`${modSelectFile.selectFile__file} ${
@@ -52,7 +52,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
 
       <span className={`${modSelectFile.selectFile__file__details} `}>
         <span className={modSelectFile.selectFile__file__details__visibility}>
-          <VisibilityIcon privacy={privacy} />
+          <VisibilityIcon privacy={privacy} numberOfGuests={guests.length} />
           <span>{size}kb</span>
         </span>
 

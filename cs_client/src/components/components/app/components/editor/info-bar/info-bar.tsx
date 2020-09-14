@@ -9,7 +9,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
-  const selectedNode_id = document?.state?.selectedNode_id;
+  const selectedNode_id = document?.persistedState?.selectedNode_id;
   const node = document?.nodes ? document.nodes[selectedNode_id] : undefined;
   return {
     node,
@@ -17,6 +17,7 @@ const mapState = (state: Store) => {
     isOnMobile: state.root.isOnMd,
     showInfoBar: state.editor.showInfoBar,
     documentPrivacy: document?.privacy,
+    numberOfGuests: document?.guests?.length,
     selectedNode_id,
   };
 };
@@ -33,20 +34,27 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
   showInfoBar,
   documentPrivacy,
   selectedNode_id,
+  numberOfGuests,
 }) => {
   const showBar = !isOnMobile || showInfoBar;
   const noSelectedDocument = !documentId;
   return showBar ? (
     <footer className={modInfoBar.infoBar}>
       <div className={modInfoBar.infoBar__group}>
-        {selectedNode_id ? (
+        {selectedNode_id && node ? (
           <Timestamps node={node} />
         ) : (
           <NoSelectedDocument noSelectedDocument={noSelectedDocument} />
         )}
       </div>
       <div className={modInfoBar.infoBar__group}>
-        {!noSelectedDocument && <VisibilityIcon privacy={documentPrivacy} />}
+        {!noSelectedDocument && (
+          <VisibilityIcon
+            privacy={documentPrivacy}
+            numberOfGuests={numberOfGuests}
+            displayNumberOfGuestsAsBadge={false}
+          />
+        )}
       </div>
     </footer>
   ) : (

@@ -3,6 +3,7 @@ import { apolloClient } from '::graphql/client/apollo-client';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { newImagePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 import { Image } from '::types/graphql/generated';
+import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 
 const base64toBlob = ({ url, name }): Promise<Blob> =>
   fetch(url).then(async res => {
@@ -16,7 +17,7 @@ const base64toBlob = ({ url, name }): Promise<Blob> =>
 type SaveImagesProps = SaveOperationProps & {};
 const saveImages = async ({ document, state }: SaveImagesProps) => {
   const nodes: [number, Image[]][] = Object.entries(
-    document.state.editedNodes.edited,
+    document.localState.editedNodes.edited,
   ).reduce((acc, [node_id, attributes]) => {
     if (
       attributes.includes('image') &&
@@ -32,7 +33,7 @@ const saveImages = async ({ document, state }: SaveImagesProps) => {
     return acc;
   }, []);
   for await (const [node_id, images_] of nodes) {
-    const node = document.nodes[node_id];
+    const node = updateDocumentId(state)(document.nodes[node_id]);
     const images: Blob[] = await Promise.all(
       Array.from(images_)
         .map(

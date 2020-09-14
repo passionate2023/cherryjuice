@@ -16,7 +16,7 @@ type Props = {
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
-  const node_id = document?.state?.selectedNode_id;
+  const node_id = document?.persistedState?.selectedNode_id;
   return {
     fetchDocumentInProgress:
       state.document.asyncOperations.fetch === 'in-progress',
@@ -26,6 +26,9 @@ const mapState = (state: Store) => {
     processLinks: state.node.processLinks,
     isDocumentOwner: hasWriteAccessToDocument(state),
     isOnMd: state.root.isOnMd,
+    scrollPosition:
+      document?.persistedState?.scrollPositions &&
+      document.persistedState.scrollPositions[node_id],
   };
 };
 const mapDispatch = {};
@@ -39,10 +42,11 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   isDocumentOwner,
   node,
   isOnMd,
+  scrollPosition,
 }) => {
   useLayoutEffect(() => {
-    if (!fetchDocumentInProgress) ac.node.fetch(node);
-  }, [node.node_id, node.documentId, fetchDocumentInProgress]);
+    if (!node?.html && !fetchDocumentInProgress) ac.node.fetch(node);
+  }, [node?.node_id, node?.documentId, fetchDocumentInProgress]);
   const nodeId = node?.id;
   const html = node?.html;
   const images = node?.image;
@@ -62,6 +66,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
             images={images}
             fetchNodeStarted={fetchNodeStarted}
             isOnMd={isOnMd}
+            scrollPosition={scrollPosition}
           />
         ) : (
           <SpinnerCircle />

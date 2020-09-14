@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 23.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 153 153" style="enable-background:new 0 0 153 153;" xml:space="preserve">
+	 viewBox="0 0 162 162" style="enable-background:new 0 0 162 162;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:none;stroke:#9F1317;stroke-width:7.7758;stroke-miterlimit:10;}
-	.st1{fill:#9F1317;}
+	.st0{fill:#9F1317;}
+	.st1{fill:none;stroke:#9F1317;stroke-width:7.25;stroke-miterlimit:10;}
 </style>
-<path id="cup" class="st0" d="M135.5,19.9H21.7v38.4l19.7,78.6c2.2,7.4,9.1,12.6,17,12.6h30.3c7.4,0,14.2-4.7,16.6-11.7l26.2-79.5
-	V19.9H135.5z"/>
 <g id="cherries">
-	<circle class="st1" cx="48.6" cy="20.3" r="20.3"/>
-	<circle class="st1" cx="89.9" cy="97" r="20.3"/>
-	<circle class="st1" cx="89.9" cy="51.8" r="20.3"/>
+	<circle class="st0" cx="52.5" cy="21.6" r="20.8"/>
+	<circle class="st0" cx="94.7" cy="100" r="20.8"/>
+	<circle class="st0" cx="94.7" cy="53.8" r="20.8"/>
+</g>
+<g id="cup">
+	<path class="st1" d="M81,149.4h17.4c4.2,0,12.7-5.3,14.3-9.1l27.8-80.8V21.5H81"/>
+	<path class="st1" d="M81,149.5H63.6c-4.2,0-12.7-5.3-14.3-9.1L21.4,59.5V21.6H81"/>
 </g>
 </svg>

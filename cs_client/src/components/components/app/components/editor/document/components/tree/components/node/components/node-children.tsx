@@ -5,6 +5,8 @@ import { lowestPrivacy } from '::root/components/app/components/menus/dialogs/do
 import { NodePrivacy } from '::types/graphql/generated';
 import { NodeProps } from '::root/components/app/components/editor/document/components/tree/components/node/node';
 import { Node } from '../node';
+import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
 
 type Props = Pick<
   NodeProps,
@@ -16,6 +18,8 @@ type Props = Pick<
   child_nodes: number[];
   privacy: NodePrivacy;
   expand?: number;
+  fatherState: NodeState;
+  filteredNodes: FilteredNodes;
 };
 
 const NodeChildren: React.FC<Props> = ({
@@ -29,6 +33,8 @@ const NodeChildren: React.FC<Props> = ({
   documentPrivacy,
   parentPrivacy,
   expand,
+  fatherState,
+  filteredNodes,
 }) => {
   const lowestPrivacyInChain = useMemo(() => {
     const b =
@@ -48,18 +54,21 @@ const NodeChildren: React.FC<Props> = ({
     >
       {child_nodes.map(node_id => {
         const node = nodes[node_id];
-        return (
-          <Node
-            key={node.node_id}
-            node_id={node.node_id}
-            nodes={nodes}
-            depth={depth + 1}
-            node_title_styles={node.node_title_styles}
-            documentPrivacy={documentPrivacy}
-            parentPrivacy={lowestPrivacyInChain}
-            expand={expand}
-          />
-        );
+        if (!filteredNodes || filteredNodes[node_id])
+          return (
+            <Node
+              key={node.node_id}
+              node_id={node.node_id}
+              nodes={nodes}
+              depth={depth + 1}
+              node_title_styles={node.node_title_styles}
+              documentPrivacy={documentPrivacy}
+              parentPrivacy={lowestPrivacyInChain}
+              expand={expand}
+              fatherState={fatherState}
+              filteredNodes={filteredNodes}
+            />
+          );
       })}
     </ul>
   );

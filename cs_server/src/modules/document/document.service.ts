@@ -10,6 +10,7 @@ import {
   EditDocumentDTO,
   GetDocumentDTO,
   GetDocumentsDTO,
+  SetDocumentStateDTO,
 } from './dto/document.dto';
 
 @Injectable()
@@ -132,5 +133,9 @@ export class DocumentService {
 
   async getSize(args: { documentId: string; user: User }): Promise<number> {
     return await this.documentRepository.getSize(args);
+  }
+
+  async setState(dto: SetDocumentStateDTO): Promise<Document> {
+    return await this.documentRepository.setState(dto);
   }
 }

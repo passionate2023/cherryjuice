@@ -50,7 +50,7 @@ const saveDeletedNodes = async ({
   document,
   state,
 }: SaveOperationProps): Promise<void> => {
-  const deletedNodes = document.state.editedNodes.deleted;
+  const deletedNodes = document.localState.editedNodes.deleted;
   for await (const node_id of deletedNodes) {
     const node = document.nodes[node_id];
     await deleteNode(node);

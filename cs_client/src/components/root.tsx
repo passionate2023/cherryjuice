@@ -1,5 +1,10 @@
 import * as React from 'react';
 import modTheme from '::sass-modules/../themes/themes.scss';
+import '::assets/styles/global-scope/material-ui.scss';
+import '::assets/styles/base.scss';
+import '::assets/styles/global-scope/global-classes.scss';
+import '::assets/styles/global-scope/google-picker.scss';
+import '::assets/styles/css-variables/css-variables.scss';
 import { useApolloClient } from '::graphql/client/hooks/apollo-client';
 import { Suspense } from 'react';
 import { Route, Switch } from 'react-router';
@@ -31,6 +36,7 @@ import { documentHasUnsavedChanges } from '::root/components/app/components/menu
 import { useRouterEffect } from '::root/components/app/components/editor/hooks/router-effect/router-effect';
 import { Router } from 'react-router-dom';
 import { router } from '::root/router/router';
+import { useTasks } from '::root/hooks/tasks';
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
@@ -90,7 +96,7 @@ const Root: React.FC<Props & PropsFromRedux> = ({
     userId,
   });
   useRouterEffect();
-
+  useTasks();
   useConsumeToken({ userId });
   return (
     <Suspense fallback={<Void />}>

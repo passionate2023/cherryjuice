@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
-import { modUserProfile } from '::sass-modules';
 
 import {
   primitiveStateToValidatedState,
@@ -14,6 +13,7 @@ import { Email } from '::root/components/app/components/menus/dialogs/settings/s
 import { Profile } from '::root/components/app/components/menus/dialogs/settings/screens/account/components/profile/profile';
 import { Password } from '::root/components/app/components/menus/dialogs/settings/screens/account/components/password/password';
 import { ManageAccount } from '::root/components/app/components/menus/dialogs/settings/screens/account/components/manage-account/manage-account';
+import { SettingsGroupContainer } from '::root/components/app/components/menus/dialogs/settings/shared/settings-group-container';
 
 const mapState = (state: Store) => ({
   currentSettings: {
@@ -84,9 +84,9 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
     state.newPasswordConfirmation,
   ]);
   return (
-    <div className={modUserProfile.userProfile}>
+    <SettingsGroupContainer>
       {tokens && (
-        <div className={modUserProfile.userProfile__personalInformation}>
+        <>
           <Profile
             firstName={state.firstName}
             lastName={state.lastName}
@@ -103,9 +103,9 @@ const UserProfile: React.FC<Props & PropsFromRedux> = ({
             newPasswordConfirmation={state.newPasswordConfirmation}
           />
           <ManageAccount />
-        </div>
+        </>
       )}
-    </div>
+    </SettingsGroupContainer>
   );
 };
 

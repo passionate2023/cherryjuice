@@ -1,7 +1,4 @@
 @import '../../vars/vars';
-.user-profile {
-  display: flex;
-}
 
 .user-profile__group {
   display: flex;
@@ -23,13 +20,10 @@
   @include respond-to($mb-down) {
     margin-left: auto;
   }
+  justify-content: center;
+  align-items: flex-start;
 }
-.user-profile__personal-information {
-  color: black;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
+
 .user-profile__personal-information__label {
   display: flex;
   color: black;

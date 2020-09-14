@@ -8,6 +8,7 @@
   --red-050: #180101;
 
   --beige: #f7f3ec;
+  --beige-50: #f7f3ec50;
 
   --neutral: #fff;
   --neutral-700: #d2d2d2;
@@ -32,6 +33,7 @@
 
   // tool-bar
   --tool-bar-background-color: var(--beige);
+  --tool-bar-background-color-transparent: var(--beige-50);
   --tool-bar-icon-background-color: transparent;
   --tool-bar-icon-background-color-on-hover: var(--neutral-700);
   --tool-bar-icon-background-color-on-active: var(--neutral-700);

@@ -20,7 +20,9 @@
   @include respond-to($md-down) {
     left: 5px;
     position: absolute;
-    bottom: calc(5px + var(--nodes-bar) + var(--formatting-bar) + var(--recent-nodes));
+    bottom: calc(
+      5px + var(--nodes-bar) + var(--formatting-bar) + var(--recent-nodes)
+    );
   }
   @include respond-to($md-up) {
     grid-area: info-bar;
@@ -81,6 +83,37 @@
   }
 }
 
+.info-bar__document-privacy__icon-container {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.info-bar__document-privacy__icon-container--badge {
+  margin-right: 5px;
+}
+.info-bar__document-privacy__icon__number-of-guests {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: grey;
+  padding-top: 2px;
+  margin-left: -1px;
+}
+.info-bar__document-privacy__icon__number-of-guests--badge {
+  margin-left: 0;
+  padding: 1px;
+  position: absolute;
+  border-radius: 50%;
+  height: 11px;
+  width: 11px;
+  top: -6px;
+  right: -6px;
+  background-color: grey;
+  color: white !important;
+}
 .info-bar__document-privacy {
   display: inline;
 }

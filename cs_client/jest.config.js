@@ -28,5 +28,5 @@ module.exports = {
       prefix: '<rootDir>/',
     }),
   },
-  testPathIgnorePatterns: ['/node_modules/', '/__data__/', '__helpers__'],
+  testPathIgnorePatterns: ['/node_modules/', '/__data__/' , '/__tests__/data/' , '__helpers__'],
 };

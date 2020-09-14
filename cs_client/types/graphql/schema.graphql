@@ -25,6 +25,7 @@ type Document {
     privacy: Privacy!
     privateNodes: [PrivateNode!]!
     size: Int!
+    state: DocumentState!
     status: String
     updatedAt: Float!
     userId: String!
@@ -41,8 +42,17 @@ type DocumentMutation {
     deleteDocument(documents: DeleteDocumentInputType!): String!
     editDocument(meta: EditDocumentIt!): String!
     node(node_id: Int): NodeMutation!
+    setState(state: DocumentStateIt!): String!
     uploadFile(files: [CTBUpload!]!): Boolean!
     uploadFromGDrive(file: UploadLinkInputType!): Boolean!
+}
+
+type DocumentState {
+    recentNodes: [Int!]!
+    scrollPositions: [NodeScrollPosition!]!
+    selectedNode_id: Int!
+    treeState: [Int!]!
+    updatedAt: Timestamp!
 }
 
 type DocumentSubscription {
@@ -50,6 +60,22 @@ type DocumentSubscription {
     id: ID!
     name: ID!
     status: DOCUMENT_SUBSCRIPTIONS!
+}
+
+type EditorSettings {
+    codeBg: String!
+    codeFont: String!
+    codeFontSize: String!
+    monospaceBg: String!
+    richTextBg: String!
+    richTextColor: String!
+    richTextFont: String!
+    richTextFontSize: String!
+    treeBg: String!
+    treeColor: String!
+    treeFont: String!
+    treeFontSize: String!
+    version: Float!
 }
 
 type HotKey {
@@ -98,6 +124,12 @@ type NodeMutation {
     uploadImage(images: [ImageUpload!]!): [[String!]!]!
 }
 
+type NodeScrollPosition {
+    node_id: Int!
+    x: Int!
+    y: Int!
+}
+
 type NodeSearchResultEntity {
     ahtmlHeadline: String
     ahtml_txt: String
@@ -142,6 +174,7 @@ type Secrets {
 }
 
 type Settings {
+    editorSettings: EditorSettings!
     hotKeys: HotKeys!
 }
 
@@ -219,6 +252,7 @@ enum HotKeyActionType {
     BG_COLOR
     BOLD
     CREATE_TEST_SAMPLE
+    DELETE_LINE
     FG_COLOR
     H1
     H2
@@ -230,6 +264,8 @@ enum HotKeyActionType {
     JUSTIFY_RIGHT
     LINE_THROUGH
     MONO
+    MOVE_LINE_DOWN
+    MOVE_LINE_UP
     REDO
     RELOAD_DOCUMENT
     REMOVE_STYLE
@@ -345,11 +381,35 @@ input DocumentGuestIt {
     userId: String!
 }
 
+input DocumentStateIt {
+    recentNodes: [Int!] = []
+    scrollPositions: [NodeScrollPositionIt!] = []
+    selectedNode_id: Int = 0
+    treeState: [Int!] = []
+    updatedAt: Timestamp = 1599976788983
+}
+
 input EditDocumentIt {
     guests: [DocumentGuestIt]
     name: String
     privacy: Privacy
     updatedAt: Timestamp!
+}
+
+input EditorSettingsIt {
+    codeBg: String!
+    codeFont: String!
+    codeFontSize: String!
+    monospaceBg: String!
+    richTextBg: String!
+    richTextColor: String!
+    richTextFont: String!
+    richTextFontSize: String!
+    treeBg: String!
+    treeColor: String!
+    treeFont: String!
+    treeFontSize: String!
+    version: Float!
 }
 
 input HotKeyIt {
@@ -375,6 +435,12 @@ input NodeMetaIt {
     read_only: Int
     sequence: Float
     updatedAt: Timestamp!
+}
+
+input NodeScrollPositionIt {
+    node_id: Int!
+    x: Int!
+    y: Int!
 }
 
 input NodeSearchIt {
@@ -445,6 +511,7 @@ input UpdateUserProfileIt {
 }
 
 input UpdateUserSettingsIt {
+    editorSettings: EditorSettingsIt
     hotKeys: HotKeysIt
 }
 

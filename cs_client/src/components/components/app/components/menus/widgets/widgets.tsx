@@ -16,7 +16,7 @@ export type Widget = {
 const mapState = (state: Store) => ({
   imports: Object.values(state.documentOperations.imports),
   exports: Object.values(state.documentOperations.exports),
-  message: state.dialogs.snackbar?.message,
+  snackbar: state.dialogs.snackbar,
   dialogIsOpen:
     state.root.isOnMd &&
     (state.dialogs.showDocumentList ||
@@ -34,15 +34,15 @@ type Props = {};
 const Widgets: React.FC<Props & PropsFromRedux> = ({
   imports,
   exports,
-  message,
+  snackbar,
   dialogIsOpen,
   showUndoDocumentAction,
   documentActionNOF,
 }) => {
   const widgets: Widget[] = [];
-  if (message)
+  if (snackbar?.message)
     widgets.push({
-      component: <Snackbar message={message} />,
+      component: <Snackbar snackbar={snackbar} />,
       key: 'Snackbar',
     });
   if (showUndoDocumentAction) {

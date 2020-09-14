@@ -1,5 +1,5 @@
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
-import { getDefaultState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-state';
+import { getDefaultLocalState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-local-state';
 
 export const removeSavedDocuments = (
   state: DocumentCacheState,
@@ -9,7 +9,7 @@ export const removeSavedDocuments = (
       .filter(([id]) => !id.startsWith('new-document'))
       .map(([, document]) => {
         const uneditedDocument =
-          document.updatedAt > document.state.localUpdatedAt;
+          document.updatedAt > document.localState.updatedAt;
         return uneditedDocument
           ? [document.id, document]
           : [
@@ -17,7 +17,8 @@ export const removeSavedDocuments = (
               {
                 ...document,
                 nodes: {},
-                state: getDefaultState({ existingState: document.state }),
+                persistedState: document.persistedState,
+                localState: getDefaultLocalState(document.id, document.nodes),
               },
             ];
       }),

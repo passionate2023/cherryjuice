@@ -12,7 +12,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { getNode } from '::store/selectors/cache/document/node';
 
 const mapState = (state: Store) => ({
-  node_id: getCurrentDocument(state)?.state?.selectedNode_id,
+  node_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
   documentId: state.document.documentId,
   show: state.dialogs.showDeleteNode,
 });

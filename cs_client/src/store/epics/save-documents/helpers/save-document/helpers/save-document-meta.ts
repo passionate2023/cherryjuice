@@ -5,7 +5,7 @@ import { EDIT_DOCUMENT_META } from '::graphql/mutations/document/edit-document-m
 
 const saveDocumentMeta = async ({ document, state }: SaveOperationProps) => {
   const editedAttributes = Object.fromEntries(
-    document.state.editedAttributes.map(attribute => [
+    document.localState.editedAttributes.map(attribute => [
       attribute,
       document[attribute],
     ]),

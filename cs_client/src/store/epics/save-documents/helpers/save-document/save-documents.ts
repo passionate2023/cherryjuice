@@ -8,13 +8,13 @@ import { saveNodesContent } from '::store/epics/save-documents/helpers/save-docu
 import { saveNewDocument } from '::store/epics/save-documents/helpers/save-document/helpers/save-new-document';
 import { saveImages } from '::store/epics/save-documents/helpers/save-document/helpers/save-images';
 import { saveDocumentMeta } from './helpers/save-document-meta';
+import { saveDocumentState } from '::store/epics/save-documents/helpers/save-document/helpers/save-document-state';
 import { CachedDocument } from '::store/ducks/cache/document-cache';
 
 const saveDocuments = async (
   state: SaveOperationState,
   editedDocuments: CachedDocument[],
 ): Promise<SaveOperationState> => {
-
   for (const document of editedDocuments) {
     state.deletedNodes[document.id] = {};
     await saveNewDocument({ state, document });
@@ -24,6 +24,7 @@ const saveDocuments = async (
     await saveImages({ state, document });
     await saveNodesContent({ state, document });
     await saveDocumentMeta({ state, document });
+    await saveDocumentState({ state, document });
   }
 
   if (location.pathname.startsWith('/document/new-document')) {

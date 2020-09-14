@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { modUserProfile } from '::sass-modules';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
@@ -11,6 +10,7 @@ import {
   ValidatedInputState,
 } from '::root/components/app/components/menus/dialogs/settings/screens/account/reducer/reducer';
 import { Icons } from '::root/components/shared-components/icon/helpers/icons';
+import { SettingsGroup } from '::root/components/app/components/menus/dialogs/settings/shared/settings-group';
 
 type Props = {
   firstName: ValidatedInputState;
@@ -63,14 +63,11 @@ const Profile: React.FC<Props> = ({ firstName, lastName, username }) => {
   ];
 
   return (
-    <div className={modUserProfile.userProfile__group}>
-      <span className={modUserProfile.userProfile__group__name}>profile</span>
-      <div className={modUserProfile.userProfile__group__elements}>
-        {personalInformation.map(po => (
-          <ValidatedTextInput key={po.label} {...po} />
-        ))}
-      </div>
-    </div>
+    <SettingsGroup name={'profile'}>
+      {personalInformation.map(po => (
+        <ValidatedTextInput key={po.label} {...po} />
+      ))}
+    </SettingsGroup>
   );
 };
 

@@ -30,7 +30,7 @@ const adapt = ({
 });
 
 const saveNewNodes = async ({ state, document }: SaveOperationProps) => {
-  const newNodes = document.state.editedNodes.created
+  const newNodes = document.localState.editedNodes.created
     .filter(node_id => !state.deletedNodes[document.id][node_id])
     .map(node_id => document.nodes[node_id])
     .sort((a, b) => a.node_id - b.node_id);

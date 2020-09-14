@@ -7,7 +7,7 @@ import { transitions } from '::root/components/shared-components/transitions/tra
 import { AlertType } from '::types/react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 
-const headerVariant = {
+export const headerVariant = {
   [AlertType.Error]: modAlertModal.alertModal__headerDanger,
   [AlertType.Warning]: modAlertModal.alertModal__headerWarning,
 };

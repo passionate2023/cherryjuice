@@ -1,12 +1,26 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const removeBrotliExtension = async manifestEntries => {
+  const manifest = manifestEntries.map(entry => {
+    if (entry.url.endsWith('.br')) {
+      entry.url = entry.url.substring(0, entry.url.length - 3);
+    }
+    return entry;
+  });
+  return { manifest, warnings: [] };
+};
+
 const { alias, globalStyles, paths } = require('./variables');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const production = process.env.NODE_ENV === 'production';
 const styleLoader = production ? MiniCssExtractPlugin.loader : 'style-loader';
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin;
+const CompressionPlugin = require('compression-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 module.exports = {
   entry: {
     index: './src/index.tsx',
@@ -118,22 +132,39 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new CopyPlugin([{ from: paths.icons, to: paths.iconsDist }]),
     production && new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/assets/index.html',
     }),
-    new FaviconsWebpackPlugin(
-      {
+    production &&
+      new FaviconsWebpackPlugin({
         logo: './src/assets/icons/material/cherry-juice.svg',
         mode: 'webapp',
-        devMode: 'webapp',
         favicons: {
           appName: 'CherryJuice',
           appDescription: 'Start building your knowledge base',
           background: '#180101',
           theme_color: '#180101',
-        }
+        },
       }),
-    new CopyPlugin([{ from: paths.icons, to: paths.iconsDist }]),
+    production &&
+      new CompressionPlugin({
+        deleteOriginalAssets: true,
+        filename: '[path].br[query]',
+        algorithm: 'brotliCompress',
+        test: /\.(js|css|svg)$/,
+      }),
+    production &&
+      new WorkboxPlugin.GenerateSW({
+        clientsClaim: true,
+        skipWaiting: true,
+        maximumFileSizeToCacheInBytes: production ? 1024 * 2000 : 1024 * 20000,
+        swDest: 'workbox-sw.js',
+        navigateFallback: 'index.html',
+        manifestTransforms: [removeBrotliExtension],
+      }),
+    production &&
+      new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
   ].filter(Boolean),
 };

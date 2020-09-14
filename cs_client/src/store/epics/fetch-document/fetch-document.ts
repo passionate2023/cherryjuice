@@ -10,6 +10,7 @@ import { createErrorHandler } from '../shared/create-error-handler';
 import { QDocumentMeta, DOCUMENT_META } from '::graphql/queries/document-meta';
 import { getDocuments } from '::store/selectors/cache/document/document';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
+import { adaptToPersistedState } from '::store/ducks/cache/document-cache/helpers/document/shared/adapt-persisted-state';
 
 const createLocalRequest = (
   file_id: string,
@@ -22,8 +23,11 @@ const createLocalRequest = (
     const node = Object.values(document.nodes);
     delete document.nodes;
 
+    const persistedState = adaptToPersistedState(document.persistedState);
+    delete document.persistedState;
     const rawDocument: QDocumentMeta = {
       ...document,
+      state: persistedState,
       node: node,
     };
     res(rawDocument);
@@ -67,9 +71,9 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
           if (next && next.documentId === document.id)
             return concat(
               of(ac_.node.clearNext()),
-              of(ac_.document.fetchFulfilled(document, next))
+              of(ac_.document.fetchFulfilled(document, next)),
             );
-          else return of(ac_.document.fetchFulfilled(document))
+          else return of(ac_.document.fetchFulfilled(document));
         }),
       );
 
@@ -92,9 +96,7 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
               callbacks: [ac.dialogs.clearAlert, ac.dialogs.showDocumentList],
             },
           },
-          actionCreators: handleFetchError({
-            userId: store.getState().auth.user?.id,
-          }),
+          actionCreators: handleFetchError(),
         }),
       );
     }),

@@ -40,13 +40,9 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const SearchFilters: React.FC<Props & PropsFromRedux> = ({
-  show,
-  dockedDialog,
-}) => {
+const SearchFilters: React.FC<Props & PropsFromRedux> = ({ show }) => {
   const ref = useSetCssVariablesOnWindowResize(
     ac.cssVariables.setSearchFiltersHeight,
-    dockedDialog,
   );
   const props = useSpring({
     to: {

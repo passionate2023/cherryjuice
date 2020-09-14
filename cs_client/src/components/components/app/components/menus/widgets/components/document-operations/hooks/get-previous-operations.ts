@@ -10,7 +10,7 @@ const useGetPreviousOperations = () => {
       .query({
         ...QUERY_DOCUMENTS.currentImports,
         variables: undefined,
-        fetchPolicy: 'network-only',
+        fetchPolicy: 'no-cache',
       })
       .then(data => {
         const { exports, imports } = data

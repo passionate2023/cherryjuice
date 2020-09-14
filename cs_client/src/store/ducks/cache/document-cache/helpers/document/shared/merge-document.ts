@@ -1,8 +1,11 @@
 import { CachedDocument } from '::store/ducks/cache/document-cache';
-import { getDefaultState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-state';
 import { constructTree } from '::root/components/app/components/editor/document/hooks/get-document-meta/helpers/construct-tree';
 import { QDocumentMeta } from '::graphql/queries/document-meta';
 import { SelectNodeParams } from '::store/ducks/cache/document-cache/helpers/document/select-node';
+import { expandNode } from '::store/ducks/cache/document-cache/helpers/node/expand-node/expand-node';
+import { getDefaultLocalState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-local-state';
+import { adaptFromPersistedState } from '::store/ducks/cache/document-cache/helpers/document/shared/adapt-persisted-state';
+import { pluckProperties } from '::store/ducks/cache/document-cache/helpers/document/shared/pluck-document-meta';
 
 export const mergeDocument = (
   fetchedDocument: QDocumentMeta,
@@ -14,53 +17,47 @@ export const mergeDocument = (
     privateNodes: fetchedDocument.privateNodes,
   });
 
-  const existingState = existingDocument?.state;
+  const existingLocalState = existingDocument?.localState;
   const existingNodesDict = existingDocument?.nodes;
 
   const existingWasInDocsListOnly =
     !existingNodesDict || (existingNodesDict && !existingNodesDict[0]);
   const existingDocHasChanges =
-    existingState && existingState.localUpdatedAt > existingDocument.updatedAt;
+    existingLocalState &&
+    existingLocalState.updatedAt > existingDocument.updatedAt;
 
   let newCachedDocument: CachedDocument;
+  const localState = getDefaultLocalState(fetchedDocument.id, nodes);
+  const persistedState = adaptFromPersistedState({
+    persistedState: fetchedDocument.state,
+    nodes,
+  });
   if (existingWasInDocsListOnly && existingDocHasChanges) {
     newCachedDocument = {
-      userId: existingDocument.userId,
-      name: existingDocument.name,
-      size: existingDocument.size,
-      folder: existingDocument.folder,
-      guests: existingDocument.guests,
-      hash: existingDocument.hash,
-      id: existingDocument.id,
-      privacy: existingDocument.privacy,
-      privateNodes: existingDocument.privateNodes,
-      createdAt: existingDocument.createdAt,
-      updatedAt: existingDocument.updatedAt,
+      ...pluckProperties(existingDocument),
       nodes,
-      state: existingDocument.state,
+      localState,
+      persistedState,
     };
   } else {
     newCachedDocument = {
-      userId: fetchedDocument.userId,
-      name: fetchedDocument.name,
-      size: fetchedDocument.size,
-      folder: fetchedDocument.folder,
-      guests: fetchedDocument.guests,
-      hash: fetchedDocument.hash,
-      id: fetchedDocument.id,
-      privacy: fetchedDocument.privacy,
-      privateNodes: fetchedDocument.privateNodes,
-      createdAt: fetchedDocument.createdAt,
-      updatedAt: fetchedDocument.updatedAt,
+      ...pluckProperties(fetchedDocument),
       nodes,
-      state: getDefaultState({
-        existingState,
-        nodes,
-      }),
+      localState,
+      persistedState,
     };
   }
   if (nextNode && newCachedDocument.nodes[nextNode.node_id]) {
-    newCachedDocument.state.selectedNode_id = nextNode.node_id;
+    newCachedDocument.persistedState.selectedNode_id = nextNode.node_id;
+    newCachedDocument.persistedState.localUpdatedAt = Date.now();
   }
+  expandNode(
+    { [newCachedDocument.id]: newCachedDocument },
+    {
+      node_id: newCachedDocument.persistedState.selectedNode_id,
+      documentId: newCachedDocument.id,
+      expandChildren: false,
+    },
+  );
   return newCachedDocument;
 };

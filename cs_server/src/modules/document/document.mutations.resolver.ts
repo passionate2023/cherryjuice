@@ -21,6 +21,7 @@ import { NodeMutation } from '../node/entities/node-mutation.entity';
 import { CreateDocumentIt } from './input-types/create-document.it';
 import { EditDocumentIt } from './input-types/edit-document.it';
 import { Document } from './entities/document.entity';
+import { DocumentState } from './entities/document-state.entity';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => DocumentMutation)
@@ -79,6 +80,29 @@ export class DocumentMutationsResolver {
     });
     return node.id;
   }
+
+  @ResolveField(() => String)
+  async setState(
+    @Args({
+      name: 'state',
+      type: () => DocumentState,
+    })
+    state: DocumentState,
+    @Parent() document: Document,
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    const savedDocument = await this.documentService.setState({
+      meta: {
+        state,
+      },
+      getDocumentDTO: {
+        documentId: document.id,
+        userId: user.id,
+      },
+    });
+    return savedDocument.id;
+  }
+
   @ResolveField(() => String)
   async deleteDocument(
     @Args({

@@ -6,7 +6,8 @@ const createNodeOverlayHelper = () => {
     tree: { scrollWidth: 250 },
   };
   return {
-    init: () => (state.tree = document.querySelector('.' + treeModule.tree)),
+    init: () =>
+      (state.tree = document.querySelector('.' + treeModule.tree_rootList)),
     updateWidth: () => {
       cssVariables.setOverlayWidth(0);
       cssVariables.setOverlayWidth(state.tree.scrollWidth);

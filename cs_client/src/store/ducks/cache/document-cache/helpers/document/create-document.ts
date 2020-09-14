@@ -2,7 +2,8 @@ import {
   CachedDocument,
   DocumentCacheState,
 } from '::store/ducks/cache/document-cache';
-import { getDefaultState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-state';
+import { getDefaultPersistedState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-persisted-state';
+import { getDefaultLocalState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-local-state';
 
 export type CreateDocumentParams = Omit<CachedDocument, 'state'>;
 
@@ -13,8 +14,7 @@ export const createDocument = (
   ...state,
   [document.id]: {
     ...document,
-    state: {
-      ...getDefaultState({ newDocument: true }),
-    },
+    persistedState: getDefaultPersistedState(),
+    localState: getDefaultLocalState(document.id, document.nodes),
   },
 });

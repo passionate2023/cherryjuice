@@ -127,7 +127,7 @@ const DocumentsList: React.FC<PropsFromRedux> = ({
     {
       hidden: showDeletionButtons,
       className: modDialog.dialog__header__fileButton,
-      onClick: ac.documentsList.deleteDocuments,
+      onClick: ac.dialogs.showDeleteDocument,
       icon: Icons.material['delete'],
       testId: testIds.dialogs__selectDocument__header__buttons__delete,
       disabled: selectedIDs.length === 0,
