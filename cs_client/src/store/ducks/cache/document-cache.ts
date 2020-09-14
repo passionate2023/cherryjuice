@@ -144,7 +144,7 @@ export type DocumentTimeLineMeta = {
 const initialState: State = {
   documents: {},
 };
-export const dTM = new TimelinesManager<DocumentTimeLineMeta>();
+export const dTM = new TimelinesManager<DocumentTimeLineMeta>(true);
 dTM.setOnFrameChangeFactory(() =>
   import('::store/store').then(
     module => module.ac.timelines.setDocumentActionNOF,
@@ -154,9 +154,12 @@ dTM.setOnFrameChangeFactory(() =>
 const reducer = createReducer(initialState, _ => [
   ...[
     // non undoable actions
-    _(rac.resetState, () => ({
-      ...cloneObj(initialState),
-    })),
+    _(rac.resetState, () => {
+      dTM.resetAll();
+      return {
+        ...cloneObj(initialState),
+      };
+    }),
     _(dac.fetchFulfilled, (state, { payload }) =>
       loadDocument(state, payload.document, payload.nextNode),
     ),

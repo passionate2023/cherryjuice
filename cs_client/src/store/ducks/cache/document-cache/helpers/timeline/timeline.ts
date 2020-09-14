@@ -12,7 +12,7 @@ export type Frame<T> = {
   meta: TimelineFrameMeta<T>;
 };
 
-type Frames<T> = {
+export type Frames<T> = {
   [position: number]: Frame<T>;
 };
 export type OnFrameChange<T> = (
@@ -20,6 +20,11 @@ export type OnFrameChange<T> = (
   frame: Frame<T>,
 ) => void;
 const noop = () => undefined;
+
+export type PersistedFrame<T> = {
+  frames: Frames<T>;
+  position: number;
+};
 
 export class Timeline<T> {
   private position: number;
@@ -36,6 +41,11 @@ export class Timeline<T> {
     this.position = -1;
     this.frames = {};
   }
+
+  reHydrate = ({ position, frames }: PersistedFrame<T>): void => {
+    this.position = position;
+    this.frames = frames;
+  };
 
   private get numberOfFrames(): NumberOfFrames {
     const numberOfFrames = Object.keys(this.frames).length - 1;

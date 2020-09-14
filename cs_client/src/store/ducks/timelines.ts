@@ -3,6 +3,9 @@ import { createActionPrefixer } from './helpers/shared';
 import { NumberOfFrames } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
 import { Frame } from '::store/ducks/cache/document-cache/helpers/timeline/timeline';
 import { DocumentTimeLineMeta } from '::store/ducks/cache/document-cache';
+import { rootActionCreators as rac } from '::store/ducks/root';
+import { cloneObj } from '::helpers/editing/execK/helpers';
+import { documentActionCreators as dac } from '::store/ducks/document';
 
 const ap = createActionPrefixer('timelines');
 
@@ -26,6 +29,15 @@ const initialState: State = {
   showUndoDocumentAction: false,
 };
 const reducer = createReducer(initialState, _ => [
+  _(rac.resetState, () => ({
+    ...cloneObj(initialState),
+  })),
+  _(
+    dac.saveFulfilled,
+    (): State => ({
+      ...cloneObj(initialState),
+    }),
+  ),
   _(ac.setDocumentActionNOF, (state, { payload }) => ({
     ...state,
     documentActionNOF: payload.nof,
