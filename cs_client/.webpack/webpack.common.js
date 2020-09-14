@@ -1,4 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const removeBrotliExtension = async manifestEntries => {
+  const manifest = manifestEntries.map(entry => {
+    if (entry.url.endsWith('.br')) {
+      entry.url = entry.url.substring(0, entry.url.length - 3);
+    }
+    return entry;
+  });
+  return { manifest, warnings: [] };
+};
+
 const { alias, globalStyles, paths } = require('./variables');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -152,6 +162,7 @@ module.exports = {
         maximumFileSizeToCacheInBytes: production ? 1024 * 2000 : 1024 * 20000,
         swDest: 'workbox-sw.js',
         navigateFallback: 'index.html',
+        manifestTransforms: [removeBrotliExtension],
       }),
     production &&
       new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
