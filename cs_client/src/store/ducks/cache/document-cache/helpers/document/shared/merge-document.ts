@@ -52,7 +52,7 @@ export const mergeDocument = (
     newCachedDocument.persistedState.localUpdatedAt = Date.now();
   }
   expandNode(
-    { [newCachedDocument.id]: newCachedDocument },
+    { documents: { [newCachedDocument.id]: newCachedDocument } },
     {
       node_id: newCachedDocument.persistedState.selectedNode_id,
       documentId: newCachedDocument.id,

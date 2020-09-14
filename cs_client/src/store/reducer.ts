@@ -19,7 +19,32 @@ import { animationReducer } from '::store/ducks/animations';
 import { timelinesReducer } from '::store/ducks/timelines';
 import { editorSettingsReducer } from '::store/ducks/settings/editor-settings';
 
-const reducer = combineReducers({
+const persistedReducers = {
+  documentCache: persistReducer(
+    {
+      key: 'documentCache',
+      storage,
+      blacklist: [],
+    },
+    documentCacheReducer,
+  ),
+  document: persistReducer(
+    {
+      key: 'document',
+      storage,
+      whitelist: ['documentId'],
+      transforms: documentTransforms,
+    },
+    documentReducer,
+  ) as Reducer<DocumentState>,
+  auth: persistReducer(
+    {
+      key: 'auth',
+      storage,
+      blacklist: ['ongoingOperation', 'alert'],
+    },
+    authReducer,
+  ),
   editorSettings: persistReducer(
     {
       key: 'editorSettings',
@@ -34,17 +59,6 @@ const reducer = combineReducers({
     },
     cacheReducer,
   ),
-  documentCache: documentCacheReducer,
-  animation: animationReducer,
-  document: persistReducer(
-    {
-      key: 'document',
-      storage,
-      whitelist: ['documentId'],
-      transforms: documentTransforms,
-    },
-    documentReducer,
-  ) as Reducer<DocumentState>,
   editor: persistReducer(
     {
       key: 'editor',
@@ -60,19 +74,6 @@ const reducer = combineReducers({
     },
     settingsReducer,
   ),
-  dialogs: dialogsReducer,
-  auth: persistReducer(
-    {
-      key: 'auth',
-      storage,
-      blacklist: ['ongoingOperation', 'alert'],
-    },
-    authReducer,
-  ),
-  node: nodeReducer,
-  documentsList: documentsListReducer,
-  documentOperations: documentOperationsReducer,
-  timelines: timelinesReducer,
   root: persistReducer(
     {
       key: 'root',
@@ -81,7 +82,6 @@ const reducer = combineReducers({
     },
     rootReducer,
   ) as Reducer<RootReducerState>,
-  cssVariables: cssVariablesReducer,
   search: persistReducer(
     {
       key: 'search',
@@ -90,6 +90,20 @@ const reducer = combineReducers({
     },
     searchReducer,
   ) as Reducer<SearchReducerState>,
+};
+
+const nonPersistedReducers = {
+  animation: animationReducer,
+  dialogs: dialogsReducer,
+  node: nodeReducer,
+  documentsList: documentsListReducer,
+  documentOperations: documentOperationsReducer,
+  timelines: timelinesReducer,
+  cssVariables: cssVariablesReducer,
+};
+const reducer = combineReducers({
+  ...persistedReducers,
+  ...nonPersistedReducers,
 });
 
 export { reducer };

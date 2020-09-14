@@ -12,13 +12,13 @@ export const selectNode = (
   { documentId, node_id }: SelectNodeParams,
 ): DocumentCacheState => {
   node_id = +node_id;
-  const document = state[documentId];
+  const document = state.documents[documentId];
   if (!document?.nodes[node_id] && document.nodes && document.nodes[0])
     node_id = getDefaultSelectedNode_id(document.nodes);
   if (node_id && document?.nodes[node_id]) {
     document.persistedState.selectedNode_id = node_id;
     document.persistedState.recentNodes = [
-      ...state[documentId].persistedState.recentNodes.filter(
+      ...state.documents[documentId].persistedState.recentNodes.filter(
         _node_id => _node_id !== node_id,
       ),
       node_id,

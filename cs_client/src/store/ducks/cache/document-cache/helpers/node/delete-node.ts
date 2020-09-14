@@ -13,7 +13,7 @@ export const deleteNode = (
   state: DocumentCacheState,
   { node_id, documentId, mode }: DeleteNodeParams,
 ): DocumentCacheState => {
-  const document = state[documentId];
+  const document = state.documents[documentId];
   const node = document.nodes[node_id];
   if (mode !== 'soft') delete document.nodes[node_id];
 
@@ -34,7 +34,7 @@ export const deleteNode = (
     );
   document.persistedState.recentNodes = calcRecentNodes({
     nodes: document.nodes,
-    recentNodes: state[documentId].persistedState.recentNodes,
+    recentNodes: state.documents[documentId].persistedState.recentNodes,
     node_id,
   });
   document.persistedState.selectedNode_id =

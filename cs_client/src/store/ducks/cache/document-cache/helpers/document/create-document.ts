@@ -12,9 +12,12 @@ export const createDocument = (
   document: CreateDocumentParams,
 ): DocumentCacheState => ({
   ...state,
-  [document.id]: {
-    ...document,
-    persistedState: getDefaultPersistedState(),
-    localState: getDefaultLocalState(document.id, document.nodes),
+  documents: {
+    ...state.documents,
+    [document.id]: {
+      ...document,
+      persistedState: getDefaultPersistedState(),
+      localState: getDefaultLocalState(document.id, document.nodes),
+    },
   },
 });

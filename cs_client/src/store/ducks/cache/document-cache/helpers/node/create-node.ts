@@ -14,7 +14,7 @@ export const createNode = (
   state: DocumentCacheState,
   { createdNode: node, previous_sibling_node_id }: CreateNodeParams,
 ): DocumentCacheState => {
-  const document = state[node.documentId];
+  const document = state.documents[node.documentId];
   document.nodes[node.node_id] = node;
 
   const fatherNode = document.nodes[node.father_id];
@@ -38,7 +38,7 @@ export const createNode = (
   document.localState.updatedAt = Date.now();
   document.localState.highestNode_id = node.node_id;
   expandNode(
-    { [document.id]: document },
+    { documents: { [document.id]: document } },
     {
       node_id: document.persistedState.selectedNode_id,
       documentId: document.id,

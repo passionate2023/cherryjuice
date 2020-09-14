@@ -23,9 +23,10 @@ const change = () => {
 };
 
 const getRoute = createSelector(
-  (state: Store) => state.documentCache[state.document.documentId]?.id,
   (state: Store) =>
-    state.documentCache[state.document.documentId]?.persistedState
+    state.documentCache.documents[state.document.documentId]?.id,
+  (state: Store) =>
+    state.documentCache.documents[state.document.documentId]?.persistedState
       ?.selectedNode_id,
   (state: Store) => state.document.asyncOperations.fetch,
   (state: Store) => state.auth.user?.id,

@@ -33,7 +33,7 @@ export const syncPersistedState = (intervalMs = 5 * 1000) => {
             SET_DOCUMENT_STATE({
               file_id: documentId,
               state: adaptToPersistedState(
-                state.documentCache[documentId].persistedState,
+                state.documentCache.documents[documentId].persistedState,
               ),
             }),
           );

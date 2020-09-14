@@ -20,6 +20,8 @@ const fetchNodeEpic = (action$: Observable<Actions>) => {
       return validNode_id && nodeFetchIdle && nodeHasNoHtml;
     }),
     concatMap(({ payload: { node_id, documentId } }) => {
+      const loading = of(ac_.node.fetchInProgress(node_id));
+      const fulfilled = of(ac_.node.fetchFulfilled(node_id));
       const fetchHtml = gqlQuery(
         NODE_HTML({
           file_id: documentId,
@@ -70,8 +72,6 @@ const fetchNodeEpic = (action$: Observable<Actions>) => {
           ),
         ),
       );
-      const loading = of(ac_.node.fetchInProgress(node_id));
-      const fulfilled = of(ac_.node.fetchFulfilled(node_id));
       return concat(
         loading,
         fetchHtml,

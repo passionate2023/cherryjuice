@@ -15,19 +15,13 @@ export const addFetchedFields = (
   state: DocumentCacheState,
   { documentId, node_id, data }: AddHtmlParams,
 ): DocumentCacheState => {
-  const node = state[documentId].nodes[node_id];
+  const node = state.documents[documentId].nodes[node_id];
 
   if (data['html'] && node.html) {
     return state;
   }
-  return {
-    ...state,
-    [documentId]: {
-      ...state[documentId],
-      nodes: {
-        ...state[documentId].nodes,
-        [node_id]: { ...node, ...data },
-      },
-    },
-  };
+  Object.entries(data).forEach(([key, value]) => {
+    node[key] = value;
+  });
+  return state;
 };

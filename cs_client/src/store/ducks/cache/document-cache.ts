@@ -130,14 +130,20 @@ export type CachedDocument = Omit<QDocumentMeta, 'node' | 'state'> & {
   persistedState: PersistedDocumentState;
 };
 
-type State = {
+export type CachedDocumentDict = {
   [documentId: string]: CachedDocument;
+};
+
+type State = {
+  documents: CachedDocumentDict;
 };
 export type DocumentTimeLineMeta = {
   node_id?: number;
   documentId?: string;
 };
-const initialState: State = {};
+const initialState: State = {
+  documents: {},
+};
 export const dTM = new TimelinesManager<DocumentTimeLineMeta>();
 dTM.setOnFrameChangeFactory(() =>
   import('::store/store').then(
@@ -180,7 +186,7 @@ const reducer = createReducer(initialState, _ => [
       loadDocumentsList(state, payload),
     ),
     _(ac.addFetchedFields, (state, { payload }) =>
-      addFetchedFields(state, payload),
+      produce(state, draft => addFetchedFields(draft, payload)),
     ),
     _(ac.undoDocumentAction, state => dTM.current.undo(state)),
     _(ac.redoDocumentAction, state => dTM.current.redo(state)),

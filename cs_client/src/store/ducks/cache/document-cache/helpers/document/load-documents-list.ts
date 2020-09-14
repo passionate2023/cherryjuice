@@ -1,4 +1,7 @@
-import { DocumentCacheState } from '::store/ducks/cache/document-cache';
+import {
+  CachedDocumentDict,
+  DocumentCacheState,
+} from '::store/ducks/cache/document-cache';
 import { DocumentMeta } from '::types/graphql-adapters';
 import { getDefaultPersistedState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-persisted-state';
 import { getDefaultLocalState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-local-state';
@@ -11,7 +14,7 @@ export const loadDocumentsList = (
   documents: LoadDocumentsListPayload,
 ): DocumentCacheState => {
   {
-    const fetchedDocuments: DocumentCacheState = Object.fromEntries(
+    const fetchedDocuments: CachedDocumentDict = Object.fromEntries(
       documents.map(document => [
         document.id,
         {
@@ -23,16 +26,21 @@ export const loadDocumentsList = (
         },
       ]),
     );
-    Object.keys(state).forEach(documentId => {
+    Object.keys(state.documents).forEach(documentId => {
       const intruder = !fetchedDocuments[documentId];
       const ownedBySameUser =
-        fetchedDocuments[documentId]?.userId === state[documentId]?.userId;
+        fetchedDocuments[documentId]?.userId ===
+        state.documents[documentId]?.userId;
       const notNew = !documentId.startsWith('new');
-      if (intruder && notNew && ownedBySameUser) delete state[documentId];
+      if (intruder && notNew && ownedBySameUser)
+        delete state.documents[documentId];
     });
     return {
-      ...fetchedDocuments,
       ...state,
+      documents: {
+        ...fetchedDocuments,
+        ...state.documents,
+      },
     };
   }
 };

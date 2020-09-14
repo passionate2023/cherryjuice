@@ -14,7 +14,7 @@ export const mutateDocument = (
   state: DocumentCacheState,
   payload: MutateDocumentProps,
 ): DocumentCacheState => {
-  const document = state[payload.documentId];
+  const document = state.documents[payload.documentId];
   Object.entries(payload.meta).forEach(([key, value]) => {
     document[key] = value;
     if (!document.localState.editedAttributes.includes(key))

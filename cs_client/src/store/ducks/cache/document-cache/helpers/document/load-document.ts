@@ -10,6 +10,13 @@ export const loadDocument = (
 ): DocumentCacheState => {
   return {
     ...state,
-    [document.id]: mergeDocument(document, state[document.id], next),
+    documents: {
+      ...state.documents,
+      [document.id]: mergeDocument(
+        document,
+        state.documents[document.id],
+        next,
+      ),
+    },
   };
 };
