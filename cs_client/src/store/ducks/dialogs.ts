@@ -144,14 +144,6 @@ const reducer = createReducer(initialState, _ => [
     showReloadDocument: false,
     showDeleteDocument: false,
   })),
-  _(dac.setDocumentId, (state, { payload: documentId }) => ({
-    ...state,
-    showDocumentList: !documentId ? true : state.showDocumentList,
-  })),
-  _(aac.setAuthenticationSucceeded, state => ({
-    ...state,
-    showDocumentList: state.showSettingsDialog ? state.showDocumentList : true,
-  })),
   // alert
   _(actionCreators.setAlert, (state, { payload }) => ({
     ...state,

@@ -1,7 +1,10 @@
 import { QDocumentMeta } from '::graphql/queries/document-meta';
 import { CachedDocument } from '::store/ducks/cache/document-cache';
+import { QDocumentsListItem } from '::graphql/fragments/document-list-item';
 
-export const pluckProperties = (document: QDocumentMeta | CachedDocument) => ({
+export const pluckProperties = (
+  document: QDocumentsListItem | QDocumentMeta | CachedDocument,
+) => ({
   userId: document.userId,
   name: document.name,
   size: document.size,

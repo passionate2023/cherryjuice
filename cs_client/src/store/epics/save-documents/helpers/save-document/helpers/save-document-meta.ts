@@ -10,8 +10,7 @@ const saveDocumentMeta = async ({ document, state }: SaveOperationProps) => {
       document[attribute],
     ]),
   );
-  if (!editedAttributes.updatedAt)
-    editedAttributes.updatedAt = new Date().getTime();
+  editedAttributes.updatedAt = document.localState.localUpdatedAt;
   if (editedAttributes.guests)
     editedAttributes.guests = editedAttributes.guests.map(
       ({ userId, email, accessLevel }) =>

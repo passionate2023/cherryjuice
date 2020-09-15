@@ -54,6 +54,9 @@ import {
   SetScrollPositionParams,
 } from '::store/ducks/cache/document-cache/helpers/node/set-scroll-position';
 import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { DocumentStateTuple } from '::store/tasks/sync-persisted-state';
+import { neutralizePersistedState } from '::store/ducks/cache/document-cache/helpers/document/neutralize-persisted-state';
+import { selectDocument } from '::store/ducks/cache/document-cache/helpers/document/select-document';
 
 const ap = createActionPrefixer('document-cache');
 
@@ -94,6 +97,10 @@ const ac = {
   ),
   undoDocumentAction: _(ap('undo-document-action')),
   redoDocumentAction: _(ap('redo-document-action')),
+  neutralizePersistedState: _(
+    ap('neutralize-persisted-state'),
+    _ => (param: DocumentStateTuple[]) => _(param),
+  ),
 };
 
 export type NodesDict = { [node_id: number]: QFullNode };
@@ -111,7 +118,7 @@ export type CachedDocumentState = {
   highestNode_id: number;
   editedAttributes: string[];
   editedNodes: CachedNodesState;
-  updatedAt: number;
+  localUpdatedAt: number;
 };
 export type PersistedDocumentState = {
   selectedNode_id?: number;
@@ -122,6 +129,8 @@ export type PersistedDocumentState = {
   recentNodes: number[];
   updatedAt: number;
   localUpdatedAt: number;
+  lastOpenedAt: number;
+  localLastOpenedAt: number;
 };
 export type CachedDocument = Omit<QDocumentMeta, 'node' | 'state'> & {
   nodes: NodesDict;
@@ -161,11 +170,16 @@ const reducer = createReducer(initialState, _ => [
       };
     }),
     _(dac.fetchFulfilled, (state, { payload }) =>
-      loadDocument(state, payload.document, payload.nextNode),
+      produce(state, draft =>
+        selectDocument(
+          loadDocument(draft, payload.document, payload.nextNode),
+          payload.document.id,
+        ),
+      ),
     ),
     _(dac.setDocumentId, (state, { payload }) => {
       dTM.setCurrent(payload);
-      return state;
+      return produce(state, draft => selectDocument(draft, payload));
     }),
     _(ac.createDocument, (state, { payload }) =>
       createDocument(state, payload),
@@ -186,7 +200,7 @@ const reducer = createReducer(initialState, _ => [
         : state,
     ),
     _(dlac.fetchDocumentsFulfilled, (state, { payload }) =>
-      loadDocumentsList(state, payload),
+      produce(state, draft => loadDocumentsList(draft, payload)),
     ),
     _(ac.addFetchedFields, (state, { payload }) =>
       produce(state, draft => addFetchedFields(draft, payload)),
@@ -201,6 +215,9 @@ const reducer = createReducer(initialState, _ => [
     ),
     _(ac.setScrollPosition, (state, { payload }) =>
       produce(state, draft => setScrollPosition(draft, payload)),
+    ),
+    _(ac.neutralizePersistedState, (state, { payload }) =>
+      produce(state, draft => neutralizePersistedState(draft, payload)),
     ),
   ],
   ...[

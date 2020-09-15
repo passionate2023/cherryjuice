@@ -11,7 +11,7 @@ export const getDocuments = createSelector(_getDocuments, documents => {
 });
 export const getEditedDocuments = () =>
   getDocumentsList(store.getState()).filter(
-    document => document.updatedAt < document.localState.updatedAt,
+    document => document.updatedAt < document.localState.localUpdatedAt,
   );
 export const getDocumentUserId = createSelector(
   _getDocuments,
@@ -32,7 +32,7 @@ export const getDocumentHasUnsavedChanges = createSelector(
   getCurrentDocument,
   document => {
     if (document) {
-      return document.localState.updatedAt > document.updatedAt;
+      return document.localState.localUpdatedAt > document.updatedAt;
     }
   },
 );

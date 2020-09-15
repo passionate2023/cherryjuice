@@ -69,11 +69,7 @@ const initialState: State = {
 };
 
 const reducer = createReducer(cloneObj(initialState), _ => [
-  ...[
-    _(rootActionCreators.resetState, () => ({
-      ...cloneObj(initialState),
-    })),
-  ],
+  ...[_(rootActionCreators.resetState, () => cloneObj(initialState))],
   _(ac.setDocumentId, (state, { payload }) => ({
     ...state,
     documentId: payload,

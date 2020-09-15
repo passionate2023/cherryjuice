@@ -18,6 +18,6 @@ export const getDefaultLocalState = (
       deletedImages: {},
     },
     highestNode_id: getDefaultHighestNode_id(nodes),
-    updatedAt: newDocument ? Date.now() : 0,
+    localUpdatedAt: 0,
   };
 };

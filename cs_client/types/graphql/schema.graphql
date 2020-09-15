@@ -48,6 +48,7 @@ type DocumentMutation {
 }
 
 type DocumentState {
+    lastOpenedAt: Timestamp!
     recentNodes: [Int!]!
     scrollPositions: [NodeScrollPosition!]!
     selectedNode_id: Int!
@@ -382,11 +383,12 @@ input DocumentGuestIt {
 }
 
 input DocumentStateIt {
-    recentNodes: [Int!] = []
-    scrollPositions: [NodeScrollPositionIt!] = []
-    selectedNode_id: Int = 0
-    treeState: [Int!] = []
-    updatedAt: Timestamp = 1599976788983
+    lastOpenedAt: Timestamp!
+    recentNodes: [Int!]!
+    scrollPositions: [NodeScrollPositionIt!]!
+    selectedNode_id: Int!
+    treeState: [Int!]!
+    updatedAt: Timestamp!
 }
 
 input EditDocumentIt {

@@ -39,7 +39,7 @@ export const deleteNode = (
   });
   document.persistedState.selectedNode_id =
     fatherNode.node_id || getDefaultSelectedNode_id(document.nodes);
-  document.localState.updatedAt = Date.now();
+  document.localState.localUpdatedAt = Date.now();
   document.persistedState.localUpdatedAt = Date.now();
   return state;
 };

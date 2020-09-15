@@ -15,12 +15,15 @@ export class NodeScrollPosition {
 @ObjectType()
 @InputType('DocumentStateIt')
 export class DocumentState {
-  constructor() {
-    this.selectedNode_id = 0;
-    this.treeState = [];
-    this.recentNodes = [];
-    this.scrollPositions = [];
-    this.updatedAt = new Date();
+  constructor(setDefaultValues = false) {
+    if (setDefaultValues) {
+      this.selectedNode_id = 0;
+      this.treeState = [];
+      this.recentNodes = [];
+      this.scrollPositions = [];
+      this.updatedAt = new Date();
+      this.lastOpenedAt = new Date();
+    }
   }
 
   @Field(() => Int)
@@ -37,4 +40,7 @@ export class DocumentState {
 
   @Field(() => Timestamp)
   updatedAt: Date;
+
+  @Field(() => Timestamp)
+  lastOpenedAt: Date;
 }

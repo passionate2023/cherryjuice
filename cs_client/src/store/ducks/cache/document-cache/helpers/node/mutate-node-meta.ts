@@ -50,7 +50,7 @@ export const mutateNodeMeta = (
       node_id,
     });
     node.updatedAt = updatedAt;
-    document.localState.updatedAt = updatedAt;
+    document.localState.localUpdatedAt = updatedAt;
   });
 
   return state;

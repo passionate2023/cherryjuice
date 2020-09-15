@@ -60,7 +60,10 @@ type State = {
   ongoingOperation: AsyncOperation;
 };
 
-const emptySettings = { hotKeys: { formatting: [], general: [] } };
+const emptySettings = {
+  hotKeys: { formatting: [], general: [] },
+  editorSettings: { values: {} },
+};
 const initialState: State = {
   alert: undefined,
   token: undefined,
@@ -68,6 +71,7 @@ const initialState: State = {
   secrets: undefined,
   storageType: 'localStorage',
   ongoingOperation: 'idle',
+  // @ts-ignore
   settings: emptySettings,
 };
 const reducer = createReducer(initialState, _ => [
@@ -78,15 +82,7 @@ const reducer = createReducer(initialState, _ => [
         token: payload.token,
         user: payload.user,
         secrets: payload.secrets,
-        settings: (() => {
-          delete payload.settings.hotKeys['__typename'];
-          Object.values(payload.settings.hotKeys).forEach(hks => {
-            hks.forEach(object => {
-              delete object['__typename'];
-            });
-          });
-          return payload.settings;
-        })(),
+        settings: payload.settings,
         ongoingOperation: 'idle',
       };
     }),

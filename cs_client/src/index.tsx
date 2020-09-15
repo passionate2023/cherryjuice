@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { render } from 'react-dom';
 import Root from '::root/root';
@@ -14,14 +13,17 @@ if (process.env.NODE_ENV !== 'development') {
 }
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/workbox-sw.js').then(registration => {
-    if(process.env.NODE_ENV==='developmenet')
-      // eslint-disable-next-line no-console
-      console.log('SW registered: ', registration);
-    }).catch(registrationError => {
-    if(process.env.NODE_ENV==='developmenet')
-      // eslint-disable-next-line no-console
-      console.log('SW registration failed: ', registrationError);
-    });
+    navigator.serviceWorker
+      .register('/workbox-sw.js')
+      .then(registration => {
+        if (process.env.NODE_ENV === 'developmenet')
+          // eslint-disable-next-line no-console
+          console.log('SW registered: ', registration);
+      })
+      .catch(registrationError => {
+        if (process.env.NODE_ENV === 'developmenet')
+          // eslint-disable-next-line no-console
+          console.log('SW registration failed: ', registrationError);
+      });
   });
 }

@@ -2,12 +2,40 @@ import {
   CachedDocumentDict,
   DocumentCacheState,
 } from '::store/ducks/cache/document-cache';
-import { DocumentMeta } from '::types/graphql-adapters';
 import { getDefaultPersistedState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-persisted-state';
 import { getDefaultLocalState } from '::store/ducks/cache/document-cache/helpers/document/shared/get-default-local-state';
 import { pluckProperties } from '::store/ducks/cache/document-cache/helpers/document/shared/pluck-document-meta';
+import { QDocumentsListItem } from '::graphql/fragments/document-list-item';
+export const documentIsNotNew = (documentId: string): boolean =>
+  !documentId.startsWith('new');
 
-export type LoadDocumentsListPayload = DocumentMeta[];
+const deleteObsoleteDocuments = (
+  exitingDocuments: CachedDocumentDict,
+  fetchedDocuments: CachedDocumentDict,
+): void => {
+  Object.keys(exitingDocuments).forEach(documentId => {
+    const noLongerExists = !fetchedDocuments[documentId];
+    const ownedBySameUser =
+      fetchedDocuments[documentId]?.userId ===
+      exitingDocuments[documentId]?.userId;
+    const isNotNew = documentIsNotNew(documentId);
+    if (noLongerExists && isNotNew && ownedBySameUser)
+      delete exitingDocuments[documentId];
+  });
+};
+
+const mergeFetchedDocuments = (
+  exitingDocuments: CachedDocumentDict,
+  fetchedDocuments: CachedDocumentDict,
+): void => {
+  Object.entries(fetchedDocuments).forEach(([documentId, document]) => {
+    const exists = !!exitingDocuments[documentId];
+    if (!exists) {
+      exitingDocuments[documentId] = document;
+    }
+  });
+};
+export type LoadDocumentsListPayload = QDocumentsListItem[];
 
 export const loadDocumentsList = (
   state: DocumentCacheState,
@@ -26,21 +54,8 @@ export const loadDocumentsList = (
         },
       ]),
     );
-    Object.keys(state.documents).forEach(documentId => {
-      const intruder = !fetchedDocuments[documentId];
-      const ownedBySameUser =
-        fetchedDocuments[documentId]?.userId ===
-        state.documents[documentId]?.userId;
-      const notNew = !documentId.startsWith('new');
-      if (intruder && notNew && ownedBySameUser)
-        delete state.documents[documentId];
-    });
-    return {
-      ...state,
-      documents: {
-        ...fetchedDocuments,
-        ...state.documents,
-      },
-    };
+    deleteObsoleteDocuments(state.documents, fetchedDocuments);
+    mergeFetchedDocuments(state.documents, fetchedDocuments);
+    return state;
   }
 };

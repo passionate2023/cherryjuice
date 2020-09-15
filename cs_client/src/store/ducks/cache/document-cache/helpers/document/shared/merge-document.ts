@@ -24,7 +24,7 @@ export const mergeDocument = (
     !existingNodesDict || (existingNodesDict && !existingNodesDict[0]);
   const existingDocHasChanges =
     existingLocalState &&
-    existingLocalState.updatedAt > existingDocument.updatedAt;
+    existingLocalState.localUpdatedAt > existingDocument.updatedAt;
 
   let newCachedDocument: CachedDocument;
   const localState = getDefaultLocalState(fetchedDocument.id, nodes);

@@ -88,6 +88,7 @@ export interface PrivateNode {
 }
 
 export interface DocumentState {
+  lastOpenedAt: Timestamp;
   recentNodes: Array<number>;
   scrollPositions: Array<NodeScrollPosition>;
   selectedNode_id: number;
@@ -95,16 +96,16 @@ export interface DocumentState {
   updatedAt: Timestamp;
 }
 
+/**
+ * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+ */
+export type Timestamp = any;
+
 export interface NodeScrollPosition {
   node_id: number;
   x: number;
   y: number;
 }
-
-/**
- * The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
- */
-export type Timestamp = any;
 
 export interface SearchResultEntity {
   node: NodeSearchResults;
@@ -399,11 +400,12 @@ export interface SaveHtmlIt {
 export type ImageUpload = any;
 
 export interface DocumentStateIt {
-  recentNodes?: Array<number>;
-  scrollPositions?: Array<NodeScrollPositionIt>;
-  selectedNode_id?: number;
-  treeState?: Array<number>;
-  updatedAt?: Timestamp;
+  lastOpenedAt: Timestamp;
+  recentNodes: Array<number>;
+  scrollPositions: Array<NodeScrollPositionIt>;
+  selectedNode_id: number;
+  treeState: Array<number>;
+  updatedAt: Timestamp;
 }
 
 export interface NodeScrollPositionIt {
@@ -562,8 +564,8 @@ export interface Resolver {
   Image?: ImageTypeResolver;
   PrivateNode?: PrivateNodeTypeResolver;
   DocumentState?: DocumentStateTypeResolver;
-  NodeScrollPosition?: NodeScrollPositionTypeResolver;
   Timestamp?: GraphQLScalarType;
+  NodeScrollPosition?: NodeScrollPositionTypeResolver;
   SearchResultEntity?: SearchResultEntityTypeResolver;
   NodeSearchResults?: NodeSearchResultsTypeResolver;
   SearchResultMeta?: SearchResultMetaTypeResolver;
@@ -836,11 +838,19 @@ export interface PrivateNodeToNode_idResolver<TParent = any, TResult = any> {
 }
 
 export interface DocumentStateTypeResolver<TParent = any> {
+  lastOpenedAt?: DocumentStateToLastOpenedAtResolver<TParent>;
   recentNodes?: DocumentStateToRecentNodesResolver<TParent>;
   scrollPositions?: DocumentStateToScrollPositionsResolver<TParent>;
   selectedNode_id?: DocumentStateToSelectedNode_idResolver<TParent>;
   treeState?: DocumentStateToTreeStateResolver<TParent>;
   updatedAt?: DocumentStateToUpdatedAtResolver<TParent>;
+}
+
+export interface DocumentStateToLastOpenedAtResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface DocumentStateToRecentNodesResolver<

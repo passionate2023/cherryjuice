@@ -49,7 +49,7 @@ export const mutateNodeContent = (
     }
     node.updatedAt = updatedAt;
   }
-  document.localState.updatedAt = updatedAt;
+  document.localState.localUpdatedAt = updatedAt;
   listNodeEditedAttributes({
     document,
     attributes: Object.keys(data),

@@ -20,6 +20,6 @@ export const mutateDocument = (
     if (!document.localState.editedAttributes.includes(key))
       document.localState.editedAttributes.push(key);
   });
-  document.localState.updatedAt = Date.now();
+  document.localState.localUpdatedAt = Date.now();
   return state;
 };

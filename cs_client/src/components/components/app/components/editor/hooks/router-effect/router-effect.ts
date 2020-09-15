@@ -7,12 +7,8 @@ import { router } from '::root/router/router';
 const initial = () => {
   const { documentId, node_id } = extractDocumentFromPathname();
   if (documentId) {
-    if (documentId.startsWith('new-document')) {
-      ac.document.setDocumentId('');
-    } else {
-      ac.document.setDocumentId(documentId);
-      if (node_id) ac.node.selectNext({ documentId, node_id });
-    }
+    ac.document.setDocumentId(documentId);
+    if (node_id) ac.node.selectNext({ documentId, node_id });
   } else ac.document.setDocumentId('');
 };
 const change = () => {

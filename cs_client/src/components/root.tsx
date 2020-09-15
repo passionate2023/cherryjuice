@@ -24,9 +24,8 @@ import { useConsumeToken } from '::root/hooks/consume-token';
 import { Auth } from '::root/components/auth/auth';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
 import { useTrackDocumentChanges } from '::root/hooks/track-document-changes';
-import { enablePatches, setAutoFreeze } from 'immer';
+import { enablePatches } from 'immer';
 import '::helpers/attach-test-callbacks';
-setAutoFreeze(false);
 enablePatches();
 import {
   getCurrentDocument,

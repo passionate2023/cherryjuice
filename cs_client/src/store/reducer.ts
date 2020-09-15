@@ -1,12 +1,11 @@
 import { combineReducers, Reducer } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { documentReducer, DocumentState } from './ducks/document';
+import { documentReducer } from './ducks/document';
 import { dialogsReducer } from './ducks/dialogs';
 import { nodeReducer } from './ducks/node';
 import { editorReducer } from './ducks/editor';
 import { documentsListReducer } from './ducks/documents-list';
-import { documentTransforms } from './redux-persist/transforms/document';
 import { documentOperationsReducer } from './ducks/document-operations';
 import { rootReducer, RootReducerState } from './ducks/root';
 import { searchReducer, SearchReducerState } from './ducks/search';
@@ -28,15 +27,6 @@ const persistedReducers = {
     },
     documentCacheReducer,
   ),
-  document: persistReducer(
-    {
-      key: 'document',
-      storage,
-      whitelist: ['documentId'],
-      transforms: documentTransforms,
-    },
-    documentReducer,
-  ) as Reducer<DocumentState>,
   timelines: persistReducer(
     {
       key: 'timelines',
@@ -100,6 +90,7 @@ const persistedReducers = {
 };
 
 const nonPersistedReducers = {
+  document: documentReducer,
   animation: animationReducer,
   dialogs: dialogsReducer,
   node: nodeReducer,

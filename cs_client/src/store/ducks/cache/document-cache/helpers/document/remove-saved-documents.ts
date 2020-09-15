@@ -11,7 +11,7 @@ export const removeSavedDocuments = (
         .filter(([id]) => !id.startsWith('new-document'))
         .map(([, document]) => {
           const uneditedDocument =
-            document.updatedAt > document.localState.updatedAt;
+            document.updatedAt > document.localState.localUpdatedAt;
           return uneditedDocument
             ? [document.id, document]
             : [

@@ -35,7 +35,7 @@ export const createNode = (
   });
   document.persistedState.selectedNode_id = node.node_id;
   document.persistedState.localUpdatedAt = Date.now();
-  document.localState.updatedAt = Date.now();
+  document.localState.localUpdatedAt = Date.now();
   document.localState.highestNode_id = node.node_id;
   expandNode(
     { documents: { [document.id]: document } },
