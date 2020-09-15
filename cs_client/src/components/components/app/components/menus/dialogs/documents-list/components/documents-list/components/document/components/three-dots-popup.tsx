@@ -16,6 +16,10 @@ const ThreeDotsPopup: React.FC<Props> = ({ documentId }) => {
           onClick: () => ac.dialogs.showEditDocumentDialog(documentId),
         },
         {
+          itemName: 'cache',
+          onClick: () => ac.node.fetchAll(documentId),
+        },
+        {
           itemName: 'delete',
           onClick: () => ac.dialogs.showDeleteDocument(),
         },

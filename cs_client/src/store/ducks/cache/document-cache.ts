@@ -79,7 +79,7 @@ const ac = {
     _(documentId),
   ),
   createNode: _(ap('create-node'), _ => (node: CreateNodeParams) => _(node)),
-  addFetchedFields: _(ap('add-fetched-fields'), _ => (node: AddHtmlParams) =>
+  addFetchedFields: _(ap('add-fetched-fields'), _ => (node: AddHtmlParams[]) =>
     _(node),
   ),
   mutateNodeMeta: _(

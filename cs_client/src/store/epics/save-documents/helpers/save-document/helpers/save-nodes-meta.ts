@@ -6,7 +6,7 @@ import { apolloClient } from '::graphql/client/apollo-client';
 import { NodeMetaIt } from '::types/graphql/generated';
 import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 import { EDIT_NODE_META } from '::graphql/mutations/document/edit-node-meta';
-import { reverseFlatMap } from '::helpers/array-helpers';
+import { unFlatMap } from '::helpers/array-helpers';
 import { QFullNode } from '::store/ducks/cache/document-cache';
 
 const swapNodeIdIfApplies = (state: SaveOperationState) => (nodeId: string) =>
@@ -40,7 +40,7 @@ const saveNodesMeta = async ({ state, document }: SaveOperationProps) => {
     });
     nodeMetaIts.push(meta);
   }
-  for await (const chunk of reverseFlatMap(200)<NodeMetaIt>()(nodeMetaIts)) {
+  for await (const chunk of unFlatMap(200)(nodeMetaIts)) {
     await apolloClient.mutate(
       EDIT_NODE_META({
         file_id: state.swappedDocumentIds[document.id] || document.id,

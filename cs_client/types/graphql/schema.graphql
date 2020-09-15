@@ -21,7 +21,7 @@ type Document {
     hash: String
     id: String!
     name: String!
-    node(node_id: Int): [Node]!
+    node(node_ids: [Int!]): [Node]!
     privacy: Privacy!
     privateNodes: [PrivateNode!]!
     size: Int!

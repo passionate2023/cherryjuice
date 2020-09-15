@@ -13,15 +13,17 @@ export type AddHtmlParams = {
 
 export const addFetchedFields = (
   state: DocumentCacheState,
-  { documentId, node_id, data }: AddHtmlParams,
+  nodes: AddHtmlParams[],
 ): DocumentCacheState => {
-  const node = state.documents[documentId].nodes[node_id];
+  nodes.forEach(({ node_id, data, documentId }) => {
+    const node = state.documents[documentId].nodes[node_id];
 
-  if (data['html'] && node.html) {
-    return state;
-  }
-  Object.entries(data).forEach(([key, value]) => {
-    node[key] = value;
+    if (data['html'] && node.html) {
+      return state;
+    }
+    Object.entries(data).forEach(([key, value]) => {
+      node[key] = value;
+    });
   });
   return state;
 };
