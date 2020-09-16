@@ -7,6 +7,7 @@ import { OperationTypes } from '../helpers/operation-types';
 import { uri } from '::graphql/client/hooks/apollo-client';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { DocumentOperation } from '::types/graphql/generated';
+import { ProgressCircle } from '::root/components/shared-components/loading-indicator/progress-circle';
 
 type Props = {
   operation: DocumentOperation;
@@ -26,7 +27,22 @@ const ActionButton: React.FC<Props> = ({ operation, open }) => {
   const deleteDocument = () => ac.documentsList.deleteDocument(id);
   if (OperationTypes.active[state]) {
     props.iconName = Icons.material.stop;
-    props.onClick = deleteDocument;
+    if (typeof operation.progress === 'number') {
+      props.onClick = () => undefined;
+      props.wrapper = function Wrapper({ children }): JSX.Element {
+        return (
+          <ProgressCircle
+            progress={operation.progress}
+            size={13}
+            className={modDocumentOperations.documentOperations__document__button}
+          >
+            {children}
+          </ProgressCircle>
+        );
+      };
+    } else {
+      props.onClick = deleteDocument;
+    }
   } else if (OperationTypes.failed[state]) {
     props.iconName = Icons.material.delete;
     props.onClick = deleteDocument;

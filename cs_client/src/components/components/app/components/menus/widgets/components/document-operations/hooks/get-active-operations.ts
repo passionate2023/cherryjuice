@@ -9,7 +9,7 @@ const useGetActiveOperations = (userId: string) => {
   });
   useEffect(() => {
     const document = DOCUMENT_OPERATION.path(data);
-    if (documentt) {
+    if (document) {
       ac.documentOperations.add(document);
     }
   }, [data]);

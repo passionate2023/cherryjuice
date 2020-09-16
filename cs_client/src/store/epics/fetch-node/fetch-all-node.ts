@@ -32,7 +32,7 @@ const progressify = <T>(
     ...propsArray.map(prop =>
       concat(
         action(prop),
-        onProgress((++state.count / state.totalProps) * 100),
+        onProgress((++state.count / state.totalProps) ),
       ),
     ),
   );
@@ -76,7 +76,7 @@ const fetchAllNodesEpic = (action$: Observable<Actions>) => {
       const cacheOperation = createCacheOperation(document);
       const fulfilled$ = of(
         ac_.documentOperations.add(
-          cacheOperation(OPERATION_STATE.FINISHED, 100),
+          cacheOperation(OPERATION_STATE.FINISHED, 1),
         ),
       );
 

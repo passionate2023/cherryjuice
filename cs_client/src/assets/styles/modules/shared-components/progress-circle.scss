@@ -1,0 +1,12 @@
+@import '../../vars/vars';
+$offset: 187;
+$duration: 150s;
+$width: 65;
+$height: 65;
+
+.circle-container {
+  transform: rotate(180deg);
+}
+.circle {
+  transform-origin: center;
+}
