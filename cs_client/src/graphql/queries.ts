@@ -1,24 +1,16 @@
 import gql from 'graphql-tag';
-import {
-  DOCUMENT_SUBSCRIPTIONS as DS,
-  NodeSearchIt,
-  NodeSearchResults,
-} from '::types/graphql/generated';
+import { NodeSearchIt, NodeSearchResults } from '::types/graphql/generated';
 
 const QUERY_DOCUMENTS = {
   currentImports: {
     query: gql`
       query {
         document {
-          id
           status
-          name
-          hash
         }
       }
     `,
-    path: (data): { id: string; status: DS; name: string; hash: string }[] =>
-      data?.document || [],
+    path: (data): { status: string }[] => data?.document || [],
   },
 };
 

@@ -3,22 +3,21 @@ import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Header } from './components/header/header';
 import { Body } from './components/body/body';
-import { DocumentSubscription } from '::types/graphql/generated';
+import { DocumentOperation } from '::types/graphql/generated';
 
 type Props = {
-  imports: DocumentSubscription[];
-  exports: DocumentSubscription[];
+  operations: DocumentOperation[];
 };
 
-const DocumentOperations: React.FC<Props> = ({ imports, exports }) => {
+const DocumentOperations: React.FC<Props> = ({ operations }) => {
   const ref = useRef<HTMLDivElement>();
   const [collapsed, setCollapsed] = useState(false);
   const toggleCollapsed = () => void setCollapsed(!collapsed);
 
   useEffect(() => {
     ref.current.parentElement.style.height = collapsed ? '40px' : 'auto';
-  }, [collapsed, imports.length, exports.length]);
-  return imports.length || exports.length ? (
+  }, [collapsed, operations]);
+  return operations.length ? (
     <div
       className={`${modDocumentOperations.documentOperations} ${
         collapsed ? modDocumentOperations.documentOperationsCollapsed : ''
@@ -27,11 +26,10 @@ const DocumentOperations: React.FC<Props> = ({ imports, exports }) => {
     >
       <Header
         toggleCollapsed={toggleCollapsed}
-        imports={imports}
-        exports={exports}
+        operations={operations}
         collapsed={collapsed}
       />
-      <Body imports={imports} exports={exports} />
+      <Body operations={operations} />
     </div>
   ) : (
     <></>

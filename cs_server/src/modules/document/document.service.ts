@@ -3,7 +3,7 @@ import { Document, Privacy } from './entities/document.entity';
 import { DocumentRepository } from './repositories/document.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
-import { DocumentSubscriptionsService } from './document.subscriptions.service';
+import { SubscriptionsService } from './subscriptions.service';
 import { DocumentGuestRepository } from './repositories/document-guest.repository';
 import {
   CreateDocumentDTO,
@@ -12,6 +12,7 @@ import {
   GetDocumentsDTO,
   SetDocumentStateDTO,
 } from './dto/document.dto';
+import { DocumentOperation } from './entities/document-operation.entity';
 
 @Injectable()
 export class DocumentService {
@@ -19,7 +20,7 @@ export class DocumentService {
   constructor(
     @InjectRepository(DocumentRepository)
     private documentRepository: DocumentRepository,
-    private subscriptionsService: DocumentSubscriptionsService,
+    private subscriptionsService: SubscriptionsService,
     private documentGuestRepository: DocumentGuestRepository,
   ) {}
   async onModuleInit(): Promise<void> {
@@ -86,7 +87,7 @@ export class DocumentService {
           privacy: Privacy.PRIVATE,
         });
         document.id = id;
-        this.subscriptionsService.import.deleted(document, user.id);
+        this.subscriptionsService.delete.deleted(document, user.id);
       });
     return deleteResult;
   }
@@ -137,5 +138,12 @@ export class DocumentService {
 
   async setState(dto: SetDocumentStateDTO): Promise<Document> {
     return await this.documentRepository.setState(dto);
+  }
+
+  async setDocumentStatus(
+    event: DocumentOperation,
+    document: Document,
+  ): Promise<void> {
+    await this.documentRepository.setDocumentStatus(event, document);
   }
 }

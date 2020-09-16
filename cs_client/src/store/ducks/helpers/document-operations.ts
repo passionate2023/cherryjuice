@@ -1,8 +1,11 @@
 import { DOCUMENT_SUBSCRIPTIONS as DS } from '::types/graphql/generated';
-import { DocumentSubscriptions } from '../document-operations';
+import {
+  DOCUMENT_OPERATIONS as DO,
+  DocumentOperations,
+} from '../document-operation/document-operations';
 
-const createFilterer = (statuses: DS[]) => (
-  operations: DocumentSubscriptions,
+const createFilterer = (statuses: (DS | DO)[]) => (
+  operations: DocumentOperations,
 ) =>
   Object.fromEntries(
     Object.entries(operations).filter(

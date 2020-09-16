@@ -1,23 +1,22 @@
 import * as React from 'react';
-import { DocumentSubscription } from '::types/graphql/generated';
+import { DocumentOperation as TDocumentOperation } from '::types/graphql/generated';
 import { modDocumentOperations } from '::sass-modules';
-import { Document } from './components/document/document';
+import { DocumentOperation } from './components/document/document';
 
 type Props = {
-  imports: DocumentSubscription[];
-  exports: DocumentSubscription[];
+  operations: TDocumentOperation[];
 };
 
-const Body: React.FC<Props> = ({ imports, exports }) => {
+const Body: React.FC<Props> = ({ operations }) => {
   return (
     <div
       className={modDocumentOperations.documentOperations__documentsContainer}
     >
-      {imports.map(document => (
-        <Document key={document.id} document={document} />
-      ))}
-      {exports.map(document => (
-        <Document key={document.id} document={document} />
+      {operations.map(operation => (
+        <DocumentOperation
+          key={operation.type + operation.target.id}
+          operation={operation}
+        />
       ))}
     </div>
   );

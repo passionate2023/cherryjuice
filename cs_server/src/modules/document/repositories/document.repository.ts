@@ -1,10 +1,11 @@
-import { EntityRepository, Repository, UpdateResult } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import { Document, Privacy } from '../entities/document.entity';
 import { User } from '../../user/entities/user.entity';
 import {
-  DOCUMENT_SUBSCRIPTIONS as DS,
-  DOCUMENT_SUBSCRIPTIONS,
-} from '../entities/document-subscription.entity';
+  OPERATION_TYPE,
+  OPERATION_STATE,
+  DocumentOperation,
+} from '../entities/document-operation.entity';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { createErrorDescription } from '../../shared/errors/create-error-description';
 import { AccessLevel, DocumentGuest } from '../entities/document-guest.entity';
@@ -21,11 +22,7 @@ import {
 } from '../../search/helpers/pg-queries/helpers/clause-builder';
 import { RunFirst } from '../../node/repositories/node.repository';
 
-const nullableEvents = [
-  DS.IMPORT_FINISHED,
-  DS.EXPORT_FINISHED,
-  DS.EXPORT_FAILED,
-];
+const nullableEvents = [OPERATION_STATE.FINISHED, OPERATION_STATE.FAILED];
 const documentMetaFields = [
   `d.id`,
   `d.name`,
@@ -189,13 +186,22 @@ export class DocumentRepository extends Repository<Document> {
     await this.remove(documents);
     return IDs;
   }
-  async markUnfinishedImportsAsFailed(): Promise<UpdateResult> {
-    const queryBuilder = this.createQueryBuilder('document');
-    return await queryBuilder
-      .update(Document)
-      .set({ status: DOCUMENT_SUBSCRIPTIONS.IMPORT_FAILED })
-      .where('document.status is not null')
-      .execute();
+  async markUnfinishedImportsAsFailed(): Promise<Document[]> {
+    const queryBuilder = this.createQueryBuilder('d');
+    const failedDocuments = await queryBuilder
+      .where('d.status is not null')
+      .getMany();
+    for (const document of failedDocuments) {
+      const currentStatus: DocumentOperation = await new Promise(res =>
+        res(JSON.parse(document.status)),
+      );
+      if (currentStatus) {
+        currentStatus.state = OPERATION_STATE.FAILED;
+        document.status = JSON.stringify(currentStatus);
+        await this.save(document);
+      }
+    }
+    return failedDocuments;
   }
 
   async getSize({ documentId }: { documentId: string }): Promise<number> {
@@ -213,9 +219,14 @@ export class DocumentRepository extends Repository<Document> {
       .then(res => Number(res[0].kb));
   }
 
-  setDocumentStatus = async (event: DS, document: Document): Promise<void> => {
-    document.status = nullableEvents.includes(event) ? null : event;
-    if (event !== DS.DELETED) {
+  setDocumentStatus = async (
+    event: DocumentOperation,
+    document: Document,
+  ): Promise<void> => {
+    document.status = nullableEvents.includes(event.state)
+      ? null
+      : JSON.stringify(event);
+    if (event.type !== OPERATION_TYPE.DELETE) {
       await this.save(document);
     }
   };

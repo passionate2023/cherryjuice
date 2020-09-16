@@ -8,7 +8,7 @@ import { FileUpload } from '../document/helpers/graphql';
 import { AddImageDTO } from './dto/upload-image.dto';
 import { NodeService } from '../node/node.service';
 import { ImportCTB } from './helpers/import-ctb/import-ctb';
-import { DocumentSubscriptionsService } from '../document/document.subscriptions.service';
+import { SubscriptionsService } from '../document/subscriptions.service';
 import {
   createGDriveDownloadTask,
   DownloadTask,
@@ -26,7 +26,7 @@ export class ImportsService {
     private documentService: DocumentService,
     private imageService: ImageService,
     private nodeService: NodeService,
-    private subscriptionsService: DocumentSubscriptionsService,
+    private subscriptionsService: SubscriptionsService,
   ) {}
 
   async onModuleInit(): Promise<void> {

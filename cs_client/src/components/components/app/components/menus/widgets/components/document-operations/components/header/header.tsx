@@ -1,39 +1,36 @@
 import * as React from 'react';
 import { modDocumentOperations } from '::sass-modules';
 import { EventHandler } from 'react';
-import { DocumentSubscription } from '::types/graphql/generated';
+import { DocumentOperation } from '::types/graphql/generated';
 import { HeaderButtons } from './components/header-buttons';
 import { HeaderText } from './components/header-text';
 import { OperationTypes } from '../body/components/document/helpers/operation-types';
 
 type OperationsStats = { inactive: number; active: number; total: number };
-const getStats = (
-  imports: DocumentSubscription[],
-  exports: DocumentSubscription[],
-): OperationsStats => {
-  const documents = [...imports, ...exports];
-  const inactive = documents.filter(
-    ({ status }) =>
-      !OperationTypes.import.active[status] &&
-      !OperationTypes.export.active[status],
+const getStats = (operations: DocumentOperation[]): OperationsStats => {
+  const inactive = operations.filter(
+    ({ state }) => !OperationTypes.active[state],
   ).length;
-  const active = documents.length - inactive;
+  const active = operations.length - inactive;
 
   return {
     inactive,
     active,
-    total: documents.length,
+    total: operations.length,
   };
 };
 
 type Props = {
   toggleCollapsed: EventHandler<any>;
-  imports: DocumentSubscription[];
-  exports: DocumentSubscription[];
+  operations: DocumentOperation[];
   collapsed: boolean;
 };
-const Header: React.FC<Props> = ({ collapsed,toggleCollapsed, imports, exports }) => {
-  const stats = getStats(imports, exports);
+const Header: React.FC<Props> = ({
+  collapsed,
+  toggleCollapsed,
+  operations,
+}) => {
+  const stats = getStats(operations);
   return (
     <div className={modDocumentOperations.documentOperations__header}>
       <HeaderText collapsed={false} stats={stats} />

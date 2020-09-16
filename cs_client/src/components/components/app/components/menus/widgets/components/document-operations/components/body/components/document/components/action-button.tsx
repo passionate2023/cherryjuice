@@ -6,9 +6,15 @@ import { ac } from '::store/store';
 import { OperationTypes } from '../helpers/operation-types';
 import { uri } from '::graphql/client/hooks/apollo-client';
 import { testIds } from '::cypress/support/helpers/test-ids';
+import { DocumentOperation } from '::types/graphql/generated';
 
-const ActionButton = ({ document, open, userId }) => {
-  const { id, status, hash, name } = document;
+type Props = {
+  operation: DocumentOperation;
+  open: Function;
+};
+const ActionButton: React.FC<Props> = ({ operation, open }) => {
+  const { id, hash, name } = operation.target;
+  const { state, userId } = operation;
   const props = {
     onClick: undefined,
     iconName: '',
@@ -17,21 +23,21 @@ const ActionButton = ({ document, open, userId }) => {
       return <>{children}</>;
     },
   };
-  const deleteDocument = () => ac.documentsList.deleteDocument(document.id);
-  if (OperationTypes.import.active[status]) {
+  const deleteDocument = () => ac.documentsList.deleteDocument(id);
+  if (OperationTypes.active[state]) {
     props.iconName = Icons.material.stop;
     props.onClick = deleteDocument;
-  } else if (OperationTypes.import.failed[status]) {
+  } else if (OperationTypes.failed[state]) {
     props.iconName = Icons.material.delete;
     props.onClick = deleteDocument;
-  } else if (OperationTypes.import.successful[status]) {
+  } else if (OperationTypes.successful[state]) {
     props.iconName = Icons.material.document;
     props.onClick = open;
     props.testId = `${testIds.popups__documentOperations__openDownloadedDocument}`;
-  } else if (OperationTypes.import.blocked[status]) {
+  } else if (OperationTypes.blocked[state]) {
     props.iconName = Icons.material.clear;
-    props.onClick = ac.documentOperations.clearFinished;
-  } else if (OperationTypes.export.successful[status]) {
+    props.onClick = ac.documentOperations.removeFinished;
+  } else if (OperationTypes.successful[state]) {
     props.iconName = Icons.material.download;
     props.testId = `${testIds.popups__documentOperations__downloadDocument}${id}`;
     props.wrapper = function Wrapper({ children }): JSX.Element {
@@ -46,10 +52,10 @@ const ActionButton = ({ document, open, userId }) => {
       );
     };
   }
-  if (OperationTypes.export.failed[status]) {
+  if (OperationTypes.failed[state]) {
     props.iconName = Icons.material.clear;
     props.onClick = () => {
-      ac.documentOperations.deleteExport(id);
+      ac.documentOperations.remove(operation);
     };
   }
   return props.iconName ? (

@@ -4,7 +4,7 @@ import { NodeService } from '../node/node.service';
 import { ExportCTB } from './helpers/export-ctb';
 import fs, { ReadStream } from 'fs';
 import { ImageService } from '../image/image.service';
-import { DocumentSubscriptionsService } from '../document/document.subscriptions.service';
+import { SubscriptionsService } from '../document/subscriptions.service';
 import { Document } from '../document/entities/document.entity';
 import { deleteFolder } from '../shared/fs/delete-folder';
 import { paths } from '../shared/fs/paths';
@@ -17,7 +17,7 @@ export class ExportsService {
   private deleteTimeouts: { [hash: string]: Timeout } = {};
   constructor(
     private documentService: DocumentService,
-    private subscriptionsService: DocumentSubscriptionsService,
+    private subscriptionsService: SubscriptionsService,
     private nodeService: NodeService,
     private imageService: ImageService,
   ) {}

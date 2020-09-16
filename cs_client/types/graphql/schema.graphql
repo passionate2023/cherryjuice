@@ -21,7 +21,7 @@ type Document {
     hash: String
     id: String!
     name: String!
-    node(node_ids: [Int!]): [Node]!
+    node(node_ids: [Int]): [Node]!
     privacy: Privacy!
     privateNodes: [PrivateNode!]!
     size: Int!
@@ -47,6 +47,15 @@ type DocumentMutation {
     uploadFromGDrive(file: UploadLinkInputType!): Boolean!
 }
 
+type DocumentOperation {
+    context: OPERATION_CONTEXT
+    progress: Int
+    state: OPERATION_STATE!
+    target: DocumentTarget!
+    type: OPERATION_TYPE!
+    userId: String!
+}
+
 type DocumentState {
     lastOpenedAt: Timestamp!
     recentNodes: [Int!]!
@@ -56,11 +65,10 @@ type DocumentState {
     updatedAt: Timestamp!
 }
 
-type DocumentSubscription {
-    hash: ID!
-    id: ID!
-    name: ID!
-    status: DOCUMENT_SUBSCRIPTIONS!
+type DocumentTarget {
+    hash: String!
+    id: String!
+    name: String!
 }
 
 type EditorSettings {
@@ -180,7 +188,7 @@ type Settings {
 }
 
 type Subscription {
-    document(userId: String!): DocumentSubscription!
+    documentOperation(userId: String!): DocumentOperation!
 }
 
 type User {
@@ -233,22 +241,6 @@ enum AccessLevel {
     WRITER
 }
 
-enum DOCUMENT_SUBSCRIPTIONS {
-    DELETED
-    EXPORT_FAILED
-    EXPORT_FINISHED
-    EXPORT_IMAGES_STARTED
-    EXPORT_NODES_STARTED
-    EXPORT_PENDING
-    EXPORT_PREPARING
-    IMPORT_DUPLICATE
-    IMPORT_FAILED
-    IMPORT_FINISHED
-    IMPORT_PENDING
-    IMPORT_PREPARING
-    IMPORT_STARTED
-}
-
 enum HotKeyActionType {
     BG_COLOR
     BOLD
@@ -287,6 +279,28 @@ enum NodePrivacy {
     GUESTS_ONLY
     PRIVATE
     PUBLIC
+}
+
+enum OPERATION_CONTEXT {
+    IMAGES
+    NODES
+}
+
+enum OPERATION_STATE {
+    DUPLICATE
+    FAILED
+    FINISHED
+    PENDING
+    PREPARING
+    STARTED
+}
+
+enum OPERATION_TYPE {
+    CACHE
+    CLONE
+    DELETE
+    EXPORT
+    IMPORT
 }
 
 enum Privacy {

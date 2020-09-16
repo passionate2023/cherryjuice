@@ -6,7 +6,7 @@ import { dialogsReducer } from './ducks/dialogs';
 import { nodeReducer } from './ducks/node';
 import { editorReducer } from './ducks/editor';
 import { documentsListReducer } from './ducks/documents-list';
-import { documentOperationsReducer } from './ducks/document-operations';
+import { documentOperationsReducer } from './ducks/document-operation/document-operations';
 import { rootReducer, RootReducerState } from './ducks/root';
 import { searchReducer, SearchReducerState } from './ducks/search';
 import { cssVariablesReducer } from './ducks/css-variables';

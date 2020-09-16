@@ -6,11 +6,12 @@ import { DocumentRepository } from './repositories/document.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DocumentMutationsResolver } from './document.mutations.resolver';
 import { DocumentQueriesResolver } from './document.queries.resolver';
-import { DocumentSubscriptionsResolver } from './document.subscriptions.resolver';
+import { SubscriptionsResolver } from './subscriptions.resolver';
 import { ImportsModule } from '../imports/imports.module';
 import { ExportsModule } from '../exports/exports.module';
-import { DocumentSubscriptionsService } from './document.subscriptions.service';
+import { SubscriptionsService } from './subscriptions.service';
 import { DocumentGuestRepository } from './repositories/document-guest.repository';
+import { SearchModule } from '../search/search.module';
 
 @Module({
   imports: [
@@ -19,14 +20,15 @@ import { DocumentGuestRepository } from './repositories/document-guest.repositor
     TypeOrmModule.forFeature([DocumentRepository, DocumentGuestRepository]),
     ImportsModule,
     ExportsModule,
+    SearchModule,
   ],
   providers: [
     DocumentQueriesResolver,
     DocumentMutationsResolver,
-    DocumentSubscriptionsResolver,
+    SubscriptionsResolver,
     DocumentService,
-    DocumentSubscriptionsService,
+    SubscriptionsService,
   ],
-  exports: [DocumentService, DocumentSubscriptionsService],
+  exports: [DocumentService, SubscriptionsService],
 })
 export class DocumentModule {}

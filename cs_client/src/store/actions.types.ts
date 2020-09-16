@@ -1,7 +1,7 @@
 import { documentActionCreators } from './ducks/document';
 import { dialogsActionCreators } from './ducks/dialogs';
 import { nodeActionCreators } from './ducks/node';
-import { documentOperationsActionCreators } from './ducks/document-operations';
+import { documentOperationsActionCreators } from './ducks/document-operation/document-operations';
 import { editorActionCreators } from './ducks/editor';
 import { documentsListActionCreators } from './ducks/documents-list';
 import { rootActionCreators } from './ducks/root';

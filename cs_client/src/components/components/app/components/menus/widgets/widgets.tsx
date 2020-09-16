@@ -14,8 +14,7 @@ export type Widget = {
 };
 
 const mapState = (state: Store) => ({
-  imports: Object.values(state.documentOperations.imports),
-  exports: Object.values(state.documentOperations.exports),
+  operations: Object.values(state.documentOperations.operations),
   snackbar: state.dialogs.snackbar,
   dialogIsOpen:
     state.root.isOnMd &&
@@ -32,8 +31,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 const Widgets: React.FC<Props & PropsFromRedux> = ({
-  imports,
-  exports,
+  operations,
   snackbar,
   dialogIsOpen,
   showUndoDocumentAction,
@@ -59,9 +57,9 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
       key: 'UndoDocumentAction',
     });
   }
-  if (!dialogIsOpen && (imports.length || exports.length))
+  if (!dialogIsOpen && operations.length)
     widgets.push({
-      component: <DocumentOperations imports={imports} exports={exports} />,
+      component: <DocumentOperations operations={operations} />,
       key: 'DocumentOperations',
     });
   const { transitions, setRef } = useHubTransition({ widgets });

@@ -10,6 +10,14 @@ import {
   fetchNodeImages,
 } from '::store/epics/fetch-node/fetch-node';
 import { unFlatMap } from '::helpers/array-helpers';
+import {
+  DocumentOperation,
+  OPERATION_CONTEXT,
+  OPERATION_STATE,
+  OPERATION_TYPE,
+} from '::types/graphql/generated';
+import { CachedDocument } from '::store/ducks/cache/document-cache';
+import { doKey } from '::store/ducks/document-operation/reducers/add-document-operations';
 
 const progressify = <T>(
   propsArray: T[],
@@ -33,22 +41,45 @@ const mapToProps = (documentId: string) => (node_ids: number[]) => ({
   node_ids,
   documentId,
 });
+
+const createCacheOperation = (document: CachedDocument) => (
+  state: OPERATION_STATE,
+  progress: number,
+  context?: OPERATION_CONTEXT,
+): DocumentOperation => ({
+  target: {
+    id: document.id,
+    hash: document.hash,
+    name: document.name,
+  },
+  type: OPERATION_TYPE.CACHE,
+  userId: document.userId,
+  state,
+  progress,
+  context,
+});
+
 const fetchAllNodesEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
     ofType([ac_.node.fetchAll]),
     filter(({ payload: documentId }) => {
-      return (
-        store.getState().node.asyncOperations.fetchAll[documentId]?.status !==
-        'in-progress'
-      );
+      return !store.getState().documentOperations[
+        doKey({
+          target: { id: documentId },
+          type: OPERATION_TYPE.CACHE,
+        } as DocumentOperation)
+      ];
     }),
     flatMap(({ payload: documentId }) => {
-      const fulfilled$ = concat(
-        of(ac_.node.setFetchAllStatus(documentId, 'idle')),
-        of(ac_.dialogs.setSnackbar({ message: documentId + ' is cached' })),
+      const state = store.getState();
+      const document = state.documentCache.documents[documentId];
+      const cacheOperation = createCacheOperation(document);
+      const fulfilled$ = of(
+        ac_.documentOperations.add(
+          cacheOperation(OPERATION_STATE.FINISHED, 100),
+        ),
       );
 
-      const document = store.getState().documentCache.documents[documentId];
       const nodesWithNoHtml = Object.values(document.nodes)
         .filter(node => !node.html && node.node_id)
         .map(node => +node.node_id);
@@ -58,29 +89,31 @@ const fetchAllNodesEpic = (action$: Observable<Actions>) => {
         .map(node => +node.node_id);
 
       const fetchNodesHtml$ = progressify<FetchContentProps>(
-        unFlatMap(50)(nodesWithNoHtml).map(mapToProps(documentId)),
+        unFlatMap(100)(nodesWithNoHtml).map(mapToProps(documentId)),
         fetchNodeHtml,
         progress =>
           of(
-            ac_.node.setFetchAllStatus(
-              documentId,
-              'in-progress',
-              'text',
-              progress,
+            ac_.documentOperations.add(
+              cacheOperation(
+                OPERATION_STATE.STARTED,
+                progress,
+                OPERATION_CONTEXT.NODES,
+              ),
             ),
           ),
       );
 
       const fetchNodesImages$ = progressify<FetchContentProps>(
-        unFlatMap(15)(nodesWithNoImages).map(mapToProps(documentId)),
+        unFlatMap(10)(nodesWithNoImages).map(mapToProps(documentId)),
         fetchNodeImages,
         progress =>
           of(
-            ac_.node.setFetchAllStatus(
-              documentId,
-              'in-progress',
-              'images',
-              progress,
+            ac_.documentOperations.add(
+              cacheOperation(
+                OPERATION_STATE.STARTED,
+                progress,
+                OPERATION_CONTEXT.IMAGES,
+              ),
             ),
           ),
       );
@@ -92,7 +125,10 @@ const fetchAllNodesEpic = (action$: Observable<Actions>) => {
             description: 'Check your network connection',
           },
           actionCreators: [
-            () => ac_.node.setFetchAllStatus(documentId, 'idle'),
+            () =>
+              ac_.documentOperations.add(
+                cacheOperation(OPERATION_STATE.FAILED, 0),
+              ),
           ],
         }),
       );

@@ -48,8 +48,6 @@ export const syncPersistedState = (intervalMs = 2 * 1000) => {
             }),
           );
         }
-      }),
-      tap(documents => {
         ac.documentCache.neutralizePersistedState(documents);
       }),
     )

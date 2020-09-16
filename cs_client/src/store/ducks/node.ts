@@ -4,7 +4,6 @@ import { cloneObj } from '::helpers/editing/execK/helpers';
 import { rootActionCreators as rac } from './root';
 import { AsyncOperation } from '::store/ducks/document';
 import { SelectNodeParams } from '::store/ducks/cache/document-cache/helpers/document/select-node';
-import produce from 'immer';
 
 const ap = createActionPrefixer('node');
 const ac = {
@@ -24,29 +23,12 @@ const ac = {
   clearNext: _(ap('clear-next')),
 
   fetchAll: _(ap('fetch-all'), _ => (documentId: string) => _(documentId)),
-  setFetchAllStatus: _(
-    ap('set-fetch-all-status'),
-    _ => (
-      documentId: string,
-      status: AsyncOperation,
-      context?: FetchNodeContext,
-      progress = 0,
-    ) => _({ documentId, status, progress, context }),
-  ),
 };
 
-type FetchNodeContext = 'images' | 'text';
 type State = {
   asyncOperations: {
     fetch: {
       [node_id: number]: AsyncOperation;
-    };
-    fetchAll: {
-      [documentId: string]: {
-        status: AsyncOperation;
-        progress: number;
-        context: FetchNodeContext;
-      };
     };
   };
   processLinks: number;
@@ -56,7 +38,6 @@ type State = {
 const initialState: State = cloneObj<State>({
   asyncOperations: {
     fetch: {},
-    fetchAll: {},
   },
   processLinks: 0,
   next: undefined,
@@ -105,19 +86,6 @@ const reducer = createReducer(initialState, _ => [
       },
     },
   })),
-  _(
-    ac.setFetchAllStatus,
-    (state, { payload: { documentId, status, progress, context } }) => {
-      return produce(state, draft => {
-        draft.asyncOperations.fetchAll[documentId] = {
-          status,
-          progress: progress.toFixed(2),
-          context,
-        };
-        return draft;
-      });
-    },
-  ),
 ]);
 
 export { reducer as nodeReducer, ac as nodeActionCreators };

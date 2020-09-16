@@ -1,18 +1,24 @@
 import gql from 'graphql-tag';
-import { DocumentSubscription } from '::types/graphql/generated';
+import { DocumentOperation } from '::types/graphql/generated';
 
-const SUBSCRIPTION_DOCUMENT = {
-  path: (data): DocumentSubscription => data?.document,
+const DOCUMENT_OPERATION = {
+  path: (data): DocumentOperation => data?.documentOperation,
   query: gql`
-    subscription documentImportPreparing($userId: String!) {
-      document(userId: $userId) {
-        status
-        id
-        name
-        hash
+    subscription DOCUMENT_OPERATION($userId: String!) {
+      documentOperation(userId: $userId) {
+        context
+        progress
+        state
+        target {
+          hash
+          id
+          name
+        }
+        type
+        userId
       }
     }
   `,
 };
 
-export { SUBSCRIPTION_DOCUMENT };
+export { DOCUMENT_OPERATION };
