@@ -1,17 +1,26 @@
 import * as React from 'react';
 import { modSelectFile } from '::sass-modules';
 import { EventHandler } from 'react';
+import { joinClassNames } from '::helpers/dom/join-class-names';
 
 type Props = {
   itemName: string;
   onClick: EventHandler<any>;
+  disabled?: boolean;
 };
 
-const PopupItem: React.FC<Props> = ({ itemName, onClick }) => {
+const PopupItem: React.FC<Props> = ({ itemName, onClick, disabled }) => {
   return (
     <div
-      className={modSelectFile.selectFile__file__threeDotsPopup__item}
-      onClick={onClick}
+      className={joinClassNames([
+        modSelectFile.selectFile__file__threeDotsPopup__item,
+        [
+          modSelectFile.selectFile__file__threeDotsPopup__itemDisabled,
+          disabled,
+        ],
+      ])}
+      onClick={disabled ? undefined : onClick}
+      data-disabled={disabled}
     >
       {itemName}
     </div>

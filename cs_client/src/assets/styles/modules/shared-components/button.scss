@@ -1,5 +1,6 @@
 @import '../../vars/vars';
 @import '../../vars/colors';
+@import '../../vars/states';
 
 @mixin button-variant($color, $bg-color, $br-base, $br-step) {
   color: $color;
@@ -37,8 +38,7 @@
     box-shadow: $box-shadow1;
   }
   &:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
+    @include disabled-button();
   }
   display: flex;
   align-items: center;

@@ -5,9 +5,10 @@ import { ac } from '::store/store';
 
 type Props = {
   documentId: string;
+  online: boolean;
 };
 
-const ThreeDotsPopup: React.FC<Props> = ({ documentId }) => {
+const ThreeDotsPopup: React.FC<Props> = ({ documentId, online }) => {
   return (
     <div className={modSelectFile.selectFile__file__threeDotsPopup}>
       {[
@@ -18,10 +19,12 @@ const ThreeDotsPopup: React.FC<Props> = ({ documentId }) => {
         {
           itemName: 'cache',
           onClick: () => ac.node.fetchAll(documentId),
+          disabled: !online,
         },
         {
           itemName: 'delete',
           onClick: () => ac.dialogs.showDeleteDocument(),
+          disabled: !online,
         },
       ].map(attributes => (
         <PopupItem key={attributes.itemName} {...attributes} />

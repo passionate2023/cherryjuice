@@ -9,6 +9,7 @@ import { ErrorBoundary } from '::root/components/shared-components/react/error-b
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { useLayoutEffect } from 'react';
 import { QFullNode } from '::store/ducks/cache/document-cache';
+import { OfflineBanner } from '::root/components/app/components/editor/document/components/rich-text/components/offline-banner';
 
 type Props = {
   node: QFullNode;
@@ -26,6 +27,7 @@ const mapState = (state: Store) => {
     processLinks: state.node.processLinks,
     isDocumentOwner: hasWriteAccessToDocument(state),
     isOnMd: state.root.isOnMd,
+    online: state.root.online,
     scrollPosition:
       document?.persistedState?.scrollPositions &&
       document.persistedState.scrollPositions[node_id],
@@ -43,10 +45,12 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   node,
   isOnMd,
   scrollPosition,
+  online,
 }) => {
   useLayoutEffect(() => {
-    if (node && !node?.html && !fetchDocumentInProgress) ac.node.fetch(node);
-  }, [node?.node_id, node?.documentId, fetchDocumentInProgress]);
+    if (online)
+      if (node && !node?.html && !fetchDocumentInProgress) ac.node.fetch(node);
+  }, [node?.node_id, node?.documentId, fetchDocumentInProgress, online]);
   const nodeId = node?.id;
   const html = node?.html;
   const images = node?.image;
@@ -68,8 +72,10 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
             isOnMd={isOnMd}
             scrollPosition={scrollPosition}
           />
-        ) : (
+        ) : online ? (
           <SpinnerCircle />
+        ) : (
+          <OfflineBanner />
         )}
       </div>
     </ErrorBoundary>

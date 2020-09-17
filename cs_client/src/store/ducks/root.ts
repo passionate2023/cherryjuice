@@ -9,6 +9,7 @@ const ac = {
   setIsOnMd: _(ap('set-is-on-md'), _ => (b: boolean) => _(b)),
   setIsOnMb: _(ap('set-is-on-mb'), _ => (b: boolean) => _(b)),
   setDocking: _(ap('set-docking'), _ => (b: boolean) => _(b)),
+  setNetworkStatus: _(ap('set-network-status'), _ => (b: boolean) => _(b)),
   toggleDockedDialog: _(ap('toggle-docked-dialog')),
 };
 
@@ -17,6 +18,7 @@ type State = {
   isOnMd: boolean;
   dockedDialog: boolean;
   docking: boolean;
+  online: boolean;
 };
 
 const initialState: State = {
@@ -24,6 +26,7 @@ const initialState: State = {
   isOnMd: false,
   dockedDialog: false,
   docking: false,
+  online: true,
 };
 const reducer = createReducer(initialState, _ => [
   ...[
@@ -42,6 +45,10 @@ const reducer = createReducer(initialState, _ => [
     _(ac.toggleDockedDialog, state => ({
       ...state,
       dockedDialog: !state.dockedDialog,
+    })),
+    _(ac.setNetworkStatus, (state, { payload }) => ({
+      ...state,
+      online: payload,
     })),
   ],
 ]);

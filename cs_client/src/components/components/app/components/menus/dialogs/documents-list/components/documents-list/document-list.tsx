@@ -12,11 +12,7 @@ type DocumentsListProps = {
 const DocumentList = ({ documents, loading }: DocumentsListProps) => {
   const filesPerFolders: [string, CachedDocument[]][] = useMemo(() => {
     const categoriesDict = documents
-      .sort(
-        (a, b) =>
-          a.persistedState.localLastOpenedAt -
-          b.persistedState.localLastOpenedAt,
-      )
+      .sort((a, b) => a.updatedAt - b.updatedAt)
       .reverse()
       .reduce((acc, val) => {
         const folder = val.folder || 'Default group';

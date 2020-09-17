@@ -19,17 +19,18 @@ const createButtons = ({
   close,
   open,
   deleteMode,
+  online,
 }) => {
   const buttonsLeft = [
     {
       label: 'reload',
       onClick: ac.documentsList.fetchDocuments,
-      disabled: false,
+      disabled: !online,
     },
     {
       label: 'import',
       onClick: ac.dialogs.showImportDocument,
-      disabled: false,
+      disabled: !online,
       testId: testIds.dialogs__selectDocument__footerLeft__import,
     },
   ];
@@ -63,6 +64,7 @@ const mapState = (state: Store) => ({
   selectedIDs: state.documentsList.selectedIDs,
   fetchDocuments: state.documentsList.fetchDocuments,
   userId: state.auth.user?.id,
+  online: state.root.online,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -77,18 +79,19 @@ const DocumentsList: React.FC<PropsFromRedux> = ({
   selectedIDs,
   fetchDocuments,
   userId,
+  online,
 }) => {
   useEffect(() => {
     if (userId) ac.documentsList.fetchDocuments();
   }, []);
   useEffect(() => {
-    if (showDocumentList) {
+    if (online && showDocumentList) {
       const handle = setTimeout(ac.documentsList.fetchDocuments, 1500);
       return () => {
         clearInterval(handle);
       };
     }
-  }, [showDocumentList]);
+  }, [showDocumentList, online]);
   const close = ac.dialogs.hideDocumentList;
   const open = () => {
     updateCachedHtmlAndImages();
@@ -100,6 +103,7 @@ const DocumentsList: React.FC<PropsFromRedux> = ({
     close,
     open,
     deleteMode: deletionMode,
+    online,
   });
 
   const showDeletionButtons = !documents.length || !deletionMode;

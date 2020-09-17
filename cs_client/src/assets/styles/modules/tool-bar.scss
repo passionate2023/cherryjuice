@@ -1,4 +1,5 @@
 @import '../vars/vars';
+@import '../vars/states';
 @import '../mixins/breakpoints';
 .tool-bar {
   // size
@@ -110,8 +111,9 @@
     }
   }
   &[disabled] {
-    filter: grayscale(0.9) opacity(0.6);
-    cursor: initial;
+    //filter: grayscale(0.9) opacity(0.6);
+    //cursor: initial;
+    @include disabled-button();
   }
   transition: $bg-transition-1;
 }

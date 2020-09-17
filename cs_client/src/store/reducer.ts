@@ -75,7 +75,7 @@ const persistedReducers = {
     {
       key: 'root',
       storage,
-      blacklist: [],
+      blacklist: ['online'],
     },
     rootReducer,
   ) as Reducer<RootReducerState>,

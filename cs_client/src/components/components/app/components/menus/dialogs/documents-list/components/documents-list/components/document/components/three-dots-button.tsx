@@ -7,9 +7,10 @@ import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 
 type Props = {
   documentId: string;
+  online: boolean;
 };
 
-const ThreeDotsButton: React.FC<Props> = ({ documentId }) => {
+const ThreeDotsButton: React.FC<Props> = ({ documentId, online }) => {
   const [showModal, setShowModal] = useState(false);
   useClickOutsideModal({
     cb: () => setShowModal(false),
@@ -23,7 +24,6 @@ const ThreeDotsButton: React.FC<Props> = ({ documentId }) => {
   return (
     <>
       <div className={`${modSelectFile.selectFile__file__threeDotsButton} `}>
-        {/*<VisibilityIcon privacy={privacy} />*/}
         <Icon
           name={Icons.material.menu}
           loadAsInlineSVG={'force'}
@@ -31,7 +31,9 @@ const ThreeDotsButton: React.FC<Props> = ({ documentId }) => {
             setShowModal(!showModal);
           }}
         />
-        {showModal && <ThreeDotsPopup documentId={documentId} />}
+        {showModal && (
+          <ThreeDotsPopup documentId={documentId} online={online} />
+        )}
       </div>
     </>
   );

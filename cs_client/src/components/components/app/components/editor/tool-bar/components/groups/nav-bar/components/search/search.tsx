@@ -9,6 +9,7 @@ import { SearchInput } from '::root/components/shared-components/inputs/search-i
 const mapState = (state: Store) => ({
   query: state.search.query,
   searchTarget: state.search.searchTarget,
+  online: state.root.online,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -24,6 +25,7 @@ const Search: React.FC<Props & PropsFromRedux> = ({
   query,
   navBar = true,
   searchTarget,
+  online,
 }) => {
   const searchImpossible = !navBar && (!query || searchTarget.length === 0);
   const ref = useRef<HTMLDivElement>();
@@ -44,6 +46,7 @@ const Search: React.FC<Props & PropsFromRedux> = ({
       onClear={ac.search.clearQuery}
       searchImpossible={searchImpossible}
       performSearch={ac.search.setSearchQueued}
+      disabled={!online}
     />
   );
 };

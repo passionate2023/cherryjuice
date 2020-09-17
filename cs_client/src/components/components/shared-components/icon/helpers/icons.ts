@@ -6,6 +6,7 @@ const Icons = {
     menu: 'menu',
     focus: 'focus',
     redo: 'redo',
+    'no-connection': 'no-connection',
     undo: 'undo',
     tune: 'tune',
     export: 'export',

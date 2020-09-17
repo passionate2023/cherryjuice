@@ -1,10 +1,12 @@
 @import '../../vars/vars';
+@import '../../vars/states';
 .selectFile {
   padding: 10px;
   background-color: $grey-light;
   min-height: calc(100% - 20px);
   user-select: none;
 }
+
 .selectFile__file {
   cursor: pointer;
   display: block;
@@ -12,8 +14,11 @@
   position: relative;
   color: black;
   margin-top: 5px;
-  padding: 10px 20px;
   max-width: 100%;
+}
+
+.selectFile__file__body {
+  padding: 10px 20px;
   &:active {
     background-color: $primary-light;
   }
@@ -21,6 +26,12 @@
   svg {
     fill: grey;
   }
+}
+
+.selectFile__file__body--disabled {
+  filter: brightness(0.5) contrast(0.5) grayscale(0.5);
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 .selectFile__file__three-dots-button {
   display: flex;
@@ -46,9 +57,13 @@
 .selectFile__file__three-dots-popup__item {
   padding: 10px 10px;
   border-bottom: 1px solid #a7a7a755;
-  &:hover {
+  &:hover:not([data-disabled]) {
     background-color: #e7e7e7;
   }
+  filter: unset;
+}
+.selectFile__file__three-dots-popup__item--disabled {
+  @include disabled-button()
 }
 .selectFile__file__name {
   display: block;

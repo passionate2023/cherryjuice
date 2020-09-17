@@ -14,7 +14,11 @@ $text-color: grey;
   align-items: center;
   background-color: $bg-color;
 }
-
+.search__container--disabled {
+  width: 40px;
+  background-color: transparent;
+  margin-right: 0;
+}
 .search__field {
   flex: 1;
   height: 100%;
