@@ -1,4 +1,6 @@
 // https://gist.github.com/SleepWalker/da5636b1abcbaff48c4d#gistcomment-2577818
+import { TouchEvent, } from 'react';
+
 const createGesturesHandler = ({
   onRight,
   onLeft,
@@ -47,11 +49,11 @@ const createGesturesHandler = ({
     }
   };
 
-  const onTouchStart = (event: TouchEvent) => {
+  const onTouchStart = (event: TouchEvent<HTMLDivElement>) => {
     touchstartX = event.changedTouches[0].screenX;
     touchstartY = event.changedTouches[0].screenY;
   };
-  const onTouchEnd = (event: TouchEvent) => {
+  const onTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
     touchendX = event.changedTouches[0].screenX;
     touchendY = event.changedTouches[0].screenY;
     handleGesture();

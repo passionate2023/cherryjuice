@@ -1,5 +1,11 @@
 import { modRichText } from '::sass-modules';
-import { default as React, useContext, useEffect, useRef } from 'react';
+import {
+  default as React,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import {
   EventHandler,
   useSetupEventHandlers,
@@ -11,25 +17,16 @@ import { useAddMetaToPastedImages } from '::root/components/app/components/edito
 import { DocumentContext } from '::root/components/app/components/editor/document/reducer/context';
 import { Image } from '::types/graphql/generated';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
-import { createGesturesHandler } from '::root/components/shared-components/drawer/components/drawer-navigation/helpers/create-gestures-handler';
-import { ac } from '::store/store';
 import { onPaste } from '::helpers/editing/clipboard';
 import { onKeyDown } from '::helpers/editing/typing';
 import { useScrollToHashElement } from '::hooks/use-scroll-to-hash-element';
 import { NodeScrollPosition } from '::store/ducks/cache/document-cache';
-
-const { onTouchEnd, onTouchStart } = createGesturesHandler({
-  onRight: ac.editor.showTree,
-  onLeft: ac.editor.hideTree,
-  onTap: ac.root.hidePopups,
-  minimumLength: 170,
-});
+import { createGesturesHandler } from '::root/components/shared-components/drawer/components/drawer-navigation/helpers/create-gestures-handler';
+import { ac } from '::store/store';
 
 const eventHandlers: EventHandler[] = [
   { type: 'paste', listener: onPaste },
   { type: 'keydown', listener: onKeyDown },
-  { type: 'ontouchstart', listener: onTouchStart },
-  { type: 'ontouchend', listener: onTouchEnd },
 ];
 
 type Props = {
@@ -93,8 +90,22 @@ const ContentEditable = ({
       ref.current.scrollTo(...scrollPosition);
     }
   }, [node_id]);
+
+  const { onTouchEnd, onTouchStart } = useMemo(
+    () =>
+      createGesturesHandler({
+        onRight: ac.editor.showTree,
+        onLeft: ac.editor.hideTree,
+        onTap: ac.root.hidePopups,
+        minimumLength: 170,
+      }),
+    [],
+  );
+
   return (
     <div
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
       ref={ref}
       key={node_id}
       className={modRichText.richText}
