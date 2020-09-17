@@ -29,8 +29,13 @@
   height: 36px;
   margin-left: 5px;
   input {
+    padding: 0;
     text-align: center;
-    padding: 5px;
+    box-sizing: border-box;
+    width: 70px;
+    height: 36px;
+    border: none;
+    border-radius: 5px;
   }
 }
 

@@ -1,3 +1,5 @@
+@import '../../mixins/breakpoints';
+
 .tree-tool-bar {
   width: 100%;
   display: flex;
@@ -16,6 +18,9 @@
 
 .tree-tool-bar__controls {
   height: 30px;
+  @include respond-to($md-down) {
+    height: 40px;
+  }
   box-sizing: border-box;
   padding: 2px;
   width: 100%;
@@ -36,9 +41,15 @@
 }
 .tree__search-button {
   width: 30px;
+  @include respond-to($md-down) {
+    width: 40px;
+  }
 }
 .tree_focus-button {
   height: 100%;
   background-color: white;
   border-radius: 0;
+  @include respond-to($md-down) {
+    width: 40px;
+  }
 }

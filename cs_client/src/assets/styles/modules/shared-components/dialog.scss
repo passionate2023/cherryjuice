@@ -33,7 +33,7 @@
 }
 $small-dialog-width: 350px;
 .dialog--small {
-  @include respond-to($md-up) {
+  @include respond-to($mb-up) {
     height: 500px;
     width: $small-dialog-width;
     margin-left: calc(100vw / 2 - #{$small-dialog-width}/ 2);

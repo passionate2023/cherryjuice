@@ -35,14 +35,12 @@ const User: React.FC<UserProps & { style }> = ({ onClose, style, user }) => {
             <ButtonSquare
               className={modUserPopup.user__actions__signOut}
               onClick={ac.dialogs.showSettingsDialog}
-              dark={true}
               text={'settings'}
               testId={testIds.toolBar__userPopup__signOut}
             />
             <ButtonSquare
               className={modUserPopup.user__actions__signOut}
               onClick={signOut}
-              dark={true}
               text={'sign out'}
               testId={testIds.toolBar__userPopup__signOut}
             />

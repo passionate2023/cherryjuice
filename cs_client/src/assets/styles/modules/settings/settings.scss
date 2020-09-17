@@ -13,12 +13,15 @@
   color: black;
   flex-direction: column;
   width: 100%;
+  gap: 5px;
 }
 
 .settings-element {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 5px;
+  min-height: 40px;
 }
 .settings-element__name {
   padding: 5px;

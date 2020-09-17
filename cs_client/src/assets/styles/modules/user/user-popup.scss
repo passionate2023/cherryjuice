@@ -12,12 +12,15 @@
   width: 240px;
   max-width: 80vw;
   border-radius: $BR_popup;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: $dark-grey;
-  color: white;
+  background-color: var(--tool-bar-background-color);
+  color: var(--text-color-inverted);
+  filter: opacity(0.97);
 }
 .user__info {
   height: 150px;

@@ -77,7 +77,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       onChange: documentMetaActionCreators.setName,
       value: state.name,
       type: 'text',
-      label: 'Document name',
+      label: 'name',
       lazyAutoFocus: isOnMd ? 0 : 500,
       testId: testIds.documentMeta__documentName,
     },

@@ -42,14 +42,14 @@
     align-items: center;
   }
   // style
-  background-color: floralwhite;
+  background-color: var(--tool-bar-background-color);
   color: black;
   font-family: 'Arial ', sans-serif;
   font-weight: 300;
   font-size: 13px;
   cursor: default;
-  opacity: 0.95;
   @include respond-to($md-down) {
+    opacity: 0.95;
     border-radius: 5px;
     box-shadow: $box-shadow2;
   }

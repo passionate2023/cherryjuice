@@ -103,18 +103,31 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       lazyAutoFocus: isOnMd ? 0 : 500,
       testId: testIds.nodeMeta__nodeName,
     },
+    isOwnerOfDocument && {
+      customInput: (
+        <SelectPrivacy
+          disabled={documentPrivacy === Privacy.PRIVATE}
+          privacy={state.privacy}
+          onChange={nodeMetaActionCreators.setPrivacy}
+          maximumPrivacy={documentPrivacy}
+          useNodeOptions={true}
+          testId={testIds.nodeMeta__privacy}
+        />
+      ),
+      label: 'visibility',
+    },
     {
       onChange: nodeMetaActionCreators.setIsBold,
       value: state.isBold,
       type: 'checkbox',
-      label: 'Bold',
+      label: 'bold',
       testId: testIds.nodeMeta__isBold,
     },
     {
       onChange: nodeMetaActionCreators.setHasCustomColor,
       value: state.hasCustomColor,
       type: 'checkbox',
-      label: 'User selected color',
+      label: 'color',
       testId: testIds.nodeMeta__hasCustomColor,
       additionalInput: (
         <ColorInput
@@ -129,7 +142,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       onChange: nodeMetaActionCreators.setHasCustomIcon,
       value: state.hasCustomIcon,
       type: 'checkbox',
-      label: 'User selected icon',
+      label: 'icon',
       testId: testIds.nodeMeta__hasCustomIcon,
       additionalInput: (
         <IconPicker
@@ -143,24 +156,10 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       onChange: nodeMetaActionCreators.setIsReadOnly,
       value: state.isReadOnly,
       type: 'checkbox',
-      label: 'Read only',
+      label: 'read only',
     },
-  ];
-  if (isOwnerOfDocument) {
-    inputs.push({
-      customInput: (
-        <SelectPrivacy
-          disabled={documentPrivacy === Privacy.PRIVATE}
-          privacy={state.privacy}
-          onChange={nodeMetaActionCreators.setPrivacy}
-          maximumPrivacy={documentPrivacy}
-          useNodeOptions={true}
-          testId={testIds.nodeMeta__privacy}
-        />
-      ),
-      label: 'visibility',
-    });
-  }
+  ].filter(Boolean);
+
   return (
     <DialogWithTransition
       dialogTitle={'Node Properties'}
