@@ -55,6 +55,7 @@ const updateBreakpointState = ({ breakpoint, callback }) => {
 
 const mapState = (state: Store) => ({
   token: state.auth.token,
+  online: state.root.online,
   userId: state.auth.user?.id,
   hotKeys: getHotkeys(state),
   document: getCurrentDocument(state),
@@ -74,6 +75,7 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   hotKeys,
   document,
   userHasUnsavedChanges,
+  online,
 }) => {
   const client = useApolloClient(token, userId);
   useOnWindowResize([
@@ -93,6 +95,7 @@ const Root: React.FC<Props & PropsFromRedux> = ({
     userHasUnsavedChanges,
     documentName: document?.name,
     userId,
+    online,
   });
   useRouterEffect();
   useTasks();
