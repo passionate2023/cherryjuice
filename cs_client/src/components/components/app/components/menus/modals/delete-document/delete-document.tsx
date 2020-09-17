@@ -3,36 +3,20 @@ import { TDialogFooterButton } from '::root/components/shared-components/dialog/
 import { ConfirmationModal } from '::root/components/shared-components/modal/confirmation-modal';
 import { AlertType, TAlert } from '::types/react';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac, store } from '::store/store';
+import { ac,} from '::store/store';
 import { Store } from '::store/store';
-import { useEffect } from 'react';
-import { getDocuments } from '::store/selectors/cache/document/document';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
 const createAlert = (selectedDocumentIds: string[]): TAlert => {
-  let numberOfNodes = 0;
-  if (selectedDocumentIds.length) {
-    const documents = getDocuments(store.getState());
-    numberOfNodes = (selectedDocumentIds as string[])
-      .map(documentId => {
-        const number = Object.keys(documents[documentId].nodes).length;
-        return number ? number - 1 : 0;
-      })
-      .reduce((acc, val) => acc + val);
-  }
-  const suffix = ' node' + (numberOfNodes === 1 ? '' : 's');
-  const prefix =
-    selectedDocumentIds.length === 1
-      ? 'this document contains '
-      : 'these documents contain ';
+
   const title = selectedDocumentIds.length
-    ? `permanently delete ${
+    ? `delete ${
         selectedDocumentIds.length === 1
           ? `document '${selectedDocumentIds[0]}'`
           : `the ${selectedDocumentIds.length} selected documents`
       } ?`
     : '';
-  const description = prefix + numberOfNodes + suffix;
+  const description = "you can't undo this action";
   return {
     type: AlertType.Warning,
     description,
@@ -71,9 +55,6 @@ const DeleteDocument: React.FC<Props & PropsFromRedux> = ({
       testId: testIds.modal__deleteDocument__confirm,
     },
   ];
-  useEffect(() => {
-    if (selectedDocumentIds.length === 0) ac.dialogs.hideDeleteDocument();
-  }, [selectedDocumentIds.length]);
 
   return (
     <ConfirmationModal

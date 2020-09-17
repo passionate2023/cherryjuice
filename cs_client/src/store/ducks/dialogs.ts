@@ -1,5 +1,6 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { documentActionCreators as dac } from './document';
+import { documentsListActionCreators as dlac } from './documents-list';
 import { createActionPrefixer } from './helpers/shared';
 import { AlertType, TAlert } from '::types/react';
 import { cloneObj } from '::helpers/editing/execK/helpers';
@@ -126,6 +127,14 @@ const reducer = createReducer(initialState, _ => [
   _(actionCreators.showDeleteDocument, state => ({
     ...state,
     showDeleteDocument: true,
+  })),
+  _(dlac.deleteDocumentsFailed, state => ({
+    ...state,
+    showDeleteDocument: false,
+  })),
+  _(dlac.deleteDocumentsFulfilled, state => ({
+    ...state,
+    showDeleteDocument: false,
   })),
   _(actionCreators.hideDeleteDocument, state => ({
     ...state,

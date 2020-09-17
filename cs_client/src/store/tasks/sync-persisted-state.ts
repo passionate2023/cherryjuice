@@ -1,7 +1,13 @@
 import { getDocumentsList } from '::store/selectors/cache/document/document';
 import { ac, store } from '::store/store';
 import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  tap,
+} from 'rxjs/operators';
 import { apolloClient } from '::graphql/client/apollo-client';
 import { SET_DOCUMENT_STATE } from '::graphql/mutations/document/set-document-state';
 import { adaptToPersistedState } from '::store/ducks/cache/document-cache/helpers/document/shared/adapt-persisted-state';

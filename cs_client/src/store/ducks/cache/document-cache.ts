@@ -75,8 +75,8 @@ const ac = {
     ap('mutate-document'),
     _ => (changes: MutateDocumentProps) => _(changes),
   ),
-  deleteDocument: _(ap('delete-document'), _ => (documentId: string) =>
-    _(documentId),
+  deleteDocuments: _(ap('delete-documents'), _ => (documentIds: string[]) =>
+    _(documentIds),
   ),
   createNode: _(ap('create-node'), _ => (node: CreateNodeParams) => _(node)),
   addFetchedFields: _(ap('add-fetched-fields'), _ => (node: AddHtmlParams[]) =>
@@ -222,10 +222,12 @@ const reducer = createReducer(initialState, _ => [
   ],
   ...[
     // require cleanup
-    _(ac.deleteDocument, (state, { payload: documentId }) => {
-      dTM.resetTimeline(documentId);
+    _(ac.deleteDocuments, (state, { payload: documentIds }) => {
       return produce(state, draft => {
-        delete draft[documentId];
+        documentIds.forEach(documentId => {
+          dTM.resetTimeline(documentId);
+          delete draft.documents[documentId];
+        });
       });
     }),
     _(

@@ -110,6 +110,7 @@ const DocumentsList: React.FC<PropsFromRedux> = ({
   const rightHeaderButtons: DialogHeaderButton[] = [
     {
       hidden: !documents.length || deletionMode,
+      disabled: !online,
       className: modDialog.dialog__header__fileButton,
       onClick: ac.documentsList.enableDeletionMode,
       icon: Icons.material['delete-sweep'],
