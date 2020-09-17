@@ -18,9 +18,11 @@ type Props = { dialogBodyElements: ReactNode };
 
 const MeasurableDialogBody: React.FC<Props & PropsFromRedux> = ({
   dialogBodyElements,
+  dockedDialog,
 }) => {
   const ref = useSetCssVariablesOnWindowResize(
     ac.cssVariables.setDialogBodyHeight,
+    dockedDialog,
   );
   return (
     <div className={`${modDialog.dialog__content}`} ref={ref}>

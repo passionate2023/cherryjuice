@@ -14,18 +14,24 @@ import { configs } from '::root/components/shared-components/transitions/transit
 import { TimeFilters } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/time-filters';
 import { SortOptions } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-sort/sort-options';
 
-export const useSetCssVariablesOnWindowResize = actionCreator => {
+export const useSetCssVariablesOnWindowResize = (
+  actionCreator,
+  hookDependency1?: boolean,
+) => {
   const ref = useRef<HTMLDivElement>();
   const height = useRef(0);
-  useOnWindowResize([
-    () => {
-      const clientHeight = ref.current.clientHeight;
-      if (clientHeight !== height.current) {
-        height.current = clientHeight;
-        actionCreator(clientHeight);
-      }
-    },
-  ]);
+  useOnWindowResize(
+    [
+      () => {
+        const clientHeight = ref.current.clientHeight;
+        if (clientHeight !== height.current) {
+          height.current = clientHeight;
+          actionCreator(clientHeight);
+        }
+      },
+    ],
+    hookDependency1,
+  );
   return ref;
 };
 
@@ -40,9 +46,13 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const SearchFilters: React.FC<Props & PropsFromRedux> = ({ show }) => {
+const SearchFilters: React.FC<Props & PropsFromRedux> = ({
+  show,
+  dockedDialog,
+}) => {
   const ref = useSetCssVariablesOnWindowResize(
     ac.cssVariables.setSearchFiltersHeight,
+    dockedDialog,
   );
   const props = useSpring({
     to: {

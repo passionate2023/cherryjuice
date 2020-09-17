@@ -58,7 +58,7 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
   });
   return (
     <>
-      {!!searchResults?.results.length && query && (
+      {!!searchResults?.results && query && (
         <animated.div
           className={joinClassNames([
             modSearchDialog.searchDialog__searchResults,
