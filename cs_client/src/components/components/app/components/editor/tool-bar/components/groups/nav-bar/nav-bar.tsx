@@ -4,7 +4,6 @@ import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { modToolbar } from '::sass-modules';
 import { ac } from '::store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
-
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { Search } from '::root/components/app/components/editor/tool-bar/components/groups/nav-bar/components/search/search';
@@ -25,11 +24,9 @@ type Props = {
 
 const NavBar: React.FC<Props & PropsFromRedux> = ({
   showUserPopup,
-  documentId,
   user,
 }) => {
   const isLoggedIn = user?.id;
-  const noDocumentIsSelected = !documentId;
   return (
     <div
       className={
@@ -43,17 +40,6 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
         testId={'new-document'}
       >
         <Icon name={Icons.material.document} loadAsInlineSVG={'force'} />
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={ac.document.export}
-        disabled={noDocumentIsSelected}
-        dontMount={!isLoggedIn}
-      >
-        <Icon
-          name={Icons.material.export}
-          testId={testIds.toolBar__navBar__exportDocument}
-          loadAsInlineSVG={'force'}
-        />
       </ToolbarButton>
       <ToolbarButton
         onClick={ac.dialogs.showDocumentList}

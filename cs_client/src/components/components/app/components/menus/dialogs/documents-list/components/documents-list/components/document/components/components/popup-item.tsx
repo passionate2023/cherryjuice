@@ -20,7 +20,7 @@ const PopupItem: React.FC<Props> = ({ itemName, onClick, disabled }) => {
         ],
       ])}
       onClick={disabled ? undefined : onClick}
-      data-disabled={disabled}
+      {...(disabled && { 'data-disabled': disabled })}
     >
       {itemName}
     </div>

@@ -16,8 +16,7 @@ const ListBody: React.FC<ListBodyProps> = ({ items, autoScroll = true }) => {
   useEffect(() => {
     if (autoScroll && items.length) {
       const active = items.findIndex(item => item.active);
-      if (typeof active === 'number')
-        listBody.current.children[active].scrollIntoView();
+      if (active >= 0) listBody.current.children[active].scrollIntoView();
       else listBody.current.scroll(0, listBody.current.scrollHeight);
     }
   }, [items]);

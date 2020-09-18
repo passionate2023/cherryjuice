@@ -5,6 +5,7 @@ const Icons = {
     close: 'close',
     menu: 'menu',
     focus: 'focus',
+    more: 'more',
     'arrow-up': 'arrow-up',
     'arrow-down': 'arrow-down',
     'arrow-left': 'arrow-left',

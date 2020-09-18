@@ -22,6 +22,11 @@ const ThreeDotsPopup: React.FC<Props> = ({ documentId, online }) => {
           disabled: !online,
         },
         {
+          itemName: 'export',
+          onClick: ac.document.export,
+          disabled: !online,
+        },
+        {
           itemName: 'delete',
           onClick: () => ac.dialogs.showDeleteDocument(),
           disabled: !online,
