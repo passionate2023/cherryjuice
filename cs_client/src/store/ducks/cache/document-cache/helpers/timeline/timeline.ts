@@ -119,4 +119,8 @@ export class Timeline<T> {
     this.position -= originalFrames.length - frames.length;
     this._onFrameChange();
   };
+
+  getFramesMeta = (): T[] => {
+    return Object.values(this.frames).map(frame => frame.meta);
+  };
 }

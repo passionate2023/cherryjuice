@@ -146,9 +146,20 @@ export type CachedDocumentDict = {
 type State = {
   documents: CachedDocumentDict;
 };
+
+enum DocumentMutations {
+  CreateNode = 'created',
+  NodeAttributes = 'changed attributes',
+  NodeContent = 'changed content',
+  DeleteNode = 'deleted',
+  DocumentAttributes = 'changed attributes',
+  CreateDocument = 'created',
+}
+
 export type DocumentTimeLineMeta = {
   node_id?: number;
   documentId?: string;
+  mutationType: DocumentMutations;
 };
 const initialState: State = {
   documents: {},
@@ -181,9 +192,6 @@ const reducer = createReducer(initialState, _ => [
       dTM.setCurrent(payload);
       return produce(state, draft => selectDocument(draft, payload));
     }),
-    _(ac.createDocument, (state, { payload }) =>
-      createDocument(state, payload),
-    ),
     _(nac.select, (state, { payload }) =>
       produce(state, draft =>
         expandNode(selectNode(draft, payload), {
@@ -193,7 +201,8 @@ const reducer = createReducer(initialState, _ => [
       ),
     ),
     _(tac.setDocumentActionNOF, (state, { payload }) =>
-      payload.frame?.meta?.documentId
+      // todo: filter mutations
+      payload.frame?.meta?.documentId && !payload.frame.meta.silent
         ? produce(state, draft =>
             selectNode(draft, payload.frame.meta as SelectNodeParams),
           )
@@ -240,15 +249,27 @@ const reducer = createReducer(initialState, _ => [
   ],
   ...[
     // undoable actions
+    _(ac.createDocument, (state, { payload }) =>
+      produce(
+        state,
+        draft => createDocument(draft, payload),
+        dTM.addFrame({
+          timelineId: payload.id,
+          silent: true,
+          documentId: payload.id,
+          mutationType: DocumentMutations.CreateDocument,
+        }),
+      ),
+    ),
     _(ac.createNode, (state, { payload }) =>
       produce(
         state,
         draft => createNode(draft, payload),
         dTM.addFrame({
           timelineId: payload.createdNode.documentId,
-          silent: true,
           node_id: payload.createdNode.node_id,
           documentId: payload.createdNode.documentId,
+          mutationType: DocumentMutations.CreateNode,
         }),
       ),
     ),
@@ -261,6 +282,7 @@ const reducer = createReducer(initialState, _ => [
           timelineId: params[0].documentId,
           node_id: params[0].node_id,
           documentId: params[0].documentId,
+          mutationType: DocumentMutations.NodeAttributes,
         }),
       );
     }),
@@ -275,6 +297,7 @@ const reducer = createReducer(initialState, _ => [
               silent: true,
               node_id: payload.node_id,
               documentId: payload.documentId,
+              mutationType: DocumentMutations.NodeContent,
             })(p, rp);
         },
       ),
@@ -285,6 +308,8 @@ const reducer = createReducer(initialState, _ => [
         draft => deleteNode(draft, payload),
         dTM.addFrame({
           timelineId: payload.documentId,
+          node_id: payload.node_id,
+          mutationType: DocumentMutations.DeleteNode,
         }),
       ),
     ),
@@ -292,7 +317,11 @@ const reducer = createReducer(initialState, _ => [
       produce(
         state,
         draft => mutateDocument(draft, payload),
-        dTM.addFrame({ timelineId: payload.documentId }),
+        dTM.addFrame({
+          timelineId: payload.documentId,
+          documentId: payload.documentId,
+          mutationType: DocumentMutations.DocumentAttributes,
+        }),
       ),
     ),
   ],

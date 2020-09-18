@@ -17,16 +17,21 @@ const ac = {
   ),
   showUndoDocumentAction: _(ap('show-undo-document-action')),
   hideUndoDocumentAction: _(ap('hide-undo-document-action')),
+  showTimeline: _(ap('show-timeline')),
+  hideTimeline: _(ap('hide-timeline')),
+  toggleTimeline: _(ap('toggle-timeline')),
 };
 
 type State = {
   documentActionNOF: NumberOfFrames;
   showUndoDocumentAction: boolean;
+  showTimeline: boolean;
 };
 
 const initialState: State = {
   documentActionNOF: { undo: 0, redo: 0 },
   showUndoDocumentAction: false,
+  showTimeline: false,
 };
 const reducer = createReducer(initialState, _ => [
   _(rac.resetState, () => ({
@@ -50,6 +55,18 @@ const reducer = createReducer(initialState, _ => [
   _(ac.hideUndoDocumentAction, state => ({
     ...state,
     showUndoDocumentAction: false,
+  })),
+  _(ac.showTimeline, state => ({
+    ...state,
+    showTimeline: true,
+  })),
+  _(ac.hideTimeline, state => ({
+    ...state,
+    showTimeline: false,
+  })),
+  _(ac.toggleTimeline, state => ({
+    ...state,
+    showTimeline: !state.showTimeline,
   })),
 ]);
 

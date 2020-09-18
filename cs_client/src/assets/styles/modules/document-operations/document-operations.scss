@@ -1,20 +1,27 @@
 @import '../../vars/colors';
 @import '../../vars/vars';
+@import '../../mixins/breakpoints';
 .document-operations {
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 100%;
   min-height: 0px;
   box-shadow: $box-shadow1;
 }
 .document-operations--collapsed {
   height: 40px;
+  box-shadow: none;
   .document-operations__header {
+    opacity: 0.5;
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
+    width: 40px;
+    margin-left: auto;
+    background-color: transparent;
   }
 }
 .document-operations__header {
+  transition: opacity 200ms linear;
   background-color: $dark-grey;
   height: 30px;
   display: flex;
@@ -26,6 +33,9 @@
 }
 .document-operations__header__text {
   margin-left: 5px;
+  &:first-letter {
+    text-transform: capitalize;
+  }
 }
 .document-operations__header__buttons {
   margin-left: auto;
@@ -45,6 +55,9 @@
   }
   &:active {
     background-color: rgba(white, 0.2);
+  }
+  svg {
+    fill: white;
   }
 }
 

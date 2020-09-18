@@ -3,7 +3,7 @@ import { Icons, Icon } from '::root/components/shared-components/icon/icon';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
 import { modDocumentOperations } from '::sass-modules';
 import { ac } from '::store/store';
-import { OperationTypes } from '../helpers/operation-types';
+import { OperationTypes } from './helpers/operation-types';
 import { uri } from '::graphql/client/hooks/apollo-client';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { DocumentOperation } from '::types/graphql/generated';

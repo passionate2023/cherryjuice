@@ -23,6 +23,8 @@ const mapState = (state: Store) => {
     documentHasUnsavedChanges: documentHasUnsavedChanges(document),
     documentId: state.document.documentId,
     isDocumentOwner: hasWriteAccessToDocument(state),
+    showTimeline: state.timelines.showTimeline,
+    documentActionNOF: state.timelines.documentActionNOF,
   };
 };
 
@@ -38,6 +40,8 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
   documentId,
   isDocumentOwner,
   online,
+  showTimeline,
+  documentActionNOF,
 }) => {
   const noDocumentIsSelected = !documentId;
   const newDocument = documentId?.startsWith('new');
@@ -59,6 +63,16 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         disabled={noDocumentIsSelected || newDocument || !online}
       >
         <Icon name={Icons.material.refresh} loadAsInlineSVG={'force'} />
+      </ToolbarButton>
+      <ToolbarButton
+        onClick={ac.timelines.toggleTimeline}
+        active={showTimeline}
+        disabled={
+          noDocumentIsSelected ||
+          !(documentActionNOF.redo || documentActionNOF.undo)
+        }
+      >
+        <Icon name={Icons.material.history} />
       </ToolbarButton>
       <ToolbarButton
         dontMount={!isDocumentOwner}

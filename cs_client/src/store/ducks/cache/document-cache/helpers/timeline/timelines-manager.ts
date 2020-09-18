@@ -10,9 +10,12 @@ import { timelinesPersistence } from '::store/ducks/cache/document-cache/helpers
 export type TimelinesDict<T> = { [id: string]: Timeline<T> };
 
 export class TimelinesManager<T> {
+  get currentId(): string {
+    return this._currentId;
+  }
   private timelines: TimelinesDict<T>;
   current: Timeline<T>;
-  currentId: string;
+  private _currentId: string;
   private onFrameChange: OnFrameChange<T>;
   constructor(private readonly persist = false) {
     this.timelines = {};
@@ -60,26 +63,26 @@ export class TimelinesManager<T> {
   setCurrent = (id: string): void => {
     if (!this.timelines[id]) this.addTimeline(id);
     this.current = this.timelines[id];
-    this.currentId = id;
+    this._currentId = id;
   };
 
   resetAll = () => {
     this.timelines = {};
     this.current = undefined;
-    this.currentId = undefined;
+    this._currentId = undefined;
     if (this.persist) timelinesPersistence.reset();
   };
 
   resetTimeline = (id: string): void => {
     delete this.timelines[id];
-    const deletingCurrent = id === this.currentId;
+    const deletingCurrent = id === this._currentId;
     timelinesPersistence.persist(
       this.timelines,
-      deletingCurrent ? undefined : this.currentId,
+      deletingCurrent ? undefined : this._currentId,
     );
     if (deletingCurrent) {
       this.current = undefined;
-      this.currentId = undefined;
+      this._currentId = undefined;
     }
   };
 }

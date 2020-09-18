@@ -53,7 +53,7 @@ const MobileButtons: React.FC<Props & PropsFromRedux> = ({
           active={showRecentNodesBar}
           disabled={noDocumentIsSelected}
         >
-          <Icon name={Icons.material.history} />
+          <Icon name={Icons.material['arrow-left']} />
         </ToolbarButton>
         <ToolbarButton
           onClick={ac.editor.toggleInfoBar}

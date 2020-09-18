@@ -99,7 +99,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       onChange: nodeMetaActionCreators.setName,
       value: state.name,
       type: 'text',
-      label: 'Node name',
+      label: 'name',
       lazyAutoFocus: isOnMd ? 0 : 500,
       testId: testIds.nodeMeta__nodeName,
     },

@@ -7,6 +7,7 @@ import { animated } from 'react-spring';
 import { DocumentOperations } from '::root/components/app/components/menus/widgets/components/document-operations/document-operations';
 import { useHubTransition } from '::root/components/app/components/menus/widgets/hooks/hub-transition';
 import { UndoAction } from '::root/components/app/components/menus/widgets/components/undo-action/undo-action';
+import { ChangesHistory } from '::root/components/app/components/menus/widgets/components/changes-history/changes-history';
 
 export type Widget = {
   component: JSX.Element;
@@ -16,13 +17,8 @@ export type Widget = {
 const mapState = (state: Store) => ({
   operations: Object.values(state.documentOperations.operations),
   snackbar: state.dialogs.snackbar,
-  dialogIsOpen:
-    state.root.isOnMd &&
-    (state.dialogs.showDocumentList ||
-      state.dialogs.showSettingsDialog ||
-      state.dialogs.showDocumentMetaDialog ||
-      state.dialogs.showNodeMetaDialog),
   showUndoDocumentAction: state.timelines.showUndoDocumentAction,
+  showTimeline: state.timelines.showTimeline,
   documentActionNOF: state.timelines.documentActionNOF,
 });
 const mapDispatch = {};
@@ -33,16 +29,23 @@ type Props = {};
 const Widgets: React.FC<Props & PropsFromRedux> = ({
   operations,
   snackbar,
-  dialogIsOpen,
   showUndoDocumentAction,
+  showTimeline,
   documentActionNOF,
 }) => {
   const widgets: Widget[] = [];
-  if (snackbar?.message)
+
+  if (operations.length)
     widgets.push({
-      component: <Snackbar snackbar={snackbar} />,
-      key: 'Snackbar',
+      component: <DocumentOperations operations={operations} />,
+      key: 'DocumentOperations',
     });
+  if (showTimeline && (documentActionNOF.redo || documentActionNOF.undo))
+    widgets.push({
+      component: <ChangesHistory />,
+      key: 'ChangesHistory',
+    });
+
   if (showUndoDocumentAction) {
     widgets.push({
       component: (
@@ -57,11 +60,12 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
       key: 'UndoDocumentAction',
     });
   }
-  if (!dialogIsOpen && operations.length)
+  if (snackbar?.message)
     widgets.push({
-      component: <DocumentOperations operations={operations} />,
-      key: 'DocumentOperations',
+      component: <Snackbar snackbar={snackbar} />,
+      key: 'Snackbar',
     });
+
   const { transitions, setRef } = useHubTransition({ widgets });
 
   return (

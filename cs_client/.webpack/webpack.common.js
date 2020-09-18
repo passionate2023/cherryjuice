@@ -149,6 +149,8 @@ module.exports = {
         },
       }),
     production &&
+    new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
+    production &&
       new CompressionPlugin({
         deleteOriginalAssets: true,
         filename: '[path].br[query]',
@@ -164,7 +166,5 @@ module.exports = {
         navigateFallback: 'index.html',
         manifestTransforms: [removeBrotliExtension],
       }),
-    production &&
-      new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
   ].filter(Boolean),
 };

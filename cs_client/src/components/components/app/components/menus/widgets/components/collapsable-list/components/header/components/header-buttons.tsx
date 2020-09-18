@@ -1,38 +1,30 @@
 import * as React from 'react';
 import { modDocumentOperations } from '::sass-modules';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
-import { ac } from '::store/store';
 import { EventHandler } from 'react';
-import { OperationsStats } from '../header';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { Icons } from '::root/components/shared-components/icon/icon';
 
-type Props = {
+export type HeaderButtonsProps = {
   collapsed: boolean;
   toggleCollapsed: EventHandler<any>;
-  stats: OperationsStats;
+  additionalHeaderButtons?: JSX.Element[];
 };
 
-const HeaderButtons: React.FC<Props> = ({
+const HeaderButtons: React.FC<HeaderButtonsProps> = ({
   toggleCollapsed,
   collapsed,
-  stats,
+  additionalHeaderButtons,
 }) => {
   return (
     <span className={modDocumentOperations.documentOperations__header__buttons}>
-      {!stats.active && (
-        <ButtonCircle
-          dark={true}
-          onClick={ac.documentOperations.removeFinished}
-          className={modDocumentOperations.documentOperations__header__button}
-          testId={testIds.popups__documentOperations__clearAllFinished}
-          icon={<span>&times;</span>}
-        />
-      )}
+      {!collapsed && additionalHeaderButtons}
       <ButtonCircle
         dark={true}
         onClick={toggleCollapsed}
         className={modDocumentOperations.documentOperations__header__button}
-        icon={<span>{collapsed ? '▴' : '▾'}</span>}
+        iconName={
+          collapsed ? Icons.material['arrow-up'] : Icons.material['arrow-down']
+        }
       />
     </span>
   );
