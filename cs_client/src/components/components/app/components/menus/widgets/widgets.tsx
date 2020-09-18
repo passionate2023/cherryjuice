@@ -6,8 +6,9 @@ import { ac, Store } from '::store/store';
 import { animated } from 'react-spring';
 import { DocumentOperations } from '::root/components/app/components/menus/widgets/components/document-operations/document-operations';
 import { useHubTransition } from '::root/components/app/components/menus/widgets/hooks/hub-transition';
-import { UndoAction } from '::root/components/app/components/menus/widgets/components/undo-action/undo-action';
+import { ActionSnackbar } from '::root/components/app/components/menus/widgets/components/undo-action/action-snackbar';
 import { ChangesHistory } from '::root/components/app/components/menus/widgets/components/changes-history/changes-history';
+import { UndoRedo } from '::root/components/app/components/menus/widgets/components/undo-action/components/undo-redo';
 
 export type Widget = {
   component: JSX.Element;
@@ -49,12 +50,16 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
   if (showUndoDocumentAction) {
     widgets.push({
       component: (
-        <UndoAction
+        <ActionSnackbar
           actionName={'undo action'}
-          numberOfFrames={documentActionNOF}
-          undo={ac.documentCache.undoDocumentAction}
-          redo={ac.documentCache.redoDocumentAction}
           hide={ac.timelines.hideUndoDocumentAction}
+          buttons={
+            <UndoRedo
+              nof={documentActionNOF}
+              undo={ac.documentCache.undoDocumentAction}
+              redo={ac.documentCache.redoDocumentAction}
+            />
+          }
         />
       ),
       key: 'UndoDocumentAction',

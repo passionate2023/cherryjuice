@@ -27,13 +27,6 @@ const persistedReducers = {
     },
     documentCacheReducer,
   ),
-  timelines: persistReducer(
-    {
-      key: 'timelines',
-      storage,
-    },
-    timelinesReducer,
-  ),
   auth: persistReducer(
     {
       key: 'auth',
@@ -97,6 +90,7 @@ const nonPersistedReducers = {
   documentsList: documentsListReducer,
   documentOperations: documentOperationsReducer,
   cssVariables: cssVariablesReducer,
+  timelines: timelinesReducer,
 };
 const reducer = combineReducers({
   ...persistedReducers,

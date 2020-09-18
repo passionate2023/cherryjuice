@@ -37,9 +37,11 @@ import modHotKeys from './settings/hot-keys.scss';
 import modSnackbar from './widgets/snackbar.scss';
 import modUndoAction from './widgets/undo-action.scss';
 import modWidgets from './widgets/widgets.scss';
+import modChangesHistory from './widgets/changes-history.scss';
 import modTreeToolBar from './tree/tree-tool-bar.scss';
 import modSettings from '::sass-modules/settings/settings.scss';
 export {
+  modChangesHistory,
   modSettings,
   modTreeToolBar,
   appModule,

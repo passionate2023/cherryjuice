@@ -7,7 +7,7 @@ export type HeaderTextProps = {
 
 const HeaderText: React.FC<HeaderTextProps> = ({ text }) => {
   return (
-    <span className={modDocumentOperations.documentOperations__header__text}>
+    <span className={modDocumentOperations.collapsableList__header__text}>
       {text}
     </span>
   );

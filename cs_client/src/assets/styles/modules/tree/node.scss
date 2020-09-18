@@ -58,7 +58,7 @@
   z-index: $ZI-node-elements;
   margin-left: 5px;
   @include respond-to($md-down) {
-    padding: 3px;
+    padding: 2px;
   }
 }
 .node__title-button--hidden {

@@ -7,7 +7,7 @@ import { Icons } from '::root/components/shared-components/icon/icon';
 export type HeaderButtonsProps = {
   collapsed: boolean;
   toggleCollapsed: EventHandler<any>;
-  additionalHeaderButtons?: JSX.Element[];
+  additionalHeaderButtons?: JSX.Element;
 };
 
 const HeaderButtons: React.FC<HeaderButtonsProps> = ({
@@ -16,12 +16,11 @@ const HeaderButtons: React.FC<HeaderButtonsProps> = ({
   additionalHeaderButtons,
 }) => {
   return (
-    <span className={modDocumentOperations.documentOperations__header__buttons}>
+    <span className={modDocumentOperations.collapsableList__header__action}>
       {!collapsed && additionalHeaderButtons}
       <ButtonCircle
         dark={true}
         onClick={toggleCollapsed}
-        className={modDocumentOperations.documentOperations__header__button}
         iconName={
           collapsed ? Icons.material['arrow-up'] : Icons.material['arrow-down']
         }

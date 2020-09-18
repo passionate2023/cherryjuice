@@ -11,18 +11,18 @@ export type ListBodyProps = {
   autoScroll?: boolean;
 };
 
-const ListBody: React.FC<ListBodyProps> = ({ items ,autoScroll=true}) => {
+const ListBody: React.FC<ListBodyProps> = ({ items, autoScroll = true }) => {
   const listBody = useRef<HTMLDivElement>();
   useEffect(() => {
     if (autoScroll && items.length) {
-      listBody.current.scroll(0, listBody.current.scrollHeight);
+      const active = items.findIndex(item => item.active);
+      if (typeof active === 'number')
+        listBody.current.children[active].scrollIntoView();
+      else listBody.current.scroll(0, listBody.current.scrollHeight);
     }
   }, [items]);
   return (
-    <div
-      className={modDocumentOperations.documentOperations__documentsContainer}
-      ref={listBody}
-    >
+    <div className={modDocumentOperations.collapsableList__body} ref={listBody}>
       {items.map(item => (
         <CollapsableListItem
           {...item}

@@ -84,7 +84,10 @@ const ac = {
   ),
   mutateNodeMeta: _(
     ap('mutate-node-meta'),
-    _ => (props: MutateNodeMetaParams | MutateNodeMetaParams[]) => _(props),
+    _ => (
+      props: MutateNodeMetaParams | MutateNodeMetaParams[],
+      mutationType?: DocumentMutations,
+    ) => _(props, mutationType),
   ),
   mutateNodeContent: _(
     ap('mutate-node-content'),
@@ -147,9 +150,10 @@ type State = {
   documents: CachedDocumentDict;
 };
 
-enum DocumentMutations {
+export enum DocumentMutations {
   CreateNode = 'created',
   NodeAttributes = 'changed attributes',
+  NodeParent = 'changed parent',
   NodeContent = 'changed content',
   DeleteNode = 'deleted',
   DocumentAttributes = 'changed attributes',
@@ -158,7 +162,7 @@ enum DocumentMutations {
 
 export type DocumentTimeLineMeta = {
   node_id?: number;
-  documentId?: string;
+  documentId: string;
   mutationType: DocumentMutations;
 };
 const initialState: State = {
@@ -202,7 +206,7 @@ const reducer = createReducer(initialState, _ => [
     ),
     _(tac.setDocumentActionNOF, (state, { payload }) =>
       // todo: filter mutations
-      payload.frame?.meta?.documentId && !payload.frame.meta.silent
+      payload.frame?.meta?.node_id
         ? produce(state, draft =>
             selectNode(draft, payload.frame.meta as SelectNodeParams),
           )
@@ -255,7 +259,6 @@ const reducer = createReducer(initialState, _ => [
         draft => createDocument(draft, payload),
         dTM.addFrame({
           timelineId: payload.id,
-          silent: true,
           documentId: payload.id,
           mutationType: DocumentMutations.CreateDocument,
         }),
@@ -273,7 +276,7 @@ const reducer = createReducer(initialState, _ => [
         }),
       ),
     ),
-    _(ac.mutateNodeMeta, (state, { payload }) => {
+    _(ac.mutateNodeMeta, (state, { payload, meta }) => {
       const params = Array.isArray(payload) ? payload : [payload];
       return produce(
         state,
@@ -282,7 +285,10 @@ const reducer = createReducer(initialState, _ => [
           timelineId: params[0].documentId,
           node_id: params[0].node_id,
           documentId: params[0].documentId,
-          mutationType: DocumentMutations.NodeAttributes,
+          mutationType:
+            meta === DocumentMutations.NodeParent
+              ? DocumentMutations.NodeParent
+              : DocumentMutations.NodeAttributes,
         }),
       );
     }),
@@ -294,7 +300,6 @@ const reducer = createReducer(initialState, _ => [
           if (payload.meta?.mode !== 'update-key-only')
             dTM.addFrame({
               timelineId: payload.documentId,
-              silent: true,
               node_id: payload.node_id,
               documentId: payload.documentId,
               mutationType: DocumentMutations.NodeContent,
@@ -308,6 +313,7 @@ const reducer = createReducer(initialState, _ => [
         draft => deleteNode(draft, payload),
         dTM.addFrame({
           timelineId: payload.documentId,
+          documentId: payload.documentId,
           node_id: payload.node_id,
           mutationType: DocumentMutations.DeleteNode,
         }),

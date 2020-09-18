@@ -46,7 +46,6 @@ const reducer = createReducer(initialState, _ => [
   _(ac.setDocumentActionNOF, (state, { payload }) => ({
     ...state,
     documentActionNOF: payload.nof,
-    showUndoDocumentAction: Boolean(payload.nof.undo || payload.nof.redo),
   })),
   _(ac.showUndoDocumentAction, state => ({
     ...state,

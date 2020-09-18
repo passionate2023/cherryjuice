@@ -149,7 +149,7 @@ module.exports = {
         },
       }),
     production &&
-    new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
+      new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
     production &&
       new CompressionPlugin({
         deleteOriginalAssets: true,

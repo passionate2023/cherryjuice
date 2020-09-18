@@ -3,45 +3,35 @@ import { modSnackbar } from '::sass-modules';
 import { Icons } from '::root/components/shared-components/icon/icon';
 import { ac } from '::store/store';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
-import { NumberOfFrames } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type Props = {
   actionName: string;
   autoCloseDuration?: number;
-  numberOfFrames: NumberOfFrames;
-  redo: () => void;
-  undo: () => void;
+  buttons: JSX.Element;
   hide: () => void;
 };
-const UndoAction: React.FC<Props> = ({
+const ActionSnackbar: React.FC<Props> = ({
   autoCloseDuration = 2500,
   actionName,
-  numberOfFrames,
-  undo,
-  redo,
   hide,
+  buttons,
 }) => {
   const [mouseIn, setMouseIn] = useState(false);
-  const [interactionTS, setInteractionTS] = useState(0);
+  const intervalRef = useRef<any>();
   useEffect(() => {
-    if (!mouseIn) {
-      const timer = setTimeout(() => {
+    if (mouseIn) {
+      clearInterval(intervalRef.current);
+    } else {
+      intervalRef.current = setTimeout(() => {
         hide();
       }, autoCloseDuration);
       return () => {
-        clearInterval(timer);
+        clearInterval(intervalRef.current);
       };
     }
-  }, [interactionTS, mouseIn]);
-  const undoM = useCallback(() => {
-    undo();
-    setInteractionTS(Date.now());
-  }, []);
-  const redoM = useCallback(() => {
-    redo();
-    setInteractionTS(Date.now());
-  }, []);
+  }, [mouseIn]);
+
   return (
     <div
       className={modSnackbar.snackbar}
@@ -50,16 +40,7 @@ const UndoAction: React.FC<Props> = ({
     >
       <span className={modSnackbar.snackbar__message}>{actionName}</span>
       <div className={modSnackbar.snackbar__buttons}>
-        <ButtonCircle
-          iconName={Icons.material.undo}
-          onClick={undoM}
-          disabled={!numberOfFrames.undo}
-        />
-        <ButtonCircle
-          iconName={Icons.material.redo}
-          onClick={redoM}
-          disabled={!numberOfFrames.redo}
-        />
+        {buttons}
         <ButtonCircle
           key={Icons.material.delete}
           onClick={ac.timelines.hideUndoDocumentAction}
@@ -70,4 +51,4 @@ const UndoAction: React.FC<Props> = ({
   );
 };
 
-export { UndoAction };
+export { ActionSnackbar };

@@ -56,8 +56,8 @@ const CollapsableList: React.FC<CollapsableListProps & PropsFromRedux> = ({
   }, [collapsed, items]);
   return items.length ? (
     <div
-      className={`${modDocumentOperations.documentOperations} ${
-        collapsed ? modDocumentOperations.documentOperationsCollapsed : ''
+      className={`${modDocumentOperations.collapsableList} ${
+        collapsed ? modDocumentOperations.collapsableListCollapsed : ''
       }`}
       ref={ref}
     >

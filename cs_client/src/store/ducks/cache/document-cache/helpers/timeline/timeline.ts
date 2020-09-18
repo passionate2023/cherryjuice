@@ -2,9 +2,7 @@ import { applyPatches, Patch } from 'immer';
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
 import { NumberOfFrames } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
 
-export type TimelineFrameMeta<T> = {
-  silent?: boolean;
-} & T;
+export type TimelineFrameMeta<T> = {} & T;
 
 export type Frame<T> = {
   redo: Patch[];
@@ -27,6 +25,9 @@ export type PersistedFrame<T> = {
 };
 
 export class Timeline<T> {
+  get getPosition(): number {
+    return this.position;
+  }
   private position: number;
   private frames: Frames<T>;
   private readonly _onFrameChange: (frame?: Frame<T>) => void = noop;
@@ -45,6 +46,7 @@ export class Timeline<T> {
   reHydrate = ({ position, frames }: PersistedFrame<T>): void => {
     this.position = position;
     this.frames = frames;
+    this._onFrameChange();
   };
 
   private get numberOfFrames(): NumberOfFrames {
@@ -77,7 +79,7 @@ export class Timeline<T> {
     };
     this.deleteFutureFrames();
     this.deleteOldFrames();
-    if (!meta.silent) this._onFrameChange();
+    this._onFrameChange();
   };
 
   redo = (state: DocumentCacheState): DocumentCacheState => {

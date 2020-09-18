@@ -34,7 +34,7 @@ const ActionButton: React.FC<Props> = ({ operation, open }) => {
           <ProgressCircle
             progress={operation.progress}
             size={13}
-            className={modDocumentOperations.documentOperations__document__button}
+            className={modDocumentOperations.collapsableList__item__button}
           >
             {children}
           </ProgressCircle>
@@ -77,7 +77,7 @@ const ActionButton: React.FC<Props> = ({ operation, open }) => {
   return props.iconName ? (
     <ButtonCircle
       key={props.iconName}
-      className={modDocumentOperations.documentOperations__document__button}
+      className={modDocumentOperations.collapsableList__item__button}
       onClick={props.onClick}
       testId={props.testId}
       icon={props.wrapper({ children: <Icon {...{ name: props.iconName }} /> })}

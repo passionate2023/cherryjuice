@@ -44,17 +44,17 @@ const DocumentOperations: React.FC<Props> = ({ operations }) => {
     ),
   }));
 
-  const headerButtons = [
-    !stats.active && (
-      <ButtonCircle
-        dark={true}
-        onClick={ac.documentOperations.removeFinished}
-        className={modDocumentOperations.documentOperations__header__button}
-        testId={testIds.popups__documentOperations__clearAllFinished}
-        icon={<span>&times;</span>}
-      />
-    ),
-  ];
+  const headerButtons = !stats.active ? (
+    <ButtonCircle
+      dark={true}
+      onClick={ac.documentOperations.removeFinished}
+      className={modDocumentOperations.collapsableList__header__button}
+      testId={testIds.popups__documentOperations__clearAllFinished}
+      icon={<span>&times;</span>}
+    />
+  ) : (
+    <></>
+  );
   const headerText = stats.active
     ? `processing ${stats.active} document${stats.active > 1 ? 's' : ''}`
     : 'no active operations';

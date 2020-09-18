@@ -11,7 +11,7 @@ const Header: React.FC<HeaderProps> = ({
   additionalHeaderButtons,
 }) => {
   return (
-    <div className={modDocumentOperations.documentOperations__header}>
+    <div className={modDocumentOperations.collapsableList__header}>
       {!collapsed && <HeaderText text={text} />}
       <HeaderButtons
         toggleCollapsed={toggleCollapsed}
