@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { modSearch } from '::sass-modules';
-import { MutableRefObject, useCallback } from 'react';
+import { MutableRefObject, useCallback, useRef } from 'react';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { useLazyAutoFocus } from '::root/components/shared-components/buttons/button-base/button-base';
 
 type Props = {
   containerClassName?: string;
@@ -17,6 +18,7 @@ type Props = {
   onClear: () => void;
   performSearch?: () => void;
   disabled?: boolean;
+  lazyAutoFocus?: number;
 };
 
 const SearchInput: React.FC<Props> = ({
@@ -31,10 +33,13 @@ const SearchInput: React.FC<Props> = ({
   performSearch,
   placeHolder,
   disabled,
+  lazyAutoFocus,
 }) => {
   const onChangeM = useCallback(e => {
     onChange(e.target.value);
   }, []);
+  const input = useRef<HTMLInputElement>();
+  useLazyAutoFocus(lazyAutoFocus, input);
   return (
     <div
       className={joinClassNames([
@@ -55,6 +60,7 @@ const SearchInput: React.FC<Props> = ({
             placeholder={placeHolder}
             value={value}
             onChange={onChangeM}
+            ref={input}
           />
           <ButtonSquare
             className={joinClassNames([

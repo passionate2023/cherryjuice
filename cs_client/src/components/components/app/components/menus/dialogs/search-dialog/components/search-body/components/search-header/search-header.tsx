@@ -7,14 +7,16 @@ import { ac } from '::store/store';
 
 type Props = {
   showFilters: boolean;
+  show: boolean;
 };
 
-const SearchHeader: React.FC<Props> = ({ showFilters }) => {
+const SearchHeader: React.FC<Props> = ({ showFilters, show }) => {
   return (
     <div className={modSearchDialog.searchDialog__header}>
       <Search
         className={modSearchDialog.searchDialog__header__searchField}
         navBar={false}
+        lazyAutoFocus={show ? 1200 : 0}
       />
       <ButtonCircle
         className={modSearchDialog.searchDialog__header__toggleFilters}

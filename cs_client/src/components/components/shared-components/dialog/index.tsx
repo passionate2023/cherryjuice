@@ -32,6 +32,7 @@ type TDialogProps = {
 
 const Dialog: React.FC<TDialogProps & {
   style;
+  show: boolean;
 }> = ({
   children,
   menuButton,
@@ -47,6 +48,7 @@ const Dialog: React.FC<TDialogProps & {
   loading = false,
   docked,
   measurable,
+  show,
 }) => {
   useModalKeyboardEvents({
     onCloseModal: onClose,
@@ -88,6 +90,7 @@ const Dialog: React.FC<TDialogProps & {
             rightHeaderButtons={rightHeaderButtons}
             isOnMobile={isOnMobile}
             docked={docked}
+            show={show}
           />
         </animated.div>
       }
@@ -98,11 +101,11 @@ const Dialog: React.FC<TDialogProps & {
 const DialogWithTransition: React.FC<TDialogProps & {
   show: boolean;
   isShownOnTopOfDialog?: boolean;
-}> = ({ show, isShownOnTopOfDialog, ...props }) => {
+}> = ({ isShownOnTopOfDialog, ...props }) => {
   return (
     <TransitionWrapper<TDialogProps>
       Component={Dialog}
-      show={show}
+      show={props.show}
       transitionValues={{
         from: { opacity: 0, xy: [0, window.innerHeight * 0.7] },
         enter: { opacity: 1, xy: [0, 0] },

@@ -3,12 +3,11 @@ import { TDialogFooterButton } from '::root/components/shared-components/dialog/
 import { ConfirmationModal } from '::root/components/shared-components/modal/confirmation-modal';
 import { AlertType, TAlert } from '::types/react';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac,} from '::store/store';
+import { ac } from '::store/store';
 import { Store } from '::store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
 const createAlert = (selectedDocumentIds: string[]): TAlert => {
-
   const title = selectedDocumentIds.length
     ? `delete ${
         selectedDocumentIds.length === 1
@@ -43,7 +42,7 @@ const DeleteDocument: React.FC<Props & PropsFromRedux> = ({
       label: 'Dismiss',
       onClick: ac.dialogs.hideDeleteDocument,
       disabled: false,
-      lazyAutoFocus: 300,
+      lazyAutoFocus: true,
     },
     {
       label: 'Delete',

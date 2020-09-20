@@ -100,7 +100,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       value: state.name,
       type: 'text',
       label: 'name',
-      lazyAutoFocus: isOnMd ? 0 : 500,
+      lazyAutoFocus: !isOnMd,
       testId: testIds.nodeMeta__nodeName,
     },
     isOwnerOfDocument && {

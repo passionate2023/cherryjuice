@@ -23,13 +23,14 @@ const SearchDialog: React.FC<Props & PropsFromRedux> = ({
   searchState,
   docked,
 }) => {
+  const show = searchState !== 'idle';
   return (
     <DialogWithTransition
       dialogTitle={'Search'}
       dialogFooterLeftButtons={[]}
       dialogFooterRightButtons={footerLeftButtons}
       isOnMobile={isOnMobile}
-      show={searchState !== 'idle'}
+      show={show}
       loading={searchState === 'in-progress'}
       onClose={ac.search.setSearchIdle}
       rightHeaderButtons={dialogHeaderButtons({ docked })}
@@ -37,7 +38,7 @@ const SearchDialog: React.FC<Props & PropsFromRedux> = ({
       measurable={true}
     >
       <ErrorBoundary>
-        <SearchBody />
+        <SearchBody show={show} />
       </ErrorBoundary>
     </DialogWithTransition>
   );

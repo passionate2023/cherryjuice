@@ -51,7 +51,7 @@ const PasswordModal: React.FC<ModalProps & PropsFromRedux> = ({
       setCurrentPassword('');
     },
     disabled: !currentPassword || !valid,
-    lazyAutoFocus: 300,
+    lazyAutoFocus: true,
   });
   buttons.push({
     label: 'Dismiss',

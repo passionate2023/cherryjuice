@@ -60,7 +60,12 @@ const Settings: React.FC<Props & PropsFromRedux> = ({
       menuButton={<DrawerToggle />}
       dialogTitle={'Settings'}
       dialogFooterRightButtons={[
-        { label: 'Close', onClick: onClose, disabled: false },
+        {
+          label: 'Close',
+          onClick: onClose,
+          disabled: false,
+          lazyAutoFocus: true,
+        },
         {
           label: 'Apply',
           onClick: apply,

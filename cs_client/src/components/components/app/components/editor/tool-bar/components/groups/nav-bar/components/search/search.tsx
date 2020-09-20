@@ -18,6 +18,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = {
   className?: string;
   navBar?: boolean;
+  lazyAutoFocus?: number;
 };
 
 const Search: React.FC<Props & PropsFromRedux> = ({
@@ -26,6 +27,7 @@ const Search: React.FC<Props & PropsFromRedux> = ({
   navBar = true,
   searchTarget,
   online,
+  lazyAutoFocus,
 }) => {
   const searchImpossible = !navBar && (!query || searchTarget.length === 0);
   const ref = useRef<HTMLDivElement>();
@@ -47,6 +49,7 @@ const Search: React.FC<Props & PropsFromRedux> = ({
       searchImpossible={searchImpossible}
       performSearch={ac.search.setSearchQueued}
       disabled={!online}
+      lazyAutoFocus={lazyAutoFocus}
     />
   );
 };

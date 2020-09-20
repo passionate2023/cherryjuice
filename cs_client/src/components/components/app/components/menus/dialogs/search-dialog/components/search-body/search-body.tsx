@@ -14,12 +14,17 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = {
+  show: boolean;
+};
 
-const SearchBody: React.FC<Props & PropsFromRedux> = ({ showFilters }) => {
+const SearchBody: React.FC<Props & PropsFromRedux> = ({
+  showFilters,
+  show,
+}) => {
   return (
     <div className={modSearchDialog.searchDialog}>
-      <SearchHeader showFilters={showFilters} />
+      <SearchHeader showFilters={showFilters} show={show} />
       <SearchFilters show={showFilters} />
       <SearchResults collapse={showFilters} />
     </div>
