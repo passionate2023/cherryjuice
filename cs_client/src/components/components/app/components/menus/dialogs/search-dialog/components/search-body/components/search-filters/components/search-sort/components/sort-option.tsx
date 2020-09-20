@@ -8,7 +8,6 @@ import {
   SortDirection,
   SortNodesBy,
 } from '::types/graphql/generated';
-import { ac } from '::store/store';
 import { mapScopeToLabel } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
 
 const mapDirectionToLabel = ({
@@ -26,14 +25,21 @@ const mapDirectionToLabel = ({
     else return 'z ▶ a';
 };
 
-type SortOptionProps = {
+export type SortOptionProps = {
   sortBy: SortNodesBy;
   sortOptions: SearchSortOptions;
+  setSortBy: (sortBy: SortNodesBy) => void;
+  toggleSortDirection: () => void;
 };
 
-const SortOption: React.FC<SortOptionProps> = ({ sortBy, sortOptions }) => {
+const SortOption: React.FC<SortOptionProps> = ({
+  sortBy,
+  sortOptions,
+  setSortBy,
+  toggleSortDirection,
+}) => {
   const setSortByM = useCallback(() => {
-    ac.search.setSortBy(sortBy);
+    setSortBy(sortBy);
   }, []);
 
   return (
@@ -52,7 +58,7 @@ const SortOption: React.FC<SortOptionProps> = ({ sortBy, sortOptions }) => {
           [modUtility.hidden, sortOptions.sortBy !== sortBy],
           modUtility.fontSize12,
         ])}
-        onClick={ac.search.toggleSortDirection}
+        onClick={toggleSortDirection}
         active={true}
       />
     </div>

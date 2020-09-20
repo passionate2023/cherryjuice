@@ -4,10 +4,7 @@ import { Search } from '::root/components/app/components/editor/tool-bar/compone
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { ac } from '::store/store';
-
-export const SearchHeaderContainer: React.FC = ({ children }) => (
-  <div className={modSearchDialog.searchDialog__header}>{children}</div>
-);
+import { SearchHeaderContainer } from '::root/components/shared-components/dialog/animations/search-header-container';
 
 type Props = {
   showFilters: boolean;
