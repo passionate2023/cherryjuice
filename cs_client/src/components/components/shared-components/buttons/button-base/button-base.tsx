@@ -29,19 +29,20 @@ const useLazyAutoFocus = (
 ) => {
   const focusTimeout = useRef<any>();
   useEffect(() => {
-    if (lazyAutoFocus) {
-      clearTimeout(focusTimeout.current);
-      focusTimeout.current = setTimeout(() => {
-        elementRef.current.focus();
-      }, lazyAutoFocus);
-      return () => {
+    if (elementRef.current)
+      if (lazyAutoFocus) {
+        clearTimeout(focusTimeout.current);
+        focusTimeout.current = setTimeout(() => {
+          elementRef.current.focus();
+        }, lazyAutoFocus);
+        return () => {
+          elementRef.current.blur();
+          clearTimeout(focusTimeout.current);
+        };
+      } else {
         elementRef.current.blur();
         clearTimeout(focusTimeout.current);
-      };
-    } else {
-      elementRef.current.blur();
-      clearTimeout(focusTimeout.current);
-    }
+      }
   }, [lazyAutoFocus]);
 };
 

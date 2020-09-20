@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { DialogWithTransition } from '::root/components/shared-components/dialog';
+import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { footerLeftButtons } from '::root/components/app/components/menus/dialogs/search-dialog/components/footer-buttons/footer-buttons';
-import { dialogHeaderButtons } from '::root/components/app/components/menus/dialogs/search-dialog/components/header-buttons/header-buttons';
 import { SearchBody } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/search-body';
 
 const mapState = (state: Store) => ({
@@ -27,14 +26,14 @@ const SearchDialog: React.FC<Props & PropsFromRedux> = ({
   return (
     <DialogWithTransition
       dialogTitle={'Search'}
-      dialogFooterLeftButtons={[]}
-      dialogFooterRightButtons={footerLeftButtons}
+      footerLeftButtons={[]}
+      footRightButtons={footerLeftButtons}
       isOnMobile={isOnMobile}
       show={show}
       loading={searchState === 'in-progress'}
       onClose={ac.search.setSearchIdle}
-      rightHeaderButtons={dialogHeaderButtons({ docked })}
-      docked={docked}
+      pinned={docked}
+      pinnable={true}
       measurable={true}
     >
       <ErrorBoundary>

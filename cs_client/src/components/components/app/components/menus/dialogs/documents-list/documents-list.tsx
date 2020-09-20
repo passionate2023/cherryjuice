@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import { DialogWithTransition } from '::root/components/shared-components/dialog';
+import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { DocumentList } from './components/documents-list/document-list';
 import { modDialog } from '::sass-modules';
@@ -65,6 +65,7 @@ const mapState = (state: Store) => ({
   fetchDocuments: state.documentsList.fetchDocuments,
   userId: state.auth.user?.id,
   online: state.root.online,
+  docked: state.root.dockedDialog,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -80,6 +81,7 @@ const DocumentsList: React.FC<PropsFromRedux> = ({
   fetchDocuments,
   userId,
   online,
+  docked,
 }) => {
   useEffect(() => {
     if (userId) ac.documentsList.fetchDocuments();
@@ -142,13 +144,14 @@ const DocumentsList: React.FC<PropsFromRedux> = ({
   return (
     <DialogWithTransition
       dialogTitle={'Select Document'}
-      dialogFooterLeftButtons={buttonsLeft}
-      dialogFooterRightButtons={buttonsRight}
+      footerLeftButtons={buttonsLeft}
+      footRightButtons={buttonsRight}
+      rightHeaderButtons={rightHeaderButtons}
       isOnMobile={isOnMobile}
       show={showDocumentList}
       onClose={close}
-      rightHeaderButtons={rightHeaderButtons}
-      docked={false}
+      pinned={docked}
+      pinnable={true}
       loading={fetchDocuments !== 'idle'}
     >
       <ErrorBoundary>

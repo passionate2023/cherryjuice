@@ -157,7 +157,6 @@ export enum DocumentMutations {
   NodeContent = 'changed content',
   DeleteNode = 'deleted',
   DocumentAttributes = 'changed attributes',
-  CreateDocument = 'created',
 }
 
 export type DocumentTimeLineMeta = {
@@ -183,6 +182,10 @@ const reducer = createReducer(initialState, _ => [
       return {
         ...cloneObj(initialState),
       };
+    }),
+    _(ac.createDocument, (state, { payload }) => {
+      dTM.setCurrent(payload.id);
+      return produce(state, draft => createDocument(draft, payload));
     }),
     _(dac.fetchFulfilled, (state, { payload }) =>
       produce(state, draft =>
@@ -253,17 +256,6 @@ const reducer = createReducer(initialState, _ => [
   ],
   ...[
     // undoable actions
-    _(ac.createDocument, (state, { payload }) =>
-      produce(
-        state,
-        draft => createDocument(draft, payload),
-        dTM.addFrame({
-          timelineId: payload.id,
-          documentId: payload.id,
-          mutationType: DocumentMutations.CreateDocument,
-        }),
-      ),
-    ),
     _(ac.createNode, (state, { payload }) =>
       produce(
         state,

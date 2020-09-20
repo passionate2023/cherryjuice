@@ -25,7 +25,8 @@ type TDialogProps = {
   isOnMobile: boolean;
   small?: boolean;
   loading?: boolean;
-  docked?: boolean;
+  pinnable?: boolean;
+  pinned?: boolean;
   measurable?: boolean;
 } & TDialogFooterProps &
   DialogHeaderProps;
@@ -39,14 +40,15 @@ const Dialog: React.FC<TDialogProps & {
   dialogTitle,
   onClose,
   onConfirm,
-  dialogFooterLeftButtons,
-  dialogFooterRightButtons,
+  footerLeftButtons,
+  footRightButtons,
   style,
   isOnMobile,
   rightHeaderButtons,
   small,
   loading = false,
-  docked,
+  pinned,
+  pinnable,
   measurable,
   show,
 }) => {
@@ -63,7 +65,7 @@ const Dialog: React.FC<TDialogProps & {
           className={joinClassNames([
             modDialog.dialog,
             [modDialog.dialogSmall, small],
-            [modDialog.dialogDocked, docked],
+            [modDialog.dialogDocked, pinned],
           ])}
           style={{
             ...style,
@@ -78,6 +80,7 @@ const Dialog: React.FC<TDialogProps & {
             dialogTitle={dialogTitle}
             onClose={onClose}
             rightHeaderButtons={rightHeaderButtons}
+            pinnable={pinnable}
           />
           {measurable ? (
             <MeasurableDialogBody dialogBodyElements={children} />
@@ -85,11 +88,10 @@ const Dialog: React.FC<TDialogProps & {
             <DialogBody dialogBodyElements={children} />
           )}
           <DialogFooter
-            dialogFooterRightButtons={dialogFooterRightButtons}
-            dialogFooterLeftButtons={dialogFooterLeftButtons}
-            rightHeaderButtons={rightHeaderButtons}
+            footRightButtons={footRightButtons}
+            footerLeftButtons={footerLeftButtons}
             isOnMobile={isOnMobile}
-            docked={docked}
+            pinned={pinnable && pinned}
             show={show}
           />
         </animated.div>
@@ -116,7 +118,7 @@ const DialogWithTransition: React.FC<TDialogProps & {
       }}
       componentProps={props}
       scrimProps={
-        props.docked
+        props.pinnable && props.pinned
           ? undefined
           : { isShownOnTopOfDialog, onClick: props.onClose }
       }

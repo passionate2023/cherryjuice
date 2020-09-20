@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DialogWithTransition } from '::root/components/shared-components/dialog';
+import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { Drawer } from '::root/components/shared-components/drawer/drawer';
 import { screens } from '::root/components/app/components/menus/dialogs/settings/screens/screens';
 import { DrawerToggle } from '::root/components/shared-components/drawer/components/drawer-toggle/drawer-toggle';
@@ -7,7 +7,6 @@ import { ErrorBoundary } from '::root/components/shared-components/react/error-b
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { useUnsavedSettingsPrompt } from '::root/components/shared-components/drawer/components/drawer-navigation/components/drawer-navigation-element';
-import { dialogHeaderButtons } from '::root/components/app/components/menus/dialogs/search-dialog/components/header-buttons/header-buttons';
 import { createSelector } from 'reselect';
 
 export const screenHasUnsavedChanges = createSelector(
@@ -55,30 +54,31 @@ const Settings: React.FC<Props & PropsFromRedux> = ({
     [ac.dialogs.hideSettingsDialog, ac.editorSettings.undoChanges],
   );
   const apply = () => ac.settings.save();
+  const footerRightButtons = [
+    {
+      label: 'Close',
+      onClick: onClose,
+      disabled: false,
+      lazyAutoFocus: true,
+    },
+    {
+      label: 'Apply',
+      onClick: apply,
+      disabled: !screenHasChanges || savePending,
+    },
+  ];
   return (
     <DialogWithTransition
       menuButton={<DrawerToggle />}
       dialogTitle={'Settings'}
-      dialogFooterRightButtons={[
-        {
-          label: 'Close',
-          onClick: onClose,
-          disabled: false,
-          lazyAutoFocus: true,
-        },
-        {
-          label: 'Apply',
-          onClick: apply,
-          disabled: !screenHasChanges || savePending,
-        },
-      ]}
+      footRightButtons={footerRightButtons}
+      footerLeftButtons={[]}
       loading={saveInProgress}
-      dialogFooterLeftButtons={[]}
       isOnMobile={isOnMobile}
       onClose={onClose}
       show={show && Boolean(userId)}
-      docked={docked}
-      rightHeaderButtons={dialogHeaderButtons({ docked })}
+      pinned={docked}
+      pinnable={true}
       measurable={true}
     >
       <ErrorBoundary>

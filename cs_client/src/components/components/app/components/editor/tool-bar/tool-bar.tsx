@@ -62,12 +62,13 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   isDocumentOwner,
   docking,
 }) => {
+  const hideDuringDocking = docking && isOnMd;
   return (
     <div className={modToolbar.toolBar}>
       <MainButtons />
       {isDocumentOwner && !isOnMd && <Separator />}
       <Portal targetSelector={'.' + appModule.app} predicate={isOnMd}>
-        {!docking && (
+        {!hideDuringDocking && (
           <NodesButtons>
             {isDocumentOwner && <UndoRedo />}
             <MobileButtons />
@@ -75,7 +76,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
         )}
       </Portal>
       {isDocumentOwner && !isOnMd && <Separator />}
-      {!docking && isDocumentOwner && (
+      {!hideDuringDocking && isDocumentOwner && (
         <ErrorBoundary>
           <Portal targetSelector={'.' + appModule.app} predicate={isOnMd}>
             {isOnMd ? (

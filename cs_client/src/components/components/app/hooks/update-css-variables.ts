@@ -21,6 +21,9 @@ export const useUpdateCssVariables = (
   const showSettingsDialog = useSelector(
     (state: Store) => state.dialogs.showSettingsDialog,
   );
+  const showDocumentList = useSelector(
+    (state: Store) => state.dialogs.showDocumentList,
+  );
   useEffect(() => {
     cssVariables.setTreeWidth(showTree ? treeWidth : 0);
     if (isDocumentOwner && showFormattingButtons) {
@@ -41,8 +44,10 @@ export const useUpdateCssVariables = (
     }
   }, [showRecentNodes]);
 
+  const dialogIsShown =
+    showSearchDialog || showSettingsDialog || showDocumentList;
   useEffect(() => {
-    if (dockedDialog && (showSearchDialog || showSettingsDialog)) {
+    if (dockedDialog && dialogIsShown) {
       cssVariables.setDockedDialogHeight(50);
       ac.root.setDocking(false);
     } else {
@@ -58,5 +63,5 @@ export const useUpdateCssVariables = (
         )
         .subscribe();
     }
-  }, [dockedDialog, showSearchDialog, showSettingsDialog]);
+  }, [dockedDialog, dialogIsShown]);
 };

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useReducer } from 'react';
-import { DialogWithTransition } from '::root/components/shared-components/dialog';
+import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { MetaForm } from '::root/components/shared-components/form/meta-form/meta-form';
 import { FormInputProps } from '::root/components/shared-components/form/meta-form/meta-form-input';
@@ -78,7 +78,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       value: state.name,
       type: 'text',
       label: 'name',
-      lazyAutoFocus: !isOnMd,
+      lazyAutoFocus: !isOnMd && Boolean(showDialog),
       testId: testIds.documentMeta__documentName,
     },
   ];
@@ -159,8 +159,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   return (
     <DialogWithTransition
       dialogTitle={'Document Properties'}
-      dialogFooterLeftButtons={[]}
-      dialogFooterRightButtons={buttonsRight}
+      footRightButtons={buttonsRight}
       isOnMobile={isOnMd}
       show={Boolean(showDialog)}
       onClose={ac.dialogs.hideDocumentMetaDialog}
@@ -168,7 +167,6 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       rightHeaderButtons={[]}
       small={true}
       isShownOnTopOfDialog={true}
-      docked={false}
     >
       <ErrorBoundary>
         <MetaForm inputs={inputs} />

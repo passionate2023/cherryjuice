@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useReducer } from 'react';
-import { DialogWithTransition } from '::root/components/shared-components/dialog';
+import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { MetaForm } from '::root/components/shared-components/form/meta-form/meta-form';
 import { useSave } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save';
@@ -100,9 +100,9 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       value: state.name,
       type: 'text',
       label: 'name',
-      lazyAutoFocus: !isOnMd,
+      lazyAutoFocus: !isOnMd && Boolean(showDialog),
       testId: testIds.nodeMeta__nodeName,
-    },
+    } as FormInputProps,
     isOwnerOfDocument && {
       customInput: (
         <SelectPrivacy
@@ -163,15 +163,14 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
   return (
     <DialogWithTransition
       dialogTitle={'Node Properties'}
-      dialogFooterLeftButtons={[]}
-      dialogFooterRightButtons={buttonsRight}
+      footerLeftButtons={[]}
+      footRightButtons={buttonsRight}
       isOnMobile={isOnMd}
       show={Boolean(showDialog)}
       onClose={onClose}
       onConfirm={onSave}
       rightHeaderButtons={[]}
       small={true}
-      docked={false}
       isShownOnTopOfDialog={true}
     >
       <ErrorBoundary>
