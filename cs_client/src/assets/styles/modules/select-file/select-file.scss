@@ -135,6 +135,8 @@
   box-shadow: $box-shadow2;
   padding: 3px;
   background-color: var(--neutral-750);
+  width: 100%;
+  box-sizing: border-box;
 }
 .selectFile__file-folder__files {
   display: flex;

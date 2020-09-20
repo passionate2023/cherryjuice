@@ -70,12 +70,11 @@ const mapState = (state: Store) => ({
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const DocumentsList: React.FC<PropsFromRedux> = ({
+const DocumentsListDialog: React.FC<PropsFromRedux> = ({
   documentId,
   showDocumentList,
   isOnMobile,
   documents,
-  loading,
   deletionMode,
   selectedIDs,
   fetchDocuments,
@@ -153,12 +152,13 @@ const DocumentsList: React.FC<PropsFromRedux> = ({
       pinned={docked}
       pinnable={true}
       loading={fetchDocuments !== 'idle'}
+      measurable={true}
     >
       <ErrorBoundary>
-        <DocumentList documents={documents} loading={loading} />
+        <DocumentList />
       </ErrorBoundary>
     </DialogWithTransition>
   );
 };
 
-export default connector(DocumentsList);
+export default connector(DocumentsListDialog);

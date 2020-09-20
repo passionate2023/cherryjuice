@@ -5,6 +5,10 @@ import { ButtonCircle } from '::root/components/shared-components/buttons/button
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { ac } from '::store/store';
 
+export const SearchHeaderContainer: React.FC = ({ children }) => (
+  <div className={modSearchDialog.searchDialog__header}>{children}</div>
+);
+
 type Props = {
   showFilters: boolean;
   show: boolean;
@@ -12,7 +16,7 @@ type Props = {
 
 const SearchHeader: React.FC<Props> = ({ showFilters, show }) => {
   return (
-    <div className={modSearchDialog.searchDialog__header}>
+    <SearchHeaderContainer>
       <Search
         className={modSearchDialog.searchDialog__header__searchField}
         navBar={false}
@@ -24,7 +28,7 @@ const SearchHeader: React.FC<Props> = ({ showFilters, show }) => {
         icon={<Icon name={Icons.material.tune} loadAsInlineSVG={'force'} />}
         active={showFilters}
       />
-    </div>
+    </SearchHeaderContainer>
   );
 };
 

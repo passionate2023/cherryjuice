@@ -34,6 +34,20 @@ export const createAnimationNotifiers = (animationName: Animations, show) => ({
   },
 });
 
+export const adjustDialogBodyHeight = (
+  dialogBodyHeight,
+  collapse,
+  filtersHeight,
+): number => {
+  dialogBodyHeight = dialogBodyHeight - 117; //- (isOnMobile ? 25 : 30);
+  const bottomOffset = 10;
+  let height =
+    bottomOffset +
+    (collapse ? dialogBodyHeight - filtersHeight : dialogBodyHeight);
+  if (collapse && height < 160) height = 0;
+  return height;
+};
+
 const SearchResults: React.FC<Props & PropsFromRedux> = ({
   searchResults,
   collapse,
@@ -44,12 +58,11 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
   searchType,
   searchOptions,
 }) => {
-  dialogBodyHeight = dialogBodyHeight - 117; //- (isOnMobile ? 25 : 30);
-  const bottomOffset = 10;
-  let height =
-    bottomOffset +
-    (collapse ? dialogBodyHeight - searchFiltersHeight : dialogBodyHeight);
-  if (collapse && height < 160) height = 0;
+  const height = adjustDialogBodyHeight(
+    dialogBodyHeight,
+    collapse,
+    searchFiltersHeight,
+  );
   const props = useSpring({
     to: {
       height,

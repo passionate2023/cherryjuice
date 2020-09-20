@@ -39,10 +39,16 @@ const ac = {
       _ => (documents: CachedDocument[]) => _(documents),
     ),
   },
+
+  ...{
+    setQuery: _(ap('set-query'), _ => (query: string) => _(query)),
+    clearQuery: _(ap('clear-query')),
+  },
 };
 
 type State = {
   focusedDocumentId?: string;
+  query?: string;
   fetchDocuments: AsyncOperation;
   deleteDocuments: AsyncOperation;
   selectedIDs: string[];
@@ -54,6 +60,7 @@ const initialState: State = {
   deleteDocuments: 'idle',
   selectedIDs: [],
   deletionMode: false,
+  query: '',
 };
 const reducer = createReducer(initialState, _ => [
   ...[
@@ -115,6 +122,16 @@ const reducer = createReducer(initialState, _ => [
         : state.selectedIDs.includes(payload)
         ? state.selectedIDs.filter(id => id !== payload)
         : [...state.selectedIDs, payload],
+    })),
+  ],
+  ...[
+    _(ac.setQuery, (state, { payload }) => ({
+      ...state,
+      query: payload,
+    })),
+    _(ac.clearQuery, state => ({
+      ...state,
+      query: '',
     })),
   ],
 ]);

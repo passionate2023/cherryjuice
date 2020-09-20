@@ -18,7 +18,7 @@ const Settings = React.lazy(() =>
 );
 const DocumentsList = React.lazy(() =>
   import(
-    '::root/components/app/components/menus/dialogs/documents-list/documents-list'
+    '::root/components/app/components/menus/dialogs/documents-list/documents-list-dialog'
   ),
 );
 const NodeMeta = React.lazy(() =>
