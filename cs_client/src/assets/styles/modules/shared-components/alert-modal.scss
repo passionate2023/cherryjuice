@@ -8,7 +8,7 @@ $width: $height * 1.35;
   width: $width;
   background-color:  var(--neutral-750);
   left: calc(100vw / 2 - #{$width/2});
-  top: calc(100vh / 2 - #{$height/2.2});
+  top: calc(100vh / 2 - #{$height/2.5});
   box-shadow: $box-shadow1;
   display: flex;
   flex-direction: column;

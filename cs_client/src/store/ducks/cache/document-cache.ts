@@ -278,19 +278,34 @@ const reducer = createReducer(initialState, _ => [
     ),
     _(ac.mutateNodeMeta, (state, { payload, meta }) => {
       const params = Array.isArray(payload) ? payload : [payload];
-      return produce(
-        state,
-        draft => mutateNodeMeta(draft, params),
-        dTM.addFrame({
-          timelineId: params[0].documentId,
-          node_id: params[0].node_id,
-          documentId: params[0].documentId,
-          mutationType:
-            meta === DocumentMutations.NodeParent
-              ? DocumentMutations.NodeParent
-              : DocumentMutations.NodeAttributes,
-        }),
+      const editedOrDroppedNode = params[0];
+      let newState = produce(
+        produce(
+          state,
+          draft => mutateNodeMeta(draft, params),
+          dTM.addFrame({
+            timelineId: editedOrDroppedNode.documentId,
+            node_id: editedOrDroppedNode.node_id,
+            documentId: editedOrDroppedNode.documentId,
+            mutationType: meta || DocumentMutations.NodeAttributes,
+          }),
+        ),
+        draft =>
+          selectNode(draft, {
+            node_id: editedOrDroppedNode.node_id,
+            documentId: editedOrDroppedNode.documentId,
+          }),
       );
+      if (meta === DocumentMutations.NodeParent) {
+        newState = produce(newState, draft =>
+          expandNode(draft, {
+            node_id: editedOrDroppedNode.node_id,
+            documentId: editedOrDroppedNode.documentId,
+            expandChildren: true,
+          }),
+        );
+      }
+      return newState;
     }),
     _(ac.mutateNodeContent, (state, { payload }) =>
       produce(

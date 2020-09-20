@@ -28,7 +28,7 @@ h6 {
 a:focus,
 button:focus,
 input:focus,
-textarea:focus {
+textarea:focus, div:focus {
   outline: 1px solid rgba(grey, 0.4);
 }
 
