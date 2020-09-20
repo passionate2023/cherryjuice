@@ -1,5 +1,4 @@
 @import '../../vars/vars';
-@import '../../vars/colors';
 
 $height: 250px;
 $width: $height * 1.35;
@@ -7,7 +6,7 @@ $width: $height * 1.35;
   box-sizing: border-box;
   position: absolute;
   width: $width;
-  background-color: white;
+  background-color:  var(--neutral-750);
   left: calc(100vw / 2 - #{$width/2});
   top: calc(100vh / 2 - #{$height/2.2});
   box-shadow: $box-shadow1;
@@ -15,7 +14,7 @@ $width: $height * 1.35;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #3e3d3d;
+  color: var(--neutral-130);
   font-family: 'Roboto', sans-serif;
   overflow: hidden;
   text-align: center;
@@ -48,10 +47,10 @@ $width: $height * 1.35;
 }
 
 .alert-modal__header--danger {
-  color: $COLOR_DANGER;
+  color: var(--danger);
 }
 .alert-modal__header--warning {
-  color: $COLOR_WARNING;
+  color: var(--warning);
 }
 .alert-modal__message {
   font-size: 16px;

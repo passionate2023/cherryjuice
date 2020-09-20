@@ -65,11 +65,13 @@ const ChangeEmail: React.FC<Props> = ({
           disabled={actionInProgress}
           text={'resend verification email'}
           onClick={resendToken}
+          className={modUserProfile.userProfile__group__elements__button}
         />
         <ButtonSquare
           disabled={actionInProgress}
           text={'cancel'}
           onClick={cancelToken}
+          className={modUserProfile.userProfile__group__elements__button}
         />
       </div>
     </div>

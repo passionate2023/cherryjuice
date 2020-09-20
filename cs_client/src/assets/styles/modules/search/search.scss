@@ -1,6 +1,4 @@
 @import '../../mixins/breakpoints';
-$bg-color: white;
-$text-color: grey;
 .search__container {
   @include respond-to($wd-down) {
     width: 40px;
@@ -12,7 +10,7 @@ $text-color: grey;
   margin-right: 50px;
   display: flex;
   align-items: center;
-  background-color: $bg-color;
+  background-color: var(--neutral-750);
 }
 .search__container--disabled {
   width: 40px;
@@ -29,7 +27,8 @@ $text-color: grey;
   &:focus-within {
     opacity: 1;
   }
-
+  border-left: 1px solid var(--neutral-240-500);
+  border-right: 1px solid var(--neutral-240-500);
   transition: opacity 200ms linear;
 }
 
@@ -42,8 +41,8 @@ $text-color: grey;
 .search__field__input {
   flex: 1;
   height: 100%;
-  background-color: $bg-color;
-  color: $text-color;
+  background-color: var(--neutral-750);
+  color: var(--neutral-180);
   border: 0;
   padding: 0 10px;
 }
@@ -70,7 +69,7 @@ $text-color: grey;
   border-radius: 0;
   width: 50px;
   svg {
-    fill: var(--tool-bar-icon-fill);
+    fill: var(--neutral-130);
   }
 }
 

@@ -1,41 +1,107 @@
-:root {
-  --red: #790604;
-  --red-900: #f1e5e5;
-  --red-800: #dfc8c7;
-  --red-200: #4c0302;
-  --red-150: #3b0503;
-  --red-100: #270101;
-  --red-050: #180101;
+@mixin common-colors() {
+  --danger: rgb(214, 0, 0);
+  --danger--100: rgb(214, 0, 0, 0.1);
+  --danger-hover: rgb(210, 0, 0);
+  --danger-active: rgb(225, 0, 0);
 
-  --beige: #f7f3ec;
-  --beige-50: #f7f3ec50;
-
-  --neutral: #fff;
-  --neutral-700: #d2d2d2;
-  --neutral-600: #c4c4c4;
-  --neutral-300: #8a8a8a;
-  --neutral-200: #757575;
-  --neutral-050: #363636;
+  --warning: #bb6134;
+  --info: #5bc0de;
+  --success: #5cb85c;
 }
 .light-theme {
-  --primary-color: var(--red);
-  --primary-color-hover: var(--red-900);
-  --primary-color-active: var(--red-800);
+  --neutral-750: rgb(255, 255, 255);
+  --neutral-750-200: rgba(255, 255, 255, 0.2);
+  --neutral-750-150: rgba(255, 255, 255, 0.15);
+  // x -> 200 + ( x - 200) * 10
+  --neutral-700: rgb(250, 250, 250);
+  --neutral-650: rgb(245, 245, 245);
+  --neutral-600: rgb(240, 240, 240);
+  --neutral-500: rgb(230, 230, 230);
+  --neutral-450: rgb(225, 225, 225);
+  // x -> 100 + ( x - 100 ) * 2
+  --neutral-290: rgb(195, 195, 195);
+  --neutral-240: rgb(170, 170, 170);
+  --neutral-240-500: rgb(170, 170, 170, 0.5);
+  --neutral-180: rgb(140, 140, 140);
+  --neutral-180-100: rgba(140, 140, 140, 0.1);
+  --neutral-180-050: rgba(140, 140, 140, 0.05);
+  --neutral-130: rgb(115, 115, 115);
+  // x -> x
+  --neutral-055: rgb(55, 55, 55);
+  --neutral-030: rgb(30, 30, 30);
+  --neutral-000: rgb(0, 0, 0);
+  --neutral-000-040: rgb(0, 0, 0, 0.04);
+  --neutral-000-070: rgb(0, 0, 0, 0.07);
+  --neutral-000-080: rgb(0, 0, 0, 0.08);
+  --neutral-000-120: rgb(0, 0, 0, 0.12);
+  --neutral-000-140: rgb(0, 0, 0, 0.14);
+  --neutral-000-200: rgb(0, 0, 0, 0.2);
 
-  --text-color-on-primary: var(--neutral);
-  --text-color-on-primary-hover: var(--red-100);
-  --text-color-on-primary-active: var(--red-100);
-  --text-color-inverted: var(--red-100);
+  // x -> 200 + ( x - 200) * 10
+  --primary-610: rgb(241, 229, 229);
+  --primary-610-500: rgb(241, 229, 229, 0.5);
+  --primary-610-200: rgb(241, 229, 229, 0.2);
+  --primary-430: rgb(223, 200, 199);
+  --primary-430-100: rgba(223, 200, 199, 0.1);
+  // x -> 100 + ( x - 100 ) * 2
+  --primary-142: rgb(121, 6, 4);
+  --primary-142-100: rgba(121, 6, 4, 0.1);
+  --primary-142-200: rgba(121, 6, 4, 0.2);
+  // x -> x
+  --primary-060: rgb(60, 5, 3);
+  --primary-040: rgb(40, 1, 1);
+  --primary-040-400: rgba(40, 1, 1, 0.4);
+  --primary-040-100: rgba(40, 1, 1, 0.1);
+  --primary-025: rgb(25, 1, 1);
 
-  --danger: #d60000;
-  --danger-hover: #d20000;
-  --danger-active: #de0000;
-
-  // tool-bar
-  --tool-bar-background-color: var(--beige);
-  --tool-bar-background-color-transparent: var(--beige-50);
-  --tool-bar-icon-background-color: transparent;
-  --tool-bar-icon-background-color-on-hover: var(--neutral-700);
-  --tool-bar-icon-background-color-on-active: var(--neutral-700);
-  --tool-bar-icon-fill: var(--neutral-200);
+  @include common-colors();
 }
+
+//.dark-theme {
+//  --neutral-750: rgb(0, 0, 0);
+//  --neutral-750-200: rgba(0, 0, 0, 0.2);
+//  --neutral-750-150: rgba(0, 0, 0, 0.15);
+//  //// x -> 750 + ( x ) * 10
+//  --neutral-700: rgb(5, 5, 5);
+//  --neutral-650: rgb(10, 10, 10);
+//  --neutral-600: rgb(15, 15, 15);
+//  --neutral-500: rgb(25, 25, 25);
+//  --neutral-450: rgb(30, 30, 30);
+//  // x => 255 - (100 + ( x - 100 ) * 2)
+//  --neutral-290: rgb(60, 60, 60);
+//  --neutral-240: rgb(85, 85, 85);
+//  --neutral-240-500: rgb(85, 85, 85, 0.5);
+//  --neutral-180: rgb(115, 115, 115);
+//  --neutral-180-100: rgba(115, 115, 115, 0.1);
+//  --neutral-180-050: rgba(115, 115, 115, 0.05);
+//  --neutral-130: rgb(140, 140, 140);
+//  // x = (i) => 255 - i
+//  --neutral-055: rgb(200, 200, 200);
+//  --neutral-030: rgb(225, 225, 225);
+//  --neutral-000: rgb(255, 255, 255);
+//  --neutral-000-040: rgb(255, 255, 255, 0.04);
+//  --neutral-000-070: rgb(255, 255, 255, 0.07);
+//  --neutral-000-080: rgb(255, 255, 255, 0.08);
+//  --neutral-000-120: rgb(255, 255, 255, 0.12);
+//  --neutral-000-140: rgb(255, 255, 255, 0.14);
+//  --neutral-000-200: rgb(255, 255, 255, 0.2);
+//
+//  // x -> 200 + ( x - 200) * 10
+//  --primary-610: rgb(241, 229, 229);
+//  --primary-610-500: rgb(241, 229, 229, 0.5);
+//  --primary-610-200: rgb(241, 229, 229, 0.2);
+//  --primary-430: rgb(223, 200, 199);
+//  --primary-430-100: rgba(223, 200, 199, 0.1);
+//  // x -> 100 + ( x - 100 ) * 2
+//  --primary-142: rgb(121, 6, 4);
+//  --primary-142-100: rgba(121, 6, 4, 0.1);
+//  --primary-142-200: rgba(121, 6, 4, 0.2);
+//  // x -> x
+//  --primary-060: rgb(60, 5, 3);
+//  --primary-040: rgb(40, 1, 1);
+//  --primary-040-400: rgba(40, 1, 1, 0.4);
+//  --primary-040-100: rgba(40, 1, 1, 0.1);
+//  --primary-025: rgb(25, 1, 1);
+//
+//  @include common-colors();
+//}

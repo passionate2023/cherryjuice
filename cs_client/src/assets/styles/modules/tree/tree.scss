@@ -46,7 +46,7 @@ $bubble-width: 35px;
     height: $bubble-width;
     width: $bubble-width;
     border-radius: 50%;
-    background-color: white;
+    background-color: var(--neutral-750);
     cursor: grab;
     z-index: $ZI-resize-bubble;
   }

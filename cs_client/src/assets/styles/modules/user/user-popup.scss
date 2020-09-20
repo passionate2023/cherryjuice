@@ -1,4 +1,3 @@
-@import '../../vars/colors';
 @import '../../vars/border-radius';
 @import '../../vars/vars';
 .user__card {
@@ -18,8 +17,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--tool-bar-background-color);
-  color: var(--text-color-inverted);
+  background-color: var(--neutral-750);
+  color: var(--primary-040);
   filter: opacity(0.97);
 }
 .user__info {

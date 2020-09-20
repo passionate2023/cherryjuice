@@ -1,13 +1,9 @@
 @import '../../vars/vars';
 .node {
-  //background-color: #727070;
   display: flex;
   align-items: center;
   cursor: default;
-  //max-width: 400px;
   position: relative;
-  //margin-left: -5px;
-  //margin-left: 5px;
   min-width: max-content;
   flex: 1;
   max-width: $max-node-width;
@@ -22,7 +18,7 @@
   height: 100%;
   position: absolute;
   left: var(--overlay-left);
-  background-color: #607d8b63;
+  background-color: var(--neutral-750-150);
 }
 
 .node__title {

@@ -1,6 +1,5 @@
 @import '../../vars/vars';
 .guests {
-  background-color: white;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -32,18 +31,22 @@
   flex: 1;
   display: flex;
   align-items: center;
-  background-color: #f5f5f5;
-  gap: 1;
+  background-color: var(--neutral-600);
+  gap: 1px;
 }
 .guests__add-guest__input {
   height: 40px;
   display: flex;
   flex: 1;
   &:invalid {
-    color: darkred;
+    color: var(--danger);
   }
 }
 .guests__add-guest__add-button {
+  background-color: var(--neutral-600);
+  &:disabled {
+    filter: brightness(0.95);
+  }
   svg {
     fill: grey;
   }
@@ -61,8 +64,8 @@
 }
 .guests__guest {
   border-radius: 5px;
-  color: $primary;
-  border: 1px solid $primary;
+  color: var(--primary-142);
+  border: 1px solid var(--primary-142);
   box-shadow: $box-shadow2;
   padding: 5px;
   display: flex;

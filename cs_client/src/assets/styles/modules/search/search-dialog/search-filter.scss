@@ -1,4 +1,3 @@
-@import '../../../vars/colors';
 @import '../../../mixins/breakpoints';
 .search-filter {
   display: flex;
@@ -18,13 +17,12 @@
   align-items: flex-start;
   justify-content: center;
   padding: 10px 0px;
-  //background-color: $grey-1;
   user-select: none;
   flex-wrap: wrap;
 }
 
 .search-filter__label {
-  color: lightgrey;
+  color: var(--neutral-290);
   padding: 10px;
   width: 150px;
 }

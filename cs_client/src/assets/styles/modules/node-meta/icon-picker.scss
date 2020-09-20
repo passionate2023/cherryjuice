@@ -16,7 +16,7 @@
   top: 25px;
   left: -130px;
   padding: 5px 10px;
-  background-color: #f5f5f5;
+  background-color: var(--neutral-600);
   box-shadow: $box-shadow1;
   z-index: 1;
 }
@@ -25,15 +25,14 @@
   height: 20px;
   padding: 3px;
   cursor: pointer;
-  background-color: #f5f5f5;
+  background-color: var(--neutral-600);
   margin-left: auto;
   &:hover {
-    background-color: #d0d0d0;
+    background-color: var(--neutral-450);
   }
 }
 
 .icon-picker__icon--selected {
-  background-color: lightgrey;
-  //border: 1px solid #5d5d5d;
+  background-color: var(--neutral-450);
   transition: background-color 200ms linear;
 }

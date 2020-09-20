@@ -18,8 +18,8 @@ $recent-nodes-width: $node-width * 2+ 10px;
     padding-right: 0;
   }
   // style
-  background-color: black;
-  color: white;
+  background-color: var(--neutral-000);
+  color:  var(--neutral-750);
 }
 .title-and-recent-nodes__recent-nodes__place-holder {
   align-self: center;
@@ -47,7 +47,7 @@ $recent-nodes-width: $node-width * 2+ 10px;
   }
   // style
   @include respond-to($md-down) {
-    background-color: var(--tool-bar-background-color);
+    background-color: var(--neutral-750);
     opacity: 0.95;
   }
 }
@@ -61,7 +61,7 @@ $recent-nodes-width: $node-width * 2+ 10px;
   margin-left: $node-left-margin;
   // style
   font-size: 12px;
-  background-color: $toolbar-bg-light;
+  background-color: var(--neutral-750);
   border: none;
   cursor: pointer;
 }

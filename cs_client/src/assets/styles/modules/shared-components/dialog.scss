@@ -4,7 +4,7 @@
   z-index: $ZI-dialog;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   overflow: hidden;
-  background-color: white;
+  background-color: var(--neutral-750);
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -30,6 +30,7 @@
   .dialog__header {
     display: none;
   }
+  border-top: $dialog-border;
 }
 $small-dialog-width: 350px;
 .dialog--small {
@@ -45,8 +46,8 @@ $small-dialog-width: 350px;
 }
 .dialog__header {
   max-height: 32px;
-  background-color: white;
-  color: black;
+  background-color: var(--neutral-750);
+  color: var(--neutral-000);
   border-bottom: $dialog-border;
   display: flex;
   align-items: center;
@@ -92,13 +93,14 @@ $small-dialog-width: 350px;
 .dialog__content {
   flex: 10;
   overflow: auto;
+  background-color: var(--neutral-700);
 }
 .dialog__footer {
   display: flex;
   justify-content: space-between;
   border-top: $dialog-border;
   padding: 10px;
-  background-color: white;
+  background-color: var(--neutral-750);
   align-items: center;
   z-index: 1;
 }

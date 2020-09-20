@@ -36,7 +36,6 @@ const DialogFooter: React.FC<TDialogFooterProps> = ({
             ) : (
               <ButtonSquare
                 key={i}
-                className={''}
                 onClick={onClick}
                 disabled={disabled}
                 testId={testId}
@@ -65,7 +64,6 @@ const DialogFooter: React.FC<TDialogFooterProps> = ({
           ({ onClick, label, disabled, lazyAutoFocus, testId }, i) => (
             <ButtonSquare
               key={i}
-              className={''}
               onClick={onClick}
               disabled={disabled}
               lazyAutoFocus={!isOnMobile ? lazyAutoFocus : 0}

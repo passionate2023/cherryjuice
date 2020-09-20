@@ -5,12 +5,12 @@
 
 .settings__screen {
   margin-left: 5px;
-  color: black;
+  color: var(--neutral-000);
 }
 
 .settings__group-container {
   display: flex;
-  color: black;
+  color: var(--neutral-000);
   flex-direction: column;
   width: 100%;
   gap: 5px;

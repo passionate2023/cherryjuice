@@ -42,8 +42,8 @@
     align-items: center;
   }
   // style
-  background-color: var(--tool-bar-background-color);
-  color: black;
+  background-color: var(--neutral-750);
+  color: var(--neutral-000);
   font-family: 'Arial ', sans-serif;
   font-weight: 300;
   font-size: 13px;
@@ -61,7 +61,7 @@
   margin-left: -1px;
   margin-right: -1px;
   width: 1px;
-  background-color: grey;
+  background-color: var(--neutral-180);
   height: 10px;
   opacity: 1;
   align-self: center;
@@ -99,7 +99,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: grey;
+  color: var(--neutral-180);
   padding-top: 2px;
   margin-left: -1px;
 }
@@ -112,8 +112,8 @@
   width: 11px;
   top: -6px;
   right: -6px;
-  background-color: grey;
-  color: white !important;
+  background-color: var(--neutral-180);
+  color:  var(--neutral-750) !important;
 }
 .info-bar__document-privacy {
   display: inline;

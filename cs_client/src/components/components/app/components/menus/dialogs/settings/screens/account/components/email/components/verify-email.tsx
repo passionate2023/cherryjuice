@@ -5,6 +5,7 @@ import { ac } from '::store/store';
 import { AlertType } from '::types/react';
 import { properErrorMessage } from '::root/components/auth/hooks/proper-error-message';
 import { useMutation } from '::hooks/graphql/use-mutation';
+import { modUserProfile } from '::sass-modules';
 
 type Props = {
   emailVerificationPending: boolean;
@@ -37,6 +38,7 @@ const VerifyEmail: React.FC<Props> = ({ emailVerificationPending, email }) => {
           ? 'verify email'
           : 'resend verification email'
       }
+      className={modUserProfile.userProfile__group__elements__button}
       onClick={verifyEmail}
     />
   );

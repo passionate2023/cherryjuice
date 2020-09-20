@@ -17,7 +17,7 @@
   overflow-x: auto;
   overflow-y: hidden;
   // style
-  background-color: var(--tool-bar-background-color);
+  background-color: var(--neutral-750);
   user-select: none;
 }
 .tool-bar__group {
@@ -71,7 +71,7 @@
   @include respond-to($md-down) {
     box-shadow: $box-shadow3;
     opacity: 0.95;
-    background-color: var(--tool-bar-background-color);
+    background-color: var(--neutral-750);
   }
 }
 .tool-bar__group--main-bar {
@@ -84,19 +84,18 @@
   }
   // style
   @include respond-to($md-down) {
-    background-color: var(--tool-bar-background-color);
+    background-color: var(--neutral-750);
   }
 }
 .tool-bar__icon {
   svg {
-    fill: var(--tool-bar-icon-fill);
+    fill: var(--neutral-130);
   }
   display: flex;
   align-items: center;
   justify-content: center;
   width: $tool-bar-height;
   height: $tool-bar-height;
-  background-color: var(--tool-bar-icon-background-color);
   @include respond-to($md-up) {
     height: $tool-bar-height-md;
     width: $tool-bar-height-md;
@@ -107,7 +106,7 @@
 
   @include respond-to($md-up) {
     &:hover:not([disabled]) {
-      background-color: var(--tool-bar-icon-background-color-on-hover);
+      background-color: var(--neutral-450);
     }
   }
   &[disabled] {
@@ -125,13 +124,13 @@
 .tool-bar__icon--active {
   @include respond-to($md-down) {
     &:not([disabled]) {
-      background-color: var(--tool-bar-icon-background-color-on-active);
+      background-color: var(--neutral-450);
     }
   }
 }
 
 .tool-bar__letter-icon {
-  color: grey;
+  color: var(--neutral-180);
   font-family: sans-serif;
   font-weight: 700;
   font-size: 18px;
@@ -142,7 +141,7 @@
   margin-left: -1px;
   margin-right: -1px;
   width: 1px;
-  background-color: grey;
+  background-color: var(--neutral-180);
   height: 45%;
   opacity: 0.6;
 }

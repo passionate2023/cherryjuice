@@ -1,7 +1,7 @@
 @import '../../vars/vars';
 .body-scrim {
   position: absolute;
-  background-color: black;
+  background-color: var(--neutral-000);
   opacity: 0.4;
   height: 100vh;
   width: 100vw;
