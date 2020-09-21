@@ -22,6 +22,7 @@ type State = {
   showRecentNodesBar: boolean;
   showInfoBar: boolean;
   treeWidth: number;
+  anchorId?: string;
 };
 
 const initialState: State = {
@@ -31,6 +32,7 @@ const initialState: State = {
   showRecentNodesBar: false,
   showInfoBar: false,
   treeWidth: 250,
+  anchorId: undefined,
 };
 const reducer = createReducer(initialState, _ => [
   ...[

@@ -6,10 +6,14 @@ import { AlertType, TAlert } from '::types/react';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { rootActionCreators } from './root';
 import { authActionCreators as aac } from './auth';
+import {
+  CustomRange,
+  getSelection,
+} from '::helpers/editing/execK/steps/get-selection';
 
 const ap = createActionPrefixer('dialogs');
 
-const actionCreators = {
+const ac = {
   ...{
     showEditDocumentDialog: _(
       ap('showEditDocumentDialog'),
@@ -85,6 +89,8 @@ const actionCreators = {
     ),
     clearSnackbar: _(ap('clear-snackbar')),
   },
+  showAnchorDialog: _(ap('show-anchor-dialog')),
+  hideAnchorDialog: _(ap('hide-anchor-dialog')),
 };
 
 type NodeMetaDialogRole = 'edit' | 'create-child' | 'create-sibling';
@@ -102,6 +108,8 @@ type State = {
   showUserPopup: boolean;
   showSettingsDialog: boolean;
   snackbar?: Snackbar;
+  showAnchorDialog: boolean;
+  selection?: CustomRange;
 };
 
 const initialState: State = {
@@ -116,6 +124,8 @@ const initialState: State = {
   showUserPopup: false,
   showSettingsDialog: false,
   snackbar: undefined,
+  showAnchorDialog: false,
+  selection: undefined,
 };
 
 const reducer = createReducer(initialState, _ => [
@@ -124,7 +134,7 @@ const reducer = createReducer(initialState, _ => [
       ...cloneObj(initialState),
     })),
   ],
-  _(actionCreators.showDeleteDocument, state => ({
+  _(ac.showDeleteDocument, state => ({
     ...state,
     showDeleteDocument: true,
   })),
@@ -136,15 +146,15 @@ const reducer = createReducer(initialState, _ => [
     ...state,
     showDeleteDocument: false,
   })),
-  _(actionCreators.hideDeleteDocument, state => ({
+  _(ac.hideDeleteDocument, state => ({
     ...state,
     showDeleteDocument: false,
   })),
-  _(actionCreators.showReloadDocument, state => ({
+  _(ac.showReloadDocument, state => ({
     ...state,
     showReloadDocument: true,
   })),
-  _(actionCreators.hideReloadDocument, state => ({
+  _(ac.hideReloadDocument, state => ({
     ...state,
     showReloadDocument: false,
   })),
@@ -154,44 +164,41 @@ const reducer = createReducer(initialState, _ => [
     showDeleteDocument: false,
   })),
   // alert
-  _(actionCreators.setAlert, (state, { payload }) => ({
+  _(ac.setAlert, (state, { payload }) => ({
     ...state,
     alert: payload,
   })),
-  _(
-    actionCreators.clearAlert,
-    state => ({ ...state, alert: undefined } as State),
-  ),
-  _(actionCreators.showImportDocument, state => ({
+  _(ac.clearAlert, state => ({ ...state, alert: undefined } as State)),
+  _(ac.showImportDocument, state => ({
     ...state,
     showImportDocuments: true,
     showDocumentList: false,
   })),
-  _(actionCreators.hideImportDocument, state => ({
+  _(ac.hideImportDocument, state => ({
     ...state,
     showImportDocuments: false,
   })),
-  _(actionCreators.showDocumentList, state => ({
+  _(ac.showDocumentList, state => ({
     ...state,
     showDocumentList: true,
   })),
-  _(actionCreators.hideDocumentList, state => ({
+  _(ac.hideDocumentList, state => ({
     ...state,
     showDocumentList: false,
   })),
 
   ...[
-    _(actionCreators.showCreateDocumentDialog, state => ({
+    _(ac.showCreateDocumentDialog, state => ({
       ...state,
       showDocumentMetaDialog: 'create',
     })),
-    _(actionCreators.showEditDocumentDialog, (state, { payload }) => ({
+    _(ac.showEditDocumentDialog, (state, { payload }) => ({
       ...state,
       documentMetaDialogDocumentId: payload,
       showDocumentMetaDialog: 'edit',
     })),
     _(
-      actionCreators.hideDocumentMetaDialog,
+      ac.hideDocumentMetaDialog,
       state =>
         ({
           ...state,
@@ -200,30 +207,30 @@ const reducer = createReducer(initialState, _ => [
     ),
   ],
   ...[
-    _(actionCreators.showDeleteNode, state => ({
+    _(ac.showDeleteNode, state => ({
       ...state,
       showDeleteNode: true,
     })),
-    _(actionCreators.hideDeleteNode, state => ({
+    _(ac.hideDeleteNode, state => ({
       ...state,
       showDeleteNode: false,
     })),
   ],
   ...[
-    _(actionCreators.showCreateChildNode, state => ({
+    _(ac.showCreateChildNode, state => ({
       ...state,
       showNodeMetaDialog: 'create-child',
     })),
-    _(actionCreators.showCreateSiblingNode, state => ({
+    _(ac.showCreateSiblingNode, state => ({
       ...state,
       showNodeMetaDialog: 'create-sibling',
     })),
-    _(actionCreators.showEditNode, state => ({
+    _(ac.showEditNode, state => ({
       ...state,
       showNodeMetaDialog: 'edit',
     })),
     _(
-      actionCreators.hideNodeMeta,
+      ac.hideNodeMeta,
       state =>
         ({
           ...state,
@@ -232,51 +239,51 @@ const reducer = createReducer(initialState, _ => [
     ),
   ],
   ...[
-    _(actionCreators.showUserPopup, state => ({
+    _(ac.showUserPopup, state => ({
       ...state,
       showUserPopup: true,
     })),
-    _(actionCreators.hideUserPopup, state => ({
+    _(ac.hideUserPopup, state => ({
       ...state,
       showUserPopup: false,
     })),
-    _(actionCreators.toggleUserPopup, state => ({
+    _(ac.toggleUserPopup, state => ({
       ...state,
       showUserPopup: !state.showUserPopup,
     })),
   ],
   ...[
-    _(actionCreators.showPasswordModal, state => ({
+    _(ac.showPasswordModal, state => ({
       ...state,
       showPasswordModal: true,
     })),
-    _(actionCreators.hidePasswordModal, state => ({
+    _(ac.hidePasswordModal, state => ({
       ...state,
       showPasswordModal: false,
     })),
-    _(actionCreators.confirmPasswordModal, state => ({
+    _(ac.confirmPasswordModal, state => ({
       ...state,
       showPasswordModal: false,
     })),
   ],
   ...[
-    _(actionCreators.showSettingsDialog, state => ({
+    _(ac.showSettingsDialog, state => ({
       ...state,
       showSettingsDialog: true,
       showUserPopup: false,
     })),
-    _(actionCreators.hideSettingsDialog, state => ({
+    _(ac.hideSettingsDialog, state => ({
       ...state,
       showSettingsDialog: false,
     })),
   ],
   ...[
-    _(actionCreators.setSnackbar, (state, { payload }) => ({
+    _(ac.setSnackbar, (state, { payload }) => ({
       ...state,
       snackbar: payload,
     })),
     _(
-      actionCreators.clearSnackbar,
+      ac.clearSnackbar,
       state =>
         ({
           ...state,
@@ -294,7 +301,19 @@ const reducer = createReducer(initialState, _ => [
       showUserPopup: false,
     })),
   ],
+  _(ac.showAnchorDialog, state => ({
+    ...state,
+    showAnchorDialog: true,
+    selection: getSelection({
+      selectAdjacentWordIfNoneIsSelected: false,
+    }),
+  })),
+  _(ac.hideAnchorDialog, state => ({
+    ...state,
+    showAnchorDialog: false,
+    selection: undefined,
+  })),
 ]);
 
-export { reducer as dialogsReducer, actionCreators as dialogsActionCreators };
+export { reducer as dialogsReducer, ac as dialogsActionCreators };
 export { NodeMetaDialogRole };

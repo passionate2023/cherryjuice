@@ -3,11 +3,11 @@ import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/
 import { execK } from '::helpers/editing/execK';
 import { ColorInput } from '::root/components/app/components/editor/tool-bar/components/groups/formatting-buttons/components/color-input';
 import { modToolbar } from '::sass-modules';
-import { Icon } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { TransitionWrapper } from '::root/components/shared-components/transitions/transition-wrapper';
 import { animated } from 'react-spring';
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::store/store';
+import { ac, Store } from '::store/store';
 import { HotKeyActionType } from '::types/graphql/generated';
 import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
@@ -52,6 +52,13 @@ const Buttons: React.FC<PropsFromRedux> = ({
           </ToolbarButton>
         );
       })}
+      <ToolbarButton
+        onClick={ac.dialogs.showAnchorDialog}
+        className={modToolbar.toolBar__iconStrictWidth}
+        disabled={disabled}
+      >
+        <Icon name={Icons.cherrytree.additionalIcons.anchor} />
+      </ToolbarButton>
     </>
   );
 };

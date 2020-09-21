@@ -6,6 +6,7 @@ import { AlertType } from '::types/react';
 import { ac } from '::store/store';
 
 export const newImagePrefix = 'ni::';
+export const newAnchorPrefix = 'na::';
 
 type AddMetaToPastedImagesProps = {
   requestId: string | number;

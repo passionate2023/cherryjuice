@@ -19,7 +19,7 @@ export type DialogHeaderProps = {
   onClose: EventHandler<undefined>;
   menuButton?: JSX.Element;
   rightHeaderButtons?: DialogHeaderButton[];
-  pinnable: boolean;
+  pinnable?: boolean;
 };
 
 const DialogHeader: React.FC<DialogHeaderProps> = ({
