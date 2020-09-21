@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Image } from '::types/graphql/generated';
-export const getEditor = () => document.querySelector('#rich-text');
+export const getEditor = (): HTMLDivElement =>
+  document.querySelector('#rich-text');
 const useAttachImagesToHtml = ({
   node_id,
   html,

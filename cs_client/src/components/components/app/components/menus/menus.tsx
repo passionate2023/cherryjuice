@@ -9,9 +9,7 @@ const PasswordModal = React.lazy(() =>
 const UserPopup = React.lazy(() =>
   import('./modals/user/user-with-transition'),
 );
-const Anchor = React.lazy(() =>
-  import('./dialogs/anchor/anchor'),
-);
+const Anchor = React.lazy(() => import('./dialogs/anchor/anchor'));
 const ImportDocuments = React.lazy(() =>
   import('./modals/import-documents/import-documents'),
 );

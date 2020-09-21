@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { MetaForm } from '::root/components/shared-components/form/meta-form/meta-form';
@@ -9,8 +9,17 @@ import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
-
 import { insertAnchor } from '::helpers/editing/anchor/insert-anchor';
+import {
+  anchorAC,
+  anchorR,
+  anchorRTC,
+} from '::root/components/app/components/menus/dialogs/anchor/reducer/reducer';
+
+const getExistingAnchorIds = (): string[] =>
+  Array.from(document.querySelectorAll('.rich-text__anchor')).map(el =>
+    el.getAttribute('id'),
+  );
 
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showAnchorDialog,
@@ -28,20 +37,31 @@ const AnchorDialogWithTransition: React.FC<Props> = ({
   isOnMd,
   selection,
 }) => {
-  const [anchorId, setAnchorId] = useState(existingAnchorId);
+  const [state, dispatch] = useReducer(anchorR, undefined, anchorRTC);
+  useEffect(() => {
+    anchorAC.init(dispatch);
+  }, []);
+
+  useEffect(() => {
+    if (existingAnchorId) {
+      anchorAC.resetToEdit({
+        anchorId: existingAnchorId,
+        existingIDs: getExistingAnchorIds(),
+      });
+    } else anchorAC.resetToCreate({ existingIDs: getExistingAnchorIds() });
+  }, [showDialog, existingAnchorId]);
   const inputs: FormInputProps[] = [
     {
-      onChange: setAnchorId,
-      value: anchorId,
+      onChange: anchorAC.setAnchorId,
+      value: state.anchorId,
       type: 'text',
       label: 'id',
       lazyAutoFocus: !isOnMd && Boolean(showDialog),
     },
   ];
-
   const createAnchor = () => {
     try {
-      insertAnchor(selection, anchorId);
+      insertAnchor(selection, state.anchorId);
     } catch (e) {
       ac.dialogs.setAlert({
         title: 'Could not create the anchor',
@@ -51,11 +71,24 @@ const AnchorDialogWithTransition: React.FC<Props> = ({
       });
     }
   };
-  const editAnchor = () => undefined;
+  const editAnchor = () => {
+    try {
+      const anchor: HTMLElement = document.getElementById(existingAnchorId);
+      anchor.setAttribute('id', state.anchorId);
+    } catch (e) {
+      ac.dialogs.setAlert({
+        title: 'Could not create the anchor',
+        description: 'please refresh the page',
+        type: AlertType.Error,
+        error: e,
+      });
+    }
+  };
   const apply = useDelayedCallback(
     ac.dialogs.hideAnchorDialog,
     existingAnchorId ? editAnchor : createAnchor,
   );
+
   const buttonsRight: TDialogFooterButton[] = [
     {
       label: 'dismiss',
@@ -65,12 +98,12 @@ const AnchorDialogWithTransition: React.FC<Props> = ({
     {
       label: 'apply',
       onClick: apply,
-      disabled: !anchorId,
+      disabled: !state.valid,
     },
   ];
   return (
     <DialogWithTransition
-      dialogTitle={'Create anchor'}
+      dialogTitle={existingAnchorId ? 'Edit Anchor' : 'Create anchor'}
       footRightButtons={buttonsRight}
       isOnMobile={isOnMd}
       show={Boolean(showDialog)}

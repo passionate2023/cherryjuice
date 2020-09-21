@@ -7,9 +7,31 @@ import { ac, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { useLayoutEffect } from 'react';
+import { useEffect, useMemo,  } from 'react';
 import { QFullNode } from '::store/ducks/cache/document-cache';
 import { OfflineBanner } from '::root/components/app/components/editor/document/components/rich-text/components/offline-banner';
+import {
+  EventHandler,
+  useSetupEventHandlers,
+} from '::hooks/dom/setup-event-handlers';
+import { onPaste } from '::helpers/editing/clipboard';
+import { onKeyDown } from '::helpers/editing/typing';
+import { createGesturesHandler } from '::root/components/shared-components/drawer/components/drawer-navigation/helpers/create-gestures-handler';
+
+const editAnchor = (e: MouseEvent) => {
+  const target = e.target as HTMLElement;
+  if (target.className === 'rich-text__anchor') {
+    const id = target.getAttribute('id');
+    ac.editor.setAnchorId(id);
+    ac.dialogs.showAnchorDialog();
+  }
+};
+
+const eventHandlers: EventHandler[] = [
+  { type: 'paste', listener: onPaste },
+  { type: 'keydown', listener: onKeyDown },
+  { type: 'dblclick', listener: editAnchor },
+];
 
 type Props = {
   node: QFullNode;
@@ -47,17 +69,31 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   scrollPosition,
   online,
 }) => {
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (online)
       if (node && !node?.html && !fetchDocumentInProgress) ac.node.fetch(node);
   }, [node?.node_id, node?.documentId, fetchDocumentInProgress, online]);
   const nodeId = node?.id;
   const html = node?.html;
   const images = node?.image;
-
+  useSetupEventHandlers(`.${modRichText.richText__container}`, eventHandlers);
+  const { onTouchEnd, onTouchStart } = useMemo(
+    () =>
+      createGesturesHandler({
+        onRight: ac.editor.showTree,
+        onLeft: ac.editor.hideTree,
+        onTap: ac.root.hidePopups,
+        minimumLength: 170,
+      }),
+    [],
+  );
   return (
     <ErrorBoundary>
-      <div className={modRichText.richText__container}>
+      <div
+        className={modRichText.richText__container}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
         {html && !fetchDocumentInProgress && !fetchNodeStarted ? (
           <ContentEditable
             isDocumentOwner={isDocumentOwner}

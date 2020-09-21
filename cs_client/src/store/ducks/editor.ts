@@ -2,6 +2,7 @@ import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { rootActionCreators } from './root';
 import { cloneObj } from '::helpers/editing/execK/helpers';
+import { dialogsActionCreators } from '::store/ducks/dialogs';
 
 const ap = createActionPrefixer('editor');
 
@@ -13,6 +14,7 @@ const ac = {
   toggleRecentNodesBar: _(ap('toggle-recent-nodes-bar')),
   toggleInfoBar: _(ap('toggle-info-bar')),
   setTreeWidth: _(ap('set-tree-width'), _ => (width: number) => _(width)),
+  setAnchorId: _(ap('set-anchor-id'), _ => (id: string) => _(id)),
 };
 
 type State = {
@@ -60,6 +62,14 @@ const reducer = createReducer(initialState, _ => [
   _(ac.setTreeWidth, (state, { payload }) => ({
     ...state,
     treeWidth: payload,
+  })),
+  _(ac.setAnchorId, (state, { payload }) => ({
+    ...state,
+    anchorId: payload,
+  })),
+  _(dialogsActionCreators.hideAnchorDialog, state => ({
+    ...state,
+    anchorId: undefined,
   })),
 ]);
 

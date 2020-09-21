@@ -35,7 +35,6 @@ export const insertAnchor = (selection: CustomRange, anchorId: string) => {
       startAnchor: splitSelection.startAnchor,
       endAnchor: splitSelection.endAnchor,
     },
-    { filterEmptyNodes: false },
   );
   editor.focus();
   const anchor = document.querySelector(`[data-ts="${anchorTs}"]`);

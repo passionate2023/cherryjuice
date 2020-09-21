@@ -41,7 +41,8 @@ const getAHtml = ({ DDOEs, options = {} }: TProps) => {
         if (el.localName === 'code' && el.classList.contains('rich-text__code'))
           extractCodeBox(acc, el, tags, options);
         else if (el.localName === 'img') {
-          el.classList.contains('rich-text__anchor') && !options.serializeNonTextElements
+          el.classList.contains('rich-text__anchor') &&
+          !options.serializeNonTextElements
             ? extractAnchor(acc, el)
             : extractImage(acc, el, tags, options, state);
         } else if (el.localName === 'table') {
