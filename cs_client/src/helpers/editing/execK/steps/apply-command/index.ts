@@ -8,16 +8,22 @@ import {
   TLineStyle,
 } from '::helpers/editing/execK/steps/apply-command/justify';
 import { hoistAHtmlProperties } from '::helpers/editing/execK/steps/apply-command/hoist-properties';
+import { Attribute, ExecKMode, ExecKProps } from '::helpers/editing/execK';
 
 type TApplyCommand = {
-  tag?: { tagName: string; tagExists: boolean };
+  tag?: {
+    tagName: string;
+    tagExists: boolean;
+    attributes: Attribute[];
+    mode: ExecKMode;
+  };
   style?: { style: { property: string; value: string }; styleExists: boolean };
   aHtmlElement: any;
   command: ExecKCommand;
   lineStyle: TLineStyle;
 };
 const applyCommand = ({
-  tag: { tagName, tagExists },
+  tag: { tagName, tagExists, attributes, mode },
   style: { style, styleExists },
   aHtmlElement,
   command,
@@ -30,7 +36,13 @@ const applyCommand = ({
     else justify({ aHtmlElement: newAHtmlElement, command, lineStyle });
   } else {
     if (tagName) {
-      applyTag({ aHtmlElement: newAHtmlElement, tagExists, tagName });
+      applyTag({
+        aHtmlElement: newAHtmlElement,
+        tagExists,
+        tagName,
+        attributes,
+        mode,
+      });
     }
     if (style) {
       applyStyle({ aHtmlElement: newAHtmlElement, styleExists, style });
@@ -39,7 +51,14 @@ const applyCommand = ({
   }
   return newAHtmlElement;
 };
-const applyCmd = ({ selected, tagName, style, command }) => {
+const applyCmd = ({
+  selected,
+  tagName,
+  style,
+  command,
+  attributes,
+  mode,
+}: Omit<ExecKProps, 'selection'> & { selected: any }) => {
   const allTags = [
     ...selected.leftEdge.tags,
     ...selected.rightEdge.tags,
@@ -58,14 +77,14 @@ const applyCmd = ({ selected, tagName, style, command }) => {
   const lineStyle = { line: {}, deleteAll: false, delete: [] };
   const modifiedSelected = {
     leftEdge: applyCommand({
-      tag: { tagName, tagExists },
+      tag: { tagName, tagExists, attributes, mode },
       style: { style, styleExists },
       aHtmlElement: selected.leftEdge,
       command,
       lineStyle,
     }),
     rightEdge: applyCommand({
-      tag: { tagName, tagExists },
+      tag: { tagName, tagExists, attributes, mode },
       style: { style, styleExists },
       aHtmlElement: selected.rightEdge,
       command,
@@ -74,7 +93,7 @@ const applyCmd = ({ selected, tagName, style, command }) => {
     midNodes: selected.midNodes.map(el =>
       typeof el === 'object'
         ? applyCommand({
-            tag: { tagName, tagExists },
+            tag: { tagName, tagExists, attributes, mode },
             style: { style, styleExists },
             aHtmlElement: el,
             command,

@@ -14,7 +14,10 @@ const setTextSelection = (
     ...trimOffset(getDeepestFirstChild(startElement), startOffset),
   );
   if (collapsed) range.collapse(true);
-  else range.setEnd(...trimOffset(getDeepestFirstChild(endElement), endOffset));
+  else if(endElement){
+    const deepestFirstChild = getDeepestFirstChild(endElement);
+    range.setEnd(...trimOffset(deepestFirstChild, endOffset));
+  }
   const sel = window.getSelection();
   sel.removeAllRanges();
   sel.addRange(range);

@@ -24,7 +24,7 @@ const getExistingAnchorIds = (): string[] =>
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showAnchorDialog,
   anchorId: state.editor.anchorId,
-  selection: state.dialogs.selection,
+  selection: state.editor.selection,
   isOnMd: state.root.isOnMd,
 });
 const connector = connect(mapState);

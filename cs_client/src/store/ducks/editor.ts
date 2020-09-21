@@ -3,6 +3,7 @@ import { createActionPrefixer } from './helpers/shared';
 import { rootActionCreators } from './root';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { dialogsActionCreators } from '::store/ducks/dialogs';
+import { CustomRange, getSelection } from '::helpers/editing/execK/steps/get-selection';
 
 const ap = createActionPrefixer('editor');
 
@@ -15,6 +16,7 @@ const ac = {
   toggleInfoBar: _(ap('toggle-info-bar')),
   setTreeWidth: _(ap('set-tree-width'), _ => (width: number) => _(width)),
   setAnchorId: _(ap('set-anchor-id'), _ => (id: string) => _(id)),
+  setSelectedLink: _(ap('set-selected-link'), _ => (link: string) => _(link)),
 };
 
 type State = {
@@ -25,6 +27,8 @@ type State = {
   showInfoBar: boolean;
   treeWidth: number;
   anchorId?: string;
+  selectedLink?: string;
+  selection?: CustomRange;
 };
 
 const initialState: State = {
@@ -35,6 +39,8 @@ const initialState: State = {
   showInfoBar: false,
   treeWidth: 250,
   anchorId: undefined,
+  selectedLink: undefined,
+  selection: undefined,
 };
 const reducer = createReducer(initialState, _ => [
   ...[
@@ -70,6 +76,27 @@ const reducer = createReducer(initialState, _ => [
   _(dialogsActionCreators.hideAnchorDialog, state => ({
     ...state,
     anchorId: undefined,
+  })),
+  _(ac.setSelectedLink, (state, { payload }) => ({
+    ...state,
+    selectedLink: payload,
+  })),
+  _(dialogsActionCreators.hideLinkDialog, state => ({
+    ...state,
+    selectedLink: undefined,
+  })),
+  _(dialogsActionCreators.showAnchorDialog, state => ({
+    ...state,
+    selection: getSelection({
+      selectAdjacentWordIfNoneIsSelected: false,
+    }),
+  })),
+
+  _(dialogsActionCreators.showLinkDialog, state => ({
+    ...state,
+    selection: getSelection({
+      selectAdjacentWordIfNoneIsSelected: true,
+    }),
   })),
 ]);
 

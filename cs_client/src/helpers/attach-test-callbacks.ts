@@ -4,6 +4,7 @@ import { apolloClient } from '::graphql/client/apollo-client';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 import { dTM } from '::store/ducks/cache/document-cache';
 import { ac } from '::store/store';
+import { execK } from '::helpers/editing/execK';
 
 const testCallbacks = {
   documentActionCreators: {
@@ -27,5 +28,6 @@ if (process.env.NODE_ENV === 'development') {
   window['son'] = () => {
     ac.root.setNetworkStatus(true);
   };
+  window['execk'] = execK;
 }
 export { TestCallbacks };

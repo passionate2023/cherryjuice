@@ -10,6 +10,7 @@ const UserPopup = React.lazy(() =>
   import('./modals/user/user-with-transition'),
 );
 const Anchor = React.lazy(() => import('./dialogs/anchor/anchor'));
+const Link = React.lazy(() => import('./dialogs/link/link'));
 const ImportDocuments = React.lazy(() =>
   import('./modals/import-documents/import-documents'),
 );
@@ -60,6 +61,7 @@ const components = [
   <AlertModal key={'AlertModal'} />,
   <Widgets key={'Widgets'} />,
   <Anchor key={'Anchor'} />,
+  <Link key={'Link'} />,
 ];
 const mapState = () => ({});
 const mapDispatch = {};

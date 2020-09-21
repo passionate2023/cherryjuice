@@ -6,10 +6,6 @@ import { AlertType, TAlert } from '::types/react';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { rootActionCreators } from './root';
 import { authActionCreators as aac } from './auth';
-import {
-  CustomRange,
-  getSelection,
-} from '::helpers/editing/execK/steps/get-selection';
 
 const ap = createActionPrefixer('dialogs');
 
@@ -91,6 +87,8 @@ const ac = {
   },
   showAnchorDialog: _(ap('show-anchor-dialog')),
   hideAnchorDialog: _(ap('hide-anchor-dialog')),
+  showLinkDialog: _(ap('show-link-dialog')),
+  hideLinkDialog: _(ap('hide-link-dialog')),
 };
 
 type NodeMetaDialogRole = 'edit' | 'create-child' | 'create-sibling';
@@ -109,7 +107,7 @@ type State = {
   showSettingsDialog: boolean;
   snackbar?: Snackbar;
   showAnchorDialog: boolean;
-  selection?: CustomRange;
+  showLinkDialog: boolean;
 };
 
 const initialState: State = {
@@ -125,7 +123,7 @@ const initialState: State = {
   showSettingsDialog: false,
   snackbar: undefined,
   showAnchorDialog: false,
-  selection: undefined,
+  showLinkDialog: false,
 };
 
 const reducer = createReducer(initialState, _ => [
@@ -304,13 +302,19 @@ const reducer = createReducer(initialState, _ => [
   _(ac.showAnchorDialog, state => ({
     ...state,
     showAnchorDialog: true,
-    selection: getSelection({
-      selectAdjacentWordIfNoneIsSelected: false,
-    }),
   })),
   _(ac.hideAnchorDialog, state => ({
     ...state,
     showAnchorDialog: false,
+    selection: undefined,
+  })),
+  _(ac.showLinkDialog, state => ({
+    ...state,
+    showLinkDialog: true,
+  })),
+  _(ac.hideLinkDialog, state => ({
+    ...state,
+    showLinkDialog: false,
     selection: undefined,
   })),
 ]);

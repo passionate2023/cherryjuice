@@ -8,7 +8,7 @@ import { calculateTag } from '::helpers/editing/execK/steps/apply-command/apply-
 //       ...(aHtmlElement.tags[0][1].style || {}),
 //     };
 // };
-const applyTag = ({ aHtmlElement, tagExists: remove, tagName }) => {
+const applyTag = ({ aHtmlElement, tagExists: remove, tagName, attributes, mode }) => {
   // const tagToBeDeleted = aHtmlElement.tags.find(([tag]) => tag === tagName);
   // if (remove) {
   //   if (tagToBeDeleted) {
@@ -20,7 +20,7 @@ const applyTag = ({ aHtmlElement, tagExists: remove, tagName }) => {
   //   if (!tagToBeDeleted) aHtmlElement.tags.push([tagName, {}]);
   // }
   aHtmlElement.tags = calculateTag({
-    cmd: { remove, tagName },
+    cmd: { remove, tagName, attributes, mode },
     tags: aHtmlElement.tags,
   });
 };

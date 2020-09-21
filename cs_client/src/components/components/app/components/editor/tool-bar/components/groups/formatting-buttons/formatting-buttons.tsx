@@ -59,6 +59,13 @@ const Buttons: React.FC<PropsFromRedux> = ({
       >
         <Icon name={Icons.cherrytree.additionalIcons.anchor} />
       </ToolbarButton>
+      <ToolbarButton
+        onClick={ac.dialogs.showLinkDialog}
+        className={modToolbar.toolBar__iconStrictWidth}
+        disabled={disabled}
+      >
+        <Icon name={Icons.material.username} />
+      </ToolbarButton>
     </>
   );
 };
