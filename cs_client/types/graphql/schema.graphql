@@ -250,6 +250,8 @@ enum HotKeyActionType {
     H1
     H2
     H3
+    INSERT_ANCHOR
+    INSERT_LINK
     ITALIC
     JUSTIFY_CENTER
     JUSTIFY_FILL

@@ -13,10 +13,37 @@ import {
   linkAC,
   linkR,
   linkRTC,
+  LinkState,
   LinkType,
 } from '::root/components/app/components/menus/dialogs/link/reducer/reducer';
 import { Select } from '::root/components/shared-components/inputs/select';
 import { execK } from '::helpers/editing/execK';
+
+const getAttributes = (
+  state: LinkState,
+  target: 'anchor' | 'image' = 'anchor',
+): [string, string][] => {
+  let href;
+  if (state.type === LinkType.WEB_SITE) {
+    href = state.url;
+  } else if (state.type === LinkType.LOCAL_NODE) {
+    href = `${state.node_id}${
+      state.anchorId ? `#${encodeURIComponent(state.anchorId)}` : ''
+    }`;
+  } else href = `file:///${encodeURIComponent(state.location)}`;
+  return [
+    [target === 'anchor' ? 'href' : 'data-href', href],
+    ['data-type', state.type],
+
+    [
+      'class',
+      target === 'anchor'
+        ? `rich-text__link rich-text__link--${state.type}`
+        : `rich-text__image rich-text__image--link rich-text__image--link-${state.type}`,
+    ],
+    ['target', 'blank_'],
+  ];
+};
 
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showLinkDialog,
@@ -31,7 +58,7 @@ type Props = PropsFromRedux;
 const LinkDialogWithTransition: React.FC<Props> = ({
   isOnMd,
   showDialog,
-  selectedLink = '',
+  selectedLink,
   selection,
 }) => {
   const [state, dispatch] = useReducer(linkR, undefined, linkRTC);
@@ -40,13 +67,33 @@ const LinkDialogWithTransition: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    if (selectedLink) {
+    if (selectedLink?.href) {
+      const type = selectedLink.type;
+      let url = '',
+        anchorId = '',
+        node_id = '',
+        location = '';
+      if (type === LinkType.WEB_SITE) url = selectedLink.href;
+      else if (type === LinkType.FOLDER || type === LinkType.FILE) {
+        location = selectedLink.href.substring(8);
+      } else if (type === LinkType.LOCAL_NODE) {
+        selectedLink.href = selectedLink.href.replace(
+          window.location.href.replace(/\d+$/, ''),
+          '',
+        );
+        const res = /(\d+)#*(.+)?$/.exec(selectedLink.href);
+        if (res) {
+          const [, id, anchor] = res;
+          node_id = id;
+          anchorId = anchor || '';
+        }
+      }
       linkAC.resetToEdit({
-        url: selectedLink,
-        type: LinkType.WEB_SITE,
-        anchorId: '',
-        node_id: '',
-        location: '',
+        type: selectedLink.type,
+        url,
+        anchorId,
+        node_id,
+        location,
       });
     } else linkAC.resetToCreate();
   }, [showDialog, selectedLink]);
@@ -98,23 +145,10 @@ const LinkDialogWithTransition: React.FC<Props> = ({
     });
   const create = () => {
     try {
-      let href;
-      if (state.type === LinkType.WEB_SITE) {
-        href = state.url;
-      } else if (state.type === LinkType.LOCAL_NODE) {
-        href = `${state.node_id}${
-          state.anchorId ? `#${encodeURIComponent(state.anchorId)}` : ''
-        }`;
-      } else href = `file:///${state.location}`;
       execK({
         selection,
         tagName: 'a',
-        attributes: [
-          ['href', href],
-          ['data-type', state.type],
-          ['class', `rich-text__link rich-text__link--${state.type}`],
-          ['target', 'black_'],
-        ],
+        attributes: getAttributes(state),
         mode: 'override',
       });
     } catch (e) {
@@ -126,10 +160,27 @@ const LinkDialogWithTransition: React.FC<Props> = ({
       });
     }
   };
-  const edit = () => undefined;
+  const edit = () => {
+    try {
+      const attributes = getAttributes(
+        state,
+        selectedLink.target.localName === 'img' ? 'image' : 'anchor',
+      );
+      attributes.forEach(([k, v]) => {
+        selectedLink.target.setAttribute(k, v);
+      });
+    } catch (e) {
+      ac.dialogs.setAlert({
+        title: 'Could not create the link',
+        description: 'please refresh the page',
+        type: AlertType.Error,
+        error: e,
+      });
+    }
+  };
   const apply = useDelayedCallback(
     ac.dialogs.hideLinkDialog,
-    selectedLink ? edit : create,
+    selectedLink?.href ? edit : create,
   );
 
   const buttonsRight: TDialogFooterButton[] = [

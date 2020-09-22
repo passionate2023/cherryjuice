@@ -130,4 +130,9 @@ const reducer = (
   return newState;
 };
 
-export { actionCreators as linkAC, resetToCreate as linkRTC, reducer as linkR };
+export {
+  actionCreators as linkAC,
+  resetToCreate as linkRTC,
+  reducer as linkR,
+  State as LinkState,
+};

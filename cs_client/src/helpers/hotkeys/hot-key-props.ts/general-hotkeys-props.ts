@@ -34,4 +34,11 @@ export const generalHotKeysProps = {
       snapBackManager.current.redo();
     else ac.documentCache.redoDocumentAction();
   },
+  [HotKeyActionType.INSERT_ANCHOR]: () => {
+    if (document.activeElement.id === 'rich-text')
+      ac.dialogs.showAnchorDialog();
+  },
+  [HotKeyActionType.INSERT_LINK]: () => {
+    if (document.activeElement.id === 'rich-text') ac.dialogs.showLinkDialog();
+  },
 };

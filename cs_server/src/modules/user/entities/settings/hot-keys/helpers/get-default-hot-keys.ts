@@ -26,6 +26,8 @@ export const getDefaultHotkeys = (): HotKeys => ({
     { type: HotKeyActionType.MOVE_LINE_DOWN, keys: 'arrowdown010' },
   ],
   general: [
+    { type: HotKeyActionType.INSERT_LINK, keys: 'l100' },
+    { type: HotKeyActionType.INSERT_ANCHOR, keys: 'a110' },
     { type: HotKeyActionType.SAVE_DOCUMENT, keys: 's100' },
     { type: HotKeyActionType.UNDO, keys: 'z100' },
     { type: HotKeyActionType.REDO, keys: 'z101' },

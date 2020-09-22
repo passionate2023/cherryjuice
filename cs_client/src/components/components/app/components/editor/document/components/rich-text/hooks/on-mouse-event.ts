@@ -4,6 +4,7 @@ import { fromEvent, merge, Observable } from 'rxjs';
 import { debounceTime, filter, map, withLatestFrom } from 'rxjs/operators';
 import { ac, store } from '::store/store';
 import { onLinkClicked } from '::root/components/app/components/editor/document/components/rich-text/helpers/links';
+import { LinkType } from '::root/components/app/components/menus/dialogs/link/reducer/reducer';
 
 const anchor = 'rich-text__anchor';
 const link = 'rich-text__link';
@@ -49,6 +50,19 @@ const getValidTarget = (e: Event): HTMLElement =>
 
 const isLeftClick = (e: MouseEvent): boolean => e['which'] === 1;
 
+const editAnchor = (id: string) => {
+  ac.editor.setAnchorId(id);
+  ac.dialogs.showAnchorDialog();
+};
+
+const editLink = (target: HTMLElement) => {
+  ac.editor.setSelectedLink({
+    href: decodeURIComponent(target['href'] || target.dataset['href']),
+    type: target.dataset.type as LinkType,
+    target,
+  });
+  ac.dialogs.showLinkDialog();
+};
 export const useMouseClick = () => {
   useEffect(() => {
     const element = document.querySelector(
@@ -70,17 +84,18 @@ export const useMouseClick = () => {
       const target = getValidTarget(e);
       if (target) {
         e.preventDefault();
+        const isAnchor = target.className === anchor;
+        const isSimpleLink = !isAnchor && target.classList[0] === link;
+        const isImageLink =
+          !isSimpleLink && target.classList.contains(imageLink);
         if (clickDuration >= 300) {
-          const isAnchor = target.className === anchor;
           if (isAnchor) {
             const id = target.getAttribute('id');
-            ac.editor.setAnchorId(id);
-            ac.dialogs.showAnchorDialog();
+            editAnchor(id);
+          } else if (isSimpleLink || isImageLink) {
+            editLink(target);
           }
         } else {
-          const isSimpleLink = target.classList[0] === link;
-          const isImageLink =
-            !isSimpleLink && target.classList.contains(imageLink);
           if (isSimpleLink || isImageLink) {
             onLinkClicked(target, store.getState().document.documentId);
           }

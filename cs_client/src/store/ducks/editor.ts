@@ -3,7 +3,11 @@ import { createActionPrefixer } from './helpers/shared';
 import { rootActionCreators } from './root';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { dialogsActionCreators } from '::store/ducks/dialogs';
-import { CustomRange, getSelection } from '::helpers/editing/execK/steps/get-selection';
+import {
+  CustomRange,
+  getSelection,
+} from '::helpers/editing/execK/steps/get-selection';
+import { LinkType } from '::root/components/app/components/menus/dialogs/link/reducer/reducer';
 
 const ap = createActionPrefixer('editor');
 
@@ -16,9 +20,10 @@ const ac = {
   toggleInfoBar: _(ap('toggle-info-bar')),
   setTreeWidth: _(ap('set-tree-width'), _ => (width: number) => _(width)),
   setAnchorId: _(ap('set-anchor-id'), _ => (id: string) => _(id)),
-  setSelectedLink: _(ap('set-selected-link'), _ => (link: string) => _(link)),
+  setSelectedLink: _(ap('set-selected-link'), _ => (link: Link) => _(link)),
 };
 
+export type Link = { href: string; type: LinkType; target: HTMLElement };
 type State = {
   showTree: boolean;
   showFormattingButtons: boolean;
@@ -27,7 +32,7 @@ type State = {
   showInfoBar: boolean;
   treeWidth: number;
   anchorId?: string;
-  selectedLink?: string;
+  selectedLink: Link;
   selection?: CustomRange;
 };
 
@@ -81,10 +86,14 @@ const reducer = createReducer(initialState, _ => [
     ...state,
     selectedLink: payload,
   })),
-  _(dialogsActionCreators.hideLinkDialog, state => ({
-    ...state,
-    selectedLink: undefined,
-  })),
+  _(
+    dialogsActionCreators.hideLinkDialog,
+    state =>
+      ({
+        ...state,
+        selectedLink: undefined,
+      } as State),
+  ),
   _(dialogsActionCreators.showAnchorDialog, state => ({
     ...state,
     selection: getSelection({
@@ -95,7 +104,7 @@ const reducer = createReducer(initialState, _ => [
   _(dialogsActionCreators.showLinkDialog, state => ({
     ...state,
     selection: getSelection({
-      selectAdjacentWordIfNoneIsSelected: true,
+      selectAdjacentWordIfNoneIsSelected: !state.selectedLink,
     }),
   })),
 ]);
