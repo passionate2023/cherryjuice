@@ -37,12 +37,21 @@ const Code = ({
       data-do_show_linenum="${do_show_linenum}"
       data-width_raw="${width_raw}"
       data-syntax= "${syntax}"
-      style="max-width: ${width_raw}${is_width_pix ? 'px' : '%'};
-        min-height: ${height};
+      style="
+        max-width: ${width_raw}${is_width_pix ? 'px' : '%'};
         width: ${width_raw}${is_width_pix ? 'px' : '%'};
-        display: inline-block;"
+        height: ${height};
+        min-height: ${height};"
     >
-      ${escapeHtml(text)}
+      ${text
+        .split('\n')
+        .map(
+          line =>
+            `<span class="rich-text__code__line">${
+              line ? escapeHtml(line) : objectDelimiter
+            }</span>`,
+        )
+        .join('')}
     </code>${objectDelimiter}`;
 };
 

@@ -8,7 +8,9 @@ const extractCodeBox = (acc, el, commonAttributes, options) => {
         }
       : {
           type: 'code',
-          _: el.innerText,
+          _: Array.from((el as HTMLDivElement).children)
+            .map(el => (el as HTMLElement).innerText)
+            .join('\n'),
           style: {
             height: el.style['min-height'], ///(^\d+)/.exec(el.style['min-height'])[1],
           },

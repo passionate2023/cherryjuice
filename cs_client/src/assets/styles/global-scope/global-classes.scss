@@ -5,11 +5,18 @@
   background-color: var(--codeBg);
   font-family: var(--codeFont);
   font-size: var(--codeFontSize);
+  padding: 5px;
+  box-sizing: border-box;
+  display: inline-block;
 }
+.rich-text__code__line {
+  display: block;
+}
+
 .rich-text__image {
   display: inline-block;
   &[src=''] {
-    opacity: 0
+    opacity: 0;
   }
 }
 .rich-text__table {
