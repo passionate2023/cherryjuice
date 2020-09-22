@@ -51,7 +51,6 @@ const execK = ({
       startDDOE,
       endDDOE,
       adjustedSelection,
-      selectionContainsLinks,
     } = pipe1({
       selectionStartElement: startElement,
       selectionEndElement: endElement,
@@ -88,8 +87,6 @@ const execK = ({
       ogSelection: { startElement, endElement, startOffset, endOffset },
       options: { collapse: isJustificationCommand(command) },
     });
-    if (selectionContainsLinks || tagName === 'a')
-      setTimeout(() => ac.node.processLinks(new Date().getTime()), 1000);
   } catch (e) {
     if (!selection) return;
     snapBackManager.current.reset();

@@ -13,9 +13,6 @@ const ac = {
   ),
   fetchFulfilled: _(ap('fetchFulfilled'), _ => (node_id: number) => _(node_id)),
   fetchFailed: _(ap('fetch-failed'), _ => (node_id: number) => _(node_id)),
-
-  processLinks: _(ap('process-links')),
-
   select: _(ap('select'), _ => (payload: SelectNodeParams) => _(payload)),
   selectNext: _(ap('select-next'), _ => (payload: SelectNodeParams) =>
     _(payload),
@@ -31,7 +28,6 @@ type State = {
       [node_id: number]: AsyncOperation;
     };
   };
-  processLinks: number;
   next: SelectNodeParams;
 };
 
@@ -39,7 +35,6 @@ const initialState: State = cloneObj<State>({
   asyncOperations: {
     fetch: {},
   },
-  processLinks: 0,
   next: undefined,
 });
 const reducer = createReducer(initialState, _ => [

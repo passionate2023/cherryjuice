@@ -9,13 +9,14 @@ export type SelectNodeParams = {
 
 export const selectNode = (
   state: DocumentCacheState,
-  { documentId, node_id }: SelectNodeParams,
+  { documentId, node_id, hash }: SelectNodeParams,
 ): DocumentCacheState => {
   node_id = +node_id;
   const document = state.documents[documentId];
   if (!document?.nodes[node_id] && document.nodes && document.nodes[0])
     node_id = getDefaultSelectedNode_id(document.nodes);
   if (node_id && document?.nodes[node_id]) {
+    document.localState.hash = hash;
     document.persistedState.selectedNode_id = node_id;
     document.persistedState.recentNodes = [
       ...state.documents[documentId].persistedState.recentNodes.filter(

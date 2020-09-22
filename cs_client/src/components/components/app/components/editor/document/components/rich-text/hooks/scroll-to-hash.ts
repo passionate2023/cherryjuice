@@ -4,7 +4,7 @@ import { scrollIntoToolbar } from '::helpers/ui';
 import { interval } from 'rxjs';
 import { filter, map, take, tap } from 'rxjs/operators';
 
-const useScrollToHashElement = () => {
+export const useScrollToHash = () => {
   const history = useHistory();
   useEffect(() => {
     if (history.location.hash) {
@@ -28,5 +28,3 @@ const useScrollToHashElement = () => {
     }
   }, [history.location.hash]);
 };
-
-export { useScrollToHashElement };

@@ -50,7 +50,6 @@ const User: React.FC<UserProps & { style }> = ({ onClose, style, user }) => {
             <ButtonSquare
               className={modUserPopup.user__actions__signOut}
               onClick={router.goto.signIn}
-              dark={true}
               text={'sign in'}
               testId={testIds.toolBar__userPopup__signIn}
             />

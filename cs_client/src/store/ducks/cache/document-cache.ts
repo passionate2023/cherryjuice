@@ -122,6 +122,7 @@ export type CachedDocumentState = {
   editedAttributes: string[];
   editedNodes: CachedNodesState;
   localUpdatedAt: number;
+  hash: string;
 };
 export type PersistedDocumentState = {
   selectedNode_id?: number;

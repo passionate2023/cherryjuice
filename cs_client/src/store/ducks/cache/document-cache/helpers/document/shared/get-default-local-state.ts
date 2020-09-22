@@ -19,5 +19,6 @@ export const getDefaultLocalState = (
     },
     highestNode_id: getDefaultHighestNode_id(nodes),
     localUpdatedAt: 0,
+    hash: '',
   };
 };

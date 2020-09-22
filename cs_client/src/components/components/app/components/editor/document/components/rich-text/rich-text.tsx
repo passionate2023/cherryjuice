@@ -7,31 +7,14 @@ import { ac, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { useEffect, useMemo,  } from 'react';
+import { useEffect, useMemo } from 'react';
 import { QFullNode } from '::store/ducks/cache/document-cache';
 import { OfflineBanner } from '::root/components/app/components/editor/document/components/rich-text/components/offline-banner';
-import {
-  EventHandler,
-  useSetupEventHandlers,
-} from '::hooks/dom/setup-event-handlers';
 import { onPaste } from '::helpers/editing/clipboard';
 import { onKeyDown } from '::helpers/editing/typing';
 import { createGesturesHandler } from '::root/components/shared-components/drawer/components/drawer-navigation/helpers/create-gestures-handler';
-
-const editAnchor = (e: MouseEvent) => {
-  const target = e.target as HTMLElement;
-  if (target.className === 'rich-text__anchor') {
-    const id = target.getAttribute('id');
-    ac.editor.setAnchorId(id);
-    ac.dialogs.showAnchorDialog();
-  }
-};
-
-const eventHandlers: EventHandler[] = [
-  { type: 'paste', listener: onPaste },
-  { type: 'keydown', listener: onKeyDown },
-  { type: 'dblclick', listener: editAnchor },
-];
+import { useMouseClick } from '::root/components/app/components/editor/document/components/rich-text/hooks/on-mouse-event';
+import { useScrollToHash } from '::root/components/app/components/editor/document/components/rich-text/hooks/scroll-to-hash';
 
 type Props = {
   node: QFullNode;
@@ -46,7 +29,6 @@ const mapState = (state: Store) => {
     fetchNodeStarted:
       state.node.asyncOperations.fetch[node_id] === 'in-progress',
     contentEditable: state.editor.contentEditable || !state.root.isOnMd,
-    processLinks: state.node.processLinks,
     isDocumentOwner: hasWriteAccessToDocument(state),
     isOnMd: state.root.isOnMd,
     online: state.root.online,
@@ -60,7 +42,6 @@ const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 const RichText: React.FC<Props & PropsFromRedux> = ({
   contentEditable,
-  processLinks,
   fetchDocumentInProgress,
   fetchNodeStarted,
   isDocumentOwner,
@@ -76,7 +57,6 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
   const nodeId = node?.id;
   const html = node?.html;
   const images = node?.image;
-  useSetupEventHandlers(`.${modRichText.richText__container}`, eventHandlers);
   const { onTouchEnd, onTouchStart } = useMemo(
     () =>
       createGesturesHandler({
@@ -87,12 +67,16 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
       }),
     [],
   );
+  useMouseClick();
+  useScrollToHash();
   return (
     <ErrorBoundary>
       <div
         className={modRichText.richText__container}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
+        onPaste={onPaste}
+        onKeyDown={onKeyDown}
       >
         {html && !fetchDocumentInProgress && !fetchNodeStarted ? (
           <ContentEditable
@@ -102,9 +86,7 @@ const RichText: React.FC<Props & PropsFromRedux> = ({
             nodeId={nodeId}
             file_id={node.documentId}
             node_id={node.node_id}
-            processLinks={[processLinks]}
             images={images}
-            fetchNodeStarted={fetchNodeStarted}
             isOnMd={isOnMd}
             scrollPosition={scrollPosition}
           />
