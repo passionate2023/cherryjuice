@@ -10,10 +10,12 @@ const anchor = 'rich-text__anchor';
 const link = 'rich-text__link';
 const imageLink = 'rich-text__image--link';
 const codebox = 'rich-text__code';
+const table = 'rich-text__table';
 const watchedElements = {
   a: true,
   img: true,
   code: true,
+  table: true,
 };
 
 const clickify$ = (
@@ -79,6 +81,15 @@ const editCodebox = (target: HTMLElement) => {
   ac.dialogs.showCodeboxDialog();
 };
 
+const editTable = (target: HTMLTableElement) => {
+  ac.editor.setSelectedTable({
+    rows: target.tBodies[0].childElementCount,
+    columns: target.tHead.firstElementChild.childElementCount,
+    target,
+  });
+  ac.dialogs.showTableDialog();
+};
+
 export const useMouseClick = () => {
   useEffect(() => {
     const element = document.querySelector(
@@ -105,6 +116,7 @@ export const useMouseClick = () => {
         const isImageLink =
           !isSimpleLink && target.classList.contains(imageLink);
         const isCodebox = !isImageLink && target.classList[0] === codebox;
+        const isTable = !isCodebox && target.classList[0] === table;
         if (clickDuration >= 300) {
           if (isAnchor) {
             const id = target.getAttribute('id');
@@ -113,6 +125,8 @@ export const useMouseClick = () => {
             editLink(target);
           } else if (isCodebox) {
             editCodebox(target);
+          } else if (isTable) {
+            editTable(target as HTMLTableElement);
           }
         } else {
           if (isSimpleLink || isImageLink) {

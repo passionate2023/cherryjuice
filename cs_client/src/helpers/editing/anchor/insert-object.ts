@@ -96,15 +96,15 @@ export const insertObject = (
     { filterEmptyNodes: false },
   );
   editor.focus();
-  const anchor = document.querySelector(`[data-ts="${timestamp}"]`);
+  const insertedObject = document.querySelector(`[data-ts="${timestamp}"]`);
   setTextSelection(
     {
-      startElement: anchor.nextElementSibling || anchor,
-      endElement: anchor.nextElementSibling || anchor,
+      startElement: insertedObject.nextElementSibling || insertedObject,
+      endElement: insertedObject.nextElementSibling || insertedObject,
       startOffset: 0,
       endOffset: 0,
     },
     true,
   );
-  anchor.removeAttribute('data-ts');
+  insertedObject.removeAttribute('data-ts');
 };

@@ -20,6 +20,13 @@ import {
   tableRTC,
 } from '::root/components/app/components/menus/dialogs/table/reducer/reducer';
 
+const createAlert = e => ({
+  title: 'Could not create the table',
+  description: 'please refresh the page',
+  type: AlertType.Error,
+  error: e,
+});
+
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showTableDialog,
   selection: state.editor.selection,
@@ -82,15 +89,53 @@ const TableDialogWithTransition: React.FC<Props> = ({
         outerHTML: createTableHtml(state.values),
       });
     } catch (e) {
-      ac.dialogs.setAlert({
-        title: 'Could not create the table',
-        description: 'please refresh the page',
-        type: AlertType.Error,
-        error: e,
-      });
+      ac.dialogs.setAlert(createAlert(e));
     }
   };
-  const edit = () => undefined;
+  const edit = () => {
+    try {
+      const target = selectedTable.target as HTMLTableElement;
+      const currentHead = target.tHead.firstElementChild;
+      const currentBody = target.tBodies[0];
+      const currentHeadCells = Array.from(currentHead.children);
+      const currentRows = Array.from(currentBody.children);
+
+      const missingColumns =
+        state.values.columns - currentHead.childElementCount;
+      if (missingColumns > 0) {
+        Array.from({ length: missingColumns }).forEach(() => {
+          currentHead.appendChild(document.createElement('th'));
+        });
+        currentRows.forEach(row => {
+          row.appendChild(document.createElement('td'));
+        });
+      } else if (missingColumns < 0) {
+        currentHeadCells.forEach((cell, i) => {
+          if (i + 1 > state.values.columns) cell.remove();
+        });
+        currentRows.forEach(row => {
+          Array.from(row.children).forEach((cell, i) => {
+            if (i + 1 > state.values.columns) cell.remove();
+          });
+        });
+      }
+
+      const missingRows = state.values.rows - currentRows.length;
+      if (missingRows > 0) {
+        const row = document.createElement('tr');
+        currentBody.appendChild(row);
+        Array.from({ length: state.values.columns }).forEach(() => {
+          row.appendChild(document.createElement('td'));
+        });
+      } else if (missingRows < 0) {
+        currentRows.forEach((row, i) => {
+          if (i + 1 > state.values.rows) row.remove();
+        });
+      }
+    } catch (e) {
+      ac.dialogs.setAlert(createAlert(e));
+    }
+  };
   const apply = useDelayedCallback(
     ac.dialogs.hideTableDialog,
     selectedTable ? edit : create,

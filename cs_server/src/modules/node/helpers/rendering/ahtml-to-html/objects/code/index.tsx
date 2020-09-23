@@ -1,6 +1,6 @@
 import { escapeHtml } from '../../helpers/escape-html';
 
-const emptySpace = '&#8203;'
+const emptySpace = '&#8203;';
 const objectDelimiter = `<span>${emptySpace}</span>`;
 
 type Props = {
