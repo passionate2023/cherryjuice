@@ -12,7 +12,6 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Select } from '::root/components/shared-components/inputs/select';
 import {
   codeboxAC,
-  CodeboxProperties,
   codeboxR,
   codeboxRTC,
 } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
@@ -22,14 +21,10 @@ import {
   insertObject,
 } from '::helpers/editing/anchor/insert-object';
 
-const getAttributes = (state: CodeboxProperties): [string, string][] => {
-  return [['height', '' + state.height]];
-};
-
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showCodeboxDialog,
   selection: state.editor.selection,
-  selectedCodebox: undefined,
+  selectedCodebox: state.editor.selectedCodebox,
   isOnMd: state.root.isOnMd,
 });
 const connector = connect(mapState);
@@ -48,7 +43,7 @@ const CodeboxDialogWithTransition: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    if (selectedCodebox?.height) {
+    if (selectedCodebox) {
       codeboxAC.resetToEdit({
         autoExpandHeight: selectedCodebox.autoExpandHeight,
         height: selectedCodebox.height,
@@ -114,10 +109,17 @@ const CodeboxDialogWithTransition: React.FC<Props> = ({
   };
   const edit = () => {
     try {
-      const attributes = getAttributes(state.values);
-      attributes.forEach(([k, v]) => {
-        selectedCodebox.target.setAttribute(k, v);
-      });
+      const target = selectedCodebox.target;
+      const height = state.values.height + 'px';
+      const width =
+        state.values.width + (state.values.widthType === 'pixels' ? 'px' : '%');
+      target.style.width = width;
+      target.style.maxWidth = width;
+      target.style.minHeight = height;
+      target.style.height =
+        state.values.autoExpandHeight === 'fixed' ? height : '';
+      target.dataset.is_width_pix = state.values.widthType === 'pixels' ? 1 : 0;
+      target.dataset.width__raw = state.values.width;
     } catch (e) {
       ac.dialogs.setAlert({
         title: 'Could not create the codebox',

@@ -9,9 +9,11 @@ import { LinkType } from '::root/components/app/components/menus/dialogs/link/re
 const anchor = 'rich-text__anchor';
 const link = 'rich-text__link';
 const imageLink = 'rich-text__image--link';
+const codebox = 'rich-text__code';
 const watchedElements = {
   a: true,
   img: true,
+  code: true,
 };
 
 const clickify$ = (
@@ -63,6 +65,20 @@ const editLink = (target: HTMLElement) => {
   });
   ac.dialogs.showLinkDialog();
 };
+
+const editCodebox = (target: HTMLElement) => {
+  ac.editor.setSelectedCodebox({
+    widthType: +target.dataset['is_width_pix'] === 1 ? 'pixels' : '%',
+    width: +target.style.width.replace(/(px|%)/, ''),
+    height:
+      +target.style.height.replace('px', '') ||
+      +target.style.minHeight.replace('px', ''),
+    autoExpandHeight: target.style.height ? 'fixed' : 'auto',
+    target,
+  });
+  ac.dialogs.showCodeboxDialog();
+};
+
 export const useMouseClick = () => {
   useEffect(() => {
     const element = document.querySelector(
@@ -88,12 +104,15 @@ export const useMouseClick = () => {
         const isSimpleLink = !isAnchor && target.classList[0] === link;
         const isImageLink =
           !isSimpleLink && target.classList.contains(imageLink);
+        const isCodebox = !isImageLink && target.classList[0] === codebox;
         if (clickDuration >= 300) {
           if (isAnchor) {
             const id = target.getAttribute('id');
             editAnchor(id);
           } else if (isSimpleLink || isImageLink) {
             editLink(target);
+          } else if (isCodebox) {
+            editCodebox(target);
           }
         } else {
           if (isSimpleLink || isImageLink) {

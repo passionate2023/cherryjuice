@@ -32,7 +32,6 @@ const Code = ({
       class="rich-text__code"
       data-do_highl_bra="${do_highl_bra}" 
       data-is_width_pix="${is_width_pix}"
-      data-is_width_pix="${is_width_pix}"
       data-do_show_linenum="${do_show_linenum}"
       data-width_raw="${width_raw}"
       data-syntax= "${syntax}"

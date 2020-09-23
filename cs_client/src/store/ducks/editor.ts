@@ -117,7 +117,7 @@ const reducer = createReducer(initialState, _ => [
   _(dialogsActionCreators.showCodeboxDialog, state => ({
     ...state,
     selection: getSelection({
-      selectAdjacentWordIfNoneIsSelected: false,
+      selectAdjacentWordIfNoneIsSelected: !state.selectedCodebox,
     }),
   })),
   _(ac.setSelectedCodebox, (state, { payload }) => ({
