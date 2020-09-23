@@ -1,6 +1,7 @@
 import { escapeHtml } from '../../helpers/escape-html';
 
-const objectDelimiter = '<span>&#8203;</span>';
+const emptySpace = '&#8203;'
+const objectDelimiter = `<span>${emptySpace}</span>`;
 
 type Props = {
   style: {
@@ -46,7 +47,7 @@ const Code = ({
         .map(
           line =>
             `<span class="rich-text__code__line">${
-              line ? escapeHtml(line) : objectDelimiter
+              line ? escapeHtml(line) : emptySpace
             }</span>`,
         )
         .join('')}

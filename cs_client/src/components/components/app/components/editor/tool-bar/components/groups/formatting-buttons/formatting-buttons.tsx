@@ -73,6 +73,13 @@ const Buttons: React.FC<PropsFromRedux> = ({
       >
         <Icon name={Icons.material.mono} />
       </ToolbarButton>
+      <ToolbarButton
+        onClick={ac.dialogs.showTableDialog}
+        className={modToolbar.toolBar__iconStrictWidth}
+        disabled={disabled}
+      >
+        <Icon name={Icons.material.info} />
+      </ToolbarButton>
     </>
   );
 };

@@ -6,7 +6,9 @@ import { getEditor } from '::root/components/app/components/editor/document/comp
 import { newObjectPrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 import { Anchor } from '@cs/ahtml-to-html/objects/anchor/anchor';
 import { Code } from '@cs/ahtml-to-html/objects/code';
+import { Table } from '@cs/ahtml-to-html/objects/table';
 import { CodeboxProperties } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
+import { TableProperties } from '::root/components/app/components/menus/dialogs/table/reducer/reducer';
 
 export const createAnchorHtml = (id: string): string =>
   Anchor({ other_attributes: { id } });
@@ -29,6 +31,16 @@ export const createCodeboxHtml = ({
       fixedHeight: autoExpandHeight === 'fixed',
     },
   });
+export const createTableHtml = ({ rows, columns }: TableProperties) => {
+  const th = Array.from({ length: columns }).map(() => '');
+  return Table({
+    table: {
+      th: th,
+      td: Array.from({ length: rows }).map(() => th),
+    },
+    other_attributes: { col_min_width: 100, col_max_width: 100 },
+  });
+};
 
 const addTimestampToMarkup = (
   html: string,
@@ -42,13 +54,14 @@ const addTimestampToMarkup = (
   );
 
 type RichTextObject = {
-  type: 'png' | 'code';
+  type: 'png' | 'code' | 'table';
   outerHTML: string;
 };
 
 const classNames = {
   code: 'rich-text__code',
   png: 'rich-text__anchor',
+  table: 'rich-text__table',
 };
 
 export const insertObject = (

@@ -53,7 +53,13 @@ const persistedReducers = {
     {
       key: 'editor',
       storage,
-      blacklist: ['anchorId','selectedLink', 'selection'],
+      blacklist: [
+        'anchorId',
+        'selectedLink',
+        'selection',
+        'selectedCodebox',
+        'selectedTable',
+      ],
     },
     editorReducer,
   ),

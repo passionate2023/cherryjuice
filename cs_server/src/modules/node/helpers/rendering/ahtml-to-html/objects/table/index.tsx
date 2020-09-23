@@ -2,9 +2,7 @@ import { escapeHtml } from '../../helpers/escape-html';
 
 type Props = {
   table: { th: string[]; td: string[][] };
-  styles: { justification: string };
   other_attributes: {
-    offset: number;
     col_min_width: number;
     col_max_width: number;
   };

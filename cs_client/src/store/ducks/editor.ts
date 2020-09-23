@@ -9,6 +9,7 @@ import {
 } from '::helpers/editing/execK/steps/get-selection';
 import { LinkType } from '::root/components/app/components/menus/dialogs/link/reducer/reducer';
 import { CodeboxProperties } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
+import { TableProperties } from '::root/components/app/components/menus/dialogs/table/reducer/reducer';
 
 const ap = createActionPrefixer('editor');
 
@@ -26,6 +27,10 @@ const ac = {
     ap('set-selected-codebox'),
     _ => (object: CodeboxProperties & { target: HTMLElement }) => _(object),
   ),
+  setSelectedTable: _(
+    ap('set-selected-table'),
+    _ => (object: TableProperties & { target: HTMLElement }) => _(object),
+  ),
 };
 
 export type Link = { href: string; type: LinkType; target: HTMLElement };
@@ -38,7 +43,8 @@ type State = {
   treeWidth: number;
   anchorId?: string;
   selectedLink: Link;
-  selectedCodebox: CodeboxProperties;
+  selectedCodebox: CodeboxProperties & { target: HTMLElement };
+  selectedTable: TableProperties & { target: HTMLElement };
   selection?: CustomRange;
 };
 
@@ -53,6 +59,7 @@ const initialState: State = {
   selectedLink: undefined,
   selection: undefined,
   selectedCodebox: undefined,
+  selectedTable: undefined,
 };
 const reducer = createReducer(initialState, _ => [
   ...[
@@ -117,12 +124,22 @@ const reducer = createReducer(initialState, _ => [
   _(dialogsActionCreators.showCodeboxDialog, state => ({
     ...state,
     selection: getSelection({
-      selectAdjacentWordIfNoneIsSelected: !state.selectedCodebox,
+      selectAdjacentWordIfNoneIsSelected: false,
+    }),
+  })),
+  _(dialogsActionCreators.showTableDialog, state => ({
+    ...state,
+    selection: getSelection({
+      selectAdjacentWordIfNoneIsSelected: false,
     }),
   })),
   _(ac.setSelectedCodebox, (state, { payload }) => ({
     ...state,
     selectedCodebox: payload,
+  })),
+  _(ac.setSelectedTable, (state, { payload }) => ({
+    ...state,
+    selectedTable: payload,
   })),
 ]);
 

@@ -91,6 +91,8 @@ const ac = {
   hideLinkDialog: _(ap('hide-link-dialog')),
   showCodeboxDialog: _(ap('show-codebox-dialog')),
   hideCodeboxDialog: _(ap('hide-codebox-dialog')),
+  showTableDialog: _(ap('show-table-dialog')),
+  hideTableDialog: _(ap('hide-table-dialog')),
 };
 
 type NodeMetaDialogRole = 'edit' | 'create-child' | 'create-sibling';
@@ -111,6 +113,7 @@ type State = {
   showAnchorDialog: boolean;
   showLinkDialog: boolean;
   showCodeboxDialog: boolean;
+  showTableDialog: boolean;
 };
 
 const initialState: State = {
@@ -128,6 +131,7 @@ const initialState: State = {
   showAnchorDialog: false,
   showLinkDialog: false,
   showCodeboxDialog: false,
+  showTableDialog: false,
 };
 
 const reducer = createReducer(initialState, _ => [
@@ -326,6 +330,14 @@ const reducer = createReducer(initialState, _ => [
   _(ac.hideCodeboxDialog, state => ({
     ...state,
     showCodeboxDialog: false,
+  })),
+  _(ac.showTableDialog, state => ({
+    ...state,
+    showTableDialog: true,
+  })),
+  _(ac.hideTableDialog, state => ({
+    ...state,
+    showTableDialog: false,
   })),
 ]);
 
