@@ -1,4 +1,4 @@
-import modSpinnerCircle from '::sass-modules/shared-components/progress-circle.scss';
+import modSpinnerCircle from '::sass-modules/shared-components/spinner-circle.scss';
 import * as React from 'react';
 
 type Props = {

@@ -1,13 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const removeBrotliExtension = async manifestEntries => {
-  const manifest = manifestEntries.map(entry => {
-    if (entry.url.endsWith('.br')) {
-      entry.url = entry.url.substring(0, entry.url.length - 3);
-    }
-    return entry;
-  });
-  return { manifest, warnings: [] };
-};
 
 const { alias, globalStyles, paths } = require('./variables');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -149,22 +140,21 @@ module.exports = {
       },
     }),
     production &&
-    new CompressionPlugin({
-      deleteOriginalAssets: true,
-      filename: '[path].br[query]',
-      algorithm: 'brotliCompress',
-      test: /\.(js|css|svg)$/,
-    }),
-    production &&
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
       maximumFileSizeToCacheInBytes: production ? 1024 * 2000 : 1024 * 20000,
       swDest: 'workbox-sw.js',
       navigateFallback: 'index.html',
-      manifestTransforms: [removeBrotliExtension],
     }),
     production &&
     new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
+    production &&
+    new CompressionPlugin({
+      deleteOriginalAssets: true,
+      filename: '[path].br[query]',
+      algorithm: 'brotliCompress',
+      test: /\.(js|css|svg)$/,
+    }),
   ].filter(Boolean),
 };

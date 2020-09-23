@@ -5,6 +5,14 @@ $duration: 1.4s;
 $width: 65;
 $height: 65;
 
+.circle-container {
+  transform: rotate(180deg);
+}
+.circle {
+  transform-origin: center;
+}
+
+
 @keyframes rotator {
   0% {
     transform: rotate(0deg);

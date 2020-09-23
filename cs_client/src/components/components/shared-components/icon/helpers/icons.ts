@@ -1,5 +1,9 @@
 const Icons = {
   material: {
+    anchor: 'anchor',
+    link: 'link',
+    code: 'code',
+    table: 'table',
     add: 'add',
     pin: 'pin',
     close: 'close',

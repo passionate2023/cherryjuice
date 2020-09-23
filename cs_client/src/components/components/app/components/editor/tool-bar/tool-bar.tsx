@@ -16,6 +16,7 @@ import { NodesButtons } from '::root/components/app/components/editor/tool-bar/c
 import { UndoRedo } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
+import { Objects } from '::root/components/app/components/editor/tool-bar/components/groups/objects/objects';
 
 type PortalProps = { targetSelector: string; predicate?: boolean };
 export const Portal: React.FC<PortalProps> = ({
@@ -80,9 +81,15 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
         <ErrorBoundary>
           <Portal targetSelector={'.' + appModule.app} predicate={isOnMd}>
             {isOnMd ? (
-              <FormattingButtonsWithTransition show={showFormattingButtons} />
+              <FormattingButtonsWithTransition show={showFormattingButtons}>
+                <Separator />
+                <Objects />
+              </FormattingButtonsWithTransition>
             ) : (
-              <FormattingButtons />
+              <FormattingButtons>
+                <Separator />
+                <Objects />
+              </FormattingButtons>
             )}
           </Portal>
         </ErrorBoundary>

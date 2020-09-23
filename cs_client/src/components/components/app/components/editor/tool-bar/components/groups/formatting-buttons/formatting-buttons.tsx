@@ -3,11 +3,11 @@ import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/
 import { execK } from '::helpers/editing/execK';
 import { ColorInput } from '::root/components/app/components/editor/tool-bar/components/groups/formatting-buttons/components/color-input';
 import { modToolbar } from '::sass-modules';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon } from '::root/components/shared-components/icon/icon';
 import { TransitionWrapper } from '::root/components/shared-components/transitions/transition-wrapper';
 import { animated } from 'react-spring';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac, Store } from '::store/store';
+import { Store } from '::store/store';
 import { HotKeyActionType } from '::types/graphql/generated';
 import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
@@ -52,41 +52,13 @@ const Buttons: React.FC<PropsFromRedux> = ({
           </ToolbarButton>
         );
       })}
-      <ToolbarButton
-        onClick={ac.dialogs.showAnchorDialog}
-        className={modToolbar.toolBar__iconStrictWidth}
-        disabled={disabled}
-      >
-        <Icon name={Icons.cherrytree.additionalIcons.anchor} />
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={ac.dialogs.showLinkDialog}
-        className={modToolbar.toolBar__iconStrictWidth}
-        disabled={disabled}
-      >
-        <Icon name={Icons.material.username} />
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={ac.dialogs.showCodeboxDialog}
-        className={modToolbar.toolBar__iconStrictWidth}
-        disabled={disabled}
-      >
-        <Icon name={Icons.material.mono} />
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={ac.dialogs.showTableDialog}
-        className={modToolbar.toolBar__iconStrictWidth}
-        disabled={disabled}
-      >
-        <Icon name={Icons.material.info} />
-      </ToolbarButton>
     </>
   );
 };
 const ConnectedButtons = connector(Buttons);
 const FormattingButtons: React.FC<Props & {
   style?: any;
-}> = ({ style }) => {
+}> = ({ style, children }) => {
   return style ? (
     <animated.div
       className={
@@ -100,6 +72,7 @@ const FormattingButtons: React.FC<Props & {
       }}
     >
       <ConnectedButtons />
+      {children}
     </animated.div>
   ) : (
     <div
@@ -108,6 +81,7 @@ const FormattingButtons: React.FC<Props & {
       }
     >
       <ConnectedButtons />
+      {children}
     </div>
   );
 };
