@@ -9,7 +9,10 @@ import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
-import { insertAnchor } from '::helpers/editing/anchor/insert-anchor';
+import {
+  createAnchorHtml,
+  insertObject,
+} from '::helpers/editing/anchor/insert-object';
 import {
   anchorAC,
   anchorR,
@@ -61,7 +64,10 @@ const AnchorDialogWithTransition: React.FC<Props> = ({
   ];
   const createAnchor = () => {
     try {
-      insertAnchor(selection, state.anchorId);
+      insertObject(selection, {
+        type: 'png',
+        outerHTML: createAnchorHtml(state.anchorId),
+      });
     } catch (e) {
       ac.dialogs.setAlert({
         title: 'Could not create the anchor',

@@ -11,6 +11,7 @@ const UserPopup = React.lazy(() =>
 );
 const Anchor = React.lazy(() => import('./dialogs/anchor/anchor'));
 const Link = React.lazy(() => import('./dialogs/link/link'));
+const Codebox = React.lazy(() => import('./dialogs/codebox/codebox'));
 const ImportDocuments = React.lazy(() =>
   import('./modals/import-documents/import-documents'),
 );
@@ -62,6 +63,7 @@ const components = [
   <Widgets key={'Widgets'} />,
   <Anchor key={'Anchor'} />,
   <Link key={'Link'} />,
+  <Codebox key={'Codebox'} />,
 ];
 const mapState = () => ({});
 const mapDispatch = {};

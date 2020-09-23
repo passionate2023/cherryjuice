@@ -89,6 +89,8 @@ const ac = {
   hideAnchorDialog: _(ap('hide-anchor-dialog')),
   showLinkDialog: _(ap('show-link-dialog')),
   hideLinkDialog: _(ap('hide-link-dialog')),
+  showCodeboxDialog: _(ap('show-codebox-dialog')),
+  hideCodeboxDialog: _(ap('hide-codebox-dialog')),
 };
 
 type NodeMetaDialogRole = 'edit' | 'create-child' | 'create-sibling';
@@ -108,6 +110,7 @@ type State = {
   snackbar?: Snackbar;
   showAnchorDialog: boolean;
   showLinkDialog: boolean;
+  showCodeboxDialog: boolean;
 };
 
 const initialState: State = {
@@ -124,6 +127,7 @@ const initialState: State = {
   snackbar: undefined,
   showAnchorDialog: false,
   showLinkDialog: false,
+  showCodeboxDialog: false,
 };
 
 const reducer = createReducer(initialState, _ => [
@@ -306,7 +310,6 @@ const reducer = createReducer(initialState, _ => [
   _(ac.hideAnchorDialog, state => ({
     ...state,
     showAnchorDialog: false,
-    selection: undefined,
   })),
   _(ac.showLinkDialog, state => ({
     ...state,
@@ -315,7 +318,14 @@ const reducer = createReducer(initialState, _ => [
   _(ac.hideLinkDialog, state => ({
     ...state,
     showLinkDialog: false,
-    selection: undefined,
+  })),
+  _(ac.showCodeboxDialog, state => ({
+    ...state,
+    showCodeboxDialog: true,
+  })),
+  _(ac.hideCodeboxDialog, state => ({
+    ...state,
+    showCodeboxDialog: false,
   })),
 ]);
 

@@ -4,13 +4,11 @@ const objectDelimiter = '<span>&#8203;</span>';
 
 type Props = {
   style: {
-    justification: string;
-    width: string;
     height: string;
   };
   other_attributes: {
+    fixedHeight?: boolean;
     width_raw: number;
-    offset: number;
     syntax: string;
     is_width_pix: number;
     do_highl_bra: number;
@@ -27,6 +25,7 @@ const Code = ({
     do_highl_bra,
     syntax,
     do_show_linenum,
+    fixedHeight = true,
   },
 }: Props) => {
   return `${objectDelimiter}<code
@@ -40,8 +39,8 @@ const Code = ({
       style="
         max-width: ${width_raw}${is_width_pix ? 'px' : '%'};
         width: ${width_raw}${is_width_pix ? 'px' : '%'};
-        height: ${height};
-        min-height: ${height};"
+        min-height: ${height};
+        ${fixedHeight ? `height: ${height};` : ''}"
     >
       ${text
         .split('\n')

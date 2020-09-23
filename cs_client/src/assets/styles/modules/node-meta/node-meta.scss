@@ -16,6 +16,7 @@
   align-items: center;
   box-sizing: border-box;
   flex: 1;
+  gap: 2px;
 }
 .node-meta__input__label {
   margin-right: 10px;
@@ -45,7 +46,7 @@
   width: 20px;
   padding: 2px;
   border: none;
-  background-color: var(--neutral-600)
+  background-color: var(--neutral-600);
 }
 .node-meta__input--disabled {
   filter: grayscale(1);

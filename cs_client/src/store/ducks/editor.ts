@@ -8,6 +8,7 @@ import {
   getSelection,
 } from '::helpers/editing/execK/steps/get-selection';
 import { LinkType } from '::root/components/app/components/menus/dialogs/link/reducer/reducer';
+import { CodeboxProperties } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
 
 const ap = createActionPrefixer('editor');
 
@@ -21,6 +22,10 @@ const ac = {
   setTreeWidth: _(ap('set-tree-width'), _ => (width: number) => _(width)),
   setAnchorId: _(ap('set-anchor-id'), _ => (id: string) => _(id)),
   setSelectedLink: _(ap('set-selected-link'), _ => (link: Link) => _(link)),
+  setSelectedCodebox: _(
+    ap('set-selected-codebox'),
+    _ => (object: CodeboxProperties & { target: HTMLElement }) => _(object),
+  ),
 };
 
 export type Link = { href: string; type: LinkType; target: HTMLElement };
@@ -33,6 +38,7 @@ type State = {
   treeWidth: number;
   anchorId?: string;
   selectedLink: Link;
+  selectedCodebox: CodeboxProperties;
   selection?: CustomRange;
 };
 
@@ -46,6 +52,7 @@ const initialState: State = {
   anchorId: undefined,
   selectedLink: undefined,
   selection: undefined,
+  selectedCodebox: undefined,
 };
 const reducer = createReducer(initialState, _ => [
   ...[
@@ -106,6 +113,16 @@ const reducer = createReducer(initialState, _ => [
     selection: getSelection({
       selectAdjacentWordIfNoneIsSelected: !state.selectedLink,
     }),
+  })),
+  _(dialogsActionCreators.showCodeboxDialog, state => ({
+    ...state,
+    selection: getSelection({
+      selectAdjacentWordIfNoneIsSelected: false,
+    }),
+  })),
+  _(ac.setSelectedCodebox, (state, { payload }) => ({
+    ...state,
+    selectedCodebox: payload,
   })),
 ]);
 
