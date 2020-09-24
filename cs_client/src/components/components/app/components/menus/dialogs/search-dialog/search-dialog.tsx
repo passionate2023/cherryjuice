@@ -34,7 +34,6 @@ const SearchDialog: React.FC<Props & PropsFromRedux> = ({
       onClose={ac.search.setSearchIdle}
       pinned={docked}
       pinnable={true}
-      measurable={true}
     >
       <ErrorBoundary>
         <SearchBody show={show} />

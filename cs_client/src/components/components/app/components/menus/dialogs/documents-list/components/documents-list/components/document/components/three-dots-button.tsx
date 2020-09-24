@@ -13,13 +13,8 @@ type Props = {
 const ThreeDotsButton: React.FC<Props> = ({ documentId, online }) => {
   const [showModal, setShowModal] = useState(false);
   useClickOutsideModal({
-    cb: () => setShowModal(false),
-    selectorsToIgnore: [
-      modSelectFile.selectFile__file__threeDotsButton,
-      modSelectFile.selectFile__file__threeDotsPopup,
-      modSelectFile.selectFile__file__threeDotsPopup__item,
-    ],
-    isVisible: showModal,
+    callback: () => setShowModal(false),
+    selector: '.' + modSelectFile.selectFile__file__threeDotsPopup,
   });
   return (
     <>

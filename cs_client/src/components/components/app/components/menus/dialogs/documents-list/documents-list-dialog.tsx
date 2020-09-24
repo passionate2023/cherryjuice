@@ -152,7 +152,6 @@ const DocumentsListDialog: React.FC<PropsFromRedux> = ({
       pinned={docked}
       pinnable={true}
       loading={fetchDocuments !== 'idle'}
-      measurable={true}
     >
       <ErrorBoundary>
         <DocumentList />

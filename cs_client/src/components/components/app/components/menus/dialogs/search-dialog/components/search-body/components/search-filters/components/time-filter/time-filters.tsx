@@ -35,9 +35,7 @@ const TimeFilters: React.FC<Props & PropsFromRedux> = ({
   ];
   return (
     <div className={modSearchFilter.searchFilter}>
-      <span className={modSearchFilter.searchFilter__label}>
-        node time filters
-      </span>
+      <span className={modSearchFilter.searchFilter__label}>time filter</span>
       <div className={modSearchFilter.searchFilter__list}>
         {timeFilters.map(props => (
           <Filter {...props} key={props.filterName} />

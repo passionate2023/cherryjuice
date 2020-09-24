@@ -129,32 +129,32 @@ module.exports = {
       template: 'src/assets/index.html',
     }),
     production &&
-    new FaviconsWebpackPlugin({
-      logo: './src/assets/icons/material/cherry-juice.svg',
-      mode: 'webapp',
-      favicons: {
-        appName: 'CherryJuice',
-        appDescription: 'Start building your knowledge base',
-        background: '#180101',
-        theme_color: '#180101',
-      },
-    }),
+      new FaviconsWebpackPlugin({
+        logo: './src/assets/icons/material/cherry-juice.svg',
+        mode: 'webapp',
+        favicons: {
+          appName: 'CherryJuice',
+          appDescription: 'Start building your knowledge base',
+          background: '#180101',
+          theme_color: '#180101',
+        },
+      }),
     production &&
-    new WorkboxPlugin.GenerateSW({
-      clientsClaim: true,
-      skipWaiting: true,
-      maximumFileSizeToCacheInBytes: production ? 1024 * 2000 : 1024 * 20000,
-      swDest: 'workbox-sw.js',
-      navigateFallback: 'index.html',
-    }),
+      new WorkboxPlugin.GenerateSW({
+        clientsClaim: true,
+        skipWaiting: true,
+        maximumFileSizeToCacheInBytes: production ? 1024 * 2000 : 1024 * 20000,
+        swDest: 'workbox-sw.js',
+        navigateFallback: 'index.html',
+      }),
     production &&
-    new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
+      new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
     production &&
-    new CompressionPlugin({
-      deleteOriginalAssets: true,
-      filename: '[path].br[query]',
-      algorithm: 'brotliCompress',
-      test: /\.(js|css|svg)$/,
-    }),
+      new CompressionPlugin({
+        // deleteOriginalAssets: true,
+        filename: '[path].br[query]',
+        algorithm: 'brotliCompress',
+        test: /\.(js|css|svg)$/,
+      }),
   ].filter(Boolean),
 };

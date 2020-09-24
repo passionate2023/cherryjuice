@@ -1,0 +1,28 @@
+@import '../../vars/vars';
+@import '../../mixins/breakpoints';
+.context-menu {
+  position: absolute;
+  box-sizing: border-box;
+  background-color: var(--neutral-750);
+  //padding: 5px 5px;
+  flex-direction: column;
+    top: calc(100% + 5px);
+    left: 0;
+  @include respond-to($mb-down) {
+   max-height: calc(var(--vh) * 0.6);
+    overflow: auto;
+    top: 55px;
+    left: 5px;
+  }
+  border-radius: 5px;
+  box-shadow: $box-shadow1;
+}
+
+.context-menu-wrapper {
+  z-index: $ZI-context-menu;
+  position: relative;
+  @include respond-to($mb-down) {
+    position: static;
+
+  }
+}

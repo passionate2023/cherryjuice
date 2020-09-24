@@ -6,6 +6,8 @@
 .settings__screen {
   margin-left: 5px;
   color: var(--neutral-000);
+  overflow: auto;
+  height: 100%;
 }
 
 .settings__group-container {

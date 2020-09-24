@@ -55,14 +55,18 @@ const CollapsableDialogBody: React.FC<Props & PropsFromRedux> = ({
     <>
       <animated.div
         className={joinClassNames([
-          modSearchDialog.searchDialog__searchResults,
+          modSearchDialog.searchDialog__collapsableSearchResults,
         ])}
         style={props}
         data-collapsed={height === 0 ? true : undefined}
       >
         {children}
       </animated.div>
-      <div className={modSearchDialog.searchDialog__searchResults__footer} />
+      <div
+        className={
+          modSearchDialog.searchDialog__collapsableSearchResults__footer
+        }
+      />
     </>
   );
 };

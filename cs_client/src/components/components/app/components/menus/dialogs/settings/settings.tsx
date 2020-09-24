@@ -79,7 +79,6 @@ const Settings: React.FC<Props & PropsFromRedux> = ({
       show={show && Boolean(userId)}
       pinned={docked}
       pinnable={true}
-      measurable={true}
     >
       <ErrorBoundary>
         <Drawer screens={screens} selectedScreenTitle={selectedScreen} />

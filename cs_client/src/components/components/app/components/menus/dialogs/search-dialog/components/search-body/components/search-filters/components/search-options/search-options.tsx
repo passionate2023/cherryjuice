@@ -30,7 +30,7 @@ const SearchOptions: React.FC<Props & PropsFromRedux> = ({ searchOptions }) => {
   return (
     <div className={modSearchFilter.searchFilter}>
       <span className={modSearchFilter.searchFilter__label}>
-        search options
+        search sensitivity
       </span>
       <div className={modSearchFilter.searchFilter__list}>
         {[{ optionName: 'caseSensitive' }, { optionName: 'fullWord' }].map(

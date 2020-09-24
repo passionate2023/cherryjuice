@@ -14,7 +14,7 @@ const SearchTarget: React.FC<Props> = () => {
 
   return (
     <div className={joinClassNames([modSearchFilter.searchFilter])}>
-      <span className={modSearchFilter.searchFilter__label}>search type</span>
+      <span className={modSearchFilter.searchFilter__label}>include</span>
       <div className={modSearchFilter.searchFilter__list}>
         {types.map(args => (
           <Target key={args.target} {...args} />

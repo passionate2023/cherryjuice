@@ -44,15 +44,20 @@ $small-dialog-width: 350px;
     }
   }
 }
+
+@mixin dialog-edge-size(){
+  padding: 15px;
+  box-sizing: border-box;
+  height: 65px;
+}
 .dialog__header {
-  max-height: 32px;
+  @include dialog-edge-size();
   background-color: var(--neutral-750);
   color: var(--neutral-000);
   border-bottom: $dialog-border;
   display: flex;
   align-items: center;
   font-family: 'Roboto Light', sans-serif;
-  padding: 15px;
   user-select: none;
   h2 {
     font-size: 1.2rem;
@@ -92,14 +97,14 @@ $small-dialog-width: 350px;
 
 .dialog__content {
   flex: 10;
-  overflow: auto;
+  height: calc(100% - 130px);
   background-color: var(--neutral-700);
 }
 .dialog__footer {
+  @include dialog-edge-size();
   display: flex;
   justify-content: space-between;
   border-top: $dialog-border;
-  padding: 10px;
   background-color: var(--neutral-750);
   align-items: center;
   z-index: 1;

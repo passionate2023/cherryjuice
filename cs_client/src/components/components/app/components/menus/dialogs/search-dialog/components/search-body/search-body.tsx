@@ -28,9 +28,9 @@ const SearchBody: React.FC<Props & PropsFromRedux> = ({
 }) => {
   return (
     <DialogBody>
-      <SearchHeader showFilters={showFilters} show={show} />
+      <SearchHeader show={show} />
       <SearchFilters show={showFilters} />
-      <SearchResults collapse={showFilters} />
+      <SearchResults />
     </DialogBody>
   );
 };

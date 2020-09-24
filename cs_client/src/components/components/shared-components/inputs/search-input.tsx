@@ -19,6 +19,7 @@ type Props = {
   performSearch?: () => void;
   disabled?: boolean;
   lazyAutoFocus?: number;
+  autoCollapse?: boolean;
 };
 
 const SearchInput: React.FC<Props> = ({
@@ -34,6 +35,7 @@ const SearchInput: React.FC<Props> = ({
   placeHolder,
   disabled,
   lazyAutoFocus,
+  autoCollapse,
 }) => {
   const onChangeM = useCallback(e => {
     onChange(e.target.value);
@@ -50,40 +52,49 @@ const SearchInput: React.FC<Props> = ({
     >
       {!disabled && (
         <div
-          className={`${modSearch.search__field} ${fieldWrapperClassName ||
-            ''}`}
+          className={joinClassNames([
+            modSearch.search__field,
+            fieldWrapperClassName,
+            [modSearch.search__fieldContainerCollapsed, autoCollapse],
+          ])}
           ref={inputRef}
         >
           <input
-            className={modSearch.search__field__input}
+            className={joinClassNames([
+              modSearch.search__field__input,
+              [modSearch.search__fieldCollapsed, autoCollapse],
+            ])}
             type="text"
             placeholder={placeHolder}
             value={value}
             onChange={onChangeM}
             ref={input}
           />
-          <ButtonSquare
-            className={joinClassNames([
-              modSearch.search__searchButton,
-              searchButtonClassName,
-              modSearch.search__field__clearTextButton,
-              [modSearch.search__clearTextButtonVisible, value.length],
-            ])}
-            onClick={onClear}
-            icon={<Icon name={Icons.material.clear} />}
-          />
+          <div className={modSearch.search__field__buttons}>
+            <ButtonSquare
+              className={joinClassNames([
+                modSearch.search__searchButton,
+                modSearch.search__field__button,
+                [modSearch.search__field__buttonVisible, value.length],
+                [modSearch.search__fieldCollapsed, autoCollapse],
+                searchButtonClassName,
+              ])}
+              onClick={onClear}
+              icon={<Icon name={Icons.material.clear} />}
+            />
+            {performSearch && (
+              <ButtonSquare
+                className={joinClassNames([
+                  modSearch.search__searchButton,
+                  searchButtonClassName,
+                ])}
+                disabled={searchImpossible || disabled}
+                onClick={performSearch}
+                icon={<Icon name={Icons.material.search} />}
+              />
+            )}
+          </div>
         </div>
-      )}
-      {performSearch && (
-        <ButtonSquare
-          className={joinClassNames([
-            modSearch.search__searchButton,
-            searchButtonClassName,
-          ])}
-          disabled={searchImpossible || disabled}
-          onClick={performSearch}
-          icon={<Icon name={Icons.material.search} />}
-        />
       )}
     </div>
   );

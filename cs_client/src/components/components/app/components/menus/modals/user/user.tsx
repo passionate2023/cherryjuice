@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { modToolbar, modUserPopup } from '::sass-modules';
+import { modUserPopup } from '::sass-modules';
 import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
 import { animated } from 'react-spring';
@@ -10,17 +10,14 @@ import { User as TUser } from '::types/graphql/generated';
 import { UserInfo } from '::root/components/app/components/menus/modals/user/components/user-info';
 import { testIds } from '::cypress/support/helpers/test-ids';
 type UserProps = {
-  onClose: Function;
+  onClose: () => void;
   user: TUser;
 };
 
 const User: React.FC<UserProps & { style }> = ({ onClose, style, user }) => {
   useClickOutsideModal({
-    selectorsToIgnore: [
-      '.' + modUserPopup.user__card,
-      '.' + modToolbar.toolBar__groupNavBar,
-    ],
-    cb: onClose,
+    selector: '.' + modUserPopup.user__card,
+    callback: onClose,
   });
   const signOut = useCallback(() => {
     ac.root.resetState();

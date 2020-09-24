@@ -40,7 +40,9 @@ import modWidgets from './widgets/widgets.scss';
 import modChangesHistory from './widgets/changes-history.scss';
 import modTreeToolBar from './tree/tree-tool-bar.scss';
 import modSettings from '::sass-modules/settings/settings.scss';
+import modContextMenu from '::sass-modules/shared-components/context-menu.scss';
 export {
+  modContextMenu,
   modChangesHistory,
   modSettings,
   modTreeToolBar,

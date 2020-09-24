@@ -39,7 +39,7 @@ const Search: React.FC<Props & PropsFromRedux> = ({
   return (
     <SearchInput
       containerClassName={className}
-      fieldWrapperClassName={navBar ? modSearch.search__fieldNavBar : ''}
+      autoCollapse={navBar}
       inputRef={ref}
       placeHolder={'search'}
       value={query}

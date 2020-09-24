@@ -24,12 +24,15 @@
   position: relative;
   display: flex;
   opacity: 1;
-  border-left: 1px solid var(--neutral-240-500);
-  border-right: 1px solid var(--neutral-240-500);
+  border: 1px solid var(--neutral-240-500);
   transition: opacity 200ms linear;
 }
-
-.search__field--nav-bar {
+.search__field-container--collapsed {
+  @include respond-to($wd-down) {
+    border: none;
+  }
+}
+.search__field--collapsed {
   @include respond-to($wd-down) {
     display: none;
   }
@@ -43,16 +46,23 @@
   border: 0;
   padding: 0 10px;
 }
-
-.search__field__clear-text-button {
+.search__field__buttons {
   position: absolute;
   right: 0;
   top: 0;
+  display: flex;
+  height: 100%;
+  button {
+    background-color: transparent;
+  }
+}
+.search__field__button {
   opacity: 0;
   transition: opacity 200ms linear;
   cursor: text;
 }
-.search__clear-text-button--visible {
+
+.search__field__button--visible {
   opacity: 0.3;
   cursor: pointer;
   &:hover {

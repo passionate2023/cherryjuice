@@ -5,17 +5,14 @@ import { DocumentGroup } from './components/document-group';
 import { CachedDocument } from '::store/ducks/cache/document-cache';
 import { SearchInput } from '::root/components/shared-components/inputs/search-input';
 import { ac, Store } from '::store/store';
-
 import { connect, ConnectedProps } from 'react-redux';
 import { getDocumentsList } from '::store/selectors/cache/document/document';
 import { SearchHeaderContainer } from '::root/components/shared-components/dialog/animations/search-header-container';
 import { DialogBody } from '../../../search-dialog/components/search-body/search-body';
-import { AnimatedDialogHeader } from '::root/components/shared-components/dialog/animations/animated-dialog-filters';
 import { SortOptions } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-sort/sort-options';
 import { SortDirection, SortNodesBy } from '::types/graphql/generated';
-import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
-import { CollapsableDialogBody } from '::root/components/shared-components/dialog/animations/collapsable-dialog-body';
+import { Icons } from '::root/components/shared-components/icon/icon';
+import { SearchSetting } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/search-filters';
 
 const options: { optionName: SortNodesBy }[] = [
   { optionName: SortNodesBy.UpdatedAt },
@@ -54,7 +51,6 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
   query,
   isOnMd,
   currentSortOptions,
-  pinned,
   showFilters,
 }) => {
   const filesPerFolders: [string, CachedDocument[]][] = useMemo(() => {
@@ -80,7 +76,7 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
     <DialogBody>
       <SearchHeaderContainer>
         <SearchInput
-          containerClassName={modSearchDialog.searchDialog__header__searchField}
+          containerClassName={modSearchDialog.searchDialog__header__field}
           placeHolder={'find documents'}
           value={query}
           onChange={ac.documentsList.setQuery}
@@ -88,29 +84,30 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
           lazyAutoFocus={!isOnMd && show ? 1200 : 0}
           searchImpossible={!documents.length}
         />
-        <ButtonCircle
-          className={modSearchDialog.searchDialog__header__toggleFilters}
-          onClick={ac.documentsList.toggleFilters}
-          icon={<Icon name={Icons.material.tune} loadAsInlineSVG={'force'} />}
-          active={showFilters}
-        />
       </SearchHeaderContainer>
-      <AnimatedDialogHeader show={showFilters} pinned={pinned}>
-        <SortOptions
-          options={options}
-          setSortBy={ac.documentsList.setSortBy}
-          toggleSortDirection={ac.documentsList.toggleSortDirection}
-          currentSortOptions={currentSortOptions}
-          label={'sort documents by'}
-        />
-      </AnimatedDialogHeader>
-      <CollapsableDialogBody collapse={showFilters} offset={15}>
+      <SearchHeaderContainer>
+        <SearchSetting
+          iconName={Icons.material.sort}
+          hide={ac.documentsList.toggleFilters}
+          show={ac.documentsList.toggleFilters}
+          shown={showFilters}
+        >
+          <SortOptions
+            options={options}
+            setSortBy={ac.documentsList.setSortBy}
+            toggleSortDirection={ac.documentsList.toggleSortDirection}
+            currentSortOptions={currentSortOptions}
+            label={'sort by'}
+          />
+        </SearchSetting>
+      </SearchHeaderContainer>
+      <div className={modSearchDialog.searchDialog__searchResults}>
         <div className={modSearchDialog.searchDialog__searchResults__list}>
           {filesPerFolders.map(([folder, documents]) => (
             <DocumentGroup key={folder} folder={folder} documents={documents} />
           ))}
         </div>
-      </CollapsableDialogBody>
+      </div>
     </DialogBody>
   );
 };
