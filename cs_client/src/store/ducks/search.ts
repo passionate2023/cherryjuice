@@ -43,8 +43,6 @@ const ac = {
       _ => (options: SearchOptions) => _(options),
     ),
     setSearchType: _(ap('set-search-type'), _ => (args: SearchType) => _(args)),
-  },
-  ...{
     setUpdatedAtTimeFilter: _(
       ap('set-updated-at-time-filter'),
       _ => (filter: TimeFilter) => _(filter),
@@ -53,10 +51,8 @@ const ac = {
       ap('set-created-at-time-filter'),
       _ => (filter: TimeFilter) => _(filter),
     ),
-  },
-  ...{
-    setSortBy: _(ap('set-sort-by'), _ => (options: SortNodesBy) => _(options)),
     toggleSortDirection: _(ap('toggle-sort-direction')),
+    setSortBy: _(ap('set-sort-by'), _ => (options: SortNodesBy) => _(options)),
   },
   ...{
     toggleFilters: _(ap('toggle-filters')),

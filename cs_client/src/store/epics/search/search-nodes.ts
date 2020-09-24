@@ -13,7 +13,17 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 const searchStates: SearchState[] = ['stand-by', 'idle'];
 const searchNodesEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
-    ofType([ac_.search.setSearchQueued]),
+    ofType([
+      ac_.search.setSearchQueued,
+      ac_.search.setSearchScope,
+      ac_.search.setSearchOptions,
+      ac_.search.setSearchTarget,
+      ac_.search.setSearchType,
+      ac_.search.setSortBy,
+      ac_.search.toggleSortDirection,
+      ac_.search.setCreatedAtTimeFilter,
+      ac_.search.setUpdatedAtTimeFilter,
+    ]),
     filter(() => searchStates.includes(store.getState().search.searchState)),
     switchMap(() => {
       if (!store.getState().search.query)
