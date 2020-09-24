@@ -15,6 +15,7 @@ type AHtmlObject = AHtmlNode & {
   other_attributes: Record<string, string>;
   linkAttributes?: LinkAttributes;
   table?: { td: string[][]; th: string[] };
+  style: { height: string };
 };
 
 const translateObject = ({
