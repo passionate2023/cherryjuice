@@ -40,13 +40,13 @@ const Result: React.FC<Props> = ({ result, searchContext }) => {
           )}
         </div>
       </div>
-      <span className={modSearchResult.searchResult__headline}>
-        {headline?.ahtmlHeadline ? (
+      {headline?.ahtmlHeadline ? (
+        <span className={modSearchResult.searchResult__headline}>
           <HighlightedHeadline headline={headline.ahtmlHeadline} />
-        ) : (
-          <></>
-        )}
-      </span>
+        </span>
+      ) : (
+        <></>
+      )}
       <span
         className={joinClassNames([
           modSearchResult.searchResult__timestamps,

@@ -17,7 +17,7 @@
   overflow-x: auto;
   overflow-y: hidden;
   // style
-  background-color: var(--neutral-750);
+  background-color: var(--background);
   user-select: none;
 }
 .tool-bar__group {
@@ -71,7 +71,7 @@
   @include respond-to($md-down) {
     box-shadow: $box-shadow3;
     opacity: 0.95;
-    background-color: var(--neutral-750);
+    background-color: var(--background);
   }
 }
 .tool-bar__group--main-bar {
@@ -84,12 +84,12 @@
   }
   // style
   @include respond-to($md-down) {
-    background-color: var(--neutral-750);
+    background-color: var(--background);
   }
 }
 .tool-bar__icon {
   svg {
-    fill: var(--neutral-130);
+    fill: var(--on-surface);
   }
   display: flex;
   align-items: center;
@@ -106,7 +106,7 @@
 
   @include respond-to($md-up) {
     &:hover:not([disabled]) {
-      background-color: var(--neutral-450);
+      background-color: var(--surface-010);
     }
   }
   &[disabled] {
@@ -124,13 +124,13 @@
 .tool-bar__icon--active {
   @include respond-to($md-down) {
     &:not([disabled]) {
-      background-color: var(--neutral-450);
+      background-color: var(--surface-010);
     }
   }
 }
 
 .tool-bar__letter-icon {
-  color: var(--neutral-180);
+  color: var(--on-surface);
   font-family: sans-serif;
   font-weight: 700;
   font-size: 18px;
@@ -141,7 +141,7 @@
   margin-left: -1px;
   margin-right: -1px;
   width: 1px;
-  background-color: var(--neutral-180);
+  background-color: var(--on-surface);
   height: 45%;
   opacity: 0.6;
 }

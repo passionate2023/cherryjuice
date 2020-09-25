@@ -31,7 +31,7 @@
   flex: 1;
   display: flex;
   align-items: center;
-  background-color: var(--neutral-600);
+  background-color: var(--surface-010);
   gap: 1px;
 }
 .guests__add-guest__input {
@@ -43,7 +43,7 @@
   }
 }
 .guests__add-guest__add-button {
-  background-color: var(--neutral-600);
+  background-color: var(--surface-010);
   &:disabled {
     filter: brightness(0.95);
   }
@@ -64,8 +64,8 @@
 }
 .guests__guest {
   border-radius: 5px;
-  color: var(--primary-142);
-  border: 1px solid var(--primary-142);
+  color: var(--primary);
+  border: 1px solid var(--primary);
   box-shadow: $box-shadow2;
   padding: 5px;
   display: flex;

@@ -9,9 +9,9 @@
 .selectFile__file {
   cursor: pointer;
   display: block;
-  background-color: var(--neutral-700);
+  background-color: var(--surface);
   position: relative;
-  color: var(--neutral-000);
+  color: var(--on-background);
   margin-top: 5px;
   max-width: 100%;
 }
@@ -19,11 +19,11 @@
 .selectFile__file__body {
   padding: 10px 20px;
   &:active {
-    background-color: var(--primary-142-200);
+    background-color: var(--primary-2);
   }
   transition: background-color 0.3s ease;
   svg {
-    fill: var(--neutral-180);
+    fill: var(--on-surface);
   }
 }
 
@@ -49,15 +49,15 @@
   top: 16px;
   display: flex;
   flex-direction: column;
-  background-color: var(--neutral-600);
-  color: var(--neutral-000);
+  background-color: var(--surface-010);
+  color: var(--on-background);
   box-shadow: $box-shadow1;
 }
 .selectFile__file__three-dots-popup__item {
   padding: 10px 10px;
   border-bottom: 1px solid #a7a7a755;
   &:hover:not([data-disabled]) {
-    background-color: var(--neutral-500);
+    background-color: var(--surface-010);
   }
   filter: unset;
 }
@@ -93,20 +93,20 @@
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  color: var(--neutral-180);
+  color: var(--on-surface);
   padding: 5px;
 }
 .selectFile__file--selected-candidate {
-  background-color: var(--primary-142-200);
+  background-color: var(--primary-2);
   span {
-    color: var(--neutral-000);
+    color: var(--on-background);
   }
 }
 .selectFile__file--selected {
-  background-color: var(--primary-142);
-  color: var(--neutral-750);
+  background-color: var(--primary);
+  color: var(--background);
   span {
-    color: var(--neutral-750);
+    color: var(--background);
   }
   svg {
     fill: white;
@@ -115,7 +115,7 @@
 .selectFile__info-bar {
   margin-top: 5px;
   max-height: 25px;
-  color: var(--neutral-000);
+  color: var(--on-background);
   flex: 1;
   text-align: left;
   font-size: 12px;
@@ -134,7 +134,7 @@
   margin-bottom: 5px;
   box-shadow: $box-shadow2;
   padding: 3px;
-  background-color: var(--neutral-750);
+  background-color: var(--background);
   width: 100%;
   box-sizing: border-box;
 }
@@ -149,7 +149,7 @@
   display: block;
   overflow: auto;
   margin-bottom: -5px;
-  color: var(--neutral-000);
+  color: var(--on-background);
   font-family: monospace;
   opacity: 0.8;
 }

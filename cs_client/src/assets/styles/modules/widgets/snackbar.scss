@@ -13,15 +13,15 @@
   padding: 0.5rem 0.8rem;
 
   // style
-  background-color: var(--neutral-750);
-  color: var(--neutral-000);
+  background-color: var(--background);
+  color: var(--on-background);
   border-radius: 3px;
   box-shadow: $box-shadow1;
 }
 
 .snackbar__message {
   font-size: 0.95rem;
-  color: var(--neutral-000);
+  color: var(--on-background);
   padding-bottom: 2.5px;
   display: block;
 }

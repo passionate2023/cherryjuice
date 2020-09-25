@@ -8,11 +8,11 @@ $tool-bar-height-md: 30px;
 $info-bar-height-md: 18px;
 $max-node-width: 400px;
 // style
-$dialog-border: 0.5px var(--primary-142-200) solid;
-$box-shadow1: 0 3px 1px -2px var(--neutral-000-200), 0 2px 2px 0 var(--neutral-000-140),
-  0 1px 5px 0 var(--neutral-000-120);
-$box-shadow2: 0 1px 3px var(--neutral-000-080), 0 1px 2px var(--neutral-000-140);
-$box-shadow3: 0 1px 3px var(--neutral-000-040), 0 1px 2px var(--neutral-000-070);
+$dialog-border: 0.5px var(--primary-2) solid;
+$box-shadow1: 0 3px 1px -2px var(--on-background-20), 0 2px 2px 0 var(--on-background-14),
+  0 1px 5px 0 var(--on-background-12);
+$box-shadow2: 0 1px 3px var(--on-background-08), 0 1px 2px var(--on-background-14);
+$box-shadow3: 0 1px 3px var(--on-background-04), 0 1px 2px var(--on-background-07);
 // transitions
 $bg-transition-1: background-color 0.3s ease;
 // z-indices

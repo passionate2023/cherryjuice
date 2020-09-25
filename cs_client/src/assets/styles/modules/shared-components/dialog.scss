@@ -4,7 +4,7 @@
   z-index: $ZI-dialog;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   overflow: hidden;
-  background-color: var(--neutral-750);
+  background-color: var(--background);
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -52,8 +52,8 @@ $small-dialog-width: 350px;
 }
 .dialog__header {
   @include dialog-edge-size();
-  background-color: var(--neutral-750);
-  color: var(--neutral-000);
+  background-color: var(--background);
+  color: var(--on-background);
   border-bottom: $dialog-border;
   display: flex;
   align-items: center;
@@ -98,14 +98,14 @@ $small-dialog-width: 350px;
 .dialog__content {
   flex: 10;
   height: calc(100% - 130px);
-  background-color: var(--neutral-700);
+  background-color: var(--surface);
 }
 .dialog__footer {
   @include dialog-edge-size();
   display: flex;
   justify-content: space-between;
   border-top: $dialog-border;
-  background-color: var(--neutral-750);
+  background-color: var(--background);
   align-items: center;
   z-index: 1;
 }

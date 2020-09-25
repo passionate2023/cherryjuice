@@ -19,7 +19,6 @@ const HeaderButtons: React.FC<HeaderButtonsProps> = ({
     <span className={modDocumentOperations.collapsableList__header__action}>
       {!collapsed && additionalHeaderButtons}
       <ButtonCircle
-        dark={true}
         onClick={toggleCollapsed}
         iconName={
           collapsed ? Icons.material['arrow-up'] : Icons.material['arrow-down']

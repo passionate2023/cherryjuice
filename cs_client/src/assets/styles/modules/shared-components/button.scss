@@ -21,19 +21,19 @@
 .button {
   user-select: none;
   border: none;
-  background-color: var(--neutral-750);
-  color: var(--primary-040);
+  background-color: var(--background);
+  color: var(--primary-020);
   transition: background-color 0.3s ease, filter 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 1.25px;
   cursor: pointer;
   &:hover:not([disabled]) {
-    background-color: var(--primary-610);
-    color: var(--primary-040);
+    background-color: var(--primary-100);
+    color: var(--primary-020);
   }
   &:active:not([disabled]) {
-    background-color: var(--primary-430);
-    color: var(--primary-040);
+    background-color: var(--primary-090);
+    color: var(--primary-020);
     box-shadow: $box-shadow1;
   }
   &:disabled {
@@ -67,18 +67,18 @@
 }
 
 .button--danger {
-  @include button-variant(var(--neutral-750), var(--danger), 1, 0.1);
+  @include button-variant(var(--background), var(--danger), 1, 0.1);
 }
 .button--dark {
-  @include button-variant(var(--neutral-750), var(--neutral-055), 1.6, 0.5);
+  @include button-variant(var(--background), var(--on-surface-010), 1.6, 0.5);
   svg {
     fill: white;
   }
 }
 
 .button--pressed {
-  background-color: var(--primary-142) !important;
-  color: var(--neutral-750) !important;
+  background-color: var(--primary) !important;
+  color: var(--background) !important;
   box-shadow: $box-shadow1;
   svg {
     fill: white;

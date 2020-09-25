@@ -7,7 +7,7 @@
   width: calc(100% - 40px);
   max-height: 250px;
   padding: 10px 20px;
-  background-color: var(--neutral-750);
+  background-color: var(--background);
   &:not(:last-child) {
     margin-bottom: 5px;
   }
@@ -28,7 +28,7 @@
 
 .search-result__location__document-name {
   font-family: monospace;
-  color: var(--neutral-180);
+  color: var(--on-surface);
   font-size: 12px;
 }
 .search-result__location__node-name {

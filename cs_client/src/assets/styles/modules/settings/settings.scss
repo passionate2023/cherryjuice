@@ -5,14 +5,14 @@
 
 .settings__screen {
   margin-left: 5px;
-  color: var(--neutral-000);
+  color: var(--on-background);
   overflow: auto;
   height: 100%;
 }
 
 .settings__group-container {
   display: flex;
-  color: var(--neutral-000);
+  color: var(--on-background);
   flex-direction: column;
   width: 100%;
   gap: 5px;

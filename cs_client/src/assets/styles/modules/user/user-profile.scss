@@ -4,7 +4,7 @@
   display: flex;
   padding-top: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--primary-142-100);
+  border-top: 1px solid var(--primary-1);
   flex-wrap: wrap;
 }
 .user-profile__group__name {
@@ -24,7 +24,7 @@
   align-items: flex-start;
 }
 .userProfile__group__elements__button{
-  background-color: var(--neutral-700);
+  background-color: var(--surface);
 }
 .user-profile__personal-information__label {
   display: flex;
@@ -39,7 +39,7 @@
   display: flex;
   flex-direction: column;
   font-size: 0.9rem;
-  background-color: var(--neutral-180);
+  background-color: var(--on-surface);
   border-radius: 5px;
 }
 .userProfile__change-email__status {

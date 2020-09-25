@@ -4,7 +4,7 @@
 .hot-key {
   min-height: 40px;
   flex-wrap: wrap;
-  background-color: var(--neutral-750);
+  background-color: var(--background);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -44,7 +44,7 @@
   @include respond-to('md') {
     margin-bottom: 0;
   }
-  color: var(--neutral-180);
+  color: var(--on-surface);
   width: 200px;
 }
 

@@ -18,7 +18,7 @@
   top: 25px;
   left: -130px;
   padding: 5px 10px;
-  background-color: var(--neutral-600);
+  background-color: var(--surface-010);
   box-shadow: $box-shadow1;
   z-index: 1;
 }
@@ -27,14 +27,14 @@
   height: 20px;
   padding: 3px;
   cursor: pointer;
-  background-color: var(--neutral-600);
+  background-color: var(--surface-010);
   margin-left: auto;
   &:hover {
-    background-color: var(--neutral-450);
+    background-color: var(--surface-010);
   }
 }
 
 .icon-picker__icon--selected {
-  background-color: var(--neutral-450);
+  background-color: var(--surface-010);
   transition: background-color 200ms linear;
 }

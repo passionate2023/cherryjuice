@@ -48,7 +48,6 @@ const ChangesHistory: React.FC<Props & PropsFromRedux> = ({ nof }) => {
           nof={nof}
           undo={ac.documentCache.undoDocumentAction}
           redo={ac.documentCache.redoDocumentAction}
-          dark={true}
         />
       }
     />

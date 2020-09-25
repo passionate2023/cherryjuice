@@ -29,18 +29,18 @@
   left: 0;
   height: 25px;
   width: 25px;
-  background-color: var(--neutral-500);
+  background-color: var(--surface-010);
 }
 
 
 /* On mouse-over, add a grey background color */
 .container:hover input ~ .checkmark {
-  background-color: var(--neutral-450);
+  background-color: var(--surface-010);
 }
 
 /* When the checkbox is checked, add a blue background */
 .container input:checked ~ .checkmark {
-  background-color: var(--primary-060);
+  background-color: var(--primary-030);
   filter: brightness(1.5);
 }
 

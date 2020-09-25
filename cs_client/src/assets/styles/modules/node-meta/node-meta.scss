@@ -20,14 +20,14 @@
 }
 .node-meta__input__label {
   margin-right: 10px;
-  color: var(--neutral-000);
+  color: var(--on-background);
   width: 100px;
 }
 .node-meta__input__select {
   padding: 5px 20px;
   height: 40px;
   border: none;
-  background-color: var(--neutral-600);
+  background-color: var(--surface-010);
   flex: 1;
   text-align: center;
 }
@@ -46,7 +46,7 @@
   width: 20px;
   padding: 2px;
   border: none;
-  background-color: var(--neutral-600);
+  background-color: var(--surface-010);
   margin-left: 12px;
 }
 .node-meta__input--disabled {

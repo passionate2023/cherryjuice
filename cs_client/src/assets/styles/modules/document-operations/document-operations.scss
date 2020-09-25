@@ -21,7 +21,7 @@
 }
 .collapsable-list__header {
   transition: opacity 200ms linear;
-  background-color: var(--neutral-030);
+  background-color: var(--background);
   height: 40px;
   display: flex;
   align-items: center;
@@ -31,6 +31,7 @@
   border-top-right-radius: 3px;
 }
 .collapsable-list__header__text {
+  color: var(--on-background);
   margin-left: 5px;
   white-space: nowrap;
   overflow: hidden;
@@ -55,7 +56,7 @@
   width: 100%;
   overflow-y: auto;
   max-height: 123px;
-  background-color: var(--neutral-650);
+  background-color: var(--background);
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
 }
@@ -68,13 +69,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color:var(--neutral-650);
-  color: var(--neutral-000);
+  background-color:var(--surface-010);
+  color: var(--on-background);
   border-radius: 3px;
 }
 
 .collapsable-list__item__name {
-  color: var(--neutral-000);
+  color: var(--on-surface);
   display: block;
   white-space: nowrap;
   overflow: hidden;
@@ -86,17 +87,17 @@
   margin-left: 5px;
 }
 .collapsable-list__item__description {
-  color: var(--neutral-180);
+  color: var(--on-surface);
   margin-left: auto;
   font-size: 13.5px;
 }
 .collapsable-list__item--active {
-  background-color: var(--primary-142);
+  background-color: var(--primary);
   filter: grayscale(0.4);
   .collapsable-list__item__name {
-    color: var(--neutral-750);
+    color: var(--on-primary);
   }
   .collapsable-list__item__description {
-    color: var(--neutral-750);
+    color: var(--on-primary);
   }
 }

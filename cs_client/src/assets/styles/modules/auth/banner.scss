@@ -24,7 +24,7 @@
   z-index: 1;
 
   @include respond-to($mb-down) {
-    background-color: var(--primary-430-100);
+    background-color: var(--primary-090-1);
 
     width: 100%;
   }
@@ -32,14 +32,14 @@
   max-width: 400px;
   opacity: 0;
   border-radius: 10px;
-  background-color: var(--neutral-750-200);
+  background-color: var(--background-2);
   transition: opacity 200ms linear;
 }
 .banner__text {
   text-align: center;
-  color:  var(--neutral-750);
+  color:  var(--background);
   @include respond-to($mb-down) {
-    color: var(--primary-142);
+    color: var(--primary);
   }
 }
 

@@ -19,7 +19,7 @@ $navigation-width: 200px;
   padding-left: 10px;
   padding-bottom: 10px;
   position: absolute;
-  background-color: var(--neutral-700);
+  background-color: var(--surface);
   user-select: none;
   left: -500px;
   min-height: calc(100% - 10px - 8px);
@@ -50,14 +50,14 @@ $navigation-width: 200px;
 .drawer__navigation__category__separator {
   flex: 1;
   height: 1px;
-  background-color: var(--neutral-180-050);
+  background-color: var(--on-surface-1);
   margin-left: 10px;
 }
 .drawer__navigation__category {
   display: flex;
   align-items: center;
   padding: 5px;
-  color: var(--neutral-290);
+  color: var(--on-surface);
   font-family: 'Roboto Light', sans-serif;
   font-size: 0.8rem;
   transition: background-color 0.3s ease;
@@ -66,25 +66,25 @@ $navigation-width: 200px;
   padding: 15px 10px;
   margin-bottom: 5px;
 
-  color: var(--neutral-000);
+  color: var(--on-background);
   font-family: 'Roboto Light', sans-serif;
   transition: background-color 0.3s ease;
   cursor: pointer;
   &:hover {
-    background-color: var(--primary-610);
+    background-color: var(--primary-100);
   }
-  background-color: var(--primary-610-500);
+  background-color: var(--primary-100-5);
 }
 .drawer__navigation__element--active {
-  background-color: var(--primary-142-200);
-  color: var(--primary-142);
+  background-color: var(--primary-2);
+  color: var(--primary);
 }
 .drawer__navigation__scrim {
   @include respond-to('md') {
     display: none;
   }
   opacity: 0;
-  background-color: var(--neutral-750);
+  background-color: var(--background);
   position: absolute;
   z-index: $ZI-drawer-navigation-scrim;
   height: 100%;
