@@ -6,13 +6,17 @@ import { joinClassNames } from '::helpers/dom/join-class-names';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 
-type Props = {
+export type NodeProps = {
   name: string;
   node_id: number;
-  documentId: string;
+  hasChanges?: boolean;
   isSelected?: boolean;
-  isOnMd?: boolean;
 };
+
+type Props = {
+  documentId: string;
+  isOnMd?: boolean;
+} & NodeProps;
 
 const Tab: React.FC<Props> = ({
   name,
@@ -20,6 +24,7 @@ const Tab: React.FC<Props> = ({
   documentId,
   isSelected,
   isOnMd,
+  hasChanges,
 }) => {
   const selectNode = useCallback(() => {
     ac.node.select({ documentId, node_id });
@@ -48,7 +53,14 @@ const Tab: React.FC<Props> = ({
       onClick={selectNode}
       ref={tab}
     >
-      <span className={modTabs.tab__name}>{name}</span>
+      <span
+        className={joinClassNames([
+          modTabs.tab__name,
+          [modTabs.tabHasChanges, hasChanges],
+        ])}
+      >
+        {name}
+      </span>
       <ButtonCircle
         className={modTabs.tab__button}
         icon={<Icon name={Icons.material.close} size={12} />}

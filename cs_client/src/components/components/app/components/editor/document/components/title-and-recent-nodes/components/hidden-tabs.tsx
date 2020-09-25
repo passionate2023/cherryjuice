@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { modTabs } from '::sass-modules';
-import { Tab } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/components/tab';
+import {
+  NodeProps,
+  Tab,
+} from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/components/tab';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
-import { QFullNode } from '::store/ducks/cache/document-cache';
 
 type Props = {
-  tabs: Pick<QFullNode, 'name' | 'node_id'>[];
+  nodes: NodeProps[];
   documentId: string;
   shown: boolean;
   showContextMenu: () => void;
@@ -15,7 +17,7 @@ type Props = {
 };
 
 const HiddenTabs: React.FC<Props> = ({
-  tabs,
+  nodes,
   documentId,
   shown,
   showContextMenu,
@@ -28,7 +30,7 @@ const HiddenTabs: React.FC<Props> = ({
       hide={hideContextMenu}
       contextMenu={
         <div className={modTabs.tabsHidden}>
-          {tabs.map(({ node_id, name }) => (
+          {nodes.map(({ node_id, name }) => (
             <Tab
               key={node_id}
               documentId={documentId}

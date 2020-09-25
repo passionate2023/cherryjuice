@@ -66,10 +66,6 @@
   }
 }
 
-.tab--selected {
-  border-bottom: 4px solid rgb(0, 139, 139, 0.8);
-}
-
 $button-width: 18px;
 .tab__button {
   min-width: $button-width;
@@ -85,3 +81,10 @@ $button-width: 18px;
   font-size: 12px;
   color: var(--neutral-130);
 }
+.tab--selected {
+  border-bottom: 4px solid rgb(0, 139, 139, 0.8);
+}
+.tab--has-changes {
+  color: rgb(0, 139, 139, 1)
+}
+

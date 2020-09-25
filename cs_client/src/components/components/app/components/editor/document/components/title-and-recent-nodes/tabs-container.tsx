@@ -21,10 +21,11 @@ const useForceUpdate = () => {
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
   return {
+    localState: document.localState,
+    nodes: document?.nodes,
     isOnMd: state.root.isOnMd,
     vw: state.cssVariables.vw,
     treeWidth: state.editor.treeWidth,
-    nodes: document?.nodes,
     selectedNode_id: document?.persistedState?.selectedNode_id,
     recentNodes: document?.persistedState?.recentNodes,
     documentId: document?.id,
@@ -42,6 +43,7 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
   recentNodes,
   documentId,
   isOnMd,
+  localState,
 }) => {
   useForceUpdate();
   const [showHiddenTabs, setShowHiddenTabs] = useState(false);
@@ -87,12 +89,16 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
       previous.current = [visible, hidden];
     }
   }
+
   return node ? (
     <div className={modTabs.tabsContainer}>
       <Tabs
         documentId={documentId}
-        nodes={nodes}
-        recentNodes={visible}
+        nodes={visible.map(node_id => ({
+          node_id,
+          name: nodes[node_id].name,
+          hasChanges: !!localState.editedNodes.edited[node_id],
+        }))}
         selectedNode_id={selectedNode_id}
         ref={tabsR}
         isOnMd={isOnMd}
@@ -100,7 +106,10 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
       {!!hidden.length && (
         <HiddenTabs
           documentId={documentId}
-          tabs={hidden.map(node_id => ({ node_id, name: nodes[node_id].name }))}
+          nodes={hidden.map(node_id => ({
+            node_id,
+            name: nodes[node_id].name,
+          }))}
           hideContextMenu={() => setShowHiddenTabs(false)}
           showContextMenu={() => setShowHiddenTabs(true)}
           shown={showHiddenTabs}
