@@ -1,10 +1,18 @@
 import * as React from 'react';
 import { ac } from '::store/store';
 import { useCallback, useRef, useEffect } from 'react';
-import { modTabs, modToolbar } from '::sass-modules';
+import { modTabs } from '::sass-modules';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { scrollIntoToolbar } from '::helpers/ui';
+
+export const smoothScrollIntoView = element =>
+  element.scrollIntoView({
+    behavior: 'smooth',
+    block: 'nearest',
+    inline: 'start',
+  });
 
 export type NodeProps = {
   name: string;
@@ -37,9 +45,8 @@ const Tab: React.FC<Props> = ({
   const tab = useRef<HTMLDivElement>();
   useEffect(() => {
     if (isSelected) {
-      tab.current.scrollIntoView();
-      if (isOnMd)
-        document.querySelector('.' + modToolbar.toolBar).scrollIntoView();
+      smoothScrollIntoView(tab.current);
+      if (isOnMd) scrollIntoToolbar();
     }
   }, [isSelected]);
 

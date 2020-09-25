@@ -20,7 +20,6 @@ const ac = {
   toggleFormattingBar: _(ap('toggle-formatting-bar')),
   toggleRecentNodesBar: _(ap('toggle-recent-nodes-bar')),
   toggleInfoBar: _(ap('toggle-info-bar')),
-  setTreeWidth: _(ap('set-tree-width'), _ => (width: number) => _(width)),
   setAnchorId: _(ap('set-anchor-id'), _ => (id: string) => _(id)),
   setSelectedLink: _(ap('set-selected-link'), _ => (link: Link) => _(link)),
   setSelectedCodebox: _(
@@ -40,7 +39,6 @@ type State = {
   contentEditable: boolean;
   showRecentNodesBar: boolean;
   showInfoBar: boolean;
-  treeWidth: number;
   anchorId?: string;
   selectedLink: Link;
   selectedCodebox: CodeboxProperties & { target: HTMLElement };
@@ -54,7 +52,6 @@ const initialState: State = {
   showFormattingButtons: true,
   showRecentNodesBar: false,
   showInfoBar: false,
-  treeWidth: 250,
   anchorId: undefined,
   selectedLink: undefined,
   selection: undefined,
@@ -83,10 +80,6 @@ const reducer = createReducer(initialState, _ => [
   _(ac.toggleInfoBar, state => ({
     ...state,
     showInfoBar: !state.showInfoBar,
-  })),
-  _(ac.setTreeWidth, (state, { payload }) => ({
-    ...state,
-    treeWidth: payload,
   })),
   _(ac.setAnchorId, (state, { payload }) => ({
     ...state,

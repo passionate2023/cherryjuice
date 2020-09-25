@@ -13,7 +13,7 @@
     'tree rich-text '
     'formatting-bar formatting-bar'
     'main-bar main-bar';
-  grid-template-columns: var(--tree-width) 1fr;
+  grid-template-columns: var(--treeWidth) 1fr;
   grid-template-rows:
     $tool-bar-height $title-and-recent-bar-height 1fr
     var(--formatting-bar)

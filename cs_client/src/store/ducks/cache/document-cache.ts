@@ -268,18 +268,21 @@ const reducer = createReducer(initialState, _ => [
   ],
   ...[
     // undoable actions
-    _(ac.createNode, (state, { payload }) =>
-      produce(
-        state,
-        draft => createNode(draft, payload),
-        dTM.addFrame({
-          timelineId: payload.createdNode.documentId,
-          node_id: payload.createdNode.node_id,
-          documentId: payload.createdNode.documentId,
-          mutationType: DocumentMutations.CreateNode,
-        }),
-      ),
-    ),
+    _(ac.createNode, (state, { payload }) => {
+      return produce(
+        produce(
+          state,
+          draft => createNode(draft, payload),
+          dTM.addFrame({
+            timelineId: payload.createdNode.documentId,
+            node_id: payload.createdNode.node_id,
+            documentId: payload.createdNode.documentId,
+            mutationType: DocumentMutations.CreateNode,
+          }),
+        ),
+        draft => selectNode(draft, payload.createdNode),
+      );
+    }),
     _(ac.mutateNodeMeta, (state, { payload, meta }) => {
       const params = Array.isArray(payload) ? payload : [payload];
       const editedOrDroppedNode = params[0];

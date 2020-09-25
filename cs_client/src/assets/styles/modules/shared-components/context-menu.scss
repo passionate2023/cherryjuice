@@ -33,3 +33,20 @@
     position: static;
   }
 }
+.context-menu-wrapper--static {
+  position: static;
+}
+
+.list-context-menu {
+  background-color: var(--neutral-700);
+}
+
+.list-context-menu__option {
+  background-color: var(--neutral-700);
+  color: var(--neutral-000);
+  padding: 7.5px;
+  cursor: pointer;
+  &:hover {
+    filter: brightness(0.9);
+  }
+}

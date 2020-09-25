@@ -5,6 +5,7 @@ import {
   ContextMenuProps,
 } from '::root/components/shared-components/context-menu/context-menu';
 import { ReactNode } from 'react';
+import { joinClassNames } from '::helpers/dom/join-class-names';
 
 type Props = {
   show: boolean;
@@ -17,12 +18,13 @@ const ContextMenuWrapper: React.FC<Props> = ({
   contextMenu,
   hide,
   alignTo,
+  offset,
 }) => {
   return (
-    <div className={modContextMenu.contextMenuWrapper}>
+    <div className={joinClassNames([modContextMenu.contextMenuWrapper])}>
       {children}
       {show && (
-        <ContextMenu hide={hide} alignTo={alignTo}>
+        <ContextMenu hide={hide} alignTo={alignTo} offset={offset}>
           {contextMenu}
         </ContextMenu>
       )}

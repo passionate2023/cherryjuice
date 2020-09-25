@@ -6,12 +6,14 @@ import { joinClassNames } from '::helpers/dom/join-class-names';
 export type ContextMenuProps = {
   hide: () => void;
   alignTo?: 'left' | 'right';
+  offset?: [number, number];
 };
 
 const ContextMenu: React.FC<ContextMenuProps> = ({
   alignTo = 'left',
   children,
   hide,
+  offset,
 }) => {
   useClickOutsideModal({
     callback: hide,
@@ -23,6 +25,7 @@ const ContextMenu: React.FC<ContextMenuProps> = ({
         modContextMenu.contextMenu,
         [modContextMenu.contextMenuRightEdge, alignTo === 'right'],
       ])}
+      style={offset ? { left: offset[0], top: offset[1] } : undefined}
     >
       {children}
     </div>

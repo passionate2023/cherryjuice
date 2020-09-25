@@ -11,7 +11,7 @@
   grid-area: tabs;
   display: flex;
   background-color: var(--neutral-000);
-  width: calc(100vw - var(--tree-width));
+  width: calc(100vw - var(--treeWidth));
   height: 35px;
   align-items: center;
   justify-content: flex-start;
@@ -30,7 +30,7 @@
   @include respond-to($md-down) {
     overflow: auto;
   }
-  width: calc(100%);
+  width: calc(100vw - var(--treeWidth) - 40px);
   height: 100%;
   padding: 2px 3px;
   box-sizing: border-box;
@@ -80,11 +80,12 @@ $button-width: 18px;
   text-overflow: ellipsis;
   font-size: 12px;
   color: var(--neutral-130);
+  margin-bottom: -2.5px;
 }
 .tab--selected {
   border-bottom: 4px solid rgb(0, 139, 139, 0.8);
 }
 .tab--has-changes {
-  color: rgb(0, 139, 139, 1)
+  color: rgb(0, 139, 139, 1);
 }
 

@@ -5,6 +5,7 @@ import {
   CollapsableListItemProps,
 } from '::root/components/app/components/menus/widgets/components/collapsable-list/components/body/components/collapsable-list-item';
 import { useEffect, useRef } from 'react';
+import { smoothScrollIntoView } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/components/tab';
 
 export type ListBodyProps = {
   items: CollapsableListItemProps[];
@@ -16,7 +17,7 @@ const ListBody: React.FC<ListBodyProps> = ({ items, autoScroll = true }) => {
   useEffect(() => {
     if (autoScroll && items.length) {
       const active = items.findIndex(item => item.active);
-      if (active >= 0) listBody.current.children[active].scrollIntoView();
+      if (active >= 0) smoothScrollIntoView(listBody.current.children[active]);
       else listBody.current.scroll(0, listBody.current.scrollHeight);
     }
   }, [items]);

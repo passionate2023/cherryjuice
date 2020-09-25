@@ -6,6 +6,7 @@ import { interval } from 'rxjs';
 import { modDialog } from '::sass-modules';
 import { ac, Store } from '::store/store';
 import { useSelector } from 'react-redux';
+import { CssVariables } from '::store/ducks/css-variables';
 
 export const useUpdateCssVariables = (
   isDocumentOwner: boolean,
@@ -25,7 +26,7 @@ export const useUpdateCssVariables = (
     (state: Store) => state.dialogs.showDocumentList,
   );
   useEffect(() => {
-    cssVariables.setTreeWidth(showTree ? treeWidth : 0);
+    ac.cssVariables.set(CssVariables.treeWidth, showTree ? treeWidth : 0);
     if (isDocumentOwner && showFormattingButtons) {
       cssVariables.setFormattingBar(40);
     } else {

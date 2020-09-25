@@ -3,9 +3,13 @@ import { createActionPrefixer } from './helpers/shared';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { rootActionCreators as rac } from './root';
 import { AsyncOperation } from '::store/ducks/document';
-import { SelectNodeParams } from '::store/ducks/cache/document-cache/helpers/document/select-node';
+import {
+  CloseNodeParams,
+  SelectNodeParams,
+} from '::store/ducks/cache/document-cache/helpers/document/select-node';
 
 const ap = createActionPrefixer('node');
+
 const ac = {
   fetch: _(ap('fetch'), _ => (payload: SelectNodeParams) => _(payload)),
   fetchInProgress: _(ap('fetch-in-progress'), _ => (node_id: number) =>
@@ -14,7 +18,7 @@ const ac = {
   fetchFulfilled: _(ap('fetchFulfilled'), _ => (node_id: number) => _(node_id)),
   fetchFailed: _(ap('fetch-failed'), _ => (node_id: number) => _(node_id)),
   select: _(ap('select'), _ => (payload: SelectNodeParams) => _(payload)),
-  close: _(ap('close'), _ => (payload: SelectNodeParams) => _(payload)),
+  close: _(ap('close'), _ => (payload: CloseNodeParams) => _(payload)),
   selectNext: _(ap('select-next'), _ => (payload: SelectNodeParams) =>
     _(payload),
   ),

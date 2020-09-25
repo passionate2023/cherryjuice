@@ -23,7 +23,7 @@ type Props = {};
 const mapState = (state: Store) => ({
   showTree: state.editor.showTree,
   showRecentNodes: state.editor.showRecentNodesBar,
-  treeWidth: state.editor.treeWidth,
+  treeWidth: state.cssVariables.treeWidth,
   showFormattingButtons: state.editor.showFormattingButtons,
   dockedDialog: state.root.dockedDialog,
   isDocumentOwner: hasWriteAccessToDocument(state),

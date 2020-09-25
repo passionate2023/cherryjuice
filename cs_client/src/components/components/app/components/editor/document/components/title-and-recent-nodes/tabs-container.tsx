@@ -4,12 +4,14 @@ import { Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { Tabs } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/tabs';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   clampTabs,
   getNumberOfVisibleTabs,
 } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/helpers/clamp-tabs/clamp-tabs';
 import { HiddenTabs } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/hidden-tabs';
+import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
+import { TabContextMenu } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/tab-context-menu';
 
 const useForceUpdate = () => {
   const [, setFoo] = useState(0);
@@ -25,7 +27,7 @@ const mapState = (state: Store) => {
     nodes: document?.nodes,
     isOnMd: state.root.isOnMd,
     vw: state.cssVariables.vw,
-    treeWidth: state.editor.treeWidth,
+    treeWidth: state.cssVariables.treeWidth,
     selectedNode_id: document?.persistedState?.selectedNode_id,
     recentNodes: document?.persistedState?.recentNodes,
     documentId: document?.id,
@@ -44,65 +46,65 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
   documentId,
   isOnMd,
   localState,
+  treeWidth,
 }) => {
   useForceUpdate();
   const [showHiddenTabs, setShowHiddenTabs] = useState(false);
+  const [CMOffset, setCMOffset] = useState(0);
+  const [focusedNode_id, setFocusedNode_id] = useState(0);
   const tabsR = useRef<HTMLDivElement>();
-  const node = nodes[selectedNode_id];
 
-  const previous = useRef<[number[], number[]]>([[], []]);
   let visible: number[], hidden: number[];
   if (isOnMd) {
     visible = recentNodes;
     hidden = [];
   } else {
     const numberOfVisibleTabs = Math.ceil(
-      getNumberOfVisibleTabs(tabsR.current?.clientWidth),
+      getNumberOfVisibleTabs(window.innerWidth - treeWidth) - 0.2,
     );
-    const selectedNodeAlreadyVisible = previous.current[0].includes(
+    [visible, hidden] = clampTabs(
+      recentNodes,
       selectedNode_id,
+      numberOfVisibleTabs,
     );
-    const thereIsNoAdditionalRoom =
-      previous.current[0].length >= numberOfVisibleTabs;
-
-    if (selectedNodeAlreadyVisible && thereIsNoAdditionalRoom) {
-      const removedNodes =
-        previous.current[0].length + previous.current[1].length >
-        recentNodes.length;
-      if (removedNodes) {
-        const set = new Set(recentNodes);
-        previous.current[0] = previous.current[0].filter(node_id =>
-          set.has(node_id),
-        );
-        previous.current[1] = previous.current[1].filter(node_id =>
-          set.has(node_id),
-        );
-      }
-
-      [visible, hidden] = previous.current;
-    } else {
-      [visible, hidden] = clampTabs(
-        recentNodes,
-        selectedNode_id,
-        numberOfVisibleTabs,
-      );
-      previous.current = [visible, hidden];
-    }
   }
 
-  return node ? (
-    <div className={modTabs.tabsContainer}>
-      <Tabs
-        documentId={documentId}
-        nodes={visible.map(node_id => ({
-          node_id,
-          name: nodes[node_id].name,
-          hasChanges: !!localState.editedNodes.edited[node_id],
-        }))}
-        selectedNode_id={selectedNode_id}
-        ref={tabsR}
-        isOnMd={isOnMd}
-      />
+  const onRightClickM = useCallback(e => {
+    e.preventDefault();
+    e.stopPropagation();
+    const target = e.target;
+    const focusedNode_id = target.dataset.id || target.parentElement.dataset.id;
+    if (focusedNode_id) {
+      setFocusedNode_id(+focusedNode_id);
+      setCMOffset(e.clientX - tabsR.current?.getBoundingClientRect().x);
+    }
+  }, []);
+  return (
+    <div className={modTabs.tabsContainer} onContextMenu={onRightClickM}>
+      <ContextMenuWrapper
+        show={CMOffset > 0}
+        hide={() => setCMOffset(0)}
+        contextMenu={
+          <TabContextMenu
+            focusedNode_id={focusedNode_id}
+            hide={() => setCMOffset(0)}
+          />
+        }
+        offset={[CMOffset, 0]}
+      >
+        <Tabs
+          documentId={documentId}
+          nodes={visible.map(node_id => ({
+            node_id,
+            name: nodes[node_id].name,
+            hasChanges: !!localState.editedNodes.edited[node_id],
+          }))}
+          selectedNode_id={selectedNode_id}
+          ref={tabsR}
+          isOnMd={isOnMd}
+        />
+      </ContextMenuWrapper>
+
       {!!hidden.length && (
         <HiddenTabs
           documentId={documentId}
@@ -116,8 +118,6 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
         />
       )}
     </div>
-  ) : (
-    <></>
   );
 };
 

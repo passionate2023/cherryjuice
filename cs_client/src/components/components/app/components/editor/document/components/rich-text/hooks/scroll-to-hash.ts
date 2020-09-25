@@ -3,6 +3,7 @@ import { useHistory } from 'react-router';
 import { scrollIntoToolbar } from '::helpers/ui';
 import { interval } from 'rxjs';
 import { filter, map, take, tap } from 'rxjs/operators';
+import { smoothScrollIntoView } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/components/tab';
 
 export const useScrollToHash = () => {
   const history = useHistory();
@@ -17,7 +18,7 @@ export const useScrollToHash = () => {
           filter(Boolean),
           take(1),
           tap(anchor => {
-            (anchor as HTMLElement).scrollIntoView();
+            smoothScrollIntoView(anchor as HTMLElement);
             scrollIntoToolbar();
           }),
         )

@@ -4,6 +4,7 @@ import { createActionPrefixer } from './helpers/shared';
 export enum CssVariables {
   vh = 'vh',
   vw = 'vw',
+  treeWidth = 'treeWidth',
 }
 
 const ap = createActionPrefixer('css-variables');
@@ -26,6 +27,7 @@ type State = {
   dialogBodyHeight: number;
   vh: number;
   vw: number;
+  treeWidth: number;
 };
 
 const initialState: State = {
@@ -33,6 +35,7 @@ const initialState: State = {
   dialogBodyHeight: 500,
   vh: 1,
   vw: 1,
+  treeWidth: 250,
 };
 const reducer = createReducer(initialState, _ => [
   _(ac.setSearchFiltersHeight, (state, { payload }) => ({
