@@ -14,6 +14,7 @@ const ac = {
   fetchFulfilled: _(ap('fetchFulfilled'), _ => (node_id: number) => _(node_id)),
   fetchFailed: _(ap('fetch-failed'), _ => (node_id: number) => _(node_id)),
   select: _(ap('select'), _ => (payload: SelectNodeParams) => _(payload)),
+  close: _(ap('close'), _ => (payload: SelectNodeParams) => _(payload)),
   selectNext: _(ap('select-next'), _ => (payload: SelectNodeParams) =>
     _(payload),
   ),

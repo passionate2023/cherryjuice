@@ -11,7 +11,6 @@ const mapState = (state: Store) => ({
   documentId: state.document.documentId,
   showFormattingButtons: state.editor.showFormattingButtons,
   contentEditable: state.editor.contentEditable,
-  showRecentNodesBar: state.editor.showRecentNodesBar,
   showInfoBar: state.editor.showInfoBar,
   isOnMb: state.root.isOnMb,
   isDocumentOwner: hasWriteAccessToDocument(state),
@@ -24,7 +23,6 @@ type Props = {};
 
 const MobileButtons: React.FC<Props & PropsFromRedux> = ({
   showFormattingButtons,
-  showRecentNodesBar,
   showInfoBar,
   documentId,
   isDocumentOwner,
@@ -47,13 +45,6 @@ const MobileButtons: React.FC<Props & PropsFromRedux> = ({
           active={showFormattingButtons}
         >
           <Icon name={Icons.material['justify-left']} />
-        </ToolbarButton>
-        <ToolbarButton
-          onClick={ac.editor.toggleRecentNodesBar}
-          active={showRecentNodesBar}
-          disabled={noDocumentIsSelected}
-        >
-          <Icon name={Icons.material['arrow-left']} />
         </ToolbarButton>
         <ToolbarButton
           onClick={ac.editor.toggleInfoBar}

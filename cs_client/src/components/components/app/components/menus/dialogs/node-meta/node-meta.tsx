@@ -19,6 +19,7 @@ import { SelectPrivacy } from '::root/components/app/components/menus/dialogs/do
 import { Privacy } from '::types/graphql/generated';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { ColorInput } from '::root/components/shared-components/inputs/color-input';
+import { ToggleSwitch } from '::root/components/shared-components/inputs/toggle-switch';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -117,16 +118,22 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       label: 'visibility',
     },
     {
-      onChange: nodeMetaActionCreators.setIsBold,
-      value: state.isBold,
-      type: 'checkbox',
       label: 'bold',
+      customInput: (
+        <ToggleSwitch
+          value={state.isBold}
+          onChange={nodeMetaActionCreators.setIsBold}
+        />
+      ),
       testId: testIds.nodeMeta__isBold,
     },
     {
-      onChange: nodeMetaActionCreators.setHasCustomColor,
-      value: state.hasCustomColor,
-      type: 'checkbox',
+      customInput: (
+        <ToggleSwitch
+          value={state.hasCustomColor}
+          onChange={nodeMetaActionCreators.setHasCustomColor}
+        />
+      ),
       label: 'color',
       testId: testIds.nodeMeta__hasCustomColor,
       additionalInput: (
@@ -139,10 +146,13 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       ),
     },
     {
-      onChange: nodeMetaActionCreators.setHasCustomIcon,
-      value: state.hasCustomIcon,
-      type: 'checkbox',
       label: 'icon',
+      customInput: (
+        <ToggleSwitch
+          value={state.hasCustomIcon}
+          onChange={nodeMetaActionCreators.setHasCustomIcon}
+        />
+      ),
       testId: testIds.nodeMeta__hasCustomIcon,
       additionalInput: (
         <IconPicker
@@ -153,10 +163,13 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       ),
     },
     {
-      onChange: nodeMetaActionCreators.setIsReadOnly,
-      value: state.isReadOnly,
-      type: 'checkbox',
       label: 'read only',
+      customInput: (
+        <ToggleSwitch
+          value={state.isReadOnly}
+          onChange={nodeMetaActionCreators.setIsReadOnly}
+        />
+      ),
     },
   ].filter(Boolean);
 

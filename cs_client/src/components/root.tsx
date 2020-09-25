@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Suspense } from 'react';
 import modTheme from '::sass-modules/../themes/themes.scss';
 import '::assets/styles/global-scope/material-ui.scss';
 import '::assets/styles/body.scss';
@@ -7,27 +8,22 @@ import '::assets/styles/global-scope/global-classes.scss';
 import '::assets/styles/global-scope/google-picker.scss';
 import '::assets/styles/css-variables/css-variables.scss';
 import { useApolloClient } from '::graphql/client/hooks/apollo-client';
-import { Suspense } from 'react';
 import { Route, Switch } from 'react-router';
-import { Provider } from 'react-redux';
+import { connect, ConnectedProps, Provider } from 'react-redux';
 import { Void } from '::root/components/shared-components/react/void';
 import { App } from '::root/components/app/app';
-import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import { useOnWindowResize } from '::hooks/use-on-window-resize';
-import { ac, store } from '::store/store';
+import { ac, store, Store } from '::store/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { useLoadEpics } from './hooks/load-epics';
 import { useRegisterHotKeys } from '::helpers/hotkeys/hooks/register-hot-keys';
-import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::store/store';
 import { useConsumeToken } from '::root/hooks/consume-token';
 import { Auth } from '::root/components/auth/auth';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
 import { useTrackDocumentChanges } from '::root/hooks/track-document-changes';
 import { enablePatches } from 'immer';
 import '::helpers/attach-test-callbacks';
-enablePatches();
 import {
   getCurrentDocument,
   getDocumentsList,
@@ -37,6 +33,9 @@ import { useRouterEffect } from '::root/components/app/components/editor/hooks/r
 import { Router } from 'react-router-dom';
 import { router } from '::root/router/router';
 import { useTasks } from '::root/hooks/tasks';
+import { CssVariables } from '::store/ducks/css-variables';
+
+enablePatches();
 const ApolloProvider = React.lazy(() =>
   import('@apollo/react-common').then(({ ApolloProvider }) => ({
     default: ApolloProvider,
@@ -80,8 +79,8 @@ const Root: React.FC<Props & PropsFromRedux> = ({
 }) => {
   const client = useApolloClient(token, userId);
   useOnWindowResize([
-    cssVariables.setVH,
-    cssVariables.setVW,
+    (w, h) => ac.cssVariables.set(CssVariables.vh, h),
+    w => ac.cssVariables.set(CssVariables.vw, w),
     updateBreakpointState({
       breakpoint: 850,
       callback: ac.root.setIsOnMd,

@@ -16,11 +16,16 @@ const ContextMenuWrapper: React.FC<Props> = ({
   show,
   contextMenu,
   hide,
+  alignTo,
 }) => {
   return (
     <div className={modContextMenu.contextMenuWrapper}>
       {children}
-      {show && <ContextMenu hide={hide}>{contextMenu}</ContextMenu>}
+      {show && (
+        <ContextMenu hide={hide} alignTo={alignTo}>
+          {contextMenu}
+        </ContextMenu>
+      )}
     </div>
   );
 };

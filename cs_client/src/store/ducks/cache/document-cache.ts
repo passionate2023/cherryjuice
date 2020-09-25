@@ -30,6 +30,7 @@ import {
   DeleteNodeParams,
 } from './document-cache/helpers/node/delete-node';
 import {
+  closeNode,
   selectNode,
   SelectNodeParams,
 } from '::store/ducks/cache/document-cache/helpers/document/select-node';
@@ -204,6 +205,16 @@ const reducer = createReducer(initialState, _ => [
       produce(state, draft =>
         expandNode(selectNode(draft, payload), {
           ...payload,
+          expandChildren: false,
+        }),
+      ),
+    ),
+    _(nac.close, (state, { payload }) =>
+      produce(state, draft =>
+        expandNode(closeNode(draft, payload), {
+          documentId: payload.documentId,
+          node_id:
+            state.documents[payload.documentId].persistedState.selectedNode_id,
           expandChildren: false,
         }),
       ),

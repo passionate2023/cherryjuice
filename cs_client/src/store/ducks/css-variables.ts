@@ -1,9 +1,17 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 
+export enum CssVariables {
+  vh = 'vh',
+  vw = 'vw',
+}
+
 const ap = createActionPrefixer('css-variables');
 
 const ac = {
+  set: _(ap('set'), _ => (variable: CssVariables, value: string | number) =>
+    _({ variable, value }),
+  ),
   setSearchFiltersHeight: _(
     ap('set-search-filters-height'),
     _ => (height: number) => _(height),
@@ -16,11 +24,15 @@ const ac = {
 type State = {
   searchFiltersHeight: number;
   dialogBodyHeight: number;
+  vh: number;
+  vw: number;
 };
 
 const initialState: State = {
   searchFiltersHeight: 230,
   dialogBodyHeight: 500,
+  vh: 1,
+  vw: 1,
 };
 const reducer = createReducer(initialState, _ => [
   _(ac.setSearchFiltersHeight, (state, { payload }) => ({
@@ -31,6 +43,14 @@ const reducer = createReducer(initialState, _ => [
     ...state,
     dialogBodyHeight: payload,
   })),
+  _(ac.set, (state, { payload }) => {
+    if (!state[payload.variable])
+      throw Error('unknown variable: ' + payload.variable);
+    return {
+      ...state,
+      [payload.variable]: payload.value,
+    };
+  }),
 ]);
 
 export { reducer as cssVariablesReducer, ac as cssVariablesActionCreators };

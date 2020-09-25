@@ -18,12 +18,36 @@ export const selectNode = (
   if (node_id && document?.nodes[node_id]) {
     document.localState.hash = hash;
     document.persistedState.selectedNode_id = node_id;
-    document.persistedState.recentNodes = [
-      ...state.documents[documentId].persistedState.recentNodes.filter(
-        _node_id => _node_id !== node_id,
-      ),
-      node_id,
-    ];
+    if (!document.persistedState.recentNodes.includes(node_id)) {
+      document.persistedState.recentNodes.push(node_id);
+    }
+    document.persistedState.recentNodes = document.persistedState.recentNodes.filter(
+      node_id => document.nodes[node_id],
+    );
+    if (document.persistedState.recentNodes.length > 20)
+      document.persistedState.recentNodes = document.persistedState.recentNodes.slice(
+        document.persistedState.recentNodes.length - 20,
+      );
+    document.persistedState.localUpdatedAt = Date.now();
+  }
+  return state;
+};
+
+export const closeNode = (
+  state: DocumentCacheState,
+  { documentId, node_id }: SelectNodeParams,
+): DocumentCacheState => {
+  node_id = +node_id;
+  const document = state.documents[documentId];
+  if (node_id && document?.nodes[node_id]) {
+    document.persistedState.recentNodes = document.persistedState.recentNodes.filter(
+      _node_id => _node_id !== node_id,
+    );
+    if (document.persistedState.selectedNode_id === node_id)
+      document.persistedState.selectedNode_id =
+        document.persistedState.recentNodes[
+          document.persistedState.recentNodes.length - 1
+        ];
     document.persistedState.localUpdatedAt = Date.now();
   }
   return state;
