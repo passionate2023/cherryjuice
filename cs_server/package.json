@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "link:ahtml-to-html": "cd src/modules/node/helpers/rendering/ahtml-to-html && npm link",
+	"link-d:graphql-types": "npm link @cs/graphql-types",
     "dev": "nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
     "dev:webpack": "webpack --progress",
     "dev:client": "cd ../cs_client && yarn watch:liveserver",
@@ -75,7 +76,6 @@
     "xml2js": "^0.4.22"
   },
   "devDependencies": {
-    "@cs/graphql-types": "file:../cs_client/types/graphql",
     "@babel/runtime": "^7.9.6",
     "@nestjs/cli": "^7.1.2",
     "@nestjs/schematics": "^7.0.0",
