@@ -7,6 +7,7 @@ export type CollapsableListItemProps = {
   description: string;
   button?: JSX.Element;
   active?: boolean;
+  key: string;
 };
 const CollapsableListItem: React.FC<CollapsableListItemProps> = ({
   name,

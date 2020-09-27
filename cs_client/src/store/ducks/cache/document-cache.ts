@@ -45,7 +45,6 @@ import {
   MutateNodeMetaParams,
 } from '::store/ducks/cache/document-cache/helpers/node/mutate-node-meta';
 import { TimelinesManager } from '::store/ducks/cache/document-cache/helpers/timeline/timelines-manager';
-import { timelinesActionCreators as tac } from '::store/ducks/timelines';
 import {
   collapseNode,
   expandNode,
@@ -165,11 +164,14 @@ export type DocumentTimeLineMeta = {
   node_id?: number;
   documentId: string;
   mutationType: DocumentMutations;
+  timeStamp: number;
 };
 const initialState: State = {
   documents: {},
 };
-export const dTM = new TimelinesManager<DocumentTimeLineMeta>(true);
+export const dTM = new TimelinesManager<DocumentTimeLineMeta, State>(true, {
+  maximumNumberOfFrames: 20,
+});
 dTM.setOnFrameChangeFactory(() =>
   import('::store/store').then(
     module => module.ac.timelines.setDocumentActionNOF,
@@ -179,16 +181,6 @@ dTM.setOnFrameChangeFactory(() =>
 const reducer = createReducer(initialState, _ => [
   ...[
     // non undoable actions
-    _(rac.resetState, () => {
-      dTM.resetAll();
-      return {
-        ...cloneObj(initialState),
-      };
-    }),
-    _(ac.createDocument, (state, { payload }) => {
-      dTM.setCurrent(payload.id);
-      return produce(state, draft => createDocument(draft, payload));
-    }),
     _(dac.fetchFulfilled, (state, { payload }) =>
       produce(state, draft =>
         selectDocument(
@@ -197,10 +189,6 @@ const reducer = createReducer(initialState, _ => [
         ),
       ),
     ),
-    _(dac.setDocumentId, (state, { payload }) => {
-      dTM.setCurrent(payload);
-      return produce(state, draft => selectDocument(draft, payload));
-    }),
     _(nac.select, (state, { payload }) =>
       produce(state, draft =>
         expandNode(selectNode(draft, payload), {
@@ -219,22 +207,12 @@ const reducer = createReducer(initialState, _ => [
         }),
       ),
     ),
-    _(tac.setDocumentActionNOF, (state, { payload }) =>
-      // todo: filter mutations
-      payload.frame?.meta?.node_id
-        ? produce(state, draft =>
-            selectNode(draft, payload.frame.meta as SelectNodeParams),
-          )
-        : state,
-    ),
     _(dlac.fetchDocumentsFulfilled, (state, { payload }) =>
       produce(state, draft => loadDocumentsList(draft, payload)),
     ),
     _(ac.addFetchedFields, (state, { payload }) =>
       produce(state, draft => addFetchedFields(draft, payload)),
     ),
-    _(ac.undoDocumentAction, state => dTM.current.undo(state)),
-    _(ac.redoDocumentAction, state => dTM.current.redo(state)),
     _(ac.expandNode, (state, { payload }) =>
       produce(state, draft => expandNode(draft, payload)),
     ),
@@ -247,6 +225,19 @@ const reducer = createReducer(initialState, _ => [
     _(ac.neutralizePersistedState, (state, { payload }) =>
       produce(state, draft => neutralizePersistedState(draft, payload)),
     ),
+    _(ac.undoDocumentAction, state => dTM.undo(state)),
+    _(ac.redoDocumentAction, state => dTM.redo(state)),
+  ],
+  ...[
+    // require setup
+    _(ac.createDocument, (state, { payload }) => {
+      dTM.setCurrent(payload.id);
+      return produce(state, draft => createDocument(draft, payload));
+    }),
+    _(dac.setDocumentId, (state, { payload }) => {
+      dTM.setCurrent(payload);
+      return produce(state, draft => selectDocument(draft, payload));
+    }),
   ],
   ...[
     // require cleanup
@@ -265,43 +256,45 @@ const reducer = createReducer(initialState, _ => [
         return removeSavedDocuments(state);
       },
     ),
+    _(rac.resetState, () => {
+      dTM.resetAll();
+      return {
+        ...cloneObj(initialState),
+      };
+    }),
   ],
   ...[
     // undoable actions
-    _(ac.createNode, (state, { payload }) => {
-      return produce(
-        produce(
-          state,
-          draft => createNode(draft, payload),
-          dTM.addFrame({
-            timelineId: payload.createdNode.documentId,
-            node_id: payload.createdNode.node_id,
-            documentId: payload.createdNode.documentId,
-            mutationType: DocumentMutations.CreateNode,
-          }),
-        ),
-        draft => selectNode(draft, payload.createdNode),
-      );
-    }),
+    _(ac.createNode, (state, { payload }) =>
+      produce(
+        state,
+        draft => selectNode(createNode(draft, payload), payload.createdNode),
+        dTM.addFrame({
+          timelineId: payload.createdNode.documentId,
+          node_id: payload.createdNode.node_id,
+          documentId: payload.createdNode.documentId,
+          mutationType: DocumentMutations.CreateNode,
+          timeStamp: Date.now(),
+        }),
+      ),
+    ),
     _(ac.mutateNodeMeta, (state, { payload, meta }) => {
       const params = Array.isArray(payload) ? payload : [payload];
       const editedOrDroppedNode = params[0];
       let newState = produce(
-        produce(
-          state,
-          draft => mutateNodeMeta(draft, params),
-          dTM.addFrame({
-            timelineId: editedOrDroppedNode.documentId,
-            node_id: editedOrDroppedNode.node_id,
-            documentId: editedOrDroppedNode.documentId,
-            mutationType: meta || DocumentMutations.NodeAttributes,
-          }),
-        ),
+        state,
         draft =>
-          selectNode(draft, {
+          selectNode(mutateNodeMeta(draft, params), {
             node_id: editedOrDroppedNode.node_id,
             documentId: editedOrDroppedNode.documentId,
           }),
+        dTM.addFrame({
+          timelineId: editedOrDroppedNode.documentId,
+          node_id: editedOrDroppedNode.node_id,
+          documentId: editedOrDroppedNode.documentId,
+          mutationType: meta || DocumentMutations.NodeAttributes,
+          timeStamp: Date.now(),
+        }),
       );
       if (meta === DocumentMutations.NodeParent) {
         newState = produce(newState, draft =>
@@ -325,6 +318,7 @@ const reducer = createReducer(initialState, _ => [
               node_id: payload.node_id,
               documentId: payload.documentId,
               mutationType: DocumentMutations.NodeContent,
+              timeStamp: Date.now(),
             })(p, rp);
         },
       ),
@@ -338,6 +332,7 @@ const reducer = createReducer(initialState, _ => [
           documentId: payload.documentId,
           node_id: payload.node_id,
           mutationType: DocumentMutations.DeleteNode,
+          timeStamp: Date.now(),
         }),
       ),
     ),
@@ -349,6 +344,7 @@ const reducer = createReducer(initialState, _ => [
           timelineId: payload.documentId,
           documentId: payload.documentId,
           mutationType: DocumentMutations.DocumentAttributes,
+          timeStamp: Date.now(),
         }),
       ),
     ),

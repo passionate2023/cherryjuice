@@ -24,10 +24,7 @@ const ListBody: React.FC<ListBodyProps> = ({ items, autoScroll = true }) => {
   return (
     <div className={modDocumentOperations.collapsableList__body} ref={listBody}>
       {items.map(item => (
-        <CollapsableListItem
-          {...item}
-          key={item.name + '/' + item.description}
-        />
+        <CollapsableListItem {...item} key={item.key} />
       ))}
     </div>
   );

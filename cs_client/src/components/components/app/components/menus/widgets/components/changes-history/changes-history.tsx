@@ -18,22 +18,28 @@ type Props = {};
 
 const ChangesHistory: React.FC<Props & PropsFromRedux> = ({ nof }) => {
   const documents = getDocuments(store.getState());
-  const items: CollapsableListItemProps[] = [
-    {
-      name: 'initial state',
-      description: '',
-      active: dTM.current?.getPosition === -1,
-    },
-  ];
+  const frames = dTM.current?.getFramesMeta() || [];
+  const firstFrameIsAvailable = frames[0] && frames[0][0] === 0;
+  const items: CollapsableListItemProps[] = firstFrameIsAvailable
+    ? [
+        {
+          name: 'initial state',
+          description: '',
+          active: dTM.current?.getPosition === -1,
+          key: dTM.getCurrentId + '::initial-state',
+        },
+      ]
+    : [];
   if (dTM.current || nof.redo || nof.undo) {
     items.push(
-      ...dTM.current.getFramesMeta().map((frame, i) => {
+      ...frames.map(([i, frame]) => {
         const document = documents[frame.documentId];
         const node = document.nodes[frame.node_id];
         return {
           name: node?.name || document.name,
           description: frame.mutationType,
           active: dTM.current.getPosition === i,
+          key: frame.timeStamp + '',
         };
       }),
     );
