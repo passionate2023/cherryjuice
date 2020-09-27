@@ -84,7 +84,7 @@ $navigation-width: 200px;
     display: none;
   }
   opacity: 0;
-  background-color: var(--background);
+  background-color: var(--on-background);
   position: absolute;
   z-index: $ZI-drawer-navigation-scrim;
   height: 100%;

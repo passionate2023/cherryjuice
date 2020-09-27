@@ -6,11 +6,9 @@ run yarn link:ahtml-to-html
 workdir /client
 copy ./cs_client/ .
 run yarn install --ignore-optional
-run yarn link:graphql-types
 
 workdir /server
 run yarn install
-run yarn link-d:graphql-types
 
 workdir /client
 run yarn build

@@ -19,7 +19,7 @@ const ThreeDotsPopup: React.FC<Props> = ({ documentId, online }) => {
         {
           itemName: 'cache',
           onClick: () => ac.node.fetchAll(documentId),
-          disabled: !online,
+          disabled: !online || documentId.startsWith('new-document'),
         },
         {
           itemName: 'export',

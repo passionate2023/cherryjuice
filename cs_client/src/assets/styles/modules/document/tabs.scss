@@ -29,6 +29,7 @@
   overflow: hidden;
   @include respond-to($md-down) {
     overflow: auto;
+    width: calc(100vw - var(--treeWidth));
   }
   width: calc(100vw - var(--treeWidth) - 40px);
   height: 100%;
@@ -88,4 +89,3 @@ $button-width: 18px;
 .tab--has-changes {
   color: var(--secondary);
 }
-
