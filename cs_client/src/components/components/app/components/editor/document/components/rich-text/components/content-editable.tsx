@@ -4,7 +4,7 @@ import { useAttachImagesToHtml } from '::root/components/app/components/editor/d
 import { useHandleContentChanges } from '::root/components/app/components/editor/document/components/rich-text/hooks/handle-content-changes';
 import { useAddMetaToPastedImages } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 import { DocumentContext } from '::root/components/app/components/editor/document/reducer/context';
-import { Image } from '::types/graphql/generated';
+import { Image } from '::types/graphql';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 import { NodeScrollPosition } from '::store/ducks/cache/document-cache';
 

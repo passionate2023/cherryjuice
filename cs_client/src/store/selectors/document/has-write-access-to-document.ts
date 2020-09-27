@@ -1,4 +1,4 @@
-import { AccessLevel } from '::types/graphql/generated';
+import { AccessLevel } from '::types/graphql';
 import { createSelector } from 'reselect';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 

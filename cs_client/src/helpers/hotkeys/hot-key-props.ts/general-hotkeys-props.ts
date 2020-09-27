@@ -1,4 +1,4 @@
-import { HotKeyActionType } from '::types/graphql/generated';
+import { HotKeyActionType } from '::types/graphql';
 import { ac, store } from '::store/store';
 import { getDocumentHasUnsavedChanges } from '::store/selectors/cache/document/document';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';

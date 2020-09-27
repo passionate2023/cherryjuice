@@ -3,7 +3,7 @@ import {
   GenerateHeadlineProps,
   Headlines,
 } from '../generate-headline';
-import { SearchTarget, SearchType } from '::types/graphql/generated';
+import { SearchTarget, SearchType } from '::types/graphql';
 
 const common = {
   ahtml_txt: 'hello havid, Have a nice day',

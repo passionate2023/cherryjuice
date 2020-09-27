@@ -1,4 +1,4 @@
-import { OPERATION_STATE } from '::types/graphql/generated';
+import { OPERATION_STATE } from '::types/graphql';
 import { DocumentOperationState } from '::store/ducks/document-operation/document-operations';
 import { doKey } from '::store/ducks/document-operation/reducers/add-document-operations';
 

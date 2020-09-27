@@ -11,7 +11,7 @@ import {
 } from '::root/components/shared-components/form/validated-text-input';
 import { FormSeparator } from '::root/components/shared-components/form/form-separator';
 import { patterns } from '::root/components/auth/helpers/form-validation';
-import { SignInCredentials } from '::types/graphql/generated';
+import { SignInCredentials } from '::types/graphql';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
 import { Link } from 'react-router-dom';
 import { openConsentWindow } from '::root/components/auth/helpers/oauth';

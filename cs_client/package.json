@@ -2,7 +2,6 @@
   "name": "cherryscript-react-client",
   "version": "0.1.0",
   "scripts": {
-    "link:graphql-types": "cd types/graphql && npm link",
     "dev": "webpack-dev-server --color --progress --config .webpack/webpack.dev.js ",
     "dev:ns": "webpack --watch --color --progress --config .webpack/webpack.dev.js ",
     "dev:server": "cd ../cs_server/ && yarn dev",
@@ -15,7 +14,6 @@
     "test:client": "jest .",
     "test:server": "cd ../cs_server && jest",
     "test": "run-p test:client test:server && lint-staged",
-    "generate-types-for-graphql": "cd scripts && node graphql-schema-typescript.js && yarn link:graphql-types",
     "storybook": "start-storybook -p 1237",
     "build-storybook": "build-storybook -c .storybook -o .storybook-static"
   },
@@ -92,7 +90,6 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^4.0.6",
     "eslint-plugin-standard": "^4.0.1",
-    "graphql-schema-typescript": "^1.3.2",
     "husky": "3.1.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.4.2",

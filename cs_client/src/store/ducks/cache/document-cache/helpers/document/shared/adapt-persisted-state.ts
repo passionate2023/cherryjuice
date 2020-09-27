@@ -1,4 +1,4 @@
-import { DocumentState } from '::types/graphql/generated';
+import { DocumentState } from '::types/graphql';
 import {
   NodesDict,
   PersistedDocumentState,

@@ -8,7 +8,7 @@ import { onResize, onResizeStop, onStart } from './helpers';
 import { useDnDNodes } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/dnd-nodes';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { NodePrivacy } from '::types/graphql/generated';
+import { NodePrivacy } from '::types/graphql';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { ToolBar } from './components/tool-bar/tool-bar';
 

@@ -8,7 +8,7 @@ import {
   ImageAst,
 } from './generate-node-content/image/generate-image';
 import { generateNodeText } from './generate-node-content/text/generate-text';
-import { NodePrivacy } from '../../../types/graphql/generated';
+import { NodePrivacy } from '../../../types/graphql';
 
 const generateImage = createImageGenerator([
   'pink',

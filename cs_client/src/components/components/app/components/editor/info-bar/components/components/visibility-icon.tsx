@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NodePrivacy, Privacy } from '::types/graphql/generated';
+import { NodePrivacy, Privacy } from '::types/graphql';
 import { modInfoBar } from '::sass-modules';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { joinClassNames } from '::helpers/dom/join-class-names';

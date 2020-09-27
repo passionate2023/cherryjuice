@@ -1,4 +1,4 @@
-import { DOCUMENT_SUBSCRIPTIONS as DS } from '::types/graphql/generated';
+import { DOCUMENT_SUBSCRIPTIONS as DS } from '::types/graphql';
 import {
   DOCUMENT_OPERATIONS as DO,
   DocumentOperations,

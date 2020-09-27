@@ -2,13 +2,11 @@
 const { generateTypeScriptTypes } = require('graphql-schema-typescript');
 const fs = require('fs');
 const path = require('path');
-const schema = fs.readFileSync('../types/graphql/schema.graphql', 'utf8');
+const schema = fs.readFileSync('./schema.graphql', 'utf8');
 
-generateTypeScriptTypes(
-  schema,
-  path.resolve(__dirname, '../types/graphql/generated.ts'),
-  { typePrefix: '' },
-)
+generateTypeScriptTypes(schema, path.resolve(__dirname, './index.ts'), {
+  typePrefix: '',
+})
   .then(() => {
     console.log('DONE');
     process.exit(0);

@@ -1,6 +1,6 @@
 import { calculateState } from '::root/components/app/components/menus/dialogs/node-meta/helpers/calculate-state';
 import { QNodeMeta } from '::graphql/queries/document-meta';
-import { NodePrivacy } from '::types/graphql/generated';
+import { NodePrivacy } from '::types/graphql';
 
 type TState = {
   name: string;

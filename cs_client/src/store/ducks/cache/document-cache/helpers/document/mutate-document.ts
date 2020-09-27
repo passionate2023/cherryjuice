@@ -1,5 +1,5 @@
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
-import { Privacy } from '::types/graphql/generated';
+import { Privacy } from '::types/graphql';
 
 type DocumentMeta = {
   name?: string;

@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { VerifyEmailIt } from '::types/graphql/generated';
+import { VerifyEmailIt } from '::types/graphql';
 
 type Variables = {
   input: VerifyEmailIt;

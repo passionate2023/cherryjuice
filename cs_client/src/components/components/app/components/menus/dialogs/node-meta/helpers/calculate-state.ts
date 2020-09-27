@@ -1,5 +1,5 @@
 import { QNodeMeta } from '::graphql/queries/document-meta';
-import { NodePrivacy } from '::types/graphql/generated';
+import { NodePrivacy } from '::types/graphql';
 
 const calculateState = (node: QNodeMeta) => {
   const { node_title_styles, name } = node;

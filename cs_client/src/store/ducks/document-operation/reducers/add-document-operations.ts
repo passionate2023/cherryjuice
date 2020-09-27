@@ -2,7 +2,7 @@ import {
   DocumentOperation,
   OPERATION_STATE,
   OPERATION_TYPE,
-} from '::types/graphql/generated';
+} from '::types/graphql';
 import { DocumentOperationState } from '::store/ducks/document-operation/document-operations';
 
 export const doKey = (operation: DocumentOperation): string =>

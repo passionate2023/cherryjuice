@@ -15,7 +15,7 @@ import {
   OPERATION_CONTEXT,
   OPERATION_STATE,
   OPERATION_TYPE,
-} from '::types/graphql/generated';
+} from '::types/graphql';
 import { CachedDocument } from '::store/ducks/cache/document-cache';
 import { doKey } from '::store/ducks/document-operation/reducers/add-document-operations';
 
@@ -30,10 +30,7 @@ const progressify = <T>(
   };
   return concat(
     ...propsArray.map(prop =>
-      concat(
-        action(prop),
-        onProgress((++state.count / state.totalProps) ),
-      ),
+      concat(action(prop), onProgress(++state.count / state.totalProps)),
     ),
   );
 };
@@ -75,9 +72,7 @@ const fetchAllNodesEpic = (action$: Observable<Actions>) => {
       const document = state.documentCache.documents[documentId];
       const cacheOperation = createCacheOperation(document);
       const fulfilled$ = of(
-        ac_.documentOperations.add(
-          cacheOperation(OPERATION_STATE.FINISHED, 1),
-        ),
+        ac_.documentOperations.add(cacheOperation(OPERATION_STATE.FINISHED, 1)),
       );
 
       const nodesWithNoHtml = Object.values(document.nodes)

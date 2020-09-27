@@ -11,7 +11,7 @@ import {
   SortNodesBy,
   TimeFilter,
   TimeRange,
-} from '::types/graphql/generated';
+} from '::types/graphql';
 import { documentCacheActionCreators } from '::store/ducks/cache/document-cache';
 
 const ap = createActionPrefixer('search');

@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { NodeSearchIt, NodeSearchResults } from '::types/graphql/generated';
+import { NodeSearchIt, NodeSearchResults } from '::types/graphql';
 
 const QUERY_DOCUMENTS = {
   currentImports: {

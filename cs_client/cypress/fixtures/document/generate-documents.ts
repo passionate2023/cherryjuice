@@ -1,6 +1,6 @@
 import { DocumentAst, generateDocument } from './generate-document';
 import { GenerateTreeProps } from '../tree/generate-tree';
-import { Privacy } from '../../../types/graphql/generated';
+import { Privacy } from '../../../types/graphql';
 
 type GenerateDocumentsProps = {
   numberOfDocuments: number;

@@ -10,7 +10,7 @@ import {
   userSettingsActionCreators,
   ValidatedInputState,
 } from '::root/components/app/components/menus/dialogs/settings/screens/account/reducer/reducer';
-import { UserToken, UserTokenType } from '::types/graphql/generated';
+import { UserToken, UserTokenType } from '::types/graphql';
 import { ChangeEmail } from '::root/components/app/components/menus/dialogs/settings/screens/account/components/email/components/change-email';
 import { SettingsGroup } from '::root/components/app/components/menus/dialogs/settings/shared/settings-group';
 

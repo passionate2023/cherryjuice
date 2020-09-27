@@ -1,5 +1,5 @@
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
-import { Image } from '::types/graphql/generated';
+import { Image } from '::types/graphql';
 
 export type AddHtmlParams = {
   node_id: number;

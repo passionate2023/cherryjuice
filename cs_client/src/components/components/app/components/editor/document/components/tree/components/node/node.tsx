@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { useDnDNodes } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/dnd-nodes';
 import { useSelectNode } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/select-node';
-import { NodePrivacy, Privacy } from '::types/graphql/generated';
+import { NodePrivacy, Privacy } from '::types/graphql';
 import { NodeIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-icon';
 import { ToggleChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/toggle-children';
 import { NodeVisibilityIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/visibility-icon';

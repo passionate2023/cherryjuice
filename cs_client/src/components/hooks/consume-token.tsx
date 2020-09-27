@@ -6,7 +6,7 @@ import { ac } from '::store/store';
 import { AlertType } from '::types/react';
 import { properErrorMessage } from '::root/components/auth/hooks/proper-error-message';
 import { router } from '::root/router/router';
-import { UserTokenType } from '::types/graphql/generated';
+import { UserTokenType } from '::types/graphql';
 import { CHANGE_EMAIL } from '::graphql/mutations/user/change-email';
 
 const verifyEmail = (token: string, userId: string) =>

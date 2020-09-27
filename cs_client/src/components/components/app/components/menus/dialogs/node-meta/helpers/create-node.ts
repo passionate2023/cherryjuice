@@ -1,4 +1,4 @@
-import { NodeMetaIt } from '::types/graphql/generated';
+import { NodeMetaIt } from '::types/graphql';
 import { QFullNode } from '::store/ducks/cache/document-cache';
 
 const defaultNode = {

@@ -11,7 +11,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import {
   SearchScope as TSearchScope,
   SearchScope as ESearchScope,
-} from '::types/graphql/generated';
+} from '::types/graphql';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 

@@ -7,7 +7,7 @@ import { patterns } from '::root/components/auth/helpers/form-validation';
 import { apolloClient } from '::graphql/client/apollo-client';
 import { USER_EXISTS } from '::graphql/queries/user-exists';
 import { documentMetaActionCreators } from '::root/components/app/components/menus/dialogs/document-meta/reducer/reducer';
-import { AccessLevel } from '::types/graphql/generated';
+import { AccessLevel } from '::types/graphql';
 import { AlertType } from '::types/react';
 import { ac } from '::store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';

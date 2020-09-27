@@ -11,7 +11,7 @@ import { ButtonSquare } from '::root/components/shared-components/buttons/button
 import { modImportDocument } from '::sass-modules';
 import { Icons, Icon } from '::root/components/shared-components/icon/icon';
 import { ac } from '::store/store';
-import { Secrets } from '::types/graphql/generated';
+import { Secrets } from '::types/graphql';
 
 type Props = {
   secrets: Secrets;

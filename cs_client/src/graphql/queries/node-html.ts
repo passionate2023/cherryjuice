@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { Node } from '::types/graphql/generated';
+import { Node } from '::types/graphql';
 export type NodeHtml = Pick<Node, 'html' | 'node_id' | 'id' | 'updatedAt'>;
 
 type Variables = { file_id: string; node_ids: number[] };

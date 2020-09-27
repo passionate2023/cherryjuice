@@ -3,7 +3,7 @@ import {
   NodeSearchResultEntity,
   SearchTarget,
   SearchType,
-} from '::types/graphql/generated';
+} from '::types/graphql';
 import { simpleHeadline } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/helpers/helpers/simple';
 import { ftsHeadline } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/helpers/helpers/fts';
 import { regexHeadline } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/helpers/helpers/regexHeadline';

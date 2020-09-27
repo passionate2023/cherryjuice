@@ -1,5 +1,5 @@
 import { QNodeMeta } from '::graphql/queries/document-meta';
-import { PrivateNode } from '::types/graphql/generated';
+import { PrivateNode } from '::types/graphql';
 import { NodesDict } from '::store/ducks/cache/document-cache';
 
 type Props = {

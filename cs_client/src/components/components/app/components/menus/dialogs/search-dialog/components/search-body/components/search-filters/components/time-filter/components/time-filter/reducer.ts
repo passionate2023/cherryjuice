@@ -1,4 +1,4 @@
-import { TimeFilter, TimeRange } from '::types/graphql/generated';
+import { TimeFilter, TimeRange } from '::types/graphql';
 import { mapRangeNameToTimeFilter } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/helpers/map-range-name-to-time-filter';
 import { EmptyTimeFilter } from '::store/ducks/search';
 

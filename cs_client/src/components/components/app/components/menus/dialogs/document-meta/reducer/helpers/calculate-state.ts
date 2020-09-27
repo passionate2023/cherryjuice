@@ -2,7 +2,7 @@ import {
   ResetToEditProps,
   TDocumentMetaState,
 } from '::root/components/app/components/menus/dialogs/document-meta/reducer/reducer';
-import { Privacy } from '::types/graphql/generated';
+import { Privacy } from '::types/graphql';
 
 const calculateEditedDocumentState = ({
   document: { name, privacy, guests },

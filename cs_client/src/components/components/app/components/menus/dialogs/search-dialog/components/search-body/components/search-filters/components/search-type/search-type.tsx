@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modSearchFilter } from '::sass-modules';
-import { SearchType as TSearchType } from '::types/graphql/generated';
+import { SearchType as TSearchType } from '::types/graphql';
 import { Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Type } from './components/type';

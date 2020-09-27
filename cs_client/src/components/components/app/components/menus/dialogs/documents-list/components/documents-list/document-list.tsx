@@ -10,7 +10,7 @@ import { getDocumentsList } from '::store/selectors/cache/document/document';
 import { SearchHeaderContainer } from '::root/components/shared-components/dialog/animations/search-header-container';
 import { DialogBody } from '../../../search-dialog/components/search-body/search-body';
 import { SortOptions } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-sort/sort-options';
-import { SortDirection, SortNodesBy } from '::types/graphql/generated';
+import { SortDirection, SortNodesBy } from '::types/graphql';
 import { Icons } from '::root/components/shared-components/icon/icon';
 import { SearchSetting } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/search-filters';
 

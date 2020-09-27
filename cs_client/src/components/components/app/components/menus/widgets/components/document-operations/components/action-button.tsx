@@ -6,7 +6,7 @@ import { ac } from '::store/store';
 import { OperationTypes } from './helpers/operation-types';
 import { uri } from '::graphql/client/hooks/apollo-client';
 import { testIds } from '::cypress/support/helpers/test-ids';
-import { DocumentOperation, OPERATION_TYPE } from '::types/graphql/generated';
+import { DocumentOperation, OPERATION_TYPE } from '::types/graphql';
 import { ProgressCircle } from '::root/components/shared-components/loading-indicator/progress-circle';
 
 type Props = {

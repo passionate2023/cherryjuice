@@ -1,5 +1,5 @@
 import { DocumentAst } from '../../../../../fixtures/document/generate-document';
-import { Privacy } from '../../../../../../types/graphql/generated';
+import { Privacy } from '../../../../../../types/graphql';
 import { UserCredentials } from '../../../../../fixtures/auth/login-credentials';
 import { interact } from '../../../interact/interact';
 import { puppeteer } from '../../puppeteer';

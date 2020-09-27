@@ -8,7 +8,7 @@ import { TransitionWrapper } from '::root/components/shared-components/transitio
 import { animated } from 'react-spring';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { HotKeyActionType } from '::types/graphql/generated';
+import { HotKeyActionType } from '::types/graphql';
 import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';

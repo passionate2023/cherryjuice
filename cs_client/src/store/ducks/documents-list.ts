@@ -5,11 +5,7 @@ import { rootActionCreators } from './root';
 import { cloneObj } from '::helpers/editing/execK/helpers';
 import { CachedDocument } from '::store/ducks/cache/document-cache';
 import { LoadDocumentsListPayload } from '::store/ducks/cache/document-cache/helpers/document/load-documents-list';
-import {
-  SearchSortOptions,
-  SortDirection,
-  SortNodesBy,
-} from '::types/graphql/generated';
+import { SearchSortOptions, SortDirection, SortNodesBy } from '::types/graphql';
 
 const ap = createActionPrefixer('document-list');
 

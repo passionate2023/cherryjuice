@@ -2,11 +2,7 @@ import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modSearchFilter } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
-import {
-  SearchSortOptions,
-  SortDirection,
-  SortNodesBy,
-} from '::types/graphql/generated';
+import { SearchSortOptions, SortDirection, SortNodesBy } from '::types/graphql';
 import {
   SortOption,
   SortOptionProps,

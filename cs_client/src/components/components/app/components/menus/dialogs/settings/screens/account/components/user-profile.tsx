@@ -8,7 +8,7 @@ import {
   userSettingsReducer,
 } from '::root/components/app/components/menus/dialogs/settings/screens/account/reducer/reducer';
 import { useEffect, useReducer } from 'react';
-import { UpdateUserProfileIt } from '::types/graphql/generated';
+import { UpdateUserProfileIt } from '::types/graphql';
 import { Email } from '::root/components/app/components/menus/dialogs/settings/screens/account/components/email/email';
 import { Profile } from '::root/components/app/components/menus/dialogs/settings/screens/account/components/profile/profile';
 import { Password } from '::root/components/app/components/menus/dialogs/settings/screens/account/components/password/password';

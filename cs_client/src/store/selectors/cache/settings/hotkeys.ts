@@ -1,7 +1,7 @@
 import { Store } from '::store/store';
-import { HotKeys } from '::types/graphql/generated';
+import { HotKeys } from '::types/graphql';
 import { createSelector } from 'reselect';
-import { HotKey } from '::types/graphql/generated';
+import { HotKey } from '::types/graphql';
 
 const hotKeysSelector = (state: Store) => state.auth.settings.hotKeys;
 const updatedHotKeys = (state: Store) => state.cache.settings.hotKeys;

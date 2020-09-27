@@ -1,7 +1,7 @@
 import { ExecKCommand } from '::helpers/editing/execK/execk-commands';
 import { Icons } from '::root/components/shared-components/icon/icon';
 import { ExecKProps } from '::helpers/editing/execK';
-import { HotKeyActionType } from '::types/graphql/generated';
+import { HotKeyActionType } from '::types/graphql';
 import { paneLine } from '::helpers/editing/typing/pane-line/pane-line';
 import { deleteLine } from '::helpers/editing/typing/delete-line/delete-line';
 

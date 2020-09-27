@@ -1,4 +1,4 @@
-import { TimeFilter, TimeRange } from '::types/graphql/generated';
+import { TimeFilter, TimeRange } from '::types/graphql';
 
 const hourMs = 1000 * 60 * 60;
 const dayMs = hourMs * 24;

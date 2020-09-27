@@ -7,7 +7,7 @@ import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { Search } from '::root/components/app/components/editor/tool-bar/components/groups/nav-bar/components/search/search';
-import { User } from '::types/graphql/generated';
+import { User } from '::types/graphql';
 import { GeneratedAvatar } from '::root/components/app/components/menus/modals/user/components/components/generated-avatar';
 
 const mapState = (state: Store) => ({
@@ -22,10 +22,7 @@ type Props = {
   showUserPopup: boolean;
 };
 
-const NavBar: React.FC<Props & PropsFromRedux> = ({
-  showUserPopup,
-  user,
-}) => {
+const NavBar: React.FC<Props & PropsFromRedux> = ({ showUserPopup, user }) => {
   const isLoggedIn = user?.id;
   return (
     <div

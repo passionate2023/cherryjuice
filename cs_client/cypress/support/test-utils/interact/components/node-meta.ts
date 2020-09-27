@@ -1,7 +1,7 @@
 import { testIds } from '../../../helpers/test-ids';
 import { wait } from '../../../helpers/cypress-helpers';
 import { setColorInputValue } from '../../../helpers/dom';
-import { Privacy } from '../../../../../types/graphql/generated';
+import { Privacy } from '../../../../../types/graphql';
 
 const set = {
   name: (name: string) => {

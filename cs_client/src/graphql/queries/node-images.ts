@@ -1,4 +1,4 @@
-import { Image } from '::types/graphql/generated';
+import { Image } from '::types/graphql';
 import gql from 'graphql-tag';
 
 type Variables = {

@@ -1,4 +1,4 @@
-import { OPERATION_STATE } from '::types/graphql/generated';
+import { OPERATION_STATE } from '::types/graphql';
 
 const OperationTypes = {
   active: {

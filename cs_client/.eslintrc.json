@@ -30,6 +30,7 @@
     "no-unused-vars": "error",
     "prefer-const": "warn",
     "@typescript-eslint/ban-ts-ignore": "warn",
+    "@typescript-eslint/class-name-casing": "warn",
     "@typescript-eslint/camelcase": "off",
     "react/prop-types": "off",
     "no-extra-semi": "off",
