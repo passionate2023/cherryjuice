@@ -1,32 +1,26 @@
-import * as React from 'react';
-import { modContextMenu } from '::sass-modules';
-
-import { connect, ConnectedProps } from 'react-redux';
-import { ac, Store } from '::store/store';
+import { ac } from '::store/store';
 import { useCallback } from 'react';
-import { getCurrentDocument } from '::store/selectors/cache/document/document';
+import {
+  CachedDocumentState,
+  NodesDict,
+} from '::store/ducks/cache/document-cache';
+import { ContextMenuItemProps } from '::root/components/shared-components/context-menu/context-menu-item';
 
-const mapState = (state: Store) => {
-  const currentDocument = getCurrentDocument(state);
-  return {
-    documentId: currentDocument?.id,
-    nodes: currentDocument?.nodes || {},
-    localState: currentDocument?.localState,
-    recentNodes: currentDocument?.persistedState?.recentNodes,
-  };
+type Props = {
+  focusedNode_id: number;
+  hide: () => void;
+  documentId: string;
+  nodes: NodesDict;
+  localState: CachedDocumentState;
+  recentNodes: number[];
 };
-const mapDispatch = {};
-const connector = connect(mapState, mapDispatch);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = { focusedNode_id: number; hide: () => void } & PropsFromRedux;
-const TabContextMenu: React.FC<Props> = ({
+const useTabContextMenu = ({
   documentId,
   focusedNode_id,
   recentNodes,
   localState,
   hide,
-}) => {
+}: Props): ContextMenuItemProps[] => {
   const closeSelectedM = useCallback(() => {
     ac.node.close({ documentId, node_id: focusedNode_id });
     hide();
@@ -71,30 +65,15 @@ const TabContextMenu: React.FC<Props> = ({
     hide();
   }, [documentId, recentNodes, focusedNode_id]);
 
-  const options: [string, () => void][] = [
-    ['rename', renameM],
-    ['close', closeSelectedM],
-    ['close all', closeAllM],
-    ['close unchanged', closeUnchangedM],
-    ['close others', closeOthersM],
-    ['close others to the left', closeOthersToLeftM],
-    ['close others to the right', closeOthersToRightM],
+  return [
+    { name: 'properties', onClick: renameM, bottomSeparator: true },
+    { name: 'close', onClick: closeSelectedM },
+    { name: 'close all', onClick: closeAllM },
+    { name: 'close unchanged', onClick: closeUnchangedM },
+    { name: 'close others', onClick: closeOthersM },
+    { name: 'close others to the left', onClick: closeOthersToLeftM },
+    { name: 'close others to the right', onClick: closeOthersToRightM },
   ];
-
-  return (
-    <div className={modContextMenu.listContextMenu}>
-      {options.map(([name, onClick]) => (
-        <div
-          className={modContextMenu.listContextMenu__option}
-          onClick={onClick}
-          key={name}
-        >
-          {name}
-        </div>
-      ))}
-    </div>
-  );
 };
 
-const _ = connector(TabContextMenu);
-export { _ as TabContextMenu };
+export { useTabContextMenu };

@@ -28,7 +28,7 @@ const HiddenTabs: React.FC<Props> = ({
       show={showContextMenu}
       shown={shown}
       hide={hideContextMenu}
-      contextMenu={
+      customBody={
         <div className={modTabs.tabsHidden}>
           {nodes.map(({ node_id, name }) => (
             <Tab

@@ -9,17 +9,18 @@ import { joinClassNames } from '::helpers/dom/join-class-names';
 
 type Props = {
   shown: boolean;
-  contextMenu: ReactNode;
+  customBody?: ReactNode;
   show?: () => void;
 } & ContextMenuProps;
 
 const ContextMenuWrapper: React.FC<Props> = ({
   children,
   shown,
-  contextMenu,
+  customBody,
   hide,
   offset,
   show,
+  items,
 }) => {
   return (
     <div
@@ -31,8 +32,8 @@ const ContextMenuWrapper: React.FC<Props> = ({
     >
       {children}
       {shown && (
-        <ContextMenu hide={hide} offset={offset}>
-          {contextMenu}
+        <ContextMenu hide={hide} offset={offset} items={items}>
+          {customBody}
         </ContextMenu>
       )}
     </div>

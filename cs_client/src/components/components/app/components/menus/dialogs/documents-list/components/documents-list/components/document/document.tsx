@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { modSelectFile } from '::sass-modules';
 import { dateToFormattedString } from '::helpers/time';
-import { ThreeDotsButton } from './components/three-dots-button';
+import { DocumentContextMenu } from './components/document-context-menu';
 import { ac } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
@@ -79,7 +79,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
           </div>
         </span>
       </div>
-      <ThreeDotsButton documentId={id} online={online} />
+      <DocumentContextMenu documentId={id} online={online} />
     </div>
   );
 };

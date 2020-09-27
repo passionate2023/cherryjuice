@@ -11,7 +11,7 @@ import {
 } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/helpers/clamp-tabs/clamp-tabs';
 import { HiddenTabs } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/hidden-tabs';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
-import { TabContextMenu } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/tab-context-menu';
+import { useTabContextMenu } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/hooks/tab-context-menu';
 
 const useForceUpdate = () => {
   const [, setFoo] = useState(0);
@@ -79,17 +79,22 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
       setCMOffset(e.clientX - tabsR.current?.getBoundingClientRect().x);
     }
   }, []);
+
+  const tabContextMenuOptions = useTabContextMenu({
+    documentId,
+    focusedNode_id,
+    recentNodes,
+    hide: () => setCMOffset(0),
+    nodes,
+    localState,
+  });
+
   return (
     <div className={modTabs.tabsContainer} onContextMenu={onRightClickM}>
       <ContextMenuWrapper
         shown={CMOffset > 0}
         hide={() => setCMOffset(0)}
-        contextMenu={
-          <TabContextMenu
-            focusedNode_id={focusedNode_id}
-            hide={() => setCMOffset(0)}
-          />
-        }
+        items={tabContextMenuOptions}
         offset={[CMOffset, 0]}
       >
         <Tabs

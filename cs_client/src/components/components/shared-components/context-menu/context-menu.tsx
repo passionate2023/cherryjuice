@@ -3,16 +3,22 @@ import { modContextMenu } from '::sass-modules';
 import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { useLayoutEffect, useRef, useState } from 'react';
+import {
+  ContextMenuItem,
+  ContextMenuItemProps,
+} from '::root/components/shared-components/context-menu/context-menu-item';
 
 export type ContextMenuProps = {
   hide: () => void;
   offset?: [number, number];
+  items?: ContextMenuItemProps[];
 };
 
 const ContextMenu: React.FC<ContextMenuProps> = ({
   children,
   hide,
   offset,
+  items,
 }) => {
   const contextMenuR = useRef<HTMLDivElement>();
   useClickOutsideModal({
@@ -43,7 +49,9 @@ const ContextMenu: React.FC<ContextMenuProps> = ({
       style={offset ? { left: offset[0], top: offset[1] } : undefined}
       ref={contextMenuR}
     >
-      {children}
+      {items
+        ? items.map(item => <ContextMenuItem {...item} key={item.name} />)
+        : children}
     </div>
   );
 };

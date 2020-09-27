@@ -26,7 +26,7 @@ export const SearchSetting: React.FC<{
     shown={shown}
     hide={hide}
     show={show}
-    contextMenu={
+    customBody={
       <div className={modSearchDialog.searchDialog__searchSetting}>
         {children}
       </div>
