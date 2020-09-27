@@ -2,13 +2,13 @@
 import React, { useRef } from 'react';
 import { Filter } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/time-filter';
 import { TimeRange } from '::types/graphql';
-import { appModule } from '::sass-modules';
+import { modApp } from '::sass-modules';
 
 const AppWrapper: React.FC = ({ children }) => {
   const mounted = useRef(false);
   if (!mounted.current) {
     const element = document.createElement('div');
-    element.classList.add(appModule.app);
+    element.classList.add(modApp.app);
     document.body.appendChild(element);
     mounted.current = true;
   }

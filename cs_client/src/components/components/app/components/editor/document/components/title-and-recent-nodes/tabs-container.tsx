@@ -50,7 +50,7 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
 }) => {
   useForceUpdate();
   const [showHiddenTabs, setShowHiddenTabs] = useState(false);
-  const [CMOffset, setCMOffset] = useState(0);
+  const [CMOffset, setCMOffset] = useState<[number, number]>([0, 0]);
   const [focusedNode_id, setFocusedNode_id] = useState(0);
   const tabsR = useRef<HTMLDivElement>();
 
@@ -76,7 +76,7 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
     const focusedNode_id = target.dataset.id || target.parentElement.dataset.id;
     if (focusedNode_id) {
       setFocusedNode_id(+focusedNode_id);
-      setCMOffset(e.clientX - tabsR.current?.getBoundingClientRect().x);
+      setCMOffset([e.clientX, e.clientY]);
     }
   }, []);
 
@@ -84,7 +84,7 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
     documentId,
     focusedNode_id,
     recentNodes,
-    hide: () => setCMOffset(0),
+    hide: () => setCMOffset([0, 0]),
     nodes,
     localState,
   });
@@ -92,10 +92,10 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
   return (
     <div className={modTabs.tabsContainer} onContextMenu={onRightClickM}>
       <ContextMenuWrapper
-        shown={CMOffset > 0}
-        hide={() => setCMOffset(0)}
+        shown={CMOffset[0] > 0}
+        hide={() => setCMOffset([0, 0])}
         items={tabContextMenuOptions}
-        offset={[CMOffset, 0]}
+        position={CMOffset}
       >
         <Tabs
           documentId={documentId}

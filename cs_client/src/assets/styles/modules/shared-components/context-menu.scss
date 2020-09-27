@@ -3,65 +3,19 @@
 @import '../../mixins/breakpoints';
 
 .context-menu {
+  user-select: none;
   position: absolute;
   box-sizing: border-box;
   background-color: var(--background);
   padding: 5px 0;
   flex-direction: column;
-  top: calc(100% + 5px);
-  left: 0;
-  @include respond-to($mb-down) {
-    max-height: calc(var(--vh) * 0.6);
-    overflow: auto;
-    top: 55px;
-    left: 5px;
-  }
   border-radius: 5px;
   box-shadow: $box-shadow1;
-}
-.context-menu--inverse-x {
-  left: unset;
-  right: 0;
-
-  @include respond-to($mb-down) {
-    left: unset;
-  }
-}
-.context-menu--inverse-y {
-  top: unset;
-  bottom: 0;
-
-  @include respond-to($mb-down) {
-    top: unset;
-  }
-}
-.context-menu-wrapper {
-  position: relative;
-  @include respond-to($mb-down) {
-    position: static;
-  }
-}
-
-.context-menu-wrapper--visible {
   z-index: $ZI-context-menu;
 }
 
-.context-menu-wrapper--static {
-  position: static;
-}
-
-.list-context-menu {
-  background-color: var(--surface);
-}
-
-.list-context-menu__option {
-  background-color: var(--surface);
-  color: var(--on-background);
-  padding: 7.5px;
-  cursor: pointer;
-  &:hover {
-    filter: brightness(0.9);
-  }
+.context-menu-wrapper {
+  padding: 0;
 }
 
 .context-menu__item {
@@ -80,11 +34,9 @@
   }
   font-size: 14px;
   transition: background-color 200ms linear;
-  display: inline-block;
   overflow: hidden;
   white-space: nowrap;
 }
-
 
 .context-menu__item--disabled {
   @include disabled-button();

@@ -15,7 +15,7 @@ import modLogin from './auth/login.scss';
 import modGoogleOauth from '::sass-modules/shared-components/google-oauth-button.scss';
 import modAuthBanner from './auth/banner.scss';
 import modUserPopup from './user/user-popup.scss';
-import appModule from '::sass-modules/app.scss';
+import modApp from '::sass-modules/app.scss';
 import modDocumentOperations from './document-operations/document-operations.scss';
 import modNodeMeta from './node-meta/node-meta.scss';
 import modIconPicker from './node-meta/icon-picker.scss';
@@ -48,7 +48,7 @@ export {
   modChangesHistory,
   modSettings,
   modTreeToolBar,
-  appModule,
+  modApp,
   modDrawer,
   modDialog,
   modButton,

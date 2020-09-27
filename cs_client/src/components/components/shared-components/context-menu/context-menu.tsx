@@ -12,13 +12,15 @@ export type ContextMenuProps = {
   hide: () => void;
   offset?: [number, number];
   items?: ContextMenuItemProps[];
+  position: [number, number];
 };
 
 const ContextMenu: React.FC<ContextMenuProps> = ({
   children,
   hide,
-  offset,
+  offset=[0,0],
   items,
+  position,
 }) => {
   const contextMenuR = useRef<HTMLDivElement>();
   useClickOutsideModal({
@@ -26,27 +28,28 @@ const ContextMenu: React.FC<ContextMenuProps> = ({
     selector: '.' + modContextMenu.contextMenu,
   });
 
-  const [inverseX, setInverseX] = useState(false);
-  const [inverseY, setInverseY] = useState(false);
+  const [inverseX, setInverseX] = useState(0);
+  const [inverseY, setInverseY] = useState(0);
   useLayoutEffect(() => {
     const boundingClientRect = contextMenuR.current.getBoundingClientRect();
     const x =
       window.innerWidth - boundingClientRect.x <
       contextMenuR.current.clientWidth;
-    if (x) setInverseX(x);
+    if (x) setInverseX(contextMenuR.current.clientWidth);
     const y =
       window.innerHeight - boundingClientRect.y <
       contextMenuR.current.clientHeight;
-    if (y) setInverseY(y);
+    if (y) setInverseY(contextMenuR.current.clientHeight);
   }, []);
+  const offsetX = inverseX ? -offset[0] : offset[0];
+  const offsetY = inverseY ? -offset[1] : offset[1];
   return (
     <div
-      className={joinClassNames([
-        modContextMenu.contextMenu,
-        [modContextMenu.contextMenuInverseX, inverseX],
-        [modContextMenu.contextMenuInverseY, inverseY],
-      ])}
-      style={offset ? { left: offset[0], top: offset[1] } : undefined}
+      className={joinClassNames([modContextMenu.contextMenu])}
+      style={{
+        left: Math.max(position[0] - inverseX + offsetX,0),
+        top: Math.max(position[1] - inverseY + offsetY,0),
+      }}
       ref={contextMenuR}
     >
       {items

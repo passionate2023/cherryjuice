@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Suspense } from 'react';
 import { Void } from '::root/components/shared-components/react/void';
-import { appModule } from '::sass-modules';
+import { modApp } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { joinClassNames } from '::helpers/dom/join-class-names';
@@ -56,8 +56,8 @@ const App: React.FC<Props & PropsFromRedux> = ({
   return (
     <div
       className={joinClassNames([
-        appModule.app,
-        [appModule.appDialogDocked, dockedDialog],
+        modApp.app,
+        [modApp.appDialogDocked, dockedDialog],
       ])}
     >
       <Suspense fallback={<Void />}>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MainButtons } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/main-buttons';
-import { appModule, modToolbar } from '::sass-modules';
+import { modApp, modToolbar } from '::sass-modules';
 import { MobileButtons } from './components/groups/mobile-buttons/mobile-buttons';
 import { createPortal } from 'react-dom';
 import {
@@ -68,7 +68,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
     <div className={modToolbar.toolBar}>
       <MainButtons />
       {isDocumentOwner && !isOnMd && <Separator />}
-      <Portal targetSelector={'.' + appModule.app} predicate={isOnMd}>
+      <Portal targetSelector={'.' + modApp.app} predicate={isOnMd}>
         {!hideDuringDocking && (
           <NodesButtons>
             {isDocumentOwner && <UndoRedo />}
@@ -79,7 +79,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
       {isDocumentOwner && !isOnMd && <Separator />}
       {!hideDuringDocking && isDocumentOwner && (
         <ErrorBoundary>
-          <Portal targetSelector={'.' + appModule.app} predicate={isOnMd}>
+          <Portal targetSelector={'.' + modApp.app} predicate={isOnMd}>
             {isOnMd ? (
               <FormattingButtonsWithTransition show={showFormattingButtons}>
                 <Separator />

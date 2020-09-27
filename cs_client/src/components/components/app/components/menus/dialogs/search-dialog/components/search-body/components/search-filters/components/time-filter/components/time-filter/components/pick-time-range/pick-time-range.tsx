@@ -6,7 +6,7 @@ import {
   TimeInputProps,
 } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/pick-time-range/components/time-input';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
-import { appModule, modPickTimeRange } from '::sass-modules';
+import { modApp, modPickTimeRange } from '::sass-modules';
 import { TimeFilter, TimeRange } from '::types/graphql';
 import { createPortal } from 'react-dom';
 
@@ -73,7 +73,7 @@ const PickTimeRange: React.FC<Props> = ({
         </div>
       </div>
     </BaseModal>,
-    document.querySelector('.' + appModule.app),
+    document.querySelector('.' + modApp.app),
   );
 };
 
