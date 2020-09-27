@@ -17,7 +17,7 @@
   border-radius: 5px;
   box-shadow: $box-shadow1;
 }
-.context-menu--right-edge {
+.context-menu--inverse-x {
   left: unset;
   right: 0;
 
@@ -25,14 +25,25 @@
     left: unset;
   }
 }
+.context-menu--inverse-y {
+  top: unset;
+  bottom: 0;
 
+  @include respond-to($mb-down) {
+    top: unset;
+  }
+}
 .context-menu-wrapper {
-  z-index: $ZI-context-menu;
   position: relative;
   @include respond-to($mb-down) {
     position: static;
   }
 }
+
+.context-menu-wrapper--visible {
+  z-index: $ZI-context-menu;
+}
+
 .context-menu-wrapper--static {
   position: static;
 }

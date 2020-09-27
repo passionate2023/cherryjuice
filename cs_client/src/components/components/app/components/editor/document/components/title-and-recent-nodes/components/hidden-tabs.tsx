@@ -25,8 +25,8 @@ const HiddenTabs: React.FC<Props> = ({
 }) => {
   return (
     <ContextMenuWrapper
-      alignTo={'right'}
-      show={shown}
+      show={showContextMenu}
+      shown={shown}
       hide={hideContextMenu}
       contextMenu={
         <div className={modTabs.tabsHidden}>
@@ -42,7 +42,6 @@ const HiddenTabs: React.FC<Props> = ({
       }
     >
       <ButtonSquare
-        onClick={showContextMenu}
         icon={<Icon name={Icons.material['arrow-down']} size={15} />}
         className={modTabs.hiddenTabsButton}
       />

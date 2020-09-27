@@ -82,7 +82,7 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
   return (
     <div className={modTabs.tabsContainer} onContextMenu={onRightClickM}>
       <ContextMenuWrapper
-        show={CMOffset > 0}
+        shown={CMOffset > 0}
         hide={() => setCMOffset(0)}
         contextMenu={
           <TabContextMenu

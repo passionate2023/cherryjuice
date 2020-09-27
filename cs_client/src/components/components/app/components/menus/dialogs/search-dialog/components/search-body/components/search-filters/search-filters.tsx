@@ -23,8 +23,9 @@ export const SearchSetting: React.FC<{
   hide: () => void;
 }> = ({ iconName, shown, show, hide, children }) => (
   <ContextMenuWrapper
-    show={shown}
+    shown={shown}
     hide={hide}
+    show={show}
     contextMenu={
       <div className={modSearchDialog.searchDialog__searchSetting}>
         {children}
@@ -33,7 +34,6 @@ export const SearchSetting: React.FC<{
   >
     <ButtonCircle
       className={modSearchDialog.searchDialog__header__toggleFilters}
-      onClick={show}
       iconName={iconName}
       active={shown}
     />

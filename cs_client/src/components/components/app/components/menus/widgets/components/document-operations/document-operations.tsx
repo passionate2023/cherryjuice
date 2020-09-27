@@ -33,6 +33,7 @@ const DocumentOperations: React.FC<Props> = ({ operations }) => {
   const stats = getStats(operations);
 
   const listItems: CollapsableListItemProps[] = operations.map(operation => ({
+    key: operation.target?.id + operation.type,
     name: operation.target.name,
     description: mapEventType(operation),
     button: (

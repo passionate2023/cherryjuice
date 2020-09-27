@@ -8,23 +8,30 @@ import { ReactNode } from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 
 type Props = {
-  show: boolean;
+  shown: boolean;
   contextMenu: ReactNode;
+  show?: () => void;
 } & ContextMenuProps;
 
 const ContextMenuWrapper: React.FC<Props> = ({
   children,
-  show,
+  shown,
   contextMenu,
   hide,
-  alignTo,
   offset,
+  show,
 }) => {
   return (
-    <div className={joinClassNames([modContextMenu.contextMenuWrapper])}>
+    <div
+      className={joinClassNames([
+        modContextMenu.contextMenuWrapper,
+        [modContextMenu.contextMenuWrapperVisible, shown],
+      ])}
+      onClick={show}
+    >
       {children}
-      {show && (
-        <ContextMenu hide={hide} alignTo={alignTo} offset={offset}>
+      {shown && (
+        <ContextMenu hide={hide} offset={offset}>
           {contextMenu}
         </ContextMenu>
       )}
