@@ -2,7 +2,7 @@ import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modSearchFilter } from '::sass-modules';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
-import { SearchScope } from '::types/graphql/generated';
+import { SearchScope } from '::types/graphql';
 import { ac } from '::store/store';
 import { useCallback } from 'react';
 import { mapScopeToLabel } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';

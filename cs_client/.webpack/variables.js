@@ -24,6 +24,7 @@ module.exports = {
     `(${[
       'node_modules/',
       'global.scss',
+      'body.scss',
       'global-classes.scss',
       'material-ui.scss',
       'google-picker.scss',

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Suspense } from 'react';
 import { Void } from '::root/components/shared-components/react/void';
-import { appModule } from '::sass-modules';
+import { modApp } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { useUpdateCssVariables } from '::root/components/app/hooks/update-css-variables';
-import { useGetPreviousOperations } from '::root/components/app/components/menus/widgets/components/document-operations/hooks/get-previous-operations';
-import { useGetActiveOperations } from '::root/components/app/components/menus/widgets/components/document-operations/hooks/get-active-operations';
+import { useGetPreviousOperations } from '::root/components/app/hooks/get-previous-operations';
+import { useGetActiveOperations } from '::root/components/app/hooks/get-active-operations';
 import { useApplyEditorSettings } from '::root/components/app/hooks/apply-editor-settings';
 
 const Menus = React.lazy(() =>
@@ -23,7 +23,8 @@ type Props = {};
 const mapState = (state: Store) => ({
   showTree: state.editor.showTree,
   showRecentNodes: state.editor.showRecentNodesBar,
-  treeWidth: state.editor.treeWidth,
+  treeWidth: state.cssVariables.treeWidth,
+  previousTreeWidth: state.cssVariables.previous.treeWidth,
   showFormattingButtons: state.editor.showFormattingButtons,
   dockedDialog: state.root.dockedDialog,
   isDocumentOwner: hasWriteAccessToDocument(state),
@@ -41,13 +42,15 @@ const App: React.FC<Props & PropsFromRedux> = ({
   isDocumentOwner,
   userId,
   showRecentNodes,
+  previousTreeWidth,
 }) => {
   useUpdateCssVariables(
     isDocumentOwner,
     showFormattingButtons,
     showTree,
-    treeWidth,
     showRecentNodes,
+    treeWidth,
+    previousTreeWidth
   );
   // useRefreshToken({ token });
   useGetPreviousOperations();
@@ -56,8 +59,8 @@ const App: React.FC<Props & PropsFromRedux> = ({
   return (
     <div
       className={joinClassNames([
-        appModule.app,
-        [appModule.appDialogDocked, dockedDialog],
+        modApp.app,
+        [modApp.appDialogDocked, dockedDialog],
       ])}
     >
       <Suspense fallback={<Void />}>

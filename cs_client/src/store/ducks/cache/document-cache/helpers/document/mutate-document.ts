@@ -1,5 +1,5 @@
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
-import { Privacy } from '::types/graphql/generated';
+import { Privacy } from '::types/graphql';
 
 type DocumentMeta = {
   name?: string;
@@ -14,12 +14,12 @@ export const mutateDocument = (
   state: DocumentCacheState,
   payload: MutateDocumentProps,
 ): DocumentCacheState => {
-  const document = state[payload.documentId];
+  const document = state.documents[payload.documentId];
   Object.entries(payload.meta).forEach(([key, value]) => {
     document[key] = value;
     if (!document.localState.editedAttributes.includes(key))
       document.localState.editedAttributes.push(key);
   });
-  document.localState.updatedAt = Date.now();
+  document.localState.localUpdatedAt = Date.now();
   return state;
 };

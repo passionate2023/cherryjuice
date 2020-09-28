@@ -11,8 +11,10 @@ export const setScrollPosition = (
   state: DocumentCacheState,
   { documentId, node_id, position }: SetScrollPositionParams,
 ) => {
-  const document = state[documentId];
-  document.persistedState.scrollPositions[node_id] = position;
+  const document = state.documents[documentId];
+  document.persistedState.scrollPositions[node_id] = position.map(
+    x => +x.toFixed(),
+  ) as [number, number];
   document.persistedState.localUpdatedAt = Date.now();
   return state;
 };

@@ -1,9 +1,11 @@
-import { modDialog } from '::sass-modules';
+import { modButton, modDialog } from '::sass-modules';
 import * as React from 'react';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
 import { EventHandler } from 'react';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
+import { ac } from '::store/store';
+
 export type DialogHeaderButton = Pick<TDialogFooterButton, 'onClick'> & {
   icon: string;
   text?: string;
@@ -17,13 +19,15 @@ export type DialogHeaderProps = {
   onClose: EventHandler<undefined>;
   menuButton?: JSX.Element;
   rightHeaderButtons?: DialogHeaderButton[];
+  pinnable?: boolean;
 };
 
 const DialogHeader: React.FC<DialogHeaderProps> = ({
+  rightHeaderButtons = [],
   menuButton,
   dialogTitle,
   onClose,
-  rightHeaderButtons = [],
+  pinnable,
 }) => {
   return (
     <div className={modDialog.dialog__header}>
@@ -44,7 +48,13 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
               />
             ),
         )}
-
+        {pinnable && (
+          <ButtonCircle
+            onClick={ac.root.toggleDockedDialog}
+            className={modButton.buttonRotated45}
+            iconName={Icons.material.pin}
+          />
+        )}
         <ButtonCircle
           className={modDialog.dialog__header__exitButton}
           onClick={onClose}

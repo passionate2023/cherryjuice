@@ -1,4 +1,8 @@
-export type DocumentInPath = { documentId: string; node_id: number };
+export type DocumentInPath = {
+  documentId: string;
+  node_id: number;
+  hash?: string;
+};
 export const extractDocumentFromPathname = (
   pathname = location.pathname,
 ): DocumentInPath => {
@@ -6,7 +10,11 @@ export const extractDocumentFromPathname = (
   if (params) {
     const documentId = params && params[1];
     const node_id = params && +params[2];
-    return { documentId, node_id };
+    return {
+      documentId,
+      node_id,
+      hash: location.hash ? location.hash.substring(1) : undefined,
+    };
   } else {
     const params = /\/document\/([^/]*)/.exec(pathname);
     const documentId = params && params[1];

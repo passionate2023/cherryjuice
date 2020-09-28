@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useReducer } from 'react';
-import { DialogWithTransition } from '::root/components/shared-components/dialog';
+import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { MetaForm } from '::root/components/shared-components/form/meta-form/meta-form';
 import { useSave } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save';
@@ -16,9 +16,10 @@ import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { SelectPrivacy } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
-import { Privacy } from '::types/graphql/generated';
+import { Privacy } from '::types/graphql';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { ColorInput } from '::root/components/shared-components/inputs/color-input';
+import { ToggleSwitch } from '::root/components/shared-components/inputs/toggle-switch';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -99,55 +100,11 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       onChange: nodeMetaActionCreators.setName,
       value: state.name,
       type: 'text',
-      label: 'Node name',
-      lazyAutoFocus: isOnMd ? 0 : 500,
+      label: 'name',
+      lazyAutoFocus: !isOnMd && Boolean(showDialog),
       testId: testIds.nodeMeta__nodeName,
-    },
-    {
-      onChange: nodeMetaActionCreators.setIsBold,
-      value: state.isBold,
-      type: 'checkbox',
-      label: 'Bold',
-      testId: testIds.nodeMeta__isBold,
-    },
-    {
-      onChange: nodeMetaActionCreators.setHasCustomColor,
-      value: state.hasCustomColor,
-      type: 'checkbox',
-      label: 'User selected color',
-      testId: testIds.nodeMeta__hasCustomColor,
-      additionalInput: (
-        <ColorInput
-          disabled={!state.hasCustomColor}
-          onChange={nodeMetaActionCreators.setCustomColor}
-          value={state.customColor}
-          testId={testIds.nodeMeta__customColor}
-        />
-      ),
-    },
-    {
-      onChange: nodeMetaActionCreators.setHasCustomIcon,
-      value: state.hasCustomIcon,
-      type: 'checkbox',
-      label: 'User selected icon',
-      testId: testIds.nodeMeta__hasCustomIcon,
-      additionalInput: (
-        <IconPicker
-          onChange={nodeMetaActionCreators.setCustomIcon}
-          value={state.customIcon}
-          disabled={!state.hasCustomIcon}
-        />
-      ),
-    },
-    {
-      onChange: nodeMetaActionCreators.setIsReadOnly,
-      value: state.isReadOnly,
-      type: 'checkbox',
-      label: 'Read only',
-    },
-  ];
-  if (isOwnerOfDocument) {
-    inputs.push({
+    } as FormInputProps,
+    isOwnerOfDocument && {
       customInput: (
         <SelectPrivacy
           disabled={documentPrivacy === Privacy.PRIVATE}
@@ -159,20 +116,74 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
         />
       ),
       label: 'visibility',
-    });
-  }
+    },
+    {
+      label: 'bold',
+      customInput: (
+        <ToggleSwitch
+          value={state.isBold}
+          onChange={nodeMetaActionCreators.setIsBold}
+        />
+      ),
+      testId: testIds.nodeMeta__isBold,
+    },
+    {
+      customInput: (
+        <ToggleSwitch
+          value={state.hasCustomColor}
+          onChange={nodeMetaActionCreators.setHasCustomColor}
+        />
+      ),
+      label: 'color',
+      testId: testIds.nodeMeta__hasCustomColor,
+      additionalInput: (
+        <ColorInput
+          disabled={!state.hasCustomColor}
+          onChange={nodeMetaActionCreators.setCustomColor}
+          value={state.customColor}
+          testId={testIds.nodeMeta__customColor}
+        />
+      ),
+    },
+    {
+      label: 'icon',
+      customInput: (
+        <ToggleSwitch
+          value={state.hasCustomIcon}
+          onChange={nodeMetaActionCreators.setHasCustomIcon}
+        />
+      ),
+      testId: testIds.nodeMeta__hasCustomIcon,
+      additionalInput: (
+        <IconPicker
+          onChange={nodeMetaActionCreators.setCustomIcon}
+          value={state.customIcon}
+          disabled={!state.hasCustomIcon}
+        />
+      ),
+    },
+    {
+      label: 'read only',
+      customInput: (
+        <ToggleSwitch
+          value={state.isReadOnly}
+          onChange={nodeMetaActionCreators.setIsReadOnly}
+        />
+      ),
+    },
+  ].filter(Boolean);
+
   return (
     <DialogWithTransition
       dialogTitle={'Node Properties'}
-      dialogFooterLeftButtons={[]}
-      dialogFooterRightButtons={buttonsRight}
+      footerLeftButtons={[]}
+      footRightButtons={buttonsRight}
       isOnMobile={isOnMd}
       show={Boolean(showDialog)}
       onClose={onClose}
       onConfirm={onSave}
       rightHeaderButtons={[]}
       small={true}
-      docked={false}
       isShownOnTopOfDialog={true}
     >
       <ErrorBoundary>

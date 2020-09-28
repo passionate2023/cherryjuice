@@ -24,9 +24,6 @@ import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
-    SearchModule,
-    NodeModule,
-    ImageModule,
     GraphQLModule.forRoot({
       include: [
         NodeModule,

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TimeFilter, TimeRange } from '::types/graphql/generated';
+import { TimeFilter, TimeRange } from '::types/graphql';
 import { mapScopeToLabel } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
 import { TimeFilterAC } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/reducer';
 import { Select } from '::root/components/shared-components/inputs/select';

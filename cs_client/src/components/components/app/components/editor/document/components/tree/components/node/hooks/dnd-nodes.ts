@@ -3,7 +3,10 @@ import { MutableRefObject, useMemo } from 'react';
 import { AlertType } from '::types/react';
 import { modTree } from '::sass-modules';
 import { ac } from '::store/store';
-import { NodesDict } from '::store/ducks/cache/document-cache';
+import {
+  DocumentMutations,
+  NodesDict,
+} from '::store/ducks/cache/document-cache';
 
 const switchParent = ({
   fatherOfDroppedNode,
@@ -16,32 +19,36 @@ const switchParent = ({
     position === -1
       ? targetNodeChildNodes.push(Number(droppedNode.node_id))
       : targetNodeChildNodes.splice(position, 0, Number(droppedNode.node_id));
-  ac.documentCache.mutateNodeMeta([
-    {
-      node_id: droppedNode.node_id,
-      documentId: droppedNode.documentId,
-      data: {
-        father_id: targetNode.node_id,
-        fatherId: targetNode.id,
+  ac.documentCache.mutateNodeMeta(
+    [
+      {
+        node_id: droppedNode.node_id,
+        documentId: droppedNode.documentId,
+        data: {
+          father_id: targetNode.node_id,
+          fatherId: targetNode.id,
+        },
       },
-    },
-    {
-      node_id: fatherOfDroppedNode.node_id,
-      documentId: fatherOfDroppedNode.documentId,
-      data: {
-        child_nodes: fatherOfDroppedNode.child_nodes.filter(
-          node_id => node_id !== droppedNode.node_id,
-        ),
+      {
+        node_id: fatherOfDroppedNode.node_id,
+        documentId: fatherOfDroppedNode.documentId,
+        data: {
+          child_nodes: fatherOfDroppedNode.child_nodes.filter(
+            node_id => node_id !== droppedNode.node_id,
+          ),
+        },
       },
-    },
-    {
-      node_id: targetNode.node_id,
-      documentId: targetNode.documentId,
-      data: {
-        child_nodes: targetNodeChildNodes,
+      {
+        node_id: targetNode.node_id,
+        documentId: targetNode.documentId,
+        data: {
+          child_nodes: targetNodeChildNodes,
+        },
       },
-    },
-  ]);
+    ],
+    DocumentMutations.NodeParent,
+  );
+  ac.timelines.showUndoDocumentAction();
 };
 
 const calculateDroppingPosition = (e): number => {

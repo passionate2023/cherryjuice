@@ -2,9 +2,10 @@ import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { AsyncOperation } from './document';
 import { rootActionCreators } from './root';
-import { cloneObj } from '::helpers/editing/execK/helpers';
+import { cloneObj } from '::helpers/objects';
 import { CachedDocument } from '::store/ducks/cache/document-cache';
 import { LoadDocumentsListPayload } from '::store/ducks/cache/document-cache/helpers/document/load-documents-list';
+import { SearchSortOptions, SortDirection, SortNodesBy } from '::types/graphql';
 
 const ap = createActionPrefixer('document-list');
 
@@ -39,14 +40,27 @@ const ac = {
       _ => (documents: CachedDocument[]) => _(documents),
     ),
   },
+
+  ...{
+    setQuery: _(ap('set-query'), _ => (query: string) => _(query)),
+    clearQuery: _(ap('clear-query')),
+  },
+  ...{
+    toggleFilters: _(ap('toggle-filters')),
+    setSortBy: _(ap('set-sort-by'), _ => (options: SortNodesBy) => _(options)),
+    toggleSortDirection: _(ap('toggle-sort-direction')),
+  },
 };
 
 type State = {
   focusedDocumentId?: string;
+  query?: string;
   fetchDocuments: AsyncOperation;
   deleteDocuments: AsyncOperation;
   selectedIDs: string[];
   deletionMode: boolean;
+  sortOptions: SearchSortOptions;
+  showFilters: boolean;
 };
 
 const initialState: State = {
@@ -54,6 +68,12 @@ const initialState: State = {
   deleteDocuments: 'idle',
   selectedIDs: [],
   deletionMode: false,
+  query: '',
+  sortOptions: {
+    sortBy: SortNodesBy.DocumentName,
+    sortDirection: SortDirection.Ascending,
+  },
+  showFilters: false,
 };
 const reducer = createReducer(initialState, _ => [
   ...[
@@ -115,6 +135,39 @@ const reducer = createReducer(initialState, _ => [
         : state.selectedIDs.includes(payload)
         ? state.selectedIDs.filter(id => id !== payload)
         : [...state.selectedIDs, payload],
+    })),
+  ],
+  ...[
+    _(ac.setQuery, (state, { payload }) => ({
+      ...state,
+      query: payload,
+    })),
+    _(ac.clearQuery, state => ({
+      ...state,
+      query: '',
+    })),
+  ],
+  ...[
+    _(ac.setSortBy, (state, { payload }) => ({
+      ...state,
+      sortOptions: {
+        ...state.sortOptions,
+        sortBy: payload,
+      },
+    })),
+    _(ac.toggleSortDirection, state => ({
+      ...state,
+      sortOptions: {
+        ...state.sortOptions,
+        sortDirection:
+          state.sortOptions.sortDirection === SortDirection.Descending
+            ? SortDirection.Ascending
+            : SortDirection.Descending,
+      },
+    })),
+    _(ac.toggleFilters, state => ({
+      ...state,
+      showFilters: !state.showFilters,
     })),
   ],
 ]);

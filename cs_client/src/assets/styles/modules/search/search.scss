@@ -1,6 +1,4 @@
 @import '../../mixins/breakpoints';
-$bg-color: white;
-$text-color: grey;
 .search__container {
   @include respond-to($wd-down) {
     width: 40px;
@@ -12,24 +10,29 @@ $text-color: grey;
   margin-right: 50px;
   display: flex;
   align-items: center;
-  background-color: $bg-color;
+  background-color: var(--background);
 }
-
+.search__container--disabled {
+  width: 40px;
+  background-color: transparent;
+  margin-right: 0;
+}
 .search__field {
   flex: 1;
   height: 100%;
   max-height: 100%;
   position: relative;
   display: flex;
-  opacity: 0.7;
-  &:focus-within {
-    opacity: 1;
-  }
-
+  opacity: 1;
+  border: 1px solid var(--on-surface-5);
   transition: opacity 200ms linear;
 }
-
-.search__field--nav-bar {
+.search__field-container--collapsed {
+  @include respond-to($wd-down) {
+    border: none;
+  }
+}
+.search__field--collapsed {
   @include respond-to($wd-down) {
     display: none;
   }
@@ -38,21 +41,28 @@ $text-color: grey;
 .search__field__input {
   flex: 1;
   height: 100%;
-  background-color: $bg-color;
-  color: $text-color;
+  background-color: var(--background);
+  color: var(--on-surface);
   border: 0;
   padding: 0 10px;
 }
-
-.search__field__clear-text-button {
+.search__field__buttons {
   position: absolute;
   right: 0;
   top: 0;
+  display: flex;
+  height: 100%;
+  button {
+    background-color: transparent;
+  }
+}
+.search__field__button {
   opacity: 0;
   transition: opacity 200ms linear;
   cursor: text;
 }
-.search__clear-text-button--visible {
+
+.search__field__button--visible {
   opacity: 0.3;
   cursor: pointer;
   &:hover {
@@ -62,11 +72,12 @@ $text-color: grey;
 .search__search-button {
   border: 0;
   margin: 0;
+  margin-left: auto;
   height: 100%;
   border-radius: 0;
   width: 50px;
   svg {
-    fill: var(--tool-bar-icon-fill);
+    fill: var(--on-surface);
   }
 }
 

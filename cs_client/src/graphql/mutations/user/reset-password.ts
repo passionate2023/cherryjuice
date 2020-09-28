@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { ResetPasswordIt } from '::types/graphql/generated';
+import { ResetPasswordIt } from '::types/graphql';
 
 type Variables = { input: ResetPasswordIt };
 const RESET_PASSWORD = (variables: Variables) => ({

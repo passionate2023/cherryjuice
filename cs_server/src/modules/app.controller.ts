@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Controller, Get, Res } from '@nestjs/common';
 import * as path from 'path';
 const staticAssetsRootFolder =
@@ -7,6 +8,7 @@ const staticAssetsRootFolder =
 const assets = {
   ['index.html']: path.join(staticAssetsRootFolder, '/index.html'),
 };
+
 @Controller()
 export class AppController {
   @Get([
@@ -20,6 +22,9 @@ export class AppController {
   clientSideRoutes(@Res() res) {
     res.sendFile(assets['index.html']);
   }
+
+  @Get('ping')
+  ping() {}
 }
 
 export { staticAssetsRootFolder };

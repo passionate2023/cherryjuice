@@ -1,4 +1,4 @@
-import { Privacy } from '../../../../../types/graphql/generated';
+import { Privacy } from '../../../../../types/graphql';
 import { DocumentAst } from '../../../../fixtures/document/generate-document';
 import { puppeteer } from '../../puppeteer/puppeteer';
 import { wait } from '../../../helpers/cypress-helpers';

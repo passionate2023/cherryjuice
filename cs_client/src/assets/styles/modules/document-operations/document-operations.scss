@@ -1,64 +1,70 @@
-@import '../../vars/colors';
 @import '../../vars/vars';
-.document-operations {
+@import '../../mixins/breakpoints';
+.collapsable-list {
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 100%;
   min-height: 0px;
   box-shadow: $box-shadow1;
 }
-.document-operations--collapsed {
+.collapsable-list--collapsed {
   height: 40px;
-  .document-operations__header {
+  box-shadow: none;
+  width: 40px;
+  margin-left: auto;
+  margin-right: 10px;
+  .collapsable-list__header {
+    opacity: 0.8;
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
+    width: 40px;
+    margin-left: auto;
+    background-color: transparent;
   }
 }
-.document-operations__header {
-  background-color: $dark-grey;
-  height: 30px;
+.collapsable-list__header {
+  transition: opacity 200ms linear;
+  background-color: var(--background);
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px;
+  padding: 0 5px;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
-.document-operations__header__text {
+.collapsable-list__header__text {
+  color: var(--on-background);
   margin-left: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &:first-letter {
+    text-transform: capitalize;
+  }
 }
-.document-operations__header__buttons {
+.collapsable-list__header__action {
   margin-left: auto;
-}
-.document-operations__header__button {
-  display: inline;
-  color: white;
-  font-size: 1.2rem;
-  min-width: 30px;
-  min-height: 30px;
-  max-width: 30px;
-  max-height: 30px;
-  text-align: center;
-  &:hover {
-    color: white;
-    background-color: rgba(white, 0.05);
-  }
-  &:active {
-    background-color: rgba(white, 0.2);
-  }
+  display: flex;
+  gap: 5px;
+  padding: 2px 0px;
+  background-color: transparent;
+  border-radius: 5px;
+  height: calc(100% - 4px);
+  align-items: center;
 }
 
-.document-operations__documents-container {
+.collapsable-list__body {
   flex: 1;
   width: 100%;
   overflow-y: auto;
   max-height: 123px;
-  background-color: rgb(250, 250, 250);
+  background-color: var(--background);
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
 }
 
-.document-operations__document {
+.collapsable-list__item {
   height: 20px;
   width: calc(100% - 20px);
   padding: 10px;
@@ -66,23 +72,38 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgb(250, 250, 250);
-  color: black;
+  background-color:var(--surface-010);
+  color: var(--on-background);
   border-radius: 3px;
 }
-.document-operations__document__name {
-  color: black;
-  display: block;
+
+.collapsable-list__item__name {
+  color: var(--on-surface);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 150px;
+  flex: 1;
 }
-.document-operations__document__button {
+.collapsable-list__item__button {
   margin-right: -5px;
+  margin-left: 5px;
 }
-.document-operations__document__status {
-  color: grey;
+.collapsable-list__item__description {
+  color: var(--on-surface);
   margin-left: auto;
-  font-size: 14px;
+  font-size: 13.5px;
+}
+.collapsable-list__item--active {
+  background-color: var(--primary);
+  filter: grayscale(0.4);
+  .collapsable-list__item__name {
+    color: var(--on-primary);
+  }
+  .collapsable-list__item__description {
+    color: var(--on-primary);
+  }
 }

@@ -8,8 +8,10 @@ export const loadDocument = (
   document: QDocumentMeta,
   next?: SelectNodeParams,
 ): DocumentCacheState => {
-  return {
-    ...state,
-    [document.id]: mergeDocument(document, state[document.id], next),
-  };
+  state.documents[document.id] = mergeDocument(
+    document,
+    state.documents[document.id],
+    next,
+  );
+  return state;
 };

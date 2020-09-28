@@ -1,4 +1,4 @@
-import { HotKeyActionType } from '::types/graphql/generated';
+import { HotKeyActionType } from '::types/graphql';
 import { ac, store } from '::store/store';
 import { getDocumentHasUnsavedChanges } from '::store/selectors/cache/document/document';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
@@ -33,5 +33,12 @@ export const generalHotKeysProps = {
     if (document.activeElement.id === 'rich-text')
       snapBackManager.current.redo();
     else ac.documentCache.redoDocumentAction();
+  },
+  [HotKeyActionType.INSERT_ANCHOR]: () => {
+    if (document.activeElement.id === 'rich-text')
+      ac.dialogs.showAnchorDialog();
+  },
+  [HotKeyActionType.INSERT_LINK]: () => {
+    if (document.activeElement.id === 'rich-text') ac.dialogs.showLinkDialog();
   },
 };

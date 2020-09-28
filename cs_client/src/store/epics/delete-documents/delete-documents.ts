@@ -1,5 +1,5 @@
 import { filter, ignoreElements, map, switchMap, tap } from 'rxjs/operators';
-import { concat, from, Observable, of } from 'rxjs';
+import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { ac, ac_, store } from '../../store';
 import { Actions } from '../../actions.types';
@@ -7,7 +7,6 @@ import { gqlMutation } from '../shared/gql-query';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { AsyncOperation } from '../../ducks/document';
 import { DELETE_DOCUMENT } from '::graphql/mutations/document/delete-document';
-import { deleteLocalDocuments } from '::root/components/app/components/menus/dialogs/documents-list/hooks/delete-documents/helpers/delete-local-documents';
 
 const asyncStates: AsyncOperation[] = ['idle', 'pending'];
 const deleteDocumentsEpic = (action$: Observable<Actions>) => {
@@ -19,38 +18,47 @@ const deleteDocumentsEpic = (action$: Observable<Actions>) => {
     filter(() =>
       asyncStates.includes(store.getState().documentsList.deleteDocuments),
     ),
-    switchMap(action => {
+    map(action => {
       let selectedIDs: string[];
       if ('payload' in action) {
         selectedIDs = [action['payload']];
       } else selectedIDs = store.getState().documentsList.selectedIDs;
+      return selectedIDs;
+    }),
+    switchMap(selectedIDs => {
       const { documentId } = store.getState().document;
       const fetchedDocuments = selectedIDs.filter(
         id => !id.startsWith('new-document'),
       );
-      const ip = of(ac_.documentsList.deleteDocumentsInProgress());
-      const deleteFetchedDocuments = gqlMutation(
+      const deletionInProgress$ = of(
+        ac_.documentsList.deleteDocumentsInProgress(),
+      );
+      const deleteFetchedDocuments$ = gqlMutation(
         DELETE_DOCUMENT({ documents: { IDs: fetchedDocuments } }),
+      ).pipe(ignoreElements());
+
+      const deleteDocumentsFromCache$ = of(
+        ac_.documentCache.deleteDocuments(selectedIDs),
       );
-      const deleteUnsavedDocuments = from(
-        new Promise(res => {
-          deleteLocalDocuments({ IDs: selectedIDs });
-          res();
+
+      const deletionFulfilled$ = of(
+        ac_.documentsList.deleteDocumentsFulfilled(),
+      );
+      const maybeClearSelectedDocument$ = of(1).pipe(
+        tap(() => {
+          if (store.getState().documentsList.selectedIDs.includes(documentId)) {
+            ac.document.setDocumentId(undefined);
+          }
         }),
+        ignoreElements(),
       );
+
       return concat(
-        ip,
-        deleteUnsavedDocuments.pipe(ignoreElements()),
-        deleteFetchedDocuments.pipe(
-          map(ac_.documentsList.deleteDocumentsFulfilled),
-          tap(() => {
-            if (
-              store.getState().documentsList.selectedIDs.includes(documentId)
-            ) {
-              ac.document.setDocumentId(undefined);
-            }
-          }),
-        ),
+        deletionInProgress$,
+        deleteFetchedDocuments$,
+        deleteDocumentsFromCache$,
+        deletionFulfilled$,
+        maybeClearSelectedDocument$,
       ).pipe(
         createErrorHandler({
           alertDetails: {

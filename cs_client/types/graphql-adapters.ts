@@ -1,4 +1,4 @@
-import { Node, Document } from '::types/graphql/generated';
+import { Node, Document } from '::types/graphql';
 
 export type NodeMeta = Omit<Node, 'html' | 'image'>;
 export type DocumentMeta = Document;

@@ -1,26 +1,36 @@
 @import '../../vars/vars';
+@import '../../vars/states';
 .selectFile {
   padding: 10px;
-  background-color: $grey-light;
   min-height: calc(100% - 20px);
   user-select: none;
 }
+
 .selectFile__file {
   cursor: pointer;
   display: block;
-  background-color: $grey-light;
+  background-color: var(--surface);
   position: relative;
-  color: black;
+  color: var(--on-background);
   margin-top: 5px;
-  padding: 10px 20px;
   max-width: 100%;
+}
+
+.selectFile__file__body {
+  padding: 10px 20px;
   &:active {
-    background-color: $primary-light;
+    background-color: var(--primary-2);
   }
   transition: background-color 0.3s ease;
   svg {
-    fill: grey;
+    fill: var(--on-surface);
   }
+}
+
+.selectFile__file__body--disabled {
+  filter: brightness(0.5) contrast(0.5) grayscale(0.5);
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 .selectFile__file__three-dots-button {
   display: flex;
@@ -34,21 +44,22 @@
 .selectFile__file__three-dots-popup {
   z-index: 2;
   width: 150px;
-  position: absolute;
-  right: 3px;
-  top: 16px;
   display: flex;
   flex-direction: column;
-  background-color: #f5f5f5;
-  color: #000000;
+  background-color: var(--surface-010);
+  color: var(--on-background);
   box-shadow: $box-shadow1;
 }
 .selectFile__file__three-dots-popup__item {
   padding: 10px 10px;
   border-bottom: 1px solid #a7a7a755;
-  &:hover {
-    background-color: #e7e7e7;
+  &:hover:not([data-disabled]) {
+    background-color: var(--surface-010);
   }
+  filter: unset;
+}
+.selectFile__file__three-dots-popup__item--disabled {
+  @include disabled-button();
 }
 .selectFile__file__name {
   display: block;
@@ -79,20 +90,20 @@
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  color: grey;
+  color: var(--on-surface);
   padding: 5px;
 }
 .selectFile__file--selected-candidate {
-  background-color: $primary-light;
+  background-color: var(--primary-2);
   span {
-    color: black;
+    color: var(--on-background);
   }
 }
 .selectFile__file--selected {
-  background-color: $primary;
-  color: white;
+  background-color: var(--primary);
+  color: var(--background);
   span {
-    color: white;
+    color: var(--background);
   }
   svg {
     fill: white;
@@ -101,7 +112,7 @@
 .selectFile__info-bar {
   margin-top: 5px;
   max-height: 25px;
-  color: black;
+  color: var(--on-background);
   flex: 1;
   text-align: left;
   font-size: 12px;
@@ -117,10 +128,12 @@
 }
 
 .selectFile__file-folder {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   box-shadow: $box-shadow2;
   padding: 3px;
-  background-color: white;
+  background-color: var(--background);
+  width: 100%;
+  box-sizing: border-box;
 }
 .selectFile__file-folder__files {
   display: flex;
@@ -133,7 +146,7 @@
   display: block;
   overflow: auto;
   margin-bottom: -5px;
-  color: black;
+  color: var(--on-background);
   font-family: monospace;
   opacity: 0.8;
 }

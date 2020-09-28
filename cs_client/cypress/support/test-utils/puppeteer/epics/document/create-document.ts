@@ -1,7 +1,7 @@
 import { DocumentAst } from '../../../../../fixtures/document/generate-document';
 import { puppeteer } from '../../puppeteer';
 import { wait } from '../../../../helpers/cypress-helpers';
-import { Privacy } from '../../../../../../types/graphql/generated';
+import { Privacy } from '../../../../../../types/graphql';
 import { interact } from '../../../interact/interact';
 
 export const createDocument = (docAst: DocumentAst) => {

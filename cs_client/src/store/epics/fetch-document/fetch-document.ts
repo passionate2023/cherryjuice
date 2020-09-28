@@ -45,7 +45,9 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
     ]),
     filter(action => {
       if (action.type === ac_.document.setDocumentId.type) {
-        const document = store.getState().documentCache[action['payload']];
+        const document = store.getState().documentCache.documents[
+          action['payload']
+        ];
         if (document?.nodes && document?.nodes[0]) {
           return false;
         }
@@ -67,6 +69,7 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
           snapBackManager.current?.enable();
         }),
         flatMap(document => {
+          if (!document?.id) return of(ac_.document.fetchFailed());
           const next = store.getState().node.next;
           if (next && next.documentId === document.id)
             return concat(

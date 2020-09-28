@@ -21,7 +21,7 @@ const ReloadDocument: React.FC<Props & PropsFromRedux> = ({ show }) => {
       label: 'Dismiss',
       onClick: ac.dialogs.hideReloadDocument,
       disabled: false,
-      lazyAutoFocus: 300,
+      lazyAutoFocus: true,
     },
     {
       label: 'Reload',

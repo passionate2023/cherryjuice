@@ -1,7 +1,6 @@
 import modSpinnerCircle from '::sass-modules/shared-components/spinner-circle.scss';
 import * as React from 'react';
 import { useSpinner } from '::hooks/use-spinner';
-import { StyleHTMLAttributes } from 'react';
 
 type Props = {
   showAfter?: number;

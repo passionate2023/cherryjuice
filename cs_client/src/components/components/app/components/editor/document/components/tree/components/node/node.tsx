@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { useDnDNodes } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/dnd-nodes';
 import { useSelectNode } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/select-node';
-import { NodePrivacy, Privacy } from '::types/graphql/generated';
+import { NodePrivacy, Privacy } from '::types/graphql';
 import { NodeIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-icon';
 import { ToggleChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/toggle-children';
 import { NodeVisibilityIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/visibility-icon';
@@ -14,6 +14,8 @@ import { NodesDict } from '::store/ducks/cache/document-cache';
 import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
 import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
 import { NodeTitle } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-title';
+import { useSelector } from 'react-redux';
+import { Store } from '::store/store';
 
 export type NodeProps = {
   node_id: number;
@@ -38,7 +40,8 @@ const Node: React.FC<NodeProps> = ({
   fatherState,
   filteredNodes,
 }) => {
-  const { child_nodes, name, privacy } = nodes[node_id];
+  const online = useSelector((state: Store) => state.root.online);
+  const { child_nodes, name, privacy, html } = nodes[node_id];
   const match = useRouteMatch<{ file_id: string }>();
   const { file_id } = match.params;
   const componentRef = useRef();
@@ -69,7 +72,9 @@ const Node: React.FC<NodeProps> = ({
   return (
     <>
       <div
-        className={`${nodeMod.node}`}
+        className={`${nodeMod.node} ${
+          !online && !html ? nodeMod.nodeNotAvailable : ''
+        }`}
         ref={componentRef}
         onClick={selectNode}
         draggable={true}

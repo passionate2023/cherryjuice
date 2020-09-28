@@ -22,8 +22,8 @@ const extractCodeBox = (
   const codeboxRow: CodeboxRow = {
     node_id,
     txt: node._,
-    height: +node.$.height,
-    width: +node.$.width,
+    height: +node.style.height.replace('px', ''),
+    width: +node.other_attributes.width_raw,
     justification,
     do_highl_bra: +node.other_attributes.do_highl_bra,
     is_width_pix: +node.other_attributes.is_width_pix,

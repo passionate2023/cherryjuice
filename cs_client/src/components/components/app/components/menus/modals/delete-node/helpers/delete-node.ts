@@ -8,6 +8,7 @@ const deleteNode = (deletedNode: QFullNode) => {
       node_id: deletedNode.node_id,
       mode: 'soft',
     });
+    ac.timelines.showUndoDocumentAction();
   };
 };
 

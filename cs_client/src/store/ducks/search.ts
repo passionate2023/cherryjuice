@@ -11,7 +11,7 @@ import {
   SortNodesBy,
   TimeFilter,
   TimeRange,
-} from '::types/graphql/generated';
+} from '::types/graphql';
 import { documentCacheActionCreators } from '::store/ducks/cache/document-cache';
 
 const ap = createActionPrefixer('search');
@@ -43,11 +43,6 @@ const ac = {
       _ => (options: SearchOptions) => _(options),
     ),
     setSearchType: _(ap('set-search-type'), _ => (args: SearchType) => _(args)),
-  },
-  ...{
-    toggleFilters: _(ap('toggle-filters')),
-  },
-  ...{
     setUpdatedAtTimeFilter: _(
       ap('set-updated-at-time-filter'),
       _ => (filter: TimeFilter) => _(filter),
@@ -56,10 +51,14 @@ const ac = {
       ap('set-created-at-time-filter'),
       _ => (filter: TimeFilter) => _(filter),
     ),
+    toggleSortDirection: _(ap('toggle-sort-direction')),
+    setSortBy: _(ap('set-sort-by'), _ => (options: SortNodesBy) => _(options)),
   },
   ...{
-    setSortBy: _(ap('set-sort-by'), _ => (options: SortNodesBy) => _(options)),
-    toggleSortDirection: _(ap('toggle-sort-direction')),
+    toggleFilters: _(ap('toggle-filters')),
+    toggleSortOptions: _(ap('toggle-sort-options')),
+    toggleTuning: _(ap('toggle-tuning')),
+    toggleTimeFilter: _(ap('toggle-time-filter')),
   },
 };
 
@@ -77,6 +76,9 @@ type State = {
   createdAtTimeFilter: TimeFilter;
   updatedAtTimeFilter: TimeFilter;
   sortOptions: SearchSortOptions;
+  showSortOptions: boolean;
+  showTuning: boolean;
+  showTimeFilter: boolean;
 };
 
 const EmptyTimeFilter = {
@@ -106,6 +108,9 @@ const initialState: State = {
     sortBy: SortNodesBy.UpdatedAt,
     sortDirection: SortDirection.Descending,
   },
+  showSortOptions: false,
+  showTuning: false,
+  showTimeFilter: false,
 };
 
 const reducer = createReducer(initialState, _ => [
@@ -201,6 +206,20 @@ const reducer = createReducer(initialState, _ => [
             ? SortDirection.Ascending
             : SortDirection.Descending,
       },
+    })),
+  ],
+  ...[
+    _(ac.toggleSortOptions, state => ({
+      ...state,
+      showSortOptions: !state.showSortOptions,
+    })),
+    _(ac.toggleTuning, state => ({
+      ...state,
+      showTuning: !state.showTuning,
+    })),
+    _(ac.toggleTimeFilter, state => ({
+      ...state,
+      showTimeFilter: !state.showTimeFilter,
     })),
   ],
 ]);

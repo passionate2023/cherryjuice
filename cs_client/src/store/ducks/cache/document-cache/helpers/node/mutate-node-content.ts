@@ -31,7 +31,7 @@ export const mutateNodeContent = (
   state: DocumentCacheState,
   { meta, documentId, node_id, data }: MutateNodeContentParams,
 ): DocumentCacheState => {
-  const document = state[documentId];
+  const document: CachedDocument = state.documents[documentId];
   const node = document.nodes[node_id];
   const updatedAt = Date.now();
 
@@ -49,7 +49,7 @@ export const mutateNodeContent = (
     }
     node.updatedAt = updatedAt;
   }
-  document.localState.updatedAt = updatedAt;
+  document.localState.localUpdatedAt = updatedAt;
   listNodeEditedAttributes({
     document,
     attributes: Object.keys(data),

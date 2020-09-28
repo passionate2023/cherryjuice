@@ -8,7 +8,7 @@ import { ImportsModule } from '../../imports/imports.module';
 import { DocumentRepository } from '../../document/repositories/document.repository';
 import { DocumentQueriesResolver } from '../../document/document.queries.resolver';
 import { DocumentMutationsResolver } from '../../document/document.mutations.resolver';
-import { DocumentSubscriptionsResolver } from '../../document/document.subscriptions.resolver';
+import { SubscriptionsResolver } from '../../document/subscriptions.resolver';
 import { DocumentService } from '../../document/document.service';
 import { DocumentSqliteRepository } from '../../imports/helpers/import-ctb/repositories/document.sqlite.repository';
 
@@ -28,7 +28,7 @@ const createTestHelpers = async (): Promise<DocumentTH> => {
     providers: [
       DocumentQueriesResolver,
       DocumentMutationsResolver,
-      DocumentSubscriptionsResolver,
+      SubscriptionsResolver,
       DocumentService,
       DocumentSqliteRepository,
     ],

@@ -31,7 +31,7 @@ const test = (
     const endElement = document.querySelector('[end-element="true"]');
     execK({
       ...cmd,
-      testSample: { endOffset, startOffset, startElement, endElement },
+      selection: { endOffset, startOffset, startElement, endElement },
     });
     const res = document.querySelector('#rich-text');
     expect(res).toMatchSnapshot();

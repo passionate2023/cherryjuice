@@ -5,14 +5,10 @@ import { createSelector } from 'reselect';
 import { router } from '::root/router/router';
 
 const initial = () => {
-  const { documentId, node_id } = extractDocumentFromPathname();
+  const { documentId, node_id, hash } = extractDocumentFromPathname();
   if (documentId) {
-    if (documentId.startsWith('new-document')) {
-      ac.document.setDocumentId('');
-    } else {
-      ac.document.setDocumentId(documentId);
-      if (node_id) ac.node.selectNext({ documentId, node_id });
-    }
+    ac.document.setDocumentId(documentId);
+    if (node_id) ac.node.selectNext({ documentId, node_id, hash });
   } else ac.document.setDocumentId('');
 };
 const change = () => {
@@ -23,21 +19,24 @@ const change = () => {
 };
 
 const getRoute = createSelector(
-  (state: Store) => state.documentCache[state.document.documentId]?.id,
   (state: Store) =>
-    state.documentCache[state.document.documentId]?.persistedState
+    state.documentCache.documents[state.document.documentId]?.id,
+  (state: Store) =>
+    state.documentCache.documents[state.document.documentId]?.persistedState
       ?.selectedNode_id,
+  (state: Store) =>
+    state.documentCache.documents[state.document.documentId]?.localState?.hash,
   (state: Store) => state.document.asyncOperations.fetch,
   (state: Store) => state.auth.user?.id,
   (state: Store) => state.auth.user?.hasPassword,
-  (documentId, node_id, fetch, userId, hasPassword) => {
+  (documentId, node_id, hash, fetch, userId, hasPassword) => {
     const unfinishedOauthSignup = userId && hasPassword === false;
 
     if (unfinishedOauthSignup) router.goto.oauthSignup();
     else if (fetch === 'idle') {
       if (documentId) {
         if (node_id) {
-          router.goto.node(documentId, node_id);
+          router.goto.node(documentId, node_id, hash);
         } else router.goto.document(documentId);
       } else if (!userId) router.goto.signIn();
       else {

@@ -1,5 +1,5 @@
 @import '../../vars/vars';
-@import '../../vars/colors';
+@import '../../vars/states';
 
 @mixin button-variant($color, $bg-color, $br-base, $br-step) {
   color: $color;
@@ -21,24 +21,23 @@
 .button {
   user-select: none;
   border: none;
-  background-color: transparent;
-  color: var(--text-color-inverted);
+  background-color: var(--background);
+  color: var(--primary-020);
   transition: background-color 0.3s ease, filter 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 1.25px;
   cursor: pointer;
   &:hover:not([disabled]) {
-    background-color: var(--primary-color-hover);
-    color: var(--text-color-on-primary-hover);
+    background-color: var(--primary-100);
+    color: var(--primary-020);
   }
   &:active:not([disabled]) {
-    background-color: var(--primary-color-active);
-    color: var(--text-color-on-primary-active);
+    background-color: var(--primary-090);
+    color: var(--primary-020);
     box-shadow: $box-shadow1;
   }
   &:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
+    @include disabled-button();
   }
   display: flex;
   align-items: center;
@@ -68,15 +67,18 @@
 }
 
 .button--danger {
-  @include button-variant(var(--text-color-on-primary), #d60000, 1, 0.1);
+  @include button-variant(var(--background), var(--danger), 1, 0.1);
 }
 .button--dark {
-  @include button-variant(var(--text-color-on-primary), $dark-grey, 0.85, 0.1);
+  @include button-variant(var(--background), var(--on-surface-010), 1.6, 0.5);
+  svg {
+    fill: white;
+  }
 }
 
 .button--pressed {
-  background-color: var(--primary-color) !important;
-  color: var(--text-color-on-primary) !important;
+  background-color: var(--primary) !important;
+  color: var(--background) !important;
   box-shadow: $box-shadow1;
   svg {
     fill: white;
@@ -87,5 +89,6 @@
   svg,
   img {
     transform: rotateZ(45deg);
+    margin-bottom: -3px;
   }
 }

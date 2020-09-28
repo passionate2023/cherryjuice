@@ -1,13 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const removeBrotliExtension = async manifestEntries => {
-  const manifest = manifestEntries.map(entry => {
-    if (entry.url.endsWith('.br')) {
-      entry.url = entry.url.substring(0, entry.url.length - 3);
-    }
-    return entry;
-  });
-  return { manifest, warnings: [] };
-};
 
 const { alias, globalStyles, paths } = require('./variables');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -136,6 +127,7 @@ module.exports = {
     production && new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/assets/index.html',
+      meta: { 'build-date': new Date().toUTCString() },
     }),
     production &&
       new FaviconsWebpackPlugin({
@@ -147,13 +139,17 @@ module.exports = {
           background: '#180101',
           theme_color: '#180101',
         },
-      }),
-    production &&
-      new CompressionPlugin({
-        deleteOriginalAssets: true,
-        filename: '[path].br[query]',
-        algorithm: 'brotliCompress',
-        test: /\.(js|css|svg)$/,
+        orientation: 'natural',
+        icons: {
+          favicons: true,
+          android: { background: '#000000' },
+          appleIcon: { background: '#000000' },
+          windows: { background: '#000000' },
+          appleStartup: false,
+          coast: false,
+          firefox: false,
+          yandex: false,
+        },
       }),
     production &&
       new WorkboxPlugin.GenerateSW({
@@ -162,9 +158,16 @@ module.exports = {
         maximumFileSizeToCacheInBytes: production ? 1024 * 2000 : 1024 * 20000,
         swDest: 'workbox-sw.js',
         navigateFallback: 'index.html',
-        manifestTransforms: [removeBrotliExtension],
+        navigateFallbackDenylist: [/auth\/google\/.*/, /report\.html/],
       }),
     production &&
       new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
+    production &&
+      new CompressionPlugin({
+        // deleteOriginalAssets: true,
+        filename: '[path].br[query]',
+        algorithm: 'brotliCompress',
+        test: /\.(js|css|svg)$/,
+      }),
   ].filter(Boolean),
 };

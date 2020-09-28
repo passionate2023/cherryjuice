@@ -1,6 +1,6 @@
 import { SaveOperationProps } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
 import { apolloClient } from '::graphql/client/apollo-client';
-import { DocumentGuestOt } from '::types/graphql/generated';
+import { DocumentGuestOt } from '::types/graphql';
 import { EDIT_DOCUMENT_META } from '::graphql/mutations/document/edit-document-meta';
 
 const saveDocumentMeta = async ({ document, state }: SaveOperationProps) => {
@@ -10,8 +10,7 @@ const saveDocumentMeta = async ({ document, state }: SaveOperationProps) => {
       document[attribute],
     ]),
   );
-  if (!editedAttributes.updatedAt)
-    editedAttributes.updatedAt = new Date().getTime();
+  editedAttributes.updatedAt = document.localState.localUpdatedAt;
   if (editedAttributes.guests)
     editedAttributes.guests = editedAttributes.guests.map(
       ({ userId, email, accessLevel }) =>

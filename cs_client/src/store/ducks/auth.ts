@@ -8,7 +8,7 @@ import {
   SignInCredentials,
   SignUpCredentials,
   User,
-} from '::types/graphql/generated';
+} from '::types/graphql';
 import { AsyncOperation } from './document';
 import { rootActionCreators } from './root';
 import { AsyncError } from '::root/components/auth/hooks/proper-error-message';
@@ -60,7 +60,10 @@ type State = {
   ongoingOperation: AsyncOperation;
 };
 
-const emptySettings = { hotKeys: { formatting: [], general: [] } };
+const emptySettings = {
+  hotKeys: { formatting: [], general: [] },
+  editorSettings: { values: {} },
+};
 const initialState: State = {
   alert: undefined,
   token: undefined,
@@ -68,6 +71,7 @@ const initialState: State = {
   secrets: undefined,
   storageType: 'localStorage',
   ongoingOperation: 'idle',
+  // @ts-ignore
   settings: emptySettings,
 };
 const reducer = createReducer(initialState, _ => [

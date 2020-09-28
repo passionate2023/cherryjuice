@@ -1,4 +1,4 @@
-import { Document } from '::types/graphql/generated';
+import { Document } from '::types/graphql';
 import gql from 'graphql-tag';
 import { DOCUMENT_GUEST } from '::graphql/fragments';
 
@@ -14,6 +14,7 @@ export type QDocumentsListItem = Pick<
   | 'updatedAt'
   | 'guests'
   | 'privacy'
+  | 'privateNodes'
   | 'state'
 >;
 
@@ -28,6 +29,10 @@ export const DOCUMENT_LIST_ITEM = gql`
     createdAt
     updatedAt
     privacy
+    privateNodes {
+      father_id
+      node_id
+    }
     state {
       updatedAt
       recentNodes
@@ -38,6 +43,7 @@ export const DOCUMENT_LIST_ITEM = gql`
       }
       selectedNode_id
       treeState
+      lastOpenedAt
     }
     ...DocumentGuest
   }

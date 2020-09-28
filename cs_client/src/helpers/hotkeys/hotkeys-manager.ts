@@ -1,5 +1,5 @@
 import { richTextIsOnFocus } from '::helpers/hotkeys/helpers/richtext-is-focused';
-import { HotKey } from '::types/graphql/generated';
+import { HotKey } from '::types/graphql';
 import { flattenHotKey } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/flatten-hot-key';
 
 export type KeysCombination = {

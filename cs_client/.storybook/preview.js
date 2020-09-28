@@ -6,6 +6,14 @@ import { withA11y } from '@storybook/addon-a11y';
 import { boolean, withKnobs } from '@storybook/addon-knobs';
 import { MemoryRouter } from 'react-router';
 import '@storybook/addon-console';
+import { Provider } from 'react-redux';
+import { store } from '::store/store';
+import modTheme from '::sass-modules/../themes/themes.scss';
+import '::assets/styles/global-scope/material-ui.scss';
+import '::assets/styles/base.scss';
+import '::assets/styles/global-scope/global-classes.scss';
+import '::assets/styles/global-scope/google-picker.scss';
+import '::assets/styles/css-variables/css-variables.scss';
 addParameters({
   backgrounds: [
     { name: 'white', value: '#f5f5f5', default: true },
@@ -27,9 +35,10 @@ addDecorator((storyFn, context) => {
 });
 addDecorator(withA11y);
 addDecorator(withKnobs);
-import { Provider } from 'react-redux';
-import { store } from '::root/../src/store/store';
+
 addDecorator(story => (
-  <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+  <MemoryRouter initialEntries={['/']}>
+    <div className={modTheme.lightTheme}>{story()}</div>
+  </MemoryRouter>
 ));
 addDecorator(story => <Provider store={store}>{story()}</Provider>);

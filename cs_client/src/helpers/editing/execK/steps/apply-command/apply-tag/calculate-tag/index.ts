@@ -1,5 +1,6 @@
-import { cloneObj } from '::helpers/editing/execK/helpers';
+import { cloneObj } from '::helpers/objects';
 import { TTag } from '::helpers/editing/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__';
+import { Attribute, ExecKMode } from '::helpers/editing/execK';
 const alwaysToBeRemovedTags = ['span'];
 const sizeTags = ['h1', 'h2', 'h3', 'small', 'sup', 'sub'];
 const styleTags = ['strong', 'em', 'code'];
@@ -44,20 +45,28 @@ const cleanTags = ({ tags, predicate }) => {
     .filter(([tagName]) => predicate(tagName))
     .forEach(([tagName]) => removeTag({ tags, tagName }));
 };
-const addTag = ({ tags, tagName }) => {
-  if (!findExistingTag({ tagName, tags })) tags.push([tagName, {}]);
+const addTag = ({ tags, tagName, attributes }) => {
+  if (!findExistingTag({ tagName, tags }))
+    tags.push([tagName, attributes ? Object.fromEntries(attributes) : {}]);
 };
 const calculateTag = ({
   tags: oldTags,
-  cmd: { remove, tagName },
+  cmd: { remove, tagName, attributes, mode },
 }: {
   tags: TTag[];
-  cmd: { tagName: string; remove?: boolean };
+  cmd: {
+    tagName: string;
+    remove?: boolean;
+    attributes: Attribute[];
+    mode: ExecKMode;
+  };
 }) => {
   const tags = cloneObj(oldTags);
   if (isSizeTag(tagName)) cleanTags({ tags, predicate: isSizeTag });
-  if (remove) removeTag({ tags, tagName });
-  else addTag({ tags, tagName });
+  if (remove) {
+    removeTag({ tags, tagName });
+    if (mode === 'override') addTag({ tags, tagName, attributes });
+  } else addTag({ tags, tagName, attributes });
   if (tags.length > 1) cleanTags({ tags, predicate: isRemovable });
   return tags;
 };

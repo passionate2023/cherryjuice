@@ -9,6 +9,54 @@ import { NODE_HTML } from '::graphql/queries/node-html';
 import { getNode } from '::store/selectors/cache/document/node';
 import { FETCH_NODE_IMAGES } from '::graphql/queries/node-images';
 
+export type FetchContentProps = {
+  documentId: string;
+  node_ids: number[];
+};
+export const fetchNodeHtml = ({ node_ids, documentId }: FetchContentProps) =>
+  defer(() =>
+    gqlQuery(
+      NODE_HTML({
+        file_id: documentId,
+        node_ids,
+      }),
+    ).pipe(
+      map(nodeHtmls =>
+        ac_.documentCache.addFetchedFields(
+          nodeHtmls.map(({ html, node_id }) => ({
+            node_id,
+            documentId,
+            data: { html },
+          })),
+        ),
+      ),
+    ),
+  );
+export const fetchNodeImages = (
+  { node_ids, documentId }: FetchContentProps,
+  thumbnail = false,
+) =>
+  defer(() =>
+    gqlQuery(
+      FETCH_NODE_IMAGES({
+        file_id: documentId,
+        node_ids,
+        thumbnail,
+      }),
+    ).pipe(
+      map(images =>
+        ac_.documentCache.addFetchedFields(
+          images
+            .filter(({ image }) => !!image.length)
+            .map(({ image, node_id }) => ({
+              node_id,
+              documentId,
+              data: { image },
+            })),
+        ),
+      ),
+    ),
+  );
 const fetchNodeEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
     ofType([ac_.node.fetch]),
@@ -20,64 +68,20 @@ const fetchNodeEpic = (action$: Observable<Actions>) => {
       return validNode_id && nodeFetchIdle && nodeHasNoHtml;
     }),
     concatMap(({ payload: { node_id, documentId } }) => {
-      const fetchHtml = gqlQuery(
-        NODE_HTML({
-          file_id: documentId,
-          node_id,
-        }),
-      ).pipe(
-        map(({ html }) =>
-          ac_.documentCache.addFetchedFields({
-            node_id,
-            documentId,
-            data: { html },
-          }),
-        ),
-      );
-
-      const fetchImagesThumbnails = defer(() =>
-        gqlQuery(
-          FETCH_NODE_IMAGES({
-            file_id: documentId,
-            node_id,
-            thumbnail: true,
-          }),
-        ).pipe(
-          filter(({ image }) => !!image.length),
-          map(({ image }) =>
-            ac_.documentCache.addFetchedFields({
-              node_id,
-              documentId,
-              data: { image },
-            }),
-          ),
-        ),
-      );
-      const fetchImages = defer(() =>
-        gqlQuery(
-          FETCH_NODE_IMAGES({
-            file_id: documentId,
-            node_id,
-          }),
-        ).pipe(
-          filter(({ image }) => !!image.length),
-          map(({ image }) =>
-            ac_.documentCache.addFetchedFields({
-              node_id,
-              documentId,
-              data: { image },
-            }),
-          ),
-        ),
-      );
       const loading = of(ac_.node.fetchInProgress(node_id));
       const fulfilled = of(ac_.node.fetchFulfilled(node_id));
+      const fetchHtml$ = fetchNodeHtml({ documentId, node_ids: [node_id] });
+      const fetchImagesThumbnails$ = fetchNodeImages(
+        { documentId, node_ids: [node_id] },
+        true,
+      );
+      const fetchImages$ = fetchNodeImages({ documentId, node_ids: [node_id] });
       return concat(
         loading,
-        fetchHtml,
+        fetchHtml$,
         fulfilled,
-        fetchImagesThumbnails,
-        fetchImages,
+        fetchImagesThumbnails$,
+        fetchImages$,
       ).pipe(
         createErrorHandler({
           alertDetails: {

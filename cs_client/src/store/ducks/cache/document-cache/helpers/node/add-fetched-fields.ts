@@ -1,5 +1,5 @@
 import { DocumentCacheState } from '::store/ducks/cache/document-cache';
-import { Image } from '::types/graphql/generated';
+import { Image } from '::types/graphql';
 
 export type AddHtmlParams = {
   node_id: number;
@@ -13,21 +13,17 @@ export type AddHtmlParams = {
 
 export const addFetchedFields = (
   state: DocumentCacheState,
-  { documentId, node_id, data }: AddHtmlParams,
+  nodes: AddHtmlParams[],
 ): DocumentCacheState => {
-  const node = state[documentId].nodes[node_id];
+  nodes.forEach(({ node_id, data, documentId }) => {
+    const node = state.documents[documentId].nodes[node_id];
 
-  if (data['html'] && node.html) {
-    return state;
-  }
-  return {
-    ...state,
-    [documentId]: {
-      ...state[documentId],
-      nodes: {
-        ...state[documentId].nodes,
-        [node_id]: { ...node, ...data },
-      },
-    },
-  };
+    if (data['html'] && node.html) {
+      return state;
+    }
+    Object.entries(data).forEach(([key, value]) => {
+      node[key] = value;
+    });
+  });
+  return state;
 };

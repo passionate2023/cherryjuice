@@ -1,19 +1,18 @@
 @import '../../vars/vars';
 .text-input {
-  background-color: #f5f5f5;
-  text-align: center;
-  width: 70px;
+  background-color: var(--surface-010);
+  padding: 10px 20px;
+  box-sizing: border-box;
+  width: 100%;
   border: none;
-  height: 20px;
-  margin-right: 10px;
 }
 
 .number-input {
   box-sizing: border-box;
-  background-color: #f5f5f5;
+  background-color: var(--surface-010);
   text-align: center;
-  width: 75px;
+  width: 65px;
   border: none;
   height: 40px;
-  padding: 2px 15px;
+  padding: 2px 7.5px;
 }

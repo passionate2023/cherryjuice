@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { EditDocumentIt } from '::types/graphql/generated';
+import { EditDocumentIt } from '::types/graphql';
 
 type Variables = {
   file_id: string;

@@ -11,7 +11,7 @@ import { nodeActionCreators } from './ducks/node';
 import { createEpicMiddleware } from 'redux-observable';
 import { editorActionCreators } from './ducks/editor';
 import { documentsListActionCreators } from './ducks/documents-list';
-import { documentOperationsActionCreators } from './ducks/document-operations';
+import { documentOperationsActionCreators } from './ducks/document-operation/document-operations';
 import { rootActionCreators } from './ducks/root';
 import { searchActionCreators } from './ducks/search';
 import { cssVariablesActionCreators } from './ducks/css-variables';

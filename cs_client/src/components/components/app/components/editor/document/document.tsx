@@ -12,7 +12,7 @@ import { DocumentContext } from './reducer/context';
 import { Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { TitleAndRecentNodes } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/title-and-recent-nodes';
+import { TabsContainer } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/tabs-container';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -51,7 +51,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
       <LinearProgress loading={fetchDocumentInProgress || saveInProgress} />
       {nodes && (
         <Fragment>
-          {Boolean(selectedNode_id) && <TitleAndRecentNodes />}
+          {Boolean(selectedNode_id) && <TabsContainer />}
           {showTree && (
             <ErrorBoundary>
               <Tree />

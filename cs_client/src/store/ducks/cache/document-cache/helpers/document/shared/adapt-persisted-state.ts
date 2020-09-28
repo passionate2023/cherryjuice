@@ -1,4 +1,4 @@
-import { DocumentState } from '::types/graphql/generated';
+import { DocumentState } from '::types/graphql';
 import {
   NodesDict,
   PersistedDocumentState,
@@ -16,6 +16,7 @@ export const adaptFromPersistedState = ({
     selectedNode_id,
     treeState,
     updatedAt,
+    lastOpenedAt,
   },
   nodes,
 }: {
@@ -30,7 +31,9 @@ export const adaptFromPersistedState = ({
     ),
     selectedNode_id: selectedNode_id || getDefaultSelectedNode_id(nodes),
     updatedAt,
-    localUpdatedAt: updatedAt
+    lastOpenedAt,
+    localUpdatedAt: updatedAt,
+    localLastOpenedAt: lastOpenedAt,
   };
 };
 
@@ -40,9 +43,13 @@ export const adaptToPersistedState = ({
   treeState,
   scrollPositions,
   localUpdatedAt,
+  localLastOpenedAt,
+  updatedAt,
+  lastOpenedAt,
 }: PersistedDocumentState): DocumentState => {
   return {
-    updatedAt: new Date(localUpdatedAt),
+    updatedAt: new Date(localUpdatedAt || updatedAt),
+    lastOpenedAt: new Date(localLastOpenedAt || lastOpenedAt),
     recentNodes,
     selectedNode_id,
     treeState: flattenTree(treeState),

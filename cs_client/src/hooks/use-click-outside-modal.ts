@@ -1,19 +1,32 @@
 import { useEffect } from 'react';
 
-const createEventHandler = ({ selectorsToIgnore, cb, isVisible }) => e => {
-  const selectors = selectorsToIgnore.join(', ');
-  if (isVisible && !e.target.closest(selectors)) {
-    cb();
+const createEventHandler = ({ selector, callback }: Props) => (
+  event: MouseEvent,
+) => {
+  if (!selector) return;
+  const element = document.querySelector(selector);
+  if (!element) return;
+  const isClickInside = element.contains(event['target'] as Node);
+
+  if (!isClickInside) {
+    callback();
   }
 };
-const useClickOutsideModal = ({ selectorsToIgnore, cb, isVisible = true }) => {
+type Props = {
+  selector: string;
+  callback: () => void;
+};
+const useClickOutsideModal = ({ selector, callback }: Props) => {
   useEffect(() => {
-    const handler = createEventHandler({ selectorsToIgnore, cb, isVisible });
+    const handler = createEventHandler({
+      selector,
+      callback,
+    });
     document.addEventListener('click', handler);
     return () => {
       document.removeEventListener('click', handler);
     };
-  }, [isVisible]);
+  }, [selector, callback]);
 };
 
 export { useClickOutsideModal };

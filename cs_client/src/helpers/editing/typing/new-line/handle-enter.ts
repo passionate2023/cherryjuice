@@ -4,7 +4,6 @@ import { insertNewLine } from '::helpers/editing/typing/new-line/helpers/insert-
 import { getCursorPosition } from '::helpers/editing/typing/new-line/helpers/get-cursor-position';
 
 const handleEnter = (e: KeyboardEvent) => {
-  e.preventDefault();
   const selection = getSelection({
     selectAdjacentWordIfNoneIsSelected: false,
   });
@@ -12,17 +11,23 @@ const handleEnter = (e: KeyboardEvent) => {
   const preserveIndentation = !e.shiftKey;
   let nextSelectionElement;
   let offset = 0;
-  if (position.insideTable) return;
-  if (position.insideCodeBox)
-    nextSelectionElement = insertNewLine.insideCodeBox(selection);
-  else if (position.beforeTable)
+  if (position.insideTable) {
+    e.preventDefault();
+    return;
+  }
+  if (position.insideCodeBox) {
+    return;
+  } else if (position.beforeTable) {
+    e.preventDefault();
     nextSelectionElement = insertNewLine.beforeTable(selection);
-  else
+  } else {
+    e.preventDefault();
     [nextSelectionElement, offset] = insertNewLine.generic(
       selection,
       position,
       preserveIndentation,
     );
+  }
   setTextSelection(
     {
       startElement: nextSelectionElement,

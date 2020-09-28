@@ -2,7 +2,7 @@ import { SaveOperationProps } from '::store/epics/save-documents/helpers/save-do
 import { apolloClient } from '::graphql/client/apollo-client';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { newImagePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
-import { Image } from '::types/graphql/generated';
+import { Image } from '::types/graphql';
 import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 
 const base64toBlob = ({ url, name }): Promise<Blob> =>

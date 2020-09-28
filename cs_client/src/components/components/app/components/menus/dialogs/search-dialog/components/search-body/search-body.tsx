@@ -7,6 +7,10 @@ import { SearchHeader } from '::root/components/app/components/menus/dialogs/sea
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 
+export const DialogBody: React.FC = ({ children }) => (
+  <div className={modSearchDialog.searchDialog}>{children}</div>
+);
+
 const mapState = (state: Store) => ({
   showFilters: state.search.showFilters,
 });
@@ -14,15 +18,20 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = {
+  show: boolean;
+};
 
-const SearchBody: React.FC<Props & PropsFromRedux> = ({ showFilters }) => {
+const SearchBody: React.FC<Props & PropsFromRedux> = ({
+  showFilters,
+  show,
+}) => {
   return (
-    <div className={modSearchDialog.searchDialog}>
-      <SearchHeader showFilters={showFilters} />
+    <DialogBody>
+      <SearchHeader show={show} />
       <SearchFilters show={showFilters} />
-      <SearchResults collapse={showFilters} />
-    </div>
+      <SearchResults />
+    </DialogBody>
   );
 };
 

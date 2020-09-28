@@ -11,7 +11,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import {
   SearchScope as TSearchScope,
   SearchScope as ESearchScope,
-} from '::types/graphql/generated';
+} from '::types/graphql';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
@@ -55,7 +55,7 @@ const SearchScope: React.FC<Props & PropsFromRedux> = ({
   }, [noSelectedNode, noSelectedDocument]);
   return (
     <div className={joinClassNames([modSearchFilter.searchFilter])}>
-      <span className={modSearchFilter.searchFilter__label}>search scope</span>
+      <span className={modSearchFilter.searchFilter__label}>scope</span>
       <div className={modSearchFilter.searchFilter__list}>
         {scopes.map(args => (
           <Scope key={args.scope} {...args} selectedScope={selectedScope} />

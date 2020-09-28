@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { modNodeMeta } from '::sass-modules';
-import { Privacy } from '::types/graphql/generated';
+import { Privacy } from '::types/graphql';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { NodePrivacy } from '::types/graphql/generated';
+import { NodePrivacy } from '::types/graphql';
 
 const privacyWeights = {
   [Privacy.PRIVATE]: 1,

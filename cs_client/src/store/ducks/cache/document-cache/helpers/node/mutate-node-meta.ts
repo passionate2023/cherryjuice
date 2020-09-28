@@ -32,7 +32,7 @@ export const mutateNodeMeta = (
   state: DocumentCacheState,
   params: MutateNodeMetaParams[],
 ): DocumentCacheState => {
-  const document = state[params[0].documentId];
+  const document = state.documents[params[0].documentId];
   if (
     params.length > 1 &&
     params.some(param => param.documentId !== document.id)
@@ -50,7 +50,7 @@ export const mutateNodeMeta = (
       node_id,
     });
     node.updatedAt = updatedAt;
-    document.localState.updatedAt = updatedAt;
+    document.localState.localUpdatedAt = updatedAt;
   });
 
   return state;

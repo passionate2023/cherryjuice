@@ -1,10 +1,20 @@
 import { applyPatches, Patch } from 'immer';
-import { DocumentCacheState } from '::store/ducks/cache/document-cache';
 import { NumberOfFrames } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
 
-export type TimelineFrameMeta<T> = {
-  silent?: boolean;
-} & T;
+export const calculateNumberOfFrames = <T>(
+  framePositions: number[],
+  _position: number,
+): NumberOfFrames => {
+  const undoOffset =
+    framePositions[0] === 0 || framePositions.length === 0 ? 0 : 1;
+  const position = framePositions.indexOf(_position);
+  const numberOfFrames = framePositions.length - 1;
+  const redo = numberOfFrames - position;
+  const undo = position + 1 - undoOffset;
+  return { redo, undo };
+};
+
+export type TimelineFrameMeta<T> = {} & T;
 
 export type Frame<T> = {
   redo: Patch[];
@@ -12,7 +22,7 @@ export type Frame<T> = {
   meta: TimelineFrameMeta<T>;
 };
 
-type Frames<T> = {
+export type Frames<T> = {
   [position: number]: Frame<T>;
 };
 export type OnFrameChange<T> = (
@@ -21,12 +31,25 @@ export type OnFrameChange<T> = (
 ) => void;
 const noop = () => undefined;
 
-export class Timeline<T> {
+export type PersistedFrame<T> = {
+  frames: Frames<T>;
+  position: number;
+};
+
+export type TimelineOptions = { maximumNumberOfFrames: number };
+
+export class Timeline<T, U> {
+  get getPosition(): number {
+    return this.position;
+  }
   private position: number;
   private frames: Frames<T>;
   private readonly _onFrameChange: (frame?: Frame<T>) => void = noop;
 
-  constructor(onFrameChange?: OnFrameChange<T>) {
+  constructor(
+    private options: TimelineOptions,
+    onFrameChange?: OnFrameChange<T>,
+  ) {
     if (onFrameChange)
       this._onFrameChange = (frame): void => {
         setTimeout(() => {
@@ -37,11 +60,17 @@ export class Timeline<T> {
     this.frames = {};
   }
 
+  reHydrate = ({ position, frames }: PersistedFrame<T>): void => {
+    this.position = position;
+    this.frames = frames;
+    this._onFrameChange();
+  };
+
   private get numberOfFrames(): NumberOfFrames {
-    const numberOfFrames = Object.keys(this.frames).length - 1;
-    const redo = numberOfFrames - this.position;
-    const undo = this.position + 1;
-    return { redo, undo };
+    return calculateNumberOfFrames<T>(
+      Object.keys(this.frames).map(Number),
+      this.position,
+    );
   }
 
   private deleteFutureFrames = () => {
@@ -53,7 +82,7 @@ export class Timeline<T> {
   };
 
   private deleteOldFrames = () => {
-    delete this.frames[this.position - 4];
+    delete this.frames[this.position - this.options.maximumNumberOfFrames];
   };
 
   add = (meta: TimelineFrameMeta<T>) => (
@@ -67,10 +96,10 @@ export class Timeline<T> {
     };
     this.deleteFutureFrames();
     this.deleteOldFrames();
-    if (!meta.silent) this._onFrameChange();
+    this._onFrameChange();
   };
 
-  redo = (state: DocumentCacheState): DocumentCacheState => {
+  redo = (state: U): U => {
     const frame = this.frames[this.position + 1];
     if (!frame) return state;
     else {
@@ -81,7 +110,7 @@ export class Timeline<T> {
       return newState;
     }
   };
-  undo = (state: DocumentCacheState): DocumentCacheState => {
+  undo = (state: U): U => {
     const frame = this.frames[this.position];
     if (!frame) return state;
     else {
@@ -108,5 +137,12 @@ export class Timeline<T> {
     });
     this.position -= originalFrames.length - frames.length;
     this._onFrameChange();
+  };
+
+  getFramesMeta = (): [number, T][] => {
+    return Object.entries(this.frames).map(([index, frame]) => [
+      +index,
+      frame.meta,
+    ]);
   };
 }

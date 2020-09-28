@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modButton } from '::sass-modules';
-import { EventHandler, useEffect, useRef } from 'react';
+import { EventHandler, MutableRefObject, useEffect, useRef } from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { Icon } from '::root/components/shared-components/icon/icon';
 
@@ -23,6 +23,29 @@ const buttonVariants = {
   danger: modButton.buttonDanger,
 };
 
+const useLazyAutoFocus = (
+  lazyAutoFocus: number,
+  elementRef: MutableRefObject<HTMLElement>,
+) => {
+  const focusTimeout = useRef<any>();
+  useEffect(() => {
+    if (elementRef.current)
+      if (lazyAutoFocus) {
+        clearTimeout(focusTimeout.current);
+        focusTimeout.current = setTimeout(() => {
+          elementRef.current.focus();
+        }, lazyAutoFocus);
+        return () => {
+          elementRef.current.blur();
+          clearTimeout(focusTimeout.current);
+        };
+      } else {
+        elementRef.current.blur();
+        clearTimeout(focusTimeout.current);
+      }
+  }, [lazyAutoFocus]);
+};
+
 const ButtonBase: React.FC<ButtonBaseProps> = ({
   disabled,
   className,
@@ -37,16 +60,8 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   iconName,
   variant,
 }) => {
-  const ref = useRef<HTMLButtonElement>();
-  useEffect(() => {
-    if (lazyAutoFocus) {
-      const handle = setTimeout(() => ref.current.focus(), lazyAutoFocus);
-      return () => {
-        ref.current.blur();
-        clearTimeout(handle);
-      };
-    }
-  }, []);
+  const buttonRef = useRef<HTMLButtonElement>();
+  useLazyAutoFocus(lazyAutoFocus, buttonRef);
   return (
     <button
       className={joinClassNames([
@@ -57,7 +72,7 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
         [modButton.buttonPressed, active],
         className,
       ])}
-      ref={ref}
+      ref={buttonRef}
       onClick={onClick}
       disabled={disabled}
       autoFocus={autoFocus}
@@ -75,5 +90,5 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   );
 };
 
-export { ButtonBase };
+export { ButtonBase, useLazyAutoFocus };
 export { ButtonBaseProps };

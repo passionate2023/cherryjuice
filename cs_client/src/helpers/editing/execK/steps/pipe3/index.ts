@@ -1,29 +1,29 @@
-import { stringToSingleElement } from '::helpers/editing/execK/helpers';
+import {
+  stringToMultipleElements,
+  stringToSingleElement,
+} from '::helpers/editing/execK/helpers';
 import { replaceElement } from '::helpers/editing/execK/steps/pipe3/helpers';
 import { getDDOE } from '::helpers/editing/execK/steps/pipe1/ddoes';
 import { Element } from '@cs/ahtml-to-html';
-const aHtmlToElement = node => (node.type ? node.outerHTML : Element(node));
-
+const aHtmlToString = node => (node.type ? node.outerHTML : Element(node));
+const aHtmlToElement = node =>
+  node.type
+    ? stringToMultipleElements(node.outerHTML)
+    : stringToSingleElement(Element(node));
 const aHtmlsToElements = (
   { childrenOfStartDDDE, midDDOEs, childrenOfEndDDDE },
   { startDDOE },
 ) => ({
-  childrenElementsOfStartDDOE: childrenOfStartDDDE.map(node =>
-    stringToSingleElement(aHtmlToElement(node)),
-  ),
+  childrenElementsOfStartDDOE: childrenOfStartDDDE.flatMap(aHtmlToElement),
   adjacentElementsOfStartDDOE: midDDOEs
     .reduce((acc, DDOE) => {
       const startDDOEShell = startDDOE.cloneNode();
-      startDDOEShell.innerHTML = DDOE.map(node => aHtmlToElement(node)).join(
-        '',
-      );
+      startDDOEShell.innerHTML = DDOE.map(aHtmlToString).join('');
       acc.push(startDDOEShell.outerHTML);
       return acc;
     }, [])
     .map(stringToSingleElement),
-  childrenElementsOfEndDDOE: childrenOfEndDDDE.map(node =>
-    stringToSingleElement(aHtmlToElement(node)),
-  ),
+  childrenElementsOfEndDDOE: childrenOfEndDDDE.flatMap(aHtmlToElement),
 });
 
 const applyLineStyle = ({ lineStyle, startDDOE, endDDOE, midDDOEs }) => {

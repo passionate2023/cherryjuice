@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { CreateDocumentIt } from '::types/graphql/generated';
+import { CreateDocumentIt } from '::types/graphql';
 
 type Variables = {
   document: CreateDocumentIt;

@@ -24,7 +24,7 @@ export const mergeDocument = (
     !existingNodesDict || (existingNodesDict && !existingNodesDict[0]);
   const existingDocHasChanges =
     existingLocalState &&
-    existingLocalState.updatedAt > existingDocument.updatedAt;
+    existingLocalState.localUpdatedAt > existingDocument.updatedAt;
 
   let newCachedDocument: CachedDocument;
   const localState = getDefaultLocalState(fetchedDocument.id, nodes);
@@ -52,7 +52,7 @@ export const mergeDocument = (
     newCachedDocument.persistedState.localUpdatedAt = Date.now();
   }
   expandNode(
-    { [newCachedDocument.id]: newCachedDocument },
+    { documents: { [newCachedDocument.id]: newCachedDocument } },
     {
       node_id: newCachedDocument.persistedState.selectedNode_id,
       documentId: newCachedDocument.id,

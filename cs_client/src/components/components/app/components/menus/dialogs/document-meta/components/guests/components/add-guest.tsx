@@ -7,10 +7,11 @@ import { patterns } from '::root/components/auth/helpers/form-validation';
 import { apolloClient } from '::graphql/client/apollo-client';
 import { USER_EXISTS } from '::graphql/queries/user-exists';
 import { documentMetaActionCreators } from '::root/components/app/components/menus/dialogs/document-meta/reducer/reducer';
-import { AccessLevel } from '::types/graphql/generated';
+import { AccessLevel } from '::types/graphql';
 import { AlertType } from '::types/react';
 import { ac } from '::store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
+import { Icons } from '::root/components/shared-components/icon/icon';
 
 const useTextInput: () => [string, (e) => void] = () => {
   const [inputValue, setInputValue] = useState('');
@@ -63,26 +64,32 @@ const AddGuest: React.FC<Props> = ({ userId }) => {
     <div className={modGuests.guests__addGuest}>
       <div className={modGuests.guests__addGuest__inputs}>
         <span className={modNodeMeta.nodeMeta__input__label}>guests</span>
-        <input
-          ref={inputRef}
-          value={inputValue}
-          onChange={setInputValue}
-          type="text"
-          pattern={pattern.pattern}
+        <div
           className={joinClassNames([
-            modGuests.guests__addGuest__input,
-            modTextInput.textInput,
+            modGuests.guests__addGuest__inputContainer,
           ])}
-          placeholder={'email'}
-          data-testid={testIds.documentMeta__addGuest__input}
-        />
-        <ButtonSquare
-          text={'add guest'}
-          className={modGuests.guests__addGuest__addButton}
-          onClick={addGuestM}
-          disabled={!inputRef.current?.checkValidity() || !inputValue}
-          testId={testIds.documentMeta__addGuest__addButton}
-        />
+        >
+          <input
+            ref={inputRef}
+            value={inputValue}
+            onChange={setInputValue}
+            type="text"
+            pattern={pattern.pattern}
+            className={joinClassNames([
+              modGuests.guests__addGuest__input,
+              modTextInput.textInput,
+            ])}
+            placeholder={'email'}
+            data-testid={testIds.documentMeta__addGuest__input}
+          />
+          <ButtonSquare
+            iconName={Icons.material.add}
+            className={modGuests.guests__addGuest__addButton}
+            onClick={addGuestM}
+            disabled={!inputRef.current?.checkValidity() || !inputValue}
+            testId={testIds.documentMeta__addGuest__addButton}
+          />
+        </div>
       </div>
     </div>
   );

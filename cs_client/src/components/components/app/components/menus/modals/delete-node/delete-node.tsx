@@ -46,7 +46,7 @@ const DeleteNode: React.FC<Props & PropsFromRedux> = ({
       label: 'Dismiss',
       onClick: onClose,
       disabled: false,
-      lazyAutoFocus: 300,
+      lazyAutoFocus: true,
     },
     {
       label: 'Delete',
@@ -62,9 +62,9 @@ const DeleteNode: React.FC<Props & PropsFromRedux> = ({
       alert={{
         type: AlertType.Warning,
         description: node?.child_nodes.length
-          ? 'this would delete all of  its child nodes'
+          ? 'its child nodes will be deleted'
           : 'this node has no child nodes',
-        title: 'Permanently delete "' + node?.name + '" ?',
+        title: 'delete "' + node?.name + '" ?',
       }}
       buttons={buttons}
     />

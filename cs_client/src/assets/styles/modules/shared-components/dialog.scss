@@ -3,8 +3,7 @@
 .dialog {
   z-index: $ZI-dialog;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  overflow: hidden;
-  background-color: white;
+  background-color: var(--background);
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -30,10 +29,11 @@
   .dialog__header {
     display: none;
   }
+  border-top: $dialog-border;
 }
 $small-dialog-width: 350px;
 .dialog--small {
-  @include respond-to($md-up) {
+  @include respond-to($mb-up) {
     height: 500px;
     width: $small-dialog-width;
     margin-left: calc(100vw / 2 - #{$small-dialog-width}/ 2);
@@ -43,15 +43,20 @@ $small-dialog-width: 350px;
     }
   }
 }
+
+@mixin dialog-edge-size(){
+  padding: 15px;
+  box-sizing: border-box;
+  height: 65px;
+}
 .dialog__header {
-  max-height: 32px;
-  background-color: white;
-  color: black;
+  @include dialog-edge-size();
+  background-color: var(--background);
+  color: var(--on-background);
   border-bottom: $dialog-border;
   display: flex;
   align-items: center;
   font-family: 'Roboto Light', sans-serif;
-  padding: 15px;
   user-select: none;
   h2 {
     font-size: 1.2rem;
@@ -91,14 +96,15 @@ $small-dialog-width: 350px;
 
 .dialog__content {
   flex: 10;
-  overflow: auto;
+  height: calc(100% - 130px);
+  background-color: var(--surface);
 }
 .dialog__footer {
+  @include dialog-edge-size();
   display: flex;
   justify-content: space-between;
   border-top: $dialog-border;
-  padding: 10px;
-  background-color: white;
+  background-color: var(--background);
   align-items: center;
   z-index: 1;
 }

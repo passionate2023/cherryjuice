@@ -24,21 +24,22 @@
   z-index: 1;
 
   @include respond-to($mb-down) {
-    background-color: rgba($primary, 0.1);
+    background-color: var(--primary-090-1);
+
     width: 100%;
   }
   @include form-element-size();
   max-width: 400px;
   opacity: 0;
   border-radius: 10px;
-  background-color: rgba(white, 0.2);
+  background-color: var(--background-2);
   transition: opacity 200ms linear;
 }
 .banner__text {
   text-align: center;
-  color: white;
+  color:  var(--background);
   @include respond-to($mb-down) {
-    color: rgba($primary-dark2, 0.8);
+    color: var(--primary);
   }
 }
 

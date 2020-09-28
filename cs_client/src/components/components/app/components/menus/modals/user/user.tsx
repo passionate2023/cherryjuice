@@ -1,26 +1,23 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { modToolbar, modUserPopup } from '::sass-modules';
+import { modUserPopup } from '::sass-modules';
 import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
 import { animated } from 'react-spring';
 import { ac } from '::store/store';
 import { router } from '::root/router/router';
-import { User as TUser } from '::types/graphql/generated';
+import { User as TUser } from '::types/graphql';
 import { UserInfo } from '::root/components/app/components/menus/modals/user/components/user-info';
 import { testIds } from '::cypress/support/helpers/test-ids';
 type UserProps = {
-  onClose: Function;
+  onClose: () => void;
   user: TUser;
 };
 
 const User: React.FC<UserProps & { style }> = ({ onClose, style, user }) => {
   useClickOutsideModal({
-    selectorsToIgnore: [
-      '.' + modUserPopup.user__card,
-      '.' + modToolbar.toolBar__groupNavBar,
-    ],
-    cb: onClose,
+    selector: '.' + modUserPopup.user__card,
+    callback: onClose,
   });
   const signOut = useCallback(() => {
     ac.root.resetState();
@@ -35,14 +32,12 @@ const User: React.FC<UserProps & { style }> = ({ onClose, style, user }) => {
             <ButtonSquare
               className={modUserPopup.user__actions__signOut}
               onClick={ac.dialogs.showSettingsDialog}
-              dark={true}
               text={'settings'}
               testId={testIds.toolBar__userPopup__signOut}
             />
             <ButtonSquare
               className={modUserPopup.user__actions__signOut}
               onClick={signOut}
-              dark={true}
               text={'sign out'}
               testId={testIds.toolBar__userPopup__signOut}
             />
@@ -52,7 +47,6 @@ const User: React.FC<UserProps & { style }> = ({ onClose, style, user }) => {
             <ButtonSquare
               className={modUserPopup.user__actions__signOut}
               onClick={router.goto.signIn}
-              dark={true}
               text={'sign in'}
               testId={testIds.toolBar__userPopup__signIn}
             />

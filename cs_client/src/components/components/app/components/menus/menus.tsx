@@ -9,7 +9,10 @@ const PasswordModal = React.lazy(() =>
 const UserPopup = React.lazy(() =>
   import('./modals/user/user-with-transition'),
 );
-
+const Anchor = React.lazy(() => import('./dialogs/anchor/anchor'));
+const Link = React.lazy(() => import('./dialogs/link/link'));
+const Codebox = React.lazy(() => import('./dialogs/codebox/codebox'));
+const Table = React.lazy(() => import('./dialogs/table/table'));
 const ImportDocuments = React.lazy(() =>
   import('./modals/import-documents/import-documents'),
 );
@@ -18,7 +21,7 @@ const Settings = React.lazy(() =>
 );
 const DocumentsList = React.lazy(() =>
   import(
-    '::root/components/app/components/menus/dialogs/documents-list/documents-list'
+    '::root/components/app/components/menus/dialogs/documents-list/documents-list-dialog'
   ),
 );
 const NodeMeta = React.lazy(() =>
@@ -59,6 +62,10 @@ const components = [
   <PasswordModal key={'PasswordModal'} />,
   <AlertModal key={'AlertModal'} />,
   <Widgets key={'Widgets'} />,
+  <Anchor key={'Anchor'} />,
+  <Link key={'Link'} />,
+  <Codebox key={'Codebox'} />,
+  <Table key={'Table'} />,
 ];
 const mapState = () => ({});
 const mapDispatch = {};

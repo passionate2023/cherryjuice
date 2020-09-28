@@ -1,4 +1,4 @@
-import { cloneObj } from '../../execK/helpers';
+import { cloneObj } from '::helpers/objects';
 import {
   sizeTags,
   styleTags,

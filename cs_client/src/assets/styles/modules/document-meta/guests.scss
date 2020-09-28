@@ -1,10 +1,9 @@
 @import '../../vars/vars';
 .guests {
-  background-color: white;
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: auto
+  height: auto;
 }
 .guests__list {
   display: flex;
@@ -16,25 +15,43 @@
 }
 .guests__add-guest {
   width: 100%;
+  max-width: 350px;
   display: flex;
+  height: 40px;
   flex-direction: column;
-  border-bottom: 1px solid #00000014;
+  justify-content: center;
 }
+
 .guests__add-guest__inputs {
-  padding: 0px 10px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
+.guests__add-guest__input-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: var(--surface-010);
+  gap: 1px;
+}
 .guests__add-guest__input {
-  height: 26px;
+  height: 40px;
   display: flex;
   flex: 1;
   &:invalid {
-    color: darkred;
+    color: var(--danger);
   }
 }
 .guests__add-guest__add-button {
+  background-color: var(--surface-010);
+  &:disabled {
+    filter: brightness(0.95);
+  }
+  svg {
+    fill: grey;
+  }
+  width: 40px;
+  height: 40px;
 }
 .guests__messages {
   height: 15px;
@@ -47,8 +64,8 @@
 }
 .guests__guest {
   border-radius: 5px;
-  color: $primary;
-  border: 1px solid $primary;
+  color: var(--primary);
+  border: 1px solid var(--primary);
   box-shadow: $box-shadow2;
   padding: 5px;
   display: flex;

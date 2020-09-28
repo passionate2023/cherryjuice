@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MainButtons } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/main-buttons';
-import { appModule, modToolbar } from '::sass-modules';
+import { modApp, modToolbar } from '::sass-modules';
 import { MobileButtons } from './components/groups/mobile-buttons/mobile-buttons';
 import { createPortal } from 'react-dom';
 import {
@@ -16,6 +16,7 @@ import { NodesButtons } from '::root/components/app/components/editor/tool-bar/c
 import { UndoRedo } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
+import { Objects } from '::root/components/app/components/editor/tool-bar/components/groups/objects/objects';
 
 type PortalProps = { targetSelector: string; predicate?: boolean };
 export const Portal: React.FC<PortalProps> = ({
@@ -62,12 +63,13 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   isDocumentOwner,
   docking,
 }) => {
+  const hideDuringDocking = docking && isOnMd;
   return (
     <div className={modToolbar.toolBar}>
       <MainButtons />
       {isDocumentOwner && !isOnMd && <Separator />}
-      <Portal targetSelector={'.' + appModule.app} predicate={isOnMd}>
-        {!docking && (
+      <Portal targetSelector={'.' + modApp.app} predicate={isOnMd}>
+        {!hideDuringDocking && (
           <NodesButtons>
             {isDocumentOwner && <UndoRedo />}
             <MobileButtons />
@@ -75,13 +77,19 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
         )}
       </Portal>
       {isDocumentOwner && !isOnMd && <Separator />}
-      {!docking && isDocumentOwner && (
+      {!hideDuringDocking && isDocumentOwner && (
         <ErrorBoundary>
-          <Portal targetSelector={'.' + appModule.app} predicate={isOnMd}>
+          <Portal targetSelector={'.' + modApp.app} predicate={isOnMd}>
             {isOnMd ? (
-              <FormattingButtonsWithTransition show={showFormattingButtons} />
+              <FormattingButtonsWithTransition show={showFormattingButtons}>
+                <Separator />
+                <Objects />
+              </FormattingButtonsWithTransition>
             ) : (
-              <FormattingButtons />
+              <FormattingButtons>
+                <Separator />
+                <Objects />
+              </FormattingButtons>
             )}
           </Portal>
         </ErrorBoundary>

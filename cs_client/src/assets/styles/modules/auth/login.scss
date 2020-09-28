@@ -1,5 +1,4 @@
 @import '../../vars/vars';
-@import '../../vars/colors';
 @import '../../mixins/form';
 
 .login__card {
@@ -12,7 +11,7 @@
   }
   min-height: 400px;
   overflow-x: hidden;
-  background-color: white;
+  background-color: var(--background);
   filter: none;
   border-radius: 10px;
   box-shadow: $box-shadow1;
@@ -41,7 +40,7 @@
   position: relative;
   display: flex;
   border-radius: 5px;
-  background-color: white;
+  background-color: var(--background);
   filter: brightness(0.95);
   margin-top: 2px;
   @include form-element-size();
@@ -79,7 +78,7 @@
 }
 .login__form__input__input--highlight-invalid {
   &:invalid {
-    color: $COLOR_WARNING;
+    color: var(--warning);
   }
 }
 .login__form__input__label {
@@ -87,7 +86,7 @@
   transform-origin: 0%;
   transform: translateY(15px) translateX(35px);
   transition: transform 200ms, opacity 200ms;
-  color: #6f6f6f;
+  color: var(--on-surface);
 }
 .login__form__input:focus-within .login__form__input__label,
 .login__form__input__input:not(:placeholder-shown) {
@@ -101,8 +100,8 @@
   margin-left: 0px;
   padding: 10px 15px !important;
   font-weight: lighter;
-  background-color: $primary-dark2;
-  color: white;
+  background-color: var(--primary-020);
+  color: var(--background);
   filter: brightness(1.5);
   cursor: pointer;
   font-size: 1.2rem;
@@ -133,7 +132,7 @@
 .login__form__remember-me__text {
   padding: 2px 0;
   display: flex;
-  color: grey;
+  color: var(--on-surface);
   margin-left: -10px;
   text-decoration: none;
 }
@@ -151,15 +150,15 @@
   height: 0px;
   width: calc(#{$form-input-width} * 0.35);
   margin: 5px;
-  border-bottom: 1px solid rgba($primary-dark2, 0.4);
+  border-bottom: 1px solid var(--primary-020-4);
 }
 .login__separator__text {
-  color: $primary-dark2;
+  color: var(--primary-020);
 }
 .login__form__create-account {
   margin-top: 20px;
   font-size: 1rem;
-  color: $primary-dark2;
+  color: var(--primary-020);
   text-decoration: none;
   @include form-element-size();
   min-width: auto;
@@ -167,8 +166,7 @@
 }
 .login__form__create-account__icon {
   text-decoration: none;
-  color: $primary-dark2;
-  text-decoration: none;
+  color: var(--primary-020);
   padding-bottom: 4px;
-  border-bottom: 1px solid rgba($primary-dark2, 0.4);
+  border-bottom: 0.5px solid var(--primary-020-4);
 }

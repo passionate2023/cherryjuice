@@ -71,30 +71,30 @@ exports[`rich-text snapshot tests offset images, tables, and codebox 1`] = `
       class=\\"rich-text__code\\"
       data-do_highl_bra=\\"1\\" 
       data-is_width_pix=\\"1\\"
-      data-is_width_pix=\\"1\\"
       data-do_show_linenum=\\"undefined\\"
       data-width_raw=\\"100\\"
       data-syntax= \\"js\\"
-      style=\\"max-width: 100px;
-        min-height: 100px;
+      style=\\"
+        max-width: 100px;
         width: 100px;
-        display: inline-block;\\"
+        min-height: 100px;
+        height: 100px;\\"
     >
-      codebox0
+      <span class=\\"rich-text__code__line\\">codebox0</span>
     </code><span>&#8203;</span></span><span class=\\"rich-text__line\\"><span>&#8203;</span><code
       class=\\"rich-text__code\\"
       data-do_highl_bra=\\"1\\" 
       data-is_width_pix=\\"1\\"
-      data-is_width_pix=\\"1\\"
       data-do_show_linenum=\\"undefined\\"
       data-width_raw=\\"200\\"
       data-syntax= \\"js\\"
-      style=\\"max-width: 200px;
-        min-height: 200px;
+      style=\\"
+        max-width: 200px;
         width: 200px;
-        display: inline-block;\\"
+        min-height: 200px;
+        height: 200px;\\"
     >
-      codebox1
+      <span class=\\"rich-text__code__line\\">codebox1</span>
     </code><span>&#8203;</span></span><span class=\\"rich-text__line\\"><img src=\\"\\"
         alt=\\"\\"
         style=\\"width:200px; height:200px;\\"

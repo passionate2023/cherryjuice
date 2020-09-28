@@ -1,13 +1,12 @@
 import { combineReducers, Reducer } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { documentReducer, DocumentState } from './ducks/document';
+import { documentReducer } from './ducks/document';
 import { dialogsReducer } from './ducks/dialogs';
 import { nodeReducer } from './ducks/node';
 import { editorReducer } from './ducks/editor';
 import { documentsListReducer } from './ducks/documents-list';
-import { documentTransforms } from './redux-persist/transforms/document';
-import { documentOperationsReducer } from './ducks/document-operations';
+import { documentOperationsReducer } from './ducks/document-operation/document-operations';
 import { rootReducer, RootReducerState } from './ducks/root';
 import { searchReducer, SearchReducerState } from './ducks/search';
 import { cssVariablesReducer } from './ducks/css-variables';
@@ -19,7 +18,23 @@ import { animationReducer } from '::store/ducks/animations';
 import { timelinesReducer } from '::store/ducks/timelines';
 import { editorSettingsReducer } from '::store/ducks/settings/editor-settings';
 
-const reducer = combineReducers({
+const persistedReducers = {
+  documentCache: persistReducer(
+    {
+      key: 'documentCache',
+      storage,
+      blacklist: [],
+    },
+    documentCacheReducer,
+  ),
+  auth: persistReducer(
+    {
+      key: 'auth',
+      storage,
+      blacklist: ['ongoingOperation', 'alert'],
+    },
+    authReducer,
+  ),
   editorSettings: persistReducer(
     {
       key: 'editorSettings',
@@ -34,21 +49,17 @@ const reducer = combineReducers({
     },
     cacheReducer,
   ),
-  documentCache: documentCacheReducer,
-  animation: animationReducer,
-  document: persistReducer(
-    {
-      key: 'document',
-      storage,
-      whitelist: ['documentId'],
-      transforms: documentTransforms,
-    },
-    documentReducer,
-  ) as Reducer<DocumentState>,
   editor: persistReducer(
     {
       key: 'editor',
       storage,
+      blacklist: [
+        'anchorId',
+        'selectedLink',
+        'selection',
+        'selectedCodebox',
+        'selectedTable',
+      ],
     },
     editorReducer,
   ),
@@ -60,28 +71,14 @@ const reducer = combineReducers({
     },
     settingsReducer,
   ),
-  dialogs: dialogsReducer,
-  auth: persistReducer(
-    {
-      key: 'auth',
-      storage,
-      blacklist: ['ongoingOperation', 'alert'],
-    },
-    authReducer,
-  ),
-  node: nodeReducer,
-  documentsList: documentsListReducer,
-  documentOperations: documentOperationsReducer,
-  timelines: timelinesReducer,
   root: persistReducer(
     {
       key: 'root',
       storage,
-      blacklist: [],
+      blacklist: ['online'],
     },
     rootReducer,
   ) as Reducer<RootReducerState>,
-  cssVariables: cssVariablesReducer,
   search: persistReducer(
     {
       key: 'search',
@@ -90,6 +87,28 @@ const reducer = combineReducers({
     },
     searchReducer,
   ) as Reducer<SearchReducerState>,
+  cssVariables: persistReducer(
+    {
+      key: 'cssVariables',
+      storage,
+      blacklist: [],
+    },
+    cssVariablesReducer,
+  ),
+};
+
+const nonPersistedReducers = {
+  document: documentReducer,
+  animation: animationReducer,
+  dialogs: dialogsReducer,
+  node: nodeReducer,
+  documentsList: documentsListReducer,
+  documentOperations: documentOperationsReducer,
+  timelines: timelinesReducer,
+};
+const reducer = combineReducers({
+  ...persistedReducers,
+  ...nonPersistedReducers,
 });
 
 export { reducer };

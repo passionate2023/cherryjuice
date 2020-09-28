@@ -1,43 +1,63 @@
 import { getDocumentsList } from '::store/selectors/cache/document/document';
-import { store } from '::store/store';
+import { ac, store } from '::store/store';
 import { Observable } from 'rxjs';
-import { debounceTime, filter, map, tap } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  tap,
+} from 'rxjs/operators';
 import { apolloClient } from '::graphql/client/apollo-client';
 import { SET_DOCUMENT_STATE } from '::graphql/mutations/document/set-document-state';
 import { adaptToPersistedState } from '::store/ducks/cache/document-cache/helpers/document/shared/adapt-persisted-state';
+import { DocumentState } from '::types/graphql';
 
 export const rdx = new Observable(observer => {
   store.subscribe(() => {
     observer.next();
   });
 });
-export const syncPersistedState = (intervalMs = 5 * 1000) => {
+export type DocumentStateTuple = [string, DocumentState];
+export const syncPersistedState = (intervalMs = 2 * 1000) => {
   return rdx
     .pipe(
       debounceTime(intervalMs),
-      map(() =>
-        getDocumentsList(store.getState())
-          .filter(document => {
-            return (
-              document.persistedState.localUpdatedAt >
-              document.persistedState.updatedAt
-            );
-          })
-          .map(document => document.id),
-      ),
-      filter(documents => Boolean(documents.length)),
-      tap(async documents => {
+      map(() => {
         const state = store.getState();
-        for await (const documentId of documents) {
+        return !state.root.online
+          ? []
+          : getDocumentsList(store.getState())
+              .filter(document => {
+                const updated =
+                  document.persistedState.localUpdatedAt >
+                  document.persistedState.updatedAt;
+                const opened =
+                  document.persistedState.localLastOpenedAt >
+                  document.persistedState.lastOpenedAt;
+                return (
+                  !document.id.startsWith('new-document') && (updated || opened)
+                );
+              })
+              .map<DocumentStateTuple>(document => [
+                document.id,
+                adaptToPersistedState(
+                  state.documentCache.documents[document.id].persistedState,
+                ),
+              ]);
+      }),
+      filter(documents => !!documents.length),
+      distinctUntilChanged(),
+      tap(async documents => {
+        for await (const [documentId, persistedState] of documents) {
           await apolloClient.mutate(
             SET_DOCUMENT_STATE({
               file_id: documentId,
-              state: adaptToPersistedState(
-                state.documentCache[documentId].persistedState,
-              ),
+              state: persistedState,
             }),
           );
         }
+        ac.documentCache.neutralizePersistedState(documents);
       }),
     )
     .subscribe();

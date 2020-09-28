@@ -1,13 +1,13 @@
 .hotkeys__category {
   padding-top: 10px;
   padding-bottom: 10px;
-  border-top: 1px solid #9958581f;
 }
 
 .hotkeys__category__name {
   padding: 10px;
   border-radius: 5px;
   text-transform: capitalize;
+  color: var(--on-surface);
 }
 .hotkeys__category__name-container {
   display: flex;

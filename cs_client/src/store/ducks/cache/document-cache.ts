@@ -15,7 +15,7 @@ import {
   addFetchedFields,
   AddHtmlParams,
 } from '::store/ducks/cache/document-cache/helpers/node/add-fetched-fields';
-import { Image } from '::types/graphql/generated';
+import { Image } from '::types/graphql';
 import {
   createDocument,
   CreateDocumentParams,
@@ -30,13 +30,14 @@ import {
   DeleteNodeParams,
 } from './document-cache/helpers/node/delete-node';
 import {
+  closeNode,
   selectNode,
   SelectNodeParams,
 } from '::store/ducks/cache/document-cache/helpers/document/select-node';
 import { removeSavedDocuments } from '::store/ducks/cache/document-cache/helpers/document/remove-saved-documents';
 import { nodeActionCreators as nac } from '::store/ducks/node';
 import { rootActionCreators as rac } from '::store/ducks/root';
-import { cloneObj } from '::helpers/editing/execK/helpers';
+import { cloneObj } from '::helpers/objects';
 import { loadDocumentsList } from '::store/ducks/cache/document-cache/helpers/document/load-documents-list';
 import produce from 'immer';
 import {
@@ -44,7 +45,6 @@ import {
   MutateNodeMetaParams,
 } from '::store/ducks/cache/document-cache/helpers/node/mutate-node-meta';
 import { TimelinesManager } from '::store/ducks/cache/document-cache/helpers/timeline/timelines-manager';
-import { timelinesActionCreators as tac } from '::store/ducks/timelines';
 import {
   collapseNode,
   expandNode,
@@ -54,6 +54,9 @@ import {
   SetScrollPositionParams,
 } from '::store/ducks/cache/document-cache/helpers/node/set-scroll-position';
 import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { DocumentStateTuple } from '::store/tasks/sync-persisted-state';
+import { neutralizePersistedState } from '::store/ducks/cache/document-cache/helpers/document/neutralize-persisted-state';
+import { selectDocument } from '::store/ducks/cache/document-cache/helpers/document/select-document';
 
 const ap = createActionPrefixer('document-cache');
 
@@ -72,16 +75,19 @@ const ac = {
     ap('mutate-document'),
     _ => (changes: MutateDocumentProps) => _(changes),
   ),
-  deleteDocument: _(ap('delete-document'), _ => (documentId: string) =>
-    _(documentId),
+  deleteDocuments: _(ap('delete-documents'), _ => (documentIds: string[]) =>
+    _(documentIds),
   ),
   createNode: _(ap('create-node'), _ => (node: CreateNodeParams) => _(node)),
-  addFetchedFields: _(ap('add-fetched-fields'), _ => (node: AddHtmlParams) =>
+  addFetchedFields: _(ap('add-fetched-fields'), _ => (node: AddHtmlParams[]) =>
     _(node),
   ),
   mutateNodeMeta: _(
     ap('mutate-node-meta'),
-    _ => (props: MutateNodeMetaParams | MutateNodeMetaParams[]) => _(props),
+    _ => (
+      props: MutateNodeMetaParams | MutateNodeMetaParams[],
+      mutationType?: DocumentMutations,
+    ) => _(props, mutationType),
   ),
   mutateNodeContent: _(
     ap('mutate-node-content'),
@@ -94,6 +100,10 @@ const ac = {
   ),
   undoDocumentAction: _(ap('undo-document-action')),
   redoDocumentAction: _(ap('redo-document-action')),
+  neutralizePersistedState: _(
+    ap('neutralize-persisted-state'),
+    _ => (param: DocumentStateTuple[]) => _(param),
+  ),
 };
 
 export type NodesDict = { [node_id: number]: QFullNode };
@@ -111,7 +121,8 @@ export type CachedDocumentState = {
   highestNode_id: number;
   editedAttributes: string[];
   editedNodes: CachedNodesState;
-  updatedAt: number;
+  localUpdatedAt: number;
+  hash: string;
 };
 export type PersistedDocumentState = {
   selectedNode_id?: number;
@@ -122,6 +133,8 @@ export type PersistedDocumentState = {
   recentNodes: number[];
   updatedAt: number;
   localUpdatedAt: number;
+  lastOpenedAt: number;
+  localLastOpenedAt: number;
 };
 export type CachedDocument = Omit<QDocumentMeta, 'node' | 'state'> & {
   nodes: NodesDict;
@@ -130,15 +143,35 @@ export type CachedDocument = Omit<QDocumentMeta, 'node' | 'state'> & {
   persistedState: PersistedDocumentState;
 };
 
-type State = {
+export type CachedDocumentDict = {
   [documentId: string]: CachedDocument;
 };
+
+type State = {
+  documents: CachedDocumentDict;
+};
+
+export enum DocumentMutations {
+  CreateNode = 'created',
+  NodeAttributes = 'changed attributes',
+  NodeParent = 'changed parent',
+  NodeContent = 'changed content',
+  DeleteNode = 'deleted',
+  DocumentAttributes = 'changed attributes',
+}
+
 export type DocumentTimeLineMeta = {
   node_id?: number;
-  documentId?: string;
+  documentId: string;
+  mutationType: DocumentMutations;
+  timeStamp: number;
 };
-const initialState: State = {};
-export const dTM = new TimelinesManager<DocumentTimeLineMeta>();
+const initialState: State = {
+  documents: {},
+};
+export const dTM = new TimelinesManager<DocumentTimeLineMeta, State>(true, {
+  maximumNumberOfFrames: 20,
+});
 dTM.setOnFrameChangeFactory(() =>
   import('::store/store').then(
     module => module.ac.timelines.setDocumentActionNOF,
@@ -148,18 +181,13 @@ dTM.setOnFrameChangeFactory(() =>
 const reducer = createReducer(initialState, _ => [
   ...[
     // non undoable actions
-    _(rac.resetState, () => ({
-      ...cloneObj(initialState),
-    })),
     _(dac.fetchFulfilled, (state, { payload }) =>
-      loadDocument(state, payload.document, payload.nextNode),
-    ),
-    _(dac.setDocumentId, (state, { payload }) => {
-      dTM.setCurrent(payload);
-      return state;
-    }),
-    _(ac.createDocument, (state, { payload }) =>
-      createDocument(state, payload),
+      produce(state, draft =>
+        selectDocument(
+          loadDocument(draft, payload.document, payload.nextNode),
+          payload.document.id,
+        ),
+      ),
     ),
     _(nac.select, (state, { payload }) =>
       produce(state, draft =>
@@ -169,21 +197,22 @@ const reducer = createReducer(initialState, _ => [
         }),
       ),
     ),
-    _(tac.setDocumentActionNOF, (state, { payload }) =>
-      payload.frame?.meta?.documentId
-        ? produce(state, draft =>
-            selectNode(draft, payload.frame.meta as SelectNodeParams),
-          )
-        : state,
+    _(nac.close, (state, { payload }) =>
+      produce(state, draft =>
+        expandNode(closeNode(draft, payload), {
+          documentId: payload.documentId,
+          node_id:
+            state.documents[payload.documentId].persistedState.selectedNode_id,
+          expandChildren: false,
+        }),
+      ),
     ),
     _(dlac.fetchDocumentsFulfilled, (state, { payload }) =>
-      loadDocumentsList(state, payload),
+      produce(state, draft => loadDocumentsList(draft, payload)),
     ),
     _(ac.addFetchedFields, (state, { payload }) =>
-      addFetchedFields(state, payload),
+      produce(state, draft => addFetchedFields(draft, payload)),
     ),
-    _(ac.undoDocumentAction, state => dTM.current.undo(state)),
-    _(ac.redoDocumentAction, state => dTM.current.redo(state)),
     _(ac.expandNode, (state, { payload }) =>
       produce(state, draft => expandNode(draft, payload)),
     ),
@@ -193,13 +222,31 @@ const reducer = createReducer(initialState, _ => [
     _(ac.setScrollPosition, (state, { payload }) =>
       produce(state, draft => setScrollPosition(draft, payload)),
     ),
+    _(ac.neutralizePersistedState, (state, { payload }) =>
+      produce(state, draft => neutralizePersistedState(draft, payload)),
+    ),
+    _(ac.undoDocumentAction, state => dTM.undo(state)),
+    _(ac.redoDocumentAction, state => dTM.redo(state)),
+  ],
+  ...[
+    // require setup
+    _(ac.createDocument, (state, { payload }) => {
+      dTM.setCurrent(payload.id);
+      return produce(state, draft => createDocument(draft, payload));
+    }),
+    _(dac.setDocumentId, (state, { payload }) => {
+      dTM.setCurrent(payload);
+      return produce(state, draft => selectDocument(draft, payload));
+    }),
   ],
   ...[
     // require cleanup
-    _(ac.deleteDocument, (state, { payload: documentId }) => {
-      dTM.resetTimeline(documentId);
+    _(ac.deleteDocuments, (state, { payload: documentIds }) => {
       return produce(state, draft => {
-        delete draft[documentId];
+        documentIds.forEach(documentId => {
+          dTM.resetTimeline(documentId);
+          delete draft.documents[documentId];
+        });
       });
     }),
     _(
@@ -209,32 +256,56 @@ const reducer = createReducer(initialState, _ => [
         return removeSavedDocuments(state);
       },
     ),
+    _(rac.resetState, () => {
+      dTM.resetAll();
+      return {
+        ...cloneObj(initialState),
+      };
+    }),
   ],
   ...[
     // undoable actions
     _(ac.createNode, (state, { payload }) =>
       produce(
         state,
-        draft => createNode(draft, payload),
+        draft => selectNode(createNode(draft, payload), payload.createdNode),
         dTM.addFrame({
           timelineId: payload.createdNode.documentId,
-          silent: true,
           node_id: payload.createdNode.node_id,
           documentId: payload.createdNode.documentId,
+          mutationType: DocumentMutations.CreateNode,
+          timeStamp: Date.now(),
         }),
       ),
     ),
-    _(ac.mutateNodeMeta, (state, { payload }) => {
+    _(ac.mutateNodeMeta, (state, { payload, meta }) => {
       const params = Array.isArray(payload) ? payload : [payload];
-      return produce(
+      const editedOrDroppedNode = params[0];
+      let newState = produce(
         state,
-        draft => mutateNodeMeta(draft, params),
+        draft =>
+          selectNode(mutateNodeMeta(draft, params), {
+            node_id: editedOrDroppedNode.node_id,
+            documentId: editedOrDroppedNode.documentId,
+          }),
         dTM.addFrame({
-          timelineId: params[0].documentId,
-          node_id: params[0].node_id,
-          documentId: params[0].documentId,
+          timelineId: editedOrDroppedNode.documentId,
+          node_id: editedOrDroppedNode.node_id,
+          documentId: editedOrDroppedNode.documentId,
+          mutationType: meta || DocumentMutations.NodeAttributes,
+          timeStamp: Date.now(),
         }),
       );
+      if (meta === DocumentMutations.NodeParent) {
+        newState = produce(newState, draft =>
+          expandNode(draft, {
+            node_id: editedOrDroppedNode.node_id,
+            documentId: editedOrDroppedNode.documentId,
+            expandChildren: true,
+          }),
+        );
+      }
+      return newState;
     }),
     _(ac.mutateNodeContent, (state, { payload }) =>
       produce(
@@ -244,9 +315,10 @@ const reducer = createReducer(initialState, _ => [
           if (payload.meta?.mode !== 'update-key-only')
             dTM.addFrame({
               timelineId: payload.documentId,
-              silent: true,
               node_id: payload.node_id,
               documentId: payload.documentId,
+              mutationType: DocumentMutations.NodeContent,
+              timeStamp: Date.now(),
             })(p, rp);
         },
       ),
@@ -257,6 +329,10 @@ const reducer = createReducer(initialState, _ => [
         draft => deleteNode(draft, payload),
         dTM.addFrame({
           timelineId: payload.documentId,
+          documentId: payload.documentId,
+          node_id: payload.node_id,
+          mutationType: DocumentMutations.DeleteNode,
+          timeStamp: Date.now(),
         }),
       ),
     ),
@@ -264,7 +340,12 @@ const reducer = createReducer(initialState, _ => [
       produce(
         state,
         draft => mutateDocument(draft, payload),
-        dTM.addFrame({ timelineId: payload.documentId }),
+        dTM.addFrame({
+          timelineId: payload.documentId,
+          documentId: payload.documentId,
+          mutationType: DocumentMutations.DocumentAttributes,
+          timeStamp: Date.now(),
+        }),
       ),
     ),
   ],

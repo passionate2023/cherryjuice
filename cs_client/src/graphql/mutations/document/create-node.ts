@@ -1,4 +1,4 @@
-import { CreateNodeIt } from '::types/graphql/generated';
+import { CreateNodeIt } from '::types/graphql';
 import gql from 'graphql-tag';
 
 type Variables = { file_id: string; node_id: number; meta: CreateNodeIt };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modSearchDialog } from '::sass-modules';
-import { NodeSearchResults } from '::types/graphql/generated';
+import { NodeSearchResults } from '::types/graphql';
 
 type Props = {
   searchResults: NodeSearchResults;
@@ -25,7 +25,9 @@ const ResultsHeader: React.FC<Props> = ({ searchResults }) => {
       {!!elapsedTimeS && (
         <>
           <span>
-            found {numberOfNodes} node{numberOfNodes > 1 ? 's' : ''}
+            {numberOfNodes > 0
+              ? `found ${numberOfNodes} node${numberOfNodes > 1 ? 's' : ''}`
+              : `found no results`}
           </span>
           {!!numberOfNodes && (
             <>

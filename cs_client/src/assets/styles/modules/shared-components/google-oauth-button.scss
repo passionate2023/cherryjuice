@@ -5,7 +5,7 @@
   min-width: 184px;
   max-width: 184px;
   height: 42px;
-  background-color: #fcfcfc;
+  background-color: var(--surface);
   border-radius: 5px;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2);
   cursor: pointer;
@@ -36,7 +36,7 @@
 .google-btn .btn-text {
   float: right;
   margin: 11px 14px 40px 40px;
-  color: #757575;
+  color: var(--on-surface);
   font-size: 14px;
   letter-spacing: 0.2px;
   font-family: Roboto;
@@ -47,9 +47,9 @@
   user-select: none;
 }
 .google-btn:active {
-  box-shadow: 0 1px 1px #757575;
-  background: #f8f8f8;
-  color: #fff;
+  box-shadow: 0 1px 1px var(--on-surface);
+  background: var(--surface);
+  color: var(--background);
   user-select: none;
 }
 
@@ -61,7 +61,7 @@
   min-width: auto;
   max-width: 184px;
   height: 42px;
-  background-color: #fcfcfc;
+  background-color: var(--surface);
   border-radius: 2px;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2);
   cursor: pointer;
@@ -78,10 +78,10 @@
 .normal-btn .btn-text {
   float: left;
   margin: 11px 14px 11px 14px;
-  color: #757575;
+  color: var(--on-surface);
   font-size: 14px;
   letter-spacing: 0.2px;
-  font-family: Roboto;
+  font-family: Roboto, sans-serif;
   user-select: none;
 }
 .normal-btn:hover {
@@ -90,7 +90,7 @@
 }
 .normal-btn:active {
   box-shadow: 0 1px 1px #757575;
-  background: #f8f8f8;
-  color: #fff;
+  background:var(--background);
+  color: var(--background);
   user-select: none;
 }

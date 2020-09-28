@@ -1,7 +1,15 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { rootActionCreators } from './root';
-import { cloneObj } from '::helpers/editing/execK/helpers';
+import { cloneObj } from '::helpers/objects';
+import { dialogsActionCreators } from '::store/ducks/dialogs';
+import {
+  CustomRange,
+  getSelection,
+} from '::helpers/editing/execK/steps/get-selection';
+import { LinkType } from '::root/components/app/components/menus/dialogs/link/reducer/reducer';
+import { CodeboxProperties } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
+import { TableProperties } from '::root/components/app/components/menus/dialogs/table/reducer/reducer';
 
 const ap = createActionPrefixer('editor');
 
@@ -12,16 +20,30 @@ const ac = {
   toggleFormattingBar: _(ap('toggle-formatting-bar')),
   toggleRecentNodesBar: _(ap('toggle-recent-nodes-bar')),
   toggleInfoBar: _(ap('toggle-info-bar')),
-  setTreeWidth: _(ap('set-tree-width'), _ => (width: number) => _(width)),
+  setAnchorId: _(ap('set-anchor-id'), _ => (id: string) => _(id)),
+  setSelectedLink: _(ap('set-selected-link'), _ => (link: Link) => _(link)),
+  setSelectedCodebox: _(
+    ap('set-selected-codebox'),
+    _ => (object: CodeboxProperties & { target: HTMLElement }) => _(object),
+  ),
+  setSelectedTable: _(
+    ap('set-selected-table'),
+    _ => (object: TableProperties & { target: HTMLElement }) => _(object),
+  ),
 };
 
+export type Link = { href: string; type: LinkType; target: HTMLElement };
 type State = {
   showTree: boolean;
   showFormattingButtons: boolean;
   contentEditable: boolean;
   showRecentNodesBar: boolean;
   showInfoBar: boolean;
-  treeWidth: number;
+  anchorId?: string;
+  selectedLink: Link;
+  selectedCodebox: CodeboxProperties & { target: HTMLElement };
+  selectedTable: TableProperties & { target: HTMLElement };
+  selection?: CustomRange;
 };
 
 const initialState: State = {
@@ -30,7 +52,11 @@ const initialState: State = {
   showFormattingButtons: true,
   showRecentNodesBar: false,
   showInfoBar: false,
-  treeWidth: 250,
+  anchorId: undefined,
+  selectedLink: undefined,
+  selection: undefined,
+  selectedCodebox: undefined,
+  selectedTable: undefined,
 };
 const reducer = createReducer(initialState, _ => [
   ...[
@@ -55,9 +81,58 @@ const reducer = createReducer(initialState, _ => [
     ...state,
     showInfoBar: !state.showInfoBar,
   })),
-  _(ac.setTreeWidth, (state, { payload }) => ({
+  _(ac.setAnchorId, (state, { payload }) => ({
     ...state,
-    treeWidth: payload,
+    anchorId: payload,
+  })),
+  _(dialogsActionCreators.hideAnchorDialog, state => ({
+    ...state,
+    anchorId: undefined,
+  })),
+  _(ac.setSelectedLink, (state, { payload }) => ({
+    ...state,
+    selectedLink: payload,
+  })),
+  _(
+    dialogsActionCreators.hideLinkDialog,
+    state =>
+      ({
+        ...state,
+        selectedLink: undefined,
+      } as State),
+  ),
+  _(dialogsActionCreators.showAnchorDialog, state => ({
+    ...state,
+    selection: getSelection({
+      selectAdjacentWordIfNoneIsSelected: false,
+    }),
+  })),
+
+  _(dialogsActionCreators.showLinkDialog, state => ({
+    ...state,
+    selection: getSelection({
+      selectAdjacentWordIfNoneIsSelected: !state.selectedLink,
+    }),
+  })),
+  _(dialogsActionCreators.showCodeboxDialog, state => ({
+    ...state,
+    selection: getSelection({
+      selectAdjacentWordIfNoneIsSelected: false,
+    }),
+  })),
+  _(dialogsActionCreators.showTableDialog, state => ({
+    ...state,
+    selection: getSelection({
+      selectAdjacentWordIfNoneIsSelected: false,
+    }),
+  })),
+  _(ac.setSelectedCodebox, (state, { payload }) => ({
+    ...state,
+    selectedCodebox: payload,
+  })),
+  _(ac.setSelectedTable, (state, { payload }) => ({
+    ...state,
+    selectedTable: payload,
   })),
 ]);
 

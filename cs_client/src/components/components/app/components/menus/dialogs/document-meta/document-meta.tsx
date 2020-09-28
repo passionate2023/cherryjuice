@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useReducer } from 'react';
-import { DialogWithTransition } from '::root/components/shared-components/dialog';
+import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { MetaForm } from '::root/components/shared-components/form/meta-form/meta-form';
 import { FormInputProps } from '::root/components/shared-components/form/meta-form/meta-form-input';
@@ -22,7 +22,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
 import { Guests } from '::root/components/app/components/menus/dialogs/document-meta/components/guests/guests';
 import { SelectPrivacy } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
-import { Privacy } from '::types/graphql/generated';
+import { Privacy } from '::types/graphql';
 import {
   getDocumentsList,
   getDocumentUserId,
@@ -77,8 +77,8 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       onChange: documentMetaActionCreators.setName,
       value: state.name,
       type: 'text',
-      label: 'Document name',
-      lazyAutoFocus: isOnMd ? 0 : 500,
+      label: 'name',
+      lazyAutoFocus: !isOnMd && Boolean(showDialog),
       testId: testIds.documentMeta__documentName,
     },
   ];
@@ -159,8 +159,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   return (
     <DialogWithTransition
       dialogTitle={'Document Properties'}
-      dialogFooterLeftButtons={[]}
-      dialogFooterRightButtons={buttonsRight}
+      footRightButtons={buttonsRight}
       isOnMobile={isOnMd}
       show={Boolean(showDialog)}
       onClose={ac.dialogs.hideDocumentMetaDialog}
@@ -168,7 +167,6 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       rightHeaderButtons={[]}
       small={true}
       isShownOnTopOfDialog={true}
-      docked={false}
     >
       <ErrorBoundary>
         <MetaForm inputs={inputs} />

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "rootDir": "./",
+    "target": "esnext",
+    "sourceMap": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "declaration": true,
+    "compose": true
+  },
+  "include": ["index.ts"]
+}

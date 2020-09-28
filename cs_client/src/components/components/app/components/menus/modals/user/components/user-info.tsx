@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { User } from '::types/graphql/generated';
+import { User } from '::types/graphql';
 import { modUserPopup } from '::sass-modules';
 import { GeneratedAvatar } from '::root/components/app/components/menus/modals/user/components/components/generated-avatar';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';

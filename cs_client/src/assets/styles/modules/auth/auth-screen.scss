@@ -1,6 +1,6 @@
 @import '../../vars/vars';
 .auth-screen {
-  background-color: $primary-dark3;
+  background-color: var(--primary-010);
   width: var(--vw);
   height: var(--vh);
   display: flex;

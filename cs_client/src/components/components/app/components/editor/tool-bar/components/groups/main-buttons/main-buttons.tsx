@@ -16,12 +16,15 @@ const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
   return {
     showTree: state.editor.showTree,
+    online: state.root.online,
     userHasUnsavedChanges: getDocumentsList(state).some(
       documentHasUnsavedChanges,
     ),
     documentHasUnsavedChanges: documentHasUnsavedChanges(document),
     documentId: state.document.documentId,
     isDocumentOwner: hasWriteAccessToDocument(state),
+    showTimeline: state.timelines.showTimeline,
+    documentActionNOF: state.timelines.documentActionNOF,
   };
 };
 
@@ -36,6 +39,9 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
   documentHasUnsavedChanges,
   documentId,
   isDocumentOwner,
+  online,
+  showTimeline,
+  documentActionNOF,
 }) => {
   const noDocumentIsSelected = !documentId;
   const newDocument = documentId?.startsWith('new');
@@ -54,15 +60,25 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
             ? ac.dialogs.showReloadDocument
             : ac.document.fetch
         }
-        disabled={noDocumentIsSelected || newDocument}
+        disabled={noDocumentIsSelected || newDocument || !online}
       >
         <Icon name={Icons.material.refresh} loadAsInlineSVG={'force'} />
+      </ToolbarButton>
+      <ToolbarButton
+        onClick={ac.timelines.toggleTimeline}
+        active={showTimeline}
+        disabled={
+          noDocumentIsSelected ||
+          !(documentActionNOF.redo || documentActionNOF.undo)
+        }
+      >
+        <Icon name={Icons.material.history} />
       </ToolbarButton>
       <ToolbarButton
         dontMount={!isDocumentOwner}
         onClick={ac.document.save}
         testId={testIds.toolBar__main__saveDocument}
-        disabled={!userHasUnsavedChanges}
+        disabled={!userHasUnsavedChanges || !online}
       >
         <Icon name={Icons.material.save} loadAsInlineSVG={'force'} />
       </ToolbarButton>

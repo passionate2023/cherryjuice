@@ -6,6 +6,7 @@ import { VisibilityIcon } from '::root/components/app/components/editor/info-bar
 import { Timestamps } from '::root/components/app/components/editor/info-bar/components/components/timestamp';
 import { NoSelectedDocument } from '::root/components/app/components/editor/info-bar/components/components/no-selected-document';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
+import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -15,6 +16,7 @@ const mapState = (state: Store) => {
     node,
     documentId: state.document.documentId,
     isOnMobile: state.root.isOnMd,
+    online: state.root.online,
     showInfoBar: state.editor.showInfoBar,
     documentPrivacy: document?.privacy,
     numberOfGuests: document?.guests?.length,
@@ -35,6 +37,7 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
   documentPrivacy,
   selectedNode_id,
   numberOfGuests,
+  online,
 }) => {
   const showBar = !isOnMobile || showInfoBar;
   const noSelectedDocument = !documentId;
@@ -48,6 +51,13 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
         )}
       </div>
       <div className={modInfoBar.infoBar__group}>
+        {!online && (
+          <Icon
+            name={Icons.material['no-connection']}
+            loadAsInlineSVG={'force'}
+            size={20}
+          />
+        )}
         {!noSelectedDocument && (
           <VisibilityIcon
             privacy={documentPrivacy}

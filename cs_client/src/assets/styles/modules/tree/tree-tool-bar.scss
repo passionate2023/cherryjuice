@@ -1,8 +1,10 @@
+@import '../../mixins/breakpoints';
+
 .tree-tool-bar {
   width: 100%;
   display: flex;
   align-items: center;
-  background-color: var(--tool-bar-background-color-transparent);
+  background-color: var(--on-surface-010);
   opacity: 0.5;
   &:hover {
     opacity: 0.9;
@@ -15,7 +17,10 @@
 }
 
 .tree-tool-bar__controls {
-  height: 30px;
+  height: 36px;
+  @include respond-to($md-down) {
+    height: 40px;
+  }
   box-sizing: border-box;
   padding: 2px;
   width: 100%;
@@ -28,7 +33,6 @@
   background-color: transparent;
 }
 .tree__search-field-container {
-  display: block;
   overflow: hidden;
   flex: 1;
   background-color: transparent;
@@ -36,9 +40,16 @@
 }
 .tree__search-button {
   width: 30px;
+  @include respond-to($md-down) {
+    width: 40px;
+  }
 }
 .tree_focus-button {
   height: 100%;
+  width: 30px;
+  @include respond-to($md-down) {
+    width: 40px;
+  }
   background-color: white;
   border-radius: 0;
 }

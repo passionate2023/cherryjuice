@@ -1,4 +1,4 @@
-import { AuthUser } from '::types/graphql/generated';
+import { AuthUser } from '::types/graphql';
 
 const openConsentWindow = ({
   url,

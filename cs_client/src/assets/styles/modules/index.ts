@@ -2,7 +2,7 @@ import modDrawer from '::sass-modules/shared-components/drawer.scss';
 import modButton from '::sass-modules/shared-components/button.scss';
 import modTextInput from '::sass-modules/shared-components/text-input.scss';
 import modSelectFile from '::sass-modules/select-file/select-file.scss';
-import modRecentNodes from './document/recent-nodes.scss';
+import modTabs from './document/tabs.scss';
 import modInfoBar from './document/info-bar.scss';
 import modToolbar from './tool-bar.scss';
 import modRichText from './document/rich-text.scss';
@@ -15,7 +15,7 @@ import modLogin from './auth/login.scss';
 import modGoogleOauth from '::sass-modules/shared-components/google-oauth-button.scss';
 import modAuthBanner from './auth/banner.scss';
 import modUserPopup from './user/user-popup.scss';
-import appModule from '::sass-modules/app.scss';
+import modApp from '::sass-modules/app.scss';
 import modDocumentOperations from './document-operations/document-operations.scss';
 import modNodeMeta from './node-meta/node-meta.scss';
 import modIconPicker from './node-meta/icon-picker.scss';
@@ -37,19 +37,25 @@ import modHotKeys from './settings/hot-keys.scss';
 import modSnackbar from './widgets/snackbar.scss';
 import modUndoAction from './widgets/undo-action.scss';
 import modWidgets from './widgets/widgets.scss';
+import modChangesHistory from './widgets/changes-history.scss';
 import modTreeToolBar from './tree/tree-tool-bar.scss';
 import modSettings from '::sass-modules/settings/settings.scss';
+import modContextMenu from '::sass-modules/shared-components/context-menu.scss';
+import modToggleSwitch from '::sass-modules/shared-components/toggle-switch.scss';
 export {
+  modToggleSwitch,
+  modContextMenu,
+  modChangesHistory,
   modSettings,
   modTreeToolBar,
-  appModule,
+  modApp,
   modDrawer,
   modDialog,
   modButton,
   modTextInput,
   modSelectFile,
   modToolbar,
-  modRecentNodes,
+  modTabs,
   modInfoBar,
   modRichText,
   modAlertModal,

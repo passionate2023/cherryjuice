@@ -14,13 +14,8 @@ const IconsList = ({
   showList,
 }) => {
   useClickOutsideModal({
-    cb: () => setShowList(false),
-    selectorsToIgnore: [
-      modIconPicker.iconPicker__icon,
-      modIconPicker.iconPicker__icon__list,
-      modIconPicker.iconPicker,
-    ],
-    isVisible: showList,
+    callback: () => setShowList(false),
+    selector: '.' + modIconPicker.iconPicker__icon__list,
   });
 
   return (

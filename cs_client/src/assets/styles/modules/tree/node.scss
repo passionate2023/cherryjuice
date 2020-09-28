@@ -1,16 +1,16 @@
 @import '../../vars/vars';
 .node {
-  //background-color: #727070;
   display: flex;
   align-items: center;
   cursor: default;
-  //max-width: 400px;
   position: relative;
-  //margin-left: -5px;
-  //margin-left: 5px;
   min-width: max-content;
   flex: 1;
   max-width: $max-node-width;
+}
+
+.node--not-available {
+  filter: brightness(0.5) contrast(0.5) grayscale(0.5);
 }
 
 .node__title-overlay {
@@ -18,7 +18,7 @@
   height: 100%;
   position: absolute;
   left: var(--overlay-left);
-  background-color: #607d8b63;
+  background-color: var(--background-15);
 }
 
 .node__title {
@@ -53,6 +53,9 @@
   cursor: pointer;
   z-index: $ZI-node-elements;
   margin-left: 5px;
+  @include respond-to($md-down) {
+    padding: 2px;
+  }
 }
 .node__title-button--hidden {
   visibility: hidden;

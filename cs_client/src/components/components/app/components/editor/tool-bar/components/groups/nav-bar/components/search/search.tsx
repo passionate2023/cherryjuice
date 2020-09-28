@@ -9,6 +9,7 @@ import { SearchInput } from '::root/components/shared-components/inputs/search-i
 const mapState = (state: Store) => ({
   query: state.search.query,
   searchTarget: state.search.searchTarget,
+  online: state.root.online,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -17,6 +18,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = {
   className?: string;
   navBar?: boolean;
+  lazyAutoFocus?: number;
 };
 
 const Search: React.FC<Props & PropsFromRedux> = ({
@@ -24,6 +26,8 @@ const Search: React.FC<Props & PropsFromRedux> = ({
   query,
   navBar = true,
   searchTarget,
+  online,
+  lazyAutoFocus,
 }) => {
   const searchImpossible = !navBar && (!query || searchTarget.length === 0);
   const ref = useRef<HTMLDivElement>();
@@ -35,7 +39,7 @@ const Search: React.FC<Props & PropsFromRedux> = ({
   return (
     <SearchInput
       containerClassName={className}
-      fieldWrapperClassName={navBar ? modSearch.search__fieldNavBar : ''}
+      autoCollapse={navBar}
       inputRef={ref}
       placeHolder={'search'}
       value={query}
@@ -44,6 +48,8 @@ const Search: React.FC<Props & PropsFromRedux> = ({
       onClear={ac.search.clearQuery}
       searchImpossible={searchImpossible}
       performSearch={ac.search.setSearchQueued}
+      disabled={!online}
+      lazyAutoFocus={lazyAutoFocus}
     />
   );
 };

@@ -6,13 +6,15 @@ import { interval } from 'rxjs';
 import { modDialog } from '::sass-modules';
 import { ac, Store } from '::store/store';
 import { useSelector } from 'react-redux';
+import { CssVariables } from '::store/ducks/css-variables';
 
 export const useUpdateCssVariables = (
   isDocumentOwner: boolean,
   showFormattingButtons: boolean,
   showTree: boolean,
-  treeWidth: number,
   showRecentNodes: boolean,
+  treeWidth: number,
+  previousTreeWidth: number,
 ) => {
   const dockedDialog = useSelector((state: Store) => state.root.dockedDialog);
   const showSearchDialog = useSelector(
@@ -21,8 +23,18 @@ export const useUpdateCssVariables = (
   const showSettingsDialog = useSelector(
     (state: Store) => state.dialogs.showSettingsDialog,
   );
+  const showDocumentList = useSelector(
+    (state: Store) => state.dialogs.showDocumentList,
+  );
+
   useEffect(() => {
-    cssVariables.setTreeWidth(showTree ? treeWidth : 0);
+    ac.cssVariables.set(
+      CssVariables.treeWidth,
+      showTree ? previousTreeWidth : 0,
+    );
+  }, [showTree, previousTreeWidth]);
+
+  useEffect(() => {
     if (isDocumentOwner && showFormattingButtons) {
       cssVariables.setFormattingBar(40);
     } else {
@@ -31,7 +43,7 @@ export const useUpdateCssVariables = (
         cssVariables.setFormattingBar(0);
       })();
     }
-  }, [showFormattingButtons, showTree]);
+  }, [showFormattingButtons, isDocumentOwner]);
 
   useEffect(() => {
     if (showRecentNodes) {
@@ -41,8 +53,10 @@ export const useUpdateCssVariables = (
     }
   }, [showRecentNodes]);
 
+  const dialogIsShown =
+    showSearchDialog || showSettingsDialog || showDocumentList;
   useEffect(() => {
-    if (dockedDialog && (showSearchDialog || showSettingsDialog)) {
+    if (dockedDialog && dialogIsShown) {
       cssVariables.setDockedDialogHeight(50);
       ac.root.setDocking(false);
     } else {
@@ -58,5 +72,5 @@ export const useUpdateCssVariables = (
         )
         .subscribe();
     }
-  }, [dockedDialog, showSearchDialog, showSettingsDialog]);
+  }, [dockedDialog, dialogIsShown]);
 };

@@ -1,5 +1,5 @@
-import { HotKey } from '::types/graphql/generated';
-import { HotKeyActionType, HotKeys } from '::types/graphql/generated';
+import { HotKey } from '::types/graphql';
+import { HotKeyActionType, HotKeys } from '::types/graphql';
 import { findDuplicateHotkeys } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/find-duplicate';
 
 const compose = (...fns) => {

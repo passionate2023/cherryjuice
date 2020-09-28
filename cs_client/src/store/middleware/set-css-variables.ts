@@ -2,7 +2,9 @@ import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 
 const setCssVariables = () => next => action => {
   try {
-    if (action?.type?.startsWith('css-variables')) {
+    if (action?.type === 'css-variables::set') {
+      cssVariables.setProperty(action.payload.variable)(action.payload.value);
+    } else if (action?.type?.startsWith('css-variables')) {
       const variableName = action.type.replace('css-variables::set-', '');
       cssVariables.setProperty(variableName)(action.payload);
     }

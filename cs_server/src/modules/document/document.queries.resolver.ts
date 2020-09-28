@@ -59,16 +59,20 @@ export class DocumentQueriesResolver {
   async node(
     @Parent() document,
     @GetUserGql() user: User,
-    @Args('node_id', { nullable: true, type: () => Int }) node_id?: number,
+    @Args('node_ids', { nullable: 'itemsAndList', type: () => [Int] })
+    node_ids?: number[],
   ) {
-    return node_id
-      ? [
-          await this.nodeService.getNodeById({
-            node_id,
-            documentId: document.id,
-            userId: user.id,
-          }),
-        ]
+    return node_ids
+      ? await Promise.all(
+          node_ids.map(
+            async node_id =>
+              await this.nodeService.getNodeById({
+                node_id,
+                documentId: document.id,
+                userId: user.id,
+              }),
+          ),
+        )
       : await this.nodeService.getNodes({
           documentId: document.id,
           userId: user.id,

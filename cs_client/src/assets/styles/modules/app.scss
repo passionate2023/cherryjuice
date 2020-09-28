@@ -9,21 +9,20 @@
   display: grid;
   grid-template-areas:
     'tool-bar tool-bar '
-    'tree title-and-recent-nodes'
+    'tree tabs'
     'tree rich-text '
-    'recent-nodes recent-nodes'
     'formatting-bar formatting-bar'
     'main-bar main-bar';
-  grid-template-columns: var(--tree-width) 1fr;
+  grid-template-columns: var(--treeWidth) 1fr;
   grid-template-rows:
-    $tool-bar-height $title-and-recent-bar-height 1fr var(--recent-nodes)
+    $tool-bar-height $title-and-recent-bar-height 1fr
     var(--formatting-bar)
     var(--nodes-bar);
 
   @include respond-to($md-up) {
     grid-template-areas:
       'tool-bar tool-bar '
-      'tree title-and-recent-nodes'
+      'tree tabs'
       'tree rich-text '
       'info-bar info-bar';
     grid-template-rows: $tool-bar-height-md $title-and-recent-bar-height-md 1fr var(
@@ -33,24 +32,23 @@
 
   overflow: hidden;
   // style
-  color: white;
-  background-color: black;
+  color: var(--background);
+  background-color: var(--on-background);
   font-family: Verdana, sans-serif;
 }
 
 .app--dialog-docked {
   grid-template-areas:
     'tool-bar tool-bar '
-    'tree title-and-recent-nodes'
+    'tree tabs'
     'tree rich-text '
-    'recent-nodes recent-nodes'
     'formatting-bar formatting-bar'
     'main-bar main-bar'
     'dialog dialog';
   @include respond-to($md-up) {
     grid-template-areas:
       'tool-bar tool-bar '
-      'tree title-and-recent-nodes'
+      'tree tabs'
       'tree rich-text '
       'info-bar info-bar'
       'dialog dialog';

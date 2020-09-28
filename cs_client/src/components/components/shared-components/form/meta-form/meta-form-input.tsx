@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { modNodeMeta, modTextInput } from '::sass-modules';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useLazyAutoFocus } from '::root/components/shared-components/buttons/button-base/button-base';
 
 type FormInputProps = {
   type?: 'checkbox' | 'text';
@@ -10,7 +11,7 @@ type FormInputProps = {
   value?;
   additionalInput?: JSX.Element;
   monolithComponent?: JSX.Element;
-  lazyAutoFocus?: number;
+  lazyAutoFocus?: boolean;
   customInput?: JSX.Element;
 };
 
@@ -30,18 +31,7 @@ const MetaFormInput: React.FC<FormInputProps> = ({
   const onChangeText = e => onChange(e.target.value);
 
   const inputRef = useRef<HTMLInputElement>();
-  useEffect(() => {
-    if (lazyAutoFocus) {
-      const handle = setTimeout(() => {
-        inputRef.current.focus();
-        clearTimeout(handle);
-      }, lazyAutoFocus);
-      return () => {
-        inputRef.current.blur();
-        clearTimeout(handle);
-      };
-    }
-  }, []);
+  useLazyAutoFocus(lazyAutoFocus ? 500 : 0, inputRef);
 
   return monolithComponent ? (
     monolithComponent
