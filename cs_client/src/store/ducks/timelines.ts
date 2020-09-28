@@ -4,7 +4,7 @@ import { NumberOfFrames } from '::root/components/app/components/editor/tool-bar
 import { Frame } from '::store/ducks/cache/document-cache/helpers/timeline/timeline';
 import { DocumentTimeLineMeta } from '::store/ducks/cache/document-cache';
 import { rootActionCreators as rac } from '::store/ducks/root';
-import { cloneObj } from '::helpers/editing/execK/helpers';
+import { cloneObj } from '::helpers/objects';
 import { documentActionCreators as dac } from '::store/ducks/document';
 
 const ap = createActionPrefixer('timelines');

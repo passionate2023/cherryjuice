@@ -1,4 +1,4 @@
-import { cloneObj } from '::helpers/editing/execK/helpers';
+import { cloneObj } from '::helpers/objects';
 import { TTag } from '::helpers/editing/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__';
 import { Attribute, ExecKMode } from '::helpers/editing/execK';
 const alwaysToBeRemovedTags = ['span'];

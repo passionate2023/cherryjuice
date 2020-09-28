@@ -11,14 +11,14 @@ import {
 export type ContextMenuProps = {
   hide: () => void;
   offset?: [number, number];
-  items?: ContextMenuItemProps[];
+  items?: Omit<ContextMenuItemProps, 'hide'>[];
   position: [number, number];
 };
 
 const ContextMenu: React.FC<ContextMenuProps> = ({
   children,
   hide,
-  offset=[0,0],
+  offset = [0, 0],
   items,
   position,
 }) => {
@@ -47,13 +47,15 @@ const ContextMenu: React.FC<ContextMenuProps> = ({
     <div
       className={joinClassNames([modContextMenu.contextMenu])}
       style={{
-        left: Math.max(position[0] - inverseX + offsetX,0),
-        top: Math.max(position[1] - inverseY + offsetY,0),
+        left: Math.max(position[0] - inverseX + offsetX, 0),
+        top: Math.max(position[1] - inverseY + offsetY, 0),
       }}
       ref={contextMenuR}
     >
       {items
-        ? items.map(item => <ContextMenuItem {...item} key={item.name} />)
+        ? items.map(item => (
+            <ContextMenuItem {...item} key={item.name} hide={hide} />
+          ))
         : children}
     </div>
   );

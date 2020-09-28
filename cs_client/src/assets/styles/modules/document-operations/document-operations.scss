@@ -79,7 +79,10 @@
 
 .collapsable-list__item__name {
   color: var(--on-surface);
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

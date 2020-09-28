@@ -9,7 +9,7 @@ const mapPrivacyToIcon = (privacy: NodePrivacy | Privacy) => {
     case Privacy.PRIVATE:
       return Icons.material['lock-closed'];
     case Privacy.GUESTS_ONLY:
-      return Icons.material.person;
+      return Icons.material.people;
     case Privacy.PUBLIC:
       return Icons.material.globe;
   }

@@ -146,6 +146,10 @@ export class DocumentRepository extends Repository<Document> {
           getDocumentDTO.documentId,
         ),
       );
+
+    if ('state' in meta && document.state.updatedAt > meta.state.updatedAt)
+      return document;
+
     entries.forEach(([k, v]) => {
       document[k] = v;
     });

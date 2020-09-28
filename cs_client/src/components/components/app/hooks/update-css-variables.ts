@@ -12,8 +12,9 @@ export const useUpdateCssVariables = (
   isDocumentOwner: boolean,
   showFormattingButtons: boolean,
   showTree: boolean,
-  treeWidth: number,
   showRecentNodes: boolean,
+  treeWidth: number,
+  previousTreeWidth: number,
 ) => {
   const dockedDialog = useSelector((state: Store) => state.root.dockedDialog);
   const showSearchDialog = useSelector(
@@ -25,8 +26,15 @@ export const useUpdateCssVariables = (
   const showDocumentList = useSelector(
     (state: Store) => state.dialogs.showDocumentList,
   );
+
   useEffect(() => {
-    ac.cssVariables.set(CssVariables.treeWidth, showTree ? treeWidth : 0);
+    ac.cssVariables.set(
+      CssVariables.treeWidth,
+      showTree ? previousTreeWidth : 0,
+    );
+  }, [showTree, previousTreeWidth]);
+
+  useEffect(() => {
     if (isDocumentOwner && showFormattingButtons) {
       cssVariables.setFormattingBar(40);
     } else {
@@ -35,7 +43,7 @@ export const useUpdateCssVariables = (
         cssVariables.setFormattingBar(0);
       })();
     }
-  }, [showFormattingButtons, showTree]);
+  }, [showFormattingButtons, isDocumentOwner]);
 
   useEffect(() => {
     if (showRecentNodes) {

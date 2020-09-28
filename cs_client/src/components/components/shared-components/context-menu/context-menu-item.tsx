@@ -8,6 +8,7 @@ export type ContextMenuItemProps = {
   name: string;
   disabled?: boolean;
   onClick: () => void;
+  hide: () => void;
   bottomSeparator?: boolean;
 };
 
@@ -17,7 +18,16 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
   disabled,
   onClick,
   bottomSeparator,
+  hide,
 }) => {
+  const onClickM = e => {
+    if (!disabled) {
+      hide();
+      onClick();
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  };
   return (
     <div
       className={joinClassNames([
@@ -25,7 +35,7 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
         [modContextMenu.contextMenu__itemDisabled, disabled],
         [modContextMenu.contextMenu__itemBottomSeparator, bottomSeparator],
       ])}
-      onClick={disabled ? undefined : onClick}
+      onClick={onClickM}
       {...(disabled && { 'data-disabled': disabled })}
     >
       {node || name}

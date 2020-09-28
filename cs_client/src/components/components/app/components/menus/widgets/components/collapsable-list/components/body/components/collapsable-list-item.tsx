@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { modDocumentOperations } from '::sass-modules';
 import { joinClassNames } from '::helpers/dom/join-class-names';
+import { Icon } from '::root/components/shared-components/icon/icon';
 
 export type CollapsableListItemProps = {
   name: string;
@@ -8,12 +9,14 @@ export type CollapsableListItemProps = {
   button?: JSX.Element;
   active?: boolean;
   key: string;
+  icon?: string;
 };
 const CollapsableListItem: React.FC<CollapsableListItemProps> = ({
   name,
   description,
   button,
   active,
+  icon,
 }) => {
   return (
     <div
@@ -23,6 +26,7 @@ const CollapsableListItem: React.FC<CollapsableListItemProps> = ({
       ])}
     >
       <div className={modDocumentOperations.collapsableList__item__name}>
+        {icon && <Icon name={icon} size={15} />}
         {name}
       </div>
       <div className={modDocumentOperations.collapsableList__item__description}>

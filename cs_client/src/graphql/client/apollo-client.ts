@@ -1,4 +1,4 @@
-import { cloneObj } from '::helpers/editing/execK/helpers';
+import { cloneObj } from '::helpers/objects';
 import { cacheInitialState, CacheState } from '::graphql/client/initial-state';
 import { DocumentNode } from 'graphql';
 import { ApolloClient } from 'apollo-client';

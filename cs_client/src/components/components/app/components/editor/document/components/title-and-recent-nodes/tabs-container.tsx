@@ -101,7 +101,7 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
           documentId={documentId}
           nodes={visible.map(node_id => ({
             node_id,
-            name: nodes[node_id].name,
+            name: nodes[node_id]?.name || '?',
             hasChanges: !!localState.editedNodes.edited[node_id],
           }))}
           selectedNode_id={selectedNode_id}
@@ -115,7 +115,7 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
           documentId={documentId}
           nodes={hidden.map(node_id => ({
             node_id,
-            name: nodes[node_id].name,
+            name: nodes[node_id]?.name || '?',
           }))}
           hideContextMenu={() => setShowHiddenTabs(false)}
           showContextMenu={() => setShowHiddenTabs(true)}

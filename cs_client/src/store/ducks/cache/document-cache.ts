@@ -37,7 +37,7 @@ import {
 import { removeSavedDocuments } from '::store/ducks/cache/document-cache/helpers/document/remove-saved-documents';
 import { nodeActionCreators as nac } from '::store/ducks/node';
 import { rootActionCreators as rac } from '::store/ducks/root';
-import { cloneObj } from '::helpers/editing/execK/helpers';
+import { cloneObj } from '::helpers/objects';
 import { loadDocumentsList } from '::store/ducks/cache/document-cache/helpers/document/load-documents-list';
 import produce from 'immer';
 import {

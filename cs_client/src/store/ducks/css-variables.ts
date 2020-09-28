@@ -1,5 +1,6 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
+import produce from 'immer';
 
 export enum CssVariables {
   vh = 'vh',
@@ -28,6 +29,9 @@ type State = {
   vh: number;
   vw: number;
   treeWidth: number;
+  previous: {
+    treeWidth: number;
+  };
 };
 
 const initialState: State = {
@@ -36,6 +40,9 @@ const initialState: State = {
   vh: 1,
   vw: 1,
   treeWidth: 250,
+  previous: {
+    treeWidth: 250,
+  },
 };
 const reducer = createReducer(initialState, _ => [
   _(ac.setSearchFiltersHeight, (state, { payload }) => ({
@@ -46,14 +53,13 @@ const reducer = createReducer(initialState, _ => [
     ...state,
     dialogBodyHeight: payload,
   })),
-  _(ac.set, (state, { payload }) => {
-    if (!state[payload.variable])
-      throw Error('unknown variable: ' + payload.variable);
-    return {
-      ...state,
-      [payload.variable]: payload.value,
-    };
-  }),
+  _(ac.set, (state, { payload }) =>
+    produce(state, draft => {
+      if (payload.variable === CssVariables.treeWidth && payload.value !== 0) {
+        draft.previous[payload.variable] = payload.value as number;
+      }
+      draft[payload.variable] = payload.value as number;
+    })),
 ]);
 
 export { reducer as cssVariablesReducer, ac as cssVariablesActionCreators };

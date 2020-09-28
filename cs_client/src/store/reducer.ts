@@ -87,6 +87,14 @@ const persistedReducers = {
     },
     searchReducer,
   ) as Reducer<SearchReducerState>,
+  cssVariables: persistReducer(
+    {
+      key: 'cssVariables',
+      storage,
+      blacklist: [],
+    },
+    cssVariablesReducer,
+  ),
 };
 
 const nonPersistedReducers = {
@@ -96,7 +104,6 @@ const nonPersistedReducers = {
   node: nodeReducer,
   documentsList: documentsListReducer,
   documentOperations: documentOperationsReducer,
-  cssVariables: cssVariablesReducer,
   timelines: timelinesReducer,
 };
 const reducer = combineReducers({

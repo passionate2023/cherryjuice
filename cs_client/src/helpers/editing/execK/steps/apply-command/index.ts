@@ -1,4 +1,4 @@
-import { cloneObj } from '::helpers/editing/execK/helpers';
+import { cloneObj } from '::helpers/objects';
 import { applyStyle } from '::helpers/editing/execK/steps/apply-command/apply-style';
 import { applyTag } from '::helpers/editing/execK/steps/apply-command/apply-tag';
 import { removeFormatting } from '::helpers/editing/execK/steps/apply-command/remove-formatting';

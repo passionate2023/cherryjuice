@@ -6,6 +6,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store, store } from '::store/store';
 import { getDocuments } from '::store/selectors/cache/document/document';
 import { UndoRedo } from '::root/components/app/components/menus/widgets/components/undo-action/components/undo-redo';
+import { Icons } from '::root/components/shared-components/icon/icon';
 
 const mapState = (state: Store) => ({
   nof: state.timelines.documentActionNOF,
@@ -27,6 +28,7 @@ const ChangesHistory: React.FC<Props & PropsFromRedux> = ({ nof }) => {
           description: '',
           active: dTM.current?.getPosition === -1,
           key: dTM.getCurrentId + '::initial-state',
+          icon: Icons.material.document,
         },
       ]
     : [];
@@ -36,10 +38,13 @@ const ChangesHistory: React.FC<Props & PropsFromRedux> = ({ nof }) => {
         const document = documents[frame.documentId];
         const node = document.nodes[frame.node_id];
         return {
-          name: node?.name || document.name,
+          name: frame.node_id
+            ? node?.name || 'node ' + frame.node_id
+            : document.name,
           description: frame.mutationType,
           active: dTM.current.getPosition === i,
           key: frame.timeStamp + '',
+          icon: frame.node_id ? Icons.material.cherry : Icons.material.document,
         };
       }),
     );

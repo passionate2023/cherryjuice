@@ -46,9 +46,10 @@
 }
 .tree_focus-button {
   height: 100%;
-  background-color: white;
-  border-radius: 0;
+  width: 30px;
   @include respond-to($md-down) {
     width: 40px;
   }
+  background-color: white;
+  border-radius: 0;
 }

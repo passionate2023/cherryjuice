@@ -3,7 +3,7 @@ import { documentActionCreators as dac } from './document';
 import { documentsListActionCreators as dlac } from './documents-list';
 import { createActionPrefixer } from './helpers/shared';
 import { AlertType, TAlert } from '::types/react';
-import { cloneObj } from '::helpers/editing/execK/helpers';
+import { cloneObj } from '::helpers/objects';
 import { rootActionCreators } from './root';
 import { authActionCreators as aac } from './auth';
 

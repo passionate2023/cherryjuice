@@ -1,4 +1,5 @@
 import { trimOffset } from '::helpers/editing/execK/helpers';
+import { smoothScrollIntoView } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/components/tab';
 
 const getDeepestFirstChild = (el: Element): Node | Element =>
   el?.firstChild
@@ -7,6 +8,7 @@ const getDeepestFirstChild = (el: Element): Node | Element =>
 const setTextSelection = (
   { startElement, endElement, startOffset, endOffset },
   collapsed?: boolean,
+  scrollIntoSelection = true,
 ) => {
   const range = document.createRange();
 
@@ -14,13 +16,14 @@ const setTextSelection = (
     ...trimOffset(getDeepestFirstChild(startElement), startOffset),
   );
   if (collapsed) range.collapse(true);
-  else if(endElement){
+  else if (endElement) {
     const deepestFirstChild = getDeepestFirstChild(endElement);
     range.setEnd(...trimOffset(deepestFirstChild, endOffset));
   }
   const sel = window.getSelection();
   sel.removeAllRanges();
   sel.addRange(range);
+  if (scrollIntoSelection) smoothScrollIntoView(startElement);
 };
 const getLength = (str: string, nextStr: string | undefined) =>
   Number(

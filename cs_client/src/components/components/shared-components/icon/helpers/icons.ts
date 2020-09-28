@@ -1,12 +1,14 @@
 const Icons = {
   material: {
     anchor: 'anchor',
+    people: 'people',
     filter: 'filter',
     time: 'time',
     link: 'link',
     code: 'code',
     sort: 'sort',
     table: 'table',
+    cherry: 'cherry',
     add: 'add',
     pin: 'pin',
     close: 'close',
