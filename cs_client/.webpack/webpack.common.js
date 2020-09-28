@@ -127,6 +127,7 @@ module.exports = {
     production && new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/assets/index.html',
+      meta: {'build-date': new Date().toUTCString()}
     }),
     production &&
       new FaviconsWebpackPlugin({
@@ -138,6 +139,16 @@ module.exports = {
           background: '#180101',
           theme_color: '#180101',
         },
+        icons: {
+          favicons: true,
+          android: true,
+          appleIcon: true,
+          windows: true,
+          appleStartup: false,
+          coast: false,
+          firefox: false,
+          yandex: false
+        }
       }),
     production &&
       new WorkboxPlugin.GenerateSW({
@@ -146,7 +157,7 @@ module.exports = {
         maximumFileSizeToCacheInBytes: production ? 1024 * 2000 : 1024 * 20000,
         swDest: 'workbox-sw.js',
         navigateFallback: 'index.html',
-        navigateFallbackDenylist: [/auth\/google\/.*/]
+        navigateFallbackDenylist: [/auth\/google\/.*/, /report\.html/]
       }),
     production &&
       new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
