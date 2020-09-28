@@ -69,6 +69,7 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
           snapBackManager.current?.enable();
         }),
         flatMap(document => {
+          if (!document?.id) return of(ac_.document.fetchFailed());
           const next = store.getState().node.next;
           if (next && next.documentId === document.id)
             return concat(

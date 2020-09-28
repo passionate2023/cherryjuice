@@ -146,6 +146,7 @@ module.exports = {
         maximumFileSizeToCacheInBytes: production ? 1024 * 2000 : 1024 * 20000,
         swDest: 'workbox-sw.js',
         navigateFallback: 'index.html',
+        navigateFallbackDenylist: [/auth\/google\/.*/]
       }),
     production &&
       new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
