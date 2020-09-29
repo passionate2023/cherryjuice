@@ -81,7 +81,7 @@ class ExportCTB {
   private writeAHtml = (
     nodesMap: Map<number, Node>,
     imagesMap: ImagesMap,
-    onProgress: OnProgress,
+    onProgress: Notify,
   ) => async (node_id: number): Promise<void> => {
     const node = nodesMap.get(node_id);
     try {

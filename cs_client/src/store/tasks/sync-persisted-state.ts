@@ -29,6 +29,7 @@ export const syncPersistedState = (intervalMs = 2 * 1000) => {
           ? []
           : getDocumentsList(store.getState())
               .filter(document => {
+                const isDocumentOwner = document.userId === state.auth?.user?.id;
                 const updated =
                   document.persistedState.localUpdatedAt >
                   document.persistedState.updatedAt;
@@ -36,7 +37,9 @@ export const syncPersistedState = (intervalMs = 2 * 1000) => {
                   document.persistedState.localLastOpenedAt >
                   document.persistedState.lastOpenedAt;
                 return (
-                  !document.id.startsWith('new-document') && (updated || opened)
+                  isDocumentOwner &&
+                  !document.id.startsWith('new-document') &&
+                  (updated || opened)
                 );
               })
               .map<DocumentStateTuple>(document => [

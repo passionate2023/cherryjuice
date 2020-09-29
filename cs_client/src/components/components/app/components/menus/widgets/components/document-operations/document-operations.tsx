@@ -40,6 +40,7 @@ const DocumentOperations: React.FC<Props> = ({ operations }) => {
       <ActionButton
         open={() => {
           ac.document.setDocumentId(operation.target.id);
+          // ac.document.fetch();
         }}
         operation={operation}
       />

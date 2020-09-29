@@ -156,8 +156,6 @@ export class DocumentService {
 
   clone = async (dto: GetDocumentDTO): Promise<string> => {
     const documentA = await this.documentRepository.getDocumentById(dto);
-    const ongoingOperation = documentA.status;
-    if (ongoingOperation) return;
 
     const documentB = await this.documentRepository.createDocument({
       data: {
@@ -167,16 +165,16 @@ export class DocumentService {
       },
       userId: dto.userId,
     });
-    documentB.state = documentA.state;
-    await this.subscriptionsService.clone.preparing(documentA, dto.userId);
+    await this.subscriptionsService.clone.preparing(documentB, dto.userId);
     const nodesA = await this.nodeService.getNodesMetaAndAHtml(dto);
+    const allNodesA = new Map(nodesA.map(node => [node.node_id, node]));
     const cloneNodes$ = progressify<Node[]>(
       unFlatMap(10)(nodesA),
-      nodes => from(this.nodeService.clone(documentB, nodes)),
+      nodes => from(this.nodeService.clone(documentB, allNodesA,nodes)),
       progress =>
         from(
           this.subscriptionsService.clone.nodesStarted(
-            documentA,
+            documentB,
             dto.userId,
             progress,
           ),
@@ -189,14 +187,14 @@ export class DocumentService {
       });
       await documentB.save();
       return from(
-        this.subscriptionsService.clone.finished(documentA, dto.userId),
+        this.subscriptionsService.clone.finished(documentB, dto.userId),
       );
     });
     const cloneDocument$ = concat(cloneNodes$, finished$).pipe(
       catchError(e => {
         this.logger.error(e.message);
         return from(
-          this.subscriptionsService.clone.failed(documentA, dto.userId),
+          this.subscriptionsService.clone.failed(documentB, dto.userId),
         );
       }),
     );

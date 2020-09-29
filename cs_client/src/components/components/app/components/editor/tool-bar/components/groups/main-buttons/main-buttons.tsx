@@ -65,6 +65,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         <Icon name={Icons.material.refresh} loadAsInlineSVG={'force'} />
       </ToolbarButton>
       <ToolbarButton
+        dontMount={!isDocumentOwner}
         onClick={ac.timelines.toggleTimeline}
         active={showTimeline}
         disabled={

@@ -97,7 +97,11 @@ export class NodeService {
     return await this.nodeRepository.getPrivateNodes(dto);
   }
 
-  clone = async (documentB: Document, nodesA: Node[]): Promise<void> => {
+  clone = async (
+    documentB: Document,
+    allNodesA: Map<number, Node>,
+    nodesA: Node[],
+  ): Promise<void> => {
     const nodesB = new Map<number, Node>();
     const imageABIds = new Map<number, [string, string][]>();
     const nodesADates: NodeDatesMap = new Map();
@@ -140,6 +144,7 @@ export class NodeService {
     }
 
     for await (const nodeB of nodesB.values()) {
+      nodeB.child_nodes = nodeB.child_nodes.filter(node_id => allNodesA.has(+node_id));
       const father = nodesB.get(nodeB.father_id);
       if (father) {
         nodeB.father = father;
