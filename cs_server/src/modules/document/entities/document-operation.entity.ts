@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, Float, ObjectType, registerEnumType } from '@nestjs/graphql';
 
 export enum OPERATION_STATE {
   PENDING = 'PENDING',
@@ -34,13 +34,13 @@ registerEnumType(OPERATION_TYPE, {
 
 @ObjectType()
 export class DocumentTarget {
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   hash: string;
 
   @Field(() => String)
   id: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   name: string;
 }
 
@@ -58,7 +58,7 @@ export class DocumentOperation {
   @Field(() => OPERATION_CONTEXT, { nullable: true })
   context?: OPERATION_CONTEXT;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => Float, { nullable: true })
   progress?: number;
 
   // todo: use a union type

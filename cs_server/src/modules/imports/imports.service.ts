@@ -52,7 +52,6 @@ export class ImportsService {
     });
     document.size = await this.documentService.getSize({
       documentId: document.id,
-      user,
     });
     await document.save();
   }

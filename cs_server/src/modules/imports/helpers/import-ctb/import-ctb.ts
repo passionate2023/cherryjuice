@@ -4,39 +4,46 @@ import { NodeSqliteRepository } from './repositories/node.sqlite.repository';
 import { DocumentSqliteRepository } from './repositories/document.sqlite.repository';
 import { Document } from '../../../document/entities/document.entity';
 import { Image } from '../../../image/entities/image.entity';
-import { ImageSqliteRepository } from './repositories/image.sqlite.repository';
+import {
+  ImageSqliteRepository,
+  SqliteImage,
+} from './repositories/image.sqlite.repository';
 import { nodeTitleStyle } from './rendering/node-meta/node-title-style';
 import { FileMeta } from '../download/create-dowload-task/create-gdrive-download-task';
 import { User } from '../../../user/entities/user.entity';
 import { CreateNodeDTO } from '../../../node/dto/mutate-node.dto';
 import { convertTime } from './rendering/node-meta/convert-time';
 import { SqliteNodeMeta } from './repositories/queries/node';
+import { AHtmlLine } from '../../../node/helpers/rendering/ahtml-to-html';
 
 type SqliteNodeMetaPreProcessed = SqliteNodeMeta & {
   child_nodes: number[];
   is_empty: number;
   node_title_styles: string;
 };
-type NodeDateMap = Map<number, { createdAt: Date; updatedAt: Date }>;
-type NodeDatesMap = NodeDateMap;
+export type NodeDateMap = Map<number, { createdAt: Date; updatedAt: Date }>;
+export type NodeDatesMap = NodeDateMap;
 type SqliteNodeNode_idMap = Map<number, SqliteNodeMetaPreProcessed>;
 type NodeNode_idMap = Map<number, Node>;
 
-const sortBySequence = rawNodesMap => (a, b) =>
+export const createSortBySequence = (
+  rawNodesMap: Map<number, { sequence: number }>,
+) => (a: number, b: number) =>
   rawNodesMap.get(a).sequence - rawNodesMap.get(b).sequence;
 
 type NodeImagesMap = [Node, { png: Buffer; hash?: string }[]][];
 
 type Node_idImagesMap = Map<number, string[]>;
 
+type NodeCreator = (dto: CreateNodeDTO) => Promise<Node>;
+
+type ImageGetter = (node: { node_id: number }) => Promise<SqliteImage[]>;
+
 export class ImportCTB {
   private readonly documentSqliteRepository: DocumentSqliteRepository;
   private readonly nodeSqliteRepository: NodeSqliteRepository;
   private readonly imageSqliteRepository: ImageSqliteRepository;
-  constructor(
-    private nodeCreator: (dto: CreateNodeDTO) => Promise<Node>,
-    private user: User,
-  ) {
+  constructor(private nodeCreator: NodeCreator, private user: User) {
     this.documentSqliteRepository = new DocumentSqliteRepository();
     this.nodeSqliteRepository = new NodeSqliteRepository(
       this.documentSqliteRepository,
@@ -54,25 +61,55 @@ export class ImportCTB {
     fileMeta: FileMeta;
   }): Promise<void> {
     await this.documentSqliteRepository.openDB(fileMeta.location.path);
-    const rawNodes = await this.nodeSqliteRepository.getNodesMeta();
+    const nodesARaw = await this.nodeSqliteRepository.getNodesMeta();
 
-    const { nodeImagesMap, nodesMap, nodeDatesMap } = await this.saveNodesMeta(
-      document,
-      rawNodes,
+    const nodesA: SqliteNodeNode_idMap = new Map(
+      nodesARaw.map(node => [
+        node.node_id,
+        {
+          ...node,
+          child_nodes: [],
+          is_empty: 0,
+          createdAt: convertTime(node.createdAt),
+          updatedAt: convertTime(node.updatedAt),
+          node_title_styles: nodeTitleStyle({
+            is_richtxt: node.is_richtxt,
+            is_ro: node.is_ro,
+          }),
+        },
+      ]),
     );
+    const {
+      nodeImagesMap,
+      nodesMap,
+      nodeDatesMap,
+    } = await ImportCTB.saveNodesMeta(
+      document,
+      nodesA,
+      this.nodeCreator,
+      node => this.imageSqliteRepository.getNodeImages(node),
+      this.user.id,
+    );
+
+    await ImportCTB.addChildToParents(nodesA, nodesMap);
     const { node_idImagesMap } = await ImportCTB.saveImages(nodeImagesMap);
-    await this.saveAhtml({
+    await ImportCTB.saveAhtml({
       node_idImagesMap,
       nodesMap,
       nodeDatesMap,
       document,
+      aHtmlGetter: (node_id, imageIds) =>
+        this.nodeSqliteRepository.getAHtml(node_id, imageIds),
     });
     await this.documentSqliteRepository.closeDB();
   }
 
-  async saveNodesMeta(
+  static async saveNodesMeta(
     newDocument: Document,
-    rawNodes: SqliteNodeMeta[],
+    nodesToSave: SqliteNodeNode_idMap,
+    nodeCreator: NodeCreator,
+    imageGetter: ImageGetter,
+    userId: string,
   ): Promise<{
     nodesMap: NodeNode_idMap;
     nodeImagesMap: NodeImagesMap;
@@ -81,66 +118,54 @@ export class ImportCTB {
     const nodeImagesMap: NodeImagesMap = [];
     const nodesMap = new Map<number, Node>();
     const nodeDatesMap: NodeDatesMap = new Map();
-    const rawNodesMap: SqliteNodeNode_idMap = new Map(
-      rawNodes.map(node => [
-        node.node_id,
-        {
-          ...node,
-          child_nodes: [],
-          is_empty: 0,
-          createdAt: convertTime(node.createdAt),
-          updatedAt: convertTime(node.updatedAt),
-          node_title_styles: '',
-        },
-      ]),
-    );
 
-    for (const nodeRaw of rawNodesMap.values()) {
-      const parentNode = rawNodesMap.get(nodeRaw.father_id);
+    for (const nodeToSave of nodesToSave.values()) {
+      const parentNode = nodesToSave.get(nodeToSave.father_id);
       if (parentNode) {
-        parentNode.child_nodes.push(nodeRaw.node_id);
+        parentNode.child_nodes.push(nodeToSave.node_id);
       }
-      nodeRaw.node_title_styles = nodeTitleStyle({
-        // @ts-ignore
-        is_richtxt: nodeRaw.is_richtxt,
-        is_ro: nodeRaw.is_ro,
-      });
 
       const dto: CreateNodeDTO = {
         getNodeDTO: {
           documentId: newDocument.id,
-          node_id: nodeRaw.node_id,
-          userId: this.user.id,
+          node_id: nodeToSave.node_id,
+          userId,
         },
         data: {
-          ...nodeRaw,
+          ...nodeToSave,
           createdAt: 0,
           updatedAt: 0,
           fatherId: undefined,
         },
       };
-      const node = await this.nodeCreator(dto);
+      const node = await nodeCreator(dto);
       nodesMap.set(node.node_id, node);
       nodeDatesMap.set(node.node_id, {
-        createdAt: new Date(nodeRaw.createdAt),
-        updatedAt: new Date(nodeRaw.updatedAt),
+        createdAt: new Date(nodeToSave.createdAt),
+        updatedAt: new Date(nodeToSave.updatedAt),
       });
-      if (nodeRaw.has_image) {
-        const images = await this.imageSqliteRepository.getNodeImages({
+      if (nodeToSave.has_image) {
+        const images = await imageGetter({
           node_id: node.node_id,
         });
         nodeImagesMap.push([node, images]);
       }
     }
 
-    const sortBySequence1 = sortBySequence(rawNodesMap);
-    for (const node of Array.from(nodesMap.values())) {
-      node.child_nodes.sort(sortBySequence1);
-      const father = nodesMap.get(node.father_id);
-      if (father) node.father = father;
-    }
     return { nodeImagesMap, nodesMap, nodeDatesMap };
   }
+
+  static addChildToParents = (
+    nodesToSave: SqliteNodeNode_idMap,
+    savedNodes: NodeNode_idMap,
+  ) => {
+    const sortBySequence = createSortBySequence(nodesToSave);
+    for (const node of Array.from(savedNodes.values())) {
+      node.child_nodes.sort(sortBySequence);
+      const father = savedNodes.get(node.father_id);
+      if (father) node.father = father;
+    }
+  };
 
   static async saveImages(
     nodeImagesMap: NodeImagesMap,
@@ -167,24 +192,23 @@ export class ImportCTB {
     return { node_idImagesMap };
   }
 
-  private async saveAhtml({
+  static async saveAhtml({
     nodesMap,
     node_idImagesMap,
     nodeDatesMap,
     document,
+    aHtmlGetter,
   }: {
     nodesMap: NodeNode_idMap;
     node_idImagesMap: Node_idImagesMap;
     nodeDatesMap: NodeDatesMap;
     document: Document;
+    aHtmlGetter: (node_id: string, imageIds?: string[]) => Promise<AHtmlLine[]>;
   }) {
     for (const node of Array.from(nodesMap.values())) {
       const node_id = String(node.node_id);
       const imagesIds = node_idImagesMap.get(node.node_id);
-      const ahtml = await this.nodeSqliteRepository.getAHtml(
-        node_id,
-        imagesIds,
-      );
+      const ahtml = await aHtmlGetter(node_id, imagesIds);
       node.ahtml = JSON.stringify(ahtml);
       node.updateAhtmlTxt();
       node.createdAt = nodeDatesMap.get(node.node_id).createdAt;

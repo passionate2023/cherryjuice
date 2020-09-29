@@ -8,6 +8,7 @@ import { Store } from '::store/store';
 import { VisibilityIcon } from '::root/components/app/components/editor/info-bar/components/components/visibility-icon';
 import { CachedDocument } from '::store/ducks/cache/document-cache';
 import { joinClassNames } from '::helpers/dom/join-class-names';
+import { useState } from 'react';
 
 export const documentHasUnsavedChanges = (document: CachedDocument) =>
   document?.localState?.localUpdatedAt > document?.updatedAt;
@@ -34,6 +35,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
 }) => {
   const { nodes, size, id, name, updatedAt, hash, privacy, guests } = document;
   const disabled = !online && (!nodes || (nodes && !nodes[0]));
+  const [showModal, setShowModal] = useState(false);
   return (
     <div
       className={joinClassNames([
@@ -47,6 +49,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
       onClick={disabled ? undefined : () => ac.documentsList.selectDocument(id)}
       key={id}
       tabIndex={0}
+      onContextMenu={() => setShowModal(true)}
     >
       <div
         className={joinClassNames([
@@ -79,7 +82,13 @@ const Document: React.FC<Props & PropsFromRedux> = ({
           </div>
         </span>
       </div>
-      <DocumentContextMenu documentId={id} online={online} />
+      <DocumentContextMenu
+        documentId={id}
+        online={online}
+        show={() => setShowModal(true)}
+        hide={() => setShowModal(false)}
+        shown={showModal}
+      />
     </div>
   );
 };

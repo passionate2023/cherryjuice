@@ -30,9 +30,15 @@ export class SubscriptionsService {
   };
   private _ = (
     props: Pick<DocumentOperation, 'state' | 'progress' | 'context' | 'type'>,
-  ) => async (document: Document, userId: string): Promise<void> => {
+    persist = true,
+  ) => async (
+    document: Document,
+    userId: string,
+    progress?: number,
+  ): Promise<void> => {
     const documentOperation: DocumentOperation = {
       ...props,
+      progress,
       target: {
         id: document.id,
         hash: document.hash,
@@ -44,10 +50,11 @@ export class SubscriptionsService {
       documentOperation,
       channel: SubscriptionChannels.DOCUMENT,
     });
-    await this.documentRepository.setDocumentStatus(
-      documentOperation,
-      document,
-    );
+    if (persist)
+      await this.documentRepository.setDocumentStatus(
+        documentOperation,
+        document,
+      );
   };
 
   import = {
@@ -109,6 +116,35 @@ export class SubscriptionsService {
     }),
     failed: this._({
       type: OPERATION_TYPE.EXPORT,
+      state: OPERATION_STATE.FAILED,
+    }),
+  };
+
+  clone = {
+    pending: this._({
+      type: OPERATION_TYPE.CLONE,
+      state: OPERATION_STATE.PENDING,
+    }),
+    preparing: this._({
+      type: OPERATION_TYPE.CLONE,
+      state: OPERATION_STATE.PREPARING,
+    }),
+    nodesStarted: this._({
+      type: OPERATION_TYPE.CLONE,
+      state: OPERATION_STATE.STARTED,
+      context: OPERATION_CONTEXT.NODES,
+    }),
+    imagesStarted: this._({
+      type: OPERATION_TYPE.CLONE,
+      state: OPERATION_STATE.STARTED,
+      context: OPERATION_CONTEXT.IMAGES,
+    }),
+    finished: this._({
+      type: OPERATION_TYPE.CLONE,
+      state: OPERATION_STATE.FINISHED,
+    }),
+    failed: this._({
+      type: OPERATION_TYPE.CLONE,
       state: OPERATION_STATE.FAILED,
     }),
   };

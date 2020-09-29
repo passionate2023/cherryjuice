@@ -10,7 +10,15 @@ const bufferToPng = buffer =>
 @Injectable()
 export class ImageService {
   constructor(private imageRepository: ImageRepository) {}
-
+  async getNodeImagesAndThumbnails({
+    nodeId,
+  }: {
+    nodeId: string;
+  }): Promise<Image[]> {
+    return this.imageRepository.getNodeImagesAndThumbnails({
+      nodeId,
+    });
+  }
   async getPNGFullBase64({ nodeId }: { nodeId: string }): Promise<Image[]> {
     return this.imageRepository
       .getNodeImages({

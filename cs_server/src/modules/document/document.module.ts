@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { NodeModule } from '../node/node.module';
 import { DocumentService } from './document.service';
 import { ImageModule } from '../image/image.module';
@@ -15,7 +15,7 @@ import { SearchModule } from '../search/search.module';
 
 @Module({
   imports: [
-    NodeModule,
+    forwardRef(() => NodeModule),
     ImageModule,
     TypeOrmModule.forFeature([DocumentRepository, DocumentGuestRepository]),
     ImportsModule,

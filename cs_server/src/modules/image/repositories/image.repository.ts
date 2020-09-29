@@ -16,6 +16,17 @@ export class ImageRepository extends Repository<Image> {
       .getMany();
   }
 
+  async getNodeImagesAndThumbnails({
+    nodeId,
+  }: {
+    nodeId: string;
+  }): Promise<Image[]> {
+    return this.createQueryBuilder('image')
+      .select(['image.thumbnail', 'image.image', 'image.id', 'image.hash'])
+      .where('image.nodeId = :nodeId', { nodeId })
+      .getMany();
+  }
+
   async deleteImages(IDs: string[]): Promise<DeleteResult> {
     return await this.delete(IDs);
   }

@@ -38,6 +38,7 @@ type DocumentGuestOt {
 }
 
 type DocumentMutation {
+    clone: String!
     createDocument(document: CreateDocumentIt!): String!
     deleteDocument(documents: DeleteDocumentInputType!): String!
     editDocument(meta: EditDocumentIt!): String!

@@ -16,9 +16,11 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
   const { fetchNodeEpic } = await import('./fetch-node/fetch-node');
   const { fetchAllNodesEpic } = await import('./fetch-node/fetch-all-node');
   const { filterTreeEpic } = await import('./filter-tree/filter-tree');
+  const { cloneDocumentEpic } = await import('./clone-document');
 
   return action$ =>
     combineEpics(
+      cloneDocumentEpic,
       filterTreeEpic,
       fetchAllNodesEpic,
       saveSettingsEpic,

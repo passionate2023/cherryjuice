@@ -13,6 +13,7 @@ import {
   FileLocation,
   resolveFileLocation,
 } from '../../shared/fs/resolve-file-location';
+import { Notify } from '../exports.service';
 
 type DebugOptions = {
   verbose?: boolean;
@@ -68,7 +69,10 @@ class ExportCTB {
   };
 
   createTables = async (): Promise<void> => {
-    await this.db.exec(queries.createTables());
+    try {
+      await this.db.exec(queries.createTables());
+      // eslint-disable-next-line no-empty
+    } catch (e) {}
   };
   closeCtb = async (): Promise<void> => {
     await this.db.close();
@@ -77,10 +81,11 @@ class ExportCTB {
   private writeAHtml = (
     nodesMap: Map<number, Node>,
     imagesMap: ImagesMap,
+    onProgress: OnProgress,
   ) => async (node_id: number): Promise<void> => {
     const node = nodesMap.get(node_id);
     try {
-      for (const node_id of node.child_nodes) {
+      for await (const node_id of node.child_nodes) {
         const i = node.child_nodes.indexOf(node_id);
         const childNode = nodesMap.get(+node_id);
         if (!childNode) {
@@ -92,16 +97,21 @@ class ExportCTB {
             node: childNode,
             sequence: i + 1,
           });
-          for (const statement of qs) {
+          for await (const statement of qs) {
             await this.db.run(statement);
           }
+          onProgress();
           imagesMap.set(childNode.id, images);
         } catch (e) {
           // eslint-disable-next-line no-console
           console.log(`node: [${JSON.stringify(node)}]`);
           throw e;
         }
-        await this.writeAHtml(nodesMap, imagesMap)(childNode.node_id);
+        await this.writeAHtml(
+          nodesMap,
+          imagesMap,
+          onProgress,
+        )(childNode.node_id);
       }
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -110,10 +120,13 @@ class ExportCTB {
     }
   };
 
-  writeAHtmls = async (nodes: Node[]): Promise<ImagesMap> => {
+  writeAHtmls = async (
+    nodes: Node[],
+    onProgress: Notify,
+  ): Promise<ImagesMap> => {
     const imagesMap: ImagesMap = new Map();
     const nodesMap = new Map(nodes.map(node => [node.node_id, node]));
-    await this.writeAHtml(nodesMap, imagesMap)(0);
+    await this.writeAHtml(nodesMap, imagesMap, onProgress)(0);
     return imagesMap;
   };
 
@@ -126,9 +139,11 @@ class ExportCTB {
   writeNodesImages = async ({
     imagesPerNode,
     getNodeImages,
+    onProgress,
   }: {
     getNodeImages: GetNodeImages;
     imagesPerNode: ImagesMap;
+    onProgress: Notify;
   }) => {
     for (const nodeId of imagesPerNode.keys()) {
       const nodeImages = imagesPerNode.get(nodeId);
@@ -142,6 +157,7 @@ class ExportCTB {
       }));
 
       await this.writeNodeImages(loadedNodeImages);
+      onProgress();
     }
   };
 }

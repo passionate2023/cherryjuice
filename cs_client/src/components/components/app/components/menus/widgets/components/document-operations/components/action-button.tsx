@@ -31,11 +31,7 @@ const ActionButton: React.FC<Props> = ({ operation, open }) => {
       props.onClick = () => undefined;
       props.wrapper = function Wrapper({ children }): JSX.Element {
         return (
-          <ProgressCircle
-            progress={operation.progress}
-            size={13}
-            className={modDocumentOperations.collapsableList__item__button}
-          >
+          <ProgressCircle progress={operation.progress} size={13}>
             {children}
           </ProgressCircle>
         );
@@ -47,10 +43,14 @@ const ActionButton: React.FC<Props> = ({ operation, open }) => {
     props.iconName = Icons.material.delete;
     props.onClick = deleteDocument;
   } else if (OperationTypes.successful[state]) {
-    if (operation.type === OPERATION_TYPE.IMPORT) {
+    if (
+      operation.type === OPERATION_TYPE.IMPORT ||
+      operation.type === OPERATION_TYPE.CLONE
+    ) {
       props.iconName = Icons.material.document;
       props.onClick = open;
       props.testId = `${testIds.popups__documentOperations__openDownloadedDocument}`;
+      ac.documentsList.fetchDocuments();
     } else if (operation.type === OPERATION_TYPE.EXPORT) {
       props.iconName = Icons.material.download;
       props.testId = `${testIds.popups__documentOperations__downloadDocument}${id}`;

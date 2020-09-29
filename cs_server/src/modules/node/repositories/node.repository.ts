@@ -159,7 +159,7 @@ export class NodeRepository extends Repository<Node> {
   async createNode({ data, getNodeDTO }: CreateNodeDTO): Promise<Node> {
     const node = new Node();
     if (data.privacy === NodePrivacy.DEFAULT) delete data.privacy;
-    copyProperties(data, node, {});
+    copyProperties(data, node, ['id']);
     node.documentId = getNodeDTO.documentId;
     node.createdAt = new Date(data.createdAt);
     node.updatedAt = new Date(data.updatedAt);

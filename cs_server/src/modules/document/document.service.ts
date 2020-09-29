@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { Document, Privacy } from './entities/document.entity';
 import { DocumentRepository } from './repositories/document.repository';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,6 +13,11 @@ import {
   SetDocumentStateDTO,
 } from './dto/document.dto';
 import { DocumentOperation } from './entities/document-operation.entity';
+import { NodeService } from '../node/node.service';
+import { concat, defer, from } from 'rxjs';
+import { progressify, unFlatMap } from '../shared/shared';
+import { Node } from '../node/entities/node.entity';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class DocumentService {
@@ -22,6 +27,8 @@ export class DocumentService {
     private documentRepository: DocumentRepository,
     private subscriptionsService: SubscriptionsService,
     private documentGuestRepository: DocumentGuestRepository,
+    @Inject(forwardRef(() => NodeService))
+    private nodeService: NodeService,
   ) {}
   async onModuleInit(): Promise<void> {
     await this.documentRepository
@@ -132,7 +139,7 @@ export class DocumentService {
     await document.save();
   }
 
-  async getSize(args: { documentId: string; user: User }): Promise<number> {
+  async getSize(args: { documentId: string }): Promise<number> {
     return await this.documentRepository.getSize(args);
   }
 
@@ -146,4 +153,54 @@ export class DocumentService {
   ): Promise<void> {
     await this.documentRepository.setDocumentStatus(event, document);
   }
+
+  clone = async (dto: GetDocumentDTO): Promise<string> => {
+    const documentA = await this.documentRepository.getDocumentById(dto);
+    const ongoingOperation = documentA.status;
+    if (ongoingOperation) return;
+
+    const documentB = await this.documentRepository.createDocument({
+      data: {
+        name: documentA.name,
+        privacy: Privacy.PRIVATE,
+        guests: [],
+      },
+      userId: dto.userId,
+    });
+    documentB.state = documentA.state;
+    await this.subscriptionsService.clone.preparing(documentA, dto.userId);
+    const nodesA = await this.nodeService.getNodesMetaAndAHtml(dto);
+    const cloneNodes$ = progressify<Node[]>(
+      unFlatMap(10)(nodesA),
+      nodes => from(this.nodeService.clone(documentB, nodes)),
+      progress =>
+        from(
+          this.subscriptionsService.clone.nodesStarted(
+            documentA,
+            dto.userId,
+            progress,
+          ),
+        ),
+    );
+
+    const finished$ = defer(async () => {
+      documentB.size = await this.getSize({
+        documentId: documentB.id,
+      });
+      await documentB.save();
+      return from(
+        this.subscriptionsService.clone.finished(documentA, dto.userId),
+      );
+    });
+    const cloneDocument$ = concat(cloneNodes$, finished$).pipe(
+      catchError(e => {
+        this.logger.error(e.message);
+        return from(
+          this.subscriptionsService.clone.failed(documentA, dto.userId),
+        );
+      }),
+    );
+    cloneDocument$.subscribe();
+    return documentB.id;
+  };
 }

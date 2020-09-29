@@ -322,6 +322,7 @@ export interface Mutation {
 }
 
 export interface DocumentMutation {
+  clone: string;
   createDocument: string;
   deleteDocument: string;
   editDocument: string;
@@ -1383,6 +1384,7 @@ export interface MutationToUserResolver<TParent = any, TResult = any> {
 }
 
 export interface DocumentMutationTypeResolver<TParent = any> {
+  clone?: DocumentMutationToCloneResolver<TParent>;
   createDocument?: DocumentMutationToCreateDocumentResolver<TParent>;
   deleteDocument?: DocumentMutationToDeleteDocumentResolver<TParent>;
   editDocument?: DocumentMutationToEditDocumentResolver<TParent>;
@@ -1390,6 +1392,10 @@ export interface DocumentMutationTypeResolver<TParent = any> {
   setState?: DocumentMutationToSetStateResolver<TParent>;
   uploadFile?: DocumentMutationToUploadFileResolver<TParent>;
   uploadFromGDrive?: DocumentMutationToUploadFromGDriveResolver<TParent>;
+}
+
+export interface DocumentMutationToCloneResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface DocumentMutationToCreateDocumentArgs {

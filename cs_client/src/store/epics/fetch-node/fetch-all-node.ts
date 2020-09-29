@@ -9,7 +9,7 @@ import {
   fetchNodeHtml,
   fetchNodeImages,
 } from '::store/epics/fetch-node/fetch-node';
-import { unFlatMap } from '::helpers/array-helpers';
+import { unFlatMap } from '::helpers/shared';
 import {
   DocumentOperation,
   OPERATION_CONTEXT,
@@ -18,22 +18,8 @@ import {
 } from '::types/graphql';
 import { CachedDocument } from '::store/ducks/cache/document-cache';
 import { doKey } from '::store/ducks/document-operation/reducers/add-document-operations';
+import { progressify } from '::helpers/shared';
 
-const progressify = <T>(
-  propsArray: T[],
-  action: (T) => Observable<any>,
-  onProgress: (number) => Observable<any>,
-) => {
-  const state = {
-    totalProps: propsArray.length,
-    count: 0,
-  };
-  return concat(
-    ...propsArray.map(prop =>
-      concat(action(prop), onProgress(++state.count / state.totalProps)),
-    ),
-  );
-};
 const mapToProps = (documentId: string) => (node_ids: number[]) => ({
   node_ids,
   documentId,

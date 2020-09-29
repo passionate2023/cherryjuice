@@ -183,11 +183,14 @@ export class DocumentRepository extends Repository<Document> {
       ),
     );
 
-    if (documents.some(document => document.userId !== user.id))
+    const ownedDocuments = documents.filter(
+      document => document.userId === user.id,
+    );
+    await this.remove(ownedDocuments);
+    if (ownedDocuments.length < documents.length)
       throw new UnauthorizedException(
         createErrorDescription.document.notEnoughAccessLevel(),
       );
-    await this.remove(documents);
     return IDs;
   }
   async markUnfinishedImportsAsFailed(): Promise<Document[]> {

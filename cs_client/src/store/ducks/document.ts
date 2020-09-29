@@ -11,7 +11,7 @@ const ac = {
   setDocumentId: _(ap('setDocumentId'), _ => (documentId: string) =>
     _(documentId),
   ),
-
+  clone: _(ap('clone'), _ => (documentId: string) => _(documentId)),
   fetch: _(ap('fetch')),
   fetchInProgress: _(ap('fetch-in-progress')),
   fetchFulfilled: _(

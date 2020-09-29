@@ -8,7 +8,6 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { NodeService } from '../node/node.service';
 import { DocumentService } from './document.service';
 import { FileUpload, GraphQLUpload } from './helpers/graphql';
 import { GetUserGql } from '../user/decorators/get-user.decorator';
@@ -27,7 +26,6 @@ import { DocumentState } from './entities/document-state.entity';
 @Resolver(() => DocumentMutation)
 export class DocumentMutationsResolver {
   constructor(
-    private nodeService: NodeService,
     private importsService: ImportsService,
     private documentService: DocumentService,
   ) {}
@@ -38,12 +36,7 @@ export class DocumentMutationsResolver {
     @Args('file_id', { nullable: true }) file_id?: string,
   ) {
     if (!user) throw new UnauthorizedException();
-    return file_id
-      ? this.documentService.getWDocumentById({
-          userId: user.id,
-          documentId: file_id,
-        })
-      : { id: undefined };
+    return { id: file_id };
   }
 
   @ResolveField(() => String)
@@ -101,6 +94,19 @@ export class DocumentMutationsResolver {
       },
     });
     return savedDocument.id;
+  }
+
+  @ResolveField(() => String)
+  async clone(
+    @Parent() document: Document,
+    @GetUserGql() user: User,
+  ): Promise<string> {
+    this.documentService.clone({
+      documentId: document.id,
+      userId: user.id,
+    });
+
+    return Date.now() + '';
   }
 
   @ResolveField(() => String)

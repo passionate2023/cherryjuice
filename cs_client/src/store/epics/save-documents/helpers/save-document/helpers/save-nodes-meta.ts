@@ -6,7 +6,7 @@ import { apolloClient } from '::graphql/client/apollo-client';
 import { NodeMetaIt } from '::types/graphql';
 import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 import { EDIT_NODE_META } from '::graphql/mutations/document/edit-node-meta';
-import { unFlatMap } from '::helpers/array-helpers';
+import { unFlatMap } from '::helpers/shared';
 import { QFullNode } from '::store/ducks/cache/document-cache';
 
 const swapNodeIdIfApplies = (state: SaveOperationState) => (nodeId: string) =>
