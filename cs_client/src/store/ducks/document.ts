@@ -146,6 +146,14 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     ...state,
     nodesFilter: '',
   })),
+  _(
+    require('./cache/document-cache').documentCacheActionCreators
+      .deleteDocuments,
+    (state, { payload }) => ({
+      ...state,
+      documentId: payload.includes(state.documentId) ? '' : state.documentId,
+    }),
+  ),
 ]);
 
 export { reducer as documentReducer, ac as documentActionCreators };

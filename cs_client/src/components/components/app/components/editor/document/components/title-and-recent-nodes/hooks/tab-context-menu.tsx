@@ -7,7 +7,7 @@ import {
 import { ContextMenuItemProps } from '::root/components/shared-components/context-menu/context-menu-item';
 
 type Props = {
-  focusedNode_id: number;
+  elementId: number;
   hide: () => void;
   documentId: string;
   nodes: NodesDict;
@@ -16,15 +16,15 @@ type Props = {
 };
 const useTabContextMenu = ({
   documentId,
-  focusedNode_id,
+  elementId,
   recentNodes,
   localState,
   hide,
-}: Props): ContextMenuItemProps[] => {
+}: Props): Omit<ContextMenuItemProps, 'hide'>[] => {
   const closeSelectedM = useCallback(() => {
-    ac.node.close({ documentId, node_id: focusedNode_id });
+    ac.node.close({ documentId, node_id: elementId });
     hide();
-  }, [documentId, focusedNode_id]);
+  }, [documentId, elementId]);
 
   const closeAllM = useCallback(() => {
     ac.node.close({ documentId, node_ids: recentNodes });
@@ -40,30 +40,30 @@ const useTabContextMenu = ({
   }, [documentId, recentNodes, localState.editedNodes.edited]);
 
   const closeOthersM = useCallback(() => {
-    const others = recentNodes.filter(_node_id => _node_id !== focusedNode_id);
-    ac.node.close({ documentId, node_ids: others });
+    const others = recentNodes.filter(_node_id => _node_id !== elementId);
+    ac.node.close({ documentId, node_ids: others, node_id: elementId });
     hide();
-  }, [documentId, recentNodes, focusedNode_id]);
+  }, [documentId, recentNodes, elementId]);
 
   const closeOthersToLeftM = useCallback(() => {
-    const indexOfFocusedNode = recentNodes.indexOf(focusedNode_id);
+    const indexOfFocusedNode = recentNodes.indexOf(elementId);
     const others = recentNodes.filter((_, i) => i < indexOfFocusedNode);
     ac.node.close({ documentId, node_ids: others });
     hide();
-  }, [documentId, recentNodes, focusedNode_id]);
+  }, [documentId, recentNodes, elementId]);
 
   const closeOthersToRightM = useCallback(() => {
-    const indexOfFocusedNode = recentNodes.indexOf(focusedNode_id);
+    const indexOfFocusedNode = recentNodes.indexOf(elementId);
     const others = recentNodes.filter((_, i) => i > indexOfFocusedNode);
     ac.node.close({ documentId, node_ids: others });
     hide();
-  }, [documentId, recentNodes, focusedNode_id]);
+  }, [documentId, recentNodes, elementId]);
 
   const renameM = useCallback(() => {
-    ac.node.select({ documentId, node_id: focusedNode_id });
+    ac.node.select({ documentId, node_id: elementId });
     ac.dialogs.showEditNode();
     hide();
-  }, [documentId, recentNodes, focusedNode_id]);
+  }, [documentId, recentNodes, elementId]);
 
   return [
     { name: 'properties', onClick: renameM, bottomSeparator: true },

@@ -6,19 +6,24 @@ import { joinClassNames } from '::helpers/dom/join-class-names';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { scrollIntoToolbar } from '::helpers/ui';
-
-export const smoothScrollIntoView = element =>
-  element.scrollIntoView({
-    behavior: 'smooth',
-    block: 'nearest',
-    inline: 'start',
-  });
+const defaultScrollOptions: ScrollIntoViewOptions = {
+  behavior: 'smooth',
+  block: 'nearest',
+  inline: 'start',
+};
+export const smoothScrollIntoView = (
+  element: Element,
+  options: Partial<ScrollIntoViewOptions> = defaultScrollOptions,
+) => {
+  element.scrollIntoView(options);
+};
 
 export type NodeProps = {
   name: string;
   node_id: number;
   hasChanges?: boolean;
   isSelected?: boolean;
+  isNew?: boolean;
 };
 
 type Props = {
@@ -33,6 +38,7 @@ const Tab: React.FC<Props> = ({
   isSelected,
   isOnMd,
   hasChanges,
+  isNew,
 }) => {
   const selectNode = useCallback(() => {
     ac.node.select({ documentId, node_id });
@@ -64,6 +70,7 @@ const Tab: React.FC<Props> = ({
         className={joinClassNames([
           modTabs.tab__name,
           [modTabs.tabHasChanges, hasChanges],
+          [modTabs.tabIsNew, isNew],
         ])}
       >
         {name}

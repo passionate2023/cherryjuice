@@ -21,7 +21,7 @@ const ContextMenuWrapper: React.FC<Props> = props => {
     <div
       className={joinClassNames([modContextMenu.contextMenuWrapper])}
       onClick={e => {
-        if (!props.shown) {
+        if (props.show && !props.shown) {
           positionR.current = [e.clientX, e.clientY];
           props.show();
         }

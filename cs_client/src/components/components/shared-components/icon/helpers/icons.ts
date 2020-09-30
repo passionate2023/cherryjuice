@@ -18,6 +18,7 @@ const Icons = {
     'arrow-up': 'arrow-up',
     'arrow-down': 'arrow-down',
     'arrow-left': 'arrow-left',
+    'arrow-right': 'arrow-right',
     redo: 'redo',
     'no-connection': 'no-connection',
     undo: 'undo',

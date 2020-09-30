@@ -25,6 +25,7 @@ const mapState = (state: Store) => {
     isDocumentOwner: hasWriteAccessToDocument(state),
     showTimeline: state.timelines.showTimeline,
     documentActionNOF: state.timelines.documentActionNOF,
+    showNodePath: state.editor.showNodePath,
   };
 };
 
@@ -42,6 +43,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
   online,
   showTimeline,
   documentActionNOF,
+  showNodePath,
 }) => {
   const noDocumentIsSelected = !documentId;
   const newDocument = documentId?.startsWith('new');
@@ -82,6 +84,13 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         disabled={!userHasUnsavedChanges || !online}
       >
         <Icon name={Icons.material.save} loadAsInlineSVG={'force'} />
+      </ToolbarButton>
+      <ToolbarButton
+        dontMount={noDocumentIsSelected}
+        onClick={ac.editor.toggleNodePath}
+        active={showNodePath}
+      >
+        <Icon name={Icons.material['arrow-right']} />
       </ToolbarButton>
     </div>
   );

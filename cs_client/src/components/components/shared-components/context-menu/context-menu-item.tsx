@@ -4,11 +4,11 @@ import { modContextMenu } from '::sass-modules';
 import { ReactNode } from 'react';
 
 export type ContextMenuItemProps = {
-  node?: ReactNode;
   name: string;
-  disabled?: boolean;
   onClick: () => void;
   hide: () => void;
+  node?: ReactNode;
+  disabled?: boolean;
   bottomSeparator?: boolean;
   hideOnClick?: boolean;
 };

@@ -1,6 +1,7 @@
 import { apolloClient } from '::graphql/client/apollo-client';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { CachedDocument, QFullNode } from '::store/ducks/cache/document-cache';
+import { newNodePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 
 type SaveOperationState = {
   swappedDocumentIds: {
@@ -26,7 +27,7 @@ type SaveOperationProps = {
 };
 
 const deleteNode = async (node: QFullNode) => {
-  if (!node.id.startsWith('TEMP:'))
+  if (!node.id.startsWith(newNodePrefix))
     await apolloClient.mutate({
       variables: {
         file_id: node.documentId,

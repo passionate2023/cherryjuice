@@ -9,23 +9,25 @@
   display: grid;
   grid-template-areas:
     'tool-bar tool-bar '
+    'node-path node-path'
     'tree tabs'
     'tree rich-text '
     'formatting-bar formatting-bar'
     'main-bar main-bar';
   grid-template-columns: var(--treeWidth) 1fr;
   grid-template-rows:
-    $tool-bar-height $title-and-recent-bar-height 1fr
+    $tool-bar-height var(--nodePath) $title-and-recent-bar-height 1fr
     var(--formatting-bar)
     var(--nodes-bar);
 
   @include respond-to($md-up) {
     grid-template-areas:
       'tool-bar tool-bar '
+      'node-path node-path'
       'tree tabs'
       'tree rich-text '
       'info-bar info-bar';
-    grid-template-rows: $tool-bar-height-md $title-and-recent-bar-height-md 1fr var(
+    grid-template-rows: $tool-bar-height-md var(--nodePath) $title-and-recent-bar-height-md 1fr var(
         --info-bar
       );
   }
@@ -40,6 +42,7 @@
 .app--dialog-docked {
   grid-template-areas:
     'tool-bar tool-bar '
+    'node-path node-path'
     'tree tabs'
     'tree rich-text '
     'formatting-bar formatting-bar'
@@ -48,6 +51,7 @@
   @include respond-to($md-up) {
     grid-template-areas:
       'tool-bar tool-bar '
+      'node-path node-path'
       'tree tabs'
       'tree rich-text '
       'info-bar info-bar'

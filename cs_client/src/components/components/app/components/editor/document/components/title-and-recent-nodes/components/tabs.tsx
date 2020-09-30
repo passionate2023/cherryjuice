@@ -8,26 +8,19 @@ import {
 
 type Props = {
   documentId: string;
-  selectedNode_id: number;
   nodes: NodeProps[];
   isOnMd: boolean;
 };
 
-const Tabs: React.FC<Props> = (
-  { selectedNode_id, nodes, isOnMd, documentId },
-  tabsR,
-) => {
+const Tabs: React.FC<Props> = ({ nodes, isOnMd, documentId }, tabsR) => {
   return (
     <div className={modTabs.tabs} ref={tabsR}>
-      {nodes.map(({ node_id, name, hasChanges }) => (
+      {nodes.map(props => (
         <Tab
-          name={name}
-          node_id={node_id}
           documentId={documentId}
-          key={node_id}
-          isSelected={selectedNode_id === node_id}
+          {...props}
+          key={props.node_id}
           isOnMd={isOnMd}
-          hasChanges={hasChanges}
         />
       ))}
     </div>

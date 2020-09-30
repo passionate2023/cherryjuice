@@ -1,5 +1,6 @@
 import { NodeMetaIt } from '::types/graphql';
 import { QFullNode } from '::store/ducks/cache/document-cache';
+import { newNodePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 
 const defaultNode = {
   name: '',
@@ -24,7 +25,7 @@ const createNode = ({
   const node_id = highestNode_id + 1;
   return {
     ...defaultNode,
-    id: `TEMP:${documentId}:${node_id}`,
+    id: `${newNodePrefix}${documentId}:${node_id}`,
     node_id,
     documentId,
     father_id,

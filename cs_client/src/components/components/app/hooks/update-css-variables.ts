@@ -16,6 +16,16 @@ export const useUpdateCssVariables = (
   treeWidth: number,
   previousTreeWidth: number,
 ) => {
+  const isOnMd = useSelector((state: Store) => state.root.isOnMd);
+
+  const showNodePath = useSelector((state: Store) => state.editor.showNodePath);
+  useEffect(() => {
+    ac.cssVariables.set(
+      CssVariables.nodePath,
+      showNodePath ? (isOnMd ? 40 : 30) : 0,
+    );
+  }, [showNodePath, isOnMd]);
+
   const dockedDialog = useSelector((state: Store) => state.root.dockedDialog);
   const showSearchDialog = useSelector(
     (state: Store) => state.search.searchState !== 'idle',

@@ -7,6 +7,7 @@ import { ac } from '::store/store';
 
 export const newImagePrefix = 'ni::';
 export const newObjectPrefix = 'na::';
+export const newNodePrefix = 'nn::';
 
 type AddMetaToPastedImagesProps = {
   requestId: string | number;

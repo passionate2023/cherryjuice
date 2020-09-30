@@ -30,6 +30,7 @@ const ac = {
     ap('set-selected-table'),
     _ => (object: TableProperties & { target: HTMLElement }) => _(object),
   ),
+  toggleNodePath: _(ap('toggle-node-path')),
 };
 
 export type Link = { href: string; type: LinkType; target: HTMLElement };
@@ -44,6 +45,7 @@ type State = {
   selectedCodebox: CodeboxProperties & { target: HTMLElement };
   selectedTable: TableProperties & { target: HTMLElement };
   selection?: CustomRange;
+  showNodePath: boolean;
 };
 
 const initialState: State = {
@@ -57,6 +59,7 @@ const initialState: State = {
   selection: undefined,
   selectedCodebox: undefined,
   selectedTable: undefined,
+  showNodePath: true,
 };
 const reducer = createReducer(initialState, _ => [
   ...[
@@ -133,6 +136,10 @@ const reducer = createReducer(initialState, _ => [
   _(ac.setSelectedTable, (state, { payload }) => ({
     ...state,
     selectedTable: payload,
+  })),
+  _(ac.toggleNodePath, state => ({
+    ...state,
+    showNodePath: !state.showNodePath,
   })),
 ]);
 

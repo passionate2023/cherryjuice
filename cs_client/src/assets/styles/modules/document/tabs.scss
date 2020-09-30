@@ -88,5 +88,8 @@ $button-width: 18px;
   border-bottom: 4px solid var(--secondary-100);
 }
 .tab--has-changes {
-  color: var(--secondary);
+  color: var(--teriary);
+}
+.tab--is-new {
+  color: var(--danger);
 }

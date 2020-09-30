@@ -6,6 +6,7 @@ export enum CssVariables {
   vh = 'vh',
   vw = 'vw',
   treeWidth = 'treeWidth',
+  nodePath = 'nodePath',
 }
 
 const ap = createActionPrefixer('css-variables');
@@ -29,6 +30,7 @@ type State = {
   vh: number;
   vw: number;
   treeWidth: number;
+  nodePath: number;
   previous: {
     treeWidth: number;
   };
@@ -40,6 +42,7 @@ const initialState: State = {
   vh: 1,
   vw: 1,
   treeWidth: 250,
+  nodePath: 30,
   previous: {
     treeWidth: 250,
   },

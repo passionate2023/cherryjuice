@@ -13,6 +13,7 @@ import { Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { TabsContainer } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/tabs-container';
+import { NodePath } from '::root/components/app/components/editor/document/components/node-path/node-path';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -23,6 +24,8 @@ const mapState = (state: Store) => {
     saveInProgress: state.document.asyncOperations.save === 'in-progress',
     selectedNode_id: document.persistedState?.selectedNode_id,
     showTree: state.editor.showTree,
+    showNodePath: state.editor.showNodePath,
+    isOnMd: state.root.isOnMd,
   };
 };
 
@@ -37,6 +40,8 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   saveInProgress,
   selectedNode_id,
   showTree,
+  showNodePath,
+  isOnMd,
 }) => {
   const [documentState, dispatch] = useReducer(
     documentReducer,
@@ -51,6 +56,11 @@ const Document: React.FC<Props & PropsFromRedux> = ({
       <LinearProgress loading={fetchDocumentInProgress || saveInProgress} />
       {nodes && (
         <Fragment>
+          {(showNodePath || !isOnMd) && (
+            <ErrorBoundary>
+              <NodePath />
+            </ErrorBoundary>
+          )}
           {Boolean(selectedNode_id) && <TabsContainer />}
           {showTree && (
             <ErrorBoundary>

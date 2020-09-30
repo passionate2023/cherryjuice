@@ -1,6 +1,7 @@
 import { NodeCached } from '::types/graphql-adapters';
 import { TDocumentMetaState } from '::root/components/app/components/menus/dialogs/document-meta/reducer/reducer';
 import { CreateDocumentParams } from '::store/ducks/cache/document-cache/helpers/document/create-document';
+import { newNodePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 
 type GenerateRootNodeProps = {
   documentId: string;
@@ -8,7 +9,7 @@ type GenerateRootNodeProps = {
 const generateRootNode = ({
   documentId,
 }: GenerateRootNodeProps): NodeCached => ({
-  id: `TEMP:${documentId}:${0}`,
+  id: `${newNodePrefix}${documentId}:${0}`,
   documentId,
   node_id: 0,
   father_id: -1,

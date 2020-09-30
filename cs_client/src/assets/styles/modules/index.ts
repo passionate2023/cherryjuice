@@ -2,6 +2,7 @@ import modDrawer from '::sass-modules/shared-components/drawer.scss';
 import modButton from '::sass-modules/shared-components/button.scss';
 import modTextInput from '::sass-modules/shared-components/text-input.scss';
 import modSelectFile from '::sass-modules/select-file/select-file.scss';
+import modNodePath from '::sass-modules/document/node-path.scss';
 import modTabs from './document/tabs.scss';
 import modInfoBar from './document/info-bar.scss';
 import modToolbar from './tool-bar.scss';
@@ -43,6 +44,7 @@ import modSettings from '::sass-modules/settings/settings.scss';
 import modContextMenu from '::sass-modules/shared-components/context-menu.scss';
 import modToggleSwitch from '::sass-modules/shared-components/toggle-switch.scss';
 export {
+  modNodePath,
   modToggleSwitch,
   modContextMenu,
   modChangesHistory,

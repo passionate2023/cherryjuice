@@ -86,7 +86,7 @@ describe('export-import-ctb - create and populate complex import-ctb', () => {
       await state.exportCtb.writeNodesImages({
         imagesPerNode,
         getNodeImages: getLoadedImages,
-        onProgress: () => undefiend,
+        onProgress: () => undefined,
       });
       await assertNodeMeta(state.exportCtb, nodes);
     });
