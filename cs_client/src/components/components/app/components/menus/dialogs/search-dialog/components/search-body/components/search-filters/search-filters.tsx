@@ -23,6 +23,7 @@ export const SearchSetting: React.FC<{
   hide: () => void;
 }> = ({ iconName, shown, show, hide, children }) => (
   <ContextMenuWrapper
+    showAsModal={'mb'}
     shown={shown}
     hide={hide}
     show={show}

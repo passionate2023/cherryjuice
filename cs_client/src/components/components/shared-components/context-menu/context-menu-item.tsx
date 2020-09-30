@@ -10,6 +10,7 @@ export type ContextMenuItemProps = {
   onClick: () => void;
   hide: () => void;
   bottomSeparator?: boolean;
+  hideOnClick?: boolean;
 };
 
 const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
@@ -19,10 +20,11 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
   onClick,
   bottomSeparator,
   hide,
+  hideOnClick = true,
 }) => {
   const onClickM = e => {
     if (!disabled) {
-      hide();
+      if (hideOnClick) hide();
       onClick();
       e.stopPropagation();
       e.preventDefault();

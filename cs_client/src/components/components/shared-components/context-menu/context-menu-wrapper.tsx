@@ -15,35 +15,26 @@ type Props = {
   position?: [number, number];
 } & Omit<ContextMenuProps, 'position'>;
 
-const ContextMenuWrapper: React.FC<Props> = ({
-  children,
-  shown,
-  customBody,
-  hide,
-  offset,
-  show,
-  items,
-  position,
-}) => {
+const ContextMenuWrapper: React.FC<Props> = props => {
   const positionR = useRef<[number, number]>([0, 0]);
   return (
     <div
       className={joinClassNames([modContextMenu.contextMenuWrapper])}
       onClick={e => {
-        positionR.current = [e.clientX, e.clientY];
-        show();
+        if (!props.shown) {
+          positionR.current = [e.clientX, e.clientY];
+          props.show();
+        }
       }}
     >
-      {children}
+      {props.children}
       <Portal targetSelector={'.' + modApp.app}>
-        {shown && (
+        {props.shown && (
           <ContextMenu
-            hide={hide}
-            offset={offset}
-            items={items}
-            position={position || positionR.current}
+            {...props}
+            position={props.position || positionR.current}
           >
-            {customBody}
+            {props.customBody}
           </ContextMenu>
         )}
       </Portal>
