@@ -144,7 +144,9 @@ export class NodeService {
     }
 
     for await (const nodeB of nodesB.values()) {
-      nodeB.child_nodes = nodeB.child_nodes.filter(node_id => allNodesA.has(+node_id));
+      nodeB.child_nodes = nodeB.child_nodes.filter(node_id =>
+        allNodesA.has(+node_id),
+      );
       const father = nodesB.get(nodeB.father_id);
       if (father) {
         nodeB.father = father;

@@ -35,7 +35,7 @@ describe('export-import-ctb - create and populate basic import-ctb', () => {
   });
   it('should write node meta to node and children tables', async () => {
     const { rootNode, nodes } = createTree();
-    await state.exportCtb.writeAHtmls([rootNode, ...nodes]);
+    await state.exportCtb.writeAHtmls([rootNode, ...nodes], () => undefined);
     await assertNodeMeta(state.exportCtb, (nodes as unknown) as NodeFromPG[]);
   });
 });
@@ -78,14 +78,15 @@ describe('export-import-ctb - create and populate complex import-ctb', () => {
           node.father_id = rootNode.node_id;
         });
       }
-      const imagesPerNode = await state.exportCtb.writeAHtmls(([
-        ...nodes,
-        rootNode,
-      ] as unknown) as Node[]);
+      const imagesPerNode = await state.exportCtb.writeAHtmls(
+        ([...nodes, rootNode] as unknown) as Node[],
+        () => undefined,
+      );
 
       await state.exportCtb.writeNodesImages({
         imagesPerNode,
         getNodeImages: getLoadedImages,
+        onProgress: () => undefiend,
       });
       await assertNodeMeta(state.exportCtb, nodes);
     });

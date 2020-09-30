@@ -3,7 +3,7 @@ import { concat, EMPTY, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { store, ac_ } from '../store';
 import { Actions } from '../actions.types';
-import { gqlQuery } from './shared/gql-query';
+import { gqlQuery$ } from './shared/gql-query';
 import { createTimeoutHandler } from './shared/create-timeout-handler';
 import { createErrorHandler } from './shared/create-error-handler';
 import { DOCUMENTS_LIST } from '::graphql/queries/documents-list';
@@ -35,7 +35,7 @@ const fetchDocumentsListEpic = (action$: Observable<Actions>) => {
     ]),
     filter(() => store.getState().documentsList.fetchDocuments === 'idle'),
     switchMap(() => {
-      const request = gqlQuery(DOCUMENTS_LIST()).pipe(
+      const request = gqlQuery$(DOCUMENTS_LIST()).pipe(
         flatMap(documents => {
           return concat(
             of(ac_.documentsList.fetchDocumentsFulfilled(documents)),

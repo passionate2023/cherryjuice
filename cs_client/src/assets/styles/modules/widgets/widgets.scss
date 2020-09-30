@@ -2,7 +2,7 @@
 @import '../../mixins/breakpoints';
 .widgets {
   position: absolute;
-  z-index: 1000;
+  z-index: $ZI-widget;
   width: 350px;
   bottom: 27px;
   right: 5px;

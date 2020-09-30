@@ -3,7 +3,7 @@ import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { store, ac_ } from '../../store';
 import { Actions } from '../../actions.types';
-import { gqlMutation } from '../shared/gql-query';
+import { gqlMutation$ } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { AsyncOperation } from '../../ducks/document';
@@ -11,7 +11,7 @@ import { USER_MUTATION } from '::graphql/mutations';
 import { properErrorMessage } from '::root/components/auth/hooks/proper-error-message';
 
 const deleteAccount = (currentPassword: string) =>
-  gqlMutation({
+  gqlMutation$({
     ...USER_MUTATION.deleteAccount,
     variables: USER_MUTATION.deleteAccount.args(currentPassword),
   });

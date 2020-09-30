@@ -1,9 +1,9 @@
 import { concatMap, filter, map } from 'rxjs/operators';
-import { concat, defer, Observable, of } from 'rxjs';
+import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { ac_, store } from '::store/store';
 import { Actions } from '../../actions.types';
-import { gqlQuery } from '::store/epics/shared/gql-query';
+import { gqlQuery$ } from '::store/epics/shared/gql-query';
 import { createErrorHandler } from '::store/epics/shared/create-error-handler';
 import { NODE_HTML } from '::graphql/queries/node-html';
 import { getNode } from '::store/selectors/cache/document/node';
@@ -14,21 +14,19 @@ export type FetchContentProps = {
   node_ids: number[];
 };
 export const fetchNodeHtml = ({ node_ids, documentId }: FetchContentProps) =>
-  defer(() =>
-    gqlQuery(
-      NODE_HTML({
-        file_id: documentId,
-        node_ids,
-      }),
-    ).pipe(
-      map(nodeHtmls =>
-        ac_.documentCache.addFetchedFields(
-          nodeHtmls.map(({ html, node_id }) => ({
-            node_id,
-            documentId,
-            data: { html },
-          })),
-        ),
+  gqlQuery$(
+    NODE_HTML({
+      file_id: documentId,
+      node_ids,
+    }),
+  ).pipe(
+    map(nodeHtmls =>
+      ac_.documentCache.addFetchedFields(
+        nodeHtmls.map(({ html, node_id }) => ({
+          node_id,
+          documentId,
+          data: { html },
+        })),
       ),
     ),
   );
@@ -36,24 +34,22 @@ export const fetchNodeImages = (
   { node_ids, documentId }: FetchContentProps,
   thumbnail = false,
 ) =>
-  defer(() =>
-    gqlQuery(
-      FETCH_NODE_IMAGES({
-        file_id: documentId,
-        node_ids,
-        thumbnail,
-      }),
-    ).pipe(
-      map(images =>
-        ac_.documentCache.addFetchedFields(
-          images
-            .filter(({ image }) => !!image.length)
-            .map(({ image, node_id }) => ({
-              node_id,
-              documentId,
-              data: { image },
-            })),
-        ),
+  gqlQuery$(
+    FETCH_NODE_IMAGES({
+      file_id: documentId,
+      node_ids,
+      thumbnail,
+    }),
+  ).pipe(
+    map(images =>
+      ac_.documentCache.addFetchedFields(
+        images
+          .filter(({ image }) => !!image.length)
+          .map(({ image, node_id }) => ({
+            node_id,
+            documentId,
+            data: { image },
+          })),
       ),
     ),
   );

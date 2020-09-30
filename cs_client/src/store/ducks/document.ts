@@ -12,6 +12,7 @@ const ac = {
     _(documentId),
   ),
   clone: _(ap('clone'), _ => (documentId: string) => _(documentId)),
+
   fetch: _(ap('fetch')),
   fetchInProgress: _(ap('fetch-in-progress')),
   fetchFulfilled: _(
@@ -32,8 +33,7 @@ const ac = {
   saveFailed: _(ap('save-failed')),
   nodeCached: _(ap('node-cached')),
   cacheReset: _(ap('cache-reset')),
-
-  export: _(ap('export')),
+  export: _(ap('export'), _ => (documentId: string) => _(documentId)),
   exportFulfilled: _(ap('exportFulfilled')),
   clearFilteredNodes: _(ap('clear-filtered-nodes')),
   setFilteredNodes: _(ap('set-filtered-nodes'), _ => (params: FilteredNodes) =>

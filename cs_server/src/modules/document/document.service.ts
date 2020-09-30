@@ -170,7 +170,7 @@ export class DocumentService {
     const allNodesA = new Map(nodesA.map(node => [node.node_id, node]));
     const cloneNodes$ = progressify<Node[]>(
       unFlatMap(10)(nodesA),
-      nodes => from(this.nodeService.clone(documentB, allNodesA,nodes)),
+      nodes => from(this.nodeService.clone(documentB, allNodesA, nodes)),
       progress =>
         from(
           this.subscriptionsService.clone.nodesStarted(

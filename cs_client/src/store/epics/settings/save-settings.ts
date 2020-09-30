@@ -1,9 +1,9 @@
 import { filter, ignoreElements, map, switchMap, take } from 'rxjs/operators';
-import { concat, defer, EMPTY, interval, Observable, of } from 'rxjs';
+import { concat, EMPTY, interval, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { ac, ac_, store } from '../../store';
 import { Actions } from '../../actions.types';
-import { gqlMutation } from '../shared/gql-query';
+import { gqlMutation$ } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { AsyncOperation } from '../../ducks/document';
@@ -64,17 +64,15 @@ const saveSettingsEpic = (action$: Observable<Actions>) => {
               ),
             )
           : EMPTY.pipe(ignoreElements());
-        const saveSettings$ = defer(() =>
-          gqlMutation(
-            UPDATE_USER_SETTINGS({
-              input: {
-                hotKeys: changes.hk ? getHotkeys(state) : undefined,
-                editorSettings: changes.editorSettings
-                  ? state.editorSettings.current
-                  : undefined,
-              },
-            }),
-          ),
+        const saveSettings$ = gqlMutation$(
+          UPDATE_USER_SETTINGS({
+            input: {
+              hotKeys: changes.hk ? getHotkeys(state) : undefined,
+              editorSettings: changes.editorSettings
+                ? state.editorSettings.current
+                : undefined,
+            },
+          }),
         ).pipe(map(ac_.auth.setAuthenticationSucceeded));
         return concat(loading$, syncHKState$, saveSettings$, fulfilled$).pipe(
           timeoutHandler(),
@@ -91,7 +89,7 @@ const saveSettingsEpic = (action$: Observable<Actions>) => {
 
             return concat(
               loading$,
-              gqlMutation(
+              gqlMutation$(
                 UPDATE_USER_PROFILE({ userProfile: userProfileChanges }),
               ).pipe(map(ac_.auth.setAuthenticationSucceeded)),
               fulfilled$,

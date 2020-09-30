@@ -18,7 +18,7 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
   return action$.pipe(
     ofType([ac_.document.save]),
     filter(() => store.getState().document.asyncOperations.save === 'idle'),
-    switchMap( () => {
+    switchMap(() => {
       const state: SaveOperationState = createSaveState();
       updateCachedHtmlAndImages();
       const editedDocuments = getEditedDocuments();
@@ -31,18 +31,16 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
             mapTo(ac_.document.cacheReset()),
           ),
         );
-        const saveFulfilled$ = defer(() =>
-          of(ac_.document.saveFulfilled(state.newSelectedDocumentId)).pipe(
-            tap(() => {
-              ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
-            }),
-          ),
+        const saveFulfilled$ = of(
+          ac_.document.saveFulfilled(state.newSelectedDocumentId),
+        ).pipe(
+          tap(() => {
+            ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
+          }),
         );
-        const maybeRedirectToNewDocument$ = defer(() => {
-          if (state.newSelectedDocumentId) {
-            return of(ac_.document.setDocumentId(state.newSelectedDocumentId));
-          } else return EMPTY.pipe(ignoreElements());
-        });
+        const maybeRedirectToNewDocument$ = state.newSelectedDocumentId
+          ? of(ac_.document.setDocumentId(state.newSelectedDocumentId))
+          : EMPTY.pipe(ignoreElements());
         return concat(
           saveInProgress$,
           saveDocuments$,

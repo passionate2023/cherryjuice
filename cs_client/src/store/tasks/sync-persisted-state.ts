@@ -29,7 +29,8 @@ export const syncPersistedState = (intervalMs = 2 * 1000) => {
           ? []
           : getDocumentsList(store.getState())
               .filter(document => {
-                const isDocumentOwner = document.userId === state.auth?.user?.id;
+                const isDocumentOwner =
+                  document.userId === state.auth?.user?.id;
                 const updated =
                   document.persistedState.localUpdatedAt >
                   document.persistedState.updatedAt;

@@ -40,7 +40,7 @@ const DocumentContextMenu: React.FC<Props> = ({
     },
     {
       name: 'export',
-      onClick: ac.document.export,
+      onClick: () => ac.document.export(documentId),
       disabled: !online,
     },
     {

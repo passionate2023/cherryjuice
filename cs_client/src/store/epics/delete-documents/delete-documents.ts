@@ -3,7 +3,7 @@ import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { ac, ac_, store } from '../../store';
 import { Actions } from '../../actions.types';
-import { gqlMutation } from '../shared/gql-query';
+import { gqlMutation$ } from '../shared/gql-query';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { AsyncOperation } from '../../ducks/document';
 import { DELETE_DOCUMENT } from '::graphql/mutations/document/delete-document';
@@ -33,7 +33,7 @@ const deleteDocumentsEpic = (action$: Observable<Actions>) => {
       const deletionInProgress$ = of(
         ac_.documentsList.deleteDocumentsInProgress(),
       );
-      const deleteFetchedDocuments$ = gqlMutation(
+      const deleteFetchedDocuments$ = gqlMutation$(
         DELETE_DOCUMENT({ documents: { IDs: fetchedDocuments } }),
       ).pipe(ignoreElements());
 

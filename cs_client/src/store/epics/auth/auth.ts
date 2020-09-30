@@ -3,7 +3,7 @@ import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { store, ac_ } from '../../store';
 import { Actions } from '../../actions.types';
-import { gqlMutation } from '../shared/gql-query';
+import { gqlMutation$ } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { AsyncOperation } from '../../ducks/document';
@@ -15,22 +15,22 @@ import {
 } from '::types/graphql';
 
 const signIn = (payload: SignInCredentials) =>
-  gqlMutation({
+  gqlMutation$({
     ...USER_MUTATION.signIn,
     variables: USER_MUTATION.signIn.args(payload),
   });
 const signUp = (payload: SignUpCredentials) =>
-  gqlMutation({
+  gqlMutation$({
     ...USER_MUTATION.signUp,
     variables: USER_MUTATION.signUp.args(payload),
   });
 const oauthSignUp = (payload: OauthSignUpCredentials) =>
-  gqlMutation({
+  gqlMutation$({
     ...USER_MUTATION.oauthSignUp,
     variables: USER_MUTATION.oauthSignUp.args(payload),
   });
 const refreshToken = () =>
-  gqlMutation({
+  gqlMutation$({
     ...USER_MUTATION.refreshToken,
     variables: USER_MUTATION.refreshToken.args(),
   });

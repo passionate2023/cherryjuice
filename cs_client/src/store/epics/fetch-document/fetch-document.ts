@@ -4,7 +4,7 @@ import { ofType } from 'deox';
 import { store, ac_, ac } from '../../store';
 import { Actions } from '../../actions.types';
 import { handleFetchError } from '::root/components/app/components/editor/document/hooks/get-document-meta/helpers/handle-fetch-error';
-import { gqlQuery } from '../shared/gql-query';
+import { gqlQuery$ } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { QDocumentMeta, DOCUMENT_META } from '::graphql/queries/document-meta';
@@ -62,7 +62,7 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
       const isNewDocument = file_id?.startsWith('new-document');
       const request = (isNewDocument
         ? createLocalRequest(file_id)
-        : gqlQuery(DOCUMENT_META({ file_id }))
+        : gqlQuery$(DOCUMENT_META({ file_id }))
       ).pipe(
         tap(() => {
           snapBackManager.resetAll();

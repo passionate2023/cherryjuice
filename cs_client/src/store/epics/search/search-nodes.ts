@@ -4,7 +4,7 @@ import { ofType } from 'deox';
 import { QUERY } from '::graphql/queries';
 import { store, ac_, ac } from '../../store';
 import { Actions } from '../../actions.types';
-import { gqlQuery } from '../shared/gql-query';
+import { gqlQuery$ } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { SearchState } from '../../ducks/search';
@@ -43,7 +43,7 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
         const documentId = document.id;
         const nodeId =
           document.nodes[document.persistedState.selectedNode_id].id;
-        const request = gqlQuery({
+        const request = gqlQuery$({
           ...QUERY.SEARCH.searchNode,
           variables: QUERY.SEARCH.searchNode.args({
             args: {
