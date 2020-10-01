@@ -44,6 +44,7 @@ export const DOCUMENT_LIST_ITEM = gql`
       selectedNode_id
       treeState
       lastOpenedAt
+      bookmarks
     }
     ...DocumentGuest
   }

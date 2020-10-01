@@ -43,7 +43,9 @@ import modTreeToolBar from './tree/tree-tool-bar.scss';
 import modSettings from '::sass-modules/settings/settings.scss';
 import modContextMenu from '::sass-modules/shared-components/context-menu.scss';
 import modToggleSwitch from '::sass-modules/shared-components/toggle-switch.scss';
+import modBookmarks from '::sass-modules/dialogs/bookmarks/bookmarks.scss';
 export {
+  modBookmarks,
   modNodePath,
   modToggleSwitch,
   modContextMenu,

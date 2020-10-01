@@ -12,7 +12,7 @@ const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
 
   const selectedNodeId = document?.persistedState?.selectedNode_id;
-  const node = document.nodes && document.nodes[selectedNodeId];
+  const node = document?.nodes && document.nodes[selectedNodeId];
   const father_id = node && node.father_id;
   return {
     node_id: father_id,

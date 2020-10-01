@@ -26,6 +26,7 @@ const mapState = (state: Store) => {
     showTimeline: state.timelines.showTimeline,
     documentActionNOF: state.timelines.documentActionNOF,
     showNodePath: state.editor.showNodePath,
+    showBookmarks: state.dialogs.showBookmarks,
   };
 };
 

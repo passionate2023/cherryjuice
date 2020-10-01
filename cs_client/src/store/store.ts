@@ -23,6 +23,7 @@ import { documentCacheActionCreators } from '::store/ducks/cache/document-cache'
 import { animationActionCreators } from '::store/ducks/animations';
 import { timelinesActionCreators } from '::store/ducks/timelines';
 import { editorSettingsActionCreators } from '::store/ducks/settings/editor-settings';
+import { bookmarksActionCreators } from '::store/ducks/bookmarks';
 
 type Store = ReturnType<typeof reducer>;
 
@@ -42,6 +43,7 @@ const middleware = applyMiddleware(epicMiddleware, setCssVariables);
 const store = createStore(reducer, composeEnhancers(middleware));
 const ac_ = {
   document: documentActionCreators,
+  bookmarks: bookmarksActionCreators,
   dialogs: dialogsActionCreators,
   node: nodeActionCreators,
   editor: editorActionCreators,
@@ -76,6 +78,7 @@ const ac = {
   cssVariables: b(cssVariablesActionCreators, dispatch),
   settings: b(settingsActionCreators, dispatch),
   editorSettings: b(editorSettingsActionCreators, dispatch),
+  bookmarks: b(bookmarksActionCreators, dispatch),
 };
 
 export { store, ac, ac_, epicMiddleware };

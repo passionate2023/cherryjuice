@@ -25,12 +25,11 @@ type Props = {};
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
-  const nodes = document.nodes;
   return {
+    nodes: document?.nodes,
+    documentPrivacy: document?.privacy,
+    treeState: document?.persistedState?.treeState,
     filteredNodes: state.document.filteredNodes,
-    nodes: nodes,
-    documentPrivacy: document.privacy,
-    treeState: document.persistedState.treeState,
   };
 };
 const mapDispatch = {};

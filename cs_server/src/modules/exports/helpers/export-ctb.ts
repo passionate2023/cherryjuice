@@ -14,6 +14,7 @@ import {
   resolveFileLocation,
 } from '../../shared/fs/resolve-file-location';
 import { Notify } from '../exports.service';
+import { insertIntoBookmark } from './helpers/queries/insert/bookmark';
 
 type DebugOptions = {
   verbose?: boolean;
@@ -92,19 +93,22 @@ class ExportCTB {
           continue;
         }
 
+        let statement;
         try {
-          const { queries: qs, images } = queries.insertAHtml({
+          const sqlQueries = queries.insertAHtml({
             node: childNode,
             sequence: i + 1,
           });
-          for await (const statement of qs) {
+          for await (statement of sqlQueries.queries) {
             await this.db.run(statement);
           }
           onProgress();
-          imagesMap.set(childNode.id, images);
+          imagesMap.set(childNode.id, sqlQueries.images);
         } catch (e) {
           // eslint-disable-next-line no-console
           console.log(`node: [${JSON.stringify(node)}]`);
+          // eslint-disable-next-line no-console
+          console.log(`query: ${JSON.stringify(statement)}`);
           throw e;
         }
         await this.writeAHtml(
@@ -131,7 +135,7 @@ class ExportCTB {
   };
 
   writeNodeImages = async (nodeImages: LoadedImageRow[]): Promise<void> => {
-    for (const q of queries.insertImages(nodeImages)) {
+    for await (const q of queries.insertImages(nodeImages)) {
       await this.db.run(q);
     }
   };
@@ -145,7 +149,7 @@ class ExportCTB {
     imagesPerNode: ImagesMap;
     onProgress: Notify;
   }) => {
-    for (const nodeId of imagesPerNode.keys()) {
+    for await (const nodeId of imagesPerNode.keys()) {
       const nodeImages = imagesPerNode.get(nodeId);
       const blobImages = await getNodeImages(nodeId, nodeImages);
       const loadedNodeImages: LoadedImageRow[] = nodeImages.map(image => ({
@@ -158,6 +162,20 @@ class ExportCTB {
 
       await this.writeNodeImages(loadedNodeImages);
       onProgress();
+    }
+  };
+
+  writeBookmarks = async (bookmarks: number[]): Promise<void> => {
+    try {
+      let sequence = 0;
+      for await (const node_id of bookmarks) {
+        await this.db.run(insertIntoBookmark({ node_id, sequence }));
+        sequence++;
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(`bookmarks: [${bookmarks.join(', ')}]`);
+      throw e;
     }
   };
 }

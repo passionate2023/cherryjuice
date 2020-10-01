@@ -2,6 +2,8 @@ const Icons = {
   material: {
     anchor: 'anchor',
     people: 'people',
+    bookmarks: 'bookmarks',
+    bookmark: 'bookmark',
     filter: 'filter',
     time: 'time',
     link: 'link',

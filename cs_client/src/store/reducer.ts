@@ -17,6 +17,7 @@ import { documentCacheReducer } from '::store/ducks/cache/document-cache';
 import { animationReducer } from '::store/ducks/animations';
 import { timelinesReducer } from '::store/ducks/timelines';
 import { editorSettingsReducer } from '::store/ducks/settings/editor-settings';
+import { bookmarksReducer } from '::store/ducks/bookmarks';
 
 const persistedReducers = {
   documentCache: persistReducer(
@@ -98,6 +99,7 @@ const persistedReducers = {
 };
 
 const nonPersistedReducers = {
+  bookmarks: bookmarksReducer,
   document: documentReducer,
   animation: animationReducer,
   dialogs: dialogsReducer,

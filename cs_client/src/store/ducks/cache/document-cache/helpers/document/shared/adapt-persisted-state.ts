@@ -12,6 +12,7 @@ import { getDefaultSelectedNode_id } from '::store/ducks/cache/document-cache/he
 export const adaptFromPersistedState = ({
   persistedState: {
     recentNodes,
+    bookmarks,
     scrollPositions,
     selectedNode_id,
     treeState,
@@ -24,7 +25,8 @@ export const adaptFromPersistedState = ({
   nodes: NodesDict;
 }): PersistedDocumentState => {
   return {
-    recentNodes: recentNodes,
+    bookmarks,
+    recentNodes,
     treeState: unFlattenTree(treeState, nodes),
     scrollPositions: Object.fromEntries(
       scrollPositions.map(({ node_id, x, y }) => [node_id, [x, y]]),
@@ -39,6 +41,7 @@ export const adaptFromPersistedState = ({
 
 export const adaptToPersistedState = ({
   recentNodes,
+  bookmarks,
   selectedNode_id,
   treeState,
   scrollPositions,
@@ -51,6 +54,7 @@ export const adaptToPersistedState = ({
     updatedAt: new Date(localUpdatedAt || updatedAt),
     lastOpenedAt: new Date(localLastOpenedAt || lastOpenedAt),
     recentNodes,
+    bookmarks,
     selectedNode_id,
     treeState: flattenTree(treeState),
     scrollPositions: Object.entries(scrollPositions).map(

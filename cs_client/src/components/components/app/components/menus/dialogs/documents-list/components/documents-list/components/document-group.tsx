@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { modSelectFile } from '::sass-modules';
 import { Document } from './document/document';
 import { CachedDocument } from '::store/ducks/cache/document-cache';
+import { DialogCard } from '::root/components/shared-components/dialog/dialog-list/dialog-card';
 
 type DocumentGroupProps = {
   documents: CachedDocument[];
@@ -9,16 +9,12 @@ type DocumentGroupProps = {
 };
 const DocumentGroup = ({ folder, documents }: DocumentGroupProps) => {
   return (
-    <div className={modSelectFile.selectFile__fileFolder}>
-      <span className={modSelectFile.selectFile__fileFolder__name}>
-        {folder}
-      </span>
-      <span className={modSelectFile.selectFile__fileFolder__files}>
-        {documents.map(document => (
-          <Document document={document} key={document.id} />
-        ))}
-      </span>
-    </div>
+    <DialogCard
+      name={folder}
+      items={documents.map(document => (
+        <Document document={document} key={document.id} />
+      ))}
+    />
   );
 };
 

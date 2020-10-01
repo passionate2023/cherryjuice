@@ -24,6 +24,7 @@ export type NodeProps = {
   hasChanges?: boolean;
   isSelected?: boolean;
   isNew?: boolean;
+  isBookmarked?: boolean;
 };
 
 type Props = {
@@ -39,6 +40,7 @@ const Tab: React.FC<Props> = ({
   isOnMd,
   hasChanges,
   isNew,
+  isBookmarked,
 }) => {
   const selectNode = useCallback(() => {
     ac.node.select({ documentId, node_id });
@@ -80,6 +82,12 @@ const Tab: React.FC<Props> = ({
         icon={<Icon name={Icons.material.close} size={12} />}
         onClick={closeNode}
       />
+      {isBookmarked && (
+        <Icon
+          name={Icons.material.bookmark}
+          className={modTabs.tab__bookmarkIcon}
+        />
+      )}
     </div>
   );
 };

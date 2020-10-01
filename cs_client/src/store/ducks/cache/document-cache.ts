@@ -31,6 +31,7 @@ import {
 } from './document-cache/helpers/node/delete-node';
 import {
   closeNode,
+  CloseNodeParams,
   selectNode,
   SelectNodeParams,
 } from '::store/ducks/cache/document-cache/helpers/document/select-node';
@@ -57,10 +58,19 @@ import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expan
 import { DocumentStateTuple } from '::store/tasks/sync-persisted-state';
 import { neutralizePersistedState } from '::store/ducks/cache/document-cache/helpers/document/neutralize-persisted-state';
 import { selectDocument } from '::store/ducks/cache/document-cache/helpers/document/select-document';
+import { addBookmark } from '::store/ducks/cache/document-cache/helpers/document/bookmarks/add-bookmark';
+import { removeBookmark } from '::store/ducks/cache/document-cache/helpers/document/bookmarks/remove-bookmark';
+import {
+  moveBookmark,
+  MoveBookmarkProps,
+} from '::store/ducks/cache/document-cache/helpers/document/bookmarks/move-bookmark';
 
 const ap = createActionPrefixer('document-cache');
 
 const ac = {
+  moveBookmark: _(ap('move-bookmark'), _ => (props: MoveBookmarkProps) =>
+    _(props),
+  ),
   expandNode: _(ap('expand-node'), _ => (params: SelectNodeParams) =>
     _(params),
   ),
@@ -94,6 +104,12 @@ const ac = {
     _ => (props: MutateNodeContentParams) => _(props),
   ),
   deleteNode: _(ap('delete-node'), _ => (param: DeleteNodeParams) => _(param)),
+  addBookmark: _(ap('add-bookmark'), _ => (param: SelectNodeParams) =>
+    _(param),
+  ),
+  removeBookmark: _(ap('remove-bookmark'), _ => (param: CloseNodeParams) =>
+    _(param),
+  ),
   setScrollPosition: _(
     ap('set-scroll-position'),
     _ => (param: SetScrollPositionParams) => _(param),
@@ -131,6 +147,7 @@ export type PersistedDocumentState = {
     [node_id: number]: NodeScrollPosition;
   };
   recentNodes: number[];
+  bookmarks: number[];
   updatedAt: number;
   localUpdatedAt: number;
   lastOpenedAt: number;
@@ -158,6 +175,8 @@ export enum DocumentMutations {
   NodeContent = 'changed content',
   DeleteNode = 'deleted',
   DocumentAttributes = 'changed attributes',
+  RemoveBookmark = 'removed bookmark',
+  AddBookmark = 'added bookmark',
 }
 
 export type DocumentTimeLineMeta = {
@@ -178,178 +197,210 @@ dTM.setOnFrameChangeFactory(() =>
   ),
 );
 
-const reducer = createReducer(initialState, _ => [
-  ...[
-    // non undoable actions
-    _(dac.fetchFulfilled, (state, { payload }) =>
-      produce(state, draft =>
-        selectDocument(
-          loadDocument(draft, payload.document, payload.nextNode),
-          payload.document.id,
+const reducer = createReducer(initialState, _ => {
+  return [
+    ...[
+      // non undoable actions
+      _(dac.fetchFulfilled, (state, { payload }) =>
+        produce(state, draft =>
+          selectDocument(
+            loadDocument(draft, payload.document, payload.nextNode),
+            payload.document.id,
+          ),
         ),
       ),
-    ),
-    _(nac.select, (state, { payload }) =>
-      produce(state, draft =>
-        expandNode(selectNode(draft, payload), {
-          ...payload,
-          expandChildren: false,
-        }),
+      _(nac.select, (state, { payload }) =>
+        produce(state, draft =>
+          expandNode(selectNode(draft, payload), {
+            ...payload,
+            expandChildren: false,
+          }),
+        ),
       ),
-    ),
-    _(nac.close, (state, { payload }) =>
-      produce(state, draft =>
-        expandNode(closeNode(draft, payload), {
-          documentId: payload.documentId,
-          node_id:
-            state.documents[payload.documentId].persistedState.selectedNode_id,
-          expandChildren: false,
-        }),
+      _(nac.close, (state, { payload }) =>
+        produce(state, draft =>
+          expandNode(closeNode(draft, payload), {
+            documentId: payload.documentId,
+            node_id:
+              state.documents[payload.documentId].persistedState
+                .selectedNode_id,
+            expandChildren: false,
+          }),
+        ),
       ),
-    ),
-    _(dlac.fetchDocumentsFulfilled, (state, { payload }) =>
-      produce(state, draft => loadDocumentsList(draft, payload)),
-    ),
-    _(ac.addFetchedFields, (state, { payload }) =>
-      produce(state, draft => addFetchedFields(draft, payload)),
-    ),
-    _(ac.expandNode, (state, { payload }) =>
-      produce(state, draft => expandNode(draft, payload)),
-    ),
-    _(ac.collapseNode, (state, { payload }) =>
-      produce(state, draft => collapseNode(draft, payload)),
-    ),
-    _(ac.setScrollPosition, (state, { payload }) =>
-      produce(state, draft => setScrollPosition(draft, payload)),
-    ),
-    _(ac.neutralizePersistedState, (state, { payload }) =>
-      produce(state, draft => neutralizePersistedState(draft, payload)),
-    ),
-    _(ac.undoDocumentAction, state => dTM.undo(state)),
-    _(ac.redoDocumentAction, state => dTM.redo(state)),
-  ],
-  ...[
-    // require setup
-    _(ac.createDocument, (state, { payload }) => {
-      dTM.setCurrent(payload.id);
-      return produce(state, draft => createDocument(draft, payload));
-    }),
-    _(dac.setDocumentId, (state, { payload }) => {
-      dTM.setCurrent(payload);
-      return produce(state, draft => selectDocument(draft, payload));
-    }),
-  ],
-  ...[
-    // require cleanup
-    _(ac.deleteDocuments, (state, { payload: documentIds }) => {
-      return produce(state, draft => {
-        documentIds.forEach(documentId => {
-          dTM.resetTimeline(documentId);
-          delete draft.documents[documentId];
+      _(dlac.fetchDocumentsFulfilled, (state, { payload }) =>
+        produce(state, draft => loadDocumentsList(draft, payload)),
+      ),
+      _(ac.addFetchedFields, (state, { payload }) =>
+        produce(state, draft => addFetchedFields(draft, payload)),
+      ),
+      _(ac.expandNode, (state, { payload }) =>
+        produce(state, draft => expandNode(draft, payload)),
+      ),
+      _(ac.collapseNode, (state, { payload }) =>
+        produce(state, draft => collapseNode(draft, payload)),
+      ),
+      _(ac.setScrollPosition, (state, { payload }) =>
+        produce(state, draft => setScrollPosition(draft, payload)),
+      ),
+      _(ac.neutralizePersistedState, (state, { payload }) =>
+        produce(state, draft => neutralizePersistedState(draft, payload)),
+      ),
+      _(ac.undoDocumentAction, state => dTM.undo(state)),
+      _(ac.redoDocumentAction, state => dTM.redo(state)),
+      _(ac.moveBookmark, (state, { payload }) =>
+        produce(state, draft => moveBookmark(draft, payload)),
+      ),
+    ],
+    ...[
+      // require setup
+      _(ac.createDocument, (state, { payload }) => {
+        dTM.setCurrent(payload.id);
+        return produce(state, draft => createDocument(draft, payload));
+      }),
+      _(dac.setDocumentId, (state, { payload }) => {
+        dTM.setCurrent(payload);
+        return produce(state, draft => selectDocument(draft, payload));
+      }),
+    ],
+    ...[
+      // require cleanup
+      _(ac.deleteDocuments, (state, { payload: documentIds }) => {
+        return produce(state, draft => {
+          documentIds.forEach(documentId => {
+            dTM.resetTimeline(documentId);
+            delete draft.documents[documentId];
+          });
         });
-      });
-    }),
-    _(
-      dac.saveFulfilled,
-      (state): State => {
-        dTM.resetAll();
-        return removeSavedDocuments(state);
-      },
-    ),
-    _(rac.resetState, () => {
-      dTM.resetAll();
-      return {
-        ...cloneObj(initialState),
-      };
-    }),
-  ],
-  ...[
-    // undoable actions
-    _(ac.createNode, (state, { payload }) =>
-      produce(
-        state,
-        draft => selectNode(createNode(draft, payload), payload.createdNode),
-        dTM.addFrame({
-          timelineId: payload.createdNode.documentId,
-          node_id: payload.createdNode.node_id,
-          documentId: payload.createdNode.documentId,
-          mutationType: DocumentMutations.CreateNode,
-          timeStamp: Date.now(),
-        }),
-      ),
-    ),
-    _(ac.mutateNodeMeta, (state, { payload, meta }) => {
-      const params = Array.isArray(payload) ? payload : [payload];
-      const editedOrDroppedNode = params[0];
-      let newState = produce(
-        state,
-        draft =>
-          selectNode(mutateNodeMeta(draft, params), {
-            node_id: editedOrDroppedNode.node_id,
-            documentId: editedOrDroppedNode.documentId,
-          }),
-        dTM.addFrame({
-          timelineId: editedOrDroppedNode.documentId,
-          node_id: editedOrDroppedNode.node_id,
-          documentId: editedOrDroppedNode.documentId,
-          mutationType: meta || DocumentMutations.NodeAttributes,
-          timeStamp: Date.now(),
-        }),
-      );
-      if (meta === DocumentMutations.NodeParent) {
-        newState = produce(newState, draft =>
-          expandNode(draft, {
-            node_id: editedOrDroppedNode.node_id,
-            documentId: editedOrDroppedNode.documentId,
-            expandChildren: true,
-          }),
-        );
-      }
-      return newState;
-    }),
-    _(ac.mutateNodeContent, (state, { payload }) =>
-      produce(
-        state,
-        draft => mutateNodeContent(draft, payload),
-        (p, rp) => {
-          if (payload.meta?.mode !== 'update-key-only')
-            dTM.addFrame({
-              timelineId: payload.documentId,
-              node_id: payload.node_id,
-              documentId: payload.documentId,
-              mutationType: DocumentMutations.NodeContent,
-              timeStamp: Date.now(),
-            })(p, rp);
+      }),
+      _(
+        dac.saveFulfilled,
+        (state): State => {
+          dTM.resetAll();
+          return removeSavedDocuments(state);
         },
       ),
-    ),
-    _(ac.deleteNode, (state, { payload }) =>
-      produce(
-        state,
-        draft => deleteNode(draft, payload),
-        dTM.addFrame({
-          timelineId: payload.documentId,
-          documentId: payload.documentId,
-          node_id: payload.node_id,
-          mutationType: DocumentMutations.DeleteNode,
-          timeStamp: Date.now(),
-        }),
+      _(rac.resetState, () => {
+        dTM.resetAll();
+        return {
+          ...cloneObj(initialState),
+        };
+      }),
+    ],
+    ...[
+      // undoable actions
+      _(ac.createNode, (state, { payload }) =>
+        produce(
+          state,
+          draft => selectNode(createNode(draft, payload), payload.createdNode),
+          dTM.addFrame({
+            timelineId: payload.createdNode.documentId,
+            node_id: payload.createdNode.node_id,
+            documentId: payload.createdNode.documentId,
+            mutationType: DocumentMutations.CreateNode,
+            timeStamp: Date.now(),
+          }),
+        ),
       ),
-    ),
-    _(ac.mutateDocument, (state, { payload }) =>
-      produce(
-        state,
-        draft => mutateDocument(draft, payload),
-        dTM.addFrame({
-          timelineId: payload.documentId,
-          documentId: payload.documentId,
-          mutationType: DocumentMutations.DocumentAttributes,
-          timeStamp: Date.now(),
-        }),
+      _(ac.mutateNodeMeta, (state, { payload, meta }) => {
+        const params = Array.isArray(payload) ? payload : [payload];
+        const editedOrDroppedNode = params[0];
+        let newState = produce(
+          state,
+          draft =>
+            selectNode(mutateNodeMeta(draft, params), {
+              node_id: editedOrDroppedNode.node_id,
+              documentId: editedOrDroppedNode.documentId,
+            }),
+          dTM.addFrame({
+            timelineId: editedOrDroppedNode.documentId,
+            node_id: editedOrDroppedNode.node_id,
+            documentId: editedOrDroppedNode.documentId,
+            mutationType: meta || DocumentMutations.NodeAttributes,
+            timeStamp: Date.now(),
+          }),
+        );
+        if (meta === DocumentMutations.NodeParent) {
+          newState = produce(newState, draft =>
+            expandNode(draft, {
+              node_id: editedOrDroppedNode.node_id,
+              documentId: editedOrDroppedNode.documentId,
+              expandChildren: true,
+            }),
+          );
+        }
+        return newState;
+      }),
+      _(ac.mutateNodeContent, (state, { payload }) =>
+        produce(
+          state,
+          draft => mutateNodeContent(draft, payload),
+          (p, rp) => {
+            if (payload.meta?.mode !== 'update-key-only')
+              dTM.addFrame({
+                timelineId: payload.documentId,
+                node_id: payload.node_id,
+                documentId: payload.documentId,
+                mutationType: DocumentMutations.NodeContent,
+                timeStamp: Date.now(),
+              })(p, rp);
+          },
+        ),
       ),
-    ),
-  ],
-]);
+      _(ac.deleteNode, (state, { payload }) =>
+        produce(
+          state,
+          draft => deleteNode(draft, payload),
+          dTM.addFrame({
+            timelineId: payload.documentId,
+            documentId: payload.documentId,
+            node_id: payload.node_id,
+            mutationType: DocumentMutations.DeleteNode,
+            timeStamp: Date.now(),
+          }),
+        ),
+      ),
+      _(ac.mutateDocument, (state, { payload }) =>
+        produce(
+          state,
+          draft => mutateDocument(draft, payload),
+          dTM.addFrame({
+            timelineId: payload.documentId,
+            documentId: payload.documentId,
+            mutationType: DocumentMutations.DocumentAttributes,
+            timeStamp: Date.now(),
+          }),
+        ),
+      ),
+      _(ac.addBookmark, (state, { payload }) =>
+        produce(
+          state,
+          draft => addBookmark(draft, payload),
+          dTM.addFrame({
+            timelineId: payload.documentId,
+            documentId: payload.documentId,
+            node_id: payload.node_id,
+            mutationType: DocumentMutations.AddBookmark,
+            timeStamp: Date.now(),
+          }),
+        ),
+      ),
+      _(ac.removeBookmark, (state, { payload }) =>
+        produce(
+          state,
+          draft => removeBookmark(draft, payload),
+          dTM.addFrame({
+            timelineId: payload.documentId,
+            documentId: payload.documentId,
+            node_id: payload.node_id,
+            mutationType: DocumentMutations.RemoveBookmark,
+            timeStamp: Date.now(),
+          }),
+        ),
+      ),
+    ],
+  ];
+});
 
 export { reducer as documentCacheReducer, ac as documentCacheActionCreators };
 export { State as DocumentCacheState };

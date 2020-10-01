@@ -5,7 +5,6 @@ import { Void } from '::root/components/shared-components/react/void';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { router } from '::root/router/router';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 
 const Document = React.lazy(() =>

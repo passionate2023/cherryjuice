@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modSearchResult, modSelectFile } from '::sass-modules';
+import { modDialog, modSearchResult,} from '::sass-modules';
 import { NodeSearchResultEntity } from '::types/graphql';
 import { useHeadline } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/headline';
 import { SearchContext } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/helpers/generate-headline';
@@ -50,7 +50,7 @@ const Result: React.FC<Props> = ({ result, searchContext }) => {
       <span
         className={joinClassNames([
           modSearchResult.searchResult__timestamps,
-          modSelectFile.selectFile__file__details,
+          modDialog.dialogListItem__details,
         ])}
       >
         <span

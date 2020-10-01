@@ -3,15 +3,13 @@ import { useEffect } from 'react';
 import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { DocumentList } from './components/documents-list/document-list';
-import { modDialog } from '::sass-modules';
-import { Icons } from '::root/components/shared-components/icon/icon';
 import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { testIds } from '::cypress/support/helpers/test-ids';
-import { DialogHeaderButton } from '::root/components/shared-components/dialog/dialog-header';
 import { getDocumentsList } from '::store/selectors/cache/document/document';
+import { useDeleteListItems } from '::root/components/app/components/menus/dialogs/documents-list/hooks/delete-list-items';
 
 const createButtons = ({
   selectedIDs,
@@ -107,38 +105,15 @@ const DocumentsListDialog: React.FC<PropsFromRedux> = ({
     online,
   });
 
-  const showDeletionButtons = !documents.length || !deletionMode;
-  const rightHeaderButtons: DialogHeaderButton[] = [
-    {
-      hidden: !documents.length || deletionMode,
-      disabled: !online,
-      className: modDialog.dialog__header__fileButton,
-      onClick: ac.documentsList.enableDeletionMode,
-      icon: Icons.material['delete-sweep'],
-      testId: testIds.dialogs__selectDocument__header__buttons__deleteSweep,
-    },
-    {
-      hidden: showDeletionButtons,
-      className: modDialog.dialog__header__fileButton,
-      onClick: ac.documentsList.disableDeletionMode,
-      icon: Icons.material.cancel,
-    },
-    {
-      hidden: showDeletionButtons,
-      className: modDialog.dialog__header__fileButton,
-      onClick: () => ac.documentsList.selectAllDocuments(documents),
-      icon: Icons.material['select-all'],
-      testId: testIds.dialogs__selectDocument__header__buttons__deleteAll,
-    },
-    {
-      hidden: showDeletionButtons,
-      className: modDialog.dialog__header__fileButton,
-      onClick: ac.dialogs.showDeleteDocument,
-      icon: Icons.material['delete'],
-      testId: testIds.dialogs__selectDocument__header__buttons__delete,
-      disabled: selectedIDs.length === 0,
-    },
-  ];
+  const rightHeaderButtons = useDeleteListItems({
+    deletionMode,
+    hidden: !documents.length,
+    disableDeletionMode: ac.documentsList.disableDeletionMode,
+    enableDeletionMode: ac.documentsList.enableDeletionMode,
+    selectAll: () => ac.documentsList.selectAllDocuments(documents),
+    numberOfSelectedElements: selectedIDs.length,
+    performDeletion: ac.dialogs.showDeleteDocument,
+  });
 
   return (
     <DialogWithTransition

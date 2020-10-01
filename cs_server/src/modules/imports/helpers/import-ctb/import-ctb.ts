@@ -83,6 +83,7 @@ export class ImportCTB {
       nodeImagesMap,
       nodesMap,
       nodeDatesMap,
+      bookmarks,
     } = await ImportCTB.saveNodesMeta(
       document,
       nodesA,
@@ -91,6 +92,9 @@ export class ImportCTB {
       this.user.id,
     );
 
+    document.state.bookmarks = bookmarks
+      .sort((a, b) => a[1] - b[1])
+      .map(([node_id]) => node_id);
     await ImportCTB.addChildToParents(nodesA, nodesMap);
     const { node_idImagesMap } = await ImportCTB.saveImages(nodeImagesMap);
     await ImportCTB.saveAhtml({
@@ -105,8 +109,8 @@ export class ImportCTB {
   }
 
   static async saveNodesMeta(
-    newDocument: Document,
-    nodesToSave: SqliteNodeNode_idMap,
+    documentB: Document,
+    nodesA: SqliteNodeNode_idMap,
     nodeCreator: NodeCreator,
     imageGetter: ImageGetter,
     userId: string,
@@ -114,45 +118,54 @@ export class ImportCTB {
     nodesMap: NodeNode_idMap;
     nodeImagesMap: NodeImagesMap;
     nodeDatesMap: NodeDateMap;
+    bookmarks: [number, number][];
   }> {
     const nodeImagesMap: NodeImagesMap = [];
     const nodesMap = new Map<number, Node>();
     const nodeDatesMap: NodeDatesMap = new Map();
-
-    for (const nodeToSave of nodesToSave.values()) {
-      const parentNode = nodesToSave.get(nodeToSave.father_id);
+    const bookmarks: [number, number][] = [];
+    for (const nodeA of nodesA.values()) {
+      const parentNode = nodesA.get(nodeA.father_id);
       if (parentNode) {
-        parentNode.child_nodes.push(nodeToSave.node_id);
+        parentNode.child_nodes.push(nodeA.node_id);
       }
 
       const dto: CreateNodeDTO = {
         getNodeDTO: {
-          documentId: newDocument.id,
-          node_id: nodeToSave.node_id,
+          documentId: documentB.id,
+          node_id: nodeA.node_id,
           userId,
         },
         data: {
-          ...nodeToSave,
+          father_id: nodeA.father_id,
+          child_nodes: nodeA.child_nodes,
+          name: nodeA.name,
+          node_id: nodeA.node_id,
+          node_title_styles: nodeA.node_title_styles,
+          privacy: undefined,
+          read_only: nodeA.read_only,
           createdAt: 0,
           updatedAt: 0,
           fatherId: undefined,
         },
       };
-      const node = await nodeCreator(dto);
-      nodesMap.set(node.node_id, node);
-      nodeDatesMap.set(node.node_id, {
-        createdAt: new Date(nodeToSave.createdAt),
-        updatedAt: new Date(nodeToSave.updatedAt),
+      const nodeB = await nodeCreator(dto);
+      nodesMap.set(nodeB.node_id, nodeB);
+      nodeDatesMap.set(nodeB.node_id, {
+        createdAt: new Date(nodeA.createdAt),
+        updatedAt: new Date(nodeA.updatedAt),
       });
-      if (nodeToSave.has_image) {
+      if (nodeA.has_image) {
         const images = await imageGetter({
-          node_id: node.node_id,
+          node_id: nodeB.node_id,
         });
-        nodeImagesMap.push([node, images]);
+        nodeImagesMap.push([nodeB, images]);
       }
+      if (nodeA.bookmark)
+        bookmarks.push([nodeA.bookmark, nodeA.bookmark_sequence]);
     }
 
-    return { nodeImagesMap, nodesMap, nodeDatesMap };
+    return { nodeImagesMap, nodesMap, nodeDatesMap, bookmarks };
   }
 
   static addChildToParents = (

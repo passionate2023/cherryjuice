@@ -10,6 +10,9 @@ const UserPopup = React.lazy(() =>
   import('./modals/user/user-with-transition'),
 );
 const Anchor = React.lazy(() => import('./dialogs/anchor/anchor'));
+const Bookmarks = React.lazy(() =>
+  import('./dialogs/bookmarks/bookmarks-dialog'),
+);
 const Link = React.lazy(() => import('./dialogs/link/link'));
 const Codebox = React.lazy(() => import('./dialogs/codebox/codebox'));
 const Table = React.lazy(() => import('./dialogs/table/table'));
@@ -50,6 +53,7 @@ import { Widgets } from '::root/components/app/components/menus/widgets/widgets'
 const components = [
   <UserPopup key={'UserPopup'} />,
   <DocumentsList key={'DocumentsList'} />,
+  <Bookmarks key={'Bookmarks'} />,
   <Settings key={'Settings'} />,
   <SearchDialog key={'PasswordModal'} />,
   <DocumentMeta key={'DocumentMeta'} />,

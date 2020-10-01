@@ -7,6 +7,7 @@ export const getDefaultPersistedState = (): PersistedDocumentState => ({
   },
   scrollPositions: {},
   recentNodes: [],
+  bookmarks: [],
   updatedAt: 0,
   localUpdatedAt: 0,
   lastOpenedAt: 0,

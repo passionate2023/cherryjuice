@@ -20,6 +20,7 @@ export class DocumentState {
       this.selectedNode_id = 0;
       this.treeState = [];
       this.recentNodes = [];
+      this.bookmarks = [];
       this.scrollPositions = [];
       this.updatedAt = new Date();
       this.lastOpenedAt = new Date();
@@ -34,6 +35,9 @@ export class DocumentState {
 
   @Field(() => [Int])
   recentNodes: number[];
+
+  @Field(() => [Int])
+  bookmarks: number[];
 
   @Field(() => [NodeScrollPosition])
   scrollPositions: NodeScrollPosition[];

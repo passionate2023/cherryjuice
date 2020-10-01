@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import {
   CachedDocumentState,
   NodesDict,
+  PersistedDocumentState,
 } from '::store/ducks/cache/document-cache';
 import { ContextMenuItemProps } from '::root/components/shared-components/context-menu/context-menu-item';
 
@@ -12,6 +13,7 @@ type Props = {
   documentId: string;
   nodes: NodesDict;
   localState: CachedDocumentState;
+  bookmarks: PersistedDocumentState['bookmarks'];
   recentNodes: number[];
 };
 const useTabContextMenu = ({
@@ -20,6 +22,7 @@ const useTabContextMenu = ({
   recentNodes,
   localState,
   hide,
+  bookmarks = [],
 }: Props): Omit<ContextMenuItemProps, 'hide'>[] => {
   const closeSelectedM = useCallback(() => {
     ac.node.close({ documentId, node_id: elementId });
@@ -65,14 +68,35 @@ const useTabContextMenu = ({
     hide();
   }, [documentId, recentNodes, elementId]);
 
+  const closeDocumentM = useCallback(() => {
+    ac.document.setDocumentId('');
+    hide();
+  }, []);
+
+  const bookmarkM = useCallback(() => {
+    !bookmarks.includes(+elementId)
+      ? ac.documentCache.addBookmark({ documentId, node_id: elementId })
+      : ac.documentCache.removeBookmark({ documentId, node_id: elementId });
+    hide();
+  }, [documentId, bookmarks, elementId]);
+
   return [
+    {
+      name: bookmarks.includes(+elementId) ? 'remove bookmark' : 'bookmark',
+      onClick: bookmarkM,
+    },
     { name: 'properties', onClick: renameM, bottomSeparator: true },
     { name: 'close', onClick: closeSelectedM },
     { name: 'close all', onClick: closeAllM },
     { name: 'close unchanged', onClick: closeUnchangedM },
     { name: 'close others', onClick: closeOthersM },
     { name: 'close others to the left', onClick: closeOthersToLeftM },
-    { name: 'close others to the right', onClick: closeOthersToRightM },
+    {
+      name: 'close others to the right',
+      onClick: closeOthersToRightM,
+      bottomSeparator: true,
+    },
+    { name: 'close document', onClick: closeDocumentM },
   ];
 };
 

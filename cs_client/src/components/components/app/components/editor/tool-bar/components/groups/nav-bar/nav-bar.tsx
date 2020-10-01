@@ -9,10 +9,13 @@ import { Store } from '::store/store';
 import { Search } from '::root/components/app/components/editor/tool-bar/components/groups/nav-bar/components/search/search';
 import { User } from '::types/graphql';
 import { GeneratedAvatar } from '::root/components/app/components/menus/modals/user/components/components/generated-avatar';
+import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 
 const mapState = (state: Store) => ({
-  documentId: state.document.documentId,
   user: state.auth.user,
+  noDocumentIsSelected: !state.document.documentId,
+  isDocumentOwner: hasWriteAccessToDocument(state),
+  showBookmarks: state.dialogs.showBookmarks,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -22,7 +25,13 @@ type Props = {
   showUserPopup: boolean;
 };
 
-const NavBar: React.FC<Props & PropsFromRedux> = ({ showUserPopup, user }) => {
+const NavBar: React.FC<Props & PropsFromRedux> = ({
+  showUserPopup,
+  user,
+  showBookmarks,
+  isDocumentOwner,
+  noDocumentIsSelected,
+}) => {
   const isLoggedIn = user?.id;
   return (
     <div
@@ -47,6 +56,14 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({ showUserPopup, user }) => {
           testId={testIds.toolBar__navBar__showDocumentList}
           loadAsInlineSVG={'force'}
         />
+      </ToolbarButton>
+      <ToolbarButton
+        dontMount={!isDocumentOwner}
+        disabled={noDocumentIsSelected}
+        onClick={ac.dialogs.showBookmarksDialog}
+        active={showBookmarks}
+      >
+        <Icon name={Icons.material.bookmarks} />
       </ToolbarButton>
       <ToolbarButton
         onClick={ac.dialogs.toggleUserPopup}

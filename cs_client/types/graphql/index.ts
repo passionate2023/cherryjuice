@@ -88,6 +88,7 @@ export interface PrivateNode {
 }
 
 export interface DocumentState {
+  bookmarks: Array<number>;
   lastOpenedAt: Timestamp;
   recentNodes: Array<number>;
   scrollPositions: Array<NodeScrollPosition>;
@@ -403,6 +404,7 @@ export interface SaveHtmlIt {
 export type ImageUpload = any;
 
 export interface DocumentStateIt {
+  bookmarks: Array<number>;
   lastOpenedAt: Timestamp;
   recentNodes: Array<number>;
   scrollPositions: Array<NodeScrollPositionIt>;
@@ -550,9 +552,9 @@ export enum OPERATION_STATE {
 }
 
 export interface DocumentTarget {
-  hash: string;
+  hash?: string;
   id: string;
-  name: string;
+  name?: string;
 }
 
 export enum OPERATION_TYPE {
@@ -856,12 +858,20 @@ export interface PrivateNodeToNode_idResolver<TParent = any, TResult = any> {
 }
 
 export interface DocumentStateTypeResolver<TParent = any> {
+  bookmarks?: DocumentStateToBookmarksResolver<TParent>;
   lastOpenedAt?: DocumentStateToLastOpenedAtResolver<TParent>;
   recentNodes?: DocumentStateToRecentNodesResolver<TParent>;
   scrollPositions?: DocumentStateToScrollPositionsResolver<TParent>;
   selectedNode_id?: DocumentStateToSelectedNode_idResolver<TParent>;
   treeState?: DocumentStateToTreeStateResolver<TParent>;
   updatedAt?: DocumentStateToUpdatedAtResolver<TParent>;
+}
+
+export interface DocumentStateToBookmarksResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface DocumentStateToLastOpenedAtResolver<

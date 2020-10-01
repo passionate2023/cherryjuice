@@ -10,11 +10,15 @@ import { connect, ConnectedProps } from 'react-redux';
 import { TimeFilters } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/time-filters';
 import { SortOptions } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-sort/sort-options';
 import { SortNodesBy } from '::types/graphql';
-import { SearchHeaderContainer } from '::root/components/shared-components/dialog/animations/search-header-container';
+import {
+  SearchHeaderContainer,
+  SearchHeaderGroup,
+} from '::root/components/shared-components/dialog/animations/search-header-container';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
 import { modSearchDialog } from '::sass-modules';
 import { Icons } from '::root/components/shared-components/icon/icon';
+import { Search } from '::root/components/app/components/editor/tool-bar/components/groups/nav-bar/components/search/search';
 
 export const SearchSetting: React.FC<{
   iconName: string;
@@ -64,6 +68,7 @@ export const useSetCssVariablesOnWindowResize = (
 
 type Props = {
   show: boolean;
+  showDialog: boolean;
 };
 
 const mapState = (state: Store) => ({
@@ -91,50 +96,60 @@ const SearchFilters: React.FC<Props & PropsFromRedux> = ({
   showFilters,
   showTuning,
   showTimeFilter,
+  showDialog,
 }) => {
   return (
-    <SearchHeaderContainer>
-      <SearchSetting
-        iconName={Icons.material.sort}
-        hide={ac.search.toggleSortOptions}
-        show={ac.search.toggleSortOptions}
-        shown={showSortOptions}
-      >
-        <SortOptions
-          options={options}
-          setSortBy={ac.search.setSortBy}
-          toggleSortDirection={ac.search.toggleSortDirection}
-          currentSortOptions={currentSortOptions}
-          label={'sort nodes by'}
+    <SearchHeaderContainer alignChildren={'v'}>
+      <SearchHeaderGroup>
+        <Search
+          className={modSearchDialog.searchDialog__header__field}
+          navBar={false}
+          lazyAutoFocus={showDialog ? 1200 : 0}
         />
-      </SearchSetting>
+      </SearchHeaderGroup>
+      <SearchHeaderGroup>
+        <SearchSetting
+          iconName={Icons.material.sort}
+          hide={ac.search.toggleSortOptions}
+          show={ac.search.toggleSortOptions}
+          shown={showSortOptions}
+        >
+          <SortOptions
+            options={options}
+            setSortBy={ac.search.setSortBy}
+            toggleSortDirection={ac.search.toggleSortDirection}
+            currentSortOptions={currentSortOptions}
+            label={'sort nodes by'}
+          />
+        </SearchSetting>
 
-      <SearchSetting
-        iconName={Icons.material.filter}
-        hide={ac.search.toggleFilters}
-        show={ac.search.toggleFilters}
-        shown={showFilters}
-      >
-        <SearchTarget />
-        <SearchScope />
-      </SearchSetting>
-      <SearchSetting
-        iconName={Icons.material.time}
-        hide={ac.search.toggleTimeFilter}
-        show={ac.search.toggleTimeFilter}
-        shown={showTimeFilter}
-      >
-        <TimeFilters />
-      </SearchSetting>
-      <SearchSetting
-        iconName={Icons.material.tune}
-        hide={ac.search.toggleTuning}
-        show={ac.search.toggleTuning}
-        shown={showTuning}
-      >
-        <SearchType />
-        <SearchOptions />
-      </SearchSetting>
+        <SearchSetting
+          iconName={Icons.material.filter}
+          hide={ac.search.toggleFilters}
+          show={ac.search.toggleFilters}
+          shown={showFilters}
+        >
+          <SearchTarget />
+          <SearchScope />
+        </SearchSetting>
+        <SearchSetting
+          iconName={Icons.material.time}
+          hide={ac.search.toggleTimeFilter}
+          show={ac.search.toggleTimeFilter}
+          shown={showTimeFilter}
+        >
+          <TimeFilters />
+        </SearchSetting>
+        <SearchSetting
+          iconName={Icons.material.tune}
+          hide={ac.search.toggleTuning}
+          show={ac.search.toggleTuning}
+          shown={showTuning}
+        >
+          <SearchType />
+          <SearchOptions />
+        </SearchSetting>
+      </SearchHeaderGroup>
     </SearchHeaderContainer>
   );
 };

@@ -50,7 +50,7 @@ type DocumentMutation {
 
 type DocumentOperation {
     context: OPERATION_CONTEXT
-    progress: Int
+    progress: Float
     state: OPERATION_STATE!
     target: DocumentTarget!
     type: OPERATION_TYPE!
@@ -58,6 +58,7 @@ type DocumentOperation {
 }
 
 type DocumentState {
+    bookmarks: [Int!]!
     lastOpenedAt: Timestamp!
     recentNodes: [Int!]!
     scrollPositions: [NodeScrollPosition!]!
@@ -67,9 +68,9 @@ type DocumentState {
 }
 
 type DocumentTarget {
-    hash: String!
+    hash: String
     id: String!
-    name: String!
+    name: String
 }
 
 type EditorSettings {
@@ -400,6 +401,7 @@ input DocumentGuestIt {
 }
 
 input DocumentStateIt {
+    bookmarks: [Int!]!
     lastOpenedAt: Timestamp!
     recentNodes: [Int!]!
     scrollPositions: [NodeScrollPositionIt!]!

@@ -7,12 +7,17 @@ import { SearchInput } from '::root/components/shared-components/inputs/search-i
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { getDocumentsList } from '::store/selectors/cache/document/document';
-import { SearchHeaderContainer } from '::root/components/shared-components/dialog/animations/search-header-container';
+import {
+  SearchHeaderContainer,
+  SearchHeaderGroup,
+} from '::root/components/shared-components/dialog/animations/search-header-container';
 import { DialogBody } from '../../../search-dialog/components/search-body/search-body';
 import { SortOptions } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-sort/sort-options';
 import { SortDirection, SortNodesBy } from '::types/graphql';
 import { Icons } from '::root/components/shared-components/icon/icon';
 import { SearchSetting } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/search-filters';
+import { DialogScrollableSurface } from '::root/components/shared-components/dialog/dialog-list/dialog-scrollable-surface';
+import { mapSortDocumentBy } from '::root/components/app/components/menus/dialogs/bookmarks/components/helpers/sort';
 
 const options: { optionName: SortNodesBy }[] = [
   { optionName: SortNodesBy.UpdatedAt },
@@ -32,18 +37,6 @@ const mapState = (state: Store) => ({
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const sortByName = (xs: CachedDocument[]) =>
-  xs.sort((a, b) => a.name.localeCompare(b.name));
-const sortByUpdated = (xs: CachedDocument[]): CachedDocument[] =>
-  xs.sort((a, b) => a.localState.localUpdatedAt - b.localState.localUpdatedAt);
-const sortByCreated = (xs: CachedDocument[]): CachedDocument[] =>
-  xs.sort((a, b) => a.createdAt - b.createdAt);
-
-const mapSortBy = {
-  [SortNodesBy.CreatedAt]: sortByCreated,
-  [SortNodesBy.UpdatedAt]: sortByUpdated,
-  [SortNodesBy.DocumentName]: sortByName,
-};
 type Props = {};
 const DocumentList: React.FC<Props & PropsFromRedux> = ({
   documents,
@@ -54,7 +47,7 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
   showFilters,
 }) => {
   const filesPerFolders: [string, CachedDocument[]][] = useMemo(() => {
-    let sortedDocuments: CachedDocument[] = mapSortBy[
+    let sortedDocuments: CachedDocument[] = mapSortDocumentBy[
       currentSortOptions.sortBy
     ](documents);
     if (currentSortOptions.sortDirection === SortDirection.Descending)
@@ -75,39 +68,37 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
   return (
     <DialogBody>
       <SearchHeaderContainer>
-        <SearchInput
-          containerClassName={modSearchDialog.searchDialog__header__field}
-          placeHolder={'find documents'}
-          value={query}
-          onChange={ac.documentsList.setQuery}
-          onClear={ac.documentsList.clearQuery}
-          lazyAutoFocus={!isOnMd && show ? 1200 : 0}
-          searchImpossible={!documents.length}
-        />
-      </SearchHeaderContainer>
-      <SearchHeaderContainer>
-        <SearchSetting
-          iconName={Icons.material.sort}
-          hide={ac.documentsList.toggleFilters}
-          show={ac.documentsList.toggleFilters}
-          shown={showFilters}
-        >
-          <SortOptions
-            options={options}
-            setSortBy={ac.documentsList.setSortBy}
-            toggleSortDirection={ac.documentsList.toggleSortDirection}
-            currentSortOptions={currentSortOptions}
-            label={'sort by'}
+        <SearchHeaderGroup>
+          <SearchInput
+            containerClassName={modSearchDialog.searchDialog__header__field}
+            placeHolder={'find documents'}
+            value={query}
+            onChange={ac.documentsList.setQuery}
+            onClear={ac.documentsList.clearQuery}
+            lazyAutoFocus={!isOnMd && show ? 1200 : 0}
+            searchImpossible={!documents.length}
           />
-        </SearchSetting>
+          <SearchSetting
+            iconName={Icons.material.sort}
+            hide={ac.documentsList.toggleFilters}
+            show={ac.documentsList.toggleFilters}
+            shown={showFilters}
+          >
+            <SortOptions
+              options={options}
+              setSortBy={ac.documentsList.setSortBy}
+              toggleSortDirection={ac.documentsList.toggleSortDirection}
+              currentSortOptions={currentSortOptions}
+              label={'sort by'}
+            />
+          </SearchSetting>
+        </SearchHeaderGroup>
       </SearchHeaderContainer>
-      <div className={modSearchDialog.searchDialog__searchResults}>
-        <div className={modSearchDialog.searchDialog__searchResults__list}>
-          {filesPerFolders.map(([folder, documents]) => (
-            <DocumentGroup key={folder} folder={folder} documents={documents} />
-          ))}
-        </div>
-      </div>
+      <DialogScrollableSurface>
+        {filesPerFolders.map(([folder, documents]) => (
+          <DocumentGroup key={folder} folder={folder} documents={documents} />
+        ))}
+      </DialogScrollableSurface>
     </DialogBody>
   );
 };

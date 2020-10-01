@@ -23,6 +23,7 @@ export const createNodePropsMapper = (
   nodes: NodesDict,
   localState: CachedDocumentState,
   selectedNode_id,
+  bookmarks?: Set<number>,
 ) => (node_id: number): NodeProps => {
   const node = nodes[node_id];
   return {
@@ -31,6 +32,7 @@ export const createNodePropsMapper = (
     hasChanges: !!localState.editedNodes.edited[node_id],
     isSelected: selectedNode_id === node_id,
     isNew: node?.id?.startsWith(newNodePrefix),
+    isBookmarked: bookmarks && bookmarks.has(node_id),
   };
 };
 
@@ -77,6 +79,7 @@ const mapState = (state: Store) => {
     treeWidth: state.cssVariables.treeWidth,
     selectedNode_id: document?.persistedState?.selectedNode_id,
     recentNodes: document?.persistedState?.recentNodes,
+    bookmarks: document?.persistedState?.bookmarks,
     documentId: document?.id,
   };
 };
@@ -94,6 +97,7 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
   isOnMd,
   localState,
   treeWidth,
+  bookmarks,
 }) => {
   useForceUpdate();
   const [showHiddenTabs, setShowHiddenTabs] = useState(false);
@@ -123,12 +127,14 @@ const TabsContainer: React.FC<Props & PropsFromRedux> = ({
     hide,
     nodes,
     localState,
+    bookmarks,
   });
 
   const mapNodeProps = createNodePropsMapper(
     nodes,
     localState,
     selectedNode_id,
+    new Set(bookmarks),
   );
   return (
     <div className={modTabs.tabsContainer} onContextMenu={onContextMenu}>

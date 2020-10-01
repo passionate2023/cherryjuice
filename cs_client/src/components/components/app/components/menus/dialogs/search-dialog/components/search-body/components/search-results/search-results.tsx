@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modSearchDialog } from '::sass-modules';
+import { modDialog, } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { Result } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/result';
@@ -26,13 +26,9 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
   searchType,
   searchOptions,
 }) => (
-  <div className={modSearchDialog.searchDialog__searchResults}>
+  <div className={modDialog.dialogSurface}>
     {<ResultsHeader searchResults={searchResults} />}
-    <div
-      className={joinClassNames([
-        modSearchDialog.searchDialog__searchResults__list,
-      ])}
-    >
+    <div className={joinClassNames([modDialog.dialogBody__scrollableSurface])}>
       {searchResults.results.map(result => (
         <Result
           key={result.nodeId + searchResults.meta.timestamp}

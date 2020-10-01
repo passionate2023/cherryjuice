@@ -19,10 +19,10 @@ const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
   return {
     nodes: document?.nodes,
+    selectedNode_id: document?.persistedState?.selectedNode_id,
     fetchDocumentInProgress:
       state.document.asyncOperations.fetch === 'in-progress',
     saveInProgress: state.document.asyncOperations.save === 'in-progress',
-    selectedNode_id: document.persistedState?.selectedNode_id,
     showTree: state.editor.showTree,
     showNodePath: state.editor.showNodePath,
     isOnMd: state.root.isOnMd,

@@ -1,14 +1,10 @@
 import * as React from 'react';
-import { modSelectFile } from '::sass-modules';
-import { dateToFormattedString } from '::helpers/time';
-import { DocumentContextMenu } from './components/document-context-menu';
 import { ac } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { VisibilityIcon } from '::root/components/app/components/editor/info-bar/components/components/visibility-icon';
 import { CachedDocument } from '::store/ducks/cache/document-cache';
-import { joinClassNames } from '::helpers/dom/join-class-names';
-import { useState } from 'react';
+import { DialogListItem } from '::root/components/shared-components/dialog/dialog-list/dialog-list-item';
+import { DocumentDetails } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/components/document-details';
 
 export const documentHasUnsavedChanges = (document: CachedDocument) =>
   document?.localState?.localUpdatedAt > document?.updatedAt;
@@ -35,61 +31,54 @@ const Document: React.FC<Props & PropsFromRedux> = ({
 }) => {
   const { nodes, size, id, name, updatedAt, hash, privacy, guests } = document;
   const disabled = !online && (!nodes || (nodes && !nodes[0]));
-  const [showModal, setShowModal] = useState(false);
+  const contextMenuOptions = [
+    {
+      name: 'edit',
+      onClick: () => ac.dialogs.showEditDocumentDialog(id),
+    },
+    {
+      name: 'cache',
+      onClick: () => ac.node.fetchAll(id),
+      disabled: !online || id.startsWith('new-document'),
+    },
+    {
+      name: 'clone',
+      onClick: () => ac.document.clone(id),
+    },
+    {
+      name: 'export',
+      onClick: () => ac.document.export(id),
+      disabled: !online,
+    },
+    {
+      name: 'delete',
+      onClick: () => ac.dialogs.showDeleteDocument(),
+      disabled: !online,
+    },
+  ];
   return (
-    <div
-      className={joinClassNames([
-        modSelectFile.selectFile__file,
-        [modSelectFile.selectFile__fileSelectedCandidate, isSelected],
-        [
-          modSelectFile.selectFile__fileSelected,
-          !deletionMode && openDocumentId === id,
-        ],
-      ])}
-      onClick={disabled ? undefined : () => ac.documentsList.selectDocument(id)}
-      key={id}
-      tabIndex={0}
-      onContextMenu={() => setShowModal(true)}
-    >
-      <div
-        className={joinClassNames([
-          modSelectFile.selectFile__file__body,
-          [modSelectFile.selectFile__file__bodyDisabled, disabled],
-        ])}
-      >
-        <span className={`${modSelectFile.selectFile__file__name} `}>
-          {id.startsWith('new-document') || documentHasUnsavedChanges(document)
-            ? `*${name}`
-            : name}
-        </span>
-
-        <span className={`${modSelectFile.selectFile__file__details} `}>
-          <span className={modSelectFile.selectFile__file__details__visibility}>
-            <VisibilityIcon privacy={privacy} numberOfGuests={guests.length} />
-            <span>{size}kb</span>
-          </span>
-
-          <div>
-            <span className={`${modSelectFile.selectFile__file__details__id}`}>
-              {id}
-            </span>
-            <span
-              className={`${modSelectFile.selectFile__file__details__hash}`}
-            >
-              {hash}
-            </span>
-            <span>{dateToFormattedString(new Date(updatedAt))}</span>
-          </div>
-        </span>
-      </div>
-      <DocumentContextMenu
-        documentId={id}
-        online={online}
-        show={() => setShowModal(true)}
-        hide={() => setShowModal(false)}
-        shown={showModal}
-      />
-    </div>
+    <DialogListItem
+      selected={isSelected}
+      active={!deletionMode && openDocumentId === id}
+      disabled={disabled}
+      name={
+        id.startsWith('new-document') || documentHasUnsavedChanges(document)
+          ? `*${name}`
+          : name
+      }
+      onClick={() => ac.documentsList.selectDocument(id)}
+      contextMenuOptions={contextMenuOptions}
+      details={
+        <DocumentDetails
+          id={id}
+          privacy={privacy}
+          numberOfGuests={guests.length}
+          size={size}
+          updatedAt={updatedAt}
+          hash={hash}
+        />
+      }
+    />
   );
 };
 

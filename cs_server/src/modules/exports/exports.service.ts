@@ -96,6 +96,9 @@ export class ExportsService {
         },
       });
       const imagesPerNode = await exportCTB.writeAHtmls(nodes, onNodeProgress);
+
+      await exportCTB.writeBookmarks(document.state.bookmarks);
+
       const onImageProgress = chunkify({
         totalSteps: imagesPerNode.size,
         stepsPerBatch: 5,

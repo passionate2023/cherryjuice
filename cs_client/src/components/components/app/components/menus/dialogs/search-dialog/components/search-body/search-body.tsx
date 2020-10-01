@@ -2,7 +2,6 @@ import * as React from 'react';
 import { modSearchDialog } from '::sass-modules';
 import { SearchResults } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/search-results';
 import { SearchFilters } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/search-filters';
-import { SearchHeader } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-header/search-header';
 
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
@@ -28,8 +27,7 @@ const SearchBody: React.FC<Props & PropsFromRedux> = ({
 }) => {
   return (
     <DialogBody>
-      <SearchHeader show={show} />
-      <SearchFilters show={showFilters} />
+      <SearchFilters show={showFilters} showDialog={show} />
       <SearchResults />
     </DialogBody>
   );
