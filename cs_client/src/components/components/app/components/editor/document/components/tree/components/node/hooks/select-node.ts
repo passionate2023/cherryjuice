@@ -5,9 +5,9 @@ import { ac } from '::store/store';
 
 type SelectNodeProps = {
   node_id: number;
-  file_id: string;
+  documentId: string;
 };
-const useSelectNode = ({ node_id, file_id }: SelectNodeProps) => {
+const useSelectNode = ({ node_id, documentId }: SelectNodeProps) => {
   const [clickTimestamp, setTimestamp] = useState(0);
   const selectNode = useCallback(
     e => {
@@ -18,9 +18,9 @@ const useSelectNode = ({ node_id, file_id }: SelectNodeProps) => {
       setTimestamp(Date.now());
 
       updateCachedHtmlAndImages();
-      ac.node.select({ documentId: file_id, node_id });
+      ac.node.select({ documentId, node_id });
     },
-    [file_id, node_id],
+    [documentId, node_id],
   );
   return { clickTimestamp, selectNode };
 };

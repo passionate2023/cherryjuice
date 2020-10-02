@@ -57,6 +57,7 @@ export class TimelinesManager<T, U> {
     patches: Patch[],
     reversePatches: Patch[],
   ): void => {
+    if (!patches?.length) return;
     const id = meta.timelineId;
     this.setCurrent(id);
     delete meta.timelineId;

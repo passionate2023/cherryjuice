@@ -1,8 +1,6 @@
 import nodeMod from '::sass-modules/tree/node.scss';
 import * as React from 'react';
 import { useRef } from 'react';
-import { useRouteMatch } from 'react-router-dom';
-import { useDnDNodes } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/dnd-nodes';
 import { useSelectNode } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/select-node';
 import { NodePrivacy, Privacy } from '::types/graphql';
 import { NodeIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-icon';
@@ -27,6 +25,7 @@ export type NodeProps = {
   expand?: number;
   fatherState: NodeState;
   filteredNodes: FilteredNodes;
+  index: number;
 };
 
 const Node: React.FC<NodeProps> = ({
@@ -39,34 +38,21 @@ const Node: React.FC<NodeProps> = ({
   expand,
   fatherState,
   filteredNodes,
+  index,
 }) => {
   const online = useSelector((state: Store) => state.root.online);
+  const documentId = useSelector((state: Store) => state.document.documentId);
   const { child_nodes, name, privacy, html } = nodes[node_id];
-  const match = useRouteMatch<{ file_id: string }>();
-  const { file_id } = match.params;
   const componentRef = useRef();
-  const listRef = useRef();
-  const titleRef = useRef();
 
   const showChildren =
     expand > depth || !!(fatherState && fatherState[node_id]);
 
   const { clickTimestamp, selectNode } = useSelectNode({
-    file_id,
+    documentId,
     node_id,
   });
 
-  const nodeDndProps = useDnDNodes({
-    node_id,
-    componentRef: titleRef,
-    nodes,
-  });
-  const listDndProps = useDnDNodes({
-    componentRef: listRef,
-    nodes,
-    node_id,
-    draggable: false,
-  });
   const nodeStyle = JSON.parse(node_title_styles || '{}');
   const icon_id = +nodeStyle.icon_id;
   return (
@@ -77,15 +63,13 @@ const Node: React.FC<NodeProps> = ({
         }`}
         ref={componentRef}
         onClick={selectNode}
-        draggable={true}
-        onDragStart={nodeDndProps.onDragStart}
       >
         <ToggleChildren
           depth={depth}
           child_nodes={child_nodes}
           showChildren={showChildren}
           node_id={node_id}
-          documentId={file_id}
+          documentId={documentId}
         />
         <NodeIcon depth={depth} icon_id={icon_id} />
         <NodeVisibilityIcon
@@ -94,12 +78,11 @@ const Node: React.FC<NodeProps> = ({
           privacy={privacy}
         />
         <NodeTitle
-          nodeDndProps={nodeDndProps}
           nodeStyle={nodeStyle}
-          titleRef={titleRef}
           name={name}
-          documentId={file_id}
+          documentId={documentId}
           node_id={node_id}
+          index={index}
         />
         <NodeOverlay
           clickTimestamp={clickTimestamp}
@@ -107,20 +90,20 @@ const Node: React.FC<NodeProps> = ({
           node_id={node_id}
         />
       </div>
+
       {showChildren && (
         <NodeChildren
           nodes={nodes}
           child_nodes={child_nodes}
           depth={depth}
           documentPrivacy={documentPrivacy}
-          listDndProps={listDndProps}
-          listRef={listRef}
-          nodeDndProps={nodeDndProps}
+          node_id={node_id}
           parentPrivacy={parentPrivacy}
           privacy={privacy}
           expand={expand}
           fatherState={fatherState && fatherState[node_id]}
           filteredNodes={filteredNodes}
+          documentId={documentId}
         />
       )}
     </>

@@ -7,6 +7,8 @@ import {
   CloseNodeParams,
   SelectNodeParams,
 } from '::store/ducks/cache/document-cache/helpers/document/select-node';
+import { OnDropParam } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';
+import { DropMeta } from '::store/ducks/cache/document-cache/helpers/node/drop';
 
 const ap = createActionPrefixer('node');
 
@@ -19,6 +21,7 @@ const ac = {
   fetchFailed: _(ap('fetch-failed'), _ => (node_id: number) => _(node_id)),
   select: _(ap('select'), _ => (payload: SelectNodeParams) => _(payload)),
   close: _(ap('close'), _ => (payload: CloseNodeParams) => _(payload)),
+  drop: _(ap('drop'), _ => (payload: OnDropParam<DropMeta>) => _(payload)),
   selectNext: _(ap('select-next'), _ => (payload: SelectNodeParams) =>
     _(payload),
   ),

@@ -24,6 +24,7 @@
   height: calc(100% - 30px);
   overflow: auto;
   background-color: var(--treeBg);
+  transition: background-color 200ms linear;
 }
 .tree__resize-handle {
   height: calc(

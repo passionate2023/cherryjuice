@@ -1,16 +1,17 @@
 import treeModule from '::sass-modules/tree/tree.scss';
 import * as React from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { Node } from './components/node/node';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { Resizable } from 're-resizable';
 import { onResize, onResizeStop, onStart } from './helpers';
-import { useDnDNodes } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/dnd-nodes';
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::store/store';
+import { ac, Store } from '::store/store';
 import { NodePrivacy } from '::types/graphql';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { ToolBar } from './components/tool-bar/tool-bar';
+import { Droppable } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';
+import nodeMod from '::sass-modules/tree/node.scss';
 
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -30,6 +31,7 @@ const mapState = (state: Store) => {
     documentPrivacy: document?.privacy,
     treeState: document?.persistedState?.treeState,
     filteredNodes: state.document.filteredNodes,
+    documentId: state.document.documentId,
   };
 };
 const mapDispatch = {};
@@ -41,15 +43,9 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
   documentPrivacy,
   treeState,
   filteredNodes,
+  documentId,
 }) => {
   useEffect(onStart, []);
-  const componentRef = useRef();
-  const rootTreeDndProps = useDnDNodes({
-    componentRef,
-    nodes,
-    node_id: 0,
-    draggable: false,
-  });
 
   const params = getParamsFromLocation();
 
@@ -63,31 +59,37 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
       <ErrorBoundary>
         <div className={treeModule.tree}>
           <ToolBar />
-          <ul
-            className={treeModule.tree_rootList}
-            {...rootTreeDndProps}
-            ref={componentRef}
+          <Droppable
+            anchorId={'0'}
+            anchorClassName={nodeMod.node}
+            meta={{ documentId }}
+            onDrop={ac.node.drop}
           >
-            {nodes &&
-              nodes[0].child_nodes.map(node_id => {
-                const node = nodes[node_id];
-                if (!filteredNodes || filteredNodes[node_id])
-                  return (
-                    <Node
-                      fatherState={treeState[0]}
-                      key={node.node_id}
-                      node_id={node.node_id}
-                      nodes={nodes}
-                      depth={0}
-                      node_title_styles={node.node_title_styles}
-                      documentPrivacy={documentPrivacy}
-                      parentPrivacy={NodePrivacy.DEFAULT}
-                      expand={params.expand}
-                      filteredNodes={filteredNodes}
-                    />
-                  );
-              })}
-          </ul>
+            {(provided, ref) => (
+              <ul className={treeModule.tree_rootList} {...provided} ref={ref}>
+                {nodes &&
+                  nodes[0].child_nodes.map((node_id, index) => {
+                    const node = nodes[node_id];
+                    if (!filteredNodes || filteredNodes[node_id])
+                      return (
+                        <Node
+                          index={index}
+                          fatherState={treeState[0]}
+                          key={node.node_id}
+                          node_id={node.node_id}
+                          nodes={nodes}
+                          depth={0}
+                          node_title_styles={node.node_title_styles}
+                          documentPrivacy={documentPrivacy}
+                          parentPrivacy={NodePrivacy.DEFAULT}
+                          expand={params.expand}
+                          filteredNodes={filteredNodes}
+                        />
+                      );
+                  })}
+              </ul>
+            )}
+          </Droppable>
         </div>
       </ErrorBoundary>
     </Resizable>

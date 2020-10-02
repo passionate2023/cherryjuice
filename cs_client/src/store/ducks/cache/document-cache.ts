@@ -64,6 +64,7 @@ import {
   moveBookmark,
   MoveBookmarkProps,
 } from '::store/ducks/cache/document-cache/helpers/document/bookmarks/move-bookmark';
+import { drop } from '::store/ducks/cache/document-cache/helpers/node/drop';
 
 const ap = createActionPrefixer('document-cache');
 
@@ -171,7 +172,7 @@ type State = {
 export enum DocumentMutations {
   CreateNode = 'created',
   NodeAttributes = 'changed attributes',
-  NodeParent = 'changed parent',
+  NodePosition = 'changed position',
   NodeContent = 'changed content',
   DeleteNode = 'deleted',
   DocumentAttributes = 'changed attributes',
@@ -304,32 +305,22 @@ const reducer = createReducer(initialState, _ => {
       ),
       _(ac.mutateNodeMeta, (state, { payload, meta }) => {
         const params = Array.isArray(payload) ? payload : [payload];
-        const editedOrDroppedNode = params[0];
-        let newState = produce(
+        const editedNode = params[0];
+        return produce(
           state,
           draft =>
             selectNode(mutateNodeMeta(draft, params), {
-              node_id: editedOrDroppedNode.node_id,
-              documentId: editedOrDroppedNode.documentId,
+              node_id: editedNode.node_id,
+              documentId: editedNode.documentId,
             }),
           dTM.addFrame({
-            timelineId: editedOrDroppedNode.documentId,
-            node_id: editedOrDroppedNode.node_id,
-            documentId: editedOrDroppedNode.documentId,
+            timelineId: editedNode.documentId,
+            node_id: editedNode.node_id,
+            documentId: editedNode.documentId,
             mutationType: meta || DocumentMutations.NodeAttributes,
             timeStamp: Date.now(),
           }),
         );
-        if (meta === DocumentMutations.NodeParent) {
-          newState = produce(newState, draft =>
-            expandNode(draft, {
-              node_id: editedOrDroppedNode.node_id,
-              documentId: editedOrDroppedNode.documentId,
-              expandChildren: true,
-            }),
-          );
-        }
-        return newState;
       }),
       _(ac.mutateNodeContent, (state, { payload }) =>
         produce(
@@ -347,6 +338,28 @@ const reducer = createReducer(initialState, _ => {
           },
         ),
       ),
+      _(nac.drop, (state, { payload }) => {
+        let newState = produce(
+          state,
+          draft => drop(draft, payload),
+          dTM.addFrame({
+            timelineId: payload.meta.documentId,
+            node_id: +payload.source.id,
+            documentId: payload.meta.documentId,
+            mutationType: DocumentMutations.NodePosition,
+            timeStamp: Date.now(),
+          }),
+        );
+        newState = produce(newState, draft =>
+          expandNode(draft, {
+            node_id: +payload.source.id,
+            documentId: payload.meta.documentId,
+            expandChildren: true,
+          }),
+        );
+
+        return newState;
+      }),
       _(ac.deleteNode, (state, { payload }) =>
         produce(
           state,

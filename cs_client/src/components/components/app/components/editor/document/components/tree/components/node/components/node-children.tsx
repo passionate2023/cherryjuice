@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MutableRefObject, useMemo } from 'react';
+import { useMemo } from 'react';
 import nodeMod from '::sass-modules/tree/node.scss';
 import { lowestPrivacy } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
 import { NodePrivacy } from '::types/graphql';
@@ -7,34 +7,34 @@ import { NodeProps } from '::root/components/app/components/editor/document/comp
 import { Node } from '../node';
 import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
 import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
+import { Droppable } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';
+import { ac } from '::store/store';
 
 type Props = Pick<
   NodeProps,
   'nodes' | 'depth' | 'documentPrivacy' | 'parentPrivacy'
 > & {
-  listRef: MutableRefObject<HTMLUListElement>;
-  listDndProps: Record<string, any>;
-  nodeDndProps: Record<string, any>;
   child_nodes: number[];
   privacy: NodePrivacy;
   expand?: number;
   fatherState: NodeState;
   filteredNodes: FilteredNodes;
+  node_id: number;
+  documentId: string;
 };
 
 const NodeChildren: React.FC<Props> = ({
-  listRef,
-  listDndProps,
-  nodeDndProps,
   child_nodes,
   privacy,
   nodes,
   depth,
+  node_id,
   documentPrivacy,
   parentPrivacy,
   expand,
   fatherState,
   filteredNodes,
+  documentId,
 }) => {
   const lowestPrivacyInChain = useMemo(() => {
     const b =
@@ -42,35 +42,37 @@ const NodeChildren: React.FC<Props> = ({
     return lowestPrivacy(parentPrivacy, b);
   }, [parentPrivacy, privacy, documentPrivacy]);
   return (
-    <ul
-      className={nodeMod.node__list}
-      {...{
-        ...nodeDndProps,
-        onDrop: listDndProps.onDrop,
-        draggable: listDndProps.draggable,
-        onDragStart: listDndProps.onDragStart,
-      }}
-      ref={listRef}
+    <Droppable
+      anchorId={'' + node_id}
+      nextSiblingOfAnchor={true}
+      anchorClassName={nodeMod.node}
+      onDrop={ac.node.drop}
+      meta={{ documentId }}
     >
-      {child_nodes.map(node_id => {
-        const node = nodes[node_id];
-        if (!filteredNodes || filteredNodes[node_id])
-          return (
-            <Node
-              key={node.node_id}
-              node_id={node.node_id}
-              nodes={nodes}
-              depth={depth + 1}
-              node_title_styles={node.node_title_styles}
-              documentPrivacy={documentPrivacy}
-              parentPrivacy={lowestPrivacyInChain}
-              expand={expand}
-              fatherState={fatherState}
-              filteredNodes={filteredNodes}
-            />
-          );
-      })}
-    </ul>
+      {(provided, ref) => (
+        <ul className={nodeMod.node__list} ref={ref} {...provided}>
+          {child_nodes.map((node_id, index) => {
+            const node = nodes[node_id];
+            if (!filteredNodes || filteredNodes[node_id])
+              return (
+                <Node
+                  index={index}
+                  key={node.node_id}
+                  node_id={node.node_id}
+                  nodes={nodes}
+                  depth={depth + 1}
+                  node_title_styles={node.node_title_styles}
+                  documentPrivacy={documentPrivacy}
+                  parentPrivacy={lowestPrivacyInChain}
+                  expand={expand}
+                  fatherState={fatherState}
+                  filteredNodes={filteredNodes}
+                />
+              );
+          })}
+        </ul>
+      )}
+    </Droppable>
   );
 };
 
