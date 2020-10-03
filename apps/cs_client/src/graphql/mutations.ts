@@ -4,7 +4,7 @@ import {
   OauthSignUpCredentials,
   SignInCredentials,
   SignUpCredentials,
-} from '::types/graphql';
+} from '@cherryjuice/graphql-types';
 import { FRAGMENT_AUTH_USER } from '::graphql/fragments';
 
 const DOCUMENT_MUTATION = {

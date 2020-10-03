@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { NodeMetaIt } from '::types/graphql';
+import { NodeMetaIt } from '@cherryjuice/graphql-types';
 
 type Variables = {
   file_id: string;

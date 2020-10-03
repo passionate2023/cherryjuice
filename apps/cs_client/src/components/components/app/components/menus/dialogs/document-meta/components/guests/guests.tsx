@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DocumentGuestOt } from '::types/graphql';
+import { DocumentGuestOt } from '@cherryjuice/graphql-types';
 import { Guest } from '::root/components/app/components/menus/dialogs/document-meta/components/guests/components/guest';
 import { modGuests } from '::sass-modules';
 import { AddGuest } from '::root/components/app/components/menus/dialogs/document-meta/components/guests/components/add-guest';

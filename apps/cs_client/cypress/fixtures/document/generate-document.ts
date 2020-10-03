@@ -4,7 +4,7 @@ import {
   TreeAst,
 } from '../tree/generate-tree';
 import { GuestAst } from '../../support/test-utils/puppeteer/epics/document/set-document-privacy';
-import { Privacy } from '../../../types/graphql';
+import { Privacy } from '@cherryjuice/graphql-types';
 
 type GenerateDocumentProps = {
   treeConfig: GenerateTreeProps;

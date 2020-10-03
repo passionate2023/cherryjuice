@@ -1,5 +1,5 @@
 import { generateDocuments } from '../../fixtures/document/generate-documents';
-import { Privacy } from '../../../types/graphql';
+import { Privacy } from '@cherryjuice/graphql-types';
 import { users } from '../../fixtures/auth/login-credentials';
 import { fixScrolling } from '../../support/helpers/cypress-helpers';
 import { puppeteer } from '../../support/test-utils/puppeteer/puppeteer';

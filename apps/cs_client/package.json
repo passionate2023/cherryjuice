@@ -21,6 +21,7 @@
   "author": "Yacine Mohamdi",
   "license": "MIT",
   "dependencies": {
+    "@cherryjuice/graphql-types": "0.0.1",
     "@material/animation": "^5.1.0",
     "@material/base": "^5.1.0",
     "@material/feature-targeting": "^5.1.0",

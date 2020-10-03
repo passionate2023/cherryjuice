@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import nodeMod from '::sass-modules/tree/node.scss';
 import { lowestPrivacy } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
-import { NodePrivacy } from '::types/graphql';
+import { NodePrivacy } from '@cherryjuice/graphql-types';
 import { NodeProps } from '::root/components/app/components/editor/document/components/tree/components/node/node';
 import { Node } from '../node';
 import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';

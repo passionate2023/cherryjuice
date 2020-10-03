@@ -1,4 +1,4 @@
-import { NodePrivacy, Privacy } from '../../../../../../../types/graphql';
+import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
 import { NodeAst } from '../../../../../../fixtures/node/generate-node';
 import { privacyIsBelow } from '../../../../../../../src/components/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
 import { DocumentAst } from '../../../../../../fixtures/document/generate-document';

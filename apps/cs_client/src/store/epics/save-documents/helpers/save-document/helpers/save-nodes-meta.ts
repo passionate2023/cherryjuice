@@ -3,7 +3,7 @@ import {
   SaveOperationState,
 } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
 import { apolloClient } from '::graphql/client/apollo-client';
-import { NodeMetaIt } from '::types/graphql';
+import { NodeMetaIt } from '@cherryjuice/graphql-types';
 import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 import { EDIT_NODE_META } from '::graphql/mutations/document/edit-node-meta';
 import { unFlatMap } from '::helpers/shared';

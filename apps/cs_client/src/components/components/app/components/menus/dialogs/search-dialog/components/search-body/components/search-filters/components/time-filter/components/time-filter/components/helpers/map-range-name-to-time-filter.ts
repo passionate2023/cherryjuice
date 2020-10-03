@@ -1,4 +1,4 @@
-import { TimeFilter, TimeRange } from '::types/graphql';
+import { TimeFilter, TimeRange } from '@cherryjuice/graphql-types';
 
 const hourMs = 1000 * 60 * 60;
 const dayMs = hourMs * 24;

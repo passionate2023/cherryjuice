@@ -4,7 +4,7 @@ import { ac } from '::store/store';
 import { AlertType } from '::types/react';
 import { properErrorMessage } from '::root/components/auth/hooks/proper-error-message';
 import { CREATE_EMAIL_CHANGE_TOKEN } from '::graphql/mutations/user/create-email-change-token';
-import { UserToken } from '::types/graphql';
+import { UserToken } from '@cherryjuice/graphql-types';
 import { useMutation } from '::hooks/graphql/use-mutation';
 import { modUserProfile } from '::sass-modules';
 import { CANCEL_EMAIL_CHANGE_TOKEN } from '::graphql/mutations/user/cancel-email-change-token';

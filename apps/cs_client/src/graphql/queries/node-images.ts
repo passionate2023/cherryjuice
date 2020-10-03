@@ -1,4 +1,4 @@
-import { Image } from '::types/graphql';
+import { Image } from '@cherryjuice/graphql-types';
 import gql from 'graphql-tag';
 
 type Variables = {

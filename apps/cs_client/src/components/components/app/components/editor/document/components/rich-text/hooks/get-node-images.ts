@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Image } from '::types/graphql';
+import { Image } from '@cherryjuice/graphql-types';
 export const getEditor = (): HTMLDivElement =>
   document.querySelector('#rich-text');
 const useAttachImagesToHtml = ({

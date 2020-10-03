@@ -3,7 +3,7 @@ import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modTimeFilter } from '::sass-modules';
 import { CustomRange } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/filter-controls/components/custom-range';
 import { SelectRange } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/filter-controls/components/select-range';
-import { TimeFilter, TimeRange } from '::types/graphql';
+import { TimeFilter, TimeRange } from '@cherryjuice/graphql-types';
 import { TimeFilterAC } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/reducer';
 import { animated, useSpring } from 'react-spring';
 import { configs } from '::root/components/shared-components/transitions/transitions';

@@ -1,4 +1,4 @@
-import { AuthUser } from '::types/graphql';
+import { AuthUser } from '@cherryjuice/graphql-types';
 
 const openConsentWindow = ({
   url,

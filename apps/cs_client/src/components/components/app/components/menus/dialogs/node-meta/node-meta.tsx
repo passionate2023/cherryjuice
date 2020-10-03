@@ -16,7 +16,7 @@ import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { SelectPrivacy } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
-import { Privacy } from '::types/graphql';
+import { Privacy } from '@cherryjuice/graphql-types';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { ColorInput } from '::root/components/shared-components/inputs/color-input';
 import { ToggleSwitch } from '::root/components/shared-components/inputs/toggle-switch';

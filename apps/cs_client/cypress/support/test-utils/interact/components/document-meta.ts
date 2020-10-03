@@ -1,7 +1,7 @@
 import { DocumentAst } from '../../../../fixtures/document/generate-document';
 import { wait } from '../../../helpers/cypress-helpers';
 import { testIds } from '../../../helpers/test-ids';
-import { Privacy } from '../../../../../types/graphql';
+import { Privacy } from '@cherryjuice/graphql-types';
 import { interact } from '../interact';
 
 const show = (docAst: DocumentAst) => {

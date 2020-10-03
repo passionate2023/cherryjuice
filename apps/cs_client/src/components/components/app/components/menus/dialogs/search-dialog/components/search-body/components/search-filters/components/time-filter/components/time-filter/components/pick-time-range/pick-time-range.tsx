@@ -7,7 +7,7 @@ import {
 } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/pick-time-range/components/time-input';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { modApp, modPickTimeRange } from '::sass-modules';
-import { TimeFilter, TimeRange } from '::types/graphql';
+import { TimeFilter, TimeRange } from '@cherryjuice/graphql-types';
 import { createPortal } from 'react-dom';
 
 type Props = {

@@ -13,7 +13,7 @@ import { LinearProgress } from '::root/components/shared-components/loading-indi
 import { Link } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
-import { SignUpCredentials } from '::types/graphql';
+import { SignUpCredentials } from '@cherryjuice/graphql-types';
 import { useDefaultValues } from '::hooks/use-default-form-values';
 
 export const ReturnToLoginPage: React.FC<{

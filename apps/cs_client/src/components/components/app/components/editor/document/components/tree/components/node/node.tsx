@@ -2,7 +2,7 @@ import nodeMod from '::sass-modules/tree/node.scss';
 import * as React from 'react';
 import { useRef } from 'react';
 import { useSelectNode } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/select-node';
-import { NodePrivacy, Privacy } from '::types/graphql';
+import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
 import { NodeIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-icon';
 import { ToggleChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/toggle-children';
 import { NodeVisibilityIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/visibility-icon';

@@ -2,7 +2,7 @@ import { apolloClient } from '::graphql/client/apollo-client';
 import { QUERY_DOCUMENTS } from '::graphql/queries';
 import { useEffect } from 'react';
 import { ac } from '::store/store';
-import { DocumentOperation } from '::types/graphql';
+import { DocumentOperation } from '@cherryjuice/graphql-types';
 
 const useGetPreviousOperations = () => {
   useEffect(() => {

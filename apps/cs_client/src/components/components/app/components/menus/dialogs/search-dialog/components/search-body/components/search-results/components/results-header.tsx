@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modSearchDialog } from '::sass-modules';
-import { NodeSearchResults } from '::types/graphql';
+import { NodeSearchResults } from '@cherryjuice/graphql-types';
 
 type Props = {
   searchResults: NodeSearchResults;

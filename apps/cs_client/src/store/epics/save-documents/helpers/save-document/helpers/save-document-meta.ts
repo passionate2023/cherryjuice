@@ -1,6 +1,6 @@
 import { SaveOperationProps } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
 import { apolloClient } from '::graphql/client/apollo-client';
-import { DocumentGuestOt } from '::types/graphql';
+import { DocumentGuestOt } from '@cherryjuice/graphql-types';
 import { EDIT_DOCUMENT_META } from '::graphql/mutations/document/edit-document-meta';
 
 const saveDocumentMeta = async ({ document, state }: SaveOperationProps) => {

@@ -1,7 +1,7 @@
 import { UserCredentials } from '../../fixtures/auth/login-credentials';
 import { DocumentAst } from '../../fixtures/document/generate-document';
 import { GuestAst } from '../test-utils/puppeteer/epics/document/set-document-privacy';
-import { Privacy } from '../../../types/graphql';
+import { Privacy } from '@cherryjuice/graphql-types';
 
 export const tn = {
   p: {

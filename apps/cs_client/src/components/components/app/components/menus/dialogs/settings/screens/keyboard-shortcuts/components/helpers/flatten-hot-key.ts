@@ -1,5 +1,5 @@
 import { KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
-import { HotKey } from '::types/graphql';
+import { HotKey } from '@cherryjuice/graphql-types';
 
 const flattenHotKey = (value: KeysCombination | KeyboardEvent) =>
   value.key.toLocaleLowerCase() +

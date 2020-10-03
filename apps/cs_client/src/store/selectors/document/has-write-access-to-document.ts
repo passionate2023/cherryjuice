@@ -1,4 +1,4 @@
-import { AccessLevel } from '::types/graphql';
+import { AccessLevel } from '@cherryjuice/graphql-types';
 import { createSelector } from 'reselect';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 

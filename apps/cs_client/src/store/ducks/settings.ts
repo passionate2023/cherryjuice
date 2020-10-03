@@ -5,7 +5,7 @@ import {
   screens,
 } from '::root/components/app/components/menus/dialogs/settings/screens/screens';
 import { AsyncOperation } from './document';
-import { UpdateUserProfileIt } from '::types/graphql';
+import { UpdateUserProfileIt } from '@cherryjuice/graphql-types';
 import { dialogsActionCreators } from './dialogs';
 
 const ap = createActionPrefixer('settings');

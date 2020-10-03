@@ -7,7 +7,7 @@ import { Resizable } from 're-resizable';
 import { onResize, onResizeStop, onStart } from './helpers';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
-import { NodePrivacy } from '::types/graphql';
+import { NodePrivacy } from '@cherryjuice/graphql-types';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { ToolBar } from './components/tool-bar/tool-bar';
 import { Droppable } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';

@@ -7,7 +7,7 @@ import { TextInput } from '::root/components/shared-components/form/text-input';
 import { keyEventToValidShortcut } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/components/keyboard-shortcut/helpers';
 import { hkActionCreators } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/reducer/reducer';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { HotKey } from '::types/graphql';
+import { HotKey } from '@cherryjuice/graphql-types';
 
 const keyToString = {
   ' ': 'space',

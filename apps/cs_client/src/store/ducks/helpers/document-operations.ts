@@ -1,4 +1,4 @@
-import { DOCUMENT_SUBSCRIPTIONS as DS } from '::types/graphql';
+import { DOCUMENT_SUBSCRIPTIONS as DS } from '@cherryjuice/graphql-types';
 import {
   DOCUMENT_OPERATIONS as DO,
   DocumentOperations,

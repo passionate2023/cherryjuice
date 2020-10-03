@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { GraphqlArgsPipe } from '../../client/apollo-client';
-import { ChangeEmailIt } from '::types/graphql';
+import { ChangeEmailIt } from '@cherryjuice/graphql-types';
 
 type Variables = {
   input: ChangeEmailIt;

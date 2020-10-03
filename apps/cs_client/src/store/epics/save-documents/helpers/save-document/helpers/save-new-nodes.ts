@@ -1,6 +1,6 @@
 import { apolloClient } from '::graphql/client/apollo-client';
 import { SaveOperationProps } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
-import { CreateNodeIt } from '::types/graphql';
+import { CreateNodeIt } from '@cherryjuice/graphql-types';
 import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 import { swapFatherIdIfApplies } from '::store/epics/save-documents/helpers/save-document/helpers/save-nodes-meta';
 import { CREATE_NODE } from '::graphql/mutations/document/create-node';

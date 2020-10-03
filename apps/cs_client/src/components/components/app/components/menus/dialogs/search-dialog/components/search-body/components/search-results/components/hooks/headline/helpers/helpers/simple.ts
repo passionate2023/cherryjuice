@@ -1,4 +1,4 @@
-import { SearchOptions } from '::types/graphql';
+import { SearchOptions } from '@cherryjuice/graphql-types';
 
 type Props = {
   searchOptions: SearchOptions;

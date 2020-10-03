@@ -1,5 +1,5 @@
 import { generateDocuments } from '../../fixtures/document/generate-documents';
-import { Privacy } from '../../../types/graphql';
+import { Privacy } from '@cherryjuice/graphql-types';
 import { puppeteer } from '../../support/test-utils/puppeteer/puppeteer';
 import { users } from '../../fixtures/auth/login-credentials';
 import { tn } from '../../support/helpers/tests-names';

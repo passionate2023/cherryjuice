@@ -12,7 +12,7 @@ import {
   OauthSignUpCredentials,
   SignInCredentials,
   SignUpCredentials,
-} from '::types/graphql';
+} from '@cherryjuice/graphql-types';
 
 const signIn = (payload: SignInCredentials) =>
   gqlMutation$({

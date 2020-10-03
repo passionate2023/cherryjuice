@@ -6,7 +6,7 @@ import { ButtonSquare } from '::root/components/shared-components/buttons/button
 import { animated } from 'react-spring';
 import { ac } from '::store/store';
 import { router } from '::root/router/router';
-import { User as TUser } from '::types/graphql';
+import { User as TUser } from '@cherryjuice/graphql-types';
 import { UserInfo } from '::root/components/app/components/menus/modals/user/components/user-info';
 import { testIds } from '::cypress/support/helpers/test-ids';
 type UserProps = {

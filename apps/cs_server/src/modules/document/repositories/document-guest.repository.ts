@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { AccessLevel, DocumentGuest } from '../entities/document-guest.entity';
-import { DocumentGuestIt } from '@cs/graphql-types';
+import { DocumentGuestIt } from '@cherryjuice/graphql-types';
 
 export type AddGuestDTO = {
   userId: string;

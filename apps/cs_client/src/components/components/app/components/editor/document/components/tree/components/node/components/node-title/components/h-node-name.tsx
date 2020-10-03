@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useHeadline } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/headline';
-import { SearchTarget, SearchType } from '::types/graphql';
+import { SearchTarget, SearchType } from '@cherryjuice/graphql-types';
 import { HighlightedHeadline } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/components/highlighted-headline';
 
 type Props = {

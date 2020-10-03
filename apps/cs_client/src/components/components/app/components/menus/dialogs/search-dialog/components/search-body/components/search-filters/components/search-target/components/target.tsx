@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
-import { SearchTarget as TSearchTarget } from '::types/graphql';
+import { SearchTarget as TSearchTarget } from '@cherryjuice/graphql-types';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modSearchFilter } from '::sass-modules';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';

@@ -1,7 +1,7 @@
 import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import { QUERY_NODE_CONTENT } from '::graphql/queries';
 import { useRef } from 'react';
-import { Image } from '::types/graphql';
+import { Image } from '@cherryjuice/graphql-types';
 type TPng = {
   node_id: number;
   nodeId: string;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NodePrivacy, Privacy } from '::types/graphql';
+import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import modIcons from '::sass-modules/tree/node.scss';
 import { privacyIsBelow } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';

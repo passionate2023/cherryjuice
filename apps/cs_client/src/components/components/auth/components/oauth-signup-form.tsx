@@ -12,7 +12,7 @@ import { createRef, useEffect, useRef, useState } from 'react';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
-import { OauthSignUpCredentials } from '::types/graphql';
+import { OauthSignUpCredentials } from '@cherryjuice/graphql-types';
 import { router } from '::root/router/router';
 import { ReturnToLoginPage } from '::root/components/auth/components/signup-form';
 

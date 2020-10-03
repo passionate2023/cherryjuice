@@ -3,7 +3,7 @@ import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/
 import { execK } from '::helpers/editing/execK';
 import { Icon } from '::root/components/shared-components/icon/icon';
 import { modToolbar } from '::sass-modules';
-import { HotKey } from '::types/graphql';
+import { HotKey } from '@cherryjuice/graphql-types';
 import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
 
 const ColorInput: React.FC<{

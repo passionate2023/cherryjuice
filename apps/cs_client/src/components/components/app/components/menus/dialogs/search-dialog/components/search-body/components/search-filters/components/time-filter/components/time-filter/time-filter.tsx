@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect, useReducer, useRef } from 'react';
 import { modTimeFilter } from '::sass-modules';
 import { PickTimeRange } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/pick-time-range/pick-time-range';
-import { TimeFilter, TimeRange } from '::types/graphql';
+import { TimeFilter, TimeRange } from '@cherryjuice/graphql-types';
 import {
   createTimeFilterAC,
   TimeFilterAC,

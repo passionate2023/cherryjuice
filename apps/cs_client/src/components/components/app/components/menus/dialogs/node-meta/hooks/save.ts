@@ -3,7 +3,7 @@ import { TNodeMetaState } from '::root/components/app/components/menus/dialogs/n
 import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { ac } from '::store/store';
-import { NodePrivacy } from '::types/graphql';
+import { NodePrivacy } from '@cherryjuice/graphql-types';
 
 const calculateNewStyle = (state: TNodeMetaState): string => {
   return JSON.stringify({

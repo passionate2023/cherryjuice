@@ -16,7 +16,7 @@ import { createImageGenerator } from '../../../fixtures/node/generate-node-conte
 import { DocumentAst } from '../../../fixtures/document/generate-document';
 import { signOut } from './epics/auth/sign-out';
 import { signIn } from './epics/auth/sign-in';
-import { NodePrivacy } from '../../../../types/graphql';
+import { NodePrivacy } from '@cherryjuice/graphql-types';
 import { wait } from '../../helpers/cypress-helpers';
 import { createNode } from './epics/document/node/create';
 import { edit } from './epics/document/node/edit';

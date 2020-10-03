@@ -15,7 +15,7 @@ import {
   addFetchedFields,
   AddHtmlParams,
 } from '::store/ducks/cache/document-cache/helpers/node/add-fetched-fields';
-import { Image } from '::types/graphql';
+import { Image } from '@cherryjuice/graphql-types';
 import {
   createDocument,
   CreateDocumentParams,

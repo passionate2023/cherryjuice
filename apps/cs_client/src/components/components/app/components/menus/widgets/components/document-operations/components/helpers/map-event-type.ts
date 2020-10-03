@@ -2,7 +2,7 @@ import {
   DocumentOperation,
   OPERATION_STATE,
   OPERATION_TYPE,
-} from '::types/graphql';
+} from '@cherryjuice/graphql-types';
 
 const eventType = {
   [OPERATION_TYPE.DELETE]: ['deletion', 'deleting'],

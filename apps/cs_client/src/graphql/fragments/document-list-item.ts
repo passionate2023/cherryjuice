@@ -1,4 +1,4 @@
-import { Document } from '::types/graphql';
+import { Document } from '@cherryjuice/graphql-types';
 import gql from 'graphql-tag';
 import { DOCUMENT_GUEST } from '::graphql/fragments';
 

@@ -1,4 +1,4 @@
-import { DocumentOperation } from '::types/graphql';
+import { DocumentOperation } from '@cherryjuice/graphql-types';
 import { DocumentOperationState } from '::store/ducks/document-operation/document-operations';
 import { doKey } from '::store/ducks/document-operation/reducers/add-document-operations';
 

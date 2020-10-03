@@ -2,7 +2,7 @@ import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from '::store/ducks/helpers/shared';
 import produce from 'immer';
 import { setValue } from '::store/ducks/settings/reducers/set-value';
-import { EditorSettings } from '::types/graphql';
+import { EditorSettings } from '@cherryjuice/graphql-types';
 import { authActionCreators } from '::store/ducks/auth';
 
 const ap = createActionPrefixer('editor-settings');

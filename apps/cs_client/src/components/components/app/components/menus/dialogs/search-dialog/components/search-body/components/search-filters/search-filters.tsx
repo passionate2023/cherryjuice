@@ -9,7 +9,7 @@ import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { TimeFilters } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/time-filters';
 import { SortOptions } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-sort/sort-options';
-import { SortNodesBy } from '::types/graphql';
+import { SortNodesBy } from '@cherryjuice/graphql-types';
 import {
   SearchHeaderContainer,
   SearchHeaderGroup,

@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { AuthUser, UpdateUserSettingsIt } from '::types/graphql';
+import { AuthUser, UpdateUserSettingsIt } from '@cherryjuice/graphql-types';
 import { FRAGMENT_AUTH_USER } from '::graphql/fragments';
 
 type Variables = {

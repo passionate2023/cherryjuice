@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SearchTarget as TSearchTarget } from '::types/graphql';
+import { SearchTarget as TSearchTarget } from '@cherryjuice/graphql-types';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modSearchFilter } from '::sass-modules';
 import { Target } from './components/target';

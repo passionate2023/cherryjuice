@@ -22,7 +22,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
 import { Guests } from '::root/components/app/components/menus/dialogs/document-meta/components/guests/guests';
 import { SelectPrivacy } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
-import { Privacy } from '::types/graphql';
+import { Privacy } from '@cherryjuice/graphql-types';
 import {
   getDocumentsList,
   getDocumentUserId,

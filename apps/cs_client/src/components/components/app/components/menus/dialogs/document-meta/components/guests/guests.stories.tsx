@@ -1,6 +1,6 @@
 import React from 'react';
 import { Guests } from '::root/components/app/components/menus/dialogs/document-meta/components/guests/guests';
-import { AccessLevel } from '::types/graphql';
+import { AccessLevel } from '@cherryjuice/graphql-types';
 
 export default { title: 'document-meta/guests' };
 

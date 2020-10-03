@@ -1,4 +1,4 @@
-import { OPERATION_STATE } from '::types/graphql';
+import { OPERATION_STATE } from '@cherryjuice/graphql-types';
 
 const OperationTypes = {
   active: {

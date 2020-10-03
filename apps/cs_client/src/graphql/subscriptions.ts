@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { DocumentOperation } from '::types/graphql';
+import { DocumentOperation } from '@cherryjuice/graphql-types';
 
 const DOCUMENT_OPERATION = {
   path: (data): DocumentOperation => data?.documentOperation,

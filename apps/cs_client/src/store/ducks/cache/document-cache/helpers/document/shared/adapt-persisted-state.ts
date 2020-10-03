@@ -1,4 +1,4 @@
-import { DocumentState } from '::types/graphql';
+import { DocumentState } from '@cherryjuice/graphql-types';
 import {
   NodesDict,
   PersistedDocumentState,

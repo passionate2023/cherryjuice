@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { NodeSearchIt, NodeSearchResults } from '::types/graphql';
+import { NodeSearchIt, NodeSearchResults } from '@cherryjuice/graphql-types';
 
 const QUERY_DOCUMENTS = {
   currentImports: {

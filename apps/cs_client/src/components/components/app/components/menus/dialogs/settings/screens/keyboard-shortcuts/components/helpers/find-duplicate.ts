@@ -1,4 +1,4 @@
-import { HotKey } from '::types/graphql';
+import { HotKey } from '@cherryjuice/graphql-types';
 
 const findDuplicate = <T>(arr: T[]): { index: number } => {
   let index;

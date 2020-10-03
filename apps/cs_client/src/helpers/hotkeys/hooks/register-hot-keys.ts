@@ -5,7 +5,7 @@ import {
   registerGeneralHKs,
   registerDevHKs,
 } from '../register-hot-keys';
-import { HotKeys } from '::types/graphql';
+import { HotKeys } from '@cherryjuice/graphql-types';
 
 const useRegisterHotKeys = (hotKeys: HotKeys) => {
   useEffect(() => {

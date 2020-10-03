@@ -8,7 +8,7 @@ import {
   SignInCredentials,
   SignUpCredentials,
   User,
-} from '::types/graphql';
+} from '@cherryjuice/graphql-types';
 import { AsyncOperation } from './document';
 import { rootActionCreators } from './root';
 import { AsyncError } from '::root/components/auth/hooks/proper-error-message';

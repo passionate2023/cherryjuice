@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AccessLevel, DocumentGuestOt } from '::types/graphql';
+import { AccessLevel, DocumentGuestOt } from '@cherryjuice/graphql-types';
 import { modGuests } from '::sass-modules';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
 import { Icons } from '::root/components/shared-components/icon/icon';

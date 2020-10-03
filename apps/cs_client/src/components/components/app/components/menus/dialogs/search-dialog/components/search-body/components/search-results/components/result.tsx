@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modDialog, modSearchResult,} from '::sass-modules';
-import { NodeSearchResultEntity } from '::types/graphql';
+import { NodeSearchResultEntity } from '@cherryjuice/graphql-types';
 import { useHeadline } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/headline';
 import { SearchContext } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/helpers/generate-headline';
 import { joinClassNames } from '::helpers/dom/join-class-names';

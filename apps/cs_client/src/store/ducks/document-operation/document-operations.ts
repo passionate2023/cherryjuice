@@ -3,7 +3,7 @@ import { createActionPrefixer } from '../helpers/shared';
 import { rootActionCreators } from '../root';
 import { cloneObj } from '::helpers/objects';
 import produce from 'immer';
-import { DocumentOperation } from '::types/graphql';
+import { DocumentOperation } from '@cherryjuice/graphql-types';
 import { addDocumentOperations } from '::store/ducks/document-operation/reducers/add-document-operations';
 import { removeStaleOperations } from '::store/ducks/document-operation/reducers/remove-stale-operations';
 import { removeDocumentOperation } from '::store/ducks/document-operation/reducers/remove-document-operation';
