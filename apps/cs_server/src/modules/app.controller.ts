@@ -3,7 +3,7 @@ import { Controller, Get, Res } from '@nestjs/common';
 import * as path from 'path';
 const staticAssetsRootFolder =
   process.env.NODE_ENV === 'production'
-    ? '/cs/client'
+    ? '/apps/cs/client'
     : path.join(process.cwd(), '../cs_client/dist');
 const assets = {
   ['index.html']: path.join(staticAssetsRootFolder, '/index.html'),

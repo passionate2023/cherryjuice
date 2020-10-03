@@ -32,6 +32,7 @@
     "ts-jest": "^25.2.1"
   },
   "dependencies": {
+    "@apollo/gateway": "^0.20.4",
     "@cherryjuice/graphql-types": "0.0.1",
     "@nestjs-modules/mailer": "^1.5.1",
     "@nestjs/common": "^7.0.7",
