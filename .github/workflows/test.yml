@@ -26,17 +26,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: install server dependencies
-        run: cd cs_server && sudo yarn install
 
       - name: link dependencies
-        run: cd cs_server && sudo yarn link:ahtml-to-html
+        run: cd apps/cs_server && sudo yarn link:ahtml-to-html
 
-      - name: install client dependencies
-        run: cd cs_client && yarn install
+      - name: install dependencies
+        run: yarn
 
       - name: run jest tests
-        run: cd cs_client && sudo yarn run test
+        run: cd apps/cs_client && sudo yarn run test
 
       - name: Notify slack success
         if: success()

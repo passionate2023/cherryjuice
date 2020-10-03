@@ -1,23 +1,23 @@
 {
-  "name": "cherryscript",
+  "name": "cherryjuice",
   "private": true,
   "workspaces": [
     "apps/*",
     "libs/*"
   ],
   "version": "0.0.1",
-  "description": "cherrytree webapp",
+  "description": "",
   "directories": {
     "doc": "docs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ycnmhd/cherryscript.git"
+    "url": "git+https://github.com/ycnmhd/cherryjuice.git"
   },
   "keywords": [
     "cherrytree"
   ],
   "author": "Yacine Mohamdi",
   "license": "ISC",
-  "homepage": "https://github.com/ycnmhd/cherryscript#readme"
+  "homepage": "https://github.com/ycnmhd/cherryjuice#readme"
 }

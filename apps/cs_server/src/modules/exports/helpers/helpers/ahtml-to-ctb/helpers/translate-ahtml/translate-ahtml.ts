@@ -20,7 +20,7 @@ const translateAHtml = (node_id: number) => (
     let justification: CTJustification = 'left';
     if (lineStyle && lineStyle['text-align']) {
       justification =
-        reverseJustificationMap['text-align'][lineStyle['text-align']];
+          reverseJustificationMap['text-align'][lineStyle['text-align']] as CTJustification;
     }
     return [
       ...line.map(node => {
