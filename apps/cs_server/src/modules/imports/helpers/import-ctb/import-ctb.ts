@@ -14,7 +14,7 @@ import { User } from '../../../user/entities/user.entity';
 import { CreateNodeDTO } from '../../../node/dto/mutate-node.dto';
 import { convertTime } from './rendering/node-meta/convert-time';
 import { SqliteNodeMeta } from './repositories/queries/node';
-import { AHtmlLine } from '../../../node/helpers/rendering/ahtml-to-html';
+import { AHtmlLine } from "@cherryjuice/ahtml-to-html"
 
 type SqliteNodeMetaPreProcessed = SqliteNodeMeta & {
   child_nodes: number[];

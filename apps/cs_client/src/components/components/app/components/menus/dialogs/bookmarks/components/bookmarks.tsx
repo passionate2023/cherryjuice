@@ -17,7 +17,7 @@ import { DialogCard } from '::root/components/shared-components/dialog/dialog-li
 import { SortOptions } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-sort/sort-options';
 import { Icons } from '::root/components/shared-components/icon/icon';
 import { SearchSetting } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/search-filters';
-import { SortDirection, SortNodesBy } from '::types/graphql/index';
+import { SortDirection, SortNodesBy } from '@cherryjuice/graphql-types';
 import {
   mapSortNodesBy,
   PartialNode,

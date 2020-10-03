@@ -9,7 +9,7 @@ import { animated } from 'react-spring';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { HotKeyActionType } from '@cherryjuice/graphql-types';
-import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
+import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props/formatting-props';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 

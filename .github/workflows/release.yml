@@ -15,7 +15,7 @@ jobs:
           node-version: 12
 
       - name: install dependencies
-        run: npm i -D conventional-changelog-conventionalcommits
+        run: npm i conventional-changelog-conventionalcommits
 
       - name: Release
         env:

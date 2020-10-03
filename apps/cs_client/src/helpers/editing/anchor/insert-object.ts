@@ -4,11 +4,9 @@ import { writeChangesToDom } from '::helpers/editing/execK/steps/pipe3';
 import { setTextSelection } from '::helpers/editing/execK/steps/restore-selection';
 import { getEditor } from '::root/components/app/components/editor/document/components/rich-text/hooks/get-node-images';
 import { newObjectPrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
-import { Anchor } from '@cs/ahtml-to-html/objects/anchor/anchor';
-import { Code } from '@cs/ahtml-to-html/objects/code';
-import { Table } from '@cs/ahtml-to-html/objects/table';
 import { CodeboxProperties } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
 import { TableProperties } from '::root/components/app/components/menus/dialogs/table/reducer/reducer';
+import {Anchor, Code, Table} from "@cherryjuice/ahtml-to-html";
 
 export const createAnchorHtml = (id: string): string =>
   Anchor({ other_attributes: { id } });

@@ -4,7 +4,7 @@ import {
   SearchSortOptions,
   SortDirection,
   SortNodesBy,
-} from '::types/graphql/index';
+} from '@cherryjuice/graphql-types';
 
 const ap = createActionPrefixer('bookmarks');
 

@@ -4,7 +4,7 @@ import {
 } from '::helpers/editing/execK/helpers';
 import { replaceElement } from '::helpers/editing/execK/steps/pipe3/helpers';
 import { getDDOE } from '::helpers/editing/execK/steps/pipe1/ddoes';
-import { Element } from '@cs/ahtml-to-html';
+import { Element } from '@cherryjuice/ahtml-to-html';
 const aHtmlToString = node => (node.type ? node.outerHTML : Element(node));
 const aHtmlToElement = node =>
   node.type

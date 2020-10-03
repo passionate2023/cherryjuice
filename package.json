@@ -5,6 +5,23 @@
     "apps/*",
     "libs/*"
   ],
+  "scripts": {
+    "test": "yarn workspaces run test && lint-staged",
+    "commit": "git-cz",
+    "docker:build": "docker image build -t cs .",
+    "docker:run": "docker container run -it -p 1430:1430 -e PORT=1430 cs"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
   "version": "0.0.1",
   "description": "",
   "directories": {
@@ -14,10 +31,20 @@
     "type": "git",
     "url": "git+https://github.com/ycnmhd/cherryjuice.git"
   },
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.1.0",
+    "npm-run-all": "^4.1.5",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "commitizen": "^4.0.3",
+    "husky": "3.1.0",
+    "lint-staged": "8.2.1"
+  },
   "keywords": [
     "cherrytree"
   ],
   "author": "Yacine Mohamdi",
   "license": "ISC",
   "homepage": "https://github.com/ycnmhd/cherryjuice#readme"
+
 }

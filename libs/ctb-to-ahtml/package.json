@@ -1,0 +1,20 @@
+{
+  "name": "@cherryjuice/ctb-to-ahtml",
+  "version": "0.0.2",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prebuild": "rimraf dist && rimraf tsconfig.build.tsbuildinfo",
+    "build": "tsc -b tsconfig.build.json",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@cherryjuice/ahtml-to-html": "0.0.2",
+    "typescript": "^3.8.3",
+    "ramda": "^0.27.0",
+    "@types/ramda": "^0.27.6"
+  }
+}

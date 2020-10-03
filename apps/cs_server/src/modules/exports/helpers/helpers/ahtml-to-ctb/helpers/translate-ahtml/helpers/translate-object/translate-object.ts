@@ -1,21 +1,14 @@
-import { AHtmlNode } from '../../../../../../../../node/helpers/rendering/ahtml-to-html';
 import { CodeboxRow, extractCodeBox } from './objects/codebox';
 import { extractGrid, GridRow } from './objects/grid';
 import { AnchorRow, extractAnchor } from './objects/anchor';
 import { extractImage, UnloadedImageRow } from './objects/image';
-import { LinkAttributes } from '../../../../../../../../node/helpers/rendering/ahtml-to-html/helpers/ctb';
 import { CTJustification } from '../translate-node/translate-node';
+import { AHtmlObject} from "@cherryjuice/ahtml-to-html"
 
 type ObjectType = 'codebox' | 'grid' | 'anchor' | 'image';
 type CTBObject = {
   row: CodeboxRow | GridRow | AnchorRow | UnloadedImageRow;
   type: ObjectType;
-};
-type AHtmlObject = AHtmlNode & {
-  other_attributes: Record<string, string>;
-  linkAttributes?: LinkAttributes;
-  table?: { td: string[][]; th: string[] };
-  style: { height: string };
 };
 
 const translateObject = ({
@@ -39,4 +32,4 @@ const translateObject = ({
 };
 
 export { translateObject };
-export { ObjectType, CTBObject, AHtmlObject };
+export { ObjectType, CTBObject,  };

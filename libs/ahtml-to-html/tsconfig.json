@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "jsx": "preserve",
+    "baseUrl": "./",
+    "rootDir": "src",
+    "outDir": "dist",
+    "target": "ES2019",
+    "sourceMap": false,
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "declaration": true,
+    "composite": true,
+    "emitDeclarationOnly": false
+  },
+  "include": [
+    "src/**/*"
+  ]
+
+
+}

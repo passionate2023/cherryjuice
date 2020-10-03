@@ -1,18 +1,27 @@
 /* eslint-disable no-console */
 import { Element, stringifyStyles } from './element';
 import { objects } from './objects/objects';
-import { AHtmlObject } from '../../../../exports/helpers/helpers/ahtml-to-ctb/helpers/translate-ahtml/helpers/translate-object/translate-object';
+import {LinkAttributes} from "./helpers/parse-link";
 
-type AHtmlNodeAttributes = Record<string, string | number>;
-type AHtmlNode = {
+export type AHtmlNodeAttributes = Record<string, string | number>;
+export type AHtmlNode = {
   _?: string;
   $?: AHtmlNodeAttributes;
   type?: string;
   tags?: any[];
 };
-type AHtmlLineAttributes = Record<string, any>;
-type AHtmlLine = [(AHtmlObject | AHtmlNode)[], AHtmlLineAttributes];
-const aHtmlToHtml = (ahtml: AHtmlLine[]) => {
+export type AHtmlLineAttributes = Record<string, any>;
+export type AHtmlLine = [(AHtmlObject | AHtmlNode)[], AHtmlLineAttributes];
+
+export type AHtmlObject = AHtmlNode & {
+  other_attributes: Record<string, string>;
+  linkAttributes?: LinkAttributes;
+  table?: { td: string[][]; th: string[] };
+  style: { height: string };
+};
+
+
+export const aHtmlToHtml = (ahtml: AHtmlLine[]) => {
   let res = '<span class="rich-text__line"></span>';
   if (ahtml.length)
     try {
@@ -34,5 +43,3 @@ const aHtmlToHtml = (ahtml: AHtmlLine[]) => {
   return res;
 };
 
-export { aHtmlToHtml, Element };
-export { AHtmlLine, AHtmlNode, AHtmlNodeAttributes, AHtmlLineAttributes };

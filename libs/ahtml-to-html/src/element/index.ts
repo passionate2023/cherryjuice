@@ -1,5 +1,5 @@
 import { escapeHtml } from '../helpers/escape-html';
-import { AHtmlNode } from '../index';
+import { AHtmlNode } from '../ahtml-to-html';
 
 const stringifyStyles = (style = {}, onlyStylesThatStartWith = undefined) =>
   (

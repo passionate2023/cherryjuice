@@ -5,7 +5,8 @@
   "main": "index.ts",
   "types": "index.d.ts",
   "scripts": {
-    "generate": "node generate.js && tsc --declaration --emitDeclarationOnly index.ts"
+    "generate": "node generate.js && tsc --declaration --emitDeclarationOnly index.ts",
+    "test": "node noop"
   },
   "devDependencies": {
     "graphql-schema-typescript": "^1.3.2",

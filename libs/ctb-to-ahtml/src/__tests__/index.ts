@@ -1,5 +1,5 @@
-import { ctbToAHtml } from '../index';
-import { renderingIssues } from './__data__';
+import { ctbToAHtml } from '../ctb-to-ahtml';
+import { renderingIssues } from '../shared/__data__';
 
 const renderingTestTemplate = async ({ txt, otherTables }) => {
   const res = await ctbToAHtml({

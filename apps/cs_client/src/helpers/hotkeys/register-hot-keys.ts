@@ -1,8 +1,8 @@
 import { execK } from '::helpers/editing/execK';
 import { createTestSample } from '::helpers/editing/execK/__tests__/__helpers__/create-test-sample';
 import { hotKeysManager, HotKeyTarget } from './hotkeys-manager';
-import { generalHotKeysProps } from '::helpers/hotkeys/hot-key-props.ts/general-hotkeys-props';
-import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
+import { generalHotKeysProps } from '::helpers/hotkeys/hot-key-props/general-hotkeys-props';
+import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props/formatting-props';
 import { HotKey, HotKeyActionType } from '@cherryjuice/graphql-types';
 import { flattenHotKey } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/flatten-hot-key';
 

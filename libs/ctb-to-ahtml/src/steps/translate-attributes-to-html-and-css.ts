@@ -1,22 +1,17 @@
-import { parseLink } from '../../../../../../node/helpers/rendering/ahtml-to-html/helpers/ctb';
+import { parseLink } from "@cherryjuice/ahtml-to-html"
 
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10],
   parseLink,
 };
-const justificationMap = {
+export const justificationMap = {
   'text-align': {
     right: 'end',
     center: 'center',
     fill: 'justify',
   },
 };
-const reverseJustificationMap = {
-  'text-align': Object.fromEntries(
-    // @ts-ignore
-    Object.entries(justificationMap['text-align']).map(kv => kv.reverse()),
-  ),
-};
+
 const createTranslatedNode = (lineStyles: { [key: string]: string }) => {
   const tags: [string, Record<string, any>][] = [];
   const styles: { [key: string]: string } = {};
@@ -99,4 +94,4 @@ const translateAttributesToHtmlAndCss = xml =>
     ];
   });
 
-export { translateAttributesToHtmlAndCss, reverseJustificationMap };
+export { translateAttributesToHtmlAndCss, };

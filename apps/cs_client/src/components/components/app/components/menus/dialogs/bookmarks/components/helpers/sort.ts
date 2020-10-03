@@ -1,5 +1,5 @@
 import { CachedDocument, QFullNode } from '::store/ducks/cache/document-cache';
-import { SortNodesBy } from '::types/graphql/index';
+import { SortNodesBy } from '@cherryjuice/graphql-types';
 
 export type PartialNode = Pick<QFullNode, 'name' | 'createdAt' | 'updatedAt'>;
 const sortByNodeName = (xs: PartialNode[]) =>

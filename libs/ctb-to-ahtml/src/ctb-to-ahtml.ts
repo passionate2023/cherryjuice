@@ -4,7 +4,7 @@ import { groupNodesByLine } from './steps/group-nodes-by-line';
 import { insertOtherTables } from './steps/insert-other-tables';
 import { compose } from 'ramda';
 import { parseXml } from './steps/parse-xml';
-import { AHtmlLine } from '../../../../../node/helpers/rendering/ahtml-to-html';
+import { AHtmlLine } from "@cherryjuice/ahtml-to-html"
 
 const processingPipe: (otherTables) => (txtTable) => any[] = otherTables =>
   compose(

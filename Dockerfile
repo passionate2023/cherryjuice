@@ -1,20 +1,15 @@
 from node:12.13.0 as cs
 
 workdir /temp
-copy ./apps/cs_server/ ./apps/cs_server
-copy ./apps/cs_client/ ./apps/cs_client
-copy ./libs/graphql-types/ ./libs/graphql-types
+copy ./apps ./apps
+copy ./libs ./libs
 copy ./package.json ./package.json
 copy ./yarn.lock ./yarn.lock
-
-workdir /temp/apps/cs_server
-run yarn link:ahtml-to-html
 
 workdir /temp
 run yarn
 
 workdir /temp/apps/cs_client
-run npm link @cs/ahtml-to-html
 run yarn build
 workdir /temp/apps/cs_server
 run yarn build

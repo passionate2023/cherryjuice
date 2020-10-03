@@ -17,10 +17,11 @@
       "::store/*": ["./src/store/*"],
       "::cypress/*": ["./cypress/*"]
     },
-    "target": "esnext",
-    "sourceMap": true,
-    "module": "esnext",
+    "target": "es2019",
+    "module": "CommonJS",
     "esModuleInterop": true,
     "moduleResolution": "node"
-  }
+  },
+  "exclude": ["node_modules"],
+  "include": ["src"]
 }

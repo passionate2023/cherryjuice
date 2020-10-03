@@ -4,7 +4,7 @@ import { execK } from '::helpers/editing/execK';
 import { Icon } from '::root/components/shared-components/icon/icon';
 import { modToolbar } from '::sass-modules';
 import { HotKey } from '@cherryjuice/graphql-types';
-import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props.ts/formatting-props';
+import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props/formatting-props';
 
 const ColorInput: React.FC<{
   hotKey: HotKey;

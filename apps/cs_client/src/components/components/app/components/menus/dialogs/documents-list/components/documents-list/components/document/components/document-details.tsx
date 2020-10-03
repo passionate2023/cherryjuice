@@ -2,7 +2,7 @@ import * as React from 'react';
 import { modSelectFile } from '::sass-modules';
 import { VisibilityIcon } from '::root/components/app/components/editor/info-bar/components/components/visibility-icon';
 import { dateToFormattedString } from '::helpers/time';
-import { Privacy } from '::types/graphql/index';
+import { Privacy } from '@cherryjuice/graphql-types';
 
 type Props = {
   id: string;

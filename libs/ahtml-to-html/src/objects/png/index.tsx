@@ -1,4 +1,4 @@
-import { LinkAttributes } from '../../helpers/ctb';
+import { LinkAttributes } from '../../helpers/parse-link';
 
 type Props = {
   style: {

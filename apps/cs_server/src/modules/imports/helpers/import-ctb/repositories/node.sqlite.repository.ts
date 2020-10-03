@@ -4,8 +4,8 @@ import { Grid } from '../entities/Grid';
 import { Codebox } from '../entities/Codebox';
 import { getPNGSize } from '../rendering/image/get-image-size';
 import { parseXml } from '../../../../node/helpers/xml';
-import { ctbToAHtml } from '../rendering/ctb-to-ahtml';
-import { AHtmlLine } from '../../../../node/helpers/rendering/ahtml-to-html';
+import { ctbToAHtml} from "@cherryjuice/ctb-to-ahtml";
+import { AHtmlLine } from "@cherryjuice/ahtml-to-html"
 import { nodeQueries, SqliteNodeMeta } from './queries/node';
 import { generateRootNode } from '../rendering/node-meta/generate-root-node';
 

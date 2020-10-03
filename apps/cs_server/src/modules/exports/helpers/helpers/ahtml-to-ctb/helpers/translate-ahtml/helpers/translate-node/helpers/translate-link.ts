@@ -1,4 +1,4 @@
-import { LinkAttributes } from '../../../../../../../../../node/helpers/rendering/ahtml-to-html/helpers/ctb';
+import { LinkAttributes} from "@cherryjuice/ahtml-to-html";
 
 const translateLinkType = {
   node: href => {

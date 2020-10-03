@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { copyProperties } from '../../document/helpers';
 import { SaveHtmlIt } from '../it/save-html.it';
 import { NodeMetaIt, NodePrivacy } from '../it/node-meta.it';
-import { AHtmlLine } from '../helpers/rendering/ahtml-to-html';
+import { AHtmlLine } from "@cherryjuice/ahtml-to-html"
 import { NodeSearchDto } from '../../search/dto/node-search.dto';
 import { NodeSearchResultEntity } from '../../search/entities/node.search-result.entity';
 import { SearchTarget, SearchType } from '../../search/it/node-search.it';

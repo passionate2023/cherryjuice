@@ -1,6 +1,6 @@
-import { aHtmlToHtml } from '../index';
-import { ctbToAHtml } from '../../../../../imports/helpers/import-ctb/rendering/ctb-to-ahtml';
-import { renderingIssues } from '../../../../../imports/helpers/import-ctb/rendering/ctb-to-ahtml/__tests__/__data__';
+import { aHtmlToHtml } from '../ahtml-to-html';
+import { ctbToAHtml} from "@cherryjuice/ctb-to-ahtml";
+import { renderingIssues} from "@cherryjuice/ctb-to-ahtml/dist/shared/__data__";
 
 const renderingTestTemplate = async ({ txt, otherTables }) => {
   const res = aHtmlToHtml(

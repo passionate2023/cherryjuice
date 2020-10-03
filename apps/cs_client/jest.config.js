@@ -11,13 +11,11 @@ module.exports = {
   // which contains the path mapping (ie the `compilerOptions.paths` option):
   globals: {
     'ts-jest': {
-      diagnostics: false,
-      tsConfig: {
-        ...tsconfig.compilerOptions,
-        target: 'es6',
-        allowJs: true,
-      },
+      tsConfig: 'tsconfig.json',
       babelConfig: false,
+      diagnostics: {
+        warnOnly: true
+      }
     },
   },
   moduleNameMapper: {
@@ -28,5 +26,5 @@ module.exports = {
       prefix: '<rootDir>/',
     }),
   },
-  testPathIgnorePatterns: ['/node_modules/', '/__data__/' , '/__tests__/data/' , '__helpers__'],
+  testPathIgnorePatterns: [ '/__data__/' , '/__tests__/data/' , '__helpers__'],
 };
