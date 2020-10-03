@@ -15,6 +15,7 @@ module.exports = {
   externals: [
     nodeExternals({
       whitelist: ['webpack/hot/poll?100'],
+      modulesDir: path.resolve(__dirname, '../../node_modules'),
     }),
   ],
   module: {
@@ -27,7 +28,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.mjs, .tsx', '.ts', '.js'],
   },
   output: {
     filename: 'main.js',
