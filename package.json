@@ -1,5 +1,10 @@
 {
   "name": "cherryscript",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
   "version": "0.0.1",
   "description": "cherrytree webapp",
   "directories": {
