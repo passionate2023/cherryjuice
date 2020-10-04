@@ -1,4 +1,4 @@
-import { escapeHtml } from '../..';
+import { escapeHtml } from '../../helpers/escape-html';
 
 const emptySpace = '&#8203;';
 const objectDelimiter = `<span>${emptySpace}</span>`;

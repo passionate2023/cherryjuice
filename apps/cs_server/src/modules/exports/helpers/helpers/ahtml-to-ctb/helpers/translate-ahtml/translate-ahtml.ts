@@ -1,7 +1,4 @@
-import {
-  AHtmlLine,
-  AHtmlNode, AHtmlObject,
-} from "@cherryjuice/ahtml-to-html"
+import { AHtmlLine, AHtmlNode, AHtmlObject } from '@cherryjuice/ahtml-to-html';
 import {
   CTBObject,
   translateObject,
@@ -10,12 +7,12 @@ import {
   CTJustification,
   translateNode,
 } from './helpers/translate-node/translate-node';
-import {justificationMap} from "@cherryjuice/ctb-to-ahtml";
+import { justificationMap } from '@cherryjuice/ctb-to-ahtml';
 
 const reverseJustificationMap = {
   'text-align': Object.fromEntries(
-      // @ts-ignore
-      Object.entries(justificationMap['text-align']).map(kv => kv.reverse()),
+    // @ts-ignore
+    Object.entries(justificationMap['text-align']).map(kv => kv.reverse()),
   ),
 };
 
@@ -25,8 +22,9 @@ const translateAHtml = (node_id: number) => (
   const translatedAHtmls = aHtmls.flatMap(([line, lineStyle]) => {
     let justification: CTJustification = 'left';
     if (lineStyle && lineStyle['text-align']) {
-      justification =
-          reverseJustificationMap['text-align'][lineStyle['text-align']] as CTJustification;
+      justification = reverseJustificationMap['text-align'][
+        lineStyle['text-align']
+      ] as CTJustification;
     }
     return [
       ...line.map(node => {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modDialog, } from '::sass-modules';
+import { modDialog } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { Result } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/result';

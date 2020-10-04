@@ -6,7 +6,7 @@ $width: $height * 1.35;
   box-sizing: border-box;
   position: absolute;
   width: $width;
-  background-color:  var(--background);
+  background-color: var(--background);
   left: calc(100vw / 2 - #{$width/2});
   top: calc(100vh / 2 - #{$height/2.5});
   box-shadow: $box-shadow1;

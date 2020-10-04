@@ -16,7 +16,10 @@ export class Draggable extends Component<DraggableProps> {
   onDragStart = e => {
     e.dataTransfer.setData(
       'text/plain',
-      JSON.stringify({ id: this.props.anchorId, index: this.props.anchorIndex }),
+      JSON.stringify({
+        id: this.props.anchorId,
+        index: this.props.anchorIndex,
+      }),
     );
   };
 

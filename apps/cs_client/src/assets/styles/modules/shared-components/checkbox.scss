@@ -32,7 +32,6 @@
   background-color: var(--surface-010);
 }
 
-
 /* On mouse-over, add a grey background color */
 .container:hover input ~ .checkmark {
   background-color: var(--surface-010);
@@ -68,4 +67,3 @@
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
-

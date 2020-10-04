@@ -1,4 +1,3 @@
 module.exports = {
-  './apps/**/*.{js,jsx,ts,tsx,md,html,css}': 'prettier --write',
-  './libs/**/*.{js,jsx,ts,tsx}': 'eslint',
+  '**/*.+(js|jsx|ts|tsx|json|css|scss)': ['yarn validate'],
 };

@@ -1,4 +1,4 @@
-import { LinkAttributes} from "@cherryjuice/ahtml-to-html";
+import { LinkAttributes } from '@cherryjuice/ahtml-to-html';
 
 const translateLinkType = {
   node: href => {

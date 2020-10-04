@@ -1,5 +1,5 @@
 {
-  "name": "cherryscript-react-client",
+  "name": "@cherryjuice/react-client",
   "version": "0.1.0",
   "scripts": {
     "dev": "webpack-dev-server --color --progress --config .webpack/webpack.dev.js ",
@@ -7,7 +7,8 @@
     "cypress": "yarn cypress open",
     "test": "jest",
     "storybook": "start-storybook -p 1237",
-    "storybook:build": "build-storybook -c .storybook -o .storybook-static"
+    "storybook:build": "build-storybook -c .storybook -o .storybook-static",
+    "lint": "eslint ./**"
   },
   "author": "Yacine Mohamdi",
   "license": "MIT",

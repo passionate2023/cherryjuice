@@ -13,7 +13,7 @@ const Node: React.FC<Props> = ({
   name,
   documentId,
   node_id,
-  isNew
+  isNew,
 }) => {
   return (
     <div

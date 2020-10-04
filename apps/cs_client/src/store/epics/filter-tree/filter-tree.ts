@@ -1,4 +1,4 @@
-import {  merge, Observable, of } from 'rxjs';
+import { merge, Observable, of } from 'rxjs';
 import { Actions } from '::store/actions.types';
 import { ofType } from 'deox';
 import { ac_, store } from '::store/store';

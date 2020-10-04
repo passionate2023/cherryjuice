@@ -51,7 +51,7 @@ function escapeHtml(string) {
         escape = QUAD_SPACE;
         break;
       case 32: // <space>
-        escape = SPACE
+        escape = SPACE;
         break;
       case 34: // "
         escape = '&quot;';

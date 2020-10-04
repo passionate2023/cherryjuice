@@ -15,7 +15,9 @@ const whereClause = ({
   searchOptions,
   variableIndex,
 }: SearchTypeQueryProps): string =>
-  `@@ plainto_tsquery($${variableIndex}${searchOptions.fullWord ? '' : "||':*'"})`;
+  `@@ plainto_tsquery($${variableIndex}${
+    searchOptions.fullWord ? '' : "||':*'"
+  })`;
 
 const headline = ({
   columnName,

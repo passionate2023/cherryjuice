@@ -68,7 +68,10 @@ const reducer = createReducer(initialState, _ => [
     })),
   ],
   _(ac.showTree, state => ({ ...state, showTree: true })),
-  _(rootActionCreators.hidePopups, state => ({ ...state, showInfoBar: false })),
+  _(rootActionCreators.hidePopups, state => ({
+    ...state,
+    showInfoBar: false,
+  })),
   _(ac.hideTree, state => ({ ...state, showTree: false })),
   _(ac.toggleTree, state => ({ ...state, showTree: !state.showTree })),
   _(ac.toggleRecentNodesBar, state => ({

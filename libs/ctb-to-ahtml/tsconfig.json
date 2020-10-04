@@ -1,19 +1,15 @@
 {
   "compilerOptions": {
-    "jsx": "preserve",
-    "baseUrl": "./",
-    "rootDir": "src",
-    "outDir": "dist",
-    "target": "ES2019",
-    "sourceMap": false,
-    "module": "CommonJS",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
+    "outDir": "build",
+    "module": "esnext",
+    "target": "es2019",
+    "sourceMap": true,
+    "allowJs": false,
     "declaration": true,
-    "composite": true,
-    "emitDeclarationOnly": false
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "jsx": "preserve"
   },
-  "include": [
-    "src/**/*"
-  ]
+  "exclude": ["src/**/__tests__"],
+  "include": ["src"]
 }

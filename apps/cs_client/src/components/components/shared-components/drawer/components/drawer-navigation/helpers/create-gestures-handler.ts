@@ -1,5 +1,5 @@
 // https://gist.github.com/SleepWalker/da5636b1abcbaff48c4d#gistcomment-2577818
-import { TouchEvent, } from 'react';
+import { TouchEvent } from 'react';
 
 const createGesturesHandler = ({
   onRight,

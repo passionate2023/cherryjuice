@@ -6,20 +6,36 @@
     "libs/*"
   ],
   "scripts": {
-    "test": "yarn workspaces run test && lint-staged",
-    "commit": "git-cz",
+    "dev:client": "yarn workspace @cherryjuice/react-client  run dev",
+    "dev:server": "yarn workspace @cherryjuice/nest-server  run dev",
+    "build:lib:1": "yarn workspace @cherryjuice/graphql-types run build",
+    "build:lib:2": "yarn workspace @cherryjuice/ahtml-to-html run build",
+    "build:lib2:1": "yarn workspace @cherryjuice/ctb-to-ahtml run build",
+    "build:libs": "run-p build:lib:* && run-p build:lib2:*",
+    "build:app:1": "yarn workspace @cherryjuice/react-client  run build",
+    "build:app:2": "yarn workspace @cherryjuice/nest-server  run build",
+    "build:apps": "run-p build:app:*",
     "docker:build": "docker image build -t cs .",
-    "docker:run": "docker container run -it -p 1430:1430 -e PORT=1430 cs"
+    "docker:run": "docker container run -it -p 1430:1430 -e PORT=1430 cs",
+    "test:lib:1": "yarn workspace @cherryjuice/graphql-types run test",
+    "test:lib:2": "yarn workspace @cherryjuice/ahtml-to-html run test",
+    "test:lib2:1": "yarn workspace @cherryjuice/ctb-to-ahtml run test",
+    "test:libs": "run-p test:lib:*",
+    "test:app:1": "yarn workspace @cherryjuice/react-client  run test",
+    "test:app:2": "yarn workspace @cherryjuice/nest-server  run test",
+    "test:apps": "run-p test:app:*",
+    "test": "run-p test:*",
+    "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|jsx|ts|tsx|json|css|scss)\"",
+    "format": "yarn prettier --write",
+    "check-format": "yarn prettier --list-different",
+    "lint": "yarn workspaces run lint",
+    "lint-fix": "yarn workspaces run lint -- --fix",
+    "validate": "run-p check-format lint",
+    "commit": "git-cz"
   },
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
-    }
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged"
     }
   },
   "version": "0.0.1",
@@ -46,5 +62,4 @@
   "author": "Yacine Mohamdi",
   "license": "ISC",
   "homepage": "https://github.com/ycnmhd/cherryjuice#readme"
-
 }

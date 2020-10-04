@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { Element, stringifyStyles } from './element';
 import { objects } from './objects/objects';
-import {LinkAttributes} from "./helpers/parse-link";
+import { LinkAttributes } from './helpers/parse-link';
 
 export type AHtmlNodeAttributes = Record<string, string | number>;
 export type AHtmlNode = {
@@ -19,7 +19,6 @@ export type AHtmlObject = AHtmlNode & {
   table?: { td: string[][]; th: string[] };
   style: { height: string };
 };
-
 
 export const aHtmlToHtml = (ahtml: AHtmlLine[]) => {
   let res = '<span class="rich-text__line"></span>';
@@ -42,4 +41,3 @@ export const aHtmlToHtml = (ahtml: AHtmlLine[]) => {
     }
   return res;
 };
-

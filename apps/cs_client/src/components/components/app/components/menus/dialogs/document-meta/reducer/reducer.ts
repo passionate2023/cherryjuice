@@ -2,7 +2,11 @@ import {
   calculateCreatedDocumentState,
   calculateEditedDocumentState,
 } from './helpers/calculate-state';
-import { AccessLevel, DocumentGuestOt, Privacy } from '@cherryjuice/graphql-types';
+import {
+  AccessLevel,
+  DocumentGuestOt,
+  Privacy,
+} from '@cherryjuice/graphql-types';
 import { QDocumentsListItem } from '::graphql/queries/documents-list';
 
 type TState = {

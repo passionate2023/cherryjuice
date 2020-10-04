@@ -8,7 +8,13 @@ import { calculateTag } from '::helpers/editing/execK/steps/apply-command/apply-
 //       ...(aHtmlElement.tags[0][1].style || {}),
 //     };
 // };
-const applyTag = ({ aHtmlElement, tagExists: remove, tagName, attributes, mode }) => {
+const applyTag = ({
+  aHtmlElement,
+  tagExists: remove,
+  tagName,
+  attributes,
+  mode,
+}) => {
   // const tagToBeDeleted = aHtmlElement.tags.find(([tag]) => tag === tagName);
   // if (remove) {
   //   if (tagToBeDeleted) {

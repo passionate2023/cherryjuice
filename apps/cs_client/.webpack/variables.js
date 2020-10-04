@@ -42,8 +42,6 @@ module.exports = {
       path.resolve(__dirname, '../src'),
       path.resolve(__dirname, '../cypress'),
       path.resolve(__dirname, '../types'),
-      fs.realpathSync('../../node_modules/@cherryjuice/ahtml-to-html'),
-        fs.realpathSync('../../node_modules/@cherryjuice/graphql-types'),
     ],
   },
 };

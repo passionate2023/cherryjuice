@@ -50,7 +50,7 @@ const App: React.FC<Props & PropsFromRedux> = ({
     showTree,
     showRecentNodes,
     treeWidth,
-    previousTreeWidth
+    previousTreeWidth,
   );
   // useRefreshToken({ token });
   useGetPreviousOperations();

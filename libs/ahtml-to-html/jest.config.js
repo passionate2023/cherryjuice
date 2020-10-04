@@ -11,7 +11,6 @@ module.exports = {
     'ts-jest': {
       diagnostics: false,
       tsConfig: 'tsconfig.json',
-
     },
   },
   // moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {

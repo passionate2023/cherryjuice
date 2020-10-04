@@ -27,7 +27,7 @@
 // circle
 .slider:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 25px;
   width: 25px;
   background-color: var(--on-surface);
@@ -39,7 +39,6 @@
 input:checked + .slider {
   background-color: var(--primary-090);
 }
-
 
 input:checked + .slider:before {
   transform: translateX(30px);

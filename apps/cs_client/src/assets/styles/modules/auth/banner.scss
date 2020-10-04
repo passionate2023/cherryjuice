@@ -37,7 +37,7 @@
 }
 .banner__text {
   text-align: center;
-  color:  var(--background);
+  color: var(--background);
   @include respond-to($mb-down) {
     color: var(--primary);
   }

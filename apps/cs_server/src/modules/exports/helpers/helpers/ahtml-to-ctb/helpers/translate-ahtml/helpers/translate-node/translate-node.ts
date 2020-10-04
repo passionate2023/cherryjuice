@@ -1,6 +1,6 @@
 import { translateColor } from './helpers/translate-color';
 import { translateLink } from './helpers/translate-link';
-import {AHtmlNode} from "@cherryjuice/ahtml-to-html";
+import { AHtmlNode } from '@cherryjuice/ahtml-to-html';
 
 const createTranslator = (styles: { [key: string]: string | number }) => {
   return {

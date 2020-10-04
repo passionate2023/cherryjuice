@@ -62,7 +62,8 @@ const reducer = createReducer(initialState, _ => [
         draft.previous[payload.variable] = payload.value as number;
       }
       draft[payload.variable] = payload.value as number;
-    })),
+    }),
+  ),
 ]);
 
 export { reducer as cssVariablesReducer, ac as cssVariablesActionCreators };

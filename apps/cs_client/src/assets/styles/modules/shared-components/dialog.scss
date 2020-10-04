@@ -44,7 +44,7 @@ $small-dialog-width: 350px;
   }
 }
 
-@mixin dialog-edge-size(){
+@mixin dialog-edge-size() {
   padding: 15px;
   box-sizing: border-box;
   height: 65px;
@@ -114,7 +114,6 @@ $small-dialog-width: 350px;
   display: flex;
   align-items: center;
 }
-
 
 .dialog-list-item {
   cursor: pointer;

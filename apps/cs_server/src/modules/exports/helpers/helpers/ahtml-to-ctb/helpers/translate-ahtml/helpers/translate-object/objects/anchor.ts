@@ -1,6 +1,6 @@
 import { CTBObject } from '../translate-object';
 import { CTJustification } from '../../translate-node/translate-node';
-import {AHtmlObject} from "@cherryjuice/ahtml-to-html";
+import { AHtmlObject } from '@cherryjuice/ahtml-to-html';
 
 type AnchorRow = {
   node_id: number;

@@ -2,7 +2,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const StartServerPlugin = require('start-server-webpack-plugin');
 
 module.exports = {
@@ -35,7 +35,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['dist'] }),
     new webpack.HotModuleReplacementPlugin(),
     new StartServerPlugin({ name: 'main.js' }),
   ],

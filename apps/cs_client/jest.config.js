@@ -1,6 +1,9 @@
 /*eslint @typescript-eslint/no-var-requires:0*/
+// eslint-disable-next-line no-undef
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
+// eslint-disable-next-line no-undef
 const tsconfig = require('./tsconfig');
+// eslint-disable-next-line no-undef
 module.exports = {
   roots: [/*'<rootDir>/.storybook', */ '<rootDir>/src', '<rootDir>/cypress'],
   preset: 'ts-jest/presets/js-with-ts',
@@ -14,8 +17,8 @@ module.exports = {
       tsConfig: 'tsconfig.json',
       babelConfig: false,
       diagnostics: {
-        warnOnly: true
-      }
+        warnOnly: true,
+      },
     },
   },
   moduleNameMapper: {
@@ -26,5 +29,5 @@ module.exports = {
       prefix: '<rootDir>/',
     }),
   },
-  testPathIgnorePatterns: [ '/__data__/' , '/__tests__/data/' , '__helpers__'],
+  testPathIgnorePatterns: ['/__data__/', '/__tests__/data/', '__helpers__'],
 };

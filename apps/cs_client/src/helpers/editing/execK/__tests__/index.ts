@@ -3,7 +3,7 @@ import {
   testSamples,
   TTestSample,
 } from '::helpers/editing/execK/__tests__/__data__';
-import { formattingHotkeysProps} from "::helpers/hotkeys/hot-key-props/formatting-props";
+import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props/formatting-props';
 
 beforeAll(() => {
   // @ts-ignore

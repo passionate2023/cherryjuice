@@ -6,7 +6,7 @@ import { getEditor } from '::root/components/app/components/editor/document/comp
 import { newObjectPrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 import { CodeboxProperties } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
 import { TableProperties } from '::root/components/app/components/menus/dialogs/table/reducer/reducer';
-import {Anchor, Code, Table} from "@cherryjuice/ahtml-to-html";
+import { Anchor, Code, Table } from '@cherryjuice/ahtml-to-html';
 
 export const createAnchorHtml = (id: string): string =>
   Anchor({ other_attributes: { id } });

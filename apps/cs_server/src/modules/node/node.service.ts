@@ -1,4 +1,4 @@
-import { aHtmlToHtml } from "@cherryjuice/ahtml-to-html"
+import { aHtmlToHtml } from '@cherryjuice/ahtml-to-html';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Node } from './entities/node.entity';
 import { NodeRepository } from './repositories/node.repository';

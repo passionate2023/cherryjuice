@@ -10,7 +10,7 @@
   font-family: Roboto, sans-serif;
 }
 
-.auth-screen__card-container{
+.auth-screen__card-container {
   position: relative;
   @include respond-to($mb-down) {
     width: 95%;

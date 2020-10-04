@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
-    "rootDir": "./",
-    "target": "esnext",
-    "sourceMap": true,
+    "outDir": "build",
     "module": "esnext",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
+    "target": "es2019",
+    "sourceMap": true,
+    "allowJs": false,
     "declaration": true,
-    "compose": true
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "jsx": "preserve"
   },
-  "include": ["index.ts"]
+  "exclude": ["src/**/__tests__"]
 }
