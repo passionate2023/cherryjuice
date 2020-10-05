@@ -1,0 +1,26 @@
+{
+  "name": "@cherryjuice/ahtml-to-html",
+  "version": "0.0.2",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "main": "build/index.js",
+  "module": "build/index.es.js",
+  "jsnext:main": "build/index.es.js",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "test": "jest",
+    "lint": "eslint ./**"
+  },
+  "devDependencies": {
+    "typescript": "^3.8.3",
+    "@cherryjuice/ctb-to-ahtml": "0.0.2",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "rollup-plugin-node-externals": "^2.2.0"
+  }
+}

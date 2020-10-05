@@ -1,0 +1,23 @@
+.import-document {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  width: 85%;
+  padding-bottom: 1rem;
+}
+
+.import-document__title {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.import-document__button {
+  display: flex;
+  align-items: center;
+}
+
+.import-document__button__icon {
+  margin-right: 10px;
+}

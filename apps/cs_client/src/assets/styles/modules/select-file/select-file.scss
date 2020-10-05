@@ -1,0 +1,39 @@
+@import '../../vars/vars';
+@import '../../vars/states';
+.selectFile {
+  padding: 10px;
+  min-height: calc(100% - 20px);
+  user-select: none;
+}
+
+.selectFile__file__details__visibility {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.selectFile__file__details__hash,
+.selectFile__file__details__id {
+  margin-right: 10px;
+  opacity: 0.5;
+  @include respond-to($md-down) {
+    display: none;
+  }
+}
+
+.selectFile__info-bar {
+  margin-top: 5px;
+  max-height: 25px;
+  color: var(--on-background);
+  flex: 1;
+  text-align: left;
+  font-size: 12px;
+  p {
+    padding: 5px;
+    margin: 0;
+  }
+}
+
+.selectFile__buttons__refresh {
+  margin-right: auto !important;
+  margin-left: 10px;
+}

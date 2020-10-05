@@ -1,0 +1,114 @@
+@import '../../vars/vars';
+.node {
+  display: flex;
+  align-items: center;
+  cursor: default;
+  position: relative;
+  min-width: max-content;
+  flex: 1;
+  max-width: $max-node-width;
+  user-select: none;
+}
+
+.node--not-available {
+  filter: brightness(0.5) contrast(0.5) grayscale(0.5);
+}
+
+.node__title-overlay {
+  min-width: var(--overlay-width);
+  height: 100%;
+  position: absolute;
+  left: var(--overlay-left);
+  background-color: var(--background-15);
+}
+
+.node__title {
+  padding: 7px 7px 7px 6px;
+  text-decoration: none;
+  text-align: left;
+  font-weight: 400;
+  z-index: $ZI-node-elements;
+  min-height: 21px;
+  color: var(--treeColor);
+  font-family: var(--treeFont);
+  font-size: var(--treeFontSize);
+  cursor: move;
+  transition: background-color 200ms linear;
+}
+
+.node__toggle-children {
+  background-color: papayawhip;
+  margin-right: 7px;
+  //margin-left: 10px;
+  min-width: 8px;
+  min-height: 8px;
+  width: 8px;
+  height: 8px;
+  img {
+    margin-left: -1px;
+    margin-top: -1px;
+    transform: scale(1.3);
+  }
+  padding: 1px;
+  font-weight: lighter;
+  font-style: normal;
+  font-size: 8px;
+  cursor: pointer;
+  z-index: $ZI-node-elements;
+  margin-left: 5px;
+  @include respond-to($md-down) {
+    padding: 2px;
+  }
+}
+.node__title-button--hidden {
+  visibility: hidden;
+}
+.node__title-privacy--disabled {
+  svg {
+    opacity: 0.3;
+  }
+}
+.node__title-privacy {
+  z-index: $ZI-node-elements;
+  svg {
+    fill: #dbdbdb;
+  }
+}
+.node__title-cherry {
+  min-width: 14px;
+  width: 14px;
+  z-index: $ZI-node-elements;
+  margin-top: -2px;
+}
+.node__list {
+  padding-left: 0;
+  transition: background-color 200ms linear;
+}
+
+div.node[data-dragged='true'] + ul {
+  background-color: var(--secondary-010-5);
+}
+
+div.droppable--dragging-over {
+  background-color: var(--secondary-010-5);
+}
+
+div.node[drag-enter='true'] {
+  .node__title {
+    background-color: var(--secondary-010-5);
+  }
+}
+
+ul.droppable--dragging-over,
+div.node[drag-enter='true'] + ul {
+  background-color: var(--secondary-010-5);
+}
+
+.drop-hint {
+  height: 2px;
+  background-color: white;
+  opacity: 0.5;
+  width: 80%;
+  position: absolute;
+  left: 10%;
+}

@@ -1,0 +1,113 @@
+import nodeMod from '::sass-modules/tree/node.scss';
+import * as React from 'react';
+import { useRef } from 'react';
+import { useSelectNode } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/select-node';
+import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
+import { NodeIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-icon';
+import { ToggleChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/toggle-children';
+import { NodeVisibilityIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/visibility-icon';
+import { NodeOverlay } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-overlay';
+import { NodeChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-children';
+import { NodesDict } from '::store/ducks/cache/document-cache';
+import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
+import { NodeTitle } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-title';
+import { useSelector } from 'react-redux';
+import { Store } from '::store/store';
+
+export type NodeProps = {
+  node_id: number;
+  nodes?: NodesDict;
+  depth: number;
+  node_title_styles: string;
+  documentPrivacy: Privacy;
+  parentPrivacy: NodePrivacy;
+  expand?: number;
+  fatherState: NodeState;
+  filteredNodes: FilteredNodes;
+  index: number;
+};
+
+const Node: React.FC<NodeProps> = ({
+  node_id,
+  nodes,
+  depth,
+  node_title_styles = '{}',
+  documentPrivacy,
+  parentPrivacy,
+  expand,
+  fatherState,
+  filteredNodes,
+  index,
+}) => {
+  const online = useSelector((state: Store) => state.root.online);
+  const documentId = useSelector((state: Store) => state.document.documentId);
+  const { child_nodes, name, privacy, html } = nodes[node_id];
+  const componentRef = useRef();
+
+  const showChildren =
+    expand > depth || !!(fatherState && fatherState[node_id]);
+
+  const { clickTimestamp, selectNode } = useSelectNode({
+    documentId,
+    node_id,
+  });
+
+  const nodeStyle = JSON.parse(node_title_styles || '{}');
+  const icon_id = +nodeStyle.icon_id;
+  return (
+    <>
+      <div
+        className={`${nodeMod.node} ${
+          !online && !html ? nodeMod.nodeNotAvailable : ''
+        }`}
+        ref={componentRef}
+        onClick={selectNode}
+      >
+        <ToggleChildren
+          depth={depth}
+          child_nodes={child_nodes}
+          showChildren={showChildren}
+          node_id={node_id}
+          documentId={documentId}
+        />
+        <NodeIcon depth={depth} icon_id={icon_id} />
+        <NodeVisibilityIcon
+          documentPrivacy={documentPrivacy}
+          parentPrivacy={parentPrivacy}
+          privacy={privacy}
+        />
+        <NodeTitle
+          nodeStyle={nodeStyle}
+          name={name}
+          documentId={documentId}
+          node_id={node_id}
+          index={index}
+        />
+        <NodeOverlay
+          clickTimestamp={clickTimestamp}
+          nodeComponentRef={componentRef}
+          node_id={node_id}
+        />
+      </div>
+
+      {showChildren && (
+        <NodeChildren
+          nodes={nodes}
+          child_nodes={child_nodes}
+          depth={depth}
+          documentPrivacy={documentPrivacy}
+          node_id={node_id}
+          parentPrivacy={parentPrivacy}
+          privacy={privacy}
+          expand={expand}
+          fatherState={fatherState && fatherState[node_id]}
+          filteredNodes={filteredNodes}
+          documentId={documentId}
+        />
+      )}
+    </>
+  );
+};
+
+export { Node };

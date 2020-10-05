@@ -1,0 +1,102 @@
+@import '../../mixins/breakpoints';
+@import '../../vars/vars';
+//$node-height: calc(#{$title-and-recent-bar-height-md} - 5px);
+//$node-width: 100px;
+//$node-left-margin: calc(
+//  calc(#{$title-and-recent-bar-height-md} - #{$node-height} + 1px) / 2
+//);
+//$recent-nodes-width: $node-width * 2+ 10px;
+
+.tabs-container {
+  grid-area: tabs;
+  display: flex;
+  background-color: var(--on-background);
+  width: calc(100vw - var(--treeWidth));
+  height: 35px;
+  align-items: center;
+  justify-content: flex-start;
+  @include respond-to($md-down) {
+    height: 40px;
+  }
+}
+
+.tabs {
+  flex: 1;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  @include respond-to($md-down) {
+    overflow: auto;
+    width: calc(100vw - var(--treeWidth));
+  }
+  width: calc(100vw - var(--treeWidth) - 40px);
+  height: 100%;
+  padding: 2px 3px;
+  box-sizing: border-box;
+}
+.tabs--hidden {
+  flex-direction: column;
+  padding: 5px;
+}
+
+.hidden-tabs-button {
+  height: 32px;
+  width: 40px;
+  border-radius: 0;
+  border-left: 1px solid var(--surface-010);
+}
+
+.tab {
+  position: relative;
+  user-select: none;
+  box-sizing: border-box;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 175px;
+  width: 175px;
+  height: 100%;
+  min-height: 32px;
+  background-color: var(--background);
+  cursor: pointer;
+  border-bottom: 4px solid var(--background);
+  transition: filter 200ms linear;
+  &:hover {
+    filter: brightness(0.9);
+  }
+}
+
+$button-width: 18px;
+.tab__button {
+  min-width: $button-width;
+  min-height: $button-width;
+  width: $button-width;
+  height: $button-width;
+}
+
+.tab__name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  color: var(--on-surface);
+  margin-bottom: -2.5px;
+}
+.tab--selected {
+  border-bottom: 4px solid var(--secondary-100);
+}
+.tab--has-changes {
+  color: var(--teriary);
+}
+.tab--is-new {
+  color: var(--danger);
+}
+
+.tab__bookmark-icon {
+  position: absolute;
+  top: -3px;
+  right: 20px;
+}

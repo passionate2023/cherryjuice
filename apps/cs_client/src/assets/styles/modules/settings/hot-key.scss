@@ -1,0 +1,56 @@
+@import '../../mixins/breakpoints';
+@import '../../vars/vars';
+
+.hot-key {
+  min-height: 40px;
+  flex-wrap: wrap;
+  background-color: var(--background);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px;
+  @include respond-to('md') {
+    flex-direction: row;
+    align-items: center;
+  }
+  border-radius: 5px;
+}
+.hot-key--duplicate {
+  background-color: var(--danger--100);
+}
+
+.hot-key__key {
+  margin-top: 10px;
+  width: 20px;
+}
+.hot-key__field {
+  max-width: 100px;
+  height: 36px;
+  margin-left: 5px;
+  input {
+    padding: 0;
+    text-align: center;
+    box-sizing: border-box;
+    width: 70px;
+    height: 36px;
+    border: none;
+    border-radius: 5px;
+  }
+}
+
+.hot-key__name {
+  margin-bottom: 5px;
+  @include respond-to('md') {
+    margin-bottom: 0;
+  }
+  color: var(--on-surface);
+  width: 200px;
+}
+
+.hot-key__keys {
+  justify-self: center;
+  align-self: center;
+  @include respond-to($md-down) {
+    margin-left: auto;
+  }
+}

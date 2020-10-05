@@ -1,0 +1,19 @@
+@import '../../vars/vars';
+.auth-screen {
+  background-color: var(--primary-010);
+  width: var(--vw);
+  height: var(--vh);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Roboto, sans-serif;
+}
+
+.auth-screen__card-container {
+  position: relative;
+  @include respond-to($mb-down) {
+    width: 95%;
+    height: 92%;
+  }
+}

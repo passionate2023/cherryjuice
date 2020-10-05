@@ -1,0 +1,122 @@
+@import '../../mixins/breakpoints';
+@import '../../vars/vars';
+@mixin search-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  gap: 10px;
+}
+
+.search-dialog {
+  //height: 100%;
+  width: 100%;
+  height: calc(100% - 10px);
+  //width: calc(100% - 20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: var(--surface);
+  button {
+    background-color: var(--surface);
+  }
+}
+.search-dialog__search-setting {
+  display: flex;
+  flex-direction: column;
+  min-width: 230px;
+}
+.search-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 95%;
+  gap: 5px;
+  margin: 15px 0;
+}
+.search-dialog__header--align-vertically {
+  flex-direction: column;
+}
+.search-dialog__header__toggle-filters {
+  width: 45px;
+  height: 45px;
+}
+.search-dialog__header__field {
+  height: 50px;
+  width: 400px;
+  margin-right: 0;
+  @include respond-to($mb-down) {
+    width: 300px;
+  }
+}
+.search-dialog__header__group {
+  height: 50px;
+  width: 400px;
+  margin-right: 0;
+  @include respond-to($mb-down) {
+    width: 300px;
+  }
+  display: flex;
+  gap: 5px;
+  padding: 3px;
+  position: relative;
+}
+.search-dialog__search-filters {
+  @include search-div;
+  padding: 10px;
+  align-items: flex-start;
+  overflow-x: auto;
+  flex-wrap: wrap;
+  @include respond-to($md-down) {
+    width: auto;
+  }
+}
+
+.search-dialog__search-filters--hidden {
+  opacity: 0;
+}
+
+.search-dialog__search-results__header {
+  padding: 0 25px;
+  color: var(--on-surface);
+  font-size: 0.8rem;
+  align-self: flex-start;
+}
+
+.dialog__sub-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dialog__filters-bar {
+  width: 400px;
+}
+
+//.search-dialog__collapsable-search-results {
+//  @include search-div;
+//  justify-content: flex-start;
+//  &:not([data-collapsed]) {
+//    padding: 5px;
+//    padding-bottom: 0px;
+//    .search-dialog__search-results__list {
+//      padding-top: 5px;
+//      padding-bottom: 5px;
+//    }
+//  }
+//  flex-direction: column;
+//  color: var(--neutral-000);
+//  position: absolute;
+//  bottom: 80px;
+//  z-index: 1;
+//  background-color: transparent;
+//  border-radius: 5px;
+//}
+//.search-dialog__collapsable-search-results__footer {
+//  position: absolute;
+//  width: 100%;
+//  bottom: 0;
+//  height: 100px;
+//  background-color: var(--neutral-700);
+//}

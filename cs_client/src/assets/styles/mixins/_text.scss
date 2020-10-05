@@ -1,7 +1,0 @@
-@mixin clampMultiLine($number-of-lines) {
-  // http://hackingui.com/front-end/a-pure-css-solution-for-multiline-text-truncation/
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: $number-of-lines;
-  -webkit-box-orient: vertical;
-}

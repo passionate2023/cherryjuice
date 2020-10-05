@@ -1,0 +1,11 @@
+.cache
+dist
+node_modules
+yarn-error.log
+*.swp
+report*.json
+.idea
+sh.exe.stackdump
+debug.log
+*.tsbuildinfo
+build
