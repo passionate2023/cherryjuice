@@ -1,5 +1,11 @@
 {
   "name": "@cherryjuice/nest-server",
+  "workspaces": {
+    "nohoist": [
+      "typeorm/**",
+      "typeorm"
+    ]
+  },
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -54,12 +60,13 @@
     "typeorm": "^0.2.25",
     "sqlite": "^3.0.3",
     "@nestjs/cli": "^7.1.2",
-    "typescript": "^3.8.3"
-  },
-  "devDependencies": {
+    "typescript": "^3.8.3",
     "@cherryjuice/graphql-types": "0.0.1",
     "@cherryjuice/ahtml-to-html": "0.0.2",
     "@cherryjuice/ctb-to-ahtml": "0.0.2",
+    "xml2js": "^0.4.22"
+  },
+  "devDependencies": {
     "@babel/runtime": "^7.9.6",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",

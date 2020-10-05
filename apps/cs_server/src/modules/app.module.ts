@@ -18,7 +18,7 @@ import { ImageModule } from './image/image.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as typeOrmConfig from '../config/typeorm.config';
 import { UserModule } from './user/user.module';
-import { AppController, staticAssetsRootFolder } from './app.controller';
+import { AppController } from './app.controller';
 import { APP_PIPE } from '@nestjs/core';
 import { SearchModule } from './search/search.module';
 
@@ -69,7 +69,7 @@ export class AppModule implements NestModule {
         );
     }
     consumer
-      .apply(express.static(staticAssetsRootFolder))
+      .apply(express.static(process.env.ASSETS_PATH))
       .forRoutes({ path: '*', method: RequestMethod.GET });
   }
 }

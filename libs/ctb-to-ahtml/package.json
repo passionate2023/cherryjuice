@@ -15,13 +15,17 @@
     "test": "jest",
     "lint": "eslint ./**"
   },
+  "dependencies": {
+    "ramda": "^0.27.0"
+  },
+  "peerDependencies": {
+    "xml2js": "^0.4.22"
+  },
   "devDependencies": {
     "@cherryjuice/ahtml-to-html": "0.0.2",
     "typescript": "^3.8.3",
-    "ramda": "^0.27.0",
     "@types/ramda": "^0.27.6",
     "rollup": "^1.27.13",
-    "xml2js": "^0.4.22",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-typescript2": "^0.25.3",

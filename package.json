@@ -1,10 +1,12 @@
 {
   "name": "cherryjuice",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "libs/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "libs/*"
+    ]
+  },
   "scripts": {
     "dev:client": "yarn workspace @cherryjuice/react-client  run dev",
     "dev:server": "yarn workspace @cherryjuice/nest-server  run dev",
@@ -24,6 +26,7 @@
     "test:app:1": "yarn workspace @cherryjuice/react-client  run test",
     "test:app:2": "yarn workspace @cherryjuice/nest-server  run test",
     "test:apps": "run-p test:app:*",
+    "strip:deps": "node scripts/strip-dev-dependencies.js",
     "test": "run-p test:*",
     "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|jsx|ts|tsx|json|css|scss)\"",
     "format": "yarn prettier --write",
@@ -61,5 +64,6 @@
   ],
   "author": "Yacine Mohamdi",
   "license": "ISC",
-  "homepage": "https://github.com/ycnmhd/cherryjuice#readme"
+  "homepage": "https://github.com/ycnmhd/cherryjuice#readme",
+  "optionalDependencies": {}
 }

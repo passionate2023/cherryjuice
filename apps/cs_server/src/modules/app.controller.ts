@@ -1,12 +1,9 @@
 /* eslint-disable */
 import { Controller, Get, Res } from '@nestjs/common';
 import * as path from 'path';
-const staticAssetsRootFolder =
-  process.env.NODE_ENV === 'production'
-    ? '/apps/cs/client'
-    : path.join(process.cwd(), '../cs_client/dist');
+
 const assets = {
-  ['index.html']: path.join(staticAssetsRootFolder, '/index.html'),
+  ['index.html']: path.join(process.env.ASSETS_PATH, '/index.html'),
 };
 
 @Controller()
@@ -26,5 +23,3 @@ export class AppController {
   @Get('ping')
   ping() {}
 }
-
-export { staticAssetsRootFolder };
