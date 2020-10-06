@@ -9,7 +9,7 @@
   display: grid;
   grid-template-areas:
     'tool-bar tool-bar '
-    'node-path node-path'
+    'tree node-path'
     'tree tabs'
     'tree rich-text '
     'formatting-bar formatting-bar'
@@ -23,7 +23,7 @@
   @include respond-to($md-up) {
     grid-template-areas:
       'tool-bar tool-bar '
-      'node-path node-path'
+      'tree node-path'
       'tree tabs'
       'tree rich-text '
       'info-bar info-bar';
@@ -42,7 +42,7 @@
 .app--dialog-docked {
   grid-template-areas:
     'tool-bar tool-bar '
-    'node-path node-path'
+    'tree node-path'
     'tree tabs'
     'tree rich-text '
     'formatting-bar formatting-bar'
@@ -51,7 +51,7 @@
   @include respond-to($md-up) {
     grid-template-areas:
       'tool-bar tool-bar '
-      'node-path node-path'
+      'tree node-path'
       'tree tabs'
       'tree rich-text '
       'info-bar info-bar'

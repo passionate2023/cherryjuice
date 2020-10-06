@@ -1,9 +1,8 @@
 .node-path {
   box-sizing: border-box;
   grid-area: node-path;
-  padding: 0 10px;
   height: 100%;
-  width: 100vw;
+  width: calc(100vw - var(--treeWidth));
   overflow-x: auto;
   background-color: var(--surface);
   color: var(--on-surface);

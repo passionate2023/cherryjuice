@@ -2,9 +2,7 @@
 @import '../../mixins/breakpoints';
 @mixin tree-height() {
   height: calc(
-    var(--vh) - #{2 * $tool-bar-height} - var(--formatting-bar) - var(
-        --recent-nodes
-      ) - var(--nodePath)
+    var(--vh) - #{2 * $tool-bar-height} - var(--formatting-bar) - var(--recent-nodes)
   );
   @include respond-to('md') {
     height: calc(var(--vh) - var(--info-bar) - #{$tool-bar-height-md});
@@ -44,7 +42,7 @@ $bubble-width: 35px;
   @media (pointer: coarse) {
     position: absolute;
     left: -#{$bubble-width * 0.4};
-    top: 62.5%;
+    bottom: 110px;
     opacity: 0.3;
     height: $bubble-width;
     width: $bubble-width;
