@@ -119,5 +119,5 @@ export {
   actionCreators as nodeMetaActionCreators,
   initialState as nodeMetaInitialState,
   reducer as nodeMetaReducer,
-  TState as TNodeMetaState,
+  TState as NodeMeta,
 };

@@ -1,14 +1,18 @@
 import * as React from 'react';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
-import modIcons from '::sass-modules/tree/node.scss';
-import { memo } from 'react';
 
-type Props = {
+import { memo } from 'react';
+import { modNode } from '::sass-modules';
+
+export type NodeCherryProps = {
   icon_id: number;
   depth: number;
 };
 
-const NodeIcon: React.FC<Props> = memo(function NodeIcon({ icon_id, depth }) {
+const NodeCherry: React.FC<NodeCherryProps> = memo(function NodeIcon({
+  icon_id,
+  depth,
+}) {
   const name = icon_id
     ? Icons.cherrytree.custom_icons[icon_id]
     : Icons.cherrytree.cherries[depth >= 11 ? 11 : depth];
@@ -16,10 +20,10 @@ const NodeIcon: React.FC<Props> = memo(function NodeIcon({ icon_id, depth }) {
     <Icon
       name={name}
       size={14}
-      className={modIcons.node__titleCherry}
+      className={modNode.node__titleCherry}
       testId={'cherry' + (icon_id || 0)}
     />
   );
 });
 
-export { NodeIcon };
+export { NodeCherry };

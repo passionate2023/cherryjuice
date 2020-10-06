@@ -9,6 +9,11 @@
   max-width: $max-node-width;
   user-select: none;
 }
+.node__icons-and-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
 
 .node--not-available {
   filter: brightness(0.5) contrast(0.5) grayscale(0.5);
@@ -68,8 +73,17 @@
     opacity: 0.3;
   }
 }
+.node__icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
 .node__title-privacy {
   z-index: $ZI-node-elements;
+  div {
+    margin: 0;
+  }
   svg {
     fill: #dbdbdb;
   }

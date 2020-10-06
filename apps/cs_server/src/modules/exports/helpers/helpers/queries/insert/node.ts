@@ -6,7 +6,7 @@ import {
 import { Node } from '../../../../../node/entities/node.entity';
 
 const insertIntoNode = ({
-  node: { node_id, name, createdAt, updatedAt, node_title_styles },
+  node: { node_id, name, createdAt, updatedAt, node_title_styles, read_only },
   txt,
   hasObjects: { codebox, grid, anchor, image },
 }: {
@@ -19,7 +19,7 @@ const insertIntoNode = ({
     image: 1 | 0;
   };
 }) => {
-  const { is_ro, is_richtxt } = adaptNodeStyle(node_title_styles);
+  const { is_ro, is_richtxt } = adaptNodeStyle(node_title_styles, !!read_only);
 
   return SQL`
     INSERT INTO "main"."node"  (

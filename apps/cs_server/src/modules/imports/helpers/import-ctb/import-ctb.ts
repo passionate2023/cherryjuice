@@ -8,7 +8,10 @@ import {
   ImageSqliteRepository,
   SqliteImage,
 } from './repositories/image.sqlite.repository';
-import { nodeTitleStyle } from './rendering/node-meta/node-title-style';
+import {
+  nodeTitleHelpers,
+  nodeTitleStyle,
+} from './rendering/node-meta/node-title-style';
 import { FileMeta } from '../download/create-dowload-task/create-gdrive-download-task';
 import { User } from '../../../user/entities/user.entity';
 import { CreateNodeDTO } from '../../../node/dto/mutate-node.dto';
@@ -68,13 +71,14 @@ export class ImportCTB {
         node.node_id,
         {
           ...node,
+          read_only: nodeTitleHelpers.isReadOnly(+node.read_only),
           child_nodes: [],
           is_empty: 0,
           createdAt: convertTime(node.createdAt),
           updatedAt: convertTime(node.updatedAt),
           node_title_styles: nodeTitleStyle({
             is_richtxt: node.is_richtxt,
-            is_ro: node.is_ro,
+            is_ro: +node.read_only,
           }),
         },
       ]),

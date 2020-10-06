@@ -6,24 +6,18 @@ import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
-import {
-  getCurrentDocument,
-  getDocumentsList,
-} from '::store/selectors/cache/document/document';
-import { documentHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
+import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
+  const selectedNodeId = document?.persistedState?.selectedNode_id;
+  const node = document?.nodes && document.nodes[selectedNodeId];
   return {
-    showTree: state.editor.showTree,
-    userHasUnsavedChanges: getDocumentsList(state).some(
-      documentHasUnsavedChanges,
-    ),
-    documentHasUnsavedChanges: documentHasUnsavedChanges(document),
-    selectedNode_id: document?.persistedState?.selectedNode_id,
+    selectedNode_id: selectedNodeId,
     documentId: state.document.documentId,
     isDocumentOwner: hasWriteAccessToDocument(state),
+    read_only: !!node?.read_only,
   };
 };
 
@@ -36,6 +30,7 @@ const NodesButtons: React.FC<Props & PropsFromRedux> = ({
   selectedNode_id,
   documentId,
   isDocumentOwner,
+  read_only,
   children,
 }) => {
   const noDocumentIsSelected = !documentId;
@@ -82,7 +77,7 @@ const NodesButtons: React.FC<Props & PropsFromRedux> = ({
       <ToolbarButton
         dontMount={!isDocumentOwner}
         onClick={ac.dialogs.showDeleteNode}
-        disabled={noNodeIsSelected || noDocumentIsSelected}
+        disabled={noNodeIsSelected || noDocumentIsSelected || read_only}
         testId={testIds.toolBar__main__deleteNode}
       >
         <Icon name={Icons.material.delete} loadAsInlineSVG={'force'} />

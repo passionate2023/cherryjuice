@@ -13,6 +13,7 @@ export type QNodeMeta = Pick<
   | 'createdAt'
   | 'updatedAt'
   | 'node_title_styles'
+  | 'read_only'
   | 'privacy'
 >;
 
@@ -29,5 +30,6 @@ export const NODE_META = gql`
     updatedAt
     node_title_styles
     privacy
+    read_only
   }
 `;

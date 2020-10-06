@@ -21,7 +21,7 @@ export const listNodeEditedAttributes = ({
   });
 };
 
-type MutateNodeData = Partial<Omit<QFullNode, 'html' | 'image'>>;
+export type MutateNodeData = Partial<Omit<QFullNode, 'html' | 'image'>>;
 export type MutateNodeMetaParams = {
   node_id: number;
   documentId: string;

@@ -5,6 +5,7 @@ const Icons = {
     bookmarks: 'bookmarks',
     bookmark: 'bookmark',
     filter: 'filter',
+    key: 'key',
     time: 'time',
     link: 'link',
     code: 'code',

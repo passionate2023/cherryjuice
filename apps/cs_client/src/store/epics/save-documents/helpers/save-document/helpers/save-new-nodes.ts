@@ -16,6 +16,7 @@ const adapt = ({
   updatedAt,
   fatherId,
   privacy,
+  read_only,
 }: QFullNode): CreateNodeIt => ({
   child_nodes,
   createdAt,
@@ -23,7 +24,7 @@ const adapt = ({
   name,
   node_id,
   node_title_styles,
-  read_only: 1,
+  read_only,
   updatedAt,
   fatherId,
   privacy,

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import nodeMod from '::sass-modules/tree/node.scss';
 import { useSelector } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { HNodeName } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-title/components/h-node-name';
-import { Draggable } from '::root/components/app/components/editor/document/components/tree/components/node/_/draggable';
+import { modNode } from '::sass-modules';
 import { Droppable } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';
+import { Draggable } from '::root/components/app/components/editor/document/components/tree/components/node/_/draggable';
 
 type Props = {
   nodeStyle: Record<string, string>;
@@ -33,13 +33,13 @@ const NodeTitle: React.FC<Props> = ({
     <Droppable
       childOfAnchor={true}
       anchorId={node_id + ''}
-      anchorClassName={nodeMod.node}
+      anchorClassName={modNode.node}
       meta={{ documentId }}
       onDrop={ac.node.drop}
     >
       {(provided, ref) => (
         <div
-          className={nodeMod.node__title}
+          className={modNode.node__title}
           style={{ ...nodeStyle }}
           {...provided}
           ref={ref}

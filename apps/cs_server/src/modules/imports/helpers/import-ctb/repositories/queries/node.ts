@@ -44,7 +44,6 @@ const nodeQueries = {
 type SqliteNodeMeta = {
   name: string;
   node_id: number;
-  is_ro: number;
   is_richtxt: number;
   has_image: number;
   has_codebox: number;

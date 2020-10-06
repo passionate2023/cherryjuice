@@ -1,3 +1,4 @@
+import modNode from '::sass-modules/tree/node.scss';
 import modDrawer from '::sass-modules/shared-components/drawer.scss';
 import modButton from '::sass-modules/shared-components/button.scss';
 import modTextInput from '::sass-modules/shared-components/text-input.scss';
@@ -45,6 +46,7 @@ import modContextMenu from '::sass-modules/shared-components/context-menu.scss';
 import modToggleSwitch from '::sass-modules/shared-components/toggle-switch.scss';
 import modBookmarks from '::sass-modules/dialogs/bookmarks/bookmarks.scss';
 export {
+  modNode,
   modBookmarks,
   modNodePath,
   modToggleSwitch,
