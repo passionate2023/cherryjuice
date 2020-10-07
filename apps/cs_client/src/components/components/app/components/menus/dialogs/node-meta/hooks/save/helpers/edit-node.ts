@@ -23,7 +23,16 @@ export const calculateNewStyle = ({
 };
 
 export const joinTags = (tags: string[]): string | undefined =>
-  tags.filter(Boolean).join(', ');
+  tags
+    .map(tag => tag.trim())
+    .filter(Boolean)
+    .join(', ');
+
+export const splitTags = (tags: string): string[] =>
+  tags
+    ?.split(/,\s/)
+    ?.map(tag => tag.trim())
+    ?.filter(Boolean);
 
 const calculateEditedAttribute = ({
   nodeA,

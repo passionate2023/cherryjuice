@@ -33,7 +33,7 @@
     "validate:eslint": "yarn workspaces run lint",
     "validate": "run-p validate:*",
     "fix:prettier": "yarn prettier --write",
-    "fix:eslint": "yarn workspaces run lint --fix",
+    "fix:eslint": "yarn workspaces run lint -- --fix",
     "fix": "yarn fix:eslint && fix:prettier",
     "commit": "git-cz"
   },

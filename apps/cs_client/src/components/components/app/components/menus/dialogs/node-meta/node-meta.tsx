@@ -145,6 +145,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
             })
           }
           placeholder={'tags'}
+          pattern={'[^,\\s]*'}
         />
       ),
     },

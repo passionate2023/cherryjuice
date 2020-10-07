@@ -41,7 +41,7 @@ const Node: React.FC<NodeProps> = ({
 }) => {
   const online = useSelector((state: Store) => state.root.online);
   const documentId = useSelector((state: Store) => state.document.documentId);
-  const { child_nodes, name, privacy, html, read_only } = nodes[node_id];
+  const { child_nodes, name, privacy, html, read_only, tags } = nodes[node_id];
   const componentRef = useRef();
 
   const showChildren =
@@ -84,6 +84,7 @@ const Node: React.FC<NodeProps> = ({
           documentId={documentId}
           node_id={node_id}
           index={index}
+          tags={tags}
         />
         <NodeOverlay
           clickTimestamp={clickTimestamp}

@@ -7,49 +7,53 @@ import { joinClassNames } from '::helpers/dom/join-class-names';
 import { HighlightedHeadline } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/components/highlighted-headline';
 import { ac } from '::store/store';
 import { waitForDocumentToLoad } from '::root/components/app/components/editor/hooks/router-effect/helpers/wait-for-document-to-load';
+import { NodeNameAndTags } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/components/node-name-and-tags';
 
 type Props = {
   result: NodeSearchResultEntity;
   searchContext: SearchContext;
+  selectedNode_id: number;
+  documentId: string;
 };
 
-const Result: React.FC<Props> = ({ result, searchContext }) => {
+const Result: React.FC<Props> = ({
+  result,
+  searchContext,
+  selectedNode_id,
+  documentId,
+}) => {
   const headline = useHeadline({
     searchContext,
     searchResult: result,
   });
+  const selectNode = () => {
+    ac.document.setDocumentId(result.documentId);
+    waitForDocumentToLoad(result.documentId, () => {
+      ac.node.select(result);
+    });
+  };
+
   return (
-    <div className={modSearchResult.searchResult}>
+    <div
+      className={joinClassNames([
+        modSearchResult.searchResult,
+        [
+          modSearchResult.searchResultSelected,
+          result?.documentId === documentId &&
+            result?.node_id === selectedNode_id,
+        ],
+      ])}
+    >
       <div className={modSearchResult.searchResult__location}>
         <div className={modSearchResult.searchResult__location__documentName}>
           {result.documentName}
         </div>
-        <div
-          className={modSearchResult.searchResult__location__nodeName}
-          onClick={() => {
-            ac.document.setDocumentId(result.documentId);
-            waitForDocumentToLoad(result.documentId, () => {
-              ac.node.select(result);
-            });
-          }}
-        >
-          {headline?.nodeNameHeadline ? (
-            <HighlightedHeadline headline={headline.nodeNameHeadline} />
-          ) : (
-            result.nodeName
-          )}
-          <span className={modSearchResult.searchResult__location__nodeTags}>
-            {headline?.tagsHeadline ? (
-              <span>
-                <HighlightedHeadline headline={headline.tagsHeadline} />
-              </span>
-            ) : (
-              result.tags
-                ?.split(', ')
-                ?.map(tag => <span key={tag}>#{tag}</span>)
-            )}
-          </span>
-        </div>
+        <NodeNameAndTags
+          name={result.nodeName}
+          onClick={selectNode}
+          tags={result.tags}
+          headline={headline}
+        />
       </div>
       {headline?.ahtmlHeadline ? (
         <span className={modSearchResult.searchResult__headline}>

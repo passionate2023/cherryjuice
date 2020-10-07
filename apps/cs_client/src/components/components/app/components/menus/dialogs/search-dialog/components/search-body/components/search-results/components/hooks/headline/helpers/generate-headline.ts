@@ -40,7 +40,12 @@ type SearchContext = Pick<
 >;
 type SearchResult = Pick<
   NodeSearchResultEntity,
-  'ahtmlHeadline' | 'nodeNameHeadline' | 'ahtml_txt' | 'nodeName'
+  | 'ahtmlHeadline'
+  | 'nodeNameHeadline'
+  | 'ahtml_txt'
+  | 'nodeName'
+  | 'tags'
+  | 'tagsHeadline'
 >;
 type GenerateHeadlineProps = {
   searchContext: SearchContext;
@@ -84,7 +89,7 @@ const generateHeadline = ({
   const c = {
     query,
     searchOptions,
-    column: tags ? '#' + tags?.replace(/, /g, ' #') : '',
+    column: tags ? '#' + tags?.replace(/,\s*/g, ' #') : '',
     headline: tagsHeadline,
   };
 
