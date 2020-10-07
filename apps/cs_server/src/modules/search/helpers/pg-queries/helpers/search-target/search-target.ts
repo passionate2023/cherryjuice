@@ -8,7 +8,11 @@ import { regex } from './helpers/regex';
 import { simple } from './helpers/simple';
 import { ForbiddenException } from '@nestjs/common';
 import { QueryCreatorState } from '../time-filter';
-type PGHeadline = { nodeNameHeadline?: string; ahtmlHeadline?: string };
+type PGHeadline = {
+  nodeNameHeadline?: string;
+  ahtmlHeadline?: string;
+  tagsHeadline?: string;
+};
 const searchTargetsToColumnName = {
   [SearchTarget.nodeTitle]: {
     valueName: 'nodeNameHeadline',
@@ -17,6 +21,10 @@ const searchTargetsToColumnName = {
   [SearchTarget.nodeContent]: {
     valueName: 'ahtmlHeadline',
     columnName: 'n."ahtml_txt"',
+  },
+  [SearchTarget.nodeTags]: {
+    valueName: 'tagsHeadline',
+    columnName: 'n."tags"',
   },
 };
 const createHeadlineGenerator = ({
@@ -29,12 +37,12 @@ const createHeadlineGenerator = ({
   const res: PGHeadline = {
     nodeNameHeadline: undefined,
     ahtmlHeadline: undefined,
+    tagsHeadline: undefined,
   };
   searchTarget.forEach(target => {
     const { valueName, columnName } = searchTargetsToColumnName[target];
     res[valueName] = fn({ columnName, numberOfVariables, searchOptions });
   });
-
   return res;
 };
 
@@ -95,6 +103,8 @@ const searchTargetWC = ({
     res.orWhereClauses.push(`n."name" ${state.whereClause}`);
   if (searchTarget.includes(SearchTarget.nodeContent))
     res.orWhereClauses.push(`n."ahtml_txt" ${state.whereClause}`);
+  if (searchTarget.includes(SearchTarget.nodeTags))
+    res.orWhereClauses.push(`n."tags" ${state.whereClause}`);
 
   return {
     orWhereClauses: `( ${res.orWhereClauses.join(' or ')} )`,

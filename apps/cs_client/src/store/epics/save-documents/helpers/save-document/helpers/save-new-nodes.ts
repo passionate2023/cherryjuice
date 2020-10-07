@@ -17,6 +17,7 @@ const adapt = ({
   fatherId,
   privacy,
   read_only,
+  tags,
 }: QFullNode): CreateNodeIt => ({
   child_nodes,
   createdAt,
@@ -28,6 +29,7 @@ const adapt = ({
   updatedAt,
   fatherId,
   privacy,
+  tags,
 });
 
 const saveNewNodes = async ({ state, document }: SaveOperationProps) => {

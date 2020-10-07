@@ -29,11 +29,12 @@
     "strip:deps": "node scripts/strip-dev-dependencies.js",
     "test": "run-p test:*",
     "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|jsx|ts|tsx|json|css|scss)\"",
-    "format": "yarn prettier --write",
-    "check-format": "yarn prettier --list-different",
-    "lint": "yarn workspaces run lint",
-    "lint-fix": "yarn workspaces run lint -- --fix",
-    "validate": "run-p check-format lint",
+    "validate:prettier": "yarn prettier --list-different",
+    "validate:eslint": "yarn workspaces run lint",
+    "validate": "run-p validate:*",
+    "fix:prettier": "yarn prettier --write",
+    "fix:eslint": "yarn workspaces run lint --fix",
+    "fix": "yarn fix:eslint && fix:prettier",
     "commit": "git-cz"
   },
   "config": {

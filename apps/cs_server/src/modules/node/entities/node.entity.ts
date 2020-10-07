@@ -74,6 +74,13 @@ export class Node extends BaseEntity {
   @Field({ nullable: true, defaultValue: '{}' })
   node_title_styles: string;
 
+  @Column({ nullable: true })
+  @Field({ nullable: true, defaultValue: '' })
+  tags: string;
+
+  @Column('tsvector')
+  tags_tsv: string;
+
   @Column({ select: false, default: '[]' })
   ahtml: string;
 

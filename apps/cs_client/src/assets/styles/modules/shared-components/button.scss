@@ -84,7 +84,14 @@
     fill: white;
   }
 }
-
+$button-width: 18px;
+.button--small {
+  min-width: $button-width;
+  min-height: $button-width;
+  width: $button-width;
+  height: $button-width;
+  padding: 0;
+}
 .button--rotated45 {
   svg,
   img {

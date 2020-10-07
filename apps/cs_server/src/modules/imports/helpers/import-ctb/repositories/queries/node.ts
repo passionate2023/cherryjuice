@@ -26,7 +26,7 @@ const nodeQueries = {
     node_meta: (node_id?: number) => `
   SELECT 
     n.node_id, n.name, n.is_richtxt, n.has_image, n.has_codebox,
-    n.has_table,n.ts_creation as createdAt,n.ts_lastsave as updatedAt, 
+    n.has_table,n.ts_creation as createdAt,n.ts_lastsave as updatedAt, n.tags,
     c.father_id,c.sequence, n.is_ro as read_only, b.node_id as bookmark, b.sequence as bookmark_sequence
    FROM node as n INNER JOIN children AS c
    on n.node_id = c.node_id
@@ -56,6 +56,7 @@ type SqliteNodeMeta = {
   read_only: number;
   bookmark: number;
   bookmark_sequence: number;
+  tags?: string;
 };
 
 export { nodeQueries };

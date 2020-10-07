@@ -50,14 +50,23 @@ type GenerateHeadlineProps = {
 type Headlines = {
   nodeNameHeadline: Headline;
   ahtmlHeadline: Headline;
+  tagsHeadline: Headline;
 };
 const generateHeadline = ({
   searchContext: { query, searchType, searchOptions, searchTarget },
-  searchResult: { nodeNameHeadline, ahtmlHeadline, ahtml_txt, nodeName },
+  searchResult: {
+    nodeNameHeadline,
+    ahtmlHeadline,
+    ahtml_txt,
+    nodeName,
+    tags,
+    tagsHeadline,
+  },
 }: GenerateHeadlineProps): Headlines => {
   const res: Headlines = {
     ahtmlHeadline: undefined,
     nodeNameHeadline: undefined,
+    tagsHeadline: undefined,
   };
   const a = {
     query,
@@ -71,6 +80,14 @@ const generateHeadline = ({
     column: ahtml_txt,
     headline: ahtmlHeadline,
   };
+
+  const c = {
+    query,
+    searchOptions,
+    column: tags ? '#' + tags?.replace(/, /g, ' #') : '',
+    headline: tagsHeadline,
+  };
+
   try {
     const fn =
       searchType === SearchType.Simple
@@ -83,6 +100,7 @@ const generateHeadline = ({
       res.nodeNameHeadline = fn(a);
     if (searchTarget.includes(SearchTarget.nodeContent))
       res.ahtmlHeadline = fn(b);
+    if (searchTarget.includes(SearchTarget.nodeTags)) res.tagsHeadline = fn(c);
     clampStartAndEnd(res);
     return res;
   } catch (e) {

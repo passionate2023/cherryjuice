@@ -124,6 +124,7 @@ type Node {
     node_title_styles: String
     privacy: NodePrivacy
     read_only: Int!
+    tags: String
     updatedAt: Float!
 }
 
@@ -151,6 +152,8 @@ type NodeSearchResultEntity {
     nodeName: String!
     nodeNameHeadline: String
     node_id: Int!
+    tags: String
+    tagsHeadline: String
     updatedAt: Timestamp!
 }
 
@@ -322,6 +325,7 @@ enum SearchScope {
 
 enum SearchTarget {
     nodeContent
+    nodeTags
     nodeTitle
 }
 
@@ -387,6 +391,7 @@ input CreateNodeIt {
     node_title_styles: String
     privacy: NodePrivacy
     read_only: Int!
+    tags: String
     updatedAt: Timestamp!
 }
 
@@ -455,6 +460,7 @@ input NodeMetaIt {
     privacy: NodePrivacy
     read_only: Int
     sequence: Float
+    tags: String
     updatedAt: Timestamp!
 }
 

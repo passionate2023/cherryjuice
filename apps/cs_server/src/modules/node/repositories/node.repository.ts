@@ -43,6 +43,7 @@ const nodeMeta = [
   `n.hash`,
   `n.documentId`,
   `n.privacy`,
+  `n.tags`,
 ];
 const nodeAhtml = ['n.ahtml'];
 const fullNode = [...nodeMeta, ...nodeAhtml];

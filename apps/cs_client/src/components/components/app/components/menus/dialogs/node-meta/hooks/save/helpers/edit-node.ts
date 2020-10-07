@@ -22,6 +22,9 @@ export const calculateNewStyle = ({
   });
 };
 
+export const joinTags = (tags: string[]): string | undefined =>
+  tags.filter(Boolean).join(', ');
+
 const calculateEditedAttribute = ({
   nodeA,
   nodeBMeta,
@@ -40,6 +43,8 @@ const calculateEditedAttribute = ({
     nodeBMeta.privacy === NodePrivacy.DEFAULT && !nodeA.privacy;
   if (!noChangeInPrivacy && nodeBMeta.privacy !== nodeA.privacy)
     diff.privacy = nodeBMeta.privacy;
+  const noChangesInTags = !nodeA.tags && nodeBMeta.tags.length === 0;
+  if (!noChangesInTags) diff.tags = joinTags(nodeBMeta.tags);
   return diff;
 };
 

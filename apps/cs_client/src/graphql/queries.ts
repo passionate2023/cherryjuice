@@ -34,6 +34,8 @@ const QUERY_SEARCH = {
               documentName
               ahtmlHeadline
               nodeNameHeadline
+              tagsHeadline
+              tags
               ahtml_txt
               createdAt
               updatedAt

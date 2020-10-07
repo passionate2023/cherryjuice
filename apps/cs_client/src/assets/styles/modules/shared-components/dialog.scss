@@ -98,6 +98,7 @@ $small-dialog-width: 350px;
   flex: 10;
   height: calc(100% - 130px);
   background-color: var(--surface);
+  overflow-y: auto;
 }
 .dialog__footer {
   @include dialog-edge-size();

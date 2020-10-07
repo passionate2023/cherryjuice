@@ -21,6 +21,12 @@ export class NodeSearchResultEntity {
   ahtmlHeadline?: string;
 
   @Field({ nullable: true })
+  tags?: string;
+
+  @Field({ nullable: true })
+  tagsHeadline?: string;
+
+  @Field({ nullable: true })
   ahtml_txt?: string;
 
   @Field(() => Timestamp)

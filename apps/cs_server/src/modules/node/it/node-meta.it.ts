@@ -19,6 +19,9 @@ export class NodeMetaIt {
   @Field({ nullable: true })
   father_id: number;
 
+  @Field({ nullable: true })
+  tags: string;
+
   @Field(() => [Int], { nullable: 'itemsAndList' })
   child_nodes: number[];
 

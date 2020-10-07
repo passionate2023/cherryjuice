@@ -22,6 +22,7 @@ import { getNode as getNodeSelector } from '::store/selectors/cache/document/nod
 import { editNode } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/edit-node';
 import { createNode } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/create-node';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
+import { Chips } from '::root/components/app/components/menus/dialogs/document-meta/components/chips/chips';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -127,6 +128,25 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
         />
       ),
       label: 'visibility',
+    },
+    {
+      label: 'tags',
+      monolithComponent: (
+        <Chips
+          label={'tags'}
+          chips={state.tags.map(tag => ({ text: tag }))}
+          onRemove={nodeMetaActionCreators.removeTag}
+          addChip={tag =>
+            new Promise<{ clearInput: boolean }>(resolve => {
+              if (tag) {
+                nodeMetaActionCreators.addTag(tag);
+                resolve({ clearInput: true });
+              } else return { clearInput: false };
+            })
+          }
+          placeholder={'tags'}
+        />
+      ),
     },
     {
       label: 'bold',

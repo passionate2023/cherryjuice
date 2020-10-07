@@ -2,7 +2,10 @@ import { NodeMetaIt } from '@cherryjuice/graphql-types';
 import { QFullNode } from '::store/ducks/cache/document-cache';
 import { newNodePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 import { NodeMeta } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
-import { calculateNewStyle } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/edit-node';
+import {
+  calculateNewStyle,
+  joinTags,
+} from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/edit-node';
 
 const defaultNode = {
   name: '',
@@ -41,6 +44,7 @@ const generateNode = ({
     read_only: nodeBMeta.isReadOnly ? 1 : 0,
     child_nodes: [],
     privacy: nodeBMeta.privacy,
+    tags: joinTags(nodeBMeta.tags),
   };
 };
 

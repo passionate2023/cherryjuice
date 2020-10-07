@@ -151,6 +151,7 @@ export class ImportCTB {
           createdAt: 0,
           updatedAt: 0,
           fatherId: undefined,
+          tags: nodeA.tags?.replace(/ /g, ', '),
         },
       };
       const nodeB = await nodeCreator(dto);

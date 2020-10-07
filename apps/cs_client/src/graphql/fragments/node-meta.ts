@@ -13,8 +13,9 @@ export type QNodeMeta = Pick<
   | 'createdAt'
   | 'updatedAt'
   | 'node_title_styles'
-  | 'read_only'
   | 'privacy'
+  | 'read_only'
+  | 'tags'
 >;
 
 export const NODE_META = gql`
@@ -31,5 +32,6 @@ export const NODE_META = gql`
     node_title_styles
     privacy
     read_only
+    tags
   }
 `;

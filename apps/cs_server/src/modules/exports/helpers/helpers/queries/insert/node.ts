@@ -6,7 +6,15 @@ import {
 import { Node } from '../../../../../node/entities/node.entity';
 
 const insertIntoNode = ({
-  node: { node_id, name, createdAt, updatedAt, node_title_styles, read_only },
+  node: {
+    node_id,
+    name,
+    createdAt,
+    updatedAt,
+    node_title_styles,
+    read_only,
+    tags,
+  },
   txt,
   hasObjects: { codebox, grid, anchor, image },
 }: {
@@ -26,8 +34,8 @@ const insertIntoNode = ({
     "node_id", "name", "txt", "syntax","tags", "is_ro", "is_richtxt", "has_codebox", "has_table", "has_image", "level","ts_creation","ts_lastsave"
     ) VALUES (
     ${node_id}, ${name}, 
-    ${txt}, 'custom-colors', '', ${is_ro}, ${is_richtxt}, ${codebox}, ${grid}, ${anchor |
-    image}, '0',
+    ${txt}, 'custom-colors', ${tags?.replace(/,/g, '') ||
+    ''}, ${is_ro}, ${is_richtxt}, ${codebox}, ${grid}, ${anchor | image}, '0',
     ${adaptNodeTime(createdAt)},${adaptNodeTime(updatedAt)}
     )`;
 };

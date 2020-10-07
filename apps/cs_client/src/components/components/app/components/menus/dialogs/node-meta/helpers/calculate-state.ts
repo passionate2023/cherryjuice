@@ -27,6 +27,7 @@ const calculateState = (node: QNodeMeta) => {
     customColor: style.color || '#ffffff',
     name,
     privacy: node.privacy || NodePrivacy.DEFAULT,
+    tags: node.tags?.split(',') || [],
   };
 };
 

@@ -11,6 +11,7 @@ type TState = {
   isBold: boolean;
   isReadOnly: boolean;
   privacy: NodePrivacy;
+  tags: string[];
 };
 const initialState: TState = {
   name: '',
@@ -21,6 +22,7 @@ const initialState: TState = {
   isBold: false,
   isReadOnly: false,
   privacy: NodePrivacy.DEFAULT,
+  tags: [],
 };
 
 type ResetToCreateProps = {
@@ -50,6 +52,8 @@ enum actions {
   resetToEdit,
   resetToCreate,
   setPrivacy,
+  addTag,
+  removeTag,
 }
 
 const actionCreators = (() => {
@@ -76,6 +80,9 @@ const actionCreators = (() => {
       state.dispatch({ type: actions.resetToCreate, value }),
     setPrivacy: (value: NodePrivacy) =>
       state.dispatch({ type: actions.setPrivacy, value }),
+    addTag: (value: string) => state.dispatch({ type: actions.addTag, value }),
+    removeTag: (value: string) =>
+      state.dispatch({ type: actions.removeTag, value }),
   };
 })();
 
@@ -101,6 +108,13 @@ const reducer = (
       return { ...state, isReadOnly: action.value };
     case actions.setName:
       return { ...state, name: action.value };
+    case actions.addTag:
+      return { ...state, tags: [...state.tags, action.value] };
+    case actions.removeTag:
+      return {
+        ...state,
+        tags: state.tags.filter(_tag => _tag !== action.value),
+      };
     case actions.resetToEdit:
       return resetToEdit(action.value);
     case actions.resetToCreate:

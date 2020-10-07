@@ -44,7 +44,7 @@ const set = {
 const get = {
   guestButton(email: string) {
     return cy
-      .findByTestId(testIds.documentMeta__guestList)
+      .findByTestId(testIds.form__chips__chipsList)
       .findByText(email)
       .findByTestId(testIds.documentMeta__guestList__writeButton);
   },

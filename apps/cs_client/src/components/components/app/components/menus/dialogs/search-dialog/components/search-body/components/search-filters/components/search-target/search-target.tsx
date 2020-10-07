@@ -10,6 +10,7 @@ const SearchTarget: React.FC<Props> = () => {
   const types: { target: TSearchTarget }[] = [
     { target: TSearchTarget.nodeContent },
     { target: TSearchTarget.nodeTitle },
+    { target: TSearchTarget.nodeTags },
   ];
 
   return (

@@ -78,14 +78,15 @@ const Tab: React.FC<Props> = ({
         {name}
       </span>
       <ButtonCircle
-        className={modTabs.tab__button}
-        icon={<Icon name={Icons.material.close} size={12} />}
+        iconName={Icons.material.close}
         onClick={closeNode}
+        small={true}
       />
       {isBookmarked && (
         <Icon
           name={Icons.material.bookmark}
           className={modTabs.tab__bookmarkIcon}
+          loadAsInlineSVG={'force'}
         />
       )}
     </div>

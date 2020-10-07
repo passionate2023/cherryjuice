@@ -61,6 +61,7 @@ export interface Node {
   node_title_styles?: string;
   privacy?: NodePrivacy;
   read_only: number;
+  tags?: string;
   updatedAt: number;
 }
 
@@ -155,6 +156,7 @@ export enum SearchScope {
 
 export enum SearchTarget {
   nodeContent = 'nodeContent',
+  nodeTags = 'nodeTags',
   nodeTitle = 'nodeTitle',
 }
 
@@ -201,6 +203,8 @@ export interface NodeSearchResultEntity {
   nodeName: string;
   nodeNameHeadline?: string;
   node_id: number;
+  tags?: string;
+  tagsHeadline?: string;
   updatedAt: Timestamp;
 }
 
@@ -374,6 +378,7 @@ export interface CreateNodeIt {
   node_title_styles?: string;
   privacy?: NodePrivacy;
   read_only: number;
+  tags?: string;
   updatedAt: Timestamp;
 }
 
@@ -389,6 +394,7 @@ export interface NodeMetaIt {
   privacy?: NodePrivacy;
   read_only?: number;
   sequence?: number;
+  tags?: string;
   updatedAt: Timestamp;
 }
 
@@ -760,6 +766,7 @@ export interface NodeTypeResolver<TParent = any> {
   node_title_styles?: NodeToNode_title_stylesResolver<TParent>;
   privacy?: NodeToPrivacyResolver<TParent>;
   read_only?: NodeToRead_onlyResolver<TParent>;
+  tags?: NodeToTagsResolver<TParent>;
   updatedAt?: NodeToUpdatedAtResolver<TParent>;
 }
 
@@ -824,6 +831,10 @@ export interface NodeToPrivacyResolver<TParent = any, TResult = any> {
 }
 
 export interface NodeToRead_onlyResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeToTagsResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -1001,6 +1012,8 @@ export interface NodeSearchResultEntityTypeResolver<TParent = any> {
   nodeName?: NodeSearchResultEntityToNodeNameResolver<TParent>;
   nodeNameHeadline?: NodeSearchResultEntityToNodeNameHeadlineResolver<TParent>;
   node_id?: NodeSearchResultEntityToNode_idResolver<TParent>;
+  tags?: NodeSearchResultEntityToTagsResolver<TParent>;
+  tagsHeadline?: NodeSearchResultEntityToTagsHeadlineResolver<TParent>;
   updatedAt?: NodeSearchResultEntityToUpdatedAtResolver<TParent>;
 }
 
@@ -1061,6 +1074,20 @@ export interface NodeSearchResultEntityToNodeNameHeadlineResolver<
 }
 
 export interface NodeSearchResultEntityToNode_idResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultEntityToTagsResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NodeSearchResultEntityToTagsHeadlineResolver<
   TParent = any,
   TResult = any
 > {

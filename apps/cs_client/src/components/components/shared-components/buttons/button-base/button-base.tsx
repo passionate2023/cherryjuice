@@ -17,6 +17,7 @@ type ButtonBaseProps = {
   icon?: JSX.Element;
   iconName?: string;
   variant?: 'danger';
+  small?: boolean;
 };
 
 const buttonVariants = {
@@ -59,6 +60,7 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   icon,
   iconName,
   variant,
+  small,
 }) => {
   const buttonRef = useRef<HTMLButtonElement>();
   useLazyAutoFocus(lazyAutoFocus, buttonRef);
@@ -70,6 +72,7 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
         [modButton.buttonDark, dark],
         [modButton.buttonText, text],
         [modButton.buttonPressed, active],
+        [modButton.buttonSmall, small],
         className,
       ])}
       ref={buttonRef}
@@ -79,7 +82,11 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
       {...(testId && { 'data-testid': testId })}
     >
       {iconName ? (
-        <Icon name={iconName} loadAsInlineSVG={'force'} />
+        <Icon
+          name={iconName}
+          loadAsInlineSVG={'force'}
+          size={small ? 12 : undefined}
+        />
       ) : icon ? (
         icon
       ) : (

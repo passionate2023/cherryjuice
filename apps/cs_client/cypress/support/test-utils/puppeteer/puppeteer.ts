@@ -48,8 +48,8 @@ const puppeteer = {
     selectDocument,
     setDocumentPrivacy,
     addGuest({ user: { email }, writeAccess }: GuestAst) {
-      cy.findByTestId(testIds.documentMeta__addGuest__input).type(email);
-      cy.findByTestId(testIds.documentMeta__addGuest__addButton).click();
+      cy.findByTestId(testIds.form__chips__input).type(email);
+      cy.findByTestId(testIds.form__chips__addChip).click();
       interact.documentMeta.get.guestButton(email);
       if (writeAccess) {
         interact.documentMeta.get.guestButton(email).click();

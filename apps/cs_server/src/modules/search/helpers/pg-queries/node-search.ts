@@ -58,7 +58,13 @@ const nodeSearch = ({
             ? `${headline.nodeNameHeadline} as "nodeNameHeadline",`
             : ''
         }
+         ${
+           headline?.tagsHeadline
+             ? `${headline.tagsHeadline} as "tagsHeadline",`
+             : ''
+         }
         ${searchTarget.includes(SearchTarget.nodeContent) ? `n.ahtml_txt,` : ''}
+        ${searchTarget.includes(SearchTarget.nodeTags) ? `n.tags,` : ''}
         n.node_id, n.id as "nodeId", n.name as "nodeName", n."documentId", n."createdAt", n."updatedAt",
         d.name as "documentName"
         from node as n

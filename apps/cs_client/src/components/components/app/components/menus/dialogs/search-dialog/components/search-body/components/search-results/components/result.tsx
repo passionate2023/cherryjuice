@@ -38,6 +38,17 @@ const Result: React.FC<Props> = ({ result, searchContext }) => {
           ) : (
             result.nodeName
           )}
+          <span className={modSearchResult.searchResult__location__nodeTags}>
+            {headline?.tagsHeadline ? (
+              <span>
+                <HighlightedHeadline headline={headline.tagsHeadline} />
+              </span>
+            ) : (
+              result.tags
+                ?.split(', ')
+                ?.map(tag => <span key={tag}>#{tag}</span>)
+            )}
+          </span>
         </div>
       </div>
       {headline?.ahtmlHeadline ? (
