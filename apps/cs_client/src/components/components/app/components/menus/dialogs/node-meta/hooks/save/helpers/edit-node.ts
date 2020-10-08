@@ -1,7 +1,7 @@
 import { ac } from '::store/store';
 import { NodeMeta } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
 import { NodePrivacy } from '@cherryjuice/graphql-types';
-import { MutateNodeData } from '::store/ducks/cache/document-cache/helpers/node/mutate-node-meta';
+import { MutateNodeData } from '::store/ducks/document-cache/helpers/node/mutate-node-meta';
 import { QNodeMeta } from '::graphql/fragments/node-meta';
 
 export const calculateNewStyle = ({

@@ -58,6 +58,7 @@
     "ts-jest": "^25.2.1"
   },
   "devDependencies": {
+    "@cherryjuice/default-settings": "0.0.2",
     "@cherryjuice/graphql-types": "0.0.1",
     "@cherryjuice/ahtml-to-html": "0.0.2",
     "@material/animation": "^5.1.0",

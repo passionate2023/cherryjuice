@@ -4,7 +4,7 @@ import {
   CachedDocumentState,
   NodesDict,
   PersistedDocumentState,
-} from '::store/ducks/cache/document-cache';
+} from '::store/ducks/document-cache/document-cache';
 import { ContextMenuItemProps } from '::root/components/shared-components/context-menu/context-menu-item';
 
 type Props = {

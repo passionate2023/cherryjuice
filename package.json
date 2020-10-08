@@ -22,6 +22,7 @@
     "test:lib:1": "yarn workspace @cherryjuice/graphql-types run test",
     "test:lib:2": "yarn workspace @cherryjuice/ahtml-to-html run test",
     "test:lib2:1": "yarn workspace @cherryjuice/ctb-to-ahtml run test",
+    "test:lib2:2": "yarn workspace @cherryjuice/default-settings run test",
     "test:libs": "run-p test:lib:*",
     "test:app:1": "yarn workspace @cherryjuice/react-client  run test",
     "test:app:2": "yarn workspace @cherryjuice/nest-server  run test",

@@ -1,13 +1,14 @@
 import * as React from 'react';
-import { KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
 import { useCallback, useMemo } from 'react';
+import { KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
 import { modButton, modHotKey } from '::sass-modules';
 import { TextInput } from '::root/components/shared-components/form/text-input';
 import { keyEventToValidShortcut } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/components/keyboard-shortcut/helpers';
-import { hkActionCreators } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/reducer/reducer';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { HotKey } from '@cherryjuice/graphql-types';
+import { ac } from '::store/store';
+import { MetaKey } from '::store/ducks/settings/hotkeys-settings/reducers/toggle-meta';
 
 const keyToString = {
   ' ': 'space',
@@ -48,12 +49,21 @@ const KeyboardShortcut = ({
   hotKey: HotKey;
   duplicate: boolean;
 }) => {
-  const toggleCtrl = useCallback(() => hkActionCreators.toggleCtrl(type), []);
-  const toggleShift = useCallback(() => hkActionCreators.toggleShift(type), []);
-  const toggleAlt = useCallback(() => hkActionCreators.toggleAlt(type), []);
+  const toggleCtrl = useCallback(
+    () => ac.hotkeySettings.toggleMeta({ type, key: MetaKey.ctrl }),
+    [],
+  );
+  const toggleShift = useCallback(
+    () => ac.hotkeySettings.toggleMeta({ type, key: MetaKey.shift }),
+    [],
+  );
+  const toggleAlt = useCallback(
+    () => ac.hotkeySettings.toggleMeta({ type, key: MetaKey.alt }),
+    [],
+  );
   const setKey = useCallback(
     e =>
-      hkActionCreators.setKey({
+      ac.hotkeySettings.setKey({
         type,
         key: keyEventToValidShortcut(e.nativeEvent.key),
       }),

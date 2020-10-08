@@ -1,6 +1,9 @@
 import { apolloClient } from '::graphql/client/apollo-client';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
-import { CachedDocument, QFullNode } from '::store/ducks/cache/document-cache';
+import {
+  CachedDocument,
+  QFullNode,
+} from '::store/ducks/document-cache/document-cache';
 import { newNodePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 
 type SaveOperationState = {

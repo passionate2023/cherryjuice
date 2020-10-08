@@ -8,7 +8,7 @@ import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-a
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { useEffect, useMemo } from 'react';
-import { QFullNode } from '::store/ducks/cache/document-cache';
+import { QFullNode } from '::store/ducks/document-cache/document-cache';
 import { OfflineBanner } from '::root/components/app/components/editor/document/components/rich-text/components/offline-banner';
 import { onPaste } from '::helpers/editing/clipboard';
 import { onKeyDown } from '::helpers/editing/typing';

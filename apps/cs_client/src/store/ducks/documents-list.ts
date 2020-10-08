@@ -3,8 +3,8 @@ import { createActionPrefixer } from './helpers/shared';
 import { AsyncOperation } from './document';
 import { rootActionCreators } from './root';
 import { cloneObj } from '::helpers/objects';
-import { CachedDocument } from '::store/ducks/cache/document-cache';
-import { LoadDocumentsListPayload } from '::store/ducks/cache/document-cache/helpers/document/load-documents-list';
+import { CachedDocument } from '::store/ducks/document-cache/document-cache';
+import { LoadDocumentsListPayload } from '::store/ducks/document-cache/helpers/document/load-documents-list';
 import {
   SearchSortOptions,
   SortDirection,

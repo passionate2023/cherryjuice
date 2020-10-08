@@ -15,7 +15,7 @@ import { useTabContextMenu } from '::root/components/app/components/editor/docum
 import {
   CachedDocumentState,
   NodesDict,
-} from '::store/ducks/cache/document-cache';
+} from '::store/ducks/document-cache/document-cache';
 import { NodeProps } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/components/tab';
 import { newNodePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 

@@ -46,13 +46,8 @@ type DrawerNavigationElementProps = {
 };
 
 const DrawerNavigationElement: React.FC<DrawerNavigationElementProps &
-  PropsFromRedux> = ({ title, selectedScreenTitle, screenHasChanges }) => {
-  const onClick = useUnsavedSettingsPrompt(
-    screenHasChanges,
-    selectedScreenTitle,
-    () => ac.settings.save(title),
-    [() => ac.settings.selectScreen(title), ac.editorSettings.undoChanges],
-  );
+  PropsFromRedux> = ({ title, selectedScreenTitle }) => {
+  const onClick = () => ac.settings.selectScreen(title);
 
   const isSelected = selectedScreenTitle === title;
   return (

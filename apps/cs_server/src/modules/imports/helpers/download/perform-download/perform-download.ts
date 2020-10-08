@@ -51,7 +51,7 @@ const performDownload = async (
       });
 
     readStream.on('data', chunk => {
-      hash.update(chunk);
+      hash.set(chunk);
       state.numberOfChunks++;
     });
   });

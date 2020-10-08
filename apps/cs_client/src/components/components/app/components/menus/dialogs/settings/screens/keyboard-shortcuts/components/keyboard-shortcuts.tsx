@@ -1,20 +1,14 @@
 import * as React from 'react';
 import { KeyboardShortcut } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/components/keyboard-shortcut/keyboard-shortcut';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac, Store } from '::store/store';
-import {
-  hkActionCreators,
-  hkReducer,
-  resetHKState,
-} from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/reducer/reducer';
-import { useEffect, useReducer } from 'react';
-import { hotKeysToDict } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/hotkeys-to-dict';
+import { Store } from '::store/store';
 import { modHotKeys } from '::sass-modules';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
 
 const mapState = (state: Store) => ({
   hotKeys: getHotkeys(state),
-  syncHotKeysWithCache: state.cache.settings.syncHotKeysWithCache,
+  current: state.hotkeySettings.current,
+  duplicates: state.hotkeySettings.duplicates,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -24,37 +18,9 @@ type Props = {};
 
 const KeyboardShortcuts: React.FC<Props & PropsFromRedux> = ({
   hotKeys,
-  syncHotKeysWithCache,
+  current,
+  duplicates,
 }) => {
-  const [state, dispatch] = useReducer(hkReducer, {}, () => {
-    return resetHKState(hotKeys);
-  });
-  useEffect(() => {
-    hkActionCreators.init(dispatch);
-  }, []);
-
-  useEffect(() => {
-    hkActionCreators.reset(hotKeys);
-  }, [hotKeys]);
-
-  useEffect(() => {
-    if (Object.keys(state.changes).length && !state.duplicates) {
-      ac.settings.setScreenHasChanges();
-    } else ac.settings.clearScreenHasChanges();
-  }, [state.changes]);
-  useEffect(() => {
-    if (syncHotKeysWithCache) {
-      if (state.changes)
-        if (!state.duplicates) {
-          ac.cache.updateHotkeys(
-            hotKeysToDict(
-              Object.values(state.changes).map(change => change.changed),
-            ),
-          );
-        } else ac.cache.clearHotkeys();
-    }
-  }, [syncHotKeysWithCache]);
-
   return (
     <>
       {Object.entries(hotKeys).map(([name, hotkeys]) => (
@@ -66,8 +32,8 @@ const KeyboardShortcuts: React.FC<Props & PropsFromRedux> = ({
             {hotkeys.map(({ type }) => (
               <KeyboardShortcut
                 key={type}
-                hotKey={state.hotKeys[type]}
-                duplicate={state.duplicates && state.duplicates[type]}
+                hotKey={{ type, keys: current[type] }}
+                duplicate={duplicates && duplicates[type]}
               />
             ))}
           </div>

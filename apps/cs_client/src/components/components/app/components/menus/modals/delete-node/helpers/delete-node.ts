@@ -1,5 +1,5 @@
 import { ac } from '::store/store';
-import { QFullNode } from '::store/ducks/cache/document-cache';
+import { QFullNode } from '::store/ducks/document-cache/document-cache';
 
 const deleteNode = (deletedNode: QFullNode) => {
   return () => {

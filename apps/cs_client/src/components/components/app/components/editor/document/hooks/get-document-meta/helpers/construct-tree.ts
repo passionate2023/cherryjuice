@@ -1,6 +1,6 @@
 import { QNodeMeta } from '::graphql/queries/document-meta';
 import { PrivateNode } from '@cherryjuice/graphql-types';
-import { NodesDict } from '::store/ducks/cache/document-cache';
+import { NodesDict } from '::store/ducks/document-cache/document-cache';
 
 type Props = {
   nodes: QNodeMeta[];

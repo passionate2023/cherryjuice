@@ -2,7 +2,7 @@ import { getEditor } from '::root/components/app/components/editor/document/comp
 import { ac, store } from '::store/store';
 import { getDocuments } from '::store/selectors/cache/document/document';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
-import { MutateNodeContentParams } from '::store/ducks/cache/document-cache/helpers/node/mutate-node-content';
+import { MutateNodeContentParams } from '::store/ducks/document-cache/helpers/node/mutate-node-content';
 
 const unsetImagesAttributes = (images: HTMLImageElement[]) => {
   const imageAttributesTempContainer = [];

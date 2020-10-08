@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ac } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { CachedDocument } from '::store/ducks/cache/document-cache';
+import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 import { DialogListItem } from '::root/components/shared-components/dialog/dialog-list/dialog-list-item';
 import { DocumentDetails } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/components/document-details';
 

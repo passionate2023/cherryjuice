@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { dTM } from '::store/ducks/cache/document-cache';
+import { dTM } from '::store/ducks/document-cache/document-cache';
 import { CollapsableListItemProps } from '::root/components/app/components/menus/widgets/components/collapsable-list/components/body/components/collapsable-list-item';
 import { CollapsableList } from '::root/components/app/components/menus/widgets/components/collapsable-list/collapsable-list';
 import { connect, ConnectedProps } from 'react-redux';

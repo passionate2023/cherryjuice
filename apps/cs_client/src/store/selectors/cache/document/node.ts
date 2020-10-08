@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { getDocuments } from '::store/selectors/cache/document/document';
 import { store } from '::store/store';
-import { QFullNode } from '::store/ducks/cache/document-cache';
+import { QFullNode } from '::store/ducks/document-cache/document-cache';
 
 type Props = { node_id; documentId };
 const _getNode = ({ node_id, documentId }: Props) =>

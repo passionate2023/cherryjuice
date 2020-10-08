@@ -12,7 +12,7 @@ import { UnauthorizedException } from '@nestjs/common';
 import { AfterLoad } from 'typeorm/index';
 import { UserToken } from './user-token.entity';
 import { Settings } from './settings/settings.entity';
-import { getDefaultSettings } from './settings/helpers/default-settings/default-settings';
+import { getDefaultSettings } from '@cherryjuice/default-settings';
 
 type UserConstructorProps = {
   username: string;

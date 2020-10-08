@@ -1,5 +1,5 @@
 import { SaveOperationState } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
-import { QFullNode } from '::store/ducks/cache/document-cache';
+import { QFullNode } from '::store/ducks/document-cache/document-cache';
 
 const updateDocumentId = (state: SaveOperationState) => (
   node: QFullNode,

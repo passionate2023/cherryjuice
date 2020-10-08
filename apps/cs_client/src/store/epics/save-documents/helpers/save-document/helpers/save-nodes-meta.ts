@@ -7,7 +7,7 @@ import { NodeMetaIt } from '@cherryjuice/graphql-types';
 import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 import { EDIT_NODE_META } from '::graphql/mutations/document/edit-node-meta';
 import { unFlatMap } from '::helpers/shared';
-import { QFullNode } from '::store/ducks/cache/document-cache';
+import { QFullNode } from '::store/ducks/document-cache/document-cache';
 
 const swapNodeIdIfApplies = (state: SaveOperationState) => (nodeId: string) =>
   state.swappedNodeIds[nodeId] ? state.swappedNodeIds[nodeId] : nodeId;

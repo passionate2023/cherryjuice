@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Document } from './document/document';
-import { CachedDocument } from '::store/ducks/cache/document-cache';
+import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 import { DialogCard } from '::root/components/shared-components/dialog/dialog-list/dialog-card';
 
 type DocumentGroupProps = {

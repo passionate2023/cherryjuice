@@ -1,5 +1,5 @@
 import { getFlatListOfChildrenTree } from '../document';
-import { NodesDict } from '::store/ducks/cache/document-cache';
+import { NodesDict } from '::store/ducks/document-cache/document-cache';
 
 const tree = {
   '0': {

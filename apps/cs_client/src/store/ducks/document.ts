@@ -3,7 +3,7 @@ import { createActionPrefixer } from './helpers/shared';
 import { cloneObj } from '::helpers/objects';
 import { rootActionCreators } from './root';
 import { QDocumentMeta } from '::graphql/queries/document-meta';
-import { SelectNodeParams } from '::store/ducks/cache/document-cache/helpers/document/select-node';
+import { SelectNodeParams } from '::store/ducks/document-cache/helpers/document/select-node';
 import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
 
 const ap = createActionPrefixer('document');
@@ -147,7 +147,7 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     nodesFilter: '',
   })),
   _(
-    require('./cache/document-cache').documentCacheActionCreators
+    require('./document-cache/document-cache').documentCacheActionCreators
       .deleteDocuments,
     (state, { payload }) => ({
       ...state,

@@ -1,5 +1,5 @@
-import { NodesDict } from '::store/ducks/cache/document-cache';
-import { getParentsNode_ids } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { NodesDict } from '::store/ducks/document-cache/document-cache';
+import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/tree';
 
 export type FilteredNodes = { [node_id: number]: true };
 export const filterTree = (filter: string, nodes: NodesDict): FilteredNodes => {

@@ -6,7 +6,7 @@ import { useAddMetaToPastedImages } from '::root/components/app/components/edito
 import { DocumentContext } from '::root/components/app/components/editor/document/reducer/context';
 import { Image } from '@cherryjuice/graphql-types';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
-import { NodeScrollPosition } from '::store/ducks/cache/document-cache';
+import { NodeScrollPosition } from '::store/ducks/document-cache/document-cache';
 
 type Props = {
   contentEditable;

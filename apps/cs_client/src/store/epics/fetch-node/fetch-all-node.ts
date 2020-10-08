@@ -16,7 +16,7 @@ import {
   OPERATION_STATE,
   OPERATION_TYPE,
 } from '@cherryjuice/graphql-types';
-import { CachedDocument } from '::store/ducks/cache/document-cache';
+import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 import { doKey } from '::store/ducks/document-operation/reducers/add-document-operations';
 import { progressify } from '::helpers/shared';
 

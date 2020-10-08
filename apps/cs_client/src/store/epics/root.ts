@@ -17,9 +17,13 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
   const { fetchAllNodesEpic } = await import('./fetch-node/fetch-all-node');
   const { filterTreeEpic } = await import('./filter-tree/filter-tree');
   const { cloneDocumentEpic } = await import('./clone-document');
+  const { hotkeySettingsDuplicates } = await import(
+    './settings/hotkey-settings-duplicates'
+  );
 
   return action$ =>
     combineEpics(
+      hotkeySettingsDuplicates,
       cloneDocumentEpic,
       filterTreeEpic,
       fetchAllNodesEpic,

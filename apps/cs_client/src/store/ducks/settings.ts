@@ -15,8 +15,6 @@ const ac = {
     selectScreen: _(ap('set-screen'), _ => (screenName: ScreenName) =>
       _(screenName),
     ),
-    setScreenHasChanges: _(ap('set-screen-has-changes')),
-    clearScreenHasChanges: _(ap('clear-screen-has-changes')),
   },
   ...{
     save: _(ap('save'), _ => (nextScreen?: ScreenName) => _(nextScreen)),
@@ -35,7 +33,6 @@ const ac = {
 
 type State = {
   selectedScreen: ScreenName;
-  screenHasChanges: boolean;
   saveOperation: AsyncOperation;
   userProfileChanges: UpdateUserProfileIt;
   nextScreen?: string;
@@ -43,7 +40,6 @@ type State = {
 
 const initialState: State = {
   selectedScreen: Object.keys(screens)[0] as ScreenName,
-  screenHasChanges: false,
   saveOperation: 'idle',
   userProfileChanges: undefined,
   nextScreen: undefined,
@@ -53,16 +49,6 @@ const reducer = createReducer(initialState, _ => [
     _(ac.selectScreen, (state, { payload }) => ({
       ...state,
       selectedScreen: payload,
-      screenHasChanges: false,
-    })),
-  ],
-  ...[
-    _(ac.setScreenHasChanges, state => ({
-      ...state,
-      screenHasChanges: true,
-    })),
-    _(ac.clearScreenHasChanges, state => ({
-      ...state,
       screenHasChanges: false,
     })),
   ],
