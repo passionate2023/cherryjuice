@@ -64,4 +64,7 @@ export class DocumentOperation {
   // todo: use a union type
   @Field(() => DocumentTarget)
   target: DocumentTarget;
+
+  @Field()
+  id: string;
 }

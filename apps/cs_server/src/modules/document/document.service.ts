@@ -86,6 +86,7 @@ export class DocumentService {
       IDs,
       user,
     );
+    const operationId = 'delete_' + Date.now();
     if (notifySubscribers)
       IDs.forEach(id => {
         const document = new Document({
@@ -94,7 +95,11 @@ export class DocumentService {
           privacy: Privacy.PRIVATE,
         });
         document.id = id;
-        this.subscriptionsService.delete.deleted(document, user.id);
+        this.subscriptionsService.delete.deleted(
+          document,
+          user.id,
+          operationId,
+        );
       });
     return deleteResult;
   }
@@ -156,7 +161,7 @@ export class DocumentService {
 
   clone = async (dto: GetDocumentDTO): Promise<string> => {
     const documentA = await this.documentRepository.getDocumentById(dto);
-
+    const operationId = 'clone_' + Date.now();
     const documentB = await this.documentRepository.createDocument({
       data: {
         name: documentA.name,
@@ -165,7 +170,11 @@ export class DocumentService {
       },
       userId: dto.userId,
     });
-    await this.subscriptionsService.clone.preparing(documentB, dto.userId);
+    await this.subscriptionsService.clone.preparing(
+      documentB,
+      dto.userId,
+      operationId,
+    );
     const nodesA = await this.nodeService.getNodesMetaAndAHtml(dto);
     const allNodesA = new Map(nodesA.map(node => [node.node_id, node]));
     const cloneNodes$ = progressify<Node[]>(
@@ -187,14 +196,22 @@ export class DocumentService {
       });
       await documentB.save();
       return from(
-        this.subscriptionsService.clone.finished(documentB, dto.userId),
+        this.subscriptionsService.clone.finished(
+          documentB,
+          dto.userId,
+          operationId,
+        ),
       );
     });
     const cloneDocument$ = concat(cloneNodes$, finished$).pipe(
       catchError(e => {
         this.logger.error(e.message);
         return from(
-          this.subscriptionsService.clone.failed(documentB, dto.userId),
+          this.subscriptionsService.clone.failed(
+            documentB,
+            dto.userId,
+            operationId,
+          ),
         );
       }),
     );

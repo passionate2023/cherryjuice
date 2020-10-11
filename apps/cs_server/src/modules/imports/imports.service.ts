@@ -113,7 +113,7 @@ export class ImportsService {
       document: Document;
       downloadTask: DownloadTask;
     }[] = [];
-
+    const operationId = 'import_' + Date.now();
     for (const file of meta) {
       let document;
       try {
@@ -131,15 +131,27 @@ export class ImportsService {
           document,
           downloadTask,
         });
-        await this.subscriptionsService.import.pending(document, user.id);
+        await this.subscriptionsService.import.pending(
+          document,
+          user.id,
+          operationId,
+        );
       } catch (e) {
-        await this.subscriptionsService.import.failed(document, user.id);
+        await this.subscriptionsService.import.failed(
+          document,
+          user.id,
+          operationId,
+        );
         throw e;
       }
     }
     for (const { document, downloadTask } of documents) {
       try {
-        await this.subscriptionsService.import.preparing(document, user.id);
+        await this.subscriptionsService.import.preparing(
+          document,
+          user.id,
+          operationId,
+        );
         const { hash } = await performDownload(downloadTask, async () => {
           await document.reload();
         });
@@ -147,22 +159,38 @@ export class ImportsService {
           hash,
         );
         if (documentWithSameHash) {
-          await this.subscriptionsService.import.duplicate(document, user.id);
+          await this.subscriptionsService.import.duplicate(
+            document,
+            user.id,
+            operationId,
+          );
           await this.documentService.deleteDocuments([document.id], user, {
             notifySubscribers: false,
           });
         } else {
-          await this.subscriptionsService.import.started(document, user.id);
+          await this.subscriptionsService.import.started(
+            document,
+            user.id,
+            operationId,
+          );
           await this.saveDocument({
             document,
             user,
             fileMeta: downloadTask.fileMeta,
           });
-          await this.subscriptionsService.import.finished(document, user.id);
+          await this.subscriptionsService.import.finished(
+            document,
+            user.id,
+            operationId,
+          );
           await deleteFolder(downloadTask.fileMeta.location.folder);
         }
       } catch (e) {
-        await this.subscriptionsService.import.failed(document, user.id);
+        await this.subscriptionsService.import.failed(
+          document,
+          user.id,
+          operationId,
+        );
         await deleteFolder(downloadTask.fileMeta.location.folder);
         throw e;
       }
