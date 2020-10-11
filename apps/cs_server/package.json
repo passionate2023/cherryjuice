@@ -41,7 +41,7 @@
     "express": "~4.16.1",
     "file-type": "^14.1.4",
     "googleapis": "^49.0.0",
-    "graphql": "^15.0.0",
+    "graphql": "^15.3.0",
     "graphql-tools": "^4.0.7",
     "handlebars": "^4.7.6",
     "image-thumbnail": "^1.0.6",
