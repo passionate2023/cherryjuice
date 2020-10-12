@@ -1,10 +1,9 @@
 server {
     listen ${PORT};
-    gzip_static on;
-    gunzip on;
     root /usr/share/nginx/html;
     index  index.html index.htm;
-
+    brotli_static on;
+    include       /etc/nginx/mime.types;
 
     proxy_intercept_errors on;
     error_page 404             /404.html;
@@ -16,6 +15,10 @@ server {
 
     location  ~ (auth|exports|graphql|ping) {
       proxy_pass http://127.0.0.1:${NODE_PORT}$request_uri;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_read_timeout 86400;
     }
 }
 

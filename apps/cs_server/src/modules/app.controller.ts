@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Controller, Get } from '@nestjs/common';
 // import * as path from 'path';
 
@@ -21,5 +20,6 @@ export class AppController {
   // }
 
   @Get('ping')
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   ping() {}
 }
