@@ -1,18 +1,18 @@
 import {
-  MiddlewareConsumer,
+  // MiddlewareConsumer,
   Module,
-  NestModule,
-  RequestMethod,
+  // NestModule,
+  // RequestMethod,
   ValidationPipe,
 } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { DocumentModule } from './document/document.module';
-import {
-  addSTSHeader,
-  redirectToHTTPS,
-  sendCompressedJavascript,
-} from '../middleware';
-import express from 'express';
+// import {
+//   addSTSHeader,
+//   redirectToHTTPS,
+//   sendCompressedJavascript,
+// } from '../middleware';
+// import express from 'express';
 import { NodeModule } from './node/node.module';
 import { ImageModule } from './image/image.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -54,22 +54,22 @@ import { SearchModule } from './search/search.module';
   ],
   controllers: [AppController],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer): void {
-    if (process.env.NODE_ENV === 'production') {
-      consumer.apply(addSTSHeader, redirectToHTTPS).forRoutes('*');
-      consumer
-        .apply(sendCompressedJavascript)
-        .exclude('/graphql')
-        .forRoutes(
-          ...['js', 'css', 'svg'].map(extension => ({
-            path: '*.' + extension,
-            method: RequestMethod.GET,
-          })),
-        );
-    }
-    consumer
-      .apply(express.static(process.env.ASSETS_PATH))
-      .forRoutes({ path: '*', method: RequestMethod.GET });
-  }
+export class AppModule /*implements NestModule */ {
+  // configure(consumer: MiddlewareConsumer): void {
+  //   if (process.env.NODE_ENV === 'production') {
+  //     consumer.apply(addSTSHeader, redirectToHTTPS).forRoutes('*');
+  //     consumer
+  //       .apply(sendCompressedJavascript)
+  //       .exclude('/graphql')
+  //       .forRoutes(
+  //         ...['js', 'css', 'svg'].map(extension => ({
+  //           path: '*.' + extension,
+  //           method: RequestMethod.GET,
+  //         })),
+  //       );
+  //   }
+  //   consumer
+  //     .apply(express.static(process.env.ASSETS_PATH))
+  //     .forRoutes({ path: '*', method: RequestMethod.GET });
+  // }
 }

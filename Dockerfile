@@ -1,40 +1,46 @@
-from node:12.13.0 as cs
+FROM node:12.13.0 as cs
 
 
-workdir /temp
-copy ./apps ./apps
-copy ./libs ./libs
-copy ./scripts ./scripts
-copy ./package.json ./package.json
-copy ./yarn.lock ./yarn.lock
+WORKDIR /temp
+COPY ./apps ./apps
+COPY ./libs ./libs
+COPY ./scripts ./scripts
+COPY ./package.json ./package.json
+COPY ./yarn.lock ./yarn.lock
 
-workdir /temp
-run yarn
-run yarn build:libs
-run yarn build:apps
-run yarn strip:deps
-from node:12.13.0-slim
-label maintainer ycnmhd
+WORKDIR /temp
+RUN yarn
+RUN yarn build:libs
+RUN yarn build:apps
+RUN yarn strip:deps
+
+FROM ycnmhd/nginx-node:12.13.0
+LABEL maintainer=ycnmhd
+
+COPY nginx/cj.conf.template /etc/nginx/conf.d/default.conf.template
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY --from=cs temp/apps/cs_client/dist /usr/share/nginx/html
 
 #copy server assets
-copy --from=cs temp/apps/cs_server/package.json build/apps/server/package.json
-copy --from=cs temp/apps/cs_server/tsconfig.json build/apps/server/tsconfig.json
-copy --from=cs temp/apps/cs_server/migrations build/apps/server/migrations
-copy --from=cs temp/apps/cs_server/src build/apps/server/src
-copy --from=cs temp/apps/cs_server/dist build/apps/server/dist
+COPY --from=cs temp/apps/cs_server/package.json /usr/share/cj/apps/server/package.json
+COPY --from=cs temp/apps/cs_server/tsconfig.json /usr/share/cj/apps/server/tsconfig.json
+COPY --from=cs temp/apps/cs_server/migrations /usr/share/cj/apps/server/migrations
+COPY --from=cs temp/apps/cs_server/src /usr/share/cj/apps/server/src
+COPY --from=cs temp/apps/cs_server/dist /usr/share/cj/apps/server/dist
 
-copy --from=cs temp/apps/cs_client/dist build/apps/client
-copy --from=cs temp/libs/ build/libs
-copy --from=cs temp/package.json/ build/package.json
-copy --from=cs temp/yarn.lock build/yarn.lock
+COPY --from=cs temp/libs/ /usr/share/cj/libs
+COPY --from=cs temp/package.json/ /usr/share/cj/package.json
+COPY --from=cs temp/yarn.lock /usr/share/cj/yarn.lock
 
-workdir /build/apps/server
-run yarn install
+WORKDIR /usr/share/cj/apps/server
+RUN yarn install
 
-workdir /
-run mkdir -p /.cs/exports
-run mkdir -p /.cs/imports
-run echo "cd build/apps/server/ && yarn start" > /entrypoint.sh
-run chmod +x /entrypoint.sh
+WORKDIR /
+RUN mkdir -p /.cs/exports
+RUN mkdir -p /.cs/imports
 
-entrypoint ["/entrypoint.sh"]
+COPY scripts /scripts
+RUN ["chmod", "+x", "/scripts/entrypoint.sh"]
+RUN ["chmod", "+x", "/scripts/nginx.sh"]
+RUN ["chmod", "+x", "/scripts/node.sh"]
+ENTRYPOINT ["/scripts/entrypoint.sh"]

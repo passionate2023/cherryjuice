@@ -29,13 +29,13 @@ jobs:
         run: heroku container:release -a ${{ secrets.HEROKU_APP_NAME_NEXT }} web
 
       - name: Push to GitHub Packages
-          uses: docker/build-push-action@v1
-          with:
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
-            registry: docker.pkg.github.com
-            repository: ycnmhd/cj/next
-            tag_with_ref: true
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: ycnmhd/cj/next
+          tag_with_ref: true
 
       - name: Notify slack success
         if: success()

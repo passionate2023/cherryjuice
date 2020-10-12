@@ -1,0 +1,21 @@
+server {
+    listen ${PORT};
+    gzip_static on;
+    gunzip on;
+    root /usr/share/nginx/html;
+    index  index.html index.htm;
+
+
+    proxy_intercept_errors on;
+    error_page 404             /404.html;
+    error_page 500 502 503 504 /50x.html;
+
+    location  ~ (auth/login|auth/signup|auth/reset-password|auth/signup-oauth|auth/forgot-password|document) {
+       try_files $uri /index.html;
+    }
+
+    location  ~ (auth|exports|graphql|ping) {
+      proxy_pass http://127.0.0.1:${NODE_PORT}$request_uri;
+    }
+}
+

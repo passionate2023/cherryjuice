@@ -164,14 +164,14 @@ module.exports = {
           /exports\/*/,
         ],
       }),
-    production &&
-      new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
-    production &&
-      new CompressionPlugin({
-        // deleteOriginalAssets: true,
-        filename: '[path].br[query]',
-        algorithm: 'brotliCompress',
-        test: /\.(js|css|svg)$/,
-      }),
+    // production &&
+    //   new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
+    // production &&
+    //   new CompressionPlugin({
+    //     // deleteOriginalAssets: true,
+    //     filename: '[path].br[query]',
+    //     algorithm: 'brotliCompress',
+    //     test: /\.(js|css|svg)$/,
+    //   }),
   ].filter(Boolean),
 };
