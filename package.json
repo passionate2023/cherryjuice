@@ -10,27 +10,22 @@
   "scripts": {
     "dev:client": "yarn workspace @cherryjuice/react-client  run dev",
     "dev:server": "yarn workspace @cherryjuice/nest-server  run dev",
-
     "build:lib:1": "yarn workspace @cherryjuice/graphql-types run build",
     "build:lib:2": "yarn workspace @cherryjuice/ahtml-to-html run build",
     "build:lib2:1": "yarn workspace @cherryjuice/ctb-to-ahtml run build",
     "build:lib2:2": "yarn workspace @cherryjuice/default-settings run build",
     "build:libs": "run-p build:lib:* && run-p build:lib2:*",
-
     "build:app:1": "yarn workspace @cherryjuice/react-client  run build",
     "build:app:2": "yarn workspace @cherryjuice/nest-server  run build",
     "build:apps": "run-p build:app:*",
-
     "test:lib:1": "yarn workspace @cherryjuice/graphql-types run test",
     "test:lib:2": "yarn workspace @cherryjuice/ahtml-to-html run test",
     "test:lib2:1": "yarn workspace @cherryjuice/ctb-to-ahtml run test",
     "test:lib2:2": "yarn workspace @cherryjuice/default-settings run test",
     "test:libs": "run-p test:lib:*",
-
     "test:app:1": "yarn workspace @cherryjuice/react-client  run test",
     "test:app:2": "yarn workspace @cherryjuice/nest-server  run test",
     "test:apps": "run-p test:app:*",
-
     "strip:deps": "node scripts/strip-dev-dependencies.js",
     "test": "run-p test:*",
     "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|jsx|ts|tsx|json|css|scss)\"",
@@ -41,13 +36,12 @@
     "fix:eslint": "yarn workspaces run lint --fix",
     "fix": "yarn fix:eslint && fix:prettier",
     "commit": "git-cz",
-
     "d:build": "sudo docker image build -t docker.pkg.github.com/ycnmhd/cherryjuice/next:next .",
-    "dc:up": "sudo docker-compose up",
+    "predc:up": "sudo docker-compose stop && sudo docker-compose rm -f && sudo docker-compose pull",
+    "dc:up": "sudo docker-compose up -d",
     "dc:down": "sudo docker-compose down",
     "d:exec": "sudo docker exec -it $(sudo docker ps -qa --filter \"ancestor=docker.pkg.github.com/ycnmhd/cherryjuice/next:next\") bash",
     "d:rm": "sudo docker rm $(sudo docker ps -qa --filter \"ancestor=docker.pkg.github.com/ycnmhd/cherryjuice/next:next\") -f"
-
   },
   "config": {
     "commitizen": {

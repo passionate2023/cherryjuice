@@ -50,6 +50,7 @@ type DocumentMutation {
 
 type DocumentOperation {
     context: OPERATION_CONTEXT
+    id: String!
     progress: Float
     state: OPERATION_STATE!
     target: DocumentTarget!
@@ -247,11 +248,11 @@ enum AccessLevel {
 }
 
 enum HotKeyActionType {
-    BG_COLOR
+    BACKGROUND_COLOR
     BOLD
     CREATE_TEST_SAMPLE
     DELETE_LINE
-    FG_COLOR
+    FOREGROUND_COLOR
     H1
     H2
     H3

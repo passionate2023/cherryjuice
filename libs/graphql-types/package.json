@@ -9,7 +9,8 @@
   "workspaces": {
     "nohoist": [
       "graphql",
-      "graphql-schema-typescript"
+      "graphql-schema-typescript",
+      "graphql-cli"
     ]
   },
   "files": [

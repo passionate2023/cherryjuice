@@ -90,13 +90,13 @@ export const formattingHotkeysProps: { [key: string]: FormattingHotProps } = {
     icon: Icons.material['justify-fill'],
     execCommandArguments: { command: ExecKCommand.justifyFill },
   },
-  [HotKeyActionType.FG_COLOR]: {
+  [HotKeyActionType.FOREGROUND_COLOR]: {
     icon: Icons.material.foreground,
     execCommandArguments: {
       style: { property: `color`, value: '' },
     },
   },
-  [HotKeyActionType.BG_COLOR]: {
+  [HotKeyActionType.BACKGROUND_COLOR]: {
     icon: Icons.material.background,
     execCommandArguments: {
       style: { property: `background-color`, value: '' },

@@ -258,11 +258,11 @@ export interface HotKey {
 }
 
 export enum HotKeyActionType {
-  BG_COLOR = 'BG_COLOR',
+  BACKGROUND_COLOR = 'BACKGROUND_COLOR',
   BOLD = 'BOLD',
   CREATE_TEST_SAMPLE = 'CREATE_TEST_SAMPLE',
   DELETE_LINE = 'DELETE_LINE',
-  FG_COLOR = 'FG_COLOR',
+  FOREGROUND_COLOR = 'FOREGROUND_COLOR',
   H1 = 'H1',
   H2 = 'H2',
   H3 = 'H3',
@@ -536,6 +536,7 @@ export interface Subscription {
 
 export interface DocumentOperation {
   context?: OPERATION_CONTEXT;
+  id: string;
   progress?: number;
   state: OPERATION_STATE;
   target: DocumentTarget;
@@ -1839,6 +1840,7 @@ export interface SubscriptionToDocumentOperationResolver<
 
 export interface DocumentOperationTypeResolver<TParent = any> {
   context?: DocumentOperationToContextResolver<TParent>;
+  id?: DocumentOperationToIdResolver<TParent>;
   progress?: DocumentOperationToProgressResolver<TParent>;
   state?: DocumentOperationToStateResolver<TParent>;
   target?: DocumentOperationToTargetResolver<TParent>;
@@ -1850,6 +1852,10 @@ export interface DocumentOperationToContextResolver<
   TParent = any,
   TResult = any
 > {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentOperationToIdResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
