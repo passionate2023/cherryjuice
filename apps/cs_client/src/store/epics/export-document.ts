@@ -1,6 +1,6 @@
-import { concat, Observable, of } from 'rxjs';
+import { concat, defer, Observable, of } from 'rxjs';
 import { Actions } from '../actions.types';
-import { ac_ } from '../store';
+import { ac_, store } from '../store';
 import { map, switchMap, take } from 'rxjs/operators';
 import { ofType } from 'deox';
 import { gqlMutation$ } from './shared/gql-query';
@@ -15,12 +15,14 @@ export const saveDocument$ = (action$: Observable<Actions>) => {
   );
   return concat(save$, waitForSave$);
 };
-const exportDocument$ = (documentId: string) =>
-  gqlMutation$(
+const exportDocument$ = (documentId: string) => {
+  const swappedIds = store.getState().document.swappedIds;
+  return gqlMutation$(
     EXPORT_DOCUMENT({
-      file_id: documentId,
+      file_id: swappedIds[documentId] || documentId,
     }),
   ).pipe(map(ac_.document.exportFulfilled));
+};
 
 const exportDocumentEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
@@ -28,7 +30,7 @@ const exportDocumentEpic = (action$: Observable<Actions>) => {
     switchMap(action => {
       return concat(
         saveDocument$(action$),
-        exportDocument$(action['payload']),
+        defer(() => exportDocument$(action['payload'])),
       ).pipe(
         createErrorHandler({
           alertDetails: {

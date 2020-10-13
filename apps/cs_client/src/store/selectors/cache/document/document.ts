@@ -11,7 +11,9 @@ export const getDocuments = createSelector(_getDocuments, documents => {
 });
 export const getEditedDocuments = () =>
   getDocumentsList(store.getState()).filter(
-    document => document.updatedAt < document.localState.localUpdatedAt,
+    document =>
+      document.updatedAt < document.localState.localUpdatedAt ||
+      document.id.startsWith('new-document'),
   );
 export const getDocumentUserId = createSelector(
   _getDocuments,

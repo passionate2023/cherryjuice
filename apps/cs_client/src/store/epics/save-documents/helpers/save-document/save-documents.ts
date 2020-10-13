@@ -14,7 +14,7 @@ import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 const saveDocuments = async (
   state: SaveOperationState,
   editedDocuments: CachedDocument[],
-): Promise<SaveOperationState> => {
+): Promise<void> => {
   for (const document of editedDocuments) {
     state.deletedNodes[document.id] = {};
     await saveNewDocument({ state, document });
@@ -26,12 +26,6 @@ const saveDocuments = async (
     await saveDocumentMeta({ state, document });
     await saveDocumentState({ state, document });
   }
-
-  if (location.pathname.startsWith('/document/new-document')) {
-    const createdDocuments = Object.values(state.swappedDocumentIds);
-    state.newSelectedDocumentId = createdDocuments.pop();
-  }
-  return state;
 };
 
 export { saveDocuments };

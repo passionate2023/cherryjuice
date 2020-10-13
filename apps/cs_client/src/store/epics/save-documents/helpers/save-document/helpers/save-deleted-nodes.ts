@@ -5,18 +5,12 @@ import {
   QFullNode,
 } from '::store/ducks/document-cache/document-cache';
 import { newNodePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
+import { SwappedIds } from '::store/ducks/document';
 
 type SaveOperationState = {
-  swappedDocumentIds: {
-    [temporaryId: string]: string;
-  };
-  swappedNodeIds: {
-    [temporaryId: string]: string;
-  };
-  swappedImageIds: {
-    [temporaryId: string]: string;
-  };
-
+  swappedDocumentIds: SwappedIds;
+  swappedNodeIds: SwappedIds;
+  swappedImageIds: SwappedIds;
   deletedNodes: {
     [documentId: string]: {
       [node_id: number]: boolean;
