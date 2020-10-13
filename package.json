@@ -42,11 +42,11 @@
     "fix": "yarn fix:eslint && fix:prettier",
     "commit": "git-cz",
 
-    "docker:build": "sudo docker image build -t docker.pkg.github.com/ycnmhd/cherryjuice/next:next .",
-    "predocker:run":"sudo docker pull docker.pkg.github.com/ycnmhd/cherryjuice/next:next",
-    "docker:run": "sudo docker-compose up",
-    "docker:exec": "sudo docker exec -it $(sudo docker ps -qa --filter \"ancestor=docker.pkg.github.com/ycnmhd/cherryjuice/next:next\") bash",
-    "docker:rm": "sudo docker rm $(sudo docker ps -qa --filter \"ancestor=docker.pkg.github.com/ycnmhd/cherryjuice/next:next\") -f"
+    "d:build": "sudo docker image build -t docker.pkg.github.com/ycnmhd/cherryjuice/next:next .",
+    "dc:up": "sudo docker-compose up",
+    "dc:down": "sudo docker-compose down",
+    "d:exec": "sudo docker exec -it $(sudo docker ps -qa --filter \"ancestor=docker.pkg.github.com/ycnmhd/cherryjuice/next:next\") bash",
+    "d:rm": "sudo docker rm $(sudo docker ps -qa --filter \"ancestor=docker.pkg.github.com/ycnmhd/cherryjuice/next:next\") -f"
 
   },
   "config": {

@@ -15,10 +15,7 @@ server {
 
     location  ~ (auth|exports|graphql|ping) {
       proxy_pass http://127.0.0.1:${NODE_PORT}$request_uri;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection "upgrade";
-      proxy_read_timeout 86400;
+      include /etc/nginx/shared/reverse_proxy.conf;
     }
 }
 

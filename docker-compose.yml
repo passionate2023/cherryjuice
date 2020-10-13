@@ -5,6 +5,8 @@ services:
     image: docker.pkg.github.com/ycnmhd/cherryjuice/next:next
     ports:
       - 1250:1250/tcp
-    network_mode: "host"
+    network_mode: 'host'
     env_file:
       - .env
+    volumes:
+      - ./nginx/shared:/etc/nginx/shared:ro
