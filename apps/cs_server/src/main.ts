@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: '../../.env' });
 process.env.TZ = 'UTC';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app.module';

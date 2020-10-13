@@ -42,8 +42,12 @@
     "fix": "yarn fix:eslint && fix:prettier",
     "commit": "git-cz",
 
-    "docker:build": "sudo docker image build -t cj .",
-    "docker:run": "sudo docker container run -it -p 1250:1250 -e PORT=1250 -e NODE_PORT=3000 cj"
+    "docker:build": "sudo docker image build -t docker.pkg.github.com/ycnmhd/cherryjuice/next:next .",
+    "predocker:run":"sudo docker pull docker.pkg.github.com/ycnmhd/cherryjuice/next:next",
+    "docker:run": "sudo docker-compose up",
+    "docker:exec": "sudo docker exec -it $(sudo docker ps -qa --filter \"ancestor=docker.pkg.github.com/ycnmhd/cherryjuice/next:next\") bash",
+    "docker:rm": "sudo docker rm $(sudo docker ps -qa --filter \"ancestor=docker.pkg.github.com/ycnmhd/cherryjuice/next:next\") -f"
+
   },
   "config": {
     "commitizen": {
