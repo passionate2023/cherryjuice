@@ -36,11 +36,12 @@
     "fix:eslint": "yarn workspaces run lint --fix",
     "fix": "yarn fix:eslint && fix:prettier",
     "commit": "git-cz",
-    "d:build": "sudo docker image build -t docker.pkg.github.com/ycnmhd/cherryjuice/next:next .",
+    "d:build": "sudo docker image build -t docker.pkg.github.com/ycnmhd/cherryjuice/next .",
     "predc:up": "sudo docker-compose stop && sudo docker-compose rm -f && sudo docker-compose pull",
     "dc:up": "sudo docker-compose up -d",
     "dc:down": "sudo docker-compose down",
     "d:exec": "sudo docker exec -it $(sudo docker ps -qa --filter \"ancestor=docker.pkg.github.com/ycnmhd/cherryjuice/next:next\") bash",
+    "d:logs": "sudo docker logs -f $(sudo docker ps -qa --filter \"ancestor=docker.pkg.github.com/ycnmhd/cherryjuice/next:next\")",
     "d:rm": "sudo docker rm $(sudo docker ps -qa --filter \"ancestor=docker.pkg.github.com/ycnmhd/cherryjuice/next:next\") -f"
   },
   "config": {
