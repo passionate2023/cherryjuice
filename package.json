@@ -26,15 +26,16 @@
     "test:app:1": "yarn workspace @cherryjuice/react-client  run test",
     "test:app:2": "yarn workspace @cherryjuice/nest-server  run test",
     "test:apps": "run-p test:app:*",
-    "strip:deps": "node scripts/strip-dev-dependencies.js",
     "test": "run-p test:*",
+    "strip:deps": "node scripts/strip-dev-dependencies.js",
     "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|jsx|ts|tsx|json|css|scss)\"",
-    "validate:prettier": "yarn prettier --list-different",
-    "validate:eslint": "yarn workspaces run lint",
-    "validate": "run-p validate:*",
-    "fix:prettier": "yarn prettier --write",
-    "fix:eslint": "yarn workspaces run lint --fix",
-    "fix": "yarn fix:eslint && fix:prettier",
+    "prettier:validate": "yarn prettier --list-different",
+    "prettier:fix": "yarn prettier --write",
+    "eslint:validate": "yarn workspaces run eslint",
+    "eslint:validate-root": "yarn eslint",
+    "eslint:fix": "yarn workspaces run lint --fix",
+    "validate": "run-p eslint:validate prettier:validate",
+    "fix": "yarn eslint:fix && prettier:fix",
     "commit": "git-cz",
     "d:build": "sudo docker image build -t docker.pkg.github.com/ycnmhd/cherryjuice/next .",
     "predc:up": "sudo docker-compose stop && sudo docker-compose rm -f && sudo docker-compose pull",
@@ -65,7 +66,7 @@
     "@commitlint/config-conventional": "^8.3.4",
     "commitizen": "^4.0.3",
     "husky": "3.1.0",
-    "lint-staged": "8.2.1"
+    "lint-staged": "^10.4.0"
   },
   "keywords": [
     "cherrytree"
