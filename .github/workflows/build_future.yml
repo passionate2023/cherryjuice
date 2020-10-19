@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
@@ -18,6 +19,12 @@ jobs:
           registry: docker.pkg.github.com
           repository: ycnmhd/cherryjuice/next
           tag_with_ref: true
+
+      - name: Invoke deployment webhook
+        uses: distributhor/workflow-webhook@v1
+        env:
+          webhook_url: ${{ secrets.DEPLOY_NEXT_WEBHOOK_URL }}
+          webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
 
       - name: Notify slack success
         if: success()
