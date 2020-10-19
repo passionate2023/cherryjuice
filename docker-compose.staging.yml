@@ -1,0 +1,12 @@
+version: '3'
+services:
+  cherryjuice-staging:
+    restart: always
+    image: docker.pkg.github.com/ycnmhd/cherryjuice/app:staging
+    ports:
+      - 1240:1240/tcp
+    network_mode: 'host'
+    env_file:
+      - .env
+    volumes:
+      - ./nginx/shared:/etc/nginx/shared:ro

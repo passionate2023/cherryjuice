@@ -1,9 +1,9 @@
-name: build_future
+name: build_staging
 
 on:
   push:
     branches:
-      - next
+      - staging
 
 jobs:
   build:
@@ -17,13 +17,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: ycnmhd/cherryjuice/next
+          repository: ycnmhd/cherryjuice/app
           tag_with_ref: true
 
       - name: Invoke deployment webhook
         uses: distributhor/workflow-webhook@v1
         env:
-          webhook_url: ${{ secrets.DEPLOY_NEXT_WEBHOOK_URL }}
+          webhook_url: ${{ secrets.DEPLOY_STAGING_WEBHOOK_URL }}
           webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
 
       - name: Notify slack success

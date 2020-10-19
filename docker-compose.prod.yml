@@ -2,7 +2,7 @@ version: '3'
 services:
   cherryjuice:
     restart: unless-stopped
-    image: docker.pkg.github.com/ycnmhd/cherryjuice/next:next
+    image: docker.pkg.github.com/ycnmhd/cherryjuice/prod
     ports:
       - 1250:1250/tcp
     network_mode: 'host'
