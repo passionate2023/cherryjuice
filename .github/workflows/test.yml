@@ -30,22 +30,12 @@ jobs:
       - name: run jest tests
         run: sudo yarn test
 
-      - name: trigger workflow
+      - name: trigger build workflow
         if: success()
         uses: benc-uk/workflow-dispatch@v1
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           workflow: build
-
-      - name: Notify slack success
-        if: success()
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        uses: voxmedia/github-action-slack-notify-build@v1
-        with:
-          channel: ${{ secrets.SLACK_CHANNEL }}
-          status: SUCCESS
-          color: good
 
       - name: Notify slack fail
         if: failure()

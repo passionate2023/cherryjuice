@@ -19,6 +19,13 @@ jobs:
           webhook_url: ${{ secrets.DEPLOY_WEBHOOK_URL }}-${{ steps.extract_branch.outputs.branch }}
           webhook_secret: ${{ secrets.DEPLOY_WEBHOOK_SECRET }}
 
+      - name: release if on master branch
+        if: success() && github.ref == 'refs/heads/master'
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          workflow: release_${{ steps.extract_branch.outputs.branch }}
+
       - name: Notify slack success
         if: success()
         env:
