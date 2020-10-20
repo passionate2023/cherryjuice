@@ -1,6 +1,5 @@
 FROM ycnmhd/nginx-node:12.13.0 as cs
 
-
 WORKDIR /temp
 COPY ./apps ./apps
 COPY ./libs ./libs
@@ -10,8 +9,6 @@ COPY ./yarn.lock ./yarn.lock
 COPY ./node_modules ./node_modules
 
 WORKDIR /temp
-RUN yarn
-RUN yarn build:libs
 RUN yarn build:apps
 RUN yarn strip:deps
 
@@ -28,6 +25,7 @@ COPY --from=cs temp/apps/cs_server/tsconfig.json /usr/share/cj/apps/server/tscon
 COPY --from=cs temp/apps/cs_server/migrations /usr/share/cj/apps/server/migrations
 COPY --from=cs temp/apps/cs_server/src /usr/share/cj/apps/server/src
 COPY --from=cs temp/apps/cs_server/dist /usr/share/cj/apps/server/dist
+COPY --from=cs temp/apps/cs_server/node_modules /usr/share/cj/apps/server/node_modules
 
 COPY --from=cs temp/libs/ /usr/share/cj/libs
 COPY --from=cs temp/package.json/ /usr/share/cj/package.json

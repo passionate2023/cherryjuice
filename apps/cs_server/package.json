@@ -2,8 +2,12 @@
   "name": "@cherryjuice/nest-server",
   "workspaces": {
     "nohoist": [
+      "ts-node/**",
+      "ts-node",
       "typeorm/**",
-      "typeorm"
+      "typeorm",
+      "@nestjs/**",
+      "@nestjs"
     ]
   },
   "version": "0.1.0",
@@ -65,7 +69,8 @@
     "@cherryjuice/ahtml-to-html": "0.0.2",
     "@cherryjuice/ctb-to-ahtml": "0.0.2",
     "@cherryjuice/default-settings": "0.0.2",
-    "xml2js": "^0.4.22"
+    "xml2js": "^0.4.22",
+    "tsconfig-paths": "^3.9.0"
   },
   "devDependencies": {
     "@babel/runtime": "^7.9.6",

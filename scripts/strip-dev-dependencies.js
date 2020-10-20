@@ -31,7 +31,7 @@ const resolveGlobs = folders =>
     return folders;
   }, []);
 
-const paths = ['./', './apps/cs_client/', './libs/*'];
+const paths = ['./', './apps/*', './libs/*'];
 
 resolveGlobs(paths).forEach(module => {
   stripDevDependencies(module);
