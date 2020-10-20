@@ -11,13 +11,13 @@ export const doKey = (operation: DocumentOperation): string =>
 export const addDocumentOperations = (operations: DocumentOperation[]) => (
   state: DocumentOperationState,
 ): DocumentOperationState => {
-  operations.forEach(operation => {
+  operations.filter(Boolean).forEach(operation => {
     if (
       operation.type === OPERATION_TYPE.DELETE &&
       operation.state === OPERATION_STATE.FINISHED
     ) {
       delete state.operations[doKey(operation)];
-    } else {
+    } else if (operation.target) {
       state.operations[doKey(operation)] = operation;
     }
   });

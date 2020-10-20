@@ -5,6 +5,7 @@ import {
   guardAgainstSelectionTargetIsImage,
 } from '::helpers/editing/execK/steps/pipe1/guards';
 import { FormattingError } from '::types/errors';
+import { getEditor } from '::root/components/app/components/editor/document/components/rich-text/hooks/get-node-images';
 
 const getLineChildren = line => Array.from(line.childNodes);
 const getRootParent = el =>
@@ -103,6 +104,7 @@ type GetSelection = ({
 const getSelection: GetSelection = ({
   selectAdjacentWordIfNoneIsSelected,
 } = {}) => {
+  getEditor().focus();
   const selection = document.getSelection();
   if (selection.rangeCount === 0)
     throw new FormattingError('Could not find the cursor');

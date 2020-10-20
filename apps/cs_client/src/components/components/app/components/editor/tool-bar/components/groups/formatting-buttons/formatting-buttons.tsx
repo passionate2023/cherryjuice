@@ -87,7 +87,7 @@ const FormattingButtons: React.FC<Props & {
 };
 const FormattingButtonsWithTransition: React.FC<Props & {
   show: boolean;
-}> = ({ show }) => {
+}> = ({ show, children }) => {
   return (
     <TransitionWrapper<Props>
       Component={FormattingButtons}
@@ -101,7 +101,7 @@ const FormattingButtonsWithTransition: React.FC<Props & {
           friction: 25,
         },
       }}
-      componentProps={{}}
+      componentProps={{ children }}
     />
   );
 };
