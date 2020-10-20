@@ -1,5 +1,11 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require('fs');
 const path = require('path');
+
+const args = process.argv;
+const stripOptional = args.includes('--opt');
+const stripDev = args.includes('--dev');
+const stripServerDeps = args.includes('--include-server');
 
 const stripDevDependencies = folder => {
   const filePath = path.join(process.cwd(), folder, 'package.json');
@@ -9,10 +15,10 @@ const stripDevDependencies = folder => {
     'package.json_backup',
   );
   const file = fs.readFileSync(filePath).toString();
-  if (file) {
+  if (file && (stripDev || stripOptional)) {
     const pckg = JSON.parse(file);
-    pckg.devDependencies = {};
-    pckg.optionalDependencies = {};
+    if (stripDev) pckg.devDependencies = {};
+    if (stripOptional) pckg.optionalDependencies = {};
     fs.writeFileSync(filePath, JSON.stringify(pckg, null, 4));
     fs.writeFileSync(fileBackupPath, file);
   }
@@ -31,7 +37,11 @@ const resolveGlobs = folders =>
     return folders;
   }, []);
 
-const paths = ['./', './apps/*', './libs/*'];
+const paths = [
+  './',
+  stripServerDeps ? './apps/*' : './apps/cs_client/',
+  './libs/*',
+];
 
 resolveGlobs(paths).forEach(module => {
   stripDevDependencies(module);

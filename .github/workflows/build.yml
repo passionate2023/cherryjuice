@@ -20,6 +20,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - name: strip optional dependencies
+        run: yarn strip:deps --opt
+
       - name: install dependencies
         run: yarn
 

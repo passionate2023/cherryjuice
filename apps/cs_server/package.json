@@ -2,12 +2,8 @@
   "name": "@cherryjuice/nest-server",
   "workspaces": {
     "nohoist": [
-      "ts-node/**",
-      "ts-node",
       "typeorm/**",
-      "typeorm",
-      "@nestjs/**",
-      "@nestjs"
+      "typeorm"
     ]
   },
   "version": "0.1.0",

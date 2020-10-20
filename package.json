@@ -40,7 +40,7 @@
     "dc:pull": "sudo docker-compose pull",
     "dc:rm": "sudo docker-compose rm -f",
     "dc:stop": "sudo docker-compose stop",
-    "predc:up": "yarn dc:stop && yarn dc:rm && yarn dc:pull",
+    "predc:up": "yarn dc:pull && yarn dc:stop && yarn dc:rm",
     "dc:up": "sudo docker-compose up -d",
     "dc:down": "sudo docker-compose down"
   },
