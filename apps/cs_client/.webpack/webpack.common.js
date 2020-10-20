@@ -143,12 +143,12 @@ module.exports = {
         icons: {
           favicons: true,
           android: { background: '#000000' },
-          appleIcon: { background: '#000000' },
           windows: { background: '#000000' },
-          appleStartup: false,
-          coast: false,
-          firefox: false,
-          yandex: false,
+          appleIcon: false, // Create Apple touch icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }` or an array of sources
+          appleStartup: false, // Create Apple startup images. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }` or an array of sources
+          coast: false, // Create Opera Coast icon. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }` or an array of sources
+          firefox: false, // Create Firefox OS icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }` or an array of sources
+          yandex: false, // Create Yandex browser icon. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }` or an array of sources
         },
       }),
     production &&
