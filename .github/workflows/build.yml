@@ -1,0 +1,45 @@
+name: build
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: ycnmhd/cherryjuice/app
+          tag_with_ref: true
+
+      - name: trigger deploy
+        if: success()
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          workflow: deploy
+
+      - name: Notify slack success
+        if: success()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          status: SUCCESS
+          color: good
+
+      - name: Notify slack fail
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          status: FAILED
+          color: danger

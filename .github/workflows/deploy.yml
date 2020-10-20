@@ -1,9 +1,6 @@
-name: build_staging
+name: deploy
 
-on:
-  push:
-    branches:
-      - staging
+on: workflow_dispatch
 
 jobs:
   build:
@@ -11,20 +8,16 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Push to GitHub Packages
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: docker.pkg.github.com
-          repository: ycnmhd/cherryjuice/app
-          tag_with_ref: true
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
 
       - name: Invoke deployment webhook
         uses: distributhor/workflow-webhook@v1
         env:
-          webhook_url: ${{ secrets.DEPLOY_STAGING_WEBHOOK_URL }}
-          webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
+          webhook_url: ${{ secrets.DEPLOY_WEBHOOK_URL }}-${{ steps.extract_branch.outputs.branch }}
+          webhook_secret: ${{ secrets.DEPLOY_WEBHOOK_SECRET }}
 
       - name: Notify slack success
         if: success()

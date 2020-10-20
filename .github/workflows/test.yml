@@ -1,6 +1,6 @@
 name: tests
 
-on: [ push ]
+on: [push]
 
 jobs:
   test:
@@ -8,11 +8,6 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
-
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -26,7 +21,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-
       - name: install dependencies
         run: yarn
 
@@ -35,6 +29,13 @@ jobs:
 
       - name: run jest tests
         run: sudo yarn test
+
+      - name: trigger workflow
+        if: success()
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          workflow: build
 
       - name: Notify slack success
         if: success()
@@ -45,13 +46,6 @@ jobs:
           channel: ${{ secrets.SLACK_CHANNEL }}
           status: SUCCESS
           color: good
-
-      - name: trigger workflow
-        if: success()
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
-          workflow: build_${{ steps.extract_branch.outputs.branch }}
 
       - name: Notify slack fail
         if: failure()
