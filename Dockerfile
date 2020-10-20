@@ -7,6 +7,7 @@ COPY ./libs ./libs
 COPY ./scripts ./scripts
 COPY ./package.json ./package.json
 COPY ./yarn.lock ./yarn.lock
+COPY ./node_modules ./node_modules
 
 WORKDIR /temp
 RUN yarn
