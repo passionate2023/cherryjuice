@@ -4,9 +4,10 @@ import { Icons } from '::root/components/shared-components/icon/icon';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { FilterNodes } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/components/filter-nodes';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -17,6 +18,7 @@ const mapState = (state: Store) => {
   return {
     node_id: father_id,
     documentId: document?.id,
+    showNodePath: state.editor.showNodePath,
   };
 };
 const mapDispatch = {};
@@ -25,7 +27,11 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const ToolBar: React.FC<Props & PropsFromRedux> = ({ node_id, documentId }) => {
+const ToolBar: React.FC<Props & PropsFromRedux> = ({
+  node_id,
+  documentId,
+  showNodePath,
+}) => {
   const expandNode = useCallback(
     () =>
       ac.documentCache.expandNode({
@@ -34,15 +40,36 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({ node_id, documentId }) => {
       }),
     [documentId, node_id],
   );
+  const [CMShown, setCMShown] = useState(false);
+  const hide = () => setCMShown(false);
+  const show = () => setCMShown(true);
   return (
     <div className={modTreeToolBar.treeToolBar}>
       <div className={modTreeToolBar.treeToolBar__controls}>
         <FilterNodes />
-        <ButtonSquare
-          iconName={Icons.material.focus}
-          onClick={expandNode}
-          className={modTreeToolBar.tree_focusButton}
-        />
+        <ContextMenuWrapper
+          shown={CMShown}
+          hide={hide}
+          show={show}
+          items={[
+            {
+              name: 'show node path',
+              onClick: ac.editor.toggleNodePath,
+              active: showNodePath,
+              hideOnClick: false,
+            },
+            {
+              name: 'focus selected node',
+              onClick: expandNode,
+              hideOnClick: true,
+            },
+          ]}
+        >
+          <ButtonSquare
+            iconName={Icons.material['three-dots-vertical']}
+            className={modTreeToolBar.tree_focusButton}
+          />
+        </ContextMenuWrapper>
       </div>
     </div>
   );
