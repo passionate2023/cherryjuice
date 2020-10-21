@@ -1,37 +1,27 @@
-FROM ycnmhd/nginx-node:12.13.0 as cs
-
-WORKDIR /temp
-COPY ./apps ./apps
-COPY ./libs ./libs
-COPY ./scripts ./scripts
-COPY ./package.json ./package.json
-COPY ./yarn.lock ./yarn.lock
-COPY ./node_modules ./node_modules
-
-WORKDIR /temp
-RUN yarn build:apps
-RUN yarn strip:deps --dev --include-server
-
 FROM ycnmhd/nginx-node:12.13.0
 LABEL maintainer=ycnmhd
 
+# nginx
 COPY nginx/cj.conf.template /etc/nginx/conf.d/default.conf.template
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
-COPY --from=cs temp/apps/cs_client/dist /usr/share/nginx/html
 
-# copy server assets
-COPY --from=cs temp/apps/cs_server/package.json /usr/share/cj/apps/server/package.json
-COPY --from=cs temp/apps/cs_server/tsconfig.json /usr/share/cj/apps/server/tsconfig.json
-COPY --from=cs temp/apps/cs_server/migrations /usr/share/cj/apps/server/migrations
-COPY --from=cs temp/apps/cs_server/src /usr/share/cj/apps/server/src
-COPY --from=cs temp/apps/cs_server/dist /usr/share/cj/apps/server/dist
-COPY --from=cs temp/apps/cs_server/node_modules /usr/share/cj/apps/server/node_modules
+# client
+COPY ./apps/cs_client/dist /usr/share/nginx/html
 
-COPY --from=cs temp/libs/ /usr/share/cj/libs
-COPY --from=cs temp/package.json/ /usr/share/cj/package.json
-COPY --from=cs temp/yarn.lock /usr/share/cj/yarn.lock
+# server
+COPY ./apps/cs_server/package.json /usr/share/cj/apps/server/package.json
+COPY ./apps/cs_server/tsconfig.json /usr/share/cj/apps/server/tsconfig.json
+COPY ./apps/cs_server/migrations /usr/share/cj/apps/server/migrations
+COPY ./apps/cs_server/src /usr/share/cj/apps/server/src
+COPY ./apps/cs_server/dist /usr/share/cj/apps/server/dist
+COPY ./apps/cs_server/node_modules /usr/share/cj/apps/server/node_modules
+# libs
+COPY ./libs/ /usr/share/cj/libs
+COPY ./package.json/ /usr/share/cj/package.json
+COPY ./yarn.lock /usr/share/cj/yarn.lock
+COPY ./node_modules/@cherryjuice /usr/share/cj/node_modules/@cherryjuice
 
-# install runtime dependencies for nestjs
+# install server runtime dependencies
 WORKDIR /usr/share/cj/apps/server
 RUN yarn install
 

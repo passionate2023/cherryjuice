@@ -145,8 +145,8 @@ module.exports = {
           start_url: '/',
           icons: {
             favicons: true,
-            android: { background: '#000000' },
-            windows: { background: '#000000' },
+            android: true,
+            windows: true,
             appleIcon: false, // Create Apple touch icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }` or an array of sources
             appleStartup: false, // Create Apple startup images. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }` or an array of sources
             coast: false, // Create Opera Coast icon. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }` or an array of sources

@@ -29,6 +29,12 @@ jobs:
       - name: build local dependencies
         run: yarn build:libs
 
+      - name: build apps
+        run: yarn build:apps
+
+      - name: strip dev dependencies
+        run: yarn strip:deps --dev --include-server
+
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
