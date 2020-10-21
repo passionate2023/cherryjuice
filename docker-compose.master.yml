@@ -1,8 +1,8 @@
 version: '3'
 services:
-  cherryjuice:
-    restart: unless-stopped
-    image: docker.pkg.github.com/ycnmhd/cherryjuice/app:master
+  cherryjuice-master:
+    restart: always
+    image: ghcr.io/ycnmhd/cherryjuice/app-master:latest
     ports:
       - 1250:1250/tcp
     network_mode: 'host'
