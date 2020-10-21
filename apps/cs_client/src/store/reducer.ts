@@ -11,13 +11,13 @@ import { rootReducer, RootReducerState } from './ducks/root';
 import { searchReducer, SearchReducerState } from './ducks/search';
 import { cssVariablesReducer } from './ducks/css-variables';
 import { authReducer } from './ducks/auth';
-import { cacheReducer } from './ducks/cache/cache';
 import { settingsReducer } from './ducks/settings';
-import { documentCacheReducer } from '::store/ducks/cache/document-cache';
+import { documentCacheReducer } from '::store/ducks/document-cache/document-cache';
 import { animationReducer } from '::store/ducks/animations';
 import { timelinesReducer } from '::store/ducks/timelines';
-import { editorSettingsReducer } from '::store/ducks/settings/editor-settings';
+import { editorSettingsReducer } from '::store/ducks/settings/editor-settings/editor-settings';
 import { bookmarksReducer } from '::store/ducks/bookmarks';
+import { hotkeysSettingsReducer } from '::store/ducks/settings/hotkeys-settings/hotkeys-settings';
 
 const persistedReducers = {
   documentCache: persistReducer(
@@ -43,12 +43,12 @@ const persistedReducers = {
     },
     editorSettingsReducer,
   ),
-  cache: persistReducer(
+  hotkeySettings: persistReducer(
     {
-      key: 'cache',
+      key: 'hotkeySettings',
       storage,
     },
-    cacheReducer,
+    hotkeysSettingsReducer,
   ),
   editor: persistReducer(
     {

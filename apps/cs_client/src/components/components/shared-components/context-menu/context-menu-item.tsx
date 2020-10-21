@@ -2,6 +2,7 @@ import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modContextMenu } from '::sass-modules';
 import { ReactNode } from 'react';
+import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 
 export type ContextMenuItemProps = {
   name: string;
@@ -9,6 +10,7 @@ export type ContextMenuItemProps = {
   hide: () => void;
   node?: ReactNode;
   disabled?: boolean;
+  active?: boolean;
   bottomSeparator?: boolean;
   hideOnClick?: boolean;
 };
@@ -21,6 +23,7 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
   bottomSeparator,
   hide,
   hideOnClick = true,
+  active,
 }) => {
   const onClickM = e => {
     if (!disabled) {
@@ -40,7 +43,12 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
       onClick={onClickM}
       {...(disabled && { 'data-disabled': disabled })}
     >
-      {node || name}
+      <span className={modContextMenu.contextMenu__item__icon}>
+        {active ? <Icon name={Icons.material.check} /> : undefined}
+      </span>
+      <span className={modContextMenu.contextMenu__item__text}>
+        {node || name}
+      </span>
     </div>
   );
 };

@@ -6,14 +6,15 @@ import { useAddMetaToPastedImages } from '::root/components/app/components/edito
 import { DocumentContext } from '::root/components/app/components/editor/document/reducer/context';
 import { Image } from '@cherryjuice/graphql-types';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
-import { NodeScrollPosition } from '::store/ducks/cache/document-cache';
+import { NodeScrollPosition } from '::store/ducks/document-cache/document-cache';
 
 type Props = {
   contentEditable;
   html: string;
   nodeId;
-  file_id;
-  node_id;
+  documentId: string;
+  node_id: number;
+  read_only: boolean;
   isDocumentOwner: boolean;
   isOnMd: boolean;
   images: Image[];
@@ -24,7 +25,8 @@ const ContentEditable = ({
   contentEditable,
   html,
   nodeId,
-  file_id,
+  documentId,
+  read_only,
   node_id,
   isDocumentOwner,
   images,
@@ -33,12 +35,10 @@ const ContentEditable = ({
 }: Props) => {
   const ref = useRef<HTMLDivElement>();
   const { pastedImages } = useContext(DocumentContext);
-  useHandleContentChanges({ node_id, documentId: file_id, ref });
+  useHandleContentChanges({ node_id, documentId, ref });
   useAddMetaToPastedImages({ requestId: pastedImages });
   useAttachImagesToHtml({
     node_id,
-    file_id,
-    nodeId,
     html,
     images,
   });
@@ -63,11 +63,11 @@ const ContentEditable = ({
       ref={ref}
       key={node_id}
       className={modRichText.richText}
-      contentEditable={contentEditable && isDocumentOwner}
+      contentEditable={!read_only && contentEditable && isDocumentOwner}
       dangerouslySetInnerHTML={{ __html: html }}
       data-id={nodeId}
       data-node_id={node_id}
-      data-document-id={file_id}
+      data-document-id={documentId}
       id={'rich-text'}
     />
   );

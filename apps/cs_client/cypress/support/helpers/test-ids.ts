@@ -37,10 +37,10 @@ const testIds = {
   popups__documentOperations__clearAllFinished:
     'popups__documentOperations__clearAllFinished',
   dialogs__scrim: 'dialogs__scrim',
-  documentMeta__addGuest__input: 'documentMeta__addGuest__input',
-  documentMeta__addGuest__addButton: 'documentMeta__addGuest__addButton',
+  form__chips__input: 'form__chips__input',
+  form__chips__addChip: 'form__chips__addChip',
   documentMeta__guestList__writeButton: 'documentMeta__guestList__writeButton',
-  documentMeta__guestList: 'documentMeta__guestList',
+  form__chips__chipsList: 'form__chips__chipsList',
   toolBar__userPopup__signOut: 'toolBar__userPopup__signOut',
   toolBar__userPopup__signIn: 'toolBar__userPopup__signIn',
   toolBar__navBar__userButton: 'toolBar__navBar__userButton',

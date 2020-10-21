@@ -38,8 +38,8 @@ const Buttons: React.FC<PropsFromRedux> = ({
         const formattingHotkeysProp = formattingHotkeysProps[hotKey.type];
         if (!('icon' in formattingHotkeysProp))
           return <React.Fragment key={hotKey.type} />;
-        return hotKey.type === HotKeyActionType.FG_COLOR ||
-          hotKey.type === HotKeyActionType.BG_COLOR ? (
+        return hotKey.type === HotKeyActionType.FOREGROUND_COLOR ||
+          hotKey.type === HotKeyActionType.BACKGROUND_COLOR ? (
           <ColorInput key={hotKey.type} hotKey={hotKey} disabled={disabled} />
         ) : (
           <ToolbarButton
@@ -87,7 +87,7 @@ const FormattingButtons: React.FC<Props & {
 };
 const FormattingButtonsWithTransition: React.FC<Props & {
   show: boolean;
-}> = ({ show }) => {
+}> = ({ show, children }) => {
   return (
     <TransitionWrapper<Props>
       Component={FormattingButtons}
@@ -101,7 +101,7 @@ const FormattingButtonsWithTransition: React.FC<Props & {
           friction: 25,
         },
       }}
-      componentProps={{}}
+      componentProps={{ children }}
     />
   );
 };

@@ -15,6 +15,7 @@ registerEnumType(SearchScope, {
 export enum SearchTarget {
   nodeContent = 'node-content',
   nodeTitle = 'node-title',
+  nodeTags = 'node-tags',
 }
 registerEnumType(SearchTarget, {
   name: 'SearchTarget',

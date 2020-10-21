@@ -7,9 +7,7 @@ const useAttachImagesToHtml = ({
   html,
   images: nodeImages,
 }: {
-  file_id;
   node_id;
-  nodeId;
   html;
   images: Image[];
 }) => {

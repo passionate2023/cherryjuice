@@ -136,19 +136,23 @@ module.exports = {
         favicons: {
           appName: 'CherryJuice',
           appDescription: 'Start building your knowledge base',
+          developerName: 'ycnmhd',
+          developerURL: 'https://github.com/ycnmhd',
+          lang: 'en-US',
           background: '#180101',
           theme_color: '#180101',
-        },
-        orientation: 'natural',
-        icons: {
-          favicons: true,
-          android: { background: '#000000' },
-          appleIcon: { background: '#000000' },
-          windows: { background: '#000000' },
-          appleStartup: false,
-          coast: false,
-          firefox: false,
-          yandex: false,
+          orientation: 'portrait',
+          start_url: '/',
+          icons: {
+            favicons: true,
+            android: true,
+            windows: true,
+            appleIcon: false, // Create Apple touch icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }` or an array of sources
+            appleStartup: false, // Create Apple startup images. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }` or an array of sources
+            coast: false, // Create Opera Coast icon. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }` or an array of sources
+            firefox: false, // Create Firefox OS icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }` or an array of sources
+            yandex: false, // Create Yandex browser icon. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }` or an array of sources
+          },
         },
       }),
     production &&

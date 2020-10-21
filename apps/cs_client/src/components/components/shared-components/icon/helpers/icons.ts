@@ -1,10 +1,13 @@
 const Icons = {
   material: {
     anchor: 'anchor',
+    'three-dots-vertical': 'three-dots-vertical',
+    check: 'check',
     people: 'people',
     bookmarks: 'bookmarks',
     bookmark: 'bookmark',
     filter: 'filter',
+    key: 'key',
     time: 'time',
     link: 'link',
     code: 'code',

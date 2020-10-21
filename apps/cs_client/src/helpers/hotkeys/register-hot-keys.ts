@@ -11,8 +11,8 @@ const registerFormattingHKs = (hotKeys: HotKey[] = []) => {
     .filter(hotKey => hotKey.keys)
     .forEach(({ keys, type }) => {
       const colorCommands =
-        type === HotKeyActionType.FG_COLOR ||
-        type === HotKeyActionType.BG_COLOR;
+        type === HotKeyActionType.FOREGROUND_COLOR ||
+        type === HotKeyActionType.BACKGROUND_COLOR;
       if (colorCommands)
         hotKeysManager.registerHotKey({
           type,

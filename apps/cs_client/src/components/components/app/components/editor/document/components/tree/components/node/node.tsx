@@ -1,19 +1,18 @@
-import nodeMod from '::sass-modules/tree/node.scss';
 import * as React from 'react';
 import { useRef } from 'react';
 import { useSelectNode } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/select-node';
 import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
-import { NodeIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-icon';
 import { ToggleChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/toggle-children';
-import { NodeVisibilityIcon } from '::root/components/app/components/editor/document/components/tree/components/node/components/visibility-icon';
 import { NodeOverlay } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-overlay';
 import { NodeChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-children';
-import { NodesDict } from '::store/ducks/cache/document-cache';
-import { NodeState } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { NodesDict } from '::store/ducks/document-cache/document-cache';
+import { NodeState } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/tree';
 import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
 import { NodeTitle } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-title';
 import { useSelector } from 'react-redux';
 import { Store } from '::store/store';
+import { NodeIcons } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-icons/node-icons';
+import { modNode } from '::sass-modules';
 
 export type NodeProps = {
   node_id: number;
@@ -42,7 +41,7 @@ const Node: React.FC<NodeProps> = ({
 }) => {
   const online = useSelector((state: Store) => state.root.online);
   const documentId = useSelector((state: Store) => state.document.documentId);
-  const { child_nodes, name, privacy, html } = nodes[node_id];
+  const { child_nodes, name, privacy, html, read_only, tags } = nodes[node_id];
   const componentRef = useRef();
 
   const showChildren =
@@ -58,8 +57,8 @@ const Node: React.FC<NodeProps> = ({
   return (
     <>
       <div
-        className={`${nodeMod.node} ${
-          !online && !html ? nodeMod.nodeNotAvailable : ''
+        className={`${modNode.node} ${
+          !online && !html ? modNode.nodeNotAvailable : ''
         }`}
         ref={componentRef}
         onClick={selectNode}
@@ -71,11 +70,13 @@ const Node: React.FC<NodeProps> = ({
           node_id={node_id}
           documentId={documentId}
         />
-        <NodeIcon depth={depth} icon_id={icon_id} />
-        <NodeVisibilityIcon
+        <NodeIcons
           documentPrivacy={documentPrivacy}
           parentPrivacy={parentPrivacy}
           privacy={privacy}
+          depth={depth}
+          icon_id={icon_id}
+          read_only={!!read_only}
         />
         <NodeTitle
           nodeStyle={nodeStyle}
@@ -83,6 +84,7 @@ const Node: React.FC<NodeProps> = ({
           documentId={documentId}
           node_id={node_id}
           index={index}
+          tags={tags}
         />
         <NodeOverlay
           clickTimestamp={clickTimestamp}

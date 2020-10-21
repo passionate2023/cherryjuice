@@ -17,7 +17,11 @@ const useHeadline = (args: HeadlineProps) => {
     });
     headlineWorker.postMessage(args);
     return () => headlineWorker.terminate();
-  }, [args?.searchResult.ahtmlHeadline, args?.searchResult.nodeNameHeadline]);
+  }, [
+    args?.searchResult.ahtmlHeadline,
+    args?.searchResult.nodeNameHeadline,
+    args?.searchResult.tagsHeadline,
+  ]);
   return processedHeadline;
 };
 

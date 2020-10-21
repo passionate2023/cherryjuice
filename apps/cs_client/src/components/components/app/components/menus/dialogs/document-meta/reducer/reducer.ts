@@ -7,7 +7,7 @@ import {
   DocumentGuestOt,
   Privacy,
 } from '@cherryjuice/graphql-types';
-import { QDocumentsListItem } from '::graphql/queries/documents-list';
+import { QDocumentsListItem } from '::graphql/fragments/document-list-item';
 
 type TState = {
   name: string;

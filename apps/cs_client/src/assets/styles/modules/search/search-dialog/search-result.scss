@@ -16,8 +16,11 @@
   flex-direction: column;
   border-radius: 5px;
   box-shadow: $box-shadow2;
+  transition: background-color 200ms linear;
 }
-
+.search-result--selected {
+  background-color: var(--primary-100);
+}
 .search-result__location {
   align-self: flex-start;
   justify-self: flex-end;
@@ -36,6 +39,15 @@
   cursor: pointer;
   text-decoration: none;
   font-size: 12px;
+
+  display: flex;
+}
+
+.search-result__location__node-tags {
+  display: flex;
+  gap: 10px;
+  margin-left: 10px;
+  opacity: 0.8;
 }
 .search-result__headline {
   align-self: flex-start;

@@ -50,6 +50,7 @@ type DocumentMutation {
 
 type DocumentOperation {
     context: OPERATION_CONTEXT
+    id: String!
     progress: Float
     state: OPERATION_STATE!
     target: DocumentTarget!
@@ -124,6 +125,7 @@ type Node {
     node_title_styles: String
     privacy: NodePrivacy
     read_only: Int!
+    tags: String
     updatedAt: Float!
 }
 
@@ -151,6 +153,8 @@ type NodeSearchResultEntity {
     nodeName: String!
     nodeNameHeadline: String
     node_id: Int!
+    tags: String
+    tagsHeadline: String
     updatedAt: Timestamp!
 }
 
@@ -244,11 +248,11 @@ enum AccessLevel {
 }
 
 enum HotKeyActionType {
-    BG_COLOR
+    BACKGROUND_COLOR
     BOLD
     CREATE_TEST_SAMPLE
     DELETE_LINE
-    FG_COLOR
+    FOREGROUND_COLOR
     H1
     H2
     H3
@@ -322,6 +326,7 @@ enum SearchScope {
 
 enum SearchTarget {
     nodeContent
+    nodeTags
     nodeTitle
 }
 
@@ -387,6 +392,7 @@ input CreateNodeIt {
     node_title_styles: String
     privacy: NodePrivacy
     read_only: Int!
+    tags: String
     updatedAt: Timestamp!
 }
 
@@ -455,6 +461,7 @@ input NodeMetaIt {
     privacy: NodePrivacy
     read_only: Int
     sequence: Float
+    tags: String
     updatedAt: Timestamp!
 }
 

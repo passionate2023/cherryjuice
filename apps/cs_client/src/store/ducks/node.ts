@@ -6,9 +6,9 @@ import { AsyncOperation } from '::store/ducks/document';
 import {
   CloseNodeParams,
   SelectNodeParams,
-} from '::store/ducks/cache/document-cache/helpers/document/select-node';
+} from '::store/ducks/document-cache/helpers/document/select-node';
 import { OnDropParam } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';
-import { DropMeta } from '::store/ducks/cache/document-cache/helpers/node/drop';
+import { DropMeta } from '::store/ducks/document-cache/helpers/node/drop';
 
 const ap = createActionPrefixer('node');
 

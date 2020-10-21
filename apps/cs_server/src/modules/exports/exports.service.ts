@@ -15,13 +15,13 @@ import Timeout = NodeJS.Timeout;
 export type Notify = () => Promise<void>;
 type ChunkifyProps = {
   totalSteps: number;
-  stepsPerBatch: number;
+  stepsPerBatchRatio: number;
   onProgress: (progress: number) => Promise<void>;
 };
 type Chunkify = (props: ChunkifyProps) => Notify;
 export const chunkify: Chunkify = ({
   onProgress,
-  stepsPerBatch,
+  stepsPerBatchRatio,
   totalSteps,
 }) => {
   const state = {
@@ -30,10 +30,11 @@ export const chunkify: Chunkify = ({
       total: 0,
     },
   };
+  const stepsPerBatch = Math.floor(stepsPerBatchRatio * totalSteps);
   return async () => {
     state.progress.total++;
     state.progress.current++;
-    if (state.progress.current > totalSteps / stepsPerBatch) {
+    if (state.progress.current > stepsPerBatch) {
       state.progress.current = 0;
       await onProgress(state.progress.total / totalSteps);
     }
@@ -69,66 +70,90 @@ export class ExportsService {
   exportDocument = async (dto: GetDocumentDTO): Promise<string> => {
     const { userId } = dto;
     const document = await this.documentService.getDocumentById(dto);
-    await this.subscriptionsService.export.pending(document, userId);
-    const nodes = await this.nodeService.getNodesMetaAndAHtml({
-      documentId: document.id,
-      userId,
+    const operationId = 'export_' + Date.now();
+
+    // eslint-disable-next-line no-async-promise-executor
+    new Promise(async () => {
+      await this.subscriptionsService.export.pending(
+        document,
+        userId,
+        operationId,
+      );
+      const nodes = await this.nodeService.getNodesMetaAndAHtml({
+        documentId: document.id,
+        userId,
+      });
+      const exportCTB = new ExportCTB({
+        id: document.id,
+        name: document.name,
+        hash: document.hash,
+        userId,
+      });
+      try {
+        await this.subscriptionsService.export.preparing(
+          document,
+          userId,
+          operationId,
+        );
+        await exportCTB.createCtb();
+        await exportCTB.createTables();
+        const onNodeProgress = chunkify({
+          totalSteps: nodes.length,
+          stepsPerBatchRatio: 0.2,
+          onProgress: async progress => {
+            await this.subscriptionsService.export.nodesStarted(
+              document,
+              userId,
+              operationId,
+              progress,
+            );
+          },
+        });
+        const imagesPerNode = await exportCTB.writeAHtmls(
+          nodes,
+          onNodeProgress,
+        );
+        await exportCTB.writeBookmarks(document.state.bookmarks);
+
+        const onImageProgress = chunkify({
+          totalSteps: imagesPerNode.size,
+          stepsPerBatchRatio: 0.1,
+          onProgress: async progress => {
+            await this.subscriptionsService.export.imagesStarted(
+              document,
+              userId,
+              operationId,
+              progress,
+            );
+          },
+        });
+        await exportCTB.writeNodesImages({
+          imagesPerNode,
+          getNodeImages: this.imageService.getLoadedImages,
+          onProgress: onImageProgress,
+        });
+        await this.subscriptionsService.export.finished(
+          document,
+          userId,
+          operationId,
+        );
+      } catch (e) {
+        await this.subscriptionsService.export.failed(
+          document,
+          userId,
+          operationId,
+        );
+        // eslint-disable-next-line no-console
+        console.error(e);
+        throw e;
+      }
+      try {
+        await exportCTB.closeCtb();
+        await this.scheduleDeletion(document, exportCTB);
+        // eslint-disable-next-line no-empty
+      } catch {}
     });
-    const exportCTB = new ExportCTB({
-      id: document.id,
-      name: document.name,
-      hash: document.hash,
-      userId,
-    });
-    try {
-      await this.subscriptionsService.export.preparing(document, userId);
-      await exportCTB.createCtb();
-      await exportCTB.createTables();
-      const onNodeProgress = chunkify({
-        totalSteps: nodes.length,
-        stepsPerBatch: 10,
-        onProgress: async progress => {
-          await this.subscriptionsService.export.nodesStarted(
-            document,
-            userId,
-            progress,
-          );
-        },
-      });
-      const imagesPerNode = await exportCTB.writeAHtmls(nodes, onNodeProgress);
-
-      await exportCTB.writeBookmarks(document.state.bookmarks);
-
-      const onImageProgress = chunkify({
-        totalSteps: imagesPerNode.size,
-        stepsPerBatch: 5,
-        onProgress: async progress => {
-          await this.subscriptionsService.export.imagesStarted(
-            document,
-            userId,
-            progress,
-          );
-        },
-      });
-
-      await exportCTB.writeNodesImages({
-        imagesPerNode,
-        getNodeImages: this.imageService.getLoadedImages,
-        onProgress: onImageProgress,
-      });
-      await this.subscriptionsService.export.finished(document, userId);
-    } catch (e) {
-      await this.subscriptionsService.export.failed(document, userId);
-      // eslint-disable-next-line no-console
-      console.error(e);
-      throw e;
-    }
-    try {
-      await exportCTB.closeCtb();
-      await this.scheduleDeletion(document, exportCTB);
-      return exportCTB.getFileLocation.relativePath;
-      // eslint-disable-next-line no-empty
-    } catch {}
+    return operationId;
   };
 
   createDownloadStream = ({

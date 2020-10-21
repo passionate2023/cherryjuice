@@ -1,31 +1,29 @@
 import { Store } from '::store/store';
-import { HotKeys } from '@cherryjuice/graphql-types';
+import { HotKey, HotKeys } from '@cherryjuice/graphql-types';
 import { createSelector } from 'reselect';
-import { HotKey } from '@cherryjuice/graphql-types';
+import { generalHotKeysProps } from '::helpers/hotkeys/hot-key-props/general-hotkeys-props';
 
-const hotKeysSelector = (state: Store) => state.auth.settings.hotKeys;
-const updatedHotKeys = (state: Store) => state.cache.settings.hotKeys;
-
-const findHotKey = (hkx: HotKey) => (hkn: HotKey): boolean =>
-  hkn.type === hkx.type;
+const hotKeysSelector = (state: Store) => state.hotkeySettings.current;
 
 export const getHotkeys = createSelector(
   hotKeysSelector,
-  updatedHotKeys,
-  (current, updatedHotKeys): HotKeys => {
-    const existingFormattingHotKeys = current.formatting;
-    const existingGeneralHotKeys = current.general;
-    Object.entries(updatedHotKeys).forEach(hotKeys => {
-      (Object.values(hotKeys) as HotKey[]).forEach(hotKey => {
-        let i = existingFormattingHotKeys.findIndex(findHotKey(hotKey));
-        if (i !== -1) {
-          current.formatting[i] = hotKey;
-        } else {
-          i = existingGeneralHotKeys.findIndex(findHotKey(hotKey));
-          current.general[i] = hotKey;
-        }
-      });
-    });
-    return { ...current };
+  (current): HotKeys => {
+    const hks = Object.entries(current).map(([type, keys]) => ({
+      type,
+      keys,
+    })) as HotKey[];
+
+    const [formatting, general] = hks.reduce(
+      (groups, hk) => {
+        if (generalHotKeysProps[hk.type]) groups[1].push(hk);
+        else groups[0].push(hk);
+        return groups;
+      },
+      [[], []],
+    );
+    return {
+      formatting,
+      general,
+    };
   },
 );

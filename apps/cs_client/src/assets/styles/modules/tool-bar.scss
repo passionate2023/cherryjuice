@@ -114,6 +114,7 @@
     //cursor: initial;
     @include disabled-button();
   }
+  overflow: hidden;
   transition: $bg-transition-1;
 }
 .tool-bar__icon--strict-width {

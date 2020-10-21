@@ -1,5 +1,5 @@
 import { NodeId } from '../document';
-import { NodesDict } from '::store/ducks/cache/document-cache';
+import { NodesDict } from '::store/ducks/document-cache/document-cache';
 const defaultRootNode = { node_id: 0, id: '' };
 const getFallbackNode = (nodes: NodesDict): NodeId => {
   if (!Object.keys(nodes)?.length) return defaultRootNode;

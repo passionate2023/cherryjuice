@@ -12,7 +12,7 @@ import {
   TimeFilter,
   TimeRange,
 } from '@cherryjuice/graphql-types';
-import { documentCacheActionCreators } from '::store/ducks/cache/document-cache';
+import { documentCacheActionCreators } from '::store/ducks/document-cache/document-cache';
 
 const ap = createActionPrefixer('search');
 

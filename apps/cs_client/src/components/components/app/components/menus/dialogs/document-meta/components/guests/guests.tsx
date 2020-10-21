@@ -1,10 +1,18 @@
 import * as React from 'react';
-import { DocumentGuestOt } from '@cherryjuice/graphql-types';
-import { Guest } from '::root/components/app/components/menus/dialogs/document-meta/components/guests/components/guest';
-import { modGuests } from '::sass-modules';
-import { AddGuest } from '::root/components/app/components/menus/dialogs/document-meta/components/guests/components/add-guest';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { AccessLevel, DocumentGuestOt } from '@cherryjuice/graphql-types';
 import { testIds } from '::cypress/support/helpers/test-ids';
+import { documentMetaActionCreators } from '::root/components/app/components/menus/dialogs/document-meta/reducer/reducer';
+import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
+import { Icons } from '::root/components/shared-components/icon/helpers/icons';
+import { useMemo } from 'react';
+import { apolloClient } from '::graphql/client/apollo-client';
+import { USER_EXISTS } from '::graphql/queries/user-exists';
+import { ac } from '::store/store';
+import { AlertType } from '::types/react';
+import { patterns } from '::root/components/auth/helpers/form-validation';
+import { Chips } from '::root/components/app/components/menus/dialogs/document-meta/components/chips/chips';
+import { AddChipCallback } from '::root/components/app/components/menus/dialogs/document-meta/components/chips/components/add-chip';
+import { ChipProps } from '::root/components/app/components/menus/dialogs/document-meta/components/chips/components/chip';
 
 type Props = {
   guests: DocumentGuestOt[];
@@ -12,18 +20,62 @@ type Props = {
 };
 
 const Guests: React.FC<Props> = ({ guests, userId }) => {
+  const chips = useMemo<ChipProps[]>(
+    () =>
+      guests.map(guest => ({
+        additionalButton: (
+          <ButtonCircle
+            iconName={Icons.material.edit}
+            small={true}
+            active={guest.accessLevel === AccessLevel.WRITER}
+            onClick={() =>
+              documentMetaActionCreators.toggleUserAccessLevel(guest.userId)
+            }
+            testId={testIds.documentMeta__guestList__writeButton}
+          />
+        ),
+        text: guest.email,
+      })),
+    [guests],
+  );
+
+  const addGuest: AddChipCallback = (email: string) =>
+    apolloClient.mutate(USER_EXISTS({ email })).then(guestUserId => {
+      if (guestUserId) {
+        if (guestUserId === userId) {
+          ac.dialogs.setAlert({
+            type: AlertType.Neutral,
+            title: "you can't add yourself as a guest",
+            description: 'try a different email',
+          });
+          return { clearInput: false };
+        } else {
+          documentMetaActionCreators.addGuest({
+            accessLevel: AccessLevel.READER,
+            email,
+            userId: guestUserId,
+          });
+          return { clearInput: true };
+        }
+      } else {
+        ac.dialogs.setAlert({
+          type: AlertType.Neutral,
+          title: 'user does not exist',
+          description: 'try a different email',
+        });
+        return { clearInput: false };
+      }
+    });
+
   return (
-    <div className={joinClassNames([modGuests.guests])}>
-      <AddGuest userId={userId} />
-      <div
-        className={modGuests.guests__list}
-        data-testid={testIds.documentMeta__guestList}
-      >
-        {guests.map(guest => (
-          <Guest key={guest.email} guest={guest} />
-        ))}
-      </div>
-    </div>
+    <Chips
+      label={'guests'}
+      addChip={addGuest}
+      placeholder={'guest email'}
+      pattern={patterns.email.pattern}
+      chips={chips}
+      onRemove={documentMetaActionCreators.removeGuest}
+    />
   );
 };
 

@@ -17,12 +17,12 @@ import { searchActionCreators } from './ducks/search';
 import { cssVariablesActionCreators } from './ducks/css-variables';
 import { setCssVariables } from './middleware/set-css-variables';
 import { authActionCreators } from './ducks/auth';
-import { cacheActionCreators } from './ducks/cache/cache';
+import { hotkeysSettingsACs } from '::store/ducks/settings/hotkeys-settings/hotkeys-settings';
 import { settingsActionCreators } from './ducks/settings';
-import { documentCacheActionCreators } from '::store/ducks/cache/document-cache';
+import { documentCacheActionCreators } from '::store/ducks/document-cache/document-cache';
 import { animationActionCreators } from '::store/ducks/animations';
 import { timelinesActionCreators } from '::store/ducks/timelines';
-import { editorSettingsActionCreators } from '::store/ducks/settings/editor-settings';
+import { editorSettingsActionCreators } from '::store/ducks/settings/editor-settings/editor-settings';
 import { bookmarksActionCreators } from '::store/ducks/bookmarks';
 
 type Store = ReturnType<typeof reducer>;
@@ -53,7 +53,7 @@ const ac_ = {
   search: searchActionCreators,
   cssVariables: cssVariablesActionCreators,
   auth: authActionCreators,
-  cache: cacheActionCreators,
+  hotkeySettings: hotkeysSettingsACs,
   settings: settingsActionCreators,
   documentCache: documentCacheActionCreators,
   animation: animationActionCreators,
@@ -73,7 +73,7 @@ const ac = {
   documentsList: b(documentsListActionCreators, dispatch),
   documentOperations: b(documentOperationsActionCreators, dispatch),
   root: b(rootActionCreators, dispatch),
-  cache: b(cacheActionCreators, dispatch),
+  hotkeySettings: b(hotkeysSettingsACs, dispatch),
   search: b(searchActionCreators, dispatch),
   cssVariables: b(cssVariablesActionCreators, dispatch),
   settings: b(settingsActionCreators, dispatch),

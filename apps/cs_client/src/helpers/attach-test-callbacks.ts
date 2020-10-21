@@ -2,7 +2,7 @@ import { documentActionCreators } from '::root/components/app/components/editor/
 import { onPaste } from './editing/clipboard';
 import { apolloClient } from '::graphql/client/apollo-client';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
-import { dTM } from '::store/ducks/cache/document-cache';
+import { dTM } from '::store/ducks/document-cache/document-cache';
 import { ac } from '::store/store';
 import { execK } from '::helpers/editing/execK';
 

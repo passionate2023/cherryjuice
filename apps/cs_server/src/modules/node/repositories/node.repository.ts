@@ -1,6 +1,6 @@
 import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { Node } from '../entities/node.entity';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { copyProperties } from '../../document/helpers';
 import { SaveHtmlIt } from '../it/save-html.it';
 import { NodeMetaIt, NodePrivacy } from '../it/node-meta.it';
@@ -28,6 +28,7 @@ import {
 } from '../../document/entities/document-guest.entity';
 import { GetterSettings } from '../../document/repositories/document.repository';
 import { PrivateNode } from '../entities/private-node.ot';
+import { createErrorDescription } from '../../shared/errors/create-error-description';
 const nodeMeta = [
   `n.id`,
   `n.name`,
@@ -42,6 +43,7 @@ const nodeMeta = [
   `n.hash`,
   `n.documentId`,
   `n.privacy`,
+  `n.tags`,
 ];
 const nodeAhtml = ['n.ahtml'];
 const fullNode = [...nodeMeta, ...nodeAhtml];
@@ -199,10 +201,17 @@ export class NodeRepository extends Repository<Node> {
       delete attributes['privacy'];
       node.privacy = null;
     }
+    if (node.read_only && attributes['ahtml'] && node.ahtml) {
+      throw new BadRequestException(
+        createErrorDescription.node.nodeIsReadOnly(dto.node_id),
+      );
+    }
     Object.entries(attributes).forEach(([k, v]) => {
       node[k] = v;
     });
-    if (attributes['ahtml']) node.updateAhtmlTxt();
+    if (attributes['ahtml']) {
+      node.updateAhtmlTxt();
+    }
     await this.save(node);
     return node;
   }
@@ -216,6 +225,10 @@ export class NodeRepository extends Repository<Node> {
   }
   async deleteNode(dto: DeleteNodeDTO): Promise<string> {
     const node = await this.getWNodeById(dto.getNodeDTO);
+    if (node.read_only)
+      throw new BadRequestException(
+        createErrorDescription.node.nodeIsReadOnly(dto.getNodeDTO.node_id),
+      );
     return await this.remove(node).then(res => JSON.stringify(res));
   }
   async getNodesMetaAndAHtml(dto: GetNodesDTO): Promise<Node[]> {

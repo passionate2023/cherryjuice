@@ -1,4 +1,7 @@
-import { CachedDocument, QFullNode } from '::store/ducks/cache/document-cache';
+import {
+  CachedDocument,
+  QFullNode,
+} from '::store/ducks/document-cache/document-cache';
 import { SortNodesBy } from '@cherryjuice/graphql-types';
 
 export type PartialNode = Pick<QFullNode, 'name' | 'createdAt' | 'updatedAt'>;

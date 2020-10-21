@@ -4,7 +4,7 @@ import { Node } from './components/node';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { getParentsNode_ids } from '::store/ducks/cache/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/tree';
 import {
   createNodePropsMapper,
   useChildCM,

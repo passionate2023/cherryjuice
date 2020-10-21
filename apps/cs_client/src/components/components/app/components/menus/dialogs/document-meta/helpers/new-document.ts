@@ -1,6 +1,6 @@
 import { NodeCached } from '@cherryjuice/graphql-types';
 import { TDocumentMetaState } from '::root/components/app/components/menus/dialogs/document-meta/reducer/reducer';
-import { CreateDocumentParams } from '::store/ducks/cache/document-cache/helpers/document/create-document';
+import { CreateDocumentParams } from '::store/ducks/document-cache/helpers/document/create-document';
 import { newNodePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 
 type GenerateRootNodeProps = {

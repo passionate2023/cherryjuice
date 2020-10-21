@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { modSearchDialog } from '::sass-modules';
 import { DocumentGroup } from './components/document-group';
-import { CachedDocument } from '::store/ducks/cache/document-cache';
+import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 import { SearchInput } from '::root/components/shared-components/inputs/search-input';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';

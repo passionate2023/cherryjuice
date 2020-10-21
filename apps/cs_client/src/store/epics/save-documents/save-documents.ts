@@ -31,14 +31,17 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
             mapTo(ac_.document.cacheReset()),
           ),
         );
-        const saveFulfilled$ = of(
-          ac_.document.saveFulfilled(state.newSelectedDocumentId),
+        const saveFulfilled$ = concat(
+          of(ac_.document.setSwappedIds(state.swappedDocumentIds)),
+          of(ac_.document.saveFulfilled()),
         ).pipe(
           tap(() => {
             ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
           }),
         );
-        const maybeRedirectToNewDocument$ = state.newSelectedDocumentId
+        const swappedDocumentId =
+          state.swappedDocumentIds[store.getState().document.documentId];
+        const maybeRedirectToNewDocument$ = swappedDocumentId
           ? of(ac_.document.setDocumentId(state.newSelectedDocumentId))
           : EMPTY.pipe(ignoreElements());
         return concat(

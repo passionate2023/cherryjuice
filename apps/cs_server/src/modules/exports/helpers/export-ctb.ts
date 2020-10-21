@@ -102,13 +102,15 @@ class ExportCTB {
           for await (statement of sqlQueries.queries) {
             await this.db.run(statement);
           }
-          onProgress();
+          await onProgress();
           imagesMap.set(childNode.id, sqlQueries.images);
         } catch (e) {
           // eslint-disable-next-line no-console
-          console.log(`node: [${JSON.stringify(node)}]`);
+          console.log(`node: [${JSON.stringify(node, null, 4)}]`);
           // eslint-disable-next-line no-console
-          console.log(`query: ${JSON.stringify(statement)}`);
+          console.log(`query: ${JSON.stringify(statement, null, 4)}`);
+          // eslint-disable-next-line no-console
+          console.error(e);
           throw e;
         }
         await this.writeAHtml(
@@ -119,7 +121,9 @@ class ExportCTB {
       }
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.log(`node: [${JSON.stringify(node)}]`);
+      console.log(`node: [${JSON.stringify(node, null, 4)}]`);
+      // eslint-disable-next-line no-console
+      console.error(e);
       throw e;
     }
   };
@@ -161,7 +165,7 @@ class ExportCTB {
       }));
 
       await this.writeNodeImages(loadedNodeImages);
-      onProgress();
+      await onProgress();
     }
   };
 

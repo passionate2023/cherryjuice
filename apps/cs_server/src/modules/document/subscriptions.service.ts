@@ -34,6 +34,7 @@ export class SubscriptionsService {
   ) => async (
     document: Document,
     userId: string,
+    id: string,
     progress?: number,
   ): Promise<void> => {
     const documentOperation: DocumentOperation = {
@@ -45,6 +46,7 @@ export class SubscriptionsService {
         name: document.name,
       },
       userId,
+      id,
     };
     await this.publishMessage({
       documentOperation,

@@ -4,7 +4,7 @@ import { CreateNodeIt } from '@cherryjuice/graphql-types';
 import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 import { swapFatherIdIfApplies } from '::store/epics/save-documents/helpers/save-document/helpers/save-nodes-meta';
 import { CREATE_NODE } from '::graphql/mutations/document/create-node';
-import { QFullNode } from '::store/ducks/cache/document-cache';
+import { QFullNode } from '::store/ducks/document-cache/document-cache';
 
 const adapt = ({
   child_nodes,
@@ -16,6 +16,8 @@ const adapt = ({
   updatedAt,
   fatherId,
   privacy,
+  read_only,
+  tags,
 }: QFullNode): CreateNodeIt => ({
   child_nodes,
   createdAt,
@@ -23,10 +25,11 @@ const adapt = ({
   name,
   node_id,
   node_title_styles,
-  read_only: 1,
+  read_only,
   updatedAt,
   fatherId,
   privacy,
+  tags,
 });
 
 const saveNewNodes = async ({ state, document }: SaveOperationProps) => {

@@ -16,7 +16,6 @@ if (process.env.NODE_ENV !== 'development') {
 register({
   onUpdate: registration => {
     const waitingServiceWorker = registration.waiting;
-
     if (waitingServiceWorker) {
       waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
     }

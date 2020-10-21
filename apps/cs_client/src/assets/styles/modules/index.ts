@@ -1,3 +1,4 @@
+import modNode from '::sass-modules/tree/node.scss';
 import modDrawer from '::sass-modules/shared-components/drawer.scss';
 import modButton from '::sass-modules/shared-components/button.scss';
 import modTextInput from '::sass-modules/shared-components/text-input.scss';
@@ -31,7 +32,7 @@ import modSearchOptions from './search/search-dialog/search-options.scss';
 import modPickTimeRange from './search/search-dialog/pick-time-range.scss';
 import modTimeFilter from './search/search-dialog/time-filter.scss';
 import modUtility from './utility.scss';
-import modGuests from './document-meta/guests.scss';
+import modChips from './document-meta/guests.scss';
 import modUserProfile from './user/user-profile.scss';
 import modHotKey from './settings/hot-key.scss';
 import modHotKeys from './settings/hot-keys.scss';
@@ -45,6 +46,7 @@ import modContextMenu from '::sass-modules/shared-components/context-menu.scss';
 import modToggleSwitch from '::sass-modules/shared-components/toggle-switch.scss';
 import modBookmarks from '::sass-modules/dialogs/bookmarks/bookmarks.scss';
 export {
+  modNode,
   modBookmarks,
   modNodePath,
   modToggleSwitch,
@@ -84,7 +86,7 @@ export {
   modTimeFilter,
   modPickTimeRange,
   modUtility,
-  modGuests,
+  modChips,
   modUserProfile,
   modHotKey,
   modHotKeys,

@@ -1,40 +1,36 @@
-from node:12.13.0 as cs
+FROM ycnmhd/nginx-node:12.13.0
+LABEL maintainer=ycnmhd
 
+# entrypoint
+RUN mkdir -p /.cs/exports
+RUN mkdir -p /.cs/imports
 
-workdir /temp
-copy ./apps ./apps
-copy ./libs ./libs
-copy ./scripts ./scripts
-copy ./package.json ./package.json
-copy ./yarn.lock ./yarn.lock
+COPY scripts /scripts
+RUN ["chmod", "+x", "/scripts/entrypoint.sh"]
+RUN ["chmod", "+x", "/scripts/nginx.sh"]
+RUN ["chmod", "+x", "/scripts/node.sh"]
 
-workdir /temp
-run yarn
-run yarn build:libs
-run yarn build:apps
-run yarn strip:deps
-from node:12.13.0-slim
-label maintainer ycnmhd
+# nginx
+COPY nginx/cj.conf.template /etc/nginx/conf.d/default.conf.template
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-#copy server assets
-copy --from=cs temp/apps/cs_server/package.json build/apps/server/package.json
-copy --from=cs temp/apps/cs_server/tsconfig.json build/apps/server/tsconfig.json
-copy --from=cs temp/apps/cs_server/migrations build/apps/server/migrations
-copy --from=cs temp/apps/cs_server/src build/apps/server/src
-copy --from=cs temp/apps/cs_server/dist build/apps/server/dist
+# server runtime dependencies
+COPY ./libs/ /usr/share/cj/libs
+COPY ./node_modules/@cherryjuice /usr/share/cj/node_modules/@cherryjuice
+COPY ./package.json/ /usr/share/cj/package.json
+COPY ./yarn.lock /usr/share/cj/yarn.lock
+COPY ./apps/cs_server/package.json /usr/share/cj/apps/server/package.json
+COPY ./apps/cs_server/node_modules /usr/share/cj/apps/server/node_modules
+WORKDIR /usr/share/cj/apps/server
+RUN yarn install
 
-copy --from=cs temp/apps/cs_client/dist build/apps/client
-copy --from=cs temp/libs/ build/libs
-copy --from=cs temp/package.json/ build/package.json
-copy --from=cs temp/yarn.lock build/yarn.lock
+# server code
+COPY ./apps/cs_server/tsconfig.json /usr/share/cj/apps/server/tsconfig.json
+COPY ./apps/cs_server/migrations /usr/share/cj/apps/server/migrations
+COPY ./apps/cs_server/src /usr/share/cj/apps/server/src
+COPY ./apps/cs_server/dist /usr/share/cj/apps/server/dist
 
-workdir /build/apps/server
-run yarn install
+# client code
+COPY ./apps/cs_client/dist /usr/share/nginx/html
 
-workdir /
-run mkdir -p /.cs/exports
-run mkdir -p /.cs/imports
-run echo "cd build/apps/server/ && yarn start" > /entrypoint.sh
-run chmod +x /entrypoint.sh
-
-entrypoint ["/entrypoint.sh"]
+ENTRYPOINT ["/scripts/entrypoint.sh"]

@@ -13,6 +13,13 @@ const createErrorDescription = {
         }`,
       }),
   },
+  node: {
+    nodeIsReadOnly: (node_id: number) =>
+      JSON.stringify({
+        errorId: 'cs::3',
+        description: `node '${node_id}' is read only`,
+      }),
+  },
 };
 
 export { createErrorDescription };

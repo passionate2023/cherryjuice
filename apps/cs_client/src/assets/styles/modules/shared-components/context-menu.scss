@@ -35,7 +35,8 @@
 .context-menu__item {
   cursor: pointer;
   box-sizing: border-box;
-  padding: 10px 20px;
+  padding: 10px;
+  padding-right: 30px;
   min-width: 150px;
   width: 100%;
   color: var(--on-background);
@@ -50,6 +51,9 @@
   transition: background-color 200ms linear;
   overflow: hidden;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .context-menu__item--disabled {
@@ -58,4 +62,10 @@
 
 .context-menu__item--bottom-separator {
   border-bottom: 1px solid var(--on-surface-1);
+}
+.context-menu__item__icon {
+  width: 20px;
+}
+.context-menu__item__text {
+  flex: 1;
 }

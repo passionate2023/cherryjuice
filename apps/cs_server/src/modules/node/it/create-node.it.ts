@@ -33,4 +33,7 @@ export class CreateNodeIt {
 
   @Field(() => NodePrivacy, { nullable: true })
   privacy?: NodePrivacy;
+
+  @Field({ nullable: true })
+  tags: string;
 }

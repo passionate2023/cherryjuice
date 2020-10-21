@@ -1,7 +1,7 @@
 import { filter, ignoreElements, map, switchMap, take } from 'rxjs/operators';
-import { concat, EMPTY, interval, Observable, of } from 'rxjs';
+import { concat, EMPTY, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
-import { ac, ac_, store } from '../../store';
+import { ac, ac_, Store, store } from '../../store';
 import { Actions } from '../../actions.types';
 import { gqlMutation$ } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
@@ -21,6 +21,7 @@ const timeoutHandler = () =>
     },
     due: 30000,
   });
+
 const errorHandler = () =>
   createErrorHandler({
     alertDetails: {
@@ -30,6 +31,46 @@ const errorHandler = () =>
     actionCreators: [ac.settings.saveFailed],
   });
 
+const loading = () => of(ac_.settings.saveStarted());
+
+const fulfilled = () =>
+  concat(
+    of(ac_.settings.saveFulfilled()),
+    of(ac_.dialogs.setSnackbar({ message: 'settings saved' })),
+  );
+
+const saveEditorAndHotkeys = (state: Store, changes) => {
+  return gqlMutation$(
+    UPDATE_USER_SETTINGS({
+      input: {
+        hotKeys: changes.hotkeySettings ? getHotkeys(state) : undefined,
+        editorSettings: changes.editorSettings
+          ? state.editorSettings.current
+          : undefined,
+      },
+    }),
+  ).pipe(map(ac_.auth.setAuthenticationSucceeded));
+};
+
+const updateUserProfile = (action$: Observable<Actions>) => {
+  const showConfirmation = of(ac_.dialogs.showPasswordModal());
+  const updateUserProfile = action$.pipe(
+    ofType([ac_.dialogs.confirmPasswordModal]),
+    take(1),
+    switchMap(action => {
+      const { userProfileChanges } = store.getState().settings;
+      userProfileChanges.currentPassword = action.payload;
+
+      return concat(
+        gqlMutation$(
+          UPDATE_USER_PROFILE({ userProfile: userProfileChanges }),
+        ).pipe(map(ac_.auth.setAuthenticationSucceeded)),
+      );
+    }),
+  );
+  return concat(showConfirmation, updateUserProfile);
+};
+const noop = () => EMPTY.pipe(ignoreElements());
 const savingState: AsyncOperation[] = ['idle', 'pending'];
 const saveSettingsEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
@@ -42,62 +83,27 @@ const saveSettingsEpic = (action$: Observable<Actions>) => {
     switchMap(() => {
       const state = store.getState();
       const changes = {
-        hk: state.settings.screenHasChanges,
+        hotkeySettings: !!state.hotkeySettings.previous,
         editorSettings: !!state.editorSettings.previous,
         manageAccount: !!state.settings.userProfileChanges,
       };
-      const loading$ = of(ac_.settings.saveStarted());
-      const fulfilled$ = concat(
-        of(ac_.settings.saveFulfilled()),
-        of(ac_.dialogs.setSnackbar({ message: 'settings saved' })),
-      );
-      if (changes.hk || changes.editorSettings) {
-        const syncHKState$ = changes.hk
-          ? concat(
-              of(ac_.cache.syncHotKeysWithCache()),
-              interval(10).pipe(
-                filter(
-                  () => !store.getState().cache.settings.syncHotKeysWithCache,
-                ),
-                take(1),
-                ignoreElements(),
-              ),
-            )
-          : EMPTY.pipe(ignoreElements());
-        const saveSettings$ = gqlMutation$(
-          UPDATE_USER_SETTINGS({
-            input: {
-              hotKeys: changes.hk ? getHotkeys(state) : undefined,
-              editorSettings: changes.editorSettings
-                ? state.editorSettings.current
-                : undefined,
-            },
-          }),
-        ).pipe(map(ac_.auth.setAuthenticationSucceeded));
-        return concat(loading$, syncHKState$, saveSettings$, fulfilled$).pipe(
-          timeoutHandler(),
-          errorHandler(),
-        );
-      } else if (changes.manageAccount) {
-        const showConfirmation = of(ac_.dialogs.showPasswordModal());
-        const updateUserProfile = action$.pipe(
-          ofType([ac_.dialogs.confirmPasswordModal]),
-          take(1),
-          switchMap(action => {
-            const { userProfileChanges } = store.getState().settings;
-            userProfileChanges.currentPassword = action.payload;
+      const loading$ = loading();
+      const fulfilled$ = fulfilled();
 
-            return concat(
-              loading$,
-              gqlMutation$(
-                UPDATE_USER_PROFILE({ userProfile: userProfileChanges }),
-              ).pipe(map(ac_.auth.setAuthenticationSucceeded)),
-              fulfilled$,
-            ).pipe(timeoutHandler(), errorHandler());
-          }),
-        );
-        return concat(showConfirmation, updateUserProfile);
-      }
+      let saveEditorAndHotkeys$: Observable<unknown> = noop();
+      let updateUserProfile$: Observable<unknown> = noop();
+      if (changes.hotkeySettings || changes.editorSettings)
+        saveEditorAndHotkeys$ = saveEditorAndHotkeys(state, changes);
+
+      if (changes.manageAccount)
+        updateUserProfile$ = updateUserProfile(action$);
+
+      return concat(
+        loading$,
+        updateUserProfile$,
+        saveEditorAndHotkeys$,
+        fulfilled$,
+      ).pipe(timeoutHandler(), errorHandler());
     }),
   );
 };

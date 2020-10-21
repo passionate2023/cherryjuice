@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { HotKeys } from './hot-keys/hot-keys.entity';
-import { EditorSettings } from './editor-settings/editor-settings';
+import { EditorSettings } from './editor-settings';
 
 @ObjectType()
 export class Settings {

@@ -6,17 +6,24 @@ import { HighlightedHeadline } from '::root/components/app/components/menus/dial
 type Props = {
   name: string;
   query: string;
+  tags: string;
 };
 
-const HNodeName: React.FC<Props> = ({ name, query }) => {
+const HNodeName: React.FC<Props> = ({ name, query, tags }) => {
+  const searchResult = {
+    nodeName: name,
+    nodeNameHeadline: name.includes(query) ? query : '',
+    tags,
+    tagsHeadline: tags?.includes(query) ? query : '',
+  };
   const headline = useHeadline({
     searchContext: {
       query,
       searchType: SearchType.Simple,
       searchOptions: { caseSensitive: false, fullWord: false },
-      searchTarget: [SearchTarget.nodeTitle],
+      searchTarget: [SearchTarget.nodeTitle, SearchTarget.nodeTags],
     },
-    searchResult: { nodeName: name, nodeNameHeadline: query },
+    searchResult,
   });
   return (
     <div>
@@ -27,6 +34,14 @@ const HNodeName: React.FC<Props> = ({ name, query }) => {
         />
       ) : (
         name
+      )}
+      {headline?.tagsHeadline && (
+        <span style={{ marginLeft: 10 }}>
+          <HighlightedHeadline
+            headline={headline.tagsHeadline}
+            color={'#20b2007a'}
+          />
+        </span>
       )}
     </div>
   );

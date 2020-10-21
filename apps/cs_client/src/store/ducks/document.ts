@@ -3,7 +3,7 @@ import { createActionPrefixer } from './helpers/shared';
 import { cloneObj } from '::helpers/objects';
 import { rootActionCreators } from './root';
 import { QDocumentMeta } from '::graphql/queries/document-meta';
-import { SelectNodeParams } from '::store/ducks/cache/document-cache/helpers/document/select-node';
+import { SelectNodeParams } from '::store/ducks/document-cache/helpers/document/select-node';
 import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
 
 const ap = createActionPrefixer('document');
@@ -24,10 +24,7 @@ const ac = {
 
   save: _(ap('save')),
   savePending: _(ap('save-pending')),
-  saveFulfilled: _(
-    ap('save-fulfilled'),
-    _ => (newSelectedDocumentId?: string) => _(newSelectedDocumentId),
-  ),
+  saveFulfilled: _(ap('save-fulfilled')),
   nothingToSave: _(ap('nothing-to-save')),
   saveInProgress: _(ap('save-in-progress')),
   saveFailed: _(ap('save-failed')),
@@ -41,6 +38,7 @@ const ac = {
   ),
   setNodesFilter: _(ap('set-nodes-filter'), _ => (filter: string) => _(filter)),
   clearNodesFilter: _(ap('clear-nodes-filter')),
+  setSwappedIds: _(ap('set-swapped-ids'), _ => (ids: SwappedIds) => _(ids)),
 };
 type NodeId = {
   id: string;
@@ -48,6 +46,9 @@ type NodeId = {
 };
 type AsyncOperation = 'in-progress' | 'idle' | 'pending';
 
+export type SwappedIds = {
+  [temporaryId: string]: string;
+};
 type State = {
   documentId: string;
   asyncOperations: {
@@ -56,6 +57,7 @@ type State = {
   };
   filteredNodes: FilteredNodes;
   nodesFilter: string;
+  swappedIds: SwappedIds;
 };
 
 const initialState: State = {
@@ -66,6 +68,7 @@ const initialState: State = {
   },
   filteredNodes: undefined,
   nodesFilter: '',
+  swappedIds: {},
 };
 
 const reducer = createReducer(cloneObj(initialState), _ => [
@@ -146,9 +149,14 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     ...state,
     nodesFilter: '',
   })),
+  _(ac.setSwappedIds, (state, { payload }) => ({
+    ...state,
+    swappedIds: payload,
+  })),
   _(
-    require('./cache/document-cache').documentCacheActionCreators
+    require('./document-cache/document-cache').documentCacheActionCreators
       .deleteDocuments,
+    // @ts-ignore
     (state, { payload }) => ({
       ...state,
       documentId: payload.includes(state.documentId) ? '' : state.documentId,

@@ -1,8 +1,0 @@
-.cache
-dist
-node_modules*
-yarn-error.log
-*.swp
-.idea
-report*.json
-.env

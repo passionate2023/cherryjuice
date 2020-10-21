@@ -29,7 +29,7 @@ const applyCommand = ({
   command,
   lineStyle,
 }: TApplyCommand) => {
-  let newAHtmlElement = cloneObj(aHtmlElement);
+  const newAHtmlElement = cloneObj(aHtmlElement);
   if (command) {
     if (command === ExecKCommand.clear)
       removeFormatting({ aHtmlElement: newAHtmlElement, lineStyle });

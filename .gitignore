@@ -1,6 +1,7 @@
 .cache
 dist
 node_modules
+temp
 yarn-error.log
 *.swp
 report*.json
@@ -9,3 +10,4 @@ sh.exe.stackdump
 debug.log
 *.tsbuildinfo
 build
+.env

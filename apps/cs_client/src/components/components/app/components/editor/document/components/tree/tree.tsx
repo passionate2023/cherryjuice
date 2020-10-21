@@ -1,4 +1,3 @@
-import treeModule from '::sass-modules/tree/tree.scss';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { Node } from './components/node/node';
@@ -11,7 +10,7 @@ import { NodePrivacy } from '@cherryjuice/graphql-types';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { ToolBar } from './components/tool-bar/tool-bar';
 import { Droppable } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';
-import nodeMod from '::sass-modules/tree/node.scss';
+import { modNode, modTree } from '::sass-modules';
 
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -54,19 +53,19 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
       enable={{ right: true }}
       onResize={onResize}
       onResizeStop={onResizeStop}
-      className={treeModule.tree__resizeHandle}
+      className={modTree.tree__resizeHandle}
     >
       <ErrorBoundary>
-        <div className={treeModule.tree}>
+        <div className={modTree.tree}>
           <ToolBar />
           <Droppable
             anchorId={'0'}
-            anchorClassName={nodeMod.node}
+            anchorClassName={modNode.node}
             meta={{ documentId }}
             onDrop={ac.node.drop}
           >
             {(provided, ref) => (
-              <ul className={treeModule.tree_rootList} {...provided} ref={ref}>
+              <ul className={modTree.tree_rootList} {...provided} ref={ref}>
                 {nodes &&
                   nodes[0].child_nodes.map((node_id, index) => {
                     const node = nodes[node_id];

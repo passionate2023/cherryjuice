@@ -7,7 +7,7 @@ import { gqlQuery$ } from './shared/gql-query';
 import { createTimeoutHandler } from './shared/create-timeout-handler';
 import { createErrorHandler } from './shared/create-error-handler';
 import { DOCUMENTS_LIST } from '::graphql/queries/documents-list';
-import { LoadDocumentsListPayload } from '::store/ducks/cache/document-cache/helpers/document/load-documents-list';
+import { LoadDocumentsListPayload } from '::store/ducks/document-cache/helpers/document/load-documents-list';
 import { QDocumentsListItem } from '::graphql/fragments/document-list-item';
 
 const maybeSelectMostRecentDocument$ = (

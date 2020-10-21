@@ -51,7 +51,12 @@ const registerValidSW = (
 };
 
 export const register = (config: RegisterSW) => {
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  const disableSw = localStorage.getItem('disable-sw') === 'true';
+  if (
+    process.env.NODE_ENV === 'production' &&
+    'serviceWorker' in navigator &&
+    !disableSw
+  ) {
     window.addEventListener('load', () => {
       const swUrl = `/workbox-sw.js`;
       registerValidSW(swUrl, config);

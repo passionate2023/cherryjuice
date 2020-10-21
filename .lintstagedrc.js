@@ -1,3 +1,4 @@
+const files = '*.(js|jsx|ts|tsx|json|css|scss)';
 module.exports = {
-  '**/*.+(js|jsx|ts|tsx|json|css|scss)': ['yarn validate'],
+  [`**/${files}`]: ['yarn prettier:fix', 'yarn eslint:validate-root'],
 };

@@ -1,15 +1,13 @@
 import * as React from 'react';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useMemo, useReducer } from 'react';
 import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { MetaForm } from '::root/components/shared-components/form/meta-form/meta-form';
-import { useSave } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save';
 import {
   nodeMetaActionCreators,
   nodeMetaInitialState,
   nodeMetaReducer,
 } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
-import { getNode } from '::root/components/app/components/menus/dialogs/node-meta/helpers/get-node';
 import { IconPicker } from '::root/components/app/components/menus/dialogs/node-meta/components/icon-picker';
 import { FormInputProps } from '::root/components/shared-components/form/meta-form/meta-form-input';
 import { testIds } from '::cypress/support/helpers/test-ids';
@@ -20,6 +18,11 @@ import { Privacy } from '@cherryjuice/graphql-types';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { ColorInput } from '::root/components/shared-components/inputs/color-input';
 import { ToggleSwitch } from '::root/components/shared-components/inputs/toggle-switch';
+import { getNode as getNodeSelector } from '::store/selectors/cache/document/node';
+import { editNode } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/edit-node';
+import { createNode } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/create-node';
+import { useDelayedCallback } from '::hooks/react/delayed-callback';
+import { Chips } from '::root/components/app/components/menus/dialogs/document-meta/components/chips/chips';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -60,27 +63,36 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
   useEffect(() => {
     nodeMetaActionCreators.init(dispatch);
   }, []);
-  const { node, isNewNode, previous_sibling_node_id } = getNode({
-    showDialog,
-    document,
-    node_id,
-  });
 
+  const editedNode = useMemo(() => {
+    const newNode =
+      showDialog === 'create-sibling' || showDialog === 'create-child';
+    const documentId = document?.id;
+    return newNode
+      ? undefined
+      : getNodeSelector({ node_id, documentId: documentId });
+  }, [node_id, document?.id, showDialog]);
   const fatherNode = nodes ? nodes[node_id] : undefined;
+
   useEffect(() => {
-    if (showDialog === 'edit') nodeMetaActionCreators.resetToEdit({ node });
+    if (editedNode) nodeMetaActionCreators.resetToEdit({ node: editedNode });
     else {
       nodeMetaActionCreators.resetToCreate({
         fatherNode,
       });
     }
   }, [node_id, showDialog, fatherNode]);
-  const onSave = useSave({
-    node,
-    newNode: isNewNode,
-    state,
-    previous_sibling_node_id,
-  });
+  const apply = useDelayedCallback(
+    onClose,
+    editedNode
+      ? () => editNode({ nodeA: editedNode, nodeBMeta: state })
+      : () =>
+          createNode({
+            document,
+            nodeBMeta: state,
+            createSibling: showDialog === 'create-sibling',
+          }),
+  );
   const buttonsRight = [
     {
       label: 'dismiss',
@@ -89,7 +101,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
     },
     {
       label: 'apply',
-      onClick: onSave,
+      onClick: apply,
       disabled: false,
       testId: testIds.nodeMeta__apply,
     },
@@ -116,6 +128,26 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
         />
       ),
       label: 'visibility',
+    },
+    {
+      label: 'tags',
+      monolithComponent: (
+        <Chips
+          label={'tags'}
+          chips={state.tags.map(tag => ({ text: tag }))}
+          onRemove={nodeMetaActionCreators.removeTag}
+          addChip={tag =>
+            new Promise<{ clearInput: boolean }>(resolve => {
+              if (tag) {
+                nodeMetaActionCreators.addTag(tag);
+                resolve({ clearInput: true });
+              } else return { clearInput: false };
+            })
+          }
+          placeholder={'tags'}
+          pattern={'[^,\\s]*'}
+        />
+      ),
     },
     {
       label: 'bold',
@@ -181,7 +213,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       isOnMobile={isOnMd}
       show={Boolean(showDialog)}
       onClose={onClose}
-      onConfirm={onSave}
+      onConfirm={apply}
       rightHeaderButtons={[]}
       small={true}
       isShownOnTopOfDialog={true}
