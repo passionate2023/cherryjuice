@@ -41,16 +41,19 @@ export const collapseNode = (
   tree: NodeState,
   node_id: number,
 ) => {
-  const father_ids = getParentsNode_ids(undefined, nodes, node_id).reverse();
-  father_ids.push(node_id);
-  let fatherState: NodeState = tree['0'];
-  for (let i = 0; i < father_ids.length; i++) {
-    const current_node_id = father_ids[i];
-    if (current_node_id === node_id) {
-      delete fatherState[current_node_id];
-      break;
-    } else {
-      fatherState = fatherState[current_node_id];
+  if (node_id === 0) tree[0] = {};
+  else {
+    const father_ids = getParentsNode_ids(undefined, nodes, node_id).reverse();
+    father_ids.push(node_id);
+    let fatherState: NodeState = tree['0'];
+    for (let i = 0; i < father_ids.length; i++) {
+      const current_node_id = father_ids[i];
+      if (current_node_id === node_id) {
+        delete fatherState[current_node_id];
+        break;
+      } else {
+        fatherState = fatherState[current_node_id];
+      }
     }
   }
 };

@@ -40,6 +40,14 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
       }),
     [documentId, node_id],
   );
+  const collapseAllNodes = useCallback(
+    () =>
+      ac.documentCache.collapseNode({
+        documentId,
+        node_id: 0,
+      }),
+    [documentId],
+  );
   const [CMShown, setCMShown] = useState(false);
   const hide = () => setCMShown(false);
   const show = () => setCMShown(true);
@@ -53,15 +61,21 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
           show={show}
           items={[
             {
+              name: 'focus selected node',
+              onClick: expandNode,
+              hideOnClick: true,
+            },
+            {
+              name: 'collapse all nodes',
+              onClick: collapseAllNodes,
+              hideOnClick: true,
+              bottomSeparator: true,
+            },
+            {
               name: 'show node path',
               onClick: ac.editor.toggleNodePath,
               active: showNodePath,
               hideOnClick: false,
-            },
-            {
-              name: 'focus selected node',
-              onClick: expandNode,
-              hideOnClick: true,
             },
           ]}
         >
