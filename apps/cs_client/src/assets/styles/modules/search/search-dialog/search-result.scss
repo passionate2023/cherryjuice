@@ -17,9 +17,19 @@
   border-radius: 5px;
   box-shadow: $box-shadow2;
   transition: background-color 200ms linear;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--primary-100);
+  }
 }
 .search-result--selected {
-  background-color: var(--primary-100);
+  background-color: var(--primary-090) !important;
+  .search-result__location__document-name {
+    color: var(--on-background);
+  }
+  .search-result__timestamps {
+    color: var(--on-background);
+  }
 }
 .search-result__location {
   align-self: flex-start;

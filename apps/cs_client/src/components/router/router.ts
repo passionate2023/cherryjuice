@@ -12,7 +12,7 @@ const router = {
     },
     node: (documentId: string, node_id: number, hash = '') => {
       const c = extractDocumentFromPathname();
-      const existingPath = `/document/${c.documentId}/node/${c.node_id}${hash}`;
+      const existingPath = `/document/${c.documentId}/node/${c.node_id}${location.hash}`;
       const newPath = `/document/${documentId}/node/${node_id}${hash}`;
       if (existingPath !== newPath) {
         history.push(newPath);

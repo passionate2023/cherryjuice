@@ -29,7 +29,19 @@ const Result: React.FC<Props> = ({
   const selectNode = () => {
     ac.document.setDocumentId(result.documentId);
     waitForDocumentToLoad(result.documentId, () => {
-      ac.node.select(result);
+      const element = Object.values(headline).filter(Boolean)[0];
+      const { start, end } = element;
+      const hash =
+        start && end
+          ? `#:~:text=${encodeURIComponent('by')},${encodeURIComponent(
+              'galaxy',
+            )}`
+          : undefined;
+      ac.node.select({
+        documentId: result.documentId,
+        node_id: result.node_id,
+        hash,
+      });
     });
   };
 
@@ -43,6 +55,7 @@ const Result: React.FC<Props> = ({
             result?.node_id === selectedNode_id,
         ],
       ])}
+      onClick={selectNode}
     >
       <div className={modSearchResult.searchResult__location}>
         <div className={modSearchResult.searchResult__location__documentName}>
@@ -50,7 +63,6 @@ const Result: React.FC<Props> = ({
         </div>
         <NodeNameAndTags
           name={result.nodeName}
-          onClick={selectNode}
           tags={result.tags}
           headline={headline}
         />
