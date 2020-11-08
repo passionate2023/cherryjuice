@@ -8,12 +8,12 @@ const Timestamps: React.FC<{ node: QNodeMeta }> = ({ node }) => {
   return (
     <div className={modInfoBar.infoBar__timestamp}>
       <span>
-        {'Date created: '}
+        {'Created '}
         {formatTime(node.createdAt)}
       </span>
       <Separator />
       <span>
-        {'Date modified: '} {formatTime(node.updatedAt)}
+        {'Updated '} {formatTime(node.updatedAt)}
       </span>
     </div>
   );

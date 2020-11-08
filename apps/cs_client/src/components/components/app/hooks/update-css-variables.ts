@@ -22,7 +22,7 @@ export const useUpdateCssVariables = (
   useEffect(() => {
     ac.cssVariables.set(
       CssVariables.nodePath,
-      showNodePath ? (isOnMd ? 40 : 30) : 0,
+      showNodePath ? (isOnMd ? 40 : 34) : 0,
     );
   }, [showNodePath, isOnMd]);
 

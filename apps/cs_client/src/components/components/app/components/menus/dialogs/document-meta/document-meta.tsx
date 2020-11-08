@@ -64,8 +64,9 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
     documentMetaActionCreators.init(dispatch);
   }, []);
 
+  const editExistingDocument = showDialog === 'edit';
   useEffect(() => {
-    if (showDialog === 'edit') {
+    if (editExistingDocument) {
       documentMetaActionCreators.resetToEdit({
         document: focusedDocument,
       });
@@ -141,7 +142,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   };
   const apply = useDelayedCallback(
     ac.dialogs.hideDocumentMetaDialog,
-    showDialog === 'edit' ? editDocument : createDocument,
+    editExistingDocument ? editDocument : createDocument,
   );
   const buttonsRight: TDialogFooterButton[] = [
     {
@@ -150,7 +151,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
       disabled: false,
     },
     {
-      label: 'apply',
+      label: editExistingDocument ? 'apply' : 'create',
       onClick: apply,
       disabled: false,
       testId: testIds.documentMeta__apply,

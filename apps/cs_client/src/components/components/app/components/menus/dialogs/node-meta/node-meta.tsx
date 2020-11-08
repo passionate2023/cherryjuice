@@ -100,7 +100,7 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
       disabled: false,
     },
     {
-      label: 'apply',
+      label: editedNode ? 'apply' : 'create',
       onClick: apply,
       disabled: false,
       testId: testIds.nodeMeta__apply,

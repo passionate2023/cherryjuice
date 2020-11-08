@@ -44,6 +44,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
     {
       name: 'clone',
       onClick: () => ac.document.clone(id),
+      disabled: !online,
     },
     {
       name: 'export',

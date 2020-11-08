@@ -81,8 +81,8 @@
 
 .search__search-button--nav-bar {
   @include respond-to($md-up) {
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
   }
   @include respond-to($mb-down) {
     &:hover {
