@@ -29,7 +29,17 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   deletionMode,
   online,
 }) => {
-  const { nodes, size, id, name, updatedAt, hash, privacy, guests } = document;
+  const {
+    nodes,
+    size,
+    id,
+    name,
+    updatedAt,
+    hash,
+    privacy,
+    guests,
+    createdAt,
+  } = document;
   const disabled = !online && (!nodes || (nodes && !nodes[0]));
   const contextMenuOptions = [
     {
@@ -76,6 +86,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
           numberOfGuests={guests.length}
           size={size}
           updatedAt={updatedAt}
+          createdAt={createdAt}
           hash={hash}
         />
       }

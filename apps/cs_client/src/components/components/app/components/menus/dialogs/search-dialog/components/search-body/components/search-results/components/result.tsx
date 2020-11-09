@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modDialog, modSearchResult } from '::sass-modules';
+import { modSearchResult } from '::sass-modules';
 import { NodeSearchResultEntity } from '@cherryjuice/graphql-types';
 import { useHeadline } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/headline';
 import { SearchContext } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/hooks/headline/helpers/generate-headline';
@@ -8,6 +8,7 @@ import { HighlightedHeadline } from '::root/components/app/components/menus/dial
 import { ac } from '::store/store';
 import { waitForDocumentToLoad } from '::root/components/app/components/editor/hooks/router-effect/helpers/wait-for-document-to-load';
 import { NodeNameAndTags } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/components/node-name-and-tags';
+import { TimeStamps } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/components/time-stamps';
 
 type Props = {
   result: NodeSearchResultEntity;
@@ -29,18 +30,18 @@ const Result: React.FC<Props> = ({
   const selectNode = () => {
     ac.document.setDocumentId(result.documentId);
     waitForDocumentToLoad(result.documentId, () => {
-      const element = Object.values(headline).filter(Boolean)[0];
-      const { start, end } = element;
-      const hash =
-        start && end
-          ? `#:~:text=${encodeURIComponent('by')},${encodeURIComponent(
-              'galaxy',
-            )}`
-          : undefined;
+      // const element = Object.values(headline).filter(Boolean)[0];
+      // const { start, end } = element;
+      // const hash =
+      //   start && end
+      //     ? `#:~:text=${encodeURIComponent('by')},${encodeURIComponent(
+      //         'galaxy',
+      //       )}`
+      //     : undefined;
       ac.node.select({
         documentId: result.documentId,
         node_id: result.node_id,
-        hash,
+        // hash,
       });
     });
   };
@@ -74,30 +75,7 @@ const Result: React.FC<Props> = ({
       ) : (
         <></>
       )}
-      <span
-        className={joinClassNames([
-          modSearchResult.searchResult__timestamps,
-          modDialog.dialogListItem__details,
-        ])}
-      >
-        <span
-          className={joinClassNames([
-            modSearchResult.searchResult__timestamps__item,
-          ])}
-        >{`created ${new Date(result.createdAt).toUTCString()}`}</span>
-        <span
-          className={joinClassNames([
-            modSearchResult.searchResult__timestamps__separator,
-          ])}
-        >
-          -
-        </span>
-        <span
-          className={joinClassNames([
-            modSearchResult.searchResult__timestamps__item,
-          ])}
-        >{`updated ${new Date(result.updatedAt).toUTCString()}`}</span>
-      </span>
+      <TimeStamps createdAt={result.createdAt} updatedAt={result.updatedAt} />
     </div>
   );
 };

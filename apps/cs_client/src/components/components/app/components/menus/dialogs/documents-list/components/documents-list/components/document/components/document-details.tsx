@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { modSelectFile } from '::sass-modules';
 import { VisibilityIcon } from '::root/components/app/components/editor/info-bar/components/components/visibility-icon';
-import { dateToFormattedString } from '::helpers/time';
 import { Privacy } from '@cherryjuice/graphql-types';
+import { TimeStamps } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/components/time-stamps';
 
 type Props = {
   id: string;
   hash: string;
   updatedAt: number;
+  createdAt: number;
   numberOfGuests: number;
   size: number;
   privacy: Privacy;
@@ -18,8 +19,8 @@ const DocumentDetails: React.FC<Props> = ({
   numberOfGuests,
   size,
   id,
-  hash,
   updatedAt,
+  createdAt,
 }) => {
   return (
     <>
@@ -28,14 +29,11 @@ const DocumentDetails: React.FC<Props> = ({
         <span>{size}kb</span>
       </span>
 
-      <div>
+      <div className={`${modSelectFile.selectFile__file__details}`}>
         <span className={`${modSelectFile.selectFile__file__details__id}`}>
           {id}
         </span>
-        <span className={`${modSelectFile.selectFile__file__details__hash}`}>
-          {hash}
-        </span>
-        <span>{dateToFormattedString(new Date(updatedAt))}</span>
+        <TimeStamps createdAt={createdAt} updatedAt={updatedAt} />
       </div>
     </>
   );
