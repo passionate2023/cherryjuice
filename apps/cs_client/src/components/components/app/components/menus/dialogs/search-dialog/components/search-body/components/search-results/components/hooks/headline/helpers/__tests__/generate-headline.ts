@@ -34,6 +34,7 @@ const data: (GenerateHeadlineProps & { res: Headlines })[] = [
           index: 6,
         },
         nodeNameHeadline: undefined,
+        tagsHeadline: undefined,
       },
     },
     {
@@ -99,6 +100,7 @@ const data: (GenerateHeadlineProps & { res: Headlines })[] = [
           index: 16,
         },
         nodeNameHeadline: undefined,
+        tagsHeadline: undefined,
       },
     },
   ],
@@ -122,6 +124,7 @@ const data: (GenerateHeadlineProps & { res: Headlines })[] = [
           index: 13,
         },
         nodeNameHeadline: undefined,
+        tagsHeadline: undefined,
       },
     },
     {
@@ -145,6 +148,7 @@ const data: (GenerateHeadlineProps & { res: Headlines })[] = [
           index: 0,
         },
         nodeNameHeadline: undefined,
+        tagsHeadline: undefined,
       },
     },
   ],

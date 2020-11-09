@@ -11,16 +11,14 @@ import { regexHeadline } from '::root/components/app/components/menus/dialogs/se
 const createTextClamper = (startFromEnd: boolean) => (
   nOfCharacters: number,
 ) => (text: string): string => {
-  let clampedText, clampedTextStartsWithFullWord;
+  let clampedText;
   if (startFromEnd) {
     clampedText = text.substring(text.length - nOfCharacters);
-    clampedTextStartsWithFullWord = clampedText.replace(/^[\w]+[^\w]+/, '');
   } else {
     clampedText = text.substring(0, nOfCharacters);
-    clampedTextStartsWithFullWord = clampedText.replace(/[^\w]+[\w]+$/, '');
   }
 
-  return clampedTextStartsWithFullWord;
+  return clampedText;
 };
 const reduceWordsFromEnd = createTextClamper(true)(50);
 const reduceWordsFromStart = createTextClamper(false)(50);
