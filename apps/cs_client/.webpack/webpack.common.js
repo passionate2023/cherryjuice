@@ -166,6 +166,7 @@ module.exports = {
           /auth\/google\/.*/,
           /report\.html/,
           /exports\/*/,
+          /overview\/*/,
         ],
       }),
     production &&
