@@ -8,9 +8,10 @@
 
 'use strict';
 
-export const SPACE = '\u00A0';
-export const DOUBLE_SPACE = SPACE + SPACE;
-export const QUAD_SPACE = SPACE + SPACE + SPACE + SPACE;
+export const SPACE = ' ';
+export const NB_SPACE = '\u00A0';
+export const DOUBLE_SPACE = NB_SPACE + NB_SPACE;
+export const QUAD_SPACE = NB_SPACE + NB_SPACE + NB_SPACE + NB_SPACE;
 
 /**
  * Module variables.
@@ -49,9 +50,6 @@ function escapeHtml(string) {
     switch (str.charCodeAt(index)) {
       case 9: // <tab>
         escape = QUAD_SPACE;
-        break;
-      case 32: // <space>
-        escape = SPACE;
         break;
       case 34: // "
         escape = '&quot;';
