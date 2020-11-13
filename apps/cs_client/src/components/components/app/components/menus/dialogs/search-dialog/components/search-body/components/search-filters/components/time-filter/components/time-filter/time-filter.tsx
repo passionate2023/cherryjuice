@@ -33,8 +33,10 @@ const Filter: React.FC<TimeFilterProps> = ({
     timeFilterAC.current = createTimeFilterAC();
     timeFilterAC.current.setDispatch(dispatch);
   }
+  const initialCallRef = useRef(true);
   useEffect(() => {
-    onChange(state.timeFilter);
+    if (initialCallRef.current) initialCallRef.current = false;
+    else onChange(state.timeFilter);
   }, [state.timeFilter]);
   const enableFilters = state.timeFilter.rangeName !== TimeRange.AnyTime;
 

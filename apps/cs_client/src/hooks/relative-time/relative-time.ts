@@ -28,7 +28,7 @@ const useRelativeTime = ({ time }: RelativeTimeProps) => {
       clearTimeout(aliveRef.current);
     };
   }, [time]);
-  return relativeTime;
+  return relativeTime || '';
 };
 
 export { useRelativeTime };

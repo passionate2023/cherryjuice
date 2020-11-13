@@ -68,13 +68,11 @@ const Result: React.FC<Props> = ({
           headline={headline}
         />
       </div>
-      {headline?.ahtmlHeadline ? (
-        <span className={modSearchResult.searchResult__headline}>
+      <span className={modSearchResult.searchResult__headline}>
+        {headline?.ahtmlHeadline && (
           <HighlightedHeadline headline={headline.ahtmlHeadline} />
-        </span>
-      ) : (
-        <></>
-      )}
+        )}
+      </span>
       <TimeStamps createdAt={result.createdAt} updatedAt={result.updatedAt} />
     </div>
   );
