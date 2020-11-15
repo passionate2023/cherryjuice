@@ -1,19 +1,24 @@
 import * as React from 'react';
 import { QNodeMeta } from '::graphql/queries/document-meta';
-import { formatTime } from '::helpers/time';
 import { modInfoBar } from '::sass-modules';
 import { Separator } from './separator';
+import { useRelativeTime } from '::hooks/relative-time/relative-time';
 
 const Timestamps: React.FC<{ node: QNodeMeta }> = ({ node }) => {
+  const createdAt = useRelativeTime({ time: node.createdAt });
+  const updatedAt = useRelativeTime({ time: node.updatedAt });
   return (
     <div className={modInfoBar.infoBar__timestamp}>
-      <span>
-        {'Date created: '}
-        {formatTime(node.createdAt)}
-      </span>
+      {createdAt && (
+        <span>
+          {'Created '}
+          {createdAt}
+        </span>
+      )}
       <Separator />
       <span>
-        {'Date modified: '} {formatTime(node.updatedAt)}
+        {'Updated '}
+        {updatedAt && <span>{updatedAt}</span>}
       </span>
     </div>
   );

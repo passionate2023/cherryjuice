@@ -19,7 +19,11 @@
     display: none;
   }
 }
-
+.selectFile__file__details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .selectFile__info-bar {
   margin-top: 5px;
   max-height: 25px;

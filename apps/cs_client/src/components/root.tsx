@@ -34,6 +34,7 @@ import { Router } from 'react-router-dom';
 import { router } from '::root/router/router';
 import { useTasks } from '::root/hooks/tasks';
 import { CssVariables } from '::store/ducks/css-variables';
+import { useAuthStatusCookie } from '::root/hooks/auth-status-cookie';
 
 enablePatches();
 const ApolloProvider = React.lazy(() =>
@@ -100,6 +101,8 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   useRouterEffect();
   useTasks();
   useConsumeToken({ userId });
+  useAuthStatusCookie({ userId });
+
   return (
     <Suspense fallback={<Void />}>
       {client && (

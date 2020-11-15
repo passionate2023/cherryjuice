@@ -4,7 +4,6 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { VisibilityIcon } from '::root/components/app/components/editor/info-bar/components/components/visibility-icon';
 import { Timestamps } from '::root/components/app/components/editor/info-bar/components/components/timestamp';
-import { NoSelectedDocument } from '::root/components/app/components/editor/info-bar/components/components/no-selected-document';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 
@@ -44,10 +43,8 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
   return showBar ? (
     <footer className={modInfoBar.infoBar}>
       <div className={modInfoBar.infoBar__group}>
-        {selectedNode_id && node ? (
+        {Boolean(selectedNode_id) && Boolean(node) && (
           <Timestamps node={node} />
-        ) : (
-          <NoSelectedDocument noSelectedDocument={noSelectedDocument} />
         )}
       </div>
       <div className={modInfoBar.infoBar__group}>

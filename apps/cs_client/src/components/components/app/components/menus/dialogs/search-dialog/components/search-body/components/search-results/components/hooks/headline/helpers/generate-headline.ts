@@ -11,9 +11,14 @@ import { regexHeadline } from '::root/components/app/components/menus/dialogs/se
 const createTextClamper = (startFromEnd: boolean) => (
   nOfCharacters: number,
 ) => (text: string): string => {
-  return startFromEnd
-    ? text.substring(text.length - nOfCharacters)
-    : text.substring(0, nOfCharacters);
+  let clampedText;
+  if (startFromEnd) {
+    clampedText = text.substring(text.length - nOfCharacters);
+  } else {
+    clampedText = text.substring(0, nOfCharacters);
+  }
+
+  return clampedText;
 };
 const reduceWordsFromEnd = createTextClamper(true)(50);
 const reduceWordsFromStart = createTextClamper(false)(50);

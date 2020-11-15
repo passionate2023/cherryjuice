@@ -1,6 +1,6 @@
 import { elementHasText } from '::helpers/editing/execK/helpers';
 import { getDeepestFirstChild } from '::helpers/editing/execK/steps/restore-selection';
-import { QUAD_SPACE } from '::helpers/rendering/escape-html';
+import { QUAD_SPACE } from '@cherryjuice/ahtml-to-html';
 
 export const addTabToStart = ddoe => {
   const ddoeIsNotEmpty = elementHasText(ddoe);

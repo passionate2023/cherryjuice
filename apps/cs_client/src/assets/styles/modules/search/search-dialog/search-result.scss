@@ -5,6 +5,7 @@
 .search-result {
   align-items: center;
   width: calc(100% - 40px);
+  min-height: 88px;
   max-height: 250px;
   padding: 10px 20px;
   background-color: var(--background);
@@ -17,9 +18,19 @@
   border-radius: 5px;
   box-shadow: $box-shadow2;
   transition: background-color 200ms linear;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--primary-100-2);
+  }
 }
 .search-result--selected {
-  background-color: var(--primary-100);
+  background-color: var(--primary-100) !important;
+  .search-result__location__document-name {
+    color: var(--on-background);
+  }
+  .search-result__timestamps {
+    color: var(--on-background);
+  }
 }
 .search-result__location {
   align-self: flex-start;
@@ -27,6 +38,7 @@
   margin-bottom: 5px;
   max-width: 100%;
   opacity: 0.8;
+  min-height: 30px;
 }
 
 .search-result__location__document-name {
@@ -78,4 +90,5 @@
   margin-right: 10px;
 }
 .search-result__timestamps__item {
+  color: var(--on-surface);
 }

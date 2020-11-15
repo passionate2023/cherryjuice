@@ -56,7 +56,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
       <LinearProgress loading={fetchDocumentInProgress || saveInProgress} />
       {nodes && (
         <Fragment>
-          {(showNodePath || !isOnMd) && (
+          {(showNodePath || !isOnMd) && Boolean(selectedNode_id) && (
             <ErrorBoundary>
               <NodePath />
             </ErrorBoundary>
