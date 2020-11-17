@@ -5,7 +5,10 @@ import { Store } from '::store/store';
 import { Result } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/result';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { ResultsHeader } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/results-header';
-import { getCurrentDocument } from '::store/selectors/cache/document/document';
+import {
+  getCurrentDocument,
+  getDocumentsList,
+} from '::store/selectors/cache/document/document';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -17,6 +20,7 @@ const mapState = (state: Store) => {
     searchTarget: state.search.searchTarget,
     selectedNode_id: document?.persistedState?.selectedNode_id,
     documentId: document?.id,
+    hasNoDocuments: getDocumentsList(state).length === 0,
   };
 };
 const mapDispatch = {};
@@ -33,9 +37,15 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
   searchOptions,
   documentId,
   selectedNode_id,
+  hasNoDocuments,
 }) => (
   <div className={modDialog.dialogSurface}>
-    {<ResultsHeader searchResults={searchResults} />}
+    {
+      <ResultsHeader
+        searchResults={searchResults}
+        hasNoDocuments={hasNoDocuments}
+      />
+    }
     <div className={joinClassNames([modDialog.dialogBody__scrollableSurface])}>
       {searchResults.results.map(result => (
         <Result

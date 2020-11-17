@@ -26,7 +26,9 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
     ]),
     filter(() => searchStates.includes(store.getState().search.searchState)),
     switchMap(() => {
-      if (!store.getState().search.query)
+      const document = getCurrentDocument(store.getState());
+      const documentId = document?.id;
+      if (!store.getState().search.query || !documentId)
         return of(ac_.search.setSearchStandBy());
       else {
         const {
@@ -39,8 +41,6 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
           updatedAtTimeFilter,
           sortOptions,
         } = store.getState().search;
-        const document = getCurrentDocument(store.getState());
-        const documentId = document.id;
         const nodeId =
           document.nodes[document.persistedState.selectedNode_id].id;
         const request = gqlQuery$({
