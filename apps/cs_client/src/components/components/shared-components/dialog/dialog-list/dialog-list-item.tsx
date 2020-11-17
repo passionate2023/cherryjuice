@@ -34,7 +34,7 @@ const DialogListItem: React.FC<Props> = ({
           block: 'nearest',
           inline: 'nearest',
         });
-      }, 1000);
+      }, 1200);
       return () => {
         clearTimeout(handle);
       };
