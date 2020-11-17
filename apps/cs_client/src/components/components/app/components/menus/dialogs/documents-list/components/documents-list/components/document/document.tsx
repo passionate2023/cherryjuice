@@ -67,6 +67,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
       disabled: !online,
     },
   ];
+
   return (
     <DialogListItem
       selected={isSelected}
