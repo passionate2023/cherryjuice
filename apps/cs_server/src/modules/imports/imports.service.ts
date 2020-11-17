@@ -104,7 +104,7 @@ export class ImportsService {
       .map((id, i) => [imageIDs[i], id]);
   }
 
-  async importDocument(
+  private async importDocument(
     meta: DownloadTaskProps[],
     user: User,
     taskCreator: DownloadTaskCreator,
