@@ -19,6 +19,7 @@ import {
 import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 import { doKey } from '::store/ducks/document-operation/reducers/add-document-operations';
 import { progressify } from '::helpers/shared';
+import { alerts } from '::helpers/texts/alerts';
 
 const mapToProps = (documentId: string) => (node_ids: number[]) => ({
   node_ids,
@@ -103,7 +104,7 @@ const fetchAllNodesEpic = (action$: Observable<Actions>) => {
         createErrorHandler({
           alertDetails: {
             title: 'Could not fetch the nodes',
-            description: 'Check your network connection',
+            description: alerts.somethingWentWrong,
           },
           actionCreators: [
             () =>
@@ -111,6 +112,7 @@ const fetchAllNodesEpic = (action$: Observable<Actions>) => {
                 cacheOperation(OPERATION_STATE.FAILED, 0),
               ),
           ],
+          mode: 'snackbar',
         }),
       );
     }),

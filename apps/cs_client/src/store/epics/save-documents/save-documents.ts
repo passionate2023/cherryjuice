@@ -13,6 +13,7 @@ import { Epic } from 'redux-observable';
 import { SnackbarMessages } from '::root/components/app/components/menus/widgets/components/snackbar/snackbar-messages';
 import { getEditedDocuments } from '::store/selectors/cache/document/document';
 import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
+import { alerts } from '::helpers/texts/alerts';
 
 const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
   return action$.pipe(
@@ -53,14 +54,14 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
           createTimeoutHandler({
             alertDetails: {
               title: 'Saving is taking longer then expected',
-              description: 'try refreshing the page',
+              description: alerts.tryRefreshingThePage,
             },
             due: 5 * 60000,
           }),
           createErrorHandler({
             alertDetails: {
               title: 'Could not save',
-              description: 'Check your network connection',
+              description: alerts.somethingWentWrong,
             },
             actionCreators: [ac_.document.saveFailed],
           }),

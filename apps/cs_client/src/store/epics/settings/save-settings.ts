@@ -12,12 +12,13 @@ import { properErrorMessage } from '::root/components/auth/hooks/proper-error-me
 import { UPDATE_USER_SETTINGS } from '::graphql/mutations/user/update-user-settings';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
 import { screenHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/settings/settings';
+import { alerts } from '::helpers/texts/alerts';
 
 const timeoutHandler = () =>
   createTimeoutHandler({
     alertDetails: {
       title: 'Saving is taking longer then expected',
-      description: 'try refreshing the page',
+      description: alerts.tryRefreshingThePage,
     },
     due: 30000,
   });

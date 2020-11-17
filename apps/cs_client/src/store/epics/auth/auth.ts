@@ -13,6 +13,7 @@ import {
   SignInCredentials,
   SignUpCredentials,
 } from '@cherryjuice/graphql-types';
+import { alerts } from '::helpers/texts/alerts';
 
 const signIn = (payload: SignInCredentials) =>
   gqlMutation$({
@@ -60,14 +61,14 @@ const authEpic = (action$: Observable<Actions>) => {
         createTimeoutHandler({
           alertDetails: {
             title: 'Authentication is taking longer then expected',
-            description: 'try refreshing the page',
+            description: alerts.tryRefreshingThePage,
           },
           due: 30000,
         }),
         createErrorHandler({
           alertDetails: {
             title: 'Could not perform the operation',
-            description: 'Check your network connection',
+            description: alerts.somethingWentWrong,
           },
           actionCreators: [ac_.auth.setAuthenticationFailed],
         }),

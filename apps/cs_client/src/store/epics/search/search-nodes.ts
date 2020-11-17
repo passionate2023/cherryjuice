@@ -9,6 +9,7 @@ import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { SearchState } from '../../ducks/search';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
+import { alerts } from '::helpers/texts/alerts';
 
 const searchStates: SearchState[] = ['stand-by', 'idle'];
 const searchNodesEpic = (action$: Observable<Actions>) => {
@@ -66,14 +67,14 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
           createTimeoutHandler({
             alertDetails: {
               title: 'Searching is taking longer then expected',
-              description: 'try refreshing the page',
+              description: alerts.tryRefreshingThePage,
             },
             due: 30000,
           }),
           createErrorHandler({
             alertDetails: {
               title: 'Could not perform the search',
-              description: 'Check your network connection',
+              description: alerts.somethingWentWrong,
             },
             actionCreators: [ac.search.setSearchStandBy],
           }),
