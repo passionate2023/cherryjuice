@@ -54,6 +54,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  height: 40px;
 }
 
 .context-menu__item--disabled {
@@ -64,7 +65,12 @@
   border-bottom: 1px solid var(--on-surface-1);
 }
 .context-menu__item__icon {
-  width: 20px;
+  box-sizing: border-box;
+  width: 18px;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .context-menu__item__text {
   flex: 1;
