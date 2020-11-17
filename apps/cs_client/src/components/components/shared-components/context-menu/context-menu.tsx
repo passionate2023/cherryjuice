@@ -25,6 +25,7 @@ export type ContextMenuProps = {
   items?: Omit<ContextMenuItemProps, 'hide'>[];
   position: [number, number];
   showAsModal?: 'md' | 'mb';
+  clickOutsideSelectorsWhitelist?: string[];
 };
 
 const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
@@ -36,11 +37,15 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
   showAsModal,
   isOnMd,
   isOnMb,
+  clickOutsideSelectorsWhitelist = [],
 }) => {
   const contextMenuR = useRef<HTMLDivElement>();
   useClickOutsideModal({
     callback: hide,
-    selector: '.' + modContextMenu.contextMenu,
+    selector: [
+      '.' + modContextMenu.contextMenu,
+      ...clickOutsideSelectorsWhitelist,
+    ],
   });
 
   const [inverseX, setInverseX] = useState(0);
