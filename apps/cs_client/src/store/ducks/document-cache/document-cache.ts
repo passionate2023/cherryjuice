@@ -46,6 +46,7 @@ import { TimelinesManager } from '::store/ducks/document-cache/helpers/timeline/
 import {
   collapseNode,
   expandNode,
+  ExpandNodeParams,
 } from '::store/ducks/document-cache/helpers/node/expand-node/expand-node';
 import {
   setScrollPosition,
@@ -69,7 +70,7 @@ const ac = {
   moveBookmark: _(ap('move-bookmark'), _ => (props: MoveBookmarkProps) =>
     _(props),
   ),
-  expandNode: _(ap('expand-node'), _ => (params: SelectNodeParams) =>
+  expandNode: _(ap('expand-node'), _ => (params: ExpandNodeParams) =>
     _(params),
   ),
   collapseNode: _(ap('collapse-node'), _ => (params: SelectNodeParams) =>

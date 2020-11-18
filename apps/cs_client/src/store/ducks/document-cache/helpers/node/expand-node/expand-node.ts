@@ -3,12 +3,16 @@ import { SelectNodeParams } from '::store/ducks/document-cache/helpers/document/
 import {
   collapseNode as _collapseNode,
   expandNode as _expandNode,
+  ExpandNodeCommands,
 } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/tree';
 
-type ExpandNodeParams = SelectNodeParams & { expandChildren?: boolean };
+export type ExpandNodeParams = SelectNodeParams & {
+  expandChildren?: boolean;
+  mode?: ExpandNodeCommands;
+};
 export const expandNode = (
   state: DocumentCacheState,
-  { documentId, node_id, expandChildren }: ExpandNodeParams,
+  { documentId, node_id, expandChildren, mode }: ExpandNodeParams,
 ): DocumentCacheState => {
   node_id = +node_id;
   const document = state.documents[documentId];
@@ -17,6 +21,7 @@ export const expandNode = (
     document.persistedState.treeState,
     node_id,
     expandChildren,
+    mode,
   );
   return state;
 };

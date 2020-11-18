@@ -19,14 +19,7 @@ export const getParentsNode_ids = (
   return fathers;
 };
 
-export const expandNode = (
-  nodes: NodesDict,
-  tree: NodeState,
-  node_id: number,
-  expandChildren = true,
-) => {
-  const father_ids = getParentsNode_ids(undefined, nodes, node_id).reverse();
-  if (expandChildren) father_ids.push(node_id);
+const expandFather_ids = (tree: NodeState, father_ids: number[]) => {
   let fatherState: NodeState = tree['0'];
   father_ids.forEach(current_node_id => {
     if (!fatherState[current_node_id]) {
@@ -34,6 +27,34 @@ export const expandNode = (
     }
     fatherState = fatherState[current_node_id];
   });
+};
+
+export type ExpandNodeCommands = 'expand-all';
+export const expandNode = (
+  nodes: NodesDict,
+  tree: NodeState,
+  node_id: number,
+  expandChildren = true,
+  mode?: ExpandNodeCommands,
+) => {
+  let father_ids: number[];
+  if (!mode) {
+    father_ids = getParentsNode_ids(undefined, nodes, node_id).reverse();
+    if (expandChildren) father_ids.push(node_id);
+    expandFather_ids(tree, father_ids);
+  } else if (mode === 'expand-all') {
+    const all_father_ids = [];
+    const allNodes = Object.values(nodes);
+    const leafs = allNodes.filter(node => !node.child_nodes.length);
+    leafs.forEach(leaf => {
+      all_father_ids.push(
+        getParentsNode_ids(father_ids, nodes, leaf.node_id).reverse(),
+      );
+    });
+    all_father_ids.forEach(father_ids => {
+      expandFather_ids(tree, father_ids);
+    });
+  }
 };
 
 export const collapseNode = (
