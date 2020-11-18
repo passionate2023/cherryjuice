@@ -7,7 +7,7 @@
   position: absolute;
   box-sizing: border-box;
   background-color: var(--background);
-  padding: 5px 0;
+  padding: 0;
   flex-direction: column;
   border-radius: 5px;
   box-shadow: $box-shadow1;
@@ -19,9 +19,14 @@
   right: 0;
   bottom: 0;
   top: 0;
-  width: 80vw;
+  max-width: 80vw;
+  width: fit-content;
   max-height: 70vh;
+  height: fit-content;
   overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .context-menu-wrapper {
