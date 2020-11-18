@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { modLogin } from '::sass-modules';
 import { Icons } from '::root/components/shared-components/icon/icon';
-import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
+import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
@@ -95,16 +95,18 @@ const OauthSignUpForm: React.FC<Props & PropsFromRedux> = ({
   useEffect(() => {
     if (!username) router.goto.signIn();
   }, []);
-  useModalKeyboardEvents({
-    modalSelector: '.' + modLogin.login__card,
+  const keyboardEventsProps = useModalKeyboardEvents({
     focusableElementsSelector: ['a', 'input[type="submit"]'],
-    onCloseModal: () => undefined,
-    onConfirmModal: signUp,
+    dismiss: () => undefined,
+    confirm: signUp,
   });
   const disableSignupButton =
     loading || !passwordValid || password !== passwordConfirmation;
   return (
-    <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
+    <div
+      {...keyboardEventsProps}
+      className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}
+    >
       <LinearProgress loading={loading} />
       <form className={modLogin.login__form} ref={formRef}>
         <span className={modLogin.login__form__createAccount}>

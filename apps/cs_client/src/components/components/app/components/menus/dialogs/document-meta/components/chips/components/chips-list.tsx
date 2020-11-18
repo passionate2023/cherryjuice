@@ -22,7 +22,7 @@ const ChipsList: React.FC<ChipsListProps> = ({ chips, onRemove }) => {
         chip.text ? (
           <Chip {...chip} key={chip.text + i} onRemove={onRemove} />
         ) : (
-          <></>
+          <React.Fragment key={chip.text + i} />
         ),
       )}
     </div>

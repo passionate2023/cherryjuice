@@ -11,7 +11,7 @@ import {
 } from '::root/components/shared-components/dialog/dialog-header';
 import { DialogBody } from '::root/components/shared-components/dialog/dialog-body/dialog-body';
 import { MeasurableDialogBody } from '::root/components/shared-components/dialog/dialog-body/measurable-dialog-body';
-import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
+import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
 import { animated } from 'react-spring';
 import { TransitionWrapper } from '::root/components/shared-components/transitions/transition-wrapper';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
@@ -52,16 +52,16 @@ const Dialog: React.FC<TDialogProps & {
   measurable,
   show,
 }) => {
-  useModalKeyboardEvents({
-    onCloseModal: onClose,
-    modalSelector: `.${modDialog.dialog}`,
-    onConfirmModal: onConfirm,
+  const keyboardEventsProps = useModalKeyboardEvents({
+    dismiss: onClose,
+    confirm: onConfirm,
   });
 
   return (
     <>
       {
         <animated.div
+          {...keyboardEventsProps}
           className={joinClassNames([
             modDialog.dialog,
             [modDialog.dialogSmall, small],

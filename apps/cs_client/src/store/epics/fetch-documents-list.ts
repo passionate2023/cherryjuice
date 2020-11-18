@@ -57,7 +57,7 @@ const fetchDocumentsListEpic = (action$: Observable<Actions>) => {
         }),
         createErrorHandler({
           alertDetails: {
-            title: 'Could not fetch the documents',
+            title: 'Could not fetch the documents list',
             description: alerts.somethingWentWrong,
           },
           actionCreators: [],

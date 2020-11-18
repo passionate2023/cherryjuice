@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { modLogin } from '::sass-modules';
 import { Icons } from '::root/components/shared-components/icon/icon';
-import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
+import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
@@ -113,14 +113,16 @@ const SignUpForm: React.FC<Props & PropsFromRedux> = ({ loading }) => {
   };
 
   useDefaultValues(inputs);
-  useModalKeyboardEvents({
-    modalSelector: '.' + modLogin.login__card,
+  const keyboardEventsProps = useModalKeyboardEvents({
     focusableElementsSelector: ['a', 'input[type="submit"]'],
-    onCloseModal: () => undefined,
-    onConfirmModal: signUp,
+    dismiss: () => undefined,
+    confirm: signUp,
   });
   return (
-    <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
+    <div
+      {...keyboardEventsProps}
+      className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}
+    >
       <LinearProgress loading={loading} />
       <form className={modLogin.login__form} ref={formRef}>
         {inputs.map(inputProps => (
