@@ -6,7 +6,7 @@ import {
 import {
   flattenTree,
   unFlattenTree,
-} from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/tree';
+} from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/collapse/collapse-node';
 import { getDefaultSelectedNode_id } from '::store/ducks/document-cache/helpers/document/shared/get-default-selected-node_id';
 
 export const adaptFromPersistedState = ({

@@ -52,7 +52,7 @@ import {
   setScrollPosition,
   SetScrollPositionParams,
 } from '::store/ducks/document-cache/helpers/node/set-scroll-position';
-import { NodeState } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { NodeState } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/expand/expand-node';
 import { DocumentStateTuple } from '::store/tasks/sync-persisted-state';
 import { neutralizePersistedState } from '::store/ducks/document-cache/helpers/document/neutralize-persisted-state';
 import { selectDocument } from '::store/ducks/document-cache/helpers/document/select-document';
@@ -121,7 +121,7 @@ const ac = {
   ),
 };
 
-export type NodesDict = { [node_id: number]: QFullNode };
+export type NodesDict = Record<node_id, QFullNode>;
 export type QFullNode = QNodeMeta & { html?: string; image?: Image[] };
 
 export type CachedNodesState = {

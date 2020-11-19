@@ -57,6 +57,15 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
       }),
     [documentId],
   );
+  const expandAllChildren = useCallback(
+    async () =>
+      ac.documentCache.expandNode({
+        documentId,
+        node_id,
+        mode: 'expand-all-children',
+      }),
+    [documentId, node_id],
+  );
   const [CMShown, setCMShown] = useState(false);
   const hide = () => setCMShown(false);
   const show = () => setCMShown(true);
@@ -72,6 +81,11 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
             {
               name: 'focus selected node',
               onClick: expandNode,
+              hideOnClick: true,
+            },
+            {
+              name: 'expand all children',
+              onClick: expandAllChildren,
               hideOnClick: true,
             },
             {
