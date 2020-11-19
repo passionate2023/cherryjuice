@@ -1,5 +1,8 @@
 import { createFocusTrapper } from '::hooks/modals/close-modal/helpers/handle-keyboard-events/helpers/create-focus-trapper';
-import { ModalsState } from '::hooks/modals/close-modal/use-modal-keyboard-events';
+import {
+  dataAttributes,
+  ModalsState,
+} from '::hooks/modals/close-modal/use-modal-keyboard-events';
 
 const eventHandler = {
   current: undefined,
@@ -14,7 +17,7 @@ export const attachEventHandler = (
   const modal = state.current;
   if (!modal) return;
   const element: HTMLElement = document.querySelector(
-    `[data-kb-events-id="${modal.id}"]`,
+    `[${dataAttributes.keyboardEvents}="${modal.id}"]`,
   );
   const { focusableElements, trapFocus } = createFocusTrapper({
     element,

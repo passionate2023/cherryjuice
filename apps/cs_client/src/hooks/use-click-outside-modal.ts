@@ -1,18 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { dataAttributes } from '::hooks/modals/close-modal/use-modal-keyboard-events';
 
-const createEventHandler = ({ selector, callback }: Props) => (
-  event: MouseEvent,
-) => {
-  if (!selector) return;
-  let element;
-  if (typeof selector === 'string') {
-    element = document.querySelector(selector);
-  } else {
-    while (!element && selector.length > 0) {
-      const _selector = selector.pop();
-      element = document.querySelector(_selector);
-    }
+const createEventHandler = ({
+  additionalSelectors,
+  callback,
+  id,
+}: Props & { id: string }) => (event: MouseEvent) => {
+  let element: HTMLElement = document.querySelector(
+    `[${dataAttributes.clickOutside}="${id}"]`,
+  );
+
+  while (!element && additionalSelectors.length > 0) {
+    const _selector = additionalSelectors.pop();
+    element = document.querySelector(_selector);
   }
+
   if (!element) return;
   const isClickInside = element.contains(event['target'] as Node);
 
@@ -21,20 +23,30 @@ const createEventHandler = ({ selector, callback }: Props) => (
   }
 };
 type Props = {
-  selector: string | string[];
+  additionalSelectors?: string[];
   callback: () => void;
 };
-const useClickOutsideModal = ({ selector, callback }: Props) => {
+const useClickOutsideModal = ({
+  additionalSelectors = [],
+  callback,
+}: Props) => {
+  const ref = useRef<string>();
+  if (!ref.current) ref.current = Date.now() + '';
   useEffect(() => {
     const handler = createEventHandler({
-      selector,
+      additionalSelectors,
       callback,
+      id: ref.current,
     });
     document.addEventListener('click', handler);
     return () => {
       document.removeEventListener('click', handler);
     };
-  }, [selector, callback]);
+  }, [additionalSelectors, callback]);
+  return {
+    clkOProps: { [dataAttributes.clickOutside]: ref.current },
+    id: ref.current,
+  };
 };
 
 export { useClickOutsideModal };

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modContextMenu } from '::sass-modules';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
 
 export type ContextMenuItemProps = {
   name: string;
@@ -13,6 +14,7 @@ export type ContextMenuItemProps = {
   active?: boolean;
   bottomSeparator?: boolean;
   hideOnClick?: boolean;
+  items?: ContextMenuItemProps[];
 };
 
 const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
@@ -24,9 +26,13 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
   hide,
   hideOnClick = true,
   active,
+  items = [],
 }) => {
+  const [CMShown, setCMShown] = useState(false);
+  const hideSub = () => setCMShown(false);
+  const showSub = () => setCMShown(true);
   const onClickM = e => {
-    if (!disabled) {
+    if (!disabled && !items.length) {
       if (hideOnClick) hide();
       onClick();
       e.stopPropagation();
@@ -34,22 +40,37 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
     }
   };
   return (
-    <div
-      className={joinClassNames([
-        modContextMenu.contextMenu__item,
-        [modContextMenu.contextMenu__itemDisabled, disabled],
-        [modContextMenu.contextMenu__itemBottomSeparator, bottomSeparator],
-      ])}
-      onClick={onClickM}
-      {...(disabled && { 'data-disabled': disabled })}
+    <ContextMenuWrapper
+      shown={CMShown}
+      hide={hideSub}
+      show={showSub}
+      items={items}
     >
-      <span className={modContextMenu.contextMenu__item__icon}>
-        {active ? <Icon name={Icons.material.check} /> : undefined}
-      </span>
-      <span className={modContextMenu.contextMenu__item__text}>
-        {node || name}
-      </span>
-    </div>
+      <div
+        className={joinClassNames([
+          modContextMenu.contextMenu__item,
+          [modContextMenu.contextMenu__itemDisabled, disabled],
+          [modContextMenu.contextMenu__itemBottomSeparator, bottomSeparator],
+        ])}
+        onClick={onClickM}
+        {...(disabled && { 'data-disabled': disabled })}
+      >
+        <span className={modContextMenu.contextMenu__item__icon}>
+          {active ? <Icon name={Icons.material.check} size={14} /> : undefined}
+        </span>
+        <span className={modContextMenu.contextMenu__item__text}>
+          {node || name}
+        </span>
+        {!!items.length && (
+          <span className={modContextMenu.contextMenu__item__subItemsArrow}>
+            <Icon
+              name={Icons.material['triangle-right']}
+              loadAsInlineSVG={'force'}
+            />
+          </span>
+        )}
+      </div>
+    </ContextMenuWrapper>
   );
 };
 

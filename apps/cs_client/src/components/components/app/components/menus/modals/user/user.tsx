@@ -15,8 +15,7 @@ type UserProps = {
 };
 
 const User: React.FC<UserProps & { style }> = ({ onClose, style, user }) => {
-  useClickOutsideModal({
-    selector: '.' + modUserPopup.user__card,
+  const { clkOProps } = useClickOutsideModal({
     callback: onClose,
   });
   const signOut = useCallback(() => {
@@ -24,7 +23,11 @@ const User: React.FC<UserProps & { style }> = ({ onClose, style, user }) => {
   }, []);
   const loggedIn = !!user;
   return (
-    <animated.div className={modUserPopup.user__card} style={style}>
+    <animated.div
+      {...clkOProps}
+      className={modUserPopup.user__card}
+      style={style}
+    >
       {loggedIn && <UserInfo user={user} />}
       <div className={modUserPopup.user__actions}>
         {loggedIn ? (

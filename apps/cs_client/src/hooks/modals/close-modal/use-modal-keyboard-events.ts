@@ -11,9 +11,8 @@ export type ModalsState = {
 export type Modal = {
   id?: string;
   dismiss: () => void;
-  confirm: () => void;
+  confirm?: () => void;
   focusableElementsSelector: string[];
-  enabled?: boolean;
 };
 
 const state: ModalsState = {
@@ -30,12 +29,17 @@ const state: ModalsState = {
   },
 };
 
-const useModalKeyboardEvents = (modal: Modal) => {
+export const dataAttributes = {
+  keyboardEvents: 'data-kb-events-id',
+  clickOutside: 'data-clkO-events-id',
+};
+
+const useModalKeyboardEvents = (modal: Omit<Modal, 'id'>) => {
   const ref = useRef<string>();
   if (!ref.current) ref.current = Date.now() + '';
 
   useEffect(() => {
-    modal.id = ref.current;
+    modal['id'] = ref.current;
     state.add(modal);
     attachEventHandler(state);
     return () => {
@@ -43,7 +47,7 @@ const useModalKeyboardEvents = (modal: Modal) => {
       attachEventHandler(state, { resumeFocus: true });
     };
   }, [modal.confirm, modal.dismiss]);
-  return { 'data-kb-events-id': ref.current };
+  return { [dataAttributes.keyboardEvents]: ref.current };
 };
 
 export { useModalKeyboardEvents };

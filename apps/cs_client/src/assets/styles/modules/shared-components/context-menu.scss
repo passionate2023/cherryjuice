@@ -38,6 +38,7 @@
 }
 
 .context-menu__item {
+  position: relative;
   cursor: pointer;
   box-sizing: border-box;
   padding: 10px;
@@ -74,9 +75,23 @@
   width: 18px;
   padding: 2px;
   display: flex;
+  margin-right: 5px;
   align-items: center;
   justify-content: center;
 }
 .context-menu__item__text {
   flex: 1;
+}
+
+.context-menu__item__sub-items-arrow {
+  box-sizing: border-box;
+  position: absolute;
+  right: 10px;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    fill: grey;
+  }
 }
