@@ -30,8 +30,8 @@ const state: ModalsState = {
 };
 
 export const dataAttributes = {
-  keyboardEvents: 'data-kb-events-id',
-  clickOutside: 'data-clkO-events-id',
+  keyboardEvents: 'data-kb-e-id',
+  clickOutside: 'data-clk-out-e-id',
 };
 
 const useModalKeyboardEvents = (modal: Omit<Modal, 'id'>) => {

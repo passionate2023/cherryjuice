@@ -14,7 +14,7 @@ export type ContextMenuItemProps = {
   active?: boolean;
   bottomSeparator?: boolean;
   hideOnClick?: boolean;
-  items?: ContextMenuItemProps[];
+  items?: Omit<ContextMenuItemProps, 'hide'>[];
 };
 
 const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
@@ -45,6 +45,7 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
       hide={hideSub}
       show={showSub}
       items={items}
+      showOnHover={true}
     >
       <div
         className={joinClassNames([

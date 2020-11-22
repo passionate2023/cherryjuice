@@ -16,7 +16,11 @@ import {
 } from '::root/components/shared-components/dialog/animations/search-header-container';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
-import { modSearchDialog, modSearchFilter } from '::sass-modules';
+import {
+  modPickTimeRange,
+  modSearchDialog,
+  modSearchFilter,
+} from '::sass-modules';
 import { Icons } from '::root/components/shared-components/icon/icon';
 import { Search } from '::root/components/app/components/editor/tool-bar/components/groups/nav-bar/components/search/search';
 
@@ -27,7 +31,14 @@ export const SearchSetting: React.FC<{
   hide: () => void;
 }> = ({ iconName, shown, show, hide, children }) => (
   <ContextMenuWrapper
-    clickOutsideSelectorsWhitelist={['.' + modSearchFilter.searchFilter]}
+    clickOutsideSelectorsWhitelist={[
+      {
+        selector: '.' + modSearchFilter.searchFilter,
+      },
+      {
+        selector: '.' + modPickTimeRange.pickTimeRange,
+      },
+    ]}
     showAsModal={'mb'}
     shown={shown}
     hide={hide}

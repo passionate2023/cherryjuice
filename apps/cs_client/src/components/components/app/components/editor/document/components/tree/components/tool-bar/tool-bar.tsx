@@ -12,13 +12,14 @@ import { ContextMenuWrapper } from '::root/components/shared-components/context-
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
 
-  const selectedNodeId = document?.persistedState?.selectedNode_id;
-  const node = document?.nodes && document.nodes[selectedNodeId];
+  const selectedNode_id = document?.persistedState?.selectedNode_id;
+  const node = document?.nodes && document.nodes[selectedNode_id];
   const father_id = node && node.father_id;
   return {
-    node_id: father_id,
+    father_id,
     documentId: document?.id,
     showNodePath: state.editor.showNodePath,
+    selectedNode_id,
   };
 };
 const mapDispatch = {};
@@ -28,17 +29,18 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = {};
 
 const ToolBar: React.FC<Props & PropsFromRedux> = ({
-  node_id,
   documentId,
   showNodePath,
+  selectedNode_id,
 }) => {
   const expandNode = useCallback(
     () =>
       ac.documentCache.expandNode({
         documentId,
-        node_id: node_id,
+        node_id: selectedNode_id,
+        expandChildren: false,
       }),
-    [documentId, node_id],
+    [documentId, selectedNode_id],
   );
   const collapseAllNodes = useCallback(
     () =>
@@ -61,10 +63,10 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
     async () =>
       ac.documentCache.expandNode({
         documentId,
-        node_id,
+        node_id: selectedNode_id,
         mode: 'expand-all-children',
       }),
-    [documentId, node_id],
+    [documentId, selectedNode_id],
   );
   const [CMShown, setCMShown] = useState(false);
   const hide = () => setCMShown(false);
@@ -79,26 +81,34 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
           show={show}
           items={[
             {
-              name: 'focus selected node',
-              onClick: expandNode,
-              hideOnClick: true,
-            },
-            {
-              name: 'expand all children',
-              onClick: expandAllChildren,
-              hideOnClick: true,
-            },
-            {
-              name: 'expand all nodes',
-              onClick: expandAllNodes,
-              hideOnClick: true,
-            },
-            {
-              name: 'collapse all nodes',
-              onClick: collapseAllNodes,
-              hideOnClick: true,
+              name: 'folding',
               bottomSeparator: true,
+              onClick: () => undefined,
+              items: [
+                {
+                  name: 'expand to current node',
+                  onClick: expandNode,
+                  hideOnClick: true,
+                },
+                {
+                  name: 'expand children',
+                  onClick: expandAllChildren,
+                  hideOnClick: true,
+                },
+                {
+                  name: 'expand all',
+                  onClick: expandAllNodes,
+                  hideOnClick: true,
+                  bottomSeparator: true,
+                },
+                {
+                  name: 'collapse all',
+                  onClick: collapseAllNodes,
+                  hideOnClick: true,
+                },
+              ],
             },
+
             {
               name: 'show node path',
               onClick: ac.editor.toggleNodePath,

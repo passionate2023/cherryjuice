@@ -1,8 +1,12 @@
 import * as React from 'react';
-import { modContextMenu } from '::sass-modules';
-import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
-import { joinClassNames } from '::helpers/dom/join-class-names';
 import { useLayoutEffect, useRef, useState } from 'react';
+import { modContextMenu } from '::sass-modules';
+import {
+  ASSERTION,
+  Assertion,
+  useClickOutsideModal,
+} from '::hooks/use-click-outside-modal';
+import { joinClassNames } from '::helpers/dom/join-class-names';
 import {
   ContextMenuItem,
   ContextMenuItemProps,
@@ -26,7 +30,7 @@ export type ContextMenuProps = {
   items?: Omit<ContextMenuItemProps, 'hide'>[];
   position: Position;
   showAsModal?: 'md' | 'mb';
-  clickOutsideSelectorsWhitelist?: string[];
+  clickOutsideSelectorsWhitelist?: Assertion[];
 };
 
 const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
@@ -41,9 +45,15 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
   clickOutsideSelectorsWhitelist = [],
 }) => {
   const contextMenuR = useRef<HTMLDivElement>();
-  const { clkOProps, id } = useClickOutsideModal({
+  const { clkOProps } = useClickOutsideModal({
     callback: hide,
-    additionalSelectors: clickOutsideSelectorsWhitelist,
+    assertions: [
+      ...clickOutsideSelectorsWhitelist,
+      {
+        selector: '.' + modContextMenu.contextMenu,
+        assertion: ASSERTION.eventTargetClosestTo,
+      },
+    ],
   });
 
   const [inverseX, setInverseX] = useState(0);
@@ -84,12 +94,7 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
       >
         {items
           ? items.map(item => (
-              <ContextMenuItem
-                {...item}
-                key={item.name}
-                hide={hide}
-                parentContextMenuId={id}
-              />
+              <ContextMenuItem {...item} key={item.name} hide={hide} />
             ))
           : children}
       </div>

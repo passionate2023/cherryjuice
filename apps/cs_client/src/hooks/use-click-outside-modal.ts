@@ -1,48 +1,75 @@
 import { useEffect, useRef } from 'react';
 import { dataAttributes } from '::hooks/modals/close-modal/use-modal-keyboard-events';
 
-const createEventHandler = ({
-  additionalSelectors,
-  callback,
-  id,
-}: Props & { id: string }) => (event: MouseEvent) => {
-  let element: HTMLElement = document.querySelector(
-    `[${dataAttributes.clickOutside}="${id}"]`,
-  );
+export enum ASSERTION {
+  referenceContainsEventTarget,
+  eventTargetClosestTo,
+}
 
-  while (!element && additionalSelectors.length > 0) {
-    const _selector = additionalSelectors.pop();
-    element = document.querySelector(_selector);
+const ElementAssertions = {
+  [ASSERTION.referenceContainsEventTarget]: (
+    eventTarget: HTMLElement,
+    selector: string,
+  ): boolean => {
+    const element = document.querySelector(selector);
+    return element && element.contains(eventTarget);
+  },
+  [ASSERTION.eventTargetClosestTo]: (
+    eventTarget: HTMLElement,
+    selector: string,
+  ) => Boolean(eventTarget.closest(selector)),
+};
+
+export type Assertion = {
+  selector: string;
+};
+
+type Props = {
+  callback: () => void;
+  assertions: Assertion[];
+};
+const createEventHandler = ({ assertions, callback }: Props) => (
+  event: MouseEvent,
+) => {
+  const state = {
+    isClickInside: false,
+  };
+  for (let i = 0; i < assertions.length; i++) {
+    const { selector } = assertions[i];
+    state.isClickInside =
+      ElementAssertions[ASSERTION.referenceContainsEventTarget](
+        event['target'] as HTMLElement,
+        selector,
+      ) ||
+      ElementAssertions[ASSERTION.eventTargetClosestTo](
+        event['target'] as HTMLElement,
+        selector,
+      );
+    if (state.isClickInside) break;
   }
 
-  if (!element) return;
-  const isClickInside = element.contains(event['target'] as Node);
-
-  if (!isClickInside) {
+  if (!state.isClickInside) {
     callback();
   }
 };
-type Props = {
-  additionalSelectors?: string[];
-  callback: () => void;
-};
-const useClickOutsideModal = ({
-  additionalSelectors = [],
-  callback,
-}: Props) => {
+const useClickOutsideModal = ({ assertions = [], callback }: Props) => {
   const ref = useRef<string>();
   if (!ref.current) ref.current = Date.now() + '';
   useEffect(() => {
     const handler = createEventHandler({
-      additionalSelectors,
+      assertions: [
+        {
+          selector: `[${dataAttributes.clickOutside}="${ref.current}"]`,
+        },
+        ...assertions,
+      ],
       callback,
-      id: ref.current,
     });
     document.addEventListener('click', handler);
     return () => {
       document.removeEventListener('click', handler);
     };
-  }, [additionalSelectors, callback]);
+  }, [assertions, callback]);
   return {
     clkOProps: { [dataAttributes.clickOutside]: ref.current },
     id: ref.current,

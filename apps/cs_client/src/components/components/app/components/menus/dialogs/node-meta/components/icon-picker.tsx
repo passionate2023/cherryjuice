@@ -20,7 +20,11 @@ const IconPicker: React.FC<Props> = ({
 
   return (
     <ContextMenuWrapper
-      clickOutsideSelectorsWhitelist={['.' + modSearchFilter.searchFilter]}
+      clickOutsideSelectorsWhitelist={[
+        {
+          selector: '.' + modSearchFilter.searchFilter,
+        },
+      ]}
       showAsModal={'mb'}
       shown={shown}
       hide={hide}
