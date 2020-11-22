@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { modContextMenu } from '::sass-modules';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
 
+export type CMItem = Omit<
+  ContextMenuItemProps,
+  'hide' | 'activeItem' | 'setActiveItem'
+>;
 export type ContextMenuItemProps = {
   name: string;
   onClick: () => void;
@@ -14,7 +18,9 @@ export type ContextMenuItemProps = {
   active?: boolean;
   bottomSeparator?: boolean;
   hideOnClick?: boolean;
-  items?: Omit<ContextMenuItemProps, 'hide'>[];
+  items?: CMItem[];
+  activeItem: string;
+  setActiveItem: (name: string) => void;
 };
 
 const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
@@ -27,6 +33,8 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
   hideOnClick = true,
   active,
   items = [],
+  activeItem,
+  setActiveItem,
 }) => {
   const [CMShown, setCMShown] = useState(false);
   const hideSub = () => setCMShown(false);
@@ -38,7 +46,13 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
       e.stopPropagation();
       e.preventDefault();
     }
+    setActiveItem(name);
   };
+  useEffect(() => {
+    if (activeItem !== name) {
+      hideSub();
+    }
+  }, [activeItem]);
   return (
     <ContextMenuWrapper
       shown={CMShown}
