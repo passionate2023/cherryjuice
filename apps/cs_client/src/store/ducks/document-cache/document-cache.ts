@@ -63,6 +63,10 @@ import {
   MoveBookmarkProps,
 } from '::store/ducks/document-cache/helpers/document/bookmarks/move-bookmark';
 import { drop } from '::store/ducks/document-cache/helpers/node/drop';
+import {
+  sortNode,
+  SortNodeParams,
+} from '::store/ducks/document-cache/helpers/node/sort-node/sort-node';
 
 const ap = createActionPrefixer('document-cache');
 
@@ -76,6 +80,7 @@ const ac = {
   collapseNode: _(ap('collapse-node'), _ => (params: SelectNodeParams) =>
     _(params),
   ),
+  sortNode: _(ap('sort-node'), _ => (params: SortNodeParams) => _(params)),
   createDocument: _(
     ap('create-document'),
     _ => (params: CreateDocumentParams) => _(params),
@@ -121,7 +126,7 @@ const ac = {
   ),
 };
 
-export type NodesDict = Record<node_id, QFullNode>;
+export type NodesDict = Record<number, QFullNode>;
 export type QFullNode = QNodeMeta & { html?: string; image?: Image[] };
 
 export type CachedNodesState = {
@@ -170,6 +175,7 @@ type State = {
 export enum DocumentMutations {
   CreateNode = 'created',
   NodeAttributes = 'changed attributes',
+  SortNodes = 'sort nodes',
   NodePosition = 'changed position',
   NodeContent = 'changed content',
   DeleteNode = 'deleted',
@@ -405,6 +411,19 @@ const reducer = createReducer(initialState, _ => {
             documentId: payload.documentId,
             node_id: payload.node_id,
             mutationType: DocumentMutations.RemoveBookmark,
+            timeStamp: Date.now(),
+          }),
+        ),
+      ),
+      _(ac.sortNode, (state, { payload }) =>
+        produce(
+          state,
+          draft => sortNode(draft, payload),
+          dTM.addFrame({
+            timelineId: payload.documentId,
+            documentId: payload.documentId,
+            node_id: payload.node_id,
+            mutationType: DocumentMutations.SortNodes,
             timeStamp: Date.now(),
           }),
         ),

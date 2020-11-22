@@ -4,10 +4,12 @@ import { Icons } from '::root/components/shared-components/icon/icon';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { FilterNodes } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/components/filter-nodes';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
+import { useSortMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/sort-menu-items';
+import { useFoldMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/fold-menu-items';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -33,44 +35,19 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   showNodePath,
   selectedNode_id,
 }) => {
-  const expandNode = useCallback(
-    () =>
-      ac.documentCache.expandNode({
-        documentId,
-        node_id: selectedNode_id,
-        expandChildren: false,
-      }),
-    [documentId, selectedNode_id],
-  );
-  const collapseAllNodes = useCallback(
-    () =>
-      ac.documentCache.collapseNode({
-        documentId,
-        node_id: 0,
-      }),
-    [documentId],
-  );
-  const expandAllNodes = useCallback(
-    async () =>
-      ac.documentCache.expandNode({
-        documentId,
-        node_id: 0,
-        mode: 'expand-all',
-      }),
-    [documentId],
-  );
-  const expandAllChildren = useCallback(
-    async () =>
-      ac.documentCache.expandNode({
-        documentId,
-        node_id: selectedNode_id,
-        mode: 'expand-all-children',
-      }),
-    [documentId, selectedNode_id],
-  );
   const [CMShown, setCMShown] = useState(false);
   const hide = () => setCMShown(false);
   const show = () => setCMShown(true);
+
+  const foldMenuItems = useFoldMenuItems({
+    documentId,
+    node_id: selectedNode_id,
+  });
+  const sortMenuItems = useSortMenuItems({
+    documentId,
+    node_id: selectedNode_id,
+  });
+
   return (
     <div className={modTreeToolBar.treeToolBar}>
       <div className={modTreeToolBar.treeToolBar__controls}>
@@ -80,35 +57,8 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
           hide={hide}
           show={show}
           items={[
-            {
-              name: 'folding',
-              bottomSeparator: true,
-              onClick: () => undefined,
-              items: [
-                {
-                  name: 'expand to current node',
-                  onClick: expandNode,
-                  hideOnClick: true,
-                },
-                {
-                  name: 'expand children',
-                  onClick: expandAllChildren,
-                  hideOnClick: true,
-                },
-                {
-                  name: 'expand all',
-                  onClick: expandAllNodes,
-                  hideOnClick: true,
-                  bottomSeparator: true,
-                },
-                {
-                  name: 'collapse all',
-                  onClick: collapseAllNodes,
-                  hideOnClick: true,
-                },
-              ],
-            },
-
+            ...foldMenuItems,
+            ...sortMenuItems,
             {
               name: 'show node path',
               onClick: ac.editor.toggleNodePath,
