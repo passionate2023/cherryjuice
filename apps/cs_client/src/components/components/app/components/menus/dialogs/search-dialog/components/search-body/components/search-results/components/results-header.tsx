@@ -5,9 +5,10 @@ import { NodeSearchResults } from '@cherryjuice/graphql-types';
 
 type Props = {
   searchResults: NodeSearchResults;
+  hasNoDocuments: boolean;
 };
 
-const ResultsHeader: React.FC<Props> = ({ searchResults }) => {
+const ResultsHeader: React.FC<Props> = ({ searchResults, hasNoDocuments }) => {
   const numberOfNodes = searchResults.results.length;
   const numberOfDocuments = new Set(
     searchResults.results.map(result => result.documentName),
@@ -22,6 +23,9 @@ const ResultsHeader: React.FC<Props> = ({ searchResults }) => {
         modSearchDialog.searchDialog__searchResults__header,
       ])}
     >
+      {hasNoDocuments && (
+        <span>{'You have no documents in your library.'}</span>
+      )}
       {!!elapsedTimeS && (
         <>
           <span>

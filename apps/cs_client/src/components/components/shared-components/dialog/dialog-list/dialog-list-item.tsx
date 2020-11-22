@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { modDialog } from '::sass-modules';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { ContextMenuItemProps } from '::root/components/shared-components/context-menu/context-menu-item';
@@ -25,6 +25,21 @@ const DialogListItem: React.FC<Props> = ({
   details,
   contextMenuOptions,
 }) => {
+  const itemRef = useRef<HTMLDivElement>();
+  useEffect(() => {
+    if (active) {
+      const handle = setTimeout(() => {
+        itemRef.current.scrollIntoView({
+          behavior: 'auto',
+          block: 'nearest',
+          inline: 'nearest',
+        });
+      }, 1200);
+      return () => {
+        clearTimeout(handle);
+      };
+    }
+  }, [active]);
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -37,6 +52,7 @@ const DialogListItem: React.FC<Props> = ({
       onClick={disabled ? undefined : onClick}
       tabIndex={0}
       onContextMenu={() => setShowModal(true)}
+      ref={itemRef}
     >
       <div
         className={joinClassNames([

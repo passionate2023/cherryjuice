@@ -4,7 +4,7 @@ import { Node } from './components/node';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/get-parents-node-ids/get-parents-node-ids';
 import {
   createNodePropsMapper,
   useChildCM,
@@ -45,7 +45,10 @@ const NodePath: React.FC<Props & PropsFromRedux> = ({
     selectedNode_id,
   );
   const father_ids = nodes[selectedNode_id]
-    ? getParentsNode_ids(undefined, nodes, selectedNode_id).reverse()
+    ? getParentsNode_ids({
+        nodes,
+        node_id: selectedNode_id,
+      }).reverse()
     : [];
   const nodeProps = father_ids.map(mapNodeProps);
   const contextMenuItems: Omit<ContextMenuItemProps, 'hide'>[] = useMemo(() => {

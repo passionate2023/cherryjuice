@@ -6,7 +6,7 @@ import { ToggleChildren } from '::root/components/app/components/editor/document
 import { NodeOverlay } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-overlay';
 import { NodeChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-children';
 import { NodesDict } from '::store/ducks/document-cache/document-cache';
-import { NodeState } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { NodeState } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/expand/expand-node';
 import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
 import { NodeTitle } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-title';
 import { useSelector } from 'react-redux';

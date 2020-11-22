@@ -1,7 +1,6 @@
-import { modAlertModal } from '::sass-modules';
 import * as React from 'react';
 import { EventHandler, ReactNode } from 'react';
-import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
+import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
 import { animated } from 'react-spring';
 import { TransitionWrapper } from '::root/components/shared-components/transitions/transition-wrapper';
 
@@ -27,14 +26,14 @@ const ComponentWrapper: React.FC<ComponentWrapperProps & { style }> = ({
   enableModalKeyboardEvents,
   className,
 }) => {
-  useModalKeyboardEvents({
-    onCloseModal: onClose,
-    modalSelector: `.${modAlertModal.alertModal}`,
+  const keyboardEventsProps = useModalKeyboardEvents({
+    dismiss: onClose,
     enabled: enableModalKeyboardEvents,
   });
   return (
     <>
       <animated.div
+        {...keyboardEventsProps}
         className={className}
         style={{
           ...style,

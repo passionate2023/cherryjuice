@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { modDialog, modSearchResult } from '::sass-modules';
+import { modSearchResult } from '::sass-modules';
 import { useRelativeTime } from '::hooks/relative-time/relative-time';
 
 type Props = {
@@ -13,10 +13,7 @@ const TimeStamps: React.FC<Props> = ({ createdAt, updatedAt }) => {
   const _updatedAt = useRelativeTime({ time: updatedAt });
   return (
     <span
-      className={joinClassNames([
-        modSearchResult.searchResult__timestamps,
-        modDialog.dialogListItem__details,
-      ])}
+      className={joinClassNames([modSearchResult.searchResult__timestamps])}
     >
       <span
         className={joinClassNames([

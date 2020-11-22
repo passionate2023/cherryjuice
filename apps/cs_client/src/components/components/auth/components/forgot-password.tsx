@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { modLogin } from '::sass-modules';
 import { Icons } from '::root/components/shared-components/icon/icon';
-import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
+import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
@@ -75,15 +75,17 @@ const ForgotPassword: React.FC<Props> = () => {
       }
     }
   };
-  useModalKeyboardEvents({
-    modalSelector: '.' + modLogin.login__card,
+  const keyboardEventsProps = useModalKeyboardEvents({
     focusableElementsSelector: ['a', 'input[type="submit"]'],
-    onCloseModal: () => undefined,
-    onConfirmModal: signUp,
+    dismiss: () => undefined,
+    confirm: signUp,
   });
   const disableSignupButton = !email.valid || !username.valid;
   return (
-    <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
+    <div
+      className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}
+      {...keyboardEventsProps}
+    >
       <LinearProgress loading={loading} />
       <form className={modLogin.login__form} ref={formRef}>
         <span className={modLogin.login__form__createAccount}>

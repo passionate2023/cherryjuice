@@ -9,6 +9,7 @@ import { createErrorHandler } from './shared/create-error-handler';
 import { DOCUMENTS_LIST } from '::graphql/queries/documents-list';
 import { LoadDocumentsListPayload } from '::store/ducks/document-cache/helpers/document/load-documents-list';
 import { QDocumentsListItem } from '::graphql/fragments/document-list-item';
+import { alerts } from '::helpers/texts/alerts';
 
 const maybeSelectMostRecentDocument$ = (
   documents: LoadDocumentsListPayload,
@@ -49,16 +50,18 @@ const fetchDocumentsListEpic = (action$: Observable<Actions>) => {
         createTimeoutHandler({
           alertDetails: {
             title: 'Fetching the documents is taking longer then expected',
-            description: 'try refreshing the page',
+            description: alerts.tryRefreshingThePage,
           },
           due: 15000,
+          mode: 'snackbar',
         }),
         createErrorHandler({
           alertDetails: {
-            title: 'Could not fetch the documents',
-            description: 'Check your network connection',
+            title: 'Could not fetch the documents list',
+            description: alerts.somethingWentWrong,
           },
           actionCreators: [],
+          mode: 'snackbar',
         }),
       );
     }),

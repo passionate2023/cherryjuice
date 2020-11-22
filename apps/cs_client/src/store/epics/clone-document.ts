@@ -7,6 +7,7 @@ import { gqlMutation$ } from './shared/gql-query';
 import { createErrorHandler } from './shared/create-error-handler';
 import { CLONE_DOCUMENT } from '::graphql/mutations/document/clone-document';
 import { saveDocument$ } from '::store/epics/export-document';
+import { alerts } from '::helpers/texts/alerts';
 
 const cloneDocument$ = (documentId: string) =>
   gqlMutation$(
@@ -26,8 +27,8 @@ const cloneDocumentEpic = (action$: Observable<Actions>) => {
       ).pipe(
         createErrorHandler({
           alertDetails: {
-            title: 'Could not clone',
-            description: 'Check your network connection',
+            title: 'Could not clone the document',
+            description: alerts.somethingWentWrong,
           },
         }),
       );

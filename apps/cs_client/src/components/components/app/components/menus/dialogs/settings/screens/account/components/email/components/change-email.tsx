@@ -31,7 +31,7 @@ const ChangeEmail: React.FC<Props> = ({
     onSuccess: () => {
       ac.auth.refreshToken();
       ac.dialogs.setSnackbar({
-        message: 'verification email sent to ' + email,
+        message: 'Verification email sent to ' + email,
       });
     },
   });

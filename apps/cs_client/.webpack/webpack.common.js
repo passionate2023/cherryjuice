@@ -55,7 +55,16 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/env', '@babel/react', '@babel/typescript'],
+              presets: [
+                [
+                  '@babel/preset-env',
+                  {
+                    targets: '>2%',
+                  },
+                ],
+                '@babel/react',
+                '@babel/typescript',
+              ],
               plugins: [
                 '@babel/plugin-proposal-optional-chaining',
                 '@babel/plugin-proposal-class-properties',

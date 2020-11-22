@@ -4,7 +4,7 @@ import { modLogin } from '::sass-modules';
 import { Checkbox } from '::root/components/shared-components/form/checkbox';
 import { GoogleOauthButton } from '::root/components/shared-components/buttons/google-oauth-button';
 import { Icons } from '::root/components/shared-components/icon/icon';
-import { useModalKeyboardEvents } from '::hooks/use-modal-keyboard-events';
+import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
@@ -73,14 +73,16 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading }) => {
   };
 
   useDefaultValues(inputs);
-  useModalKeyboardEvents({
-    modalSelector: '.' + modLogin.login__card,
-    onCloseModal: () => undefined,
-    onConfirmModal: login,
+  const keyboardEventsProps = useModalKeyboardEvents({
+    dismiss: () => undefined,
+    confirm: login,
     focusableElementsSelector: ['a', 'input[type="submit"]', '#google-btn'],
   });
   return (
-    <div className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}>
+    <div
+      {...keyboardEventsProps}
+      className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}
+    >
       <LinearProgress loading={loading} />
       <form className={modLogin.login__form} ref={formRef}>
         <GoogleOauthButton

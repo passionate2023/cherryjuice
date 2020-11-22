@@ -13,6 +13,7 @@ const SvgIcon: React.FC<Props> = ({
   testId,
   onClick,
   size,
+  tabIndex,
 }) => {
   const { width, height } = dimensions(size || 18);
   const fetcthedSVG = useFetchSVG(`${group}/${name}`);
@@ -25,7 +26,11 @@ const SvgIcon: React.FC<Props> = ({
     height,
   });
 
-  return fetched ? <>{element}</> : <span {...{ className, width, height }} />;
+  return fetched ? (
+    <>{element}</>
+  ) : (
+    <span tabIndex={tabIndex} {...{ className, width, height }} />
+  );
 };
 
 export { SvgIcon };

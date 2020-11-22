@@ -36,7 +36,9 @@ export const useUpdateCssVariables = (
   const showDocumentList = useSelector(
     (state: Store) => state.dialogs.showDocumentList,
   );
-
+  const showBookmarks = useSelector(
+    (state: Store) => state.dialogs.showBookmarks,
+  );
   useEffect(() => {
     ac.cssVariables.set(
       CssVariables.treeWidth,
@@ -64,7 +66,7 @@ export const useUpdateCssVariables = (
   }, [showRecentNodes]);
 
   const dialogIsShown =
-    showSearchDialog || showSettingsDialog || showDocumentList;
+    showSearchDialog || showSettingsDialog || showDocumentList || showBookmarks;
   useEffect(() => {
     if (dockedDialog && dialogIsShown) {
       cssVariables.setDockedDialogHeight(50);

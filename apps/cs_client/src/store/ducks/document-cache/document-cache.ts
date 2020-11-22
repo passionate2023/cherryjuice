@@ -46,12 +46,13 @@ import { TimelinesManager } from '::store/ducks/document-cache/helpers/timeline/
 import {
   collapseNode,
   expandNode,
+  ExpandNodeParams,
 } from '::store/ducks/document-cache/helpers/node/expand-node/expand-node';
 import {
   setScrollPosition,
   SetScrollPositionParams,
 } from '::store/ducks/document-cache/helpers/node/set-scroll-position';
-import { NodeState } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { NodeState } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/expand/expand-node';
 import { DocumentStateTuple } from '::store/tasks/sync-persisted-state';
 import { neutralizePersistedState } from '::store/ducks/document-cache/helpers/document/neutralize-persisted-state';
 import { selectDocument } from '::store/ducks/document-cache/helpers/document/select-document';
@@ -69,7 +70,7 @@ const ac = {
   moveBookmark: _(ap('move-bookmark'), _ => (props: MoveBookmarkProps) =>
     _(props),
   ),
-  expandNode: _(ap('expand-node'), _ => (params: SelectNodeParams) =>
+  expandNode: _(ap('expand-node'), _ => (params: ExpandNodeParams) =>
     _(params),
   ),
   collapseNode: _(ap('collapse-node'), _ => (params: SelectNodeParams) =>
@@ -120,7 +121,7 @@ const ac = {
   ),
 };
 
-export type NodesDict = { [node_id: number]: QFullNode };
+export type NodesDict = Record<node_id, QFullNode>;
 export type QFullNode = QNodeMeta & { html?: string; image?: Image[] };
 
 export type CachedNodesState = {

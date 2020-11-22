@@ -13,6 +13,7 @@ type IconProps = {
   testId?: string;
   className?: string;
   loadAsInlineSVG?: 'force';
+  tabIndex?: number;
 };
 const Icon = (iconProps: IconProps) => {
   const group = getIconGroup(iconProps.name);

@@ -11,6 +11,7 @@ import { QDocumentMeta, DOCUMENT_META } from '::graphql/queries/document-meta';
 import { getDocuments } from '::store/selectors/cache/document/document';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 import { adaptToPersistedState } from '::store/ducks/document-cache/helpers/document/shared/adapt-persisted-state';
+import { alerts } from '::helpers/texts/alerts';
 
 const createLocalRequest = (
   file_id: string,
@@ -85,21 +86,23 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
         createTimeoutHandler({
           alertDetails: {
             title: 'Fetching the document is taking longer then expected',
-            description: 'try refreshing the page',
+            description: alerts.tryRefreshingThePage,
           },
           due: 15000,
+          mode: 'snackbar',
         }),
         createErrorHandler({
           dontShowAlert: isNewDocument,
           alertDetails: {
             title: 'Could not fetch the document',
-            description: 'Check your network connection',
+            description: alerts.somethingWentWrong,
             action: {
               name: 'select a document',
               callbacks: [ac.dialogs.clearAlert, ac.dialogs.showDocumentList],
             },
           },
           actionCreators: handleFetchError(),
+          mode: 'snackbar',
         }),
       );
     }),

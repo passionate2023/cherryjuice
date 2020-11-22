@@ -43,7 +43,7 @@ export const loadDocumentsList = (
 ): DocumentCacheState => {
   {
     const fetchedDocuments: CachedDocumentDict = Object.fromEntries(
-      documents.map(document => [
+      documents.filter(Boolean).map(document => [
         document.id,
         {
           ...pluckProperties(document),

@@ -160,14 +160,6 @@ $small-dialog-width: 350px;
   font-size: 14px;
 }
 
-.dialog-list-item__details {
-  font-family: monospace;
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: var(--on-surface);
-  padding: 5px;
-}
 .dialog-list-item--focused {
   background-color: var(--primary-2);
   span {

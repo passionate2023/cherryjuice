@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { ac } from '::store/store';
 import { Snackbar as TSnackbar } from '::store/ducks/dialogs';
 import { headerVariant } from '::root/components/shared-components/modal/base-modal';
+import { joinClassNames } from '::helpers/dom/join-class-names';
 
 type Props = {
   snackbar: TSnackbar;
@@ -23,11 +24,10 @@ const Snackbar: React.FC<Props> = ({ snackbar }) => {
   return (
     <div className={modSnackbar.snackbar}>
       <span
-        className={
-          modSnackbar.snackbar__message + snackbar.type
-            ? headerVariant[snackbar.type]
-            : ''
-        }
+        className={joinClassNames([
+          modSnackbar.snackbar__message,
+          [headerVariant[snackbar.type], snackbar.type],
+        ])}
       >
         {snackbar.message}
       </span>

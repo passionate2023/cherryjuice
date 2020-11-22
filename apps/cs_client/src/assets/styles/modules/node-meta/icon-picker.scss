@@ -9,7 +9,6 @@
   visibility: hidden;
 }
 .iconPicker__icon__list {
-  position: absolute;
   width: 225px;
   //height: 75px;
   display: flex;
@@ -21,6 +20,7 @@
   background-color: var(--surface-010);
   box-shadow: $box-shadow1;
   z-index: 1;
+  box-sizing: border-box;
 }
 .icon-picker__icon {
   width: 20px;
@@ -30,11 +30,11 @@
   background-color: var(--surface-010);
   margin-left: auto;
   &:hover {
-    background-color: var(--surface-010);
+    background-color: var(--surface-020);
   }
 }
 
 .icon-picker__icon--selected {
-  background-color: var(--surface-010);
+  background-color: var(--surface-030);
   transition: background-color 200ms linear;
 }

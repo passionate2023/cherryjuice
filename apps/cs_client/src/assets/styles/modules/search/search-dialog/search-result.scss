@@ -3,7 +3,6 @@
 @import '../../../mixins/breakpoints';
 
 .search-result {
-  align-items: center;
   width: calc(100% - 40px);
   min-height: 88px;
   max-height: 250px;
@@ -21,6 +20,9 @@
   cursor: pointer;
   &:hover {
     background-color: var(--primary-100-2);
+  }
+  .search-result__timestamps {
+    padding: 5px;
   }
 }
 .search-result--selected {
@@ -79,11 +81,12 @@
 .search-result__timestamps {
   display: flex;
   flex-wrap: wrap;
-  align-self: flex-start;
-  justify-self: flex-end;
+  font-family: monospace;
+  font-size: 0.85rem;
   @include respond-to($md-down) {
     font-size: 0.8rem;
   }
+  color: var(--on-surface);
 }
 .search-result__timestamps__separator {
   margin-left: 10px;

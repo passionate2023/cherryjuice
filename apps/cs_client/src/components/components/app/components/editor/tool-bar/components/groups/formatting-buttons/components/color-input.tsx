@@ -5,12 +5,23 @@ import { Icon } from '::root/components/shared-components/icon/icon';
 import { modToolbar } from '::sass-modules';
 import { HotKey } from '@cherryjuice/graphql-types';
 import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props/formatting-props';
+import { useDebouncedEventHandler } from '::hooks/react/debounced-event-handler';
+import { useCallback } from 'react';
 
 const ColorInput: React.FC<{
   hotKey: HotKey;
   disabled: boolean;
 }> = ({ disabled, hotKey: { type } }) => {
   const { icon, execCommandArguments } = formattingHotkeysProps[type];
+  const onChange = useCallback(value => {
+    execK({
+      style: {
+        ...execCommandArguments.style,
+        value: value,
+      },
+    });
+  }, []);
+  const onChangeM = useDebouncedEventHandler(onChange, 200);
   return (
     <ToolbarButton
       className={modToolbar.toolBar__iconStrictWidth}
@@ -22,14 +33,7 @@ const ColorInput: React.FC<{
           id={type}
           type="color"
           style={{ display: 'none' }}
-          onChange={e => {
-            execK({
-              style: {
-                ...execCommandArguments.style,
-                value: `${e.target.value}`,
-              },
-            });
-          }}
+          onChange={onChangeM}
         />
       </label>
     </ToolbarButton>

@@ -18,11 +18,11 @@ const ChipsList: React.FC<ChipsListProps> = ({ chips, onRemove }) => {
       className={modChips.chips__list}
       data-testid={testIds.form__chips__chipsList}
     >
-      {chips.map(chip =>
+      {chips.map((chip, i) =>
         chip.text ? (
-          <Chip {...chip} key={chip.text} onRemove={onRemove} />
+          <Chip {...chip} key={chip.text + i} onRemove={onRemove} />
         ) : (
-          <></>
+          <React.Fragment key={chip.text + i} />
         ),
       )}
     </div>

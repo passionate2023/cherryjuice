@@ -1,7 +1,7 @@
 import { DocumentCacheState } from '::store/ducks/document-cache/document-cache';
 import { OnDropParam } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';
 import { mutateNodeMeta } from '::store/ducks/document-cache/helpers/node/mutate-node-meta';
-import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/tree';
+import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/get-parents-node-ids/get-parents-node-ids';
 
 export type DropMeta = {
   documentId: string;
@@ -41,11 +41,10 @@ export const drop = (
       },
     ]);
   } else {
-    const fathersOfNewFather = getParentsNode_ids(
-      undefined,
-      document.nodes,
-      newFather_id,
-    );
+    const fathersOfNewFather = getParentsNode_ids({
+      nodes: document.nodes,
+      node_id: newFather_id,
+    });
 
     if (fathersOfNewFather.includes(droppedNode_id)) return state;
 

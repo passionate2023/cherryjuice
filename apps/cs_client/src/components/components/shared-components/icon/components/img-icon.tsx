@@ -10,10 +10,12 @@ const ImgIcon: React.FC<Props> = ({
   testId,
   onClick,
   size,
+  tabIndex,
 }) => {
   const { width, height } = dimensions(size || 18);
   return (
     <img
+      tabIndex={tabIndex}
       {...{
         src: '/icons/' + `${group}/${name}` + '.svg',
         onClick,

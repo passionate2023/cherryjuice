@@ -1,7 +1,6 @@
-import { concat } from 'rxjs';
+import { concat, of } from 'rxjs';
 import { AlertType } from '::types/react';
 import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { ac_ } from '::store/store';
 import { CreateAlertHandler } from './create-timeout-handler';
 
@@ -17,22 +16,28 @@ const createErrorHandler = ({
   },
   actionCreators = [],
   dontShowAlert,
+  mode = 'modal',
 }: CreateErrorHandler) =>
   catchError(error => {
     return concat(
       ...[
         !dontShowAlert &&
           of(
-            ac_.dialogs.setAlert({
-              title,
-              description: descriptionFactory
-                ? descriptionFactory(error)
-                : description,
-              type: AlertType.Error,
-              error,
-              dismissAction,
-              action,
-            }),
+            mode === 'modal'
+              ? ac_.dialogs.setAlert({
+                  title,
+                  description: descriptionFactory
+                    ? descriptionFactory(error)
+                    : description,
+                  type: AlertType.Error,
+                  error,
+                  dismissAction,
+                  action,
+                })
+              : ac_.dialogs.setSnackbar({
+                  message: title,
+                  type: AlertType.Error,
+                }),
           ),
       ].filter(Boolean),
       ...actionCreators.map(actionCreator => of(actionCreator(error))),

@@ -9,6 +9,7 @@ import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { SearchState } from '../../ducks/search';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
+import { alerts } from '::helpers/texts/alerts';
 
 const searchStates: SearchState[] = ['stand-by', 'idle'];
 const searchNodesEpic = (action$: Observable<Actions>) => {
@@ -26,7 +27,9 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
     ]),
     filter(() => searchStates.includes(store.getState().search.searchState)),
     switchMap(() => {
-      if (!store.getState().search.query)
+      const document = getCurrentDocument(store.getState());
+      const documentId = document?.id;
+      if (!store.getState().search.query || !documentId)
         return of(ac_.search.setSearchStandBy());
       else {
         const {
@@ -39,8 +42,6 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
           updatedAtTimeFilter,
           sortOptions,
         } = store.getState().search;
-        const document = getCurrentDocument(store.getState());
-        const documentId = document.id;
         const nodeId =
           document.nodes[document.persistedState.selectedNode_id].id;
         const request = gqlQuery$({
@@ -66,14 +67,14 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
           createTimeoutHandler({
             alertDetails: {
               title: 'Searching is taking longer then expected',
-              description: 'try refreshing the page',
+              description: alerts.tryRefreshingThePage,
             },
             due: 30000,
           }),
           createErrorHandler({
             alertDetails: {
               title: 'Could not perform the search',
-              description: 'Check your network connection',
+              description: alerts.somethingWentWrong,
             },
             actionCreators: [ac.search.setSearchStandBy],
           }),

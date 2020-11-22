@@ -9,6 +9,7 @@ import { createErrorHandler } from '../shared/create-error-handler';
 import { AsyncOperation } from '../../ducks/document';
 import { USER_MUTATION } from '::graphql/mutations';
 import { properErrorMessage } from '::root/components/auth/hooks/proper-error-message';
+import { alerts } from '::helpers/texts/alerts';
 
 const deleteAccount = (currentPassword: string) =>
   gqlMutation$({
@@ -41,7 +42,7 @@ const deleteAccountEpic = (action$: Observable<Actions>) => {
             createTimeoutHandler({
               alertDetails: {
                 title: 'The Operation is taking longer then expected',
-                description: 'try refreshing the page',
+                description: alerts.tryRefreshingThePage,
               },
               due: 30000,
             }),
