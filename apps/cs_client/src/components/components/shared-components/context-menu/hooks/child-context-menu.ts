@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { MouseEvent, useCallback, useState } from 'react';
 import { Position } from '::root/components/shared-components/context-menu/context-menu-wrapper';
 
 type Props = {
@@ -6,16 +6,18 @@ type Props = {
   onSelectElement?: (id: string) => void;
 };
 
-export const useChildContextMenu = ({
+export const useChildContextMenu = <T = HTMLDivElement>({
   getIdOfActiveElement,
   onSelectElement = () => undefined,
 }: Props) => {
   const [CMOffset, setCMOffset] = useState<Position>([0, 0, 0, 0]);
-  const show = useCallback(e => {
-    e.preventDefault();
+  const show = useCallback((e: MouseEvent<T>) => {
+    if (!e.shiftKey) {
+      e.preventDefault();
+    }
     e.stopPropagation();
     const target = e.target;
-    const activeElementId = getIdOfActiveElement(target);
+    const activeElementId = getIdOfActiveElement(target as HTMLElement);
     if (activeElementId) {
       setCMOffset([e.clientX, e.clientY, 0, 0]);
       onSelectElement(activeElementId);

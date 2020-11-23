@@ -67,6 +67,14 @@ import {
   sortNode,
   SortNodeParams,
 } from '::store/ducks/document-cache/helpers/node/sort-node/sort-node';
+import {
+  pasteNode,
+  PasteNodeParams,
+} from '::store/ducks/document-cache/helpers/node/copy-cut-paste/paste-node';
+import {
+  copyNode,
+  CopyNodeParams,
+} from '::store/ducks/document-cache/helpers/node/copy-cut-paste/copy-node';
 
 const ap = createActionPrefixer('document-cache');
 
@@ -81,6 +89,8 @@ const ac = {
     _(params),
   ),
   sortNode: _(ap('sort-node'), _ => (params: SortNodeParams) => _(params)),
+  copyNode: _(ap('copy-node'), _ => (params: CopyNodeParams) => _(params)),
+  pasteNode: _(ap('paste-node'), _ => (params: PasteNodeParams) => _(params)),
   createDocument: _(
     ap('create-document'),
     _ => (params: CreateDocumentParams) => _(params),
@@ -170,10 +180,12 @@ export type CachedDocumentDict = {
 
 type State = {
   documents: CachedDocumentDict;
+  copiedNode: CopyNodeParams;
 };
 
 export enum DocumentMutations {
   CreateNode = 'created',
+  PasteNode = 'pasted',
   NodeAttributes = 'changed attributes',
   SortNodes = 'sort nodes',
   NodePosition = 'changed position',
@@ -192,6 +204,7 @@ export type DocumentTimeLineMeta = {
 };
 const initialState: State = {
   documents: {},
+  copiedNode: undefined,
 };
 export const dTM = new TimelinesManager<DocumentTimeLineMeta, State>(true, {
   maximumNumberOfFrames: 20,
@@ -241,6 +254,9 @@ const reducer = createReducer(initialState, _ => {
       ),
       _(ac.expandNode, (state, { payload }) =>
         produce(state, draft => expandNode(draft, payload)),
+      ),
+      _(ac.copyNode, (state, { payload }) =>
+        produce(state, draft => copyNode(draft, payload)),
       ),
       _(ac.collapseNode, (state, { payload }) =>
         produce(state, draft => collapseNode(draft, payload)),
@@ -424,6 +440,19 @@ const reducer = createReducer(initialState, _ => {
             documentId: payload.documentId,
             node_id: payload.node_id,
             mutationType: DocumentMutations.SortNodes,
+            timeStamp: Date.now(),
+          }),
+        ),
+      ),
+      _(ac.pasteNode, (state, { payload }) =>
+        produce(
+          state,
+          draft => pasteNode(draft, payload),
+          dTM.addFrame({
+            timelineId: payload.documentId,
+            documentId: payload.documentId,
+            node_id: payload.new_father_id,
+            mutationType: DocumentMutations.PasteNode,
             timeStamp: Date.now(),
           }),
         ),
