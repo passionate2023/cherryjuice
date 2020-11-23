@@ -61,7 +61,7 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
       hide={hideSub}
       show={showSub}
       items={items}
-      showOnHover={true}
+      triggers={{ click: true, hover: true }}
     >
       <div
         className={joinClassNames([

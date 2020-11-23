@@ -11,6 +11,8 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { ToolBar } from './components/tool-bar/tool-bar';
 import { Droppable } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';
 import { modNode, modTree } from '::sass-modules';
+import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
+import { useChildContextMenu } from '::root/components/shared-components/context-menu/hooks/child-context-menu';
 
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -47,7 +49,9 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
   useEffect(onStart, []);
 
   const params = getParamsFromLocation();
-
+  const { position, show, hide, shown } = useChildContextMenu({
+    getIdOfActiveElement: () => '1',
+  });
   return (
     <Resizable
       enable={{ right: true }}
@@ -58,37 +62,49 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
       <ErrorBoundary>
         <div className={modTree.tree}>
           <ToolBar />
-          <Droppable
-            anchorId={'0'}
-            anchorClassName={modNode.node}
-            meta={{ documentId }}
-            onDrop={ac.node.drop}
+          <ContextMenuWrapper
+            shown={shown}
+            hide={hide}
+            items={[]}
+            position={position}
           >
-            {(provided, ref) => (
-              <ul className={modTree.tree_rootList} {...provided} ref={ref}>
-                {nodes &&
-                  nodes[0].child_nodes.map((node_id, index) => {
-                    const node = nodes[node_id];
-                    if (!filteredNodes || filteredNodes[node_id])
-                      return (
-                        <Node
-                          index={index}
-                          fatherState={treeState[0]}
-                          key={node.node_id}
-                          node_id={node.node_id}
-                          nodes={nodes}
-                          depth={0}
-                          node_title_styles={node.node_title_styles}
-                          documentPrivacy={documentPrivacy}
-                          parentPrivacy={NodePrivacy.DEFAULT}
-                          expand={params.expand}
-                          filteredNodes={filteredNodes}
-                        />
-                      );
-                  })}
-              </ul>
-            )}
-          </Droppable>
+            <Droppable
+              anchorId={'0'}
+              anchorClassName={modNode.node}
+              meta={{ documentId }}
+              onDrop={ac.node.drop}
+            >
+              {(provided, ref) => (
+                <ul
+                  className={modTree.tree_rootList}
+                  {...provided}
+                  ref={ref}
+                  onContextMenu={show}
+                >
+                  {nodes &&
+                    nodes[0].child_nodes.map((node_id, index) => {
+                      const node = nodes[node_id];
+                      if (!filteredNodes || filteredNodes[node_id])
+                        return (
+                          <Node
+                            index={index}
+                            fatherState={treeState[0]}
+                            key={node.node_id}
+                            node_id={node.node_id}
+                            nodes={nodes}
+                            depth={0}
+                            node_title_styles={node.node_title_styles}
+                            documentPrivacy={documentPrivacy}
+                            parentPrivacy={NodePrivacy.DEFAULT}
+                            expand={params.expand}
+                            filteredNodes={filteredNodes}
+                          />
+                        );
+                    })}
+                </ul>
+              )}
+            </Droppable>
+          </ContextMenuWrapper>
         </div>
       </ErrorBoundary>
     </Resizable>

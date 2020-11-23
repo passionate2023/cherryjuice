@@ -5,10 +5,10 @@ import {
   NodesDict,
   PersistedDocumentState,
 } from '::store/ducks/document-cache/document-cache';
-import { ContextMenuItemProps } from '::root/components/shared-components/context-menu/context-menu-item';
+import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
 
 type Props = {
-  elementId: number;
+  activeTab: number;
   hide: () => void;
   documentId: string;
   nodes: NodesDict;
@@ -16,18 +16,18 @@ type Props = {
   bookmarks: PersistedDocumentState['bookmarks'];
   recentNodes: number[];
 };
-const useTabContextMenu = ({
+const useTabsMenuItems = ({
   documentId,
-  elementId,
+  activeTab,
   recentNodes,
   localState,
   hide,
   bookmarks = [],
-}: Props): Omit<ContextMenuItemProps, 'hide'>[] => {
+}: Props): CMItem[] => {
   const closeSelectedM = useCallback(() => {
-    ac.node.close({ documentId, node_id: elementId });
+    ac.node.close({ documentId, node_id: activeTab });
     hide();
-  }, [documentId, elementId]);
+  }, [documentId, activeTab]);
 
   const closeAllM = useCallback(() => {
     ac.node.close({ documentId, node_ids: recentNodes });
@@ -43,30 +43,30 @@ const useTabContextMenu = ({
   }, [documentId, recentNodes, localState.editedNodes.edited]);
 
   const closeOthersM = useCallback(() => {
-    const others = recentNodes.filter(_node_id => _node_id !== elementId);
-    ac.node.close({ documentId, node_ids: others, node_id: elementId });
+    const others = recentNodes.filter(_node_id => _node_id !== activeTab);
+    ac.node.close({ documentId, node_ids: others, node_id: activeTab });
     hide();
-  }, [documentId, recentNodes, elementId]);
+  }, [documentId, recentNodes, activeTab]);
 
   const closeOthersToLeftM = useCallback(() => {
-    const indexOfFocusedNode = recentNodes.indexOf(elementId);
+    const indexOfFocusedNode = recentNodes.indexOf(activeTab);
     const others = recentNodes.filter((_, i) => i < indexOfFocusedNode);
     ac.node.close({ documentId, node_ids: others });
     hide();
-  }, [documentId, recentNodes, elementId]);
+  }, [documentId, recentNodes, activeTab]);
 
   const closeOthersToRightM = useCallback(() => {
-    const indexOfFocusedNode = recentNodes.indexOf(elementId);
+    const indexOfFocusedNode = recentNodes.indexOf(activeTab);
     const others = recentNodes.filter((_, i) => i > indexOfFocusedNode);
     ac.node.close({ documentId, node_ids: others });
     hide();
-  }, [documentId, recentNodes, elementId]);
+  }, [documentId, recentNodes, activeTab]);
 
   const renameM = useCallback(() => {
-    ac.node.select({ documentId, node_id: elementId });
+    ac.node.select({ documentId, node_id: activeTab });
     ac.dialogs.showEditNode();
     hide();
-  }, [documentId, recentNodes, elementId]);
+  }, [documentId, recentNodes, activeTab]);
 
   const closeDocumentM = useCallback(() => {
     ac.document.setDocumentId('');
@@ -74,15 +74,15 @@ const useTabContextMenu = ({
   }, []);
 
   const bookmarkM = useCallback(() => {
-    !bookmarks.includes(+elementId)
-      ? ac.documentCache.addBookmark({ documentId, node_id: elementId })
-      : ac.documentCache.removeBookmark({ documentId, node_id: elementId });
+    !bookmarks.includes(+activeTab)
+      ? ac.documentCache.addBookmark({ documentId, node_id: activeTab })
+      : ac.documentCache.removeBookmark({ documentId, node_id: activeTab });
     hide();
-  }, [documentId, bookmarks, elementId]);
+  }, [documentId, bookmarks, activeTab]);
 
   return [
     {
-      name: bookmarks.includes(+elementId) ? 'remove bookmark' : 'bookmark',
+      name: bookmarks.includes(+activeTab) ? 'remove bookmark' : 'bookmark',
       onClick: bookmarkM,
     },
     { name: 'properties', onClick: renameM, bottomSeparator: true },
@@ -100,4 +100,4 @@ const useTabContextMenu = ({
   ];
 };
 
-export { useTabContextMenu };
+export { useTabsMenuItems };
