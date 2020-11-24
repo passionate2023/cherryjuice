@@ -4,7 +4,7 @@ import { joinClassNames } from '::helpers/dom/join-class-names';
 import { useEffect, useRef, useState } from 'react';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
-import { ContextMenuItemProps } from '::root/components/shared-components/context-menu/context-menu-item';
+import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
 
 export type MuteCallback = () => void;
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
   active: boolean;
   onClick: MuteCallback;
   details?: JSX.Element;
-  contextMenuOptions?: Omit<ContextMenuItemProps, 'hide'>[];
+  cmItems?: CMItem[];
 };
 const DialogListItem: React.FC<Props> = ({
   name,
@@ -23,7 +23,7 @@ const DialogListItem: React.FC<Props> = ({
   selected,
   onClick,
   details,
-  contextMenuOptions,
+  cmItems,
 }) => {
   const itemRef = useRef<HTMLDivElement>();
   useEffect(() => {
@@ -66,13 +66,13 @@ const DialogListItem: React.FC<Props> = ({
           {details}
         </span>
       </div>
-      {contextMenuOptions && (
+      {cmItems && (
         <div className={`${modDialog.dialogListItem__contextMenuButton} `}>
           <ContextMenuWrapper
             shown={showModal}
             hide={() => setShowModal(false)}
             show={() => setShowModal(true)}
-            items={contextMenuOptions}
+            items={cmItems}
           >
             <Icon name={Icons.material.menu} loadAsInlineSVG={'force'} />
           </ContextMenuWrapper>

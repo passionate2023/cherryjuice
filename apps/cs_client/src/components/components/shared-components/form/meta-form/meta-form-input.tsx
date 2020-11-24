@@ -31,7 +31,7 @@ const MetaFormInput: React.FC<FormInputProps> = ({
   const onChangeText = e => onChange(e.target.value);
 
   const inputRef = useRef<HTMLInputElement>();
-  useLazyAutoFocus(lazyAutoFocus ? 500 : 0, inputRef);
+  useLazyAutoFocus(lazyAutoFocus ? 1200 : 0, inputRef);
 
   return monolithComponent ? (
     monolithComponent

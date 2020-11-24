@@ -7,11 +7,15 @@ import { ac } from '::store/store';
 import { Store } from '::store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
-const createAlert = (selectedDocumentIds: string[]): TAlert => {
+const createAlert = (
+  selectedDocumentIds: string[],
+  documentIdNameDict: Record<string, string>,
+): TAlert => {
+  const selectedDocumentId = selectedDocumentIds[0];
   const title = selectedDocumentIds.length
     ? `delete ${
         selectedDocumentIds.length === 1
-          ? `document '${selectedDocumentIds[0]}'`
+          ? `'${documentIdNameDict[selectedDocumentId]}'`
           : `the ${selectedDocumentIds.length} selected documents`
       } ?`
     : '';
@@ -26,6 +30,12 @@ const createAlert = (selectedDocumentIds: string[]): TAlert => {
 const mapState = (state: Store) => ({
   show: state.dialogs.showDeleteDocument,
   selectedDocumentIds: state.documentsList.selectedIDs,
+  documentIdNameDict: Object.fromEntries(
+    Object.values(state.documentCache.documents).map(({ id, name }) => [
+      id,
+      name,
+    ]),
+  ),
 });
 
 const connector = connect(mapState);
@@ -36,6 +46,7 @@ type Props = {};
 const DeleteDocument: React.FC<Props & PropsFromRedux> = ({
   show,
   selectedDocumentIds,
+  documentIdNameDict,
 }) => {
   const buttons: TDialogFooterButton[] = [
     {
@@ -59,7 +70,7 @@ const DeleteDocument: React.FC<Props & PropsFromRedux> = ({
     <ConfirmationModal
       show={show && !!selectedDocumentIds.length}
       onClose={ac.dialogs.hideDeleteDocument}
-      alert={createAlert(selectedDocumentIds)}
+      alert={createAlert(selectedDocumentIds, documentIdNameDict)}
       buttons={buttons}
     />
   );
