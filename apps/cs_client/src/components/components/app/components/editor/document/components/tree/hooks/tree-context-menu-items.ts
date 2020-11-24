@@ -17,7 +17,14 @@ const useTreeContextMenuItems = ({
   const copyNode = useCallback(() => {
     ac.documentCache.copyNode({
       mode: 'copy',
-      recursive: false,
+      documentId,
+      node_id,
+    });
+  }, [node_id, documentId]);
+
+  const cutNode = useCallback(() => {
+    ac.documentCache.copyNode({
+      mode: 'cut',
       documentId,
       node_id,
     });
@@ -30,11 +37,16 @@ const useTreeContextMenuItems = ({
     });
   }, [node_id, documentId]);
   const items = [];
-  if (node_id)
+  if (node_id) {
     items.push({
       name: 'copy',
       onClick: copyNode,
     });
+    items.push({
+      name: 'cut',
+      onClick: cutNode,
+    });
+  }
   if (copiedNode)
     items.push({
       name: 'paste',

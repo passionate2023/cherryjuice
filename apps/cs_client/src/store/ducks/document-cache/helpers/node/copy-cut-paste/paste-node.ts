@@ -1,13 +1,7 @@
-import {
-  DocumentCacheState,
-  QFullNode,
-} from '::store/ducks/document-cache/document-cache';
-import {
-  newImagePrefix,
-  newNodePrefix,
-} from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
-import { createNode } from '::store/ducks/document-cache/helpers/node/create-node';
-import { mutateNodeContent } from '::store/ducks/document-cache/helpers/node/mutate-node-content';
+import { DocumentCacheState } from '::store/ducks/document-cache/document-cache';
+import { createCloneNode } from '::store/ducks/document-cache/helpers/node/copy-cut-paste/paste-node/helpers/create-clone-node';
+import { insertCloneNode } from '::store/ducks/document-cache/helpers/node/copy-cut-paste/paste-node/helpers/insert-clone-node';
+import { drop } from '::store/ducks/document-cache/helpers/node/drop/drop';
 
 export type PasteNodeParams = {
   documentId: string;
@@ -26,53 +20,27 @@ export const pasteNode = (
   const copiedNode = sourceNodes[state.copiedNode.node_id];
   const newFatherNode = targetNodes[new_father_id];
 
-  const new_node_id = targetDocument.localState.highestNode_id + 1;
-
-  const clone: QFullNode = {
-    documentId: targetDocument.id,
-    id: `${newNodePrefix}${targetDocument.id}:${new_node_id}`,
-    node_id: new_node_id,
-    fatherId: newFatherNode.id,
-    father_id: newFatherNode.node_id,
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    tags: copiedNode.tags,
-    read_only: copiedNode.read_only,
-    node_title_styles: copiedNode.node_title_styles,
-    child_nodes: [],
-    html: '',
-    image: [],
-    name: copiedNode.name,
-    privacy: copiedNode.privacy,
-  };
   if (state.copiedNode.mode === 'copy') {
-    createNode(state, { createdNode: clone, previous_sibling_node_id: -1 });
-    let images = [];
-    let html = copiedNode.html;
-    if (copiedNode.image.length) {
-      const replacedImageIds: [string, string][] = [];
-      let baseId = new Date().getTime();
-      images = copiedNode.image.map(image => {
-        const newId = (newImagePrefix + baseId++).toString();
-        replacedImageIds.push([image.id, newId]);
-        return {
-          ...image,
-          id: newId,
-        };
-      });
-      replacedImageIds.forEach(([oldId, newId]) => {
-        html = html.replace(oldId, newId);
-      });
-    }
-    mutateNodeContent(state, {
-      node_id: clone.node_id,
-      documentId: targetDocument.id,
-      data: {
-        image: images,
-        html: html,
+    const new_node_id = targetDocument.localState.highestNode_id + 1;
+    const clone = createCloneNode({
+      new_node_id,
+      newDocumentId: targetDocument.id,
+      newFatherNode_id: newFatherNode.node_id,
+      newFatherNodeId: newFatherNode.id,
+      copiedNode,
+    });
+    insertCloneNode(state, { clone, copiedNode });
+  } else if (state.copiedNode.mode === 'cut') {
+    drop(state, {
+      source: { id: copiedNode.node_id + '', index: -1 },
+      dest: {
+        id: newFatherNode.node_id + '',
+        index: newFatherNode.child_nodes.length,
       },
+      meta: { documentId: newFatherNode.documentId },
     });
   }
+
   state.copiedNode = undefined;
   return state;
 };

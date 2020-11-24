@@ -62,7 +62,7 @@ import {
   moveBookmark,
   MoveBookmarkProps,
 } from '::store/ducks/document-cache/helpers/document/bookmarks/move-bookmark';
-import { drop } from '::store/ducks/document-cache/helpers/node/drop';
+import { drop } from '::store/ducks/document-cache/helpers/node/drop/drop';
 import {
   sortNode,
   SortNodeParams,
