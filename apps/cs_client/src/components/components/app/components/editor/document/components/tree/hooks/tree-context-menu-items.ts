@@ -14,6 +14,18 @@ const useTreeContextMenuItems = ({
   documentId,
   copiedNode,
 }: TreeContextMenuItemsProps): CMItem[] => {
+  const copyNodeId = useCallback(() => {
+    navigator.clipboard.writeText('' + node_id).then(() => {
+      ac.dialogs.setSnackbar({ message: 'node ID copied to clipboard' });
+    });
+  }, [node_id]);
+  const copyNodeLink = useCallback(() => {
+    navigator.clipboard
+      .writeText(`${location.origin}/document/${documentId}/node/${node_id}`)
+      .then(() => {
+        ac.dialogs.setSnackbar({ message: 'node link copied to clipboard' });
+      });
+  }, [node_id, documentId]);
   const copyNode = useCallback(() => {
     ac.documentCache.copyNode({
       mode: 'copy',
@@ -38,6 +50,15 @@ const useTreeContextMenuItems = ({
   }, [node_id, documentId]);
   const items = [];
   if (node_id) {
+    items.push({
+      name: 'copy link',
+      onClick: copyNodeLink,
+    });
+    items.push({
+      name: 'copy id',
+      onClick: copyNodeId,
+      bottomSeparator: true,
+    });
     items.push({
       name: 'copy',
       onClick: copyNode,

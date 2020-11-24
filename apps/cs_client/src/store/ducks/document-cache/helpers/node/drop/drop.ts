@@ -3,6 +3,7 @@ import { OnDropParam } from '::root/components/app/components/editor/document/co
 import { mutateNodeMeta } from '::store/ducks/document-cache/helpers/node/mutate-node-meta';
 import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/get-parents-node-ids/get-parents-node-ids';
 import { moveNode } from '::store/ducks/document-cache/helpers/node/drop/helpers/move-node';
+import { ac } from '::store/store';
 
 export type DropMeta = {
   documentId: string;
@@ -28,7 +29,7 @@ export const drop = (
   const newIndex = dest.index;
   const currentIndex = oldFatherChildNodes.indexOf(copiedNode.node_id);
   if (isSameFather) {
-    if (newIndex === currentIndex) return state;
+    if (newIndex === currentIndex) return;
     newFatherChildNodes.splice(currentIndex, 1);
     newFatherChildNodes.splice(newIndex, 0, copiedNode.node_id);
     state = mutateNodeMeta(state, [
@@ -46,7 +47,13 @@ export const drop = (
       node_id: newFatherNode.node_id,
     });
 
-    if (fathersOfNewFather.includes(copiedNode.node_id)) return state;
+    if (fathersOfNewFather.includes(copiedNode.node_id)) {
+      setTimeout(() => {
+        const message = 'cannot move a node into its child';
+        ac.dialogs.setSnackbar({ message });
+      }, 10);
+      return;
+    }
 
     newFatherChildNodes.splice(newIndex, 0, copiedNode.node_id);
     moveNode(state, { copiedNode, newFatherNode, oldFatherNode, newIndex });

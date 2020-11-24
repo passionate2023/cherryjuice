@@ -2,6 +2,7 @@ import { DocumentCacheState } from '::store/ducks/document-cache/document-cache'
 import { createCloneNode } from '::store/ducks/document-cache/helpers/node/copy-cut-paste/paste-node/helpers/create-clone-node';
 import { insertCloneNode } from '::store/ducks/document-cache/helpers/node/copy-cut-paste/paste-node/helpers/insert-clone-node';
 import { drop } from '::store/ducks/document-cache/helpers/node/drop/drop';
+import { ac } from '::store/store';
 
 export type PasteNodeParams = {
   documentId: string;
@@ -31,6 +32,14 @@ export const pasteNode = (
     });
     insertCloneNode(state, { clone, copiedNode });
   } else if (state.copiedNode.mode === 'cut') {
+    const pastingNodeIntoItself = state.copiedNode.node_id === new_father_id;
+    if (pastingNodeIntoItself) {
+      setTimeout(() => {
+        const message = 'cannot move a node into itself';
+        ac.dialogs.setSnackbar({ message });
+      }, 10);
+      return;
+    }
     drop(state, {
       source: { id: copiedNode.node_id + '', index: -1 },
       dest: {
