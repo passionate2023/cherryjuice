@@ -85,7 +85,7 @@ const useConsumeToken = ({ userId }: { userId: string }) => {
               await confirmEmailChange(token, userId);
               break;
             case UserTokenType.PASSWORD_RESET:
-              router.goto.resetPassword(token);
+              ac.auth.setResetPasswordToken(token);
               break;
           }
         }

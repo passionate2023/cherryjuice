@@ -98,9 +98,9 @@ const Root: React.FC<Props & PropsFromRedux> = ({
     userId,
     online,
   });
+  useConsumeToken({ userId });
   useRouterEffect();
   useTasks();
-  useConsumeToken({ userId });
   useAuthStatusCookie({ userId });
 
   return (

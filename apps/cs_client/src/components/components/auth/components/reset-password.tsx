@@ -16,6 +16,8 @@ import { VERIFY_TOKEN } from '::graphql/mutations/user/verify-token';
 import { ReturnToLoginPage } from '::root/components/auth/components/signup-form';
 import { ac } from '::store/store';
 import { useMutation } from '::hooks/graphql/use-mutation';
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::store/store';
 
 const idPrefix = 'reset--password';
 const inputs: ValidatedTextInputProps[] = [
@@ -49,14 +51,12 @@ export const getToken = () => {
   return token ? token[1] : '';
 };
 
-const useVerifyToken = setError => {
-  const token = useRef<string>();
+const useVerifyToken = (setError, token: string) => {
   const [valid, setValid] = useState<boolean>();
   useEffect(() => {
-    token.current = getToken();
-    if (token.current) {
+    if (token) {
       apolloClient
-        .mutate(VERIFY_TOKEN({ token: token.current }))
+        .mutate(VERIFY_TOKEN({ token }))
         .then(() => {
           setValid(true);
         })
@@ -68,28 +68,36 @@ const useVerifyToken = setError => {
       router.goto.signIn();
     }
   }, []);
-  return { token: { value: token.current, valid } };
+  return valid;
 };
 
+const mapState = (state: Store) => ({
+  token: state.auth.resetPasswordToken,
+});
+const mapDispatch = {};
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
 type Props = {};
-const ResetPassword: React.FC<Props> = () => {
+const ResetPassword: React.FC<Props & PropsFromRedux> = ({ token }) => {
   const password = useStatefulValidatedInput(inputs[0]);
   const passwordConfirmation = useStatefulValidatedInput(inputs[1]);
   const formRef = useRef<HTMLFormElement>();
-  const { token } = useVerifyToken(ac.auth.setAuthenticationFailed);
+  const valid = useVerifyToken(ac.auth.setAuthenticationFailed, token);
   const validPassword =
-    token.valid &&
-    password.valid &&
-    password.value === passwordConfirmation.value;
+    valid && password.valid && password.value === passwordConfirmation.value;
   const [resetPassword, resetPasswordState] = useMutation({
     gqlPipe: RESET_PASSWORD,
     variables: {
       input: {
         newPassword: password.value,
-        token: token.value,
+        token: token,
       },
     },
-    onSuccess: router.goto.signIn,
+    onSuccess: () => {
+      router.goto.signIn();
+      ac.auth.clearResetPasswordToken();
+    },
     onFailure: ac.auth.setAuthenticationFailed,
   });
   const submit = (e?: any) => {
@@ -119,7 +127,7 @@ const ResetPassword: React.FC<Props> = () => {
           <ValidatedTextInput
             {...inputProps}
             key={inputProps.label}
-            disabled={token.valid === false}
+            disabled={valid === false}
           />
         ))}
         {
@@ -138,4 +146,5 @@ const ResetPassword: React.FC<Props> = () => {
   );
 };
 
-export { ResetPassword };
+const _ = connector(ResetPassword);
+export { _ as ResetPassword };

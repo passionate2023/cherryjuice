@@ -34,6 +34,11 @@ const ac = {
 
     refreshToken: _(ap('refresh-token')),
     deleteAccount: _(ap('delete-account')),
+    setResetPasswordToken: _(
+      ap('set-reset-password-token'),
+      _ => (token: string) => _(token),
+    ),
+    clearResetPasswordToken: _(ap('clear-reset-password-token')),
   },
   ...{
     setAuthenticationInProgress: _(ap('set-authentication-in-progress')),
@@ -56,6 +61,7 @@ type State = {
   storageType: StorageType;
   alert: AsyncError;
   ongoingOperation: AsyncOperation;
+  resetPasswordToken: string;
 };
 
 const emptySettings = {
@@ -69,6 +75,7 @@ const initialState: State = {
   secrets: undefined,
   storageType: 'localStorage',
   ongoingOperation: 'idle',
+  resetPasswordToken: undefined,
   // @ts-ignore
   settings: emptySettings,
 };
@@ -87,6 +94,7 @@ const reducer = createReducer(initialState, _ => [
       ...state,
       alert: payload,
       ongoingOperation: 'idle',
+      resetPasswordToken: '',
     })),
     _(
       ac.setAuthenticationInProgress,
@@ -110,6 +118,14 @@ const reducer = createReducer(initialState, _ => [
     _(ac.refreshToken, state => ({
       ...state,
       ongoingOperation: 'pending',
+    })),
+    _(ac.setResetPasswordToken, (state, { payload }) => ({
+      ...state,
+      resetPasswordToken: payload,
+    })),
+    _(ac.clearResetPasswordToken, state => ({
+      ...state,
+      resetPasswordToken: '',
     })),
   ],
   ...[

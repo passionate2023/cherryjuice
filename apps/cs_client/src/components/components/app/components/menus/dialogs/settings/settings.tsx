@@ -33,7 +33,7 @@ const mapState = (state: Store) => {
     selectedScreen,
     screenHasChanges: screenHasUnsavedChanges(state),
     saveOperation: state.settings.saveOperation,
-    duplicateHotkeys: !!state.hotkeySettings.duplicates,
+    duplicateHotkeys: !!Object.keys(state.hotkeySettings.duplicates).length,
     userId: state.auth.user?.id,
     docked: state.root.dockedDialog,
     hasDefaultEditorSettings: hasDefaultEditorSettings(state),
