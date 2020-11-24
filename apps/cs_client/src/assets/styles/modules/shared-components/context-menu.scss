@@ -12,6 +12,7 @@
   border-radius: 5px;
   box-shadow: $box-shadow1;
   z-index: $ZI-context-menu;
+  overflow: hidden;
 }
 .context-menu--modal {
   margin: auto;
@@ -19,14 +20,13 @@
   right: 0;
   bottom: 0;
   top: 0;
-  max-width: 80vw;
+  max-width: calc(var(--vw) * 0.975);
   width: fit-content;
-  max-height: 70vh;
+  max-height: calc(var(--vh) * 0.95);
   height: fit-content;
   overflow: auto;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 .context-menu-wrapper {

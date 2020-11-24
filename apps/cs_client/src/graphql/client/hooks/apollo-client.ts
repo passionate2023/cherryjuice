@@ -12,7 +12,7 @@ if (
   process.env.NODE_ENV === 'development' &&
   !localStorage.getItem('graphqlAPIHost')
 )
-  localStorage.setItem('graphqlAPIHost', 'localhost:1230');
+  localStorage.setItem('graphqlAPIHost', `${location.hostname}:1230`);
 
 const host = localStorage.getItem('graphqlAPIHost') || location.host;
 const secure = location.protocol === 'https:';
