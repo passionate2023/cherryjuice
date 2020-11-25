@@ -6,7 +6,6 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
   }
-  overflow: auto;
   // size
   @include respond-to($md-up) {
     height: var(--info-bar);
@@ -81,7 +80,6 @@
   svg {
     fill: grey;
   }
-  overflow: hidden;
 }
 
 .info-bar__document-privacy__icon-container {

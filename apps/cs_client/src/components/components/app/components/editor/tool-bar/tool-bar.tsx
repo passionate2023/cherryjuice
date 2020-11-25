@@ -1,29 +1,29 @@
 import * as React from 'react';
-import { MainButtons } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/main-buttons';
-import { modApp, modToolbar } from '::sass-modules';
-import { MobileButtons } from './components/groups/mobile-buttons/mobile-buttons';
-import { createPortal } from 'react-dom';
+import {useEffect, useState} from 'react';
+import {MainButtons} from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/main-buttons';
+import {modApp, modToolbar} from '::sass-modules';
+import {MobileButtons} from './components/groups/mobile-buttons/mobile-buttons';
+import {createPortal} from 'react-dom';
 import {
   FormattingButtons,
   FormattingButtonsWithTransition,
 } from './components/groups/formatting-buttons/formatting-buttons';
-import { NavBar } from '::root/components/app/components/editor/tool-bar/components/groups/nav-bar/nav-bar';
-import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::store/store';
-import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
-import { useEffect, useState } from 'react';
-import { NodesButtons } from '::root/components/app/components/editor/tool-bar/components/groups/nodes-buttons/nodes-buttons';
-import { UndoRedo } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
-import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
-import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
-import { Objects } from '::root/components/app/components/editor/tool-bar/components/groups/objects/objects';
+import {NavBar} from '::root/components/app/components/editor/tool-bar/components/groups/nav-bar/nav-bar';
+import {connect, ConnectedProps} from 'react-redux';
+import {Store} from '::store/store';
+import {hasWriteAccessToDocument} from '::store/selectors/document/has-write-access-to-document';
+import {NodesButtons} from '::root/components/app/components/editor/tool-bar/components/groups/nodes-buttons/nodes-buttons';
+import {UndoRedo} from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
+import {Separator} from '::root/components/app/components/editor/tool-bar/components/separator';
+import {ErrorBoundary} from '::root/components/shared-components/react/error-boundary';
+import {Objects} from '::root/components/app/components/editor/tool-bar/components/groups/objects/objects';
 
 type PortalProps = { targetSelector: string; predicate?: boolean };
 export const Portal: React.FC<PortalProps> = ({
-  targetSelector,
-  children,
-  predicate = true,
-}) => {
+                                                targetSelector,
+                                                children,
+                                                predicate = true,
+                                              }) => {
   const [targetMounted, serTargetMounted] = useState(false);
   useEffect(() => {
     const handle = setInterval(() => {
@@ -81,20 +81,23 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
         <ErrorBoundary>
           <Portal targetSelector={'.' + modApp.app} predicate={isOnMd}>
             {isOnMd ? (
-              <FormattingButtonsWithTransition show={showFormattingButtons}>
-                <Separator />
-                <Objects />
-              </FormattingButtonsWithTransition>
+                <FormattingButtonsWithTransition show={showFormattingButtons}>
+                  <Separator/>
+                  <Objects/>
+                </FormattingButtonsWithTransition>
             ) : (
-              <FormattingButtons>
-                <Separator />
-                <Objects />
-              </FormattingButtons>
+                <FormattingButtons/>
             )}
           </Portal>
         </ErrorBoundary>
       )}
-      <NavBar showUserPopup={false} />
+      {!isOnMd && (
+          <div className={modToolbar.toolBar__group}>
+            <Separator/>
+            <Objects/>
+          </div>
+      )}
+      <NavBar showUserPopup={false}/>
     </div>
   );
 };

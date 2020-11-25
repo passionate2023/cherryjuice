@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Suspense } from 'react';
+import {Suspense} from 'react';
 import modTheme from '::sass-modules/../themes/themes.scss';
 import '::assets/styles/global-scope/material-ui.scss';
 import '::assets/styles/body.scss';
@@ -7,43 +7,41 @@ import '::assets/styles/base.scss';
 import '::assets/styles/global-scope/global-classes.scss';
 import '::assets/styles/global-scope/google-picker.scss';
 import '::assets/styles/css-variables/css-variables.scss';
-import { useApolloClient } from '::graphql/client/hooks/apollo-client';
-import { Route, Switch } from 'react-router';
-import { connect, ConnectedProps, Provider } from 'react-redux';
-import { Void } from '::root/components/shared-components/react/void';
-import { App } from '::root/components/app/app';
-import { useOnWindowResize } from '::hooks/use-on-window-resize';
-import { ac, store, Store } from '::store/store';
-import { PersistGate } from 'redux-persist/integration/react';
-import { persistStore } from 'redux-persist';
-import { useLoadEpics } from './hooks/load-epics';
-import { useRegisterHotKeys } from '::helpers/hotkeys/hooks/register-hot-keys';
-import { useConsumeToken } from '::root/hooks/consume-token';
-import { Auth } from '::root/components/auth/auth';
-import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
-import { useTrackDocumentChanges } from '::root/hooks/track-document-changes';
-import { enablePatches } from 'immer';
+import {useApolloClient} from '::graphql/client/hooks/apollo-client';
+import {Route, Switch} from 'react-router';
+import {connect, ConnectedProps, Provider} from 'react-redux';
+import {Void} from '::root/components/shared-components/react/void';
+import {App} from '::root/components/app/app';
+import {useOnWindowResize} from '::hooks/use-on-window-resize';
+import {ac, store, Store} from '::store/store';
+import {PersistGate} from 'redux-persist/integration/react';
+import {persistStore} from 'redux-persist';
+import {useLoadEpics} from './hooks/load-epics';
+import {useRegisterHotKeys} from '::helpers/hotkeys/hooks/register-hot-keys';
+import {useConsumeToken} from '::root/hooks/consume-token';
+import {Auth} from '::root/components/auth/auth';
+import {getHotkeys} from '::store/selectors/cache/settings/hotkeys';
+import {useTrackDocumentChanges} from '::root/hooks/track-document-changes';
+import {enablePatches} from 'immer';
 import '::helpers/attach-test-callbacks';
-import {
-  getCurrentDocument,
-  getDocumentsList,
-} from '::store/selectors/cache/document/document';
-import { documentHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
-import { useRouterEffect } from '::root/components/app/components/editor/hooks/router-effect/router-effect';
-import { Router } from 'react-router-dom';
-import { router } from '::root/router/router';
-import { useTasks } from '::root/hooks/tasks';
-import { CssVariables } from '::store/ducks/css-variables';
-import { useAuthStatusCookie } from '::root/hooks/auth-status-cookie';
+import {getCurrentDocument, getDocumentsList,} from '::store/selectors/cache/document/document';
+import {documentHasUnsavedChanges} from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
+import {useRouterEffect} from '::root/components/app/components/editor/hooks/router-effect/router-effect';
+import {Router} from 'react-router-dom';
+import {router} from '::root/router/router';
+import {useTasks} from '::root/hooks/tasks';
+import {CssVariables} from '::store/ducks/css-variables';
+import {useAuthStatusCookie} from '::root/hooks/auth-status-cookie';
+import 'hint.css';
 
 enablePatches();
 const ApolloProvider = React.lazy(() =>
-  import('@apollo/react-common').then(({ ApolloProvider }) => ({
-    default: ApolloProvider,
-  })),
+    import('@apollo/react-common').then(({ApolloProvider}) => ({
+      default: ApolloProvider,
+    })),
 );
 
-const updateBreakpointState = ({ breakpoint, callback }) => {
+const updateBreakpointState = ({breakpoint, callback}) => {
   let previousState = undefined;
   return () => {
     const newState = window.innerWidth <= breakpoint;
