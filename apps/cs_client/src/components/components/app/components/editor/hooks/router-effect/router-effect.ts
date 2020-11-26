@@ -50,9 +50,7 @@ const getRoute = createSelector(
 );
 
 const reflectState = () => getRoute(store.getState());
-const stateToRouter = (): void => {
-  store.subscribe(reflectState);
-};
+
 const initial = () => {
   const { documentId, node_id, hash } = extractDocumentFromPathname();
   if (documentId) {
@@ -66,10 +64,17 @@ const change = () => {
   else if (documentId) ac.document.setDocumentId(documentId);
   else ac.document.setDocumentId('');
 };
+
 const routerToState = (): void => {
   initial();
   window.onpopstate = change;
 };
+
+const stateToRouter = (): void => {
+  reflectState();
+  store.subscribe(reflectState);
+};
+
 const useRouterEffect = () => {
   useEffect(() => {
     routerToState();

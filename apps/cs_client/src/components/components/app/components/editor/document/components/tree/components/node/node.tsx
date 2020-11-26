@@ -40,6 +40,7 @@ const Node: React.FC<NodeProps> = ({
   index,
 }) => {
   const online = useSelector((state: Store) => state.root.online);
+  const userId = useSelector((state: Store) => state.auth.user?.id);
   const documentId = useSelector((state: Store) => state.document.documentId);
   const { child_nodes, name, privacy, html, read_only, tags } = nodes[node_id];
   const componentRef = useRef();
@@ -78,6 +79,7 @@ const Node: React.FC<NodeProps> = ({
           depth={depth}
           icon_id={icon_id}
           read_only={!!read_only}
+          userId={userId}
         />
         <NodeTitle
           nodeStyle={nodeStyle}

@@ -58,7 +58,7 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
   return (
     <ContextMenuWrapper
       shown={CMShown}
-      hide={hideSub}
+      hide={hide}
       show={showSub}
       items={items}
       triggers={{ click: true, hover: true }}
