@@ -44,7 +44,6 @@ const ContextMenuWrapper: React.FC<Props> = ({
       }
     }
     e.preventDefault();
-    e.stopPropagation();
   };
   return (
     <div

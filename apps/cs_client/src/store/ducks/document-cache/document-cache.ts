@@ -444,8 +444,8 @@ const reducer = createReducer(initialState, _ => {
           }),
         ),
       ),
-      _(ac.pasteNode, (state, { payload }) =>
-        produce(
+      _(ac.pasteNode, (state, { payload }) => {
+        let newState = produce(
           state,
           draft => pasteNode(draft, payload),
           dTM.addFrame({
@@ -455,8 +455,22 @@ const reducer = createReducer(initialState, _ => {
             mutationType: DocumentMutations.PasteNode,
             timeStamp: Date.now(),
           }),
-        ),
-      ),
+        );
+        newState = produce(newState, draft =>
+          expandNode(draft, {
+            node_id: +payload.new_father_id,
+            documentId: payload.documentId,
+            expandChildren: true,
+          }),
+        );
+        newState = produce(newState, draft =>
+          selectNode(draft, {
+            node_id: state.copiedNode.node_id,
+            documentId: payload.documentId,
+          }),
+        );
+        return newState;
+      }),
     ],
   ];
 });
