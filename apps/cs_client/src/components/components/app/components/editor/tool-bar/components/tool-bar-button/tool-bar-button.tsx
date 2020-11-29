@@ -20,7 +20,7 @@ const ToolbarButton: React.FC<{
       {...(!disabled && onClick && { onClick })}
       {...(testId && { 'data-testid': testId })}
     >
-      {children && children}
+      {children}
     </div>
   );
 

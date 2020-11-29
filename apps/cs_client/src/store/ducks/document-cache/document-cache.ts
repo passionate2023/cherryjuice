@@ -62,7 +62,19 @@ import {
   moveBookmark,
   MoveBookmarkProps,
 } from '::store/ducks/document-cache/helpers/document/bookmarks/move-bookmark';
-import { drop } from '::store/ducks/document-cache/helpers/node/drop';
+import { drop } from '::store/ducks/document-cache/helpers/node/drop/drop';
+import {
+  sortNode,
+  SortNodeParams,
+} from '::store/ducks/document-cache/helpers/node/sort-node/sort-node';
+import {
+  pasteNode,
+  PasteNodeParams,
+} from '::store/ducks/document-cache/helpers/node/copy-cut-paste/paste-node';
+import {
+  copyNode,
+  CopyNodeParams,
+} from '::store/ducks/document-cache/helpers/node/copy-cut-paste/copy-node';
 
 const ap = createActionPrefixer('document-cache');
 
@@ -76,6 +88,9 @@ const ac = {
   collapseNode: _(ap('collapse-node'), _ => (params: SelectNodeParams) =>
     _(params),
   ),
+  sortNode: _(ap('sort-node'), _ => (params: SortNodeParams) => _(params)),
+  copyNode: _(ap('copy-node'), _ => (params: CopyNodeParams) => _(params)),
+  pasteNode: _(ap('paste-node'), _ => (params: PasteNodeParams) => _(params)),
   createDocument: _(
     ap('create-document'),
     _ => (params: CreateDocumentParams) => _(params),
@@ -121,7 +136,7 @@ const ac = {
   ),
 };
 
-export type NodesDict = Record<node_id, QFullNode>;
+export type NodesDict = Record<number, QFullNode>;
 export type QFullNode = QNodeMeta & { html?: string; image?: Image[] };
 
 export type CachedNodesState = {
@@ -165,11 +180,14 @@ export type CachedDocumentDict = {
 
 type State = {
   documents: CachedDocumentDict;
+  copiedNode: CopyNodeParams;
 };
 
 export enum DocumentMutations {
   CreateNode = 'created',
+  PasteNode = 'pasted',
   NodeAttributes = 'changed attributes',
+  SortNodes = 'sort nodes',
   NodePosition = 'changed position',
   NodeContent = 'changed content',
   DeleteNode = 'deleted',
@@ -186,6 +204,7 @@ export type DocumentTimeLineMeta = {
 };
 const initialState: State = {
   documents: {},
+  copiedNode: undefined,
 };
 export const dTM = new TimelinesManager<DocumentTimeLineMeta, State>(true, {
   maximumNumberOfFrames: 20,
@@ -235,6 +254,9 @@ const reducer = createReducer(initialState, _ => {
       ),
       _(ac.expandNode, (state, { payload }) =>
         produce(state, draft => expandNode(draft, payload)),
+      ),
+      _(ac.copyNode, (state, { payload }) =>
+        produce(state, draft => copyNode(draft, payload)),
       ),
       _(ac.collapseNode, (state, { payload }) =>
         produce(state, draft => collapseNode(draft, payload)),
@@ -409,6 +431,46 @@ const reducer = createReducer(initialState, _ => {
           }),
         ),
       ),
+      _(ac.sortNode, (state, { payload }) =>
+        produce(
+          state,
+          draft => sortNode(draft, payload),
+          dTM.addFrame({
+            timelineId: payload.documentId,
+            documentId: payload.documentId,
+            node_id: payload.node_id,
+            mutationType: DocumentMutations.SortNodes,
+            timeStamp: Date.now(),
+          }),
+        ),
+      ),
+      _(ac.pasteNode, (state, { payload }) => {
+        let newState = produce(
+          state,
+          draft => pasteNode(draft, payload),
+          dTM.addFrame({
+            timelineId: payload.documentId,
+            documentId: payload.documentId,
+            node_id: payload.new_father_id,
+            mutationType: DocumentMutations.PasteNode,
+            timeStamp: Date.now(),
+          }),
+        );
+        newState = produce(newState, draft =>
+          expandNode(draft, {
+            node_id: +payload.new_father_id,
+            documentId: payload.documentId,
+            expandChildren: true,
+          }),
+        );
+        newState = produce(newState, draft =>
+          selectNode(draft, {
+            node_id: state.copiedNode.node_id,
+            documentId: payload.documentId,
+          }),
+        );
+        return newState;
+      }),
     ],
   ];
 });

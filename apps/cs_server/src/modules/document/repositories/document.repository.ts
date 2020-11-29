@@ -21,6 +21,7 @@ import {
   or_,
 } from '../../search/helpers/pg-queries/helpers/clause-builder';
 import { RunFirst } from '../../node/repositories/node.repository';
+import { DocumentState } from '../entities/document-state.entity';
 
 const nullableEvents = [OPERATION_STATE.FINISHED, OPERATION_STATE.FAILED];
 const documentMetaFields = [
@@ -40,6 +41,13 @@ const documentMetaFields = [
   `g.email`,
 ];
 const select = () => documentMetaFields;
+
+const removeDocumentStateForNonOwner = (userId: string) => (
+  document: Document,
+): Document =>
+  document.userId === userId
+    ? document
+    : ((document.state = new DocumentState(true)), document);
 
 export type GetterSettings = {
   write: boolean;
@@ -103,7 +111,8 @@ export class DocumentRepository extends Repository<Document> {
       throw new NotFoundException(
         createErrorDescription.document.doesNotExist(dto.documentId),
       );
-    return document;
+
+    return removeDocumentStateForNonOwner(dto.userId)(document);
   }
 
   async getWDocumentById(dto: GetDocumentDTO): Promise<Document> {
@@ -116,10 +125,12 @@ export class DocumentRepository extends Repository<Document> {
   }
 
   async getDocuments(dto: GetDocumentsDTO): Promise<Document[]> {
-    return await this.baseQueryBuilder(dto, {
-      write: false,
-      single: false,
-    }).getMany();
+    return (
+      await this.baseQueryBuilder(dto, {
+        write: false,
+        single: false,
+      }).getMany()
+    ).map(removeDocumentStateForNonOwner(dto.userId));
   }
 
   async createDocument({

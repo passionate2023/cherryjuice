@@ -1,13 +1,14 @@
 import * as React from 'react';
-import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
-import { modToolbar } from '::sass-modules';
-import { testIds } from '::cypress/support/helpers/test-ids';
-import { connect, ConnectedProps } from 'react-redux';
-import { ac, Store } from '::store/store';
-import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
-import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import {ToolbarButton} from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
+import {Icon, Icons} from '::root/components/shared-components/icon/icon';
+import {modToolbar} from '::sass-modules';
+import {testIds} from '::cypress/support/helpers/test-ids';
+import {connect, ConnectedProps} from 'react-redux';
+import {ac, Store} from '::store/store';
+import {hasWriteAccessToDocument} from '::store/selectors/document/has-write-access-to-document';
+import {getCurrentDocument} from '::store/selectors/cache/document/document';
+import {joinClassNames} from '::helpers/dom/join-class-names';
+import {Tooltip} from '::root/components/shared-components/tooltip/tooltip';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -43,44 +44,52 @@ const NodesButtons: React.FC<Props & PropsFromRedux> = ({
       ])}
     >
       <ToolbarButton
-        dontMount={!isDocumentOwner}
-        onClick={ac.dialogs.showCreateSiblingNode}
-        testId={testIds.toolBar__main__createSiblingNode}
-        disabled={noDocumentIsSelected}
+          dontMount={!isDocumentOwner}
+          onClick={ac.dialogs.showCreateSiblingNode}
+          testId={testIds.toolBar__main__createSiblingNode}
+          disabled={noDocumentIsSelected}
       >
-        <Icon
-          name={Icons.material['create-sibling']}
-          size={20}
-          loadAsInlineSVG={'force'}
-        />
+        <Tooltip label={'Create a sibling node'}>
+          <Icon
+              name={Icons.material['create-sibling']}
+              size={20}
+              loadAsInlineSVG={'force'}
+          />
+        </Tooltip>
       </ToolbarButton>
       <ToolbarButton
-        dontMount={!isDocumentOwner}
-        onClick={ac.dialogs.showCreateChildNode}
-        testId={testIds.toolBar__main__createChildNode}
-        disabled={!selectedNode_id}
+          dontMount={!isDocumentOwner}
+          onClick={ac.dialogs.showCreateChildNode}
+          testId={testIds.toolBar__main__createChildNode}
+          disabled={!selectedNode_id}
       >
-        <Icon
-          name={Icons.material['create-child']}
-          size={20}
-          loadAsInlineSVG={'force'}
-        />
+        <Tooltip label={'Create a child node'}>
+          <Icon
+              name={Icons.material['create-child']}
+              size={20}
+              loadAsInlineSVG={'force'}
+          />
+        </Tooltip>
       </ToolbarButton>
       <ToolbarButton
-        dontMount={!isDocumentOwner}
-        onClick={ac.dialogs.showEditNode}
-        disabled={noNodeIsSelected || noDocumentIsSelected}
-        testId={testIds.toolBar__main__editNodeMeta}
+          dontMount={!isDocumentOwner}
+          onClick={ac.dialogs.showEditNode}
+          disabled={noNodeIsSelected || noDocumentIsSelected}
+          testId={testIds.toolBar__main__editNodeMeta}
       >
-        <Icon name={Icons.material.edit} loadAsInlineSVG={'force'} />
+        <Tooltip label={'Edit selected node'}>
+          <Icon name={Icons.material.edit} loadAsInlineSVG={'force'}/>
+        </Tooltip>
       </ToolbarButton>
       <ToolbarButton
-        dontMount={!isDocumentOwner}
-        onClick={ac.dialogs.showDeleteNode}
-        disabled={noNodeIsSelected || noDocumentIsSelected || read_only}
-        testId={testIds.toolBar__main__deleteNode}
+          dontMount={!isDocumentOwner}
+          onClick={ac.dialogs.showDeleteNode}
+          disabled={noNodeIsSelected || noDocumentIsSelected || read_only}
+          testId={testIds.toolBar__main__deleteNode}
       >
-        <Icon name={Icons.material.delete} loadAsInlineSVG={'force'} />
+        <Tooltip label={'Delete selected node'}>
+          <Icon name={Icons.material.delete} loadAsInlineSVG={'force'}/>
+        </Tooltip>
       </ToolbarButton>
       {children}
     </div>

@@ -31,9 +31,11 @@ const createHeadlineGenerator = ({
   searchTarget,
   numberOfVariables,
   searchOptions,
-}: Omit<HeadlineProps, 'columnName'> & { searchTarget: SearchTarget[] }) => (
-  fn,
-): PGHeadline => {
+  queryHasFlags,
+}: Omit<HeadlineProps, 'columnName'> & {
+  searchTarget: SearchTarget[];
+  queryHasFlags: boolean;
+}) => (fn): PGHeadline => {
   const res: PGHeadline = {
     nodeNameHeadline: undefined,
     ahtmlHeadline: undefined,
@@ -41,9 +43,39 @@ const createHeadlineGenerator = ({
   };
   searchTarget.forEach(target => {
     const { valueName, columnName } = searchTargetsToColumnName[target];
-    res[valueName] = fn({ columnName, numberOfVariables, searchOptions });
+    res[valueName] = fn({
+      columnName,
+      numberOfVariables,
+      searchOptions,
+      queryHasFlags,
+    });
   });
   return res;
+};
+
+export enum FlagsPositionInVariablesList {
+  flagsAndQuery = 2,
+  flags = 1,
+}
+
+const insertQueryAndFlagsToVariablesList = (
+  rawQuery: string,
+  searchType: SearchType,
+  state: QueryCreatorState,
+) => {
+  const maybeFlags =
+    searchType === SearchType.Regex ? /(.+)\/(\w+)$/.exec(rawQuery) : undefined;
+  if (maybeFlags) {
+    const searchTerm = maybeFlags[1];
+    const flags = maybeFlags[2];
+    const tildeFlagAndQuery = `(?${flags})${searchTerm}`;
+    state.variables.push(tildeFlagAndQuery);
+    state.variables.push(flags);
+    state.variables.push(searchTerm);
+  } else {
+    state.variables.push(rawQuery);
+  }
+  return !!maybeFlags;
 };
 
 type Props = {
@@ -60,7 +92,11 @@ const searchTargetWC = ({
   state: qState,
   searchTarget,
 }: Props): { orWhereClauses: string; headline?: PGHeadline } => {
-  qState.variables.push(query);
+  const queryHasFlags = insertQueryAndFlagsToVariablesList(
+    query,
+    searchType,
+    qState,
+  );
   const state = {
     whereClause: '',
   };
@@ -73,6 +109,7 @@ const searchTargetWC = ({
     numberOfVariables: qState.variables.length,
     searchTarget,
     searchOptions,
+    queryHasFlags,
   });
   switch (searchType) {
     case SearchType.FullText:
@@ -86,6 +123,7 @@ const searchTargetWC = ({
       state.whereClause = regex.whereClause({
         searchOptions,
         variableIndex: qState.variables.length,
+        queryHasFlags,
       });
       res.headline = headlineGenerator(regex.headline);
       break;

@@ -49,7 +49,7 @@ const Bookmark: React.FC<Props> = ({
       active={active}
       selected={selected}
       onClick={() => ac.bookmarks.select(node_id)}
-      contextMenuOptions={contextMenuOptions}
+      cmItems={contextMenuOptions}
       disabled={false}
     />
   );

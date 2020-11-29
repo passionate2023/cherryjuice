@@ -22,7 +22,7 @@ export const calculateDroppingPosition = ({ anchorClassName, flag }: Props) => (
         nodes.indexOf(droppedThrough) + (above ? 0 : 1),
       ].map(position => Math.max(position, 0))[0];
     } else {
-      position = nodes.length - 1;
+      position = nodes.length;
     }
   }
   return position;

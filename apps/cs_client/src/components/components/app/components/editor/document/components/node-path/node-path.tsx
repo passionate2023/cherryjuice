@@ -5,13 +5,11 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/get-parents-node-ids/get-parents-node-ids';
-import {
-  createNodePropsMapper,
-  useChildCM,
-} from '::root/components/app/components/editor/document/components/title-and-recent-nodes/tabs-container';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
-import { ContextMenuItemProps } from '::root/components/shared-components/context-menu/context-menu-item';
-import { useEffect, useMemo, useRef } from 'react';
+import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useChildContextMenu } from '::root/components/shared-components/context-menu/hooks/child-context-menu';
+import { createNodePropsMapper } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/helpers/map-props';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -38,7 +36,14 @@ const NodePath: React.FC<Props & PropsFromRedux> = ({
   useEffect(() => {
     nodesR.current.scrollLeft += nodesR.current.scrollWidth;
   }, [selectedNode_id]);
-  const { elementId, position, onContextMenu, hide, shown } = useChildCM();
+  const [activeTab, setActiveTab] = useState<number>();
+
+  const { position, show, hide, shown } = useChildContextMenu({
+    onSelectElement: id => setActiveTab(+id),
+    getIdOfActiveElement: target =>
+      target.dataset.id || target.parentElement.dataset.id,
+  });
+
   const mapNodeProps = createNodePropsMapper(
     nodes,
     localState,
@@ -51,17 +56,17 @@ const NodePath: React.FC<Props & PropsFromRedux> = ({
       }).reverse()
     : [];
   const nodeProps = father_ids.map(mapNodeProps);
-  const contextMenuItems: Omit<ContextMenuItemProps, 'hide'>[] = useMemo(() => {
-    return elementId && nodes[elementId]
-      ? nodes[elementId].child_nodes.map(node_id => ({
+  const contextMenuItems: CMItem[] = useMemo(() => {
+    return activeTab && nodes[activeTab]
+      ? nodes[activeTab].child_nodes.map(node_id => ({
           name: nodes[node_id].name,
           onClick: () => ac.node.select({ node_id, documentId }),
         }))
       : [];
-  }, [elementId, nodes, documentId]);
+  }, [activeTab, nodes, documentId]);
 
   return (
-    <div className={modNodePath.nodePath} onContextMenu={onContextMenu}>
+    <div className={modNodePath.nodePath} onContextMenu={show}>
       <ContextMenuWrapper
         shown={shown}
         hide={hide}
@@ -70,7 +75,7 @@ const NodePath: React.FC<Props & PropsFromRedux> = ({
       >
         <div
           className={modNodePath.nodePath__nodes}
-          onContextMenu={onContextMenu}
+          onContextMenu={show}
           ref={nodesR}
         >
           {nodeProps.map(node => (

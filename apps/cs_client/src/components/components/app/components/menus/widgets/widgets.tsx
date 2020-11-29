@@ -68,7 +68,7 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
   if (snackbar?.message)
     widgets.push({
       component: <Snackbar snackbar={snackbar} />,
-      key: 'Snackbar',
+      key: snackbar.message,
     });
 
   const { transitions, setRef } = useHubTransition({ widgets });

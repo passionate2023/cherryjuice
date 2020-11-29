@@ -38,7 +38,10 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
 }) => {
   const [CMShown, setCMShown] = useState(false);
   const hideSub = () => setCMShown(false);
-  const showSub = () => setCMShown(true);
+  const showSub = () => {
+    setCMShown(true);
+    setActiveItem(name);
+  };
   const onClickM = e => {
     if (!disabled && !items.length) {
       if (hideOnClick) hide();
@@ -46,7 +49,6 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
       e.stopPropagation();
       e.preventDefault();
     }
-    setActiveItem(name);
   };
   useEffect(() => {
     if (activeItem !== name) {
@@ -56,10 +58,10 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
   return (
     <ContextMenuWrapper
       shown={CMShown}
-      hide={hideSub}
+      hide={hide}
       show={showSub}
       items={items}
-      showOnHover={true}
+      triggers={{ click: true, hover: true }}
     >
       <div
         className={joinClassNames([

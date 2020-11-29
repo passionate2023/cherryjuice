@@ -10,7 +10,8 @@ import {
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { modNode } from '::sass-modules';
 
-type Props = NodeVisibilityProps & NodeCherryProps & { read_only: boolean };
+type Props = NodeVisibilityProps &
+  NodeCherryProps & { read_only: boolean; userId: string };
 
 const NodeIcons: React.FC<Props> = ({
   depth,
@@ -19,15 +20,18 @@ const NodeIcons: React.FC<Props> = ({
   parentPrivacy,
   privacy,
   read_only,
+  userId,
 }) => {
   return (
     <div className={modNode.node__icons}>
       <NodeCherry depth={depth} icon_id={icon_id} />
-      <NodeVisibility
-        documentPrivacy={documentPrivacy}
-        parentPrivacy={parentPrivacy}
-        privacy={privacy}
-      />
+      {userId && (
+        <NodeVisibility
+          documentPrivacy={documentPrivacy}
+          parentPrivacy={parentPrivacy}
+          privacy={privacy}
+        />
+      )}
       {read_only && (
         <div className={modNode.node__titlePrivacy}>
           <Icon name={Icons.material.key} size={14} loadAsInlineSVG={'force'} />

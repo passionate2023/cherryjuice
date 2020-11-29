@@ -2,7 +2,7 @@ import { KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
 import { HotKey } from '@cherryjuice/graphql-types';
 
 const flattenHotKey = (value: KeysCombination | KeyboardEvent) =>
-  value.key.toLocaleLowerCase() +
+  value?.key?.toLocaleLowerCase() +
   Number(value.ctrlKey || 0) +
   Number(value.altKey || 0) +
   Number(value.shiftKey || 0);

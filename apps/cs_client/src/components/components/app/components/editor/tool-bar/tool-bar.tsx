@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { MainButtons } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/main-buttons';
 import { modApp, modToolbar } from '::sass-modules';
 import { MobileButtons } from './components/groups/mobile-buttons/mobile-buttons';
@@ -11,7 +12,6 @@ import { NavBar } from '::root/components/app/components/editor/tool-bar/compone
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
-import { useEffect, useState } from 'react';
 import { NodesButtons } from '::root/components/app/components/editor/tool-bar/components/groups/nodes-buttons/nodes-buttons';
 import { UndoRedo } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
@@ -86,13 +86,16 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
                 <Objects />
               </FormattingButtonsWithTransition>
             ) : (
-              <FormattingButtons>
-                <Separator />
-                <Objects />
-              </FormattingButtons>
+              <FormattingButtons />
             )}
           </Portal>
         </ErrorBoundary>
+      )}
+      {!isOnMd && isDocumentOwner && (
+        <div className={modToolbar.toolBar__group}>
+          <Separator />
+          <Objects />
+        </div>
       )}
       <NavBar showUserPopup={false} />
     </div>

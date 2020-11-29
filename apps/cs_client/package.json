@@ -123,6 +123,7 @@
     "webpack-merge": "^4.2.2",
     "workbox-webpack-plugin": "^5.1.4",
     "worker-loader": "^2.0.0",
-    "javascript-time-ago": "^2.3.2"
+    "javascript-time-ago": "^2.3.2",
+    "hint.css": "^2.6.0"
   }
 }

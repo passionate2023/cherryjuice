@@ -11,10 +11,7 @@ const ap = createActionPrefixer('dialogs');
 
 const ac = {
   ...{
-    showEditDocumentDialog: _(
-      ap('showEditDocumentDialog'),
-      _ => (documentId: string) => _(documentId),
-    ),
+    showEditDocumentDialog: _(ap('showEditDocumentDialog')),
     showCreateDocumentDialog: _(ap('showCreateDocumentDialog')),
     hideDocumentMetaDialog: _(ap('hideDocumentMetaDialog')),
   },
@@ -202,9 +199,8 @@ const reducer = createReducer(initialState, _ => [
       ...state,
       showDocumentMetaDialog: 'create',
     })),
-    _(ac.showEditDocumentDialog, (state, { payload }) => ({
+    _(ac.showEditDocumentDialog, state => ({
       ...state,
-      documentMetaDialogDocumentId: payload,
       showDocumentMetaDialog: 'edit',
     })),
     _(

@@ -41,10 +41,11 @@ const Document: React.FC<Props & PropsFromRedux> = ({
     createdAt,
   } = document;
   const disabled = !online && (!nodes || (nodes && !nodes[0]));
+  const selectDocument = () => ac.documentsList.selectDocument(id);
   const contextMenuOptions = [
     {
       name: 'edit',
-      onClick: () => ac.dialogs.showEditDocumentDialog(id),
+      onClick: () => ac.dialogs.showEditDocumentDialog(),
     },
     {
       name: 'cache',
@@ -63,7 +64,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
     },
     {
       name: 'delete',
-      onClick: () => ac.dialogs.showDeleteDocument(),
+      onClick: () => void ac.dialogs.showDeleteDocument(),
       disabled: !online,
     },
   ];
@@ -78,8 +79,8 @@ const Document: React.FC<Props & PropsFromRedux> = ({
           ? `*${name}`
           : name
       }
-      onClick={() => ac.documentsList.selectDocument(id)}
-      contextMenuOptions={contextMenuOptions}
+      onClick={selectDocument}
+      cmItems={contextMenuOptions}
       details={
         <DocumentDetails
           id={id}

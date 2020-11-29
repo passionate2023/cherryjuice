@@ -14,8 +14,6 @@
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
   // style
   background-color: var(--background);
   user-select: none;
@@ -112,9 +110,11 @@
   &[disabled] {
     //filter: grayscale(0.9) opacity(0.6);
     //cursor: initial;
-    @include disabled-button();
+    svg,
+    img {
+      @include disabled-button();
+    }
   }
-  overflow: hidden;
   transition: $bg-transition-1;
 }
 .tool-bar__icon--strict-width {

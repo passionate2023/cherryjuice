@@ -1,4 +1,3 @@
-import { NodeMetaIt } from '@cherryjuice/graphql-types';
 import { QFullNode } from '::store/ducks/document-cache/document-cache';
 import { newNodePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
 import { NodeMeta } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
@@ -24,7 +23,6 @@ const generateNode = ({
 }: {
   highestNode_id: number;
   documentId: string;
-  meta?: NodeMetaIt;
   father_id: number;
   fatherId: string;
   nodeBMeta: NodeMeta;
