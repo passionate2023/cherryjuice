@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {modToolbar} from '::sass-modules';
-import {ToolbarButton} from '../../tool-bar-button/tool-bar-button';
-import {Icon, Icons} from '::root/components/shared-components/icon/icon';
-import {Separator} from '::root/components/app/components/editor/tool-bar/components/separator';
-import {connect, ConnectedProps} from 'react-redux';
-import {ac, Store} from '::store/store';
-import {hasWriteAccessToDocument} from '::store/selectors/document/has-write-access-to-document';
-import {Tooltip} from '::root/components/shared-components/tooltip/tooltip';
+import { modToolbar } from '::sass-modules';
+import { ToolbarButton } from '../../tool-bar-button/tool-bar-button';
+import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
+import { connect, ConnectedProps } from 'react-redux';
+import { ac, Store } from '::store/store';
+import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
+import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
@@ -41,27 +41,27 @@ const MobileButtons: React.FC<Props & PropsFromRedux> = ({
         ].join(' ')}
       >
         <ToolbarButton
-            dontMount={!isDocumentOwner}
-            onClick={ac.editor.toggleFormattingBar}
-            active={showFormattingButtons}
+          dontMount={!isDocumentOwner}
+          onClick={ac.editor.toggleFormattingBar}
+          active={showFormattingButtons}
         >
           <Tooltip
-              label={`${
-                  showFormattingButtons ? 'hide' : 'show'
-              } formatting buttons`}
+            label={`${
+              showFormattingButtons ? 'hide' : 'show'
+            } formatting buttons`}
           >
-            <Icon name={Icons.material['justify-left']}/>
+            <Icon name={Icons.material['justify-left']} />
           </Tooltip>
         </ToolbarButton>
         <ToolbarButton
-            onClick={ac.editor.toggleInfoBar}
-            active={showInfoBar}
-            disabled={noDocumentIsSelected}
+          onClick={ac.editor.toggleInfoBar}
+          active={showInfoBar}
+          disabled={noDocumentIsSelected}
         >
           <Tooltip
-              label={`${showFormattingButtons ? 'hide' : 'show'} information bar`}
+            label={`${showFormattingButtons ? 'hide' : 'show'} information bar`}
           >
-            <Icon name={Icons.material.info}/>
+            <Icon name={Icons.material.info} />
           </Tooltip>
         </ToolbarButton>
       </div>

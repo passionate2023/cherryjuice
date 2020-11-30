@@ -1,7 +1,7 @@
 import {
   isPresentationalTable,
   splitTableByRow,
-} from '::helpers/editing/clipboard/parse-table';
+} from '::helpers/rendering/html-to-ahtml/extractors/parse-table/parse-table';
 
 const extractTable = (acc, el, commonAttributes, options, getAHtml) => {
   const tableOuterHTML: string = el.outerHTML;

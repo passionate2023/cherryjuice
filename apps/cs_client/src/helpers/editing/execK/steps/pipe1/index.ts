@@ -11,7 +11,7 @@ import {
   getAHtmlAnchors,
   splitSelected,
 } from '::helpers/editing/execK/steps/pipe1/split-selection';
-import { optimizeAHtml } from '::helpers/editing/clipboard/optimize-ahtml';
+import { optimizeAHtml } from '::helpers/editing/clipboard/helpers/steps/process-clipboard-data/helpers/html/optimize-a-html/optimize-a-html';
 import {
   guardAgainstDDOETagIsNotNeutral,
   guardAgainstSubDDOEIsTextNode,

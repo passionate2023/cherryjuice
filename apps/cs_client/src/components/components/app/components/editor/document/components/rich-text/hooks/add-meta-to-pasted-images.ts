@@ -1,7 +1,7 @@
 import { createIsNotProcessed } from '::hooks/misc/isnot-processed';
 import { getEditor } from '::root/components/app/components/editor/document/components/rich-text/hooks/get-node-images';
 import { useEffect } from 'react';
-import { replaceImageUrlWithBase64 } from '::helpers/editing/clipboard';
+import { replaceImageUrlWithBase64 } from '::helpers/editing/clipboard/helpers/images/replace-image-url-with-base64';
 import { AlertType } from '::types/react';
 import { ac } from '::store/store';
 

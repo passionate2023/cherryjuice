@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {NodePrivacy, Privacy} from '@cherryjuice/graphql-types';
-import {modInfoBar} from '::sass-modules';
-import {Icon, Icons} from '::root/components/shared-components/icon/icon';
-import {joinClassNames} from '::helpers/dom/join-class-names';
-import {Tooltip} from '::root/components/shared-components/tooltip/tooltip';
+import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
+import { modInfoBar } from '::sass-modules';
+import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { joinClassNames } from '::helpers/dom/join-class-names';
+import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
 
 const mapPrivacyToIcon = (privacy: NodePrivacy | Privacy) => {
   switch (privacy) {
@@ -39,42 +39,42 @@ const VisibilityIcon: React.FC<Props> = ({
           }
         >
           <div
-              className={joinClassNames([
-                modInfoBar.infoBar__documentPrivacy__iconContainer,
-                [
-                  modInfoBar.infoBar__documentPrivacy__iconContainerBadge,
-                  displayNumberOfGuestsAsBadge,
-                ],
-              ])}
+            className={joinClassNames([
+              modInfoBar.infoBar__documentPrivacy__iconContainer,
+              [
+                modInfoBar.infoBar__documentPrivacy__iconContainerBadge,
+                displayNumberOfGuestsAsBadge,
+              ],
+            ])}
           >
             <Tooltip
-                label={
-                  privacy === Privacy.PRIVATE
-                      ? 'This document is private'
-                      : privacy === Privacy.GUESTS_ONLY
-                      ? 'This document is visible for guests'
-                      : privacy === Privacy.PUBLIC
-                          ? 'This document is public'
-                          : ''
-                }
-                position={'top-left'}
+              label={
+                privacy === Privacy.PRIVATE
+                  ? 'This document is private'
+                  : privacy === Privacy.GUESTS_ONLY
+                  ? 'This document is visible for guests'
+                  : privacy === Privacy.PUBLIC
+                  ? 'This document is public'
+                  : ''
+              }
+              position={'top-left'}
             >
-              <Icon name={name} loadAsInlineSVG={'force'} size={14}/>
+              <Icon name={name} loadAsInlineSVG={'force'} size={14} />
               {Boolean(numberOfGuests) &&
-              (privacy === Privacy.GUESTS_ONLY ||
+                (privacy === Privacy.GUESTS_ONLY ||
                   privacy === Privacy.PUBLIC) && (
                   <span
-                      className={joinClassNames([
-                        modInfoBar.infoBar__documentPrivacy__icon__numberOfGuests,
-                        [
-                          modInfoBar.infoBar__documentPrivacy__icon__numberOfGuestsBadge,
-                          displayNumberOfGuestsAsBadge,
-                        ],
-                      ])}
+                    className={joinClassNames([
+                      modInfoBar.infoBar__documentPrivacy__icon__numberOfGuests,
+                      [
+                        modInfoBar.infoBar__documentPrivacy__icon__numberOfGuestsBadge,
+                        displayNumberOfGuestsAsBadge,
+                      ],
+                    ])}
                   >
                     {numberOfGuests}
                   </span>
-              )}
+                )}
             </Tooltip>
           </div>
         </div>

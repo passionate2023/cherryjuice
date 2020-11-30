@@ -1,5 +1,5 @@
-import { testSamples } from '::helpers/editing/clipboard/optimize-ahtml/__tests__/__data__';
-import { optimizeAHtml } from '::helpers/editing/clipboard/optimize-ahtml';
+import { testSamples } from '::helpers/editing/clipboard/helpers/steps/process-clipboard-data/helpers/html/optimize-a-html/__tests__/__data__';
+import { optimizeAHtml } from '::helpers/editing/clipboard/helpers/steps/process-clipboard-data/helpers/html/optimize-a-html/optimize-a-html';
 
 const test = ({ meta: { name }, input: { aHtml }, output }) => {
   it(name + ' ', () => {

@@ -1,13 +1,13 @@
 import * as React from 'react';
-import {useEffect, useState} from 'react';
-import {ToolbarButton} from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
-import {Icon, Icons} from '::root/components/shared-components/icon/icon';
-import {NumberOfFrames} from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
-import {SnapBackManager} from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback-manager';
-import {connect, ConnectedProps} from 'react-redux';
-import {Store} from '::store/store';
-import {getCurrentDocument} from '::store/selectors/cache/document/document';
-import {Tooltip} from '::root/components/shared-components/tooltip/tooltip';
+import { useEffect, useState } from 'react';
+import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
+import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { NumberOfFrames } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
+import { SnapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback-manager';
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::store/store';
+import { getCurrentDocument } from '::store/selectors/cache/document/document';
+import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
 
 export const snapBackManager = new SnapBackManager();
 
@@ -55,19 +55,19 @@ const UndoRedo: React.FC<Props & PropsFromRedux> = ({
   return (
     <>
       <ToolbarButton
-          onClick={snapBackManager.current?.undo}
-          disabled={noDocumentIsSelected || !numberOfFrames.undo}
+        onClick={snapBackManager.current?.undo}
+        disabled={noDocumentIsSelected || !numberOfFrames.undo}
       >
         <Tooltip label={'Undo text change'}>
-          <Icon name={Icons.material.undo} loadAsInlineSVG={'force'}/>
+          <Icon name={Icons.material.undo} loadAsInlineSVG={'force'} />
         </Tooltip>
       </ToolbarButton>
       <ToolbarButton
-          onClick={snapBackManager.current?.redo}
-          disabled={noDocumentIsSelected || !numberOfFrames.redo}
+        onClick={snapBackManager.current?.redo}
+        disabled={noDocumentIsSelected || !numberOfFrames.redo}
       >
         <Tooltip label={'Redo text change'}>
-          <Icon name={Icons.material.redo} loadAsInlineSVG={'force'}/>
+          <Icon name={Icons.material.redo} loadAsInlineSVG={'force'} />
         </Tooltip>
       </ToolbarButton>
     </>

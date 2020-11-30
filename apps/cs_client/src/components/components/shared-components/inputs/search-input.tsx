@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {MutableRefObject, useCallback, useRef} from 'react';
-import {modSearch} from '::sass-modules';
-import {ButtonSquare} from '::root/components/shared-components/buttons/button-square/button-square';
-import {joinClassNames} from '::helpers/dom/join-class-names';
-import {Icon, Icons} from '::root/components/shared-components/icon/icon';
-import {useLazyAutoFocus} from '::root/components/shared-components/buttons/button-base/button-base';
-import {Tooltip} from '::root/components/shared-components/tooltip/tooltip';
+import { MutableRefObject, useCallback, useRef } from 'react';
+import { modSearch } from '::sass-modules';
+import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { joinClassNames } from '::helpers/dom/join-class-names';
+import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { useLazyAutoFocus } from '::root/components/shared-components/buttons/button-base/button-base';
+import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
 
 type Props = {
   containerClassName?: string;
@@ -84,17 +84,17 @@ const SearchInput: React.FC<Props> = ({
               icon={<Icon name={Icons.material.clear} />}
             />
             {performSearch && (
-                <Tooltip label={placeHolder}>
-                  <ButtonSquare
-                      className={joinClassNames([
-                        modSearch.search__searchButton,
-                        searchButtonClassName,
-                      ])}
-                      disabled={searchImpossible || disabled}
-                      onClick={performSearch}
-                      icon={<Icon name={Icons.material.search}/>}
-                  />
-                </Tooltip>
+              <Tooltip label={placeHolder}>
+                <ButtonSquare
+                  className={joinClassNames([
+                    modSearch.search__searchButton,
+                    searchButtonClassName,
+                  ])}
+                  disabled={searchImpossible || disabled}
+                  onClick={performSearch}
+                  icon={<Icon name={Icons.material.search} />}
+                />
+              </Tooltip>
             )}
           </div>
         </div>
