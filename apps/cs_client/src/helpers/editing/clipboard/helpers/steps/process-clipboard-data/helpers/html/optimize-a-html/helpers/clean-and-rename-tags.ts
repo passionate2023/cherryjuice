@@ -28,8 +28,16 @@ const stylePropertiesToKeep = [
   'text-decoration',
   'display',
 ];
-const styleValuesToIgnore = ['inherit', 'initial', 'left', 'start'];
-
+const styleValuesToIgnore = [
+  'inherit',
+  'initial',
+  'inline',
+  'left',
+  'start',
+  'rgb(32, 33, 34)',
+  'rgb(255, 255, 255)',
+  'none rgb(255, 255, 255)',
+];
 const stylePropertiesToRename = {
   'text-decoration-style': {
     propertyName: 'text-decoration',

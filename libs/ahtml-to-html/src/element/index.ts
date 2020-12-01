@@ -29,7 +29,11 @@ const createElement = (tag, attributes, children) => {
 const Element = (node: AHtmlNode) =>
   node?.tags?.length
     ? node.tags.reduceRight((acc, [tagName, attributes]) => {
-        return createElement(`${tagName}`, attributes, acc);
+        return createElement(
+          `${tagName}`,
+          tagName === 'a' ? node['other_attributes'] || attributes : attributes,
+          acc,
+        );
       }, escapeHtml(node._))
     : createElement(
         `span`,

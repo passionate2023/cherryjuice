@@ -11,6 +11,7 @@
     "build"
   ],
   "scripts": {
+    "dev": "rollup -c --watch -m",
     "build": "rollup -c",
     "test": "jest",
     "lint": "eslint ./**"

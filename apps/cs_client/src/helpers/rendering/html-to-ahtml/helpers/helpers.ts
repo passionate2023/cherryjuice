@@ -1,3 +1,6 @@
+import { extractLinkAttributes } from '::helpers/rendering/html-to-ahtml/extractors/link';
+import { LinkAttributes } from '@cherryjuice/ahtml-to-html';
+
 type AHtml = Record<string, any>;
 const getStyles = el =>
   (el.style.cssText.match(/([\w-]+)(?=:)/g) || []).reduce(
@@ -15,12 +18,21 @@ const getAttributes = (ignoredAttributes: string[]) => el =>
       ]),
   );
 
-const getTags = (list = []) => el => [
+export type GetTagsState = {
+  link_attributes?: LinkAttributes;
+};
+const getTags = (list = [], state: GetTagsState) => el => [
   ...list,
-  [el.localName, getAttributes([])(el)],
+  [
+    el.localName,
+    el.localName === 'a'
+      ? ((state.link_attributes = extractLinkAttributes(el)),
+        getAttributes([])(el))
+      : getAttributes([])(el),
+  ],
   ...(el.localName === 'table'
     ? []
-    : Array.from(el.children).flatMap(getTags(list))),
+    : Array.from(el.children).flatMap(getTags(list, state))),
 ];
 
 const isBlock = (() => {

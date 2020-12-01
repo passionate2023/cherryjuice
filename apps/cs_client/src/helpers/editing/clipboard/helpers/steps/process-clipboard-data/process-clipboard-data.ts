@@ -5,20 +5,26 @@ import { TAHtml } from '::helpers/editing/clipboard/helpers/steps/add-to-dom/add
 import { unwrapHtml } from '::helpers/editing/clipboard/helpers/steps/process-clipboard-data/helpers/html/unwrap-html';
 import { wrapNodeInSpan } from '::helpers/editing/clipboard/helpers/steps/process-clipboard-data/helpers/html/wrap-node-in-span';
 import { optimizeAHtml } from '::helpers/editing/clipboard/helpers/steps/process-clipboard-data/helpers/html/optimize-a-html/optimize-a-html';
+import { detectSources } from '::helpers/editing/clipboard/helpers/steps/process-clipboard-data/helpers/detect-sources';
 
-export const processClipboard: { [p: string]: (str) => TAHtml[] } = {
-  image: src => [
+export const processClipboard = {
+  image: (src: string): TAHtml[] => [
     {
       type: 'png',
       outerHTML: `<img src="${src}"/>`,
     },
   ],
-  html: pastedData => {
+  html: (pastedData: string): TAHtml[] => {
+    const singleLineFromWikipedia = detectSources.isSingleLineFromWikipedia(
+      pastedData,
+    );
     const node = new DOMParser().parseFromString(
       unwrapHtml(pastedData),
       'text/html',
     ).body;
-    const DDOEs = Array.from(node.childNodes).reduce((acc, child) => {
+    const DDOEs = Array.from(
+      singleLineFromWikipedia ? [node] : node.childNodes,
+    ).reduce((acc, child) => {
       const res =
         child.nodeType === Node.ELEMENT_NODE
           ? child
@@ -43,5 +49,5 @@ export const processClipboard: { [p: string]: (str) => TAHtml[] } = {
     if (abstractHtml[0] === '\n') abstractHtml.shift();
     return optimizeAHtml({ aHtml: abstractHtml });
   },
-  text: str => [{ _: str, tags: [['span', {}]] }],
+  text: (str: string): TAHtml[] => [{ _: str, tags: [['span', {}]] }],
 };

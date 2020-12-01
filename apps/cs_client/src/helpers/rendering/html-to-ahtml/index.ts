@@ -6,6 +6,7 @@ import { extractText } from '::helpers/rendering/html-to-ahtml/extractors/text';
 import { flattenDDOEs } from '::helpers/rendering/html-to-ahtml/steps/flatten-ddoe';
 import {
   getTags,
+  GetTagsState,
   reduceIntoLines,
 } from '::helpers/rendering/html-to-ahtml/helpers/helpers';
 import { extractAnchor } from '::helpers/rendering/html-to-ahtml/extractors/anchor';
@@ -35,9 +36,20 @@ const getAHtml = ({ DDOEs, options = {} }: TProps) => {
       if (el.localName === 'br') {
         acc.push('\n');
       } else {
-        const tags = {
-          tags: el.nodeType === Node.ELEMENT_NODE ? getTags([])(el) : [],
+        const getTagsState: GetTagsState = {
+          link_attributes: undefined,
         };
+        const tags = {
+          tags:
+            el.nodeType === Node.ELEMENT_NODE
+              ? getTags([], getTagsState)(el)
+              : [],
+        };
+        const elementHasChildAnchor =
+          el.localName !== 'a' && getTagsState.link_attributes;
+        if (elementHasChildAnchor) {
+          tags['other_attributes'] = getTagsState.link_attributes;
+        }
         if (el.localName === 'code' && el.classList.contains('rich-text__code'))
           extractCodeBox(acc, el, tags, options);
         else if (el.localName === 'img') {
