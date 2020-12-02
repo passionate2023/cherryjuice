@@ -18,7 +18,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = {
   className?: string;
   navBar?: boolean;
-  lazyAutoFocus?: number;
+  lazyAutoFocus?: boolean;
 };
 
 const Search: React.FC<Props & PropsFromRedux> = ({

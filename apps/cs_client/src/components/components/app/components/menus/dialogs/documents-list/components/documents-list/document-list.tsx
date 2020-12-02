@@ -75,7 +75,7 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
             value={query}
             onChange={ac.documentsList.setQuery}
             onClear={ac.documentsList.clearQuery}
-            lazyAutoFocus={!isOnMd && show ? 1200 : 0}
+            lazyAutoFocus={!isOnMd && show}
             searchImpossible={!documents.length}
           />
           <SearchSetting

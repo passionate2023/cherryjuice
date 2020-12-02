@@ -14,12 +14,14 @@ const transitions = {
     enter: { opacity: 1, xyz: [0, 0, 1] },
     leave: { opacity: 0, xyz: [0, window.innerHeight * 0.5, 1] },
     config: configs.c1,
+    unique: true,
   },
   t2: {
     from: { opacity: 0, xyz: [0, window.innerHeight * 0.25, 1, 0.5] },
     enter: { opacity: 1, xyz: [0, 0, 1] },
     leave: { opacity: 0, xyz: [0, window.innerHeight * 0.25, 1] },
     config: configs.c1,
+    unique: true,
   },
 };
 

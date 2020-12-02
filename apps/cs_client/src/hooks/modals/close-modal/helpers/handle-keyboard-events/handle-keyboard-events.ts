@@ -12,20 +12,18 @@ type Options = {
 };
 export const attachEventHandler = (
   state: ModalsState,
-  { resumeFocus }: Options = {},
+  // eslint-disable-next-line no-unused-vars
+  options: Options = {},
 ) => {
   const modal = state.current;
   if (!modal) return;
   const element: HTMLElement = document.querySelector(
     `[${dataAttributes.keyboardEvents}="${modal.id}"]`,
   );
-  const { focusableElements, trapFocus } = createFocusTrapper({
+  const { trapFocus } = createFocusTrapper({
     element,
     focusableElementsSelector: modal.focusableElementsSelector,
   });
-  if (resumeFocus && focusableElements.length) {
-    focusableElements[0].focus();
-  }
   if (eventHandler.current) {
     document.removeEventListener('keydown', eventHandler.current);
   }

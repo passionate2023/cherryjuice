@@ -38,7 +38,6 @@ const createButtons = ({
       onClick: close,
       disabled: false,
       testId: 'close-document-select',
-      lazyAutoFocus: true,
     },
     {
       testId: testIds.dialogs__selectDocument__footerRight__open,

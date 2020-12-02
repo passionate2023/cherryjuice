@@ -116,7 +116,7 @@ const SearchFilters: React.FC<Props & PropsFromRedux> = ({
         <Search
           className={modSearchDialog.searchDialog__header__field}
           navBar={false}
-          lazyAutoFocus={showDialog ? 1200 : 0}
+          lazyAutoFocus={showDialog}
         />
       </SearchHeaderGroup>
       <SearchHeaderGroup>

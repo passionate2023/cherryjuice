@@ -19,7 +19,7 @@ type Props = {
   onClear: () => void;
   performSearch?: () => void;
   disabled?: boolean;
-  lazyAutoFocus?: number;
+  lazyAutoFocus?: boolean;
   autoCollapse?: boolean;
 };
 

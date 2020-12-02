@@ -58,7 +58,7 @@ const DialogFooter: React.FC<TDialogFooterProps> = ({
               key={i}
               onClick={onClick}
               disabled={disabled}
-              lazyAutoFocus={lazyAutoFocus && !isOnMobile && show ? 1200 : 0}
+              lazyAutoFocus={lazyAutoFocus && !isOnMobile && show}
               testId={testId}
               text={label}
             />
