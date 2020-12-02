@@ -28,12 +28,10 @@ const stylePropertiesToKeep = [
   'text-decoration',
   'display',
 ];
-const styleValuesToIgnore = [
-  'inherit',
-  'initial',
-  'inline',
-  'left',
-  'start',
+
+const styleValuesToIgnore = ['inherit', 'initial', 'left', 'start', 'inline'];
+
+const whiteBackgroundStyle = [
   'rgb(32, 33, 34)',
   'rgb(255, 255, 255)',
   'none rgb(255, 255, 255)',
@@ -53,8 +51,12 @@ const stylePropertiesToRename = {
   },
 };
 
+export type CleanStyleAndRenameTagsProps = {
+  removeClassAttribute?: boolean;
+  removeWhiteBackground?: boolean;
+};
 export const cleanStyleAndRenameTags = (
-  options = { keepClassAttribute: false },
+  options: CleanStyleAndRenameTagsProps = {},
 ) => val => {
   if (val.tags)
     val.tags = val.tags.map(([tagName, attributes]) => {
@@ -66,7 +68,7 @@ export const cleanStyleAndRenameTags = (
           : 'span',
         {
           ...(attributes.class &&
-            options.keepClassAttribute && { class: attributes.class }),
+            !options.removeClassAttribute && { class: attributes.class }),
           ...(attributes.href && { href: attributes.href }),
           ...(attributes.src && { src: attributes.src }),
           ...(attributes.target && { target: attributes.target }),
@@ -78,7 +80,11 @@ export const cleanStyleAndRenameTags = (
               (acc, [styleName, styleValue]) => {
                 if (
                   stylePropertiesToKeep.includes(styleName) &&
-                  !styleValuesToIgnore.includes(styleValue as string)
+                  !styleValuesToIgnore.includes(styleValue as string) &&
+                  !(
+                    options.removeWhiteBackground &&
+                    whiteBackgroundStyle.includes(styleValue as string)
+                  )
                 )
                   stylePropertiesToRename[styleName]
                     ? (acc[

@@ -29,11 +29,13 @@ const createElement = (tag, attributes, children) => {
 const Element = (node: AHtmlNode) =>
   node?.tags?.length
     ? node.tags.reduceRight((acc, [tagName, attributes]) => {
-        return createElement(
-          `${tagName}`,
-          tagName === 'a' ? node['other_attributes'] || attributes : attributes,
-          acc,
-        );
+        const isAnchor = tagName === 'a' && node['other_attributes'];
+        const elementAttributes = isAnchor
+          ? node['other_attributes']
+          : attributes;
+        if (isAnchor && attributes?.style)
+          elementAttributes.style = attributes.style;
+        return createElement(`${tagName}`, elementAttributes, acc);
       }, escapeHtml(node._))
     : createElement(
         `span`,

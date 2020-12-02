@@ -116,10 +116,9 @@ const pipe1: Pipe1 = ({
     startOffset,
     endOffset,
   });
-  [left, selected.leftEdge, selected.rightEdge, right] = optimizeAHtml(
-    { aHtml: [left, selected.leftEdge, selected.rightEdge, right] },
-    { addEmptyLineBeforeHeader: false, keepClassAttribute: true },
-  );
+  [left, selected.leftEdge, selected.rightEdge, right] = optimizeAHtml({
+    aHtml: [left, selected.leftEdge, selected.rightEdge, right],
+  });
   return {
     left,
     right,

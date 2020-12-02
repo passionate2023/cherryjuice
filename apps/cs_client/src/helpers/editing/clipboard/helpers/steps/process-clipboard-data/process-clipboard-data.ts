@@ -47,7 +47,10 @@ export const processClipboard = {
       },
     });
     if (abstractHtml[0] === '\n') abstractHtml.shift();
-    return optimizeAHtml({ aHtml: abstractHtml });
+    return optimizeAHtml(
+      { aHtml: abstractHtml },
+      { removeWhiteBackground: true },
+    );
   },
   text: (str: string): TAHtml[] => [{ _: str, tags: [['span', {}]] }],
 };

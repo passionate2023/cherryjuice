@@ -3,7 +3,7 @@ import { optimizeAHtml } from '::helpers/editing/clipboard/helpers/steps/process
 
 const test = ({ meta: { name }, input: { aHtml }, output }) => {
   it(name + ' ', () => {
-    const res = optimizeAHtml({ aHtml });
+    const res = optimizeAHtml({ aHtml }, { removeClassAttribute: true });
     expect(res).toEqual(output);
   });
 };

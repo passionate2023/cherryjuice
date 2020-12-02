@@ -6,7 +6,7 @@ export const extractLinkAttributes = (
   const type = el.dataset.type || 'web';
   return {
     'data-type': type,
-    href: el.href,
+    href: el.href.replace(/\/$/, ''),
     class: `rich-text__link ${type ? `rich-text__link--${type}` : ''}`,
     target: el.target || '_blank',
   };
