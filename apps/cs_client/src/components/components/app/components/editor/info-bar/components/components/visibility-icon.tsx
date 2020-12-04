@@ -3,7 +3,10 @@ import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
 import { modInfoBar } from '::sass-modules';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
+import {
+  LabelPosition,
+  Tooltip,
+} from '::root/components/shared-components/tooltip/tooltip';
 
 const mapPrivacyToIcon = (privacy: NodePrivacy | Privacy) => {
   switch (privacy) {
@@ -21,6 +24,9 @@ type Props = {
   numberOfGuests: number;
   className?: string;
   displayNumberOfGuestsAsBadge?: boolean;
+  labelPosition?: LabelPosition;
+  labelSubject?: 'document' | 'node';
+  showTooltip?: boolean;
 };
 
 const VisibilityIcon: React.FC<Props> = ({
@@ -28,38 +34,43 @@ const VisibilityIcon: React.FC<Props> = ({
   privacy,
   className,
   displayNumberOfGuestsAsBadge = true,
+  labelPosition = 'top-left',
+  labelSubject = 'document',
+  showTooltip = true,
 }) => {
   const name = mapPrivacyToIcon(privacy);
   return (
     <>
-      {name && (
-        <div
-          className={
-            modInfoBar.infoBar__documentPrivacy + ' ' + (className || '')
-          }
-        >
+      <Tooltip
+        label={
+          privacy === Privacy.PRIVATE
+            ? `This ${labelSubject} is private`
+            : privacy === Privacy.GUESTS_ONLY
+            ? `This ${labelSubject} is visible for guests`
+            : privacy === Privacy.PUBLIC
+            ? `This ${labelSubject} is public`
+            : ''
+        }
+        position={labelPosition}
+        show={showTooltip}
+      >
+        {name && (
           <div
-            className={joinClassNames([
-              modInfoBar.infoBar__documentPrivacy__iconContainer,
-              [
-                modInfoBar.infoBar__documentPrivacy__iconContainerBadge,
-                displayNumberOfGuestsAsBadge,
-              ],
-            ])}
+            className={
+              modInfoBar.infoBar__documentPrivacy + ' ' + (className || '')
+            }
           >
-            <Tooltip
-              label={
-                privacy === Privacy.PRIVATE
-                  ? 'This document is private'
-                  : privacy === Privacy.GUESTS_ONLY
-                  ? 'This document is visible for guests'
-                  : privacy === Privacy.PUBLIC
-                  ? 'This document is public'
-                  : ''
-              }
-              position={'top-left'}
+            <div
+              className={joinClassNames([
+                modInfoBar.infoBar__documentPrivacy__iconContainer,
+                [
+                  modInfoBar.infoBar__documentPrivacy__iconContainerBadge,
+                  displayNumberOfGuestsAsBadge,
+                ],
+              ])}
             >
               <Icon name={name} loadAsInlineSVG={'force'} size={14} />
+
               {Boolean(numberOfGuests) &&
                 (privacy === Privacy.GUESTS_ONLY ||
                   privacy === Privacy.PUBLIC) && (
@@ -75,10 +86,10 @@ const VisibilityIcon: React.FC<Props> = ({
                     {numberOfGuests}
                   </span>
                 )}
-            </Tooltip>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </Tooltip>
     </>
   );
 };
