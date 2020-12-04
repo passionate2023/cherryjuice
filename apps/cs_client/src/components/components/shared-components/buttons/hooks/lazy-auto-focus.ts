@@ -1,21 +1,19 @@
 import { MutableRefObject, useEffect } from 'react';
-import { isMoving$ } from '::root/components/shared-components/buttons/hooks/is-moving';
+import { onEnteredViewPort } from '::root/components/shared-components/buttons/hooks/on-entered-viewport';
 
 export const useLazyAutoFocus = (
   lazyAutoFocus: boolean,
   elementRef: MutableRefObject<HTMLElement>,
-  comesFromUp?: boolean,
 ) => {
   useEffect(() => {
     if (elementRef.current) {
       if (lazyAutoFocus) {
-        const cleanup = isMoving$({
+        const cleanup = onEnteredViewPort({
           elementRef,
-          onArrived: () => {
+          onEntered: () => {
             elementRef.current.focus();
           },
-          onStartingToGo: () => elementRef.current.blur(),
-          comesFromUp,
+          onExited: () => elementRef.current.blur(),
         });
         return () => {
           elementRef.current.blur();
