@@ -23,17 +23,6 @@ const useSortMenuItems = ({
       onClick: noop,
       items: [
         {
-          name: 'all',
-          onClick: noop,
-          items: [
-            { name: 'name', onClick: sort({ level: 'all' }) },
-            {
-              name: 'name (desc)',
-              onClick: sort({ level: 'all', sortDirection: 'descending' }),
-            },
-          ],
-        },
-        {
           name: 'current level',
           onClick: noop,
           items: [
@@ -55,6 +44,17 @@ const useSortMenuItems = ({
             {
               name: 'name (desc)',
               onClick: sort({ level: 'children', sortDirection: 'descending' }),
+            },
+          ],
+        },
+        {
+          name: 'all',
+          onClick: noop,
+          items: [
+            { name: 'name', onClick: sort({ level: 'all' }) },
+            {
+              name: 'name (desc)',
+              onClick: sort({ level: 'all', sortDirection: 'descending' }),
             },
           ],
         },
