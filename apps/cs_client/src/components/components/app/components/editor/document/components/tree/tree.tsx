@@ -15,6 +15,7 @@ import { ContextMenuWrapper } from '::root/components/shared-components/context-
 import { useChildContextMenu } from '::root/components/shared-components/context-menu/hooks/child-context-menu';
 import { useTreeContextMenuItems } from '::root/components/app/components/editor/document/components/tree/hooks/tree-context-menu-items';
 import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
+import { Overlay } from '::root/components/app/components/editor/document/components/tree/components/overlay/overlay';
 
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -91,6 +92,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
           {({ ref, show }) => (
             <div className={modTree.tree} onContextMenu={show} ref={ref}>
               <ToolBar />
+              <Overlay treeRef={ref} />
               <Droppable
                 anchorId={'0'}
                 anchorClassName={modNode.node}

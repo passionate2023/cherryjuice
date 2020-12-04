@@ -3,7 +3,6 @@ import { useRef } from 'react';
 import { useSelectNode } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/select-node';
 import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
 import { ToggleChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/toggle-children';
-import { NodeOverlay } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-overlay';
 import { NodeChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-children';
 import { NodesDict } from '::store/ducks/document-cache/document-cache';
 import { NodeState } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/expand/expand-node';
@@ -48,7 +47,7 @@ const Node: React.FC<NodeProps> = ({
   const showChildren =
     expand > depth || !!(fatherState && fatherState[node_id]);
 
-  const { clickTimestamp, selectNode } = useSelectNode({
+  const { selectNode } = useSelectNode({
     documentId,
     node_id,
   });
@@ -88,11 +87,6 @@ const Node: React.FC<NodeProps> = ({
           node_id={node_id}
           index={index}
           tags={tags}
-        />
-        <NodeOverlay
-          clickTimestamp={clickTimestamp}
-          nodeComponentRef={componentRef}
-          node_id={node_id}
         />
       </div>
 

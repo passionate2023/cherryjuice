@@ -7,6 +7,7 @@ export enum CssVariables {
   vw = 'vw',
   treeWidth = 'treeWidth',
   nodePath = 'nodePath',
+  overlayTop = 'overlayTop',
 }
 
 const ap = createActionPrefixer('css-variables');
