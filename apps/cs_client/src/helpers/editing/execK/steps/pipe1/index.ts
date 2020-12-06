@@ -75,6 +75,7 @@ const pipe1: Pipe1 = ({
     startElement: selectionStartElement,
     endElement: selectionEndElement,
     stampPrefix,
+    offset: startOffset,
   });
   const { selectedDDOEs } = getSelectedDDOEs({ startDDOE, endDDOE });
 

@@ -1,59 +1,46 @@
 import { EnhancedMutationRecord } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
-import { calculateTextDifference } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-text-difference';
-import { getIndexOfNode } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/restore-caret/helpers/get-index-of-child-node';
 import { setRange } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/restore-caret/helpers/set-range';
-
-const objects = new Set(['img', 'code', 'table']);
+import { MutationType } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/detect-mutation-type';
+import {
+  redoFormattingMutation,
+  undoFormattingMutation,
+} from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/formatting-mutation';
+import { textMutation } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/text-mutation';
+import { genericMutation } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/generic-mutation';
+import {
+  redoStructureMutation,
+  undoStructureMutation,
+} from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/structure-mutation';
 
 export const restoreCaret = (
   mutations: EnhancedMutationRecord[],
+  type: MutationType,
   undo: boolean,
 ) => {
-  const lastMutation = mutations[mutations.length - 1];
-  const mutationTarget = lastMutation.target;
-  let caretTarget, offset: number;
+  let caretTarget: Node, offset: number;
   try {
-    if (lastMutation.type === 'characterData') {
-      const { newValue, oldValue } = lastMutation;
-      if (newValue.startsWith(oldValue))
-        offset = undo ? oldValue.length : newValue.length;
-      else {
-        const diff = calculateTextDifference(oldValue, newValue);
-        offset = diff.offset + (undo ? 0 : diff.length);
-      }
+    if (type === MutationType.text) {
+      [offset, caretTarget] = textMutation(mutations, undo);
+    } else if (type === MutationType.formatting) {
+      [offset, caretTarget] = undo
+        ? undoFormattingMutation(mutations)
+        : redoFormattingMutation(mutations);
+    } else if (type === MutationType.structure) {
+      [offset, caretTarget] = undo
+        ? undoStructureMutation(mutations)
+        : redoStructureMutation(mutations);
     } else {
-      caretTarget =
-        mutationTarget.nodeType === Node.TEXT_NODE
-          ? mutationTarget
-          : mutationTarget.lastChild || mutationTarget;
-      if (caretTarget.nodeType === Node.TEXT_NODE)
-        offset = caretTarget.textContent.length;
-      else {
-        if (objects.has(caretTarget['localName'])) {
-          offset = getIndexOfNode(caretTarget as ChildNode) + (undo ? 0 : 1);
-          caretTarget = caretTarget.parentElement;
-        } else {
-          const redoExecK = !undo && lastMutation.addedNodes.length;
-          if (redoExecK) {
-            caretTarget =
-              lastMutation.addedNodes[lastMutation.addedNodes.length - 1];
-          } else {
-            const length = caretTarget['innerText']?.length;
-            offset = length + (length > 0 ? -1 : 0);
-          }
-        }
-      }
+      [offset, caretTarget] = genericMutation(mutations, undo);
     }
-
-    const range = document.createRange();
-    range.setStart(caretTarget, offset);
-    setRange(range, false);
+    if (caretTarget) {
+      const range = document.createRange();
+      range.setStart(caretTarget, offset);
+      setRange(range, false);
+    }
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(e);
     // eslint-disable-next-line no-console
-    console.log(caretTarget);
-    // eslint-disable-next-line no-console
-    console.log(mutations);
+    console.log({ caretTarget, mutations });
   }
 };

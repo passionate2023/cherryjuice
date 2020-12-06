@@ -31,6 +31,10 @@ export const detectMutationType = (
     )
   )
     return MutationType.pastedImageMeta;
-  if (mutations.some(mutation => mutation.type === 'childList'))
+  if (
+    mutations.some(mutation =>
+      mutation.attributeName?.startsWith('sselection-start'),
+    )
+  )
     return MutationType.structure;
 };

@@ -41,7 +41,7 @@ const generic = (
     selectionEndElement: endElement,
     startOffset,
     endOffset,
-    stampPrefix: 'p',
+    stampPrefix: 's',
   });
   const siblings = collectSiblings()(splitSelection.endAnchor);
   if (position.beforeCodeBox)

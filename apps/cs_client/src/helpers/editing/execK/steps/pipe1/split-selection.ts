@@ -2,8 +2,10 @@ import { cloneObj } from '::helpers/objects';
 const Stamps = {
   start: 'selection-start',
   end: 'selection-end',
+  offset: 'selection-offset',
   genStamps: (stampPrefix = '') => {
     Stamps.start = `${stampPrefix}selection-start-${new Date().getTime()}`;
+    Stamps.offset = `${stampPrefix}selection-offset-${new Date().getTime()}`;
     Stamps.end = `${stampPrefix}selection-end-${new Date().getTime()}`;
   },
 };
@@ -16,14 +18,17 @@ const applyTemporaryStamps = ({
   startElement,
   endElement,
   stampPrefix,
+  offset,
 }: {
   startElement?: Element;
   endElement?: Element;
+  offset?: number;
   stampPrefix?: string;
 }) => {
   Stamps.genStamps(stampPrefix);
   startElement && startElement.setAttribute(Stamps.start, 'true');
   endElement && endElement.setAttribute(Stamps.end, 'true');
+  startElement.setAttribute(Stamps.offset, '' + offset);
   return { start: Stamps.start, end: Stamps.end };
 };
 const deleteTemporaryStamps = ({
@@ -34,6 +39,7 @@ const deleteTemporaryStamps = ({
   endElement?: Element;
 }) => {
   startElement && startElement.removeAttribute(Stamps.start);
+  startElement && endElement.removeAttribute(Stamps.offset);
   endElement && endElement.removeAttribute(Stamps.end);
 };
 const splitSelected = ({

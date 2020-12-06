@@ -94,18 +94,19 @@ export class SnapBack {
 
   private applyFrame = (
     mutations: EnhancedMutationRecord[],
+    type: MutationType,
     undo = false,
   ): void => {
     this.disable();
     applyMutations(mutations, undo);
-    restoreCaret(mutations, undo);
+    restoreCaret(mutations, type, undo);
     this.enable();
   };
 
   redo = (): void => {
     if (this.state.enabled && this.numberOfFrames.redo) {
       const frame = this.state.frames[++this.state.pointer];
-      this.applyFrame(frame.mutations, false);
+      this.applyFrame(frame.mutations, frame.type, false);
       this.onFrameChange();
     }
   };
@@ -114,7 +115,7 @@ export class SnapBack {
     if (this.state.enabled && this.numberOfFrames.undo) {
       const frame = this.state.frames[this.state.pointer--];
       const mutations = frame.mutations.slice(0).reverse();
-      this.applyFrame(mutations, true);
+      this.applyFrame(mutations, frame.type, true);
       this.onFrameChange();
     }
   };
