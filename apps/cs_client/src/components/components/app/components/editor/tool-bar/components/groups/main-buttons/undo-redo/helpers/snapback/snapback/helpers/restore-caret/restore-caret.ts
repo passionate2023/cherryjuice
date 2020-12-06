@@ -11,6 +11,10 @@ import {
   redoStructureMutation,
   undoStructureMutation,
 } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/structure-mutation';
+import {
+  redoPastingMutation,
+  undoPastingMutation,
+} from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/pasting-mutation';
 
 export const restoreCaret = (
   mutations: EnhancedMutationRecord[],
@@ -29,6 +33,10 @@ export const restoreCaret = (
       [offset, caretTarget] = undo
         ? undoStructureMutation(mutations)
         : redoStructureMutation(mutations);
+    } else if (type === MutationType.pasting) {
+      [offset, caretTarget] = undo
+        ? undoPastingMutation(mutations)
+        : redoPastingMutation(mutations);
     } else {
       [offset, caretTarget] = genericMutation(mutations, undo);
     }
