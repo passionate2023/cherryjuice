@@ -74,7 +74,7 @@ export const insertObject = (
     selectionEndElement: endElement,
     startOffset,
     endOffset,
-    stampPrefix: 'p',
+    stampPrefix: 'o',
   });
   object.outerHTML = addTimestampToMarkup(
     object.outerHTML,

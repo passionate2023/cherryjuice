@@ -1,20 +1,6 @@
 import { EnhancedMutationRecord } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
 import { getIndexOfNode } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/restore-caret/helpers/get-index-of-child-node';
 
-export const undoPastingMutation = (mutations: EnhancedMutationRecord[]) => {
-  let offset, caretTarget;
-  const mutation = mutations.filter(
-    m =>
-      m.type === 'attributes' &&
-      m.attributeName.startsWith('pselection-offset'),
-  )[0];
-  if (mutation) {
-    offset = mutation.newValue;
-    caretTarget = mutation.target.lastChild || mutation.target;
-  }
-
-  return [offset, caretTarget];
-};
 export const redoPastingMutation = (mutations: EnhancedMutationRecord[]) => {
   let offset, caretTarget;
   const isSingleLinePaste = mutations.length === 8;

@@ -2,6 +2,7 @@ export enum MutationType {
   text = 'text',
   deletion = 'deletion',
   structure = 'structure',
+  object = 'object',
   formatting = 'formatting',
   pasting = 'pasting',
   pastedImageMeta = 'pastedImageMeta',
@@ -37,4 +38,10 @@ export const detectMutationType = (
     )
   )
     return MutationType.structure;
+  if (
+    mutations.some(mutation =>
+      mutation.attributeName?.startsWith('oselection-start'),
+    )
+  )
+    return MutationType.object;
 };
