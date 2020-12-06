@@ -4,7 +4,7 @@ import {
   MutationType,
 } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/detect-mutation-type';
 import { handleTextMutation } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/handle-mutations/handle-text-mutation';
-
+import { restoreCaret } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/helpers/restore-caret/restore-caret';
 export type Frame = { mutations: EnhancedMutationRecord[]; type: MutationType };
 
 type SnapBackState = {
@@ -98,22 +98,22 @@ export class SnapBack {
   ): void => {
     this.disable();
     applyMutations(mutations, undo);
+    restoreCaret(mutations, undo);
     this.enable();
   };
 
   redo = (): void => {
     if (this.state.enabled && this.numberOfFrames.redo) {
-      const mutations = this.state.frames[++this.state.pointer].mutations;
-      this.applyFrame(mutations, false);
+      const frame = this.state.frames[++this.state.pointer];
+      this.applyFrame(frame.mutations, false);
       this.onFrameChange();
     }
   };
 
   undo = (): void => {
     if (this.state.enabled && this.numberOfFrames.undo) {
-      const mutations = this.state.frames[this.state.pointer--].mutations
-        .slice(0)
-        .reverse();
+      const frame = this.state.frames[this.state.pointer--];
+      const mutations = frame.mutations.slice(0).reverse();
       this.applyFrame(mutations, true);
       this.onFrameChange();
     }
