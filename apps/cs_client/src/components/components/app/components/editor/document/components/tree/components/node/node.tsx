@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { Store } from '::store/store';
 import { NodeIcons } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-icons/node-icons';
 import { modNode } from '::sass-modules';
+import { NodeOverlay } from '::app/components/editor/document/components/tree/components/node/components/node-overlay';
 
 export type NodeProps = {
   node_id: number;
@@ -47,7 +48,7 @@ const Node: React.FC<NodeProps> = ({
   const showChildren =
     expand > depth || !!(fatherState && fatherState[node_id]);
 
-  const { selectNode } = useSelectNode({
+  const { clickTimestamp, selectNode } = useSelectNode({
     documentId,
     node_id,
   });
@@ -87,6 +88,11 @@ const Node: React.FC<NodeProps> = ({
           node_id={node_id}
           index={index}
           tags={tags}
+        />
+        <NodeOverlay
+          clickTimestamp={clickTimestamp}
+          nodeComponentRef={componentRef}
+          node_id={node_id}
         />
       </div>
 
