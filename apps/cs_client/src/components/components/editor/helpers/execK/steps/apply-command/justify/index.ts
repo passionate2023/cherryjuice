@@ -1,4 +1,4 @@
-import { ExecKCommand } from '::root/components/editor/helpers/execK/execk-commands';
+import { ExecKCommand } from '::editor/helpers/execK/execk-commands';
 
 type TLineStyle = {
   line: { [p: string]: string };

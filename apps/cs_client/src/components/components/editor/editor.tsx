@@ -3,16 +3,16 @@ import * as React from 'react';
 import {
   ContentEditable,
   ContentEditableProps,
-} from '::root/components/editor/components/content-editable/content-editable';
+} from '::editor/components/content-editable/content-editable';
 import { useMemo } from 'react';
-import { onPaste } from '::root/components/editor/helpers/clipboard/on-paste';
-import { onKeyDown } from '::root/components/editor/helpers/typing';
+import { onPaste } from '::editor/helpers/clipboard/on-paste';
+import { onKeyDown } from '::editor/helpers/typing';
 import {
   createGesturesHandler,
   GestureHandlerProps,
 } from '::root/components/shared-components/drawer/components/drawer-navigation/helpers/create-gestures-handler';
-import { useOnMouseEvents } from '::root/components/editor/hooks/on-mouse-events/on-mouse-event';
-import { useScrollToHash } from '::root/components/editor/hooks/scroll-to-hash';
+import { useOnMouseEvents } from '::editor/hooks/on-mouse-events/on-mouse-event';
+import { useScrollToHash } from '::editor/hooks/scroll-to-hash';
 
 type Props = {
   contentEditableProps: ContentEditableProps;

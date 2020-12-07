@@ -1,5 +1,5 @@
-import { testSamples } from '::root/components/editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/html/optimize-a-html/__tests__/__data__';
-import { optimizeAHtml } from '::root/components/editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/html/optimize-a-html/optimize-a-html';
+import { testSamples } from '::editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/html/optimize-a-html/__tests__/__data__';
+import { optimizeAHtml } from '::editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/html/optimize-a-html/optimize-a-html';
 
 const test = ({ meta: { name }, input: { aHtml }, output }) => {
   it(name + ' ', () => {

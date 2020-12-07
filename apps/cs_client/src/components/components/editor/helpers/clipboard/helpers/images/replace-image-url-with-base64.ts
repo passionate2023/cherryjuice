@@ -1,6 +1,6 @@
 import { isNotPngBase64, isValidUrl } from '::helpers/misc';
-import { urlToBase64 } from '::root/components/editor/helpers/clipboard/helpers/images/url-to-base64';
-import { anyImageBase64ToPngBase64 } from '::root/components/editor/helpers/clipboard/helpers/images/any-image-base64-to-png-base64';
+import { urlToBase64 } from '::editor/helpers/clipboard/helpers/images/url-to-base64';
+import { anyImageBase64ToPngBase64 } from '::editor/helpers/clipboard/helpers/images/any-image-base64-to-png-base64';
 
 const attachWidthAndHeight = (image: HTMLImageElement) => () => {
   const { width, height } = image;

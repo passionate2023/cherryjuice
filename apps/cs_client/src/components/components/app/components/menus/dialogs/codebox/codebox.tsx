@@ -19,7 +19,7 @@ import { NumberInput } from '::root/components/shared-components/inputs/number-i
 import {
   createCodeboxHtml,
   insertObject,
-} from '::root/components/editor/helpers/objects/insert-object';
+} from '::editor/helpers/objects/insert-object';
 
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showCodeboxDialog,

@@ -1,8 +1,8 @@
-import { elementHasText } from '::root/components/editor/helpers/execK/helpers';
+import { elementHasText } from '::editor/helpers/execK/helpers';
 import {
   getAttributes,
   isBlock,
-} from '::root/components/editor/helpers/rendering/html-to-ahtml/helpers/helpers';
+} from '::editor/helpers/rendering/html-to-ahtml/helpers/helpers';
 
 const flattenDDOEs = ({ DDOEs }) => {
   const DDOEsChildren = [];

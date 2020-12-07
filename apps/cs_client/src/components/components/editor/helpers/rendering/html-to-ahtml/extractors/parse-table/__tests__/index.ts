@@ -1,8 +1,8 @@
 import {
   isPresentationalTable,
   splitTableByRow,
-} from '::root/components/editor/helpers/rendering/html-to-ahtml/extractors/parse-table/parse-table';
-import { testSamples } from '::root/components/editor/helpers/rendering/html-to-ahtml/extractors/parse-table/__tests__/__data__';
+} from '::editor/helpers/rendering/html-to-ahtml/extractors/parse-table/parse-table';
+import { testSamples } from '::editor/helpers/rendering/html-to-ahtml/extractors/parse-table/__tests__/__data__';
 
 const testSplitTableByRow = ({
   meta: { name },

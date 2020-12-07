@@ -1,4 +1,4 @@
-import { stringToSingleElement } from '::root/components/editor/helpers/execK/helpers';
+import { stringToSingleElement } from '::editor/helpers/execK/helpers';
 
 const t1 = `<table role="presentation">
 <tbody>

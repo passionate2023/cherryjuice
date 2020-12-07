@@ -12,7 +12,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import {
   createAnchorHtml,
   insertObject,
-} from '::root/components/editor/helpers/objects/insert-object';
+} from '::editor/helpers/objects/insert-object';
 import {
   anchorAC,
   anchorR,

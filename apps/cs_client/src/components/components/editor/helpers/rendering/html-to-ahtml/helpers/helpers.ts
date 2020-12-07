@@ -1,4 +1,4 @@
-import { extractLinkAttributes } from '::root/components/editor/helpers/rendering/html-to-ahtml/extractors/link';
+import { extractLinkAttributes } from '::editor/helpers/rendering/html-to-ahtml/extractors/link';
 import { LinkAttributes } from '@cherryjuice/ahtml-to-html';
 
 type AHtml = Record<string, any>;

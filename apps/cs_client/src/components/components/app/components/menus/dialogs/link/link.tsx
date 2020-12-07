@@ -17,7 +17,7 @@ import {
   LinkType,
 } from '::root/components/app/components/menus/dialogs/link/reducer/reducer';
 import { Select } from '::root/components/shared-components/inputs/select';
-import { execK } from '::root/components/editor/helpers/execK';
+import { execK } from '::editor/helpers/execK';
 
 const getAttributes = (
   state: LinkState,

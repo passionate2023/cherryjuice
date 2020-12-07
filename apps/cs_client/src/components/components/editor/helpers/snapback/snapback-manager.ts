@@ -2,7 +2,7 @@ import {
   ElementGetter,
   OnFrameChange,
   SnapBack,
-} from '::root/components/editor/helpers/snapback/snapback/snapback';
+} from '::editor/helpers/snapback/snapback/snapback';
 export const mutationObserverOptions: MutationObserverInit = {
   attributes: true,
   characterData: true,

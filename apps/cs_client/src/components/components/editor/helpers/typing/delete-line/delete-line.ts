@@ -1,5 +1,5 @@
-import { getDDOE } from '::root/components/editor/helpers/execK/steps/pipe1/ddoes';
-import { setTextSelection } from '::root/components/editor/helpers/execK/steps/restore-selection';
+import { getDDOE } from '::editor/helpers/execK/steps/pipe1/ddoes';
+import { setTextSelection } from '::editor/helpers/execK/steps/restore-selection';
 
 export const putCursorAtEndOfLine = (line: HTMLElement) => {
   const lastChild = line.lastElementChild;

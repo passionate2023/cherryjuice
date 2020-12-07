@@ -12,7 +12,7 @@ import { resetCache } from '::store/epics/save-documents/helpers/reset-cache';
 import { Epic } from 'redux-observable';
 import { SnackbarMessages } from '::root/components/app/components/menus/widgets/components/snackbar/snackbar-messages';
 import { getEditedDocuments } from '::store/selectors/cache/document/document';
-import { updateCachedHtmlAndImages } from '::root/components/editor/components/content-editable/helpers/apollo-cache';
+import { saveNodeContent } from '::editor/components/content-editable/helpers/save-node-content';
 import { alerts } from '::helpers/texts/alerts';
 
 const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
@@ -21,7 +21,7 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
     filter(() => store.getState().document.asyncOperations.save === 'idle'),
     switchMap(() => {
       const state: SaveOperationState = createSaveState();
-      updateCachedHtmlAndImages();
+      saveNodeContent();
       const editedDocuments = getEditedDocuments();
       if (!editedDocuments.length) return of(ac_.document.nothingToSave());
       else {

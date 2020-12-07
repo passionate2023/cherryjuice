@@ -14,7 +14,7 @@ import { modNode, modTree } from '::sass-modules';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper-pure';
 import { useChildContextMenu } from '::root/components/shared-components/context-menu/hooks/child-context-menu';
 import { useTreeContextMenuItems } from '::root/components/app/components/editor/document/components/tree/hooks/tree-context-menu-items';
-import { updateCachedHtmlAndImages } from '::root/components/editor/components/content-editable/helpers/apollo-cache';
+import { saveNodeContent } from '::editor/components/content-editable/helpers/save-node-content';
 import { Overlay } from '::root/components/app/components/editor/document/components/tree/components/overlay/overlay';
 
 const getParamsFromLocation = () => {
@@ -62,7 +62,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
       if (nodeElement) return nodeElement.dataset.nodeId;
     },
     onSelectElement: node_id => {
-      updateCachedHtmlAndImages();
+      saveNodeContent();
       ac.node.select({
         documentId: store.getState().document.documentId,
         node_id: +node_id,

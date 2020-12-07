@@ -1,18 +1,18 @@
 import { cloneObj } from '::helpers/objects';
-import { applyStyle } from '::root/components/editor/helpers/execK/steps/apply-command/apply-style';
-import { applyTag } from '::root/components/editor/helpers/execK/steps/apply-command/apply-tag';
-import { removeFormatting } from '::root/components/editor/helpers/execK/steps/apply-command/remove-formatting';
-import { ExecKCommand } from '::root/components/editor/helpers/execK/execk-commands';
+import { applyStyle } from '::editor/helpers/execK/steps/apply-command/apply-style';
+import { applyTag } from '::editor/helpers/execK/steps/apply-command/apply-tag';
+import { removeFormatting } from '::editor/helpers/execK/steps/apply-command/remove-formatting';
+import { ExecKCommand } from '::editor/helpers/execK/execk-commands';
 import {
   justify,
   TLineStyle,
-} from '::root/components/editor/helpers/execK/steps/apply-command/justify';
-import { hoistAHtmlProperties } from '::root/components/editor/helpers/execK/steps/apply-command/hoist-properties';
+} from '::editor/helpers/execK/steps/apply-command/justify';
+import { hoistAHtmlProperties } from '::editor/helpers/execK/steps/apply-command/hoist-properties';
 import {
   Attribute,
   ExecKMode,
   ExecKProps,
-} from '::root/components/editor/helpers/execK';
+} from '::editor/helpers/execK';
 
 type TApplyCommand = {
   tag?: {

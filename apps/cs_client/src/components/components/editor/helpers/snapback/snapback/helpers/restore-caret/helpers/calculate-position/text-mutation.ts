@@ -1,5 +1,5 @@
-import { EnhancedMutationRecord } from '::root/components/editor/helpers/snapback/snapback/snapback';
-import { calculateTextDifference } from '::root/components/editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-text-difference';
+import { EnhancedMutationRecord } from '::editor/helpers/snapback/snapback/snapback';
+import { calculateTextDifference } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-text-difference';
 
 export const textMutation = (
   mutations: EnhancedMutationRecord[],

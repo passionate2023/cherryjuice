@@ -1,8 +1,8 @@
 import {
   testSamples,
   TStyleSample,
-} from '::root/components/editor/helpers/execK/steps/apply-command/apply-style/calculate-style/__tests__/__data__';
-import { calculateStyle } from '::root/components/editor/helpers/execK/steps/apply-command/apply-style/calculate-style';
+} from '::editor/helpers/execK/steps/apply-command/apply-style/calculate-style/__tests__/__data__';
+import { calculateStyle } from '::editor/helpers/execK/steps/apply-command/apply-style/calculate-style';
 
 const testStyle = ({
   input: { cmd, ogStyle },

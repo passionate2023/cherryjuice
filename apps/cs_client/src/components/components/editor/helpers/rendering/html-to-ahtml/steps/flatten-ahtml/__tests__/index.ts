@@ -1,4 +1,4 @@
-import { flattenAHtml } from '::root/components/editor/helpers/rendering/html-to-ahtml/steps/flatten-ahtml';
+import { flattenAHtml } from '::editor/helpers/rendering/html-to-ahtml/steps/flatten-ahtml';
 
 const testSamples = [
   {

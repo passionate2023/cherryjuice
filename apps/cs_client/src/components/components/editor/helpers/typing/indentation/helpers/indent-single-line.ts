@@ -1,9 +1,9 @@
-import { moveCursor } from '::root/components/editor/helpers/execK/helpers';
-import { addTabToEnd } from '::root/components/editor/helpers/typing/indentation/helpers/helpers/add-tab-to-end';
-import { removeTabFromStart } from '::root/components/editor/helpers/typing/indentation/helpers/helpers/remove-tab-from-start/remove-tab-from-start';
-import { addTabToStart } from '::root/components/editor/helpers/typing/indentation/helpers/helpers/add-tab-to-start';
-import { CustomRange } from '::root/components/editor/helpers/execK/steps/get-selection';
-import { IndentationContext } from '::root/components/editor/helpers/typing/indentation/helpers/indent-multiple-lines';
+import { moveCursor } from '::editor/helpers/execK/helpers';
+import { addTabToEnd } from '::editor/helpers/typing/indentation/helpers/helpers/add-tab-to-end';
+import { removeTabFromStart } from '::editor/helpers/typing/indentation/helpers/helpers/remove-tab-from-start/remove-tab-from-start';
+import { addTabToStart } from '::editor/helpers/typing/indentation/helpers/helpers/add-tab-to-start';
+import { CustomRange } from '::editor/helpers/execK/steps/get-selection';
+import { IndentationContext } from '::editor/helpers/typing/indentation/helpers/indent-multiple-lines';
 
 export const indentSingleLine = (
   { collapsed, startElement, startOffset, endElement, endOffset }: CustomRange,

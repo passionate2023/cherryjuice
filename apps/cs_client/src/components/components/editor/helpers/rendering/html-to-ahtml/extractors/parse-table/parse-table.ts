@@ -1,4 +1,4 @@
-import { stringToSingleElement } from '::root/components/editor/helpers/execK/helpers';
+import { stringToSingleElement } from '::editor/helpers/execK/helpers';
 
 const splitTableByRow = ({ table }: { table: string }): Node[] => {
   const res = [];

@@ -1,4 +1,4 @@
-import { EnhancedMutationRecord } from '::root/components/editor/helpers/snapback/snapback/snapback';
+import { EnhancedMutationRecord } from '::editor/helpers/snapback/snapback/snapback';
 
 const removeNode = (node: Node): void => {
   node.parentNode.removeChild(node);

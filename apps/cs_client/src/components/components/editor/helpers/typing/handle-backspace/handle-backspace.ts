@@ -1,7 +1,7 @@
-import { getCursorPosition } from '::root/components/editor/helpers/typing/new-line/helpers/get-cursor-position';
-import { getSelection } from '::root/components/editor/helpers/execK/steps/get-selection';
-import { doBackspace } from '::root/components/editor/helpers/typing/handle-backspace/helpers/do-backspace';
-import { setTextSelection } from '::root/components/editor/helpers/execK/steps/restore-selection';
+import { getCursorPosition } from '::editor/helpers/typing/new-line/helpers/get-cursor-position';
+import { getSelection } from '::editor/helpers/execK/steps/get-selection';
+import { doBackspace } from '::editor/helpers/typing/handle-backspace/helpers/do-backspace';
+import { setTextSelection } from '::editor/helpers/execK/steps/restore-selection';
 
 const handleBackSpace = e => {
   const selection = getSelection({

@@ -3,7 +3,7 @@ import {
   NodesDict,
 } from '::store/ducks/document-cache/document-cache';
 import { NodeProps } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/components/tab';
-import { newNodePrefix } from '::root/components/editor/components/content-editable/hooks/add-meta-to-pasted-images';
+import { newNodePrefix } from '::editor/components/content-editable/hooks/add-meta-to-pasted-images';
 
 export const createNodePropsMapper = (
   nodes: NodesDict,

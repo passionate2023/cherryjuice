@@ -19,7 +19,7 @@ import {
   documentMetaReducer,
 } from './reducer/reducer';
 import { connect, ConnectedProps } from 'react-redux';
-import { updateCachedHtmlAndImages } from '::root/components/editor/components/content-editable/helpers/apollo-cache';
+import { saveNodeContent } from '::editor/components/content-editable/helpers/save-node-content';
 import { Guests } from '::root/components/app/components/menus/dialogs/document-meta/components/guests/guests';
 import { SelectPrivacy } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
 import { Privacy } from '@cherryjuice/graphql-types';
@@ -103,7 +103,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   }
   const createDocument = () => {
     try {
-      updateCachedHtmlAndImages();
+      saveNodeContent();
       const document = generateNewDocument({ state, userId });
       const rootNode = generateRootNode({
         documentId: document.id,

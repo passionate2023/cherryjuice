@@ -1,8 +1,8 @@
 import { useMutationObserver } from '::hooks/dom/mutation-observer';
 import { MutableRefObject, useCallback } from 'react';
-import { ac } from '::store/store';
+import { bridge } from '::editor/bridge';
 
-const useHandleContentChanges = ({
+const useFlagEditedNode = ({
   node_id,
   documentId,
   ref,
@@ -25,12 +25,7 @@ const useHandleContentChanges = ({
         );
         if (userMutations.length) {
           ref.current.setAttribute('data-edited', String(new Date().getTime()));
-          ac.documentCache.mutateNodeContent({
-            node_id,
-            documentId,
-            data: { html: '' },
-            meta: { mode: 'update-key-only' },
-          });
+          bridge.current.flagEditedNode({ node_id, documentId });
           observer.disconnect();
         }
       },
@@ -39,4 +34,4 @@ const useHandleContentChanges = ({
   );
 };
 
-export { useHandleContentChanges };
+export { useFlagEditedNode };

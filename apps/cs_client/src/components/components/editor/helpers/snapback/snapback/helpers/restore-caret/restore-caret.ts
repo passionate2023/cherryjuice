@@ -1,15 +1,15 @@
-import { EnhancedMutationRecord } from '::root/components/editor/helpers/snapback/snapback/snapback';
-import { setRange } from '::root/components/editor/helpers/snapback/snapback/helpers/restore-caret/helpers/set-range';
-import { MutationType } from '::root/components/editor/helpers/snapback/snapback/helpers/detect-mutation-type';
-import { redoFormattingMutation } from '::root/components/editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/formatting-mutation';
-import { textMutation } from '::root/components/editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/text-mutation';
-import { genericMutation } from '::root/components/editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/generic-mutation';
+import { EnhancedMutationRecord } from '::editor/helpers/snapback/snapback/snapback';
+import { setRange } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/set-range';
+import { MutationType } from '::editor/helpers/snapback/snapback/helpers/detect-mutation-type';
+import { redoFormattingMutation } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/formatting-mutation';
+import { textMutation } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/text-mutation';
+import { genericMutation } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/generic-mutation';
 import {
   redoStructureMutation,
   undoExecKMutation,
-} from '::root/components/editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/structure-mutation';
-import { redoPastingMutation } from '::root/components/editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/pasting-mutation';
-import { redoObjectMutation } from '::root/components/editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/object-mutation';
+} from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/structure-mutation';
+import { redoPastingMutation } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/pasting-mutation';
+import { redoObjectMutation } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/object-mutation';
 
 export const restoreCaret = (
   mutations: EnhancedMutationRecord[],

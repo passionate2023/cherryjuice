@@ -1,8 +1,8 @@
-import { CustomRange } from '::root/components/editor/helpers/execK/steps/get-selection';
+import { CustomRange } from '::editor/helpers/execK/steps/get-selection';
 import {
   getDDOE,
   getIndexOfSubDDOE,
-} from '::root/components/editor/helpers/execK/steps/pipe1/ddoes';
+} from '::editor/helpers/execK/steps/pipe1/ddoes';
 
 const codeBoxDelimiter = '\u200B';
 const cursorIsAtBoxDelimiter = (range: CustomRange) => {

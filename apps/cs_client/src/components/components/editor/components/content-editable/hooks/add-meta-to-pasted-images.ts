@@ -1,9 +1,8 @@
 import { createIsNotProcessed } from '::hooks/misc/isnot-processed';
-import { getEditor } from '::root/components/editor/components/content-editable/hooks/attach-images-to-html';
+import { getEditor } from '::editor/components/content-editable/hooks/attach-images-to-html';
 import { useEffect } from 'react';
-import { replaceImageUrlWithBase64 } from '::root/components/editor/helpers/clipboard/helpers/images/replace-image-url-with-base64';
-import { AlertType } from '::types/react';
-import { ac } from '::store/store';
+import { replaceImageUrlWithBase64 } from '::editor/helpers/clipboard/helpers/images/replace-image-url-with-base64';
+import { bridge } from '::editor/bridge';
 
 export const newImagePrefix = 'ni::';
 export const newObjectPrefix = 'na::';
@@ -32,12 +31,7 @@ const useAddMetaToPastedImages = ({
             })
             .catch(error => {
               image.remove();
-              ac.dialogs.setAlert({
-                title: 'could not download the pasted image',
-                type: AlertType.Error,
-                description: 'verify your network connection',
-                error,
-              });
+              bridge.current.onPasteImageErrorHandler(error);
             });
         },
       );

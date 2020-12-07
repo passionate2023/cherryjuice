@@ -1,6 +1,6 @@
-import { deleteSubDDOEsThatStartWithSpaceAndGetTheirText } from '::root/components/editor/helpers/typing/indentation/helpers/helpers/remove-tab-from-start/helpers/delete-sub-ddoes';
-import { removeTabFromStringStart } from '::root/components/editor/helpers/typing/indentation/helpers/helpers/remove-tab-from-start/helpers/remove-tab-from-string-start/remove-tab-from-string-start';
-import { getDeepestFirstChild } from '::root/components/editor/helpers/execK/steps/restore-selection';
+import { deleteSubDDOEsThatStartWithSpaceAndGetTheirText } from '::editor/helpers/typing/indentation/helpers/helpers/remove-tab-from-start/helpers/delete-sub-ddoes';
+import { removeTabFromStringStart } from '::editor/helpers/typing/indentation/helpers/helpers/remove-tab-from-start/helpers/remove-tab-from-string-start/remove-tab-from-string-start';
+import { getDeepestFirstChild } from '::editor/helpers/execK/steps/restore-selection';
 
 export const removeTabFromStart = ddoe => {
   const {

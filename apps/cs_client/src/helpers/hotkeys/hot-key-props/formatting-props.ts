@@ -1,9 +1,9 @@
-import { ExecKCommand } from '::root/components/editor/helpers/execK/execk-commands';
+import { ExecKCommand } from '::editor/helpers/execK/execk-commands';
 import { Icons } from '::root/components/shared-components/icon/icon';
-import { ExecKProps } from '::root/components/editor/helpers/execK';
+import { ExecKProps } from '::editor/helpers/execK';
 import { HotKeyActionType } from '@cherryjuice/graphql-types';
-import { paneLine } from '::root/components/editor/helpers/typing/pane-line/pane-line';
-import { deleteLine } from '::root/components/editor/helpers/typing/delete-line/delete-line';
+import { paneLine } from '::editor/helpers/typing/pane-line/pane-line';
+import { deleteLine } from '::editor/helpers/typing/delete-line/delete-line';
 
 export type FormattingHotProps = {
   name?: string;

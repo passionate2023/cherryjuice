@@ -1,11 +1,11 @@
 import {
   sizeTags,
   styleTags,
-} from '::root/components/editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag';
+} from '::editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag';
 import {
   applyTemporaryStamps,
   deleteTemporaryStamps,
-} from '::root/components/editor/helpers/execK/steps/pipe1/split-selection';
+} from '::editor/helpers/execK/steps/pipe1/split-selection';
 
 const guardAgainstDDOETagIsNotNeutral = ({
   startDDOE,

@@ -1,7 +1,7 @@
 import { SaveOperationProps } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
 import { apolloClient } from '::graphql/client/apollo-client';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
-import { newImagePrefix } from '::root/components/editor/components/content-editable/hooks/add-meta-to-pasted-images';
+import { newImagePrefix } from '::editor/components/content-editable/hooks/add-meta-to-pasted-images';
 import { Image } from '@cherryjuice/graphql-types';
 import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 

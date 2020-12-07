@@ -1,4 +1,4 @@
-import { hoistAHtmlProperties } from '::root/components/editor/helpers/execK/steps/apply-command/hoist-properties';
+import { hoistAHtmlProperties } from '::editor/helpers/execK/steps/apply-command/hoist-properties';
 
 const testSamples = [
   {

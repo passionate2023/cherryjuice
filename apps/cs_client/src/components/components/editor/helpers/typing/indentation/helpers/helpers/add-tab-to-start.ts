@@ -1,5 +1,5 @@
-import { elementHasText } from '::root/components/editor/helpers/execK/helpers';
-import { getDeepestFirstChild } from '::root/components/editor/helpers/execK/steps/restore-selection';
+import { elementHasText } from '::editor/helpers/execK/helpers';
+import { getDeepestFirstChild } from '::editor/helpers/execK/steps/restore-selection';
 import { QUAD_SPACE } from '@cherryjuice/ahtml-to-html';
 
 export const addTabToStart = ddoe => {

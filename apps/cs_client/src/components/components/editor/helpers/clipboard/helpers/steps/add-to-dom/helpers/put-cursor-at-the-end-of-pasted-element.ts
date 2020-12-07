@@ -1,8 +1,8 @@
 import {
   isElementNonTextual,
   moveCursor,
-} from '::root/components/editor/helpers/execK/helpers';
-import { setTextSelection } from '::root/components/editor/helpers/execK/steps/restore-selection';
+} from '::editor/helpers/execK/helpers';
+import { setTextSelection } from '::editor/helpers/execK/steps/restore-selection';
 
 export const putCursorAtTheEndOfPastedElement = ({ newEndElement }) => {
   const elementIsNonTextual = isElementNonTextual(newEndElement);

@@ -1,4 +1,4 @@
-import { getDeepestFirstChild } from '::root/components/editor/helpers/execK/steps/restore-selection';
+import { getDeepestFirstChild } from '::editor/helpers/execK/steps/restore-selection';
 import { QUAD_SPACE } from '@cherryjuice/ahtml-to-html';
 
 export const addTabToEnd = ({ startElement, startOffset }) => {

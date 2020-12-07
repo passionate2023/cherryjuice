@@ -1,5 +1,5 @@
-import { EnhancedMutationRecord } from '::root/components/editor/helpers/snapback/snapback/snapback';
-import { getIndexOfNode } from '::root/components/editor/helpers/snapback/snapback/helpers/restore-caret/helpers/get-index-of-child-node';
+import { EnhancedMutationRecord } from '::editor/helpers/snapback/snapback/snapback';
+import { getIndexOfNode } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/get-index-of-child-node';
 
 type Prefix = 'structure' | 'pasting' | 'object' | 'formatting';
 const prefixes: Record<Prefix, string> = {

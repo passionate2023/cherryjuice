@@ -1,8 +1,8 @@
 import {
   EnhancedMutationRecord,
   Frame,
-} from '::root/components/editor/helpers/snapback/snapback/snapback';
-import { MutationType } from '::root/components/editor/helpers/snapback/snapback/helpers/detect-mutation-type';
+} from '::editor/helpers/snapback/snapback/snapback';
+import { MutationType } from '::editor/helpers/snapback/snapback/helpers/detect-mutation-type';
 
 const replaceNBSPWithSpace = (word: string): string =>
   word.replace(new RegExp(`${String.fromCharCode(160)}`, 'g'), ' ');

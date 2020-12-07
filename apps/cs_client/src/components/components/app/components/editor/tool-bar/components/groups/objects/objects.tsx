@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
+import { ToolbarButton } from '::app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
 import { modToolbar } from '::sass-modules';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { connect, ConnectedProps } from 'react-redux';

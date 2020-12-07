@@ -1,4 +1,4 @@
-import { getInnerText } from '::root/components/editor/helpers/execK/helpers';
+import { getInnerText } from '::editor/helpers/execK/helpers';
 
 type Params = {
   textOfNodes: string[];

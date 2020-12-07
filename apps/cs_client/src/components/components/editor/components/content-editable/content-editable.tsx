@@ -1,12 +1,11 @@
 import { modRichText } from '::sass-modules';
 import { default as React, useContext, useEffect, useRef } from 'react';
-import { useAttachImagesToHtml } from '::root/components/editor/components/content-editable/hooks/attach-images-to-html';
-import { useHandleContentChanges } from '::root/components/editor/components/content-editable/hooks/handle-content-changes';
-import { useAddMetaToPastedImages } from '::root/components/editor/components/content-editable/hooks/add-meta-to-pasted-images';
+import { useAttachImagesToHtml } from '::editor/components/content-editable/hooks/attach-images-to-html';
+import { useFlagEditedNode } from '::editor/components/content-editable/hooks/flag-edited-node';
+import { useAddMetaToPastedImages } from '::editor/components/content-editable/hooks/add-meta-to-pasted-images';
 import { DocumentContext } from '::root/components/app/components/editor/document/reducer/context';
 import { Image } from '@cherryjuice/graphql-types';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
-import { NodeScrollPosition } from '::store/ducks/document-cache/document-cache';
 
 export type ContentEditableProps = {
   contentEditable;
@@ -15,7 +14,7 @@ export type ContentEditableProps = {
   node_id: number;
   focusOnUpdate: boolean;
   images: Image[];
-  scrollPosition: NodeScrollPosition;
+  scrollPosition: [number, number];
 };
 
 const ContentEditable = ({
@@ -29,7 +28,7 @@ const ContentEditable = ({
 }: ContentEditableProps) => {
   const ref = useRef<HTMLDivElement>();
   const { pastedImages } = useContext(DocumentContext);
-  useHandleContentChanges({ node_id, documentId, ref });
+  useFlagEditedNode({ node_id, documentId, ref });
   useAddMetaToPastedImages({ requestId: pastedImages });
   useAttachImagesToHtml({
     node_id,

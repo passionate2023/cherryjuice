@@ -1,7 +1,7 @@
-import { getSelection } from '::root/components/editor/helpers/execK/steps/get-selection';
-import { setTextSelection } from '::root/components/editor/helpers/execK/steps/restore-selection';
-import { insertNewLine } from '::root/components/editor/helpers/typing/new-line/helpers/insert-new-line';
-import { getCursorPosition } from '::root/components/editor/helpers/typing/new-line/helpers/get-cursor-position';
+import { getSelection } from '::editor/helpers/execK/steps/get-selection';
+import { setTextSelection } from '::editor/helpers/execK/steps/restore-selection';
+import { insertNewLine } from '::editor/helpers/typing/new-line/helpers/insert-new-line';
+import { getCursorPosition } from '::editor/helpers/typing/new-line/helpers/get-cursor-position';
 
 const handleEnter = (e: KeyboardEvent) => {
   const selection = getSelection({

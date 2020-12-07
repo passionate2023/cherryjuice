@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { DocumentList } from './components/documents-list/document-list';
-import { updateCachedHtmlAndImages } from '::root/components/editor/components/content-editable/helpers/apollo-cache';
+import { saveNodeContent } from '::editor/components/content-editable/helpers/save-node-content';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
@@ -92,7 +92,7 @@ const DocumentsListDialog: React.FC<PropsFromRedux> = ({
   }, [showDocumentList, online]);
   const close = ac.dialogs.hideDocumentList;
   const open = () => {
-    updateCachedHtmlAndImages();
+    saveNodeContent();
     ac.document.setDocumentId(selectedIDs[0]);
   };
   const { buttonsLeft, buttonsRight } = createButtons({

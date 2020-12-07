@@ -1,17 +1,16 @@
-import { applyCmd } from '::root/components/editor/helpers/execK/steps/apply-command';
+import { applyCmd } from '::editor/helpers/execK/steps/apply-command';
 import {
   CustomRange,
   getSelection,
-} from '::root/components/editor/helpers/execK/steps/get-selection';
-import { pipe1 } from '::root/components/editor/helpers/execK/steps/pipe1';
-import { pipe3 } from '::root/components/editor/helpers/execK/steps/pipe3';
-import { restoreSelection } from '::root/components/editor/helpers/execK/steps/restore-selection';
-import { AlertType } from '::types/react';
+} from '::editor/helpers/execK/steps/get-selection';
+import { pipe1 } from '::editor/helpers/execK/steps/pipe1';
+import { pipe3 } from '::editor/helpers/execK/steps/pipe3';
+import { restoreSelection } from '::editor/helpers/execK/steps/restore-selection';
 import { FormattingError } from '::types/errors';
-import { ac } from '::store/store';
-import { ExecKCommand } from '::root/components/editor/helpers/execK/execk-commands';
+import { ExecKCommand } from '::editor/helpers/execK/execk-commands';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
-import { mergeSimilarNodes } from '::root/components/editor/helpers/execK/steps/merge-similar-nodes/merge-similar-nodes';
+import { mergeSimilarNodes } from '::editor/helpers/execK/steps/merge-similar-nodes/merge-similar-nodes';
+import { bridge } from '::editor/bridge';
 
 const isJustificationCommand = command =>
   command && command != ExecKCommand.clear;
@@ -94,14 +93,7 @@ const execK = ({
     snapBackManager.current.enable(1000);
     // eslint-disable-next-line no-console
     if (process.env.NODE_ENV === 'development') console.error(e);
-    ac.dialogs.setSnackbar({
-      lifeSpan: 2000,
-      type: AlertType.Warning,
-      message:
-        e instanceof FormattingError
-          ? e.message
-          : 'Could not perform the action',
-    });
+    bridge.current.onFormattingErrorHandler(e);
   }
 };
 

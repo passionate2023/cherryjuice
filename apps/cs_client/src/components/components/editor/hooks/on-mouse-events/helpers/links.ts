@@ -1,6 +1,6 @@
-import { ac } from '::store/store';
 import { extractDocumentFromPathname } from '::root/components/app/components/editor/hooks/router-effect/helpers/extract-document-from-pathname';
-import { updateCachedHtmlAndImages } from '::root/components/editor/components/content-editable/helpers/apollo-cache';
+import { saveNodeContent} from "::editor/components/content-editable/helpers/save-node-content";
+import { bridge } from '::editor/bridge';
 
 const getURL = ({ target, file_id }): URL => {
   let url: URL;
@@ -23,8 +23,8 @@ export const onLinkClicked = (target: HTMLElement, file_id: string) => {
     const isWebLink = !isLocalLink && url.protocol.startsWith('http');
     if (isLocalLink) {
       const { documentId, node_id } = extractDocumentFromPathname(url.pathname);
-      updateCachedHtmlAndImages();
-      ac.node.select({ documentId, node_id, hash: url.hash });
+      saveNodeContent();
+      bridge.current.selectNode({ documentId, node_id, hash: url.hash });
     } else if (isWebLink) {
       window.open(url.href, '_blank');
     }

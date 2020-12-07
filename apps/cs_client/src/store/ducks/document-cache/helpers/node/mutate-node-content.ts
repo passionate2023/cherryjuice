@@ -3,7 +3,7 @@ import {
   DocumentCacheState,
   QFullNode,
 } from '::store/ducks/document-cache/document-cache';
-import { newImagePrefix } from '::root/components/editor/components/content-editable/hooks/add-meta-to-pasted-images';
+import { newImagePrefix } from '::editor/components/content-editable/hooks/add-meta-to-pasted-images';
 import { listNodeEditedAttributes } from '::store/ducks/document-cache/helpers/node/mutate-node-meta';
 
 export type MutateNodeContentParams = {

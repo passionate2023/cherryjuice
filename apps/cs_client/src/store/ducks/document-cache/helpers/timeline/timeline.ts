@@ -1,5 +1,5 @@
 import { applyPatches, Patch } from 'immer';
-import { NumberOfFrames } from '::root/components/editor/helpers/snapback/snapback/snapback';
+import { NumberOfFrames } from '::editor/helpers/snapback/snapback/snapback';
 
 export const calculateNumberOfFrames = <T>(
   framePositions: number[],

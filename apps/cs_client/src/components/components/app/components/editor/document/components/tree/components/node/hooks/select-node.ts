@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { updateCachedHtmlAndImages } from '::root/components/editor/components/content-editable/helpers/apollo-cache';
+import { saveNodeContent } from '::editor/components/content-editable/helpers/save-node-content';
 import { ac } from '::store/store';
 import { modNode } from '::sass-modules';
 
@@ -15,7 +15,7 @@ const useSelectNode = ({ node_id, documentId }: SelectNodeProps) => {
       );
       if (eventIsTriggeredByCollapseButton) return;
 
-      updateCachedHtmlAndImages();
+      saveNodeContent();
       ac.node.select({ documentId, node_id });
     },
     [documentId, node_id],

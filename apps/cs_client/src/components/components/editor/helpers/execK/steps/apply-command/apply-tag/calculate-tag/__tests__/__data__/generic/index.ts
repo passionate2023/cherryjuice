@@ -2,8 +2,8 @@ import {
   alwaysToBeRemovedTags,
   sizeTags,
   styleTags,
-} from '::root/components/editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag';
-import { TTagTestSample } from '::root/components/editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__';
+} from '::editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag';
+import { TTagTestSample } from '::editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__';
 
 const genTags = (tagsToBeExcluded: string[]) => (
   tagsToNotHaveAttributes: string[],

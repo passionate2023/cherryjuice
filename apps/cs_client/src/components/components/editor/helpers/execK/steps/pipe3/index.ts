@@ -1,9 +1,9 @@
 import {
   stringToMultipleElements,
   stringToSingleElement,
-} from '::root/components/editor/helpers/execK/helpers';
-import { replaceElement } from '::root/components/editor/helpers/execK/steps/pipe3/helpers';
-import { getDDOE } from '::root/components/editor/helpers/execK/steps/pipe1/ddoes';
+} from '::editor/helpers/execK/helpers';
+import { replaceElement } from '::editor/helpers/execK/steps/pipe3/helpers';
+import { getDDOE } from '::editor/helpers/execK/steps/pipe1/ddoes';
 import { Element } from '@cherryjuice/ahtml-to-html';
 const aHtmlToString = node => (node.type ? node.outerHTML : Element(node));
 const aHtmlToElement = node =>

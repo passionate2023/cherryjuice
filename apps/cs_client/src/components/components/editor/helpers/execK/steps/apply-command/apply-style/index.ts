@@ -17,7 +17,7 @@
 //   return ogStyle;
 // };
 
-import { calculateStyle } from '::root/components/editor/helpers/execK/steps/apply-command/apply-style/calculate-style';
+import { calculateStyle } from '::editor/helpers/execK/steps/apply-command/apply-style/calculate-style';
 
 type TApplyStyle = {
   aHtmlElement: any;

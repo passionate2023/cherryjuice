@@ -1,10 +1,10 @@
-import { applyMutations } from '::root/components/editor/helpers/snapback/snapback/helpers/apply-mutations';
+import { applyMutations } from '::editor/helpers/snapback/snapback/helpers/apply-mutations';
 import {
   detectMutationType,
   MutationType,
-} from '::root/components/editor/helpers/snapback/snapback/helpers/detect-mutation-type';
-import { handleTextMutation } from '::root/components/editor/helpers/snapback/snapback/helpers/handle-mutations/handle-text-mutation';
-import { restoreCaret } from '::root/components/editor/helpers/snapback/snapback/helpers/restore-caret/restore-caret';
+} from '::editor/helpers/snapback/snapback/helpers/detect-mutation-type';
+import { handleTextMutation } from '::editor/helpers/snapback/snapback/helpers/handle-mutations/handle-text-mutation';
+import { restoreCaret } from '::editor/helpers/snapback/snapback/helpers/restore-caret/restore-caret';
 export type Frame = { mutations: EnhancedMutationRecord[]; type: MutationType };
 
 type SnapBackState = {

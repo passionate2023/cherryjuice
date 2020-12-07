@@ -1,10 +1,10 @@
 import {
   getAllElementsUntilElement,
   moveCursor,
-} from '::root/components/editor/helpers/execK/helpers';
-import { addTabToStart } from '::root/components/editor/helpers/typing/indentation/helpers/helpers/add-tab-to-start';
-import { removeTabFromStart } from '::root/components/editor/helpers/typing/indentation/helpers/helpers/remove-tab-from-start/remove-tab-from-start';
-import { CustomRange } from '::root/components/editor/helpers/execK/steps/get-selection';
+} from '::editor/helpers/execK/helpers';
+import { addTabToStart } from '::editor/helpers/typing/indentation/helpers/helpers/add-tab-to-start';
+import { removeTabFromStart } from '::editor/helpers/typing/indentation/helpers/helpers/remove-tab-from-start/remove-tab-from-start';
+import { CustomRange } from '::editor/helpers/execK/steps/get-selection';
 
 export type IndentationContext = {
   startDDOE: HTMLElement;

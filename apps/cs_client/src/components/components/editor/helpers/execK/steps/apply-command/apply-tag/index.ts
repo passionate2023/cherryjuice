@@ -1,4 +1,4 @@
-import { calculateTag } from '::root/components/editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag';
+import { calculateTag } from '::editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag';
 
 // const mergeStylesWithRootTag = ({ aHtmlElement, tagToBeDeleted }) => {
 //   if (!aHtmlElement.tags.length) aHtmlElement.tags.push(['span', {}]);

@@ -1,15 +1,15 @@
-import { extractTable } from '::root/components/editor/helpers/rendering/html-to-ahtml/extractors/table';
-import { extractImage } from '::root/components/editor/helpers/rendering/html-to-ahtml/extractors/img';
-import { extractCodeBox } from '::root/components/editor/helpers/rendering/html-to-ahtml/extractors/code-box';
-import { extractLink } from '::root/components/editor/helpers/rendering/html-to-ahtml/extractors/link';
-import { extractText } from '::root/components/editor/helpers/rendering/html-to-ahtml/extractors/text';
-import { flattenDDOEs } from '::root/components/editor/helpers/rendering/html-to-ahtml/steps/flatten-ddoe';
+import { extractTable } from '::editor/helpers/rendering/html-to-ahtml/extractors/table';
+import { extractImage } from '::editor/helpers/rendering/html-to-ahtml/extractors/img';
+import { extractCodeBox } from '::editor/helpers/rendering/html-to-ahtml/extractors/code-box';
+import { extractLink } from '::editor/helpers/rendering/html-to-ahtml/extractors/link';
+import { extractText } from '::editor/helpers/rendering/html-to-ahtml/extractors/text';
+import { flattenDDOEs } from '::editor/helpers/rendering/html-to-ahtml/steps/flatten-ddoe';
 import {
   getTags,
   GetTagsState,
   reduceIntoLines,
-} from '::root/components/editor/helpers/rendering/html-to-ahtml/helpers/helpers';
-import { extractAnchor } from '::root/components/editor/helpers/rendering/html-to-ahtml/extractors/anchor';
+} from '::editor/helpers/rendering/html-to-ahtml/helpers/helpers';
+import { extractAnchor } from '::editor/helpers/rendering/html-to-ahtml/extractors/anchor';
 
 type GetAhtmlOptions = {
   useObjForTextNodes?: boolean;

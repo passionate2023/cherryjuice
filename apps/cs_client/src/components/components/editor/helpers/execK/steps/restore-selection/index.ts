@@ -1,4 +1,4 @@
-import { trimOffset } from '::root/components/editor/helpers/execK/helpers';
+import { trimOffset } from '::editor/helpers/execK/helpers';
 import { smoothScrollIntoView } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/components/tab';
 
 const getDeepestFirstChild = (el: Element): Node | Element =>

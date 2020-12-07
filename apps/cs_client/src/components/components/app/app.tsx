@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Void } from '::root/components/shared-components/react/void';
 import { modApp } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
@@ -10,6 +10,7 @@ import { useUpdateCssVariables } from '::root/components/app/hooks/update-css-va
 import { useGetPreviousOperations } from '::root/components/app/hooks/get-previous-operations';
 import { useGetActiveOperations } from '::root/components/app/hooks/get-active-operations';
 import { useApplyEditorSettings } from '::root/components/app/hooks/apply-editor-settings';
+import { initBridge } from '::editor/bridge';
 
 const Menus = React.lazy(() =>
   import('::root/components/app/components/menus/menus'),
@@ -56,6 +57,9 @@ const App: React.FC<Props & PropsFromRedux> = ({
   useGetPreviousOperations();
   useGetActiveOperations(userId);
   useApplyEditorSettings();
+  useEffect(() => {
+    initBridge();
+  }, []);
   return (
     <div
       className={joinClassNames([

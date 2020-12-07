@@ -1,6 +1,6 @@
 import { cloneObj } from '::helpers/objects';
-import { TTag } from '::root/components/editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__';
-import { Attribute, ExecKMode } from '::root/components/editor/helpers/execK';
+import { TTag } from '::editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__';
+import { Attribute, ExecKMode } from '::editor/helpers/execK';
 const alwaysToBeRemovedTags = ['span'];
 const sizeTags = ['h1', 'h2', 'h3', 'small', 'sup', 'sub'];
 const styleTags = ['strong', 'em', 'code'];

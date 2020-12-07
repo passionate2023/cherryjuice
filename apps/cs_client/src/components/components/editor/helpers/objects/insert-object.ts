@@ -1,9 +1,9 @@
-import { pipe1 } from '::root/components/editor/helpers/execK/steps/pipe1';
-import { CustomRange } from '::root/components/editor/helpers/execK/steps/get-selection';
-import { writeChangesToDom } from '::root/components/editor/helpers/execK/steps/pipe3';
-import { setTextSelection } from '::root/components/editor/helpers/execK/steps/restore-selection';
-import { getEditor } from '::root/components/editor/components/content-editable/hooks/attach-images-to-html';
-import { newObjectPrefix } from '::root/components/editor/components/content-editable/hooks/add-meta-to-pasted-images';
+import { pipe1 } from '::editor/helpers/execK/steps/pipe1';
+import { CustomRange } from '::editor/helpers/execK/steps/get-selection';
+import { writeChangesToDom } from '::editor/helpers/execK/steps/pipe3';
+import { setTextSelection } from '::editor/helpers/execK/steps/restore-selection';
+import { getEditor } from '::editor/components/content-editable/hooks/attach-images-to-html';
+import { newObjectPrefix } from '::editor/components/content-editable/hooks/add-meta-to-pasted-images';
 import { CodeboxProperties } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
 import { TableProperties } from '::root/components/app/components/menus/dialogs/table/reducer/reducer';
 import { Anchor, Code, Table } from '@cherryjuice/ahtml-to-html';

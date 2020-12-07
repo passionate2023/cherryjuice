@@ -1,4 +1,4 @@
-import { removeTabFromStringStart } from '::root/components/editor/helpers/typing/indentation/helpers/helpers/remove-tab-from-start/helpers/remove-tab-from-string-start/remove-tab-from-string-start';
+import { removeTabFromStringStart } from '::editor/helpers/typing/indentation/helpers/helpers/remove-tab-from-start/helpers/remove-tab-from-string-start/remove-tab-from-string-start';
 import { DOUBLE_SPACE, QUAD_SPACE } from '@cherryjuice/ahtml-to-html';
 
 const testSamples = [

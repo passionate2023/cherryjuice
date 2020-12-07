@@ -1,9 +1,9 @@
-import { calculateTag } from '::root/components/editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag';
+import { calculateTag } from '::editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag';
 import {
   genericTests,
   TTagTestSample,
-} from '::root/components/editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__';
-import { specificTests } from '::root/components/editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__/specific';
+} from '::editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__';
+import { specificTests } from '::editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__/specific';
 
 const testTemplate = ({
   input: { cmd, tags },

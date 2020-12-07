@@ -1,12 +1,12 @@
-import { getDDOE } from '::root/components/editor/helpers/execK/steps/pipe1/ddoes';
+import { getDDOE } from '::editor/helpers/execK/steps/pipe1/ddoes';
 import {
   collectSiblings,
   getSpaceAtStart,
-} from '::root/components/editor/helpers/typing/new-line/helpers/shared';
-import { CustomRange } from '::root/components/editor/helpers/execK/steps/get-selection';
-import { pipe1 } from '::root/components/editor/helpers/execK/steps/pipe1';
-import { writeChangesToDom } from '::root/components/editor/helpers/execK/steps/pipe3';
-import { CursorPosition } from '::root/components/editor/helpers/typing/new-line/helpers/get-cursor-position';
+} from '::editor/helpers/typing/new-line/helpers/shared';
+import { CustomRange } from '::editor/helpers/execK/steps/get-selection';
+import { pipe1 } from '::editor/helpers/execK/steps/pipe1';
+import { writeChangesToDom } from '::editor/helpers/execK/steps/pipe3';
+import { CursorPosition } from '::editor/helpers/typing/new-line/helpers/get-cursor-position';
 
 const beforeTable = (selection: CustomRange): Node => {
   const siblings = collectSiblings()(selection.startElement);

@@ -1,4 +1,4 @@
-import { getDeepestFirstChild } from '::root/components/editor/helpers/execK/steps/restore-selection';
+import { getDeepestFirstChild } from '::editor/helpers/execK/steps/restore-selection';
 
 const stringToSingleElement = (singleElement: string): Element =>
   // https://stackoverflow.com/a/42448876

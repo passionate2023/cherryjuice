@@ -1,8 +1,8 @@
-import { execK } from '::root/components/editor/helpers/execK';
+import { execK } from '::editor/helpers/execK';
 import {
   testSamples,
   TTestSample,
-} from '::root/components/editor/helpers/execK/__tests__/__data__';
+} from '::editor/helpers/execK/__tests__/__data__';
 import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props/formatting-props';
 
 beforeAll(() => {

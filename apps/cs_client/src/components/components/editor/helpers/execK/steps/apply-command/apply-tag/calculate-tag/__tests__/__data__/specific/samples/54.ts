@@ -1,4 +1,4 @@
-import { TTagTestSample } from '::root/components/editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__';
+import { TTagTestSample } from '::editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__';
 
 const n54: TTagTestSample = {
   meta: { name: 'n54' },

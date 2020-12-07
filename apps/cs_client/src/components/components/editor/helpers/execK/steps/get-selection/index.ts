@@ -1,11 +1,11 @@
-import { setTextSelection } from '::root/components/editor/helpers/execK/steps/restore-selection';
+import { setTextSelection } from '::editor/helpers/execK/steps/restore-selection';
 import {
   guardAgainstEditorIsDDOE,
   guardAgainstEditorIsSelectionTarget,
   guardAgainstSelectionTargetIsImage,
-} from '::root/components/editor/helpers/execK/steps/pipe1/guards';
+} from '::editor/helpers/execK/steps/pipe1/guards';
 import { FormattingError } from '::types/errors';
-import { getEditor } from '::root/components/editor/components/content-editable/hooks/attach-images-to-html';
+import { getEditor } from '::editor/components/content-editable/hooks/attach-images-to-html';
 
 const getLineChildren = line => Array.from(line.childNodes);
 const getRootParent = el =>

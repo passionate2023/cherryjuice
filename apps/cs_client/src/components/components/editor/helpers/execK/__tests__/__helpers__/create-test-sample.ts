@@ -1,4 +1,4 @@
-import { getSelection } from '::root/components/editor/helpers/execK/steps/get-selection';
+import { getSelection } from '::editor/helpers/execK/steps/get-selection';
 const copyToClipboard = str => {
   const el = document.createElement('textarea');
   el.value = str;

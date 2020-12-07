@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
 import { Icons } from '::root/components/shared-components/icon/helpers/icons';
-import { NumberOfFrames } from '::root/components/editor/helpers/snapback/snapback/snapback';
+import { NumberOfFrames } from '::editor/helpers/snapback/snapback/snapback';
 
 type Props = {
   redo: () => void;

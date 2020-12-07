@@ -4,18 +4,18 @@ import {
   getIsolatedDDOESelection,
   deletedIsolatedSelection,
   getIndexOfSubDDOE,
-} from '::root/components/editor/helpers/execK/steps/pipe1/ddoes';
-import { getAHtml } from '::root/components/editor/helpers/rendering/html-to-ahtml';
+} from '::editor/helpers/execK/steps/pipe1/ddoes';
+import { getAHtml } from '::editor/helpers/rendering/html-to-ahtml';
 import {
   applyTemporaryStamps,
   getAHtmlAnchors,
   splitSelected,
-} from '::root/components/editor/helpers/execK/steps/pipe1/split-selection';
-import { optimizeAHtml } from '::root/components/editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/html/optimize-a-html/optimize-a-html';
+} from '::editor/helpers/execK/steps/pipe1/split-selection';
+import { optimizeAHtml } from '::editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/html/optimize-a-html/optimize-a-html';
 import {
   guardAgainstDDOETagIsNotNeutral,
   guardAgainstSubDDOEIsTextNode,
-} from '::root/components/editor/helpers/execK/steps/pipe1/guards';
+} from '::editor/helpers/execK/steps/pipe1/guards';
 
 export type SplitSelection = {
   adjustedSelection: { selectionEndElement: any; selectionStartElement: any };

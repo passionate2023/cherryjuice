@@ -1,7 +1,7 @@
-import { CustomRange } from '::root/components/editor/helpers/execK/steps/get-selection';
-import { getDDOE } from '::root/components/editor/helpers/execK/steps/pipe1/ddoes';
-import { pipe1 } from '::root/components/editor/helpers/execK/steps/pipe1';
-import { writeChangesToDom } from '::root/components/editor/helpers/execK/steps/pipe3';
+import { CustomRange } from '::editor/helpers/execK/steps/get-selection';
+import { getDDOE } from '::editor/helpers/execK/steps/pipe1/ddoes';
+import { pipe1 } from '::editor/helpers/execK/steps/pipe1';
+import { writeChangesToDom } from '::editor/helpers/execK/steps/pipe3';
 
 const deleteSelection = (selection: CustomRange): void => {
   const { startAnchor, endAnchor, left, right } = pipe1({

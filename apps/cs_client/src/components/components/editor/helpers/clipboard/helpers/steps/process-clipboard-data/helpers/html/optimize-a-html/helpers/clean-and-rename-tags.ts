@@ -1,7 +1,7 @@
 import {
   sizeTags,
   styleTags,
-} from '::root/components/editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag';
+} from '::editor/helpers/execK/steps/apply-command/apply-tag/calculate-tag';
 
 const tagsToRename = {
   // p: 'span',

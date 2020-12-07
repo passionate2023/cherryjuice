@@ -2,9 +2,8 @@ import { useEffect } from 'react';
 import { modRichText } from '::sass-modules';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { debounceTime, filter, map, withLatestFrom } from 'rxjs/operators';
-import { ac, store } from '::store/store';
-import { onLinkClicked } from '::root/components/editor/hooks/on-mouse-events/helpers/links';
-import { LinkType } from '::root/components/app/components/menus/dialogs/link/reducer/reducer';
+import { onLinkClicked } from '::editor/hooks/on-mouse-events/helpers/links';
+import { bridge } from '::editor/bridge';
 
 const anchor = 'rich-text__anchor';
 const link = 'rich-text__link';
@@ -54,42 +53,6 @@ const getValidTarget = (e: Event): HTMLElement =>
 
 const isLeftClick = (e: MouseEvent): boolean => e['which'] === 1;
 
-const editAnchor = (id: string) => {
-  ac.editor.setAnchorId(id);
-  ac.dialogs.showAnchorDialog();
-};
-
-const editLink = (target: HTMLElement) => {
-  ac.editor.setSelectedLink({
-    href: decodeURIComponent(target['href'] || target.dataset['href']),
-    type: target.dataset.type as LinkType,
-    target,
-  });
-  ac.dialogs.showLinkDialog();
-};
-
-const editCodebox = (target: HTMLElement) => {
-  ac.editor.setSelectedCodebox({
-    widthType: +target.dataset['is_width_pix'] === 1 ? 'pixels' : '%',
-    width: +target.style.width.replace(/(px|%)/, ''),
-    height:
-      +target.style.height.replace('px', '') ||
-      +target.style.minHeight.replace('px', ''),
-    autoExpandHeight: target.style.height ? 'fixed' : 'auto',
-    target,
-  });
-  ac.dialogs.showCodeboxDialog();
-};
-
-const editTable = (target: HTMLTableElement) => {
-  ac.editor.setSelectedTable({
-    rows: target.tBodies[0].childElementCount,
-    columns: target.tHead.firstElementChild.childElementCount,
-    target,
-  });
-  ac.dialogs.showTableDialog();
-};
-
 export const useOnMouseEvents = () => {
   useEffect(() => {
     const element = document.querySelector(
@@ -120,17 +83,17 @@ export const useOnMouseEvents = () => {
         if (clickDuration >= 300) {
           if (isAnchor) {
             const id = target.getAttribute('id');
-            editAnchor(id);
+            bridge.current.editAnchor(id);
           } else if (isSimpleLink || isImageLink) {
-            editLink(target);
+            bridge.current.editLink(target);
           } else if (isCodebox) {
-            editCodebox(target);
+            bridge.current.editCodebox(target);
           } else if (isTable) {
-            editTable(target as HTMLTableElement);
+            bridge.current.editTable(target as HTMLTableElement);
           }
         } else {
           if (isSimpleLink || isImageLink) {
-            onLinkClicked(target, store.getState().document.documentId);
+            onLinkClicked(target, bridge.current.getDocumentId());
           }
         }
       }

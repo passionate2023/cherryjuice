@@ -1,8 +1,7 @@
-import { blobToBase64 } from '::root/components/editor/helpers/clipboard/helpers/images/blob-to-base64';
-import { ac } from '::store/store';
-import { AlertType } from '::types/react';
-import { addNodeToDom } from '::root/components/editor/helpers/clipboard/helpers/steps/add-to-dom/add-node-to-dom';
-import { processClipboard } from '::root/components/editor/helpers/clipboard/helpers/steps/process-clipboard-data/process-clipboard-data';
+import { blobToBase64 } from '::editor/helpers/clipboard/helpers/images/blob-to-base64';
+import { addNodeToDom } from '::editor/helpers/clipboard/helpers/steps/add-to-dom/add-node-to-dom';
+import { processClipboard } from '::editor/helpers/clipboard/helpers/steps/process-clipboard-data/process-clipboard-data';
+import { bridge } from '::editor/bridge';
 
 const handlePaste = async e => {
   if (
@@ -28,14 +27,7 @@ const handlePaste = async e => {
   }
 };
 const onPaste = e => {
-  handlePaste(e).catch(error => {
-    ac.dialogs.setAlert({
-      title: 'Could not perform the paste',
-      description: 'Please submit a bug report',
-      error,
-      type: AlertType.Error,
-    });
-  });
+  handlePaste(e).catch(bridge.current.onPasteErrorHandler);
 };
 
 export { onPaste };

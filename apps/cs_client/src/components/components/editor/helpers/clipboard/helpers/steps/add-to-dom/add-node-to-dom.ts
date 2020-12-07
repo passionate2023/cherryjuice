@@ -1,12 +1,12 @@
-import { getSelection } from '::root/components/editor/helpers/execK/steps/get-selection';
-import { pipe1 } from '::root/components/editor/helpers/execK/steps/pipe1';
+import { getSelection } from '::editor/helpers/execK/steps/get-selection';
+import { pipe1 } from '::editor/helpers/execK/steps/pipe1';
 import {
   splitAHtmlsToMultipleLines,
   writeChangesToDom,
-} from '::root/components/editor/helpers/execK/steps/pipe3';
-import { getDDOE } from '::root/components/editor/helpers/execK/steps/pipe1/ddoes';
+} from '::editor/helpers/execK/steps/pipe3';
+import { getDDOE } from '::editor/helpers/execK/steps/pipe1/ddoes';
 import { documentActionCreators } from '::root/components/app/components/editor/document/reducer/action-creators';
-import { putCursorAtTheEndOfPastedElement } from '::root/components/editor/helpers/clipboard/helpers/steps/add-to-dom/helpers/put-cursor-at-the-end-of-pasted-element';
+import { putCursorAtTheEndOfPastedElement } from '::editor/helpers/clipboard/helpers/steps/add-to-dom/helpers/put-cursor-at-the-end-of-pasted-element';
 
 export type TAHtml =
   | { _: string; tags: [string, { [p: string]: string | object }][] }

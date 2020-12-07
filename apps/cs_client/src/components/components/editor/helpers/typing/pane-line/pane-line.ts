@@ -1,6 +1,6 @@
-import { getSelection } from '::root/components/editor/helpers/execK/steps/get-selection';
-import { getDDOE } from '::root/components/editor/helpers/execK/steps/pipe1/ddoes';
-import { setTextSelection } from '::root/components/editor/helpers/execK/steps/restore-selection';
+import { getSelection } from '::editor/helpers/execK/steps/get-selection';
+import { getDDOE } from '::editor/helpers/execK/steps/pipe1/ddoes';
+import { setTextSelection } from '::editor/helpers/execK/steps/restore-selection';
 
 export const paneLine = (direction: 'up' | 'down') => {
   const up = direction === 'up';

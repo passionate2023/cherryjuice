@@ -1,11 +1,11 @@
 // :: clipData -> aHtml
-import { getAHtml } from '::root/components/editor/helpers/rendering/html-to-ahtml';
-import { stringToSingleElement } from '::root/components/editor/helpers/execK/helpers';
-import { TAHtml } from '::root/components/editor/helpers/clipboard/helpers/steps/add-to-dom/add-node-to-dom';
-import { unwrapHtml } from '::root/components/editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/html/unwrap-html';
-import { wrapNodeInSpan } from '::root/components/editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/html/wrap-node-in-span';
-import { optimizeAHtml } from '::root/components/editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/html/optimize-a-html/optimize-a-html';
-import { detectSources } from '::root/components/editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/detect-sources';
+import { getAHtml } from '::editor/helpers/rendering/html-to-ahtml';
+import { stringToSingleElement } from '::editor/helpers/execK/helpers';
+import { TAHtml } from '::editor/helpers/clipboard/helpers/steps/add-to-dom/add-node-to-dom';
+import { unwrapHtml } from '::editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/html/unwrap-html';
+import { wrapNodeInSpan } from '::editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/html/wrap-node-in-span';
+import { optimizeAHtml } from '::editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/html/optimize-a-html/optimize-a-html';
+import { detectSources } from '::editor/helpers/clipboard/helpers/steps/process-clipboard-data/helpers/detect-sources';
 
 export const processClipboard = {
   image: (src: string): TAHtml[] => [

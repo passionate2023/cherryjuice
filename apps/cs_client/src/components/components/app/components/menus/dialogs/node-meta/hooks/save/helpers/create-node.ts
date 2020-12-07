@@ -1,4 +1,4 @@
-import { updateCachedHtmlAndImages } from '::root/components/editor/components/content-editable/helpers/apollo-cache';
+import { saveNodeContent } from '::editor/components/content-editable/helpers/save-node-content';
 import { ac } from '::store/store';
 import { NodeMeta } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
 import { getNode } from '::store/selectors/cache/document/node';
@@ -25,7 +25,7 @@ export const createNode = ({
     ? focusedNode.node_id
     : -1;
 
-  updateCachedHtmlAndImages();
+  saveNodeContent();
   ac.documentCache.createNode({
     createdNode: generateNode({
       documentId,

@@ -1,7 +1,7 @@
-import { getSelection } from '::root/components/editor/helpers/execK/steps/get-selection';
-import { getDDOE } from '::root/components/editor/helpers/execK/steps/pipe1/ddoes';
-import { indentMultipleLines } from '::root/components/editor/helpers/typing/indentation/helpers/indent-multiple-lines';
-import { indentSingleLine } from '::root/components/editor/helpers/typing/indentation/helpers/indent-single-line';
+import { getSelection } from '::editor/helpers/execK/steps/get-selection';
+import { getDDOE } from '::editor/helpers/execK/steps/pipe1/ddoes';
+import { indentMultipleLines } from '::editor/helpers/typing/indentation/helpers/indent-multiple-lines';
+import { indentSingleLine } from '::editor/helpers/typing/indentation/helpers/indent-single-line';
 
 const handleTab = (e: KeyboardEvent) => {
   e.preventDefault();
