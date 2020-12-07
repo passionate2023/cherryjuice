@@ -1,5 +1,5 @@
-import { execK } from '::helpers/editing/execK';
-import { createTestSample } from '::helpers/editing/execK/__tests__/__helpers__/create-test-sample';
+import { execK } from '::root/components/editor/helpers/execK';
+import { createTestSample } from '::root/components/editor/helpers/execK/__tests__/__helpers__/create-test-sample';
 import { hotKeysManager, HotKeyTarget } from './hotkeys-manager';
 import { generalHotKeysProps } from '::helpers/hotkeys/hot-key-props/general-hotkeys-props';
 import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props/formatting-props';

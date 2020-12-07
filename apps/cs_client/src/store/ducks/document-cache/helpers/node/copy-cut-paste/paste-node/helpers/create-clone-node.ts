@@ -1,5 +1,5 @@
 import { QFullNode } from '::store/ducks/document-cache/document-cache';
-import { newNodePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
+import { newNodePrefix } from '::root/components/editor/components/content-editable/hooks/add-meta-to-pasted-images';
 
 type Props = {
   newDocumentId: string;

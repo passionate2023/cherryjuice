@@ -1,6 +1,6 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
-import { NumberOfFrames } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/helpers/snapback/snapback/snapback';
+import { NumberOfFrames } from '::root/components/editor/helpers/snapback/snapback/snapback';
 import { Frame } from '::store/ducks/document-cache/helpers/timeline/timeline';
 import { DocumentTimeLineMeta } from '::store/ducks/document-cache/document-cache';
 import { rootActionCreators as rac } from '::store/ducks/root';

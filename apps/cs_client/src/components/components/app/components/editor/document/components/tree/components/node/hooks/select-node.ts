@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
+import { updateCachedHtmlAndImages } from '::root/components/editor/components/content-editable/helpers/apollo-cache';
 import { ac } from '::store/store';
 import { modNode } from '::sass-modules';
 

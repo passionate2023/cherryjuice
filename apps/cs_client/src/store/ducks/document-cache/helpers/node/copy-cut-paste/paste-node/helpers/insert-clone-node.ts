@@ -1,5 +1,5 @@
 import { createNode } from '../../../create-node';
-import { newImagePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
+import { newImagePrefix } from '::root/components/editor/components/content-editable/hooks/add-meta-to-pasted-images';
 import { mutateNodeContent } from '../../../mutate-node-content';
 import { DocumentCacheState, QFullNode } from '../../../../../document-cache';
 

@@ -12,7 +12,7 @@ import { resetCache } from '::store/epics/save-documents/helpers/reset-cache';
 import { Epic } from 'redux-observable';
 import { SnackbarMessages } from '::root/components/app/components/menus/widgets/components/snackbar/snackbar-messages';
 import { getEditedDocuments } from '::store/selectors/cache/document/document';
-import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
+import { updateCachedHtmlAndImages } from '::root/components/editor/components/content-editable/helpers/apollo-cache';
 import { alerts } from '::helpers/texts/alerts';
 
 const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {

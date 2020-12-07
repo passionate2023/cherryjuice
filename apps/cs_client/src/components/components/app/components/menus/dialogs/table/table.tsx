@@ -13,7 +13,7 @@ import { NumberInput } from '::root/components/shared-components/inputs/number-i
 import {
   createTableHtml,
   insertObject,
-} from '::helpers/editing/anchor/insert-object';
+} from '::root/components/editor/helpers/objects/insert-object';
 import {
   tableAC,
   tableR,

@@ -12,6 +12,7 @@ import {
 } from '::store/selectors/cache/document/document';
 import { documentHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
 import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
+import { useEffect, useRef } from 'react';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -47,8 +48,17 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
 }) => {
   const noDocumentIsSelected = !documentId;
   const newDocument = documentId?.startsWith('new');
+  const ref = useRef<HTMLDivElement>();
+  useEffect(() => {
+    const handle = setInterval(() => {
+      ref.current.scrollIntoView();
+    }, 2000);
+    return () => {
+      clearInterval(handle);
+    };
+  }, []);
   return (
-    <div className={modToolbar.toolBar__group}>
+    <div ref={ref} className={modToolbar.toolBar__group}>
       <ToolbarButton
         onClick={ac.editor.toggleTree}
         active={showTree}

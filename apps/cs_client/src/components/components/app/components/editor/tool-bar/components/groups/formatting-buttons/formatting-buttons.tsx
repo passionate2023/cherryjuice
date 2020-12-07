@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
-import { execK } from '::helpers/editing/execK';
+import { execK } from '::root/components/editor/helpers/execK';
 import { ColorInput } from '::root/components/app/components/editor/tool-bar/components/groups/formatting-buttons/components/color-input';
 import { modToolbar } from '::sass-modules';
 import { Icon } from '::root/components/shared-components/icon/icon';

@@ -6,7 +6,7 @@ import { dialogsActionCreators } from '::store/ducks/dialogs';
 import {
   CustomRange,
   getSelection,
-} from '::helpers/editing/execK/steps/get-selection';
+} from '::root/components/editor/helpers/execK/steps/get-selection';
 import { LinkType } from '::root/components/app/components/menus/dialogs/link/reducer/reducer';
 import { CodeboxProperties } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
 import { TableProperties } from '::root/components/app/components/menus/dialogs/table/reducer/reducer';

@@ -1,7 +1,7 @@
 import { SaveOperationProps } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
 import { apolloClient } from '::graphql/client/apollo-client';
-import { stringToMultipleElements } from '::helpers/editing/execK/helpers';
-import { getAHtml } from '::helpers/rendering/html-to-ahtml';
+import { stringToMultipleElements } from '::root/components/editor/helpers/execK/helpers';
+import { getAHtml } from '::root/components/editor/helpers/rendering/html-to-ahtml';
 import { updateDocumentId } from '::store/epics/save-documents/helpers/save-document/helpers/shared';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 

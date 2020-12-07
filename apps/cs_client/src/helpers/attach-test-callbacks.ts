@@ -1,10 +1,10 @@
 import { documentActionCreators } from '::root/components/app/components/editor/document/reducer/action-creators';
-import { onPaste } from '::helpers/editing/clipboard/on-paste';
+import { onPaste } from '::helpers/../components/components/editor/helpers/clipboard/on-paste';
 import { apolloClient } from '::graphql/client/apollo-client';
 import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 import { dTM } from '::store/ducks/document-cache/document-cache';
 import { ac } from '::store/store';
-import { execK } from '::helpers/editing/execK';
+import { execK } from '::helpers/../components/components/editor/helpers/execK';
 
 const testCallbacks = {
   documentActionCreators: {

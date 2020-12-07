@@ -1,6 +1,14 @@
 // https://gist.github.com/SleepWalker/da5636b1abcbaff48c4d#gistcomment-2577818
 import { TouchEvent } from 'react';
 
+export type GestureHandlerProps = {
+  onRight?: Function;
+  onLeft?: Function;
+  onTop?: Function;
+  onBottom?: Function;
+  onTap?: Function;
+  minimumLength?: number;
+};
 const createGesturesHandler = ({
   onRight,
   onLeft,
@@ -8,14 +16,7 @@ const createGesturesHandler = ({
   onBottom,
   onTap,
   minimumLength = 0,
-}: {
-  onRight?: Function;
-  onLeft?: Function;
-  onTop?: Function;
-  onBottom?: Function;
-  onTap?: Function;
-  minimumLength?: number;
-}) => {
+}: GestureHandlerProps) => {
   const pageWidth = window.innerWidth || document.body.clientWidth;
   const treshold = Math.max(1, Math.floor(0.01 * pageWidth));
   let touchstartX = 0;

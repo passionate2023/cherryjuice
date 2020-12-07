@@ -4,7 +4,7 @@ import { ErrorBoundary } from '::root/components/shared-components/react/error-b
 import { Tree } from './components/tree/tree';
 import { Route } from 'react-router-dom';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
-import { RichText } from '::root/components/app/components/editor/document/components/rich-text/rich-text';
+import { EditorContainer } from '::root/components/app/components/editor/document/components/editor-container/editor-container';
 import { documentReducer } from '::root/components/app/components/editor/document/reducer/reducer';
 import { documentInitialState } from '::root/components/app/components/editor/document/reducer/initial-state';
 import { documentActionCreators } from '::root/components/app/components/editor/document/reducer/action-creators';
@@ -71,7 +71,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
           <Route
             exact
             path={`/document/:file_id/node/:node_id/`}
-            render={() => <RichText node={nodes[selectedNode_id]} />}
+            render={() => <EditorContainer node={nodes[selectedNode_id]} />}
           />
         </Fragment>
       )}
