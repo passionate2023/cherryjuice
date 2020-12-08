@@ -49,11 +49,12 @@ const fetchDocumentsListEpic = (action$: Observable<Actions>) => {
       return concat(loading, request).pipe(
         createTimeoutHandler({
           alertDetails: {
-            title: 'Fetching the documents is taking longer then expected',
+            title: 'Fetching documents is taking longer then expected',
             description: alerts.tryRefreshingThePage,
           },
-          due: 15000,
+          due: 10000,
           mode: 'snackbar',
+          actionCreators: [ac_.documentsList.fetchDocuments],
         }),
         createErrorHandler({
           alertDetails: {

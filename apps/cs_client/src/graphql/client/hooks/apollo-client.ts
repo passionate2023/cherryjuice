@@ -48,6 +48,7 @@ const useApolloClient = (token: string, userId: string) => {
       },
     });
     const client = new ApolloClient({
+      queryDeduplication: false,
       defaultOptions: {
         query: {
           fetchPolicy: 'no-cache',

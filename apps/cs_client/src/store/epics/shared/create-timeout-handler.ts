@@ -41,7 +41,9 @@ const createTimeoutHandler = ({
             }),
       ),
       ...actionCreators.map(action => of(action())),
-      process.env.NODE_ENV === 'test' && virtualTimeScheduler,
+      ...[process.env.NODE_ENV === 'test' && virtualTimeScheduler].filter(
+        Boolean,
+      ),
     ),
   );
 

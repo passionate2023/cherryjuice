@@ -22,20 +22,38 @@ export type GraphqlQueryArgs<T, U> = {
 };
 export type GraphqlMutation = <T, U>(
   args: GraphqlMutationArgs<T, U>,
+  signal?: AbortSignal,
 ) => Promise<U>;
-export type GraphqlQuery = <T, U>(args: GraphqlQueryArgs<T, U>) => Promise<U>;
+export type GraphqlQuery = <T, U>(
+  args: GraphqlQueryArgs<T, U>,
+  signal?: AbortSignal,
+) => Promise<U>;
 
 const apolloClient = (() => {
   const state: CacheState = {
     ...cloneObj(cacheInitialState),
   };
-  const query: GraphqlQuery = args =>
-    state.client.query(args).then(({ data }) => args.path(data));
-  const mutate: GraphqlMutation = args =>
+  const query: GraphqlQuery = (args, signal) =>
+    state.client
+      .query({
+        ...args,
+        context: {
+          fetchOptions: {
+            signal,
+          },
+        },
+      })
+      .then(({ data }) => args.path(data));
+  const mutate: GraphqlMutation = (args, signal) =>
     state.client
       .mutate({
         variables: args.variables,
         mutation: args.query,
+        context: {
+          fetchOptions: {
+            signal,
+          },
+        },
       })
       .then(({ data }) => args.path(data));
   return {
