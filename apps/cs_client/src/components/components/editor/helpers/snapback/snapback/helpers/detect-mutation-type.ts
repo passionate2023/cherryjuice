@@ -1,6 +1,7 @@
 export enum MutationType {
   text = 'text',
   deletion = 'deletion',
+  pane = 'pane',
   structure = 'structure',
   object = 'object',
   formatting = 'formatting',
@@ -50,4 +51,10 @@ export const detectMutationType = (
     )
   )
     return MutationType.deletion;
+  if (
+    mutations.some(mutation =>
+      mutation.attributeName?.startsWith('pnselection-start'),
+    )
+  )
+    return MutationType.pane;
 };

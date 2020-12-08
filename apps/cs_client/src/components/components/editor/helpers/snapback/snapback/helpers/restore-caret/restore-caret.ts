@@ -11,6 +11,7 @@ import {
 } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/structure-mutation';
 import { redoPastingMutation } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/pasting-mutation';
 import { redoObjectMutation } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/object-mutation';
+import { trimOffset } from '::editor/helpers/execK/helpers';
 
 export const restoreCaret = (
   mutations: EnhancedMutationRecord[],
@@ -33,6 +34,8 @@ export const restoreCaret = (
       [offset, caretTarget] = undo
         ? undoExecKMutation(mutations, type)
         : redoDeletionMutation(mutations);
+    } else if (type === MutationType.pane) {
+      [offset, caretTarget] = undoExecKMutation(mutations, type);
     } else if (type === MutationType.pasting) {
       [offset, caretTarget] = undo
         ? undoExecKMutation(mutations, type)
@@ -46,7 +49,7 @@ export const restoreCaret = (
     }
     if (caretTarget) {
       const range = document.createRange();
-      range.setStart(caretTarget, offset);
+      range.setStart(...trimOffset(caretTarget, offset));
       setRange(range, false);
     }
   } catch (e) {

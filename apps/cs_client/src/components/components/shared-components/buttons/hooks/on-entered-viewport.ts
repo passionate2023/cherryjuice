@@ -1,6 +1,6 @@
 import { MutableRefObject } from 'react';
 import { interval } from 'rxjs';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, take, tap } from 'rxjs/operators';
 export type Props = {
   elementRef: MutableRefObject<HTMLElement>;
   onEntered: () => void;
@@ -15,10 +15,10 @@ export const onEnteredViewPort = ({
   const xy$ = interval(250).pipe(
     map(() => +elementRef.current.getBoundingClientRect().bottom.toFixed()),
     distinctUntilChanged(),
-    map(a => window.innerHeight - a <= 0),
-    distinctUntilChanged(),
-    tap(offScreen => {
-      if (!offScreen) onEntered();
+    filter(a => window.innerHeight - a > 0),
+    take(1),
+    tap(onScreen => {
+      if (onScreen) onEntered();
       else onExited();
     }),
   );

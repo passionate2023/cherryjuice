@@ -1,5 +1,6 @@
 import { trimOffset } from '::editor/helpers/execK/helpers';
 import { smoothScrollIntoView } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/components/tab';
+import { getDDOE } from '::editor/helpers/execK/steps/pipe1/ddoes';
 
 const getDeepestFirstChild = (el: Element): Node | Element =>
   el?.firstChild
@@ -23,7 +24,12 @@ const setTextSelection = (
   const sel = window.getSelection();
   sel.removeAllRanges();
   sel.addRange(range);
-  if (scrollIntoSelection) smoothScrollIntoView(startElement);
+  if (scrollIntoSelection)
+    smoothScrollIntoView(
+      startElement.nodeType === Node.TEXT_NODE
+        ? getDDOE(startElement)
+        : startElement,
+    );
 };
 const getLength = (str: string, nextStr: string | undefined) =>
   Number(

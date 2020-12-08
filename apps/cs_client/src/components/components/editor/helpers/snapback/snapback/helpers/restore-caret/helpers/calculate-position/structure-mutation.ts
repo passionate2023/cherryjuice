@@ -1,9 +1,9 @@
 import { EnhancedMutationRecord } from '::editor/helpers/snapback/snapback/snapback';
-import { getIndexOfNode } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/get-index-of-child-node';
 import { MutationType } from '::editor/helpers/snapback/snapback/helpers/detect-mutation-type';
 
 const prefixes: Partial<Record<MutationType, string>> = {
   [MutationType.structure]: 's',
+  [MutationType.pane]: 'pn',
   [MutationType.pasting]: 'p',
   [MutationType.object]: 'o',
   [MutationType.deletion]: 'd',
@@ -21,9 +21,12 @@ export const undoExecKMutation = (
       m.attributeName.startsWith(prefixes[type] + 'selection-offset'),
   )[0];
   if (mutation)
-    if (type === 'formatting') {
-      caretTarget = mutation.target.parentElement;
-      offset = getIndexOfNode(mutation.target as ChildNode) + 1;
+    if (
+      type === MutationType.formatting &&
+      !document.contains(mutation.target)
+    ) {
+      caretTarget = mutations[mutations.length - 1].target;
+      offset = mutation.target.childNodes.length;
     } else if (type === MutationType.deletion) {
       caretTarget = mutation.target;
       offset = mutation.target.childNodes.length;
