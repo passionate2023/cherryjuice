@@ -1,5 +1,5 @@
 import { extractDocumentFromPathname } from '::root/components/app/components/editor/hooks/router-effect/helpers/extract-document-from-pathname';
-import { saveNodeContent} from "::editor/components/content-editable/helpers/save-node-content";
+import { saveNodeContent } from '::editor/components/content-editable/helpers/save-node-content';
 import { bridge } from '::editor/bridge';
 
 const getURL = ({ target, file_id }): URL => {

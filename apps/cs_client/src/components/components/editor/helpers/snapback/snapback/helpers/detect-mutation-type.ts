@@ -44,4 +44,10 @@ export const detectMutationType = (
     )
   )
     return MutationType.object;
+  if (
+    mutations.some(mutation =>
+      mutation.attributeName?.startsWith('dselection-start'),
+    )
+  )
+    return MutationType.deletion;
 };

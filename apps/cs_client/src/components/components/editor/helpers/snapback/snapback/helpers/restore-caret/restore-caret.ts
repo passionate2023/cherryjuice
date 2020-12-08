@@ -5,6 +5,7 @@ import { redoFormattingMutation } from '::editor/helpers/snapback/snapback/helpe
 import { textMutation } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/text-mutation';
 import { genericMutation } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/generic-mutation';
 import {
+  redoDeletionMutation,
   redoStructureMutation,
   undoExecKMutation,
 } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/calculate-position/structure-mutation';
@@ -22,19 +23,23 @@ export const restoreCaret = (
       [offset, caretTarget] = textMutation(mutations, undo);
     } else if (type === MutationType.formatting) {
       [offset, caretTarget] = undo
-        ? undoExecKMutation(mutations, 'formatting')
+        ? undoExecKMutation(mutations, type)
         : redoFormattingMutation(mutations);
     } else if (type === MutationType.structure) {
       [offset, caretTarget] = undo
-        ? undoExecKMutation(mutations, 'structure')
+        ? undoExecKMutation(mutations, type)
         : redoStructureMutation(mutations);
+    } else if (type === MutationType.deletion) {
+      [offset, caretTarget] = undo
+        ? undoExecKMutation(mutations, type)
+        : redoDeletionMutation(mutations);
     } else if (type === MutationType.pasting) {
       [offset, caretTarget] = undo
-        ? undoExecKMutation(mutations, 'pasting')
+        ? undoExecKMutation(mutations, type)
         : redoPastingMutation(mutations);
     } else if (type === MutationType.object) {
       [offset, caretTarget] = undo
-        ? undoExecKMutation(mutations, 'object')
+        ? undoExecKMutation(mutations, type)
         : redoObjectMutation(mutations, undo);
     } else {
       [offset, caretTarget] = genericMutation(mutations, undo);

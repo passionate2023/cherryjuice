@@ -9,7 +9,9 @@
       "::helpers/*": ["./src/helpers/*"],
       "::graphql/*": ["./src/graphql/*"],
       "::assets/*": ["./src/assets/*"],
-      "::shared-components/*": ["./src/components/components/shared-components/*"],
+      "::shared-components/*": [
+        "./src/components/components/shared-components/*"
+      ],
       "::hooks/*": ["./src/hooks/*"],
       "::app/*": ["./src/components/components/app/*"],
       "::editor/*": ["./src/components/components/editor/*"],

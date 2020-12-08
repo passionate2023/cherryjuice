@@ -1,16 +1,18 @@
 import { EnhancedMutationRecord } from '::editor/helpers/snapback/snapback/snapback';
 import { getIndexOfNode } from '::editor/helpers/snapback/snapback/helpers/restore-caret/helpers/get-index-of-child-node';
+import { MutationType } from '::editor/helpers/snapback/snapback/helpers/detect-mutation-type';
 
-type Prefix = 'structure' | 'pasting' | 'object' | 'formatting';
-const prefixes: Record<Prefix, string> = {
-  structure: 's',
-  pasting: 'p',
-  object: 'o',
-  formatting: '',
+const prefixes: Partial<Record<MutationType, string>> = {
+  [MutationType.structure]: 's',
+  [MutationType.pasting]: 'p',
+  [MutationType.object]: 'o',
+  [MutationType.deletion]: 'd',
+  [MutationType.formatting]: '',
 };
+
 export const undoExecKMutation = (
   mutations: EnhancedMutationRecord[],
-  type: Prefix,
+  type: MutationType,
 ) => {
   let offset, caretTarget;
   const mutation = mutations.filter(
@@ -22,6 +24,9 @@ export const undoExecKMutation = (
     if (type === 'formatting') {
       caretTarget = mutation.target.parentElement;
       offset = getIndexOfNode(mutation.target as ChildNode) + 1;
+    } else if (type === MutationType.deletion) {
+      caretTarget = mutation.target;
+      offset = mutation.target.childNodes.length;
     } else {
       offset = mutation.newValue;
       caretTarget = mutation.target.lastChild || mutation.target;
@@ -34,6 +39,18 @@ export const redoStructureMutation = (mutations: EnhancedMutationRecord[]) => {
   const mutation = mutations[mutations.length - 1];
   offset = 0;
   caretTarget = mutation.target;
+
+  return [offset, caretTarget];
+};
+
+export const redoDeletionMutation = (mutations: EnhancedMutationRecord[]) => {
+  let offset, caretTarget;
+  const mutation = mutations[mutations.length - 1];
+  caretTarget =
+    mutation.previousSibling ||
+    mutation.nextSibling ||
+    mutation.target.parentElement;
+  offset = caretTarget.childNodes.length;
 
   return [offset, caretTarget];
 };
