@@ -1,5 +1,5 @@
 import { createBrowserHistory } from 'history';
-import { extractDocumentFromPathname } from '::root/components/app/components/editor/hooks/router-effect/helpers/extract-document-from-pathname';
+import { extractDocumentFromPathname } from '@cherryjuice/shared-helpers';
 
 const history = createBrowserHistory();
 const router = {

@@ -1,7 +1,7 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from '../helpers/shared';
 import { rootActionCreators } from '../root';
-import { cloneObj } from '::helpers/objects';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 import produce from 'immer';
 import { DocumentOperation } from '@cherryjuice/graphql-types';
 import { addDocumentOperations } from '::store/ducks/document-operation/reducers/add-document-operations';

@@ -5,7 +5,7 @@ import {
   CollapsableListItemProps,
 } from '::root/components/app/components/menus/widgets/components/collapsable-list/components/body/components/collapsable-list-item';
 import { useEffect, useRef } from 'react';
-import { smoothScrollIntoView } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/components/tab';
+import { smoothScrollIntoView } from '@cherryjuice/shared-helpers';
 
 export type ListBodyProps = {
   items: CollapsableListItemProps[];

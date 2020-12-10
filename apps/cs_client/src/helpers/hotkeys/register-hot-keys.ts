@@ -1,10 +1,10 @@
-import { execK } from '::editor/helpers/execK';
-import { createTestSample } from '::editor/helpers/execK/__tests__/__helpers__/create-test-sample';
+import { execK } from '@cherryjuice/editor';
 import { hotKeysManager, HotKeyTarget } from './hotkeys-manager';
 import { generalHotKeysProps } from '::helpers/hotkeys/hot-key-props/general-hotkeys-props';
 import { formattingHotkeysProps } from '::helpers/hotkeys/hot-key-props/formatting-props';
 import { HotKey, HotKeyActionType } from '@cherryjuice/graphql-types';
 import { flattenHotKey } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/flatten-hot-key';
+import { createTestSample } from '::helpers/hotkeys/helpers/create-test-sample';
 
 const registerFormattingHKs = (hotKeys: HotKey[] = []) => {
   hotKeys

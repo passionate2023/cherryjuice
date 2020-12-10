@@ -1,4 +1,4 @@
-import { saveNodeContent } from '::editor/components/content-editable/helpers/save-node-content';
+import { saveNodeContent } from '@cherryjuice/editor';
 import { ac } from '::store/store';
 import { NodeMeta } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
 import { getNode } from '::store/selectors/cache/document/node';

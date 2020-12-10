@@ -1,12 +1,9 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { rootActionCreators } from './root';
-import { cloneObj } from '::helpers/objects';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 import { dialogsActionCreators } from '::store/ducks/dialogs';
-import {
-  CustomRange,
-  getSelection,
-} from '::editor/helpers/execK/steps/get-selection';
+import { CustomRange, getSelection } from '@cherryjuice/editor';
 import { LinkType } from '::root/components/app/components/menus/dialogs/link/reducer/reducer';
 import { CodeboxProperties } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
 import { TableProperties } from '::root/components/app/components/menus/dialogs/table/reducer/reducer';

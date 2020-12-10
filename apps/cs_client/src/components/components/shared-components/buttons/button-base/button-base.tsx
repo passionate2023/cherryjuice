@@ -40,10 +40,9 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   iconName,
   variant,
   small,
-  comesFromUp,
 }) => {
   const buttonRef = useRef<HTMLButtonElement>();
-  useLazyAutoFocus(lazyAutoFocus, buttonRef, comesFromUp);
+  useLazyAutoFocus(lazyAutoFocus, buttonRef);
   return (
     <button
       className={joinClassNames([

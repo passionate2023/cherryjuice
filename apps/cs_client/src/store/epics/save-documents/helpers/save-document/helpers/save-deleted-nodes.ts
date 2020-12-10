@@ -4,7 +4,7 @@ import {
   CachedDocument,
   QFullNode,
 } from '::store/ducks/document-cache/document-cache';
-import { newNodePrefix } from '::editor/components/content-editable/hooks/add-meta-to-pasted-images';
+import { newNodePrefix } from '@cherryjuice/editor';
 import { SwappedIds } from '::store/ducks/document';
 
 type SaveOperationState = {

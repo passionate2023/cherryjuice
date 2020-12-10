@@ -14,7 +14,7 @@ import { modNode, modTree } from '::sass-modules';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper-pure';
 import { useChildContextMenu } from '::root/components/shared-components/context-menu/hooks/child-context-menu';
 import { useTreeContextMenuItems } from '::root/components/app/components/editor/document/components/tree/hooks/tree-context-menu-items';
-import { saveNodeContent } from '::editor/components/content-editable/helpers/save-node-content';
+import { saveNodeContent } from '@cherryjuice/editor';
 
 const getParamsFromLocation = () => {
   const params = { expand: undefined };

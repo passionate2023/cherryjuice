@@ -3,13 +3,10 @@ import { useEffect, useState } from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { NumberOfFrames } from '::editor/helpers/snapback/snapback/snapback';
-import { SnapBackManager } from '::editor/helpers/snapback/snapback-manager';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
-
-export const snapBackManager = new SnapBackManager();
 
 const mapState = (state: Store) => ({
   node_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,

@@ -20,7 +20,7 @@ const createErrorHandler = ({
 }: CreateErrorHandler) =>
   catchError(error => {
     // eslint-disable-next-line no-console
-    if (process.env.NODE_ENV === 'dev') console.error(error);
+    console.error(error);
     return concat(
       ...[
         !dontShowAlert &&

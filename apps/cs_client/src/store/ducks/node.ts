@@ -1,6 +1,6 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
-import { cloneObj } from '::helpers/objects';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 import { rootActionCreators as rac } from './root';
 import { AsyncOperation } from '::store/ducks/document';
 import {

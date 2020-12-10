@@ -10,10 +10,7 @@ import { TDialogFooterButton } from '::root/components/shared-components/dialog/
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { NumberInput } from '::root/components/shared-components/inputs/number-input';
-import {
-  createTableHtml,
-  insertObject,
-} from '::editor/helpers/objects/insert-object';
+import { createTableHtml, insertObject } from '@cherryjuice/editor';
 import {
   tableAC,
   tableR,

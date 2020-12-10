@@ -1,5 +1,5 @@
 import { QFullNode } from '::store/ducks/document-cache/document-cache';
-import { newNodePrefix } from '::editor/components/content-editable/hooks/add-meta-to-pasted-images';
+import { newNodePrefix } from '@cherryjuice/editor';
 
 type Props = {
   newDocumentId: string;

@@ -16,10 +16,7 @@ import {
   codeboxRTC,
 } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
 import { NumberInput } from '::root/components/shared-components/inputs/number-input';
-import {
-  createCodeboxHtml,
-  insertObject,
-} from '::editor/helpers/objects/insert-object';
+import { createCodeboxHtml, insertObject } from '@cherryjuice/editor';
 
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showCodeboxDialog,

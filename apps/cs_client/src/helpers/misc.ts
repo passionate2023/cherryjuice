@@ -1,16 +1,4 @@
 const insertAt = xs => index => (x: any): void => xs.splice(index, 0, x);
-const isValidUrl = (url: string): boolean => {
-  try {
-    new URL(url);
-  } catch {
-    return false;
-  }
-
-  return true;
-};
-
-const isNotPngBase64 = (image: HTMLImageElement) =>
-  !image.src.startsWith('data:image/png');
 
 // https://medium.com/@rajeshnaroth/writing-a-react-hook-to-cancel-promises-when-a-component-unmounts-526efabf251f
 const makeCancelable = <T>(
@@ -30,4 +18,4 @@ const makeCancelable = <T>(
   };
 };
 
-export { insertAt, isValidUrl, isNotPngBase64, makeCancelable };
+export { insertAt, makeCancelable };

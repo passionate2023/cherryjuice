@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { saveNodeContent } from '::editor/components/content-editable/helpers/save-node-content';
+import { saveNodeContent } from '@cherryjuice/editor';
 import { ac } from '::store/store';
 import { modNode } from '::sass-modules';
 

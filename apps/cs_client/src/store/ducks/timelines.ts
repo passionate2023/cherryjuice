@@ -1,11 +1,11 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
-import { NumberOfFrames } from '::editor/helpers/snapback/snapback/snapback';
 import { Frame } from '::store/ducks/document-cache/helpers/timeline/timeline';
 import { DocumentTimeLineMeta } from '::store/ducks/document-cache/document-cache';
 import { rootActionCreators as rac } from '::store/ducks/root';
-import { cloneObj } from '::helpers/objects';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 import { documentActionCreators as dac } from '::store/ducks/document';
+import { NumberOfFrames } from '@cherryjuice/editor';
 
 const ap = createActionPrefixer('timelines');
 

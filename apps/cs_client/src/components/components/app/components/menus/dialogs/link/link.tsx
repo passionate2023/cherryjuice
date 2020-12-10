@@ -17,7 +17,7 @@ import {
   LinkType,
 } from '::root/components/app/components/menus/dialogs/link/reducer/reducer';
 import { Select } from '::root/components/shared-components/inputs/select';
-import { execK } from '::editor/helpers/execK';
+import { execK } from '@cherryjuice/editor';
 
 const getAttributes = (
   state: LinkState,

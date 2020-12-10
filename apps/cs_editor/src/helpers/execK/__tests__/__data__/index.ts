@@ -1,0 +1,11 @@
+import { n45 } from './samples/45';
+import { n68 } from './samples/68';
+import { n71 } from './samples/71';
+import { n55 } from './samples/55';
+import { n56 } from './samples/56';
+import { n49 } from './samples/49';
+import { n48 } from './samples/48';
+import { n46 } from './samples/46';
+const testSamples = [n45, n46, n48, n49, n55, n56, n68, n71];
+export { testSamples };
+export type TTestSample = typeof testSamples[0];

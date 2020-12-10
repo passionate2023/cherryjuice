@@ -8,7 +8,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { useEffect } from 'react';
 import { QFullNode } from '::store/ducks/document-cache/document-cache';
 import { OfflineBanner } from '::root/components/app/components/editor/document/components/editor-container/components/offline-banner';
-import { Editor } from '::editor/editor';
+import { Editor } from '@cherryjuice/editor';
 
 type Props = {
   node: QFullNode;

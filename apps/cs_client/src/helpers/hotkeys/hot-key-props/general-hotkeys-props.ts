@@ -1,7 +1,7 @@
 import { HotKeyActionType } from '@cherryjuice/graphql-types';
 import { ac, store } from '::store/store';
 import { getDocumentHasUnsavedChanges } from '::store/selectors/cache/document/document';
-import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
+import { snapBackManager } from '@cherryjuice/editor';
 
 export const generalHotKeysProps = {
   [HotKeyActionType.SAVE_DOCUMENT]: () => {

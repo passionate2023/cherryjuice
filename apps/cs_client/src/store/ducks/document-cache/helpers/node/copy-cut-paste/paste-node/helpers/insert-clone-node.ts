@@ -1,5 +1,5 @@
 import { createNode } from '../../../create-node';
-import { newImagePrefix } from '::editor/components/content-editable/hooks/add-meta-to-pasted-images';
+import { newImagePrefix } from '@cherryjuice/editor';
 import { mutateNodeContent } from '../../../mutate-node-content';
 import { DocumentCacheState, QFullNode } from '../../../../../document-cache';
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
-import { execK } from '::editor/helpers/execK';
+import { execK } from '@cherryjuice/editor';
 import { ColorInput } from '::root/components/app/components/editor/tool-bar/components/groups/formatting-buttons/components/color-input';
 import { modToolbar } from '::sass-modules';
 import { Icon } from '::root/components/shared-components/icon/icon';
