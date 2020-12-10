@@ -4,10 +4,12 @@ export {
   stringToSingleElement,
   stringToMultipleElements,
 } from '::helpers/execK/helpers';
-export { execK, ExecKProps } from '::helpers/execK';
+export { execK } from '::helpers/execK';
+// export { ExecKProps } from '::helpers/execK';
 export { ExecKCommand } from '::helpers/execK/execk-commands';
 export { FormattingError } from '::helpers/execK/helpers/errors';
-export { CustomRange, getSelection } from '::helpers/execK/steps/get-selection';
+export { getSelection } from '::helpers/execK/steps/get-selection';
+// export { CustomRange } from '::helpers/execK/steps/get-selection';
 
 export { getAttributes } from '::helpers/rendering/html-to-ahtml/helpers/helpers';
 export { getAHtml } from '::helpers/rendering/html-to-ahtml';
@@ -25,7 +27,7 @@ export {
   newNodePrefix,
   newObjectPrefix,
 } from '::helpers/clipboard/helpers/steps/add-to-dom/helpers/add-meta-to-pasted-images';
-export { NumberOfFrames } from '::helpers/snapback/snapback/snapback';
+// export { NumberOfFrames } from '::helpers/snapback/snapback/snapback';
 export { paneLine } from '::helpers/typing/pane-line/pane-line';
 export { deleteLine } from '::helpers/typing/delete-line/delete-line';
 export { saveNodeContent } from '::root/components/content-editable/helpers/save-node-content';
