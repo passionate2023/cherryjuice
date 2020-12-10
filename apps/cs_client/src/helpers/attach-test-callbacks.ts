@@ -1,7 +1,12 @@
 import { apolloClient } from '::graphql/client/apollo-client';
 import { dTM } from '::store/ducks/document-cache/document-cache';
 import { ac } from '::store/store';
-import { execK, snapBackManager, _onPaste } from '@cherryjuice/editor';
+import {
+  execK,
+  snapBackManager,
+  _onPaste,
+  toggleBulletPoint,
+} from '@cherryjuice/editor';
 
 const testCallbacks = {
   clipboard: {
@@ -23,5 +28,6 @@ if (process.env.NODE_ENV === 'development') {
     ac.root.setNetworkStatus(true);
   };
   window['execk'] = execK;
+  window['tbp'] = toggleBulletPoint;
 }
 export { TestCallbacks };

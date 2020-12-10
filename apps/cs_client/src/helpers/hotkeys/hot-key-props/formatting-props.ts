@@ -1,9 +1,12 @@
 import { Icons } from '::root/components/shared-components/icon/icon';
 import { HotKeyActionType } from '@cherryjuice/graphql-types';
-import { ExecKProps } from '@cherryjuice/editor';
-import { paneLine } from '@cherryjuice/editor';
-import { deleteLine } from '@cherryjuice/editor';
-import { ExecKCommand } from '@cherryjuice/editor';
+import {
+  ExecKProps,
+  toggleBulletPoint,
+  paneLine,
+  deleteLine,
+  ExecKCommand,
+} from '@cherryjuice/editor';
 
 export type FormattingHotProps = {
   name?: string;
@@ -119,5 +122,9 @@ export const formattingHotkeysProps: { [key: string]: FormattingHotProps } = {
   [HotKeyActionType.DELETE_LINE]: {
     name: 'delete line',
     callback: deleteLine,
+  },
+  [HotKeyActionType.TOGGLE_BULLET_POINT]: {
+    name: 'toggle bullet point',
+    callback: toggleBulletPoint,
   },
 };

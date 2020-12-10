@@ -1,3 +1,5 @@
+export { toggleBulletPoint } from '::helpers/lists/bullet-points/toggle-bullet-point';
+
 export {
   stringToSingleElement,
   stringToMultipleElements,

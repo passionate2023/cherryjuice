@@ -278,6 +278,7 @@ enum HotKeyActionType {
     SMALL
     SUB
     SUP
+    TOGGLE_BULLET_POINT
     UNDERLINE
     UNDO
 }
@@ -551,7 +552,6 @@ input UploadLinkInputType {
 input VerifyEmailIt {
     token: String!
 }
-
 
 "The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch."
 scalar Timestamp
