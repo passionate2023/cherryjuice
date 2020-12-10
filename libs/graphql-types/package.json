@@ -20,7 +20,7 @@
     "generate": "cd src && node generate.js",
     "postgenerate": "yarn build",
     "build": "rollup -c",
-    "test": "node noop.js",
+    "test": "exit 0",
     "lint": "eslint ./**"
   },
   "devDependencies": {

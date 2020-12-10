@@ -23,6 +23,7 @@ export const getDefaultHotkeys = (): HotKeys => ({
     { type: HotKeyActionType.DELETE_LINE, keys: 'k100' },
     { type: HotKeyActionType.MOVE_LINE_UP, keys: 'arrowup010' },
     { type: HotKeyActionType.MOVE_LINE_DOWN, keys: 'arrowdown010' },
+    { type: HotKeyActionType.TOGGLE_BULLET_POINT, keys: 'n101' },
   ],
   general: [
     { type: HotKeyActionType.INSERT_LINK, keys: 'l100' },
