@@ -5,41 +5,42 @@ import postcss from 'rollup-plugin-postcss';
 import esbuild from 'rollup-plugin-esbuild';
 import pkg from './package.json';
 import alias from '@rollup/plugin-alias';
-const customResolver = resolve({
-  extensions: ['.tsx', '.ts'],
-});
-const productionMode = process.env.NODE_ENV === 'production';
 import path from 'path';
-const projectRootDir = path.resolve(__dirname);
-const entries = Object.entries({
-  '::sass-modules/*': ['./src/assets/styles/modules/*'],
-  '::types/*': ['./types/*'],
-  '::helpers/*': ['./src/helpers/*'],
-  '::assets/*': ['./src/assets/*'],
-  '::hooks/*': ['./src/hooks/*'],
-  '::root/*': ['./src/*'],
-  '::cypress/*': ['./cypress/*'],
-}).map(([alias, value]) => ({
-  find: new RegExp(`${alias.replace('/*', '')}`),
-  replacement: path.resolve(projectRootDir, `${value[0].replace('/*', '')}`),
-}));
 
-export default {
+const production = process.env.NODE_ENV === 'production';
+const projectRootDir = path.resolve(__dirname);
+const mainConfig = {
   input: 'src/index.ts',
   output: [
     {
       file: pkg.module,
       format: 'es',
       exports: 'named',
-      sourcemap: true,
+      sourcemap: !production,
     },
   ],
   plugins: [
     external(),
     resolve(),
     alias({
-      entries,
-      customResolver,
+      entries: Object.entries({
+        '::sass-modules/*': ['./src/assets/styles/modules/*'],
+        '::types/*': ['./types/*'],
+        '::helpers/*': ['./src/helpers/*'],
+        '::assets/*': ['./src/assets/*'],
+        '::hooks/*': ['./src/hooks/*'],
+        '::root/*': ['./src/*'],
+        '::cypress/*': ['./cypress/*'],
+      }).map(([alias, value]) => ({
+        find: new RegExp(`${alias.replace('/*', '')}`),
+        replacement: path.resolve(
+          projectRootDir,
+          `${value[0].replace('/*', '')}`,
+        ),
+      })),
+      customResolver: resolve({
+        extensions: ['.tsx', '.ts'],
+      }),
     }),
     postcss({
       extensions: ['scss', 'css'],
@@ -48,11 +49,10 @@ export default {
         `${name.replace(/-([a-z])/g, g => g[1].toUpperCase())}`,
     }),
     esbuild({
-      // All options are optional
       include: /\.[jt]sx?$/, // default, inferred from `loaders` option
       exclude: /node_modules/, // default
-      sourceMap: !productionMode, // default
-      minify: productionMode,
+      sourceMap: !production, // default
+      minify: production,
       target: 'es2019',
       jsxFactory: 'React.createElement',
       jsxFragment: 'React.Fragment',
@@ -62,3 +62,4 @@ export default {
     }),
   ],
 };
+export default [mainConfig];

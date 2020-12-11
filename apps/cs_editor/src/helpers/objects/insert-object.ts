@@ -4,10 +4,17 @@ import { writeChangesToDom } from '::helpers/execK/steps/pipe3';
 import { setTextSelection } from '::helpers/execK/steps/restore-selection';
 import { getEditor } from '::root/components/content-editable/hooks/attach-images-to-html';
 import { newObjectPrefix } from '::helpers/clipboard/helpers/steps/add-to-dom/helpers/add-meta-to-pasted-images';
-import { CodeboxProperties } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
-import { TableProperties } from '::root/components/app/components/menus/dialogs/table/reducer/reducer';
 import { Anchor, Code, Table } from '@cherryjuice/ahtml-to-html';
-
+export type TableProperties = {
+  rows: number;
+  columns: number;
+};
+export type CodeboxProperties = {
+  width: number;
+  widthType: 'pixels' | '%';
+  height: number;
+  autoExpandHeight: 'fixed' | 'auto';
+};
 export const createAnchorHtml = (id: string): string =>
   Anchor({ other_attributes: { id } });
 

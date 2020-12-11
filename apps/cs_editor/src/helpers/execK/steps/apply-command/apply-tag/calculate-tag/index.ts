@@ -1,4 +1,5 @@
 import { cloneObj } from '@cherryjuice/shared-helpers';
+// @ts-ignore
 import { TTag } from '::helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__';
 import { Attribute, ExecKMode } from '::helpers/execK';
 const alwaysToBeRemovedTags = ['span'];

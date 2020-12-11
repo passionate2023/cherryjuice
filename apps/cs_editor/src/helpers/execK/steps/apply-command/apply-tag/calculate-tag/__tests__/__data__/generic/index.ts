@@ -68,6 +68,7 @@ const getInput = tagName => ({
   tagName,
   excludedTagsInOutput: [...sizeTags.filter(tag => tag !== tagName)],
 });
+// @ts-ignore
 const genericTests: TTagTestSample[] = [...sizeTags, ...styleTags]
   .map(getInput)
   //@ts-ignore

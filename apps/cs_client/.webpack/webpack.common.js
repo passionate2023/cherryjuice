@@ -38,6 +38,11 @@ module.exports = {
   },
   module: {
     rules: [
+      !production && {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
       {
         test: /\.worker\.ts$/,
         use: {

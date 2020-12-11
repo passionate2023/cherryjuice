@@ -4,15 +4,17 @@
   "description": "",
   "author": "",
   "license": "ISC",
-  "module": "build/index.es.js",
-  "types": "build/index.d.ts",
+  "module": "build/index.js",
+  "types": "./types/index.d.ts",
+  "jsnext:main": "build/index.js",
   "files": [
     "build"
   ],
   "scripts": {
     "dev": "rollup -c -w",
-    "build": "rollup -c",
-    "generate-types": "tsc ",
+    "generate-types": "tsc --watch",
+    "build": "rollup -c --environment NODE_ENV:production",
+    "postbuild": "tsc",
     "test": "jest",
     "lint": "eslint ./**"
   },

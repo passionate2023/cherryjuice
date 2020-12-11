@@ -8,6 +8,5 @@ export type TTagTestSample = {
   output: TTag[];
 };
 
-import { genericTests } from '::helpers/execK/steps/apply-command/apply-tag/calculate-tag/__tests__/__data__/generic';
-
-export { genericTests };
+// @ts-ignore
+export { genericTests } from './generic/index';

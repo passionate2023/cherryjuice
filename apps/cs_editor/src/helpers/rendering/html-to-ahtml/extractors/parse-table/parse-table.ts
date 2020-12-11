@@ -13,7 +13,7 @@ const splitTableByRow = ({ table }: { table: string }): Node[] => {
         Array.from(cell.childNodes).reduce(
           (acc, node) => (
             node.nodeType === Node.TEXT_NODE
-              ? /^(\s+|)$/.test(node.wholeText)
+              ? /^(\s+|)$/.test(node['wholeText'])
                 ? undefined
                 : acc.push(node)
               : acc.push(node),

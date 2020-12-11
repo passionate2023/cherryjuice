@@ -1,7 +1,5 @@
-export type TableProperties = {
-  rows: number;
-  columns: number;
-};
+import { TableProperties } from '@cherryjuice/editor/types/helpers/objects/insert-object';
+
 type State = {
   valid: boolean;
   values: TableProperties;
