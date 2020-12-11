@@ -3,6 +3,7 @@ import { useAttachImagesToHtml } from '::root/components/content-editable/hooks/
 import { useFlagEditedNode } from '::root/components/content-editable/hooks/flag-edited-node';
 import { Image } from '@cherryjuice/graphql-types';
 import { snapBackManager } from '::root/snapback-manager';
+import { modEditor } from '::sass-modules';
 
 export type ContentEditableProps = {
   contentEditable;
@@ -51,7 +52,7 @@ const ContentEditable = ({
       key={node_id}
       ref={ref}
       id={'rich-text'}
-      className={'editor__content-editable'}
+      className={modEditor.editor__contentEditable}
       data-node_id={node_id}
       data-document-id={documentId}
       contentEditable={contentEditable}

@@ -28,12 +28,6 @@ export default {
   input: 'src/index.ts',
   output: [
     {
-      file: pkg.main,
-      format: 'cjs',
-      exports: 'named',
-      sourcemap: true,
-    },
-    {
       file: pkg.module,
       format: 'es',
       exports: 'named',
@@ -46,6 +40,12 @@ export default {
     alias({
       entries,
       customResolver,
+    }),
+    postcss({
+      extensions: ['scss', 'css'],
+      modules: true,
+      namedExports: name =>
+        `${name.replace(/-([a-z])/g, g => g[1].toUpperCase())}`,
     }),
     esbuild({
       // All options are optional
@@ -60,6 +60,5 @@ export default {
     commonjs({
       include: ['../../node_modules/**', 'node_modules/**'],
     }),
-    postcss({ extensions: ['scss', 'css'] }),
   ],
 };

@@ -4,10 +4,8 @@
   "description": "",
   "author": "",
   "license": "ISC",
-  "main": "build/index.js",
   "module": "build/index.es.js",
   "types": "build/index.d.ts",
-  "jsnext:main": "build/index.es.js",
   "files": [
     "build"
   ],

@@ -13,6 +13,7 @@ import {
 import { useOnMouseEvents } from '::hooks/on-mouse-events/on-mouse-event';
 import { useScrollToHash } from '::hooks/scroll-to-hash';
 import './assets/styles/global-classes/global-classes.scss';
+import { modEditor } from '::sass-modules';
 
 type Props = {
   contentEditableProps: ContentEditableProps;
@@ -35,7 +36,7 @@ const Editor: React.FC<Props> = ({
   useScrollToHash();
   return (
     <div
-      className={'editor'}
+      className={modEditor.editor}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
       onPaste={onPaste}
