@@ -56,7 +56,7 @@ const EditorContainer: React.FC<Props & PropsFromRedux> = ({
   };
 
   const contentEditableProps = {
-    contentEditable: !node.read_only && contentEditable && isDocumentOwner,
+    contentEditable: !node?.read_only && contentEditable && isDocumentOwner,
     documentId: node?.documentId,
     focusOnUpdate: !isOnMd,
     html: node?.html,

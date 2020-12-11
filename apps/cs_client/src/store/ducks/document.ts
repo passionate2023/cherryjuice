@@ -77,7 +77,6 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     ...state,
     documentId: payload,
   })),
-
   _(ac.fetchInProgress, state => ({
     ...state,
     asyncOperations: {
@@ -85,8 +84,9 @@ const reducer = createReducer(cloneObj(initialState), _ => [
       fetch: 'in-progress',
     },
   })),
-  _(ac.fetchFulfilled, state => ({
+  _(ac.fetchFulfilled, (state, { payload }) => ({
     ...state,
+    documentId: payload.document.id,
     asyncOperations: {
       ...state.asyncOperations,
       fetch: 'idle',

@@ -1,5 +1,5 @@
-import { filter, ignoreElements, mapTo, switchMap, tap } from 'rxjs/operators';
-import { concat, defer, EMPTY, from, Observable, of } from 'rxjs';
+import { filter, mapTo, switchMap, tap } from 'rxjs/operators';
+import { concat, defer, from, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { Actions } from '../../actions.types';
 import { SaveOperationState } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
@@ -40,17 +40,8 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
             ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
           }),
         );
-        const swappedDocumentId =
-          state.swappedDocumentIds[store.getState().document.documentId];
-        const maybeRedirectToNewDocument$ = swappedDocumentId
-          ? of(ac_.document.setDocumentId(state.newSelectedDocumentId))
-          : EMPTY.pipe(ignoreElements());
-        return concat(
-          saveInProgress$,
-          saveDocuments$,
-          saveFulfilled$,
-          maybeRedirectToNewDocument$,
-        ).pipe(
+
+        return concat(saveInProgress$, saveDocuments$, saveFulfilled$).pipe(
           createTimeoutHandler({
             alertDetails: {
               title: 'Saving is taking longer then expected',

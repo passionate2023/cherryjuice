@@ -37,7 +37,10 @@ const createLocalRequest = (
 };
 
 const fetchDocumentEpic = (action$: Observable<Actions>) => {
-  const selectedDocumentId = () => store.getState().document.documentId;
+  const selectedDocumentId = () => {
+    const document = store.getState().document;
+    return document.swappedIds[document.documentId] || document.documentId;
+  };
   return action$.pipe(
     ofType([
       ac_.document.fetch,
