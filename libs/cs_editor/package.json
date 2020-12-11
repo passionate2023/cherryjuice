@@ -4,17 +4,17 @@
   "description": "",
   "author": "",
   "license": "ISC",
-  "module": "build/index.js",
-  "types": "./types/index.d.ts",
-  "jsnext:main": "build/index.js",
+  "main": "build/index.js",
+  "module": "build/index.es.js",
+  "jsnext:main": "build/index.es.js",
+  "types": "build",
   "files": [
     "build"
   ],
   "scripts": {
     "dev": "rollup -c -w",
-    "generate-types": "tsc --watch",
+    "dev-esbuild": "rollup -c -w --environment mode:esbuild",
     "build": "rollup -c --environment NODE_ENV:production",
-    "postbuild": "tsc",
     "test": "jest",
     "lint": "eslint ./**"
   },
@@ -107,6 +107,8 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-node-externals": "^2.2.0",
     "esbuild": "^0.8.21",
-    "@rollup/plugin-alias": "^3.1.1"
+    "@rollup/plugin-alias": "^3.1.1",
+    "ttypescript": "^1.5.12",
+    "typescript-transform-paths": "^2.1.0"
   }
 }

@@ -5,7 +5,6 @@ import {
 } from '::store/ducks/document-cache/document-cache';
 import { newImagePrefix } from '@cherryjuice/editor';
 import { listNodeEditedAttributes } from '::store/ducks/document-cache/helpers/node/mutate-node-meta';
-
 export type MutateNodeContentParams = {
   node_id: number;
   documentId: string;

@@ -132,7 +132,7 @@ module.exports = {
         ],
         include: globalStyles,
       },
-    ],
+    ].filter(Boolean),
   },
 
   target: 'web',

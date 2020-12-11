@@ -31,6 +31,6 @@ export { Editor } from '::root/editor';
 export { snapBackManager } from '::root/snapback-manager';
 export { bridge } from '::root/bridge';
 
-// export { NumberOfFrames } from '::helpers/snapback/snapback/snapback';
-// export { ExecKProps } from '::helpers/execK';
-// export { CustomRange } from '::helpers/execK/steps/get-selection';
+export { NumberOfFrames } from '::helpers/snapback/snapback/snapback';
+export { ExecKProps } from '::helpers/execK';
+export { CustomRange } from '::helpers/execK/steps/get-selection';
