@@ -14,7 +14,6 @@
     "dev": "rollup -c -w",
     "generate-types": "tsc --watch",
     "build": "rollup -c --environment NODE_ENV:production",
-    "postbuild": "tsc",
     "test": "jest",
     "lint": "eslint ./**"
   },

@@ -106,7 +106,12 @@ module.exports = {
               esModule: true,
             },
           },
-          'sass-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              implementation: require('sass'),
+            },
+          },
         ],
         exclude: globalStyles,
       },
@@ -121,6 +126,7 @@ module.exports = {
               sassOptions: {
                 includePaths: ['node_modules', '../../node_modules'],
               },
+              implementation: require('sass'),
             },
           },
         ],
