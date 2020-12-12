@@ -1,4 +1,4 @@
-import { TableProperties } from '@cherryjuice/editor/types/helpers/objects/insert-object';
+import { TableProperties } from '@cherryjuice/editor';
 
 type State = {
   valid: boolean;

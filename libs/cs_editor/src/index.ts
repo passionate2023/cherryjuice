@@ -34,3 +34,7 @@ export { bridge } from '::root/bridge';
 export { NumberOfFrames } from '::helpers/snapback/snapback/snapback';
 export { ExecKProps } from '::helpers/execK';
 export { CustomRange } from '::helpers/execK/steps/get-selection';
+export {
+  TableProperties,
+  CodeboxProperties,
+} from '::helpers/objects/insert-object';
