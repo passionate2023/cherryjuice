@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
-import { NumberOfFrames } from '::editor/helpers/snapback/snapback/snapback';
+import { NumberOfFrames, snapBackManager } from '@cherryjuice/editor';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';

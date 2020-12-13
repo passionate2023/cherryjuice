@@ -1,5 +1,5 @@
 import { applyPatches, Patch } from 'immer';
-import { NumberOfFrames } from '::editor/helpers/snapback/snapback/snapback';
+import { NumberOfFrames } from '@cherryjuice/editor';
 
 export const calculateNumberOfFrames = <T>(
   framePositions: number[],
