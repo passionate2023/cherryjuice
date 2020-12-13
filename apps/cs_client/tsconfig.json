@@ -9,10 +9,13 @@
       "::helpers/*": ["./src/helpers/*"],
       "::graphql/*": ["./src/graphql/*"],
       "::assets/*": ["./src/assets/*"],
-      "::shared-components/*": ["./src/components/app/shared-components/*"],
+      "::shared-components/*": [
+        "./src/components/components/shared-components/*"
+      ],
       "::hooks/*": ["./src/hooks/*"],
-      "::app/*": ["./src/components/app/*"],
-      "::auth/*": ["./src/components/auth/*"],
+      "::app/*": ["./src/components/components/app/*"],
+      "::editor/*": ["./src/components/components/editor/*"],
+      "::auth/*": ["./src/components/components/auth/*"],
       "::root/*": ["./src/components/*"],
       "::store/*": ["./src/store/*"],
       "::cypress/*": ["./cypress/*"]
@@ -20,7 +23,8 @@
     "target": "es2019",
     "module": "CommonJS",
     "esModuleInterop": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "composite": true
   },
   "exclude": ["node_modules"],
   "include": ["src"]

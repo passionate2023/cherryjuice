@@ -17,10 +17,8 @@
 }
 
 .tree-tool-bar__controls {
-  height: 34px;
-  @include respond-to($md-down) {
-    height: 40px;
-  }
+  height: var(--treeToolBarHeight);
+
   box-sizing: border-box;
   padding: 2px;
   width: 100%;

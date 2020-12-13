@@ -1,9 +1,5 @@
-export type CodeboxProperties = {
-  width: number;
-  widthType: 'pixels' | '%';
-  height: number;
-  autoExpandHeight: 'fixed' | 'auto';
-};
+import { CodeboxProperties } from '@cherryjuice/editor/types/helpers/objects/insert-object';
+
 type State = {
   valid: boolean;
   values: CodeboxProperties;

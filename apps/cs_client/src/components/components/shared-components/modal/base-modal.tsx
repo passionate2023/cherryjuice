@@ -1,5 +1,5 @@
 import { modAlertModal, modDeleteNode } from '::sass-modules';
-import { EventHandler, default as React } from 'react';
+import { default as React } from 'react';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
 import { ComponentWithTransition } from '::root/components/shared-components/transitions/component-with-transition';
@@ -14,7 +14,7 @@ export const headerVariant = {
 
 type BaseModalProps = {
   show: boolean;
-  onClose: EventHandler<undefined>;
+  onClose: () => void;
   buttons: TDialogFooterButton[];
   title: string;
   alertType?: AlertType;
@@ -50,7 +50,8 @@ const BaseModal: React.FC<BaseModalProps> = ({
           key={i}
           className={`${modAlertModal.alertModal__dismissButton}`}
           onClick={onClick}
-          lazyAutoFocus={lazyAutoFocus ? 450 : 0}
+          lazyAutoFocus={lazyAutoFocus}
+          comesFromUp={true}
           disabled={disabled}
           testId={testId}
           text={label}

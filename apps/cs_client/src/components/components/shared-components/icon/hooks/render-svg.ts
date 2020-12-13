@@ -1,7 +1,7 @@
 import { EventHandler, useEffect, useRef, useState } from 'react';
-import { stringToSingleElement } from '::helpers/editing/execK/helpers';
+import { stringToSingleElement } from '@cherryjuice/editor';
 import React from 'react';
-import { getAttributes } from '::helpers/rendering/html-to-ahtml/helpers/helpers';
+import { getAttributes } from '@cherryjuice/editor';
 
 const useRenderSVG = (
   svg: string,

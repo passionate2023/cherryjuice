@@ -11,3 +11,4 @@ debug.log
 *.tsbuildinfo
 build
 .env
+*/cs_editor/types

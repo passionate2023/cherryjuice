@@ -1,5 +1,5 @@
-import { filter, ignoreElements, mapTo, switchMap, tap } from 'rxjs/operators';
-import { concat, defer, EMPTY, from, Observable, of } from 'rxjs';
+import { filter, mapTo, switchMap, tap } from 'rxjs/operators';
+import { concat, defer, from, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { Actions } from '../../actions.types';
 import { SaveOperationState } from '::store/epics/save-documents/helpers/save-document/helpers/save-deleted-nodes';
@@ -12,7 +12,7 @@ import { resetCache } from '::store/epics/save-documents/helpers/reset-cache';
 import { Epic } from 'redux-observable';
 import { SnackbarMessages } from '::root/components/app/components/menus/widgets/components/snackbar/snackbar-messages';
 import { getEditedDocuments } from '::store/selectors/cache/document/document';
-import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
+import { saveNodeContent } from '@cherryjuice/editor';
 import { alerts } from '::helpers/texts/alerts';
 
 const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
@@ -21,7 +21,7 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
     filter(() => store.getState().document.asyncOperations.save === 'idle'),
     switchMap(() => {
       const state: SaveOperationState = createSaveState();
-      updateCachedHtmlAndImages();
+      saveNodeContent();
       const editedDocuments = getEditedDocuments();
       if (!editedDocuments.length) return of(ac_.document.nothingToSave());
       else {
@@ -40,17 +40,8 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
             ac.dialogs.setSnackbar(SnackbarMessages.documentSaved);
           }),
         );
-        const swappedDocumentId =
-          state.swappedDocumentIds[store.getState().document.documentId];
-        const maybeRedirectToNewDocument$ = swappedDocumentId
-          ? of(ac_.document.setDocumentId(state.newSelectedDocumentId))
-          : EMPTY.pipe(ignoreElements());
-        return concat(
-          saveInProgress$,
-          saveDocuments$,
-          saveFulfilled$,
-          maybeRedirectToNewDocument$,
-        ).pipe(
+
+        return concat(saveInProgress$, saveDocuments$, saveFulfilled$).pipe(
           createTimeoutHandler({
             alertDetails: {
               title: 'Saving is taking longer then expected',

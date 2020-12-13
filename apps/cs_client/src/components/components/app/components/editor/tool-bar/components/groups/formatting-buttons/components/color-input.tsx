@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
-import { execK } from '::helpers/editing/execK';
+import { execK } from '@cherryjuice/editor';
 import { Icon } from '::root/components/shared-components/icon/icon';
 import { modToolbar } from '::sass-modules';
 import { HotKey } from '@cherryjuice/graphql-types';

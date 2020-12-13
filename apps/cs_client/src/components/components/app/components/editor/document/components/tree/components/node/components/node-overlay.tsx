@@ -1,9 +1,9 @@
 import * as React from 'react';
-import nodeMod from '::sass-modules/tree/node.scss';
 import { MutableRefObject, useEffect, useRef } from 'react';
 import { nodeOverlay } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/node-overlay';
 import { useSelector } from 'react-redux';
 import { Store } from '::store/store';
+import { modNode } from '::sass-modules';
 
 type Props = {
   clickTimestamp: number;
@@ -39,7 +39,7 @@ const NodeOverlay: React.FC<Props> = ({
       clearTimeout(handle);
     };
   }, [clickTimestamp]);
-  return <div className={isSelected ? nodeMod.node__titleOverlay : ''} />;
+  return <div className={isSelected ? modNode.node__titleOverlay : ''} />;
 };
 
 export { NodeOverlay };

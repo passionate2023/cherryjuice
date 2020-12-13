@@ -2,7 +2,7 @@ import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { AsyncOperation } from './document';
 import { rootActionCreators } from './root';
-import { cloneObj } from '::helpers/objects';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 import { LoadDocumentsListPayload } from '::store/ducks/document-cache/helpers/document/load-documents-list';
 import {

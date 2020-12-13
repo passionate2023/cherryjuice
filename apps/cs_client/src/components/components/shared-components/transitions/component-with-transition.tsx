@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { EventHandler, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
 import { animated } from 'react-spring';
 import { TransitionWrapper } from '::root/components/shared-components/transitions/transition-wrapper';
 
 type ComponentWithTransitionProps = {
-  onClose: EventHandler<undefined>;
+  onClose: () => void;
   show: boolean;
   transitionValues: any;
   enableModalKeyboardEvents?: boolean;
@@ -23,12 +23,11 @@ const ComponentWrapper: React.FC<ComponentWrapperProps & { style }> = ({
   children,
   onClose,
   style,
-  enableModalKeyboardEvents,
   className,
 }) => {
   const keyboardEventsProps = useModalKeyboardEvents({
     dismiss: onClose,
-    enabled: enableModalKeyboardEvents,
+    focusableElementsSelector: ['a', 'input[type="submit"]'],
   });
   return (
     <>

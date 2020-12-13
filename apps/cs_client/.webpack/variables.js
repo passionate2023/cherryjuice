@@ -11,11 +11,12 @@ module.exports = {
     '::assets': path.resolve(__dirname, '../src/assets/'),
     '::shared-components': path.resolve(
       __dirname,
-      '../src/components/app/shared-components/',
+      '../src/components/components/shared-components/',
     ),
     '::hooks': path.resolve(__dirname, '../src/hooks/'),
-    '::app': path.resolve(__dirname, '../src/components/app/'),
-    '::auth': path.resolve(__dirname, '../src/components/auth/'),
+    '::app': path.resolve(__dirname, '../src/components/components/app/'),
+    '::editor': path.resolve(__dirname, '../src/components/components/editor/'),
+    '::auth': path.resolve(__dirname, '../src/components/components/auth/'),
     '::root': path.resolve(__dirname, '../src/components/'),
     '::store': path.resolve(__dirname, '../src/store/'),
     '::cypress': path.resolve(__dirname, '../cypress/'),
@@ -37,6 +38,10 @@ module.exports = {
     dist: path.resolve(__dirname, '../dist'),
     iconsDist: path.resolve(__dirname, '../dist/icons/'),
     icons: path.resolve(__dirname, '../src/assets/icons'),
+    serviceWorker: path.resolve(
+      __dirname,
+      '../src/service-worker/service-worker.ts',
+    ),
     env: undefined /*path.join(__dirname, '../.env')*/,
     src: [
       path.resolve(__dirname, '../src'),

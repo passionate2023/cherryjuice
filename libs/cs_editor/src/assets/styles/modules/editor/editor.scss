@@ -1,0 +1,22 @@
+.editor {
+  grid-area: rich-text;
+  position: relative;
+  overflow: auto;
+  background-color: var(--richTextBg);
+}
+.editor__content-editable {
+  box-sizing: border-box;
+  padding: 6px;
+  overflow: auto;
+  overflow-wrap: break-word;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+
+  &:focus {
+    outline: none;
+  }
+  color: var(--richTextColor);
+  font-family: var(--richTextFont);
+  font-size: var(--richTextFontSize);
+}

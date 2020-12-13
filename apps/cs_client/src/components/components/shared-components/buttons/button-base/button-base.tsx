@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { modButton } from '::sass-modules';
-import { EventHandler, MutableRefObject, useEffect, useRef } from 'react';
+import { EventHandler, useRef } from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { Icon } from '::root/components/shared-components/icon/icon';
+import { useLazyAutoFocus } from '../hooks/lazy-auto-focus';
 
 type ButtonBaseProps = {
   className?: string;
@@ -10,7 +11,8 @@ type ButtonBaseProps = {
   disabled?: boolean;
   autoFocus?: boolean;
   dark?: boolean;
-  lazyAutoFocus?: number;
+  lazyAutoFocus?: boolean;
+  comesFromUp?: boolean;
   testId?: string;
   active?: boolean;
   text?: string;
@@ -22,29 +24,6 @@ type ButtonBaseProps = {
 
 const buttonVariants = {
   danger: modButton.buttonDanger,
-};
-
-const useLazyAutoFocus = (
-  lazyAutoFocus: number,
-  elementRef: MutableRefObject<HTMLElement>,
-) => {
-  const focusTimeout = useRef<any>();
-  useEffect(() => {
-    if (elementRef.current)
-      if (lazyAutoFocus) {
-        clearTimeout(focusTimeout.current);
-        focusTimeout.current = setTimeout(() => {
-          elementRef.current.focus();
-        }, lazyAutoFocus);
-        return () => {
-          elementRef.current.blur();
-          clearTimeout(focusTimeout.current);
-        };
-      } else {
-        elementRef.current.blur();
-        clearTimeout(focusTimeout.current);
-      }
-  }, [lazyAutoFocus]);
 };
 
 const ButtonBase: React.FC<ButtonBaseProps> = ({

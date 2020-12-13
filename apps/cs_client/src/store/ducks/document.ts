@@ -1,6 +1,6 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
-import { cloneObj } from '::helpers/objects';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 import { rootActionCreators } from './root';
 import { QDocumentMeta } from '::graphql/queries/document-meta';
 import { SelectNodeParams } from '::store/ducks/document-cache/helpers/document/select-node';
@@ -77,7 +77,6 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     ...state,
     documentId: payload,
   })),
-
   _(ac.fetchInProgress, state => ({
     ...state,
     asyncOperations: {
@@ -85,8 +84,9 @@ const reducer = createReducer(cloneObj(initialState), _ => [
       fetch: 'in-progress',
     },
   })),
-  _(ac.fetchFulfilled, state => ({
+  _(ac.fetchFulfilled, (state, { payload }) => ({
     ...state,
+    documentId: payload.document.id,
     asyncOperations: {
       ...state.asyncOperations,
       fetch: 'idle',

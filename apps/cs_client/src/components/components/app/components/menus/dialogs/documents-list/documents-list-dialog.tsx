@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { DocumentList } from './components/documents-list/document-list';
-import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
+import { saveNodeContent } from '@cherryjuice/editor';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
@@ -38,7 +38,6 @@ const createButtons = ({
       onClick: close,
       disabled: false,
       testId: 'close-document-select',
-      lazyAutoFocus: true,
     },
     {
       testId: testIds.dialogs__selectDocument__footerRight__open,
@@ -93,7 +92,7 @@ const DocumentsListDialog: React.FC<PropsFromRedux> = ({
   }, [showDocumentList, online]);
   const close = ac.dialogs.hideDocumentList;
   const open = () => {
-    updateCachedHtmlAndImages();
+    saveNodeContent();
     ac.document.setDocumentId(selectedIDs[0]);
   };
   const { buttonsLeft, buttonsRight } = createButtons({

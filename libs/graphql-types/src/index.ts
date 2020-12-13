@@ -288,6 +288,7 @@ export enum HotKeyActionType {
   SMALL = 'SMALL',
   SUB = 'SUB',
   SUP = 'SUP',
+  TOGGLE_BULLET_POINT = 'TOGGLE_BULLET_POINT',
   UNDERLINE = 'UNDERLINE',
   UNDO = 'UNDO',
 }

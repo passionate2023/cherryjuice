@@ -3,7 +3,7 @@ import * as React from 'react';
 import { DrawerNavigation } from '::root/components/shared-components/drawer/components/drawer-navigation/drawer-navigation';
 import { useEffect, useMemo } from 'react';
 import { updateSubTitle } from '::root/components/shared-components/drawer/components/drawer-navigation/helpers/update-sub-title';
-import { createGesturesHandler } from '::root/components/shared-components/drawer/components/drawer-navigation/helpers/create-gestures-handler';
+import { createGesturesHandler } from '@cherryjuice/shared-helpers';
 import { toggleDrawer } from '::root/components/shared-components/drawer/components/drawer-toggle/helpers/create-toggle-handler';
 import { ScreenName } from '::root/components/app/components/menus/dialogs/settings/screens/screens';
 

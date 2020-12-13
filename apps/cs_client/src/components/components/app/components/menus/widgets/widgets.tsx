@@ -36,17 +36,11 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
 }) => {
   const widgets: Widget[] = [];
 
-  if (operations.length)
+  if (snackbar?.message)
     widgets.push({
-      component: <DocumentOperations operations={operations} />,
-      key: 'DocumentOperations',
+      component: <Snackbar snackbar={snackbar} />,
+      key: snackbar.message,
     });
-  if (showTimeline && (documentActionNOF.redo || documentActionNOF.undo))
-    widgets.push({
-      component: <ChangesHistory />,
-      key: 'ChangesHistory',
-    });
-
   if (showUndoDocumentAction) {
     widgets.push({
       component: (
@@ -65,10 +59,15 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
       key: 'UndoDocumentAction',
     });
   }
-  if (snackbar?.message)
+  if (showTimeline && (documentActionNOF.redo || documentActionNOF.undo))
     widgets.push({
-      component: <Snackbar snackbar={snackbar} />,
-      key: snackbar.message,
+      component: <ChangesHistory />,
+      key: 'ChangesHistory',
+    });
+  if (operations.length)
+    widgets.push({
+      component: <DocumentOperations operations={operations} />,
+      key: 'DocumentOperations',
     });
 
   const { transitions, setRef } = useHubTransition({ widgets });

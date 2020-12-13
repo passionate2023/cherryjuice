@@ -9,7 +9,7 @@ import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { QDocumentMeta, DOCUMENT_META } from '::graphql/queries/document-meta';
 import { getDocuments } from '::store/selectors/cache/document/document';
-import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
+import { snapBackManager } from '@cherryjuice/editor';
 import { adaptToPersistedState } from '::store/ducks/document-cache/helpers/document/shared/adapt-persisted-state';
 import { alerts } from '::helpers/texts/alerts';
 
@@ -37,7 +37,10 @@ const createLocalRequest = (
 };
 
 const fetchDocumentEpic = (action$: Observable<Actions>) => {
-  const selectedDocumentId = () => store.getState().document.documentId;
+  const selectedDocumentId = () => {
+    const document = store.getState().document;
+    return document.swappedIds[document.documentId] || document.documentId;
+  };
   return action$.pipe(
     ofType([
       ac_.document.fetch,

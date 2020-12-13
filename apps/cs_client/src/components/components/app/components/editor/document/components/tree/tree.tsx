@@ -14,7 +14,7 @@ import { modNode, modTree } from '::sass-modules';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper-pure';
 import { useChildContextMenu } from '::root/components/shared-components/context-menu/hooks/child-context-menu';
 import { useTreeContextMenuItems } from '::root/components/app/components/editor/document/components/tree/hooks/tree-context-menu-items';
-import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
+import { saveNodeContent } from '@cherryjuice/editor';
 
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -61,7 +61,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
       if (nodeElement) return nodeElement.dataset.nodeId;
     },
     onSelectElement: node_id => {
-      updateCachedHtmlAndImages();
+      saveNodeContent();
       ac.node.select({
         documentId: store.getState().document.documentId,
         node_id: +node_id,

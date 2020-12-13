@@ -1,5 +1,5 @@
 import { QFullNode } from '::store/ducks/document-cache/document-cache';
-import { newNodePrefix } from '::root/components/app/components/editor/document/components/rich-text/hooks/add-meta-to-pasted-images';
+import { newNodePrefix } from '@cherryjuice/editor';
 import { NodeMeta } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
 import {
   calculateNewStyle,

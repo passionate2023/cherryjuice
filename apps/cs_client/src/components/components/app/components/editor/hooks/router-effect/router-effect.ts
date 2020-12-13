@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { extractDocumentFromPathname } from '::root/components/app/components/editor/hooks/router-effect/helpers/extract-document-from-pathname';
+import { extractDocumentFromPathname } from '@cherryjuice/shared-helpers';
 import { ac, store, Store } from '::store/store';
 import { createSelector } from 'reselect';
 import { router } from '::root/router/router';

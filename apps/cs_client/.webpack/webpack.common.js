@@ -38,6 +38,11 @@ module.exports = {
   },
   module: {
     rules: [
+      !production && {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
       {
         test: /\.worker\.ts$/,
         use: {
@@ -101,7 +106,12 @@ module.exports = {
               esModule: true,
             },
           },
-          'sass-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              implementation: require('sass'),
+            },
+          },
         ],
         exclude: globalStyles,
       },
@@ -116,12 +126,13 @@ module.exports = {
               sassOptions: {
                 includePaths: ['node_modules', '../../node_modules'],
               },
+              implementation: require('sass'),
             },
           },
         ],
         include: globalStyles,
       },
-    ],
+    ].filter(Boolean),
   },
 
   target: 'web',
@@ -165,18 +176,10 @@ module.exports = {
         },
       }),
     production &&
-      new WorkboxPlugin.GenerateSW({
-        clientsClaim: true,
-        skipWaiting: true,
+      new WorkboxPlugin.InjectManifest({
+        swSrc: paths.serviceWorker,
         maximumFileSizeToCacheInBytes: production ? 1024 * 2000 : 1024 * 20000,
         swDest: 'workbox-sw.js',
-        navigateFallback: 'index.html',
-        navigateFallbackDenylist: [
-          /auth\/google\/.*/,
-          /report\.html/,
-          /exports\/*/,
-          /overview\/*/,
-        ],
       }),
     production &&
       new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),

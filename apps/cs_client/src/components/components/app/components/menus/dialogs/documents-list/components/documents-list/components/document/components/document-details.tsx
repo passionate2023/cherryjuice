@@ -26,7 +26,11 @@ const DocumentDetails: React.FC<Props> = ({
   return (
     <div className={modDocumentsList.documentsList__details}>
       <span className={modDocumentsList.documentsList__details__primary}>
-        <VisibilityIcon privacy={privacy} numberOfGuests={numberOfGuests} />
+        <VisibilityIcon
+          privacy={privacy}
+          numberOfGuests={numberOfGuests}
+          labelPosition={'bottom-right'}
+        />
         <span className={modDocumentsList.documentsList__details__text}>
           {size}kb
         </span>

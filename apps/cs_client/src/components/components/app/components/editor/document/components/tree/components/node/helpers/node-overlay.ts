@@ -10,7 +10,7 @@ const createNodeOverlayHelper = () => {
       (state.tree = document.querySelector('.' + treeModule.tree_rootList)),
     updateWidth: () => {
       cssVariables.setOverlayWidth(0);
-      cssVariables.setOverlayWidth(state.tree.scrollWidth);
+      cssVariables.setOverlayWidth(state.tree.scrollWidth - 40);
     },
     updateLeft: overlayParent => {
       const nodeRect = overlayParent.current.getBoundingClientRect();

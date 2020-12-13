@@ -1,6 +1,7 @@
 import { combineReducers, Reducer } from 'redux';
 import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import localForage from 'localforage';
+import localStorage from 'redux-persist/lib/storage';
 import { documentReducer } from './ducks/document';
 import { dialogsReducer } from './ducks/dialogs';
 import { nodeReducer } from './ducks/node';
@@ -19,41 +20,50 @@ import { editorSettingsReducer } from '::store/ducks/settings/editor-settings/ed
 import { bookmarksReducer } from '::store/ducks/bookmarks';
 import { hotkeysSettingsReducer } from '::store/ducks/settings/hotkeys-settings/hotkeys-settings';
 
-const persistedReducers = {
+const localStorageReducerConfig = {
+  storage: localStorage,
+};
+const localForageReducerConfig = {
+  storage: localForage,
+  timeout: 0,
+};
+const localForageReducers = {
   documentCache: persistReducer(
     {
+      ...localForageReducerConfig,
       key: 'documentCache',
-      storage,
       blacklist: [],
     },
     documentCacheReducer,
   ),
+};
+const localStorageReducers = {
   auth: persistReducer(
     {
+      ...localStorageReducerConfig,
       key: 'auth',
-      storage,
       blacklist: ['ongoingOperation', 'alert'],
     },
     authReducer,
   ),
   editorSettings: persistReducer(
     {
+      ...localStorageReducerConfig,
       key: 'editorSettings',
-      storage,
     },
     editorSettingsReducer,
   ),
   hotkeySettings: persistReducer(
     {
+      ...localStorageReducerConfig,
       key: 'hotkeySettings',
-      storage,
     },
     hotkeysSettingsReducer,
   ),
   editor: persistReducer(
     {
+      ...localStorageReducerConfig,
       key: 'editor',
-      storage,
       blacklist: [
         'anchorId',
         'selectedLink',
@@ -66,32 +76,32 @@ const persistedReducers = {
   ),
   settings: persistReducer(
     {
+      ...localStorageReducerConfig,
       key: 'settings',
-      storage,
       whitelist: ['selectedScreen'],
     },
     settingsReducer,
   ),
   root: persistReducer(
     {
+      ...localStorageReducerConfig,
       key: 'root',
-      storage,
       blacklist: ['online'],
     },
     rootReducer,
   ) as Reducer<RootReducerState>,
   search: persistReducer(
     {
+      ...localStorageReducerConfig,
       key: 'search',
-      storage,
       blacklist: ['query', 'searchResults', 'searchState'],
     },
     searchReducer,
   ) as Reducer<SearchReducerState>,
   cssVariables: persistReducer(
     {
+      ...localStorageReducerConfig,
       key: 'cssVariables',
-      storage,
       blacklist: [],
     },
     cssVariablesReducer,
@@ -109,7 +119,8 @@ const nonPersistedReducers = {
   timelines: timelinesReducer,
 };
 const reducer = combineReducers({
-  ...persistedReducers,
+  ...localForageReducers,
+  ...localStorageReducers,
   ...nonPersistedReducers,
 });
 

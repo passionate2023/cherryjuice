@@ -1,6 +1,12 @@
 @import '../mixins/breakpoints';
 @import '../vars/vars';
 :root {
+  // constants
+  --treeToolBarHeight: 34px;
+  @include respond-to($md-down) {
+    --treeToolBarHeight: 40px;
+  }
+
   --vh: 100vh;
   --vw: 100vw;
   --overlay-width: 0;

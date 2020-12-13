@@ -10,6 +10,7 @@ import { useUpdateCssVariables } from '::root/components/app/hooks/update-css-va
 import { useGetPreviousOperations } from '::root/components/app/hooks/get-previous-operations';
 import { useGetActiveOperations } from '::root/components/app/hooks/get-active-operations';
 import { useApplyEditorSettings } from '::root/components/app/hooks/apply-editor-settings';
+import { useInitEditorBridge } from '::app/hooks/init-editor-bridge';
 
 const Menus = React.lazy(() =>
   import('::root/components/app/components/menus/menus'),
@@ -56,6 +57,7 @@ const App: React.FC<Props & PropsFromRedux> = ({
   useGetPreviousOperations();
   useGetActiveOperations(userId);
   useApplyEditorSettings();
+  useInitEditorBridge();
   return (
     <div
       className={joinClassNames([

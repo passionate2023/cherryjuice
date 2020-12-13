@@ -9,10 +9,7 @@ import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
-import {
-  createAnchorHtml,
-  insertObject,
-} from '::helpers/editing/anchor/insert-object';
+import { createAnchorHtml, insertObject } from '@cherryjuice/editor';
 import {
   anchorAC,
   anchorR,

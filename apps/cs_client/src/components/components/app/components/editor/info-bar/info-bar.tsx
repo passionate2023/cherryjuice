@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {modInfoBar} from '::sass-modules';
-import {connect, ConnectedProps} from 'react-redux';
-import {Store} from '::store/store';
-import {VisibilityIcon} from '::root/components/app/components/editor/info-bar/components/components/visibility-icon';
-import {Timestamps} from '::root/components/app/components/editor/info-bar/components/components/timestamp';
-import {getCurrentDocument} from '::store/selectors/cache/document/document';
-import {Icon, Icons} from '::root/components/shared-components/icon/icon';
-import {Tooltip} from '::root/components/shared-components/tooltip/tooltip';
+import { modInfoBar } from '::sass-modules';
+import { connect, ConnectedProps } from 'react-redux';
+import { Store } from '::store/store';
+import { VisibilityIcon } from '::root/components/app/components/editor/info-bar/components/components/visibility-icon';
+import { Timestamps } from '::root/components/app/components/editor/info-bar/components/components/timestamp';
+import { getCurrentDocument } from '::store/selectors/cache/document/document';
+import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -50,13 +50,13 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
       </div>
       <div className={modInfoBar.infoBar__group}>
         {!online && (
-            <Tooltip label={'You are offline'}>
-              <Icon
-                  name={Icons.material['no-connection']}
-                  loadAsInlineSVG={'force'}
-                  size={20}
-              />
-            </Tooltip>
+          <Tooltip label={'You are offline'}>
+            <Icon
+              name={Icons.material['no-connection']}
+              loadAsInlineSVG={'force'}
+              size={20}
+            />
+          </Tooltip>
         )}
         {!noSelectedDocument && (
           <VisibilityIcon

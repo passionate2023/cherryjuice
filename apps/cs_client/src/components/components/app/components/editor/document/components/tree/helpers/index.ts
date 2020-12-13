@@ -1,7 +1,7 @@
 import treeModule from '::sass-modules/tree/tree.scss';
-import { nodeOverlay } from '../components/node/helpers/node-overlay';
 import { ac } from '::store/store';
 import { CssVariables } from '::store/ducks/css-variables';
+import { nodeOverlay } from '::app/components/editor/document/components/tree/components/node/helpers/node-overlay';
 
 const attachTreeResizeBubble = onResize => {
   const handleRef = document.querySelector('.' + treeModule.tree__resizeHandle);

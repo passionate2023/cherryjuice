@@ -6,6 +6,11 @@ import { ContextMenuWrapper } from '::root/components/shared-components/context-
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
 
+const onContextMenu = e => {
+  e.preventDefault();
+  e.stopPropagation();
+};
+
 export type MuteCallback = () => void;
 type Props = {
   name: string;
@@ -51,7 +56,7 @@ const DialogListItem: React.FC<Props> = ({
       ])}
       onClick={disabled ? undefined : onClick}
       tabIndex={0}
-      onContextMenu={() => setShowModal(true)}
+      onContextMenu={onContextMenu}
       ref={itemRef}
     >
       <div

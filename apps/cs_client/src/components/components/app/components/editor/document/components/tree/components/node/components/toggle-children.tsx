@@ -1,8 +1,8 @@
 import * as React from 'react';
-import nodeMod from '::sass-modules/tree/node.scss';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { memo, useCallback } from 'react';
 import { ac } from '::store/store';
+import { modNode } from '::sass-modules';
 
 type Props = {
   depth: number;
@@ -27,8 +27,8 @@ const ToggleChildren: React.FC<Props> = memo(function ToggleChildren({
     <>
       <div style={{ marginLeft: depth * 20 }} />
       <div
-        className={`${nodeMod.node__toggleChildren} ${
-          child_nodes.length > 0 ? '' : nodeMod.node__titleButtonHidden
+        className={`${modNode.node__toggleChildren} ${
+          child_nodes.length > 0 ? '' : modNode.node__titleButtonHidden
         }`}
       >
         {

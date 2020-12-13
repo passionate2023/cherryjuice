@@ -1,4 +1,4 @@
-import { updateCachedHtmlAndImages } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/apollo-cache';
+import { saveNodeContent } from '@cherryjuice/editor';
 import { ac } from '::store/store';
 import { NodeMeta } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
 import { getNode } from '::store/selectors/cache/document/node';
@@ -25,7 +25,7 @@ export const createNode = ({
     ? focusedNode.node_id
     : -1;
 
-  updateCachedHtmlAndImages();
+  saveNodeContent();
   ac.documentCache.createNode({
     createdNode: generateNode({
       documentId,

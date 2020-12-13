@@ -3,7 +3,6 @@ import { useRef } from 'react';
 import { useSelectNode } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/select-node';
 import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
 import { ToggleChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/toggle-children';
-import { NodeOverlay } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-overlay';
 import { NodeChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-children';
 import { NodesDict } from '::store/ducks/document-cache/document-cache';
 import { NodeState } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/expand/expand-node';
@@ -13,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { Store } from '::store/store';
 import { NodeIcons } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-icons/node-icons';
 import { modNode } from '::sass-modules';
+import { NodeOverlay } from '::app/components/editor/document/components/tree/components/node/components/node-overlay';
 
 export type NodeProps = {
   node_id: number;

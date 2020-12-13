@@ -19,6 +19,8 @@ const createErrorHandler = ({
   mode = 'modal',
 }: CreateErrorHandler) =>
   catchError(error => {
+    // eslint-disable-next-line no-console
+    console.error(error);
     return concat(
       ...[
         !dontShowAlert &&

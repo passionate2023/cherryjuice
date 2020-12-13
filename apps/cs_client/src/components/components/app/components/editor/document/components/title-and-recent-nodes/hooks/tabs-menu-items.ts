@@ -86,7 +86,7 @@ const useTabsMenuItems = ({
       onClick: bookmarkM,
     },
     { name: 'node properties', onClick: renameM, bottomSeparator: true },
-    { name: 'close', onClick: closeSelectedM },
+    { name: 'close tab', onClick: closeSelectedM },
     { name: 'close all tabs', onClick: closeAllM },
     { name: 'close unchanged tabs', onClick: closeUnchangedM },
     { name: 'close other tabs', onClick: closeOthersM },

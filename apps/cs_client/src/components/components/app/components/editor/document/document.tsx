@@ -1,14 +1,10 @@
 import * as React from 'react';
-import { Fragment, useEffect, useReducer } from 'react';
+import { Fragment } from 'react';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { Tree } from './components/tree/tree';
 import { Route } from 'react-router-dom';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
-import { RichText } from '::root/components/app/components/editor/document/components/rich-text/rich-text';
-import { documentReducer } from '::root/components/app/components/editor/document/reducer/reducer';
-import { documentInitialState } from '::root/components/app/components/editor/document/reducer/initial-state';
-import { documentActionCreators } from '::root/components/app/components/editor/document/reducer/action-creators';
-import { DocumentContext } from './reducer/context';
+import { EditorContainer } from '::root/components/app/components/editor/document/components/editor-container/editor-container';
 import { Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
@@ -43,16 +39,8 @@ const Document: React.FC<Props & PropsFromRedux> = ({
   showNodePath,
   isOnMd,
 }) => {
-  const [documentState, dispatch] = useReducer(
-    documentReducer,
-    documentInitialState,
-  );
-  useEffect(() => {
-    documentActionCreators.setDispatch(dispatch);
-  }, []);
-
   return (
-    <DocumentContext.Provider value={documentState}>
+    <>
       <LinearProgress loading={fetchDocumentInProgress || saveInProgress} />
       {nodes && (
         <Fragment>
@@ -71,11 +59,11 @@ const Document: React.FC<Props & PropsFromRedux> = ({
           <Route
             exact
             path={`/document/:file_id/node/:node_id/`}
-            render={() => <RichText node={nodes[selectedNode_id]} />}
+            render={() => <EditorContainer node={nodes[selectedNode_id]} />}
           />
         </Fragment>
       )}
-    </DocumentContext.Provider>
+    </>
   );
 };
 

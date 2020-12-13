@@ -1,17 +1,16 @@
-import { documentActionCreators } from '::root/components/app/components/editor/document/reducer/action-creators';
-import { onPaste } from './editing/clipboard';
 import { apolloClient } from '::graphql/client/apollo-client';
-import { snapBackManager } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 import { dTM } from '::store/ducks/document-cache/document-cache';
 import { ac } from '::store/store';
-import { execK } from '::helpers/editing/execK';
+import {
+  execK,
+  snapBackManager,
+  _onPaste,
+  toggleBulletPoint,
+} from '@cherryjuice/editor';
 
 const testCallbacks = {
-  documentActionCreators: {
-    pastedImages: documentActionCreators.pastedImages,
-  },
   clipboard: {
-    onpaste: onPaste,
+    onpaste: _onPaste,
   },
 };
 type TestCallbacks = typeof testCallbacks;
@@ -29,5 +28,6 @@ if (process.env.NODE_ENV === 'development') {
     ac.root.setNetworkStatus(true);
   };
   window['execk'] = execK;
+  window['tbp'] = toggleBulletPoint;
 }
 export { TestCallbacks };
