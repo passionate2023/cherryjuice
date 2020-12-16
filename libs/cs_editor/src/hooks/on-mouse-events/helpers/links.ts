@@ -1,5 +1,5 @@
 import { extractDocumentFromPathname } from '@cherryjuice/shared-helpers';
-import { saveNodeContent } from '::root/components/content-editable/helpers/save-node-content';
+import { saveNodeContent } from '::root/components/content-editable/helpers/save-node-content/save-node-content';
 import { bridge } from '::root/bridge';
 
 const getURL = ({ target, file_id }): URL => {

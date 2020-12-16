@@ -1,4 +1,4 @@
-import { getEditor } from '::root/components/content-editable/hooks/attach-images-to-html';
+import { getEditor } from '::helpers/pages-manager/helpers/get-editor';
 import { replaceImageUrlWithBase64 } from '::helpers/clipboard/helpers/images/replace-image-url-with-base64';
 import { bridge } from '::root/bridge';
 

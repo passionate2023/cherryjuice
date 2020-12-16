@@ -6,6 +6,7 @@ import {
   applyTemporaryStamps,
   deleteTemporaryStamps,
 } from '::helpers/execK/steps/pipe1/split-selection';
+import { getEditor } from '::helpers/pages-manager/helpers/get-editor';
 
 const guardAgainstDDOETagIsNotNeutral = ({
   startDDOE,
@@ -99,7 +100,7 @@ const guardAgainstEditorIsDDOE = ({
   startOffset,
   endOffset,
 }) => {
-  const editor = document.querySelector('#rich-text');
+  const editor = getEditor();
   const editorIsStartDDOE = selectionStartElement.parentElement === editor;
   const editorIsEndDDOE = selectionEndElement.parentElement === editor;
   const selectionStartEqualsEndElement =
@@ -212,7 +213,7 @@ const guardAgainstEditorIsSelectionTarget = ({
   startOffset,
   endOffset,
 }) => {
-  const editor = document.querySelector('#rich-text');
+  const editor = getEditor();
   const editorIsStartSelectionTarget = editor === selectionStartElement;
   const editorIsEndSelectionTarget = editor === selectionEndElement;
   const startSelectionEqualsEndSelection =

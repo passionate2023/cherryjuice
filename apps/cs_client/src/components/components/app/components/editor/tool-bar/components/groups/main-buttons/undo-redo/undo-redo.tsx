@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { NumberOfFrames, snapBackManager } from '@cherryjuice/editor';
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::store/store';
+import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
 
@@ -18,16 +18,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const getEditor = async (): Promise<HTMLDivElement> =>
-  new Promise(res => {
-    const interval = setInterval(() => {
-      const editor = document.querySelector<HTMLDivElement>('#rich-text');
-      if (editor) {
-        clearInterval(interval);
-        res(editor);
-      }
-    }, 100);
-  });
 const UndoRedo: React.FC<Props & PropsFromRedux> = ({
   node_id,
   documentId,
@@ -39,7 +29,6 @@ const UndoRedo: React.FC<Props & PropsFromRedux> = ({
   });
 
   useEffect(() => {
-    snapBackManager.setElementGetter(getEditor);
     snapBackManager.setOnFrameChange(setNumberOfFrames);
   }, []);
 
@@ -48,7 +37,18 @@ const UndoRedo: React.FC<Props & PropsFromRedux> = ({
       snapBackManager.setCurrent(documentId + '/' + node_id);
     }
   }, [node_id, documentId]);
-
+  const oneShot = useRef<boolean>(true);
+  useEffect(() => {
+    if (numberOfFrames.undo && oneShot.current) {
+      oneShot.current = false;
+      ac.documentCache.mutateNodeContent({
+        node_id,
+        documentId,
+        data: { html: '' },
+        meta: { mode: 'update-key-only' },
+      });
+    }
+  }, [numberOfFrames, node_id, documentId]);
   return (
     <>
       <ToolbarButton

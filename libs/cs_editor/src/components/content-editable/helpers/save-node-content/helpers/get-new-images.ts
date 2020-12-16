@@ -1,4 +1,4 @@
-import { getEditor } from '::root/components/content-editable/hooks/attach-images-to-html';
+import { getEditor } from '::helpers/pages-manager/helpers/get-editor';
 
 export const getNewImages = ({
   newImageIDs,

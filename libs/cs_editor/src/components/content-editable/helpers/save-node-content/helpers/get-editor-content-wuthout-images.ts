@@ -1,8 +1,8 @@
+import { getEditor } from '::helpers/pages-manager/helpers/get-editor';
+
 const getImagesFromDom = () =>
   Array.from(
-    document
-      .querySelector('#rich-text')
-      .querySelectorAll('img.rich-text__image'),
+    getEditor().querySelectorAll('img.rich-text__image'),
   ) as HTMLImageElement[];
 
 const setImageAttributes = attributes => {
@@ -26,22 +26,21 @@ const unsetImagesAttributes = (images: HTMLImageElement[]) => {
 };
 
 export const getEditorContentWithoutImages = () => {
-  let html, node_id, documentId, edited;
-  const editor: HTMLDivElement = document.querySelector('#rich-text');
+  let html, nodeId, node_id, documentId;
+  const editor = getEditor();
   let imageAttributesTempContainer: any[] = [];
   if (editor) {
     const images = getImagesFromDom();
     imageAttributesTempContainer = unsetImagesAttributes(images);
     html = editor.innerHTML;
-    edited = editor.dataset.edited;
     documentId = editor.dataset.documentId;
-    node_id = editor.dataset.node_id;
+    nodeId = editor.dataset.nodeId;
+    [documentId, node_id] = nodeId ? nodeId.split('/') : [];
     setImageAttributes(imageAttributesTempContainer);
   }
   return {
     html,
     node_id,
-    edited,
     documentId,
     imageIDs: imageAttributesTempContainer.map(({ dataId }) => dataId),
   };

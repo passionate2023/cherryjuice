@@ -1,3 +1,5 @@
+import { getEditor } from '::helpers/pages-manager/helpers/get-editor';
+
 const getDDOE = el =>
   el?.parentElement?.getAttribute('id') === 'rich-text'
     ? el
@@ -10,7 +12,7 @@ const getSubDDOE = el =>
     : getSubDDOE(el.parentElement);
 
 const getSelectedDDOEs = ({ startDDOE, endDDOE }) => {
-  const editorDiv = document.querySelector('#rich-text');
+  const editorDiv = getEditor();
   const allDDOEs = Array.from(editorDiv.childNodes);
   const startDDOEIndex = allDDOEs.indexOf(startDDOE);
   const endDDOEIndex = allDDOEs.indexOf(endDDOE);

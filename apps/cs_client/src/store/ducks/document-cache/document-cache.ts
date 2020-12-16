@@ -144,6 +144,7 @@ export type CachedNodesState = {
   deleted: number[];
   edited: { [node_id: number]: string[] };
   deletedImages: { [node_id: number]: string[] };
+  updatedContentTs: { [node_id: number]: number };
 };
 
 export type NodeScrollPosition = [number, number];

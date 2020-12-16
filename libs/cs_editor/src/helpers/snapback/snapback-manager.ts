@@ -1,5 +1,5 @@
 import {
-  ElementGetter,
+  NumberOfFrames,
   OnFrameChange,
   SnapBack,
 } from '::helpers/snapback/snapback/snapback';
@@ -14,12 +14,9 @@ export const mutationObserverOptions: MutationObserverInit = {
 export class SnapBackManager {
   private readonly snapBacks: { [id: string]: SnapBack } = {};
   current: SnapBack;
-  private elementGetter: ElementGetter;
   private onFrameChange: OnFrameChange;
-
-  setElementGetter(elementGetter: ElementGetter): void {
-    this.elementGetter = elementGetter;
-  }
+  getCurrentFrameTS = (id: string): number =>
+    this.snapBacks[id]?.currentFrameTs;
   setOnFrameChange(onFrameChange: OnFrameChange): void {
     this.onFrameChange = onFrameChange;
   }
@@ -41,13 +38,19 @@ export class SnapBackManager {
       this.snapBacks[id] = new SnapBack(
         id,
         mutationObserverOptions,
-        this.elementGetter,
         this.onFrameChange,
       );
     }
-    this.disableAll();
+    if (this.current) this.current.disable();
+
     this.current = this.snapBacks[id];
-    this.current.reset();
     this.current.enable();
   };
+
+  reset(nodeId: string) {
+    if (this.snapBacks[nodeId]) {
+      this.snapBacks[nodeId].reset();
+      this.snapBacks[nodeId].enable();
+    }
+  }
 }

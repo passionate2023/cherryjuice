@@ -9,7 +9,11 @@ export type MutateNodeContentParams = {
   node_id: number;
   documentId: string;
   data: Partial<Pick<QFullNode, 'html' | 'image'>>;
-  meta?: { deletedImages?: string[]; mode?: 'update-key-only' };
+  meta?: {
+    deletedImages?: string[];
+    mode?: 'update-key-only';
+    updatedContentTs?: number;
+  };
 };
 
 const listDeletedImages = (
@@ -48,6 +52,9 @@ export const mutateNodeContent = (
     }
     node.updatedAt = updatedAt;
   }
+  if (meta?.updatedContentTs)
+    document.localState.editedNodes.updatedContentTs[node.node_id] =
+      meta?.updatedContentTs;
   document.localState.localUpdatedAt = updatedAt;
   listNodeEditedAttributes({
     document,

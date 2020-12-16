@@ -11,9 +11,9 @@
     "build"
   ],
   "scripts": {
-    "dev": "rollup -c -w",
+    "dev": "rollup -c -w --environment TSC_NONPOLLING_WATCHER:true",
     "types": "tsc -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
-    "build": "rollup -c --environment NODE_ENV:production",
+    "build": "rollup -c",
     "test": "jest",
     "lint": "eslint ./**"
   },

@@ -7,7 +7,7 @@ import { nodeResolve as resolve } from '@rollup/plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 import del from 'rollup-plugin-delete';
 
-const production = process.env.NODE_ENV === 'production';
+const production = !process.env.ROLLUP_WATCH;
 
 const mainConfig = {
   input: 'src/index.ts',
@@ -27,7 +27,7 @@ const mainConfig = {
     },
   ],
   plugins: [
-    del({ targets: 'build/*' }),
+    production && del({ targets: 'build/*' }),
     external(),
     resolve(),
     postcss({
@@ -36,7 +36,10 @@ const mainConfig = {
       namedExports: name =>
         `${name.replace(/-([a-z])/g, g => g[1].toUpperCase())}`,
     }),
-    typescript({}),
+    typescript({
+      sourceMap: !production,
+      inlineSources: !production,
+    }),
     commonjs({
       include: ['../../node_modules/**', 'node_modules/**'],
     }),

@@ -5,7 +5,12 @@ import {
 } from '::helpers/snapback/snapback/helpers/detect-mutation-type';
 import { handleTextMutation } from '::helpers/snapback/snapback/helpers/handle-mutations/handle-text-mutation';
 import { restoreCaret } from '::helpers/snapback/snapback/helpers/restore-caret/restore-caret';
-export type Frame = { mutations: EnhancedMutationRecord[]; type: MutationType };
+import { getEditor } from '::helpers/pages-manager/helpers/get-editor';
+export type Frame = {
+  mutations: EnhancedMutationRecord[];
+  type: MutationType;
+  ts: number;
+};
 
 type SnapBackState = {
   pointer: number;
@@ -27,6 +32,16 @@ const assignValue = (mrs: EnhancedMutationRecord[]): void =>
       mr.newValue = (mr.target as HTMLElement).getAttribute(mr.attributeName);
   });
 
+const getEditorInstance = async (id: string): Promise<HTMLDivElement> =>
+  new Promise(res => {
+    const interval = setInterval(() => {
+      const editor = getEditor(id);
+      if (editor) {
+        clearInterval(interval);
+        res(editor);
+      }
+    }, 100);
+  });
 // inspired from https://github.com/lohfu/snapback
 export class SnapBack {
   private observer;
@@ -35,7 +50,7 @@ export class SnapBack {
   constructor(
     private id: string,
     private options: MutationObserverInit,
-    private elementGetter: ElementGetter,
+    // private elementGetter: ElementGetter,
     onFrameChange: OnFrameChange,
   ) {
     this.onFrameChange = () => {
@@ -48,7 +63,10 @@ export class SnapBack {
   private get latestFrame(): Frame {
     return this.state.frames[this.state.frames.length - 1];
   }
-  private get numberOfFrames(): NumberOfFrames {
+  get currentFrameTs(): number {
+    return this.state.frames[this.state.pointer]?.ts;
+  }
+  get numberOfFrames(): NumberOfFrames {
     const numberOfFrames = this.state.frames.length - 1;
     const redo = numberOfFrames - this.state.pointer;
     const undo = this.state.pointer + 1;
@@ -69,12 +87,12 @@ export class SnapBack {
         if (latestFrame?.type === MutationType.pasting)
           latestFrame.mutations.push(...mutations);
       } else if (type) {
-        this.addFrame({ mutations, type });
+        this.addFrame({ mutations, type, ts: Date.now() });
       }
     }
   };
 
-  private addFrame = ({ type, mutations }: Frame): void => {
+  private addFrame = ({ type, mutations, ts }: Frame): void => {
     const nextFrameHasMutations = mutations.length > 0;
     if (nextFrameHasMutations) {
       const obsoleteFutureFrames =
@@ -86,6 +104,7 @@ export class SnapBack {
       this.state.frames.push({
         mutations: mutations.flatMap(x => x),
         type,
+        ts,
       });
       this.state.pointer = this.state.frames.length - 1;
       this.onFrameChange();
@@ -138,11 +157,14 @@ export class SnapBack {
     setTimeout(() => {
       if (!this.state.enabled) {
         this.state.enabled = true;
-        this.elementGetter().then(element => {
+        getEditorInstance(this.id).then(element => {
           this.observer.observe(element, this.options);
-          this.onFrameChange();
         });
       }
     }, delay);
+    this.onFrameChange();
   };
+  get ID() {
+    return this.id;
+  }
 }

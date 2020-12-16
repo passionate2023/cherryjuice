@@ -16,6 +16,7 @@ export const getDefaultLocalState = (
       created: newDocument ? [0] : [],
       deleted: [],
       deletedImages: {},
+      updatedContentTs: {},
     },
     highestNode_id: getDefaultHighestNode_id(nodes),
     localUpdatedAt: 0,

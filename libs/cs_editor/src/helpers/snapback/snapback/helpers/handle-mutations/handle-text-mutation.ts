@@ -60,14 +60,14 @@ export const handleTextMutation = (
   } else if (additiveMutation && latestFrameWasText) {
     if (valueEndsWithDelimiter) {
       latestMutation.newValue = removeDelimiter(newMutation.newValue);
-      return { mutations: [], type: MutationType.text };
+      return { mutations: [], type: MutationType.text, ts: Date.now() };
     } else {
       latestMutation.newValue = newMutation.newValue;
     }
   } else if (subtractiveMutation && latestFrameWasDeletion) {
     if (valueEndsWithDelimiter) {
       latestMutation.newValue = removeDelimiter(newMutation.newValue);
-      return { mutations: [], type: MutationType.deletion };
+      return { mutations: [], type: MutationType.deletion, ts: Date.now() };
     } else latestMutation.newValue = newMutation.newValue;
   } else {
     return {
@@ -77,6 +77,7 @@ export const handleTextMutation = (
         : subtractiveMutation
         ? MutationType.deletion
         : MutationType.text,
+      ts: Date.now(),
     };
   }
 };

@@ -12,7 +12,7 @@
     "rootDir": "src",
     "module": "esnext",
     "target": "es2019",
-    "sourceMap": true,
+    "sourceMap": false,
     "allowJs": false,
     "moduleResolution": "node",
     "esModuleInterop": true,
