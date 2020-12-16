@@ -49,18 +49,16 @@ const saveNodeContent = () => {
         imageIDsInDom,
       });
     }
-    const updatedContentTs = Date.now();
-    pagesManager.setUpdatedContentTs(nodeId, updatedContentTs, currentFrameTS);
+    pagesManager.setUpdatedContentTs(nodeId, currentFrameTS);
     bridge.current.saveHtml({
       documentId,
       node_id,
       html,
       deletedImages: deletedImageIDs,
       newImages,
-      updatedContentTs,
     });
-    snapBackManager.current.enable(200);
   }
+  snapBackManager.current.enable(200);
 };
 
 export { saveNodeContent };

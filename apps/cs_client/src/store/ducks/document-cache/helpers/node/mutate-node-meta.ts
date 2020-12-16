@@ -3,21 +3,28 @@ import {
   DocumentCacheState,
   QFullNode,
 } from '::store/ducks/document-cache/document-cache';
+import { MutateNodeContentFlag } from '::store/ducks/document-cache/helpers/node/mutate-node-content';
 
 export const listNodeEditedAttributes = ({
   document,
   attributes,
   node_id,
+  mode = 'list',
 }: {
   document: CachedDocument;
   attributes: string[];
   node_id: number;
+  mode?: MutateNodeContentFlag;
 }) => {
   const editedNodes = document.localState.editedNodes;
   if (!editedNodes.edited[node_id]) editedNodes.edited[node_id] = [];
   attributes.forEach(k => {
-    if (!editedNodes.edited[node_id].includes(k))
-      editedNodes.edited[node_id].push(k);
+    const index = editedNodes.edited[node_id].indexOf(k);
+    const attributeExists = index !== -1;
+    if (mode === 'list') {
+      if (!attributeExists) editedNodes.edited[node_id].push(k);
+    } else if (mode === 'unlist')
+      if (attributeExists) editedNodes.edited[node_id].splice(index, 1);
   });
 };
 

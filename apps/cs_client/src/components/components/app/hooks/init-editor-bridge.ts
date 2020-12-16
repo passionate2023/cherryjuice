@@ -29,7 +29,6 @@ export const initBridge = () => {
     documentId,
     node_id,
     html,
-    updatedContentTs,
   }) =>
     ac.documentCache.mutateNodeContent({
       node_id,
@@ -38,7 +37,7 @@ export const initBridge = () => {
         html,
         image: newImages,
       },
-      meta: { deletedImages, updatedContentTs },
+      meta: { deletedImages },
     });
 
   bridge.current.getNodeImageIDsFromCache = ({

@@ -144,7 +144,6 @@ export type CachedNodesState = {
   deleted: number[];
   edited: { [node_id: number]: string[] };
   deletedImages: { [node_id: number]: string[] };
-  updatedContentTs: { [node_id: number]: number };
 };
 
 export type NodeScrollPosition = [number, number];
@@ -273,6 +272,9 @@ const reducer = createReducer(initialState, _ => {
       _(ac.moveBookmark, (state, { payload }) =>
         produce(state, draft => moveBookmark(draft, payload)),
       ),
+      _(ac.mutateNodeContent, (state, { payload }) =>
+        produce(state, draft => mutateNodeContent(draft, payload)),
+      ),
     ],
     ...[
       // require setup
@@ -343,22 +345,7 @@ const reducer = createReducer(initialState, _ => {
           }),
         );
       }),
-      _(ac.mutateNodeContent, (state, { payload }) =>
-        produce(
-          state,
-          draft => mutateNodeContent(draft, payload),
-          (p, rp) => {
-            if (payload.meta?.mode !== 'update-key-only')
-              dTM.addFrame({
-                timelineId: payload.documentId,
-                node_id: payload.node_id,
-                documentId: payload.documentId,
-                mutationType: DocumentMutations.NodeContent,
-                timeStamp: Date.now(),
-              })(p, rp);
-          },
-        ),
-      ),
+
       _(nac.drop, (state, { payload }) => {
         let newState = produce(
           state,

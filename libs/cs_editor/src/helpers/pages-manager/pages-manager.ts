@@ -18,12 +18,10 @@ export type ContentEditableProps = PageProps & {
   focusOnUpdate: boolean;
   scrollPosition: [number, number];
   images: Image[];
-  updatedContentTs: number;
 };
 export type PageSelector = (pageId: string) => boolean;
 type Page = {
   element: HTMLDivElement;
-  updatedContentTs: number;
   currentFrameTS: number;
 };
 
@@ -59,18 +57,16 @@ export class PagesManager {
     editable,
     html,
     images,
-    updatedContentTs = 0,
   }: ContentEditableProps) => {
     const editor = getEditorContainer();
     const contentEditable = editor.firstElementChild as HTMLDivElement;
     const renderedNodeId = contentEditable?.dataset?.nodeId;
-    const queriedNodeIsUpToDate =
-      this.pages[nodeId]?.updatedContentTs === updatedContentTs;
+    const queriedNodeIsCached = this.pages[nodeId]?.element;
     const queriedNodeIsRendered = renderedNodeId === nodeId;
     const somePageIsRendered = !!renderedNodeId;
-    if (!(queriedNodeIsRendered && queriedNodeIsUpToDate)) {
+    if (!(queriedNodeIsRendered && queriedNodeIsCached)) {
       if (somePageIsRendered) this.hide();
-      if (queriedNodeIsUpToDate) this.restore(nodeId);
+      if (queriedNodeIsCached) this.restore(nodeId);
       else {
         editor.innerHTML = createContentEditable({
           nodeId,
@@ -79,7 +75,6 @@ export class PagesManager {
         });
         this.pages[nodeId] = {
           element: editor.firstElementChild as HTMLDivElement,
-          updatedContentTs: updatedContentTs,
           currentFrameTS: this.pages[nodeId]?.currentFrameTS || 0,
         };
         snapBackManager.reset(nodeId);
@@ -91,12 +86,7 @@ export class PagesManager {
     if (scrollPosition) editor.scrollTo(...scrollPosition);
     scrollIntoHash.scroll();
   };
-  setUpdatedContentTs = (
-    nodeId: string,
-    updatedContentTs: number,
-    currentFrameTS: number,
-  ): void => {
-    this.pages[nodeId].updatedContentTs = updatedContentTs;
+  setUpdatedContentTs = (nodeId: string, currentFrameTS: number): void => {
     this.pages[nodeId].currentFrameTS = currentFrameTS;
   };
 

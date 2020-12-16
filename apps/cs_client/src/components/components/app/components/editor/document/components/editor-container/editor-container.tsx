@@ -29,9 +29,6 @@ const mapState = (state: Store) => {
     scrollPosition: document
       ? document.persistedState.scrollPositions[node_id]
       : undefined,
-    updatedContentTs: document
-      ? document.localState.editedNodes.updatedContentTs[node_id]
-      : undefined,
   };
 };
 const mapDispatch = {};
@@ -46,7 +43,6 @@ const EditorContainer: React.FC<Props & PropsFromRedux> = ({
   isOnMd,
   scrollPosition,
   online,
-  updatedContentTs,
 }) => {
   useEffect(() => {
     if (online)
@@ -66,7 +62,6 @@ const EditorContainer: React.FC<Props & PropsFromRedux> = ({
     images: node?.image,
     nodeId: node?.node_id ? node.documentId + '/' + node.node_id : undefined,
     scrollPosition,
-    updatedContentTs,
   };
   return (
     <ErrorBoundary>

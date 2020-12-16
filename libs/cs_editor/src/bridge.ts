@@ -16,7 +16,6 @@ type SaveHtml = (props: {
   html: string;
   deletedImages?: string[];
   newImages?: Image[];
-  updatedContentTs: number;
 }) => void;
 type GetNodeImageIDsFromCache = (props: {
   documentId: string;

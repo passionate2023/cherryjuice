@@ -6,8 +6,18 @@ import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 import { DialogListItem } from '::root/components/shared-components/dialog/dialog-list/dialog-list-item';
 import { DocumentDetails } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/components/document-details';
 
-export const documentHasUnsavedChanges = (document: CachedDocument) =>
-  document?.localState?.localUpdatedAt > document?.updatedAt;
+export const documentHasUnsavedChanges = (document: CachedDocument) => {
+  const localState = document?.localState;
+  if (localState) {
+    const editedNodes = localState.editedNodes;
+    return (
+      localState.editedAttributes.length ||
+      editedNodes.created.length ||
+      editedNodes.deleted.length ||
+      Object.values(editedNodes.edited).flatMap(x => x).length
+    );
+  }
+};
 
 const mapState = (state: Store, props: Props) => ({
   isSelected: state.documentsList.selectedIDs.includes(props.document.id),

@@ -13,6 +13,6 @@ export const useRenderPage = (
     if (!loading && props.nodeId) {
       pagesManager.render(props);
     }
-  }, [loading, props.html, props.nodeId, props.images, props.updatedContentTs]);
+  }, [loading, props.html, props.nodeId, props.images]);
 };
 window['pm'] = pagesManager;
