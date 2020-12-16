@@ -1,9 +1,5 @@
 import { useEffect, useRef } from 'react';
-import {
-  NumberOfFrames,
-  saveNodeContent,
-  snapBackManager,
-} from '@cherryjuice/editor';
+import { NumberOfFrames, pagesManager } from '@cherryjuice/editor';
 
 export const useCacheNodeContent = (
   documentId: string,
@@ -11,18 +7,14 @@ export const useCacheNodeContent = (
   numberOfFrames: NumberOfFrames,
 ) => {
   const timeout = useRef<ReturnType<typeof setTimeout>>();
-  const previousFramesTs = useRef<Record<string, number>>({});
   useEffect(() => {
+    if (!node_id) return;
     const nodeId = documentId + '/' + node_id;
-    const previousFrameTs = previousFramesTs.current[nodeId] || 0;
-    const newFrameTs = snapBackManager.getCurrentFrameTS(nodeId) || 0;
-    if (newFrameTs !== previousFrameTs) {
-      clearTimeout(timeout.current);
-      timeout.current = setTimeout(() => {
-        previousFramesTs.current[nodeId] = newFrameTs;
-        saveNodeContent();
-      }, 5000);
-    }
+
+    clearTimeout(timeout.current);
+    timeout.current = setTimeout(() => {
+      pagesManager.cachePage(nodeId);
+    }, 5000);
     return () => {
       clearTimeout(timeout.current);
     };

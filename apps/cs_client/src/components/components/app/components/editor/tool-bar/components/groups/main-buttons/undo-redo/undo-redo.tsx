@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
 import { Icon, Icons } from '::root/components/shared-components/icon/icon';
-import { NumberOfFrames, snapBackManager } from '@cherryjuice/editor';
+import { NumberOfFrames, pagesManager } from '@cherryjuice/editor';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
@@ -31,20 +31,15 @@ const UndoRedo: React.FC<Props & PropsFromRedux> = ({
   });
 
   useEffect(() => {
-    snapBackManager.setOnFrameChange(setNumberOfFrames);
+    pagesManager.setOnFrameChange(setNumberOfFrames);
   }, []);
 
-  useEffect(() => {
-    if (documentId && node_id) {
-      snapBackManager.setCurrent(documentId + '/' + node_id);
-    }
-  }, [node_id, documentId]);
   useFlagNodeContentChange(documentId, node_id, numberOfFrames);
   useCacheNodeContent(documentId, node_id, numberOfFrames);
   return (
     <>
       <ToolbarButton
-        onClick={snapBackManager.current?.undo}
+        onClick={pagesManager.current?.undo}
         disabled={noDocumentIsSelected || !numberOfFrames.undo}
       >
         <Tooltip label={'Undo text change'}>
@@ -52,7 +47,7 @@ const UndoRedo: React.FC<Props & PropsFromRedux> = ({
         </Tooltip>
       </ToolbarButton>
       <ToolbarButton
-        onClick={snapBackManager.current?.redo}
+        onClick={pagesManager.current?.redo}
         disabled={noDocumentIsSelected || !numberOfFrames.redo}
       >
         <Tooltip label={'Redo text change'}>

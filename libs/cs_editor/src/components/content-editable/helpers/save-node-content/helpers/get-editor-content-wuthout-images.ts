@@ -1,12 +1,10 @@
-import { getEditor } from '::helpers/pages-manager/helpers/get-editor';
-
-const getImagesFromDom = () =>
+const getImagesFromDom = (editor: HTMLDivElement) =>
   Array.from(
-    getEditor().querySelectorAll('img.rich-text__image'),
+    editor.querySelectorAll('img.rich-text__image'),
   ) as HTMLImageElement[];
 
-const setImageAttributes = attributes => {
-  const images = getImagesFromDom();
+const setImageAttributes = (attributes, editor: HTMLDivElement) => {
+  const images = getImagesFromDom(editor);
 
   images.forEach((img, i) => {
     img.setAttribute('src', attributes[i].src);
@@ -25,18 +23,17 @@ const unsetImagesAttributes = (images: HTMLImageElement[]) => {
   return imageAttributesTempContainer;
 };
 
-export const getEditorContentWithoutImages = () => {
+export const getEditorContentWithoutImages = (editor: HTMLDivElement) => {
   let html, nodeId, node_id, documentId;
-  const editor = getEditor();
   let imageAttributesTempContainer: any[] = [];
   if (editor) {
-    const images = getImagesFromDom();
+    const images = getImagesFromDom(editor);
     imageAttributesTempContainer = unsetImagesAttributes(images);
     html = editor.innerHTML;
     documentId = editor.dataset.documentId;
     nodeId = editor.dataset.nodeId;
     [documentId, node_id] = nodeId ? nodeId.split('/') : [];
-    setImageAttributes(imageAttributesTempContainer);
+    setImageAttributes(imageAttributesTempContainer, editor);
   }
   return {
     html,

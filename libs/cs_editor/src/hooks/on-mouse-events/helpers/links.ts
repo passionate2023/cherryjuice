@@ -1,5 +1,4 @@
 import { extractDocumentFromPathname } from '@cherryjuice/shared-helpers';
-import { saveNodeContent } from '::root/components/content-editable/helpers/save-node-content/save-node-content';
 import { bridge } from '::root/bridge';
 
 const getURL = ({ target, file_id }): URL => {
@@ -23,7 +22,6 @@ export const onLinkClicked = (target: HTMLElement, file_id: string) => {
     const isWebLink = !isLocalLink && url.protocol.startsWith('http');
     if (isLocalLink) {
       const { documentId, node_id } = extractDocumentFromPathname(url.pathname);
-      saveNodeContent();
       bridge.current.selectNode({ documentId, node_id, hash: url.hash });
     } else if (isWebLink) {
       window.open(url.href, '_blank');

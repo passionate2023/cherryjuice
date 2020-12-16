@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { DocumentList } from './components/documents-list/document-list';
-import { saveNodeContent } from '@cherryjuice/editor';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
@@ -92,7 +91,6 @@ const DocumentsListDialog: React.FC<PropsFromRedux> = ({
   }, [showDocumentList, online]);
   const close = ac.dialogs.hideDocumentList;
   const open = () => {
-    saveNodeContent();
     ac.document.setDocumentId(selectedIDs[0]);
   };
   const { buttonsLeft, buttonsRight } = createButtons({

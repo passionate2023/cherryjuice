@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import { saveNodeContent } from '@cherryjuice/editor';
 import { ac } from '::store/store';
 import { modNode } from '::sass-modules';
 
@@ -17,7 +16,6 @@ const useSelectNode = ({ node_id, documentId }: SelectNodeProps) => {
       if (eventIsTriggeredByCollapseButton) return;
       setTimestamp(Date.now());
 
-      saveNodeContent();
       ac.node.select({ documentId, node_id });
     },
     [documentId, node_id],

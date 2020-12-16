@@ -1,15 +1,14 @@
-import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import {
-  PagesManager,
   ContentEditableProps,
+  pagesManager,
 } from '::helpers/pages-manager/pages-manager';
 
-export const pagesManager = new PagesManager();
 export const useRenderPage = (
   props: ContentEditableProps,
   loading: boolean,
 ) => {
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!loading && props.nodeId) {
       pagesManager.render(props);
     }

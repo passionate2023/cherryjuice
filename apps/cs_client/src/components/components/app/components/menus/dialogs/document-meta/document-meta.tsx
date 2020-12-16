@@ -19,7 +19,6 @@ import {
   documentMetaReducer,
 } from './reducer/reducer';
 import { connect, ConnectedProps } from 'react-redux';
-import { saveNodeContent } from '@cherryjuice/editor';
 import { Guests } from '::root/components/app/components/menus/dialogs/document-meta/components/guests/guests';
 import { SelectPrivacy } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
 import { Privacy } from '@cherryjuice/graphql-types';
@@ -103,7 +102,6 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   }
   const createDocument = () => {
     try {
-      saveNodeContent();
       const document = generateNewDocument({ state, userId });
       const rootNode = generateRootNode({
         documentId: document.id,

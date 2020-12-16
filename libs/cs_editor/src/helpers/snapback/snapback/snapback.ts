@@ -5,7 +5,6 @@ import {
 } from '::helpers/snapback/snapback/helpers/detect-mutation-type';
 import { handleTextMutation } from '::helpers/snapback/snapback/helpers/handle-mutations/handle-text-mutation';
 import { restoreCaret } from '::helpers/snapback/snapback/helpers/restore-caret/restore-caret';
-import { getEditor } from '::helpers/pages-manager/helpers/get-editor';
 export type Frame = {
   mutations: EnhancedMutationRecord[];
   type: MutationType;
@@ -32,26 +31,18 @@ const assignValue = (mrs: EnhancedMutationRecord[]): void =>
       mr.newValue = (mr.target as HTMLElement).getAttribute(mr.attributeName);
   });
 
-const getEditorInstance = async (id: string): Promise<HTMLDivElement> =>
-  new Promise(res => {
-    const interval = setInterval(() => {
-      const editor = getEditor(id);
-      if (editor) {
-        clearInterval(interval);
-        res(editor);
-      }
-    }, 100);
-  });
 // inspired from https://github.com/lohfu/snapback
 export class SnapBack {
   private observer;
   private state: SnapBackState;
   private readonly onFrameChange: () => void;
+
   constructor(
     private id: string,
     private options: MutationObserverInit,
     // private elementGetter: ElementGetter,
     onFrameChange: OnFrameChange,
+    private element: HTMLElement,
   ) {
     this.onFrameChange = () => {
       onFrameChange(this.numberOfFrames);
@@ -157,9 +148,7 @@ export class SnapBack {
     setTimeout(() => {
       if (!this.state.enabled) {
         this.state.enabled = true;
-        getEditorInstance(this.id).then(element => {
-          this.observer.observe(element, this.options);
-        });
+        this.observer.observe(this.element, this.options);
       }
     }, delay);
     this.onFrameChange();

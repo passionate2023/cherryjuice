@@ -6,7 +6,6 @@ import { restoreSelection } from '::helpers/execK/steps/restore-selection';
 import { ExecKCommand } from '::helpers/execK/execk-commands';
 import { mergeSimilarNodes } from '::helpers/execK/steps/merge-similar-nodes/merge-similar-nodes';
 import { bridge } from '::root/bridge';
-import { snapBackManager } from '::root/snapback-manager';
 import { FormattingError } from '::helpers/execK/helpers/errors';
 import { getEditor } from '::helpers/pages-manager/helpers/get-editor';
 
@@ -86,9 +85,7 @@ const execK = ({
     });
   } catch (e) {
     if (!selection) return;
-    snapBackManager.current.reset();
     getEditor().innerHTML = ogHtml;
-    snapBackManager.current.enable(1000);
     // eslint-disable-next-line no-console
     if (process.env.NODE_ENV === 'development') console.error(e);
     bridge.current.onFormattingErrorHandler(e);

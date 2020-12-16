@@ -1,7 +1,7 @@
 import { HotKeyActionType } from '@cherryjuice/graphql-types';
 import { ac, store } from '::store/store';
 import { getDocumentHasUnsavedChanges } from '::store/selectors/cache/document/document';
-import { snapBackManager } from '@cherryjuice/editor';
+import { pagesManager } from '@cherryjuice/editor';
 
 export const generalHotKeysProps = {
   [HotKeyActionType.SAVE_DOCUMENT]: () => {
@@ -25,13 +25,11 @@ export const generalHotKeysProps = {
     ac.dialogs.showCreateSiblingNode();
   },
   [HotKeyActionType.UNDO]: () => {
-    if (document.activeElement.id === 'rich-text')
-      snapBackManager.current.undo();
+    if (document.activeElement.id === 'rich-text') pagesManager.current.undo();
     else ac.documentCache.undoDocumentAction();
   },
   [HotKeyActionType.REDO]: () => {
-    if (document.activeElement.id === 'rich-text')
-      snapBackManager.current.redo();
+    if (document.activeElement.id === 'rich-text') pagesManager.current.redo();
     else ac.documentCache.redoDocumentAction();
   },
   [HotKeyActionType.INSERT_ANCHOR]: () => {

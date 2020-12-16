@@ -12,8 +12,8 @@ import { resetCache } from '::store/epics/save-documents/helpers/reset-cache';
 import { Epic } from 'redux-observable';
 import { SnackbarMessages } from '::root/components/app/components/menus/widgets/components/snackbar/snackbar-messages';
 import { getEditedDocuments } from '::store/selectors/cache/document/document';
-import { saveNodeContent } from '@cherryjuice/editor';
 import { alerts } from '::helpers/texts/alerts';
+import { pagesManager } from '@cherryjuice/editor';
 
 const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
   return action$.pipe(
@@ -21,7 +21,7 @@ const saveDocumentsEpic: Epic = (action$: Observable<Actions>) => {
     filter(() => store.getState().document.asyncOperations.save === 'idle'),
     switchMap(() => {
       const state: SaveOperationState = createSaveState();
-      saveNodeContent();
+      pagesManager.cachePages();
       const editedDocuments = getEditedDocuments();
       if (!editedDocuments.length) return of(ac_.document.nothingToSave());
       else {

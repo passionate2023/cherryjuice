@@ -1,4 +1,4 @@
-export { pagesManager } from '::hooks/render-page';
+export { pagesManager } from '::helpers/pages-manager/pages-manager';
 
 export { getEditor } from '::helpers/pages-manager/helpers/get-editor';
 
@@ -30,9 +30,7 @@ export {
 } from '::helpers/clipboard/helpers/steps/add-to-dom/helpers/add-meta-to-pasted-images';
 export { paneLine } from '::helpers/typing/pane-line/pane-line';
 export { deleteLine } from '::helpers/typing/delete-line/delete-line';
-export { saveNodeContent } from '::root/components/content-editable/helpers/save-node-content/save-node-content';
 export { Editor } from '::root/editor';
-export { snapBackManager } from '::root/snapback-manager';
 export { bridge } from '::root/bridge';
 
 export { NumberOfFrames } from '::helpers/snapback/snapback/snapback';
