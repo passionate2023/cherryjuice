@@ -39,7 +39,6 @@ export const initBridge = () => {
       },
       meta: { deletedImages },
     });
-  bridge.current.cachingFinished = ac.documentCache.cachingFinished;
   bridge.current.getNodeImageIDsFromCache = ({
     node_id,
     documentId,
@@ -98,12 +97,12 @@ export const initBridge = () => {
     });
     ac.dialogs.showTableDialog();
   };
-  bridge.current.flagEditedNode = ({ node_id, documentId }) =>
+  bridge.current.flagEditedNode = ({ node_id, documentId, changed }) =>
     ac.documentCache.mutateNodeContent({
       node_id,
       documentId,
       data: { html: '' },
-      meta: { mode: 'update-key-only' },
+      meta: { flag: changed ? 'list' : 'unlist' },
     });
   bridge.current.getDocumentId = () => store.getState().document.documentId;
 };

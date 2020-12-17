@@ -5,13 +5,9 @@ import { Icon, Icons } from '::root/components/shared-components/icon/icon';
 import { NumberOfFrames, pagesManager } from '@cherryjuice/editor';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
-import { useFlagNodeContentChange } from '::app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/hooks/flag-node-content-change';
-import { useCacheNodeContent } from '::app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/hooks/cache-node-content';
 
 const mapState = (state: Store) => ({
-  node_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
   documentId: state.document.documentId,
 });
 const mapDispatch = {};
@@ -20,10 +16,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const UndoRedo: React.FC<Props & PropsFromRedux> = ({
-  node_id,
-  documentId,
-}) => {
+const UndoRedo: React.FC<Props & PropsFromRedux> = ({ documentId }) => {
   const noDocumentIsSelected = !documentId;
   const [numberOfFrames, setNumberOfFrames] = useState<NumberOfFrames>({
     redo: 0,
@@ -34,8 +27,6 @@ const UndoRedo: React.FC<Props & PropsFromRedux> = ({
     pagesManager.setOnFrameChange(setNumberOfFrames);
   }, []);
 
-  useFlagNodeContentChange(documentId, node_id, numberOfFrames);
-  useCacheNodeContent(documentId, node_id, numberOfFrames);
   return (
     <>
       <ToolbarButton

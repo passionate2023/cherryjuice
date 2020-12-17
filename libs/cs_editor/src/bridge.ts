@@ -39,7 +39,11 @@ export type Bridge = {
     editLink: EditObject;
     editTable: EditObject;
     editCodebox: EditObject;
-    flagEditedNode: (props: { node_id: number; documentId: string }) => void;
+    flagEditedNode: (props: {
+      node_id: number;
+      documentId: string;
+      changed: boolean;
+    }) => void;
   };
 };
 const noop = () => undefined;

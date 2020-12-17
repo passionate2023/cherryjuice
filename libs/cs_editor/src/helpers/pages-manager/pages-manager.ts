@@ -61,7 +61,24 @@ export class PagesManager {
   };
 
   setOnFrameChange(onFrameChange: OnFrameChange): void {
-    this.onFrameChange = onFrameChange;
+    let frameTs;
+    this.onFrameChange = (nof, meta) => {
+      if (frameTs === meta.currentFrameTs) return;
+      frameTs = meta.currentFrameTs;
+      onFrameChange(nof, meta);
+      clearTimeout(this.autoSaveTimer);
+      this.autoSaveTimer = setTimeout(() => {
+        this.cachePage(meta.id);
+      }, 5000);
+      if (nof.undo < 2) {
+        const [documentId, node_id] = meta.id.split('/');
+        bridge.current.flagEditedNode({
+          documentId,
+          node_id: +node_id,
+          changed: !!nof.undo,
+        });
+      }
+    };
   }
 
   private hidePage = async () => {
@@ -84,7 +101,7 @@ export class PagesManager {
       editor.appendChild(page.element);
     } else throw new Error(`page ${nodeId} not found`);
   };
-
+  private autoSaveTimer: ReturnType<typeof setTimeout>;
   render = async ({
     focusOnUpdate,
     scrollPosition,

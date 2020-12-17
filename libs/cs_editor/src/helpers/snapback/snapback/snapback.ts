@@ -21,7 +21,10 @@ export type EnhancedMutationRecord = MutationRecord & {
   newValue?: string;
 };
 export type NumberOfFrames = { undo: number; redo: number };
-export type OnFrameChange = (frames: NumberOfFrames) => void;
+export type OnFrameChange = (
+  frames: NumberOfFrames,
+  meta: { id: string; currentFrameTs: number },
+) => void;
 export type ElementGetter = () => Promise<HTMLDivElement>;
 
 const assignValue = (mrs: EnhancedMutationRecord[]): void =>
@@ -45,7 +48,10 @@ export class SnapBack {
     private element: HTMLElement,
   ) {
     this.onFrameChange = () => {
-      onFrameChange(this.numberOfFrames);
+      onFrameChange(this.numberOfFrames, {
+        id,
+        currentFrameTs: this.currentFrameTs,
+      });
     };
     this.observer = new MutationObserver(this.handleMutations);
     this.reset();
