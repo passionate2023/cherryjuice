@@ -1,4 +1,4 @@
-import { bridge } from '@cherryjuice/editor';
+import { bridge, pagesManager } from '@cherryjuice/editor';
 import { ac, store } from '::store/store';
 import { AlertType } from '::types/react';
 import { getDocuments } from '::store/selectors/cache/document/document';
@@ -7,6 +7,7 @@ import { LinkType } from '::root/components/app/components/menus/dialogs/link/re
 import { useEffect } from 'react';
 
 export const initBridge = () => {
+  pagesManager.resetPages(() => true);
   bridge.current.selectNode = ac.node.select;
   bridge.current.onPasteImageErrorHandler = error =>
     ac.dialogs.setAlert({

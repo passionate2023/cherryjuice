@@ -36,6 +36,7 @@ type Page = {
   element: HTMLDivElement;
   snapBack: SnapBack;
   lastSavedFrameTs: number;
+  scrollPosition: [number, number];
 };
 
 export class PagesManager {
@@ -87,6 +88,7 @@ export class PagesManager {
       const { nodeId } = page.dataset;
       if (nodeId) {
         this.pages[nodeId].snapBack.disable();
+        this.pages[nodeId].scrollPosition = [page.scrollLeft, page.scrollTop];
         this.hiddenPagesContainer.appendChild(page);
         this.cachePage(nodeId);
       }
@@ -113,7 +115,8 @@ export class PagesManager {
     const editor = getEditorContainer();
     const contentEditable = editor.firstElementChild as HTMLDivElement;
     const renderedNodeId = contentEditable?.dataset?.nodeId;
-    const queriedNodeIsCached = this.pages[nodeId]?.element;
+    let page = this.pages[nodeId];
+    const queriedNodeIsCached = page?.element;
     const queriedNodeIsRendered = renderedNodeId === nodeId;
     const somePageIsRendered = !!renderedNodeId;
     if (!(queriedNodeIsRendered && queriedNodeIsCached)) {
@@ -135,15 +138,17 @@ export class PagesManager {
             element,
           ),
           lastSavedFrameTs: 0,
+          scrollPosition,
         };
       }
-      this.pages[nodeId].snapBack.enable();
+      page = this.pages[nodeId];
+      page.snapBack.enable();
       this.currentNodeId = nodeId;
-      this.current = this.pages[nodeId].snapBack;
+      this.current = page.snapBack;
     }
     attachPageImages(editor, images);
-    if (focusOnUpdate) editor.focus();
-    if (scrollPosition) editor.scrollTo(...scrollPosition);
+    if (focusOnUpdate) page.element.focus();
+    page.element.scrollTo(...page.scrollPosition);
     scrollIntoHash.scroll();
   };
 
@@ -157,9 +162,10 @@ export class PagesManager {
   };
 
   cachePage = (pageId: string) => {
-    const snapBack = this.pages[pageId].snapBack;
+    const page = this.pages[pageId];
+    const snapBack = page.snapBack;
     snapBack.disable();
-    const element = this.pages[pageId].element;
+    const element = page.element;
     const { scrollTop, scrollLeft } = element;
     const {
       html,
@@ -168,7 +174,10 @@ export class PagesManager {
       documentId,
     } = getEditorContentWithoutImages(element);
     if (!node_id) return;
-    if (documentId && node_id)
+    if (
+      page.scrollPosition[0] !== scrollLeft ||
+      page.scrollPosition[1] !== scrollTop
+    )
       bridge.current.setScrollPosition({
         node_id,
         documentId,
