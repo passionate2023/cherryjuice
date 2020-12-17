@@ -88,6 +88,8 @@ const ac = {
   collapseNode: _(ap('collapse-node'), _ => (params: SelectNodeParams) =>
     _(params),
   ),
+  cachingPagesFulfilled: _(ap('caching-pages-fulfilled')),
+  cachePages: _(ap('cache-pages')),
   sortNode: _(ap('sort-node'), _ => (params: SortNodeParams) => _(params)),
   copyNode: _(ap('copy-node'), _ => (params: CopyNodeParams) => _(params)),
   pasteNode: _(ap('paste-node'), _ => (params: PasteNodeParams) => _(params)),

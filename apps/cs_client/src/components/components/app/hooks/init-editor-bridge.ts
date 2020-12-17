@@ -39,7 +39,7 @@ export const initBridge = () => {
       },
       meta: { deletedImages },
     });
-
+  bridge.current.cachingFinished = ac.documentCache.cachingFinished;
   bridge.current.getNodeImageIDsFromCache = ({
     node_id,
     documentId,

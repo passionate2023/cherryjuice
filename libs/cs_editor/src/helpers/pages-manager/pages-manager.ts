@@ -151,7 +151,7 @@ export class PagesManager {
       documentId,
     } = getEditorContentWithoutImages(element);
     if (!node_id) return;
-    if (element)
+    if (documentId && node_id)
       bridge.current.setScrollPosition({
         node_id,
         documentId,

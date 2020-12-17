@@ -36,6 +36,16 @@ export const mutateNodeContent = (
   { meta = {}, documentId, node_id, data }: MutateNodeContentParams,
 ): DocumentCacheState => {
   const document: CachedDocument = state.documents[documentId];
+  if (!document) {
+    // eslint-disable-next-line no-console
+    console.error('no document exception:', {
+      documentId,
+      node_id,
+      data,
+      meta,
+    });
+    return state;
+  }
   const node = document.nodes[node_id];
   const updatedAt = Date.now();
 
