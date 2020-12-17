@@ -40,4 +40,4 @@ export {
   TableProperties,
   CodeboxProperties,
 } from '::helpers/objects/insert-object';
-export { ContentEditableProps } from '::helpers/pages-manager/pages-manager';
+export { ContentEditableProps } from '::helpers/pages-manager/helpers/render-page/render-page';
