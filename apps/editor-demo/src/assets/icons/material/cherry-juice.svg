@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 162 162" style="enable-background:new 0 0 162 162;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#9F1317;}
+	.st1{fill:none;stroke:#9F1317;stroke-width:7.25;stroke-miterlimit:10;}
+</style>
+<g id="cherries">
+	<circle class="st0" cx="52.5" cy="21.6" r="20.8"/>
+	<circle class="st0" cx="94.7" cy="100" r="20.8"/>
+	<circle class="st0" cx="94.7" cy="53.8" r="20.8"/>
+</g>
+<g id="cup">
+	<path class="st1" d="M81,149.4h17.4c4.2,0,12.7-5.3,14.3-9.1l27.8-80.8V21.5H81"/>
+	<path class="st1" d="M81,149.5H63.6c-4.2,0-12.7-5.3-14.3-9.1L21.4,59.5V21.6H81"/>
+</g>
+</svg>

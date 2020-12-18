@@ -22,7 +22,7 @@ export class PagesManager {
   hiddenPagesContainer: HTMLDivElement;
   private currentNodeId: string;
   current: SnapBack;
-  private onFrameChange: OnFrameChange;
+  private onFrameChange: OnFrameChange = () => undefined;
   constructor() {
     this.init();
   }

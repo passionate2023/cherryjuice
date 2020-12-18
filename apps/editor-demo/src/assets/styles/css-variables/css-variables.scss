@@ -1,0 +1,38 @@
+@import '../mixins/breakpoints';
+@import '../vars/vars';
+:root {
+  // constants
+  --treeToolBarHeight: 34px;
+  @include respond-to($md-down) {
+    --treeToolBarHeight: 40px;
+  }
+
+  --vh: 100vh;
+  --vw: 100vw;
+  --overlay-width: 0;
+  --overlay-left: 0;
+  --treeWidth: 250px;
+  --nodePath: 34px;
+  --formatting-bar: $tool-bar-height;
+  --recent-nodes: 40px;
+  --info-bar: 22.5px;
+  --nodes-bar: 40px;
+  --docked-dialog-height: 0;
+
+  // editor-settings
+  --richTextBg: #000;
+  --richTextColor: #fff;
+  --richTextFont: Verdana;
+  --richTextFontSize: 22px;
+
+  --treeBg: #000;
+  --treeColor: #fff;
+  --treeFont: Verdana;
+  --treeFontSize: 18px;
+
+  --codeBg: #483d8b;
+  --codeFont: consolas;
+  --codeFontSize: 22px;
+
+  --monospaceBg: #666;
+}
