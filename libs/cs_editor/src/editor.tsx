@@ -10,7 +10,7 @@ import { useOnMouseEvents } from '::hooks/on-mouse-events/on-mouse-event';
 import './assets/styles/global-classes/global-classes.scss';
 import { modEditor } from '::sass-modules';
 import { useRenderPage } from '::hooks/render-page';
-import { ContentEditableProps } from '::helpers/pages-manager/pages-manager';
+import { ContentEditableProps } from '::helpers/pages-manager/helpers/render-page/render-page';
 
 type Props = {
   contentEditableProps: ContentEditableProps;

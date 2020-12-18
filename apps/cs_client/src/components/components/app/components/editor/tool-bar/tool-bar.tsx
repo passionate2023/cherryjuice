@@ -4,10 +4,7 @@ import { MainButtons } from '::root/components/app/components/editor/tool-bar/co
 import { modApp, modToolbar } from '::sass-modules';
 import { MobileButtons } from './components/groups/mobile-buttons/mobile-buttons';
 import { createPortal } from 'react-dom';
-import {
-  FormattingButtons,
-  FormattingButtonsWithTransition,
-} from './components/groups/formatting-buttons/formatting-buttons';
+import { FormattingButtons } from './components/groups/formatting-buttons/formatting-buttons';
 import { NavBar } from '::root/components/app/components/editor/tool-bar/components/groups/nav-bar/nav-bar';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
@@ -17,6 +14,7 @@ import { UndoRedo } from '::root/components/app/components/editor/tool-bar/compo
 import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { Objects } from '::root/components/app/components/editor/tool-bar/components/groups/objects/objects';
+import { FormattingButtonsWithTransition } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/formatting-buttons-with-transition';
 
 type PortalProps = { targetSelector: string; predicate?: boolean };
 export const Portal: React.FC<PortalProps> = ({

@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
-import {
-  ContentEditableProps,
-  pagesManager,
-} from '::helpers/pages-manager/pages-manager';
+import { pagesManager } from '::helpers/pages-manager/pages-manager';
+import { ContentEditableProps } from '::helpers/pages-manager/helpers/render-page/render-page';
 
 export const useRenderPage = (
   props: ContentEditableProps,

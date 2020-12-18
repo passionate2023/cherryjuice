@@ -1,5 +1,6 @@
 import * as React from 'react';
 import toolbarMod from '::sass-modules/tool-bar.scss';
+import { joinClassNames } from '::helpers/dom/join-class-names';
 
 const ToolbarButton: React.FC<{
   onClick?: any;
@@ -12,12 +13,13 @@ const ToolbarButton: React.FC<{
   !dontMount && (
     <div
       disabled={disabled}
-      className={`${toolbarMod.toolBar__icon} ${
-        active ? toolbarMod.toolBar__iconActive : ''
-      } ${className ? className : ''} ${
-        disabled ? toolbarMod.toolBar__iconDisabled : ''
-      }`}
-      {...(!disabled && onClick && { onClick })}
+      className={joinClassNames([
+        toolbarMod.toolBar__icon,
+        [toolbarMod.toolBar__iconActive, active],
+        [toolbarMod.toolBar__iconDisabled, disabled],
+        className,
+      ])}
+      {...(!disabled && { onClick })}
       {...(testId && { 'data-testid': testId })}
     >
       {children}

@@ -27,7 +27,7 @@ const Tooltip: React.FC<Props> = ({
   return show ? (
     <div
       aria-label={label}
-      className={!isTouchScreen && 'hint--' + position}
+      className={!isTouchScreen ? 'hint--' + position : undefined}
       title={isTouchScreen ? label : undefined}
     >
       {children}

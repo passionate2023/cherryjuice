@@ -45,6 +45,8 @@ import modSettings from '::sass-modules/settings/settings.scss';
 import modContextMenu from '::sass-modules/shared-components/context-menu.scss';
 import modToggleSwitch from '::sass-modules/shared-components/toggle-switch.scss';
 import modBookmarks from '::sass-modules/dialogs/bookmarks/bookmarks.scss';
+import modDropdownButton from '::sass-modules/shared-components/drop-down-button.scss';
+
 export {
   modNode,
   modBookmarks,
@@ -93,4 +95,5 @@ export {
   modUndoAction,
   modWidgets,
   modSplashScreen,
+  modDropdownButton,
 };
