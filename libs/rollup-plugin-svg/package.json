@@ -1,0 +1,50 @@
+{
+  "name": "@cherryjuice/rollup-plugin-svg",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "module": "build/index.es.js",
+  "main": "build/index.js",
+  "types": "build/types",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "dev": "rollup -c -w --environment TSC_NONPOLLING_WATCHER:true",
+    "types": "tsc -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
+    "build": "rollup -c",
+    "test": "jest",
+    "lint": "eslint ./**"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@cherryjuice/shared-helpers": "0.0.1",
+    "rollup-pluginutils": "^2.8.2",
+    "typescript": "^3.8.3",
+    "rollup": "^2.34.2",
+    "rollup-plugin-node-externals": "^2.2.0",
+    "@rollup/plugin-alias": "^3.1.1",
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.0.0",
+    "@rollup/plugin-typescript": "^8.0.0",
+    "rollup-plugin-terser": "7.0.2",
+    "rollup-plugin-delete": "^2.0.0"
+  },
+  "optionalDependencies": {
+    "@types/jest": "^25.1.0",
+    "@types/node": "^12.7.5",
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1"
+  }
+}

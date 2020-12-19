@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.dts.json",
+  "compilerOptions": {
+    "paths": {
+      "::sass-modules/*": ["./assets/styles/modules/*"],
+      "::sass-modules": ["./assets/styles/modules/index.ts"],
+      "::helpers/*": ["./helpers/*"],
+      "::assets/*": ["./assets/*"],
+      "::hooks/*": ["./hooks/*"],
+      "::root/*": ["./*"]
+    }
+  }
+}

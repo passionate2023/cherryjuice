@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { modButton } from '::sass-modules';
 import { EventHandler, useRef } from 'react';
-import { joinClassNames } from '::helpers/dom/join-class-names';
-import { Icon } from '::root/components/shared-components/icon/icon';
-import { useLazyAutoFocus } from '../hooks/lazy-auto-focus';
+import { joinClassNames } from '::helpers/join-class-names';
+import { Icon } from '@cherryjuice/icons';
 
 type ButtonBaseProps = {
   className?: string;
@@ -31,7 +30,6 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   className,
   onClick,
   autoFocus,
-  lazyAutoFocus,
   dark,
   testId,
   text,
@@ -42,7 +40,6 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   small,
 }) => {
   const buttonRef = useRef<HTMLButtonElement>();
-  useLazyAutoFocus(lazyAutoFocus, buttonRef);
   return (
     <button
       className={joinClassNames([
@@ -61,11 +58,7 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
       {...(testId && { 'data-testid': testId })}
     >
       {iconName ? (
-        <Icon
-          name={iconName}
-          loadAsInlineSVG={'force'}
-          size={small ? 12 : undefined}
-        />
+        <Icon name={iconName} size={small ? 12 : undefined} />
       ) : icon ? (
         icon
       ) : (
@@ -76,5 +69,5 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
   );
 };
 
-export { ButtonBase, useLazyAutoFocus };
+export { ButtonBase };
 export { ButtonBaseProps };

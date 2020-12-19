@@ -3,7 +3,7 @@ import { ToolbarButton } from '::root/app/components/toolbar/components/formatti
 import { execK } from '@cherryjuice/editor';
 import { ColorInput } from '::root/app/components/toolbar/components/formatting-buttons/components/color-input';
 import { modToolbar } from '::sass-modules';
-import { Icon } from '::root/shared-components/icon/icon';
+import { Icon } from '@cherryjuice/icons';
 import { HotKeyActionType } from '@cherryjuice/graphql-types';
 import { getDefaultSettings } from '@cherryjuice/default-settings';
 import { formattingHotkeysProps } from '::root/app/components/toolbar/components/formatting-buttons/helpers/formatting-icon-props';
@@ -28,7 +28,7 @@ const Buttons: React.FC<Props> = () => {
             onClick={() => execK(formattingHotkeysProp.execCommandArguments)}
             className={modToolbar.toolBar__iconStrictWidth}
           >
-            <Icon name={formattingHotkeysProp.icon} loadAsInlineSVG={'force'} />
+            <Icon name={formattingHotkeysProp.icon} />
           </ToolbarButton>
         );
       })}

@@ -2705,7 +2705,7 @@
     "@rollup/pluginutils" "^3.1.0"
     resolve "^1.17.0"
 
-"@rollup/pluginutils@^3.0.8", "@rollup/pluginutils@^3.1.0":
+"@rollup/pluginutils@^3.0.8", "@rollup/pluginutils@^3.0.9", "@rollup/pluginutils@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-3.1.0.tgz#706b4524ee6dc8b103b3c995533e5ad680c02b9b"
   integrity sha512-GksZ6pr6TpIjHm8h9lSQ8pi8BE9VeubNT0OMJ3B5uZJ8pz73NPiqOtCog/x2/QzM1ENChPKxMDhiQuRHsqc+lg==
@@ -10418,7 +10418,7 @@ globalthis@^1.0.0:
   dependencies:
     define-properties "^1.1.3"
 
-globby@11.0.1, globby@^11.0.1:
+globby@11.0.1, globby@^11.0.0, globby@^11.0.1:
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/globby/-/globby-11.0.1.tgz#9a2bf107a068f3ffeabc49ad702c79ede8cfd357"
   integrity sha512-iH9RmgwCmUJHi2z5o2l3eTtGBtXek1OYlHrbcxOYugyHLmAsZrPj43OtHThd62Buh/Vv6VyCBD2bdyWcGNQqoQ==
@@ -18297,6 +18297,16 @@ rollup-plugin-delete@^2.0.0:
   integrity sha512-/VpLMtDy+8wwRlDANuYmDa9ss/knGsAgrDhM+tEwB1npHwNu4DYNmDfUL55csse/GHs9Q+SMT/rw9uiaZ3pnzA==
   dependencies:
     del "^5.1.0"
+
+rollup-plugin-dynamic-import-variables@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-dynamic-import-variables/-/rollup-plugin-dynamic-import-variables-1.1.0.tgz#4981d38907a471b35234398a09047bef47a2006a"
+  integrity sha512-C1avEmnXC8cC4aAQ5dB63O9oQf7IrhEHc98bQw9Qd6H36FxtZooLCvVfcO4SNYrqaNrzH3ErucQt/zdFSLPHNw==
+  dependencies:
+    "@rollup/pluginutils" "^3.0.9"
+    estree-walker "^2.0.1"
+    globby "^11.0.0"
+    magic-string "^0.25.7"
 
 rollup-plugin-esbuild@^2.6.0:
   version "2.6.0"

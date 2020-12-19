@@ -2,8 +2,7 @@ import * as React from 'react';
 import { useCallback, useRef } from 'react';
 import { modTabs } from '::sass-modules';
 import { joinClassNames } from '::helpers/join-class-names';
-import { Icons } from '::root/shared-components/icon/helpers/icons';
-import { Icon } from '::root/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { editorAC } from '::root/app/components/editor/reducer';
 
 export type NodeProps = {
@@ -56,7 +55,6 @@ const Tab: React.FC<Props> = ({
         <Icon
           name={Icons.material.bookmark}
           className={modTabs.tab__bookmarkIcon}
-          loadAsInlineSVG={'force'}
         />
       )}
     </div>

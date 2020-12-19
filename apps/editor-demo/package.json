@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "webpack-dev-server --color --progress --config .webpack/webpack.dev.js ",
+    "dev:editor-demo": "yarn dev",
     "build": "webpack --config .webpack/webpack.prod.js",
+    "build:editor-demo": "yarn build",
     "cypress": "yarn cypress open",
     "test": "jest",
     "storybook": "start-storybook -p 1237",
@@ -46,6 +48,7 @@
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
     "@cherryjuice/ahtml-to-html": "0.0.2",
+    "@cherryjuice/icons": "0.0.1",
     "@cherryjuice/default-settings": "0.0.2",
     "@cherryjuice/graphql-types": "0.0.1",
     "@cherryjuice/shared-helpers": "0.0.1",

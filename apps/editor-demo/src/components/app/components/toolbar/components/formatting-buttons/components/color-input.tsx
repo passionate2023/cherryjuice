@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ToolbarButton } from '::root/app/components/toolbar/components/formatting-buttons/components/tool-bar-button';
 import { execK } from '@cherryjuice/editor';
-import { Icon } from '::root/shared-components/icon/icon';
+import { Icon } from '@cherryjuice/icons';
 import { modToolbar } from '::sass-modules';
 import { HotKey } from '@cherryjuice/graphql-types';
 import { formattingHotkeysProps } from '::root/app/components/toolbar/components/formatting-buttons/helpers/formatting-icon-props';
@@ -40,7 +40,7 @@ const ColorInput: React.FC<{
       disabled={disabled}
     >
       <label htmlFor={type} style={!disabled ? { cursor: 'pointer' } : {}}>
-        <Icon name={icon} loadAsInlineSVG={'force'} />
+        <Icon name={icon} />
         <input
           id={type}
           type="color"
