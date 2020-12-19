@@ -3,6 +3,7 @@ import { stringToSingleElement } from '@cherryjuice/editor';
 import React from 'react';
 import { toDataUrl } from '::root/components/icon/hooks/helpers/to-data-url';
 import { getIconGroup } from '::root/components/icon/data/get-icon-group';
+import { getStyles } from '::root/components/icon/hooks/helpers/get-styles';
 
 export type SVGProps = {
   size?: number;
@@ -28,7 +29,9 @@ const useRenderSVG = ({
     const group = getIconGroup(name);
     (group === 'material'
       ? import('../../../assets/icons/material/' + name + '.svg')
-      : import('../../../assets/icons/cherrytree/' + name + '.svg')
+      : group === 'cherrytree'
+      ? import('../../../assets/icons/cherrytree/' + name + '.svg')
+      : import('../../../assets/icons/misc/' + name + '.svg')
     ).then(({ default: svg }) => {
       if (svg) {
         const props = {
@@ -41,7 +44,8 @@ const useRenderSVG = ({
         } else {
           const svgElement = stringToSingleElement(svg) as SVGElement;
           Array.from(svgElement.attributes).forEach(({ name, value }) => {
-            props[name] = value;
+            // if (name !== 'style')
+            props[name] = name === 'style' ? getStyles(value) : value;
           });
           props['dangerouslySetInnerHTML'] = {
             __html: svgElement.innerHTML,

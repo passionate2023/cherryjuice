@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modSnackbar } from '::sass-modules';
-import { Icons } from '::root/components/shared-components/icon/icon';
+import { Icons } from '@cherryjuice/icons';
 import { ac } from '::store/store';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
 import { useEffect, useRef, useState } from 'react';

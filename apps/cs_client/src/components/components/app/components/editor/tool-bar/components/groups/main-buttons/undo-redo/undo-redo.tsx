@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { NumberOfFrames, pagesManager } from '@cherryjuice/editor';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
@@ -34,7 +34,7 @@ const UndoRedo: React.FC<Props & PropsFromRedux> = ({ documentId }) => {
         disabled={noDocumentIsSelected || !numberOfFrames.undo}
       >
         <Tooltip label={'Undo text change'}>
-          <Icon name={Icons.material.undo} loadAsInlineSVG={'force'} />
+          <Icon name={Icons.material.undo} />
         </Tooltip>
       </ToolbarButton>
       <ToolbarButton
@@ -42,7 +42,7 @@ const UndoRedo: React.FC<Props & PropsFromRedux> = ({ documentId }) => {
         disabled={noDocumentIsSelected || !numberOfFrames.redo}
       >
         <Tooltip label={'Redo text change'}>
-          <Icon name={Icons.material.redo} loadAsInlineSVG={'force'} />
+          <Icon name={Icons.material.redo} />
         </Tooltip>
       </ToolbarButton>
     </>

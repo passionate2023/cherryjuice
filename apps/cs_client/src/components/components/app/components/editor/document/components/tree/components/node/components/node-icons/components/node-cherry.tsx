@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 
 import { memo } from 'react';
 import { modNode } from '::sass-modules';
@@ -22,6 +22,7 @@ const NodeCherry: React.FC<NodeCherryProps> = memo(function NodeIcon({
       size={14}
       className={modNode.node__titleCherry}
       testId={'cherry' + (icon_id || 0)}
+      image={true}
     />
   );
 });

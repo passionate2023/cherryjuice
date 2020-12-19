@@ -21,7 +21,7 @@ import {
   modSearchDialog,
   modSearchFilter,
 } from '::sass-modules';
-import { Icons } from '::root/components/shared-components/icon/icon';
+import { Icons } from '@cherryjuice/icons';
 import { Search } from '::root/components/app/components/editor/tool-bar/components/groups/nav-bar/components/search/search';
 
 export const SearchSetting: React.FC<{

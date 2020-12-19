@@ -2,7 +2,7 @@ import * as React from 'react';
 import { modDropdownButton } from '::sass-modules';
 import { useRef, useState } from 'react';
 import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
-import { Icon, Icons } from '::shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { useSelector } from 'react-redux';
 import { Store } from '::store/store';
 
@@ -33,11 +33,7 @@ export const DropDownButton: React.FC<Props> = ({
       <div className={modDropdownButton.head}>
         {buttons[previouslySelected.current].element}
         <div onClick={toggleDropdown} className={modDropdownButton.head__arrow}>
-          <Icon
-            name={Icons.material['arrow-down']}
-            loadAsInlineSVG={'force'}
-            size={14}
-          />
+          <Icon name={Icons.material['arrow-down']} size={14} />
         </div>
       </div>
       {showDropdown && (

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { modToolbar } from '::sass-modules';
 import { ac, Store } from '::store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
@@ -46,7 +46,7 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
         testId={'new-document'}
       >
         <Tooltip label={'Create a new document'}>
-          <Icon name={Icons.material.document} loadAsInlineSVG={'force'} />
+          <Icon name={Icons.material.document} />
         </Tooltip>
       </ToolbarButton>
       <ToolbarButton
@@ -57,7 +57,6 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
           <Icon
             name={Icons.material.folder}
             testId={testIds.toolBar__navBar__showDocumentList}
-            loadAsInlineSVG={'force'}
           />
         </Tooltip>
       </ToolbarButton>

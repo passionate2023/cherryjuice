@@ -3,7 +3,7 @@ import { modChips, modNodeMeta, modTextInput } from '::sass-modules';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
-import { Icons } from '::root/components/shared-components/icon/helpers/icons';
+import { Icons } from '@cherryjuice/icons';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { ChipProps } from '::root/components/app/components/menus/dialogs/document-meta/components/chips/components/chip';
 

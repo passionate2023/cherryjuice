@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modLogin } from '::sass-modules';
-import { Icons } from '::root/components/shared-components/icon/icon';
+import { Icons } from '@cherryjuice/icons';
 import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
 import {
   ValidatedTextInput,

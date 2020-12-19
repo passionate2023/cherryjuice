@@ -73,6 +73,7 @@
     "@cherryjuice/graphql-types": "0.0.1",
     "@cherryjuice/shared-helpers": "0.0.1",
     "@cherryjuice/editor": "0.0.1",
+    "@cherryjuice/icons": "0.0.1",
     "@material/animation": "^5.1.0",
     "@material/base": "^5.1.0",
     "@material/feature-targeting": "^5.1.0",

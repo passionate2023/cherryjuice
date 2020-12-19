@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { modToolbar } from '::sass-modules';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
@@ -65,7 +65,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         disabled={noDocumentIsSelected}
       >
         <Tooltip label={'Toggle tree'} position={'bottom-right'}>
-          <Icon name={Icons.material.tree} size={20} />
+          <Icon image={true} name={Icons.material.tree} size={20} />
         </Tooltip>
       </ToolbarButton>
       <ToolbarButton
@@ -77,7 +77,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         disabled={noDocumentIsSelected || newDocument || !online}
       >
         <Tooltip label={'Reload document'} position={'bottom-right'}>
-          <Icon name={Icons.material.refresh} loadAsInlineSVG={'force'} />
+          <Icon name={Icons.material.refresh} />
         </Tooltip>
       </ToolbarButton>
       <ToolbarButton
@@ -100,7 +100,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
         disabled={!userHasUnsavedChanges || !online}
       >
         <Tooltip label={'Save all documents'}>
-          <Icon name={Icons.material.save} loadAsInlineSVG={'force'} />
+          <Icon name={Icons.material.save} />
         </Tooltip>
       </ToolbarButton>
     </div>

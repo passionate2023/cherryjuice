@@ -2,7 +2,6 @@
 
 const { alias, globalStyles, paths } = require('./variables');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const production = process.env.NODE_ENV === 'production';
@@ -143,7 +142,6 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new CopyPlugin([{ from: paths.icons, to: paths.iconsDist }]),
     production && new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/assets/index.html',

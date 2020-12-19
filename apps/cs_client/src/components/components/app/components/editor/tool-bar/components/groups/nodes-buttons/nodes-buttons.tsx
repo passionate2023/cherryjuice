@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { modToolbar } from '::sass-modules';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
@@ -50,11 +50,7 @@ const NodesButtons: React.FC<Props & PropsFromRedux> = ({
         disabled={noDocumentIsSelected}
       >
         <Tooltip label={'Create a sibling node'}>
-          <Icon
-            name={Icons.material['create-sibling']}
-            size={20}
-            loadAsInlineSVG={'force'}
-          />
+          <Icon name={Icons.material['create-sibling']} size={20} />
         </Tooltip>
       </ToolbarButton>
       <ToolbarButton
@@ -64,11 +60,7 @@ const NodesButtons: React.FC<Props & PropsFromRedux> = ({
         disabled={!selectedNode_id}
       >
         <Tooltip label={'Create a child node'}>
-          <Icon
-            name={Icons.material['create-child']}
-            size={20}
-            loadAsInlineSVG={'force'}
-          />
+          <Icon name={Icons.material['create-child']} size={20} />
         </Tooltip>
       </ToolbarButton>
       <ToolbarButton
@@ -78,7 +70,7 @@ const NodesButtons: React.FC<Props & PropsFromRedux> = ({
         testId={testIds.toolBar__main__editNodeMeta}
       >
         <Tooltip label={'Edit selected node'}>
-          <Icon name={Icons.material.edit} loadAsInlineSVG={'force'} />
+          <Icon name={Icons.material.edit} />
         </Tooltip>
       </ToolbarButton>
       <ToolbarButton
@@ -88,7 +80,7 @@ const NodesButtons: React.FC<Props & PropsFromRedux> = ({
         testId={testIds.toolBar__main__deleteNode}
       >
         <Tooltip label={'Delete selected node'}>
-          <Icon name={Icons.material.delete} loadAsInlineSVG={'force'} />
+          <Icon name={Icons.material.delete} />
         </Tooltip>
       </ToolbarButton>
       {children}

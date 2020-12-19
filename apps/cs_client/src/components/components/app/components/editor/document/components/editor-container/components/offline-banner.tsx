@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modRichText } from '::sass-modules';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 
 type Props = {};
 

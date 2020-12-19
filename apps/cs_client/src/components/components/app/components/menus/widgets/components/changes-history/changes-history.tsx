@@ -6,7 +6,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store, store } from '::store/store';
 import { getDocuments } from '::store/selectors/cache/document/document';
 import { UndoRedo } from '::root/components/app/components/menus/widgets/components/undo-action/components/undo-redo';
-import { Icons } from '::root/components/shared-components/icon/icon';
+import { Icons } from '@cherryjuice/icons';
 
 const mapState = (state: Store) => ({
   nof: state.timelines.documentActionNOF,

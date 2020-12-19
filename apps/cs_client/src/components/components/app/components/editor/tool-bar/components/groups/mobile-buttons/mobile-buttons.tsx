@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { modToolbar } from '::sass-modules';
 import { ToolbarButton } from '../../tool-bar-button/tool-bar-button';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';

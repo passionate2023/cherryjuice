@@ -3,7 +3,7 @@ import { modDialog } from '::sass-modules';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { useEffect, useRef, useState } from 'react';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
 
 const onContextMenu = e => {
@@ -79,7 +79,7 @@ const DialogListItem: React.FC<Props> = ({
             show={() => setShowModal(true)}
             items={cmItems}
           >
-            <Icon name={Icons.material.menu} loadAsInlineSVG={'force'} />
+            <Icon name={Icons.material.menu} />
           </ContextMenuWrapper>
         </div>
       )}

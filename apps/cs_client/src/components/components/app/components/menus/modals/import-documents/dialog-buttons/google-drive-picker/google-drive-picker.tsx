@@ -9,7 +9,7 @@ import { googlePickerDefaultProps, googlePickerHelpers } from './helpers';
 import { useLoadGoogleSDK } from '::hooks/use-google-sdk';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
 import { modImportDocument } from '::sass-modules';
-import { Icons, Icon } from '::root/components/shared-components/icon/icon';
+import { Icons, Icon } from '@cherryjuice/icons';
 import { ac } from '::store/store';
 import { Secrets } from '@cherryjuice/graphql-types';
 

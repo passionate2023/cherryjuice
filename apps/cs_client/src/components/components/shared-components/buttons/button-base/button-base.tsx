@@ -2,7 +2,7 @@ import * as React from 'react';
 import { modButton } from '::sass-modules';
 import { EventHandler, useRef } from 'react';
 import { joinClassNames } from '::helpers/dom/join-class-names';
-import { Icon } from '::root/components/shared-components/icon/icon';
+import { Icon } from '@cherryjuice/icons';
 import { useLazyAutoFocus } from '../hooks/lazy-auto-focus';
 
 type ButtonBaseProps = {
@@ -61,11 +61,7 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
       {...(testId && { 'data-testid': testId })}
     >
       {iconName ? (
-        <Icon
-          name={iconName}
-          loadAsInlineSVG={'force'}
-          size={small ? 12 : undefined}
-        />
+        <Icon name={iconName} size={small ? 12 : undefined} />
       ) : icon ? (
         icon
       ) : (

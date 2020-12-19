@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { modGoogleOauth } from '::sass-modules';
 import { useOnKeyPress } from '::hooks/use-on-key-up';
 import { EventHandler, useRef } from 'react';

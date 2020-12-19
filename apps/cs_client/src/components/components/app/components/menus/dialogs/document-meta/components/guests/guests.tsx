@@ -3,7 +3,7 @@ import { AccessLevel, DocumentGuestOt } from '@cherryjuice/graphql-types';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { documentMetaActionCreators } from '::root/components/app/components/menus/dialogs/document-meta/reducer/reducer';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
-import { Icons } from '::root/components/shared-components/icon/helpers/icons';
+import { Icons } from '@cherryjuice/icons';
 import { useMemo } from 'react';
 import { apolloClient } from '::graphql/client/apollo-client';
 import { USER_EXISTS } from '::graphql/queries/user-exists';

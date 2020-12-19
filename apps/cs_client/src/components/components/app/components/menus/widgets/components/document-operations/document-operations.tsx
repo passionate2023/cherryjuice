@@ -9,7 +9,7 @@ import { CollapsableListItemProps } from '::root/components/app/components/menus
 import { ActionButton } from '::root/components/app/components/menus/widgets/components/document-operations/components/action-button';
 import { mapEventType } from '::root/components/app/components/menus/widgets/components/document-operations/components/helpers/map-event-type';
 import { CollapsableList } from '::root/components/app/components/menus/widgets/components/collapsable-list/collapsable-list';
-import { Icons } from '::root/components/shared-components/icon/icon';
+import { Icons } from '@cherryjuice/icons';
 
 type OperationsStats = { inactive: number; active: number; total: number };
 const getStats = (operations: DocumentOperation[]): OperationsStats => {

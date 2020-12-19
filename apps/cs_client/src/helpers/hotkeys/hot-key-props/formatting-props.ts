@@ -1,4 +1,4 @@
-import { Icons } from '::root/components/shared-components/icon/icon';
+import { Icons } from '@cherryjuice/icons';
 import { HotKeyActionType } from '@cherryjuice/graphql-types';
 import {
   ExecKProps,

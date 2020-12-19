@@ -2,7 +2,7 @@ import * as React from 'react';
 import { User } from '@cherryjuice/graphql-types';
 import { modUserPopup } from '::sass-modules';
 import { GeneratedAvatar } from '::root/components/app/components/menus/modals/user/components/components/generated-avatar';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 
 type Props = { user: User };
 

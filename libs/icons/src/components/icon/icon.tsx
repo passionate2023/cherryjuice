@@ -10,5 +10,6 @@ type Props = SVGProps & {
 
 export const Icon: React.FC<Props> = props => {
   const [element, fetched] = useRenderSVG(props);
-  return <>{fetched ? element : undefined}</>;
+  const placeholder = <div style={{ width: props.size, height: props.size }} />;
+  return <>{fetched ? element : placeholder}</>;
 };

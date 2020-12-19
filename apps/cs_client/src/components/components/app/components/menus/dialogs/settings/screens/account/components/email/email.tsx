@@ -5,7 +5,7 @@ import {
   ValidatedTextInputProps,
 } from '::root/components/shared-components/form/validated-text-input';
 import { VerifyEmail } from '::root/components/app/components/menus/dialogs/settings/screens/account/components/email/components/verify-email';
-import { Icons } from '::root/components/shared-components/icon/helpers/icons';
+import { Icons } from '@cherryjuice/icons';
 import {
   userSettingsActionCreators,
   ValidatedInputState,

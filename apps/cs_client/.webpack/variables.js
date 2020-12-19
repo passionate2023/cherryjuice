@@ -36,8 +36,6 @@ module.exports = {
   paths: {
     postCssConfig: path.resolve(__dirname, '../postcss.config.js'),
     dist: path.resolve(__dirname, '../dist'),
-    iconsDist: path.resolve(__dirname, '../dist/icons/'),
-    icons: path.resolve(__dirname, '../src/assets/icons'),
     serviceWorker: path.resolve(
       __dirname,
       '../src/service-worker/service-worker.ts',

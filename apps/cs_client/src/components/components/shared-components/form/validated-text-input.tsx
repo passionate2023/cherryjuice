@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modLogin } from '::sass-modules';
-import { Icon } from '::root/components/shared-components/icon/icon';
+import { Icon } from '@cherryjuice/icons';
 import { Ref } from 'react';
 import {
   patternToString,
@@ -55,7 +55,6 @@ const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
     <div className={modLogin.login__form__input} disabled={disabled}>
       {icon && (
         <Icon
-          loadAsInlineSVG={'force'}
           name={typeof icon === 'string' ? icon : icon[0]}
           className={modLogin.login__form__input__icon}
         />
