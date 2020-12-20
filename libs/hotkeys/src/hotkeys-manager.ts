@@ -1,6 +1,5 @@
-import { richTextIsOnFocus } from '::helpers/hotkeys/helpers/richtext-is-focused';
 import { HotKey } from '@cherryjuice/graphql-types';
-import { flattenHotKey } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/flatten-hot-key';
+import { flattenHotKey } from '::helpers/flatten-hot-key';
 
 export type KeysCombination = {
   key?: string;
@@ -43,8 +42,9 @@ const createHotKeysManager = () => {
   const eventHandler = (e: KeyboardEvent) => {
     const correspondingHotKey = state.hotKeys[flattenHotKey(e)];
     if (correspondingHotKey) {
-      const global = correspondingHotKey.options.target === HotKeyTarget.GLOBAL;
-      if (global || richTextIsOnFocus(e)) {
+      //const global = correspondingHotKey.options.target === HotKeyTarget.GLOBAL;
+      // if (global || richTextIsOnFocus(e))
+      {
         e.preventDefault();
         correspondingHotKey.callback();
       }

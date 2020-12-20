@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useCallback, useMemo } from 'react';
-import { KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
+import { KeysCombination } from '@cherryjuice/hotkeys';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
 import { modButton, modHotKey } from '::sass-modules';
 import { TextInput } from '::root/components/shared-components/form/text-input';
-import { keyEventToValidShortcut } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/components/keyboard-shortcut/helpers';
+import { keyEventToValidShortcut } from '::app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/helpers';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { HotKey } from '@cherryjuice/graphql-types';
 import { ac } from '::store/store';

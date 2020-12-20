@@ -1,3 +1,11 @@
+export { registerDevHKs } from '::helpers/hotkeys/register-dev-hotkeys';
+export { registerFormattingHKs } from '::helpers/hotkeys/register-formatting-hot-keys';
+export {
+  FormattingButtonCategory,
+  formattingHotkeysProps,
+  FormattingHotProps,
+} from '::helpers/hotkeys/props/formatting-props';
+
 export { pagesManager } from '::helpers/pages-manager/pages-manager';
 
 export { getEditor } from '::helpers/pages-manager/helpers/get-editor';

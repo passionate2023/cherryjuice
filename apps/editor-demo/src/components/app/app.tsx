@@ -8,9 +8,11 @@ import '::assets/styles/base.scss';
 import '::assets/styles/css-variables/css-variables.scss';
 import { Editor } from '::root/app/components/editor/editor';
 import { document1 } from '::root/app/components/editor/data/document1';
+import { useRegisterHotkeys } from '::root/app/hooks/register-hotkeys';
 
 type Props = {};
 export const App: React.FC<Props> = () => {
+  useRegisterHotkeys();
   return (
     <div className={modTheme.lightTheme}>
       <div className={modApp.app}>

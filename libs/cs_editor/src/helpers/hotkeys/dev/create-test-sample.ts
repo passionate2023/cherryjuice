@@ -1,4 +1,4 @@
-import { getSelection } from '@cherryjuice/editor';
+import { getSelection } from '::helpers/execK/steps/get-selection';
 
 const copyToClipboard = str => {
   const el = document.createElement('textarea');
@@ -15,7 +15,7 @@ const copyToClipboard = str => {
 const getNodeId = () => /-(\d+)$/.exec(document.location.pathname)[1];
 
 const createTestSample = () => {
-  const { startOffset, endElement, startElement, endOffset } = getSelection();
+  const { startOffset, endElement, startElement, endOffset } = getSelection({});
   // @ts-ignore
   startElement.setAttribute('start-element', true);
   // @ts-ignore

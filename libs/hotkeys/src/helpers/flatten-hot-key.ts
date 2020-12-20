@@ -1,4 +1,4 @@
-import { KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
+import { KeysCombination } from '::root/hotkeys-manager';
 import { HotKey } from '@cherryjuice/graphql-types';
 
 const flattenHotKey = (value: KeysCombination | KeyboardEvent) =>

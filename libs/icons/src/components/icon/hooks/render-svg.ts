@@ -1,9 +1,8 @@
-import { EventHandler, useEffect, useRef, useState } from 'react';
-import { stringToSingleElement } from '@cherryjuice/editor';
-import React from 'react';
+import React, { EventHandler, useEffect, useRef, useState } from 'react';
 import { toDataUrl } from '::root/components/icon/hooks/helpers/to-data-url';
 import { getIconGroup } from '::root/components/icon/data/get-icon-group';
 import { getStyles } from '::root/components/icon/hooks/helpers/get-styles';
+import { stringToSingleElement } from './helpers/string-to-element';
 
 export type SVGProps = {
   size?: number;

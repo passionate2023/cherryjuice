@@ -1,12 +1,12 @@
-import { FormattingHotProps } from '@cherryjuice/react-client/src/helpers/hotkeys/hot-key-props/formatting-props';
-import { HotKeyActionType } from '@cherryjuice/graphql-types';
-import { Icons } from '@cherryjuice/react-client/src/components/components/shared-components/icon/helpers/icons';
 import {
   deleteLine,
   ExecKCommand,
+  FormattingHotProps,
   paneLine,
   toggleBulletPoint,
 } from '@cherryjuice/editor';
+import { HotKeyActionType } from '@cherryjuice/graphql-types';
+import { Icons } from '@cherryjuice/icons';
 
 export const formattingHotkeysProps: { [key: string]: FormattingHotProps } = {
   [HotKeyActionType.BOLD]: {

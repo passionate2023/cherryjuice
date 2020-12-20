@@ -1,7 +1,7 @@
 import { Store } from '::store/store';
 import { HotKey, HotKeys } from '@cherryjuice/graphql-types';
 import { createSelector } from 'reselect';
-import { generalHotKeysProps } from '::helpers/hotkeys/hot-key-props/general-hotkeys-props';
+import { generalHotKeysProps } from '::helpers/hotkeys/props/general-hotkeys-props';
 
 const hotKeysSelector = (state: Store) => state.hotkeySettings.current;
 

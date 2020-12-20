@@ -1,6 +1,6 @@
 import { execK } from '../index';
 import { testSamples, TTestSample } from './__data__';
-import { formattingHotkeysProps } from '../default-commands';
+import { formattingHotkeysProps } from '../../hotkeys/props/formatting-props';
 
 beforeAll(() => {
   // @ts-ignore
@@ -39,10 +39,9 @@ describe('execK snapshot tests', () => {
   const predicate = filter => ({ meta: { name } }) =>
     filter ? name === filter : name;
   testSamples.filter(predicate(undefined)).forEach(sample => {
-    Object.values(formattingHotkeysProps).forEach(
-      ({ execCommandArguments }) => {
-        test(sample, execCommandArguments);
-      },
-    );
+    Object.values(formattingHotkeysProps).forEach(prop => {
+      if ('execCommandArguments' in prop)
+        test(sample, prop.execCommandArguments);
+    });
   });
 });

@@ -28,6 +28,8 @@
     "@cherryjuice/ahtml-to-html": "0.0.2",
     "@cherryjuice/graphql-types": "0.0.1",
     "@cherryjuice/shared-helpers": "0.0.1",
+    "@cherryjuice/icons": "0.0.1",
+    "@cherryjuice/hotkeys": "0.0.1",
     "sass": "^1.23.7",
     "typescript": "^3.8.3",
     "rollup-plugin-postcss": "^4.0.0",

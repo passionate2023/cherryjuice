@@ -1,12 +1,10 @@
 import { Icons } from '@cherryjuice/icons';
 import { HotKeyActionType } from '@cherryjuice/graphql-types';
-import {
-  ExecKProps,
-  toggleBulletPoint,
-  paneLine,
-  deleteLine,
-  ExecKCommand,
-} from '@cherryjuice/editor';
+import { ExecKProps } from '::helpers/execK';
+import { ExecKCommand } from '::helpers/execK/execk-commands';
+import { deleteLine } from '::helpers/typing/delete-line/delete-line';
+import { paneLine } from '::helpers/typing/pane-line/pane-line';
+import { toggleBulletPoint } from '::helpers/lists/bullet-points/toggle-bullet-point';
 
 export type FormattingHotProps = {
   name?: string;

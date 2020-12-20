@@ -3,14 +3,14 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
 import { connect, ConnectedProps } from 'react-redux';
 import * as React from 'react';
+import { memo, useMemo } from 'react';
 import {
   FormattingButtonCategory,
   formattingHotkeysProps,
-} from '::helpers/hotkeys/hot-key-props/formatting-props';
+} from '@cherryjuice/editor';
 import { ColorInput } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/components/components/color-input';
 import { FormattingButton } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/components/components/formatting-button';
 import { DropDownButton } from '::shared-components/buttons/drop-down-button/drop-down-button';
-import { memo, useMemo } from 'react';
 
 const mapState = (state: Store) => {
   return {
