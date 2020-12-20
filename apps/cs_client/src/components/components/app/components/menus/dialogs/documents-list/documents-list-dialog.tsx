@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useEffect } from 'react';
 import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { DocumentList } from './components/documents-list/document-list';
@@ -9,6 +8,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { getDocumentsList } from '::store/selectors/cache/document/document';
 import { useDeleteListItems } from '::root/components/app/components/menus/dialogs/documents-list/hooks/delete-list-items';
+import { useFetchDocumentsList } from '::app/components/menus/dialogs/documents-list/hooks/fetch-documents-list';
 
 const createButtons = ({
   selectedIDs,
@@ -78,17 +78,8 @@ const DocumentsListDialog: React.FC<PropsFromRedux> = ({
   online,
   docked,
 }) => {
-  useEffect(() => {
-    if (userId) ac.documentsList.fetchDocuments();
-  }, []);
-  useEffect(() => {
-    if (online && showDocumentList) {
-      const handle = setTimeout(ac.documentsList.fetchDocuments, 1500);
-      return () => {
-        clearInterval(handle);
-      };
-    }
-  }, [showDocumentList, online]);
+  useFetchDocumentsList({ userId, online, showDocumentList });
+
   const close = ac.dialogs.hideDocumentList;
   const open = () => {
     ac.document.setDocumentId(selectedIDs[0]);
