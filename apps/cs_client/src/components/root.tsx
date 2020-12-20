@@ -33,7 +33,6 @@ import { Router } from 'react-router-dom';
 import { router } from '::root/router/router';
 import { useTasks } from '::root/hooks/tasks';
 import { CssVariables } from '::store/ducks/css-variables';
-import { useAuthStatusCookie } from '::root/hooks/auth-status-cookie';
 import 'hint.css';
 
 enablePatches();
