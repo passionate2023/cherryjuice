@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { NumberOfFrames, pagesManager } from '@cherryjuice/editor';
@@ -49,4 +49,5 @@ const UndoRedo: React.FC<Props & PropsFromRedux> = ({ documentId }) => {
   );
 };
 const _ = connector(UndoRedo);
-export { _ as UndoRedo };
+const M = memo(_);
+export { M as UndoRedo };

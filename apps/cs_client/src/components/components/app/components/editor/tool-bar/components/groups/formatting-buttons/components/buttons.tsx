@@ -10,7 +10,7 @@ import {
 import { ColorInput } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/components/components/color-input';
 import { FormattingButton } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/components/components/formatting-button';
 import { DropDownButton } from '::shared-components/buttons/drop-down-button/drop-down-button';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 
 const mapState = (state: Store) => {
   return {
@@ -95,5 +95,6 @@ const Buttons: React.FC<PropsFromRedux> = ({
     </>
   );
 };
-const ConnectedButtons = connector(Buttons);
-export { ConnectedButtons as Buttons };
+const _ = connector(Buttons);
+const M = memo(_);
+export { M as Buttons };

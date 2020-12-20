@@ -10,6 +10,7 @@ import { User } from '@cherryjuice/graphql-types';
 import { GeneratedAvatar } from '::root/components/app/components/menus/modals/user/components/components/generated-avatar';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
+import { memo } from 'react';
 
 const mapState = (state: Store) => ({
   user: state.auth.user,
@@ -99,4 +100,5 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
   );
 };
 const _ = connector(NavBar);
-export { _ as NavBar };
+const M = memo(_);
+export { M as NavBar };

@@ -101,7 +101,6 @@ const Root: React.FC<Props & PropsFromRedux> = ({
   useConsumeToken({ userId });
   useRouterEffect();
   useTasks();
-  useAuthStatusCookie({ userId });
 
   return (
     <Suspense fallback={<Void />}>

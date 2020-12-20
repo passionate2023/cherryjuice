@@ -7,6 +7,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
+import { memo } from 'react';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
@@ -70,4 +71,5 @@ const MobileButtons: React.FC<Props & PropsFromRedux> = ({
 };
 
 const _ = connector(MobileButtons);
-export { _ as MobileButtons };
+const M = memo(_);
+export { M as MobileButtons };

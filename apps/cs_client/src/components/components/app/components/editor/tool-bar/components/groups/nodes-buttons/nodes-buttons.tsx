@@ -9,6 +9,7 @@ import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-a
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { joinClassNames } from '::helpers/dom/join-class-names';
 import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
+import { memo } from 'react';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -88,4 +89,5 @@ const NodesButtons: React.FC<Props & PropsFromRedux> = ({
   );
 };
 const _ = connector(NodesButtons);
-export { _ as NodesButtons };
+const M = memo(_);
+export { M as NodesButtons };

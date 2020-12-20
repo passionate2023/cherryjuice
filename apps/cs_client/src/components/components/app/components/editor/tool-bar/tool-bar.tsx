@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { MainButtons } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/main-buttons';
 import { modApp, modToolbar } from '::sass-modules';
 import { MobileButtons } from './components/groups/mobile-buttons/mobile-buttons';
@@ -100,4 +100,5 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   );
 };
 const _ = connector(ToolBar);
-export default _;
+const M = memo(_);
+export default M;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { modSearch } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
-import { useRef } from 'react';
+import { memo, useRef } from 'react';
 import { useOnKeyPress } from '::hooks/use-on-key-up';
 import { SearchInput } from '::root/components/shared-components/inputs/search-input';
 
@@ -55,4 +55,5 @@ const Search: React.FC<Props & PropsFromRedux> = ({
 };
 
 const _ = connector(Search);
-export { _ as Search };
+const M = memo(_);
+export { M as Search };

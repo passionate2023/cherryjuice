@@ -12,7 +12,7 @@ import {
 } from '::store/selectors/cache/document/document';
 import { documentHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
 import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -107,4 +107,5 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
   );
 };
 const _ = connector(MainButtons);
-export { _ as MainButtons };
+const M = memo(_);
+export { M as MainButtons };
