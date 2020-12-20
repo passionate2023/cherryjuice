@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { modSearchDialog } from '::sass-modules';
 import { joinClassNames } from '::helpers/dom/join-class-names';
+import { memo } from 'react';
 
-export const SearchHeaderContainer: React.FC<{ alignChildren?: 'h' | 'v' }> = ({
+const SearchHeaderContainer: React.FC<{ alignChildren?: 'h' | 'v' }> = ({
   children,
   alignChildren,
 }) => (
@@ -19,6 +20,12 @@ export const SearchHeaderContainer: React.FC<{ alignChildren?: 'h' | 'v' }> = ({
   </div>
 );
 
-export const SearchHeaderGroup: React.FC = ({ children }) => (
+const M = memo(SearchHeaderContainer);
+export { M as SearchHeaderContainer };
+
+const SearchHeaderGroup: React.FC = ({ children }) => (
   <div className={modSearchDialog.searchDialog__header__group}>{children}</div>
 );
+
+const M2 = memo(SearchHeaderGroup);
+export { M2 as SearchHeaderGroup };

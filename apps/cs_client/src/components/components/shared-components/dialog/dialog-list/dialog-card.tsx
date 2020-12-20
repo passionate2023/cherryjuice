@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { modDialog } from '::sass-modules';
+import { memo } from 'react';
 
 type DialogCardProps = {
   items: JSX.Element[];
@@ -14,4 +15,5 @@ const DialogCard = ({ name, items }: DialogCardProps) => {
   );
 };
 
-export { DialogCard };
+const M = memo(DialogCard);
+export { M as DialogCard };

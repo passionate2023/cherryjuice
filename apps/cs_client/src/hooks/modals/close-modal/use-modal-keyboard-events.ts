@@ -12,7 +12,7 @@ export type Modal = {
   id?: string;
   dismiss: () => void;
   confirm?: () => void;
-  focusableElementsSelector: string[];
+  focusableElementsSelector?: string[];
 };
 
 const state: ModalsState = {

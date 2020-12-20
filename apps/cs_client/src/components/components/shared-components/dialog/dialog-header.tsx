@@ -1,7 +1,7 @@
 import { modButton, modDialog } from '::sass-modules';
 import * as React from 'react';
 import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
-import { EventHandler } from 'react';
+import { EventHandler, memo } from 'react';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ac } from '::store/store';
@@ -65,4 +65,5 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
   );
 };
 
-export { DialogHeader };
+const M = memo(DialogHeader);
+export { M as DialogHeader };

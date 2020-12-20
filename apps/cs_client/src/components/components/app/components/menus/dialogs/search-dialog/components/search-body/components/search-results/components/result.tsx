@@ -9,12 +9,14 @@ import { ac } from '::store/store';
 import { waitForDocumentToLoad } from '::root/components/app/components/editor/hooks/router-effect/helpers/wait-for-document-to-load';
 import { NodeNameAndTags } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/components/node-name-and-tags';
 import { TimeStamps } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/components/time-stamps';
+import { memo } from 'react';
 
 type Props = {
   result: NodeSearchResultEntity;
   searchContext: SearchContext;
   selectedNode_id: number;
   documentId: string;
+  listIndex: number;
 };
 
 const Result: React.FC<Props> = ({
@@ -22,10 +24,12 @@ const Result: React.FC<Props> = ({
   searchContext,
   selectedNode_id,
   documentId,
+  listIndex,
 }) => {
   const headline = useHeadline({
     searchContext,
     searchResult: result,
+    delay: listIndex * 50 + 100,
   });
   const selectNode = () => {
     ac.document.setDocumentId(result.documentId);
@@ -77,5 +81,5 @@ const Result: React.FC<Props> = ({
     </div>
   );
 };
-
-export { Result };
+const M = memo(Result);
+export { M as Result };

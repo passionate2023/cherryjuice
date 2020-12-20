@@ -1,8 +1,8 @@
 import * as React from 'react';
-import modDialog from '::sass-modules/shared-components/dialog.scss';
-import { EventHandler } from 'react';
+import { EventHandler, memo } from 'react';
 import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
 import { ac } from '::store/store';
+import { modDialog } from '::sass-modules';
 export type TDialogFooterButton = {
   label: string;
   onClick: EventHandler<any>;
@@ -68,5 +68,5 @@ const DialogFooter: React.FC<TDialogFooterProps> = ({
     </footer>
   );
 };
-
-export { DialogFooter };
+const M = memo(DialogFooter);
+export { M as DialogFooter };

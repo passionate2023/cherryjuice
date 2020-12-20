@@ -1,6 +1,6 @@
 import * as React from 'react';
-import modDialog from '::sass-modules/shared-components/dialog.scss';
-import { ReactNode } from 'react';
+import { memo, ReactNode } from 'react';
+import { modDialog } from '::sass-modules';
 
 type Props = { dialogBodyElements: ReactNode };
 
@@ -9,4 +9,5 @@ const DialogBody: React.FC<Props> = ({ dialogBodyElements }) => {
     <div className={`${modDialog.dialog__content}`}>{dialogBodyElements}</div>
   );
 };
-export { DialogBody };
+const M = memo(DialogBody);
+export { M as DialogBody };

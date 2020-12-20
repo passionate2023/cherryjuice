@@ -2,52 +2,13 @@ import * as React from 'react';
 import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { DocumentList } from './components/documents-list/document-list';
-import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
-import { testIds } from '::cypress/support/helpers/test-ids';
 import { getDocumentsList } from '::store/selectors/cache/document/document';
 import { useDeleteListItems } from '::root/components/app/components/menus/dialogs/documents-list/hooks/delete-list-items';
 import { useFetchDocumentsList } from '::app/components/menus/dialogs/documents-list/hooks/fetch-documents-list';
-
-const createButtons = ({
-  selectedIDs,
-  documentId,
-  close,
-  open,
-  deleteMode,
-  online,
-}) => {
-  const buttonsLeft = [
-    {
-      label: 'reload',
-      onClick: ac.documentsList.fetchDocuments,
-      disabled: !online,
-    },
-    {
-      label: 'import',
-      onClick: ac.dialogs.showImportDocument,
-      disabled: !online,
-      testId: testIds.dialogs__selectDocument__footerLeft__import,
-    },
-  ];
-  const buttonsRight: TDialogFooterButton[] = [
-    {
-      label: 'close',
-      onClick: close,
-      disabled: false,
-      testId: 'close-document-select',
-    },
-    {
-      testId: testIds.dialogs__selectDocument__footerRight__open,
-      label: 'open',
-      onClick: open,
-      disabled:
-        deleteMode || selectedIDs[0] === documentId || selectedIDs.length !== 1,
-    },
-  ];
-  return { buttonsLeft, buttonsRight };
-};
+import { useCallback } from 'react';
+import { useFooterButtons } from '::app/components/menus/dialogs/documents-list/hooks/footer-buttons';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
@@ -81,11 +42,13 @@ const DocumentsListDialog: React.FC<PropsFromRedux> = ({
   useFetchDocumentsList({ userId, online, showDocumentList });
 
   const close = ac.dialogs.hideDocumentList;
-  const open = () => {
-    ac.document.setDocumentId(selectedIDs[0]);
-  };
-  const { buttonsLeft, buttonsRight } = createButtons({
-    selectedIDs,
+  const selectedID = selectedIDs[0];
+  const open = useCallback(() => {
+    ac.document.setDocumentId(selectedID);
+  }, [selectedID]);
+  const [buttonsLeft, buttonsRight] = useFooterButtons({
+    selectedID: selectedID,
+    numberOfDocuments: selectedIDs.length,
     documentId,
     close,
     open,

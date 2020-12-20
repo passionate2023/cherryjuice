@@ -12,8 +12,7 @@
     'tabs'
     'rich-text';
   grid-template-columns: 1fr;
-  grid-template-rows:
-    40px 40px 1fr;
+  grid-template-rows: 40px 40px 1fr;
 
   overflow: hidden;
   // style
@@ -21,4 +20,3 @@
   background-color: var(--on-background);
   font-family: Verdana, sans-serif;
 }
-

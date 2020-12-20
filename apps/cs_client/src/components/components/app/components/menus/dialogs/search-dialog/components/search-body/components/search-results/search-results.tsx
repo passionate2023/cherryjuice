@@ -9,6 +9,7 @@ import {
   getCurrentDocument,
   getDocumentsList,
 } from '::store/selectors/cache/document/document';
+import { memo } from 'react';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -47,7 +48,7 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
       />
     }
     <div className={joinClassNames([modDialog.dialogBody__scrollableSurface])}>
-      {searchResults.results.map(result => (
+      {searchResults.results.map((result, i) => (
         <Result
           key={result.nodeId + searchResults.meta.timestamp}
           documentId={documentId}
@@ -59,6 +60,7 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
             searchOptions,
             searchTarget,
           }}
+          listIndex={i}
         />
       ))}
     </div>
@@ -66,4 +68,5 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
 );
 
 const _ = connector(SearchResults);
-export { _ as SearchResults };
+const M = memo(_);
+export { M as SearchResults };

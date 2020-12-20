@@ -9,9 +9,10 @@ const timeAgo = new TimeAgo('en-US');
 
 type RelativeTimeProps = {
   time: number;
+  delay?: number;
 };
 
-const useRelativeTime = ({ time }: RelativeTimeProps) => {
+const useRelativeTime = ({ time, delay = 300 }: RelativeTimeProps) => {
   const [relativeTime, setRelativeTime] = useState();
   const aliveRef = useRef(undefined);
 
@@ -23,7 +24,7 @@ const useRelativeTime = ({ time }: RelativeTimeProps) => {
       const interval = time ? calculateInterval(difference) : 1000;
       if (interval) aliveRef.current = setTimeout(update, interval);
     };
-    update();
+    aliveRef.current = setTimeout(update, delay);
     return () => {
       clearTimeout(aliveRef.current);
     };

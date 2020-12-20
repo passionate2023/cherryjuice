@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRef } from 'react';
+import { memo, useRef } from 'react';
 import { SearchTarget } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/search-target';
 import { SearchOptions } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-options/search-options';
 import { SearchScope } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-scope/search-scope';
@@ -29,33 +29,35 @@ export const SearchSetting: React.FC<{
   shown: boolean;
   show: () => void;
   hide: () => void;
-}> = ({ iconName, shown, show, hide, children }) => (
-  <ContextMenuWrapper
-    clickOutsideSelectorsWhitelist={[
-      {
-        selector: '.' + modSearchFilter.searchFilter,
-      },
-      {
-        selector: '.' + modPickTimeRange.pickTimeRange,
-      },
-    ]}
-    showAsModal={'mb'}
-    shown={shown}
-    hide={hide}
-    show={show}
-    customBody={
-      <div className={modSearchDialog.searchDialog__searchSetting}>
-        {children}
-      </div>
-    }
-  >
-    <ButtonCircle
-      className={modSearchDialog.searchDialog__header__toggleFilters}
-      iconName={iconName}
-      active={shown}
-    />
-  </ContextMenuWrapper>
-);
+}> = memo(function SearchSetting({ iconName, shown, show, hide, children }) {
+  return (
+    <ContextMenuWrapper
+      clickOutsideSelectorsWhitelist={[
+        {
+          selector: '.' + modSearchFilter.searchFilter,
+        },
+        {
+          selector: '.' + modPickTimeRange.pickTimeRange,
+        },
+      ]}
+      showAsModal={'mb'}
+      shown={shown}
+      hide={hide}
+      show={show}
+      customBody={
+        <div className={modSearchDialog.searchDialog__searchSetting}>
+          {children}
+        </div>
+      }
+    >
+      <ButtonCircle
+        className={modSearchDialog.searchDialog__header__toggleFilters}
+        iconName={iconName}
+        active={shown}
+      />
+    </ContextMenuWrapper>
+  );
+});
 
 export const useSetCssVariablesOnWindowResize = (
   actionCreator,
@@ -167,4 +169,5 @@ const SearchFilters: React.FC<Props & PropsFromRedux> = ({
 };
 
 const _ = connector(SearchFilters);
-export { _ as SearchFilters };
+const M = memo(_);
+export { M as SearchFilters };
