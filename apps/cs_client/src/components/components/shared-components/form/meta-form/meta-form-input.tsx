@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modNodeMeta, modTextInput } from '::sass-modules';
-import { useRef } from 'react';
+import { memo, useRef } from 'react';
 import { useLazyAutoFocus } from '::root/components/shared-components/buttons/button-base/button-base';
 
 type FormInputProps = {
@@ -62,5 +62,6 @@ const MetaFormInput: React.FC<FormInputProps> = ({
   );
 };
 
-export { MetaFormInput };
+const M = memo(MetaFormInput);
+export { M as MetaFormInput };
 export { FormInputProps };
