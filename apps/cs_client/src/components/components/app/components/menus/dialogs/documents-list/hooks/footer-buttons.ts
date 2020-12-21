@@ -20,12 +20,6 @@ export const useFooterButtons = ({
           onClick: ac.documentsList.fetchDocuments,
           disabled: !online,
         },
-        {
-          label: 'import',
-          onClick: ac.dialogs.showImportDocument,
-          disabled: !online,
-          testId: testIds.dialogs__selectDocument__footerLeft__import,
-        },
       ],
       [
         {

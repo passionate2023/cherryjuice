@@ -1,17 +1,16 @@
 import * as React from 'react';
-import { ac } from '::store/store';
+import { memo, useMemo } from 'react';
+import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::store/store';
 import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 import { DialogListItem } from '::root/components/shared-components/dialog/dialog-list/dialog-list-item';
 import { DocumentDetails } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/components/document-details';
-import { memo, useMemo } from 'react';
 
 export const documentHasUnsavedChanges = (document: CachedDocument) => {
   const localState = document?.localState;
   if (localState) {
     const editedNodes = localState.editedNodes;
-    return (
+    return !!(
       localState.editedAttributes.length ||
       editedNodes.created.length ||
       editedNodes.deleted.length ||

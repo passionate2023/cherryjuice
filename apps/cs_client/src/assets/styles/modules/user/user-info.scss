@@ -1,0 +1,31 @@
+.user-info {
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-020);
+  text-align: center;
+}
+
+.user-info__generated-avatar {
+  border-radius: 50%;
+}
+
+.user-info__name {
+  &:first-letter {
+    text-transform: capitalize;
+  }
+
+  font-size: 0.9em;
+  line-height: 22px;
+}
+
+.user-info__username {
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.user-info__email {
+  text-transform: lowercase;
+  font-size: 0.85em;
+}

@@ -34,6 +34,7 @@ import modTimeFilter from './search/search-dialog/time-filter.scss';
 import modUtility from './utility.scss';
 import modChips from './document-meta/guests.scss';
 import modUserProfile from './user/user-profile.scss';
+import modUserInfo from './user/user-info.scss';
 import modHotKey from './settings/hot-key.scss';
 import modHotKeys from './settings/hot-keys.scss';
 import modSnackbar from './widgets/snackbar.scss';
@@ -46,6 +47,7 @@ import modContextMenu from '::sass-modules/shared-components/context-menu.scss';
 import modToggleSwitch from '::sass-modules/shared-components/toggle-switch.scss';
 import modBookmarks from '::sass-modules/dialogs/bookmarks/bookmarks.scss';
 import modDropdownButton from '::sass-modules/shared-components/drop-down-button.scss';
+import modDropdownMenu from './shared-components/dropdown-menu.scss';
 
 export {
   modNode,
@@ -90,10 +92,12 @@ export {
   modUtility,
   modChips,
   modUserProfile,
+  modUserInfo,
   modHotKey,
   modHotKeys,
   modUndoAction,
   modWidgets,
   modSplashScreen,
   modDropdownButton,
+  modDropdownMenu,
 };

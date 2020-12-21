@@ -26,7 +26,7 @@ export type Assertion = {
 
 type Props = {
   callback: () => void;
-  assertions: Assertion[];
+  assertions?: Assertion[];
 };
 const createEventHandler = ({ assertions, callback }: Props) => (
   event: MouseEvent,

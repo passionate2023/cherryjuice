@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { memo } from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { modToolbar } from '::sass-modules';
@@ -10,13 +11,14 @@ import { User } from '@cherryjuice/graphql-types';
 import { GeneratedAvatar } from '::root/components/app/components/menus/modals/user/components/components/generated-avatar';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
-import { memo } from 'react';
+import { DocumentDropdownMenu } from '::app/components/menus/modals/document-dropdown-menu/document-dropdown-menu';
+import { UserDropdownMenu } from '::app/components/menus/modals/user-dropdown-menu/user-dropdown-menu';
 
 const mapState = (state: Store) => ({
   user: state.auth.user,
-  noDocumentIsSelected: !state.document.documentId,
   isDocumentOwner: hasWriteAccessToDocument(state),
-  showBookmarks: state.dialogs.showBookmarks,
+  showDocumentDropdownMenu: state.dialogs.showDocumentDropdownMenu,
+  showUserDropdownMenu: state.dialogs.showUserDropdownMenu,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -27,13 +29,11 @@ type Props = {
 };
 
 const NavBar: React.FC<Props & PropsFromRedux> = ({
-  showUserPopup,
+  showUserDropdownMenu,
+  showDocumentDropdownMenu,
   user,
-  showBookmarks,
   isDocumentOwner,
-  noDocumentIsSelected,
 }) => {
-  const isLoggedIn = user?.id;
   return (
     <div
       className={
@@ -41,39 +41,20 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
       }
     >
       <Search />
-      <ToolbarButton
-        dontMount={!isLoggedIn}
-        onClick={ac.dialogs.showCreateDocumentDialog}
-        testId={'new-document'}
-      >
-        <Tooltip label={'Create a new document'}>
-          <Icon name={Icons.material.document} />
-        </Tooltip>
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={ac.dialogs.showDocumentList}
-        dontMount={!isLoggedIn}
-      >
-        <Tooltip label={'Documents list'}>
-          <Icon
-            name={Icons.material.folder}
-            testId={testIds.toolBar__navBar__showDocumentList}
-          />
-        </Tooltip>
-      </ToolbarButton>
+
       <ToolbarButton
         dontMount={!isDocumentOwner}
-        disabled={noDocumentIsSelected}
-        onClick={ac.dialogs.showBookmarksDialog}
-        active={showBookmarks}
+        onClick={ac.dialogs.showDocumentDropdownMenu}
+        active={showDocumentDropdownMenu}
       >
-        <Tooltip label={'Bookmarks'}>
-          <Icon name={Icons.material.bookmarks} />
+        <Tooltip label={'Document menu'}>
+          <Icon name={Icons.material.add} />
         </Tooltip>
+        <DocumentDropdownMenu key={'DocumentDropdownMenu'} />
       </ToolbarButton>
       <ToolbarButton
-        onClick={ac.dialogs.toggleUserPopup}
-        active={showUserPopup}
+        onClick={ac.dialogs.showUserDropdownMenu}
+        active={showUserDropdownMenu}
         testId={testIds.toolBar__navBar__userButton}
       >
         <Tooltip label={'User preferences'} position={'bottom-left'}>
@@ -95,6 +76,7 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
             <Icon name={Icons.material['person-circle']} />
           )}
         </Tooltip>
+        <UserDropdownMenu key={'UserDropdownMenu'} />
       </ToolbarButton>
     </div>
   );

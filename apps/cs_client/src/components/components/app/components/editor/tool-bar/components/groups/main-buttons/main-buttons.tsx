@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { modToolbar } from '::sass-modules';
@@ -12,7 +13,6 @@ import {
 } from '::store/selectors/cache/document/document';
 import { documentHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
 import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
-import { memo, useEffect, useRef } from 'react';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -66,18 +66,6 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
       >
         <Tooltip label={'Toggle tree'} position={'bottom-right'}>
           <Icon image={true} name={Icons.material.tree} size={20} />
-        </Tooltip>
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={
-          documentHasUnsavedChanges
-            ? ac.dialogs.showReloadDocument
-            : ac.document.fetch
-        }
-        disabled={noDocumentIsSelected || newDocument || !online}
-      >
-        <Tooltip label={'Reload document'} position={'bottom-right'}>
-          <Icon name={Icons.material.refresh} />
         </Tooltip>
       </ToolbarButton>
       <ToolbarButton

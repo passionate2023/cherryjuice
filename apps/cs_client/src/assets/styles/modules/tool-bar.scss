@@ -107,9 +107,12 @@
   }
 }
 .tool-bar__icon {
+  position: relative;
+
   svg {
     fill: var(--on-surface);
   }
+
   display: flex;
   align-items: center;
   justify-content: center;
