@@ -12,7 +12,6 @@
     "rootDir": "src",
     "module": "esnext",
     "target": "es2019",
-    "outDir": "build",
     "sourceMap": false,
     "allowJs": false,
     "moduleResolution": "node",

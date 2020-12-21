@@ -5,7 +5,7 @@ const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const tsconfig = require('./tsconfig');
 // eslint-disable-next-line no-undef
 module.exports = {
-  roots: [/*'<rootDir>/.storybook', */ '<rootDir>/src', '<rootDir>/cypress'],
+  roots: [/*'<rootDir>/.storybook', */ '<rootDir>/src'],
   preset: 'ts-jest/presets/js-with-ts',
   testEnvironment: 'jsdom',
 

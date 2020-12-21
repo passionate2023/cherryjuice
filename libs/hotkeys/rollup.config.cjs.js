@@ -1,27 +1,24 @@
 import typescript from '@rollup/plugin-typescript';
-import del from 'rollup-plugin-delete';
 import { shared } from './rollup.config.base';
-
 const production = !process.env.ROLLUP_WATCH;
 
-const es = {
+const cjs = {
   ...shared,
   output: [
     {
-      dir: 'build',
-      format: 'es',
+      dir: 'build/cjs',
+      format: 'cjs',
       exports: 'named',
       sourcemap: !production,
     },
   ],
 };
-es.plugins.push(
+cjs.plugins.push(
   typescript({
     sourceMap: !production,
     inlineSources: !production,
-    tsconfig: './tsconfig.es.json',
+    tsconfig: './tsconfig.cjs.json',
   }),
 );
-if (production) es.plugins.push(del({ targets: 'build/*' }));
 
-export default [es];
+export default [cjs];

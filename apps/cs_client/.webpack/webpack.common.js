@@ -149,7 +149,7 @@ module.exports = {
     }),
     production &&
       new FaviconsWebpackPlugin({
-        logo: './src/assets/icons/material/cherry-juice.svg',
+        logo: '../../libs/icons/src/assets/icons/material/cherry-juice.svg',
         mode: 'webapp',
         favicons: {
           appName: 'CherryJuice',

@@ -5,6 +5,7 @@
   "author": "",
   "license": "ISC",
   "module": "build/index.js",
+  "main": "build/cjs/index.js",
   "types": "build/types",
   "files": [
     "build"
@@ -13,9 +14,10 @@
     "dev": "rollup -c -w --environment TSC_NONPOLLING_WATCHER:true",
     "dev:icons": "yarn dev",
     "types": "tsc -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
-    "build": "rollup -c",
+    "build": "rollup -c && yarn build-cjs",
+    "build-cjs": "rollup -c rollup.config.cjs.js",
     "build:icons": "yarn build",
-    "test": "jest",
+    "test": "exit 0",
     "lint": "eslint ./**"
   },
   "peerDependencies": {
