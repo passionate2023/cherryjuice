@@ -42,6 +42,9 @@
 }
 .tool-bar__group--formatting-container {
   pointer-events: none;
+  @include respond-to($md-down) {
+    pointer-events: all;
+  }
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -89,7 +92,7 @@
 
   &:last-child {
     @include respond-to($md-down) {
-      padding-right: 15px;
+      padding-right: 25px;
     }
   }
 }
