@@ -1,4 +1,4 @@
-@import '../../vars/vars';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
 .linearProgress {
   position: absolute;
   z-index: $ZI-linear-progress;

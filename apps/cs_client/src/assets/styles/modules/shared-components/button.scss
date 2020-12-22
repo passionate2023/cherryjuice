@@ -1,5 +1,5 @@
-@import '../../vars/vars';
-@import '../../vars/states';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/vars/states';
 
 @mixin button-variant($color, $bg-color, $br-base, $br-step) {
   color: $color;

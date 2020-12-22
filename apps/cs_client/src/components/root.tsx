@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Suspense } from 'react';
-import modTheme from '::sass-modules/../themes/themes.scss';
+// @ts-ignore
+import modTheme from '@cherryjuice/shared-styles/build/themes/themes.scss';
 import '::assets/styles/global-scope/material-ui.scss';
 import '::assets/styles/global-scope/google-picker.scss';
-import '::assets/styles/body.scss';
-import '::assets/styles/base.scss';
-import '::assets/styles/css-variables/css-variables.scss';
+import '@cherryjuice/shared-styles/build/global/body.scss';
+import '@cherryjuice/shared-styles/build/global/base.scss';
+import '@cherryjuice/shared-styles/build/global/css-variables.scss';
 import { useApolloClient } from '::graphql/client/hooks/apollo-client';
 import { Route, Switch } from 'react-router';
 import { connect, ConnectedProps, Provider } from 'react-redux';

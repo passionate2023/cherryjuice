@@ -1,5 +1,6 @@
-@import '../../vars/vars';
-@import '../../mixins/form';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/form';
 
 .login__card {
   position: relative;

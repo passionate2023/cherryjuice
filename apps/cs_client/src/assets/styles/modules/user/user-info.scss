@@ -23,6 +23,7 @@
 .user-info__username {
   font-weight: bold;
   color: var(--primary);
+  overflow-wrap: anywhere;
 }
 
 .user-info__email {

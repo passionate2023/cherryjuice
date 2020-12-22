@@ -14,6 +14,7 @@
     "build:lib:2": "yarn workspace @cherryjuice/ahtml-to-html run build",
     "build:lib:3": "yarn workspace @cherryjuice/shared-helpers run build",
     "build:lib:4": "yarn workspace @cherryjuice/rollup-plugin-svg run build",
+    "build:lib:5": "yarn workspace @cherryjuice/shared-styles run build",
     "build:lib2:1": "yarn workspace @cherryjuice/ctb-to-ahtml run build",
     "build:lib2:2": "yarn workspace @cherryjuice/default-settings run build",
     "build:lib2:3": "yarn workspace @cherryjuice/icons run build",

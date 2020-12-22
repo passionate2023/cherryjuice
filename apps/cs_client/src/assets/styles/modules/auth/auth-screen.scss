@@ -1,4 +1,5 @@
-@import '../../vars/vars';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 .auth-screen {
   background-color: var(--primary-010);
   width: var(--vw);

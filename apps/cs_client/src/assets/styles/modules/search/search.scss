@@ -1,4 +1,4 @@
-@import '../../mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 .search__container {
   @include respond-to($wd-down) {
     width: 40px;

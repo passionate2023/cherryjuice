@@ -1,5 +1,5 @@
-@import '../../vars/vars';
-@import '../../mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 
 .dropdown-menu {
   --border: 0.5px solid var(--on-surface-1);

@@ -9,7 +9,7 @@ const UserInfo: React.FC<Props> = ({ user }) => {
   return (
     <div className={modUserInfo.userInfo}>
       <span className={modUserInfo.userInfo__name}>
-        signed in in as{' '}
+        signed in as{' '}
         <span className={modUserInfo.userInfo__username}>{username}</span>
       </span>
     </div>

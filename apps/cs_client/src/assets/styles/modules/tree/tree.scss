@@ -1,5 +1,5 @@
-@import '../../vars/vars';
-@import '../../mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 @mixin tree-height() {
   height: calc(
     var(--vh) - #{2 * $tool-bar-height} - var(--formatting-bar) - var(--recent-nodes)
