@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 process.env.NODE_ENV = 'development';
-const path = require('path');
 const merge = require('webpack-merge');
-const common = require('../.webpack/webpack.common.js');
+const common = require('../apps/cs_client/.webpack/webpack.common.js');
 module.exports = {
-  stories: ['../src/**/*.stories.tsx'],
+  stories: ['../apps/cs_client/src/**/*.stories.tsx'],
 
-  webpackFinal: async (config, { configType }) => {
+  webpackFinal: async config => {
     return merge(common, config);
   },
   addons: [

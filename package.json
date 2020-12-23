@@ -54,7 +54,9 @@
     "dc:stop": "sudo docker-compose stop",
     "predc:up": "yarn dc:pull && yarn dc:stop && yarn dc:rm",
     "dc:up": "sudo docker-compose up -d",
-    "dc:down": "sudo docker-compose down"
+    "dc:down": "sudo docker-compose down",
+    "storybook": "start-storybook -c storybook -p 1237",
+    "storybook:build": "build-storybook -c storybook -o storybook-static"
   },
   "config": {
     "commitizen": {
@@ -85,5 +87,17 @@
   "author": "Yacine Mohamdi",
   "license": "ISC",
   "homepage": "https://github.com/ycnmhd/cherryjuice#readme",
-  "optionalDependencies": {}
+  "optionalDependencies": {
+    "@storybook/addon-a11y": "^5.3.19",
+    "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-backgrounds": "^5.3.19",
+    "@storybook/addon-console": "^1.2.1",
+    "@storybook/addon-knobs": "^5.3.19",
+    "@storybook/addon-storyshots": "^5.3.19",
+    "@storybook/addon-storysource": "^5.3.19",
+    "@storybook/addon-viewport": "^5.3.19",
+    "@storybook/addons": "^5.3.19",
+    "@storybook/react": "^5.3.19",
+    "@storybook/theming": "^5.3.19"
+  }
 }

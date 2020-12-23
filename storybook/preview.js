@@ -8,11 +8,11 @@ import { MemoryRouter } from 'react-router';
 import '@storybook/addon-console';
 import { Provider } from 'react-redux';
 import { store } from '::store/store';
-import modTheme from '::sass-modules/../themes/themes.scss';
-import '::assets/styles/global-scope/material-ui.scss';
-import '::assets/styles/base.scss';
-import '::assets/styles/global-scope/google-picker.scss';
-import '::assets/styles/css-variables/css-variables.scss';
+import modTheme from '@cherryjuice/shared-styles/build/themes/themes.scss';
+import '../apps/cs_client/src/assets/styles/global-scope/material-ui.scss';
+import '../apps/cs_client/src/assets/styles/global-scope/google-picker.scss';
+import '@cherryjuice/shared-styles/build/global/base.scss';
+import '@cherryjuice/shared-styles/build/global/css-variables.scss';
 addParameters({
   backgrounds: [
     { name: 'white', value: '#f5f5f5', default: true },

@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 process.env.NODE_ENV = 'development';
-const { paths } = require('./variables');
+const paths = require('./paths');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const DotEnv = require('dotenv-webpack');
+
 module.exports = merge(common, {
   mode: 'development',
   devtool: 'eval-source-map',
@@ -20,5 +21,14 @@ module.exports = merge(common, {
     writeToDisk: true,
     host: '0.0.0.0',
   },
-  plugins: [new DotEnv({ path: paths.env })],
+  plugins: [paths.env && new DotEnv({ path: paths.env })].filter(Boolean),
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
+    ],
+  },
 });

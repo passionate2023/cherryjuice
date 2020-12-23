@@ -1,0 +1,110 @@
+const paths = require('./paths');
+const production = process.env.NODE_ENV === 'production';
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const styleLoader = production ? MiniCssExtractPlugin.loader : 'style-loader';
+
+const globalStyles = new RegExp(
+  `(${[
+    'node_modules/',
+    'global.scss',
+    'body.scss',
+    'global-classes.scss',
+    'material-ui.scss',
+    'google-picker.scss',
+    'css-variables.scss',
+    'storybook.scss',
+  ].join('|')})`,
+);
+
+module.exports = {
+  workerLoader: {
+    test: /\.worker\.ts$/,
+    use: {
+      loader: 'worker-loader',
+      options: {
+        name: 'WorkerName.[hash].js',
+        inline: true,
+        publicPath: '/workers/',
+      },
+    },
+  },
+
+  javascriptAndTypescript: {
+    test: /\.(mjs|js|ts|tsx)$/,
+    use: [
+      {
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                targets: '>2%',
+              },
+            ],
+            '@babel/react',
+            '@babel/typescript',
+          ],
+          plugins: [
+            '@babel/plugin-proposal-optional-chaining',
+            '@babel/plugin-proposal-class-properties',
+            [
+              '@babel/plugin-transform-runtime',
+              { regenerator: true, runtime: true },
+            ],
+          ],
+        },
+      },
+    ],
+    include: [paths.src, paths.cypress, paths.types],
+  },
+  graphql: {
+    test: /\.(graphql|gql)$/,
+    exclude: /node_modules/,
+    use: {
+      loader: 'raw-loader',
+    },
+  },
+  svg: { test: /\.svg$/, loader: 'svg-inline-loader' },
+  sassModules: {
+    test: /\.(s[ac]|c)ss$/i,
+    use: [
+      styleLoader,
+      {
+        loader: 'css-loader',
+        options: {
+          localsConvention: 'dashes',
+          importLoaders: 2,
+          modules: {
+            localIdentName: production ? '[hash:base64]' : '[local]',
+          },
+          esModule: true,
+        },
+      },
+      {
+        loader: 'sass-loader',
+        options: {
+          implementation: require('sass'),
+        },
+      },
+    ],
+    exclude: globalStyles,
+  },
+  sassGlobal: {
+    test: /\.(s[ac]|c)ss$/i,
+    use: [
+      styleLoader,
+      'css-loader',
+      {
+        loader: 'sass-loader',
+        options: {
+          sassOptions: {
+            includePaths: ['node_modules', '../../node_modules'],
+          },
+          implementation: require('sass'),
+        },
+      },
+    ],
+    include: globalStyles,
+  },
+};
