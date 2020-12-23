@@ -13,4 +13,5 @@ module.exports = {
   src: path.resolve(__dirname, '../src'),
   cypress: path.resolve(__dirname, '../cypress'),
   types: path.resolve(__dirname, '../types'),
+  components: path.resolve(__dirname, '../../../libs/components'),
 };

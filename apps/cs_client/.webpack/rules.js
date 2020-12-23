@@ -1,5 +1,6 @@
 const paths = require('./paths');
 const production = process.env.NODE_ENV === 'production';
+const storybook = process.env.STORYBOOK === 'true';
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const styleLoader = production ? MiniCssExtractPlugin.loader : 'style-loader';
 
@@ -56,7 +57,12 @@ module.exports = {
         },
       },
     ],
-    include: [paths.src, paths.cypress, paths.types],
+    include: [
+      paths.src,
+      paths.cypress,
+      paths.types,
+      storybook && paths.components,
+    ].filter(Boolean),
   },
   graphql: {
     test: /\.(graphql|gql)$/,

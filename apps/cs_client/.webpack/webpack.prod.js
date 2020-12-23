@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 process.env.NODE_ENV = 'production';
+const paths = require('./paths');
 const merge = require('webpack-merge');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;

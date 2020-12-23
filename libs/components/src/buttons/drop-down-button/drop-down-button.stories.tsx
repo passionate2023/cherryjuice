@@ -1,27 +1,32 @@
-import { Grid } from '::shared-components/storybook/board';
-import React from 'react';
-import { ToolbarButton } from '::app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
-import { modToolbar } from '::sass-modules';
-import { DropDownButton } from '::shared-components/buttons/drop-down-button/drop-down-button';
-
-const Icon = ({ text }) => (
-  <span style={{ display: 'flex', color: 'black' }}>{text}</span>
-);
+import * as React from 'react';
+import { DropDownButton, ButtonSquare } from '@cherryjuice/components';
+import { Grid } from '../../storybook/board';
 
 const config = {
-  title: 'shared/drop-down-button',
+  title: 'buttons',
 };
-export const square = () => {
+export const DropDown = () => {
   return (
     <Grid>
-      <div className={modToolbar.toolBar}>
+      <div
+        style={{
+          minHeight: 40,
+
+          // children
+          display: 'flex',
+          alignItems: 'center',
+          flexWrap: 'nowrap',
+          backgroundColor: 'var(--background)',
+          userSelect: 'none',
+        }}
+      >
         {
           <DropDownButton
-            buttons={['+', '-', '*', '/'].map(text => (
-              <ToolbarButton key={text}>
-                <Icon text={text} />
-              </ToolbarButton>
-            ))}
+            buttons={['+', '-', '*', '/'].map(text => ({
+              key: text,
+              element: <ButtonSquare text={text} key={text} />,
+            }))}
+            md={false}
           />
         }
       </div>
