@@ -6,7 +6,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
-import { DropDownButton } from '::shared-components/buttons/drop-down-button/drop-down-button';
+import { DropDownButton } from '@cherryjuice/components';
 
 const mapState = (state: Store) => {
   return {

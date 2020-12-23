@@ -1,5 +1,5 @@
 import { MutableRefObject, useEffect } from 'react';
-import { onEnteredViewPort } from '::root/components/shared-components/buttons/hooks/on-entered-viewport';
+import { onEnteredViewPort } from './helpers/on-entered-viewport';
 
 export const useLazyAutoFocus = (
   lazyAutoFocus: boolean,

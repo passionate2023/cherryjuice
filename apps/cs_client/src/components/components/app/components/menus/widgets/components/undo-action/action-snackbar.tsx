@@ -2,7 +2,7 @@ import * as React from 'react';
 import { modSnackbar } from '::sass-modules';
 import { Icons } from '@cherryjuice/icons';
 import { ac } from '::store/store';
-import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
+import { ButtonCircle } from '@cherryjuice/components';
 import { useEffect, useRef, useState } from 'react';
 
 type Props = {

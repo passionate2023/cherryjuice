@@ -2,7 +2,7 @@ import * as React from 'react';
 import { modSearchDialog } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { configs } from '::root/components/shared-components/transitions/transitions';
 import { animated, useSpring } from 'react-spring';
 

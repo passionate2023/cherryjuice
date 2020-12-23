@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useCallback } from 'react';
 import { modUserPopup } from '::sass-modules';
-import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { useClickOutsideModal } from '@cherryjuice/shared-helpers';
+import { ButtonSquare } from '@cherryjuice/components';
 import { animated } from 'react-spring';
 import { ac } from '::store/store';
 import { router } from '::root/router/router';

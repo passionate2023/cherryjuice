@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
+import { ButtonCircle } from '@cherryjuice/components';
 import { Icons } from '@cherryjuice/icons';
 import { NumberOfFrames } from '::editor/helpers/snapback/snapback/snapback';
 

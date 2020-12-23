@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modDropdownMenu } from '::sass-modules';
-import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
+import { useClickOutsideModal } from '@cherryjuice/shared-helpers';
 import {
   DropdownMenuGroup,
   DropdownMenuGroupProps,

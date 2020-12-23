@@ -4,7 +4,7 @@ import { Void } from '::root/components/shared-components/react/void';
 import { modApp } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Empty } from '::app/components/empty/empty';
 
 const Menus = React.lazy(() =>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import toolbarMod from '::sass-modules/tool-bar.scss';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 
 const ToolbarButton: React.FC<{
   onClick?: any;

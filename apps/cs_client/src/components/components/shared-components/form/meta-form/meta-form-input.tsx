@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { modNodeMeta, modTextInput } from '::sass-modules';
 import { memo, useRef } from 'react';
-import { useLazyAutoFocus } from '::root/components/shared-components/buttons/button-base/button-base';
+import { useLazyAutoFocus } from '@cherryjuice/shared-helpers';
 
 type FormInputProps = {
   type?: 'checkbox' | 'text';

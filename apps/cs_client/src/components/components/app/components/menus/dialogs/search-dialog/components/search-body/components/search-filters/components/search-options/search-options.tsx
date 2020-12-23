@@ -4,8 +4,8 @@ import { ac, Store } from '::store/store';
 import { useCallback } from 'react';
 import { modSearchFilter } from '::sass-modules';
 import { mapScopeToLabel } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
-import { joinClassNames } from '::helpers/dom/join-class-names';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
+import { ButtonSquare } from '@cherryjuice/components';
 
 const mapState = (state: Store) => ({
   searchOptions: state.search.searchOptions,

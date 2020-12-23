@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { attachEventHandler } from '::hooks/modals/close-modal/helpers/handle-keyboard-events/handle-keyboard-events';
+import { attachEventHandler } from './helpers/handle-keyboard-events/handle-keyboard-events';
 
 export type ModalsState = {
   _modals: Modal[];

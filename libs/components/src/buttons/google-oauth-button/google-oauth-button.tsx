@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Icon, Icons } from '@cherryjuice/icons';
-import { modGoogleOauth } from '::sass-modules';
-import { useOnKeyPress } from '::hooks/use-on-key-up';
+import modGoogleOauth from './google-oauth-button.scss';
+import { useOnKeyPress } from '@cherryjuice/shared-helpers';
 import { EventHandler, useRef } from 'react';
 
 type Props = { signIn?: boolean; onClick: EventHandler<any> };

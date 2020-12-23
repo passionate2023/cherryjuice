@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { dataAttributes } from '::hooks/modals/close-modal/use-modal-keyboard-events';
+import { dataAttributes } from './modal-keyboard-events/modal-keyboard-events';
 
 export enum ASSERTION {
   referenceContainsEventTarget,

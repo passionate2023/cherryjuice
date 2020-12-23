@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { EventHandler, memo } from 'react';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { ButtonSquare } from '@cherryjuice/components';
 import { ac } from '::store/store';
 import { modDialog } from '::sass-modules';
 export type TDialogFooterButton = {

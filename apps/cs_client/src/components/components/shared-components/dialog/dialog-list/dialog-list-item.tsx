@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modDialog } from '::sass-modules';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { memo, useEffect, useRef, useState } from 'react';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
 import { Icon, Icons } from '@cherryjuice/icons';

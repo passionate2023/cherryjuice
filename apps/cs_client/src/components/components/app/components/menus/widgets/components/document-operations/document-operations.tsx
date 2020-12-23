@@ -2,7 +2,7 @@ import { modDocumentOperations } from '::sass-modules';
 import * as React from 'react';
 import { DocumentOperation } from '@cherryjuice/graphql-types';
 import { OperationTypes } from '::root/components/app/components/menus/widgets/components/document-operations/components/helpers/operation-types';
-import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
+import { ButtonCircle } from '@cherryjuice/components';
 import { ac } from '::store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { CollapsableListItemProps } from '::root/components/app/components/menus/widgets/components/collapsable-list/components/body/components/collapsable-list-item';

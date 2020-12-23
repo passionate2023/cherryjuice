@@ -7,7 +7,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
 import { memo } from 'react';
 

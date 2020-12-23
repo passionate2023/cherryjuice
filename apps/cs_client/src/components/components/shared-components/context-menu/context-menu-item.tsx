@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { modContextMenu } from '::sass-modules';
 import { ReactNode, useEffect, useState } from 'react';
 import { Icon, Icons } from '@cherryjuice/icons';

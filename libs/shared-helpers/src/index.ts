@@ -1,3 +1,9 @@
+export { useLazyAutoFocus } from './hooks/lazy-auto-focus/lazy-auto-focus';
+export { joinClassNames } from './helpers/join-class-names';
+export { useClickOutsideModal, ASSERTION } from './hooks/click-outside-modal';
+export { useModalKeyboardEvents } from './hooks/modal-keyboard-events/modal-keyboard-events';
+export { useOnKeyPress } from './hooks/on-key-up';
+
 export {
   extractDocumentFromPathname,
   DocumentInPath,

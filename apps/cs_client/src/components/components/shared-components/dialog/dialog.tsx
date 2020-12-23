@@ -10,11 +10,11 @@ import {
   DialogHeaderProps,
 } from '::root/components/shared-components/dialog/dialog-header';
 import { DialogBody } from '::root/components/shared-components/dialog/dialog-body/dialog-body';
-import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
+import { useModalKeyboardEvents } from '@cherryjuice/shared-helpers';
 import { animated } from 'react-spring';
 import { TransitionWrapper } from '::root/components/shared-components/transitions/transition-wrapper';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 
 type TDialogProps = {
   menuButton?: JSX.Element;

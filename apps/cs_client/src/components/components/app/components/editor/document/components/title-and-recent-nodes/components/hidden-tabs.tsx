@@ -4,7 +4,7 @@ import {
   NodeProps,
   Tab,
 } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/components/tab';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { ButtonSquare } from '@cherryjuice/components';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
 

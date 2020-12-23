@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { modSearchFilter } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import {
@@ -11,7 +11,7 @@ import {
   SortOption,
   SortOptionProps,
 } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-sort/components/sort-option';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { ButtonSquare } from '@cherryjuice/components';
 
 const mapState = () => ({});
 const mapDispatch = {};

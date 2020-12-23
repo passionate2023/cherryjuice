@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { modNodePath, modTabs } from '::sass-modules';
 import { ac } from '::store/store';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Icons, Icon } from '@cherryjuice/icons';
 import { NodeProps } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/components/tab';
 

@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { modButton } from '::sass-modules';
+import modButton from './button-base.scss';
 import { EventHandler, useRef } from 'react';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Icon } from '@cherryjuice/icons';
-import { useLazyAutoFocus } from '../hooks/lazy-auto-focus';
+import { useLazyAutoFocus } from '@cherryjuice/shared-helpers';
+import { ButtonCircleProps } from '::root/buttons/button-circle/button-circle';
 
 type ButtonBaseProps = {
   className?: string;
@@ -19,14 +20,13 @@ type ButtonBaseProps = {
   icon?: JSX.Element;
   iconName?: string;
   variant?: 'danger';
-  small?: boolean;
 };
 
 const buttonVariants = {
   danger: modButton.buttonDanger,
 };
 
-const ButtonBase: React.FC<ButtonBaseProps> = ({
+const ButtonBase: React.FC<ButtonBaseProps & ButtonCircleProps> = ({
   disabled,
   className,
   onClick,
@@ -49,9 +49,8 @@ const ButtonBase: React.FC<ButtonBaseProps> = ({
         modButton.button,
         buttonVariants[variant],
         [modButton.buttonDark, dark],
-        [modButton.buttonText, text],
+        [modButton.buttonText, !!text],
         [modButton.buttonPressed, active],
-        [modButton.buttonSmall, small],
         className,
       ])}
       ref={buttonRef}

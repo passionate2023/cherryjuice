@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createRef, useEffect, useRef, useState } from 'react';
 import { modLogin } from '::sass-modules';
-import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
+import { useModalKeyboardEvents } from '@cherryjuice/shared-helpers';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,

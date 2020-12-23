@@ -1,6 +1,6 @@
-import { modButton, modDialog } from '::sass-modules';
+import { modDialog } from '::sass-modules';
 import * as React from 'react';
-import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
+import { ButtonCircle } from '@cherryjuice/components';
 import { EventHandler, memo } from 'react';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
@@ -51,7 +51,7 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
         {pinnable && (
           <ButtonCircle
             onClick={ac.root.toggleDockedDialog}
-            className={modButton.buttonRotated45}
+            rotated45={true}
             iconName={Icons.material.pin}
           />
         )}

@@ -22,8 +22,9 @@ export const shared = {
       extensions: ['scss', 'css'],
       modules: true,
       namedExports: name =>
-        `${name.replace(/-([a-z])/g, g => g[1].toUpperCase())}`,
+        `${name.replace(/-+([a-z])/g, g => g[g.length - 1].toUpperCase())}`,
     }),
+    ,
     commonjs({
       include: ['../../node_modules/**', 'node_modules/**'],
     }),

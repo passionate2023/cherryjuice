@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modTimeFilter } from '::sass-modules';
-import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
+import { ButtonCircle } from '@cherryjuice/components';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { TimeFilter } from '@cherryjuice/graphql-types';
 import { mapTimestampToDateString } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/helpers/map-time-stamp-to-date-string';

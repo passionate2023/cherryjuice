@@ -1,8 +1,5 @@
-import { createFocusTrapper } from '::hooks/modals/close-modal/helpers/handle-keyboard-events/helpers/create-focus-trapper';
-import {
-  dataAttributes,
-  ModalsState,
-} from '::hooks/modals/close-modal/use-modal-keyboard-events';
+import { createFocusTrapper } from './helpers/create-focus-trapper';
+import { dataAttributes, ModalsState } from '../../modal-keyboard-events';
 
 const eventHandler = {
   current: undefined,

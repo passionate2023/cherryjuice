@@ -17,7 +17,11 @@
     "lint": "eslint ./**"
   },
   "dependencies": {},
-  "peerDependencies": {},
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "rxjs": "^6.5.5"
+  },
   "devDependencies": {
     "typescript": "^3.8.3",
     "rollup": "^1.27.13",

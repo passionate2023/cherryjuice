@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modSearchDialog } from '::sass-modules';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { memo } from 'react';
 
 const SearchHeaderContainer: React.FC<{ alignChildren?: 'h' | 'v' }> = ({

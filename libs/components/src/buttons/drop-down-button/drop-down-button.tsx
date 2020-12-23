@@ -1,21 +1,20 @@
 import * as React from 'react';
-import { modDropdownButton } from '::sass-modules';
+import modDropdownButton from './drop-down-button.scss';
 import { useRef, useState } from 'react';
-import { useClickOutsideModal } from '::hooks/use-click-outside-modal';
+import { useClickOutsideModal } from '@cherryjuice/shared-helpers';
 import { Icon, Icons } from '@cherryjuice/icons';
-import { useSelector } from 'react-redux';
-import { Store } from '::store/store';
 
 type Props = {
   buttons: { key: string; element: JSX.Element }[];
   collapseOnInsideClick?: boolean;
+  md: boolean;
 };
 
 export const DropDownButton: React.FC<Props> = ({
   buttons,
   collapseOnInsideClick,
+  md,
 }) => {
-  const md = useSelector<Store>(state => state.root.isOnMd);
   const previouslySelected = useRef(0);
   const [showDropdown, setShowDropdown] = useState(false);
   const toggleDropdown = () => setShowDropdown(shown => !shown);

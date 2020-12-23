@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { modSearchResult } from '::sass-modules';
 import { useRelativeTime } from '::hooks/relative-time/relative-time';
 

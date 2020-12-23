@@ -2,7 +2,7 @@ import { modIconPicker } from '::sass-modules';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { Icon, Icons } from '@cherryjuice/icons';
 import * as React from 'react';
-import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
+import { useModalKeyboardEvents } from '@cherryjuice/shared-helpers';
 
 const icons = [...Object.entries(Icons.cherrytree.custom_icons)];
 

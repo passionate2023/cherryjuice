@@ -20,6 +20,7 @@
     "build:lib2:3": "yarn workspace @cherryjuice/icons run build",
     "build:lib2:4": "yarn workspace @cherryjuice/hotkeys run build",
     "build:lib3:1": "yarn workspace @cherryjuice/editor run build",
+    "build:lib3:2": "yarn workspace @cherryjuice/components run build",
     "build:libs": "run-p build:lib:* && run-p build:lib2:* && run-p build:lib3:*",
     "build:app:1": "yarn workspace @cherryjuice/react-client  run build",
     "build:app:2": "yarn workspace @cherryjuice/nest-server  run build",

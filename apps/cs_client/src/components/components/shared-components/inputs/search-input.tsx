@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { MutableRefObject, useCallback, useRef } from 'react';
 import { modSearch } from '::sass-modules';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { ButtonSquare } from '@cherryjuice/components';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Icon, Icons } from '@cherryjuice/icons';
-import { useLazyAutoFocus } from '::root/components/shared-components/buttons/button-base/button-base';
+import { useLazyAutoFocus } from '@cherryjuice/shared-helpers';
 import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
 
 type Props = {

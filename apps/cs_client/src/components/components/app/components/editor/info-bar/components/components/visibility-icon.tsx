@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
 import { modInfoBar } from '::sass-modules';
 import { Icon, Icons } from '@cherryjuice/icons';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import {
   LabelPosition,
   Tooltip,

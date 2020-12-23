@@ -15,7 +15,7 @@ import {
   SearchHeaderGroup,
 } from '::root/components/shared-components/dialog/animations/search-header-container';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
-import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
+import { ButtonCircle } from '@cherryjuice/components';
 import {
   modPickTimeRange,
   modSearchDialog,

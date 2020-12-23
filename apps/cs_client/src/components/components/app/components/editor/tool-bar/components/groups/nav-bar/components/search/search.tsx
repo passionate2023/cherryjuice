@@ -3,7 +3,7 @@ import { modSearch } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { memo, useRef } from 'react';
-import { useOnKeyPress } from '::hooks/use-on-key-up';
+import { useOnKeyPress } from '@cherryjuice/shared-helpers';
 import { SearchInput } from '::root/components/shared-components/inputs/search-input';
 
 const mapState = (state: Store) => ({

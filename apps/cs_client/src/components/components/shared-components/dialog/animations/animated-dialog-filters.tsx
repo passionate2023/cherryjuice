@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ac } from '::store/store';
 import { animated, useSpring } from 'react-spring';
 import { configs } from '::root/components/shared-components/transitions/transitions';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { modSearchDialog } from '::sass-modules';
 import { useSetCssVariablesOnWindowResize } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/search-filters';
 

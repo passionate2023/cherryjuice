@@ -2,9 +2,9 @@ import * as React from 'react';
 import { createRef, useRef } from 'react';
 import { modLogin } from '::sass-modules';
 import { Checkbox } from '::root/components/shared-components/form/checkbox';
-import { GoogleOauthButton } from '::root/components/shared-components/buttons/google-oauth-button';
+import { GoogleOauthButton } from '@cherryjuice/components';
 import { Icons } from '@cherryjuice/icons';
-import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
+import { useModalKeyboardEvents } from '@cherryjuice/shared-helpers';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,

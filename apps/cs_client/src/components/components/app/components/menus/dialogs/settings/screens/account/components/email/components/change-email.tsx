@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { ButtonSquare } from '@cherryjuice/components';
 import { ac } from '::store/store';
 import { AlertType } from '::types/react';
 import { properErrorMessage } from '::root/components/auth/hooks/proper-error-message';
