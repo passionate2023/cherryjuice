@@ -1,5 +1,5 @@
 import { MutableRefObject, useEffect } from 'react';
-import { onEnteredViewPort } from './helpers/on-entered-viewport';
+import { onEnteredViewPort } from '../../helpers/dom/on-entered-viewport';
 
 export const useLazyAutoFocus = (
   lazyAutoFocus: boolean,
@@ -13,7 +13,6 @@ export const useLazyAutoFocus = (
           onEntered: () => {
             elementRef.current.focus();
           },
-          onExited: () => elementRef.current.blur(),
         });
         return () => {
           elementRef.current.blur();

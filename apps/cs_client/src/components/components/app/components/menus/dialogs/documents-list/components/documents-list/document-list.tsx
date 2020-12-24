@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { modSearchDialog } from '::sass-modules';
 import { DocumentGroup } from './components/document-group';
 import { CachedDocument } from '::store/ducks/document-cache/document-cache';
@@ -104,4 +104,5 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
 };
 
 const _ = connector(DocumentList);
-export { _ as DocumentList };
+const M = memo(_);
+export { M as DocumentList };

@@ -1,7 +1,7 @@
 const defaultScrollOptions: ScrollIntoViewOptions = {
   behavior: 'smooth',
   block: 'nearest',
-  inline: 'start',
+  inline: 'nearest',
 };
 export const smoothScrollIntoView = (
   element: Element,

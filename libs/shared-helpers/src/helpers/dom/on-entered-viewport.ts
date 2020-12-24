@@ -4,23 +4,17 @@ import { distinctUntilChanged, filter, map, take, tap } from 'rxjs/operators';
 export type Props = {
   elementRef: MutableRefObject<HTMLElement>;
   onEntered: () => void;
-  onExited: () => void;
 };
 
-export const onEnteredViewPort = ({
-  elementRef,
-  onEntered,
-  onExited,
-}: Props) => {
+const isInsideWindow = a => window.innerHeight - a > 0;
+
+export const onEnteredViewPort = ({ elementRef, onEntered }: Props) => {
   const xy$ = interval(250).pipe(
     map(() => +elementRef.current.getBoundingClientRect().bottom.toFixed()),
     distinctUntilChanged(),
-    filter(a => window.innerHeight - a > 0),
+    filter(isInsideWindow),
     take(1),
-    tap(onScreen => {
-      if (onScreen) onEntered();
-      else onExited();
-    }),
+    tap(onEntered),
   );
   const subscription = xy$.subscribe();
   return () => {

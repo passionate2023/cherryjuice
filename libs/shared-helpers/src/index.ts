@@ -1,3 +1,5 @@
+export { onEnteredViewPort } from './helpers/dom/on-entered-viewport';
+
 export { useDebouncedEventHandler } from './hooks/debounced-event-handler';
 export { useLazyAutoFocus } from './hooks/lazy-auto-focus/lazy-auto-focus';
 export { joinClassNames } from './helpers/join-class-names';

@@ -7,7 +7,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { getDocumentsList } from '::store/selectors/cache/document/document';
 import { useDeleteListItems } from '::root/components/app/components/menus/dialogs/documents-list/hooks/delete-list-items';
 import { useFetchDocumentsList } from '::app/components/menus/dialogs/documents-list/hooks/fetch-documents-list';
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { useFooterButtons } from '::app/components/menus/dialogs/documents-list/hooks/footer-buttons';
 
 const mapState = (state: Store) => ({
@@ -86,4 +86,6 @@ const DocumentsListDialog: React.FC<PropsFromRedux> = ({
   );
 };
 
-export default connector(DocumentsListDialog);
+const _ = connector(DocumentsListDialog);
+const M = memo(_);
+export default M;

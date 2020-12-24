@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AlertType } from '::types/react';
 import { ac } from '::store/store';
 
-class ErrorBoundary extends React.PureComponent<{}, { error?: Error }> {
+class ErrorBoundary extends React.Component<{}, { error?: Error }> {
   constructor(props) {
     super(props);
     this.state = { error: undefined };
