@@ -12,6 +12,7 @@ const mapState = (state: Store) => {
   return {
     selectedNode_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
     documentId: state.document.documentId,
+    md: state.root.isOnMd,
   };
 };
 const mapDispatch = {};
@@ -20,12 +21,17 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const Buttons: React.FC<PropsFromRedux> = ({ selectedNode_id, documentId }) => {
+const Buttons: React.FC<PropsFromRedux> = ({
+  selectedNode_id,
+  documentId,
+  md,
+}) => {
   const disabled = !documentId || !selectedNode_id;
   return (
     <>
       <DropDownButton
         collapseOnInsideClick={true}
+        md={md}
         buttons={[
           {
             element: (
