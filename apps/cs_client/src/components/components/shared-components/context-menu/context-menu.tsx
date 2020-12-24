@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { modContextMenu } from '::sass-modules';
 import {

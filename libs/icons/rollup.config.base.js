@@ -10,7 +10,11 @@ import { terser } from 'rollup-plugin-terser';
 const production = !process.env.ROLLUP_WATCH;
 
 export const shared = {
-  input: 'src/index.ts',
+  input: {
+    index: 'src/index.ts',
+    icon: 'src/components/icon/icon.tsx',
+    icons: 'src/components/icon/data/icons.ts',
+  },
   plugins: [
     svg(),
     external(),
@@ -24,7 +28,6 @@ export const shared = {
       namedExports: name =>
         `${name.replace(/-+([a-z])/g, g => g[g.length - 1].toUpperCase())}`,
     }),
-    ,
     commonjs({
       include: ['../../node_modules/**', 'node_modules/**'],
     }),

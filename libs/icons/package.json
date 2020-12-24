@@ -18,7 +18,8 @@
     "build-cjs": "rollup -c rollup.config.cjs.js",
     "build:icons": "yarn build",
     "test": "exit 0",
-    "lint": "eslint ./**"
+    "lint": "eslint ./**",
+    "generate-named-inputs": "node ../../scripts/generate-named-inputs.js"
   },
   "peerDependencies": {
     "react": ">=16.8.0",

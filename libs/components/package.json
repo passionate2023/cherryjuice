@@ -17,7 +17,8 @@
     "build-es": "rollup -c rollup.config.es.js",
     "build-cjs": "rollup -c rollup.config.cjs.js",
     "test": "exit 0",
-    "lint": "eslint ./**"
+    "lint": "eslint ./**",
+    "generate-named-inputs": "node ../../scripts/generate-named-inputs.js"
   },
   "peerDependencies": {
     "@cherryjuice/icons": "0.0.1",
@@ -52,17 +53,6 @@
     "@types/node": "^12.7.5",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
-    "@typescript-eslint/eslint-plugin": "^2.23.0",
-    "@typescript-eslint/parser": "^2.23.0",
-    "eslint": "^6.8.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-cypress": "^2.10.3",
-    "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.19.0",
-    "eslint-plugin-react-hooks": "^4.0.6",
-    "eslint-plugin-standard": "^4.0.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^25.1.0",
     "react-test-renderer": "^16.13.1",

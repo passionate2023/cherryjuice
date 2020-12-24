@@ -8,7 +8,12 @@ import { terser } from 'rollup-plugin-terser';
 const production = !process.env.ROLLUP_WATCH;
 
 export const shared = {
-  input: 'src/index.ts',
+  input: {
+    index: 'src/index.ts',
+    'flatten-hot-key': 'src/helpers/flatten-hot-key.ts',
+    'hotkeys-to-dict': 'src/helpers/hotkeys-to-dict.ts',
+    'hotkeys-manager': 'src/hotkeys-manager.ts',
+  },
   plugins: [
     external(),
     resolve(),

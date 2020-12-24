@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { modEditor } from '::sass-modules';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { debounceTime, filter, map, withLatestFrom } from 'rxjs/operators';
 import { onLinkClicked } from '::hooks/on-mouse-events/helpers/links';

@@ -4,9 +4,9 @@
   "description": "",
   "author": "",
   "license": "ISC",
-  "main": "build/index.js",
-  "module": "build/index.es.js",
-  "jsnext:main": "build/index.es.js",
+  "main": "build/cjs/index.js",
+  "module": "build/index.js",
+  "jsnext:main": "build/index.js",
   "files": [
     "build"
   ],
@@ -14,7 +14,8 @@
     "dev": "rollup -c -w",
     "build": "rollup -c",
     "test": "exit 0",
-    "lint": "eslint ./**"
+    "lint": "eslint ./**",
+    "generate-named-inputs": "node ../../scripts/generate-named-inputs.js"
   },
   "dependencies": {},
   "peerDependencies": {
@@ -29,8 +30,6 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-typescript2": "^0.25.3",
     "rollup-plugin-node-externals": "^2.2.0",
-    "eslint-plugin-react": "^7.19.0",
-    "eslint-plugin-react-hooks": "^4.0.6",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0"
   }

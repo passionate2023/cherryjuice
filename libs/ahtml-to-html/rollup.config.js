@@ -3,19 +3,23 @@ import commonjs from 'rollup-plugin-commonjs';
 import external from 'rollup-plugin-node-externals';
 import resolve from 'rollup-plugin-node-resolve';
 
-import pkg from './package.json';
-
 export default {
-  input: 'src/index.ts',
+  input: {
+    index: 'src/index.ts',
+    'ahtml-to-html': 'src/ahtml-to-html.tsx',
+    objects: 'src/objects/index.ts',
+    helpers: 'src/helpers/index.ts',
+    element: 'src/element/index.ts',
+  },
   output: [
     {
-      file: pkg.main,
+      dir: 'build/cjs',
       format: 'cjs',
       exports: 'named',
       sourcemap: true,
     },
     {
-      file: pkg.module,
+      dir: 'build',
       format: 'es',
       exports: 'named',
       sourcemap: true,

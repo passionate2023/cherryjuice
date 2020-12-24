@@ -19,5 +19,8 @@ module.exports = {
     '@storybook/addon-storysource',
     '@storybook/addon-viewport/register',
     '@storybook/addon-backgrounds/register',
+    '@storybook/addon-controls',
+    '@storybook/addon-toolbars',
+    'storybook-mobile',
   ],
 };
