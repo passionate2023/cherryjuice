@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useCallback, useRef } from 'react';
 import { modTabs } from '::sass-modules';
-import { joinClassNames } from '::helpers/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { editorAC } from '::root/app/components/editor/reducer';
 

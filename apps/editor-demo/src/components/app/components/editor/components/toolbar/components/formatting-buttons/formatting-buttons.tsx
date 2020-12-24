@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { ToolbarButton, ToolbarColorInput } from '@cherryjuice/components';
-import { execK } from '@cherryjuice/editor';
+import { execK, formattingHotkeysProps } from '@cherryjuice/editor';
 import { modToolbar } from '::sass-modules';
 import { Icon } from '@cherryjuice/icons';
 import { HotKeyActionType } from '@cherryjuice/graphql-types';
 import { getDefaultSettings } from '@cherryjuice/default-settings';
-import { formattingHotkeysProps } from '::root/app/components/toolbar/components/formatting-buttons/helpers/formatting-icon-props';
 
 const formattingHotkeys = getDefaultSettings().hotKeys.formatting;
 

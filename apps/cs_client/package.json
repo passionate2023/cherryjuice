@@ -47,6 +47,7 @@
     "@cherryjuice/default-settings": "0.0.2",
     "@cherryjuice/graphql-types": "0.0.1",
     "@cherryjuice/shared-helpers": "0.0.1",
+    "@cherryjuice/shared-styles": "0.0.1",
     "@cherryjuice/editor": "0.0.1",
     "@cherryjuice/components": "0.0.1",
     "@cherryjuice/hotkeys": "0.0.1",

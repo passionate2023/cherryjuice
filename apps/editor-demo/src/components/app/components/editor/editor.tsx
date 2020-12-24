@@ -6,7 +6,7 @@ import {
 } from '::root/app/components/editor/components/editor-container';
 import { useEffect, useReducer } from 'react';
 import { editorAC, editorR } from '::root/app/components/editor/reducer';
-import { Toolbar } from '::root/app/components/toolbar/toolbar';
+import { Toolbar } from '::root/app/components/editor/components/toolbar/toolbar';
 
 export type Document = {
   id: string;

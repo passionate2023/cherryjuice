@@ -5,6 +5,7 @@ export default {
     index: 'src/index.ts',
     'clone-object': 'src/helpers/clone-object.ts',
     'create-gestures-handler': 'src/helpers/create-gestures-handler.ts',
+    'make-promise-cancelable': 'src/helpers/make-promise-cancelable.ts',
     'extract-document-from-pathname':
       'src/helpers/extract-document-from-pathname.ts',
     'join-class-names': 'src/helpers/join-class-names.ts',
