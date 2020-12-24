@@ -3,10 +3,7 @@ import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
 import { modInfoBar } from '::sass-modules';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
-import {
-  LabelPosition,
-  Tooltip,
-} from '::root/components/shared-components/tooltip/tooltip';
+import { LabelPosition, Tooltip } from '@cherryjuice/components';
 
 const mapPrivacyToIcon = (privacy: NodePrivacy | Privacy) => {
   switch (privacy) {

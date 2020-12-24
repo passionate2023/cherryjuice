@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
+import { ToolbarButton } from '@cherryjuice/components';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { modToolbar } from '::sass-modules';
 import { testIds } from '::cypress/support/helpers/test-ids';
@@ -8,7 +8,7 @@ import { ac, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
-import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
+import { Tooltip } from '@cherryjuice/components';
 import { memo } from 'react';
 
 const mapState = (state: Store) => {

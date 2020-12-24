@@ -1,0 +1,49 @@
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/vars/states';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+.toolbar-button {
+  position: relative;
+
+  svg {
+    fill: var(--on-surface);
+  }
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $tool-bar-height;
+  height: $tool-bar-height;
+  @include respond-to($md-up) {
+    height: $tool-bar-height-md;
+    width: $tool-bar-height-md;
+  }
+  &:not([data-disabled='true']) {
+    cursor: pointer;
+  }
+
+  @include respond-to($md-up) {
+    &:hover:not([data-disabled='true']) {
+      background-color: var(--surface-010);
+    }
+  }
+  &[data-disabled='true'] {
+    //filter: grayscale(0.9) opacity(0.6);
+    //cursor: initial;
+    svg,
+    img {
+      @include disabled-button();
+    }
+  }
+  transition: $bg-transition-1;
+  @include respond-to($md-down) {
+    min-width: $tool-bar-height;
+  }
+}
+
+.tool-bar__icon--active {
+  @include respond-to($md-down) {
+    &:not([data-disabled='true']) {
+      background-color: var(--surface-010);
+    }
+  }
+}

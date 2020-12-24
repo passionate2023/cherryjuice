@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { SettingsGroup } from '::root/components/app/components/menus/dialogs/settings/shared/settings-group';
 import { SettingsElement } from '::root/components/app/components/menus/dialogs/settings/shared/settings-element';
-import { ColorInput } from '::root/components/shared-components/inputs/color-input';
+import { ColorInput } from '@cherryjuice/components';
 import { Select } from '::root/components/shared-components/inputs/select';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';

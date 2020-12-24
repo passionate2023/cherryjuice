@@ -109,53 +109,6 @@
     background-color: var(--background);
   }
 }
-.tool-bar__icon {
-  position: relative;
-
-  svg {
-    fill: var(--on-surface);
-  }
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: $tool-bar-height;
-  height: $tool-bar-height;
-  @include respond-to($md-up) {
-    height: $tool-bar-height-md;
-    width: $tool-bar-height-md;
-  }
-  &:not([disabled]) {
-    cursor: pointer;
-  }
-
-  @include respond-to($md-up) {
-    &:hover:not([disabled]) {
-      background-color: var(--surface-010);
-    }
-  }
-  &[disabled] {
-    //filter: grayscale(0.9) opacity(0.6);
-    //cursor: initial;
-    svg,
-    img {
-      @include disabled-button();
-    }
-  }
-  transition: $bg-transition-1;
-}
-.tool-bar__icon--strict-width {
-  @include respond-to($md-down) {
-    min-width: $tool-bar-height;
-  }
-}
-.tool-bar__icon--active {
-  @include respond-to($md-down) {
-    &:not([disabled]) {
-      background-color: var(--surface-010);
-    }
-  }
-}
 
 .tool-bar__letter-icon {
   color: var(--on-surface);

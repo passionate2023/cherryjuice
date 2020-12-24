@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { ToolbarButton } from '::root/app/components/toolbar/components/formatting-buttons/components/tool-bar-button';
+import { ToolbarButton, ToolbarColorInput } from '@cherryjuice/components';
 import { execK } from '@cherryjuice/editor';
-import { ColorInput } from '::root/app/components/toolbar/components/formatting-buttons/components/color-input';
 import { modToolbar } from '::sass-modules';
 import { Icon } from '@cherryjuice/icons';
 import { HotKeyActionType } from '@cherryjuice/graphql-types';
@@ -19,9 +18,24 @@ const Buttons: React.FC<Props> = () => {
         const formattingHotkeysProp = formattingHotkeysProps[hotKey.type];
         if (!('icon' in formattingHotkeysProp))
           return <React.Fragment key={hotKey.type} />;
+        const onChange = value => {
+          execK({
+            style: {
+              ...formattingHotkeysProp.execCommandArguments.style,
+              value,
+            },
+          });
+        };
         return hotKey.type === HotKeyActionType.FOREGROUND_COLOR ||
           hotKey.type === HotKeyActionType.BACKGROUND_COLOR ? (
-          <ColorInput key={hotKey.type} hotKey={hotKey} disabled={false} />
+          <ToolbarColorInput
+            key={hotKey.type}
+            hotKey={hotKey}
+            disabled={false}
+            icon={formattingHotkeysProp.icon}
+            onChange={onChange}
+            id={hotKey.type}
+          />
         ) : (
           <ToolbarButton
             key={hotKey.type}

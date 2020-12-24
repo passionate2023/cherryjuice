@@ -10,13 +10,13 @@ export type LabelPosition =
   | 'bottom-left'
   | 'bottom-right';
 
-type Props = {
+export type TooltipProps = {
   label?: string;
   position?: LabelPosition;
   show?: boolean;
 };
 
-const Tooltip: React.FC<Props> = ({
+const Tooltip: React.FC<TooltipProps> = ({
   show = true,
   position = 'bottom',
   label,
@@ -24,7 +24,7 @@ const Tooltip: React.FC<Props> = ({
 }) => {
   const isTouchScreen = 'ontouchstart' in window;
 
-  return show ? (
+  return show && label ? (
     <div
       aria-label={label}
       className={!isTouchScreen ? 'hint--' + position : undefined}

@@ -1,10 +1,14 @@
 import { OnFrameChange } from '::helpers/snapback/snapback/snapback';
 import { bridge } from '::root/bridge';
-import { STimer } from '::helpers/pages-manager/pages-manager';
+import {
+  PagesManagerConfiguration,
+  STimer,
+} from '::helpers/pages-manager/pages-manager';
 
 export const onFrameChangeFactory = (
   onFrameChange: OnFrameChange,
   cachePage: (id: string) => void,
+  pmConfig: PagesManagerConfiguration,
 ): OnFrameChange => {
   let frameTs;
   let autoSaveTimer: STimer;
@@ -12,10 +16,12 @@ export const onFrameChangeFactory = (
     if (frameTs === meta.currentFrameTs) return;
     frameTs = meta.currentFrameTs;
     onFrameChange(nof, meta);
-    clearTimeout(autoSaveTimer);
-    autoSaveTimer = setTimeout(() => {
-      cachePage(meta.id);
-    }, 5000);
+    if (pmConfig.autoSaveInterval > 100) {
+      clearTimeout(autoSaveTimer);
+      autoSaveTimer = setTimeout(() => {
+        cachePage(meta.id);
+      }, pmConfig.autoSaveInterval);
+    }
     if (nof.undo < 2) {
       const [documentId, node_id] = meta.id.split('/');
       bridge.current.flagEditedNode({

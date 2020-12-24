@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 
 export const initBridge = () => {
   pagesManager.resetPages(() => true);
+  pagesManager.setConfiguration({ autoSaveInterval: 5000 });
   bridge.current.selectNode = ac.node.select;
   bridge.current.onPasteImageErrorHandler = error =>
     ac.dialogs.setAlert({

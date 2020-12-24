@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Toolbar } from '::root/app/components/toolbar/toolbar';
 import { modApp } from '::sass-modules';
 // @ts-ignore
 import modTheme from '::sass-modules/../themes/themes.scss';
@@ -16,7 +15,6 @@ export const App: React.FC<Props> = () => {
   return (
     <div className={modTheme.lightTheme}>
       <div className={modApp.app}>
-        <Toolbar />
         <Editor document={document1} />
       </div>
     </div>

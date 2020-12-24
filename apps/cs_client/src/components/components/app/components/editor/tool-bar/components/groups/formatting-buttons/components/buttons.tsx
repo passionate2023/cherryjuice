@@ -5,10 +5,11 @@ import { connect, ConnectedProps } from 'react-redux';
 import * as React from 'react';
 import { memo, useMemo } from 'react';
 import {
+  execK,
   FormattingButtonCategory,
   formattingHotkeysProps,
 } from '@cherryjuice/editor';
-import { ColorInput } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/components/components/color-input';
+import { ToolbarColorInput } from '@cherryjuice/components';
 import { FormattingButton } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/components/components/formatting-button';
 import { DropDownButton } from '@cherryjuice/components';
 
@@ -17,6 +18,7 @@ const mapState = (state: Store) => {
     selectedNode_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
     documentId: state.document.documentId,
     formattingHotKeys: getHotkeys(state).formatting,
+    md: state.root.isOnMd,
   };
 };
 const mapDispatch = {};
@@ -27,6 +29,7 @@ const Buttons: React.FC<PropsFromRedux> = ({
   selectedNode_id,
   documentId,
   formattingHotKeys,
+  md,
 }) => {
   const disabled = !documentId || !selectedNode_id;
 
@@ -67,6 +70,7 @@ const Buttons: React.FC<PropsFromRedux> = ({
             ),
             key: props.name,
           }))}
+          md={md}
         />
       }
       {categories.secondary.map(([, props]) => (
@@ -84,10 +88,24 @@ const Buttons: React.FC<PropsFromRedux> = ({
             ),
             key: props.name,
           }))}
+          md={md}
         />
       }
-      {categories.colors.map(([hk]) => (
-        <ColorInput key={hk.type} hotKey={hk} disabled={disabled} />
+      {categories.colors.map(([hk, props]) => (
+        <ToolbarColorInput
+          key={hk.type}
+          id={hk.type}
+          disabled={disabled}
+          icon={props.icon}
+          onChange={value => {
+            execK({
+              style: {
+                ...props.execCommandArguments.style,
+                value,
+              },
+            });
+          }}
+        />
       ))}
       {categories.tertiary.map(([, props]) => (
         <FormattingButton {...props} disabled={disabled} key={props.name} />

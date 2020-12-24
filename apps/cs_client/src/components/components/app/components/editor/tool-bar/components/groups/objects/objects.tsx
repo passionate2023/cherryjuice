@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { ToolbarButton } from '::app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
+import { ToolbarButton } from '@cherryjuice/components';
 import { modToolbar } from '::sass-modules';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
+import { Tooltip } from '@cherryjuice/components';
 import { DropDownButton } from '@cherryjuice/components';
 
 const mapState = (state: Store) => {

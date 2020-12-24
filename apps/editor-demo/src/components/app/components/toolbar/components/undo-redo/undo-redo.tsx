@@ -1,21 +1,12 @@
 import * as React from 'react';
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ToolbarButton } from '@cherryjuice/components';
 import { Icons } from '@cherryjuice/icons';
 import { NumberOfFrames, pagesManager } from '@cherryjuice/editor';
-import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::store/store';
 
-const mapState = (state: Store) => ({
-  documentId: state.document.documentId,
-});
-const mapDispatch = {};
-const connector = connect(mapState, mapDispatch);
-type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = { documentId: string };
 
-type Props = {};
-
-const UndoRedo: React.FC<Props & PropsFromRedux> = ({ documentId }) => {
+const UndoRedo: React.FC<Props> = ({ documentId }) => {
   const noDocumentIsSelected = !documentId;
   const [numberOfFrames, setNumberOfFrames] = useState<NumberOfFrames>({
     redo: 0,
@@ -43,6 +34,5 @@ const UndoRedo: React.FC<Props & PropsFromRedux> = ({ documentId }) => {
     </>
   );
 };
-const _ = connector(UndoRedo);
-const M = memo(_);
-export { M as UndoRedo };
+
+export { UndoRedo };

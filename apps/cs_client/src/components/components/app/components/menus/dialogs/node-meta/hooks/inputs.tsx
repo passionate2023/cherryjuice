@@ -5,7 +5,7 @@ import { SelectPrivacy } from '::app/components/menus/dialogs/document-meta/comp
 import { Privacy } from '@cherryjuice/graphql-types';
 import { Chips } from '::app/components/menus/dialogs/document-meta/components/chips/chips';
 import { ToggleSwitch } from '::shared-components/inputs/toggle-switch';
-import { ColorInput } from '::shared-components/inputs/color-input';
+import { ColorInput } from '@cherryjuice/components';
 import { IconPicker } from '::app/components/menus/dialogs/node-meta/components/icon-picker';
 import * as React from 'react';
 import { useMemo } from 'react';

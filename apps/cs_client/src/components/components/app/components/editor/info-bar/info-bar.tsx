@@ -6,7 +6,7 @@ import { VisibilityIcon } from '::root/components/app/components/editor/info-bar
 import { Timestamps } from '::root/components/app/components/editor/info-bar/components/components/timestamp';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { Icon, Icons } from '@cherryjuice/icons';
-import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
+import { Tooltip } from '@cherryjuice/components';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);

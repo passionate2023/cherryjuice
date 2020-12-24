@@ -1,6 +1,9 @@
 import * as React from 'react';
-import { modNodeMeta } from '::sass-modules';
-import { useDebouncedEventHandler } from '::hooks/react/debounced-event-handler';
+import mod from './color-input.scss';
+import {
+  joinClassNames,
+  useDebouncedEventHandler,
+} from '@cherryjuice/shared-helpers';
 
 type Props = {
   disabled?: boolean;
@@ -18,9 +21,10 @@ const ColorInput: React.FC<Props> = ({ disabled, onChange, value, testId }) => {
       type={'color'}
       onChange={onChangeM}
       value={value}
-      className={`${modNodeMeta.nodeMeta__input__colorInput} ${
-        disabled ? modNodeMeta.nodeMeta__inputDisabled : ''
-      }`}
+      className={joinClassNames([
+        mod.colorInput,
+        [mod.colorInputDisabled, disabled],
+      ])}
       data-testid={testId}
     />
   );

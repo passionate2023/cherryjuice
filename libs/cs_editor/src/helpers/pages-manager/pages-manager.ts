@@ -15,10 +15,15 @@ import {
 export type PageSelector = (pageId: string) => boolean;
 export type STimer = ReturnType<typeof setTimeout>;
 
+export type PagesManagerConfiguration = {
+  autoSaveInterval: number; // ms, smaller then 100 is ignored
+};
+
 export class PagesManager {
   pages: {
     [id: string]: Page;
   };
+  private configuration: PagesManagerConfiguration = { autoSaveInterval: 0 };
   hiddenPagesContainer: HTMLDivElement;
   private currentNodeId: string;
   current: SnapBack;
@@ -36,9 +41,15 @@ export class PagesManager {
     this.hiddenPagesContainer = vault;
     this.pages = {};
   };
-
+  setConfiguration = (config: PagesManagerConfiguration) => {
+    this.configuration = config;
+  };
   setOnFrameChange(onFrameChange: OnFrameChange): void {
-    this.onFrameChange = onFrameChangeFactory(onFrameChange, this.cachePage);
+    this.onFrameChange = onFrameChangeFactory(
+      onFrameChange,
+      this.cachePage,
+      this.configuration,
+    );
   }
 
   private hidePage = async () => {

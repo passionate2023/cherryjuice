@@ -1,28 +1,22 @@
 import * as React from 'react';
 import { memo, useEffect, useRef } from 'react';
-import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { modToolbar } from '::sass-modules';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
-import {
-  getCurrentDocument,
-  getDocumentsList,
-} from '::store/selectors/cache/document/document';
+import { getDocumentsList } from '::store/selectors/cache/document/document';
 import { documentHasUnsavedChanges } from '::root/components/app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
-import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
+import { Tooltip, ToolbarButton } from '@cherryjuice/components';
 
 const mapState = (state: Store) => {
-  const document = getCurrentDocument(state);
   return {
     showTree: state.editor.showTree,
     online: state.root.online,
     userHasUnsavedChanges: getDocumentsList(state).some(
       documentHasUnsavedChanges,
     ),
-    documentHasUnsavedChanges: documentHasUnsavedChanges(document),
     documentId: state.document.documentId,
     isDocumentOwner: hasWriteAccessToDocument(state),
     showTimeline: state.timelines.showTimeline,
@@ -39,7 +33,6 @@ type Props = {};
 const MainButtons: React.FC<Props & PropsFromRedux> = ({
   showTree,
   userHasUnsavedChanges,
-  documentHasUnsavedChanges,
   documentId,
   isDocumentOwner,
   online,
@@ -47,7 +40,6 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
   documentActionNOF,
 }) => {
   const noDocumentIsSelected = !documentId;
-  const newDocument = documentId?.startsWith('new');
   const ref = useRef<HTMLDivElement>();
   useEffect(() => {
     const handle = setInterval(() => {

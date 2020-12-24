@@ -7,15 +7,21 @@ const es = {
   ...shared,
   input: {
     index: 'src/index.ts',
-    ...Object.fromEntries(
-      [
+    ...Object.fromEntries([
+      ...[
         'button-base',
         'button-circle',
         'button-square',
         'drop-down-button',
         'google-oauth-button',
+        'toolbar-button',
       ].map(f => [f, `src/buttons/${f}/${f}.tsx`]),
-    ),
+      ...['color-input', 'toolbar-color-input'].map(f => [
+        f,
+        `src/inputs/${f}/${f}.tsx`,
+      ]),
+      ...['tooltip'].map(f => [f, `src/unclassified/${f}/${f}.tsx`]),
+    ]),
   },
   output: [
     {

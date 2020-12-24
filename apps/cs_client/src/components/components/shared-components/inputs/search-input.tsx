@@ -5,7 +5,7 @@ import { ButtonSquare } from '@cherryjuice/components';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { useLazyAutoFocus } from '@cherryjuice/shared-helpers';
-import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
+import { Tooltip } from '@cherryjuice/components';
 
 type Props = {
   containerClassName?: string;

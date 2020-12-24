@@ -6,6 +6,7 @@ import {
 } from '::root/app/components/editor/components/editor-container';
 import { useEffect, useReducer } from 'react';
 import { editorAC, editorR } from '::root/app/components/editor/reducer';
+import { Toolbar } from '::root/app/components/toolbar/toolbar';
 
 export type Document = {
   id: string;
@@ -25,6 +26,7 @@ export const Editor: React.FC<Props> = ({ document }) => {
 
   return (
     <>
+      <Toolbar documentId={document.id} />
       <TabsContainer
         documentId={document.id}
         nodes={Object.values(document.nodes).map(node => ({

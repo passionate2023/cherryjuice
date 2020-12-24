@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { memo } from 'react';
-import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
+import { ToolbarButton } from '@cherryjuice/components';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { modToolbar } from '::sass-modules';
 import { ac, Store } from '::store/store';
@@ -10,7 +10,7 @@ import { Search } from '::root/components/app/components/editor/tool-bar/compone
 import { User } from '@cherryjuice/graphql-types';
 import { GeneratedAvatar } from '::root/components/app/components/menus/modals/user/components/components/generated-avatar';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
-import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
+import { Tooltip } from '@cherryjuice/components';
 import { DocumentDropdownMenu } from '::app/components/menus/modals/document-dropdown-menu/document-dropdown-menu';
 import { UserDropdownMenu } from '::app/components/menus/modals/user-dropdown-menu/user-dropdown-menu';
 
