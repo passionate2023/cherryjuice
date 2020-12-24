@@ -2,7 +2,12 @@
 import { extname } from 'path';
 import { createFilter } from 'rollup-pluginutils';
 
-export default (options = {}) => {
+type Props = {
+  include?: Array<string | RegExp> | string | RegExp | null;
+  exclude?: Array<string | RegExp> | string | RegExp | null;
+};
+
+export default (options: Props = {}) => {
   const filter = createFilter(options.include, options.exclude);
 
   return {

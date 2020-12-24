@@ -1,24 +1,7 @@
-import typescript from '@rollup/plugin-typescript';
-import { shared } from './rollup.config.base';
-const production = !process.env.ROLLUP_WATCH;
+import { config } from '../../rollup-configs/official-typescript-plugin/svg-sass/cjs';
+import { input } from './rollup.config.input';
 
-const cjs = {
-  ...shared,
-  output: [
-    {
-      dir: 'build/cjs',
-      format: 'cjs',
-      exports: 'named',
-      sourcemap: !production,
-    },
-  ],
+export default {
+  ...config,
+  input,
 };
-cjs.plugins.push(
-  typescript({
-    sourceMap: !production,
-    inlineSources: !production,
-    tsconfig: './tsconfig.cjs.json',
-  }),
-);
-
-export default [cjs];

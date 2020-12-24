@@ -18,7 +18,6 @@ const es = {
   output: [
     {
       dir: 'build',
-      sourcemap: !production,
     },
   ],
 };

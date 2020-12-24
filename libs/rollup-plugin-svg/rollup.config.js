@@ -1,6 +1,5 @@
 import commonjs from '@rollup/plugin-commonjs';
 import external from 'rollup-plugin-node-externals';
-import pkg from './package.json';
 import typescript from '@rollup/plugin-typescript';
 import { nodeResolve as resolve } from '@rollup/plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
@@ -12,14 +11,14 @@ const mainConfig = {
   input: 'src/index.ts',
   output: [
     {
-      file: pkg.main,
+      dir: 'build/cjs',
       format: 'cjs',
       exports: 'named',
       sourcemap: !production,
     },
 
     {
-      file: pkg.module,
+      dir: 'build',
       format: 'es',
       exports: 'named',
       sourcemap: !production,
@@ -39,4 +38,5 @@ const mainConfig = {
     production && terser(),
   ].filter(Boolean),
 };
-export default [mainConfig];
+
+export default mainConfig;

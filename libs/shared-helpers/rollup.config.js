@@ -1,9 +1,6 @@
-import typescript from 'rollup-plugin-typescript2';
-import commonjs from 'rollup-plugin-commonjs';
-import external from 'rollup-plugin-node-externals';
-import resolve from 'rollup-plugin-node-resolve';
-
+import { shared } from '../../rollup-configs/typescript2/config.js';
 export default {
+  ...shared,
   input: {
     index: 'src/index.ts',
     'clone-object': 'src/helpers/clone-object.ts',
@@ -20,30 +17,4 @@ export default {
       'src/hooks/modal-keyboard-events/modal-keyboard-events.ts',
     'on-key-up': 'src/hooks/on-key-up.ts',
   },
-  output: [
-    {
-      dir: 'build/cjs',
-      format: 'cjs',
-      exports: 'named',
-      sourcemap: true,
-    },
-    {
-      dir: 'build',
-      format: 'es',
-      exports: 'named',
-      sourcemap: true,
-    },
-  ],
-  plugins: [
-    external(),
-    resolve(),
-    typescript({
-      rollupCommonJSResolveHack: true,
-      exclude: '**/__tests__/**',
-      clean: true,
-    }),
-    commonjs({
-      include: ['../../node_modules/**', 'node_modules/**'],
-    }),
-  ],
 };

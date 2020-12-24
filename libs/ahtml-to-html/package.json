@@ -18,10 +18,7 @@
   },
   "devDependencies": {
     "typescript": "^3.8.3",
-    "@cherryjuice/ctb-to-ahtml": "0.0.2",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-typescript2": "^0.25.3",
-    "rollup-plugin-node-externals": "^2.2.0"
+    "@cherryjuice/ctb-to-ahtml": "0.0.2"
+
   }
 }
