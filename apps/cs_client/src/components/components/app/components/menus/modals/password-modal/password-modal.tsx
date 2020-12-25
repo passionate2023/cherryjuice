@@ -8,7 +8,7 @@ import {
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
-} from '::root/components/shared-components/form/validated-text-input';
+} from '@cherryjuice/components';
 import { AlertType } from '::types/react';
 import { createRef, useState } from 'react';
 import { patterns } from '::root/components/auth/helpers/form-validation';

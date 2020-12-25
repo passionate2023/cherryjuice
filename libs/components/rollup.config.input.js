@@ -8,6 +8,8 @@ export const input = {
     'src/buttons/google-oauth-button/google-oauth-button.tsx',
   'toolbar-button': 'src/buttons/toolbar-button/toolbar-button.tsx',
   'color-input': 'src/inputs/color-input/color-input.tsx',
+  'validated-text-input':
+    'src/inputs/validated-text-input/validated-text-input.tsx',
   'toolbar-color-input':
     'src/inputs/toolbar-color-input/toolbar-color-input.tsx',
   tooltip: 'src/unclassified/tooltip/tooltip.tsx',

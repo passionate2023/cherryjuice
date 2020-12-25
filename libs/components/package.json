@@ -11,7 +11,7 @@
     "build"
   ],
   "scripts": {
-    "dev": "yarn build-es -w --environment TSC_NONPOLLING_WATCHER:true",
+    "dev": "yarn build-es -w --environment TSC_NONPOLLING_WATCHER:true --single-input",
     "types": "tsc -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
     "build": "yarn build-es && yarn build-cjs",
     "build-es": "rollup -c rollup.config.es.js",

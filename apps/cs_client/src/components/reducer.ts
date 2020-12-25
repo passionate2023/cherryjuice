@@ -6,6 +6,7 @@ type State = {
 enum actions {
   setReady,
   showLoader,
+  hideLoader,
 }
 
 const actionCreators = (() => {
@@ -18,6 +19,7 @@ const actionCreators = (() => {
       state.dispatch({ type: actions.setReady, value: ready }),
     showLoader: (show: true) =>
       state.dispatch({ type: actions.showLoader, value: show }),
+    hideLoader: () => state.dispatch({ type: actions.hideLoader }),
   };
 })();
 
@@ -40,6 +42,12 @@ const reducer = (
       newState = {
         ...state,
         showLoader: true,
+      };
+      break;
+    case actions.hideLoader:
+      newState = {
+        ...state,
+        showLoader: false,
       };
       break;
     default:

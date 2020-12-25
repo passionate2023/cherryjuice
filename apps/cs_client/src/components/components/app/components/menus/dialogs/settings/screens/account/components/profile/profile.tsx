@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
-} from '::root/components/shared-components/form/validated-text-input';
+} from '@cherryjuice/components';
 import { patterns } from '::root/components/auth/helpers/form-validation';
 import { createRef } from 'react';
 import {

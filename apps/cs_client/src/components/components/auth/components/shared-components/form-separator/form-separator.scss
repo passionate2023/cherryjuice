@@ -1,0 +1,20 @@
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+
+.form-separator {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  height: 1px;
+  display: flex;
+  align-items: center;
+  opacity: 0.6;
+}
+
+.form-separator__line {
+  height: 0px;
+  width: calc(#{$form-input-width} * 0.35);
+  margin: 5px;
+  border-bottom: 1px solid var(--primary-020-4);
+}
+.form-separator__text {
+  color: var(--primary-020);
+}

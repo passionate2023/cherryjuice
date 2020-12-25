@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { modLogin } from '::sass-modules';
+import mod from './validated-text-input.scss';
 import { Icon } from '@cherryjuice/icons';
 import { Ref } from 'react';
 import {
   patternToString,
   TPattern,
-} from '::root/components/auth/helpers/form-validation';
-import { useCustomValidityMessage } from '::hooks/use-custom-validation-message';
+} from '::root/inputs/validated-text-input/helpers/pattetn-to-string';
+import { useCustomValidityMessage } from '::root/inputs/validated-text-input/hooks/custom-validation-message';
 
 export type ValidatedTextInputProps = {
   label: string;
@@ -52,18 +52,16 @@ const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
   const { onInput, onInvalid } = useCustomValidityMessage(patterns, setValid);
   const id = `${idPrefix}-${label.replace(' ', '-')}`;
   return (
-    <div className={modLogin.login__form__input} disabled={disabled}>
+    <div className={mod.vTextInput} data-disabled={disabled}>
       {icon && (
         <Icon
           name={typeof icon === 'string' ? icon : icon[0]}
-          className={modLogin.login__form__input__icon}
+          className={mod.vTextInput__icon}
         />
       )}
       <input
-        className={`${modLogin.login__form__input__input} ${
-          highlightInvalidInput
-            ? modLogin.login__form__input__inputHighlightInvalid
-            : ''
+        className={`${mod.vTextIcon__input} ${
+          highlightInvalidInput ? mod.vTextInput__inputHighlightInvalid : ''
         }`}
         ref={inputRef}
         type={type}
@@ -88,7 +86,7 @@ const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
         onInput={onInput}
         defaultValue={defaultValue}
       />
-      <label htmlFor={id} className={modLogin.login__form__input__label}>
+      <label htmlFor={id} className={mod.vTextInput__label}>
         {label}
       </label>
     </div>

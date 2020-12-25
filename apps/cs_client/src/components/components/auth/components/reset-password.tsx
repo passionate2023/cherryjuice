@@ -5,7 +5,7 @@ import { useModalKeyboardEvents } from '@cherryjuice/shared-helpers';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
-} from '::root/components/shared-components/form/validated-text-input';
+} from '@cherryjuice/components';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
 import { patterns } from '::root/components/auth/helpers/form-validation';
 import { apolloClient } from '::graphql/client/apollo-client';
@@ -18,6 +18,8 @@ import { ac } from '::store/store';
 import { useMutation } from '::hooks/graphql/use-mutation';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
+import { SubmitButton } from '::auth/components/shared-components/submit-buttton/submit-button';
+import { authFormFocusableElements } from '::auth/components/login-form/login-form';
 
 const idPrefix = 'reset--password';
 const inputs: ValidatedTextInputProps[] = [
@@ -109,7 +111,7 @@ const ResetPassword: React.FC<Props & PropsFromRedux> = ({ token }) => {
     }
   };
   const keyboardEventsProps = useModalKeyboardEvents({
-    focusableElementsSelector: ['a', 'input[type="submit"]'],
+    focusableElementsSelector: authFormFocusableElements,
     dismiss: () => undefined,
     confirm: submit,
   });
@@ -119,8 +121,8 @@ const ResetPassword: React.FC<Props & PropsFromRedux> = ({ token }) => {
       className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}
     >
       <LinearProgress loading={resetPasswordState === 'in-progress'} />
-      <form className={modLogin.login__form} ref={formRef}>
-        <span className={modLogin.login__form__createAccount}>
+      <form className={modLogin.loginForm} ref={formRef}>
+        <span className={modLogin.loginForm__bottomSection}>
           Enter your new password
         </span>
         {inputs.map(inputProps => (
@@ -130,16 +132,12 @@ const ResetPassword: React.FC<Props & PropsFromRedux> = ({ token }) => {
             disabled={valid === false}
           />
         ))}
-        {
-          <input
-            type={'submit'}
-            value={'Reset password'}
-            className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
-            onClick={submit}
-            disabled={!validPassword}
-            style={{ marginTop: 5 }}
-          />
-        }
+
+        <SubmitButton
+          text={'Reset password'}
+          onClick={submit}
+          disabled={!validPassword}
+        />
         <ReturnToLoginPage text={'return to'} linkText={'login page'} />
       </form>
     </div>

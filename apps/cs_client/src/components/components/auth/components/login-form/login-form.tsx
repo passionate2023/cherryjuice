@@ -1,25 +1,26 @@
 import * as React from 'react';
 import { createRef, useRef } from 'react';
 import { modLogin } from '::sass-modules';
-import { Checkbox } from '::root/components/shared-components/form/checkbox';
 import { GoogleOauthButton } from '@cherryjuice/components';
 import { Icons } from '@cherryjuice/icons';
 import { useModalKeyboardEvents } from '@cherryjuice/shared-helpers';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
-} from '::root/components/shared-components/form/validated-text-input';
-import { FormSeparator } from '::root/components/shared-components/form/form-separator';
+} from '@cherryjuice/components';
+import { FormSeparator } from '::auth/components/shared-components/form-separator/form-separator';
 import { patterns } from '::root/components/auth/helpers/form-validation';
 import { SignInCredentials } from '@cherryjuice/graphql-types';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
-import { Link } from 'react-router-dom';
+import { Link } from '::auth/components/shared-components/link/link';
 import { openConsentWindow } from '::root/components/auth/helpers/oauth';
 import { useDefaultValues } from '::hooks/use-default-form-values';
 import { ac } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { uri } from '::graphql/client/hooks/apollo-client';
+import { SubmitButton } from '::auth/components/shared-components/submit-buttton/submit-button';
+import { FormCheckbox } from '::auth/components/shared-components/form-checkbox/form-checkbox';
 
 const inputs: ValidatedTextInputProps[] = [
   {
@@ -41,6 +42,12 @@ const inputs: ValidatedTextInputProps[] = [
     required: true,
     idPrefix: 'login',
   },
+];
+
+export const authFormFocusableElements = [
+  'span[tabindex="0"]',
+  'input[type="submit"]',
+  '#google-btn',
 ];
 
 const mapState = (state: Store) => ({
@@ -73,10 +80,11 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading }) => {
   };
 
   useDefaultValues(inputs);
+
   const keyboardEventsProps = useModalKeyboardEvents({
     dismiss: () => undefined,
     confirm: login,
-    focusableElementsSelector: ['a', 'input[type="submit"]', '#google-btn'],
+    focusableElementsSelector: authFormFocusableElements,
   });
   return (
     <div
@@ -84,7 +92,7 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading }) => {
       className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}
     >
       <LinearProgress loading={loading} />
-      <form className={modLogin.login__form} ref={formRef}>
+      <form className={modLogin.loginForm} ref={formRef}>
         <GoogleOauthButton
           onClick={openConsentWindow({
             url: uri.httpBase + '/auth/google/callback',
@@ -99,37 +107,24 @@ const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading }) => {
             highlightInvalidInput={false}
           />
         ))}
-        <span className={modLogin.login__form__rememberMe}>
-          <Checkbox
-            className={modLogin.login__form__rememberMe__checkbox}
-            myRef={staySignedRef}
-          />{' '}
-          <span className={modLogin.login__form__rememberMe__text}>
-            keep me logged-in
-          </span>
+        <span className={modLogin.loginForm__middleSection}>
+          <FormCheckbox _ref={staySignedRef} text={'keep me logged-in'} />
           <Link
             to="/auth/forgot-password"
-            className={modLogin.login__form__rememberMe__text}
-          >
-            forgot password
-          </Link>
+            text={'forgot password'}
+            decorated={false}
+          />
         </span>
 
-        <input
-          type={'submit'}
-          value={'Login'}
-          className={`${modLogin.login__form__input__input} ${modLogin.login__form__inputSubmit}`}
+        <SubmitButton
+          text={'Login'}
           onClick={login}
           disabled={loading}
+          noMarginTop={true}
         />
-        <span className={modLogin.login__form__createAccount}>
-          or{' '}
-          <Link
-            to="/auth/signup"
-            className={modLogin.login__form__createAccount__icon}
-          >
-            create an account
-          </Link>
+        <span className={modLogin.loginForm__bottomSection}>
+          <span>or </span>
+          <Link to="/auth/signup" text={'create an account'} />
         </span>
       </form>
     </div>

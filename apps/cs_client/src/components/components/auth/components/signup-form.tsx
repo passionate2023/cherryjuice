@@ -6,31 +6,28 @@ import { useModalKeyboardEvents } from '@cherryjuice/shared-helpers';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
-} from '::root/components/shared-components/form/validated-text-input';
+} from '@cherryjuice/components';
 import { patterns } from '::root/components/auth/helpers/form-validation';
 import { createRef, useRef } from 'react';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
-import { Link } from 'react-router-dom';
+import { Link } from '::auth/components/shared-components/link/link';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { SignUpCredentials } from '@cherryjuice/graphql-types';
 import { useDefaultValues } from '::hooks/use-default-form-values';
+import { SubmitButton } from '::auth/components/shared-components/submit-buttton/submit-button';
+import { authFormFocusableElements } from '::auth/components/login-form/login-form';
 
 export const ReturnToLoginPage: React.FC<{
   text?: string;
   linkText?: string;
 }> = ({ text, linkText }) => (
   <span
-    className={modLogin.login__form__createAccount}
+    className={modLogin.loginForm__bottomSection}
     onClick={ac.root.resetState}
   >
     {text || 'already a member?'}{' '}
-    <Link
-      to="/auth/login"
-      className={modLogin.login__form__createAccount__icon}
-    >
-      {linkText || 'log in'}
-    </Link>
+    <Link to="/auth/login" text={linkText || 'log in'} />
   </span>
 );
 
@@ -114,7 +111,7 @@ const SignUpForm: React.FC<Props & PropsFromRedux> = ({ loading }) => {
 
   useDefaultValues(inputs);
   const keyboardEventsProps = useModalKeyboardEvents({
-    focusableElementsSelector: ['a', 'input[type="submit"]'],
+    focusableElementsSelector: authFormFocusableElements,
     dismiss: () => undefined,
     confirm: signUp,
   });
@@ -124,19 +121,12 @@ const SignUpForm: React.FC<Props & PropsFromRedux> = ({ loading }) => {
       className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}
     >
       <LinearProgress loading={loading} />
-      <form className={modLogin.login__form} ref={formRef}>
+      <form className={modLogin.loginForm} ref={formRef}>
         {inputs.map(inputProps => (
           <ValidatedTextInput {...inputProps} key={inputProps.variableName} />
         ))}
 
-        <input
-          type={'submit'}
-          value={'Sign up'}
-          className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
-          onClick={signUp}
-          disabled={loading}
-          style={{ marginTop: 5 }}
-        />
+        <SubmitButton text={'Sign up'} onClick={signUp} disabled={loading} />
         <ReturnToLoginPage />
       </form>
     </div>

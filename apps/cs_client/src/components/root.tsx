@@ -20,14 +20,17 @@ export const Root: React.FC<Props> = () => {
     if (!state.ready)
       interval.current = setTimeout(() => {
         rootAC.showLoader(true);
-      }, 1500);
+        setTimeout(() => {
+          rootAC.hideLoader();
+        }, 1500);
+      }, 800);
   }, [state.ready]);
 
   return (
     <>
-      {!state.ready && state.showLoader && <SplashScreen />}
+      {(!state.ready || state.showLoader) && <SplashScreen />}
       <React.Suspense fallback={<Void />}>
-        <RootWithRedux />
+        {!state.showLoader && <RootWithRedux />}
       </React.Suspense>
     </>
   );

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { modAuthScreen } from '::sass-modules';
 import { Banner } from '::root/components/auth/components/banner';
 import { Route, Switch } from 'react-router';
-import { LoginForm } from '::root/components/auth/components/login-form';
+import { LoginForm } from '::root/components/auth/components/login-form/login-form';
 import { SignUpForm } from '::root/components/auth/components/signup-form';
 import { OauthSignUpForm } from '::root/components/auth/components/oauth-signup-form';
 import { ResetPassword } from '::root/components/auth/components/reset-password';
