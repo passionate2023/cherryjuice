@@ -10,6 +10,7 @@ import { ForgotPassword } from '::root/components/auth/components/forgot-passwor
 
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
+import { useComponentIsReady } from '::root/hooks/is-ready';
 
 const mapState = (state: Store) => ({
   error: state.auth.alert,
@@ -20,6 +21,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 const Auth: React.FC<Props & PropsFromRedux> = ({ error }) => {
+  useComponentIsReady(true);
   return (
     <div className={modAuthScreen.authScreen}>
       <div className={modAuthScreen.authScreen__cardContainer}>

@@ -15,6 +15,7 @@ import { Separator } from '::root/components/app/components/editor/tool-bar/comp
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { Objects } from '::root/components/app/components/editor/tool-bar/components/groups/objects/objects';
 import { FormattingButtonsWithTransition } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/formatting-buttons-with-transition';
+import { useComponentIsReady } from '::root/hooks/is-ready';
 
 type PortalProps = { targetSelector: string; predicate?: boolean };
 export const Portal: React.FC<PortalProps> = ({
@@ -61,21 +62,22 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   isDocumentOwner,
   docking,
 }) => {
+  useComponentIsReady(true);
   const hideDuringDocking = docking && isOnMd;
   return (
     <div className={modToolbar.toolBar}>
       <MainButtons />
       {isDocumentOwner && !isOnMd && <Separator />}
       <Portal targetSelector={'.' + modApp.app} predicate={isOnMd}>
-        {!hideDuringDocking && (
+        {
           <NodesButtons>
             {isDocumentOwner && <UndoRedo />}
             <MobileButtons />
           </NodesButtons>
-        )}
+        }
       </Portal>
       {isDocumentOwner && !isOnMd && <Separator />}
-      {!hideDuringDocking && isDocumentOwner && (
+      {isDocumentOwner && (
         <ErrorBoundary>
           <Portal targetSelector={'.' + modApp.app} predicate={isOnMd}>
             {isOnMd ? (
@@ -84,7 +86,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
                 <Objects />
               </FormattingButtonsWithTransition>
             ) : (
-              <FormattingButtons />
+              !hideDuringDocking && <FormattingButtons />
             )}
           </Portal>
         </ErrorBoundary>

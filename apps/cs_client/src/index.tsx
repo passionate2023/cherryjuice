@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { render } from 'react-dom';
-import Root from '::root/root';
+import { Root } from '::root/root';
+import '@cherryjuice/shared-styles/build/global/body.scss';
 import { register } from '::helpers/service-worker';
 
 render(<Root />, document.querySelector('#cs'));

@@ -27,7 +27,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-  "rollup-plugin-dynamic-import-variables": "^1.1.0",
+    "rollup-plugin-dynamic-import-variables": "^1.1.0",
     "sass": "^1.23.7",
     "typescript": "^3.8.3",
     "node-sass": "4.14.1",

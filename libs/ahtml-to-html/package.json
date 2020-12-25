@@ -19,6 +19,5 @@
   "devDependencies": {
     "typescript": "^3.8.3",
     "@cherryjuice/ctb-to-ahtml": "0.0.2"
-
   }
 }

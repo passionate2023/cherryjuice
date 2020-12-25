@@ -42,6 +42,7 @@ export const Icons = {
     settings: 'settings',
     format: 'format',
     edit: 'edit',
+    'cherry-juice': 'cherry-juice',
     tree: 'tree',
     'create-sibling': 'create-sibling',
     'create-child': 'create-child',
