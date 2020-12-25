@@ -1,19 +1,43 @@
+/* eslint-disable no-console */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const fs = require('fs');
 
-const generateNamedInputs = (files, maxDepth, srcFolder, dirname) => {
+const generateNamedInputs = (
+  maxDepth,
+  svg = false,
+  files,
+  srcFolder,
+  dirname,
+) => {
   if (!fs.lstatSync(srcFolder).isDirectory()) return;
   const objects = fs.readdirSync(srcFolder);
   objects.forEach(object => {
     const fullPath = srcFolder + '/' + object;
-    const isFile = /(?<!global.d)(?<!stories)(?<!index)\.tsx*$/.test(object);
+    const isFile = svg
+      ? /(?<!global.d)(?<!stories)(?<!index)\.svg$/.test(object)
+      : /(?<!global.d)(?<!stories)(?<!index)\.tsx*$/.test(object);
     if (isFile) {
-      files.push([object.replace(/.tsx*$/, ''), fullPath.replace(dirname, '')]);
+      const fileName = object.replace(/\.(tsx*|svg)$/, '');
+      if (files.has(fileName)) {
+        throw new Error('duplicate file: ' + fileName);
+      }
+      files.set(fileName, fullPath.replace(dirname, ''));
     } else if (maxDepth > 0) {
-      generateNamedInputs(files, maxDepth - 1, fullPath, dirname);
+      generateNamedInputs(maxDepth - 1, svg, files, fullPath, dirname);
     }
   });
 };
 
-const files = [];
-generateNamedInputs(files, 2, process.cwd() + '/src', process.cwd() + '/');
-console.log(Object.fromEntries(files));
+const files = new Map();
+let depth = process.argv[2];
+if (depth && depth.startsWith('--depth=')) depth = +depth.split('=')[1];
+const svg = process.argv[3];
+generateNamedInputs(
+  isNaN(depth) ? 2 : depth,
+  svg === '--svg',
+  files,
+  process.cwd() + '/src',
+  process.cwd() + '/',
+);
+console.log(Object.fromEntries(files.entries()));
+console.log(`found ${files.size} files`);

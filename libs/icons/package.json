@@ -19,7 +19,8 @@
     "build-cjs": "rollup -c rollup.config.cjs.js",
     "test": "exit 0",
     "lint": "eslint ./**",
-    "generate-named-inputs": "node ../../scripts/generate-named-inputs.js"
+    "generate-named-inputs-svg": "node ../../scripts/generate-named-inputs.js --depth=6 --svg",
+    "generate-named-inputs": "node ../../scripts/generate-named-inputs.js --depth=6"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
@@ -27,7 +28,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "rollup-plugin-dynamic-import-variables": "^1.1.0",
     "sass": "^1.23.7",
     "typescript": "^3.8.3",
     "node-sass": "4.14.1",

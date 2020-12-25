@@ -1,6 +1,7 @@
 // copied from https://github.com/antony/rollup-plugin-svg/blob/master/src/index.js
 import { extname } from 'path';
 import { createFilter } from 'rollup-pluginutils';
+import { toDataUrl } from '::helpers/to-data-url';
 
 type Props = {
   include?: Array<string | RegExp> | string | RegExp | null;
@@ -18,9 +19,15 @@ export default (options: Props = {}) => {
         return null;
       }
 
-      const encoded = JSON.stringify(code.trim());
+      const trimmed = code.trim();
+      const encoded = JSON.stringify(trimmed);
 
-      return { code: `export default ${encoded}`, map: { mappings: '' } };
+      return {
+        code: `export const svg = ${encoded}; export const base64 = "${toDataUrl(
+          trimmed,
+        )}";`,
+        map: { mappings: '' },
+      };
     },
   };
 };

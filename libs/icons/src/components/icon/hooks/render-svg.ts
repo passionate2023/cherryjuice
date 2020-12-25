@@ -1,6 +1,4 @@
 import React, { EventHandler, useEffect, useRef, useState } from 'react';
-import { toDataUrl } from '::root/components/icon/hooks/helpers/to-data-url';
-import { getIconGroup } from '::root/components/icon/data/get-icon-group';
 import { getStyles } from '::root/components/icon/hooks/helpers/get-styles';
 import { stringToSingleElement } from './helpers/string-to-element';
 
@@ -25,13 +23,7 @@ const useRenderSVG = ({
   const [fetched, setFetched] = useState(0);
 
   useEffect(() => {
-    const group = getIconGroup(name);
-    (group === 'material'
-      ? import('../../../assets/icons/material/' + name + '.svg')
-      : group === 'cherrytree'
-      ? import('../../../assets/icons/cherrytree/' + name + '.svg')
-      : import('../../../assets/icons/misc/' + name + '.svg')
-    ).then(({ default: svg }) => {
+    import('./' + name + '.js').then(({ svg, base64 }) => {
       if (svg) {
         const props = {
           onClick,
@@ -39,7 +31,7 @@ const useRenderSVG = ({
           'data-testid': testId,
         };
         if (image) {
-          props['src'] = toDataUrl(svg);
+          props['src'] = base64;
         } else {
           const svgElement = stringToSingleElement(svg) as SVGElement;
           Array.from(svgElement.attributes).forEach(({ name, value }) => {
