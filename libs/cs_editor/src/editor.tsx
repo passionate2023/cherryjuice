@@ -1,9 +1,5 @@
 import * as React from 'react';
-import {
-  ContentEditable,
-  ContentEditableProps,
-} from '::root/components/content-editable/content-editable';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { onPaste } from '::helpers/clipboard/on-paste';
 import { onKeyDown } from '::helpers/typing';
 import {
@@ -11,9 +7,10 @@ import {
   GestureHandlerProps,
 } from '@cherryjuice/shared-helpers';
 import { useOnMouseEvents } from '::hooks/on-mouse-events/on-mouse-event';
-import { useScrollToHash } from '::hooks/scroll-to-hash';
 import './assets/styles/global-classes/global-classes.scss';
 import { modEditor } from '::sass-modules';
+import { useRenderPage } from '::hooks/render-page';
+import { ContentEditableProps } from '::helpers/pages-manager/helpers/render-page/render-page';
 
 type Props = {
   contentEditableProps: ContentEditableProps;
@@ -28,12 +25,13 @@ const Editor: React.FC<Props> = ({
   fallbackComponent,
   loading,
 }) => {
+  const ref = useRef<HTMLDivElement>();
   const { onTouchEnd, onTouchStart } = useMemo(
     () => createGesturesHandler(gestureHandlerProps),
     [],
   );
   useOnMouseEvents();
-  useScrollToHash();
+  useRenderPage(contentEditableProps, loading);
   return (
     <div
       className={modEditor.editor}
@@ -41,12 +39,10 @@ const Editor: React.FC<Props> = ({
       onTouchEnd={onTouchEnd}
       onPaste={onPaste}
       onKeyDown={onKeyDown}
+      id={'editor'}
+      ref={ref}
     >
-      {loading ? (
-        fallbackComponent
-      ) : (
-        <ContentEditable {...contentEditableProps} />
-      )}
+      {loading && fallbackComponent}
     </div>
   );
 };

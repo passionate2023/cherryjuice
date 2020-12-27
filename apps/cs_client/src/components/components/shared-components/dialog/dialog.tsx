@@ -1,6 +1,6 @@
 import { modDialog } from '::sass-modules';
 import * as React from 'react';
-import { EventHandler } from 'react';
+import { memo } from 'react';
 import {
   DialogFooter,
   TDialogFooterProps,
@@ -10,24 +10,22 @@ import {
   DialogHeaderProps,
 } from '::root/components/shared-components/dialog/dialog-header';
 import { DialogBody } from '::root/components/shared-components/dialog/dialog-body/dialog-body';
-import { MeasurableDialogBody } from '::root/components/shared-components/dialog/dialog-body/measurable-dialog-body';
-import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
+import { useModalKeyboardEvents } from '@cherryjuice/shared-helpers';
 import { animated } from 'react-spring';
 import { TransitionWrapper } from '::root/components/shared-components/transitions/transition-wrapper';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 
 type TDialogProps = {
   menuButton?: JSX.Element;
   dialogTitle?: string;
-  onClose: EventHandler<undefined>;
-  onConfirm?: EventHandler<undefined>;
+  onClose: () => void;
+  onConfirm?: () => void;
   isOnMobile: boolean;
   small?: boolean;
   loading?: boolean;
   pinnable?: boolean;
   pinned?: boolean;
-  measurable?: boolean;
 } & TDialogFooterProps &
   DialogHeaderProps;
 
@@ -49,7 +47,6 @@ const Dialog: React.FC<TDialogProps & {
   loading = false,
   pinned,
   pinnable,
-  measurable,
   show,
 }) => {
   const keyboardEventsProps = useModalKeyboardEvents({
@@ -82,11 +79,7 @@ const Dialog: React.FC<TDialogProps & {
             rightHeaderButtons={rightHeaderButtons}
             pinnable={pinnable}
           />
-          {measurable ? (
-            <MeasurableDialogBody dialogBodyElements={children} />
-          ) : (
-            <DialogBody dialogBodyElements={children} />
-          )}
+          <DialogBody dialogBodyElements={children} />
           <DialogFooter
             footRightButtons={footRightButtons}
             footerLeftButtons={footerLeftButtons}
@@ -100,13 +93,15 @@ const Dialog: React.FC<TDialogProps & {
   );
 };
 
+const M = memo(Dialog);
+
 const DialogWithTransition: React.FC<TDialogProps & {
   show: boolean;
   isShownOnTopOfDialog?: boolean;
 }> = ({ isShownOnTopOfDialog, ...props }) => {
   return (
     <TransitionWrapper<TDialogProps>
-      Component={Dialog}
+      Component={M}
       show={props.show}
       transitionValues={{
         from: { opacity: 0, xy: [0, window.innerHeight * 0.7] },

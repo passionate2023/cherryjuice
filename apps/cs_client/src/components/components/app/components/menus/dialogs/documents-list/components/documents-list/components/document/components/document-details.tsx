@@ -3,7 +3,7 @@ import { modDocumentsList } from '::sass-modules';
 import { VisibilityIcon } from '::root/components/app/components/editor/info-bar/components/components/visibility-icon';
 import { Privacy } from '@cherryjuice/graphql-types';
 import { TimeStamps } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/components/time-stamps';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 
 type Props = {
   id: string;

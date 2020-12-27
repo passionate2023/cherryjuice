@@ -1,13 +1,12 @@
-import { getEditor } from '::root/components/content-editable/hooks/attach-images-to-html';
-
 export const getNewImages = ({
   newImageIDs,
   imageIDsInDom,
+  editor,
 }: {
   newImageIDs: string[];
   imageIDsInDom: string[];
+  editor: HTMLDivElement;
 }) => {
-  const editor = getEditor();
   return newImageIDs.reduce((acc, id) => {
     const imageInDom: HTMLImageElement = editor.querySelector(
       `img[data-id="${id}"]`,

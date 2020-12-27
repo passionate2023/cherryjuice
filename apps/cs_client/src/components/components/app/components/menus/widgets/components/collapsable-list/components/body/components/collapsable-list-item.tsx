@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { modDocumentOperations } from '::sass-modules';
-import { joinClassNames } from '::helpers/dom/join-class-names';
-import { Icon } from '::root/components/shared-components/icon/icon';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
+import { Icon } from '@cherryjuice/icons';
 
 export type CollapsableListItemProps = {
   name: string;

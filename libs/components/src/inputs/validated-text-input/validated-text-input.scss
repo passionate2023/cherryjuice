@@ -1,0 +1,73 @@
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/form';
+
+.v-text-input {
+  // size
+  max-height: 50px;
+  @include form-element-size();
+  // position
+  position: relative;
+  margin-top: 2px;
+  // content
+  display: flex;
+  // style
+  border-radius: 5px;
+  background-color: var(--background);
+  filter: brightness(0.95);
+  &[data-disabled='true'] {
+    opacity: 0.5;
+    input,
+    label {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.v-text-input__icon {
+  // position
+  position: absolute;
+  align-self: center;
+  // style
+  opacity: 0.4;
+  fill: black;
+  // content
+  padding-left: 10px;
+}
+
+.v-text-icon__input {
+  // position
+  // size
+  height: 50px;
+  width: 100%;
+  box-sizing: border-box;
+  // content
+  padding: 20px 15px;
+  padding-left: 35px;
+  // style
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+  &:focus {
+    outline: 2px solid var(--primary-030-5);
+  }
+  &:invalid {
+    color: var(--warning);
+  }
+}
+
+.v-text-input__label {
+  position: absolute;
+  transform-origin: 0%;
+  transform: translateY(15px) translateX(35px);
+  transition: transform 200ms, opacity 200ms;
+  color: var(--on-surface);
+}
+.v-text-input:focus-within .v-text-input__label,
+.v-text-icon__input:not(:placeholder-shown) {
+  padding-bottom: 3px;
+  + .v-text-input__label {
+    transform: scale(0.76) translateY(4px) translateX(47px);
+    opacity: 0.8;
+  }
+}

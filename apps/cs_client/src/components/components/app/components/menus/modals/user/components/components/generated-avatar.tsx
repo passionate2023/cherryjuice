@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { modUserPopup } from '::sass-modules';
 import { memo, useMemo } from 'react';
+import { modUserInfo } from '::sass-modules';
 
 const colors = [
   '#2196f3',
@@ -102,7 +102,7 @@ const GeneratedAvatar: React.FC<Props> = memo(function GeneratedAvatar({
     <img
       src={avatar}
       alt={'user avatar (a circle containing user initials)'}
-      className={modUserPopup.user__info__generatedAvatar + ' ' + className}
+      className={modUserInfo.userInfo__generatedAvatar + ' ' + className}
     />
   );
 });

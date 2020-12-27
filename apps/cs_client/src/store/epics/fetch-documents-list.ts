@@ -1,4 +1,10 @@
-import { filter, flatMap, ignoreElements, switchMap } from 'rxjs/operators';
+import {
+  filter,
+  flatMap,
+  ignoreElements,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { concat, EMPTY, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { store, ac_ } from '../store';
@@ -28,6 +34,9 @@ const maybeSelectMostRecentDocument$ = (
 };
 
 const fetchDocumentsListEpic = (action$: Observable<Actions>) => {
+  const state = {
+    failedAttemptsCount: 0,
+  };
   return action$.pipe(
     ofType([
       ac_.documentsList.fetchDocuments,
@@ -39,7 +48,11 @@ const fetchDocumentsListEpic = (action$: Observable<Actions>) => {
       const request = gqlQuery$(DOCUMENTS_LIST()).pipe(
         flatMap(documents => {
           return concat(
-            of(ac_.documentsList.fetchDocumentsFulfilled(documents)),
+            of(ac_.documentsList.fetchDocumentsFulfilled(documents)).pipe(
+              tap(() => {
+                state.failedAttemptsCount = 0;
+              }),
+            ),
             maybeSelectMostRecentDocument$(documents),
           );
         }),
@@ -52,8 +65,8 @@ const fetchDocumentsListEpic = (action$: Observable<Actions>) => {
             title: 'Fetching documents is taking longer then expected',
             description: alerts.tryRefreshingThePage,
           },
-          due: 10000,
-          mode: 'snackbar',
+          mode: state.failedAttemptsCount < 3 ? 'silent' : 'snackbar',
+          due: 1000 + 1000 * state.failedAttemptsCount++,
           actionCreators: [ac_.documentsList.fetchDocuments],
         }),
         createErrorHandler({

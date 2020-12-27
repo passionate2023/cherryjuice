@@ -1,5 +1,5 @@
-@import '../../mixins/breakpoints';
-@import '../../vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
 //$node-height: calc(#{$title-and-recent-bar-height-md} - 5px);
 //$node-width: 100px;
 //$node-left-margin: calc(

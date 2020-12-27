@@ -1,4 +1,4 @@
-import { bridge } from '@cherryjuice/editor';
+import { bridge, pagesManager } from '@cherryjuice/editor';
 import { ac, store } from '::store/store';
 import { AlertType } from '::types/react';
 import { getDocuments } from '::store/selectors/cache/document/document';
@@ -7,6 +7,8 @@ import { LinkType } from '::root/components/app/components/menus/dialogs/link/re
 import { useEffect } from 'react';
 
 export const initBridge = () => {
+  pagesManager.resetPages(() => true);
+  pagesManager.setConfiguration({ autoSaveInterval: 5000 });
   bridge.current.selectNode = ac.node.select;
   bridge.current.onPasteImageErrorHandler = error =>
     ac.dialogs.setAlert({
@@ -39,7 +41,6 @@ export const initBridge = () => {
       },
       meta: { deletedImages },
     });
-
   bridge.current.getNodeImageIDsFromCache = ({
     node_id,
     documentId,
@@ -98,12 +99,12 @@ export const initBridge = () => {
     });
     ac.dialogs.showTableDialog();
   };
-  bridge.current.flagEditedNode = ({ node_id, documentId }) =>
+  bridge.current.flagEditedNode = ({ node_id, documentId, changed }) =>
     ac.documentCache.mutateNodeContent({
       node_id,
       documentId,
       data: { html: '' },
-      meta: { mode: 'update-key-only' },
+      meta: { flag: changed ? 'list' : 'unlist' },
     });
   bridge.current.getDocumentId = () => store.getState().document.documentId;
 };

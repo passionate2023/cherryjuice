@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { ButtonSquare } from '@cherryjuice/components';
 import { useRef } from 'react';
 import { modImportDocument } from '::sass-modules';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { apolloClient } from '::graphql/client/apollo-client';
 import { testIds } from '::cypress/support/helpers/test-ids';

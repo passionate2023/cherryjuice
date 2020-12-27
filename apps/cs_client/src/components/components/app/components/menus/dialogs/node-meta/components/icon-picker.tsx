@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modIconPicker, modNodeMeta, modSearchFilter } from '::sass-modules';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { useState } from 'react';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
@@ -50,6 +50,7 @@ const IconPicker: React.FC<Props> = ({
             disabled ? modNodeMeta.nodeMeta__inputDisabled : ''
           }`}
           onClick={() => !disabled && setShown(shown => !shown)}
+          image={true}
         />
       </div>
     </ContextMenuWrapper>

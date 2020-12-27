@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { modSearchFilter } from '::sass-modules';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { ButtonSquare } from '@cherryjuice/components';
 import { SearchSortOptions, SortNodesBy } from '@cherryjuice/graphql-types';
 import { mapScopeToLabel } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
 

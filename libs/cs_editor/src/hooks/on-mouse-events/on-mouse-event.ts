@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { modEditor } from '::sass-modules';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { debounceTime, filter, map, withLatestFrom } from 'rxjs/operators';
 import { onLinkClicked } from '::hooks/on-mouse-events/helpers/links';
 import { bridge } from '::root/bridge';
+import { getEditorContainer } from '::helpers/pages-manager/helpers/get-editor';
 
 const anchor = 'rich-text__anchor';
 const link = 'rich-text__link';
@@ -55,7 +55,7 @@ const isLeftClick = (e: MouseEvent): boolean => e['which'] === 1;
 
 export const useOnMouseEvents = () => {
   useEffect(() => {
-    const element = document.querySelector(`.${modEditor.editor__container}`);
+    const element = getEditorContainer();
     const md$ = fromEvent(element, 'mousedown').pipe(filter(isLeftClick));
     const mu$ = fromEvent(element, 'mouseup').pipe(filter(isLeftClick));
     const [mouseClick$, mouseHold$] = clickify$(md$, mu$);

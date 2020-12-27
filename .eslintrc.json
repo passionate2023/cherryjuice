@@ -13,10 +13,15 @@
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 2018,
+    "ecmaVersion": 2019,
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint", "react-hooks"],
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "react-hooks",
+    "eslint-plugin-node"
+  ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -38,7 +43,8 @@
     "semi": "off",
     "linebreak-style": "error",
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "node/no-extraneous-import": "error"
   },
   "settings": {
     "react": {

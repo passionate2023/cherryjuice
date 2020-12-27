@@ -20,7 +20,7 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
   const { hotkeySettingsDuplicates } = await import(
     './settings/hotkey-settings-duplicates'
   );
-
+  const { editorEpics } = await import('./editor/editor');
   return action$ =>
     combineEpics(
       hotkeySettingsDuplicates,
@@ -37,6 +37,7 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
       searchNodesEpic,
       deleteAccountEpic,
       fetchNodeEpic,
+      ...editorEpics,
     )(action$);
 };
 export { createRootEpic };

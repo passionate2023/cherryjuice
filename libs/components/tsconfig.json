@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "::sass-modules/*": ["./src/assets/styles/modules/*"],
+      "::sass-modules": ["./src/assets/styles/modules/index.ts"],
+      "::helpers/*": ["./src/helpers/*"],
+      "::assets/*": ["./src/assets/*"],
+      "::hooks/*": ["./src/hooks/*"],
+      "::root/*": ["./src/*"]
+    },
+    "rootDir": "src",
+    "module": "esnext",
+    "target": "es2019",
+    "sourceMap": false,
+    "allowJs": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": ["src/**/__tests__", "src/**/*.stories.*"],
+  "include": ["src"]
+}

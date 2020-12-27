@@ -1,0 +1,26 @@
+.button-circle {
+  min-height: 30px;
+  min-width: 30px;
+  border-radius: 50%;
+  img {
+    margin-bottom: -2px;
+  }
+  width: 30px;
+  height: 30px;
+}
+
+$button-width: 18px;
+.button-circle--small {
+  min-width: $button-width;
+  min-height: $button-width;
+  width: $button-width;
+  height: $button-width;
+  padding: 0;
+}
+.button-circle--rotated45 {
+  svg,
+  img {
+    transform: rotateZ(45deg);
+    margin-bottom: -3px;
+  }
+}

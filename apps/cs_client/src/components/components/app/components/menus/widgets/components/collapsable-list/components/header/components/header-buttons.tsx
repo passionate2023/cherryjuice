@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { modDocumentOperations } from '::sass-modules';
-import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
+import { ButtonCircle } from '@cherryjuice/components';
 import { EventHandler } from 'react';
-import { Icons } from '::root/components/shared-components/icon/icon';
+import { Icons } from '@cherryjuice/icons';
 
 export type HeaderButtonsProps = {
   collapsed: boolean;

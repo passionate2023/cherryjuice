@@ -7,13 +7,14 @@ import {
 import { getDDOE } from '::helpers/execK/steps/pipe1/ddoes';
 import { putCursorAtTheEndOfPastedElement } from '::helpers/clipboard/helpers/steps/add-to-dom/helpers/put-cursor-at-the-end-of-pasted-element';
 import { addMetaToPastedImages } from '::helpers/clipboard/helpers/steps/add-to-dom/helpers/add-meta-to-pasted-images';
+import { getEditor } from '::helpers/pages-manager/helpers/get-editor';
 
 export type TAHtml =
   | { _: string; tags: [string, { [p: string]: string | object }][] }
   | { type: 'png'; outerHTML: string };
 
 export const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
-  const ogHtml = document.querySelector('#rich-text ').innerHTML;
+  const ogHtml = getEditor().innerHTML;
   try {
     const selection = getSelection({
       selectAdjacentWordIfNoneIsSelected: false,
@@ -57,7 +58,7 @@ export const addNodeToDom = ({ pastedData }: { pastedData: TAHtml[] }) => {
       addMetaToPastedImages();
     }
   } catch (e) {
-    document.querySelector('#rich-text ').innerHTML = ogHtml;
+    getEditor().innerHTML = ogHtml;
     throw e;
   }
 };

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { modSearchFilter } from '::sass-modules';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { ButtonSquare } from '@cherryjuice/components';
 import { SearchScope } from '@cherryjuice/graphql-types';
 import { ac } from '::store/store';
 import { useCallback } from 'react';

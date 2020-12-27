@@ -1,4 +1,4 @@
-import { filter, map, switchMap } from 'rxjs/operators';
+import { delay, filter, map, switchMap } from 'rxjs/operators';
 import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
 import { QUERY } from '::graphql/queries';
@@ -29,8 +29,9 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
     switchMap(() => {
       const document = getCurrentDocument(store.getState());
       const documentId = document?.id;
-      if (!store.getState().search.query || !documentId)
-        return of(ac_.search.setSearchStandBy());
+      const searchState = store.getState().search;
+      const noQuery = !searchState.query;
+      if (noQuery || !documentId) return of(ac_.search.setSearchStandBy());
       else {
         const {
           query,
@@ -41,9 +42,12 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
           createdAtTimeFilter,
           updatedAtTimeFilter,
           sortOptions,
-        } = store.getState().search;
+        } = searchState;
         const nodeId =
           document.nodes[document.persistedState.selectedNode_id].id;
+        const delayWhileDialogIsAnimated =
+          searchState.searchState !== 'idle' ? 0 : 750;
+
         const request = gqlQuery$({
           ...QUERY.SEARCH.searchNode,
           variables: QUERY.SEARCH.searchNode.args({
@@ -60,7 +64,10 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
               sortOptions,
             },
           }),
-        }).pipe(map(ac_.search.setSearchFulfilled));
+        }).pipe(
+          delay(delayWhileDialogIsAnimated),
+          map(ac_.search.setSearchFulfilled),
+        );
 
         const loading = of(ac_.search.setSearchInProgress());
         return concat(loading, request).pipe(

@@ -1,16 +1,18 @@
 import * as React from 'react';
-import { ToolbarButton } from '::app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
+import { ToolbarButton } from '@cherryjuice/components';
 import { modToolbar } from '::sass-modules';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
+import { Tooltip } from '@cherryjuice/components';
+import { DropDownButton } from '@cherryjuice/components';
 
 const mapState = (state: Store) => {
   return {
     selectedNode_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
     documentId: state.document.documentId,
+    md: state.root.isOnMd,
   };
 };
 const mapDispatch = {};
@@ -19,46 +21,76 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const Buttons: React.FC<PropsFromRedux> = ({ selectedNode_id, documentId }) => {
+const Buttons: React.FC<PropsFromRedux> = ({
+  selectedNode_id,
+  documentId,
+  md,
+}) => {
   const disabled = !documentId || !selectedNode_id;
   return (
     <>
-      <ToolbarButton
-        onClick={ac.dialogs.showAnchorDialog}
-        className={modToolbar.toolBar__iconStrictWidth}
-        disabled={disabled}
-      >
-        <Tooltip label={'Insert an anchor'}>
-          <Icon name={Icons.material.anchor} />
-        </Tooltip>
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={ac.dialogs.showLinkDialog}
-        className={modToolbar.toolBar__iconStrictWidth}
-        disabled={disabled}
-      >
-        <Tooltip label={'Insert a link'}>
-          <Icon name={Icons.material.link} />
-        </Tooltip>
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={ac.dialogs.showCodeboxDialog}
-        className={modToolbar.toolBar__iconStrictWidth}
-        disabled={disabled}
-      >
-        <Tooltip label={'Insert a code box'}>
-          <Icon name={Icons.material.code} />
-        </Tooltip>
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={ac.dialogs.showTableDialog}
-        className={modToolbar.toolBar__iconStrictWidth}
-        disabled={disabled}
-      >
-        <Tooltip label={'Insert a table'}>
-          <Icon name={Icons.material.table} />
-        </Tooltip>
-      </ToolbarButton>
+      <DropDownButton
+        collapseOnInsideClick={true}
+        md={md}
+        buttons={[
+          {
+            element: (
+              <ToolbarButton
+                onClick={ac.dialogs.showAnchorDialog}
+                className={modToolbar.toolBar__iconStrictWidth}
+                disabled={disabled}
+              >
+                <Tooltip label={'Insert an anchor'}>
+                  <Icon name={Icons.material.anchor} />
+                </Tooltip>
+              </ToolbarButton>
+            ),
+            key: 'anchor',
+          },
+          {
+            element: (
+              <ToolbarButton
+                onClick={ac.dialogs.showLinkDialog}
+                className={modToolbar.toolBar__iconStrictWidth}
+                disabled={disabled}
+              >
+                <Tooltip label={'Insert a link'}>
+                  <Icon name={Icons.material.link} />
+                </Tooltip>
+              </ToolbarButton>
+            ),
+            key: 'link',
+          },
+          {
+            element: (
+              <ToolbarButton
+                onClick={ac.dialogs.showCodeboxDialog}
+                className={modToolbar.toolBar__iconStrictWidth}
+                disabled={disabled}
+              >
+                <Tooltip label={'Insert a code box'}>
+                  <Icon name={Icons.material.code} />
+                </Tooltip>
+              </ToolbarButton>
+            ),
+            key: 'codebox',
+          },
+          {
+            element: (
+              <ToolbarButton
+                onClick={ac.dialogs.showTableDialog}
+                className={modToolbar.toolBar__iconStrictWidth}
+                disabled={disabled}
+              >
+                <Tooltip label={'Insert a table'}>
+                  <Icon name={Icons.material.table} />
+                </Tooltip>
+              </ToolbarButton>
+            ),
+            key: 'table',
+          },
+        ]}
+      />
     </>
   );
 };

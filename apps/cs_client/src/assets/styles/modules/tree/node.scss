@@ -1,4 +1,5 @@
-@import '../../vars/vars';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 .node {
   display: flex;
   align-items: center;
@@ -48,7 +49,7 @@
   min-height: 8px;
   width: 8px;
   height: 8px;
-  img {
+  svg {
     margin-left: -1px;
     margin-top: -1px;
     transform: scale(1.3);

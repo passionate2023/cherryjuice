@@ -1,0 +1,11 @@
+.color-input {
+  width: 20px;
+  padding: 2px;
+  border: none;
+  background-color: var(--surface-010);
+  margin-left: 12px;
+}
+.color-input--disabled {
+  filter: grayscale(1);
+  opacity: 0.3;
+}

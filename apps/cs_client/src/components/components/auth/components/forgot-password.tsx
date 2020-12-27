@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { modLogin } from '::sass-modules';
-import { Icons } from '::root/components/shared-components/icon/icon';
-import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
+import { Icons } from '@cherryjuice/icons';
+import { useModalKeyboardEvents } from '@cherryjuice/shared-helpers';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
-} from '::root/components/shared-components/form/validated-text-input';
+} from '@cherryjuice/components';
 import { createRef, useRef, useState } from 'react';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
 import { patterns } from '::root/components/auth/helpers/form-validation';
@@ -14,6 +14,8 @@ import { CREATE_PASSWORD_RESET_TOKEN } from '::graphql/mutations/user/create-pas
 import { useStatefulValidatedInput } from '::root/components/auth/hooks/stateful-validated-input';
 import { ReturnToLoginPage } from '::root/components/auth/components/signup-form';
 import { ac } from '::store/store';
+import { SubmitButton } from '::auth/components/shared-components/submit-buttton/submit-button';
+import { authFormFocusableElements } from '::auth/components/login-form/login-form';
 
 const idPrefix = 'forgot-password';
 const inputs: ValidatedTextInputProps[] = [
@@ -76,7 +78,7 @@ const ForgotPassword: React.FC<Props> = () => {
     }
   };
   const keyboardEventsProps = useModalKeyboardEvents({
-    focusableElementsSelector: ['a', 'input[type="submit"]'],
+    focusableElementsSelector: authFormFocusableElements,
     dismiss: () => undefined,
     confirm: signUp,
   });
@@ -87,21 +89,18 @@ const ForgotPassword: React.FC<Props> = () => {
       {...keyboardEventsProps}
     >
       <LinearProgress loading={loading} />
-      <form className={modLogin.login__form} ref={formRef}>
-        <span className={modLogin.login__form__createAccount}>
+      <form className={modLogin.loginForm} ref={formRef}>
+        <span className={modLogin.loginForm__bottomSection}>
           Enter your email and username
         </span>
         {inputs.map(inputProps => (
           <ValidatedTextInput {...inputProps} key={inputProps.label} />
         ))}
 
-        <input
-          type={'submit'}
-          value={timestamp ? 'Resend email' : 'Reset password'}
-          className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
+        <SubmitButton
+          text={timestamp ? 'Resend email' : 'Reset password'}
           onClick={signUp}
           disabled={disableSignupButton}
-          style={{ marginTop: 5 }}
         />
         <ReturnToLoginPage text={'return to'} linkText={'login page'} />
       </form>

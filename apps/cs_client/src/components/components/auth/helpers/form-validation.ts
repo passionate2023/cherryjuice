@@ -29,10 +29,5 @@ const patterns = {
   },
 };
 
-const patternToString = (patterns: TPattern[]): string =>
-  patterns.length
-    ? '(' + patterns.map(({ pattern }) => pattern).join('|') + ')'
-    : undefined;
-
-export { patterns, patternToString };
+export { patterns };
 export { TPattern };

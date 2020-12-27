@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { modTimeFilter } from '::sass-modules';
 import { CustomRange } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/filter-controls/components/custom-range';
 import { SelectRange } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/filter-controls/components/select-range';

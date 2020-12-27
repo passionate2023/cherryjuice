@@ -1,4 +1,4 @@
-@import '../mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 .picker-dialog-frame {
   @include respond-to($md-down) {
     height: var(--vh) !important;

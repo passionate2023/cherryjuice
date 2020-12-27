@@ -7,7 +7,7 @@ import {
   NodeCherry,
   NodeCherryProps,
 } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-icons/components/node-cherry';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { modNode } from '::sass-modules';
 
 type Props = NodeVisibilityProps &
@@ -34,7 +34,7 @@ const NodeIcons: React.FC<Props> = ({
       )}
       {read_only && (
         <div className={modNode.node__titlePrivacy}>
-          <Icon name={Icons.material.key} size={14} loadAsInlineSVG={'force'} />
+          <Icon name={Icons.material.key} size={14} />
         </div>
       )}
     </div>

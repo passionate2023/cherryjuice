@@ -2,14 +2,14 @@ import * as React from 'react';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
-} from '::root/components/shared-components/form/validated-text-input';
+} from '@cherryjuice/components';
 import { createRef } from 'react';
 import { patterns } from '::root/components/auth/helpers/form-validation';
 import {
   userSettingsActionCreators,
   ValidatedInputState,
 } from '::root/components/app/components/menus/dialogs/settings/screens/account/reducer/reducer';
-import { Icons } from '::root/components/shared-components/icon/helpers/icons';
+import { Icons } from '@cherryjuice/icons';
 import { SettingsGroup } from '::root/components/app/components/menus/dialogs/settings/shared/settings-group';
 
 const idPrefix = 'settings::password';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { memo, useCallback } from 'react';
 import { ac } from '::store/store';
 import { modNode } from '::sass-modules';

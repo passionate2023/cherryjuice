@@ -1,0 +1,13 @@
+.splash-screen {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(25, 1, 1) !important;
+  z-index: 100;
+}
+
+.splash-screen__logo {
+  padding: 0;
+}

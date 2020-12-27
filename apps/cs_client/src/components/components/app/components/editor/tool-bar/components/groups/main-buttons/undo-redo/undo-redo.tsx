@@ -1,15 +1,12 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { ToolbarButton } from '::root/components/app/components/editor/tool-bar/components/tool-bar-button/tool-bar-button';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
-import { NumberOfFrames, snapBackManager } from '@cherryjuice/editor';
+import { memo, useEffect, useState } from 'react';
+import { ToolbarButton } from '@cherryjuice/components';
+import { Icons } from '@cherryjuice/icons';
+import { NumberOfFrames, pagesManager } from '@cherryjuice/editor';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
 
 const mapState = (state: Store) => ({
-  node_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
   documentId: state.document.documentId,
 });
 const mapDispatch = {};
@@ -18,20 +15,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = {};
 
-const getEditor = async (): Promise<HTMLDivElement> =>
-  new Promise(res => {
-    const interval = setInterval(() => {
-      const editor = document.querySelector<HTMLDivElement>('#rich-text');
-      if (editor) {
-        clearInterval(interval);
-        res(editor);
-      }
-    }, 100);
-  });
-const UndoRedo: React.FC<Props & PropsFromRedux> = ({
-  node_id,
-  documentId,
-}) => {
+const UndoRedo: React.FC<Props & PropsFromRedux> = ({ documentId }) => {
   const noDocumentIsSelected = !documentId;
   const [numberOfFrames, setNumberOfFrames] = useState<NumberOfFrames>({
     redo: 0,
@@ -39,36 +23,26 @@ const UndoRedo: React.FC<Props & PropsFromRedux> = ({
   });
 
   useEffect(() => {
-    snapBackManager.setElementGetter(getEditor);
-    snapBackManager.setOnFrameChange(setNumberOfFrames);
+    pagesManager.setOnFrameChange(setNumberOfFrames);
   }, []);
-
-  useEffect(() => {
-    if (documentId && node_id) {
-      snapBackManager.setCurrent(documentId + '/' + node_id);
-    }
-  }, [node_id, documentId]);
 
   return (
     <>
       <ToolbarButton
-        onClick={snapBackManager.current?.undo}
+        onClick={pagesManager.current?.undo}
         disabled={noDocumentIsSelected || !numberOfFrames.undo}
-      >
-        <Tooltip label={'Undo text change'}>
-          <Icon name={Icons.material.undo} loadAsInlineSVG={'force'} />
-        </Tooltip>
-      </ToolbarButton>
+        tooltip={{ label: 'Undo Text change' }}
+        icon={Icons.material.undo}
+      />
       <ToolbarButton
-        onClick={snapBackManager.current?.redo}
+        onClick={pagesManager.current?.redo}
         disabled={noDocumentIsSelected || !numberOfFrames.redo}
-      >
-        <Tooltip label={'Redo text change'}>
-          <Icon name={Icons.material.redo} loadAsInlineSVG={'force'} />
-        </Tooltip>
-      </ToolbarButton>
+        tooltip={{ label: 'Redo text change' }}
+        icon={Icons.material.redo}
+      />
     </>
   );
 };
 const _ = connector(UndoRedo);
-export { _ as UndoRedo };
+const M = memo(_);
+export { M as UndoRedo };

@@ -9,7 +9,7 @@ import {
   timeFilterInitialState,
   timeFilterReducer,
 } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/reducer';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { ButtonSquare } from '@cherryjuice/components';
 import { FilterControls } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/components/time-filter/components/filter-controls/filter-controls';
 
 type TimeFilterProps = {

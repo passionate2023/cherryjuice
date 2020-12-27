@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ReactNode } from 'react';
-import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
+import { useModalKeyboardEvents } from '@cherryjuice/shared-helpers';
 import { animated } from 'react-spring';
 import { TransitionWrapper } from '::root/components/shared-components/transitions/transition-wrapper';
 

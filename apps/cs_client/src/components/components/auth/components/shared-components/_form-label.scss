@@ -1,0 +1,6 @@
+@mixin form-label {
+  box-sizing: border-box;
+  color: var(--on-surface);
+  padding: 2px;
+  height: 20px;
+}

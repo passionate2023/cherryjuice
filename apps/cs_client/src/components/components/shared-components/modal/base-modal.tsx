@@ -1,11 +1,11 @@
 import { modAlertModal, modDeleteNode } from '::sass-modules';
 import { default as React } from 'react';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { ButtonSquare } from '@cherryjuice/components';
 import { ComponentWithTransition } from '::root/components/shared-components/transitions/component-with-transition';
 import { transitions } from '::root/components/shared-components/transitions/transitions';
 import { AlertType } from '::types/react';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 
 export const headerVariant = {
   [AlertType.Error]: modAlertModal.alertModal__headerDanger,

@@ -3,9 +3,9 @@ import { createRef } from 'react';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
-} from '::root/components/shared-components/form/validated-text-input';
+} from '@cherryjuice/components';
 import { VerifyEmail } from '::root/components/app/components/menus/dialogs/settings/screens/account/components/email/components/verify-email';
-import { Icons } from '::root/components/shared-components/icon/helpers/icons';
+import { Icons } from '@cherryjuice/icons';
 import {
   userSettingsActionCreators,
   ValidatedInputState,

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { modTreeToolBar } from '::sass-modules';
-import { Icons } from '::root/components/shared-components/icon/icon';
+import { Icons } from '@cherryjuice/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { useState } from 'react';
 import { FilterNodes } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/components/filter-nodes';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
+import { ButtonSquare } from '@cherryjuice/components';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
 import { useSortMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/sort-menu-items';
 import { useFoldMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/fold-menu-items';

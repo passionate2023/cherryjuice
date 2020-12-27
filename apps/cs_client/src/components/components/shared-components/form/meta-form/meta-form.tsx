@@ -4,6 +4,7 @@ import {
   MetaFormInput,
   FormInputProps,
 } from '::root/components/shared-components/form/meta-form/meta-form-input';
+import { memo } from 'react';
 
 type Props = {
   inputs: FormInputProps[];
@@ -19,4 +20,5 @@ const MetaForm: React.FC<Props> = ({ inputs }) => {
   );
 };
 
-export { MetaForm };
+const M = memo(MetaForm);
+export { M as MetaForm };

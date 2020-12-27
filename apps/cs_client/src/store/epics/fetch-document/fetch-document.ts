@@ -9,7 +9,7 @@ import { createTimeoutHandler } from '../shared/create-timeout-handler';
 import { createErrorHandler } from '../shared/create-error-handler';
 import { QDocumentMeta, DOCUMENT_META } from '::graphql/queries/document-meta';
 import { getDocuments } from '::store/selectors/cache/document/document';
-import { snapBackManager } from '@cherryjuice/editor';
+import { pagesManager } from '@cherryjuice/editor';
 import { adaptToPersistedState } from '::store/ducks/document-cache/helpers/document/shared/adapt-persisted-state';
 import { alerts } from '::helpers/texts/alerts';
 
@@ -69,8 +69,7 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
         : gqlQuery$(DOCUMENT_META({ file_id }))
       ).pipe(
         tap(() => {
-          snapBackManager.resetAll();
-          snapBackManager.current?.enable();
+          pagesManager.resetPages(id => id.startsWith(file_id));
         }),
         flatMap(document => {
           if (!document?.id) return of(ac_.document.fetchFailed());

@@ -1,6 +1,5 @@
 import modNode from '::sass-modules/tree/node.scss';
 import modDrawer from '::sass-modules/shared-components/drawer.scss';
-import modButton from '::sass-modules/shared-components/button.scss';
 import modTextInput from '::sass-modules/shared-components/text-input.scss';
 import modDocumentsList from '::sass-modules/select-file/select-file.scss';
 import modNodePath from '::sass-modules/document/node-path.scss';
@@ -11,10 +10,8 @@ import modRichText from './document/rich-text.scss';
 import modAlertModal from './shared-components/alert-modal.scss';
 import modImportDocument from './import-document.scss';
 import modDialog from './shared-components/dialog.scss';
-import modSplashScreen from './splash-screen.scss';
 import modAuthScreen from './auth/auth-screen.scss';
 import modLogin from './auth/login.scss';
-import modGoogleOauth from '::sass-modules/shared-components/google-oauth-button.scss';
 import modAuthBanner from './auth/banner.scss';
 import modUserPopup from './user/user-popup.scss';
 import modApp from '::sass-modules/app.scss';
@@ -34,6 +31,7 @@ import modTimeFilter from './search/search-dialog/time-filter.scss';
 import modUtility from './utility.scss';
 import modChips from './document-meta/guests.scss';
 import modUserProfile from './user/user-profile.scss';
+import modUserInfo from './user/user-info.scss';
 import modHotKey from './settings/hot-key.scss';
 import modHotKeys from './settings/hot-keys.scss';
 import modSnackbar from './widgets/snackbar.scss';
@@ -45,6 +43,8 @@ import modSettings from '::sass-modules/settings/settings.scss';
 import modContextMenu from '::sass-modules/shared-components/context-menu.scss';
 import modToggleSwitch from '::sass-modules/shared-components/toggle-switch.scss';
 import modBookmarks from '::sass-modules/dialogs/bookmarks/bookmarks.scss';
+import modDropdownMenu from './shared-components/dropdown-menu.scss';
+
 export {
   modNode,
   modBookmarks,
@@ -57,7 +57,6 @@ export {
   modApp,
   modDrawer,
   modDialog,
-  modButton,
   modTextInput,
   modDocumentsList,
   modToolbar,
@@ -68,7 +67,6 @@ export {
   modImportDocument,
   modAuthScreen,
   modLogin,
-  modGoogleOauth,
   modAuthBanner,
   modUserPopup,
   modDocumentOperations,
@@ -88,9 +86,10 @@ export {
   modUtility,
   modChips,
   modUserProfile,
+  modUserInfo,
   modHotKey,
   modHotKeys,
   modUndoAction,
   modWidgets,
-  modSplashScreen,
+  modDropdownMenu,
 };

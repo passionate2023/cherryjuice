@@ -5,7 +5,7 @@ import {
   guardAgainstSelectionTargetIsImage,
 } from '::helpers/execK/steps/pipe1/guards';
 import { FormattingError } from '::helpers/execK/helpers/errors';
-import { getEditor } from '::root/components/content-editable/hooks/attach-images-to-html';
+import { getEditor } from '::helpers/pages-manager/helpers/get-editor';
 
 const getLineChildren = line => Array.from(line.childNodes);
 const getRootParent = el =>

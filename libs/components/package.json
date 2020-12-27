@@ -1,0 +1,52 @@
+{
+  "name": "@cherryjuice/components",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "module": "build/index.js",
+  "main": "build/cjs/index.js",
+  "types": "build/types",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "dev": "yarn build-es -w --environment TSC_NONPOLLING_WATCHER:true --single-input",
+    "types": "tsc -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
+    "build": "yarn build-es && yarn build-cjs",
+    "build-es": "rollup -c rollup.config.es.js",
+    "build-cjs": "rollup -c rollup.config.cjs.js",
+    "test": "exit 0",
+    "lint": "eslint ./**",
+    "generate-named-inputs": "node ../../scripts/generate-named-inputs.js"
+  },
+  "peerDependencies": {
+    "@cherryjuice/icons": "0.0.1",
+    "@cherryjuice/shared-helpers": "0.0.1",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "rxjs": "^6.5.5"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@cherryjuice/rollup-plugin-svg": "0.0.1",
+    "@cherryjuice/shared-styles": "0.0.1",
+    "node-sass": "4.14.1",
+    "postcss": "8.2.1",
+    "sass": "^1.23.7",
+    "typescript": "^3.8.3"
+  },
+  "optionalDependencies": {
+    "@testing-library/jest-dom": "^5.5.0",
+    "@testing-library/react": "^10.0.4",
+    "@testing-library/react-hooks": "^3.4.1",
+    "@types/jest": "^25.1.0",
+    "@types/node": "^12.7.5",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^25.1.0",
+    "react-test-renderer": "^16.13.1",
+    "ts-jest": "^25.2.1"
+  }
+}

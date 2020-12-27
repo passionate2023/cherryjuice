@@ -13,9 +13,9 @@ type AlertDetails = {
   dismissAction?: AlertAction;
 };
 type CreateAlertHandler = {
-  alertDetails: AlertDetails;
+  alertDetails?: AlertDetails;
   actionCreators?: ((error?: any) => Actions)[];
-  mode?: 'snackbar' | 'modal';
+  mode?: 'snackbar' | 'modal' | 'silent';
 };
 
 type CreateTimeoutHandler = CreateAlertHandler & { due: number };
@@ -28,18 +28,21 @@ const createTimeoutHandler = ({
   timeoutWith(
     due,
     concat(
-      of(
-        mode === 'modal'
-          ? ac_.dialogs.setAlert({
-              title,
-              description,
-              type: AlertType.Warning,
-            })
-          : ac_.dialogs.setSnackbar({
-              message: title,
-              type: AlertType.Warning,
-            }),
-      ),
+      ...[
+        mode !== 'silent' &&
+          of(
+            mode === 'modal'
+              ? ac_.dialogs.setAlert({
+                  title,
+                  description,
+                  type: AlertType.Warning,
+                })
+              : ac_.dialogs.setSnackbar({
+                  message: title,
+                  type: AlertType.Warning,
+                }),
+          ),
+      ].filter(Boolean),
       ...actionCreators.map(action => of(action())),
       ...[process.env.NODE_ENV === 'test' && virtualTimeScheduler].filter(
         Boolean,

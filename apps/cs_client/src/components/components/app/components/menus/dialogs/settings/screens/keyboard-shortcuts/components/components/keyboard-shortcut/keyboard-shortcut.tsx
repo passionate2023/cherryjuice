@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useCallback, useMemo } from 'react';
-import { KeysCombination } from '::helpers/hotkeys/hotkeys-manager';
-import { ButtonSquare } from '::root/components/shared-components/buttons/button-square/button-square';
-import { modButton, modHotKey } from '::sass-modules';
+import { KeysCombination } from '@cherryjuice/hotkeys';
+import { ButtonSquare } from '@cherryjuice/components';
+import { modHotKey } from '::sass-modules';
 import { TextInput } from '::root/components/shared-components/form/text-input';
-import { keyEventToValidShortcut } from '::root/components/app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/components/keyboard-shortcut/helpers';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { keyEventToValidShortcut } from '::app/components/menus/dialogs/settings/screens/keyboard-shortcuts/components/helpers/helpers';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { HotKey } from '@cherryjuice/graphql-types';
 import { ac } from '::store/store';
 import { MetaKey } from '::store/ducks/settings/hotkeys-settings/reducers/toggle-meta';
@@ -83,18 +83,10 @@ const KeyboardShortcut = ({
       <span className={modHotKey.hotKey__name}>{enumToString(type)}</span>
       {keys && (
         <span className={modHotKey.hotKey__keys}>
+          <ButtonSquare active={ctrlKey} onClick={toggleCtrl} text={'ctrl'} />
+          <ButtonSquare active={altKey} onClick={toggleAlt} text={'alt'} />
           <ButtonSquare
-            className={`${ctrlKey ? modButton.buttonPressed : ''}`}
-            onClick={toggleCtrl}
-            text={'ctrl'}
-          />
-          <ButtonSquare
-            className={`${altKey ? modButton.buttonPressed : ''}`}
-            onClick={toggleAlt}
-            text={'alt'}
-          />
-          <ButtonSquare
-            className={`${shiftKey ? modButton.buttonPressed : ''}`}
+            active={shiftKey}
             onClick={toggleShift}
             text={'shift'}
           />

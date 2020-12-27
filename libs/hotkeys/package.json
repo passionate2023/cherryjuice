@@ -1,0 +1,38 @@
+{
+  "name": "@cherryjuice/hotkeys",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "module": "build/index.js",
+  "main": "build/cjs/index.js",
+  "types": "build/types",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "dev": "rollup -c -w --environment TSC_NONPOLLING_WATCHER:true",
+    "dev:hotkeys": "yarn dev",
+    "types": "tsc -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
+    "build": "yarn build-es && yarn build-cjs",
+    "build-es": "rollup -c rollup.config.es.js",
+    "build-cjs": "rollup -c rollup.config.cjs.js",
+    "test": "exit 0",
+    "lint": "eslint ./**",
+    "generate-named-inputs": "node ../../scripts/generate-named-inputs.js"
+  },
+  "peerDependencies": {},
+  "dependencies": {},
+  "devDependencies": {
+    "@cherryjuice/graphql-types": "0.0.1",
+    "typescript": "^3.8.3"
+  },
+  "optionalDependencies": {
+    "@types/jest": "^25.1.0",
+    "@types/node": "^12.7.5",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1",
+    "@testing-library/jest-dom": "^5.5.0"
+  }
+}

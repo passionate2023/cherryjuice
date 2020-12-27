@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 import * as React from 'react';
 import { modLogin } from '::sass-modules';
-import { Icons } from '::root/components/shared-components/icon/icon';
-import { useModalKeyboardEvents } from '::hooks/modals/close-modal/use-modal-keyboard-events';
+import { Icons } from '@cherryjuice/icons';
+import { useModalKeyboardEvents } from '@cherryjuice/shared-helpers';
 import {
   ValidatedTextInput,
   ValidatedTextInputProps,
-} from '::root/components/shared-components/form/validated-text-input';
+} from '@cherryjuice/components';
 import { patterns } from '::root/components/auth/helpers/form-validation';
 import { createRef, useEffect, useRef, useState } from 'react';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
@@ -15,6 +15,8 @@ import { ac, Store } from '::store/store';
 import { OauthSignUpCredentials } from '@cherryjuice/graphql-types';
 import { router } from '::root/router/router';
 import { ReturnToLoginPage } from '::root/components/auth/components/signup-form';
+import { SubmitButton } from '::auth/components/shared-components/submit-buttton/submit-button';
+import { authFormFocusableElements } from '::auth/components/login-form/login-form';
 
 const idPrefix = 'oauth::sign-up';
 const inputs: ValidatedTextInputProps[] = [
@@ -96,7 +98,7 @@ const OauthSignUpForm: React.FC<Props & PropsFromRedux> = ({
     if (!username) router.goto.signIn();
   }, []);
   const keyboardEventsProps = useModalKeyboardEvents({
-    focusableElementsSelector: ['a', 'input[type="submit"]'],
+    focusableElementsSelector: authFormFocusableElements,
     dismiss: () => undefined,
     confirm: signUp,
   });
@@ -108,21 +110,16 @@ const OauthSignUpForm: React.FC<Props & PropsFromRedux> = ({
       className={modLogin.login__card + ' ' + modLogin.login__cardSignUp}
     >
       <LinearProgress loading={loading} />
-      <form className={modLogin.login__form} ref={formRef}>
-        <span className={modLogin.login__form__createAccount}>
-          One last step
-        </span>
+      <form className={modLogin.loginForm} ref={formRef}>
+        <span className={modLogin.loginForm__bottomSection}>One last step</span>
         {inputs.map(inputProps => (
           <ValidatedTextInput {...inputProps} key={inputProps.label} />
         ))}
 
-        <input
-          type={'submit'}
-          value={'Finish Sign up'}
-          className={`${modLogin.login__form__inputSubmit} ${modLogin.login__form__input__input} `}
+        <SubmitButton
+          text={'Finish Sign up'}
           onClick={signUp}
           disabled={disableSignupButton}
-          style={{ marginTop: 5 }}
         />
         <ReturnToLoginPage text={'return to'} linkText={'login page'} />
       </form>

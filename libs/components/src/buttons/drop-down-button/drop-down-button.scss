@@ -1,0 +1,54 @@
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+
+.drop-down-button {
+  padding: 0;
+  position: relative;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  &:hover {
+    background-color: var(--surface-010);
+  }
+  transition: background-color 0.3s ease;
+}
+
+.head__arrow {
+  padding: 0 4px;
+  min-height: 34px;
+  margin-left: -12px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  svg {
+    fill: grey;
+  }
+}
+
+.list {
+  width: 100%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface);
+  align-items: center;
+  box-shadow: $box-shadow2;
+  z-index: 1;
+}
+.list__item {
+  width: 100%;
+  &:hover {
+    background-color: var(--surface-010);
+  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.list__item--selected {
+  background-color: var(--surface-010);
+}

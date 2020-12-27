@@ -1,6 +1,6 @@
 import React from 'react';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
-import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
+import { Icon, Icons } from '@cherryjuice/icons';
+import { ButtonCircle } from '@cherryjuice/components';
 import { modDocumentOperations } from '::sass-modules';
 import { ac } from '::store/store';
 import { OperationTypes } from './helpers/operation-types';

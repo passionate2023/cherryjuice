@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { modNodeMeta, modTextInput } from '::sass-modules';
-import { useRef } from 'react';
-import { useLazyAutoFocus } from '::root/components/shared-components/buttons/button-base/button-base';
+import { memo, useRef } from 'react';
+import { useLazyAutoFocus } from '@cherryjuice/shared-helpers';
 
 type FormInputProps = {
   type?: 'checkbox' | 'text';
@@ -62,5 +62,6 @@ const MetaFormInput: React.FC<FormInputProps> = ({
   );
 };
 
-export { MetaFormInput };
+const M = memo(MetaFormInput);
+export { M as MetaFormInput };
 export { FormInputProps };

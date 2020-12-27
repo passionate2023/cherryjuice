@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { modDialog } from '::sass-modules';
-import { joinClassNames } from '::helpers/dom/join-class-names';
-import { useEffect, useRef, useState } from 'react';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
+import { memo, useEffect, useRef, useState } from 'react';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
 
 const onContextMenu = e => {
@@ -35,11 +35,11 @@ const DialogListItem: React.FC<Props> = ({
     if (active) {
       const handle = setTimeout(() => {
         itemRef.current.scrollIntoView({
-          behavior: 'auto',
+          behavior: 'smooth',
           block: 'nearest',
           inline: 'nearest',
         });
-      }, 1200);
+      }, 1400);
       return () => {
         clearTimeout(handle);
       };
@@ -79,7 +79,7 @@ const DialogListItem: React.FC<Props> = ({
             show={() => setShowModal(true)}
             items={cmItems}
           >
-            <Icon name={Icons.material.menu} loadAsInlineSVG={'force'} />
+            <Icon name={Icons.material.menu} />
           </ContextMenuWrapper>
         </div>
       )}
@@ -87,4 +87,5 @@ const DialogListItem: React.FC<Props> = ({
   );
 };
 
-export { DialogListItem };
+const M = memo(DialogListItem);
+export { M as DialogListItem };

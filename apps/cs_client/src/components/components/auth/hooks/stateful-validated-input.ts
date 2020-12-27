@@ -1,4 +1,4 @@
-import { ValidatedTextInputProps } from '::root/components/shared-components/form/validated-text-input';
+import { ValidatedTextInputProps } from '@cherryjuice/components';
 import { useState } from 'react';
 
 export const useStatefulValidatedInput = (input: ValidatedTextInputProps) => {

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { modSnackbar } from '::sass-modules';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
-import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
+import { Icon, Icons } from '@cherryjuice/icons';
+import { addNumbers, ButtonCircle } from '@cherryjuice/components';
 import { useEffect } from 'react';
 import { ac } from '::store/store';
 import { Snackbar as TSnackbar } from '::store/ducks/dialogs';
 import { headerVariant } from '::root/components/shared-components/modal/base-modal';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 
 type Props = {
   snackbar: TSnackbar;

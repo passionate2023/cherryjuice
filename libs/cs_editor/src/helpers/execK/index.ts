@@ -6,8 +6,8 @@ import { restoreSelection } from '::helpers/execK/steps/restore-selection';
 import { ExecKCommand } from '::helpers/execK/execk-commands';
 import { mergeSimilarNodes } from '::helpers/execK/steps/merge-similar-nodes/merge-similar-nodes';
 import { bridge } from '::root/bridge';
-import { snapBackManager } from '::root/snapback-manager';
 import { FormattingError } from '::helpers/execK/helpers/errors';
+import { getEditor } from '::helpers/pages-manager/helpers/get-editor';
 
 const isJustificationCommand = command =>
   command && command != ExecKCommand.clear;
@@ -31,7 +31,7 @@ const execK = ({
   command,
   selection,
 }: ExecKProps) => {
-  const editor: HTMLDivElement = document.querySelector('#rich-text ');
+  const editor = getEditor();
   const ogHtml = editor.innerHTML;
   try {
     if (editor.contentEditable !== 'true' && !selection)
@@ -85,9 +85,7 @@ const execK = ({
     });
   } catch (e) {
     if (!selection) return;
-    snapBackManager.current.reset();
-    document.querySelector('#rich-text ').innerHTML = ogHtml;
-    snapBackManager.current.enable(1000);
+    getEditor().innerHTML = ogHtml;
     // eslint-disable-next-line no-console
     if (process.env.NODE_ENV === 'development') console.error(e);
     bridge.current.onFormattingErrorHandler(e);

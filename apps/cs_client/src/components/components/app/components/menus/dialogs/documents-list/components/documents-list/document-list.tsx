@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { modSearchDialog } from '::sass-modules';
 import { DocumentGroup } from './components/document-group';
 import { CachedDocument } from '::store/ducks/document-cache/document-cache';
@@ -14,7 +14,7 @@ import {
 import { DialogBody } from '../../../search-dialog/components/search-body/search-body';
 import { SortOptions } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-sort/sort-options';
 import { SortDirection, SortNodesBy } from '@cherryjuice/graphql-types';
-import { Icons } from '::root/components/shared-components/icon/icon';
+import { Icons } from '@cherryjuice/icons';
 import { SearchSetting } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/search-filters';
 import { DialogScrollableSurface } from '::root/components/shared-components/dialog/dialog-list/dialog-scrollable-surface';
 import { mapSortDocumentBy } from '::root/components/app/components/menus/dialogs/bookmarks/components/helpers/sort';
@@ -104,4 +104,5 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
 };
 
 const _ = connector(DocumentList);
-export { _ as DocumentList };
+const M = memo(_);
+export { M as DocumentList };

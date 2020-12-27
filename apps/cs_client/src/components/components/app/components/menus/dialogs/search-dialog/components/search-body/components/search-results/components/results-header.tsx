@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { modSearchDialog } from '::sass-modules';
 import { NodeSearchResults } from '@cherryjuice/graphql-types';
 

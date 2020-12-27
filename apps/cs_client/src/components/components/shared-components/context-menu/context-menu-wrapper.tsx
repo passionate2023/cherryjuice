@@ -5,7 +5,7 @@ import {
   ContextMenuProps,
 } from '::root/components/shared-components/context-menu/context-menu';
 import { ReactNode, useRef } from 'react';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Portal } from '::root/components/app/components/editor/tool-bar/tool-bar';
 
 export type Position = [number, number, number, number];

@@ -5,7 +5,11 @@ import {
 } from '::helpers/snapback/snapback/helpers/detect-mutation-type';
 import { handleTextMutation } from '::helpers/snapback/snapback/helpers/handle-mutations/handle-text-mutation';
 import { restoreCaret } from '::helpers/snapback/snapback/helpers/restore-caret/restore-caret';
-export type Frame = { mutations: EnhancedMutationRecord[]; type: MutationType };
+export type Frame = {
+  mutations: EnhancedMutationRecord[];
+  type: MutationType;
+  ts: number;
+};
 
 type SnapBackState = {
   pointer: number;
@@ -17,7 +21,10 @@ export type EnhancedMutationRecord = MutationRecord & {
   newValue?: string;
 };
 export type NumberOfFrames = { undo: number; redo: number };
-export type OnFrameChange = (frames: NumberOfFrames) => void;
+export type OnFrameChange = (
+  frames: NumberOfFrames,
+  meta: { id: string; currentFrameTs: number },
+) => void;
 export type ElementGetter = () => Promise<HTMLDivElement>;
 
 const assignValue = (mrs: EnhancedMutationRecord[]): void =>
@@ -32,14 +39,19 @@ export class SnapBack {
   private observer;
   private state: SnapBackState;
   private readonly onFrameChange: () => void;
+
   constructor(
     private id: string,
     private options: MutationObserverInit,
-    private elementGetter: ElementGetter,
+    // private elementGetter: ElementGetter,
     onFrameChange: OnFrameChange,
+    private element: HTMLElement,
   ) {
     this.onFrameChange = () => {
-      onFrameChange(this.numberOfFrames);
+      onFrameChange(this.numberOfFrames, {
+        id,
+        currentFrameTs: this.currentFrameTs,
+      });
     };
     this.observer = new MutationObserver(this.handleMutations);
     this.reset();
@@ -48,7 +60,10 @@ export class SnapBack {
   private get latestFrame(): Frame {
     return this.state.frames[this.state.frames.length - 1];
   }
-  private get numberOfFrames(): NumberOfFrames {
+  get currentFrameTs(): number {
+    return this.state.frames[this.state.pointer]?.ts;
+  }
+  get numberOfFrames(): NumberOfFrames {
     const numberOfFrames = this.state.frames.length - 1;
     const redo = numberOfFrames - this.state.pointer;
     const undo = this.state.pointer + 1;
@@ -69,12 +84,12 @@ export class SnapBack {
         if (latestFrame?.type === MutationType.pasting)
           latestFrame.mutations.push(...mutations);
       } else if (type) {
-        this.addFrame({ mutations, type });
+        this.addFrame({ mutations, type, ts: Date.now() });
       }
     }
   };
 
-  private addFrame = ({ type, mutations }: Frame): void => {
+  private addFrame = ({ type, mutations, ts }: Frame): void => {
     const nextFrameHasMutations = mutations.length > 0;
     if (nextFrameHasMutations) {
       const obsoleteFutureFrames =
@@ -86,6 +101,7 @@ export class SnapBack {
       this.state.frames.push({
         mutations: mutations.flatMap(x => x),
         type,
+        ts,
       });
       this.state.pointer = this.state.frames.length - 1;
       this.onFrameChange();
@@ -138,11 +154,12 @@ export class SnapBack {
     setTimeout(() => {
       if (!this.state.enabled) {
         this.state.enabled = true;
-        this.elementGetter().then(element => {
-          this.observer.observe(element, this.options);
-          this.onFrameChange();
-        });
+        this.observer.observe(this.element, this.options);
       }
     }, delay);
+    this.onFrameChange();
   };
+  get ID() {
+    return this.id;
+  }
 }

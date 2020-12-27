@@ -2,6 +2,11 @@ import * as React from 'react';
 import { Suspense } from 'react';
 import { Void } from '::root/components/shared-components/react/void';
 import ReloadDocument from '::root/components/app/components/menus/modals/reload-document/reload-document';
+import { connect, ConnectedProps } from 'react-redux';
+import { SearchDialog } from '::root/components/app/components/menus/dialogs/search-dialog/search-dialog';
+import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
+import { Widgets } from '::root/components/app/components/menus/widgets/widgets';
+
 const AlertModal = React.lazy(() => import('./modals/alert-modal/alert-modal'));
 const PasswordModal = React.lazy(() =>
   import('./modals/password-modal/password-modal'),
@@ -45,22 +50,19 @@ const DeleteDocument = React.lazy(() =>
     '::root/components/app/components/menus/modals/delete-document/delete-document'
   ),
 );
-import { connect, ConnectedProps } from 'react-redux';
-import { SearchDialog } from '::root/components/app/components/menus/dialogs/search-dialog/search-dialog';
-import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
-import { Widgets } from '::root/components/app/components/menus/widgets/widgets';
 
 const components = [
   <UserPopup key={'UserPopup'} />,
   <DocumentsList key={'DocumentsList'} />,
   <Bookmarks key={'Bookmarks'} />,
   <Settings key={'Settings'} />,
-  <SearchDialog key={'PasswordModal'} />,
+  <SearchDialog key={'SearchDialog'} />,
   <DocumentMeta key={'DocumentMeta'} />,
   <NodeMeta key={'NodeMeta'} />,
   <ImportDocuments key={'ImportDocuments'} />,
   <ReloadDocument key={'ReloadDocument'} />,
   <DeleteDocument key={'DeleteDocument'} />,
+  <DeleteNode key={'DeleteNode'} />,
   <DeleteNode key={'DeleteNode'} />,
   // @ts-ignore
   <PasswordModal key={'PasswordModal'} />,

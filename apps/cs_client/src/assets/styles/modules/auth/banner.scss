@@ -1,6 +1,7 @@
-@import '../../vars/vars';
-@import '../../mixins/breakpoints';
-@import '../../mixins/form';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/form';
+
 .banner__container {
   position: absolute;
   width: calc(100% - 15px);

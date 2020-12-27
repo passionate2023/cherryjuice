@@ -11,10 +11,9 @@ import {
   SetKeyProps,
 } from '::store/ducks/settings/hotkeys-settings/reducers/set-key';
 import { resetToDefault } from '::store/ducks/settings/hotkeys-settings/reducers/reset-to-default';
-import { HotKeyActionType } from '@cherryjuice/graphql-types';
 import { calculateDuplicates } from '::store/ducks/settings/hotkeys-settings/reducers/calculate-duplicates';
+import { HotKeyDict } from '@cherryjuice/hotkeys';
 
-export type HotKeyDict = { [key in HotKeyActionType]?: string };
 const ap = createActionPrefixer('hotkeys-settings');
 
 const ac = {

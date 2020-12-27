@@ -88,6 +88,8 @@ const ac = {
   collapseNode: _(ap('collapse-node'), _ => (params: SelectNodeParams) =>
     _(params),
   ),
+  cachingPagesFulfilled: _(ap('caching-pages-fulfilled')),
+  cachePages: _(ap('cache-pages')),
   sortNode: _(ap('sort-node'), _ => (params: SortNodeParams) => _(params)),
   copyNode: _(ap('copy-node'), _ => (params: CopyNodeParams) => _(params)),
   pasteNode: _(ap('paste-node'), _ => (params: PasteNodeParams) => _(params)),
@@ -272,6 +274,9 @@ const reducer = createReducer(initialState, _ => {
       _(ac.moveBookmark, (state, { payload }) =>
         produce(state, draft => moveBookmark(draft, payload)),
       ),
+      _(ac.mutateNodeContent, (state, { payload }) =>
+        produce(state, draft => mutateNodeContent(draft, payload)),
+      ),
     ],
     ...[
       // require setup
@@ -342,22 +347,7 @@ const reducer = createReducer(initialState, _ => {
           }),
         );
       }),
-      _(ac.mutateNodeContent, (state, { payload }) =>
-        produce(
-          state,
-          draft => mutateNodeContent(draft, payload),
-          (p, rp) => {
-            if (payload.meta?.mode !== 'update-key-only')
-              dTM.addFrame({
-                timelineId: payload.documentId,
-                node_id: payload.node_id,
-                documentId: payload.documentId,
-                mutationType: DocumentMutations.NodeContent,
-                timeStamp: Date.now(),
-              })(p, rp);
-          },
-        ),
-      ),
+
       _(nac.drop, (state, { payload }) => {
         let newState = produce(
           state,

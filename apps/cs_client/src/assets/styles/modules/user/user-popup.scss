@@ -1,5 +1,6 @@
-@import '../../vars/border-radius';
-@import '../../vars/vars';
+@import '~@cherryjuice/shared-styles/build/vars/border-radius';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 .user__card {
   position: absolute;
   right: 0px;
@@ -20,19 +21,7 @@
   background-color: var(--background);
   color: var(--primary-020);
 }
-.user__info {
-  height: 150px;
-  flex: 1;
-  padding-top: 30px;
-  padding-bottom: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid rgba(#180101, 0.2);
-  width: 100%;
-}
+
 .user__actions {
   min-height: 150px;
   flex: 3;
@@ -41,25 +30,6 @@
   align-items: center;
   justify-content: center;
 }
-.user__info__picture {
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  margin-bottom: 15px;
-}
 
-.user__info__generated-avatar {
-  border-radius: 50%;
-}
-
-.user__info__name {
-  text-transform: capitalize;
-  font-size: 1.1rem;
-}
-
-.user__info__email {
-  text-transform: lowercase;
-  font-size: 0.95rem;
-}
 .user__actions__sign-out {
 }

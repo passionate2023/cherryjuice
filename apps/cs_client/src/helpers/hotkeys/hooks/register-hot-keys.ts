@@ -1,10 +1,7 @@
 import { useEffect } from 'react';
-import { hotKeysManager } from '../hotkeys-manager';
-import {
-  registerFormattingHKs,
-  registerGeneralHKs,
-  registerDevHKs,
-} from '../register-hot-keys';
+import { hotKeysManager } from '@cherryjuice/hotkeys';
+import { registerDevHKs, registerFormattingHKs } from '@cherryjuice/editor';
+import { registerGeneralHKs } from '../register-general-hotkeys';
 import { HotKeys } from '@cherryjuice/graphql-types';
 
 const useRegisterHotKeys = (hotKeys: HotKeys) => {

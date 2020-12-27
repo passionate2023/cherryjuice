@@ -8,7 +8,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { useEffect } from 'react';
 import { QFullNode } from '::store/ducks/document-cache/document-cache';
 import { OfflineBanner } from '::root/components/app/components/editor/document/components/editor-container/components/offline-banner';
-import { Editor } from '@cherryjuice/editor';
+import { ContentEditableProps, Editor } from '@cherryjuice/editor';
 
 type Props = {
   node: QFullNode;
@@ -26,9 +26,9 @@ const mapState = (state: Store) => {
     isDocumentOwner: hasWriteAccessToDocument(state),
     isOnMd: state.root.isOnMd,
     online: state.root.online,
-    scrollPosition:
-      document?.persistedState?.scrollPositions &&
-      document.persistedState.scrollPositions[node_id],
+    scrollPosition: document
+      ? document.persistedState.scrollPositions[node_id]
+      : undefined,
   };
 };
 const mapDispatch = {};
@@ -55,13 +55,12 @@ const EditorContainer: React.FC<Props & PropsFromRedux> = ({
     minimumLength: 170,
   };
 
-  const contentEditableProps = {
-    contentEditable: !node?.read_only && contentEditable && isDocumentOwner,
-    documentId: node?.documentId,
+  const contentEditableProps: ContentEditableProps = {
+    editable: !node?.read_only && contentEditable && isDocumentOwner,
     focusOnUpdate: !isOnMd,
     html: node?.html,
     images: node?.image,
-    node_id: node?.node_id,
+    nodeId: node?.node_id ? node.documentId + '/' + node.node_id : undefined,
     scrollPosition,
   };
   return (

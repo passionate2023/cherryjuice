@@ -2,9 +2,9 @@ import * as React from 'react';
 import { ac } from '::store/store';
 import { useCallback, useRef, useEffect } from 'react';
 import { modTabs } from '::sass-modules';
-import { joinClassNames } from '::helpers/dom/join-class-names';
-import { ButtonCircle } from '::root/components/shared-components/buttons/button-circle/button-circle';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
+import { ButtonCircle } from '@cherryjuice/components';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { scrollIntoToolbar } from '::helpers/ui';
 import { smoothScrollIntoView } from '@cherryjuice/shared-helpers';
 
@@ -76,7 +76,6 @@ const Tab: React.FC<Props> = ({
         <Icon
           name={Icons.material.bookmark}
           className={modTabs.tab__bookmarkIcon}
-          loadAsInlineSVG={'force'}
         />
       )}
     </div>

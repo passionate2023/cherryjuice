@@ -2,7 +2,7 @@ import { pipe1 } from '::helpers/execK/steps/pipe1';
 import { CustomRange } from '::helpers/execK/steps/get-selection';
 import { writeChangesToDom } from '::helpers/execK/steps/pipe3';
 import { setTextSelection } from '::helpers/execK/steps/restore-selection';
-import { getEditor } from '::root/components/content-editable/hooks/attach-images-to-html';
+import { getEditor } from '::helpers/pages-manager/helpers/get-editor';
 import { newObjectPrefix } from '::helpers/clipboard/helpers/steps/add-to-dom/helpers/add-meta-to-pasted-images';
 import { Anchor, Code, Table } from '@cherryjuice/ahtml-to-html';
 export type TableProperties = {

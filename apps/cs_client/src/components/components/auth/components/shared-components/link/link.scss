@@ -1,0 +1,22 @@
+@import '../form-label';
+.link {
+  @include form-label();
+  display: flex;
+  a {
+    text-decoration: none;
+  }
+  align-items: center;
+  &:focus {
+    outline: 2px solid rgba(60, 5, 3, 0.5);
+  }
+}
+
+.link--decorated {
+  a {
+    text-decoration: none;
+    padding-bottom: 4px;
+    margin-bottom: -4px;
+    border-bottom: 0.5px solid var(--primary-020-4);
+  }
+  outline-offset: 3px;
+}

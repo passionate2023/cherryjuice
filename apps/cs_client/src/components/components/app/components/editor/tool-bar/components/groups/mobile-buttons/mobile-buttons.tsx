@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { modToolbar } from '::sass-modules';
-import { ToolbarButton } from '../../tool-bar-button/tool-bar-button';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { ToolbarButton } from '@cherryjuice/components';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
-import { Tooltip } from '::root/components/shared-components/tooltip/tooltip';
+import { Tooltip } from '@cherryjuice/components';
+import { memo } from 'react';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
@@ -70,4 +71,5 @@ const MobileButtons: React.FC<Props & PropsFromRedux> = ({
 };
 
 const _ = connector(MobileButtons);
-export { _ as MobileButtons };
+const M = memo(_);
+export { M as MobileButtons };

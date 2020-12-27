@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { modContextMenu } from '::sass-modules';
 import { ReactNode, useEffect, useState } from 'react';
-import { Icon, Icons } from '::root/components/shared-components/icon/icon';
+import { Icon, Icons } from '@cherryjuice/icons';
 import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
 
 export type CMItem = Omit<
@@ -80,10 +80,7 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
         </span>
         {!!items.length && (
           <span className={modContextMenu.contextMenu__item__subItemsArrow}>
-            <Icon
-              name={Icons.material['triangle-right']}
-              loadAsInlineSVG={'force'}
-            />
+            <Icon name={Icons.material['triangle-right']} />
           </span>
         )}
       </div>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useMemo, useReducer } from 'react';
+import { memo, useEffect, useMemo, useReducer } from 'react';
 import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { MetaForm } from '::root/components/shared-components/form/meta-form/meta-form';
@@ -8,21 +8,15 @@ import {
   nodeMetaInitialState,
   nodeMetaReducer,
 } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
-import { IconPicker } from '::root/components/app/components/menus/dialogs/node-meta/components/icon-picker';
-import { FormInputProps } from '::root/components/shared-components/form/meta-form/meta-form-input';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
-import { SelectPrivacy } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
-import { Privacy } from '@cherryjuice/graphql-types';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { ColorInput } from '::root/components/shared-components/inputs/color-input';
-import { ToggleSwitch } from '::root/components/shared-components/inputs/toggle-switch';
 import { getNode as getNodeSelector } from '::store/selectors/cache/document/node';
 import { editNode } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/edit-node';
 import { createNode } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/create-node';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
-import { Chips } from '::root/components/app/components/menus/dialogs/document-meta/components/chips/chips';
+import { useFormInputs } from '::app/components/menus/dialogs/node-meta/hooks/inputs';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -77,9 +71,14 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
   useEffect(() => {
     if (editedNode) nodeMetaActionCreators.resetToEdit({ node: editedNode });
     else {
-      nodeMetaActionCreators.resetToCreate({
-        fatherNode,
-      });
+      setTimeout(
+        () => {
+          nodeMetaActionCreators.resetToCreate({
+            fatherNode,
+          });
+        },
+        showDialog ? 0 : 500,
+      );
     }
   }, [node_id, showDialog, fatherNode]);
   const apply = useDelayedCallback(
@@ -93,117 +92,30 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
             createSibling: showDialog === 'create-sibling',
           }),
   );
-  const buttonsRight = [
-    {
-      label: 'dismiss',
-      onClick: onClose,
-      disabled: false,
-    },
-    {
-      label: editedNode ? 'apply' : 'create',
-      onClick: apply,
-      disabled: false,
-      testId: testIds.nodeMeta__apply,
-    },
-  ];
+  const buttonsRight = useMemo(
+    () => [
+      {
+        label: 'dismiss',
+        onClick: onClose,
+        disabled: false,
+      },
+      {
+        label: editedNode ? 'apply' : 'create',
+        onClick: apply,
+        disabled: false,
+        testId: testIds.nodeMeta__apply,
+      },
+    ],
+    [apply, editedNode, onClose],
+  );
 
-  const inputs: FormInputProps[] = [
-    {
-      onChange: nodeMetaActionCreators.setName,
-      value: state.name,
-      type: 'text',
-      label: 'name',
-      lazyAutoFocus: !isOnMd && Boolean(showDialog),
-      testId: testIds.nodeMeta__nodeName,
-    } as FormInputProps,
-    isOwnerOfDocument && {
-      customInput: (
-        <SelectPrivacy
-          disabled={documentPrivacy === Privacy.PRIVATE}
-          privacy={state.privacy}
-          onChange={nodeMetaActionCreators.setPrivacy}
-          maximumPrivacy={documentPrivacy}
-          useNodeOptions={true}
-          testId={testIds.nodeMeta__privacy}
-        />
-      ),
-      label: 'visibility',
-    },
-    {
-      label: 'tags',
-      monolithComponent: (
-        <Chips
-          label={'tags'}
-          chips={state.tags.map(tag => ({ text: tag }))}
-          onRemove={nodeMetaActionCreators.removeTag}
-          addChip={tag =>
-            new Promise<{ clearInput: boolean }>(resolve => {
-              if (tag) {
-                nodeMetaActionCreators.addTag(tag);
-                resolve({ clearInput: true });
-              } else return { clearInput: false };
-            })
-          }
-          placeholder={'tags'}
-          pattern={'[^,\\s]*'}
-        />
-      ),
-    },
-    {
-      label: 'bold',
-      customInput: (
-        <ToggleSwitch
-          value={state.isBold}
-          onChange={nodeMetaActionCreators.setIsBold}
-        />
-      ),
-      testId: testIds.nodeMeta__isBold,
-    },
-    {
-      customInput: (
-        <ToggleSwitch
-          value={state.hasCustomColor}
-          onChange={nodeMetaActionCreators.setHasCustomColor}
-        />
-      ),
-      label: 'color',
-      testId: testIds.nodeMeta__hasCustomColor,
-      additionalInput: (
-        <ColorInput
-          disabled={!state.hasCustomColor}
-          onChange={nodeMetaActionCreators.setCustomColor}
-          value={state.customColor}
-          testId={testIds.nodeMeta__customColor}
-        />
-      ),
-    },
-    {
-      label: 'icon',
-      customInput: (
-        <ToggleSwitch
-          value={state.hasCustomIcon}
-          onChange={nodeMetaActionCreators.setHasCustomIcon}
-        />
-      ),
-      testId: testIds.nodeMeta__hasCustomIcon,
-      additionalInput: (
-        <IconPicker
-          onChange={nodeMetaActionCreators.setCustomIcon}
-          value={state.customIcon}
-          disabled={!state.hasCustomIcon}
-        />
-      ),
-    },
-    {
-      label: 'read only',
-      customInput: (
-        <ToggleSwitch
-          value={state.isReadOnly}
-          onChange={nodeMetaActionCreators.setIsReadOnly}
-        />
-      ),
-    },
-  ].filter(Boolean);
+  const inputs = useFormInputs({
+    documentPrivacy,
+    state,
+    isOnMd,
+    showDialog,
+    isOwnerOfDocument,
+  });
 
   return (
     <DialogWithTransition
@@ -225,4 +137,5 @@ const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
   );
 };
 
-export default connector(NodeMetaModalWithTransition);
+const M = memo(connector(NodeMetaModalWithTransition));
+export default M;

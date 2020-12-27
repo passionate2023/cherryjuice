@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
-import { joinClassNames } from '::helpers/dom/join-class-names';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { privacyIsBelow } from '::root/components/app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
 import { VisibilityIcon } from '::root/components/app/components/editor/info-bar/components/components/visibility-icon';
 import { memo } from 'react';
