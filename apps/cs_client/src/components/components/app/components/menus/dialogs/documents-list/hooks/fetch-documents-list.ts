@@ -18,7 +18,7 @@ export const useFetchDocumentsList = ({
       firstFetch.current = false;
       const handle = setTimeout(
         ac.documentsList.fetchDocuments,
-        showDocumentList ? 1500 : 150,
+        showDocumentList ? 1500 : 0,
       );
       return () => {
         clearInterval(handle);

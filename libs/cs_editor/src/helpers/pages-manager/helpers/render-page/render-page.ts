@@ -69,6 +69,7 @@ export const renderPage = (
     }
     page.snapBack.enable();
   }
+  page.element.contentEditable = String(editable);
   attachPageImages(editor, images);
   if (focusOnUpdate) page.element.focus();
   page.element.scrollTo(...page.scrollPosition);

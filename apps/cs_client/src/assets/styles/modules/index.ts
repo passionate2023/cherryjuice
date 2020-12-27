@@ -10,7 +10,6 @@ import modRichText from './document/rich-text.scss';
 import modAlertModal from './shared-components/alert-modal.scss';
 import modImportDocument from './import-document.scss';
 import modDialog from './shared-components/dialog.scss';
-import modSplashScreen from './splash-screen.scss';
 import modAuthScreen from './auth/auth-screen.scss';
 import modLogin from './auth/login.scss';
 import modAuthBanner from './auth/banner.scss';
@@ -92,6 +91,5 @@ export {
   modHotKeys,
   modUndoAction,
   modWidgets,
-  modSplashScreen,
   modDropdownMenu,
 };

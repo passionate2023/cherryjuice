@@ -45,6 +45,7 @@ const inputs: ValidatedTextInputProps[] = [
 ];
 
 export const authFormFocusableElements = [
+  'input',
   'span[tabindex="0"]',
   'input[type="submit"]',
   '#google-btn',
