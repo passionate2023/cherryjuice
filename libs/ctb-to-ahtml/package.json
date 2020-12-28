@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@cherryjuice/ahtml-to-html": "0.0.2",
-    "typescript": "^3.8.3",
+    "typescript": "^4.1.3",
     "@types/ramda": "^0.27.6"
   }
 }

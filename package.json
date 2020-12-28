@@ -107,6 +107,10 @@
   "author": "Yacine Mohamdi",
   "license": "ISC",
   "homepage": "https://github.com/ycnmhd/cherryjuice#readme",
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
   "optionalDependencies": {
     "@storybook/addon-a11y": "^5.3.19",
     "@storybook/addon-controls": "^6.1.11",

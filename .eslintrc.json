@@ -44,7 +44,9 @@
     "linebreak-style": "error",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "node/no-extraneous-import": "error"
+    "node/no-extraneous-import": "error",
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off"
   },
   "settings": {
     "react": {
