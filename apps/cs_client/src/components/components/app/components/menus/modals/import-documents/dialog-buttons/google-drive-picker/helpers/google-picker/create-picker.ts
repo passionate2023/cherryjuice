@@ -13,6 +13,15 @@ export type CreatePickerPreferences = {
   authImmediate: boolean;
 };
 
+const defaultPickerPreferences = {
+  viewId: 'DOCS',
+  authImmediate: false,
+  navHidden: false,
+  multiselect: true,
+  mimeTypes: ['application/octet-stream'],
+  query: '*.ctb',
+};
+
 export const createPicker = (
   { onPickerChange }: CreatePickerProps,
   {
@@ -21,14 +30,7 @@ export const createPicker = (
     mimeTypes,
     navHidden,
     multiselect,
-  }: CreatePickerPreferences = {
-    viewId: 'DOCS',
-    authImmediate: false,
-    navHidden: false,
-    multiselect: true,
-    mimeTypes: ['application/octet-stream'],
-    query: '*.ctb',
-  },
+  }: CreatePickerPreferences = defaultPickerPreferences,
 ) => {
   // @ts-ignore
   const gapiPicker = window.gapi.picker.api;

@@ -18,16 +18,12 @@ export const showPicker = ({
 }: ShowGooglePickerProps) => () => {
   if (!googlePicker.isReady || !gapiAuth2.isReady) return;
 
-  if (gapiAuth2.token) {
-    createPicker(pickerProps);
-  } else {
-    gapiAuth2
-      .authorize({
-        clientId,
-      })
-      .then(() => {
-        createPicker(pickerProps);
-      })
-      .catch(onAuthFailed);
-  }
+  gapiAuth2
+    .authorize({
+      clientId,
+    })
+    .then(() => {
+      createPicker(pickerProps);
+    })
+    .catch(onAuthFailed);
 };
