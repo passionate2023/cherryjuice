@@ -1,6 +1,8 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import produce from 'immer';
+import { rootActionCreators as rac } from '::store/ducks/root';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 
 export enum CssVariables {
   vh = 'vh',
@@ -48,6 +50,9 @@ const initialState: State = {
   },
 };
 const reducer = createReducer(initialState, _ => [
+  _(rac.resetState, () => ({
+    ...cloneObj(initialState),
+  })),
   _(ac.setSearchFiltersHeight, (state, { payload }) => ({
     ...state,
     searchFiltersHeight: payload,

@@ -5,6 +5,8 @@ import {
   SortDirection,
   SortNodesBy,
 } from '@cherryjuice/graphql-types';
+import { rootActionCreators as rac } from '::store/ducks/root';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 
 const ap = createActionPrefixer('bookmarks');
 
@@ -40,6 +42,9 @@ const initialState: State = {
 };
 
 const reducer = createReducer(initialState, _ => [
+  _(rac.resetState, () => ({
+    ...cloneObj(initialState),
+  })),
   _(ac.select, (state, { payload }) => ({
     ...state,
     selectedIDs: [payload],

@@ -14,7 +14,6 @@ import { cssVariablesReducer } from './ducks/css-variables';
 import { authReducer } from './ducks/auth';
 import { settingsReducer } from './ducks/settings';
 import { documentCacheReducer } from '::store/ducks/document-cache/document-cache';
-import { animationReducer } from '::store/ducks/animations';
 import { timelinesReducer } from '::store/ducks/timelines';
 import { editorSettingsReducer } from '::store/ducks/settings/editor-settings/editor-settings';
 import { bookmarksReducer } from '::store/ducks/bookmarks';
@@ -111,7 +110,6 @@ const localStorageReducers = {
 const nonPersistedReducers = {
   bookmarks: bookmarksReducer,
   document: documentReducer,
-  animation: animationReducer,
   dialogs: dialogsReducer,
   node: nodeReducer,
   documentsList: documentsListReducer,

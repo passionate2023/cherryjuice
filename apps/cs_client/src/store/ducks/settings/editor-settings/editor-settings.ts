@@ -5,6 +5,8 @@ import { setValue } from '::store/ducks/settings/editor-settings/reducers/set-va
 import { EditorSettings } from '@cherryjuice/graphql-types';
 import { authActionCreators } from '::store/ducks/auth';
 import { getDefaultSettings } from '@cherryjuice/default-settings';
+import { rootActionCreators as rac } from '::store/ducks/root';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 
 const ap = createActionPrefixer('editor-settings');
 
@@ -63,6 +65,9 @@ const initialState: State = {
 };
 
 const reducer = createReducer(initialState, _ => [
+  _(rac.resetState, () => ({
+    ...cloneObj(initialState),
+  })),
   _(authActionCreators.setAuthenticationSucceeded, (state, { payload }) => {
     delete payload.settings.editorSettings['__typename'];
     return {

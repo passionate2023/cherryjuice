@@ -1,5 +1,6 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
+import { cloneObj } from '::helpers/objects';
 
 const ap = createActionPrefixer('root');
 
@@ -29,6 +30,7 @@ const initialState: State = {
   online: true,
 };
 const reducer = createReducer(initialState, _ => [
+  _(ac.resetState, () => cloneObj(initialState)),
   ...[
     _(ac.setIsOnMb, (state, { payload }) => ({
       ...state,

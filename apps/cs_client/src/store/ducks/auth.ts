@@ -9,8 +9,9 @@ import {
   User,
 } from '@cherryjuice/graphql-types';
 import { AsyncOperation } from './document';
-import { rootActionCreators } from './root';
 import { AsyncError } from '::root/components/auth/hooks/proper-error-message';
+import { rootActionCreators as rac } from '::store/ducks/root';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 
 const ap = createActionPrefixer('auth');
 
@@ -80,6 +81,9 @@ const initialState: State = {
   settings: emptySettings,
 };
 const reducer = createReducer(initialState, _ => [
+  _(rac.resetState, () => ({
+    ...cloneObj(initialState),
+  })),
   ...[
     _(ac.setAuthenticationSucceeded, (state, { payload }) => {
       return {
@@ -128,15 +132,10 @@ const reducer = createReducer(initialState, _ => [
       resetPasswordToken: '',
     })),
   ],
-  ...[
-    _(rootActionCreators.resetState, () => ({
-      ...initialState,
-    })),
-    _(ac.setStorageType, (state, { payload }) => ({
-      ...state,
-      storageType: payload,
-    })),
-  ],
+  _(ac.setStorageType, (state, { payload }) => ({
+    ...state,
+    storageType: payload,
+  })),
 ]);
 
 export { reducer as authReducer, ac as authActionCreators };

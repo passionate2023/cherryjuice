@@ -46,11 +46,9 @@ const initialState: State = cloneObj<State>({
   next: undefined,
 });
 const reducer = createReducer(initialState, _ => [
-  ...[
-    _(rac.resetState, () => ({
-      ...cloneObj(initialState),
-    })),
-  ],
+  _(rac.resetState, () => ({
+    ...cloneObj(initialState),
+  })),
   _(ac.selectNext, (state, { payload }) => ({
     ...state,
     next: payload,

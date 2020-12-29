@@ -7,6 +7,8 @@ import {
 import { AsyncOperation } from './document';
 import { UpdateUserProfileIt } from '@cherryjuice/graphql-types';
 import { dialogsActionCreators } from './dialogs';
+import { rootActionCreators as rac } from '::store/ducks/root';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 
 const ap = createActionPrefixer('settings');
 
@@ -44,7 +46,11 @@ const initialState: State = {
   userProfileChanges: undefined,
   nextScreen: undefined,
 };
+
 const reducer = createReducer(initialState, _ => [
+  _(rac.resetState, () => ({
+    ...cloneObj(initialState),
+  })),
   ...[
     _(ac.selectScreen, (state, { payload }) => ({
       ...state,

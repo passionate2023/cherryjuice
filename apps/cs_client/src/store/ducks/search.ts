@@ -13,6 +13,8 @@ import {
   TimeRange,
 } from '@cherryjuice/graphql-types';
 import { documentCacheActionCreators } from '::store/ducks/document-cache/document-cache';
+import { rootActionCreators as rac } from '::store/ducks/root';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 
 const ap = createActionPrefixer('search');
 
@@ -114,6 +116,9 @@ const initialState: State = {
 };
 
 const reducer = createReducer(initialState, _ => [
+  _(rac.resetState, () => ({
+    ...cloneObj(initialState),
+  })),
   ...[
     _(ac.setQuery, (state, { payload }) => ({
       ...state,

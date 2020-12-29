@@ -1,7 +1,7 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { AsyncOperation } from './document';
-import { rootActionCreators } from './root';
+import { rootActionCreators as rac } from '::store/ducks/root';
 import { cloneObj } from '@cherryjuice/shared-helpers';
 import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 import { LoadDocumentsListPayload } from '::store/ducks/document-cache/helpers/document/load-documents-list';
@@ -80,11 +80,9 @@ const initialState: State = {
   showFilters: false,
 };
 const reducer = createReducer(initialState, _ => [
-  ...[
-    _(rootActionCreators.resetState, () => ({
-      ...cloneObj(initialState),
-    })),
-  ],
+  _(rac.resetState, () => ({
+    ...cloneObj(initialState),
+  })),
   ...[
     _(ac.deleteDocuments, state => ({
       ...state,
