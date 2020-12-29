@@ -24,7 +24,8 @@
     "module": "CommonJS",
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "composite": true
+    "composite": true,
+    "lib": ["ES2015", "DOM"]
   },
   "exclude": ["node_modules"],
   "include": ["src"]

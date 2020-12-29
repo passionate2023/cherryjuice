@@ -1,10 +1,9 @@
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloClient, InMemoryCache } from '@apollo/client/core';
 import { createUploadLink } from 'apollo-upload-client';
-import { setContext } from 'apollo-link-context';
-import { WebSocketLink } from 'apollo-link-ws';
-import { split } from 'apollo-link';
-import { getMainDefinition } from 'apollo-utilities';
+import { setContext } from '@apollo/client/link/context';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { split } from '@apollo/client/core';
+import { getMainDefinition } from '@apollo/client/utilities';
 import { useEffect, useState } from 'react';
 import { apolloClient } from '../apollo-client';
 

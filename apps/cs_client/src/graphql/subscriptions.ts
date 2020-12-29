@@ -1,7 +1,10 @@
 import gql from 'graphql-tag';
 import { DocumentOperation } from '@cherryjuice/graphql-types';
 
-const DOCUMENT_OPERATION = {
+type Args = { userId: string };
+
+const DOCUMENT_OPERATION = ({ userId }: Args) => ({
+  variables: { userId },
   path: (data): DocumentOperation => data?.documentOperation,
   query: gql`
     subscription DOCUMENT_OPERATION($userId: String!) {
@@ -19,6 +22,6 @@ const DOCUMENT_OPERATION = {
       }
     }
   `,
-};
+});
 
 export { DOCUMENT_OPERATION };

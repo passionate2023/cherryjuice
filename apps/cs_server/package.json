@@ -3,7 +3,9 @@
   "workspaces": {
     "nohoist": [
       "typeorm/**",
-      "typeorm"
+      "typeorm",
+      "cli-highlight/**",
+      "cli-highlight"
     ]
   },
   "version": "0.1.0",
@@ -81,7 +83,8 @@
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-merge": "^4.2.2",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "chalk": "^4.1.0"
   },
   "optionalDependencies": {
     "@types/jest": "^25.1.0",
