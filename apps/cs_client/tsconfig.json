@@ -5,7 +5,7 @@
     "paths": {
       "::sass-modules/*": ["./src/assets/styles/modules/*"],
       "::sass-modules": ["./src/assets/styles/modules/index.ts"],
-      "::types/*": ["./types/*"],
+      "::types/*": ["./src/types/*"],
       "::helpers/*": ["./src/helpers/*"],
       "::graphql/*": ["./src/graphql/*"],
       "::assets/*": ["./src/assets/*"],
