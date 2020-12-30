@@ -11,13 +11,9 @@
     "build"
   ],
   "scripts": {
-    "dev-legacy": "yarn build-legacy -w --environment TSC_NONPOLLING_WATCHER:true",
-    "dev": "yarn build-cjs -w --environment TSC_NONPOLLING_WATCHER:true",
+    "dev": "rollup -c  -w --environment TSC_NONPOLLING_WATCHER:true,mode:ts_cjs",
+    "build": "rollup -c --environment mode:ts2_es",
     "types": "tsc -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
-    "build": "yarn build-es && yarn build-cjs",
-    "build-legacy": "rollup -c",
-    "build-es": "rollup -c rollup.config.es.js",
-    "build-cjs": "rollup -c rollup.config.cjs.js",
     "test": "jest",
     "lint": "eslint ./**",
     "generate-named-inputs": "node ../../scripts/generate-named-inputs.js"

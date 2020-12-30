@@ -22,6 +22,7 @@
     "build:lib3:1": "yarn workspace @cherryjuice/editor run build",
     "build:lib3:2": "yarn workspace @cherryjuice/components run build",
     "build:libs": "run-p build:lib0:* && run-p build:lib:* && run-p build:lib2:* && run-p build:lib3:*",
+    "build:libs:cjs": "run-p \"build:lib0:* --ts2_cjs\" && run-p \"build:lib:* --ts2_cjs\" && run-p \"build:lib2:* --ts2_cjs\" && run-p \"build:lib3:* --ts2_cjs\"",
     "build:app:1": "yarn workspace @cherryjuice/react-client  run build",
     "build:app:2": "yarn workspace @cherryjuice/nest-server  run build",
     "build:apps": "run-p build:app:*",

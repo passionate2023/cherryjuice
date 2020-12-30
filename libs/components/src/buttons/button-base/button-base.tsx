@@ -5,6 +5,7 @@ import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Icon } from '@cherryjuice/icons';
 import { useLazyAutoFocus } from '@cherryjuice/shared-helpers';
 import { ButtonCircleProps } from '::root/buttons/button-circle/button-circle';
+import { IconName } from '@cherryjuice/icons';
 
 type ButtonBaseProps = {
   className?: string;
@@ -18,7 +19,7 @@ type ButtonBaseProps = {
   active?: boolean;
   text?: string;
   icon?: JSX.Element;
-  iconName?: string;
+  iconName?: IconName;
   variant?: 'danger';
 };
 

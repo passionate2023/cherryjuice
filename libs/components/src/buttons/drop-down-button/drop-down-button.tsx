@@ -2,7 +2,7 @@ import * as React from 'react';
 import modDropdownButton from './drop-down-button.scss';
 import { useRef, useState } from 'react';
 import { useClickOutsideModal } from '@cherryjuice/shared-helpers';
-import { Icon, Icons } from '@cherryjuice/icons';
+import { Icon } from '@cherryjuice/icons';
 
 type Props = {
   buttons: { key: string; element: JSX.Element }[];
@@ -32,7 +32,7 @@ export const DropDownButton: React.FC<Props> = ({
       <div className={modDropdownButton.head}>
         {buttons[previouslySelected.current].element}
         <div onClick={toggleDropdown} className={modDropdownButton.head__arrow}>
-          <Icon name={Icons.material['arrow-down']} size={14} />
+          <Icon name={'arrow-down'} size={14} />
         </div>
       </div>
       {showDropdown && (

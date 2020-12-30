@@ -1,6 +1,7 @@
-import { shared } from '../../rollup-configs/typescript2/config.js';
+import { rollupConfig } from '../../rollup-config/index';
+
 export default {
-  ...shared,
+  ...rollupConfig(),
   input: {
     index: 'src/index.ts',
     'clone-object': 'src/helpers/clone-object.ts',

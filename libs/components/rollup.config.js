@@ -1,4 +1,6 @@
-export const input = {
+import { rollupConfig } from '../../rollup-config/index';
+
+const input = {
   index: 'src/index.ts',
   'button-base': 'src/buttons/button-base/button-base.tsx',
   'button-circle': 'src/buttons/button-circle/button-circle.tsx',
@@ -13,4 +15,9 @@ export const input = {
   'toolbar-color-input':
     'src/inputs/toolbar-color-input/toolbar-color-input.tsx',
   tooltip: 'src/unclassified/tooltip/tooltip.tsx',
+};
+
+export default {
+  ...rollupConfig(),
+  input: input,
 };

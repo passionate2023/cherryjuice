@@ -25,7 +25,7 @@ export const replaceImageUrlWithBase64 = async (
   if (isValidUrl(image.src)) {
     image.src = await urlToBase64(image.src);
   }
-  await new Promise(res => {
+  await new Promise<void>(res => {
     image.onload = () => {
       attachWidthAndHeight(image)();
       if (isNotPngBase64(image)) {

@@ -4,14 +4,15 @@
   "description": "",
   "author": "",
   "license": "ISC",
-  "main": "build/cjs/index.js",
   "module": "build/index.js",
-  "jsnext:main": "build/index.js",
+  "main": "build/cjs/index.js",
+  "types": "build/types",
   "files": [
     "build"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "dev": "rollup -c  -w --environment TSC_NONPOLLING_WATCHER:true,mode:ts_cjs",
+    "build": "rollup -c --environment mode:ts2_es_cjs",
     "test": "jest",
     "lint": "eslint ./** --fix"
   },

@@ -2,12 +2,13 @@ import * as React from 'react';
 import { ToolbarButton } from '::root/buttons';
 import { useDebouncedEventHandler } from '@cherryjuice/shared-helpers';
 import { Icon } from '@cherryjuice/icons';
+import { IconName } from '@cherryjuice/icons';
 
 type Props = {
   disabled?: boolean;
   onChange: (value: string) => void;
   id: string;
-  icon?: string;
+  icon?: IconName;
   testId?: string;
 };
 
