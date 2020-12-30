@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "dev-legacy": "yarn build-legacy -w --environment TSC_NONPOLLING_WATCHER:true",
-    "dev": "yarn build-es -w --environment TSC_NONPOLLING_WATCHER:true",
+    "dev": "yarn build-cjs -w --environment TSC_NONPOLLING_WATCHER:true",
     "types": "tsc -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
     "build": "yarn build-es && yarn build-cjs",
     "build-legacy": "rollup -c",
