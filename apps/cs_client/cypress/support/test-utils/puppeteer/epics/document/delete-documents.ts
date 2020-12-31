@@ -11,7 +11,7 @@ export const deleteDocuments = (
   interact.documentsList.show();
   wait.s1;
   cy.document().then(document => {
-    const files = document.querySelectorAll('.selectFile__file__name');
+    const files = document.querySelectorAll('.dialog-list-item');
     if (files.length > 0) {
       cy.findByTestId(
         testIds.dialogs__selectDocument__header__buttons__deleteSweep,

@@ -66,19 +66,19 @@ export const useFormInputs = ({
           <ToggleSwitch
             value={state.isBold}
             onChange={nodeMetaActionCreators.setIsBold}
+            testId={testIds.nodeMeta__isBold}
           />
         ),
-        testId: testIds.nodeMeta__isBold,
       },
       {
         customInput: (
           <ToggleSwitch
             value={state.hasCustomColor}
             onChange={nodeMetaActionCreators.setHasCustomColor}
+            testId={testIds.nodeMeta__hasCustomColor}
           />
         ),
         label: 'color',
-        testId: testIds.nodeMeta__hasCustomColor,
         additionalInput: (
           <ColorInput
             disabled={!state.hasCustomColor}
@@ -94,9 +94,9 @@ export const useFormInputs = ({
           <ToggleSwitch
             value={state.hasCustomIcon}
             onChange={nodeMetaActionCreators.setHasCustomIcon}
+            testId={testIds.nodeMeta__hasCustomIcon}
           />
         ),
-        testId: testIds.nodeMeta__hasCustomIcon,
         additionalInput: (
           <IconPicker
             onChange={nodeMetaActionCreators.setCustomIcon}

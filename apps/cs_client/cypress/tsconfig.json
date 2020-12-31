@@ -5,6 +5,7 @@
     "strict": false,
     "baseUrl": "../node_modules",
     "target": "es2019",
+    "module": "esnext",
     "types": ["cypress", "@types/testing-library__cypress"]
   },
   "include": ["**/*.ts"]

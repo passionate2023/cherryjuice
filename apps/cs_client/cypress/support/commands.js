@@ -24,7 +24,6 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import '@testing-library/cypress/add-commands';
-import './helpers/mock-graphql';
-import 'cypress-localstorage-commands';
 import '@4tw/cypress-drag-drop';
 import 'cypress-file-upload';
+import './helpers/mock-graphql';

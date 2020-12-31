@@ -98,6 +98,7 @@
     "rollup-plugin-typescript2": "^0.25.3",
     "@rollup/plugin-typescript": "^8.0.0",
     "@cherryjuice/rollup-plugin-svg": "^0.0.1",
+    "eslint-plugin-cypress": "^2.10.3",
     "rollup-plugin-terser": "7.0.2",
     "tslib": "^2.0.3",
     "rollup-plugin-delete": "^2.0.0"

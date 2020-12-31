@@ -5,6 +5,7 @@ import { Privacy } from '@cherryjuice/graphql-types';
 import { interact } from '../../../interact/interact';
 
 export const createDocument = (docAst: DocumentAst) => {
+  interact.documentMenu.show();
   cy.findByTestId('new-document').click();
   wait.ms500();
   interact.documentMeta.set.name(docAst.meta.name);

@@ -46,6 +46,7 @@ const NavBar: React.FC<Props & PropsFromRedux> = ({
         dontMount={!isDocumentOwner}
         onClick={ac.dialogs.showDocumentDropdownMenu}
         active={showDocumentDropdownMenu}
+        testId={testIds.toolBar__navBar__documentButton}
       >
         <Tooltip label={'Document menu'}>
           <Icon name={Icons.material.add} />

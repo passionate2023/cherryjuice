@@ -4,14 +4,21 @@
   "scripts": {
     "dev": "webpack-dev-server --color --progress --config .webpack/webpack.dev.js ",
     "build": "webpack --config .webpack/webpack.prod.js",
-    "cypress": "yarn cypress open",
+    "cypress:open": "cypress open",
     "test": "jest",
     "lint": "eslint ./**"
   },
   "author": "Yacine Mohamdi",
   "license": "MIT",
   "dependencies": {},
+  "peerDependencies": {
+    "cypress": "^4.2.0"
+  },
   "optionalDependencies": {
+    "@4tw/cypress-drag-drop": "^1.3.1",
+    "@cypress/webpack-preprocessor": "^5.4.1",
+    "@testing-library/cypress": "^5.3.0",
+    "cypress-file-upload": "^4.0.7",
     "@testing-library/react": "^10.0.4",
     "@testing-library/react-hooks": "^3.4.1",
     "@types/jest": "^25.1.0",
@@ -23,7 +30,6 @@
     "@types/react-router": "^5.1.3",
     "@types/react-router-dom": "^5.1.3",
     "@types/gapi": "^0.0.39",
-    "cypress": "^4.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^25.1.0",
     "ramda": "^0.27.0",
