@@ -9,7 +9,7 @@ export const deleteDocuments = (
   options = { closeDocumentsList: true },
 ) => {
   interact.documentsList.show();
-  wait.s1;
+  wait.ms500();
   cy.document().then(document => {
     const files = document.querySelectorAll('.dialog-list-item');
     if (files.length > 0) {
@@ -29,8 +29,6 @@ export const deleteDocuments = (
         testIds.dialogs__selectDocument__header__buttons__delete,
       ).click();
       cy.findByTestId(testIds.modal__deleteDocument__confirm).click();
-      wait.s1;
-      wait.s1;
       wait.s1;
     }
   });

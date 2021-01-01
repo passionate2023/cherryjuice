@@ -13,7 +13,6 @@ export const signIn = (
     const auth = window.localStorage.getItem('persist:auth');
     if (auth?.startsWith('{')) token = JSON.parse(auth).token;
     if (!token) {
-      cy.clearLocalStorage();
       puppeteer.navigate.goToLogin();
       cy.get('#login-username')
         .clear()

@@ -6,7 +6,7 @@ const show = () => {
   cy.findByTestId(testIds.toolBar__navBar__documentButton, {
     timeout: 20000,
   }).click({ force: true });
-  wait.s1;
+  wait.ms250();
 };
 
 export const documentMenu = {

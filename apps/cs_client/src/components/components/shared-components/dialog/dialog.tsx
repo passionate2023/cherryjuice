@@ -15,6 +15,7 @@ import { animated } from 'react-spring';
 import { TransitionWrapper } from '::root/components/shared-components/transitions/transition-wrapper';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
+import { transitions } from '::shared-components/transitions/transitions';
 
 type TDialogProps = {
   menuButton?: JSX.Element;
@@ -103,14 +104,7 @@ const DialogWithTransition: React.FC<TDialogProps & {
     <TransitionWrapper<TDialogProps>
       Component={M}
       show={props.show}
-      transitionValues={{
-        from: { opacity: 0, xy: [0, window.innerHeight * 0.7] },
-        enter: { opacity: 1, xy: [0, 0] },
-        leave: { opacity: 0.5, xy: [0, window.innerHeight * 1.1] },
-        config: {
-          tension: 170,
-        },
-      }}
+      transitionValues={transitions.t3}
       componentProps={props}
       scrimProps={
         props.pinnable && props.pinned
