@@ -1,6 +1,6 @@
 name: Cypress tests
 
-on: [ push ]
+on: workflow_dispatch
 
 jobs:
   cypress-run:
@@ -27,13 +27,12 @@ jobs:
         run: NOYARNPOSTINSTALL=1 yarn install
 
       - name: build local dependencies
-        run: yarn build:lib0:1 && yarn build:lib:1 && yarn build:lib:3
+        run: yarn build:lib0:1 && yarn build:lib:1 && yarn build:lib:3 && yarn build:lib:4
 
       - name: Cypress run with env
         uses: cypress-io/github-action@v2
         with:
           working-directory: ./apps/cs_client
-          spec: cypress/integration/auth/01. login.ts, cypress/integration/content/01. tree.ts
           config-file: cypress.ci.json
           browser: chrome
           headless: true

@@ -5,9 +5,11 @@ import { Buttons } from '::app/components/editor/tool-bar/components/groups/form
 
 export type FormattingButtonsProps = {};
 
-const FormattingButtons: React.FC<FormattingButtonsProps & {
-  style?: any;
-}> = ({ style, children }) => {
+const FormattingButtons: React.FC<
+  FormattingButtonsProps & {
+    style?: any;
+  }
+> = ({ style, children }) => {
   return style ? (
     <animated.div
       className={modToolbar.toolBar__groupFormattingContainer}

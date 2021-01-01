@@ -6,8 +6,10 @@ const whereClause = ({
   variableIndex,
   queryHasFlags,
 }: SearchTypeQueryProps & { queryHasFlags: boolean }): string =>
-  `~${searchOptions.caseSensitive ? '' : '*'} $${variableIndex -
-    (queryHasFlags ? FlagsPositionInVariablesList.flagsAndQuery : 0)}`;
+  `~${searchOptions.caseSensitive ? '' : '*'} $${
+    variableIndex -
+    (queryHasFlags ? FlagsPositionInVariablesList.flagsAndQuery : 0)
+  }`;
 
 const headline = ({
   columnName,

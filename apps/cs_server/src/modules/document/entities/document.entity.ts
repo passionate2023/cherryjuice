@@ -99,11 +99,7 @@ export class Document extends BaseEntity {
     this.hash = hash(fields);
   }
 
-  @ManyToOne(
-    () => User,
-    user => user.id,
-    { onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => User, user => user.id, { onDelete: 'CASCADE' })
   user: User;
   @Field()
   @Column()

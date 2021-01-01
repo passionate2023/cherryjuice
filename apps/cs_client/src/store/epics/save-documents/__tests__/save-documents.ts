@@ -17,7 +17,7 @@ jest.mock('../helpers/save-document/save-documents', () => {
   };
 });
 
-describe.skip('save-documents epic', function() {
+describe.skip('save-documents epic', function () {
   it('test should run without errors', async () => {
     const state = {
       output: undefined,

@@ -8,10 +8,7 @@ const typeText = (nodes: NodeAst[], clear = false) => {
     .forEach(node => {
       interact.tree.select.node(node);
       clear
-        ? cy
-            .get('#rich-text')
-            .clear()
-            .type(node.text)
+        ? cy.get('#rich-text').clear().type(node.text)
         : cy.get('#rich-text').type(node.text);
     });
 };

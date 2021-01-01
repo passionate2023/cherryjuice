@@ -15,11 +15,7 @@ export class Image extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(
-    () => Node,
-    node => node.id,
-    { onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => Node, node => node.id, { onDelete: 'CASCADE' })
   node: Node;
 
   @Column()

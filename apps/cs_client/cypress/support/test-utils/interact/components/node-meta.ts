@@ -10,9 +10,7 @@ const checkToggle = (testId: string) => {
 
 const set = {
   name: (name: string) => {
-    cy.findByTestId(testIds.nodeMeta__nodeName)
-      .clear()
-      .type(name);
+    cy.findByTestId(testIds.nodeMeta__nodeName).clear().type(name);
   },
   isBold: (isBold: boolean) => {
     if (isBold) {
@@ -30,11 +28,13 @@ const set = {
     checkToggle(testIds.nodeMeta__hasCustomIcon);
     cy.findByTestId(testIds.nodeMeta__customIcon).click();
     wait.s1;
+    wait.s1;
     cy.findByTestId(testIds.nodeMeta__customIconList).then($element => {
       const element = $element[0];
       const child = element.children[icon - 1] as HTMLDivElement;
       child.click();
     });
+    wait.ms500();
   },
   privacy: (privacy: Privacy) => {
     cy.findByTestId(testIds.nodeMeta__privacy).select(privacy);

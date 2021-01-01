@@ -14,12 +14,8 @@ export const signIn = (
     if (auth?.startsWith('{')) token = JSON.parse(auth).token;
     if (!token) {
       puppeteer.navigate.goToLogin();
-      cy.get('#login-username')
-        .clear()
-        .type(username);
-      cy.get('#login-password')
-        .clear()
-        .type(password);
+      cy.get('#login-username').clear().type(username);
+      cy.get('#login-password').clear().type(password);
       cy.get('input[type="submit"]', { timeout: 20000 }).click();
       cy.findByTestId(testIds.toolBar__navBar__userButton, { timeout: 20000 });
       wait.s1;

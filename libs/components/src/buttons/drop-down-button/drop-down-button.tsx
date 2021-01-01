@@ -49,9 +49,7 @@ export const DropDownButton: React.FC<Props> = ({
               >
                 {button.element}
               </div>
-            ) : (
-              undefined
-            ),
+            ) : undefined,
           )}
         </div>
       )}

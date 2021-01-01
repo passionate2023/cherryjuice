@@ -4,9 +4,7 @@ export const nodeTitleHelpers = {
   isBold: is_richtxt => (is_richtxt >> 1) & 0x01,
   customIconId: is_ro => is_ro >> 1,
   isReadOnly: (is_ro: string | number): number =>
-    +Number(is_ro)
-      .toString(2)
-      .slice(-1),
+    +Number(is_ro).toString(2).slice(-1),
   rgb_str_from_int24bit: int24bit => {
     const r = (int24bit >> 16) & 0xff;
     const g = (int24bit >> 8) & 0xff;

@@ -40,8 +40,9 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type TNodeMetaModalProps = {};
 
-const NodeMetaModalWithTransition: React.FC<TNodeMetaModalProps &
-  PropsFromRedux> = ({
+const NodeMetaModalWithTransition: React.FC<
+  TNodeMetaModalProps & PropsFromRedux
+> = ({
   showDialog,
   isOnMd,
   onClose,

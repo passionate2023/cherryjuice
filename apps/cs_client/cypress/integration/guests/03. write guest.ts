@@ -47,7 +47,7 @@ const bootstrap = () => {
   };
 };
 
-describe('write guest', function() {
+describe('write guest', function () {
   const { docAsts, docsPrivacy, documentMutation } = bootstrap();
   // delete all documents of the user
   before(() => {

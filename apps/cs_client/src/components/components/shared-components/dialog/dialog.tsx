@@ -30,10 +30,12 @@ type TDialogProps = {
 } & TDialogFooterProps &
   DialogHeaderProps;
 
-const Dialog: React.FC<TDialogProps & {
-  style;
-  show: boolean;
-}> = ({
+const Dialog: React.FC<
+  TDialogProps & {
+    style;
+    show: boolean;
+  }
+> = ({
   children,
   menuButton,
   dialogTitle,
@@ -96,10 +98,12 @@ const Dialog: React.FC<TDialogProps & {
 
 const M = memo(Dialog);
 
-const DialogWithTransition: React.FC<TDialogProps & {
-  show: boolean;
-  isShownOnTopOfDialog?: boolean;
-}> = ({ isShownOnTopOfDialog, ...props }) => {
+const DialogWithTransition: React.FC<
+  TDialogProps & {
+    show: boolean;
+    isShownOnTopOfDialog?: boolean;
+  }
+> = ({ isShownOnTopOfDialog, ...props }) => {
   return (
     <TransitionWrapper<TDialogProps>
       Component={M}

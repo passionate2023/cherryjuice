@@ -45,8 +45,9 @@ type DrawerNavigationElementProps = {
   title: ScreenName;
 };
 
-const DrawerNavigationElement: React.FC<DrawerNavigationElementProps &
-  PropsFromRedux> = ({ title, selectedScreenTitle }) => {
+const DrawerNavigationElement: React.FC<
+  DrawerNavigationElementProps & PropsFromRedux
+> = ({ title, selectedScreenTitle }) => {
   const onClick = () => ac.settings.selectScreen(title);
 
   const isSelected = selectedScreenTitle === title;

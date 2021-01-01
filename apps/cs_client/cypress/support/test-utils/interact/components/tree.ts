@@ -32,10 +32,7 @@ const dndNode = ({ tree }: DndNodeProps) => {
 };
 
 const selectNode = ({ name }) => {
-  cy.get('.tree')
-    .findAllByText(name)
-    .first()
-    .click();
+  cy.get('.tree').findAllByText(name).first().click();
   wait.ms500();
 };
 

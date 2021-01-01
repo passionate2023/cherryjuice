@@ -9,7 +9,7 @@ const objToXml = ({ xmlObject }) =>
 
 const parseXml = ({ xml }) =>
   new Promise((resolve, reject) => {
-    parseString(xml, async function(err, result) {
+    parseString(xml, async function (err, result) {
       err ? reject(err) : resolve(result);
     });
   });
