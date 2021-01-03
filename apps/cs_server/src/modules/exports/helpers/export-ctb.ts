@@ -60,7 +60,10 @@ class ExportCTB {
   createCtb = async (): Promise<sqlite.Database> => {
     await deleteFolder(this.fileLocation.folder, true);
     fs.mkdirSync(this.fileLocation.folder, { recursive: true });
-    this.db = await sqlite.open(this.fileLocation.path);
+    this.db = await sqlite.open({
+      filename: this.fileLocation.path,
+      driver: sqlite3.Database,
+    });
     if (this.debugOptions.verbose) {
       sqlite3.verbose();
       // eslint-disable-next-line no-console

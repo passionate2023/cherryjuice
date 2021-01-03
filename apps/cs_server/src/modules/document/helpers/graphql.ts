@@ -13,16 +13,18 @@ const GraphQLUpload = (acceptedMimeTypes: string[], TypeName: string) =>
   new GraphQLScalarType({
     name: TypeName,
     description: `The ${TypeName} scalar type represents a file upload.`,
-    async parseValue(value: Promise<FileUpload>): Promise<FileUpload> {
-      const upload = await value;
-      const stream = upload.createReadStream();
+    async parseValue(
+      value: Promise<{ file: FileUpload }>,
+    ): Promise<FileUpload> {
+      const { file } = await value;
+      const stream = file.createReadStream();
       const fileType = await FileType.fromStream(stream);
       if (!acceptedMimeTypes.includes(fileType.mime))
         throw new GraphQLError(
           'Mime type should be one of: ' + acceptedMimeTypes.join(', '),
         );
 
-      return upload;
+      return file;
     },
     parseLiteral(ast): void {
       throw new GraphQLError('Upload literal unsupported.', ast);

@@ -1,4 +1,4 @@
-FROM ycnmhd/nginx-node:12.13.0
+FROM ycnmhd/nginx-node:14.15.3
 LABEL maintainer=ycnmhd
 
 # entrypoint

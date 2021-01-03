@@ -73,7 +73,7 @@
     "deox": "^3.2.1",
     "dotenv-webpack": "^1.7.0",
     "favicons-webpack-plugin": "^4.2.0",
-    "graphql": "^15.3.0",
+    "graphql": "^15.4.0",
     "graphql-tag": "^2.10.1",
     "hint.css": "^2.6.0",
     "html-webpack-plugin": "^4.4.1",
