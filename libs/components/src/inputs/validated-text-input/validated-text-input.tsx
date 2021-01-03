@@ -28,9 +28,11 @@ export type ValidatedTextInputProps = {
   sendValidStatusWithValue?: boolean;
 };
 
-const ValidatedTextInput: React.FC<ValidatedTextInputProps & {
-  highlightInvalidInput?: boolean;
-}> = ({
+const ValidatedTextInput: React.FC<
+  ValidatedTextInputProps & {
+    highlightInvalidInput?: boolean;
+  }
+> = ({
   label,
   icon,
   ariaLabel,

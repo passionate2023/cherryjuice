@@ -1,6 +1,6 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
-import { rootActionCreators } from './root';
+import { rootActionCreators as rac } from './root';
 import { cloneObj } from '@cherryjuice/shared-helpers';
 import { dialogsActionCreators } from '::store/ducks/dialogs';
 import { CustomRange, getSelection } from '@cherryjuice/editor';
@@ -59,13 +59,11 @@ const initialState: State = {
   showNodePath: true,
 };
 const reducer = createReducer(initialState, _ => [
-  ...[
-    _(rootActionCreators.resetState, () => ({
-      ...cloneObj(initialState),
-    })),
-  ],
+  _(rac.resetState, () => ({
+    ...cloneObj(initialState),
+  })),
   _(ac.showTree, state => ({ ...state, showTree: true })),
-  _(rootActionCreators.hidePopups, state => ({
+  _(rac.hidePopups, state => ({
     ...state,
     showInfoBar: false,
   })),

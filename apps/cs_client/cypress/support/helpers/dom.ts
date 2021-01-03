@@ -1,5 +1,5 @@
 export const getTreeInDom = ({ document, nOfLevels }) => {
-  const treeElement = document.querySelector('.tree');
+  const treeElement = document.querySelector('#tree');
   return Array.from({ length: nOfLevels })
     .map(
       (_, i) =>

@@ -1,6 +1,6 @@
 import { calculateNumberOfFrames } from '::store/ducks/document-cache/helpers/timeline/timeline';
 
-describe('calculate number of frames', function() {
+describe('calculate number of frames', function () {
   it('case 1', () => {
     const nof = calculateNumberOfFrames([0], 0);
     expect(nof).toEqual({ redo: 0, undo: 1 });

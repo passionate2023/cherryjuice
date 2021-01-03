@@ -13,6 +13,8 @@ import {
 import { resetToDefault } from '::store/ducks/settings/hotkeys-settings/reducers/reset-to-default';
 import { calculateDuplicates } from '::store/ducks/settings/hotkeys-settings/reducers/calculate-duplicates';
 import { HotKeyDict } from '@cherryjuice/hotkeys';
+import { rootActionCreators as rac } from '::store/ducks/root';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 
 const ap = createActionPrefixer('hotkeys-settings');
 
@@ -39,6 +41,9 @@ const initialState: State = {
   previous: undefined,
 };
 const reducer = createReducer(initialState, _ => [
+  _(rac.resetState, () => ({
+    ...cloneObj(initialState),
+  })),
   _(authActionCreators.setAuthenticationSucceeded, (state, { payload }) => {
     delete payload.settings.hotKeys['__typename'];
     Object.values(payload.settings.hotKeys).forEach(hks => {

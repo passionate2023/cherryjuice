@@ -5,9 +5,11 @@ import {
   FormattingButtonsProps,
 } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/formatting-buttons';
 
-export const FormattingButtonsWithTransition: React.FC<FormattingButtonsProps & {
-  show: boolean;
-}> = ({ show, children }) => {
+export const FormattingButtonsWithTransition: React.FC<
+  FormattingButtonsProps & {
+    show: boolean;
+  }
+> = ({ show, children }) => {
   return (
     <TransitionWrapper<FormattingButtonsProps>
       Component={FormattingButtons}

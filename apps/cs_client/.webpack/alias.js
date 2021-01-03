@@ -1,7 +1,7 @@
 const path = require('path');
 module.exports = {
   '::sass-modules': path.resolve(__dirname, '../src/assets/styles/modules/'),
-  '::types': path.resolve(__dirname, '../types/'),
+  '::types': path.resolve(__dirname, '../src/types/'),
   '::helpers': path.resolve(__dirname, '../src/helpers/'),
   '::graphql': path.resolve(__dirname, '../src/graphql/'),
   '::assets': path.resolve(__dirname, '../src/assets/'),

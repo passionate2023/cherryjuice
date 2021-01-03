@@ -87,7 +87,12 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
           position={position}
         >
           {({ ref, show }) => (
-            <div className={modTree.tree} onContextMenu={show} ref={ref}>
+            <div
+              className={modTree.tree}
+              onContextMenu={show}
+              ref={ref}
+              id="tree"
+            >
               <ToolBar />
               <Droppable
                 anchorId={'0'}

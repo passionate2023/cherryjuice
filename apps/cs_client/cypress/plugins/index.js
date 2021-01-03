@@ -18,22 +18,34 @@ const common = require('../../.webpack/webpack.common');
 /**
  * @type {Cypress.PluginConfig}
  */
-module.exports = on => {
-  const config = common;
-  const options = {
+module.exports = (on, config) => {
+  const existingWebpackConfig = common;
+  const webpackConfig = {
     webpackOptions: {
       mode: 'development',
-      resolve: config.resolve,
-      module: config.module,
+      resolve: existingWebpackConfig.resolve,
+      module: existingWebpackConfig.module,
     },
     watchOptions: {},
   };
 
-  on('file:preprocessor', webpackPreprocessor(options));
+  on('file:preprocessor', webpackPreprocessor(webpackConfig));
   on('task', {
     // deconstruct the individual properties
     copyDownloadedFile({ name, tempSubFolder, extension, suffix }) {
       return copyDownloadedFile({ name, tempSubFolder, extension, suffix });
     },
   });
+  const chromium = {
+    name: 'chromium',
+    channel: 'stable',
+    family: 'chromium',
+    displayName: 'Chromium',
+    version: '87.0.4',
+    path: 'C:\\Users\\lpflo\\AppData\\Local\\Chromium\\Application\\chrome.exe',
+    majorVersion: 87,
+  };
+  return {
+    browsers: [...config.browsers, chromium],
+  };
 };

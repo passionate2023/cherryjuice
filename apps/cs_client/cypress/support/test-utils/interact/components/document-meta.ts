@@ -32,9 +32,7 @@ const apply = () => {
 
 const set = {
   name: (name: string) => {
-    cy.findByTestId(testIds.documentMeta__documentName)
-      .clear()
-      .type(name);
+    cy.findByTestId(testIds.documentMeta__documentName).clear().type(name);
   },
   privacy: (privacy: Privacy) => {
     cy.findByTestId(testIds.documentMeta__documentPrivacy).select(privacy);

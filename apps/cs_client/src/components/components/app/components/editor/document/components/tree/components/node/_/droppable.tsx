@@ -73,6 +73,7 @@ export class Droppable<T> extends Component<Props<T>> {
             onDragLeave: this.onDragLeave,
             onDragEnd: this.onDragLeave,
             onDrop: this.onDrop,
+            'data-droppable': 'true',
           },
           this.ref,
         )}

@@ -15,9 +15,11 @@ export type DropdownMenuGroupProps = {
   body: JSX.Element | DropdownMenuItemProps[];
 };
 
-export const DropdownMenuGroup: React.FC<DropdownMenuGroupProps & {
-  hide: () => void;
-}> = ({ header, body, hide }) => {
+export const DropdownMenuGroup: React.FC<
+  DropdownMenuGroupProps & {
+    hide: () => void;
+  }
+> = ({ header, body, hide }) => {
   return (
     <div className={modDropdownMenu.dropdownMenu__group}>
       {header && <DropdownMenuGroupHeader {...header} />}

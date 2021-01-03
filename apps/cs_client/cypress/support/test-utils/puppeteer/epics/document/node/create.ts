@@ -22,6 +22,7 @@ const createNode = ({ node }: { node: NodeAst }) => {
   wait.s1;
   setNodeMeta({ node: { name, isBold, color, icon } });
   interact.nodeMeta.apply();
+  wait.ms250();
 };
 
 export { createNode };

@@ -1,6 +1,6 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from '../helpers/shared';
-import { rootActionCreators } from '../root';
+import { rootActionCreators as rac } from '../root';
 import { cloneObj } from '@cherryjuice/shared-helpers';
 import produce from 'immer';
 import { DocumentOperation } from '@cherryjuice/graphql-types';
@@ -24,7 +24,7 @@ type State = {
 
 const initialState: State = { operations: {} };
 const reducer = createReducer(initialState, _ => [
-  _(rootActionCreators.resetState, () => ({
+  _(rac.resetState, () => ({
     ...cloneObj(initialState),
   })),
   _(ac.add, (state, { payload }) =>

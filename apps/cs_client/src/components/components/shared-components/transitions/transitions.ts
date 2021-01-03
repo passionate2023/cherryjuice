@@ -1,3 +1,6 @@
+const disableAnimations =
+  localStorage.getItem('--disable-animations') === 'true';
+
 const configs = {
   c1: {
     tension: 255,
@@ -23,6 +26,23 @@ const transitions = {
     config: configs.c1,
     unique: true,
   },
+  t3: {
+    from: { opacity: 0, xy: [0, window.innerHeight * 0.7] },
+    enter: { opacity: 1, xy: [0, 0] },
+    leave: { opacity: 0.5, xy: [0, window.innerHeight * 1.1] },
+    config: {
+      tension: 170,
+      unique: true,
+    },
+  },
 };
+if (disableAnimations) {
+  const empty = { opacity: 1, xyz: [0, 0, 1], xy: [0, 0] };
+  Object.entries(transitions).forEach(([, props]) => {
+    props.from = empty;
+    props.enter = empty;
+    props.leave = empty;
+  });
+}
 
 export { transitions, configs };

@@ -1,16 +1,22 @@
+import { Privacy } from '@cherryjuice/graphql-types';
 import { DocumentAst } from '../../../../../fixtures/document/generate-document';
 import { puppeteer } from '../../puppeteer';
 import { wait } from '../../../../helpers/cypress-helpers';
-import { Privacy } from '@cherryjuice/graphql-types';
 import { interact } from '../../../interact/interact';
 
-export const createDocument = (docAst: DocumentAst) => {
+const createNewDocument = (docAst: DocumentAst) => {
+  interact.documentMenu.show();
   cy.findByTestId('new-document').click();
-  wait.ms500();
+  wait.ms250();
   interact.documentMeta.set.name(docAst.meta.name);
   if (docAst.meta.privacy !== Privacy.PRIVATE)
     interact.documentMeta.set.privacy(docAst.meta.privacy);
   interact.documentMeta.apply();
+  wait.ms250();
+};
+
+export const createDocument = (docAst: DocumentAst) => {
+  createNewDocument(docAst);
   puppeteer.content.createTree(docAst);
   docAst.tree.forEach(level =>
     level

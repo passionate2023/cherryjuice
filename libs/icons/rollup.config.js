@@ -1,3 +1,5 @@
+import { rollupConfig } from '../../rollup-config/index.js';
+
 const icons = {
   'add-ct': 'src/assets/icons/cherrytree/add-ct.svg',
   c: 'src/assets/icons/cherrytree/c.svg',
@@ -141,4 +143,8 @@ const main = {
   index: 'src/index.ts',
 };
 
-export const input = { ...main, ...icons };
+const input = { ...main, ...icons };
+export default {
+  ...rollupConfig(),
+  input: input,
+};

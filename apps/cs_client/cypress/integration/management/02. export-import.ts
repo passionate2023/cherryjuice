@@ -19,7 +19,7 @@ const bootstrap = () => {
   return { docAsts };
 };
 
-describe('export-import', function() {
+describe('export-import', function () {
   const { docAsts } = bootstrap();
 
   before(() => {

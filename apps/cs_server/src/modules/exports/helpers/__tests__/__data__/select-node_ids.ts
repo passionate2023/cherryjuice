@@ -10,10 +10,7 @@ const selectNode_ids = (node_ids?: number[]) => (
         ...node,
         createdAt: new Date(node.createdAt),
         updatedAt: new Date(node.updatedAt),
-        child_nodes: node.child_nodes
-          .split(',')
-          .filter(Boolean)
-          .map(Number),
+        child_nodes: node.child_nodes.split(',').filter(Boolean).map(Number),
       };
       if (node.node_id === 0) {
         acc.rootNode = node;

@@ -1,10 +1,9 @@
 const snakeToCamel = str =>
-  str.toLowerCase().replace(/([-_][a-z])/g, group =>
-    group
-      .toUpperCase()
-      .replace('-', '')
-      .replace('_', ''),
-  );
+  str
+    .toLowerCase()
+    .replace(/([-_][a-z])/g, group =>
+      group.toUpperCase().replace('-', '').replace('_', ''),
+    );
 // todo: move to shared lib
 const regex = /([\w-]*)\s*:\s*([^;]*)/g;
 export const getStyles = el => {

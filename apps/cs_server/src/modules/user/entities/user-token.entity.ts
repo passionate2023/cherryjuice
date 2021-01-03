@@ -61,11 +61,7 @@ export class UserToken extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(
-    () => User,
-    user => user.id,
-    { onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => User, user => user.id, { onDelete: 'CASCADE' })
   user: User;
   @Column()
   userId: string;

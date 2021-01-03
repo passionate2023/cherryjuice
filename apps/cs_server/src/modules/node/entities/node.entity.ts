@@ -20,21 +20,19 @@ import { NodePrivacy } from '../it/node-meta.it';
 @Entity()
 @ObjectType()
 export class Node extends BaseEntity {
-  @ManyToOne(
-    () => Document,
-    document => document.node,
-    { primary: true, onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => Document, document => document.node, {
+    primary: true,
+    onDelete: 'CASCADE',
+  })
   document: Document;
   @Field()
   @Column()
   documentId: string;
 
-  @ManyToOne(
-    () => Node,
-    node => node.children,
-    { nullable: true, onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => Node, node => node.children, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   father: Node;
   children: Node[];
 

@@ -26,7 +26,6 @@ import { useTasks } from '::root/hooks/tasks';
 import { CssVariables } from '::store/ducks/css-variables';
 import 'hint.css';
 // eslint-disable-next-line node/no-extraneous-import
-import { ApolloProvider } from '@apollo/react-common';
 
 enablePatches();
 
@@ -89,12 +88,10 @@ const Root: React.FC<PropsFromRedux> = ({
   return (
     <>
       {client && (
-        <ApolloProvider client={client}>
-          <Switch>
-            <Route path={'/auth'} component={Auth} />
-            <Route path={'(/|/document/*)'} component={App} />
-          </Switch>
-        </ApolloProvider>
+        <Switch>
+          <Route path={'/auth'} component={Auth} />
+          <Route path={'(/|/document/*)'} component={App} />
+        </Switch>
       )}
     </>
   );

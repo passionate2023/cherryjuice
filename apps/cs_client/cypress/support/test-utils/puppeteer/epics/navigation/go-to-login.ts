@@ -1,4 +1,4 @@
 export const goToLogin = () => {
-  cy.visit('/');
-  cy.get('#login-password');
+  cy.visit('/auth/login');
+  cy.get('#login-password', { timeout: 20000 });
 };

@@ -5,13 +5,15 @@ import {
 } from '::root/components/icon/hooks/render-svg';
 import { Icons } from '::root/components/icon/data/icons';
 
+export type IconName =
+  | keyof typeof Icons.material
+  | keyof typeof Icons.cherrytree.additionalIcons
+  | keyof typeof Icons.cherrytree.cherries
+  | keyof typeof Icons.cherrytree.custom_icons
+  | keyof typeof Icons.misc;
+
 type Props = SVGProps & {
-  name:
-    | keyof typeof Icons.material
-    | keyof typeof Icons.cherrytree.additionalIcons
-    | keyof typeof Icons.cherrytree.cherries
-    | keyof typeof Icons.cherrytree.custom_icons
-    | keyof typeof Icons.misc;
+  name: IconName;
 };
 
 export const Icon: React.FC<Props> = props => {

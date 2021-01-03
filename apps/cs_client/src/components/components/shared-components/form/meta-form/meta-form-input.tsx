@@ -49,12 +49,12 @@ const MetaFormInput: React.FC<FormInputProps> = ({
           }`}
           ref={inputRef}
           type={type}
+          data-testid={testId}
           name={inputName}
           {...{
             onChange: type === 'checkbox' ? onChangeCheckbox : onChangeText,
             [type === 'checkbox' ? 'checked' : 'value']: value,
           }}
-          {...(testId && { 'data-testid': testId })}
         />
       )}
       {additionalInput ? additionalInput : <></>}

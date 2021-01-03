@@ -1,7 +1,7 @@
 import { _sortNodes } from '::store/ducks/document-cache/helpers/node/sort-node/helpers/sort-nods';
 import { nodes } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/__tests__/data/doc1';
 
-describe('sort node', function() {
+describe('sort node', function () {
   it('should sort current-level by name desc', () => {
     _sortNodes({
       nodes,

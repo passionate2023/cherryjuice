@@ -1,9 +1,10 @@
 import svg from '@cherryjuice/rollup-plugin-svg';
 import postcss from 'rollup-plugin-postcss';
 import { terser } from 'rollup-plugin-terser';
+import del from 'rollup-plugin-delete';
 
 const production = !process.env.ROLLUP_WATCH;
-export const shared = {
+export const zero = ({ clean }) => ({
   plugins: [
     svg(),
     postcss({
@@ -16,5 +17,6 @@ export const shared = {
       },
     }),
     production && terser(),
-  ],
-};
+    clean && del({ targets: 'build' }),
+  ].filter(Boolean),
+});

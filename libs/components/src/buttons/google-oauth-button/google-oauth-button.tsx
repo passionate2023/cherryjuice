@@ -21,10 +21,7 @@ const GoogleOauthButton: React.FC<Props> = ({ onClick, signIn = true }) => {
       ref={ref}
     >
       <div className={modGoogleOauth.googleIconWrapper}>
-        <Icon
-          name={Icons.misc['google-g']}
-          className={modGoogleOauth.googleIconSvg}
-        />
+        <Icon name={'google-g'} className={modGoogleOauth.googleIconSvg} />
       </div>
       <p className={modGoogleOauth.btnText}>
         <b> {signIn ? 'Login' : 'Sign up'} with Google</b>

@@ -5,7 +5,7 @@ import { createActionPrefixer } from './helpers/shared';
 // @ts-ignore
 import { AlertType, TAlert } from '::types/react';
 import { cloneObj } from '@cherryjuice/shared-helpers';
-import { rootActionCreators } from './root';
+import { rootActionCreators as rac } from '::store/ducks/root';
 import { authActionCreators as aac } from './auth';
 
 const ap = createActionPrefixer('dialogs');
@@ -149,11 +149,9 @@ const initialState: State = {
 };
 
 const reducer = createReducer(initialState, _ => [
-  ...[
-    _(rootActionCreators.resetState, () => ({
-      ...cloneObj(initialState),
-    })),
-  ],
+  _(rac.resetState, () => ({
+    ...cloneObj(initialState),
+  })),
   _(ac.showDeleteDocument, state => ({
     ...state,
     showDeleteDocument: true,

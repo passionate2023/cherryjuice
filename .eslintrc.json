@@ -34,8 +34,8 @@
     "no-debugger": "error",
     "no-unused-vars": "error",
     "prefer-const": "warn",
-    "@typescript-eslint/ban-ts-ignore": "warn",
-    "@typescript-eslint/class-name-casing": "warn",
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "@typescript-eslint/naming-convention": "warn",
     "@typescript-eslint/camelcase": "off",
     "react/prop-types": "off",
     "no-extra-semi": "off",
@@ -45,6 +45,8 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "node/no-extraneous-import": "error"
+    //    "react/jsx-uses-react": "off",
+    //    "react/react-in-jsx-scope": "off"
   },
   "settings": {
     "react": {

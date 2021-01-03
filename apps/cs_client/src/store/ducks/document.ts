@@ -1,7 +1,7 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { cloneObj } from '@cherryjuice/shared-helpers';
-import { rootActionCreators } from './root';
+import { rootActionCreators as rac } from '::store/ducks/root';
 import { QDocumentMeta } from '::graphql/queries/document-meta';
 import { SelectNodeParams } from '::store/ducks/document-cache/helpers/document/select-node';
 import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
@@ -72,7 +72,9 @@ const initialState: State = {
 };
 
 const reducer = createReducer(cloneObj(initialState), _ => [
-  ...[_(rootActionCreators.resetState, () => cloneObj(initialState))],
+  _(rac.resetState, () => ({
+    ...cloneObj(initialState),
+  })),
   _(ac.setDocumentId, (state, { payload }) => ({
     ...state,
     documentId: payload,

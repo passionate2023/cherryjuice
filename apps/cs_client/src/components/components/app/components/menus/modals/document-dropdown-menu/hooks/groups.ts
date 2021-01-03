@@ -28,7 +28,7 @@ export const useGroups = ({
         {
           text: 'import document',
           onClick: ac.dialogs.showImportDocument,
-          disabled: !userId,
+          disabled: !userId || !online,
           testId: testIds.dialogs__selectDocument__footerLeft__import,
         },
       ],

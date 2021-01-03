@@ -7,6 +7,7 @@ import { CustomRange } from '::helpers/execK/steps/get-selection';
 import { pipe1 } from '::helpers/execK/steps/pipe1';
 import { writeChangesToDom } from '::helpers/execK/steps/pipe3';
 import { CursorPosition } from '::helpers/typing/new-line/helpers/get-cursor-position';
+import { NB_SPACE } from '@cherryjuice/ahtml-to-html';
 
 const beforeTable = (selection: CustomRange): Node => {
   const siblings = collectSiblings()(selection.startElement);
@@ -70,7 +71,7 @@ const generic = (
   firstElementOfNewLine.after(...siblings);
   if (preserveIndentation && spaceAtStart) {
     const span = document.createElement('span');
-    span.innerText = spaceAtStart;
+    span.innerText = spaceAtStart.replace(/ $/, NB_SPACE);
     startDDOEShell.insertBefore(span, firstElementOfNewLine);
     return [span, spaceAtStart.length];
   } else return [firstElementOfNewLine, 0];

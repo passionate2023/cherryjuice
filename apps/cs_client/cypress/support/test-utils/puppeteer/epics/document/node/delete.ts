@@ -16,7 +16,9 @@ const deleteNode = ({
   interact.tree.select.node(nodeToDelete);
   cy.findByTestId(testIds.toolBar__main__deleteNode).click();
   wait.ms500();
-  cy.findByTestId(testIds.modal__deleteNode__confirm).click();
+  cy.findAllByTestId(testIds.modal__deleteNode__confirm)
+    .first()
+    .click({ force: true });
   deleteNodeAndItsChildren(treeAst)(treeMap)(nodeToDelete);
   wait.s1;
 };

@@ -8,9 +8,11 @@ export type DropdownMenuItemProps = {
   testId?: string;
 };
 
-export const DropdownMenuItem: React.FC<DropdownMenuItemProps & {
-  hide: () => void;
-}> = ({ text, onClick, hide, testId, disabled }) => {
+export const DropdownMenuItem: React.FC<
+  DropdownMenuItemProps & {
+    hide: () => void;
+  }
+> = ({ text, onClick, hide, testId, disabled }) => {
   const _onClick = e => {
     e.preventDefault();
     e.stopPropagation();

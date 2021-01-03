@@ -5,7 +5,8 @@ const path = require('path');
 const args = process.argv;
 const stripOptional = args.includes('--opt');
 const stripDev = args.includes('--dev');
-const stripServerDeps = args.includes('--include-server');
+const includeServerDeps = args.includes('--include-server');
+const includeClientDeps = args.includes('--include-client');
 
 const stripDevDependencies = folder => {
   const filePath = path.join(process.cwd(), folder, 'package.json');
@@ -39,9 +40,11 @@ const resolveGlobs = folders =>
 
 const paths = [
   './',
-  stripServerDeps ? './apps/*' : './apps/cs_client/',
+  includeServerDeps ? './apps/cs_server' : '',
+  includeClientDeps ? './apps/cs_client' : '',
+  './apps/editor-demo',
   './libs/*',
-];
+].filter(Boolean);
 
 resolveGlobs(paths).forEach(module => {
   stripDevDependencies(module);

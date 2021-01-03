@@ -30,6 +30,7 @@ describe('create document > create nodes > dnd > edit', () => {
   } = bootstrap();
 
   before(() => {
+    puppeteer.flags.disableAnimations();
     puppeteer.auth.signIn(users.user0);
     puppeteer.manage.deleteDocuments([], true);
   });

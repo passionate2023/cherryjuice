@@ -45,9 +45,9 @@ const BaseModal: React.FC<BaseModalProps> = ({
       {children}
     </span>
     <div className={modDeleteNode.deleteDocument__buttons}>
-      {buttons.map(({ onClick, label, disabled, testId, lazyAutoFocus }, i) => (
+      {buttons.map(({ onClick, label, disabled, testId, lazyAutoFocus }) => (
         <ButtonSquare
-          key={i}
+          key={label}
           className={`${modAlertModal.alertModal__dismissButton}`}
           onClick={onClick}
           lazyAutoFocus={lazyAutoFocus}

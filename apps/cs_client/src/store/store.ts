@@ -20,7 +20,6 @@ import { authActionCreators } from './ducks/auth';
 import { hotkeysSettingsACs } from '::store/ducks/settings/hotkeys-settings/hotkeys-settings';
 import { settingsActionCreators } from './ducks/settings';
 import { documentCacheActionCreators } from '::store/ducks/document-cache/document-cache';
-import { animationActionCreators } from '::store/ducks/animations';
 import { timelinesActionCreators } from '::store/ducks/timelines';
 import { editorSettingsActionCreators } from '::store/ducks/settings/editor-settings/editor-settings';
 import { bookmarksActionCreators } from '::store/ducks/bookmarks';
@@ -56,7 +55,6 @@ const ac_ = {
   hotkeySettings: hotkeysSettingsACs,
   settings: settingsActionCreators,
   documentCache: documentCacheActionCreators,
-  animation: animationActionCreators,
   timelines: timelinesActionCreators,
   editorSettings: editorSettingsActionCreators,
 };
@@ -66,7 +64,6 @@ const ac = {
   dialogs: b(dialogsActionCreators, dispatch),
   node: b(nodeActionCreators, dispatch),
   editor: b(editorActionCreators, dispatch),
-  animation: b(animationActionCreators, dispatch),
   auth: b(authActionCreators, dispatch),
   timelines: b(timelinesActionCreators, dispatch),
   documentCache: b(documentCacheActionCreators, dispatch),

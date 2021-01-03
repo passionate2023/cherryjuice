@@ -15,7 +15,7 @@ export const useLazyAutoFocus = (
           },
         });
         return () => {
-          elementRef.current.blur();
+          elementRef.current?.blur();
           cleanup();
         };
       }

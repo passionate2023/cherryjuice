@@ -2,9 +2,9 @@
   "name": "@cherryjuice/graphql-types",
   "version": "0.0.1",
   "description": "",
-  "main": "build/cjs/index.js",
   "module": "build/index.js",
-  "jsnext:main": "build/index.js",
+  "main": "build/cjs/index.js",
+  "types": "build/types",
   "private": true,
   "workspaces": {
     "nohoist": [
@@ -19,7 +19,8 @@
   "scripts": {
     "generate": "cd src && node generate.js",
     "postgenerate": "yarn build",
-    "build": "rollup -c",
+    "build": "rollup -c --environment mode:ts2_es_cjs",
+    "types": "tsc -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
     "test": "exit 0",
     "lint": "eslint ./**"
   },
@@ -27,7 +28,7 @@
     "graphql": "^14.5.7",
     "graphql-cli": "^4.1.0",
     "graphql-schema-typescript": "^1.3.2",
-    "typescript": "^3.8.3"
+    "typescript": "^4.1.3"
   },
   "author": "",
   "license": "ISC"

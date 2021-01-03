@@ -4,6 +4,7 @@ import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Icon } from '@cherryjuice/icons';
 import { Tooltip } from '::root/unclassified';
 import { TooltipProps } from '::root/unclassified/tooltip/tooltip';
+import { IconName } from '@cherryjuice/icons';
 
 const ToolbarButton: React.FC<{
   onClick?: any;
@@ -12,7 +13,7 @@ const ToolbarButton: React.FC<{
   disabled?: boolean;
   testId?: string;
   dontMount?: boolean;
-  icon?: string;
+  icon?: IconName;
   tooltip?: TooltipProps;
 }> = ({
   icon,

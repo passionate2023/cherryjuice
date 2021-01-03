@@ -1,4 +1,5 @@
 import * as sqlite from 'sqlite';
+import sqlite3 from 'sqlite3';
 import { Database } from 'sqlite';
 
 export class DocumentSqliteRepository {
@@ -6,8 +7,8 @@ export class DocumentSqliteRepository {
     db: undefined,
   };
 
-  async openDB(path: string): Promise<void> {
-    this.sqlite.db = await sqlite.open(path);
+  async openDB(filename: string): Promise<void> {
+    this.sqlite.db = await sqlite.open({ filename, driver: sqlite3.Database });
   }
 
   async closeDB(): Promise<void> {

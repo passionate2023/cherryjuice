@@ -25,7 +25,7 @@ jobs:
         run: yarn
 
       - name: build local dependencies
-        run: yarn build:libs
+        run: yarn build:libs:cjs
 
       - name: run jest tests
         run: sudo yarn test

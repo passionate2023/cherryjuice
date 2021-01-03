@@ -1,3 +1,4 @@
 {
-  "baseUrl": "http://localhost:1236"
+  "baseUrl": "http://localhost:1236",
+  "scrollBehavior": "nearest"
 }

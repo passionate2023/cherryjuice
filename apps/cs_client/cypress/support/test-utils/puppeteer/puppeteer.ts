@@ -28,6 +28,18 @@ import { pasteHtmlImages } from './epics/clipboard/paste-html-images';
 import { pasteBlobImages } from './epics/clipboard/paste-blob-images';
 
 const puppeteer = {
+  flags: {
+    disableAnimations: () => {
+      cy.window().then(window => {
+        window.localStorage.setItem('--disable-animations', 'true');
+      });
+    },
+    disableScrolling: () => {
+      cy.window().then(window => {
+        window.localStorage.setItem('--disable-scrolling', 'true');
+      });
+    },
+  },
   auth: {
     signOut,
     signIn,

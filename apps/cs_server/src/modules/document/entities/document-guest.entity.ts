@@ -41,21 +41,13 @@ export class DocumentGuest extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(
-    () => User,
-    user => user.id,
-    { onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => User, user => user.id, { onDelete: 'CASCADE' })
   user: User;
   @Field()
   @Column()
   userId: string;
 
-  @ManyToOne(
-    () => Document,
-    document => document.id,
-    { onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => Document, document => document.id, { onDelete: 'CASCADE' })
   document: Document;
   @Column()
   documentId: string;

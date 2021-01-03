@@ -1,4 +1,4 @@
-import { cloneObj } from '../../../src/components/components/editor/helpers/execK/helpers';
+import { cloneObj } from '@cherryjuice/shared-helpers';
 
 export const randomBoolean = () => Math.floor(Math.random() * 10) < 5;
 export const randomInteger = (min, max) => {

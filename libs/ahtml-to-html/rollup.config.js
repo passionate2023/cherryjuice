@@ -1,6 +1,7 @@
-import { shared } from '../../rollup-configs/typescript2/config.js';
+import { rollupConfig } from '../../rollup-config/index';
+
 export default {
-  ...shared,
+  ...rollupConfig(),
   input: {
     index: 'src/index.ts',
     'ahtml-to-html': 'src/ahtml-to-html.tsx',
