@@ -1,4 +1,5 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 //$node-height: calc(#{$title-and-recent-bar-height-md} - 5px);
 //$node-width: 100px;
@@ -63,9 +64,9 @@
   width: 175px;
   height: 100%;
   min-height: 32px;
-  background-color: var(--background);
+  background-color: var(--background-100);
   cursor: pointer;
-  border-bottom: 4px solid var(--background);
+  border-bottom: 4px solid var(--background-100);
   transition: filter 200ms linear;
   &:hover {
     filter: brightness(0.9);
@@ -76,15 +77,15 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 12px;
   color: var(--on-surface);
   margin-bottom: -2.5px;
+  @include type-e();
 }
 .tab--selected {
   border-bottom: 4px solid var(--secondary-100);
 }
 .tab--has-changes {
-  color: var(--teriary);
+  color: var(--teriary-050);
 }
 .tab--is-new {
   color: var(--danger);

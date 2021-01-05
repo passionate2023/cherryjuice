@@ -1,5 +1,6 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 @import '~@cherryjuice/shared-styles/build/vars/states';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
 
 @mixin button-variant($color, $bg-color, $br-base, $br-step) {
   color: $color;
@@ -21,11 +22,10 @@
 .button {
   user-select: none;
   border: none;
-  background-color: var(--background);
+  background-color: var(--background-100);
   color: var(--primary-020);
   transition: background-color 0.3s ease, filter 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1.25px;
+
   cursor: pointer;
   &:hover:not([disabled]) {
     background-color: var(--primary-100);
@@ -45,6 +45,7 @@
   //height: 30px;
   //width: 30px;
   margin: 0;
+  @include type-d()
 }
 .button--text {
   display: inline-block;
@@ -53,18 +54,18 @@
 }
 
 .button--danger {
-  @include button-variant(var(--background), var(--danger), 1, 0.1);
+  @include button-variant(var(--background-100), var(--danger), 1, 0.1);
 }
 .button--dark {
-  @include button-variant(var(--background), var(--on-surface-010), 1.6, 0.5);
+  @include button-variant(var(--background-100), var(--on-surface-010), 1.6, 0.5);
   svg {
     fill: white;
   }
 }
 
 .button--pressed {
-  background-color: var(--primary) !important;
-  color: var(--background) !important;
+  background-color: var(--primary-050) !important;
+  color: var(--background-100) !important;
   box-shadow: $box-shadow1;
   svg {
     fill: white;

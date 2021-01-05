@@ -3,7 +3,7 @@
   padding: 10px 15px !important;
   font-weight: lighter;
   background-color: var(--primary-020);
-  color: var(--background);
+  color: var(--background-100);
   filter: brightness(1.5);
   cursor: pointer;
   font-size: 1.2rem;
@@ -17,7 +17,7 @@
   border-radius: 5px;
   border: none;
   &:focus {
-    outline: 4px solid var(--primary-030-5);
+    outline: 4px solid var(--primary-030-50);
   }
   &:disabled {
     filter: opacity(0.5);

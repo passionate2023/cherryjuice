@@ -27,7 +27,7 @@ const Node: React.FC<Props> = ({
       data-id={node_id}
     >
       <Icon name={Icons.material['arrow-right']} />
-      {name}
+      <span>{name}</span>
     </div>
   );
 };

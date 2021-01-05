@@ -50,5 +50,5 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   transform: translateX($circleHOffset);
-  background-color: var(--primary);
+  background-color: var(--primary-050);
 }

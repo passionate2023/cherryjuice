@@ -1,3 +1,4 @@
+import '@cherryjuice/shared-styles'; // so that webpack rebuilds when rollup builds styles package
 import modNode from '::sass-modules/tree/node.scss';
 import modDrawer from '::sass-modules/shared-components/drawer.scss';
 import modTextInput from '::sass-modules/shared-components/text-input.scss';

@@ -22,6 +22,13 @@ const es = {
   ],
 };
 
+if (!production)
+  es.plugins.push({
+    name: 'watch-external',
+    async buildStart() {
+      this.addWatchFile('./src');
+    },
+  });
 if (production) es.plugins.push(del({ targets: 'build/*' }));
 
 export default [es];

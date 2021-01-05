@@ -15,7 +15,7 @@
   align-items: center;
   flex-wrap: nowrap;
   // style
-  background-color: var(--background);
+  background-color: var(--background-100);
   user-select: none;
 }
 .tool-bar__group {
@@ -87,7 +87,7 @@
   @include respond-to($md-down) {
     box-shadow: $box-shadow3;
     opacity: 0.95;
-    background-color: var(--background-95);
+    background-color: var(--background-100-95);
   }
 
   &:last-child {
@@ -106,7 +106,7 @@
   }
   // style
   @include respond-to($md-down) {
-    background-color: var(--background);
+    background-color: var(--background-100);
   }
 }
 

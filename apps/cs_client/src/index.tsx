@@ -10,7 +10,8 @@ if (process.env.NODE_ENV !== 'development') {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.type = 'text/css';
-  link.href = '//fonts.googleapis.com/css?family=Roboto:400';
+  link.href =
+    'https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap';
   document.head.appendChild(link);
 }
 

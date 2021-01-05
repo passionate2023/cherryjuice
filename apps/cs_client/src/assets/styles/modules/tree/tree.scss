@@ -50,7 +50,7 @@ $bubble-width: 35px;
     height: $bubble-width;
     width: $bubble-width;
     border-radius: 50%;
-    background-color: var(--background);
+    background-color: var(--background-100);
     cursor: grab;
     z-index: $ZI-resize-bubble;
   }
