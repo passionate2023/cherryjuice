@@ -13,14 +13,11 @@ module.exports = {
     return merge(common, config);
   },
   addons: [
-    '@storybook/addon-actions/register',
-    '@storybook/addon-a11y/register',
-    '@storybook/addon-knobs/register',
+    '@storybook/addon-essentials',
+    '@storybook/addon-a11y',
+    '@storybook/addon-knobs',
     '@storybook/addon-storysource',
-    '@storybook/addon-viewport/register',
-    '@storybook/addon-backgrounds/register',
-    '@storybook/addon-controls',
-    '@storybook/addon-toolbars',
     'storybook-mobile',
+    'storybook-addon-designs',
   ],
 };
