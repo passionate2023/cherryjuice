@@ -43,6 +43,9 @@
   color: var(--on-surface);
   border: 0;
   padding: 0 10px;
+  &::placeholder {
+    color: var(--on-surface-5);
+  }
 }
 .search__field__buttons {
   position: absolute;

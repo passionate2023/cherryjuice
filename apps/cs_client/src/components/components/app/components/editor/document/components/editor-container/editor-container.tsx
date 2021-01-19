@@ -56,7 +56,7 @@ const EditorContainer: React.FC<Props & PropsFromRedux> = ({
   };
 
   const contentEditableProps: ContentEditableProps = {
-    editable: !node?.read_only && contentEditable && isDocumentOwner,
+    editable: Boolean(!node?.read_only && contentEditable && isDocumentOwner),
     focusOnUpdate: !isOnMd,
     html: node?.html,
     images: node?.image,
@@ -70,6 +70,7 @@ const EditorContainer: React.FC<Props & PropsFromRedux> = ({
         gestureHandlerProps={gestureHandlerProps}
         loading={!node?.html || fetchDocumentInProgress || fetchNodeStarted}
         fallbackComponent={online ? <SpinnerCircle /> : <OfflineBanner />}
+        style={{ zIndex: 1 }}
       />
     </ErrorBoundary>
   );

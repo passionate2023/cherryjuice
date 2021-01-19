@@ -4,7 +4,7 @@ import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { modSearchFilter } from '::sass-modules';
 import { ButtonSquare } from '@cherryjuice/components';
 import { SearchSortOptions, SortNodesBy } from '@cherryjuice/graphql-types';
-import { mapScopeToLabel } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
+import { mapEnumToReadableText } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
 
 export type SortOptionProps = {
   sortBy: SortNodesBy;
@@ -24,7 +24,7 @@ const SortOption: React.FC<SortOptionProps> = ({
   return (
     <div className={joinClassNames([modSearchFilter.searchFilter__list__item])}>
       <ButtonSquare
-        text={mapScopeToLabel(sortBy)}
+        text={mapEnumToReadableText(sortBy)}
         onClick={setSortByM}
         active={sortOptions.sortBy === sortBy}
       />
@@ -33,4 +33,3 @@ const SortOption: React.FC<SortOptionProps> = ({
 };
 
 export { SortOption };
-export { SortOptionProps };

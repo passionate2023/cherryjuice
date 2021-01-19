@@ -90,7 +90,7 @@ const Root: React.FC<PropsFromRedux> = ({
       {client && (
         <Switch>
           <Route path={'/auth'} component={Auth} />
-          <Route path={'(/|/document/*)'} component={App} />
+          <Route path={'(/|/document/*|/documents/*)'} component={App} />
         </Switch>
       )}
     </>

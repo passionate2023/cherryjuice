@@ -3,14 +3,12 @@ $weight-light: 300;
 $weight-regular: 400;
 $weight-medium: 500;
 
-
 @mixin type-a() {
   font-family: $font-family;
   font-weight: $weight-light;
   font-size: 18px;
   line-height: 23px;
 }
-
 
 @mixin type-b() {
   family: Verdana, sans-serif;
@@ -25,7 +23,6 @@ $weight-medium: 500;
   line-height: 16px;
   letter-spacing: 0.02rem;
 }
-
 
 @mixin type-d() {
   font-family: $font-family;

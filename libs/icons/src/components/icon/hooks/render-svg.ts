@@ -1,6 +1,7 @@
 import React, { EventHandler, useEffect, useRef, useState } from 'react';
 import { getStyles } from '::root/components/icon/hooks/helpers/get-styles';
 import { stringToSingleElement } from './helpers/string-to-element';
+import { IconName } from '::root/components/icon/icon';
 
 export type SVGProps = {
   size?: number;
@@ -8,7 +9,7 @@ export type SVGProps = {
   className?: string;
   testId?: string;
   image?: boolean;
-  name: string;
+  name: IconName;
 };
 
 const useRenderSVG = ({
@@ -44,9 +45,7 @@ const useRenderSVG = ({
         }
         props['width'] = size + 'px';
         props['height'] = size + 'px';
-        const element = React.createElement(image ? 'img' : 'svg', props);
-
-        ref.current = element;
+        ref.current = React.createElement(image ? 'img' : 'svg', props);
         setFetched(new Date().getTime());
       }
     });

@@ -43,7 +43,7 @@
 .tool-bar__group--formatting-container {
   pointer-events: none;
   @include respond-to($md-down) {
-    pointer-events: all;
+    pointer-events: auto;
   }
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -86,8 +86,8 @@
   // style
   @include respond-to($md-down) {
     box-shadow: $box-shadow3;
-    opacity: 0.95;
-    background-color: var(--background-100-95);
+    opacity: 0.96;
+    background-color: var(--background-100);
   }
 
   &:last-child {

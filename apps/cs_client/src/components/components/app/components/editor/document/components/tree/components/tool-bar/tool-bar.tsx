@@ -7,7 +7,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { useState } from 'react';
 import { FilterNodes } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/components/filter-nodes';
 import { ButtonSquare } from '@cherryjuice/components';
-import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 import { useSortMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/sort-menu-items';
 import { useFoldMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/fold-menu-items';
 
@@ -28,7 +28,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 
 const ToolBar: React.FC<Props & PropsFromRedux> = ({
   documentId,
@@ -52,7 +52,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
     <div className={modTreeToolBar.treeToolBar}>
       <div className={modTreeToolBar.treeToolBar__controls}>
         <FilterNodes />
-        <ContextMenuWrapper
+        <ContextMenuWrapperLegacy
           shown={CMShown}
           hide={hide}
           show={show}
@@ -71,7 +71,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
             iconName={Icons.material['three-dots-vertical']}
             className={modTreeToolBar.tree_focusButton}
           />
-        </ContextMenuWrapper>
+        </ContextMenuWrapperLegacy>
       </div>
     </div>
   );

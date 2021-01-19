@@ -22,8 +22,7 @@ import { useFormInputs } from '::app/components/menus/dialogs/document-meta/hook
 
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showDocumentMetaDialog,
-  focusedDocumentId:
-    state.documentsList.focusedDocumentId || state.document.documentId,
+  focusedDocumentId: state.home.activeDocumentId || state.document.documentId,
   documents: getDocumentsList(state),
   isOnMd: state.root.isOnMd,
   userId: state.auth.user?.id,

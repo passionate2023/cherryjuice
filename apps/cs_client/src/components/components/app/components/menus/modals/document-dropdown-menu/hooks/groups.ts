@@ -7,11 +7,13 @@ export const useGroups = ({
   documentId,
   userId,
   documentHasUnsavedChanges,
+  includeCurrentDocumentSection,
 }: {
   online: boolean;
   userId: string;
   documentId: string;
   documentHasUnsavedChanges: boolean;
+  includeCurrentDocumentSection: boolean;
 }): DropdownMenuGroupProps[] => {
   const noDocumentIsSelected = !documentId;
   const newDocument = documentId?.startsWith('new-document');
@@ -34,7 +36,7 @@ export const useGroups = ({
       ],
     },
 
-    {
+    includeCurrentDocumentSection && {
       id: 'current-document',
       header: {
         text: 'current document',
@@ -69,5 +71,5 @@ export const useGroups = ({
         },
       ],
     },
-  ];
+  ].filter(Boolean);
 };

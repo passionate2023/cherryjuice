@@ -1,0 +1,12 @@
+.rows-container {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rows-container--collapsed {
+  flex-direction: column;
+}

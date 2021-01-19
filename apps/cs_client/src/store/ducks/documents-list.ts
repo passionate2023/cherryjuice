@@ -2,6 +2,7 @@ import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { AsyncOperation } from './document';
 import { rootActionCreators as rac } from '::store/ducks/root';
+import { homeActionCreators as hac } from '::store/ducks/home/home';
 import { cloneObj } from '@cherryjuice/shared-helpers';
 import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 import { LoadDocumentsListPayload } from '::store/ducks/document-cache/helpers/document/load-documents-list';
@@ -137,6 +138,11 @@ const reducer = createReducer(initialState, _ => [
         : state.selectedIDs.includes(payload)
         ? state.selectedIDs.filter(id => id !== payload)
         : [...state.selectedIDs, payload],
+    })),
+    _(hac.selectDocument, (state, { payload: { documentId } }) => ({
+      ...state,
+      focusedDocumentId: documentId,
+      selectedIDs: [documentId],
     })),
   ],
   ...[

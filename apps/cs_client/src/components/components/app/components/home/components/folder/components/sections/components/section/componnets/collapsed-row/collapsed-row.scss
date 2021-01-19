@@ -1,0 +1,18 @@
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
+
+.collapsed-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 16px;
+  top: 0px;
+  @include type-e();
+  color: var(--on-background);
+}
+
+.row__cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+}

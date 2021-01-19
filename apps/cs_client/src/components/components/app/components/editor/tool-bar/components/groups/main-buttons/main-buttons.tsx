@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { memo, useEffect, useRef } from 'react';
+import { memo } from 'react';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { modToolbar } from '::sass-modules';
 import { testIds } from '::cypress/support/helpers/test-ids';
@@ -28,7 +28,7 @@ const mapState = (state: Store) => {
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 
 const MainButtons: React.FC<Props & PropsFromRedux> = ({
   showTree,
@@ -40,17 +40,9 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
   documentActionNOF,
 }) => {
   const noDocumentIsSelected = !documentId;
-  const ref = useRef<HTMLDivElement>();
-  useEffect(() => {
-    const handle = setInterval(() => {
-      ref.current.scrollIntoView();
-    }, 2000);
-    return () => {
-      clearInterval(handle);
-    };
-  }, []);
+
   return (
-    <div ref={ref} className={modToolbar.toolBar__group}>
+    <div className={modToolbar.toolBar__group}>
       <ToolbarButton
         onClick={ac.editor.toggleTree}
         active={showTree}

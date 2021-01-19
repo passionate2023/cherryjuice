@@ -14,7 +14,7 @@ import {
   SearchHeaderContainer,
   SearchHeaderGroup,
 } from '::root/components/shared-components/dialog/animations/search-header-container';
-import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 import { ButtonCircle } from '@cherryjuice/components';
 import {
   modPickTimeRange,
@@ -31,7 +31,7 @@ export const SearchSetting: React.FC<{
   hide: () => void;
 }> = memo(function SearchSetting({ iconName, shown, show, hide, children }) {
   return (
-    <ContextMenuWrapper
+    <ContextMenuWrapperLegacy
       clickOutsideSelectorsWhitelist={[
         {
           selector: '.' + modSearchFilter.searchFilter,
@@ -55,7 +55,7 @@ export const SearchSetting: React.FC<{
         iconName={iconName}
         active={shown}
       />
-    </ContextMenuWrapper>
+    </ContextMenuWrapperLegacy>
   );
 });
 

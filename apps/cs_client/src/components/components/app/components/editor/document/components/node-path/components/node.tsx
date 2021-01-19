@@ -3,7 +3,7 @@ import { modNodePath, modTabs } from '::sass-modules';
 import { ac } from '::store/store';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Icons, Icon } from '@cherryjuice/icons';
-import { NodeProps } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/components/components/tab';
+import { NodeProps } from '::root/components/app/components/tabs/document-nodes/components/components/tab';
 
 type Props = NodeProps & { documentId: string };
 

@@ -5,10 +5,10 @@ import { Icon, Icons } from '@cherryjuice/icons';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { LabelPosition, Tooltip } from '@cherryjuice/components';
 
-const mapPrivacyToIcon = (privacy: NodePrivacy | Privacy) => {
+export const mapPrivacyToIcon = (privacy: NodePrivacy | Privacy) => {
   switch (privacy) {
     case Privacy.PRIVATE:
-      return Icons.material['lock-closed'];
+      return undefined; //Icons.material['lock-closed'];
     case Privacy.GUESTS_ONLY:
       return Icons.material.people;
     case Privacy.PUBLIC:

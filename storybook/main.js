@@ -13,11 +13,19 @@ module.exports = {
     return merge(common, config);
   },
   addons: [
-    '@storybook/addon-essentials',
+    {
+      name: '@storybook/addon-essentials',
+      options: {
+        '@storybook/addon-backgrounds': false,
+      },
+    },
     '@storybook/addon-a11y',
-    '@storybook/addon-knobs',
+    // '@storybook/addon-knobs',
     '@storybook/addon-storysource',
-    'storybook-mobile',
+    // 'storybook-mobile',
     'storybook-addon-designs',
   ],
+  typescript: {
+    reactDocgen: 'none',
+  },
 };

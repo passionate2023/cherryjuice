@@ -11,8 +11,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { ToolBar } from './components/tool-bar/tool-bar';
 import { Droppable } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';
 import { modNode, modTree } from '::sass-modules';
-import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper-pure';
-import { useChildContextMenu } from '::root/components/shared-components/context-menu/hooks/child-context-menu';
+import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
 import { useTreeContextMenuItems } from '::root/components/app/components/editor/document/components/tree/hooks/tree-context-menu-items';
 
 const getParamsFromLocation = () => {
@@ -24,7 +23,7 @@ const getParamsFromLocation = () => {
   return params;
 };
 
-type Props = {};
+type Props = Record<string, never>;
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -54,7 +53,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
   useEffect(onStart, []);
 
   const params = getParamsFromLocation();
-  const { position, show, hide, shown } = useChildContextMenu({
+  const hookProps = {
     getIdOfActiveElement: target => {
       const nodeElement: HTMLElement = target.closest('.' + modNode.node);
       if (nodeElement) return nodeElement.dataset.nodeId;
@@ -65,7 +64,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
         node_id: +node_id,
       });
     },
-  });
+  };
   const contextMenuItems = useTreeContextMenuItems({
     documentId,
     node_id: selectedNode_id,
@@ -79,13 +78,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
       className={modTree.tree__resizeHandle}
     >
       <ErrorBoundary>
-        <ContextMenuWrapper
-          shown={shown}
-          hide={hide}
-          show={show}
-          items={contextMenuItems}
-          position={position}
-        >
+        <ContextMenuWrapper hookProps={hookProps} items={contextMenuItems}>
           {({ ref, show }) => (
             <div
               className={modTree.tree}
@@ -108,6 +101,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
                     onContextMenu={show}
                   >
                     {nodes &&
+                      nodes[0] &&
                       nodes[0].child_nodes.map((node_id, index) => {
                         const node = nodes[node_id];
                         if (!filteredNodes || filteredNodes[node_id])

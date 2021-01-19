@@ -22,7 +22,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 
 const Empty: React.FC<Props & PropsFromRedux> = ({
   isDocumentOwner,
@@ -41,7 +41,7 @@ const Empty: React.FC<Props & PropsFromRedux> = ({
     treeWidth,
     previousTreeWidth,
   );
-  useGetPreviousOperations();
+  useGetPreviousOperations(userId);
   useGetActiveOperations(userId);
   useApplyEditorSettings();
   useInitEditorBridge();

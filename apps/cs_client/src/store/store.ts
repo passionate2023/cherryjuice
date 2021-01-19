@@ -23,6 +23,7 @@ import { documentCacheActionCreators } from '::store/ducks/document-cache/docume
 import { timelinesActionCreators } from '::store/ducks/timelines';
 import { editorSettingsActionCreators } from '::store/ducks/settings/editor-settings/editor-settings';
 import { bookmarksActionCreators } from '::store/ducks/bookmarks';
+import { homeActionCreators } from '::store/ducks/home/home';
 
 type Store = ReturnType<typeof reducer>;
 
@@ -57,6 +58,7 @@ const ac_ = {
   documentCache: documentCacheActionCreators,
   timelines: timelinesActionCreators,
   editorSettings: editorSettingsActionCreators,
+  home: homeActionCreators,
 };
 const dispatch = store.dispatch;
 const ac = {
@@ -76,6 +78,7 @@ const ac = {
   settings: b(settingsActionCreators, dispatch),
   editorSettings: b(editorSettingsActionCreators, dispatch),
   bookmarks: b(bookmarksActionCreators, dispatch),
+  home: b(homeActionCreators, dispatch),
 };
 
 export { store, ac, ac_, epicMiddleware };

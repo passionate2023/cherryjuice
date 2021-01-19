@@ -28,7 +28,7 @@ const icons = {
   find: 'src/assets/icons/cherrytree/find.svg',
   'folder-ct': 'src/assets/icons/cherrytree/folder-ct.svg',
   'help-contents': 'src/assets/icons/cherrytree/help-contents.svg',
-  home: 'src/assets/icons/cherrytree/home.svg',
+  'home-ct': 'src/assets/icons/cherrytree/home.svg',
   html: 'src/assets/icons/cherrytree/html.svg',
   information: 'src/assets/icons/cherrytree/information.svg',
   java: 'src/assets/icons/cherrytree/java.svg',
@@ -56,6 +56,7 @@ const icons = {
   'arrow-up': 'src/assets/icons/material/arrow-up.svg',
   background: 'src/assets/icons/material/background.svg',
   bold: 'src/assets/icons/material/bold.svg',
+  home: 'src/assets/icons/material/home.svg',
   bookmark: 'src/assets/icons/material/bookmark.svg',
   bookmarks: 'src/assets/icons/material/bookmarks.svg',
   cancel: 'src/assets/icons/material/cancel.svg',
@@ -135,6 +136,7 @@ const icons = {
   undo: 'src/assets/icons/material/undo.svg',
   username: 'src/assets/icons/material/username.svg',
   'google-g': 'src/assets/icons/misc/google-g.svg',
+  'cloud-upload': 'src/assets/icons/material/cloud-upload.svg',
 };
 
 const main = {

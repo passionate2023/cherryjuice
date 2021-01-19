@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { useCallback } from 'react';
 import { modSearchFilter } from '::sass-modules';
-import { mapScopeToLabel } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
+import { mapEnumToReadableText } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { ButtonSquare } from '@cherryjuice/components';
 
@@ -14,7 +14,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 
 const SearchOptions: React.FC<Props & PropsFromRedux> = ({ searchOptions }) => {
   const setOptionM = useCallback(
@@ -42,7 +42,7 @@ const SearchOptions: React.FC<Props & PropsFromRedux> = ({ searchOptions }) => {
               key={optionName}
             >
               <ButtonSquare
-                text={mapScopeToLabel(optionName)}
+                text={mapEnumToReadableText(optionName)}
                 onClick={setOptionM(optionName)}
                 active={searchOptions[optionName]}
               />

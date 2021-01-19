@@ -2,7 +2,7 @@ import * as React from 'react';
 import { modDialog } from '::sass-modules';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { memo, useEffect, useRef, useState } from 'react';
-import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
 
@@ -73,14 +73,14 @@ const DialogListItem: React.FC<Props> = ({
       </div>
       {cmItems && (
         <div className={`${modDialog.dialogListItem__contextMenuButton} `}>
-          <ContextMenuWrapper
+          <ContextMenuWrapperLegacy
             shown={showModal}
             hide={() => setShowModal(false)}
             show={() => setShowModal(true)}
             items={cmItems}
           >
             <Icon name={Icons.material.menu} />
-          </ContextMenuWrapper>
+          </ContextMenuWrapperLegacy>
         </div>
       )}
     </div>

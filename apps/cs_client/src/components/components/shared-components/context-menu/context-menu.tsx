@@ -2,7 +2,6 @@ import React from 'react';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { modContextMenu } from '::sass-modules';
 import {
-  Assertion,
   useClickOutsideModal,
   joinClassNames,
 } from '@cherryjuice/shared-helpers';
@@ -14,7 +13,7 @@ import {
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { Scrim } from '::root/components/shared-components/scrim/scrim';
-import { Position } from '::root/components/shared-components/context-menu/context-menu-wrapper';
+import { Position } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 
 const mapState = (state: Store) => ({
   isOnMd: state.root.isOnMd,
@@ -29,7 +28,8 @@ export type ContextMenuProps = {
   items?: CMItem[];
   position: Position;
   showAsModal?: 'md' | 'mb';
-  clickOutsideSelectorsWhitelist?: Assertion[];
+  clickOutsideSelectorsWhitelist?: any[];
+  id: string;
 };
 
 const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
@@ -42,6 +42,7 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
   isOnMd,
   isOnMb,
   clickOutsideSelectorsWhitelist = [],
+  id,
 }) => {
   const [activeItem, setActiveItem] = useState<string>(undefined);
   const contextMenuR = useRef<HTMLDivElement>();
@@ -99,6 +100,7 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
                 hide={hide}
                 setActiveItem={setActiveItem}
                 activeItem={activeItem}
+                id={id}
               />
             ))
           : children}

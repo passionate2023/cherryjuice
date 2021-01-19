@@ -10,7 +10,14 @@ import '../apps/cs_client/src/assets/styles/global-scope/material-ui.scss';
 import '../apps/cs_client/src/assets/styles/global-scope/google-picker.scss';
 import '@cherryjuice/shared-styles/build/global/base.scss';
 import '@cherryjuice/shared-styles/build/global/css-variables.scss';
-
+{
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href =
+    'https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap';
+  document.head.appendChild(link);
+}
 addDecorator(story => (
   <MemoryRouter initialEntries={['/']}>
     <div className={modTheme.lightTheme}>{story()}</div>

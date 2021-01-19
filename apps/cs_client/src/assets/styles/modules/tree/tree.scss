@@ -2,7 +2,7 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 @mixin tree-height() {
   height: calc(
-    var(--vh) - #{2 * $tool-bar-height} - var(--formatting-bar) - var(--recent-nodes)
+    var(--vh) - #{3 * $tool-bar-height} - var(--formatting-bar) - var(--recent-nodes)
   );
   @include respond-to('md') {
     height: calc(var(--vh) - var(--info-bar) - #{$tool-bar-height-md});
@@ -29,11 +29,11 @@
 }
 .tree__resize-handle {
   height: calc(
-    100vh - var(--docked-dialog-height) - #{2 * $tool-bar-height}
+    100vh - var(--docked-dialog-height) - #{3 * $tool-bar-height}
   ) !important;
   @include respond-to($md-up) {
     height: calc(
-      100vh - var(--docked-dialog-height) - #{$tool-bar-height}
+      100vh - var(--docked-dialog-height) - #{2 * $tool-bar-height}
     ) !important;
   }
   span > div {

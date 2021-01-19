@@ -18,8 +18,8 @@ const router = {
         history.push(newPath);
       }
     },
-    home: () => {
-      history.push(`/`);
+    home: (folder?: string) => {
+      history.push(`/documents${folder ? `/${folder}` : ''}`);
     },
     signIn: () => history.push(`/auth/login`),
     oauthSignup() {

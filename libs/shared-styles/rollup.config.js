@@ -3,7 +3,7 @@ import copy from 'rollup-plugin-copy';
 
 const production = !process.env.ROLLUP_WATCH;
 
-const es = {
+const cjs = {
   input: 'src/index.js',
   plugins: [
     copy({
@@ -17,18 +17,21 @@ const es = {
   ],
   output: [
     {
-      dir: 'build',
+      dir: 'build/cjs',
+      format: 'cjs',
+      exports: 'named',
+      sourcemap: !production,
     },
   ],
 };
 
 if (!production)
-  es.plugins.push({
+  cjs.plugins.push({
     name: 'watch-external',
     async buildStart() {
       this.addWatchFile('./src');
     },
   });
-if (production) es.plugins.push(del({ targets: 'build/*' }));
+if (production) cjs.plugins.push(del({ targets: 'build/*' }));
 
-export default [es];
+export default [cjs];

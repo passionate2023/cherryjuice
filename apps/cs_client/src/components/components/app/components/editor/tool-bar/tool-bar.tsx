@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { memo, useEffect, useState } from 'react';
 import { MainButtons } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/main-buttons';
-import { modApp, modToolbar } from '::sass-modules';
+import { modToolbar } from '::sass-modules';
 import { MobileButtons } from './components/groups/mobile-buttons/mobile-buttons';
 import { createPortal } from 'react-dom';
 import { FormattingButtons } from './components/groups/formatting-buttons/formatting-buttons';
@@ -16,6 +16,7 @@ import { ErrorBoundary } from '::root/components/shared-components/react/error-b
 import { Objects } from '::root/components/app/components/editor/tool-bar/components/groups/objects/objects';
 import { FormattingButtonsWithTransition } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/formatting-buttons-with-transition';
 import { useComponentIsReady } from '::root/hooks/is-ready';
+import { modEditor } from '::app/components/editor/editor';
 
 type PortalProps = { targetSelector: string; predicate?: boolean };
 export const Portal: React.FC<PortalProps> = ({
@@ -54,7 +55,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 
 const ToolBar: React.FC<Props & PropsFromRedux> = ({
   isOnMd,
@@ -68,7 +69,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
     <div className={modToolbar.toolBar}>
       <MainButtons />
       {isDocumentOwner && !isOnMd && <Separator />}
-      <Portal targetSelector={'.' + modApp.app} predicate={isOnMd}>
+      <Portal targetSelector={'.' + modEditor.editor} predicate={isOnMd}>
         {
           <NodesButtons>
             {isDocumentOwner && <UndoRedo />}
@@ -79,7 +80,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
       {isDocumentOwner && !isOnMd && <Separator />}
       {isDocumentOwner && (
         <ErrorBoundary>
-          <Portal targetSelector={'.' + modApp.app} predicate={isOnMd}>
+          <Portal targetSelector={'.' + modEditor.editor} predicate={isOnMd}>
             {isOnMd ? (
               <FormattingButtonsWithTransition show={showFormattingButtons}>
                 <Separator />

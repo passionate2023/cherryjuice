@@ -3,24 +3,27 @@ import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { modContextMenu } from '::sass-modules';
 import { ReactNode, useEffect, useState } from 'react';
 import { Icon, Icons } from '@cherryjuice/icons';
-import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 
 export type CMItem = Omit<
   ContextMenuItemProps,
-  'hide' | 'activeItem' | 'setActiveItem'
+  'hide' | 'activeItem' | 'setActiveItem' | 'id'
 >;
+
+type IsDisabled = (id: string) => boolean;
 export type ContextMenuItemProps = {
   name: string;
-  onClick: () => void;
+  onClick: (id: string) => void;
   hide: () => void;
   node?: ReactNode;
-  disabled?: boolean;
+  disabled?: boolean | IsDisabled;
   active?: boolean;
   bottomSeparator?: boolean;
   hideOnClick?: boolean;
   items?: CMItem[];
   activeItem: string;
   setActiveItem: (name: string) => void;
+  id: string;
 };
 
 const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
@@ -35,6 +38,7 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
   items = [],
   activeItem,
   setActiveItem,
+  id,
 }) => {
   const [CMShown, setCMShown] = useState(false);
   const hideSub = () => setCMShown(false);
@@ -42,10 +46,11 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
     setCMShown(true);
     setActiveItem(name);
   };
+  const isDisabled = typeof disabled === 'function' ? disabled(id) : disabled;
   const onClickM = e => {
-    if (!disabled && !items.length) {
+    if (!isDisabled && !items.length) {
       if (hideOnClick) hide();
-      onClick();
+      onClick(id);
       e.stopPropagation();
       e.preventDefault();
     }
@@ -56,7 +61,7 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
     }
   }, [activeItem]);
   return (
-    <ContextMenuWrapper
+    <ContextMenuWrapperLegacy
       shown={CMShown}
       hide={hide}
       show={showSub}
@@ -66,11 +71,11 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
       <div
         className={joinClassNames([
           modContextMenu.contextMenu__item,
-          [modContextMenu.contextMenu__itemDisabled, disabled],
+          [modContextMenu.contextMenu__itemDisabled, isDisabled],
           [modContextMenu.contextMenu__itemBottomSeparator, bottomSeparator],
         ])}
         onClick={onClickM}
-        {...(disabled && { 'data-disabled': disabled })}
+        {...(isDisabled && { 'data-disabled': isDisabled })}
       >
         <span className={modContextMenu.contextMenu__item__icon}>
           {active ? <Icon name={Icons.material.check} size={14} /> : undefined}
@@ -84,7 +89,7 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
           </span>
         )}
       </div>
-    </ContextMenuWrapper>
+    </ContextMenuWrapperLegacy>
   );
 };
 

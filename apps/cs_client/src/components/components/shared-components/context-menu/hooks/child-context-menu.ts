@@ -1,7 +1,7 @@
 import { MouseEvent, useCallback, useState } from 'react';
-import { Position } from '::root/components/shared-components/context-menu/context-menu-wrapper';
+import { Position } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 
-type Props = {
+export type ChildContextMenuProps = {
   getIdOfActiveElement: (e: HTMLElement) => string;
   onSelectElement?: (id: string) => void;
 };
@@ -9,7 +9,7 @@ type Props = {
 export const useChildContextMenu = <T = HTMLDivElement>({
   getIdOfActiveElement,
   onSelectElement = () => undefined,
-}: Props) => {
+}: ChildContextMenuProps) => {
   const [CMOffset, setCMOffset] = useState<Position>([0, 0, 0, 0]);
   const show = useCallback((e: MouseEvent<T>) => {
     if (!e.shiftKey) {
@@ -22,6 +22,7 @@ export const useChildContextMenu = <T = HTMLDivElement>({
       setCMOffset([e.clientX, e.clientY, 0, 0]);
       onSelectElement(activeElementId);
     }
+    return activeElementId;
   }, []);
   const hide = () => setCMOffset([0, 0, 0, 0]);
   const shown = CMOffset[0] > 0;

@@ -45,7 +45,7 @@
   //height: 30px;
   //width: 30px;
   margin: 0;
-  @include type-d()
+  @include type-d();
 }
 .button--text {
   display: inline-block;
@@ -57,7 +57,12 @@
   @include button-variant(var(--background-100), var(--danger), 1, 0.1);
 }
 .button--dark {
-  @include button-variant(var(--background-100), var(--on-surface-010), 1.6, 0.5);
+  @include button-variant(
+    var(--background-100),
+    var(--on-surface-010),
+    1.6,
+    0.5
+  );
   svg {
     fill: white;
   }

@@ -1,9 +1,23 @@
 import * as React from 'react';
+import { CSSProperties } from 'react';
 
-type Props = {};
+const blockBackgroundFullSize: CSSProperties = {
+  backgroundColor: 'var(--background-100)',
+  display: 'block',
+  width: '100%',
+  height: '100%',
+};
 
-const Void: React.FC<Props> = () => {
-  return <span />;
+const fallbackStyles = {
+  blockBackgroundFullSize,
+};
+
+type Props = {
+  style?: keyof typeof fallbackStyles;
+};
+
+const Void: React.FC<Props> = ({ style }) => {
+  return <span style={fallbackStyles[style]} />;
 };
 
 export { Void };

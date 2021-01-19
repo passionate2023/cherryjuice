@@ -8,9 +8,10 @@ import { router } from '::root/router/router';
 
 export const useGroups = ({
   user,
+  documentId,
 }: {
   online: boolean;
-  id: string;
+  documentId: string;
   user: User;
 }): DropdownMenuGroupProps[] => {
   return user
@@ -32,7 +33,7 @@ export const useGroups = ({
             {
               text: 'bookmarks',
               onClick: ac.dialogs.showBookmarksDialog,
-              // disabled: noDocumentIsSelected
+              disabled: !documentId,
             },
             {
               text: 'settings',

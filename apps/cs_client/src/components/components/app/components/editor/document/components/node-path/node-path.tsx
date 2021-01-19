@@ -5,11 +5,11 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/get-parents-node-ids/get-parents-node-ids';
-import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useChildContextMenu } from '::root/components/shared-components/context-menu/hooks/child-context-menu';
-import { createNodePropsMapper } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/helpers/map-props';
+import { createNodePropsMapper } from '::root/components/app/components/tabs/document-nodes/helpers/map-props';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -67,7 +67,7 @@ const NodePath: React.FC<Props & PropsFromRedux> = ({
 
   return (
     <div className={modNodePath.nodePath} onContextMenu={show}>
-      <ContextMenuWrapper
+      <ContextMenuWrapperLegacy
         shown={shown}
         hide={hide}
         items={contextMenuItems}
@@ -87,7 +87,7 @@ const NodePath: React.FC<Props & PropsFromRedux> = ({
             <Node documentId={documentId} {...mapNodeProps(selectedNode_id)} />
           )}
         </div>
-      </ContextMenuWrapper>
+      </ContextMenuWrapperLegacy>
     </div>
   );
 };

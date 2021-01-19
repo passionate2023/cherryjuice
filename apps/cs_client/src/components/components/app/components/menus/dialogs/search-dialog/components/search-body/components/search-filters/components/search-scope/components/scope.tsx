@@ -5,7 +5,7 @@ import { ButtonSquare } from '@cherryjuice/components';
 import { SearchScope } from '@cherryjuice/graphql-types';
 import { ac } from '::store/store';
 import { useCallback } from 'react';
-import { mapScopeToLabel } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
+import { mapEnumToReadableText } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
 
 type ScopeProps = {
   scope: SearchScope;
@@ -20,7 +20,7 @@ const Scope: React.FC<ScopeProps> = ({ scope, selectedScope, disabled }) => {
   return (
     <div className={joinClassNames([modSearchFilter.searchFilter__list__item])}>
       <ButtonSquare
-        text={mapScopeToLabel(scope)}
+        text={mapEnumToReadableText(scope)}
         onClick={setSearchScopeM}
         active={selectedScope === scope}
         disabled={disabled}

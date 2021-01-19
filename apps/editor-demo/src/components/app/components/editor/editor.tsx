@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { TabsContainer } from '::root/app/components/editor/components/tabs/tabs-container';
 import {
   EditorContainer,
   Node,
@@ -27,18 +26,7 @@ export const Editor: React.FC<Props> = ({ document }) => {
   return (
     <>
       <Toolbar documentId={document.id} />
-      <TabsContainer
-        documentId={document.id}
-        nodes={Object.values(document.nodes).map(node => ({
-          node_id: node.meta.node_id,
-          name: node.meta.name,
-          isSelected: state.selected === node.meta.node_id,
-          hasChanges: false,
-          isBookmarked: false,
-          isNew: false,
-        }))}
-        isOnMd={false}
-      />
+
       <EditorContainer demo={document.nodes[state.selected]} />
     </>
   );

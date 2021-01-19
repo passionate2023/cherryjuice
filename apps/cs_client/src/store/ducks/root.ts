@@ -30,7 +30,11 @@ const initialState: State = {
   online: true,
 };
 const reducer = createReducer(initialState, _ => [
-  _(ac.resetState, () => cloneObj(initialState)),
+  _(ac.resetState, state => ({
+    ...cloneObj(initialState),
+    isOnMb: state.isOnMb,
+    isOnMd: state.isOnMd,
+  })),
   ...[
     _(ac.setIsOnMb, (state, { payload }) => ({
       ...state,

@@ -1,0 +1,11 @@
+.table {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  &:not(:first-child) {
+    border-top: 1px solid var(--on-background-10);
+  }
+  padding: 10px 20px 0 20px;
+  gap: 10px;
+}
