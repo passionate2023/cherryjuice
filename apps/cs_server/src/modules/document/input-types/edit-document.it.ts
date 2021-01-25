@@ -13,4 +13,7 @@ export class EditDocumentIt {
   guests?: DocumentGuestIt[];
   @Field(() => Privacy, { nullable: true })
   privacy: Privacy;
+
+  @Field({ nullable: true })
+  folderId: string;
 }

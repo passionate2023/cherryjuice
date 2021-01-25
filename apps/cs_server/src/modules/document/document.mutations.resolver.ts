@@ -21,6 +21,7 @@ import { CreateDocumentIt } from './input-types/create-document.it';
 import { EditDocumentIt } from './input-types/edit-document.it';
 import { Document } from './entities/document.entity';
 import { DocumentState } from './entities/document-state.entity';
+import { FoldersService } from '../user/folders.service';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => DocumentMutation)
@@ -28,6 +29,7 @@ export class DocumentMutationsResolver {
   constructor(
     private importsService: ImportsService,
     private documentService: DocumentService,
+    private foldersService: FoldersService,
   ) {}
 
   @Mutation(() => DocumentMutation)
@@ -139,7 +141,15 @@ export class DocumentMutationsResolver {
     { IDs, access_token }: UploadLinkInputType,
     @GetUserGql() user: User,
   ): Promise<boolean> {
-    this.importsService.importDocumentsFromGDrive(IDs, user, access_token);
+    const draftsFolder = await this.foldersService.getDraftsFolder({
+      userId: user.id,
+    });
+    this.importsService.importDocumentsFromGDrive(
+      IDs,
+      user,
+      access_token,
+      draftsFolder.id,
+    );
     return true;
   }
 
@@ -152,7 +162,14 @@ export class DocumentMutationsResolver {
     files: FileUpload[],
     @GetUserGql() user: User,
   ): Promise<boolean> {
-    await this.importsService.importFromGraphqlClient(files, user);
+    const draftsFolder = await this.foldersService.getDraftsFolder({
+      userId: user.id,
+    });
+    await this.importsService.importFromGraphqlClient(
+      files,
+      user,
+      draftsFolder.id,
+    );
     return true;
   }
 }

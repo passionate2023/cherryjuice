@@ -11,6 +11,7 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
     './delete-documents/delete-documents'
   );
   const { saveSettingsEpic } = await import('./settings/save-settings');
+  const { fetchFoldersEpic } = await import('./fetch-folders');
   const { authEpic } = await import('./auth/auth');
   const { deleteAccountEpic } = await import('./delete-account/delete-account');
   const { fetchNodeEpic } = await import('./fetch-node/fetch-node');
@@ -37,6 +38,7 @@ const createRootEpic = async (): Promise<(action$) => Observable<unknown>> => {
       searchNodesEpic,
       deleteAccountEpic,
       fetchNodeEpic,
+      fetchFoldersEpic,
       ...editorEpics,
     )(action$);
 };

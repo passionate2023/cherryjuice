@@ -7,7 +7,7 @@ export type QDocumentsListItem = Pick<
   | 'id'
   | 'userId'
   | 'name'
-  | 'folder'
+  | 'folderId'
   | 'size'
   | 'hash'
   | 'createdAt'
@@ -23,7 +23,7 @@ export const DOCUMENT_LIST_ITEM = gql`
     id
     userId
     name
-    folder
+    folderId
     size
     hash
     createdAt

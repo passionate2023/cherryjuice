@@ -34,7 +34,7 @@ const getRoute = createSelector(
     else {
       const loggedInUser =
         userId && /\/auth\/(login|signup)/.test(location.pathname);
-      if (loggedInUser || (userId && showHome)) router.goto.home(folder);
+      if (loggedInUser || (userId && showHome)) router.goto.home(folder.name);
       else if (fetch === 'idle') {
         const isAtHomePage = /\/documents\/.*/.test(location.pathname);
         if (documentId) {
@@ -45,7 +45,7 @@ const getRoute = createSelector(
           if (!userId) router.goto.signIn();
           else {
             if (!isAtHomePage) {
-              router.goto.home(folder);
+              router.goto.home(folder.name);
             }
           }
         }

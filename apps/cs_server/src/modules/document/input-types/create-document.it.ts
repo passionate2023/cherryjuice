@@ -11,4 +11,7 @@ export class CreateDocumentIt {
 
   @Field(() => [DocumentGuest], { nullable: 'items' })
   guests: DocumentGuest[];
+
+  @Field()
+  folderId: string;
 }

@@ -18,6 +18,7 @@ import {
 import { removeDots } from '../pipes/gmail-dots';
 import { UpdateUserSettingsIt } from '../input-types/update-user-settings.it';
 import { Settings } from '../entities/settings/settings.entity';
+import { Workspace } from '../entities/workspace/workspace.entity';
 
 export type UserExistsDTO = { email: string };
 export type CreatePasswordResetTokenDTO = { email: string; username: string };
@@ -158,7 +159,8 @@ class UserRepository extends Repository<User> {
       | { email: string; email_verified: boolean }
       | Omit<UpdateUserProfileIt, 'newEmail'>
       | Omit<OauthSignUpCredentials, 'password'>
-      | { settings: Settings },
+      | { settings: Settings }
+      | { workspace: Workspace },
   ): Promise<void> {
     Object.entries(data).forEach(([key, value]) => {
       user[key] = value;

@@ -24,12 +24,14 @@ const generateRootNode = ({
   hash: '',
 });
 
-type GenerateNewDocumentProps = {
+export type GenerateNewDocumentProps = {
   state: TDocumentMetaState;
   userId: string;
+  currentFolderId: string;
 };
 const generateNewDocument = ({
   userId,
+  currentFolderId,
   state: { guests, privacy, name },
 }: GenerateNewDocumentProps): CreateDocumentParams => {
   return {
@@ -40,7 +42,7 @@ const generateNewDocument = ({
     id: `new-document-${new Date().getTime()}`,
     size: 0,
     hash: '',
-    folder: 'Unsaved',
+    folderId: currentFolderId,
     createdAt: new Date().getTime(),
     updatedAt: new Date().getTime(),
     privateNodes: [],

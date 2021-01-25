@@ -35,6 +35,7 @@ const documentMetaFields = [
   `d.nodes`, // nodes hash
   `d.userId`,
   `d.privacy`,
+  `d.folderId`,
   `d.state`,
   `g.userId`,
   `g.accessLevel`,
@@ -134,10 +135,10 @@ export class DocumentRepository extends Repository<Document> {
   }
 
   async createDocument({
-    data: { name, privacy },
+    data: { name, privacy, folderId },
     userId,
   }: CreateDocumentDTO): Promise<Document> {
-    const document = new Document({ name, userId, privacy });
+    const document = new Document({ name, userId, privacy, folderId });
     await document.save();
     return document;
   }

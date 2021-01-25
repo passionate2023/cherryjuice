@@ -13,6 +13,7 @@ import { Droppable } from '::root/components/app/components/editor/document/comp
 import { modNode, modTree } from '::sass-modules';
 import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
 import { useTreeContextMenuItems } from '::root/components/app/components/editor/document/components/tree/hooks/tree-context-menu-items';
+import nodeMod from '::sass-modules/tree/node.scss';
 
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -92,6 +93,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
                 anchorClassName={modNode.node}
                 meta={{ documentId }}
                 onDrop={ac.node.drop}
+                onDragEnterStyleClass={nodeMod.droppableDraggingOver}
               >
                 {(provided, ref) => (
                   <ul

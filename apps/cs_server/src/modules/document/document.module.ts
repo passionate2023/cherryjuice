@@ -12,6 +12,7 @@ import { ExportsModule } from '../exports/exports.module';
 import { SubscriptionsService } from './subscriptions.service';
 import { DocumentGuestRepository } from './repositories/document-guest.repository';
 import { SearchModule } from '../search/search.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { SearchModule } from '../search/search.module';
     TypeOrmModule.forFeature([DocumentRepository, DocumentGuestRepository]),
     ImportsModule,
     ExportsModule,
+    UserModule,
     SearchModule,
   ],
   providers: [

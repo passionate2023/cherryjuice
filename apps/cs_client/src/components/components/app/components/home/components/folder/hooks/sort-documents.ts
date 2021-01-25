@@ -29,9 +29,10 @@ type Props = {
   documents: CachedDocument[];
   openedDocumentId: string;
   activeDocumentId: string;
+  draftsFolderId;
 };
 
-type SortedDocuments = Record<string, { rows: RowProps[]; folderName: string }>;
+type SortedDocuments = Record<string, { rows: RowProps[] }>;
 
 export const useSortDocuments = ({
   documents,
@@ -40,6 +41,7 @@ export const useSortDocuments = ({
   query,
   openedDocumentId,
   activeDocumentId,
+  draftsFolderId,
 }: Props) => {
   return useMemo<SortedDocuments>(() => {
     let sortedDocuments: CachedDocument[] = mapSortDocumentBy[sortBy](
@@ -51,11 +53,10 @@ export const useSortDocuments = ({
       const matchesSearchFilter =
         !query || document.name.toLowerCase().includes(query.toLowerCase());
 
-      const folderName = document.folder || 'Drafts';
-      const _folderName = folderName.toLowerCase();
-      if (!acc[_folderName]) acc[_folderName] = { rows: [], folderName };
+      const documentFolderId = document.folderId || draftsFolderId;
+      if (!acc[documentFolderId]) acc[documentFolderId] = { rows: [] };
       if (matchesSearchFilter)
-        acc[_folderName].rows.push({
+        acc[documentFolderId].rows.push({
           id: document.id,
           elements: [
             document.name,

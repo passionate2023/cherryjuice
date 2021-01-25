@@ -26,7 +26,7 @@ export const AllDocuments: React.FC<Props> = ({
       SortDocumentsBy.CreatedAt,
       SortDocumentsBy.Size,
     ].map(text => ({
-      text: mapEnumToReadableText(text, 'cap-first-letter'),
+      text: mapEnumToReadableText(text, 'cap-first-letter').replace(/ at$/, ''),
       onClick: () => ac.home.setSortBy({ sortBy: text }),
       icon:
         sortBy === text &&

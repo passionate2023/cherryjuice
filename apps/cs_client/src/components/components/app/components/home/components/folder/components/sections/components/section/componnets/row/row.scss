@@ -32,7 +32,16 @@
   background-color: var(--primary-100-50);
 }
 .row--opened {
-  background-color: var(--primary-100);
+  position: relative;
+  &::after {
+    --width: 1px;
+    content: '';
+    position: absolute;
+    left: 0px;
+    height: calc(100% - var(--width) * 2);
+    border: var(--width) var(--primary-050) solid;
+    opacity: 0.3;
+  }
 }
 .row--collapsed {
 }

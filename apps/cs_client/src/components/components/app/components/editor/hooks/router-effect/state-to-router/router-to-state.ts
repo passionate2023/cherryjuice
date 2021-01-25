@@ -5,7 +5,7 @@ import { extractFolderFromPathname } from '::app/components/editor/hooks/router-
 const folder = () => {
   const { folder } = extractFolderFromPathname();
   if (!folder) ac.document.setDocumentId('');
-  if (folder) ac.home.selectFolder(folder);
+  if (folder) ac.home.selectFolder({ name: folder });
 };
 
 const initial = () => {

@@ -1,14 +1,35 @@
-import { createActionCreator as _, createReducer } from 'deox';
+import { createActionCreator as cac, createReducer } from 'deox';
 import { createActionPrefixer } from '::store/ducks/helpers/shared';
 import { rootActionCreators as rac } from '::store/ducks/root';
 import { nodeActionCreators as nac } from '::store/ducks/node';
-import { documentActionCreators as dac } from '::store/ducks/document';
+import {
+  AsyncOperation,
+  documentActionCreators as dac,
+} from '::store/ducks/document';
 import { cloneObj } from '@cherryjuice/shared-helpers';
-import { SortDirection } from '@cherryjuice/graphql-types';
+import { Folder, SortDirection } from '@cherryjuice/graphql-types';
 import {
   setSortBy,
   SetSortByPayload,
 } from '::store/ducks/home/reducers/set-sort-by';
+import produce from 'immer';
+import {
+  removeFolder,
+  RemoveFolderPayload,
+} from '::store/ducks/home/reducers/remove-folder';
+import { create_ } from '::store/boilerplate';
+import {
+  setFolderName,
+  SetFolderNamePayload,
+} from '::store/ducks/home/reducers/set-folder-name';
+import {
+  selectFolder,
+  SelectFolderPayload,
+} from '::store/ducks/home/reducers/select-folder';
+import {
+  createFolder,
+  CreateFolderPayload,
+} from '::store/ducks/home/reducers/create-folder';
 
 export enum SortDocumentsBy {
   CreatedAt = 'CreatedAt',
@@ -19,44 +40,88 @@ export enum SortDocumentsBy {
 
 const ap = createActionPrefixer('home');
 
+const { noPayload: __, withPayload: _ } = create_('home');
+
 const ac = {
-  selectFolder: _(ap('select-folder'), _ => (folder: string) => _({ folder })),
-  setSortBy: _(ap('set-sort-by'), _ => (sortBy: SetSortByPayload) => _(sortBy)),
-  selectDocument: _(ap('select-document'), _ => (documentId: string) =>
+  selectFolder: _<SelectFolderPayload>('select-folder'),
+  setSortBy: cac(ap('set-sort-by'), _ => (sortBy: SetSortByPayload) =>
+    _(sortBy),
+  ),
+  selectDocument: cac(ap('select-document'), _ => (documentId: string) =>
     _({ documentId }),
   ),
-  setQuery: _(ap('set-query'), _ => (query: string) => _(query)),
-  clearQuery: _(ap('clear-query')),
-  show: _(ap('show')),
-  hide: _(ap('hide')),
+  setQuery: cac(ap('set-query'), _ => (query: string) => _(query)),
+  clearQuery: cac(ap('clear-query')),
+  show: cac(ap('show')),
+  hide: cac(ap('hide')),
+  toggleSidebar: __('toggle-sidebar'),
+  createFolder: _<CreateFolderPayload>('create-folder'),
+  removeFolder: _<RemoveFolderPayload>('remove-folder'),
+  setFolderName: _<SetFolderNamePayload>('set-folder-name'),
+  ...{
+    fetchFolders: __('fetch-folders'),
+    fetchFoldersInProgress: __('fetch-folders-in-progress'),
+    fetchFoldersFailed: __('fetch-folders-failed'),
+    fetchFoldersFulfilled: _<Folder[]>('fetch-folders-fulfilled'),
+  },
 };
 
+export type CurrentFolder = { name: string; id: string };
+export type FoldersDict = { [id: string]: Folder };
 type State = {
-  folder: string;
+  folder: CurrentFolder;
+  draftsFolderId: string;
   activeDocumentId: string;
   sortBy: SortDocumentsBy;
   sortDirection: SortDirection;
   query: string;
   show: boolean;
+  folders: FoldersDict;
+  changes: {
+    folders: {
+      created: string[];
+      edited: Record<string, string[]>;
+      deleted: string[];
+    };
+  };
+  showSidebar: boolean;
+  asyncOperations: {
+    fetchFolders: AsyncOperation;
+  };
 };
 
+const changes = {
+  folders: {
+    created: [],
+    edited: {},
+    deleted: [],
+  },
+};
 const initialState: State = {
-  folder: 'drafts',
+  folder: {
+    name: undefined,
+    id: undefined,
+  },
+  draftsFolderId: undefined,
   activeDocumentId: undefined,
   sortBy: SortDocumentsBy.DocumentName,
   sortDirection: SortDirection.Ascending,
   query: '',
   show: false,
+  showSidebar: true,
+  folders: {},
+  asyncOperations: {
+    fetchFolders: 'idle',
+  },
+  changes: cloneObj(changes),
 };
 const reducer = createReducer(initialState, _ => [
   _(rac.resetState, () => ({
     ...cloneObj(initialState),
   })),
-  _(ac.selectFolder, (state, { payload }) => ({
-    ...state,
-    folder: payload.folder.toLowerCase(),
-    show: !!payload.folder,
-  })),
+  _(ac.selectFolder, (state, { payload }) =>
+    produce(state, selectFolder(payload)),
+  ),
   _(ac.selectDocument, (state, { payload }) => ({
     ...state,
     activeDocumentId: payload.documentId,
@@ -74,6 +139,66 @@ const reducer = createReducer(initialState, _ => [
     ...state,
     show: true,
   })),
+
+  _(ac.setFolderName, (state, { payload }) =>
+    produce(state, setFolderName(payload)),
+  ),
+  _(ac.removeFolder, (state, { payload }) =>
+    produce(state, removeFolder(payload)),
+  ),
+  _(ac.createFolder, (state, { payload }) =>
+    produce(state, createFolder(payload)),
+  ),
+  _(ac.toggleSidebar, state => ({
+    ...state,
+    showSidebar: !state.showSidebar,
+  })),
+
+  // fetch
+  _(ac.fetchFoldersInProgress, state => ({
+    ...state,
+    asyncOperations: {
+      ...state.asyncOperations,
+      fetchFolders: 'in-progress',
+    },
+  })),
+  _(ac.fetchFoldersFailed, state => ({
+    ...state,
+    asyncOperations: {
+      ...state.asyncOperations,
+      fetchFolders: 'idle',
+    },
+  })),
+  _(ac.fetchFoldersFulfilled, (state, { payload }) => {
+    let draftsFolderId;
+    const folders = {
+      ...state.folders,
+      ...Object.fromEntries(
+        payload.reduce((acc, folder) => {
+          if (folder.name === 'Drafts') draftsFolderId = folder.id;
+          acc.push([folder.id, folder]);
+          return acc;
+        }, []),
+      ),
+    };
+    return {
+      ...state,
+      folders,
+      changes: cloneObj(changes),
+      draftsFolderId,
+      asyncOperations: {
+        ...state.asyncOperations,
+        fetchFolders: 'idle',
+      },
+      folder: Object.keys(state.folder).length
+        ? state.folder
+        : {
+            name: folders[draftsFolderId].name.toLowerCase(),
+            id: draftsFolderId,
+          },
+    };
+  }),
+  // side-effects
   _(nac.select, state => ({
     ...state,
     show: false,

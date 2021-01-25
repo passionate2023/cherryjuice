@@ -8,7 +8,7 @@ const useOnKeyPress = ({
   keys = defaultKeys,
 }: {
   ref: MutableRefObject<HTMLElement>;
-  onClick: Function;
+  onClick: () => void;
   keys?: KeyCodes[];
 }) => {
   useEffect(() => {
@@ -22,7 +22,7 @@ const useOnKeyPress = ({
     return () => {
       element.removeEventListener('keyup', eventHandler);
     };
-  }, [ref]);
+  }, [ref.current, onClick, keys]);
 };
 
 export { useOnKeyPress };

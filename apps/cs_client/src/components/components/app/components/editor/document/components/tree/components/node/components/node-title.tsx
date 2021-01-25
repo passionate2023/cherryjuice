@@ -7,6 +7,7 @@ import { modNode } from '::sass-modules';
 import { Droppable } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';
 import { Draggable } from '::root/components/app/components/editor/document/components/tree/components/node/_/draggable';
 import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
+import nodeMod from '::sass-modules/tree/node.scss';
 
 type Props = {
   nodeStyle: Record<string, string>;
@@ -42,6 +43,7 @@ const NodeTitle: React.FC<Props> = ({
       anchorClassName={modNode.node}
       meta={{ documentId }}
       onDrop={ac.node.drop}
+      onDragEnterStyleClass={nodeMod.droppableDraggingOver}
     >
       {(provided, ref) => (
         <div

@@ -21,6 +21,7 @@ import { useEditDocument } from '::app/components/menus/dialogs/document-meta/ho
 import { useFormInputs } from '::app/components/menus/dialogs/document-meta/hooks/inputs';
 
 const mapState = (state: Store) => ({
+  currentFolderId: state.home.folder.id,
   showDialog: state.dialogs.showDocumentMetaDialog,
   focusedDocumentId: state.home.activeDocumentId || state.document.documentId,
   documents: getDocumentsList(state),
@@ -43,6 +44,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   focusedDocumentId,
   documents,
   userId,
+  currentFolderId,
 }) => {
   const focusedDocument = useMemo(
     () => documents.find(document => document.id === focusedDocumentId),
@@ -80,7 +82,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
     state,
     showDialog,
   });
-  const createDocument = useCreateDocument({ state, userId });
+  const createDocument = useCreateDocument({ state, userId, currentFolderId });
   const editDocument = useEditDocument({
     state,
     focusedDocument,

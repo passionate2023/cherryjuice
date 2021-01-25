@@ -6,6 +6,7 @@ import { User } from '../user/entities/user.entity';
 import { SubscriptionsService } from './subscriptions.service';
 import { DocumentGuestRepository } from './repositories/document-guest.repository';
 import {
+  CloneDocumentDTO,
   CreateDocumentDTO,
   EditDocumentDTO,
   GetDocumentDTO,
@@ -93,6 +94,7 @@ export class DocumentService {
           name: '',
           userId: '',
           privacy: Privacy.PRIVATE,
+          folderId: '',
         });
         document.id = id;
         this.subscriptionsService.delete.deleted(
@@ -159,7 +161,7 @@ export class DocumentService {
     await this.documentRepository.setDocumentStatus(event, document);
   }
 
-  clone = async (dto: GetDocumentDTO): Promise<string> => {
+  clone = async (dto: CloneDocumentDTO): Promise<string> => {
     const documentA = await this.documentRepository.getDocumentById(dto);
     const operationId = 'clone_' + Date.now();
     const documentB = await this.documentRepository.createDocument({
@@ -167,6 +169,7 @@ export class DocumentService {
         name: documentA.name,
         privacy: Privacy.PRIVATE,
         guests: [],
+        folderId: documentA.folderId,
       },
       userId: dto.userId,
     });

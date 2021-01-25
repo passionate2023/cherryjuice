@@ -5,8 +5,7 @@ import '@cherryjuice/shared-styles/build/global/body.scss';
 import { register } from '::helpers/service-worker';
 
 render(<Root />, document.querySelector('#cs'));
-
-if (process.env.NODE_ENV !== 'development') {
+if (localStorage.getItem('--disable-external-fonts') === 'true') {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.type = 'text/css';

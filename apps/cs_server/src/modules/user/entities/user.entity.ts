@@ -9,10 +9,11 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { UnauthorizedException } from '@nestjs/common';
-import { AfterLoad } from 'typeorm/index';
+import { AfterLoad } from 'typeorm';
 import { UserToken } from './user-token.entity';
 import { Settings } from './settings/settings.entity';
 import { getDefaultSettings } from '@cherryjuice/default-settings';
+import { Workspace } from './workspace/workspace.entity';
 
 type UserConstructorProps = {
   username: string;
@@ -34,6 +35,7 @@ class User extends BaseEntity {
       this.salt = '';
       this.passwordHash = '';
       this.settings = getDefaultSettings();
+      this.workspace = new Workspace({});
     }
   }
 
@@ -106,6 +108,9 @@ class User extends BaseEntity {
 
   @Column('json')
   settings: Settings;
+
+  @Column('json')
+  workspace: Workspace;
 }
 
 export { User };

@@ -7,16 +7,20 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useRowContextMenuItems } from '::app/components/home/components/folder/hooks/row-context-menu-items';
 import { useSortDocuments } from '::app/components/home/components/folder/hooks/sort-documents';
 import { LinearProgress } from '::shared-components/loading-indicator/linear-progress';
+import { Portal } from '::app/components/editor/tool-bar/tool-bar';
+import { modHome } from '::app/components/home/home';
 
 const mapState = (state: Store) => ({
   documents: Object.values(state.documentCache.documents),
   folder: state.home.folder,
+  draftsFolderId: state.home.draftsFolderId,
   openedDocumentId: state.document.documentId,
   activeDocumentId: state.home.activeDocumentId,
   online: state.root.online,
   sortBy: state.home.sortBy,
   sortDirection: state.home.sortDirection,
   query: state.home.query,
+  folders: state.home.folders,
   isOnMd: state.root.isOnMd,
   loading: state.documentsList.fetchDocuments === 'in-progress',
 });
@@ -27,7 +31,9 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 export type FolderProps = Record<string, never>;
 const Folder: React.FC<FolderProps & PropsFromRedux> = ({
   documents,
-  folder: folderName,
+  folder: currentFolder,
+  draftsFolderId,
+  folders,
   activeDocumentId,
   openedDocumentId,
   online,
@@ -44,20 +50,24 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
     sortDirection,
     sortBy,
     query,
+    draftsFolderId,
   });
-  const folder = sorted[folderName];
+  const folder = sorted[currentFolder.id];
   const rows = folder?.rows || [];
   const isEmpty = rows.length === 0;
-  // const pinned = isEmpty ? [] : [rows[0], rows[1]].filter(Boolean);
   const rest = rows;
   const cmItems = useRowContextMenuItems({ online });
+  const folderName = folders[currentFolder.id]?.name;
   return (
     <div className={mod.folder}>
-      <Header
-        folderName={folder?.folderName}
-        query={query}
-        noSearch={isEmpty}
-      />
+      <Portal targetSelector={'.' + modHome.home} predicate={isOnMd}>
+        <Header
+          folderName={folderName}
+          query={query}
+          noSearch={isEmpty}
+          isOnMd={isOnMd}
+        />
+      </Portal>
       <div className={mod.folder__tables}>
         <LinearProgress loading={loading} />
         {!loading && (

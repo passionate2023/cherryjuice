@@ -4,6 +4,7 @@ import { Privacy } from '@cherryjuice/graphql-types';
 type DocumentMeta = {
   name?: string;
   privacy?: Privacy;
+  folderId?: string;
 };
 export type MutateDocumentProps = {
   documentId: string;

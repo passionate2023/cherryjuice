@@ -38,6 +38,7 @@ import { ResetPasswordIt } from './input-types/reset-password.it';
 import { VerifyEmailIt } from './input-types/verify-email.it';
 import { EmailService } from '../email/email.service';
 import { ConfirmEmailChangeIt } from './input-types/confirm-email-change.it';
+import { FoldersService } from './folders.service';
 
 export type OauthJson = {
   sub: string;
@@ -79,6 +80,7 @@ export class UserService {
     @InjectRepository(UserRepository) private userRepository: UserRepository,
     @InjectRepository(UserTokenRepository)
     private userTokenRepository: UserTokenRepository,
+    private foldersService: FoldersService,
     private jwtService: JwtService,
     private emailService: EmailService,
   ) {}
@@ -96,6 +98,7 @@ export class UserService {
 
   async signUp(authCredentialsDto: SignUpCredentials): Promise<AuthUser> {
     const user = await this.userRepository.signUp(authCredentialsDto);
+    await this.foldersService.createDefaultFolders({ userId: user.id });
     await this.createEmailVerificationToken({
       userId: user.id,
       email: user.email,
@@ -106,6 +109,7 @@ export class UserService {
 
   async oauthSignUp(dto: OauthSignupDTO): Promise<AuthUser> {
     const user = await this.userRepository.oauthSignUp(dto);
+    await this.foldersService.createDefaultFolders({ userId: user.id });
     return this.packageAuthUser(user);
   }
 

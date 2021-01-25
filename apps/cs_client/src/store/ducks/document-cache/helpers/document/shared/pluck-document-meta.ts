@@ -8,7 +8,7 @@ export const pluckProperties = (
   userId: document.userId,
   name: document.name,
   size: document.size,
-  folder: document.folder,
+  folderId: document.folderId,
   guests: document.guests,
   hash: document.hash,
   id: document.id,

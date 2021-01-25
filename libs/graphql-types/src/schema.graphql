@@ -16,7 +16,7 @@ type AuthUser {
 type Document {
     createdAt: Float!
     exportDocument: String!
-    folder: String
+    folderId: String
     guests: [DocumentGuestOt]
     hash: String
     id: String!
@@ -90,6 +90,18 @@ type EditorSettings {
     version: Float!
 }
 
+type Folder {
+    id: String!
+    name: String!
+    settings: FolderSettings!
+    userId: String!
+}
+
+type FolderSettings {
+    icon: String
+    sortDocumentsBy: SortDocumentsBy!
+}
+
 type HotKey {
     keys: String
     type: HotKeyActionType!
@@ -108,6 +120,7 @@ type Image {
 type Mutation {
     document(file_id: String): DocumentMutation!
     user: UserMutation!
+    userMeta: UserMetaMutations!
 }
 
 type Node {
@@ -172,6 +185,7 @@ type Query {
     document(file_id: String): [Document]!
     search: SearchResultEntity!
     user: UserQuery!
+    userMeta: UserMetaQueries!
 }
 
 type SearchResultEntity {
@@ -209,6 +223,18 @@ type User {
     username: String!
 }
 
+type UserMetaMutations {
+    createFolders(folders: [CreateFolderIt!]!): Void
+    removeFolders(folderIds: [String!]!): Void
+    updateFolders(folders: [UpdateFolderIt!]!): Void
+}
+
+type UserMetaQueries {
+    folders: [Folder!]!
+    id: String!
+    workspace: Workspace!
+}
+
 type UserMutation {
     cancelEmailChangeToken(input: CancelChangeEmailIt!): Timestamp!
     changeEmail(input: ConfirmEmailChangeIt!): Timestamp!
@@ -240,6 +266,13 @@ type UserToken {
 type UserTokenMeta {
     currentEmail: String
     newEmail: String
+}
+
+type Workspace {
+    currentDocumentId: String
+    currentFolderId: String
+    currentScreen: Screen!
+    folders: [String!]!
 }
 
 enum AccessLevel {
@@ -318,6 +351,11 @@ enum Privacy {
     PUBLIC
 }
 
+enum Screen {
+    Document
+    Home
+}
+
 enum SearchScope {
     allDocuments
     childNodes
@@ -340,6 +378,13 @@ enum SearchType {
 enum SortDirection {
     Ascending
     Descending
+}
+
+enum SortDocumentsBy {
+    CreatedAt
+    DocumentName
+    Size
+    UpdatedAt
 }
 
 enum SortNodesBy {
@@ -378,9 +423,17 @@ input ConfirmEmailChangeIt {
 }
 
 input CreateDocumentIt {
+    folderId: String!
     guests: [DocumentGuestIt]!
     name: String!
     privacy: Privacy!
+}
+
+input CreateFolderIt {
+    id: String!
+    name: String!
+    settings: FolderSettingsIt!
+    userId: String!
 }
 
 input CreateNodeIt {
@@ -418,6 +471,7 @@ input DocumentStateIt {
 }
 
 input EditDocumentIt {
+    folderId: String
     guests: [DocumentGuestIt]
     name: String
     privacy: Privacy
@@ -438,6 +492,11 @@ input EditorSettingsIt {
     treeFont: String!
     treeFontSize: String!
     version: Float!
+}
+
+input FolderSettingsIt {
+    icon: String
+    sortDocumentsBy: SortDocumentsBy!
 }
 
 input HotKeyIt {
@@ -530,6 +589,12 @@ input TimeFilter {
     rangeStart: Timestamp!
 }
 
+input UpdateFolderIt {
+    id: String!
+    name: String
+    settings: FolderSettingsIt
+}
+
 input UpdateUserProfileIt {
     currentPassword: String!
     email: String
@@ -553,6 +618,7 @@ input VerifyEmailIt {
     token: String!
 }
 
+
 "The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch."
 scalar Timestamp
 
@@ -561,3 +627,6 @@ scalar ImageUpload
 
 "The CTBUpload scalar type represents a file upload."
 scalar CTBUpload
+
+"Represents NULL values"
+scalar Void

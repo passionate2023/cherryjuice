@@ -1,15 +1,16 @@
 import { useCallback } from 'react';
 import {
   generateNewDocument,
+  GenerateNewDocumentProps,
   generateRootNode,
 } from '::app/components/menus/dialogs/document-meta/helpers/new-document';
 import { ac } from '::store/store';
 import { AlertType } from '::types/react';
 
-export const useCreateDocument = ({ state, userId }) => {
+export const useCreateDocument = (props: GenerateNewDocumentProps) => {
   return useCallback(() => {
     try {
-      const document = generateNewDocument({ state, userId });
+      const document = generateNewDocument(props);
       const rootNode = generateRootNode({
         documentId: document.id,
       });
@@ -26,5 +27,5 @@ export const useCreateDocument = ({ state, userId }) => {
         error: e,
       });
     }
-  }, [state, userId]);
+  }, [props.currentFolderId, props.userId, props.state]);
 };

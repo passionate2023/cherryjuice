@@ -99,7 +99,8 @@ const ac = {
   ),
   mutateDocument: _(
     ap('mutate-document'),
-    _ => (changes: MutateDocumentProps) => _(changes),
+    _ => (changes: MutateDocumentProps, { dontAddToTimeline } = {}) =>
+      _(changes, { dontAddToTimeline }),
   ),
   deleteDocuments: _(ap('delete-documents'), _ => (documentIds: string[]) =>
     _(documentIds),
@@ -383,16 +384,18 @@ const reducer = createReducer(initialState, _ => {
           }),
         ),
       ),
-      _(ac.mutateDocument, (state, { payload }) =>
+      _(ac.mutateDocument, (state, { payload, meta }) =>
         produce(
           state,
           draft => mutateDocument(draft, payload),
-          dTM.addFrame({
-            timelineId: payload.documentId,
-            documentId: payload.documentId,
-            mutationType: DocumentMutations.DocumentAttributes,
-            timeStamp: Date.now(),
-          }),
+          meta.dontAddToTimeline
+            ? undefined
+            : dTM.addFrame({
+                timelineId: payload.documentId,
+                documentId: payload.documentId,
+                mutationType: DocumentMutations.DocumentAttributes,
+                timeStamp: Date.now(),
+              }),
         ),
       ),
       _(ac.addBookmark, (state, { payload }) =>
@@ -461,6 +464,22 @@ const reducer = createReducer(initialState, _ => {
         );
         return newState;
       }),
+      // _(hac.removeFolder, (state, { payload }) => {
+      //     let newState = produce(
+      //         state,
+      //         state => {
+      //             const affectedDocuments = state.
+      //             //return pasteNode(draft, payload);
+      //         },
+      //         dTM.addFrame({
+      //             timelineId: payload.documentId,
+      //             documentId: payload.documentId,
+      //             node_id: payload.new_father_id,
+      //             mutationType: DocumentMutations.PasteNode,
+      //             timeStamp: Date.now(),
+      //         }),
+      //     );
+      // }),
     ],
   ];
 });
