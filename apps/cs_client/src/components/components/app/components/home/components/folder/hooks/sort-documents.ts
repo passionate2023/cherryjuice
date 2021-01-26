@@ -5,6 +5,7 @@ import { FoldersDict, SortDocumentsBy } from '::store/ducks/home/home';
 import { RowProps } from '::app/components/home/components/folder/components/sections/components/section/componnets/row/row';
 import { timeAgo } from '::hooks/relative-time/relative-time';
 import { mapPrivacyToIcon } from '::app/components/editor/info-bar/components/components/visibility-icon';
+import { IconName } from '@cherryjuice/icons';
 
 const sortByDocumentName = (xs: CachedDocument[]) =>
   xs.sort((a, b) => a.name.localeCompare(b.name));
@@ -33,7 +34,7 @@ type Props = {
   folders: FoldersDict;
 };
 
-type SortedDocuments = Record<string, { rows: RowProps[] }>;
+type SortedDocuments = Record<string, { rows: RowProps[]; pinned: RowProps[] }>;
 
 export const useSortDocuments = ({
   documents,
@@ -60,10 +61,12 @@ export const useSortDocuments = ({
       const documentFolderId = documentFolderIdIsValid
         ? document.folderId
         : draftsFolderId;
-      if (!acc[documentFolderId]) acc[documentFolderId] = { rows: [] };
-      if (matchesSearchFilter)
-        acc[documentFolderId].rows.push({
+      if (!acc[documentFolderId])
+        acc[documentFolderId] = { rows: [], pinned: [] };
+      if (matchesSearchFilter) {
+        const row: RowProps = {
           id: document.id,
+          pinned: document.persistedState.pinned,
           elements: [
             document.name,
             timeAgo.format(document.updatedAt, 'round'),
@@ -71,13 +74,18 @@ export const useSortDocuments = ({
             document.size,
           ].map((text, i) => ({
             text,
-            icon: i === 0 && mapPrivacyToIcon(document.privacy),
+            icon: i === 0 && (mapPrivacyToIcon(document.privacy) as IconName),
           })),
           state: {
             opened: openedDocumentId === document.id,
             active: activeDocumentId === document.id,
           },
-        });
+        };
+
+        if (document.persistedState.pinned)
+          acc[documentFolderId].pinned.push(row);
+        else acc[documentFolderId].rows.push(row);
+      }
       return acc;
     }, {});
   }, [

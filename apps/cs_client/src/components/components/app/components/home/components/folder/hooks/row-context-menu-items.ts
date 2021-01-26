@@ -10,6 +10,11 @@ export const useRowContextMenuItems = ({ online }: Props) => {
   return useMemo<CMItem[]>(
     () => [
       {
+        name: '',
+        nameFactory: (id, context) => (context.pinned ? 'unpin' : 'pin'),
+        onClick: id => ac.documentCache.pinDocument(id),
+      },
+      {
         name: 'edit',
         onClick: () => ac.dialogs.showEditDocumentDialog(),
       },

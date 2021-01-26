@@ -92,6 +92,7 @@ export interface PrivateNode {
 export interface DocumentState {
   bookmarks: Array<number>;
   lastOpenedAt: Timestamp;
+  pinned: boolean;
   recentNodes: Array<number>;
   scrollPositions: Array<NodeScrollPosition>;
   selectedNode_id: number;
@@ -454,6 +455,7 @@ export type ImageUpload = any;
 export interface DocumentStateIt {
   bookmarks: Array<number>;
   lastOpenedAt: Timestamp;
+  pinned: boolean;
   recentNodes: Array<number>;
   scrollPositions: Array<NodeScrollPositionIt>;
   selectedNode_id: number;
@@ -954,6 +956,7 @@ export interface PrivateNodeToNode_idResolver<TParent = any, TResult = any> {
 export interface DocumentStateTypeResolver<TParent = any> {
   bookmarks?: DocumentStateToBookmarksResolver<TParent>;
   lastOpenedAt?: DocumentStateToLastOpenedAtResolver<TParent>;
+  pinned?: DocumentStateToPinnedResolver<TParent>;
   recentNodes?: DocumentStateToRecentNodesResolver<TParent>;
   scrollPositions?: DocumentStateToScrollPositionsResolver<TParent>;
   selectedNode_id?: DocumentStateToSelectedNode_idResolver<TParent>;
@@ -972,6 +975,10 @@ export interface DocumentStateToLastOpenedAtResolver<
   TParent = any,
   TResult = any
 > {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentStateToPinnedResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 

@@ -61,6 +61,7 @@ type DocumentOperation {
 type DocumentState {
     bookmarks: [Int!]!
     lastOpenedAt: Timestamp!
+    pinned: Boolean!
     recentNodes: [Int!]!
     scrollPositions: [NodeScrollPosition!]!
     selectedNode_id: Int!
@@ -463,6 +464,7 @@ input DocumentGuestIt {
 input DocumentStateIt {
     bookmarks: [Int!]!
     lastOpenedAt: Timestamp!
+    pinned: Boolean!
     recentNodes: [Int!]!
     scrollPositions: [NodeScrollPositionIt!]!
     selectedNode_id: Int!

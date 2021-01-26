@@ -6,7 +6,7 @@ import { joinClassNames } from '@cherryjuice/shared-helpers';
 export type RowElementsProps = {
   text: string;
   icon?: IconName;
-  onClick: () => void;
+  onClick?: () => void;
   isHead?: boolean;
   rowIsCollapsed?: boolean;
 };

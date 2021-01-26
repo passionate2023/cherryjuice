@@ -30,6 +30,7 @@ export type ContextMenuProps = {
   showAsModal?: 'md' | 'mb';
   clickOutsideSelectorsWhitelist?: any[];
   id: string;
+  context: Record<string, any>;
 };
 
 const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
@@ -43,6 +44,7 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
   isOnMb,
   clickOutsideSelectorsWhitelist = [],
   id,
+  context,
 }) => {
   const [activeItem, setActiveItem] = useState<string>(undefined);
   const contextMenuR = useRef<HTMLDivElement>();
@@ -101,6 +103,7 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
                 setActiveItem={setActiveItem}
                 activeItem={activeItem}
                 id={id}
+                context={context}
               />
             ))
           : children}

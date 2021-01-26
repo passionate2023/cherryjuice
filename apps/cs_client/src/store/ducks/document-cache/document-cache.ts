@@ -75,6 +75,7 @@ import {
   copyNode,
   CopyNodeParams,
 } from '::store/ducks/document-cache/helpers/node/copy-cut-paste/copy-node';
+import { pinDocument } from '::store/ducks/document-cache/helpers/document/pin-document';
 
 const ap = createActionPrefixer('document-cache');
 
@@ -131,6 +132,9 @@ const ac = {
     ap('set-scroll-position'),
     _ => (param: SetScrollPositionParams) => _(param),
   ),
+  pinDocument: _(ap('pin-document'), _ => (documentId: string) =>
+    _(documentId),
+  ),
   undoDocumentAction: _(ap('undo-document-action')),
   redoDocumentAction: _(ap('redo-document-action')),
   neutralizePersistedState: _(
@@ -166,6 +170,7 @@ export type PersistedDocumentState = {
   recentNodes: number[];
   bookmarks: number[];
   updatedAt: number;
+  pinned: boolean;
   localUpdatedAt: number;
   lastOpenedAt: number;
   localLastOpenedAt: number;
@@ -263,6 +268,9 @@ const reducer = createReducer(initialState, _ => {
       ),
       _(ac.collapseNode, (state, { payload }) =>
         produce(state, draft => collapseNode(draft, payload)),
+      ),
+      _(ac.pinDocument, (state, { payload }) =>
+        produce(state, draft => pinDocument(draft, payload)),
       ),
       _(ac.setScrollPosition, (state, { payload }) =>
         produce(state, draft => setScrollPosition(draft, payload)),

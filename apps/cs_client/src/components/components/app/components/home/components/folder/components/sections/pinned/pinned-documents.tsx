@@ -4,13 +4,18 @@ import {
   SectionProps,
 } from '::app/components/home/components/folder/components/sections/components/section/table';
 import { ac } from '::store/store';
+import { RowProps } from '::app/components/home/components/folder/components/sections/components/section/componnets/row/row';
 
 export type PinnedDocumentsProps = Omit<
   SectionProps,
   'header' | 'onRowClick' | 'onRowDoubleClick'
 >;
 
-const header = { id: 'header', elements: [{ text: 'Pinned' }], isPinned: true };
+const header: RowProps = {
+  id: 'header',
+  elements: [{ text: 'Pinned' }],
+  isHeader: true,
+};
 
 export const PinnedDocuments: React.FC<PinnedDocumentsProps> = ({
   rows,

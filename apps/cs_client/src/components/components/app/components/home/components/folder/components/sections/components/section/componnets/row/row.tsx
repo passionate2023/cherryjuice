@@ -11,6 +11,7 @@ export type RowProps = {
   isHeader?: boolean;
   isCollapsed?: boolean;
   id: string;
+  pinned?: boolean;
   state?: {
     opened?: boolean;
     active?: boolean;
@@ -25,6 +26,7 @@ export const Row: React.FC<RowProps> = ({
   onClick,
   onDoubleClick,
   isCollapsed,
+  pinned,
 }) => {
   const [head, ...tail] = elements;
   return (
@@ -41,6 +43,7 @@ export const Row: React.FC<RowProps> = ({
           onClick={onClick ? () => onClick(id) : undefined}
           onDoubleClick={onDoubleClick ? () => onDoubleClick(id) : undefined}
           data-row-id={id}
+          data-cmi-context={JSON.stringify({ pinned })}
           ref={ref}
           {...provided}
         >

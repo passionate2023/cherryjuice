@@ -39,7 +39,7 @@ const ContextMenuWrapper: React.FC<Props> = ({
 
   const positionR = useRef<Position>([0, 0, 0, 0]);
   const ref = useRef<HTMLDivElement>();
-  const id = useRef<string>();
+  const id = useRef<{ id: string; context: Record<string, any> }>({});
   const showM = e => {
     if (show) {
       const boundingClientRect = ref.current.getBoundingClientRect();
@@ -65,7 +65,8 @@ const ContextMenuWrapper: React.FC<Props> = ({
             {...props}
             hide={hide}
             position={position || positionR.current}
-            id={id.current}
+            id={id.current.id}
+            context={id.current.context}
           >
             {customBody}
           </ContextMenu>

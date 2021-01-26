@@ -1,15 +1,20 @@
 import { MouseEvent, useCallback, useState } from 'react';
 import { Position } from '::shared-components/context-menu/context-menu-wrapper-legacy';
-
-export type ChildContextMenuProps = {
+export type ContextMenuItemContext = Record<string, any>;
+export type ChildContextMenuProps<Context = ContextMenuItemContext> = {
   getIdOfActiveElement: (e: HTMLElement) => string;
-  onSelectElement?: (id: string) => void;
+  getActiveElement?: (e: HTMLElement) => HTMLElement;
+  onSelectElement?: (id: string, context: Context) => void;
 };
 
-export const useChildContextMenu = <T = HTMLDivElement>({
+export const useChildContextMenu = <
+  T = HTMLDivElement,
+  Context = ContextMenuItemContext
+>({
   getIdOfActiveElement,
+  getActiveElement = () => undefined,
   onSelectElement = () => undefined,
-}: ChildContextMenuProps) => {
+}: ChildContextMenuProps<Context>) => {
   const [CMOffset, setCMOffset] = useState<Position>([0, 0, 0, 0]);
   const show = useCallback((e: MouseEvent<T>) => {
     if (!e.shiftKey) {
@@ -17,12 +22,21 @@ export const useChildContextMenu = <T = HTMLDivElement>({
     }
     e.stopPropagation();
     const target = e.target;
-    const activeElementId = getIdOfActiveElement(target as HTMLElement);
-    if (activeElementId) {
+    const id = getIdOfActiveElement(target as HTMLElement);
+    const activeElement = getActiveElement(target as HTMLElement);
+    let context;
+    if (activeElement && activeElement.dataset.cmiContext)
+      try {
+        context = JSON.parse(activeElement.dataset.cmiContext);
+      } catch {
+        context = {};
+      }
+
+    if (id) {
       setCMOffset([e.clientX, e.clientY, 0, 0]);
-      onSelectElement(activeElementId);
+      onSelectElement(id, context);
     }
-    return activeElementId;
+    return { id, context };
   }, []);
   const hide = () => setCMOffset([0, 0, 0, 0]);
   const shown = CMOffset[0] > 0;

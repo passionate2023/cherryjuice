@@ -2,7 +2,7 @@ import * as React from 'react';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { modContextMenu } from '::sass-modules';
 import { ReactNode, useEffect, useState } from 'react';
-import { Icon, Icons } from '@cherryjuice/icons';
+import { Icon } from '@cherryjuice/icons';
 import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 
 export type CMItem = Omit<
@@ -11,9 +11,11 @@ export type CMItem = Omit<
 >;
 
 type IsDisabled = (id: string) => boolean;
-export type ContextMenuItemProps = {
+export type ContextMenuItemProps<Context = Record<string, any>> = {
   name: string;
-  onClick: (id: string) => void;
+  nameFactory?: (id: string, context: Context) => string;
+  onClick: (id: string, context: Context) => void;
+  context: Context;
   hide: () => void;
   node?: ReactNode;
   disabled?: boolean | IsDisabled;
@@ -39,6 +41,8 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
   activeItem,
   setActiveItem,
   id,
+  context,
+  nameFactory,
 }) => {
   const [CMShown, setCMShown] = useState(false);
   const hideSub = () => setCMShown(false);
@@ -50,7 +54,7 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
   const onClickM = e => {
     if (!isDisabled && !items.length) {
       if (hideOnClick) hide();
-      onClick(id);
+      onClick(id, context);
       e.stopPropagation();
       e.preventDefault();
     }
@@ -78,14 +82,14 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
         {...(isDisabled && { 'data-disabled': isDisabled })}
       >
         <span className={modContextMenu.contextMenu__item__icon}>
-          {active ? <Icon name={Icons.material.check} size={14} /> : undefined}
+          {active ? <Icon name={'check'} size={14} /> : undefined}
         </span>
         <span className={modContextMenu.contextMenu__item__text}>
-          {node || name}
+          {node || nameFactory ? nameFactory(id, context) : name}
         </span>
         {!!items.length && (
           <span className={modContextMenu.contextMenu__item__subItemsArrow}>
-            <Icon name={Icons.material['triangle-right']} />
+            <Icon name={'triangle-right'} />
           </span>
         )}
       </div>

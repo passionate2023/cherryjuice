@@ -27,6 +27,9 @@ export const Table: React.FC<SectionProps> = ({
       const row: HTMLElement = target.closest('.' + modRow.row);
       if (row) return row.dataset.rowId;
     },
+    getActiveElement: target => {
+      return target.closest('.' + modRow.row);
+    },
     onSelectElement: rowId => {
       onRowClick(rowId);
     },

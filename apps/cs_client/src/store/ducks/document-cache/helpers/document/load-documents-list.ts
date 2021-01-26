@@ -2,10 +2,10 @@ import {
   CachedDocumentDict,
   DocumentCacheState,
 } from '::store/ducks/document-cache/document-cache';
-import { getDefaultPersistedState } from '::store/ducks/document-cache/helpers/document/shared/get-default-persisted-state';
 import { getDefaultLocalState } from '::store/ducks/document-cache/helpers/document/shared/get-default-local-state';
 import { pluckProperties } from '::store/ducks/document-cache/helpers/document/shared/pluck-document-meta';
 import { QDocumentsListItem } from '::graphql/fragments/document-list-item';
+import { getDefaultPersistedState } from '::store/ducks/document-cache/helpers/document/shared/get-default-persisted-state';
 export const documentIsNotNew = (documentId: string): boolean =>
   !documentId.startsWith('new');
 
@@ -49,7 +49,11 @@ export const loadDocumentsList = (
           ...pluckProperties(document),
           nodes: {},
           privateNodes: [],
-          persistedState: getDefaultPersistedState(),
+          persistedState: {
+            // temporary fix because persisted state is loaded when document is fetched individually
+            ...getDefaultPersistedState(),
+            pinned: document.state.pinned,
+          },
           localState: getDefaultLocalState(document.id, undefined),
         },
       ]),

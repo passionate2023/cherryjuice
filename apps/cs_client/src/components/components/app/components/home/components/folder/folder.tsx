@@ -9,6 +9,7 @@ import { useSortDocuments } from '::app/components/home/components/folder/hooks/
 import { LinearProgress } from '::shared-components/loading-indicator/linear-progress';
 import { Portal } from '::app/components/editor/tool-bar/tool-bar';
 import { modHome } from '::app/components/home/home';
+import { PinnedDocuments } from '::app/components/home/components/folder/components/sections/pinned/pinned-documents';
 
 const mapState = (state: Store) => ({
   documents: Object.values(state.documentCache.documents),
@@ -55,8 +56,7 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
   });
   const folder = sorted[currentFolder.id];
   const rows = folder?.rows || [];
-  const isEmpty = rows.length === 0;
-  const rest = rows;
+  const pinned = folder?.pinned || [];
   const cmItems = useRowContextMenuItems({ online });
   const folderName = folders[currentFolder.id]?.name;
   return (
@@ -65,7 +65,7 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
         <Header
           folderName={folderName}
           query={query}
-          noSearch={isEmpty}
+          noSearch={rows.length === 0 && pinned.length === 0}
           isOnMd={isOnMd}
         />
       </Portal>
@@ -73,14 +73,18 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
         <LinearProgress loading={loading} />
         {!loading && (
           <>
-            {/*<PinnedDocuments rows={pinned} cmItems={cmItems} />*/}
-            <AllDocuments
-              rows={rest}
-              cmItems={cmItems}
-              sortBy={sortBy}
-              sortDirection={sortDirection}
-              isOnMd={isOnMd}
-            />
+            {pinned.length > 0 && (
+              <PinnedDocuments rows={pinned} cmItems={cmItems} />
+            )}
+            {rows.length > 0 && (
+              <AllDocuments
+                rows={rows}
+                cmItems={cmItems}
+                sortBy={sortBy}
+                sortDirection={sortDirection}
+                isOnMd={isOnMd}
+              />
+            )}
           </>
         )}
       </div>
