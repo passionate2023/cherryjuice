@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { store, Store } from '::store/store';
 import { router } from '::root/router/router';
+import { extractDocumentFromPathname } from '@cherryjuice/shared-helpers';
 
 const getRoute = createSelector(
   (state: Store) =>
@@ -11,6 +12,7 @@ const getRoute = createSelector(
   (state: Store) =>
     state.documentCache.documents[state.document.documentId]?.localState?.hash,
   (state: Store) => state.document.asyncOperations.fetch,
+  (state: Store) => state.document.swappedIds,
   (state: Store) => state.auth.user?.id,
   (state: Store) => state.auth.user?.hasPassword,
   (state: Store) => state.auth.resetPasswordToken,
@@ -21,6 +23,7 @@ const getRoute = createSelector(
     node_id,
     hash,
     fetch,
+    swappedIds,
     userId,
     hasPassword,
     resetPasswordToken,
@@ -44,7 +47,10 @@ const getRoute = createSelector(
         } else {
           if (!userId) router.goto.signIn();
           else {
-            if (!isAtHomePage) {
+            const swappingDocumentIdInProgress = !swappedIds[
+              extractDocumentFromPathname().documentId
+            ];
+            if (!isAtHomePage && swappingDocumentIdInProgress) {
               router.goto.home(folder.name);
             }
           }
