@@ -1,7 +1,7 @@
 import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 import { useMemo } from 'react';
 import { SortDirection } from '@cherryjuice/graphql-types';
-import { SortDocumentsBy } from '::store/ducks/home/home';
+import { FoldersDict, SortDocumentsBy } from '::store/ducks/home/home';
 import { RowProps } from '::app/components/home/components/folder/components/sections/components/section/componnets/row/row';
 import { timeAgo } from '::hooks/relative-time/relative-time';
 import { mapPrivacyToIcon } from '::app/components/editor/info-bar/components/components/visibility-icon';
@@ -30,6 +30,7 @@ type Props = {
   openedDocumentId: string;
   activeDocumentId: string;
   draftsFolderId;
+  folders: FoldersDict;
 };
 
 type SortedDocuments = Record<string, { rows: RowProps[] }>;
@@ -42,6 +43,7 @@ export const useSortDocuments = ({
   openedDocumentId,
   activeDocumentId,
   draftsFolderId,
+  folders,
 }: Props) => {
   return useMemo<SortedDocuments>(() => {
     let sortedDocuments: CachedDocument[] = mapSortDocumentBy[sortBy](
@@ -53,7 +55,11 @@ export const useSortDocuments = ({
       const matchesSearchFilter =
         !query || document.name.toLowerCase().includes(query.toLowerCase());
 
-      const documentFolderId = document.folderId || draftsFolderId;
+      const documentFolderIdIsValid =
+        document.folderId && folders[document.folderId];
+      const documentFolderId = documentFolderIdIsValid
+        ? document.folderId
+        : draftsFolderId;
       if (!acc[documentFolderId]) acc[documentFolderId] = { rows: [] };
       if (matchesSearchFilter)
         acc[documentFolderId].rows.push({
@@ -81,5 +87,6 @@ export const useSortDocuments = ({
     query,
     openedDocumentId,
     activeDocumentId,
+    folders,
   ]);
 };

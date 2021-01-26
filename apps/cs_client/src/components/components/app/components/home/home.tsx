@@ -9,6 +9,7 @@ import { createGesturesHandler } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => ({
   showSidebar: state.home.showSidebar,
+  isOnMd: state.root.isOnMd,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -16,7 +17,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = Record<string, never>;
 
-const Home: React.FC<Props & PropsFromRedux> = ({ showSidebar }) => {
+const Home: React.FC<Props & PropsFromRedux> = ({ showSidebar, isOnMd }) => {
   const { onTouchEnd, onTouchStart } = useMemo(
     () =>
       createGesturesHandler({
@@ -38,7 +39,7 @@ const Home: React.FC<Props & PropsFromRedux> = ({ showSidebar }) => {
         className={mod.mod__sidebarAndFolder}
         data-show-sidebar={showSidebar}
       >
-        {showSidebar && <Sidebar />}
+        {(!isOnMd || showSidebar) && <Sidebar />}
         <Folder />
       </div>
     </div>

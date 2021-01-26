@@ -51,6 +51,7 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
     sortBy,
     query,
     draftsFolderId,
+    folders,
   });
   const folder = sorted[currentFolder.id];
   const rows = folder?.rows || [];
