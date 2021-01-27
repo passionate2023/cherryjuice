@@ -7,7 +7,7 @@ import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/conte
 
 export type CMItem = Omit<
   ContextMenuItemProps,
-  'hide' | 'activeItem' | 'setActiveItem' | 'id'
+  'hide' | 'activeItem' | 'setActiveItem' | 'id' | 'context'
 >;
 
 type IsDisabled = (id: string) => boolean;

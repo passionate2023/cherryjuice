@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { store, Store } from '::store/store';
+import { ac, store, Store } from '::store/store';
 import { router } from '::root/router/router';
 import { extractDocumentFromPathname } from '@cherryjuice/shared-helpers';
 
@@ -51,7 +51,7 @@ const getRoute = createSelector(
               extractDocumentFromPathname().documentId
             ];
             if (!isAtHomePage && swappingDocumentIdInProgress) {
-              router.goto.home(folder.name);
+              ac.home.show();
             }
           }
         }

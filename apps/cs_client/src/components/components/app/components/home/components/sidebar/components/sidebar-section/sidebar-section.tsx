@@ -9,12 +9,14 @@ import {
   SectionHeader,
   SectionHeaderProps,
 } from '::app/components/home/components/sidebar/components/sidebar-section/components/section-header/section-header';
+import { InlineInputProps } from '::shared-components/inline-input/hooks/inline-input-provider';
 
 type Props = {
   topBorder?: boolean;
   elements: SectionElementProps[];
   header?: SectionHeaderProps;
   sharedSectionElementProps: SharedSectionElementProps;
+  inlineInputProps: InlineInputProps;
 };
 
 export const SidebarSection: React.FC<Props> = ({
@@ -22,6 +24,7 @@ export const SidebarSection: React.FC<Props> = ({
   elements,
   topBorder,
   sharedSectionElementProps,
+  inlineInputProps,
 }) => {
   return (
     <div className={mod.sidebarSection}>
@@ -32,6 +35,7 @@ export const SidebarSection: React.FC<Props> = ({
           {...element}
           key={element.id}
           {...sharedSectionElementProps}
+          inlineInputProps={inlineInputProps}
         />
       ))}
     </div>

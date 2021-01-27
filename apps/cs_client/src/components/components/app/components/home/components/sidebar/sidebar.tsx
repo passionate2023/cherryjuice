@@ -8,9 +8,10 @@ import {
   modSectionElement,
   SharedSectionElementProps,
 } from '::app/components/home/components/sidebar/components/sidebar-section/components/section-element/section-element';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
 import { deleteFolder } from '::app/components/home/components/sidebar/callbacks/delete-folder';
+import { useInlineInputProvider } from '::shared-components/inline-input/hooks/inline-input-provider';
 
 const mapState = (state: Store) => ({
   currentFolder: state.home.folder,
@@ -34,18 +35,17 @@ const Sidebar: React.FC<Props & PropsFromRedux> = ({
     currentFolder,
     folders,
   });
-  const [currentlyEnabledInput, setCurrentlyEnabledInput] = useState('');
-  const sectionElementProps = useMemo(() => {
-    const folderNames = new Set(userFolders.map(folder => folder.text));
-    const sectionElementProps: SharedSectionElementProps = {
-      checkValidity: value => !folderNames.has(value),
-      currentlyEnabledInput,
-      onToggleInputMode: id => void setCurrentlyEnabledInput(id),
-      onClick: id => ac.home.selectFolder({ id }),
-    };
-    return sectionElementProps;
-  }, [userFolders, currentlyEnabledInput]);
-
+  const inputValues = useMemo(() => userFolders.map(folder => folder.text), [
+    userFolders,
+  ]);
+  const inlineInputProps = useInlineInputProvider({
+    inputValues,
+    onApply: (id, value) => ac.home.setFolderName({ id, name: value.trim() }),
+    onDiscard: id => ac.home.removeFolder({ id }),
+  });
+  const sharedSectionElementProps: SharedSectionElementProps = {
+    onClick: id => ac.home.selectFolder({ id }),
+  };
   const hookProps = {
     getIdOfActiveElement: target => {
       const element: HTMLElement = target.closest(
@@ -60,7 +60,7 @@ const Sidebar: React.FC<Props & PropsFromRedux> = ({
     <ContextMenuWrapper
       hookProps={hookProps}
       items={[
-        { name: 'rename', onClick: setCurrentlyEnabledInput },
+        { name: 'rename', onClick: inlineInputProps.setCurrentlyEnabledInput },
         {
           name: 'delete',
           onClick: id => deleteFolder({ folderId: id, draftsFolderId }),
@@ -72,7 +72,8 @@ const Sidebar: React.FC<Props & PropsFromRedux> = ({
           <SidebarSection
             topBorder={false}
             elements={defaultFolders}
-            sharedSectionElementProps={sectionElementProps}
+            sharedSectionElementProps={sharedSectionElementProps}
+            inlineInputProps={inlineInputProps}
           />
           <SidebarSection
             topBorder={true}
@@ -88,7 +89,8 @@ const Sidebar: React.FC<Props & PropsFromRedux> = ({
                 },
               },
             }}
-            sharedSectionElementProps={sectionElementProps}
+            sharedSectionElementProps={sharedSectionElementProps}
+            inlineInputProps={inlineInputProps}
           />
         </div>
       )}

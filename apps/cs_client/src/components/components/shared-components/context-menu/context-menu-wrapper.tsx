@@ -23,7 +23,7 @@ type Props<T = HTMLDivElement> = {
     show: () => string;
     ref: MutableRefObject<T>;
   }) => JSX.Element;
-} & Omit<ContextMenuProps, 'position' | 'id' | 'hide'>;
+} & Omit<ContextMenuProps, 'position' | 'id' | 'hide' | 'context'>;
 
 const ContextMenuWrapper: React.FC<Props> = ({
   // shown,
