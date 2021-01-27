@@ -16,7 +16,6 @@ import {
   getDocumentUserId,
 } from '::store/selectors/cache/document/document';
 import { useFooterButtons } from '::app/components/menus/dialogs/document-meta/hooks/footer-buttons';
-import { useCreateDocument } from '::app/components/menus/dialogs/document-meta/hooks/create-document';
 import { useEditDocument } from '::app/components/menus/dialogs/document-meta/hooks/edit-document';
 import { useFormInputs } from '::app/components/menus/dialogs/document-meta/hooks/inputs';
 
@@ -33,7 +32,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type DocumentMetaDialogProps = {
-  showDialog: 'edit' | 'create';
+  showDialog: boolean;
   documentId?: string;
 };
 
@@ -44,7 +43,6 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   focusedDocumentId,
   documents,
   userId,
-  currentFolderId,
 }) => {
   const focusedDocument = useMemo(
     () => documents.find(document => document.id === focusedDocumentId),
@@ -59,20 +57,12 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
     documentMetaActionCreators.init(dispatch);
   }, []);
 
-  const editExistingDocument = showDialog === 'edit';
   useEffect(() => {
-    if (editExistingDocument) {
+    if (showDialog) {
       documentMetaActionCreators.resetToEdit({
         // @ts-ignore
         document: focusedDocument,
       });
-    } else {
-      setTimeout(
-        () => {
-          documentMetaActionCreators.resetToCreate({ userId });
-        },
-        showDialog === 'create' ? 0 : 500,
-      );
     }
   }, [showDialog, focusedDocumentId, userId]);
   const inputs = useFormInputs({
@@ -80,9 +70,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
     isOwnerOfFocusedDocument,
     userId,
     state,
-    showDialog,
   });
-  const createDocument = useCreateDocument({ state, userId, currentFolderId });
   const editDocument = useEditDocument({
     state,
     focusedDocument,
@@ -90,9 +78,9 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
 
   const apply = useDelayedCallback(
     ac.dialogs.hideDocumentMetaDialog,
-    editExistingDocument ? editDocument : createDocument,
+    editDocument,
   );
-  const buttonsRight = useFooterButtons({ apply, editExistingDocument });
+  const buttonsRight = useFooterButtons({ apply });
   return (
     <DialogWithTransition
       dialogTitle={'Document Properties'}

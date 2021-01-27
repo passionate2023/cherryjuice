@@ -15,8 +15,15 @@ import {
   useInlineInputProvider,
 } from '::shared-components/inline-input/hooks/inline-input-provider';
 import { createContext } from 'react';
+import { getDocuments } from '::store/selectors/cache/document/document';
 
-export const FolderContext = createContext<InlineInputProps>({});
+export const FolderContext = createContext<InlineInputProps>({
+  checkValidity: undefined,
+  currentlyEnabledInput: undefined,
+  disableInput: undefined,
+  enableInput: undefined,
+  setCurrentlyEnabledInput: undefined,
+});
 
 const mapState = (state: Store) => ({
   documents: Object.values(state.documentCache.documents),
@@ -24,6 +31,9 @@ const mapState = (state: Store) => ({
   draftsFolderId: state.home.draftsFolderId,
   openedDocumentId: state.document.documentId,
   activeDocumentId: state.home.activeDocumentId,
+  isOwnerOfActiveDocument:
+    getDocuments(state)?.[state.home.activeDocumentId]?.userId ===
+    state.auth.user?.id,
   online: state.root.online,
   sortBy: state.home.sortBy,
   sortDirection: state.home.sortDirection,
@@ -50,6 +60,7 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
   query,
   isOnMd,
   loading,
+  isOwnerOfActiveDocument,
 }) => {
   const sorted = useSortDocuments({
     documents,
@@ -62,6 +73,7 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
     folders,
   });
   const inlineInputProps = useInlineInputProvider({
+    disable: !isOwnerOfActiveDocument,
     onApply: (id, value) =>
       ac.documentCache.mutateDocument({
         documentId: id,
@@ -75,6 +87,7 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
   const cmItems = useRowContextMenuItems({
     online,
     rename: inlineInputProps.setCurrentlyEnabledInput,
+    isOwnerOfActiveDocument,
   });
   const folderName = folders[currentFolder.id]?.name;
   return (

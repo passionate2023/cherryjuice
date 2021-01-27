@@ -1,6 +1,8 @@
 import { ac } from '::store/store';
 import { DropdownMenuGroupProps } from '::shared-components/dropdown-menu/components/dropdown-menu-group/dropdown-menu-group';
 import { testIds } from '::cypress/support/helpers/test-ids';
+import { createDocument } from '::app/components/menus/modals/document-dropdown-menu/callbacks/create-document/create-document';
+import { Privacy } from '@cherryjuice/graphql-types';
 
 export const useGroups = ({
   online,
@@ -8,22 +10,36 @@ export const useGroups = ({
   userId,
   documentHasUnsavedChanges,
   includeCurrentDocumentSection,
+  currentFolderId,
+  isOwnerOfDocument,
 }: {
   online: boolean;
   userId: string;
   documentId: string;
   documentHasUnsavedChanges: boolean;
   includeCurrentDocumentSection: boolean;
+  isOwnerOfDocument: boolean;
+  currentFolderId: string;
 }): DropdownMenuGroupProps[] => {
   const noDocumentIsSelected = !documentId;
   const newDocument = documentId?.startsWith('new-document');
+
   return [
     {
       id: 'document',
       body: [
         {
           text: 'new document',
-          onClick: ac.dialogs.showCreateDocumentDialog,
+          onClick: () =>
+            createDocument({
+              currentFolderId,
+              userId,
+              state: {
+                guests: [],
+                name: 'new document',
+                privacy: Privacy.PRIVATE,
+              },
+            }),
           testId: 'new-document',
           disabled: !userId,
         },
@@ -45,7 +61,7 @@ export const useGroups = ({
         {
           text: 'edit',
           onClick: () => ac.dialogs.showEditDocumentDialog(),
-          disabled: noDocumentIsSelected,
+          disabled: noDocumentIsSelected || !isOwnerOfDocument,
         },
         {
           text: 'reload',

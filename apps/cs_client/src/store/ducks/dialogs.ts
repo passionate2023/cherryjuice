@@ -13,7 +13,6 @@ const ap = createActionPrefixer('dialogs');
 const ac = {
   ...{
     showEditDocumentDialog: _(ap('showEditDocumentDialog')),
-    showCreateDocumentDialog: _(ap('showCreateDocumentDialog')),
     hideDocumentMetaDialog: _(ap('hideDocumentMetaDialog')),
   },
   ...{
@@ -112,7 +111,7 @@ type State = {
   showPasswordModal: boolean;
   showImportDocuments: boolean;
   showDocumentList: boolean;
-  showDocumentMetaDialog?: 'edit' | 'create';
+  showDocumentMetaDialog: boolean;
   showNodeMetaDialog?: NodeMetaDialogRole;
   showDeleteNode: boolean;
   showUserPopup: boolean;
@@ -128,6 +127,7 @@ type State = {
 };
 
 const initialState: State = {
+  showDocumentMetaDialog: false,
   showReloadDocument: false,
   showDeleteDocument: false,
   showImportDocuments: false,
@@ -222,22 +222,14 @@ const reducer = createReducer(initialState, _ => [
   })),
 
   ...[
-    _(ac.showCreateDocumentDialog, state => ({
-      ...state,
-      showDocumentMetaDialog: 'create',
-    })),
     _(ac.showEditDocumentDialog, state => ({
       ...state,
-      showDocumentMetaDialog: 'edit',
+      showDocumentMetaDialog: true,
     })),
-    _(
-      ac.hideDocumentMetaDialog,
-      state =>
-        ({
-          ...state,
-          showDocumentMetaDialog: undefined,
-        } as State),
-    ),
+    _(ac.hideDocumentMetaDialog, state => ({
+      ...state,
+      showDocumentMetaDialog: false,
+    })),
   ],
   ...[
     _(ac.showDeleteNode, state => ({

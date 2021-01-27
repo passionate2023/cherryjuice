@@ -1,5 +1,5 @@
 import { NodeCached } from '@cherryjuice/graphql-types';
-import { TDocumentMetaState } from '::root/components/app/components/menus/dialogs/document-meta/reducer/reducer';
+import { TDocumentMetaState } from '::app/components/menus/dialogs/document-meta/reducer/reducer';
 import { CreateDocumentParams } from '::store/ducks/document-cache/helpers/document/create-document';
 import { newNodePrefix } from '@cherryjuice/editor';
 

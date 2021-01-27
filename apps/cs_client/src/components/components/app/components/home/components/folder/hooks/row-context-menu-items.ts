@@ -5,20 +5,27 @@ import { CMItem } from '::shared-components/context-menu/context-menu-item';
 type Props = {
   online: boolean;
   rename: (id) => void;
+  isOwnerOfActiveDocument: boolean;
 };
 
-export const useRowContextMenuItems = ({ online, rename }: Props) => {
+export const useRowContextMenuItems = ({
+  online,
+  rename,
+  isOwnerOfActiveDocument,
+}: Props) => {
   return useMemo<CMItem[]>(
     () => [
       {
         name: '',
         nameFactory: (id, context) => (context.pinned ? 'unpin' : 'pin'),
         onClick: id => ac.documentCache.pinDocument(id),
+        disabled: !isOwnerOfActiveDocument,
       },
-      { name: 'rename', onClick: rename },
+      { name: 'rename', onClick: rename, disabled: !isOwnerOfActiveDocument },
       {
         name: 'edit',
         onClick: () => ac.dialogs.showEditDocumentDialog(),
+        disabled: !isOwnerOfActiveDocument,
       },
       {
         name: 'cache',
@@ -38,9 +45,9 @@ export const useRowContextMenuItems = ({ online, rename }: Props) => {
       {
         name: 'delete',
         onClick: () => void ac.dialogs.showDeleteDocument(),
-        disabled: !online,
+        disabled: !online || !isOwnerOfActiveDocument,
       },
     ],
-    [online, rename],
+    [online, rename, isOwnerOfActiveDocument],
   );
 };

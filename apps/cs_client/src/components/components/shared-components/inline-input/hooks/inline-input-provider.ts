@@ -13,17 +13,20 @@ type InlineInputProviderProps = {
   inputValues?: string[];
   onApply: (inputId: string, newInputValue: string) => void;
   onDiscard: (inputId: string) => void;
+  disable?: boolean;
 };
 
 export const useInlineInputProvider = ({
   inputValues = [],
   onApply,
   onDiscard,
+  disable,
 }: InlineInputProviderProps) => {
   const [currentlyEnabledInput, setCurrentlyEnabledInput] = useState('');
 
   return useMemo(() => {
-    const enableInput = inputId => () => setCurrentlyEnabledInput(inputId);
+    const enableInput = inputId => () =>
+      setCurrentlyEnabledInput(!disable && inputId);
     const disableInput = (inputId: string, originalInputValue: string) => (
       value,
       valid,
@@ -46,5 +49,5 @@ export const useInlineInputProvider = ({
       disableInput,
     };
     return sectionElementProps;
-  }, [inputValues, currentlyEnabledInput]);
+  }, [disable, inputValues, currentlyEnabledInput]);
 };

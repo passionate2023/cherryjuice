@@ -9,12 +9,15 @@ import { testIds } from '::cypress/support/helpers/test-ids';
 const mapState = (state: Store) => {
   const documentId = state.document.documentId;
   const document = state.documentCache.documents[documentId];
+  const userId = state.auth.user?.id;
   return {
     documentId: documentId,
+    isOwnerOfDocument: document?.userId === userId,
     online: state.root.online,
     show: state.dialogs.showDocumentDropdownMenu,
     documentHasUnsavedChanges: documentHasUnsavedChanges(document),
-    userId: state.auth.user?.id,
+    userId: userId,
+    currentFolderId: state.home.folder?.id,
   };
 };
 const connector = connect(mapState);
@@ -29,6 +32,8 @@ const DocumentDropdownMenu: React.FC<Props & PropsFromRedux> = ({
   documentHasUnsavedChanges,
   userId,
   includeCurrentDocumentSection = true,
+  currentFolderId,
+  isOwnerOfDocument,
 }) => {
   const elements = useGroups({
     online,
@@ -36,6 +41,8 @@ const DocumentDropdownMenu: React.FC<Props & PropsFromRedux> = ({
     userId,
     documentHasUnsavedChanges,
     includeCurrentDocumentSection,
+    currentFolderId,
+    isOwnerOfDocument,
   });
   return (
     show && (
