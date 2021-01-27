@@ -6,13 +6,18 @@ import {
 } from '@cherryjuice/shared-helpers';
 import mod from './inline-input.scss';
 import { useLayoutEffect, useRef, useState } from 'react';
-export type CheckValidity = (currentValue: string) => boolean;
+import {
+  CheckValidity,
+  OnAcceptInput,
+} from '::shared-components/inline-input/hooks/inline-input-provider';
+
 type Props = {
-  checkValidity: CheckValidity;
   autoFocus?: boolean;
-  onAcceptInput: (value: string, isValid: boolean) => void;
   initialValue: string;
   className?: string;
+  onAcceptInput: OnAcceptInput;
+  checkValidity: CheckValidity;
+  width?: number;
 };
 export const InlineInput: React.FC<Props> = ({
   checkValidity,
@@ -20,6 +25,7 @@ export const InlineInput: React.FC<Props> = ({
   onAcceptInput,
   initialValue,
   className,
+  width,
 }) => {
   const [valid, setValid] = useState(true);
   const [value, setValue] = useState(initialValue);
@@ -47,10 +53,15 @@ export const InlineInput: React.FC<Props> = ({
         mod.inlineInput,
         [mod.inlineInputInvalid, !valid],
       ])}
+      style={{ width }}
       value={value}
       onChange={e => setValue(e.target.value)}
       ref={ref}
       autoFocus={autoFocus}
+      onDoubleClick={e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
     />
   );
 };

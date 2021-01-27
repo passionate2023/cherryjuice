@@ -1,25 +1,22 @@
 import { useMemo, useState } from 'react';
-import { CheckValidity } from '::shared-components/inline-input/inline-input';
-
+export type CheckValidity = (currentValue: string) => boolean;
+export type OnAcceptInput = (currentValue: string, valid: boolean) => void;
 export type InlineInputProps = {
   checkValidity: CheckValidity;
   currentlyEnabledInput: string;
   setCurrentlyEnabledInput: (inputId: string) => void;
   enableInput: (inputId: string) => () => void;
-  disableInput: (
-    inputId: string,
-    originalInputValue: string,
-  ) => (currentValue: string, valid: boolean) => void;
+  disableInput: (inputId: string, originalInputValue: string) => OnAcceptInput;
 };
 
 type InlineInputProviderProps = {
-  inputValues: string[];
+  inputValues?: string[];
   onApply: (inputId: string, newInputValue: string) => void;
   onDiscard: (inputId: string) => void;
 };
 
 export const useInlineInputProvider = ({
-  inputValues,
+  inputValues = [],
   onApply,
   onDiscard,
 }: InlineInputProviderProps) => {

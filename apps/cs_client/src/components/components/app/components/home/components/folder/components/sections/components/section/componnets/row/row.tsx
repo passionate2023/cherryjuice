@@ -47,7 +47,12 @@ export const Row: React.FC<RowProps> = ({
           ref={ref}
           {...provided}
         >
-          <RowElement {...head} isHead={true} rowIsCollapsed={isCollapsed} />
+          <RowElement
+            {...head}
+            isHead={true}
+            rowIsCollapsed={isCollapsed}
+            rowId={id}
+          />
           {!isCollapsed && (
             <span className={mod.row__tail}>
               {tail.map((element, i) => (

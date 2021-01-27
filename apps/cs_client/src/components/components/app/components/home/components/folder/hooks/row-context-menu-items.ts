@@ -4,9 +4,10 @@ import { CMItem } from '::shared-components/context-menu/context-menu-item';
 
 type Props = {
   online: boolean;
+  rename: (id) => void;
 };
 
-export const useRowContextMenuItems = ({ online }: Props) => {
+export const useRowContextMenuItems = ({ online, rename }: Props) => {
   return useMemo<CMItem[]>(
     () => [
       {
@@ -14,6 +15,7 @@ export const useRowContextMenuItems = ({ online }: Props) => {
         nameFactory: (id, context) => (context.pinned ? 'unpin' : 'pin'),
         onClick: id => ac.documentCache.pinDocument(id),
       },
+      { name: 'rename', onClick: rename },
       {
         name: 'edit',
         onClick: () => ac.dialogs.showEditDocumentDialog(),
@@ -39,6 +41,6 @@ export const useRowContextMenuItems = ({ online }: Props) => {
         disabled: !online,
       },
     ],
-    [online],
+    [online, rename],
   );
 };
