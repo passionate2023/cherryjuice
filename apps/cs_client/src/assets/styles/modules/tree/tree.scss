@@ -19,10 +19,8 @@
 .tree_root-list {
   margin: 0 0 0 -40px;
   flex-direction: column;
-  height: calc(100% - 34px);
-  @include respond-to($md-down) {
-    height: calc(100% - 40px);
-  }
+  height: calc(100% - 44px);
+
   overflow: auto;
   background-color: var(--treeBg);
   transition: background-color 200ms linear;

@@ -68,8 +68,11 @@ export const SectionElement: React.FC<
                 initialValue={text}
                 checkValidity={inlineInputProps.checkValidity}
                 onAcceptInput={inlineInputProps.disableInput(id, text)}
-                autoFocus={true}
-                className={mod.sectionElement__text}
+                className={
+                  mod.sectionElement__text +
+                  ' ' +
+                  mod.sectionElement__inlineInput
+                }
               />
             ) : (
               <span className={mod.sectionElement__text}>{text}</span>

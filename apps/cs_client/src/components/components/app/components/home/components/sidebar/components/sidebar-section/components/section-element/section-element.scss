@@ -42,3 +42,9 @@
   width: 165px;
   @include type-g();
 }
+
+.section-element__inline-input {
+  align-self: flex-start;
+  margin-right: auto;
+  margin-left: 25px;
+}

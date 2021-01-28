@@ -11,19 +11,12 @@ import { Portal } from '::app/components/editor/tool-bar/tool-bar';
 import { modHome } from '::app/components/home/home';
 import { PinnedDocuments } from '::app/components/home/components/folder/components/sections/pinned/pinned-documents';
 import {
-  InlineInputProps,
+  createInlineInputProviderContext,
   useInlineInputProvider,
 } from '::shared-components/inline-input/hooks/inline-input-provider';
-import { createContext } from 'react';
 import { getDocuments } from '::store/selectors/cache/document/document';
 
-export const FolderContext = createContext<InlineInputProps>({
-  checkValidity: undefined,
-  currentlyEnabledInput: undefined,
-  disableInput: undefined,
-  enableInput: undefined,
-  setCurrentlyEnabledInput: undefined,
-});
+export const FolderContext = createInlineInputProviderContext();
 
 const mapState = (state: Store) => ({
   documents: Object.values(state.documentCache.documents),

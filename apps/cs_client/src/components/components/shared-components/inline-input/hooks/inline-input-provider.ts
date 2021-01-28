@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { createContext, useMemo, useState } from 'react';
 export type CheckValidity = (currentValue: string) => boolean;
 export type OnAcceptInput = (currentValue: string, valid: boolean) => void;
 export type InlineInputProps = {
@@ -9,21 +9,26 @@ export type InlineInputProps = {
   disableInput: (inputId: string, originalInputValue: string) => OnAcceptInput;
 };
 
+type InputAction = (
+  inputId: string,
+  newInputValue: string,
+  originalInputValue: string,
+) => void;
 type InlineInputProviderProps = {
   inputValues?: string[];
-  onApply: (inputId: string, newInputValue: string) => void;
-  onDiscard: (inputId: string) => void;
+  onApply: InputAction;
+  onDiscard?: InputAction;
   disable?: boolean;
 };
 
+const noop = () => undefined;
 export const useInlineInputProvider = ({
   inputValues = [],
   onApply,
-  onDiscard,
+  onDiscard = noop,
   disable,
 }: InlineInputProviderProps) => {
   const [currentlyEnabledInput, setCurrentlyEnabledInput] = useState('');
-
   return useMemo(() => {
     const enableInput = inputId => () =>
       setCurrentlyEnabledInput(!disable && inputId);
@@ -31,12 +36,15 @@ export const useInlineInputProvider = ({
       value,
       valid,
     ) => {
+      value = value.trim();
+      originalInputValue = originalInputValue.trim();
       if (!valid) return;
       if (value) {
-        if (value !== originalInputValue) onApply(inputId, value);
+        if (value !== originalInputValue)
+          onApply(inputId, value, originalInputValue);
       } else {
         const newInput = !originalInputValue;
-        if (newInput) onDiscard(inputId);
+        if (newInput) onDiscard(inputId, value, originalInputValue);
       }
       setCurrentlyEnabledInput('');
     };
@@ -51,3 +59,12 @@ export const useInlineInputProvider = ({
     return sectionElementProps;
   }, [disable, inputValues, currentlyEnabledInput]);
 };
+
+export const createInlineInputProviderContext = () =>
+  createContext<InlineInputProps>({
+    checkValidity: undefined,
+    currentlyEnabledInput: undefined,
+    disableInput: undefined,
+    enableInput: undefined,
+    setCurrentlyEnabledInput: undefined,
+  });

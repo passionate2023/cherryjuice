@@ -70,8 +70,6 @@ const ac = {
     hideDeleteNode: _(ap('hide-delete-node')),
   },
   ...{
-    showCreateChildNode: _(ap('show-create-child-node')),
-    showCreateSiblingNode: _(ap('show-create-sibling-node')),
     showEditNode: _(ap('show-edit-node')),
     hideNodeMeta: _(ap('hide-node-meta')),
   },
@@ -102,7 +100,6 @@ const ac = {
   hideBookmarksDialog: _(ap('hide-bookmarks-dialog')),
 };
 
-type NodeMetaDialogRole = 'edit' | 'create-child' | 'create-sibling';
 export type Snackbar = { message: string; type?: AlertType; lifeSpan?: number };
 type State = {
   showReloadDocument: boolean;
@@ -112,7 +109,7 @@ type State = {
   showImportDocuments: boolean;
   showDocumentList: boolean;
   showDocumentMetaDialog: boolean;
-  showNodeMetaDialog?: NodeMetaDialogRole;
+  showNodeMetaDialog?: boolean;
   showDeleteNode: boolean;
   showUserPopup: boolean;
   showSettingsDialog: boolean;
@@ -242,26 +239,14 @@ const reducer = createReducer(initialState, _ => [
     })),
   ],
   ...[
-    _(ac.showCreateChildNode, state => ({
-      ...state,
-      showNodeMetaDialog: 'create-child',
-    })),
-    _(ac.showCreateSiblingNode, state => ({
-      ...state,
-      showNodeMetaDialog: 'create-sibling',
-    })),
     _(ac.showEditNode, state => ({
       ...state,
-      showNodeMetaDialog: 'edit',
+      showNodeMetaDialog: true,
     })),
-    _(
-      ac.hideNodeMeta,
-      state =>
-        ({
-          ...state,
-          showNodeMetaDialog: undefined,
-        } as State),
-    ),
+    _(ac.hideNodeMeta, state => ({
+      ...state,
+      showNodeMetaDialog: false,
+    })),
   ],
   ...[
     _(ac.showUserPopup, state => ({
@@ -369,4 +354,3 @@ const reducer = createReducer(initialState, _ => [
 ]);
 
 export { reducer as dialogsReducer, ac as dialogsActionCreators };
-export { NodeMetaDialogRole };

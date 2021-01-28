@@ -14,7 +14,6 @@ import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { getNode as getNodeSelector } from '::store/selectors/cache/document/node';
 import { editNode } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/edit-node';
-import { createNode } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/create-node';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { useFormInputs } from '::app/components/menus/dialogs/node-meta/hooks/inputs';
 
@@ -24,7 +23,6 @@ const mapState = (state: Store) => {
     document,
     documentId: state.document.documentId,
     node_id: document?.persistedState?.selectedNode_id,
-    nodes: document?.nodes,
     documentUserId: document?.userId,
     documentPrivacy: document?.privacy,
     showDialog: state.dialogs.showNodeMetaDialog,
@@ -38,7 +36,7 @@ const mapDispatch = {
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type TNodeMetaModalProps = {};
+type TNodeMetaModalProps = Record<string, never>;
 
 const NodeMetaModalWithTransition: React.FC<
   TNodeMetaModalProps & PropsFromRedux
@@ -47,7 +45,6 @@ const NodeMetaModalWithTransition: React.FC<
   isOnMd,
   onClose,
   document,
-  nodes,
   node_id,
   userId,
   documentUserId,
@@ -60,55 +57,30 @@ const NodeMetaModalWithTransition: React.FC<
   }, []);
 
   const editedNode = useMemo(() => {
-    const newNode =
-      showDialog === 'create-sibling' || showDialog === 'create-child';
     const documentId = document?.id;
-    return newNode
-      ? undefined
-      : getNodeSelector({ node_id, documentId: documentId });
-  }, [node_id, document?.id, showDialog]);
-  const fatherNode = nodes ? nodes[node_id] : undefined;
+    return getNodeSelector({ node_id, documentId: documentId });
+  }, [node_id, document?.id]);
 
   useEffect(() => {
-    if (editedNode) nodeMetaActionCreators.resetToEdit({ node: editedNode });
-    else {
-      setTimeout(
-        () => {
-          nodeMetaActionCreators.resetToCreate({
-            fatherNode,
-          });
-        },
-        showDialog ? 0 : 500,
-      );
-    }
-  }, [node_id, showDialog, fatherNode]);
-  const apply = useDelayedCallback(
-    onClose,
-    editedNode
-      ? () => editNode({ nodeA: editedNode, nodeBMeta: state })
-      : () =>
-          createNode({
-            document,
-            nodeBMeta: state,
-            createSibling: showDialog === 'create-sibling',
-          }),
+    nodeMetaActionCreators.resetToEdit({ node: editedNode });
+  }, [node_id]);
+
+  const apply = useDelayedCallback(onClose, () =>
+    editNode({ nodeA: editedNode, nodeBMeta: state }),
   );
-  const buttonsRight = useMemo(
-    () => [
-      {
-        label: 'dismiss',
-        onClick: onClose,
-        disabled: false,
-      },
-      {
-        label: editedNode ? 'apply' : 'create',
-        onClick: apply,
-        disabled: false,
-        testId: testIds.nodeMeta__apply,
-      },
-    ],
-    [apply, editedNode, onClose],
-  );
+  const buttonsRight = [
+    {
+      label: 'dismiss',
+      onClick: onClose,
+      disabled: false,
+    },
+    {
+      label: 'apply',
+      onClick: apply,
+      disabled: false,
+      testId: testIds.nodeMeta__apply,
+    },
+  ];
 
   const inputs = useFormInputs({
     documentPrivacy,

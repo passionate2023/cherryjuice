@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { HNodeName } from '::root/components/app/components/editor/document/components/tree/components/node/components/node-title/components/h-node-name';
@@ -8,6 +8,8 @@ import { Droppable } from '::root/components/app/components/editor/document/comp
 import { Draggable } from '::root/components/app/components/editor/document/components/tree/components/node/_/draggable';
 import { FilteredNodes } from '::store/epics/filter-tree/helpers/filter-tree/filter-tree';
 import nodeMod from '::sass-modules/tree/node.scss';
+import { InlineInput } from '::shared-components/inline-input/inline-input';
+import { TreeContext } from '::app/components/editor/document/components/tree/tree';
 
 type Props = {
   nodeStyle: Record<string, string>;
@@ -36,6 +38,13 @@ const NodeTitle: React.FC<Props> = ({
   useEffect(() => {
     if (matchesFilter) ac.documentCache.expandNode({ documentId, node_id });
   }, [matchesFilter]);
+  const id = documentId + '/' + node_id;
+  const inlineInputProps = useContext(TreeContext);
+  const onDoubleClick = e => {
+    e.stopPropagation();
+    e.preventDefault();
+    inlineInputProps.enableInput(id)();
+  };
   return (
     <Droppable
       childOfAnchor={true}
@@ -52,17 +61,25 @@ const NodeTitle: React.FC<Props> = ({
           {...provided}
           ref={ref}
         >
-          <Draggable anchorId={'' + node_id} anchorIndex={index}>
-            {(provided, ref) => (
-              <span {...provided} ref={ref}>
-                {matchesFilter ? (
-                  <HNodeName name={name} query={nodesFilter} tags={tags} />
-                ) : (
-                  name
-                )}
-              </span>
-            )}
-          </Draggable>
+          {id && inlineInputProps?.currentlyEnabledInput === id ? (
+            <InlineInput
+              initialValue={name}
+              checkValidity={inlineInputProps.checkValidity}
+              onAcceptInput={inlineInputProps.disableInput(id, name)}
+            />
+          ) : (
+            <Draggable anchorId={'' + node_id} anchorIndex={index}>
+              {(provided, ref) => (
+                <span {...provided} ref={ref} onDoubleClick={onDoubleClick}>
+                  {matchesFilter ? (
+                    <HNodeName name={name} query={nodesFilter} tags={tags} />
+                  ) : (
+                    name
+                  )}
+                </span>
+              )}
+            </Draggable>
+          )}
         </div>
       )}
     </Droppable>
