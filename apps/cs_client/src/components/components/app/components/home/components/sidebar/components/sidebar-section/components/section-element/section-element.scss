@@ -41,6 +41,9 @@
 .section-element__text {
   width: 165px;
   @include type-g();
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .section-element__inline-input {

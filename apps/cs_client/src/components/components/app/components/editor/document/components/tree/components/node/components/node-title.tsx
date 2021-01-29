@@ -45,6 +45,12 @@ const NodeTitle: React.FC<Props> = ({
     e.preventDefault();
     inlineInputProps.enableInput(id)();
   };
+  useEffect(() => {
+    setTimeout(() => {
+      const isNewFolder = !name;
+      if (isNewFolder) inlineInputProps.enableInput(id)();
+    });
+  }, []);
   return (
     <Droppable
       childOfAnchor={true}

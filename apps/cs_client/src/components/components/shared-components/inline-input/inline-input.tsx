@@ -10,6 +10,10 @@ import {
   CheckValidity,
   OnAcceptInput,
 } from '::shared-components/inline-input/hooks/inline-input-provider';
+import {
+  onPaste,
+  putCursor,
+} from '::shared-components/inline-input/helpers/on-paste';
 
 type Props = {
   initialValue: string;
@@ -38,25 +42,19 @@ export const InlineInput: React.FC<Props> = ({
     assertions: [],
     callback: acceptInput,
   });
-  useOnKeyPress({ ref, onClick: acceptInput, keys: ['Enter'] });
+  useOnKeyPress({ ref, onClick: acceptInput, keys: ['Enter', 'Escape'] });
   useLayoutEffect(() => {
     setValid(value === initialValue ? true : checkValidity(value));
   }, [value]);
   useEffect(() => {
     ref.current.innerHTML = value;
     ref.current.focus();
-    try {
-      const range = document.createRange();
-      range.setStart(ref.current.firstChild, value.length);
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
-      // eslint-disable-next-line no-empty
-    } catch {}
+    putCursor(ref.current, value.length);
   }, []);
   return (
     <span
       {...clkOProps}
+      onPaste={onPaste}
       contentEditable={true}
       className={joinClassNames([
         className,

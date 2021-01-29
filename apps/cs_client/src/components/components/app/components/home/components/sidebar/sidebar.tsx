@@ -60,7 +60,7 @@ const Sidebar: React.FC<Props & PropsFromRedux> = ({
     <ContextMenuWrapper
       hookProps={hookProps}
       items={[
-        { name: 'rename', onClick: inlineInputProps.setCurrentlyEnabledInput },
+        { name: 'rename', onClick: id => inlineInputProps.enableInput(id)() },
         {
           name: 'delete',
           onClick: id => deleteFolder({ folderId: id, draftsFolderId }),

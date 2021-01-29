@@ -12,7 +12,6 @@ import { Tooltip } from '@cherryjuice/components';
 import { memo } from 'react';
 import { createNode } from '::app/components/menus/dialogs/node-meta/hooks/save/helpers/create-node';
 import { nodeMetaInitialState } from '::app/components/menus/dialogs/node-meta/reducer/reducer';
-import { globalTreeInlineInputProps } from '::app/components/editor/document/components/tree/tree';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -33,7 +32,7 @@ type Props = Record<string, never>;
 
 const createNewNode = (createSibling: boolean) => () => {
   const document = getCurrentDocument(store.getState());
-  const { node_id, documentId } = createNode({
+  createNode({
     document,
     createSibling,
     nodeBMeta: {
@@ -42,11 +41,6 @@ const createNewNode = (createSibling: boolean) => () => {
     },
   });
   ac.editor.showTree();
-  setTimeout(() => {
-    globalTreeInlineInputProps.current.setCurrentlyEnabledInput(
-      documentId + '/' + node_id,
-    );
-  });
 };
 
 const NodesButtons: React.FC<Props & PropsFromRedux> = ({

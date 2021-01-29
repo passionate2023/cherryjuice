@@ -7,6 +7,7 @@ import { InlineInput } from '::shared-components/inline-input/inline-input';
 import { Droppable } from '::app/components/editor/document/components/tree/components/node/_/droppable';
 import { modRow } from '::app/components/home/components/folder/components/sections/components/section/componnets/row/row';
 import { InlineInputProps } from '::shared-components/inline-input/hooks/inline-input-provider';
+import { useEffect } from 'react';
 
 export type ElementState = 'opened';
 export type SectionElementProps = {
@@ -36,6 +37,10 @@ export const SectionElement: React.FC<
   onClick,
   inlineInputProps,
 }) => {
+  useEffect(() => {
+    const isNewFolder = !text;
+    if (isNewFolder) inlineInputProps.enableInput(id)();
+  }, []);
   return (
     <Droppable
       anchorId={id}

@@ -79,7 +79,7 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
   const pinned = folder?.pinned || [];
   const cmItems = useRowContextMenuItems({
     online,
-    rename: inlineInputProps.setCurrentlyEnabledInput,
+    rename: id => inlineInputProps.enableInput(id)(),
     isOwnerOfActiveDocument,
   });
   const folderName = folders[currentFolder.id]?.name;

@@ -1,11 +1,11 @@
 import { createContext, useMemo, useState } from 'react';
 export type CheckValidity = (currentValue: string) => boolean;
 export type OnAcceptInput = (currentValue: string, valid: boolean) => void;
+export type EnableInput = (inputId: string) => () => void;
 export type InlineInputProps = {
   checkValidity: CheckValidity;
   currentlyEnabledInput: string;
-  setCurrentlyEnabledInput: (inputId: string) => void;
-  enableInput: (inputId: string) => () => void;
+  enableInput: EnableInput;
   disableInput: (inputId: string, originalInputValue: string) => OnAcceptInput;
 };
 
@@ -52,7 +52,6 @@ export const useInlineInputProvider = ({
     const sectionElementProps: InlineInputProps = {
       checkValidity: value => !folderNames.has(value),
       currentlyEnabledInput,
-      setCurrentlyEnabledInput,
       enableInput,
       disableInput,
     };
@@ -66,5 +65,4 @@ export const createInlineInputProviderContext = () =>
     currentlyEnabledInput: undefined,
     disableInput: undefined,
     enableInput: undefined,
-    setCurrentlyEnabledInput: undefined,
   });

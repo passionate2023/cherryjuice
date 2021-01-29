@@ -16,9 +16,9 @@ import { useTreeContextMenuItems } from '::root/components/app/components/editor
 import nodeMod from '::sass-modules/tree/node.scss';
 import {
   createInlineInputProviderContext,
-  InlineInputProps,
   useInlineInputProvider,
 } from '::shared-components/inline-input/hooks/inline-input-provider';
+import { getEditor } from '@cherryjuice/editor';
 export const TreeContext = createInlineInputProviderContext();
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -27,9 +27,6 @@ const getParamsFromLocation = () => {
     params.expand = expand[1];
   }
   return params;
-};
-export const globalTreeInlineInputProps: { current: InlineInputProps } = {
-  current: undefined,
 };
 
 type Props = Record<string, never>;
@@ -79,7 +76,9 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
           node_id: +node_id,
           data: { name: value },
         });
+      getEditor()?.focus();
     },
+
     onDiscard: (id, currentValue, originalInputValue) => {
       const [documentId, node_id] = id.split('/');
       if (node_id && !currentValue?.trim() && !originalInputValue?.trim()) {
@@ -91,12 +90,10 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
       }
     },
   });
-  useEffect(() => {
-    globalTreeInlineInputProps.current = inlineInputProps;
-  }, [inlineInputProps]);
+
   const contextMenuItems = useTreeContextMenuItems({
     copiedNode,
-    rename: inlineInputProps.setCurrentlyEnabledInput,
+    rename: id => inlineInputProps.enableInput(id)(),
     isOwnerOfCurrentDocument,
   });
   return (
