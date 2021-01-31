@@ -62,7 +62,7 @@ const NodeMetaModalWithTransition: React.FC<
   }, [node_id, document?.id]);
 
   useEffect(() => {
-    nodeMetaActionCreators.resetToEdit({ node: editedNode });
+    if (editedNode) nodeMetaActionCreators.resetToEdit({ node: editedNode });
   }, [node_id]);
 
   const apply = useDelayedCallback(onClose, () =>
