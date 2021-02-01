@@ -5,6 +5,7 @@
   --treeToolBarHeight: 34px;
   @include respond-to($md-down) {
     --treeToolBarHeight: 40px;
+    --tabs: 40px;
   }
 
   --vh: 100vh;
@@ -14,6 +15,7 @@
   --treeWidth: 250px;
   --nodePath: 34px;
   --formatting-bar: $tool-bar-height;
+  --tabs: 34px;
   --recent-nodes: 40px;
   --info-bar: 22.5px;
   --nodes-bar: 40px;

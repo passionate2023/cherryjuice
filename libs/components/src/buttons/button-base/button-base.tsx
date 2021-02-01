@@ -1,6 +1,6 @@
 import * as React from 'react';
 import modButton from './button-base.scss';
-import { EventHandler, useRef } from 'react';
+import { EventHandler, MutableRefObject, useRef } from 'react';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Icon } from '@cherryjuice/icons';
 import { useLazyAutoFocus } from '@cherryjuice/shared-helpers';
@@ -21,6 +21,7 @@ type ButtonBaseProps = {
   icon?: JSX.Element;
   iconName?: IconName;
   variant?: 'danger';
+  _ref?: MutableRefObject<HTMLButtonElement>;
 };
 
 const buttonVariants = {
@@ -35,6 +36,7 @@ const ButtonBase: React.FC<ButtonBaseProps & ButtonCircleProps> = ({
   lazyAutoFocus,
   dark,
   testId,
+  _ref,
   text,
   active,
   icon,
@@ -43,7 +45,7 @@ const ButtonBase: React.FC<ButtonBaseProps & ButtonCircleProps> = ({
   small,
 }) => {
   const buttonRef = useRef<HTMLButtonElement>();
-  useLazyAutoFocus(lazyAutoFocus, buttonRef);
+  useLazyAutoFocus(lazyAutoFocus, _ref || buttonRef);
   return (
     <button
       className={joinClassNames([
@@ -54,7 +56,7 @@ const ButtonBase: React.FC<ButtonBaseProps & ButtonCircleProps> = ({
         [modButton.buttonPressed, active],
         className,
       ])}
-      ref={buttonRef}
+      ref={_ref || buttonRef}
       onClick={onClick}
       disabled={disabled}
       autoFocus={autoFocus}

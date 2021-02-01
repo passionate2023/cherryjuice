@@ -10,6 +10,7 @@ const saveNewDocument = async ({ state, document }: SaveOperationProps) => {
           name: document.name,
           guests: document.guests,
           privacy: document.privacy,
+          folderId: document.folderId,
         },
       }),
     );

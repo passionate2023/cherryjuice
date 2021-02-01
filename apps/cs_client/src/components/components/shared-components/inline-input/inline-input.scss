@@ -1,0 +1,15 @@
+.inline-input {
+  outline: 1px solid var(--on-surface-25);
+  outline-offset: 2px;
+  background-color: transparent;
+  padding: 0;
+  width: auto !important;
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+.inline-input--invalid {
+  color: var(--danger);
+}

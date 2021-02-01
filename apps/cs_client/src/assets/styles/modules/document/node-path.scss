@@ -1,3 +1,4 @@
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
 .node-path {
   box-sizing: border-box;
   grid-area: node-path;
@@ -32,15 +33,18 @@
       background-color: var(--surface-010);
     }
   }
-  img {
-    margin-bottom: -2px;
+  svg {
+    margin-top: -2px;
   }
-  font-size: 14px;
+  span {
+    margin-top: -4px;
+  }
   overflow: hidden;
   white-space: nowrap;
+  @include type-e();
 }
 .node-path__node--selected {
-  color: var(--secondary);
+  color: var(--secondary-050);
   background-color: var(--surface-010);
 }
 .separator {

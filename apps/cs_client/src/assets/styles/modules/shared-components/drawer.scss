@@ -73,11 +73,11 @@ $navigation-width: 200px;
   &:hover {
     background-color: var(--primary-100);
   }
-  background-color: var(--primary-100-5);
+  background-color: var(--primary-100-50);
 }
 .drawer__navigation__element--active {
-  background-color: var(--primary-2);
-  color: var(--primary);
+  background-color: var(--primary-050-20);
+  color: var(--primary-050);
 }
 .drawer__navigation__scrim {
   @include respond-to('md') {

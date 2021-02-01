@@ -11,7 +11,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
+    "dev": "cross-env TS_NODE_TRANSPILE_ONLY=true TSC_NONPOLLING_WATCHER=true nest start --watch ",
+    "dev:webpack": "nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "test": "jest",

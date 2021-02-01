@@ -12,20 +12,10 @@ export const useFormInputs = ({
   isOwnerOfFocusedDocument,
   userId,
   state,
-  showDialog,
 }) => {
   return useMemo(() => {
-    const inputs: FormInputProps[] = [
-      {
-        onChange: documentMetaActionCreators.setName,
-        value: state.name,
-        type: 'text',
-        label: 'name',
-        lazyAutoFocus: !isOnMd && Boolean(showDialog),
-        testId: testIds.documentMeta__documentName,
-      },
-    ];
-    if (isOwnerOfFocusedDocument || showDialog === 'create') {
+    const inputs: FormInputProps[] = [];
+    if (isOwnerOfFocusedDocument) {
       inputs.push({
         customInput: (
           <SelectPrivacy
@@ -44,5 +34,5 @@ export const useFormInputs = ({
       }
     }
     return inputs;
-  }, [isOnMd, isOwnerOfFocusedDocument, userId, state, showDialog]);
+  }, [isOnMd, isOwnerOfFocusedDocument, userId, state]);
 };

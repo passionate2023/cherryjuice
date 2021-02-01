@@ -6,6 +6,7 @@ export type GetDocumentDTO = {
   userId: string;
   documentId: string;
 };
+export type CloneDocumentDTO = GetDocumentDTO;
 export type GetDocumentsDTO = Omit<GetDocumentDTO, 'documentId'>;
 export type EditDocumentDTO = {
   getDocumentDTO: GetDocumentDTO;

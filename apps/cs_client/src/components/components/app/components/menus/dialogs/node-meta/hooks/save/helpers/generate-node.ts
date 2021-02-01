@@ -37,7 +37,7 @@ const generateNode = ({
     createdAt: new Date().getTime(),
     updatedAt: new Date().getTime(),
     fatherId,
-    name: nodeBMeta.name || '?',
+    name: nodeBMeta.name || '',
     node_title_styles: calculateNewStyle(nodeBMeta),
     read_only: nodeBMeta.isReadOnly ? 1 : 0,
     child_nodes: [],

@@ -14,9 +14,9 @@
   --on-surface-25: rgb(115, 115, 115, 0.25);
   --on-surface-5: rgb(115, 115, 115, 0.5);
 
-  --background: rgb(255, 255, 255);
-  --background-2: rgba(255, 255, 255, 0.2);
-  --background-15: rgba(255, 255, 255, 0.15);
+  --background-100: rgb(255, 255, 255);
+  --background-100-20: rgba(255, 255, 255, 0.2);
+  --background-100-15: rgba(255, 255, 255, 0.15);
   --on-background: rgb(0, 0, 0);
   --on-background-04: rgb(0, 0, 0, 0.04);
   --on-background-07: rgb(0, 0, 0, 0.07);
@@ -26,24 +26,24 @@
   --on-background-20: rgb(0, 0, 0, 0.2);
 
   --primary-100: rgb(241, 229, 229);
-  --primary-100-5: rgb(241, 229, 229, 0.5);
-  --primary-100-2: rgb(241, 229, 229, 0.2);
+  --primary-100-50: rgb(241, 229, 229, 0.5);
+  --primary-100-20: rgb(241, 229, 229, 0.2);
   --primary-090: rgb(223, 200, 199);
-  --primary-090-1: rgba(223, 200, 199, 0.1);
-  --primary: rgb(121, 6, 4);
-  --primary-1: rgba(121, 6, 4, 0.1);
-  --primary-2: rgba(121, 6, 4, 0.2);
+  --primary-090-10: rgba(223, 200, 199, 0.1);
+  --primary-050: rgb(121, 6, 4);
+  --primary-050-10: rgba(121, 6, 4, 0.1);
+  --primary-050-20: rgba(121, 6, 4, 0.2);
   --primary-030: rgb(60, 5, 3);
   --primary-020: rgb(40, 1, 1);
-  --primary-020-1: rgba(40, 1, 1, 0.1);
-  --primary-020-4: rgba(40, 1, 1, 0.4);
+  --primary-020-10: rgba(40, 1, 1, 0.1);
+  --primary-020-40: rgba(40, 1, 1, 0.4);
   --primary-010: rgb(25, 1, 1);
   --on-primary: rgb(255, 255, 255);
 
   --secondary-010: rgb(0, 65, 66);
-  --secondary-010-5: rgb(0, 65, 66, 0.5);
-  --secondary: #006d6d;
-  --teriary: #00982b;
+  --secondary-010-50: rgb(0, 65, 66, 0.5);
+  --secondary-050: #006d6d;
+  --teriary-050: #00982b;
   --secondary-100: #469c9b;
   --on-secondary: rgb(255, 255, 255);
 

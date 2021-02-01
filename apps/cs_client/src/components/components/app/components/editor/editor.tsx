@@ -6,7 +6,7 @@ import { ErrorBoundary } from '::root/components/shared-components/react/error-b
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-
+import mod from './editor.scss';
 const Document = React.lazy(() =>
   import('::root/components/app/components/editor/document/document'),
 );
@@ -32,7 +32,7 @@ const Editor: React.FC<PropsFromRedux> = ({
   docking,
 }) => {
   return (
-    <>
+    <div className={mod.editor}>
       <ErrorBoundary>
         <Suspense fallback={<Void />}>
           <ToolBar />
@@ -55,7 +55,8 @@ const Editor: React.FC<PropsFromRedux> = ({
         </>
       )}
       <Suspense fallback={<Void />}>{!docking && <InfoBar />}</Suspense>
-    </>
+    </div>
   );
 };
 export default connector(Editor);
+export { mod as modEditor };

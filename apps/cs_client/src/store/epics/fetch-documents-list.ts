@@ -17,6 +17,8 @@ import { LoadDocumentsListPayload } from '::store/ducks/document-cache/helpers/d
 import { QDocumentsListItem } from '::graphql/fragments/document-list-item';
 import { alerts } from '::helpers/texts/alerts';
 
+// todo: re-use this action
+// eslint-disable-next-line no-unused-vars
 const maybeSelectMostRecentDocument$ = (
   documents: LoadDocumentsListPayload,
 ) => {
@@ -53,7 +55,7 @@ const fetchDocumentsListEpic = (action$: Observable<Actions>) => {
                 state.failedAttemptsCount = 0;
               }),
             ),
-            maybeSelectMostRecentDocument$(documents),
+            // maybeSelectMostRecentDocument$(documents),
           );
         }),
       );

@@ -1,0 +1,63 @@
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+.tab {
+  position: relative;
+  box-sizing: border-box;
+  // size
+  min-width: 175px;
+  width: 175px;
+  height: var(--tabs);
+  // content
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  // style
+  background-color: var(--surface-040);
+  cursor: pointer;
+  transition: filter 200ms linear;
+  &:hover {
+    background-color: var(--surface-050);
+  }
+  user-select: none;
+}
+
+.tab__name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--on-surface);
+  @include type-e();
+}
+
+.tab__close-button {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  opacity: 0.2;
+  &:hover {
+    opacity: 1;
+  }
+}
+.tab--selected {
+  background-color: var(--background-100);
+}
+.tab--hidden {
+  background-color: transparent;
+  &:hover {
+    background-color: var(--surface-050);
+  }
+}
+.tab--has-changes {
+  color: var(--teriary-050);
+}
+.tab--is-new {
+  color: var(--danger);
+}
+
+.tab__bookmark-icon {
+  position: absolute;
+  top: -3px;
+  right: 20px;
+  fill: var(--secondary-100);
+}

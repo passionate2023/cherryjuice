@@ -19,14 +19,6 @@ export const useFormInputs = ({
 }) => {
   return useMemo(() => {
     const inputs: FormInputProps[] = [
-      {
-        onChange: nodeMetaActionCreators.setName,
-        value: state.name,
-        type: 'text',
-        label: 'name',
-        lazyAutoFocus: !isOnMd && Boolean(showDialog),
-        testId: testIds.nodeMeta__nodeName,
-      } as FormInputProps,
       isOwnerOfDocument && {
         customInput: (
           <SelectPrivacy

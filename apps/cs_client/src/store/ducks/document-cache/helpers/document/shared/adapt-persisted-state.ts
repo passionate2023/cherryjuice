@@ -12,6 +12,7 @@ import { getDefaultSelectedNode_id } from '::store/ducks/document-cache/helpers/
 export const adaptFromPersistedState = ({
   persistedState: {
     recentNodes,
+    pinned,
     bookmarks,
     scrollPositions,
     selectedNode_id,
@@ -36,6 +37,7 @@ export const adaptFromPersistedState = ({
     lastOpenedAt,
     localUpdatedAt: updatedAt,
     localLastOpenedAt: lastOpenedAt,
+    pinned,
   };
 };
 
@@ -49,6 +51,7 @@ export const adaptToPersistedState = ({
   localLastOpenedAt,
   updatedAt,
   lastOpenedAt,
+  pinned,
 }: PersistedDocumentState): DocumentState => {
   return {
     updatedAt: new Date(localUpdatedAt || updatedAt),
@@ -64,5 +67,6 @@ export const adaptToPersistedState = ({
         y,
       }),
     ),
+    pinned,
   };
 };

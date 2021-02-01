@@ -1,5 +1,7 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
+
 .node {
   display: flex;
   align-items: center;
@@ -25,20 +27,21 @@
   height: 100%;
   position: absolute;
   left: var(--overlay-left);
-  background-color: var(--background-15);
+  background-color: var(--background-100-15);
 }
 
 .node__title {
   padding: 7px 7px 7px 6px;
-  text-decoration: none;
   text-align: left;
-  font-weight: 400;
   z-index: $ZI-node-elements;
   min-height: 21px;
+  @include type-b();
   color: var(--treeColor);
+  transition: background-color 200ms linear;
+  font-weight: 400;
+  text-decoration: none;
   font-family: var(--treeFont);
   font-size: var(--treeFontSize);
-  transition: background-color 200ms linear;
 }
 
 .node__toggle-children {
@@ -100,22 +103,22 @@
 }
 
 div.node[data-dragged='true'] + ul {
-  background-color: var(--secondary-010-5);
+  background-color: var(--secondary-010-50);
 }
 
 div.droppable--dragging-over {
-  background-color: var(--secondary-010-5);
+  background-color: var(--secondary-010-50);
 }
 
 div.node[drag-enter='true'] {
   .node__title {
-    background-color: var(--secondary-010-5);
+    background-color: var(--secondary-010-50);
   }
 }
 
 ul.droppable--dragging-over,
 div.node[drag-enter='true'] + ul {
-  background-color: var(--secondary-010-5);
+  background-color: var(--secondary-010-50);
 }
 
 .drop-hint {

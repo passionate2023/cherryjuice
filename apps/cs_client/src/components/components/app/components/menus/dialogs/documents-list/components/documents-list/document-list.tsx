@@ -17,7 +17,7 @@ import { SortDirection, SortNodesBy } from '@cherryjuice/graphql-types';
 import { Icons } from '@cherryjuice/icons';
 import { SearchSetting } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/search-filters';
 import { DialogScrollableSurface } from '::root/components/shared-components/dialog/dialog-list/dialog-scrollable-surface';
-import { mapSortDocumentBy } from '::root/components/app/components/menus/dialogs/bookmarks/components/helpers/sort';
+import { mapSortDocumentBy } from '::app/components/home/components/folder/hooks/sort-documents';
 
 const options: { optionName: SortNodesBy }[] = [
   { optionName: SortNodesBy.UpdatedAt },
@@ -37,7 +37,7 @@ const mapState = (state: Store) => ({
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 const DocumentList: React.FC<Props & PropsFromRedux> = ({
   documents,
   show,

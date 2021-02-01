@@ -5,7 +5,7 @@ import en from 'javascript-time-ago/locale/en';
 import { calculateInterval } from '::hooks/relative-time/helpers/calculate-interval';
 
 TimeAgo.addDefaultLocale(en);
-const timeAgo = new TimeAgo('en-US');
+export const timeAgo = new TimeAgo('en-US');
 
 type RelativeTimeProps = {
   time: number;

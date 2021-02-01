@@ -24,16 +24,19 @@ export const createNode = ({
     ? focusedNode.node_id
     : -1;
 
+  const createdNode = generateNode({
+    documentId,
+    highestNode_id: document?.localState?.highestNode_id,
+    fatherId: selectedNodeIsASibling ? focusedNode.fatherId : focusedNode.id,
+    father_id: selectedNodeIsASibling
+      ? focusedNode.father_id
+      : focusedNode.node_id,
+    nodeBMeta,
+  });
   ac.documentCache.createNode({
-    createdNode: generateNode({
-      documentId,
-      highestNode_id: document?.localState?.highestNode_id,
-      fatherId: selectedNodeIsASibling ? focusedNode.fatherId : focusedNode.id,
-      father_id: selectedNodeIsASibling
-        ? focusedNode.father_id
-        : focusedNode.node_id,
-      nodeBMeta,
-    }),
+    createdNode: createdNode,
     previous_sibling_node_id,
   });
+
+  return { node_id: createdNode.node_id, documentId: createdNode.documentId };
 };

@@ -15,12 +15,13 @@ export interface Query {
   document: Array<Document | null>;
   search: SearchResultEntity;
   user: UserQuery;
+  userMeta: UserMetaQueries;
 }
 
 export interface Document {
   createdAt: number;
   exportDocument: string;
-  folder?: string;
+  folderId?: string;
   guests?: Array<DocumentGuestOt | null>;
   hash?: string;
   id: string;
@@ -91,6 +92,7 @@ export interface PrivateNode {
 export interface DocumentState {
   bookmarks: Array<number>;
   lastOpenedAt: Timestamp;
+  pinned: boolean;
   recentNodes: Array<number>;
   scrollPositions: Array<NodeScrollPosition>;
   selectedNode_id: number;
@@ -322,9 +324,47 @@ export enum UserTokenType {
   PASSWORD_RESET = 'PASSWORD_RESET',
 }
 
+export interface UserMetaQueries {
+  folders: Array<Folder>;
+  id: string;
+  workspace: Workspace;
+}
+
+export interface Folder {
+  id: string;
+  name: string;
+  settings: FolderSettings;
+  userId: string;
+}
+
+export interface FolderSettings {
+  icon?: string;
+  sortDocumentsBy: SortDocumentsBy;
+}
+
+export enum SortDocumentsBy {
+  CreatedAt = 'CreatedAt',
+  DocumentName = 'DocumentName',
+  Size = 'Size',
+  UpdatedAt = 'UpdatedAt',
+}
+
+export interface Workspace {
+  currentDocumentId?: string;
+  currentFolderId?: string;
+  currentScreen: Screen;
+  folders: Array<string>;
+}
+
+export enum Screen {
+  Document = 'Document',
+  Home = 'Home',
+}
+
 export interface Mutation {
   document: DocumentMutation;
   user: UserMutation;
+  userMeta: UserMetaMutations;
 }
 
 export interface DocumentMutation {
@@ -339,6 +379,7 @@ export interface DocumentMutation {
 }
 
 export interface CreateDocumentIt {
+  folderId: string;
   guests: Array<DocumentGuestIt | null>;
   name: string;
   privacy: Privacy;
@@ -355,6 +396,7 @@ export interface DeleteDocumentInputType {
 }
 
 export interface EditDocumentIt {
+  folderId?: string;
   guests?: Array<DocumentGuestIt | null>;
   name?: string;
   privacy?: Privacy;
@@ -413,6 +455,7 @@ export type ImageUpload = any;
 export interface DocumentStateIt {
   bookmarks: Array<number>;
   lastOpenedAt: Timestamp;
+  pinned: boolean;
   recentNodes: Array<number>;
   scrollPositions: Array<NodeScrollPositionIt>;
   selectedNode_id: number;
@@ -531,6 +574,35 @@ export interface VerifyEmailIt {
   token: string;
 }
 
+export interface UserMetaMutations {
+  createFolders?: Void;
+  removeFolders?: Void;
+  updateFolders?: Void;
+}
+
+export interface CreateFolderIt {
+  id: string;
+  name: string;
+  settings: FolderSettingsIt;
+  userId: string;
+}
+
+export interface FolderSettingsIt {
+  icon?: string;
+  sortDocumentsBy: SortDocumentsBy;
+}
+
+/**
+ * Represents NULL values
+ */
+export type Void = any;
+
+export interface UpdateFolderIt {
+  id: string;
+  name?: string;
+  settings?: FolderSettingsIt;
+}
+
 export interface Subscription {
   documentOperation: DocumentOperation;
 }
@@ -607,12 +679,18 @@ export interface Resolver {
   User?: UserTypeResolver;
   UserToken?: UserTokenTypeResolver;
   UserTokenMeta?: UserTokenMetaTypeResolver;
+  UserMetaQueries?: UserMetaQueriesTypeResolver;
+  Folder?: FolderTypeResolver;
+  FolderSettings?: FolderSettingsTypeResolver;
+  Workspace?: WorkspaceTypeResolver;
   Mutation?: MutationTypeResolver;
   DocumentMutation?: DocumentMutationTypeResolver;
   NodeMutation?: NodeMutationTypeResolver;
   ImageUpload?: GraphQLScalarType;
   CTBUpload?: GraphQLScalarType;
   UserMutation?: UserMutationTypeResolver;
+  UserMetaMutations?: UserMetaMutationsTypeResolver;
+  Void?: GraphQLScalarType;
   Subscription?: SubscriptionTypeResolver;
   DocumentOperation?: DocumentOperationTypeResolver;
   DocumentTarget?: DocumentTargetTypeResolver;
@@ -621,6 +699,7 @@ export interface QueryTypeResolver<TParent = any> {
   document?: QueryToDocumentResolver<TParent>;
   search?: QueryToSearchResolver<TParent>;
   user?: QueryToUserResolver<TParent>;
+  userMeta?: QueryToUserMetaResolver<TParent>;
 }
 
 export interface QueryToDocumentArgs {
@@ -643,10 +722,14 @@ export interface QueryToUserResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface QueryToUserMetaResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface DocumentTypeResolver<TParent = any> {
   createdAt?: DocumentToCreatedAtResolver<TParent>;
   exportDocument?: DocumentToExportDocumentResolver<TParent>;
-  folder?: DocumentToFolderResolver<TParent>;
+  folderId?: DocumentToFolderIdResolver<TParent>;
   guests?: DocumentToGuestsResolver<TParent>;
   hash?: DocumentToHashResolver<TParent>;
   id?: DocumentToIdResolver<TParent>;
@@ -672,7 +755,7 @@ export interface DocumentToExportDocumentResolver<
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface DocumentToFolderResolver<TParent = any, TResult = any> {
+export interface DocumentToFolderIdResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -873,6 +956,7 @@ export interface PrivateNodeToNode_idResolver<TParent = any, TResult = any> {
 export interface DocumentStateTypeResolver<TParent = any> {
   bookmarks?: DocumentStateToBookmarksResolver<TParent>;
   lastOpenedAt?: DocumentStateToLastOpenedAtResolver<TParent>;
+  pinned?: DocumentStateToPinnedResolver<TParent>;
   recentNodes?: DocumentStateToRecentNodesResolver<TParent>;
   scrollPositions?: DocumentStateToScrollPositionsResolver<TParent>;
   selectedNode_id?: DocumentStateToSelectedNode_idResolver<TParent>;
@@ -891,6 +975,10 @@ export interface DocumentStateToLastOpenedAtResolver<
   TParent = any,
   TResult = any
 > {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface DocumentStateToPinnedResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -1401,9 +1489,105 @@ export interface UserTokenMetaToNewEmailResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface UserMetaQueriesTypeResolver<TParent = any> {
+  folders?: UserMetaQueriesToFoldersResolver<TParent>;
+  id?: UserMetaQueriesToIdResolver<TParent>;
+  workspace?: UserMetaQueriesToWorkspaceResolver<TParent>;
+}
+
+export interface UserMetaQueriesToFoldersResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserMetaQueriesToIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserMetaQueriesToWorkspaceResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface FolderTypeResolver<TParent = any> {
+  id?: FolderToIdResolver<TParent>;
+  name?: FolderToNameResolver<TParent>;
+  settings?: FolderToSettingsResolver<TParent>;
+  userId?: FolderToUserIdResolver<TParent>;
+}
+
+export interface FolderToIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface FolderToNameResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface FolderToSettingsResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface FolderToUserIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface FolderSettingsTypeResolver<TParent = any> {
+  icon?: FolderSettingsToIconResolver<TParent>;
+  sortDocumentsBy?: FolderSettingsToSortDocumentsByResolver<TParent>;
+}
+
+export interface FolderSettingsToIconResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface FolderSettingsToSortDocumentsByResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface WorkspaceTypeResolver<TParent = any> {
+  currentDocumentId?: WorkspaceToCurrentDocumentIdResolver<TParent>;
+  currentFolderId?: WorkspaceToCurrentFolderIdResolver<TParent>;
+  currentScreen?: WorkspaceToCurrentScreenResolver<TParent>;
+  folders?: WorkspaceToFoldersResolver<TParent>;
+}
+
+export interface WorkspaceToCurrentDocumentIdResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface WorkspaceToCurrentFolderIdResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface WorkspaceToCurrentScreenResolver<
+  TParent = any,
+  TResult = any
+> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface WorkspaceToFoldersResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface MutationTypeResolver<TParent = any> {
   document?: MutationToDocumentResolver<TParent>;
   user?: MutationToUserResolver<TParent>;
+  userMeta?: MutationToUserMetaResolver<TParent>;
 }
 
 export interface MutationToDocumentArgs {
@@ -1419,6 +1603,10 @@ export interface MutationToDocumentResolver<TParent = any, TResult = any> {
 }
 
 export interface MutationToUserResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MutationToUserMetaResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -1809,6 +1997,57 @@ export interface UserMutationToVerifyEmailResolver<
   (
     parent: TParent,
     args: UserMutationToVerifyEmailArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMetaMutationsTypeResolver<TParent = any> {
+  createFolders?: UserMetaMutationsToCreateFoldersResolver<TParent>;
+  removeFolders?: UserMetaMutationsToRemoveFoldersResolver<TParent>;
+  updateFolders?: UserMetaMutationsToUpdateFoldersResolver<TParent>;
+}
+
+export interface UserMetaMutationsToCreateFoldersArgs {
+  folders: Array<CreateFolderIt>;
+}
+export interface UserMetaMutationsToCreateFoldersResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMetaMutationsToCreateFoldersArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMetaMutationsToRemoveFoldersArgs {
+  folderIds: Array<string>;
+}
+export interface UserMetaMutationsToRemoveFoldersResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMetaMutationsToRemoveFoldersArgs,
+    context: any,
+    info: GraphQLResolveInfo,
+  ): TResult;
+}
+
+export interface UserMetaMutationsToUpdateFoldersArgs {
+  folders: Array<UpdateFolderIt>;
+}
+export interface UserMetaMutationsToUpdateFoldersResolver<
+  TParent = any,
+  TResult = any
+> {
+  (
+    parent: TParent,
+    args: UserMetaMutationsToUpdateFoldersArgs,
     context: any,
     info: GraphQLResolveInfo,
   ): TResult;

@@ -11,7 +11,7 @@
     "build"
   ],
   "scripts": {
-    "dev": "rollup -c  -w --environment TSC_NONPOLLING_WATCHER:true,mode:ts_cjs",
+    "dev": "rollup -c  -w --environment TSC_NONPOLLING_WATCHER:true,mode:ts2_es",
     "build": "rollup -c --environment mode:ts2_es",
     "test": "exit 0",
     "lint": "eslint ./**",

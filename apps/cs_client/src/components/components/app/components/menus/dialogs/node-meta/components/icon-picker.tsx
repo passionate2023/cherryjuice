@@ -3,7 +3,7 @@ import { modIconPicker, modNodeMeta, modSearchFilter } from '::sass-modules';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { useState } from 'react';
 import { testIds } from '::cypress/support/helpers/test-ids';
-import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 import { IconsList } from '::root/components/app/components/menus/dialogs/node-meta/components/components/icons-list';
 
 type Props = { value: string; disabled: boolean; onChange };
@@ -19,7 +19,7 @@ const IconPicker: React.FC<Props> = ({
   const value = selectedIcon === '0' ? '1' : selectedIcon;
 
   return (
-    <ContextMenuWrapper
+    <ContextMenuWrapperLegacy
       clickOutsideSelectorsWhitelist={[
         {
           selector: '.' + modSearchFilter.searchFilter,
@@ -53,7 +53,7 @@ const IconPicker: React.FC<Props> = ({
           image={true}
         />
       </div>
-    </ContextMenuWrapper>
+    </ContextMenuWrapperLegacy>
   );
 };
 

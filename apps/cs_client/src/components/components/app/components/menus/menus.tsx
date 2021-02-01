@@ -63,7 +63,6 @@ const components = [
   <ReloadDocument key={'ReloadDocument'} />,
   <DeleteDocument key={'DeleteDocument'} />,
   <DeleteNode key={'DeleteNode'} />,
-  <DeleteNode key={'DeleteNode'} />,
   // @ts-ignore
   <PasswordModal key={'PasswordModal'} />,
   <AlertModal key={'AlertModal'} />,
@@ -78,7 +77,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 const Menus: React.FC<Props & PropsFromRedux> = () => {
   return (
     <>

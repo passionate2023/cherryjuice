@@ -7,6 +7,7 @@ import { AlertType } from '::types/react';
 
 const useGetActiveOperations = (userId: string) => {
   useEffect(() => {
+    if (!userId) return;
     const gqlQuery = DOCUMENT_OPERATION({ userId });
     const obs = apolloClient.subscribe(gqlQuery);
     const subscription = obs.subscribe({

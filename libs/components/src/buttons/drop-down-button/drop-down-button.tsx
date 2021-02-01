@@ -1,6 +1,6 @@
 import * as React from 'react';
 import modDropdownButton from './drop-down-button.scss';
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useClickOutsideModal } from '@cherryjuice/shared-helpers';
 import { Icon } from '@cherryjuice/icons';
 
@@ -8,12 +8,14 @@ type Props = {
   buttons: { key: string; element: JSX.Element }[];
   collapseOnInsideClick?: boolean;
   md: boolean;
+  onToggle?: (shown: boolean) => void;
 };
 
 export const DropDownButton: React.FC<Props> = ({
   buttons,
   collapseOnInsideClick,
   md,
+  onToggle = () => undefined,
 }) => {
   const previouslySelected = useRef(0);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -27,6 +29,9 @@ export const DropDownButton: React.FC<Props> = ({
     assertions: [],
     callback: hideDropdownMenu,
   });
+  useLayoutEffect(() => {
+    onToggle(showDropdown);
+  }, [showDropdown]);
   return (
     <div className={modDropdownButton.dropDownButton} {...clkOProps}>
       <div className={modDropdownButton.head}>

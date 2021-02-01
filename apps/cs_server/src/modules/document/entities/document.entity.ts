@@ -22,6 +22,7 @@ import hash from 'object-hash';
 import { DocumentGuest } from './document-guest.entity';
 import { User } from '../../user/entities/user.entity';
 import { DocumentState } from './document-state.entity';
+import { Folder } from '../../user/entities/folder/folder.entity';
 
 export type NodesHash = { [node_id: number]: { hash: string } };
 export enum Privacy {
@@ -37,6 +38,7 @@ type DocumentConstructorProps = {
   name: string;
   size?: number;
   privacy: Privacy;
+  folderId: string;
 };
 
 @Entity()
@@ -45,12 +47,13 @@ export class Document extends BaseEntity {
   constructor(args: DocumentConstructorProps) {
     super();
     if (args?.userId) {
-      const { name, size, userId, privacy } = args;
+      const { name, size, userId, privacy, folderId } = args;
       this.id = randomUUID10();
       this.name = name;
       this.size = size || 0;
       this.userId = userId;
       this.privacy = privacy;
+      this.folderId = folderId;
       this.hash = '';
       this.state = new DocumentState(true);
     }
@@ -74,9 +77,6 @@ export class Document extends BaseEntity {
   @UpdateDateColumn({ type: 'timestamp with time zone' })
   @Field(() => Float)
   updatedAt: Date;
-
-  @Field({ nullable: true })
-  folder: string;
 
   @Field(() => [Node], { nullable: 'items' })
   node: Node[];
@@ -104,6 +104,12 @@ export class Document extends BaseEntity {
   @Field()
   @Column()
   userId: string;
+
+  @ManyToOne(() => Folder, folder => folder.id)
+  folder: Folder;
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  folderId: string;
 
   @Field(() => Privacy)
   @Column({

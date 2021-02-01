@@ -1,71 +1,78 @@
 import * as React from 'react';
-import { modApp, modContextMenu } from '::sass-modules';
+import { modApp } from '::sass-modules';
 import {
   ContextMenu,
   ContextMenuProps,
 } from '::root/components/shared-components/context-menu/context-menu';
-import { ReactNode, useRef } from 'react';
-import { joinClassNames } from '@cherryjuice/shared-helpers';
+import { MutableRefObject, ReactNode, useRef } from 'react';
 import { Portal } from '::root/components/app/components/editor/tool-bar/tool-bar';
+import { Position } from '::shared-components/context-menu/context-menu-wrapper-legacy';
+import {
+  ChildContextMenuProps,
+  useChildContextMenu,
+} from '::shared-components/context-menu/hooks/child-context-menu';
 
-export type Position = [number, number, number, number];
-export type Trigger = 'click' | 'right-click' | 'hover';
-type Props = {
-  shown: boolean;
+type Props<T = HTMLDivElement> = {
+  hookProps: ChildContextMenuProps;
+  // shown: boolean;
   customBody?: ReactNode;
-  show?: () => void;
-  position?: Position;
-  triggers?: Partial<Record<Trigger, boolean | undefined>>;
+  // show?: (e: MouseEvent<T>) => string;
   reference?: 'cursor' | 'element';
-} & Omit<ContextMenuProps, 'position'>;
+  // position?: Position;
+  children: (props: {
+    show: () => string;
+    ref: MutableRefObject<T>;
+  }) => JSX.Element;
+} & Omit<ContextMenuProps, 'position' | 'id' | 'hide' | 'context'>;
 
 const ContextMenuWrapper: React.FC<Props> = ({
-  triggers = { click: true },
+  // shown,
+  customBody,
+  // show,
   reference = 'element',
+  // position,
   children,
+  hookProps,
   ...props
 }) => {
+  const { position, show, hide, shown } = useChildContextMenu(hookProps);
+
   const positionR = useRef<Position>([0, 0, 0, 0]);
   const ref = useRef<HTMLDivElement>();
-  const show = e => {
-    if (props.show) {
-      if (!props.shown) {
-        const boundingClientRect = ref.current.getBoundingClientRect();
-        positionR.current =
-          reference === 'element'
-            ? [
-                boundingClientRect.x + boundingClientRect.width,
-                boundingClientRect.y,
-                boundingClientRect.width,
-                boundingClientRect.height,
-              ]
-            : [boundingClientRect.x, boundingClientRect.y, 0, 0];
-        props.show();
-      }
+  const id = useRef<{ id: string; context: Record<string, any> }>({});
+  const showM = e => {
+    if (show) {
+      const boundingClientRect = ref.current.getBoundingClientRect();
+      positionR.current =
+        reference === 'element'
+          ? [
+              boundingClientRect.x + boundingClientRect.width,
+              boundingClientRect.y,
+              boundingClientRect.width,
+              boundingClientRect.height,
+            ]
+          : [boundingClientRect.x, boundingClientRect.y, 0, 0];
+      id.current = show(e);
     }
-    e.preventDefault();
   };
   return (
-    <div
-      className={joinClassNames([modContextMenu.contextMenuWrapper])}
-      onClick={triggers.click && show}
-      onMouseEnter={triggers.hover && show}
-      onContextMenu={triggers['right-click'] && show}
-      ref={ref}
-    >
-      {children}
+    <>
+      {children({ show: showM, ref })}
       <Portal targetSelector={'.' + modApp.app}>
-        {props.shown && (
+        {shown && (
           // @ts-ignore
           <ContextMenu
             {...props}
-            position={props.position || positionR.current}
+            hide={hide}
+            position={position || positionR.current}
+            id={id.current.id}
+            context={id.current.context}
           >
-            {props.customBody}
+            {customBody}
           </ContextMenu>
         )}
       </Portal>
-    </div>
+    </>
   );
 };
 

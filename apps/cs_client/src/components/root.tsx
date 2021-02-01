@@ -4,8 +4,10 @@ import { useEffect, useReducer, useRef } from 'react';
 import { Void } from '::shared-components/react/void';
 import { rootAC, rootR } from '::root/reducer';
 const RootWithRedux = React.lazy(() => import('::root/root-with-redux'));
-type Props = {};
 
+type Props = Record<string, never>;
+
+const skipLoader = process.env.NODE_ENV !== 'production';
 export const Root: React.FC<Props> = () => {
   const [state, dispatch] = useReducer(rootR, undefined, () => ({
     ready: false,
@@ -16,19 +18,21 @@ export const Root: React.FC<Props> = () => {
   }, []);
   const interval = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => {
-    clearTimeout(interval.current);
-    if (!state.ready)
-      interval.current = setTimeout(() => {
-        rootAC.showLoader(true);
-        setTimeout(() => {
-          rootAC.hideLoader();
-        }, 1500);
-      }, 800);
+    if (!skipLoader) {
+      clearTimeout(interval.current);
+      if (!state.ready)
+        interval.current = setTimeout(() => {
+          rootAC.showLoader(true);
+          setTimeout(() => {
+            rootAC.hideLoader();
+          }, 1500);
+        }, 800);
+    }
   }, [state.ready]);
 
   return (
     <>
-      {(!state.ready || state.showLoader) && <SplashScreen />}
+      {!skipLoader && (!state.ready || state.showLoader) && <SplashScreen />}
       <React.Suspense fallback={<Void />}>
         {!state.showLoader && <RootWithRedux />}
       </React.Suspense>

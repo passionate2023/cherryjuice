@@ -20,12 +20,11 @@
       "::store/*": ["./src/store/*"],
       "::cypress/*": ["./cypress/*"]
     },
-    "target": "es2019",
+    "target": "es2020",
     "module": "CommonJS",
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "composite": true,
-    "lib": ["ES2015", "DOM"]
+    "composite": true
   },
   "exclude": ["node_modules"],
   "include": ["src"]

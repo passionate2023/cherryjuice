@@ -8,7 +8,6 @@ import { EditorContainer } from '::root/components/app/components/editor/documen
 import { Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { TabsContainer } from '::root/components/app/components/editor/document/components/title-and-recent-nodes/tabs-container';
 import { NodePath } from '::root/components/app/components/editor/document/components/node-path/node-path';
 
 const mapState = (state: Store) => {
@@ -28,7 +27,7 @@ const mapState = (state: Store) => {
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 
 const Document: React.FC<Props & PropsFromRedux> = ({
   nodes,
@@ -49,7 +48,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
               <NodePath />
             </ErrorBoundary>
           )}
-          {Boolean(selectedNode_id) && <TabsContainer />}
+
           {showTree && (
             <ErrorBoundary>
               <Tree />

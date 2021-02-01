@@ -44,7 +44,7 @@ type NodeId = {
   id: string;
   node_id: number;
 };
-type AsyncOperation = 'in-progress' | 'idle' | 'pending';
+export type AsyncOperation = 'in-progress' | 'idle' | 'pending';
 
 export type SwappedIds = {
   [temporaryId: string]: string;
@@ -156,6 +156,7 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     swappedIds: payload,
   })),
   _(
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     require('./document-cache/document-cache').documentCacheActionCreators
       .deleteDocuments,
     // @ts-ignore
@@ -167,4 +168,4 @@ const reducer = createReducer(cloneObj(initialState), _ => [
 ]);
 
 export { reducer as documentReducer, ac as documentActionCreators };
-export { NodeId, AsyncOperation, State as DocumentState };
+export { NodeId, State as DocumentState };

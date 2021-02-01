@@ -1,0 +1,53 @@
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
+
+.section-element {
+  // size
+  width: 100%;
+  height: 35px;
+  box-sizing: border-box;
+  // content
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  cursor: pointer;
+  // style
+  &:hover {
+    background-color: var(--primary-100-20);
+  }
+}
+
+.section-element--opened {
+  background-color: var(--primary-100-50);
+}
+.section-element--drag-enter {
+  background-color: var(--primary-100);
+}
+.section-element__content {
+  // size
+  height: 20px;
+  width: 190px;
+
+  // content
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 7px;
+
+  // style
+  color: var(--on-background);
+}
+
+.section-element__text {
+  width: 165px;
+  @include type-g();
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.section-element__inline-input {
+  align-self: flex-start;
+  margin-right: auto;
+  margin-left: 25px;
+}

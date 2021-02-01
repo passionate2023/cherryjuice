@@ -1,7 +1,7 @@
 import { modSearchFilter } from '::sass-modules';
 import * as React from 'react';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
-import { mapScopeToLabel } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
+import { mapEnumToReadableText } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
 import { ButtonSquare } from '@cherryjuice/components';
 import { SearchType } from '@cherryjuice/graphql-types';
 import { useCallback } from 'react';
@@ -22,7 +22,7 @@ const Type: React.FC<Props> = ({ optionName, searchType }) => {
       key={optionName}
     >
       <ButtonSquare
-        text={mapScopeToLabel(optionName)}
+        text={mapEnumToReadableText(optionName)}
         onClick={setOptionM}
         active={searchType === optionName}
       />

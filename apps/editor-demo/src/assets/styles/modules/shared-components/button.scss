@@ -21,7 +21,7 @@
 .button {
   user-select: none;
   border: none;
-  background-color: var(--background);
+  background-color: var(--background-100);
   color: var(--primary-020);
   transition: background-color 0.3s ease, filter 0.3s ease;
   text-transform: uppercase;
@@ -67,18 +67,23 @@
 }
 
 .button--danger {
-  @include button-variant(var(--background), var(--danger), 1, 0.1);
+  @include button-variant(var(--background-100), var(--danger), 1, 0.1);
 }
 .button--dark {
-  @include button-variant(var(--background), var(--on-surface-010), 1.6, 0.5);
+  @include button-variant(
+    var(--background-100),
+    var(--on-surface-010),
+    1.6,
+    0.5
+  );
   svg {
     fill: white;
   }
 }
 
 .button--pressed {
-  background-color: var(--primary) !important;
-  color: var(--background) !important;
+  background-color: var(--primary-050) !important;
+  color: var(--background-100) !important;
   box-shadow: $box-shadow1;
   svg {
     fill: white;

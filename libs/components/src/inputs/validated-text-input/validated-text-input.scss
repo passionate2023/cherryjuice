@@ -13,7 +13,7 @@
   display: flex;
   // style
   border-radius: 5px;
-  background-color: var(--background);
+  background-color: var(--background-100);
   filter: brightness(0.95);
   &[data-disabled='true'] {
     opacity: 0.5;
@@ -49,7 +49,7 @@
   border-radius: 5px;
   border: none;
   &:focus {
-    outline: 2px solid var(--primary-030-5);
+    outline: 2px solid var(--primary-030-50);
   }
   &:invalid {
     color: var(--warning);

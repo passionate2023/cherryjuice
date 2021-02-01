@@ -3,10 +3,7 @@ import { useMemo } from 'react';
 import { ac } from '::store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
-export const useFooterButtons = ({
-  apply,
-  editExistingDocument,
-}): TDialogFooterButton[] => {
+export const useFooterButtons = ({ apply }): TDialogFooterButton[] => {
   return useMemo(
     () => [
       {
@@ -15,12 +12,12 @@ export const useFooterButtons = ({
         disabled: false,
       },
       {
-        label: editExistingDocument ? 'apply' : 'create',
+        label: 'apply',
         onClick: apply,
         disabled: false,
         testId: testIds.documentMeta__apply,
       },
     ],
-    [editExistingDocument, apply],
+    [apply],
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ButtonSquare } from '@cherryjuice/components';
-import { ContextMenuWrapper } from '::root/components/shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 import { modApp, modTreeToolBar } from '::sass-modules';
 
 const config = {
@@ -57,7 +57,7 @@ export const Square = () => {
       className={modApp.app}
     >
       <div style={{ height: 30, width: 30 }}>
-        <ContextMenuWrapper
+        <ContextMenuWrapperLegacy
           shown={CMShown}
           hide={hide}
           show={show}
@@ -67,7 +67,7 @@ export const Square = () => {
             text={'...'}
             className={modTreeToolBar.tree_focusButton}
           />
-        </ContextMenuWrapper>
+        </ContextMenuWrapperLegacy>
       </div>
     </div>
   );

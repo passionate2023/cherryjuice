@@ -1,5 +1,4 @@
 import React, { Component, createRef, MutableRefObject } from 'react';
-import nodeMod from '::sass-modules/tree/node.scss';
 import { DraggableProps } from '::root/components/app/components/editor/document/components/tree/components/node/_/draggable';
 import { calculateDroppingPosition } from '::root/components/app/components/editor/document/components/tree/components/node/_/helpers/find-drop-position';
 export const dragEnter = 'drag-enter';
@@ -14,8 +13,9 @@ type Props<T> = Omit<DraggableProps, 'anchorIndex'> & {
   childOfAnchor?: boolean;
   nextSiblingOfAnchor?: boolean;
   anchorClassName: string;
-  meta: T;
+  meta?: T;
   onDrop: OnDrop<T>;
+  onDragEnterStyleClass?: string;
 };
 export type DragObject = { index: number; id: string };
 
@@ -24,7 +24,7 @@ export class Droppable<T> extends Component<Props<T>> {
   onDragEnter = e => {
     e.preventDefault();
     e.stopPropagation();
-    this.ref.current.classList.add(nodeMod.droppableDraggingOver);
+    this.ref.current.classList.add(this.props.onDragEnterStyleClass);
     if (this.props.childOfAnchor)
       this.ref.current.parentElement.setAttribute(dragEnter, 'true');
     if (this.props.nextSiblingOfAnchor) {
@@ -34,7 +34,7 @@ export class Droppable<T> extends Component<Props<T>> {
   onDragLeave = e => {
     e.preventDefault();
     e.stopPropagation();
-    this.ref.current.classList.remove(nodeMod.droppableDraggingOver);
+    this.ref.current.classList.remove(this.props.onDragEnterStyleClass);
     if (this.props.childOfAnchor)
       this.ref.current.parentElement.removeAttribute(dragEnter);
     if (this.props.nextSiblingOfAnchor)

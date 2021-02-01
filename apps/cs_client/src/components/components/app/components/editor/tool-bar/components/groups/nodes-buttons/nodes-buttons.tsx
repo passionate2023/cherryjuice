@@ -1,15 +1,17 @@
 import * as React from 'react';
 import { ToolbarButton } from '@cherryjuice/components';
-import { Icon, Icons } from '@cherryjuice/icons';
+import { Icon } from '@cherryjuice/icons';
 import { modToolbar } from '::sass-modules';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
-import { ac, Store } from '::store/store';
+import { ac, store, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Tooltip } from '@cherryjuice/components';
 import { memo } from 'react';
+import { createNode } from '::app/components/menus/dialogs/node-meta/hooks/save/helpers/create-node';
+import { nodeMetaInitialState } from '::app/components/menus/dialogs/node-meta/reducer/reducer';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -26,7 +28,20 @@ const mapState = (state: Store) => {
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
+
+const createNewNode = (createSibling: boolean) => () => {
+  const document = getCurrentDocument(store.getState());
+  createNode({
+    document,
+    createSibling,
+    nodeBMeta: {
+      ...nodeMetaInitialState,
+      name: '',
+    },
+  });
+  ac.editor.showTree();
+};
 
 const NodesButtons: React.FC<Props & PropsFromRedux> = ({
   selectedNode_id,
@@ -46,22 +61,22 @@ const NodesButtons: React.FC<Props & PropsFromRedux> = ({
     >
       <ToolbarButton
         dontMount={!isDocumentOwner}
-        onClick={ac.dialogs.showCreateSiblingNode}
+        onClick={createNewNode(true)}
         testId={testIds.toolBar__main__createSiblingNode}
         disabled={noDocumentIsSelected}
       >
         <Tooltip label={'Create a sibling node'}>
-          <Icon name={Icons.material['create-sibling']} size={20} />
+          <Icon name={'create-sibling'} size={20} />
         </Tooltip>
       </ToolbarButton>
       <ToolbarButton
         dontMount={!isDocumentOwner}
-        onClick={ac.dialogs.showCreateChildNode}
+        onClick={createNewNode(false)}
         testId={testIds.toolBar__main__createChildNode}
         disabled={!selectedNode_id}
       >
         <Tooltip label={'Create a child node'}>
-          <Icon name={Icons.material['create-child']} size={20} />
+          <Icon name={'create-child'} size={20} />
         </Tooltip>
       </ToolbarButton>
       <ToolbarButton
@@ -71,7 +86,7 @@ const NodesButtons: React.FC<Props & PropsFromRedux> = ({
         testId={testIds.toolBar__main__editNodeMeta}
       >
         <Tooltip label={'Edit selected node'}>
-          <Icon name={Icons.material.edit} />
+          <Icon name={'edit'} />
         </Tooltip>
       </ToolbarButton>
       <ToolbarButton
@@ -81,7 +96,7 @@ const NodesButtons: React.FC<Props & PropsFromRedux> = ({
         testId={testIds.toolBar__main__deleteNode}
       >
         <Tooltip label={'Delete selected node'}>
-          <Icon name={Icons.material.delete} />
+          <Icon name={'delete'} />
         </Tooltip>
       </ToolbarButton>
       {children}

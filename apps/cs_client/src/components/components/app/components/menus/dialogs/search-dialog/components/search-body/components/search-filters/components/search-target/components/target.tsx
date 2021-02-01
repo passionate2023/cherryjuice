@@ -7,11 +7,20 @@ import { modSearchFilter } from '::sass-modules';
 import { ButtonSquare } from '@cherryjuice/components';
 import { useCallback } from 'react';
 
-const mapScopeToLabel = (scope: string) => {
-  return scope
+const mapEnumToReadableText = (
+  ogText: string,
+  mode: 'all-lowercase' | 'cap-first-letter' = 'all-lowercase',
+) => {
+  const text = ogText
     .split(/(?=[A-Z])/)
     .join(' ')
     .toLowerCase();
+  if (mode === 'all-lowercase') {
+    return text;
+  } else {
+    const [head, ...tail] = text;
+    return head.toUpperCase() + tail.join('');
+  }
 };
 
 const mapState = (state: Store) => ({
@@ -32,7 +41,7 @@ const Target: React.FC<Props & PropsFromRedux> = ({ target, searchTarget }) => {
   return (
     <div className={joinClassNames([modSearchFilter.searchFilter__list__item])}>
       <ButtonSquare
-        text={mapScopeToLabel(target)}
+        text={mapEnumToReadableText(target)}
         onClick={setSearchTargetM}
         active={searchTarget.includes(target)}
       />
@@ -41,4 +50,4 @@ const Target: React.FC<Props & PropsFromRedux> = ({ target, searchTarget }) => {
 };
 
 const _ = connector(Target);
-export { _ as Target, mapScopeToLabel };
+export { _ as Target, mapEnumToReadableText };

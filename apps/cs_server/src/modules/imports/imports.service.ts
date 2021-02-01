@@ -59,22 +59,26 @@ export class ImportsService {
     gDriveFileIds: string[],
     user: User,
     access_token: string,
+    folder: string,
   ): Promise<void> {
     await this.importDocument(
       gDriveFileIds.map(gDriveFileId => ({ gDriveFileId, userId: user.id })),
       user,
       createGDriveDownloadTask(access_token),
+      folder,
     );
   }
 
   async importFromGraphqlClient(
     files: FileUpload[],
     user: User,
+    folder: string,
   ): Promise<void> {
     await this.importDocument(
       files.map(fileUpload => ({ fileUpload, userId: user.id })),
       user,
       createGqlDownloadTask,
+      folder,
     );
   }
 
@@ -108,6 +112,7 @@ export class ImportsService {
     meta: DownloadTaskProps[],
     user: User,
     taskCreator: DownloadTaskCreator,
+    folderId: string,
   ): Promise<void> {
     const documents: {
       document: Document;
@@ -123,6 +128,7 @@ export class ImportsService {
             name: downloadTask.fileMeta.fileName,
             privacy: Privacy.PRIVATE,
             guests: [],
+            folderId,
           },
           userId: user.id,
         });

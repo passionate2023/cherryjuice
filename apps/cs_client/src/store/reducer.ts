@@ -18,6 +18,7 @@ import { timelinesReducer } from '::store/ducks/timelines';
 import { editorSettingsReducer } from '::store/ducks/settings/editor-settings/editor-settings';
 import { bookmarksReducer } from '::store/ducks/bookmarks';
 import { hotkeysSettingsReducer } from '::store/ducks/settings/hotkeys-settings/hotkeys-settings';
+import { homeReducer, HomeReducerState } from '::store/ducks/home/home';
 
 const localStorageReducerConfig = {
   storage: localStorage,
@@ -89,6 +90,14 @@ const localStorageReducers = {
     },
     rootReducer,
   ) as Reducer<RootReducerState>,
+  home: persistReducer(
+    {
+      ...localStorageReducerConfig,
+      key: 'home',
+      blacklist: ['query'],
+    },
+    homeReducer,
+  ) as Reducer<HomeReducerState>,
   search: persistReducer(
     {
       ...localStorageReducerConfig,

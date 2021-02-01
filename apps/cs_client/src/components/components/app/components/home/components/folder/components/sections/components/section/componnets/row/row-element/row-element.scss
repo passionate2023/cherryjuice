@@ -1,0 +1,25 @@
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
+
+.row-element {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  span,
+  input {
+    max-width: 90%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: auto;
+  }
+}
+.row-element--head {
+  width: 50%;
+}
+.row-element--collapsed-row {
+  width: 100%;
+}
+
+.row-element__input {
+}

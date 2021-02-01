@@ -28,7 +28,7 @@ const state: ModalsState = {
     return state._modals[state._modals.length - 1];
   },
 };
-
+window['modals'] = state;
 export const dataAttributes = {
   keyboardEvents: 'data-kb-e-id',
   clickOutside: 'data-clk-out-e-id',

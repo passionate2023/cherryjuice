@@ -48,6 +48,7 @@ const NodeChildren: React.FC<Props> = ({
       anchorClassName={nodeMod.node}
       onDrop={ac.node.drop}
       meta={{ documentId }}
+      onDragEnterStyleClass={nodeMod.droppableDraggingOver}
     >
       {(provided, ref) => (
         <ul className={nodeMod.node__list} ref={ref} {...provided}>

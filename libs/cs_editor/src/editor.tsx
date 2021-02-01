@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo, useRef } from 'react';
+import { CSSProperties, useMemo, useRef } from 'react';
 import { onPaste } from '::helpers/clipboard/on-paste';
 import { onKeyDown } from '::helpers/typing';
 import {
@@ -17,6 +17,7 @@ type Props = {
   gestureHandlerProps: GestureHandlerProps;
   fallbackComponent: JSX.Element;
   loading: boolean;
+  style?: CSSProperties;
 };
 
 const Editor: React.FC<Props> = ({
@@ -24,6 +25,7 @@ const Editor: React.FC<Props> = ({
   contentEditableProps,
   fallbackComponent,
   loading,
+  style,
 }) => {
   const ref = useRef<HTMLDivElement>();
   const { onTouchEnd, onTouchStart } = useMemo(
@@ -41,6 +43,7 @@ const Editor: React.FC<Props> = ({
       onKeyDown={onKeyDown}
       id={'editor'}
       ref={ref}
+      style={style}
     >
       {loading && fallbackComponent}
     </div>

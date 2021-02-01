@@ -5,12 +5,12 @@ import '@cherryjuice/shared-styles/build/global/body.scss';
 import { register } from '::helpers/service-worker';
 
 render(<Root />, document.querySelector('#cs'));
-
-if (process.env.NODE_ENV !== 'development') {
+if (localStorage.getItem('--disable-external-fonts') === 'true') {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.type = 'text/css';
-  link.href = '//fonts.googleapis.com/css?family=Roboto:400';
+  link.href =
+    'https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap';
   document.head.appendChild(link);
 }
 

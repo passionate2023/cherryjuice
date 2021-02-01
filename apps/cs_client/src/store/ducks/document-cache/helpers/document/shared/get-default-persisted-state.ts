@@ -12,4 +12,5 @@ export const getDefaultPersistedState = (): PersistedDocumentState => ({
   localUpdatedAt: 0,
   lastOpenedAt: 0,
   localLastOpenedAt: 0,
+  pinned: false,
 });

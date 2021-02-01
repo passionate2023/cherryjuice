@@ -5,15 +5,22 @@ import {
   DropdownMenuGroup,
   DropdownMenuGroupProps,
 } from '::shared-components/dropdown-menu/components/dropdown-menu-group/dropdown-menu-group';
+import { Assertion } from '@cherryjuice/shared-helpers/build/hooks/click-outside-modal';
 
 type Props = {
   groups: DropdownMenuGroupProps[];
   hide: () => void;
   xOffset?: number;
+  assertions?: Assertion[];
 };
-export const DropdownMenu: React.FC<Props> = ({ xOffset, hide, groups }) => {
+export const DropdownMenu: React.FC<Props> = ({
+  assertions = [],
+  xOffset,
+  hide,
+  groups,
+}) => {
   const { clkOProps } = useClickOutsideModal({
-    assertions: [],
+    assertions,
     callback: hide,
   });
   return (

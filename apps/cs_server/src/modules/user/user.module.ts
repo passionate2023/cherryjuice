@@ -12,6 +12,10 @@ import { UserMutationsResolver } from './user.mutations.resolver';
 import { UserQueriesResolver, UserResolver } from './user.queries.resolver';
 import { UserTokenRepository } from './repositories/user-token.repository';
 import { EmailModule } from '../email/email.module';
+import { FoldersRepository } from './repositories/folders.repository';
+import { UserMetaQueriesResolver } from './user-meta.queries.resolver';
+import { UserMetaMutationsResolver } from './user-meta.mutations.resolver';
+import { FoldersService } from './folders.service';
 
 @Module({
   imports: [
@@ -25,7 +29,11 @@ import { EmailModule } from '../email/email.module';
         expiresIn: jwtConfig.expiresIn,
       },
     }),
-    TypeOrmModule.forFeature([UserRepository, UserTokenRepository]),
+    TypeOrmModule.forFeature([
+      UserRepository,
+      UserTokenRepository,
+      FoldersRepository,
+    ]),
   ],
   controllers: [UserController],
   providers: [
@@ -34,8 +42,17 @@ import { EmailModule } from '../email/email.module';
     GoogleStrategy,
     UserMutationsResolver,
     UserQueriesResolver,
+    UserMetaQueriesResolver,
+    UserMetaMutationsResolver,
+    FoldersService,
     UserResolver,
   ],
-  exports: [PassportModule, JwtStrategy, UserService, GoogleStrategy],
+  exports: [
+    PassportModule,
+    JwtStrategy,
+    UserService,
+    GoogleStrategy,
+    FoldersService,
+  ],
 })
 export class UserModule {}

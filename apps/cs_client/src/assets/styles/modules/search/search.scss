@@ -8,7 +8,7 @@
   height: 100%;
   display: flex;
   align-items: center;
-  background-color: var(--background);
+  background-color: var(--background-100);
 }
 .search__container--disabled {
   width: 40px;
@@ -39,10 +39,13 @@
 .search__field__input {
   flex: 1;
   height: 100%;
-  background-color: var(--background);
+  background-color: var(--background-100);
   color: var(--on-surface);
   border: 0;
   padding: 0 10px;
+  &::placeholder {
+    color: var(--on-surface-5);
+  }
 }
 .search__field__buttons {
   position: absolute;

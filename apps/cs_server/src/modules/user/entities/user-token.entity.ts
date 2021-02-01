@@ -6,7 +6,7 @@ import {
   Unique,
   CreateDateColumn,
   ManyToOne,
-} from 'typeorm/index';
+} from 'typeorm';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { User } from './user.entity';
 

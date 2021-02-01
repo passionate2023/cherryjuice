@@ -1,6 +1,6 @@
 import * as React from 'react';
 import mod from './validated-text-input.scss';
-import { Icon } from '@cherryjuice/icons';
+import { Icon, IconName } from '@cherryjuice/icons';
 import { Ref } from 'react';
 import {
   patternToString,
@@ -57,7 +57,7 @@ const ValidatedTextInput: React.FC<
     <div className={mod.vTextInput} data-disabled={disabled}>
       {icon && (
         <Icon
-          name={typeof icon === 'string' ? icon : icon[0]}
+          name={(typeof icon === 'string' ? icon : icon[0]) as IconName}
           className={mod.vTextInput__icon}
         />
       )}

@@ -12,7 +12,13 @@ import {
 import { ToolbarColorInput } from '@cherryjuice/components';
 import { FormattingButton } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/components/components/formatting-button';
 import { DropDownButton } from '@cherryjuice/components';
-
+import { modToolbar } from '::sass-modules';
+export const onDropdownToggle = shown => {
+  const container = document.querySelector(
+    '.' + modToolbar.toolBar__groupFormattingContainer,
+  ) as HTMLDivElement;
+  if (container) container.style.zIndex = shown ? 2 : 0;
+};
 const mapState = (state: Store) => {
   return {
     selectedNode_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
@@ -71,6 +77,7 @@ const Buttons: React.FC<PropsFromRedux> = ({
             key: props.name,
           }))}
           md={md}
+          onToggle={onDropdownToggle}
         />
       }
       {categories.secondary.map(([, props]) => (
@@ -89,6 +96,7 @@ const Buttons: React.FC<PropsFromRedux> = ({
             key: props.name,
           }))}
           md={md}
+          onToggle={onDropdownToggle}
         />
       }
       {categories.colors.map(([hk, props]) => (

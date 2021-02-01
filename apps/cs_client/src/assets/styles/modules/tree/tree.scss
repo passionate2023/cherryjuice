@@ -2,7 +2,7 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 @mixin tree-height() {
   height: calc(
-    var(--vh) - #{2 * $tool-bar-height} - var(--formatting-bar) - var(--recent-nodes)
+    var(--vh) - #{3 * $tool-bar-height} - var(--formatting-bar) - var(--recent-nodes)
   );
   @include respond-to('md') {
     height: calc(var(--vh) - var(--info-bar) - #{$tool-bar-height-md});
@@ -19,21 +19,19 @@
 .tree_root-list {
   margin: 0 0 0 -40px;
   flex-direction: column;
-  height: calc(100% - 34px);
-  @include respond-to($md-down) {
-    height: calc(100% - 40px);
-  }
+  height: calc(100% - 44px);
+
   overflow: auto;
   background-color: var(--treeBg);
   transition: background-color 200ms linear;
 }
 .tree__resize-handle {
   height: calc(
-    100vh - var(--docked-dialog-height) - #{2 * $tool-bar-height}
+    100vh - var(--docked-dialog-height) - #{3 * $tool-bar-height}
   ) !important;
   @include respond-to($md-up) {
     height: calc(
-      100vh - var(--docked-dialog-height) - #{$tool-bar-height}
+      100vh - var(--docked-dialog-height) - #{2 * $tool-bar-height}
     ) !important;
   }
   span > div {
@@ -50,7 +48,7 @@ $bubble-width: 35px;
     height: $bubble-width;
     width: $bubble-width;
     border-radius: 50%;
-    background-color: var(--background);
+    background-color: var(--background-100);
     cursor: grab;
     z-index: $ZI-resize-bubble;
   }

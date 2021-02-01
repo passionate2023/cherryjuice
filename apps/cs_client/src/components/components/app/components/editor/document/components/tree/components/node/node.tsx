@@ -64,6 +64,7 @@ const Node: React.FC<NodeProps> = ({
         ref={componentRef}
         onClick={selectNode}
         data-node-id={node_id}
+        data-cmi-id={documentId + '/' + node_id}
       >
         <ToggleChildren
           depth={depth}

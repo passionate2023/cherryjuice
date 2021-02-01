@@ -1,4 +1,5 @@
 import * as React from 'react';
+// eslint-disable-next-line node/no-extraneous-import
 import { ButtonSquare } from '@cherryjuice/components';
 import { Grid } from '../../storybook/board';
 
@@ -15,5 +16,12 @@ export const square = () => {
     </Grid>
   );
 };
-
+square.parameters = {
+  design: {
+    type: 'figma',
+    url:
+      localStorage['figmaFile'] +
+      JSON.parse(localStorage['figmaNodeIds'] || '{}')['components'],
+  },
+};
 export default config;

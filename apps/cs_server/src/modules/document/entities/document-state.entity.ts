@@ -18,6 +18,7 @@ export class DocumentState {
   constructor(setDefaultValues = false) {
     if (setDefaultValues) {
       this.selectedNode_id = 0;
+      this.pinned = false;
       this.treeState = [];
       this.recentNodes = [];
       this.bookmarks = [];
@@ -47,4 +48,7 @@ export class DocumentState {
 
   @Field(() => Timestamp)
   lastOpenedAt: Date;
+
+  @Field(() => Boolean, { nullable: true })
+  pinned: boolean;
 }
