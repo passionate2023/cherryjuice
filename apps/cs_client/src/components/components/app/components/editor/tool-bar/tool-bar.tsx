@@ -9,7 +9,6 @@ import { NavBar } from '::root/components/app/components/editor/tool-bar/compone
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
-import { NodesButtons } from '::root/components/app/components/editor/tool-bar/components/groups/nodes-buttons/nodes-buttons';
 import { UndoRedo } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
@@ -17,6 +16,7 @@ import { Objects } from '::root/components/app/components/editor/tool-bar/compon
 import { FormattingButtonsWithTransition } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/formatting-buttons-with-transition';
 import { useComponentIsReady } from '::root/hooks/is-ready';
 import { modEditor } from '::app/components/editor/editor';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 
 type PortalProps = { targetSelector: string; predicate?: boolean };
 export const Portal: React.FC<PortalProps> = ({
@@ -70,12 +70,15 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
       <MainButtons />
       {isDocumentOwner && !isOnMd && <Separator />}
       <Portal targetSelector={'.' + modEditor.editor} predicate={isOnMd}>
-        {
-          <NodesButtons>
-            {isDocumentOwner && <UndoRedo />}
-            <MobileButtons />
-          </NodesButtons>
-        }
+        <div
+          className={joinClassNames([
+            modToolbar.toolBar__group,
+            modToolbar.toolBar__groupMainBar,
+          ])}
+        >
+          {isDocumentOwner && <UndoRedo />}
+          <MobileButtons />
+        </div>
       </Portal>
       {isDocumentOwner && !isOnMd && <Separator />}
       {isDocumentOwner && (

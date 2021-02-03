@@ -4,12 +4,13 @@ import { Icons } from '@cherryjuice/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { useState } from 'react';
-import { FilterNodes } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/components/filter-nodes';
+import { useEffect, useState } from 'react';
 import { ButtonSquare } from '@cherryjuice/components';
 import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 import { useSortMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/sort-menu-items';
 import { useFoldMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/fold-menu-items';
+import { NodesButtons } from '::app/components/editor/tool-bar/components/groups/nodes-buttons/nodes-buttons';
+import { Search } from '::shared-components/search-input/search';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -22,6 +23,8 @@ const mapState = (state: Store) => {
     documentId: document?.id,
     showNodePath: state.editor.showNodePath,
     selectedNode_id,
+    filter: state.document.nodesFilter,
+    tb: state.root.isOnTb,
   };
 };
 const mapDispatch = {};
@@ -34,6 +37,8 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   documentId,
   showNodePath,
   selectedNode_id,
+  tb,
+  filter,
 }) => {
   const [CMShown, setCMShown] = useState(false);
   const hide = () => setCMShown(false);
@@ -47,31 +52,49 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
     documentId,
     node_id: selectedNode_id,
   });
-
+  useEffect(() => {
+    const parent = document.querySelector('.' + modTreeToolBar.treeToolBar);
+    if (filter) {
+      parent.classList.add(modTreeToolBar.treeToolBarActive);
+    } else parent.classList.remove(modTreeToolBar.treeToolBarActive);
+  }, [filter]);
+  const [inputShown, setInputShown] = useState(false);
   return (
     <div className={modTreeToolBar.treeToolBar}>
       <div className={modTreeToolBar.treeToolBar__controls}>
-        <FilterNodes />
-        <ContextMenuWrapperLegacy
-          shown={CMShown}
-          hide={hide}
-          show={show}
-          items={[
-            ...foldMenuItems,
-            ...sortMenuItems,
-            {
-              name: 'show node path',
-              onClick: ac.editor.toggleNodePath,
-              active: showNodePath,
-              hideOnClick: false,
-            },
-          ]}
-        >
-          <ButtonSquare
-            iconName={Icons.material['three-dots-vertical']}
-            className={modTreeToolBar.tree_focusButton}
-          />
-        </ContextMenuWrapperLegacy>
+        <Search
+          providedValue={filter}
+          onChange={ac.document.setNodesFilter}
+          placeholder={'filter nodes'}
+          hideableInput={'manual'}
+          style={{ height: tb ? 36 : 30, width: '100%' }}
+          onInputShown={setInputShown}
+        />
+        {!inputShown && (
+          <>
+            <NodesButtons />
+            <ContextMenuWrapperLegacy
+              shown={CMShown}
+              hide={hide}
+              show={show}
+              items={[
+                ...foldMenuItems,
+                ...sortMenuItems,
+                {
+                  name: 'show node path',
+                  onClick: ac.editor.toggleNodePath,
+                  active: showNodePath,
+                  hideOnClick: false,
+                },
+              ]}
+            >
+              <ButtonSquare
+                iconName={Icons.material['three-dots-vertical']}
+                className={modTreeToolBar.button}
+              />
+            </ContextMenuWrapperLegacy>
+          </>
+        )}
       </div>
     </div>
   );

@@ -63,10 +63,7 @@ export const Square = () => {
           show={show}
           items={items}
         >
-          <ButtonSquare
-            text={'...'}
-            className={modTreeToolBar.tree_focusButton}
-          />
+          <ButtonSquare text={'...'} className={modTreeToolBar.button} />
         </ContextMenuWrapperLegacy>
       </div>
     </div>

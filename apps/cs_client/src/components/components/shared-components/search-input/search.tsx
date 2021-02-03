@@ -25,7 +25,7 @@ export type SearchProps = {
   onInputShown?: (value: boolean) => void;
   style?: {
     height?: number;
-    width?: number;
+    width?: number | string;
   };
 };
 
@@ -59,7 +59,10 @@ const Search: React.FC<SearchProps> = ({
   useEffect(() => {
     Object.entries(style).forEach(([k, v]) => {
       if (cssVariables[k])
-        ref.current.style.setProperty(cssVariables[k], v + 'px');
+        ref.current.style.setProperty(
+          cssVariables[k],
+          v + (typeof v === 'string' ? '' : 'px'),
+        );
     });
   }, [style]);
   return (
