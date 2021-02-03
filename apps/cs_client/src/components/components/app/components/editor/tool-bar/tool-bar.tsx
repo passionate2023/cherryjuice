@@ -9,10 +9,8 @@ import { NavBar } from '::root/components/app/components/editor/tool-bar/compone
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
-import { UndoRedo } from '::root/components/app/components/editor/tool-bar/components/groups/main-buttons/undo-redo/undo-redo';
 import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
-import { Objects } from '::root/components/app/components/editor/tool-bar/components/groups/objects/objects';
 import { FormattingButtonsWithTransition } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/formatting-buttons-with-transition';
 import { useComponentIsReady } from '::root/hooks/is-ready';
 import { modEditor } from '::app/components/editor/editor';
@@ -76,30 +74,19 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
             modToolbar.toolBar__groupMainBar,
           ])}
         >
-          {isDocumentOwner && <UndoRedo />}
           <MobileButtons />
         </div>
       </Portal>
-      {isDocumentOwner && !isOnMd && <Separator />}
       {isDocumentOwner && (
         <ErrorBoundary>
           <Portal targetSelector={'.' + modEditor.editor} predicate={isOnMd}>
             {isOnMd ? (
-              <FormattingButtonsWithTransition show={showFormattingButtons}>
-                <Separator />
-                <Objects />
-              </FormattingButtonsWithTransition>
+              <FormattingButtonsWithTransition show={showFormattingButtons} />
             ) : (
               !hideDuringDocking && <FormattingButtons />
             )}
           </Portal>
         </ErrorBoundary>
-      )}
-      {!isOnMd && isDocumentOwner && (
-        <div className={modToolbar.toolBar__group}>
-          <Separator />
-          <Objects />
-        </div>
       )}
       <NavBar showUserPopup={false} />
     </div>

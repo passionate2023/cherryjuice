@@ -9,8 +9,8 @@ import { ButtonSquare } from '@cherryjuice/components';
 import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 import { useSortMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/sort-menu-items';
 import { useFoldMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/fold-menu-items';
-import { NodesButtons } from '::app/components/editor/tool-bar/components/groups/nodes-buttons/nodes-buttons';
 import { Search } from '::shared-components/search-input/search';
+import { NodesButtons } from './components/nodes-buttons/nodes-buttons';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);

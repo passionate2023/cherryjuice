@@ -40,62 +40,7 @@
     display: none;
   }
 }
-.tool-bar__group--formatting-container {
-  pointer-events: none;
-  @include respond-to($md-down) {
-    pointer-events: auto;
-  }
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  z-index: 1;
-  // position
-  @include respond-to($md-down) {
-    grid-area: formatting-bar;
-  }
 
-  align-items: flex-start;
-  margin-bottom: calc(-200px + #{$tool-bar-height-md});
-  overflow-x: auto;
-  overflow-y: hidden;
-  height: 200px;
-  @include respond-to($md-down) {
-    display: flex;
-    align-items: flex-end;
-    margin-top: calc(-200px + #{$tool-bar-height});
-  }
-}
-.tool-bar__group--formatting {
-  pointer-events: all;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  // size
-  @include respond-to($md-down) {
-    height: $tool-bar-height;
-    min-width: max-content;
-    width: 100%;
-  }
-  // children
-  user-select: none;
-  @include respond-to($md-down) {
-    padding: 3px;
-    justify-content: start;
-    align-items: center;
-  }
-  // style
-  @include respond-to($md-down) {
-    box-shadow: $box-shadow3;
-    opacity: 0.96;
-    background-color: var(--background-100);
-  }
-
-  &:last-child {
-    @include respond-to($md-down) {
-      padding-right: 25px;
-    }
-  }
-}
 .tool-bar__group--main-bar {
   user-select: none;
   // position

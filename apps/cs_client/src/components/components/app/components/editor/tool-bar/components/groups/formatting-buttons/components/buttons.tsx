@@ -12,12 +12,12 @@ import {
 import { ToolbarColorInput } from '@cherryjuice/components';
 import { FormattingButton } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/components/components/formatting-button';
 import { DropDownButton } from '@cherryjuice/components';
-import { modToolbar } from '::sass-modules';
+import mod from '::app/components/editor/tool-bar/components/groups/formatting-buttons/formatting-buttons.scss';
 export const onDropdownToggle = shown => {
   const container = document.querySelector(
-    '.' + modToolbar.toolBar__groupFormattingContainer,
+    '.' + mod.formattingButtonsContainer,
   ) as HTMLDivElement;
-  if (container) container.style.zIndex = shown ? 2 : 0;
+  if (container) container.style.zIndex = shown ? 2 : 1;
 };
 const mapState = (state: Store) => {
   return {
