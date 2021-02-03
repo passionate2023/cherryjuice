@@ -29,7 +29,7 @@ const mapState = (state: Store) => {
   const selectedScreen = state.settings.selectedScreen;
   return {
     show: state.dialogs.showSettingsDialog,
-    isOnMobile: state.root.isOnMd,
+    isOnMobile: state.root.isOnTb,
     selectedScreen,
     screenHasChanges: screenHasUnsavedChanges(state),
     saveOperation: state.settings.saveOperation,
@@ -46,7 +46,7 @@ const mapState = (state: Store) => {
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 
 const Settings: React.FC<Props & PropsFromRedux> = ({
   show,

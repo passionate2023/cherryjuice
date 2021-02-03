@@ -1,20 +1,21 @@
 import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
-import { SearchInput } from '::root/components/shared-components/inputs/search-input';
+import { Search } from '::shared-components/search-input/search';
 import { modTreeToolBar } from '::sass-modules';
 import { useEffect } from 'react';
 
 const mapState = (state: Store) => ({
   filter: state.document.nodesFilter,
+  tb: state.root.isOnTb,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 
-const FilterNodes: React.FC<Props & PropsFromRedux> = ({ filter }) => {
+const FilterNodes: React.FC<Props & PropsFromRedux> = ({ filter, tb }) => {
   useEffect(() => {
     const parent = document.querySelector('.' + modTreeToolBar.treeToolBar);
     if (filter) {
@@ -22,15 +23,15 @@ const FilterNodes: React.FC<Props & PropsFromRedux> = ({ filter }) => {
     } else parent.classList.remove(modTreeToolBar.treeToolBarActive);
   }, [filter]);
   return (
-    <SearchInput
-      value={filter}
+    <Search
+      providedValue={filter}
       onChange={ac.document.setNodesFilter}
-      onClear={ac.document.clearNodesFilter}
-      placeHolder={'search'}
-      searchImpossible={false}
-      containerClassName={modTreeToolBar.tree__searchFieldContainer}
-      fieldWrapperClassName={modTreeToolBar.tree__searchFieldWrapper}
-      searchButtonClassName={modTreeToolBar.tree__searchButton}
+      placeholder={'filter nodes'}
+      hideableInput={'never'}
+      style={{ height: tb ? 36 : 30 }}
+      // containerClassName={modTreeToolBar.tree__searchFieldContainer}
+      // fieldWrapperClassName={modTreeToolBar.tree__searchFieldWrapper}
+      // searchButtonClassName={modTreeToolBar.tree__searchButton}
     />
   );
 };

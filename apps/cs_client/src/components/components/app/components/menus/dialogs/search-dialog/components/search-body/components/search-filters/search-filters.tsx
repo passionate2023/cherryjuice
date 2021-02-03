@@ -22,7 +22,7 @@ import {
   modSearchFilter,
 } from '::sass-modules';
 import { Icons } from '@cherryjuice/icons';
-import { Search } from '::root/components/app/components/editor/tool-bar/components/groups/nav-bar/components/search/search';
+import { DocumentSearch } from '::app/components/editor/tool-bar/components/groups/nav-bar/components/search/document-search';
 
 export const SearchSetting: React.FC<{
   iconName: string;
@@ -92,6 +92,7 @@ const mapState = (state: Store) => ({
   showFilters: state.search.showFilters,
   showTuning: state.search.showTuning,
   showTimeFilter: state.search.showTimeFilter,
+  mb: state.root.isOnMb,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -111,12 +112,13 @@ const SearchFilters: React.FC<Props & PropsFromRedux> = ({
   showTuning,
   showTimeFilter,
   showDialog,
+  mb,
 }) => {
   return (
     <SearchHeaderContainer alignChildren={'v'}>
       <SearchHeaderGroup>
-        <Search
-          className={modSearchDialog.searchDialog__header__field}
+        <DocumentSearch
+          style={{ width: mb ? 300 : 400, height: 50 }}
           navBar={false}
           lazyAutoFocus={showDialog}
         />

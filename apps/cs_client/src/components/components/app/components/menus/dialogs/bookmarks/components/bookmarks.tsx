@@ -22,7 +22,7 @@ import {
   mapSortNodesBy,
   PartialNode,
 } from '::root/components/app/components/menus/dialogs/bookmarks/components/helpers/sort';
-import { SearchInput } from '::root/components/shared-components/inputs/search-input';
+import { Search } from '::shared-components/search-input/search';
 import { modSearchDialog } from '::sass-modules';
 import { useMemo } from 'react';
 
@@ -48,13 +48,14 @@ const mapState = (state: Store) => {
     showSortOptions: state.bookmarks.showSortOptions,
     showDialog: state.dialogs.showBookmarks,
     query: state.bookmarks.query,
-    isOnMd: state.root.isOnMd,
+    isOnMd: state.root.isOnTb,
+    mb: state.root.isOnMb,
   };
 };
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 
 const Bookmarks: React.FC<Props & PropsFromRedux> = ({
   selectedNode_id,
@@ -68,6 +69,7 @@ const Bookmarks: React.FC<Props & PropsFromRedux> = ({
   query,
   showDialog,
   isOnMd,
+  mb,
 }) => {
   const bookmarkProps = useMemo(() => {
     let bookmarkProps: (BookmarkProps & PartialNode)[] = bookmarks.map(
@@ -102,14 +104,15 @@ const Bookmarks: React.FC<Props & PropsFromRedux> = ({
     <DialogBody>
       <SearchHeaderContainer>
         <SearchHeaderGroup>
-          <SearchInput
+          <Search
             containerClassName={modSearchDialog.searchDialog__header__field}
-            placeHolder={'filter by node name'}
+            placeholder={'filter nodes'}
             value={query}
             onChange={ac.bookmarks.setQuery}
             onClear={ac.bookmarks.clearQuery}
             lazyAutoFocus={!isOnMd && showDialog ? 1200 : 0}
             searchImpossible={!bookmarks.length}
+            style={{ width: mb ? 300 : 400, height: 50 }}
           />
           <SearchSetting
             iconName={Icons.material.sort}

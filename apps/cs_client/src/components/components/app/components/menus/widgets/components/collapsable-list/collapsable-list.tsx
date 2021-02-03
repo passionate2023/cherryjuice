@@ -15,7 +15,7 @@ import { Store } from '::store/store';
 
 const mapState = (state: Store) => ({
   dialogIsOpen:
-    state.root.isOnMd &&
+    state.root.isOnTb &&
     (state.dialogs.showDocumentList ||
       state.dialogs.showSettingsDialog ||
       state.dialogs.showDocumentMetaDialog ||

@@ -49,7 +49,7 @@ const mapState = (state: Store) => ({
   showDialog: state.dialogs.showLinkDialog,
   selectedLink: state.editor.selectedLink,
   selection: state.editor.selection,
-  isOnMd: state.root.isOnMd,
+  isOnMd: state.root.isOnTb,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;

@@ -22,7 +22,6 @@ import modIconPicker from './node-meta/icon-picker.scss';
 import modTreeNode from './tree/node.scss';
 import modTree from './tree/tree.scss';
 import modDeleteNode from './delete-node.scss';
-import modSearch from './search/search.scss';
 import modSearchDialog from './search/search-dialog.scss';
 import modSearchFilter from './search/search-dialog/search-filter.scss';
 import modSearchResult from './search/search-dialog/search-result.scss';
@@ -77,7 +76,6 @@ export {
   modTree,
   modDeleteNode,
   modSnackbar,
-  modSearch,
   modSearchDialog,
   modSearchResult,
   modSearchFilter,

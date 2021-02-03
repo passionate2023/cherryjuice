@@ -37,7 +37,6 @@ const ac = {
     _(params),
   ),
   setNodesFilter: _(ap('set-nodes-filter'), _ => (filter: string) => _(filter)),
-  clearNodesFilter: _(ap('clear-nodes-filter')),
   setSwappedIds: _(ap('set-swapped-ids'), _ => (ids: SwappedIds) => _(ids)),
 };
 type NodeId = {
@@ -147,10 +146,7 @@ const reducer = createReducer(cloneObj(initialState), _ => [
     ...state,
     nodesFilter: payload,
   })),
-  _(ac.clearNodesFilter, state => ({
-    ...state,
-    nodesFilter: '',
-  })),
+
   _(ac.setSwappedIds, (state, { payload }) => ({
     ...state,
     swappedIds: payload,

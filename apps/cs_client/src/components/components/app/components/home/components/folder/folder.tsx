@@ -32,7 +32,7 @@ const mapState = (state: Store) => ({
   sortDirection: state.home.sortDirection,
   query: state.home.query,
   folders: state.home.folders,
-  isOnMd: state.root.isOnMd,
+  isOnMd: state.root.isOnTb,
   loading: state.documentsList.fetchDocuments === 'in-progress',
 });
 const mapDispatch = {};
@@ -87,12 +87,7 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
     <FolderContext.Provider value={inlineInputProps}>
       <div className={mod.folder}>
         <Portal targetSelector={'.' + modHome.home} predicate={isOnMd}>
-          <Header
-            folderName={folderName}
-            query={query}
-            noSearch={rows.length === 0 && pinned.length === 0}
-            isOnMd={isOnMd}
-          />
+          <Header folderName={folderName} query={query} isOnMd={isOnMd} />
         </Portal>
         <div className={mod.folder__tables}>
           <LinearProgress loading={loading} />

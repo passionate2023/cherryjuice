@@ -15,7 +15,7 @@ const mapState = (state: Store) => {
   return {
     node,
     documentId: state.document.documentId,
-    isOnMobile: state.root.isOnMd,
+    isOnMobile: state.root.isOnTb,
     online: state.root.online,
     showInfoBar: state.editor.showInfoBar,
     documentPrivacy: document?.privacy,
@@ -27,7 +27,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 
 const InfoBar: React.FC<Props & PropsFromRedux> = ({
   node,

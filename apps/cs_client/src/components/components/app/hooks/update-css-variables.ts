@@ -16,7 +16,7 @@ export const useUpdateCssVariables = (
   treeWidth: number,
   previousTreeWidth: number,
 ) => {
-  const isOnMd = useSelector((state: Store) => state.root.isOnMd);
+  const isOnMd = useSelector((state: Store) => state.root.isOnTb);
 
   const showNodePath = useSelector((state: Store) => state.editor.showNodePath);
   useEffect(() => {

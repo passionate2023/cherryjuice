@@ -16,7 +16,7 @@ import { Scrim } from '::root/components/shared-components/scrim/scrim';
 import { Position } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 
 const mapState = (state: Store) => ({
-  isOnMd: state.root.isOnMd,
+  isOnMd: state.root.isOnTb,
   isOnMb: state.root.isOnMb,
 });
 const connector = connect(mapState);

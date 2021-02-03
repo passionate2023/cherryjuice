@@ -22,7 +22,7 @@ const mapState = (state: Store) => ({
   showDialog: state.dialogs.showCodeboxDialog,
   selection: state.editor.selection,
   selectedCodebox: state.editor.selectedCodebox,
-  isOnMd: state.root.isOnMd,
+  isOnMd: state.root.isOnTb,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;

@@ -13,7 +13,7 @@ const mapState = (state: Store) => {
   return {
     selectedNode_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
     documentId: state.document.documentId,
-    md: state.root.isOnMd,
+    md: state.root.isOnTb,
   };
 };
 const mapDispatch = {};

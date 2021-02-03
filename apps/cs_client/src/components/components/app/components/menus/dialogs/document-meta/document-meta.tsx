@@ -24,7 +24,7 @@ const mapState = (state: Store) => ({
   showDialog: state.dialogs.showDocumentMetaDialog,
   focusedDocumentId: state.home.activeDocumentId || state.document.documentId,
   documents: getDocumentsList(state),
-  isOnMd: state.root.isOnMd,
+  isOnMd: state.root.isOnTb,
   userId: state.auth.user?.id,
   documentUserId: getDocumentUserId(state),
 });

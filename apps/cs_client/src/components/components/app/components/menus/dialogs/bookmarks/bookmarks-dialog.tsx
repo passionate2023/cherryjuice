@@ -13,7 +13,7 @@ const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
   return {
     shown: state.dialogs.showBookmarks,
-    isOnMd: state.root.isOnMd,
+    isOnMd: state.root.isOnTb,
     documentId: state.document.documentId,
     selectedIDs: state.bookmarks.selectedIDs,
     bookmarks: document?.persistedState?.bookmarks,
@@ -25,7 +25,7 @@ const mapState = (state: Store) => {
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 
 const BookmarksDialog: React.FC<Props & PropsFromRedux> = ({
   shown,

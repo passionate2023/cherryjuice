@@ -46,7 +46,7 @@ export const Portal: React.FC<PortalProps> = ({
 };
 
 const mapState = (state: Store) => ({
-  isOnMd: state.root.isOnMd,
+  isOnMd: state.root.isOnTb,
   docking: state.root.docking,
   showFormattingButtons: state.editor.showFormattingButtons,
   isDocumentOwner: hasWriteAccessToDocument(state),

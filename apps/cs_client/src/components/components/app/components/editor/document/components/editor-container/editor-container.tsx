@@ -22,9 +22,9 @@ const mapState = (state: Store) => {
       state.document.asyncOperations.fetch === 'in-progress',
     fetchNodeStarted:
       state.node.asyncOperations.fetch[node_id] === 'in-progress',
-    contentEditable: state.editor.contentEditable || !state.root.isOnMd,
+    contentEditable: state.editor.contentEditable || !state.root.isOnTb,
     isDocumentOwner: hasWriteAccessToDocument(state),
-    isOnMd: state.root.isOnMd,
+    isOnMd: state.root.isOnTb,
     online: state.root.online,
     scrollPosition: document
       ? document.persistedState.scrollPositions[node_id]

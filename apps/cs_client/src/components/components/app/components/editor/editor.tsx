@@ -19,7 +19,7 @@ const ToolBar = React.lazy(() =>
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
-  isOnMobile: state.root.isOnMd,
+  isOnMobile: state.root.isOnTb,
   docking: state.root.docking,
   document: getCurrentDocument(state),
 });

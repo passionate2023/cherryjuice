@@ -26,7 +26,7 @@ const mapState = (state: Store) => {
     documentUserId: document?.userId,
     documentPrivacy: document?.privacy,
     showDialog: state.dialogs.showNodeMetaDialog,
-    isOnMd: state.root.isOnMd,
+    isOnMd: state.root.isOnTb,
     userId: state.auth.user?.id,
   };
 };

@@ -21,7 +21,7 @@ const ap = createActionPrefixer('search');
 const ac = {
   ...{
     setQuery: _(ap('set-query'), _ => (query: string) => _(query)),
-    clearQuery: _(ap('clear-query')),
+    // clearQuery: _(ap('clear-query')),
   },
   ...{
     setSearchIdle: _(ap('set-search-idle')),
@@ -123,11 +123,7 @@ const reducer = createReducer(initialState, _ => [
     _(ac.setQuery, (state, { payload }) => ({
       ...state,
       query: payload,
-    })),
-    _(ac.clearQuery, state => ({
-      ...state,
-      query: '',
-      searchResults: EmptySearchResults,
+      searchResults: payload === '' ? EmptySearchResults : state.searchResults,
     })),
   ],
   ...[

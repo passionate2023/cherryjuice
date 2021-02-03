@@ -9,7 +9,7 @@ import { createGesturesHandler } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => ({
   showSidebar: state.home.showSidebar,
-  isOnMd: state.root.isOnMd,
+  isOnMd: state.root.isOnTb,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);

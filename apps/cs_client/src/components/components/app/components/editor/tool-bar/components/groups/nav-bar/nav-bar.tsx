@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modToolbar } from '::sass-modules';
-import { Search } from '::root/components/app/components/editor/tool-bar/components/groups/nav-bar/components/search/search';
+import { DocumentSearch } from '::app/components/editor/tool-bar/components/groups/nav-bar/components/search/document-search';
 import { UserButton } from '::app/components/editor/tool-bar/components/groups/nav-bar/components/user-button';
 import { DocumentButton } from '::app/components/editor/tool-bar/components/groups/nav-bar/components/document-button';
 
@@ -13,7 +13,7 @@ const NavBar: React.FC<Props> = () => {
         modToolbar.toolBar__group + ' ' + modToolbar.toolBar__groupNavBar
       }
     >
-      <Search />
+      <DocumentSearch />
       <DocumentButton />
       <UserButton />
     </div>

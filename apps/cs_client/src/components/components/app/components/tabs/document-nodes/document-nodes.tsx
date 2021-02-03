@@ -23,7 +23,7 @@ const mapState = (state: Store) => {
   return {
     localState: document?.localState,
     nodes: document?.nodes,
-    isOnMd: state.root.isOnMd,
+    isOnMd: state.root.isOnTb,
     vw: state.cssVariables.vw,
     selectedNode_id: document?.persistedState?.selectedNode_id,
     recentNodes: document?.persistedState?.recentNodes,

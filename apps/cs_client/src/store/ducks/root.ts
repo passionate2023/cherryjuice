@@ -7,7 +7,8 @@ const ap = createActionPrefixer('root');
 const ac = {
   resetState: _(ap('reset-state')),
   hidePopups: _(ap('hide-popups')),
-  setIsOnMd: _(ap('set-is-on-md'), _ => (b: boolean) => _(b)),
+  setIsOnWd: _(ap('set-is-on-wd'), _ => (b: boolean) => _(b)),
+  setIsOnTb: _(ap('set-is-on-tb'), _ => (b: boolean) => _(b)),
   setIsOnMb: _(ap('set-is-on-mb'), _ => (b: boolean) => _(b)),
   setDocking: _(ap('set-docking'), _ => (b: boolean) => _(b)),
   setNetworkStatus: _(ap('set-network-status'), _ => (b: boolean) => _(b)),
@@ -16,7 +17,8 @@ const ac = {
 
 type State = {
   isOnMb: boolean;
-  isOnMd: boolean;
+  isOnTb: boolean;
+  isOnWd: boolean;
   dockedDialog: boolean;
   docking: boolean;
   online: boolean;
@@ -24,7 +26,8 @@ type State = {
 
 const initialState: State = {
   isOnMb: false,
-  isOnMd: false,
+  isOnTb: false,
+  isOnWd: false,
   dockedDialog: false,
   docking: false,
   online: true,
@@ -33,16 +36,20 @@ const reducer = createReducer(initialState, _ => [
   _(ac.resetState, state => ({
     ...cloneObj(initialState),
     isOnMb: state.isOnMb,
-    isOnMd: state.isOnMd,
+    isOnTb: state.isOnTb,
   })),
   ...[
     _(ac.setIsOnMb, (state, { payload }) => ({
       ...state,
       isOnMb: payload,
     })),
-    _(ac.setIsOnMd, (state, { payload }) => ({
+    _(ac.setIsOnTb, (state, { payload }) => ({
       ...state,
-      isOnMd: payload,
+      isOnTb: payload,
+    })),
+    _(ac.setIsOnWd, (state, { payload }) => ({
+      ...state,
+      isOnWd: payload,
     })),
     _(ac.setDocking, (state, { payload }) => ({
       ...state,

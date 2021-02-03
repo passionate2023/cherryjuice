@@ -1,0 +1,15 @@
+.search-button {
+  z-index: 1;
+  border: 0;
+  margin: 0;
+  margin-left: auto;
+  border-radius: 0;
+  width: var(--search-element-height);
+  height: var(--search-element-height);
+  svg {
+    fill: var(--on-surface);
+  }
+  &:hover {
+    background-color: var(--surface-040) !important;
+  }
+}

@@ -3,7 +3,7 @@ import { memo, useMemo } from 'react';
 import { modSearchDialog } from '::sass-modules';
 import { DocumentGroup } from './components/document-group';
 import { CachedDocument } from '::store/ducks/document-cache/document-cache';
-import { SearchInput } from '::root/components/shared-components/inputs/search-input';
+import { Search } from '::shared-components/search-input/search';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { getDocumentsList } from '::store/selectors/cache/document/document';
@@ -31,7 +31,7 @@ const mapState = (state: Store) => ({
   query: state.documentsList.query,
   showFilters: state.documentsList.showFilters,
   currentSortOptions: state.documentsList.sortOptions,
-  isOnMd: state.root.isOnMd,
+  isOnMd: state.root.isOnTb,
   pinned: state.root.dockedDialog,
 });
 const connector = connect(mapState);
@@ -69,9 +69,9 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
     <DialogBody>
       <SearchHeaderContainer>
         <SearchHeaderGroup>
-          <SearchInput
+          <Search
             containerClassName={modSearchDialog.searchDialog__header__field}
-            placeHolder={'find documents'}
+            placeholder={'find documents'}
             value={query}
             onChange={ac.documentsList.setQuery}
             onClear={ac.documentsList.clearQuery}

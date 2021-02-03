@@ -20,7 +20,7 @@ const mapState = (state: Store) => {
     saveInProgress: state.document.asyncOperations.save === 'in-progress',
     showTree: state.editor.showTree,
     showNodePath: state.editor.showNodePath,
-    isOnMd: state.root.isOnMd,
+    isOnMd: state.root.isOnTb,
   };
 };
 

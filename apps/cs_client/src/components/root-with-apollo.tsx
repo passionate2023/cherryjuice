@@ -29,10 +29,21 @@ import 'hint.css';
 
 enablePatches();
 
-const updateBreakpointState = ({ breakpoint, callback }) => {
+const updateBreakpointState = ({
+  breakpoint,
+  callback,
+  mode = 'smallerThan',
+}: {
+  breakpoint: number;
+  callback: (value: boolean) => void;
+  mode?: 'smallerThan' | 'biggerThan';
+}) => {
   let previousState = undefined;
   return () => {
-    const newState = window.innerWidth <= breakpoint;
+    const newState =
+      mode === 'smallerThan'
+        ? window.innerWidth <= breakpoint
+        : window.innerWidth > breakpoint;
     if (previousState != newState) {
       previousState = newState;
       callback(newState);
@@ -67,8 +78,13 @@ const Root: React.FC<PropsFromRedux> = ({
     (w, h) => ac.cssVariables.set(CssVariables.vh, h),
     w => ac.cssVariables.set(CssVariables.vw, w),
     updateBreakpointState({
+      breakpoint: 1200,
+      callback: ac.root.setIsOnWd,
+      mode: 'biggerThan',
+    }),
+    updateBreakpointState({
       breakpoint: 850,
-      callback: ac.root.setIsOnMd,
+      callback: ac.root.setIsOnTb,
     }),
     updateBreakpointState({
       breakpoint: 425,

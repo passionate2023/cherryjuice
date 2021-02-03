@@ -127,3 +127,14 @@
   opacity: 0.6;
   z-index: 1;
 }
+.search__search-button {
+  @include respond-to($md-up) {
+    width: 34px;
+    height: 34px;
+  }
+  @include respond-to($mb-down) {
+    &:hover {
+      background-color: initial;
+    }
+  }
+}

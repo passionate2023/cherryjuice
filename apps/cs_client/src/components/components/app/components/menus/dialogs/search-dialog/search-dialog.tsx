@@ -8,14 +8,14 @@ import { SearchBody } from '::root/components/app/components/menus/dialogs/searc
 
 const mapState = (state: Store) => ({
   searchState: state.search.searchState,
-  isOnMobile: state.root.isOnMd,
+  isOnMobile: state.root.isOnTb,
   docked: state.root.dockedDialog,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
+type Props = Record<string, never>;
 
 const SearchDialog: React.FC<Props & PropsFromRedux> = ({
   isOnMobile,
