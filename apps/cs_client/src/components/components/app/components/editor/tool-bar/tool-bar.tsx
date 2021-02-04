@@ -65,18 +65,24 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   const hideDuringDocking = docking && isOnMd;
   return (
     <div className={modToolbar.toolBar}>
-      <MainButtons />
+      {!isOnMd && <MainButtons />}
       {isDocumentOwner && !isOnMd && <Separator />}
-      <Portal targetSelector={'.' + modEditor.editor} predicate={isOnMd}>
-        <div
-          className={joinClassNames([
-            modToolbar.toolBar__group,
-            modToolbar.toolBar__groupMainBar,
-          ])}
-        >
-          <MobileButtons />
-        </div>
-      </Portal>
+      {isOnMd && (
+        <Portal targetSelector={'.' + modEditor.editor} predicate={isOnMd}>
+          <div
+            className={joinClassNames([
+              modToolbar.toolBar__group,
+              modToolbar.toolBar__groupMainBar,
+            ])}
+          >
+            <MainButtons>
+              <Separator />
+              <MobileButtons />
+            </MainButtons>
+            <NavBar />
+          </div>
+        </Portal>
+      )}
       {isDocumentOwner && (
         <ErrorBoundary>
           <Portal targetSelector={'.' + modEditor.editor} predicate={isOnMd}>
@@ -88,7 +94,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
           </Portal>
         </ErrorBoundary>
       )}
-      <NavBar showUserPopup={false} />
+      {!isOnMd && <NavBar />}
     </div>
   );
 };

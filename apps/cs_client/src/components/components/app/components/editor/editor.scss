@@ -7,7 +7,6 @@
   flex: 1;
   // tablet and mobile
   grid-template-areas:
-    'tool-bar tool-bar '
     'tree node-path'
     'tree rich-text '
     'formatting-bar formatting-bar'
@@ -15,13 +14,13 @@
 
   grid-template-columns: var(--treeWidth) 1fr;
   grid-template-rows:
-    $tool-bar-height var(--nodePath) 1fr
+    var(--nodePath) 1fr
     var(--formatting-bar)
     var(--nodes-bar);
   // desktop
   @include respond-to($md-up) {
     grid-template-areas:
-      'tool-bar tool-bar '
+      'tree tool-bar '
       'tree node-path'
       'tree rich-text '
       'info-bar info-bar';

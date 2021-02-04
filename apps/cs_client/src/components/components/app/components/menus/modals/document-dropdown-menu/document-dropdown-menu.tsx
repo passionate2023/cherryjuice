@@ -18,6 +18,7 @@ const mapState = (state: Store) => {
     documentHasUnsavedChanges: documentHasUnsavedChanges(document),
     userId: userId,
     currentFolderId: state.home.folder?.id,
+    tb: state.root.isOnTb,
   };
 };
 const connector = connect(mapState);
@@ -34,6 +35,7 @@ const DocumentDropdownMenu: React.FC<Props & PropsFromRedux> = ({
   includeCurrentDocumentSection = true,
   currentFolderId,
   isOwnerOfDocument,
+  tb,
 }) => {
   const elements = useGroups({
     online,
@@ -47,6 +49,7 @@ const DocumentDropdownMenu: React.FC<Props & PropsFromRedux> = ({
   return (
     show && (
       <DropdownMenu
+        showFromBottom={tb}
         groups={elements}
         hide={ac.dialogs.hideDocumentDropdownMenu}
         xOffset={-5}

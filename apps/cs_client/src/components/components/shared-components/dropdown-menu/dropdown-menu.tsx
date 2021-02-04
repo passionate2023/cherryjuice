@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { modDropdownMenu } from '::sass-modules';
-import { useClickOutsideModal } from '@cherryjuice/shared-helpers';
+import {
+  joinClassNames,
+  useClickOutsideModal,
+} from '@cherryjuice/shared-helpers';
 import {
   DropdownMenuGroup,
   DropdownMenuGroupProps,
@@ -12,12 +15,14 @@ type Props = {
   hide: () => void;
   xOffset?: number;
   assertions?: Assertion[];
+  showFromBottom?: boolean;
 };
 export const DropdownMenu: React.FC<Props> = ({
   assertions = [],
   xOffset,
   hide,
   groups,
+  showFromBottom,
 }) => {
   const { clkOProps } = useClickOutsideModal({
     assertions,
@@ -25,7 +30,10 @@ export const DropdownMenu: React.FC<Props> = ({
   });
   return (
     <div
-      className={modDropdownMenu.dropdownMenu}
+      className={joinClassNames([
+        modDropdownMenu.dropdownMenu,
+        showFromBottom && modDropdownMenu.dropdownMenuShowFromBottom,
+      ])}
       {...clkOProps}
       style={{ right: xOffset }}
     >

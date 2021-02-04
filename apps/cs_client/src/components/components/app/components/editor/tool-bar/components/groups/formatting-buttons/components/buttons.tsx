@@ -17,7 +17,7 @@ export const onDropdownToggle = shown => {
   const container = document.querySelector(
     '.' + mod.formattingButtonsContainer,
   ) as HTMLDivElement;
-  if (container) container.style.zIndex = shown ? 2 : 1;
+  if (container) container.style.zIndex = shown ? 2 : 0;
 };
 const mapState = (state: Store) => {
   return {

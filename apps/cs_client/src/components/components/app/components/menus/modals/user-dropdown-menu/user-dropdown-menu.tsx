@@ -10,6 +10,7 @@ const mapState = (state: Store) => ({
   online: state.root.online,
   show: state.dialogs.showUserDropdownMenu,
   user: state.auth.user,
+  tb: state.root.isOnTb,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -19,11 +20,13 @@ const UserDropdownMenu: React.FC<Props & PropsFromRedux> = ({
   documentId,
   show,
   user,
+  tb,
 }) => {
   const elements = useGroups({ online, documentId, user });
   return (
     show && (
       <DropdownMenu
+        showFromBottom={tb}
         groups={elements}
         hide={ac.dialogs.hideUserDropdownMenu}
         xOffset={5}

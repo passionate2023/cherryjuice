@@ -12,6 +12,10 @@
   grid-area: tool-bar;
   // children
   display: flex;
+
+  @include respond-to($md-down) {
+    display: none;
+  }
   align-items: center;
   flex-wrap: nowrap;
   // style

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { memo } from 'react';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { modToolbar } from '::sass-modules';
 import { testIds } from '::cypress/support/helpers/test-ids';
@@ -28,9 +27,7 @@ const mapState = (state: Store) => {
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = Record<string, never>;
-
-const MainButtons: React.FC<Props & PropsFromRedux> = ({
+const MainButtons: React.FC<PropsFromRedux> = ({
   showTree,
   userHasUnsavedChanges,
   documentId,
@@ -38,6 +35,7 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
   online,
   showTimeline,
   documentActionNOF,
+  children,
 }) => {
   const noDocumentIsSelected = !documentId;
 
@@ -75,9 +73,9 @@ const MainButtons: React.FC<Props & PropsFromRedux> = ({
           <Icon name={Icons.material.save} />
         </Tooltip>
       </ToolbarButton>
+      {children}
     </div>
   );
 };
 const _ = connector(MainButtons);
-const M = memo(_);
-export { M as MainButtons };
+export { _ as MainButtons };
