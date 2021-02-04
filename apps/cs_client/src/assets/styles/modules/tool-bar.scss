@@ -3,7 +3,7 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 .tool-bar {
   // size
-  max-width: var(--vw);
+  max-width: calc(var(--vw) - var(--treeWidth));
   min-height: $tool-bar-height;
   @include respond-to('md') {
     min-height: $tool-bar-height-md;

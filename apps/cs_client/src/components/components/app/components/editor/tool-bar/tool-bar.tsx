@@ -65,9 +65,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   const hideDuringDocking = docking && isOnMd;
   return (
     <div className={modToolbar.toolBar}>
-      {!isOnMd && <MainButtons />}
-      {isDocumentOwner && !isOnMd && <Separator />}
-      {isOnMd && (
+      {isOnMd ? (
         <Portal targetSelector={'.' + modEditor.editor} predicate={isOnMd}>
           <div
             className={joinClassNames([
@@ -76,12 +74,14 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
             ])}
           >
             <MainButtons>
-              <Separator />
-              <MobileButtons />
+              {isDocumentOwner && <Separator />}
+              {isDocumentOwner && <MobileButtons />}
             </MainButtons>
             <NavBar />
           </div>
         </Portal>
+      ) : (
+        <MainButtons>{isDocumentOwner && <Separator />}</MainButtons>
       )}
       {isDocumentOwner && (
         <ErrorBoundary>
@@ -89,7 +89,11 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
             {isOnMd ? (
               <FormattingButtonsWithTransition show={showFormattingButtons} />
             ) : (
-              !hideDuringDocking && <FormattingButtons />
+              !hideDuringDocking && (
+                <div style={{ overflowX: 'auto' }}>
+                  <FormattingButtons />
+                </div>
+              )
             )}
           </Portal>
         </ErrorBoundary>
