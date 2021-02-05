@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { modContextMenu } from '::sass-modules';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 import { Icon } from '@cherryjuice/icons';
-import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
+import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
 
 export type CMItem = Omit<
   ContextMenuItemProps,
@@ -23,9 +23,10 @@ export type ContextMenuItemProps<Context = Record<string, any>> = {
   bottomSeparator?: boolean;
   hideOnClick?: boolean;
   items?: CMItem[];
-  activeItem: string;
-  setActiveItem: (name: string) => void;
+  // activeItem: string;
+  // setActiveItem: (name: string) => void;
   id: string;
+  level: number;
 };
 
 const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
@@ -38,18 +39,18 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
   hideOnClick = true,
   active,
   items = [],
-  activeItem,
-  setActiveItem,
   id,
   context,
   nameFactory,
+  level = 0,
 }) => {
-  const [CMShown, setCMShown] = useState(false);
-  const hideSub = () => setCMShown(false);
-  const showSub = () => {
-    setCMShown(true);
-    setActiveItem(name);
-  };
+  // const [CMShown, setCMShown] = useState(false);
+  // const hideSub = () => setCMShown(false);
+  // const showSub = () => {
+  //   setCMShown(true);
+  //   setActiveItem(name);
+  // };
+  id = id || name;
   const isDisabled = typeof disabled === 'function' ? disabled(id) : disabled;
   const onClickM = e => {
     if (!isDisabled && !items.length) {
@@ -59,41 +60,59 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
       e.preventDefault();
     }
   };
-  useEffect(() => {
-    if (activeItem !== name) {
-      hideSub();
-    }
-  }, [activeItem]);
+  // useEffect(() => {
+  //   if (activeItem !== name) {
+  //     hideSub();
+  //   }
+  // }, [activeItem]);
   return (
-    <ContextMenuWrapperLegacy
-      shown={CMShown}
-      hide={hide}
-      show={showSub}
+    <ContextMenuWrapper
+      // shown={CMShown}
+      // hide={hide}
+      // show={showSub}
       items={items}
-      triggers={{ click: true, hover: true }}
+      hookProps={{
+        getIdOfActiveElement: target => {
+          const row: HTMLElement = target.closest(
+            '.' + modContextMenu.contextMenu__item,
+          );
+          if (row) return row.dataset.cmiId;
+        },
+        getActiveElement: target => {
+          return target.closest('.' + modContextMenu.contextMenu__item);
+        },
+      }}
+      reference={'element'}
+      // triggers={{ click: true, hover: true }}
+      level={level + 1}
     >
-      <div
-        className={joinClassNames([
-          modContextMenu.contextMenu__item,
-          [modContextMenu.contextMenu__itemDisabled, isDisabled],
-          [modContextMenu.contextMenu__itemBottomSeparator, bottomSeparator],
-        ])}
-        onClick={onClickM}
-        {...(isDisabled && { 'data-disabled': isDisabled })}
-      >
-        <span className={modContextMenu.contextMenu__item__icon}>
-          {active ? <Icon name={'check'} size={14} /> : undefined}
-        </span>
-        <span className={modContextMenu.contextMenu__item__text}>
-          {node || nameFactory ? nameFactory(id, context) : name}
-        </span>
-        {!!items.length && (
-          <span className={modContextMenu.contextMenu__item__subItemsArrow}>
-            <Icon name={'triangle-right'} />
+      {({ ref, show }) => (
+        <div
+          className={joinClassNames([
+            modContextMenu.contextMenu__item,
+            [modContextMenu.contextMenu__itemDisabled, isDisabled],
+            [modContextMenu.contextMenu__itemBottomSeparator, bottomSeparator],
+          ])}
+          onClick={isDisabled ? undefined : items.length ? show : onClickM}
+          ref={ref}
+          onMouseEnter={isDisabled ? undefined : show}
+          data-cmi-id={id}
+          {...(isDisabled && { 'data-disabled': isDisabled })}
+        >
+          <span className={modContextMenu.contextMenu__item__icon}>
+            {active ? <Icon name={'check'} size={14} /> : undefined}
           </span>
-        )}
-      </div>
-    </ContextMenuWrapperLegacy>
+          <span className={modContextMenu.contextMenu__item__text}>
+            {node || nameFactory ? nameFactory(id, context) : name}
+          </span>
+          {!!items.length && (
+            <span className={modContextMenu.contextMenu__item__subItemsArrow}>
+              <Icon name={'triangle-right'} />
+            </span>
+          )}
+        </div>
+      )}
+    </ContextMenuWrapper>
   );
 };
 

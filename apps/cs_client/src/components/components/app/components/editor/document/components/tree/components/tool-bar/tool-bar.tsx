@@ -6,11 +6,12 @@ import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { useEffect, useState } from 'react';
 import { ButtonSquare } from '@cherryjuice/components';
-import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 import { useSortMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/sort-menu-items';
 import { useFoldMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/fold-menu-items';
 import { Search } from '::shared-components/search-input/search';
 import { NodesButtons } from './components/nodes-buttons/nodes-buttons';
+import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { testIds } from '::cypress/support/helpers/test-ids';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -40,10 +41,6 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   tb,
   filter,
 }) => {
-  const [CMShown, setCMShown] = useState(false);
-  const hide = () => setCMShown(false);
-  const show = () => setCMShown(true);
-
   const foldMenuItems = useFoldMenuItems({
     documentId,
     node_id: selectedNode_id,
@@ -73,10 +70,14 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
         {!inputShown && (
           <>
             <NodesButtons />
-            <ContextMenuWrapperLegacy
-              shown={CMShown}
-              hide={hide}
-              show={show}
+            <ContextMenuWrapper
+              hookProps={{
+                getIdOfActiveElement: () => testIds.tree__threeDots,
+                getActiveElement: () =>
+                  document.querySelector(
+                    `[data-testid="${testIds.tree__threeDots}"]`,
+                  ),
+              }}
               items={[
                 ...foldMenuItems,
                 ...sortMenuItems,
@@ -87,12 +88,18 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
                   hideOnClick: false,
                 },
               ]}
+              reference={'element'}
             >
-              <ButtonSquare
-                iconName={Icons.material['three-dots-vertical']}
-                className={modTreeToolBar.button}
-              />
-            </ContextMenuWrapperLegacy>
+              {({ ref, show }) => (
+                <ButtonSquare
+                  iconName={Icons.material['three-dots-vertical']}
+                  className={modTreeToolBar.button}
+                  _ref={ref}
+                  onClick={show}
+                  testId={testIds.tree__threeDots}
+                />
+              )}
+            </ContextMenuWrapper>
           </>
         )}
       </div>

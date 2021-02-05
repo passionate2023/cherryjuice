@@ -14,7 +14,6 @@ import {
   SearchHeaderContainer,
   SearchHeaderGroup,
 } from '::root/components/shared-components/dialog/animations/search-header-container';
-import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 import { ButtonCircle } from '@cherryjuice/components';
 import {
   modPickTimeRange,
@@ -23,15 +22,14 @@ import {
 } from '::sass-modules';
 import { Icons } from '@cherryjuice/icons';
 import { DocumentSearch } from '::app/components/editor/tool-bar/components/groups/nav-bar/components/search/document-search';
+import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
 
 export const SearchSetting: React.FC<{
   iconName: string;
-  shown: boolean;
-  show: () => void;
-  hide: () => void;
-}> = memo(function SearchSetting({ iconName, shown, show, hide, children }) {
+  testId: string;
+}> = memo(function SearchSetting({ iconName, children, testId }) {
   return (
-    <ContextMenuWrapperLegacy
+    <ContextMenuWrapper
       clickOutsideSelectorsWhitelist={[
         {
           selector: '.' + modSearchFilter.searchFilter,
@@ -41,21 +39,29 @@ export const SearchSetting: React.FC<{
         },
       ]}
       showAsModal={'mb'}
-      shown={shown}
-      hide={hide}
-      show={show}
+      hookProps={{
+        getActiveElement: () =>
+          document.querySelector(`[data-testid="${testId}"]`),
+        getIdOfActiveElement: () => testId,
+      }}
       customBody={
         <div className={modSearchDialog.searchDialog__searchSetting}>
           {children}
         </div>
       }
+      reference={'element'}
     >
-      <ButtonCircle
-        className={modSearchDialog.searchDialog__header__toggleFilters}
-        iconName={iconName}
-        active={shown}
-      />
-    </ContextMenuWrapperLegacy>
+      {({ ref, show, shown }) => (
+        <ButtonCircle
+          className={modSearchDialog.searchDialog__header__toggleFilters}
+          iconName={iconName}
+          active={shown}
+          testId={testId}
+          onClick={show}
+          _ref={ref}
+        />
+      )}
+    </ContextMenuWrapper>
   );
 });
 
@@ -88,10 +94,6 @@ type Props = {
 const mapState = (state: Store) => ({
   dockedDialog: state.root.dockedDialog,
   currentSortOptions: state.search.sortOptions,
-  showSortOptions: state.search.showSortOptions,
-  showFilters: state.search.showFilters,
-  showTuning: state.search.showTuning,
-  showTimeFilter: state.search.showTimeFilter,
   mb: state.root.isOnMb,
 });
 const mapDispatch = {};
@@ -107,10 +109,6 @@ const options: { optionName: SortNodesBy }[] = [
 
 const SearchFilters: React.FC<Props & PropsFromRedux> = ({
   currentSortOptions,
-  showSortOptions,
-  showFilters,
-  showTuning,
-  showTimeFilter,
   showDialog,
   mb,
 }) => {
@@ -126,9 +124,7 @@ const SearchFilters: React.FC<Props & PropsFromRedux> = ({
       <SearchHeaderGroup>
         <SearchSetting
           iconName={Icons.material.sort}
-          hide={ac.search.toggleSortOptions}
-          show={ac.search.toggleSortOptions}
-          shown={showSortOptions}
+          testId={'toggleSortOptions'}
         >
           <SortOptions
             options={options}
@@ -141,27 +137,18 @@ const SearchFilters: React.FC<Props & PropsFromRedux> = ({
 
         <SearchSetting
           iconName={Icons.material.filter}
-          hide={ac.search.toggleFilters}
-          show={ac.search.toggleFilters}
-          shown={showFilters}
+          testId={'toggleFilters'}
         >
           <SearchTarget />
           <SearchScope />
         </SearchSetting>
         <SearchSetting
           iconName={Icons.material.time}
-          hide={ac.search.toggleTimeFilter}
-          show={ac.search.toggleTimeFilter}
-          shown={showTimeFilter}
+          testId={'toggleTimeFilter'}
         >
           <TimeFilters />
         </SearchSetting>
-        <SearchSetting
-          iconName={Icons.material.tune}
-          hide={ac.search.toggleTuning}
-          show={ac.search.toggleTuning}
-          shown={showTuning}
-        >
+        <SearchSetting iconName={Icons.material.tune} testId={'toggleTuning'}>
           <SearchType />
           <SearchOptions />
         </SearchSetting>

@@ -29,7 +29,9 @@
   display: flex;
   align-items: center;
 }
-
+.context-menu--custom-body {
+  padding: 0;
+}
 .context-menu-wrapper {
   padding: 0;
   height: 100%;

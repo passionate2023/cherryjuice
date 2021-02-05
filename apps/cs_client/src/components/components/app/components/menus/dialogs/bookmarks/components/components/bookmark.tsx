@@ -46,6 +46,7 @@ const Bookmark: React.FC<Props> = ({
   return (
     <DialogListItem
       name={name}
+      id={'node' + node_id}
       active={active}
       selected={selected}
       onClick={() => ac.bookmarks.select(node_id)}

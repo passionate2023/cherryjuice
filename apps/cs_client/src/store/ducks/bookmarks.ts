@@ -17,7 +17,6 @@ const ac = {
   disableDeletionMode: _(ap('disable-deletion-mode')),
   setQuery: _(ap('set-query'), _ => (query: string) => _(query)),
   clearQuery: _(ap('clear-query')),
-  toggleSortOptions: _(ap('toggle-sort-options')),
   setSortBy: _(ap('set-sort-by'), _ => (options: SortNodesBy) => _(options)),
   toggleSortDirection: _(ap('toggle-sort-direction')),
 };
@@ -27,7 +26,6 @@ type State = {
   selectedIDs: number[];
   deletionMode: boolean;
   sortOptions: SearchSortOptions;
-  showSortOptions: boolean;
 };
 
 const initialState: State = {
@@ -38,7 +36,6 @@ const initialState: State = {
     sortBy: SortNodesBy.NodeName,
     sortDirection: SortDirection.Ascending,
   },
-  showSortOptions: false,
 };
 
 const reducer = createReducer(initialState, _ => [
@@ -90,10 +87,6 @@ const reducer = createReducer(initialState, _ => [
             ? SortDirection.Ascending
             : SortDirection.Descending,
       },
-    })),
-    _(ac.toggleSortOptions, state => ({
-      ...state,
-      showSortOptions: !state.showSortOptions,
     })),
   ],
 ]);

@@ -41,6 +41,7 @@ const mapState = (state: Store) => {
     documentId: state.document.documentId,
     copiedNode: state.documentCache.copiedNode,
     isOwnerOfCurrentDocument: state.auth.user?.id === document.userId,
+    tb: state.root.isOnTb,
   };
 };
 const mapDispatch = {};
@@ -55,6 +56,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
   documentId,
   copiedNode,
   isOwnerOfCurrentDocument,
+  tb,
 }) => {
   useEffect(onStart, []);
 
@@ -112,7 +114,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
               ref={ref}
               id="tree"
             >
-              <ToolBar />
+              {!tb && <ToolBar />}
               <TreeContext.Provider value={inlineInputProps}>
                 <Droppable
                   anchorId={'0'}
@@ -153,6 +155,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
                   )}
                 </Droppable>
               </TreeContext.Provider>
+              {tb && <ToolBar />}
             </div>
           )}
         </ContextMenuWrapper>

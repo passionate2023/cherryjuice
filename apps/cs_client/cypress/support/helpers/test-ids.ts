@@ -1,4 +1,5 @@
 const testIds = {
+  tree__threeDots: 'tree__threeDots',
   documentMeta__apply: 'documentMeta__apply',
   documentMeta__documentName: 'documentMeta__documentName',
   documentMeta__documentPrivacy: 'documentMeta__documentPrivacy',

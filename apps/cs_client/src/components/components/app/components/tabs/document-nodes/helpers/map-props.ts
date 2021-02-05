@@ -9,8 +9,8 @@ export const createNodePropsMapper = (
   nodes: NodesDict,
   localState: CachedDocumentState,
   selectedNode_id,
+  showHome?: boolean,
   bookmarks?: Set<number>,
-  showHome: boolean,
 ) => (node_id: number): NodeProps => {
   const node = nodes[node_id];
   return {

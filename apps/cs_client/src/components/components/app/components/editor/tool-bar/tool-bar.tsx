@@ -89,11 +89,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
             {isOnMd ? (
               <FormattingButtonsWithTransition show={showFormattingButtons} />
             ) : (
-              !hideDuringDocking && (
-                <div style={{ overflowX: 'auto' }}>
-                  <FormattingButtons />
-                </div>
-              )
+              !hideDuringDocking && <FormattingButtons />
             )}
           </Portal>
         </ErrorBoundary>
