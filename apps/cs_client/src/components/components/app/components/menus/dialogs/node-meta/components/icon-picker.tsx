@@ -29,7 +29,12 @@ const IconPicker: React.FC<Props> = ({
           ),
         getIdOfActiveElement: () => 'icon-picker',
       }}
-      reference={'element'}
+      positionPreferences={{
+        positionX: 'rl',
+        positionY: 'tt',
+        offsetX: 0,
+        offsetY: 0,
+      }}
       customBody={
         <IconsList
           {...{

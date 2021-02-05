@@ -4,18 +4,18 @@ import {
   ContextMenu,
   ContextMenuProps,
 } from '::root/components/shared-components/context-menu/context-menu';
-import { MutableRefObject, ReactNode, useEffect, useRef } from 'react';
+import { MutableRefObject, useEffect, useRef } from 'react';
 import { Portal } from '::root/components/app/components/editor/tool-bar/tool-bar';
 import {
   ChildContextMenuProps,
-  PositionReference,
+  PositionPreferences,
   useChildContextMenu,
 } from '::shared-components/context-menu/hooks/child-context-menu';
-
+type renderCustomBody = ({ hide }) => JSX.Element;
 type Props<T = HTMLDivElement> = {
   hookProps: ChildContextMenuProps;
-  customBody?: ReactNode;
-  reference?: PositionReference;
+  customBody?: JSX.Element | renderCustomBody;
+  positionPreferences?: PositionPreferences;
   children: (props: {
     show: () => string;
     hide: () => undefined;
@@ -29,15 +29,15 @@ const state = {
 };
 const ContextMenuWrapper: React.FC<Props> = ({
   customBody,
-  reference,
   level,
   children,
   hookProps,
+  positionPreferences,
   ...props
 }) => {
   const { position, show, hide, shown } = useChildContextMenu(
     hookProps,
-    reference,
+    positionPreferences,
   );
 
   const ref = useRef<HTMLDivElement>();
@@ -73,7 +73,9 @@ const ContextMenuWrapper: React.FC<Props> = ({
             context={id.current.context}
             level={level}
           >
-            {customBody}
+            {typeof customBody === 'function'
+              ? customBody({ hide })
+              : customBody}
           </ContextMenu>
         )}
       </Portal>

@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { ac, Store } from '::store/store';
+import { Store } from '::store/store';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { ToolbarButton, Tooltip } from '@cherryjuice/components';
 import { connect, ConnectedProps } from 'react-redux';
 import { DocumentDropdownMenu } from '::app/components/menus/modals/document-dropdown-menu/document-dropdown-menu';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
+import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
 
 const mapState = (state: Store) => ({
   isDocumentOwner: hasWriteAccessToDocument(state),
-  showDocumentDropdownMenu: state.dialogs.showDocumentDropdownMenu,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -20,25 +20,46 @@ type Props = {
 };
 
 const DocumentButton: React.FC<Props & PropsFromRedux> = ({
-  showDocumentDropdownMenu,
   isDocumentOwner,
   includeCurrentDocumentSection,
 }) => {
   return (
-    <ToolbarButton
-      dontMount={!isDocumentOwner}
-      onClick={ac.dialogs.showDocumentDropdownMenu}
-      active={showDocumentDropdownMenu}
-      testId={testIds.toolBar__navBar__documentButton}
+    <ContextMenuWrapper
+      customBody={({ hide }) => (
+        <DocumentDropdownMenu
+          key={'DocumentDropdownMenu'}
+          includeCurrentDocumentSection={includeCurrentDocumentSection}
+          hide={hide}
+        />
+      )}
+      hookProps={{
+        getIdOfActiveElement: () => 'DocumentDropdownMenu',
+        getActiveElement: () =>
+          document.querySelector(
+            `[data-testid="${testIds.toolBar__navBar__documentButton}"]`,
+          ),
+      }}
+      positionPreferences={{
+        positionX: 'rr',
+        positionY: 'bt',
+        offsetX: 0,
+        offsetY: 3,
+      }}
     >
-      <Tooltip label={'Document menu'}>
-        <Icon name={Icons.material.add} />
-      </Tooltip>
-      <DocumentDropdownMenu
-        key={'DocumentDropdownMenu'}
-        includeCurrentDocumentSection={includeCurrentDocumentSection}
-      />
-    </ToolbarButton>
+      {({ ref, show, shown }) => (
+        <ToolbarButton
+          dontMount={!isDocumentOwner}
+          active={shown}
+          onClick={show}
+          testId={testIds.toolBar__navBar__documentButton}
+          _ref={ref}
+        >
+          <Tooltip label={'Document menu'}>
+            <Icon name={Icons.material.add} />
+          </Tooltip>
+        </ToolbarButton>
+      )}
+    </ContextMenuWrapper>
   );
 };
 

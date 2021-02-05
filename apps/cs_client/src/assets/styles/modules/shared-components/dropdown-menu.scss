@@ -24,7 +24,6 @@
   }
 
   // position
-  position: absolute;
   top: 100%;
   z-index: $ZI-dropdown-menu;
   // style
@@ -39,10 +38,7 @@
 
   border: var(--border);
 }
-.dropdown-menu--show-from-bottom {
-  top: initial;
-  bottom: calc(100% + 3px);
-}
+
 .dropdown-menu__group {
 }
 

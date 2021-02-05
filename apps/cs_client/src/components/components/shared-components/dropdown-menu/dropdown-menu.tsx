@@ -13,16 +13,12 @@ import { Assertion } from '@cherryjuice/shared-helpers/build/hooks/click-outside
 type Props = {
   groups: DropdownMenuGroupProps[];
   hide: () => void;
-  xOffset?: number;
   assertions?: Assertion[];
-  showFromBottom?: boolean;
 };
 export const DropdownMenu: React.FC<Props> = ({
   assertions = [],
-  xOffset,
   hide,
   groups,
-  showFromBottom,
 }) => {
   const { clkOProps } = useClickOutsideModal({
     assertions,
@@ -30,12 +26,8 @@ export const DropdownMenu: React.FC<Props> = ({
   });
   return (
     <div
-      className={joinClassNames([
-        modDropdownMenu.dropdownMenu,
-        showFromBottom && modDropdownMenu.dropdownMenuShowFromBottom,
-      ])}
+      className={joinClassNames([modDropdownMenu.dropdownMenu])}
       {...clkOProps}
-      style={{ right: xOffset }}
     >
       {groups.map(group => (
         <DropdownMenuGroup {...group} key={group.id} hide={hide} />

@@ -38,14 +38,6 @@ const ac = {
     ),
   },
   ...{
-    showDocumentDropdownMenu: _(ap('show-document-dropdown-menu')),
-    hideDocumentDropdownMenu: _(ap('hide-document-dropdown-menu')),
-  },
-  ...{
-    showUserDropdownMenu: _(ap('show-user-dropdown-menu')),
-    hideUserDropdownMenu: _(ap('hide-user-dropdown-menu')),
-  },
-  ...{
     setAlert: _(ap('setAlert'), _ => (alert: TAlert) => {
       if (alert?.error && process.env.NODE_ENV === 'development')
         // eslint-disable-next-line no-console
@@ -119,8 +111,6 @@ type State = {
   showCodeboxDialog: boolean;
   showTableDialog: boolean;
   showBookmarks: boolean;
-  showDocumentDropdownMenu: boolean;
-  showUserDropdownMenu: boolean;
 };
 
 const initialState: State = {
@@ -141,8 +131,6 @@ const initialState: State = {
   showCodeboxDialog: false,
   showTableDialog: false,
   showBookmarks: false,
-  showDocumentDropdownMenu: false,
-  showUserDropdownMenu: false,
 };
 
 const reducer = createReducer(initialState, _ => [
@@ -168,22 +156,6 @@ const reducer = createReducer(initialState, _ => [
   _(ac.showReloadDocument, state => ({
     ...state,
     showReloadDocument: true,
-  })),
-  _(ac.showDocumentDropdownMenu, state => ({
-    ...state,
-    showDocumentDropdownMenu: true,
-  })),
-  _(ac.hideDocumentDropdownMenu, state => ({
-    ...state,
-    showDocumentDropdownMenu: false,
-  })),
-  _(ac.showUserDropdownMenu, state => ({
-    ...state,
-    showUserDropdownMenu: true,
-  })),
-  _(ac.hideUserDropdownMenu, state => ({
-    ...state,
-    showUserDropdownMenu: false,
   })),
   _(ac.hideReloadDocument, state => ({
     ...state,

@@ -49,7 +49,12 @@ export const SearchSetting: React.FC<{
           {children}
         </div>
       }
-      reference={'element'}
+      positionPreferences={{
+        positionX: 'rl',
+        positionY: 'tt',
+        offsetX: 0,
+        offsetY: 0,
+      }}
     >
       {({ ref, show, shown }) => (
         <ButtonCircle

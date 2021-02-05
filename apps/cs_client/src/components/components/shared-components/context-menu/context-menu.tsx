@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { modContextMenu } from '::sass-modules';
 import {
   useClickOutsideModal,
@@ -14,7 +14,17 @@ import {
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { Scrim } from '::root/components/shared-components/scrim/scrim';
-export type Position = [number, number];
+import { useCalculateElementPosition } from '::shared-components/context-menu/hooks/calculate-element-position/calculate-element-position';
+export type Position = {
+  anchorX: number;
+  anchorY: number;
+  anchorW?: number;
+  anchorH?: number;
+  offsetX?: number;
+  offsetY?: number;
+  positionX?: 'lr' | 'rl' | 'rr' | 'll';
+  positionY?: 'bt' | 'tb' | 'tt' | 'bb';
+};
 const mapState = (state: Store) => ({
   isOnMd: state.root.isOnTb,
   isOnMb: state.root.isOnMb,
@@ -37,7 +47,6 @@ export type ContextMenuProps = {
 const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
   children,
   hide,
-  offset = [0, 0],
   items,
   position,
   showAsModal,
@@ -63,23 +72,10 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
     dismiss: hide,
     focusableElementsSelector: [],
   });
-  const [inverseX, setInverseX] = useState(0);
-  const [inverseY, setInverseY] = useState(0);
-  useLayoutEffect(() => {
-    const boundingClientRect = contextMenuR.current.getBoundingClientRect();
-    const x =
-      window.innerWidth - boundingClientRect.x <
-      contextMenuR.current.clientWidth;
-    if (x) setInverseX(contextMenuR.current.clientWidth);
-    const y =
-      window.innerHeight - boundingClientRect.y <
-      contextMenuR.current.clientHeight;
-    if (y) setInverseY(contextMenuR.current.clientHeight);
-  }, []);
-  const offsetX = inverseX ? -offset[0] : offset[0];
-  const offsetY = inverseY ? -offset[1] : offset[1];
+
   const modal =
     (showAsModal === 'mb' && isOnMb) || (showAsModal === 'md' && isOnMd);
+  const { x, y } = useCalculateElementPosition(position, contextMenuR);
   return (
     <>
       {modal && <Scrim onClick={hide} isShownOnTopOfDialog={true} />}
@@ -95,8 +91,8 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
           modal
             ? undefined
             : {
-                left: Math.max(position[0] - inverseX + offsetX, 0),
-                top: Math.max(position[1] - inverseY + offsetY, 0),
+                left: Math.max(x, 0),
+                top: Math.max(y, 0),
               }
         }
         ref={contextMenuR}

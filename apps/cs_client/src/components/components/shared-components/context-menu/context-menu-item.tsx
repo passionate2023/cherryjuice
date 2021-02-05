@@ -82,7 +82,12 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
           return target.closest('.' + modContextMenu.contextMenu__item);
         },
       }}
-      reference={'element'}
+      positionPreferences={{
+        positionX: 'rl',
+        positionY: 'tt',
+        offsetX: 0,
+        offsetY: 0,
+      }}
       // triggers={{ click: true, hover: true }}
       level={level + 1}
     >

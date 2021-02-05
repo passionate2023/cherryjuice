@@ -88,7 +88,12 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
                   hideOnClick: false,
                 },
               ]}
-              reference={'element'}
+              positionPreferences={{
+                positionX: 'rl',
+                positionY: 'tt',
+                offsetX: 3,
+                offsetY: 0,
+              }}
             >
               {({ ref, show }) => (
                 <ButtonSquare

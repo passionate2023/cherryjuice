@@ -6,7 +6,24 @@ export type ChildContextMenuProps<Context = ContextMenuItemContext> = {
   getActiveElement?: (e: HTMLElement) => HTMLElement;
   onSelectElement?: (id: string, context: Context) => void;
 };
-export type PositionReference = 'element' | 'cursor';
+const initialState = {
+  offsetX: 0,
+  offsetY: 0,
+  anchorW: 0,
+  anchorH: 0,
+  anchorX: 0,
+  anchorY: 0,
+};
+export type PositionPreferences = Pick<
+  Position,
+  'positionX' | 'positionY' | 'offsetX' | 'offsetY'
+>;
+const cursorPositionPreferences: PositionPreferences = {
+  offsetY: 0,
+  offsetX: 0,
+  positionY: 'tt',
+  positionX: 'rl',
+};
 export const useChildContextMenu = <
   T = HTMLDivElement,
   Context = ContextMenuItemContext
@@ -16,9 +33,9 @@ export const useChildContextMenu = <
     getActiveElement = () => undefined,
     onSelectElement = () => undefined,
   }: ChildContextMenuProps<Context>,
-  reference: PositionReference = 'cursor',
+  positionPreferences?: PositionPreferences,
 ) => {
-  const [position, setPosition] = useState<Position>([0, 0]);
+  const [position, setPosition] = useState<Position>(initialState);
   const show = useCallback((e: MouseEvent<T>) => {
     const target = e.target as HTMLElement;
     const activeElement = getActiveElement(target as HTMLElement);
@@ -39,21 +56,34 @@ export const useChildContextMenu = <
       const boundingClientRect = (
         activeElement || target
       ).getBoundingClientRect();
-      setPosition(
-        reference === 'element'
-          ? [
-              boundingClientRect.x + boundingClientRect.width,
-              boundingClientRect.y,
-            ]
-          : [e.clientX, e.clientY],
-      );
+      let numbers: Position;
+      if (positionPreferences) {
+        numbers = {
+          anchorX: boundingClientRect.x,
+          anchorY: boundingClientRect.y,
+          anchorH: boundingClientRect.height,
+          anchorW: boundingClientRect.width,
+          offsetY: 0,
+          offsetX: 0,
+          ...positionPreferences,
+        };
+      } else {
+        numbers = {
+          anchorX: e.clientX,
+          anchorY: e.clientY,
+          anchorH: 0,
+          anchorW: 0,
+          ...cursorPositionPreferences,
+        };
+      }
+      setPosition(numbers);
 
       onSelectElement(id, context);
     }
     return { id, context };
   }, []);
-  const hide = () => setPosition([0, 0]);
-  const shown = position[0] > 0;
+  const hide = () => setPosition(initialState);
+  const shown = position.anchorX > 0;
 
   return {
     show,
