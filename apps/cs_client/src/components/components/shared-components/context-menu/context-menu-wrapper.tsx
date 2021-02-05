@@ -4,25 +4,31 @@ import {
   ContextMenu,
   ContextMenuProps,
 } from '::root/components/shared-components/context-menu/context-menu';
-import { MutableRefObject, useEffect, useRef } from 'react';
+import { useEffect, useRef, MouseEvent } from 'react';
 import { Portal } from '::root/components/app/components/editor/tool-bar/tool-bar';
 import {
   ChildContextMenuProps,
   PositionPreferences,
   useChildContextMenu,
 } from '::shared-components/context-menu/hooks/child-context-menu';
+import { CMItem } from '::shared-components/context-menu/context-menu-item';
 type renderCustomBody = ({ hide }) => JSX.Element;
-type Props<T = HTMLDivElement> = {
+type renderChildren = (props: {
+  show: (e: MouseEvent<HTMLDivElement>) => void;
+  hide: () => void;
+  shown: boolean;
+}) => JSX.Element;
+
+type Props = {
   hookProps: ChildContextMenuProps;
   customBody?: JSX.Element | renderCustomBody;
   positionPreferences?: PositionPreferences;
-  children: (props: {
-    show: () => string;
-    hide: () => undefined;
-    shown: boolean;
-    ref: MutableRefObject<T>;
-  }) => JSX.Element;
-} & Omit<ContextMenuProps, 'position' | 'id' | 'hide' | 'context'>;
+  children: renderChildren;
+  items: CMItem[];
+} & Pick<
+  ContextMenuProps,
+  'clickOutsideSelectorsWhitelist' | 'showAsModal' | 'level'
+>;
 
 const state = {
   hide: new Map<number, Set<() => undefined>>(),
@@ -33,14 +39,15 @@ const ContextMenuWrapper: React.FC<Props> = ({
   children,
   hookProps,
   positionPreferences,
-  ...props
+  items,
+  clickOutsideSelectorsWhitelist,
+  showAsModal,
 }) => {
   const { position, show, hide, shown } = useChildContextMenu(
     hookProps,
     positionPreferences,
   );
 
-  const ref = useRef<HTMLDivElement>();
   const id = useRef<{ id: string; context: Record<string, any> }>({
     id: undefined,
     context: undefined,
@@ -61,17 +68,18 @@ const ContextMenuWrapper: React.FC<Props> = ({
 
   return (
     <>
-      {children({ shown, show: showM, ref, hide })}
+      {children({ shown, show: showM, hide })}
       <Portal targetSelector={'.' + modApp.app}>
         {shown && (
-          // @ts-ignore
           <ContextMenu
-            {...props}
+            items={items}
             hide={hide}
+            level={level}
             position={position}
             id={id.current.id}
             context={id.current.context}
-            level={level}
+            clickOutsideSelectorsWhitelist={clickOutsideSelectorsWhitelist}
+            showAsModal={showAsModal}
           >
             {typeof customBody === 'function'
               ? customBody({ hide })

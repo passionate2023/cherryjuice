@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
-import { modContextMenu } from '::sass-modules';
+import mod from './context-menu-item.scss';
 import { ReactNode } from 'react';
 import { Icon } from '@cherryjuice/icons';
 import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
@@ -73,13 +73,11 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
       items={items}
       hookProps={{
         getIdOfActiveElement: target => {
-          const row: HTMLElement = target.closest(
-            '.' + modContextMenu.contextMenu__item,
-          );
+          const row: HTMLElement = target.closest('.' + mod.contextMenuItem);
           if (row) return row.dataset.cmiId;
         },
         getActiveElement: target => {
-          return target.closest('.' + modContextMenu.contextMenu__item);
+          return target.closest('.' + mod.contextMenuItem);
         },
       }}
       positionPreferences={{
@@ -88,30 +86,28 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
         offsetX: 0,
         offsetY: 0,
       }}
-      // triggers={{ click: true, hover: true }}
       level={level + 1}
     >
-      {({ ref, show }) => (
+      {({ show }) => (
         <div
           className={joinClassNames([
-            modContextMenu.contextMenu__item,
-            [modContextMenu.contextMenu__itemDisabled, isDisabled],
-            [modContextMenu.contextMenu__itemBottomSeparator, bottomSeparator],
+            mod.contextMenuItem,
+            [mod.contextMenuItemDisabled, isDisabled],
+            [mod.contextMenuItemBottomSeparator, bottomSeparator],
           ])}
           onClick={isDisabled ? undefined : items.length ? show : onClickM}
-          ref={ref}
           onMouseEnter={isDisabled ? undefined : show}
           data-cmi-id={id}
           {...(isDisabled && { 'data-disabled': isDisabled })}
         >
-          <span className={modContextMenu.contextMenu__item__icon}>
+          <span className={mod.contextMenuItem__icon}>
             {active ? <Icon name={'check'} size={14} /> : undefined}
           </span>
-          <span className={modContextMenu.contextMenu__item__text}>
+          <span className={mod.contextMenuItem__text}>
             {node || nameFactory ? nameFactory(id, context) : name}
           </span>
           {!!items.length && (
-            <span className={modContextMenu.contextMenu__item__subItemsArrow}>
+            <span className={mod.contextMenuItem__subItemsArrow}>
               <Icon name={'triangle-right'} />
             </span>
           )}

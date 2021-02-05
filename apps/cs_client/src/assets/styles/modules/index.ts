@@ -40,7 +40,6 @@ import modWidgets from './widgets/widgets.scss';
 import modChangesHistory from './widgets/changes-history.scss';
 import modTreeToolBar from './tree/tree-tool-bar.scss';
 import modSettings from '::sass-modules/settings/settings.scss';
-import modContextMenu from '::sass-modules/shared-components/context-menu.scss';
 import modToggleSwitch from '::sass-modules/shared-components/toggle-switch.scss';
 import modBookmarks from '::sass-modules/dialogs/bookmarks/bookmarks.scss';
 import modDropdownMenu from './shared-components/dropdown-menu.scss';
@@ -50,7 +49,6 @@ export {
   modBookmarks,
   modNodePath,
   modToggleSwitch,
-  modContextMenu,
   modChangesHistory,
   modSettings,
   modTreeToolBar,
