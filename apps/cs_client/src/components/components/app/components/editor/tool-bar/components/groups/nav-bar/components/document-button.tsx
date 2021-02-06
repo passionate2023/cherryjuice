@@ -45,14 +45,14 @@ const DocumentButton: React.FC<Props & PropsFromRedux> = ({
         offsetX: 0,
         offsetY: 3,
       }}
+      style={{ paddingTop: 0, paddingBottom: 0 }}
     >
-      {({ ref, show, shown }) => (
+      {({ show, shown }) => (
         <ToolbarButton
           dontMount={!isDocumentOwner}
           active={shown}
           onClick={show}
           testId={testIds.toolBar__navBar__documentButton}
-          _ref={ref}
         >
           <Tooltip label={'Document menu'}>
             <Icon name={Icons.material.add} />

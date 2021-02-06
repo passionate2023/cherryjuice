@@ -38,6 +38,7 @@ const UserButton: React.FC<Props & PropsFromRedux> = ({ user }) => {
         offsetX: 3,
         offsetY: 3,
       }}
+      style={{ paddingTop: 0, paddingBottom: 0 }}
     >
       {({ ref, show }) => (
         <ToolbarButton

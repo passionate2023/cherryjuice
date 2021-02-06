@@ -95,11 +95,10 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
                 offsetY: 0,
               }}
             >
-              {({ ref, show }) => (
+              {({ show }) => (
                 <ButtonSquare
                   iconName={Icons.material['three-dots-vertical']}
                   className={modTreeToolBar.button}
-                  _ref={ref}
                   onClick={show}
                   testId={testIds.tree__threeDots}
                 />

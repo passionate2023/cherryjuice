@@ -43,14 +43,14 @@ const IconPicker: React.FC<Props> = ({
           }}
         />
       }
+      style={{ paddingTop: 0, paddingBottom: 0 }}
     >
-      {({ ref, show }) => {
+      {({ show }) => {
         return (
           <div
             className={modIconPicker.iconPicker}
             data-testid={testIds.nodeMeta__customIcon}
             onClick={disabled ? undefined : show}
-            ref={ref}
           >
             <Icon
               name={Icons.cherrytree.custom_icons[value]}

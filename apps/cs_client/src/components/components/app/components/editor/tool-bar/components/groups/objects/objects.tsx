@@ -6,14 +6,12 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { Tooltip } from '@cherryjuice/components';
-import { DropDownButton } from '@cherryjuice/components';
-import { onDropdownToggle } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/components/buttons';
+import { DropDownButton } from '::shared-components/drop-down-button/drop-down-button';
 
 const mapState = (state: Store) => {
   return {
     selectedNode_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
     documentId: state.document.documentId,
-    md: state.root.isOnTb,
   };
 };
 const mapDispatch = {};
@@ -25,15 +23,12 @@ type Props = Record<string, never>;
 const Buttons: React.FC<Props & PropsFromRedux> = ({
   selectedNode_id,
   documentId,
-  md,
 }) => {
   const disabled = !documentId || !selectedNode_id;
   return (
     <>
       <DropDownButton
         collapseOnInsideClick={true}
-        md={md}
-        onToggle={onDropdownToggle}
         buttons={[
           {
             element: (

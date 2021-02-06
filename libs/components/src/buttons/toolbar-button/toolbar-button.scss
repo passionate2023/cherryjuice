@@ -12,10 +12,12 @@
   align-items: center;
   justify-content: center;
   width: $tool-bar-height;
+  min-width: $tool-bar-height;
   height: $tool-bar-height;
   @include respond-to($md-up) {
     height: $tool-bar-height-md;
     width: $tool-bar-height-md;
+    min-width: $tool-bar-height-md;
   }
   &:not([data-disabled='true']) {
     cursor: pointer;

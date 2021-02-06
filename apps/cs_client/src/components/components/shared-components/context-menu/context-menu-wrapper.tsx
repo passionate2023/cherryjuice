@@ -24,10 +24,10 @@ type Props = {
   customBody?: JSX.Element | renderCustomBody;
   positionPreferences?: PositionPreferences;
   children: renderChildren;
-  items: CMItem[];
+  items?: CMItem[];
 } & Pick<
   ContextMenuProps,
-  'clickOutsideSelectorsWhitelist' | 'showAsModal' | 'level'
+  'clickOutsideSelectorsWhitelist' | 'showAsModal' | 'level' | 'style'
 >;
 
 const state = {
@@ -42,6 +42,7 @@ const ContextMenuWrapper: React.FC<Props> = ({
   items,
   clickOutsideSelectorsWhitelist,
   showAsModal,
+  style,
 }) => {
   const { position, show, hide, shown } = useChildContextMenu(
     hookProps,
@@ -80,6 +81,7 @@ const ContextMenuWrapper: React.FC<Props> = ({
             context={id.current.context}
             clickOutsideSelectorsWhitelist={clickOutsideSelectorsWhitelist}
             showAsModal={showAsModal}
+            style={style}
           >
             {typeof customBody === 'function'
               ? customBody({ hide })

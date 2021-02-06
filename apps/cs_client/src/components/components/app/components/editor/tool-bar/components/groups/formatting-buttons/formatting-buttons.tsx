@@ -6,6 +6,7 @@ import { UndoRedo } from '::app/components/editor/tool-bar/components/groups/mai
 import { Separator } from '::app/components/editor/tool-bar/components/separator';
 import mod from './formatting-buttons.scss';
 import { Objects } from '::app/components/editor/tool-bar/components/groups/objects/objects';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 export type FormattingButtonsProps = Record<string, never>;
 
 const FormattingButtons: React.FC<
@@ -23,18 +24,25 @@ const FormattingButtons: React.FC<
     : undefined;
   return (
     <animated.div className={mod.formattingButtonsContainer} style={style}>
-      <div className={mod.formattingButtons + ' ' + modToolbar.toolBar__group}>
+      <div
+        className={joinClassNames([
+          mod.formattingButtons,
+          modToolbar.toolBar__group,
+        ])}
+      >
         <UndoRedo />
         <Separator />
       </div>
-      <div className={mod.dropDownContainer}>
-        <div
-          className={mod.formattingButtons + ' ' + modToolbar.toolBar__group}
-        >
-          <Buttons />
-          <Separator />
-          <Objects />
-        </div>
+      <div
+        className={joinClassNames([
+          mod.formattingButtons,
+          modToolbar.toolBar__group,
+          mod.formattingButtonsScrollable,
+        ])}
+      >
+        <Buttons />
+        <Separator />
+        <Objects />
       </div>
     </animated.div>
   );

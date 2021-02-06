@@ -54,9 +54,11 @@
 .button {
   height: 100%;
   width: 30px;
+  min-width: 30px;
 
   @include respond-to($md-down) {
     width: 40px;
+    min-width: 40px;
   }
   background-color: var(--background-100);
   border-radius: 0;

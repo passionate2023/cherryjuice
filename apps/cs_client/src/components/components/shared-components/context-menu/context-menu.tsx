@@ -42,6 +42,11 @@ export type ContextMenuProps = {
   showAsModal?: 'md' | 'mb';
   clickOutsideSelectorsWhitelist?: any[];
   children?: ReactNode;
+  style?: {
+    borderRadius?: number;
+    paddingTop?: number;
+    paddingBottom?: number;
+  };
 };
 
 const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
@@ -56,6 +61,7 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
   isOnMd,
   isOnMb,
   clickOutsideSelectorsWhitelist = [],
+  style = {},
 }) => {
   const ref = useRef<HTMLDivElement>();
   const { clkOProps } = useClickOutsideModal({
@@ -84,14 +90,14 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
         className={joinClassNames([
           mod.contextMenu,
           [mod.contextMenuModal, modal],
-          [mod.contextMenuCustomBody, children],
         ])}
         style={
           modal
-            ? undefined
+            ? { ...style }
             : {
                 left: Math.max(x, 0),
                 top: Math.max(y, 0),
+                ...style,
               }
         }
         ref={ref}

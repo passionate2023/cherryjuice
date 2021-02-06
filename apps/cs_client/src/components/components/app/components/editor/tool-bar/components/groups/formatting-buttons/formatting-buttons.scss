@@ -2,12 +2,10 @@
 @import '~@cherryjuice/shared-styles/build/vars/states';
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 .formatting-buttons {
-  pointer-events: all;
   box-sizing: border-box;
   // size
   @include respond-to($md-down) {
     height: $tool-bar-height;
-    min-width: max-content;
   }
   // children
   user-select: none;
@@ -22,9 +20,11 @@
       padding-right: 25px;
     }
   }
-  z-index: 1;
 }
-
+.formatting-buttons--scrollable {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
 .formatting-buttons-container {
   // position
   @include respond-to($md-down) {
@@ -35,23 +35,5 @@
   }
   // content
   display: flex;
-}
-
-.drop-down-container {
-  box-sizing: border-box;
-  pointer-events: none;
-  @include respond-to($md-down) {
-    pointer-events: auto;
-  }
-  z-index: 1;
-  align-items: flex-start;
-  margin-bottom: calc(-200px + #{$tool-bar-height-md});
-  overflow-x: auto;
-  overflow-y: hidden;
-  height: 200px;
-  @include respond-to($md-down) {
-    display: flex;
-    align-items: flex-end;
-    margin-top: calc(-200px + #{$tool-bar-height});
-  }
+  overflow: hidden;
 }

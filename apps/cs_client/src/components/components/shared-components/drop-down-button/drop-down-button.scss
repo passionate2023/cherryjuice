@@ -2,7 +2,6 @@
 
 .drop-down-button {
   padding: 0;
-  position: relative;
 }
 
 .head {
@@ -31,17 +30,15 @@
 }
 
 .list {
-  width: 100%;
-  position: absolute;
+  width: 50px;
   display: flex;
   flex-direction: column;
   background-color: var(--surface);
-  align-items: center;
+  align-items: flex-start;
   box-shadow: $box-shadow2;
   z-index: 1;
 }
 .list__item {
-  width: 100%;
   &:hover {
     background-color: var(--surface-010);
   }

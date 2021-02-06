@@ -11,14 +11,8 @@ import {
 } from '@cherryjuice/editor';
 import { ToolbarColorInput } from '@cherryjuice/components';
 import { FormattingButton } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/components/components/formatting-button';
-import { DropDownButton } from '@cherryjuice/components';
-import mod from '::app/components/editor/tool-bar/components/groups/formatting-buttons/formatting-buttons.scss';
-export const onDropdownToggle = shown => {
-  const container = document.querySelector(
-    '.' + mod.formattingButtonsContainer,
-  ) as HTMLDivElement;
-  if (container) container.style.zIndex = shown ? 2 : 0;
-};
+import { DropDownButton } from '::shared-components/drop-down-button/drop-down-button';
+
 const mapState = (state: Store) => {
   return {
     selectedNode_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
@@ -35,7 +29,6 @@ const Buttons: React.FC<PropsFromRedux> = ({
   selectedNode_id,
   documentId,
   formattingHotKeys,
-  md,
 }) => {
   const disabled = !documentId || !selectedNode_id;
 
@@ -76,8 +69,6 @@ const Buttons: React.FC<PropsFromRedux> = ({
             ),
             key: props.name,
           }))}
-          md={md}
-          onToggle={onDropdownToggle}
         />
       }
       {categories.secondary.map(([, props]) => (
@@ -95,8 +86,6 @@ const Buttons: React.FC<PropsFromRedux> = ({
             ),
             key: props.name,
           }))}
-          md={md}
-          onToggle={onDropdownToggle}
         />
       }
       {categories.colors.map(([hk, props]) => (
