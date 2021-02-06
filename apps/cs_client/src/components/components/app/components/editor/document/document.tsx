@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Fragment } from 'react';
+import { Fragment, Suspense } from 'react';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { Tree } from './components/tree/tree';
 import { Route } from 'react-router-dom';
@@ -8,7 +8,10 @@ import { Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { NodePath } from '::root/components/app/components/editor/document/components/node-path/node-path';
-
+import { Void } from '::shared-components/react/void';
+const ToolBar = React.lazy(() =>
+  import('::root/components/app/components/editor/tool-bar/tool-bar'),
+);
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
   return {
@@ -36,6 +39,11 @@ const Document: React.FC<Props & PropsFromRedux> = ({
 }) => {
   return (
     <>
+      <ErrorBoundary>
+        <Suspense fallback={<Void />}>
+          <ToolBar />
+        </Suspense>
+      </ErrorBoundary>
       {nodes && (
         <Fragment>
           {(showNodePath || !isOnMd) && Boolean(selectedNode_id) && (

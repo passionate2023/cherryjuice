@@ -2,7 +2,6 @@ import { Route } from 'react-router-dom';
 import { Suspense } from 'react';
 import * as React from 'react';
 import { Void } from '::root/components/shared-components/react/void';
-import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
@@ -13,9 +12,6 @@ const Document = React.lazy(() =>
 );
 const InfoBar = React.lazy(() =>
   import('::root/components/app/components/editor/info-bar/info-bar'),
-);
-const ToolBar = React.lazy(() =>
-  import('::root/components/app/components/editor/tool-bar/tool-bar'),
 );
 
 const mapState = (state: Store) => ({
@@ -40,11 +36,6 @@ const Editor: React.FC<PropsFromRedux> = ({
   return (
     <div className={mod.editor}>
       <LinearProgress loading={fetchDocumentInProgress || saveInProgress} />
-      <ErrorBoundary>
-        <Suspense fallback={<Void />}>
-          <ToolBar />
-        </Suspense>
-      </ErrorBoundary>
       {document?.nodes && document.nodes[0] && (
         <>
           {!documentId && location.pathname === '/' ? (
