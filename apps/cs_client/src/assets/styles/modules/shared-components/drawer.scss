@@ -1,5 +1,6 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
 .drawer {
   height: 100%;
   @include respond-to('md') {
@@ -67,17 +68,16 @@ $navigation-width: 200px;
   margin-bottom: 5px;
 
   color: var(--on-background);
-  font-family: 'Roboto Light', sans-serif;
   transition: background-color 0.3s ease;
   cursor: pointer;
   &:hover {
-    background-color: var(--primary-100);
+    background-color: var(--primary-100-50);
   }
-  background-color: var(--primary-100-50);
+  @include type-c();
+  text-transform: capitalize;
 }
 .drawer__navigation__element--active {
-  background-color: var(--primary-050-20);
-  color: var(--primary-050);
+  background-color: var(--primary-100);
 }
 .drawer__navigation__scrim {
   @include respond-to('md') {

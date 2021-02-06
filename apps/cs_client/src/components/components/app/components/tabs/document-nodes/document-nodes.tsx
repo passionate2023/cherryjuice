@@ -86,16 +86,17 @@ const DocumentNodes: React.FC<Props & PropsFromRedux> = ({
     new Set(bookmarks),
     showHome,
   );
+  const indexOfSelectedTab = showHome ? -1 : visible.indexOf(selectedNode_id);
   return (
     <div className={modTabs.tabsContainer}>
       <ContextMenuWrapper items={tabContextMenuOptions} hookProps={hookProps}>
-        {({ ref, show }) => (
+        {({ show }) => (
           <Tabs
             documentId={documentId}
             nodes={visible.map(mapNodeProps)}
-            ref={ref}
             isOnMd={isOnMd}
             onContextMenu={show}
+            indexOfSelectedTab={indexOfSelectedTab}
           />
         )}
       </ContextMenuWrapper>

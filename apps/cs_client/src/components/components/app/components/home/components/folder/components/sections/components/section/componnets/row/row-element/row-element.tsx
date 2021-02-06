@@ -23,13 +23,7 @@ export const RowElement: React.FC<RowElementsProps & { rowId?: string }> = ({
   rowId,
 }) => {
   const inlineInputProps = useContext(FolderContext);
-  const onDoubleClick = rowId
-    ? e => {
-        e.stopPropagation();
-        e.preventDefault();
-        inlineInputProps.enableInput(rowId)();
-      }
-    : undefined;
+
   const spanRef = useRef<HTMLSpanElement>();
   const spanWidthRef = useRef(0);
   if (spanRef.current) spanWidthRef.current = spanRef.current.clientWidth;
@@ -47,14 +41,11 @@ export const RowElement: React.FC<RowElementsProps & { rowId?: string }> = ({
           initialValue={text}
           checkValidity={inlineInputProps.checkValidity}
           onAcceptInput={inlineInputProps.disableInput(rowId, text)}
-          autoFocus={true}
           className={mod.rowElement__input}
           width={spanWidthRef.current}
         />
       ) : (
-        <span onDoubleClick={onDoubleClick} ref={spanRef}>
-          {text}
-        </span>
+        <span ref={spanRef}>{text}</span>
       )}
       {icon && <Icon name={icon} size={16} />}
     </span>

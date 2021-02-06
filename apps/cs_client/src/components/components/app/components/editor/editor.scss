@@ -1,6 +1,7 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 .editor {
+  position: relative;
   overflow: hidden;
   grid-area: editor;
   display: grid;

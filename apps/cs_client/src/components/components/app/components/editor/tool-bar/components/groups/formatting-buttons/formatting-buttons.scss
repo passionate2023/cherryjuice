@@ -14,18 +14,14 @@
     justify-content: start;
     align-items: center;
   }
-
-  &:last-child {
-    @include respond-to($md-down) {
-      padding-right: 25px;
-    }
-  }
 }
 .formatting-buttons--scrollable {
   overflow-x: auto;
   overflow-y: hidden;
+  flex: auto;
 }
 .formatting-buttons-container {
+  flex: auto;
   // position
   @include respond-to($md-down) {
     grid-area: formatting-bar;

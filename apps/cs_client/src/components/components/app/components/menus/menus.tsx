@@ -27,11 +27,6 @@ const ImportDocuments = React.lazy(() =>
 const Settings = React.lazy(() =>
   import('::root/components/app/components/menus/dialogs/settings/settings'),
 );
-const DocumentsList = React.lazy(() =>
-  import(
-    '::root/components/app/components/menus/dialogs/documents-list/documents-list-dialog'
-  ),
-);
 const NodeMeta = React.lazy(() =>
   import('::root/components/app/components/menus/dialogs/node-meta/node-meta'),
 );
@@ -53,7 +48,6 @@ const DeleteDocument = React.lazy(() =>
 
 const components = [
   <UserPopup key={'UserPopup'} />,
-  <DocumentsList key={'DocumentsList'} />,
   <Bookmarks key={'Bookmarks'} />,
   <Settings key={'Settings'} />,
   <SearchDialog key={'SearchDialog'} />,

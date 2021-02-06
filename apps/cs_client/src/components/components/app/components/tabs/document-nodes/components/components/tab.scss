@@ -16,7 +16,7 @@
   // style
   background-color: var(--surface-040);
   cursor: pointer;
-  transition: filter 200ms linear;
+  transition: all 200ms linear;
   &:hover {
     background-color: var(--surface-050);
   }

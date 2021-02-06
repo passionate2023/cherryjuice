@@ -1,10 +1,10 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 
 .hot-key {
   min-height: 40px;
   flex-wrap: wrap;
-  background-color: var(--background-100);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -46,6 +46,7 @@
   }
   color: var(--on-surface);
   width: 200px;
+  @include type-c();
 }
 
 .hot-key__keys {

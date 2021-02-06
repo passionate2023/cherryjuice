@@ -25,12 +25,6 @@ export const useGroups = ({
           header: {},
           body: [
             {
-              text: 'documents',
-              onClick: ac.dialogs.showDocumentList,
-              testId: testIds.toolBar__navBar__showDocumentList,
-              // dontShow: !isLoggedIn,
-            },
-            {
               text: 'bookmarks',
               onClick: ac.dialogs.showBookmarksDialog,
               disabled: !documentId,

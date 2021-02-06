@@ -1,5 +1,6 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 .drop-down-button {
   padding: 0;
 }
@@ -30,7 +31,10 @@
 }
 
 .list {
-  width: 50px;
+  width: 44px;
+  @include respond-to($md-down) {
+    width: 50px;
+  }
   display: flex;
   flex-direction: column;
   background-color: var(--surface);

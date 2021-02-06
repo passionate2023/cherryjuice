@@ -2,7 +2,6 @@ import * as React from 'react';
 import { modToolbar } from '::sass-modules';
 import { ToolbarButton } from '@cherryjuice/components';
 import { Icon, Icons } from '@cherryjuice/icons';
-import { Separator } from '::root/components/app/components/editor/tool-bar/components/separator';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
@@ -21,20 +20,16 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-
-const MobileButtons: React.FC<Props & PropsFromRedux> = ({
+const MobileButtons: React.FC<PropsFromRedux> = ({
   showFormattingButtons,
   showInfoBar,
   documentId,
   isDocumentOwner,
-  isOnMb,
 }) => {
   const noDocumentIsSelected = !documentId;
   return (
     <>
       <div style={{ marginLeft: 'auto' }} />
-      {isDocumentOwner && isOnMb && <Separator />}
       <div
         className={[
           modToolbar.toolBar__group,

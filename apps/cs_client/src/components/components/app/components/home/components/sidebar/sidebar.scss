@@ -9,6 +9,7 @@
 
   @include respond-to($md-down) {
     border-top: var(--border);
+    max-width: 50vw;
   }
   border-right: var(--border);
 }

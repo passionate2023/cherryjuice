@@ -68,12 +68,11 @@
 }
 
 .tool-bar__separator {
-  margin-left: -1px;
-  margin-right: -1px;
+  margin-right: -0.5px;
   width: 1px;
   background-color: var(--on-surface);
   height: 45%;
-  opacity: 0.6;
+  opacity: 0.3;
   z-index: 1;
 }
 .search__search-button {

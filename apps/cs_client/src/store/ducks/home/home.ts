@@ -108,7 +108,7 @@ const initialState: State = {
   sortDirection: SortDirection.Ascending,
   query: '',
   show: false,
-  showSidebar: true,
+  showSidebar: false,
   folders: {},
   asyncOperations: {
     fetchFolders: 'idle',

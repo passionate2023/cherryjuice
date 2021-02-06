@@ -48,3 +48,9 @@
   border-radius: 0;
   border-left: 1px solid var(--surface-010);
 }
+
+.tab-separator {
+  height: 80%;
+  width: 1px;
+  background-color: var(--on-surface);
+}

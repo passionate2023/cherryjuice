@@ -1,5 +1,6 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
 
 .user-profile__group {
   display: flex;
@@ -12,6 +13,8 @@
   padding: 10px;
   padding-bottom: 15px;
   min-width: 100px;
+  text-transform: capitalize;
+  @include type-c();
 }
 .userProfile__group__elements {
   display: flex;

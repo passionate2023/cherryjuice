@@ -22,7 +22,9 @@ const Home = React.lazy(() =>
 
 type Props = Record<string, never>;
 
-const mapState = (state: Store) => ({ isAuthenticated: !!state.auth.user?.id });
+const mapState = (state: Store) => ({
+  isAuthenticated: !!state.auth.user?.id,
+});
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;

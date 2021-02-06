@@ -7,7 +7,7 @@ import { ContextMenuWrapper } from '::shared-components/context-menu/context-men
 
 export type CMItem = Omit<
   ContextMenuItemProps,
-  'hide' | 'activeItem' | 'setActiveItem' | 'id' | 'context'
+  'hide' | 'activeItem' | 'setActiveItem' | 'id' | 'context' | 'level'
 >;
 
 type IsDisabled = (id: string) => boolean;

@@ -107,13 +107,8 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
     >
       <ErrorBoundary>
         <ContextMenuWrapper hookProps={hookProps} items={contextMenuItems}>
-          {({ ref, show }) => (
-            <div
-              className={modTree.tree}
-              onContextMenu={show}
-              ref={ref}
-              id="tree"
-            >
+          {({ show }) => (
+            <div className={modTree.tree} onContextMenu={show} id="tree">
               {!tb && <ToolBar />}
               <TreeContext.Provider value={inlineInputProps}>
                 <Droppable
