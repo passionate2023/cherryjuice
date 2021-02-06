@@ -114,11 +114,18 @@ const localStorageReducers = {
     },
     cssVariablesReducer,
   ),
+  document: persistReducer(
+    {
+      ...localStorageReducerConfig,
+      key: 'document',
+      whitelist: ['documentId'],
+    },
+    documentReducer,
+  ),
 };
 
 const nonPersistedReducers = {
   bookmarks: bookmarksReducer,
-  document: documentReducer,
   dialogs: dialogsReducer,
   node: nodeReducer,
   documentsList: documentsListReducer,

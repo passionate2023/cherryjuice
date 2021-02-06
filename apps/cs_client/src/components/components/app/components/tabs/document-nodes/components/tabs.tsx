@@ -25,15 +25,10 @@ const Tabs: React.FC<Props> = ({
         const showSeparator =
           i > 0 && indexOfSelectedTab !== i && indexOfSelectedTab !== i - 1;
         return (
-          <>
-            {showSeparator && <Separator key={props.node_id} />}
-            <Tab
-              documentId={documentId}
-              {...props}
-              key={props.node_id}
-              isOnMd={isOnMd}
-            />
-          </>
+          <React.Fragment key={props.node_id}>
+            {showSeparator && <Separator />}
+            <Tab documentId={documentId} {...props} isOnMd={isOnMd} />
+          </React.Fragment>
         );
       })}
     </div>
