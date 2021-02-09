@@ -15,6 +15,7 @@ export type RowProps = {
   state?: {
     opened?: boolean;
     active?: boolean;
+    draggable?: boolean;
   };
 };
 
@@ -45,7 +46,7 @@ export const Row: React.FC<RowProps> = ({
           data-row-id={id}
           data-cmi-context={JSON.stringify({ pinned })}
           ref={ref}
-          {...provided}
+          {...(state.draggable && provided)}
         >
           <RowElement
             {...head}

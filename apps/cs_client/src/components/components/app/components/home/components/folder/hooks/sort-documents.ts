@@ -32,6 +32,7 @@ type Props = {
   activeDocumentId: string;
   draftsFolderId;
   folders: FoldersDict;
+  draggable: boolean;
 };
 
 type SortedDocuments = Record<string, { rows: RowProps[]; pinned: RowProps[] }>;
@@ -45,6 +46,7 @@ export const useSortDocuments = ({
   activeDocumentId,
   draftsFolderId,
   folders,
+  draggable,
 }: Props) => {
   return useMemo<SortedDocuments>(() => {
     let sortedDocuments: CachedDocument[] = mapSortDocumentBy[sortBy](
@@ -79,6 +81,7 @@ export const useSortDocuments = ({
           state: {
             opened: openedDocumentId === document.id,
             active: activeDocumentId === document.id,
+            draggable,
           },
         };
 
@@ -96,5 +99,6 @@ export const useSortDocuments = ({
     openedDocumentId,
     activeDocumentId,
     folders,
+    draggable,
   ]);
 };

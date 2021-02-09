@@ -34,13 +34,14 @@ const mapState = (state: Store) => ({
   folders: state.home.folders,
   isOnMd: state.root.isOnTb,
   loading: state.documentsList.fetchDocuments === 'in-progress',
+  showSidebar: state.home.showSidebar,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export type FolderProps = Record<string, never>;
-const Folder: React.FC<FolderProps & PropsFromRedux> = ({
+const Folder: React.FC<PropsFromRedux> = ({
   documents,
   folder: currentFolder,
   draftsFolderId,
@@ -54,6 +55,7 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
   isOnMd,
   loading,
   isOwnerOfActiveDocument,
+  showSidebar,
 }) => {
   const sorted = useSortDocuments({
     documents,
@@ -64,6 +66,7 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
     query,
     draftsFolderId,
     folders,
+    draggable: (isOnMd && showSidebar) || !isOnMd,
   });
   const inlineInputProps = useInlineInputProvider({
     disable: !isOwnerOfActiveDocument,
