@@ -10,12 +10,13 @@
 
 .tabs-container {
   display: flex;
-
   flex: 1;
   overflow: hidden;
+  max-height: var(--tabs);
   height: var(--tabs);
   align-items: center;
   justify-content: flex-start;
+  background-color: var(--surface-045);
 }
 
 .tabs-list {

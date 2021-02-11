@@ -56,7 +56,7 @@ const initialState: State = {
   selection: undefined,
   selectedCodebox: undefined,
   selectedTable: undefined,
-  showNodePath: true,
+  showNodePath: false,
 };
 const reducer = createReducer(initialState, _ => [
   _(rac.resetState, () => ({

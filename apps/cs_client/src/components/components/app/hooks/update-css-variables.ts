@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
-import { formattingBarUnmountAnimationDelay } from '::app/components/editor/tool-bar/components/groups/formatting-buttons/formatting-buttons-with-transition';
+import { formattingBarUnmountAnimationDelay } from '::app/components/editor/editor-toolbar/components/animated-editor-toolbar/animated-editor-toolbar';
 import { filter, take, tap } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { modDialog } from '::sass-modules';
@@ -19,11 +19,9 @@ export const useUpdateCssVariables = (
   const isOnMd = useSelector((state: Store) => state.root.isOnTb);
 
   const showNodePath = useSelector((state: Store) => state.editor.showNodePath);
+  const barHeight = isOnMd ? 40 : 34;
   useEffect(() => {
-    ac.cssVariables.set(
-      CssVariables.nodePath,
-      showNodePath ? (isOnMd ? 40 : 34) : 0,
-    );
+    ac.cssVariables.set(CssVariables.nodePath, showNodePath ? barHeight : 0);
   }, [showNodePath, isOnMd]);
 
   const dockedDialog = useSelector((state: Store) => state.root.dockedDialog);
@@ -46,16 +44,17 @@ export const useUpdateCssVariables = (
     );
   }, [showTree, previousTreeWidth]);
 
+  const showToolbar = isDocumentOwner && (!isOnMd || showFormattingButtons);
   useEffect(() => {
-    if (isDocumentOwner && showFormattingButtons) {
-      cssVariables.setFormattingBar(40);
+    if (showToolbar) {
+      cssVariables.setFormattingBar(barHeight);
     } else {
       (async () => {
         await formattingBarUnmountAnimationDelay();
         cssVariables.setFormattingBar(0);
       })();
     }
-  }, [showFormattingButtons, isDocumentOwner]);
+  }, [showToolbar, barHeight]);
 
   useEffect(() => {
     if (showRecentNodes) {

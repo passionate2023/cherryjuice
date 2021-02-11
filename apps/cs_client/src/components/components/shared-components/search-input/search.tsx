@@ -7,10 +7,12 @@ import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { SearchContext } from '::shared-components/search-input/machine/search-machine';
 import { useSearchMachine } from '::shared-components/search-input/hooks/search-machine';
 import { useEffect, useRef } from 'react';
+import { IconName } from '@cherryjuice/icons';
 
 const cssVariables = {
   height: '--search-element-height',
   width: '--search-element-width',
+  backgroundColor: '--search-element-bc',
 };
 type EmptyFunction = () => void;
 export type SearchProps = {
@@ -26,6 +28,8 @@ export type SearchProps = {
   style?: {
     height?: number;
     width?: number | string;
+    backgroundColor?: string;
+    icon?: IconName;
   };
 };
 
@@ -95,7 +99,7 @@ const Search: React.FC<SearchProps> = ({
               ? performSearch
               : toggleInputVisibility
           }
-          icon={'search'}
+          icon={style.icon || 'search'}
         />
       )}
     </div>

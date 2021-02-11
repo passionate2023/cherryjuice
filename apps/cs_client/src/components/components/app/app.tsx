@@ -6,7 +6,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { Empty } from '::app/components/empty/empty';
 
-import { Tabs } from '::app/components/tabs/tabs';
+import { Toolbar } from '::app/components/toolbar/toolbar';
 import { Store } from '::store/store';
 import { Route } from 'react-router-dom';
 
@@ -20,8 +20,6 @@ const Home = React.lazy(() =>
   import('::root/components/app/components/home/home'),
 );
 
-type Props = Record<string, never>;
-
 const mapState = (state: Store) => ({
   isAuthenticated: !!state.auth.user?.id,
 });
@@ -29,7 +27,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const App: React.FC<Props & PropsFromRedux> = ({ isAuthenticated }) => {
+const App: React.FC<PropsFromRedux> = ({ isAuthenticated }) => {
   // useRefreshToken({ token });
   return (
     <div
@@ -38,7 +36,7 @@ const App: React.FC<Props & PropsFromRedux> = ({ isAuthenticated }) => {
         // [modApp.appDialogDocked, dockedDialog],
       ])}
     >
-      <Tabs />
+      <Toolbar />
       <Route
         path={`/documents/:folder?/`}
         render={() => {

@@ -7,7 +7,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useRowContextMenuItems } from '::app/components/home/components/folder/hooks/row-context-menu-items';
 import { useSortDocuments } from '::app/components/home/components/folder/hooks/sort-documents';
 import { LinearProgress } from '::shared-components/loading-indicator/linear-progress';
-import { Portal } from '::app/components/editor/tool-bar/tool-bar';
+import { Portal } from '::app/components/editor/editor-toolbar/editor-toolbar';
 import { modHome } from '::app/components/home/home';
 import { PinnedDocuments } from '::app/components/home/components/folder/components/sections/pinned/pinned-documents';
 import {

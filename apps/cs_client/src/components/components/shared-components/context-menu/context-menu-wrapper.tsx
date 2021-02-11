@@ -5,7 +5,7 @@ import {
   ContextMenuProps,
 } from '::root/components/shared-components/context-menu/context-menu';
 import { useEffect, useRef, MouseEvent } from 'react';
-import { Portal } from '::root/components/app/components/editor/tool-bar/tool-bar';
+import { Portal } from '::app/components/editor/editor-toolbar/editor-toolbar';
 import {
   ChildContextMenuProps,
   PositionPreferences,

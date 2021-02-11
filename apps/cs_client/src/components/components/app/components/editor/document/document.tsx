@@ -10,7 +10,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { NodePath } from '::root/components/app/components/editor/document/components/node-path/node-path';
 import { Void } from '::shared-components/react/void';
 const ToolBar = React.lazy(() =>
-  import('::root/components/app/components/editor/tool-bar/tool-bar'),
+  import('::app/components/editor/editor-toolbar/editor-toolbar'),
 );
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);

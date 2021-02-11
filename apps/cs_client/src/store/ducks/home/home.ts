@@ -139,7 +139,10 @@ const reducer = createReducer(initialState, _ => [
     ...state,
     show: true,
   })),
-
+  _(ac.hide, state => ({
+    ...state,
+    show: false,
+  })),
   _(ac.setFolderName, (state, { payload }) =>
     produce(state, setFolderName(payload)),
   ),

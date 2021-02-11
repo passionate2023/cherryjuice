@@ -1,0 +1,14 @@
+.toolbar {
+  grid-area: tabs;
+  display: flex;
+  align-items: center;
+  height: var(--tabs);
+  background-color: var(--surface-045);
+  //overflow: hidden;
+}
+
+.toolbar__group {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}

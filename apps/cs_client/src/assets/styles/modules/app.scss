@@ -24,6 +24,10 @@
   color: var(--background-100);
   background-color: var(--on-background);
   font-family: Verdana, sans-serif;
+
+  @include respond-to($md-down) {
+    flex-direction: column-reverse;
+  }
 }
 
 .app--dialog-docked {

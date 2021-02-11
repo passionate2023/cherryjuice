@@ -7,7 +7,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/get-parents-node-ids/get-parents-node-ids';
 import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { createNodePropsMapper } from '::root/components/app/components/tabs/document-nodes/helpers/map-props';
+import { createNodePropsMapper } from '::root/components/app/components/tabs/helpers/map-props';
 import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
 
 const mapState = (state: Store) => {

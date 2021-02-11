@@ -1,0 +1,20 @@
+.toolbar-button {
+  min-width: var(--tabs);
+  height: var(--tabs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--background-100-95);
+  }
+  svg {
+    fill: grey;
+  }
+}
+.toolbar-button--active {
+  background-color: var(--background-100);
+  svg {
+    opacity: 1;
+  }
+}

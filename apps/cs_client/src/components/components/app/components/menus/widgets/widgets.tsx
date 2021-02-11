@@ -21,18 +21,21 @@ const mapState = (state: Store) => ({
   showUndoDocumentAction: state.timelines.showUndoDocumentAction,
   showTimeline: state.timelines.showTimeline,
   documentActionNOF: state.timelines.documentActionNOF,
+  showHome: state.home.show,
+  tb: state.root.isOnTb,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-const Widgets: React.FC<Props & PropsFromRedux> = ({
+const Widgets: React.FC<PropsFromRedux> = ({
   operations,
   snackbar,
   showUndoDocumentAction,
   showTimeline,
   documentActionNOF,
+  showHome,
+  tb,
 }) => {
   const widgets: Widget[] = [];
 
@@ -73,7 +76,10 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
   const { transitions, setRef } = useHubTransition({ widgets });
 
   return (
-    <div className={modWidgets.widgets}>
+    <div
+      className={modWidgets.widgets}
+      style={{ bottom: showHome ? (tb ? 45 : 5) : undefined }}
+    >
       {transitions.map(({ key, item, props: style }) => (
         <animated.div
           style={style}

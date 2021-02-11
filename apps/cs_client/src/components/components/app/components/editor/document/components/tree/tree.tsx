@@ -19,6 +19,7 @@ import {
   useInlineInputProvider,
 } from '::shared-components/inline-input/hooks/inline-input-provider';
 import { getEditor } from '@cherryjuice/editor';
+import { nodeOverlay } from '::app/components/editor/document/components/tree/components/node/helpers/node-overlay';
 export const TreeContext = createInlineInputProviderContext();
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -37,6 +38,7 @@ const mapState = (state: Store) => {
     nodes: document?.nodes,
     documentPrivacy: document?.privacy,
     treeState: document?.persistedState?.treeState,
+    selectedNode_id: document?.persistedState?.selectedNode_id,
     filteredNodes: state.document.filteredNodes,
     documentId: state.document.documentId,
     copiedNode: state.documentCache.copiedNode,
@@ -57,9 +59,30 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
   copiedNode,
   isOwnerOfCurrentDocument,
   tb,
+  selectedNode_id,
 }) => {
   useEffect(onStart, []);
-
+  useEffect(() => {
+    if (selectedNode_id) {
+      const node = document
+        .querySelector('.' + modTree.tree)
+        .querySelector(`[data-node-id="${selectedNode_id}"]`);
+      if (node) {
+        nodeOverlay.setNode(node);
+        nodeOverlay.updateWidth();
+        nodeOverlay.updateLeft();
+      }
+    }
+  }, [selectedNode_id]);
+  useEffect(() => {
+    const t = setTimeout(() => {
+      nodeOverlay.updateWidth();
+      nodeOverlay.updateLeft();
+    }, 500);
+    return () => {
+      clearTimeout(t);
+    };
+  }, []);
   const params = getParamsFromLocation();
   const hookProps = {
     getIdOfActiveElement: target => {

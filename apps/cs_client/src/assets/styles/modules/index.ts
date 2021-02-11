@@ -6,7 +6,6 @@ import modDocumentsList from '::sass-modules/select-file/select-file.scss';
 import modNodePath from '::sass-modules/document/node-path.scss';
 import modTabs from './document/tabs.scss';
 import modInfoBar from './document/info-bar.scss';
-import modToolbar from './tool-bar.scss';
 import modRichText from './document/rich-text.scss';
 import modAlertModal from './shared-components/alert-modal.scss';
 import modImportDocument from './import-document.scss';
@@ -57,7 +56,6 @@ export {
   modDialog,
   modTextInput,
   modDocumentsList,
-  modToolbar,
   modTabs,
   modInfoBar,
   modRichText,

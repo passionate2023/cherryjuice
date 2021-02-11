@@ -2,11 +2,12 @@
 .search {
   --search-element-height: 34px;
   --search-element-width: 250px;
+  --search-element-bc: var(--background-100);
   width: var(--search-element-width);
   height: var(--search-element-height);
   display: flex;
   align-items: center;
-  background-color: var(--background-100);
+  background-color: var(--search-element-bc);
   button:focus {
     outline: none;
   }

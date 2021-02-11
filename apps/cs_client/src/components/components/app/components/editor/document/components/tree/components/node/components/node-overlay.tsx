@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { MutableRefObject, useEffect, useRef } from 'react';
-import { nodeOverlay } from '::root/components/app/components/editor/document/components/tree/components/node/helpers/node-overlay';
+import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Store } from '::store/store';
 import { modNode } from '::sass-modules';
@@ -8,14 +7,9 @@ import { modNode } from '::sass-modules';
 type Props = {
   clickTimestamp: number;
   node_id: number;
-  nodeComponentRef: MutableRefObject<HTMLDivElement>;
 };
 
-const NodeOverlay: React.FC<Props> = ({
-  node_id,
-  clickTimestamp,
-  nodeComponentRef,
-}) => {
+const NodeOverlay: React.FC<Props> = ({ node_id, clickTimestamp }) => {
   const selectedNode_id = useSelector<Store>(
     state =>
       state.documentCache.documents[state.document.documentId]?.persistedState
@@ -24,12 +18,6 @@ const NodeOverlay: React.FC<Props> = ({
   const clicks = useRef({ 0: true });
   const isSelected =
     !clicks.current[clickTimestamp] || selectedNode_id === node_id;
-  useEffect(() => {
-    if (isSelected) {
-      nodeOverlay.updateWidth();
-      nodeOverlay.updateLeft(nodeComponentRef);
-    }
-  }, [isSelected]);
 
   useEffect(() => {
     const handle = setTimeout(() => {

@@ -27,6 +27,7 @@ const onResizeStop = () => {
   ac.cssVariables.set(CssVariables.treeWidth, treeHelper.getTreeWidth());
   treeHelper.updateTreeSizeCssVariable();
   nodeOverlay.updateWidth();
+  nodeOverlay.updateLeft();
 };
 const onResize = () => {
   treeHelper.updateTreeSizeCssVariable();
