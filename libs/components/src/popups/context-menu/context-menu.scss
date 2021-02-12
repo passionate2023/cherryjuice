@@ -17,10 +17,10 @@
 }
 .context-menu--modal {
   margin: auto;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  top: 0 !important;
   max-width: calc(var(--vw) * 0.975);
   width: fit-content;
   max-height: calc(var(--vh) * 0.95);

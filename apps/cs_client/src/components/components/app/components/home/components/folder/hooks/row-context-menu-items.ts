@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { ac } from '::store/store';
-import { CMItem } from '::shared-components/context-menu/context-menu-item';
+import { CMItem } from '@cherryjuice/components';
 
 type Props = {
   online: boolean;

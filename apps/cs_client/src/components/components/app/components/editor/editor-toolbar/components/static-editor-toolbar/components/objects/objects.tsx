@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { ToolbarButton } from '@cherryjuice/components';
-import { Icon, Icons } from '@cherryjuice/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { Tooltip } from '@cherryjuice/components';
 import { DropDownButton } from '::shared-components/drop-down-button/drop-down-button';
 
 const mapState = (state: Store) => {
@@ -34,11 +32,9 @@ const Buttons: React.FC<Props & PropsFromRedux> = ({
               <ToolbarButton
                 onClick={ac.dialogs.showAnchorDialog}
                 disabled={disabled}
-              >
-                <Tooltip label={'Insert an anchor'}>
-                  <Icon name={Icons.material.anchor} />
-                </Tooltip>
-              </ToolbarButton>
+                tooltip={'Insert an anchor'}
+                icon={'anchor'}
+              />
             ),
             key: 'anchor',
           },
@@ -47,11 +43,9 @@ const Buttons: React.FC<Props & PropsFromRedux> = ({
               <ToolbarButton
                 onClick={ac.dialogs.showLinkDialog}
                 disabled={disabled}
-              >
-                <Tooltip label={'Insert a link'}>
-                  <Icon name={Icons.material.link} />
-                </Tooltip>
-              </ToolbarButton>
+                tooltip={'Insert a link'}
+                icon={'link'}
+              />
             ),
             key: 'link',
           },
@@ -60,11 +54,9 @@ const Buttons: React.FC<Props & PropsFromRedux> = ({
               <ToolbarButton
                 onClick={ac.dialogs.showCodeboxDialog}
                 disabled={disabled}
-              >
-                <Tooltip label={'Insert a code box'}>
-                  <Icon name={Icons.material.code} />
-                </Tooltip>
-              </ToolbarButton>
+                tooltip={'Insert a codebox'}
+                icon={'code'}
+              />
             ),
             key: 'codebox',
           },
@@ -73,11 +65,9 @@ const Buttons: React.FC<Props & PropsFromRedux> = ({
               <ToolbarButton
                 onClick={ac.dialogs.showTableDialog}
                 disabled={disabled}
-              >
-                <Tooltip label={'Insert a table'}>
-                  <Icon name={Icons.material.table} />
-                </Tooltip>
-              </ToolbarButton>
+                tooltip={'Insert a table'}
+                icon={'table'}
+              />
             ),
             key: 'table',
           },

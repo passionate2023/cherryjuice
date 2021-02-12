@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import mod from '::app/components/toolbar/components/toolbar-button/toolbar-button.scss';
-import { TooltipProps } from '@cherryjuice/components';
-import { Icon, IconName } from '@cherryjuice/icons';
 import { Tooltip } from '@cherryjuice/components';
+import { Icon, IconName } from '@cherryjuice/icons';
 
 type Props = {
   onClick: () => void;
-  tooltip?: TooltipProps;
+  tooltip?: string;
   icon?: IconName;
   iconIsImage?: boolean;
   active?: boolean;
@@ -25,18 +24,21 @@ export const ToolbarButton: React.FC<Props> = ({
   children,
 }) => {
   return (
-    <div
-      onClick={disabled ? undefined : onClick}
-      className={joinClassNames([
-        mod.toolbarButton,
-        active && mod.toolbarButtonActive,
-      ])}
-      data-testid={testId}
-    >
-      <Tooltip {...tooltip}>
-        {icon && <Icon image={iconIsImage} name={icon} size={16} />}
-        {children}
-      </Tooltip>
-    </div>
+    <Tooltip tooltip={tooltip}>
+      {bind => (
+        <div
+          onClick={disabled ? undefined : onClick}
+          className={joinClassNames([
+            mod.toolbarButton,
+            active && mod.toolbarButtonActive,
+          ])}
+          data-testid={testId}
+          {...bind}
+        >
+          {icon && <Icon image={iconIsImage} name={icon} size={16} />}
+          {children}
+        </div>
+      )}
+    </Tooltip>
   );
 };

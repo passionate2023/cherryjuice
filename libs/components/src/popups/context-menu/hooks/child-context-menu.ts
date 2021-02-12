@@ -1,5 +1,5 @@
 import { MouseEvent, useCallback, useState } from 'react';
-import { Position } from '::shared-components/context-menu/context-menu';
+import { Position } from '::root/popups/context-menu/context-menu';
 export type ContextMenuItemContext = Record<string, any>;
 export type ChildContextMenuProps<Context = ContextMenuItemContext> = {
   getIdOfActiveElement: (e: HTMLElement, activeElement: HTMLElement) => string;
@@ -83,7 +83,7 @@ export const useChildContextMenu = <
     return { id, context };
   }, []);
   const hide = () => setPosition(initialState);
-  const shown = position.anchorX > 0;
+  const shown = position.anchorX + position.anchorW > 0;
 
   return {
     show,

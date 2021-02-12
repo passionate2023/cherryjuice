@@ -10,7 +10,7 @@ import { HiddenTabs } from '::app/components/tabs/components/hidden-tabs';
 import { useTabsMenuItems } from '::app/components/tabs/hooks/tabs-menu-items';
 import { createNodePropsMapper } from '::app/components/tabs/helpers/map-props';
 import { useForceUpdate } from '::hooks/react/force-update';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapper } from '@cherryjuice/components';
 
 const getNumberOfVisibleTabs = () => {
   const tabsList = document.querySelector('.' + modTabs.tabsList);

@@ -1,6 +1,6 @@
-import { Position } from '::shared-components/context-menu/context-menu';
+import { Position } from '::root/popups/context-menu/context-menu';
 import { MutableRefObject, useLayoutEffect, useState } from 'react';
-import { calculateElementPosition } from '::shared-components/context-menu/hooks/calculate-element-position/helpers/calculate-element-position';
+import { calculateElementPosition } from '::root/popups/context-menu/hooks/calculate-element-position/helpers/calculate-element-position';
 
 export const useCalculateElementPosition = (
   position: Position,
@@ -26,6 +26,6 @@ export const useCalculateElementPosition = (
     });
     setX(x);
     setY(y);
-  }, []);
+  }, [elementRef.current]);
   return { x, y };
 };

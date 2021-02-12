@@ -11,7 +11,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { ToolBar } from './components/tool-bar/tool-bar';
 import { Droppable } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';
 import { modNode, modTree } from '::sass-modules';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapper } from '@cherryjuice/components';
 import { useTreeContextMenuItems } from '::root/components/app/components/editor/document/components/tree/hooks/tree-context-menu-items';
 import nodeMod from '::sass-modules/tree/node.scss';
 import {

@@ -1,17 +1,16 @@
 import * as React from 'react';
-import { modApp } from '::sass-modules';
 import {
   ContextMenu,
   ContextMenuProps,
-} from '::root/components/shared-components/context-menu/context-menu';
+} from '::root/popups/context-menu/context-menu';
 import { useEffect, useRef, MouseEvent } from 'react';
-import { Portal } from '::app/components/editor/editor-toolbar/editor-toolbar';
+import { Portal } from '::root/unclassified/portal/portal';
 import {
   ChildContextMenuProps,
   PositionPreferences,
   useChildContextMenu,
-} from '::shared-components/context-menu/hooks/child-context-menu';
-import { CMItem } from '::shared-components/context-menu/context-menu-item';
+} from '::root/popups/context-menu/hooks/child-context-menu';
+import { CMItem } from '::root/popups/context-menu/context-menu-item';
 type renderCustomBody = ({ hide }) => JSX.Element;
 type renderChildren = (props: {
   show: (e: MouseEvent<HTMLDivElement>) => void;
@@ -31,8 +30,13 @@ type Props = {
 >;
 
 const state = {
+  root: '',
   hide: new Map<number, Set<() => undefined>>(),
 };
+export const setContextMenusAnchor = (anchorSelector: string) => {
+  state.root = anchorSelector;
+};
+
 const ContextMenuWrapper: React.FC<Props> = ({
   customBody,
   level,
@@ -70,7 +74,7 @@ const ContextMenuWrapper: React.FC<Props> = ({
   return (
     <>
       {children({ shown, show: showM, hide })}
-      <Portal targetSelector={'.' + modApp.app}>
+      <Portal targetSelector={state.root}>
         {shown && (
           <ContextMenu
             items={items}

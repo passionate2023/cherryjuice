@@ -8,12 +8,10 @@ import {
 import {
   CMItem,
   ContextMenuItem,
-} from '::root/components/shared-components/context-menu/context-menu-item';
+} from '::root/popups/context-menu/context-menu-item';
 import mod from './context-menu.scss';
-import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::store/store';
-import { Scrim } from '::root/components/shared-components/scrim/scrim';
-import { useCalculateElementPosition } from '::shared-components/context-menu/hooks/calculate-element-position/calculate-element-position';
+import { Scrim } from '::root/popups/scrim/scrim';
+import { useCalculateElementPosition } from '::root/popups/context-menu/hooks/calculate-element-position/calculate-element-position';
 export type Position = {
   anchorX: number;
   anchorY: number;
@@ -24,12 +22,6 @@ export type Position = {
   positionX?: 'lr' | 'rl' | 'rr' | 'll';
   positionY?: 'bt' | 'tb' | 'tt' | 'bb';
 };
-const mapState = (state: Store) => ({
-  isOnMd: state.root.isOnTb,
-  isOnMb: state.root.isOnMb,
-});
-const connector = connect(mapState);
-type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export type ContextMenuProps = {
   hide: () => void;
@@ -46,10 +38,11 @@ export type ContextMenuProps = {
     borderRadius?: number;
     paddingTop?: number;
     paddingBottom?: number;
+    opacity?: number;
   };
 };
 
-const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
+const ContextMenu: React.FC<ContextMenuProps> = ({
   items,
   level = 0,
   hide,
@@ -58,8 +51,6 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
   context,
   children,
   showAsModal,
-  isOnMd,
-  isOnMb,
   clickOutsideSelectorsWhitelist = [],
   style = {},
 }) => {
@@ -78,21 +69,19 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
     focusableElementsSelector: [],
   });
 
-  const modal =
-    (showAsModal === 'mb' && isOnMb) || (showAsModal === 'md' && isOnMd);
   const { x, y } = useCalculateElementPosition(position, ref);
   return (
     <>
-      {modal && <Scrim onClick={hide} isShownOnTopOfDialog={true} />}
+      {!!showAsModal && <Scrim onClick={hide} isShownOnTopOfDialog={true} />}
       <div
         {...clkOProps}
         {...keprops}
         className={joinClassNames([
           mod.contextMenu,
-          [mod.contextMenuModal, modal],
+          [mod.contextMenuModal, !!showAsModal],
         ])}
         style={
-          modal
+          showAsModal
             ? { ...style }
             : {
                 left: Math.max(x, 0),
@@ -119,5 +108,4 @@ const ContextMenu: React.FC<ContextMenuProps & PropsFromRedux> = ({
   );
 };
 
-const _ = connector(ContextMenu);
-export { _ as ContextMenu };
+export { ContextMenu };

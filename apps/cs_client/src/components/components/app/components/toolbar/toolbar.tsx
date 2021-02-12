@@ -8,7 +8,7 @@ import { ToolbarButton } from '::app/components/toolbar/components/toolbar-butto
 import { NavBar } from '::app/components/toolbar/components/nav-bar/nav-bar';
 import { MobileButtons } from '::app/components/toolbar/components/mobile-buttons/mobile-buttons';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
-import { Portal } from '::app/components/editor/editor-toolbar/editor-toolbar';
+import { Portal } from '@cherryjuice/components';
 import { modApp } from '::sass-modules';
 import { Separator } from '::app/components/editor/editor-toolbar/components/separator';
 
@@ -43,16 +43,15 @@ const Toolbar: React.FC<Props & PropsFromRedux> = ({
         {isAuthenticated && (
           <ToolbarButton
             onClick={ac.home.show}
-            tooltip={{ label: 'home', position: 'bottom-right' }}
+            tooltip={'Go to home'}
             icon={'home'}
-            iconIsImage={true}
             active={showHome}
           />
         )}
         {documentId && (
           <ToolbarButton
             onClick={showHome ? ac.home.hide : ac.editor.toggleTree}
-            tooltip={{ label: 'Toggle tree', position: 'bottom-right' }}
+            tooltip={'Toggle tree'}
             icon={'tree'}
             iconIsImage={true}
           />

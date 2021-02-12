@@ -31,20 +31,16 @@ const MobileButtons: React.FC<PropsFromRedux> = ({
         <ToolbarButton
           onClick={ac.editor.toggleFormattingBar}
           active={showFormattingButtons}
-          tooltip={{
-            label: `${
-              showFormattingButtons ? 'hide' : 'show'
-            } formatting buttons`,
-          }}
+          tooltip={`${
+            showFormattingButtons ? 'hide' : 'show'
+          } formatting buttons`}
           icon={'justify-left'}
         />
       )}
       <ToolbarButton
         onClick={ac.editor.toggleInfoBar}
         active={showInfoBar}
-        tooltip={{
-          label: `${showFormattingButtons ? 'hide' : 'show'} information bar`,
-        }}
+        tooltip={`${showFormattingButtons ? 'hide' : 'show'} information bar`}
         icon={'info'}
         disabled={noDocumentIsSelected}
       />

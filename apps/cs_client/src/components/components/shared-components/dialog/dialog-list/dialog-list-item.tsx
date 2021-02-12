@@ -3,8 +3,8 @@ import { modDialog } from '::sass-modules';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { memo, useEffect, useRef } from 'react';
 import { Icon, Icons } from '@cherryjuice/icons';
-import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { CMItem } from '@cherryjuice/components';
+import { ContextMenuWrapper } from '@cherryjuice/components';
 
 const onContextMenu = e => {
   e.preventDefault();

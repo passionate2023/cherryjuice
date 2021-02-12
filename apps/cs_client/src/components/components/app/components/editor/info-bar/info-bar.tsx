@@ -50,8 +50,12 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
       </div>
       <div className={modInfoBar.infoBar__group}>
         {!online && (
-          <Tooltip label={'You are offline'}>
-            <Icon name={Icons.material['no-connection']} size={20} />
+          <Tooltip tooltip={'You are offline'}>
+            {bind => (
+              <div {...bind}>
+                <Icon name={Icons.material['no-connection']} size={20} />
+              </div>
+            )}
           </Tooltip>
         )}
         {!noSelectedDocument && (

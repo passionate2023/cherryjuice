@@ -24,7 +24,9 @@ import { documentHasUnsavedChanges } from '::root/components/app/components/menu
 import { useRouterEffect } from '::root/components/app/components/editor/hooks/router-effect/router-effect';
 import { useTasks } from '::root/hooks/tasks';
 import { CssVariables } from '::store/ducks/css-variables';
-import 'hint.css';
+import { setContextMenusAnchor } from '@cherryjuice/components';
+import { modApp } from '::sass-modules';
+setContextMenusAnchor('.' + modApp.app);
 // eslint-disable-next-line node/no-extraneous-import
 
 enablePatches();

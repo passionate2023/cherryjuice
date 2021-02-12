@@ -3,7 +3,7 @@ import { joinClassNames } from '@cherryjuice/shared-helpers';
 import mod from './context-menu-item.scss';
 import { ReactNode } from 'react';
 import { Icon } from '@cherryjuice/icons';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapper } from '::root/popups/context-menu/context-menu-wrapper';
 
 export type CMItem = Omit<
   ContextMenuItemProps,

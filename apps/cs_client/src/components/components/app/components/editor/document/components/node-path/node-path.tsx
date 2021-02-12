@@ -5,10 +5,9 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/get-parents-node-ids/get-parents-node-ids';
-import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
+import { CMItem, ContextMenuWrapper } from '@cherryjuice/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createNodePropsMapper } from '::root/components/app/components/tabs/helpers/map-props';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);

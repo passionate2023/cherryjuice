@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DialogListItem } from '::root/components/shared-components/dialog/dialog-list/dialog-list-item';
 import { ac } from '::store/store';
-import { ContextMenuItemProps } from '::root/components/shared-components/context-menu/context-menu-item';
+import { CMItem } from '@cherryjuice/components';
 import { Direction } from '::helpers/shared';
 
 export type BookmarkProps = {
@@ -30,7 +30,7 @@ const Bookmark: React.FC<Props> = ({
     [Direction.down, i === numberOfBookmarks - 1, ''],
     [Direction.bottom, i === numberOfBookmarks - 1, 'to the '],
   ];
-  const contextMenuOptions: Omit<ContextMenuItemProps, 'hide'>[] = [
+  const contextMenuOptions: CMItem[] = [
     {
       name: 'remove from bookmarks',
       onClick: () => ac.documentCache.removeBookmark({ node_id, documentId }),

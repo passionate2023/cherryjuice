@@ -20,13 +20,16 @@ export const SearchButton: React.FC<PerformSearchProps> = ({
   icon,
 }) => {
   return (
-    <Tooltip label={tooltip}>
-      <ButtonSquare
-        className={joinClassNames([mod.searchButton, className])}
-        disabled={disabled}
-        onClick={onClick}
-        icon={<Icon name={icon} />}
-      />
+    <Tooltip tooltip={tooltip}>
+      {bind => (
+        <ButtonSquare
+          className={joinClassNames([mod.searchButton, className])}
+          disabled={disabled}
+          onClick={onClick}
+          icon={<Icon name={icon} />}
+          {...bind}
+        />
+      )}
     </Tooltip>
   );
 };

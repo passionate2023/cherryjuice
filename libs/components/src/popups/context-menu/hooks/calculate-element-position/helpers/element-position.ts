@@ -1,5 +1,5 @@
-import { Position } from '::shared-components/context-menu/context-menu';
-import { PositionContext } from '::shared-components/context-menu/hooks/calculate-element-position/helpers/calculate-element-position';
+import { Position } from '::root/popups/context-menu/context-menu';
+import { PositionContext } from '::root/popups/context-menu/hooks/calculate-element-position/helpers/calculate-element-position';
 /**
  first side is that of the anchor
  second side is that of the element
@@ -15,10 +15,10 @@ export const rightRight = (position: Position, context: PositionContext) =>
   leftRight(position, context) + position.anchorW;
 
 export const topTop = (position: Position) =>
-  position.anchorY - position.offsetY;
+  position.anchorY + position.offsetY;
 export const topBottom = (position: Position, context: PositionContext) =>
-  topTop(position) - context.elementH;
+  position.anchorY - position.offsetY - context.elementH;
 export const bottomTop = (position: Position) =>
   position.anchorY + position.anchorH + position.offsetY;
 export const bottomBottom = (position: Position, context: PositionContext) =>
-  bottomTop(position) - context.elementH;
+  position.anchorY + position.anchorH - position.offsetY - context.elementH;

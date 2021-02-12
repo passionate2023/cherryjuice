@@ -29,13 +29,13 @@ const UndoRedo: React.FC<PropsFromRedux> = ({ documentId }) => {
       <ToolbarButton
         onClick={pagesManager.current?.undo}
         disabled={noDocumentIsSelected || !numberOfFrames.undo}
-        tooltip={{ label: 'Undo Text change' }}
+        tooltip={'Undo Text change'}
         icon={Icons.material.undo}
       />
       <ToolbarButton
         onClick={pagesManager.current?.redo}
         disabled={noDocumentIsSelected || !numberOfFrames.redo}
-        tooltip={{ label: 'Redo text change' }}
+        tooltip={'Redo text change'}
         icon={Icons.material.redo}
       />
     </>

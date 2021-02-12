@@ -10,7 +10,7 @@ import { useSortMenuItems } from '::root/components/app/components/editor/docume
 import { useFoldMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/fold-menu-items';
 import { Search } from '::shared-components/search-input/search';
 import { NodesButtons } from './components/nodes-buttons/nodes-buttons';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapper } from '@cherryjuice/components';
 import { testIds } from '::cypress/support/helpers/test-ids';
 
 const mapState = (state: Store) => {

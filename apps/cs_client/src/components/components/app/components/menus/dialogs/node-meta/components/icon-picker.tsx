@@ -3,7 +3,7 @@ import { modIconPicker, modNodeMeta, modSearchFilter } from '::sass-modules';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { IconsList } from '::root/components/app/components/menus/dialogs/node-meta/components/components/icons-list';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapper } from '@cherryjuice/components';
 
 type Props = { value: string; disabled: boolean; onChange };
 

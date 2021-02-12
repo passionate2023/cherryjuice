@@ -1,7 +1,7 @@
-@import '~@cherryjuice/shared-styles/build/vars/vars';
-@import '~@cherryjuice/shared-styles/build/vars/states';
-@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
-@import '~@cherryjuice/shared-styles/build/mixins/typography';
+@import '../../../../../node_modules/@cherryjuice/shared-styles/build/vars/vars';
+@import '../../../../../node_modules/@cherryjuice/shared-styles/build/vars/states';
+@import '../../../../../node_modules/@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '../../../../../node_modules/@cherryjuice/shared-styles/build/mixins/typography';
 .context-menu-item {
   position: relative;
   cursor: pointer;

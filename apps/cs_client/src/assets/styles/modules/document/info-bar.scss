@@ -111,7 +111,10 @@
   color: var(--on-secondary) !important;
 }
 .info-bar__document-privacy {
-  display: inline;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 .info-bar__timestamp {
   @include respond-to($md-down) {

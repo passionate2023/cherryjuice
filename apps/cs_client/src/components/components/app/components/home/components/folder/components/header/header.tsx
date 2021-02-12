@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({
           <ToolbarButton
             onClick={ac.home.toggleSidebar}
             icon={'menu'}
-            tooltip={{ label: 'toggle sidebar', position: 'bottom-right' }}
+            tooltip={'toggle sidebar'}
           />
         )}
         {folderName}

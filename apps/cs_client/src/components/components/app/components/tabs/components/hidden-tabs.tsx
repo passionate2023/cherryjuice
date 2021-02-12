@@ -3,7 +3,7 @@ import { modTabs } from '::sass-modules';
 import { NodeProps, Tab } from './components/tab';
 import { ButtonSquare } from '@cherryjuice/components';
 import { Icon, Icons } from '@cherryjuice/icons';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapper } from '@cherryjuice/components';
 
 type Props = {
   nodes: NodeProps[];

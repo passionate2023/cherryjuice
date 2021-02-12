@@ -5,7 +5,7 @@ import {
   NodesDict,
   PersistedDocumentState,
 } from '::store/ducks/document-cache/document-cache';
-import { CMItem } from '::shared-components/context-menu/context-menu-item';
+import { CMItem } from '@cherryjuice/components';
 
 type Props = {
   activeTab: number;

@@ -5,7 +5,7 @@ import { ToolbarButton } from '::app/components/toolbar/components/toolbar-butto
 import { connect, ConnectedProps } from 'react-redux';
 import { DocumentDropdownMenu } from '::app/components/menus/modals/document-dropdown-menu/document-dropdown-menu';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapper } from '@cherryjuice/components';
 
 const mapState = (state: Store) => ({
   isDocumentOwner: hasWriteAccessToDocument(state),
@@ -54,7 +54,7 @@ const DocumentButton: React.FC<Props & PropsFromRedux> = ({
               onClick={show}
               testId={testIds.toolBar__navBar__documentButton}
               icon={'add'}
-              tooltip={{ label: 'Document menu' }}
+              tooltip={'Document menu'}
             />
           )}
         </ContextMenuWrapper>

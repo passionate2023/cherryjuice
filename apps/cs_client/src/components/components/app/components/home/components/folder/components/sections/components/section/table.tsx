@@ -6,8 +6,7 @@ import {
   SectionBodyProps,
 } from '::app/components/home/components/folder/components/sections/components/section/componnets/section-body/rows-container';
 import modRow from './componnets/row/row.scss';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
-import { CMItem } from '::shared-components/context-menu/context-menu-item';
+import { ContextMenuWrapper, CMItem } from '@cherryjuice/components';
 
 export type SectionProps = SectionBodyProps & {
   header: RowProps;

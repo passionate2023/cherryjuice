@@ -1,4 +1,4 @@
-import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
+import { CMItem } from '@cherryjuice/components';
 import { ac } from '::store/store';
 import { SortNodeCommand } from '::store/ducks/document-cache/helpers/node/sort-node/helpers/sort-nods';
 import { useCallback } from 'react';

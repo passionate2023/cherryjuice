@@ -9,7 +9,7 @@ import {
   SharedSectionElementProps,
 } from '::app/components/home/components/sidebar/components/sidebar-section/components/section-element/section-element';
 import { useMemo } from 'react';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapper } from '@cherryjuice/components';
 import { deleteFolder } from '::app/components/home/components/sidebar/callbacks/delete-folder';
 import { useInlineInputProvider } from '::shared-components/inline-input/hooks/inline-input-provider';
 

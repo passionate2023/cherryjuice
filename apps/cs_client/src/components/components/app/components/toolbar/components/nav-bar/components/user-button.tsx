@@ -7,7 +7,7 @@ import { Icon, Icons } from '@cherryjuice/icons';
 import { UserDropdownMenu } from '::app/components/menus/modals/user-dropdown-menu/user-dropdown-menu';
 import { ToolbarButton } from '::app/components/toolbar/components/toolbar-button/toolbar-button';
 import { connect, ConnectedProps } from 'react-redux';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapper } from '@cherryjuice/components';
 
 const mapState = (state: Store) => ({
   user: state.auth.user,
@@ -43,7 +43,7 @@ const UserButton: React.FC<Props & PropsFromRedux> = ({ user }) => {
         <ToolbarButton
           onClick={show}
           testId={testIds.toolBar__navBar__userButton}
-          tooltip={{ label: 'User preferences', position: 'bottom-left' }}
+          tooltip={'User preferences'}
         >
           {(user as User)?.picture ? (
             <img

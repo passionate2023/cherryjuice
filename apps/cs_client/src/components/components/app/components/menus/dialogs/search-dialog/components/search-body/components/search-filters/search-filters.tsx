@@ -22,7 +22,7 @@ import {
 } from '::sass-modules';
 import { Icons } from '@cherryjuice/icons';
 import { DocumentSearch } from '::app/components/toolbar/components/nav-bar/components/document-search';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapper } from '@cherryjuice/components';
 
 export const SearchSetting: React.FC<{
   iconName: string;

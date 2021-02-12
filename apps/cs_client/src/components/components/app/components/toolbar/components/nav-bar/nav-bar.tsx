@@ -54,14 +54,14 @@ const NavBar: React.FC<PropsFromRedux> = ({
                 !(documentActionNOF.redo || documentActionNOF.undo)
               }
               icon={'history'}
-              tooltip={{ label: 'Local document changes' }}
+              tooltip={'Local document changes'}
             />
             <ToolbarButton
               onClick={ac.document.save}
               testId={testIds.toolBar__main__saveDocument}
               disabled={!userHasUnsavedChanges || !online}
               icon={'save'}
-              tooltip={{ label: 'Save all documents' }}
+              tooltip={'Save all documents'}
             />
           </>
         )}

@@ -2,7 +2,7 @@ import * as React from 'react';
 import mod from './drop-down-button.scss';
 import { useRef } from 'react';
 import { Icon } from '@cherryjuice/icons';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { ContextMenuWrapper } from '@cherryjuice/components';
 
 const List = ({
   buttons,

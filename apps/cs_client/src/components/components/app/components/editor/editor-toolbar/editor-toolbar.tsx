@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
 import mod from './editor-toolbar.scss';
-import { createPortal } from 'react-dom';
 import { StaticEditorToolbar } from './components/static-editor-toolbar/static-editor-toolbar';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
@@ -10,34 +8,7 @@ import { ErrorBoundary } from '::root/components/shared-components/react/error-b
 import { AnimatedEditorToolbar } from '::app/components/editor/editor-toolbar/components/animated-editor-toolbar/animated-editor-toolbar';
 import { useComponentIsReady } from '::root/hooks/is-ready';
 import { modEditor } from '::app/components/editor/editor';
-
-type PortalProps = { targetSelector: string; predicate?: boolean };
-
-export const Portal: React.FC<PortalProps> = ({
-  targetSelector,
-  children,
-  predicate = true,
-}) => {
-  const [targetMounted, serTargetMounted] = useState(false);
-  useEffect(() => {
-    const handle = setInterval(() => {
-      if (document.querySelector(targetSelector)) {
-        clearInterval(handle);
-        serTargetMounted(true);
-      }
-      return () => clearInterval(handle);
-    }, 100);
-  }, []);
-  return predicate ? (
-    targetMounted ? (
-      createPortal(children, document.querySelector(targetSelector))
-    ) : (
-      <></>
-    )
-  ) : (
-    <>{children}</>
-  );
-};
+import { Portal } from '@cherryjuice/components';
 
 const mapState = (state: Store) => ({
   isOnMd: state.root.isOnTb,

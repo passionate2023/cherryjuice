@@ -1,10 +1,10 @@
-import { Position } from '::shared-components/context-menu/context-menu';
+import { Position } from '::root/popups/context-menu/context-menu';
 import {
   bottomOverflow,
   leftOverflow,
   rightOverflow,
   topOverflow,
-} from '::shared-components/context-menu/hooks/calculate-element-position/helpers/element-overflow';
+} from '::root/popups/context-menu/hooks/calculate-element-position/helpers/element-overflow';
 import {
   bottomBottom,
   bottomTop,
@@ -14,7 +14,7 @@ import {
   rightRight,
   topBottom,
   topTop,
-} from '::shared-components/context-menu/hooks/calculate-element-position/helpers/element-position';
+} from '::root/popups/context-menu/hooks/calculate-element-position/helpers/element-position';
 
 export type PositionContext = {
   elementW;

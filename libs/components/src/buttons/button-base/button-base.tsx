@@ -27,7 +27,10 @@ type ButtonBaseProps = {
   iconName?: IconName;
   variant?: 'danger';
   _ref?: MutableRefObject<HTMLButtonElement>;
-  onContextMenu: MouseEventHandler<HTMLButtonElement>;
+  onContextMenu?: MouseEventHandler<HTMLButtonElement>;
+  onMouseEnter?: EventHandler<undefined>;
+  onMouseLeave?: EventHandler<undefined>;
+  'data-tooltip-id'?: string;
 };
 
 const buttonVariants = {
@@ -50,6 +53,7 @@ const ButtonBase: React.FC<ButtonBaseProps & ButtonCircleProps> = ({
   variant,
   small,
   onContextMenu,
+  ...props
 }) => {
   const buttonRef = useRef<HTMLButtonElement>();
   _ref = _ref || buttonRef;
@@ -69,6 +73,9 @@ const ButtonBase: React.FC<ButtonBaseProps & ButtonCircleProps> = ({
       disabled={disabled}
       autoFocus={autoFocus}
       onContextMenu={onContextMenu}
+      onMouseLeave={props.onMouseLeave}
+      onMouseEnter={props.onMouseEnter}
+      data-tooltip-id={props['data-tooltip-id']}
       {...(testId && { 'data-testid': testId })}
     >
       {iconName ? (
