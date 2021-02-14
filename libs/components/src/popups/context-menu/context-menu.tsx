@@ -38,6 +38,8 @@ export type ContextMenuProps = {
     borderRadius?: number;
     paddingTop?: number;
     paddingBottom?: number;
+    paddingLeft?: number;
+    paddingRight?: number;
     opacity?: number;
   };
 };

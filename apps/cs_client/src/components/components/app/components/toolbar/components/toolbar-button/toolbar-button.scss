@@ -7,6 +7,9 @@
   cursor: pointer;
   &:hover {
     background-color: var(--background-100-95);
+
+    // to hide the bottom border of the toolbar
+    z-index: 1;
   }
   svg {
     fill: grey;

@@ -9,6 +9,7 @@ export const FormattingButton: React.FC<Props> = hk => {
       onClick={() => execK(hk['execCommandArguments'])}
       disabled={hk.disabled}
       icon={hk['icon']}
+      tooltip={hk.name}
     />
   );
 };

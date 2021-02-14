@@ -21,6 +21,8 @@ type Props = {
   documentId: string;
   isOnMd?: boolean;
   hidden?: boolean;
+  showLeftSeparator?: boolean;
+  showRightSeparator?: boolean;
 } & NodeProps;
 
 const Tab: React.FC<Props> = ({
@@ -33,6 +35,8 @@ const Tab: React.FC<Props> = ({
   isNew,
   isBookmarked,
   hidden,
+  showLeftSeparator,
+  showRightSeparator,
 }) => {
   const selectNode = useCallback(() => {
     ac.node.select({ documentId, node_id });
@@ -89,6 +93,12 @@ const Tab: React.FC<Props> = ({
           name={Icons.material.bookmark}
           className={mod.tab__bookmarkIcon}
         />
+      )}
+      {showLeftSeparator && (
+        <span className={mod.tab__separator + ' ' + mod.tab__separatorLeft} />
+      )}
+      {showRightSeparator && (
+        <span className={mod.tab__separator + ' ' + mod.tab__separatorRight} />
       )}
     </div>
   );

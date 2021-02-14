@@ -40,7 +40,13 @@ $weight-medium: 500;
   line-height: 16px;
   letter-spacing: 0.02rem;
 }
-
+@mixin type-e2() {
+  font-family: $font-family;
+  font-weight: $weight-medium;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.02rem;
+}
 @mixin type-f() {
   font-family: $font-family;
   font-weight: $weight-medium;

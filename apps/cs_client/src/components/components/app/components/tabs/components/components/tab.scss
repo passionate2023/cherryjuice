@@ -1,7 +1,19 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 @import '~@cherryjuice/shared-styles/build/mixins/typography';
 @import '~@cherryjuice/shared-styles/build/vars/vars';
+@mixin selected-tab {
+  background-color: var(--bg-color-hover);
+  border-radius: 10px 10px 0 0;
+  border-color: rgba(115, 115, 115, 0.15);
+  border-bottom-color: var(--background-100);
+}
 .tab {
+  // variables
+  --tab-border-color: rgb(115, 115, 115, 0.08);
+  --bg-color: var(--surface-045);
+  --bg-color-hover: var(--background-100);
+  --tab-separator-color: var(--on-surface-25);
+  // position
   position: relative;
   box-sizing: border-box;
   // size
@@ -14,46 +26,61 @@
   align-items: center;
   justify-content: space-between;
   // style
-  background-color: var(--surface-045);
+  background-color: var(--bg-color);
   cursor: pointer;
   transition: all 200ms linear;
+  border-radius: 10px 10px 0 0;
   &:hover {
-    background-color: var(--background-100);
+    @include selected-tab;
+    .tab__separator {
+      opacity: 0;
+    }
+    + .tab {
+      .tab__separator {
+        opacity: 0;
+      }
+    }
   }
   user-select: none;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--bg-color);
+  border-bottom-color: var(--tab-border-color);
+  z-index: 1;
 }
-
 .tab__name {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--on-surface);
-  @include type-e();
+  @include type-e2();
 }
 
 .tab__close-button {
   background-color: transparent !important;
   box-shadow: none !important;
-  opacity: 0.2;
+  opacity: 0.8;
   &:hover {
     opacity: 1;
   }
 }
 .tab--selected {
-  background-color: var(--background-100);
-  border-radius: 5px 5px 0 0;
+  @include selected-tab;
 }
 .tab--hidden {
   background-color: transparent;
   &:hover {
     background-color: var(--surface-050);
   }
+  border: none;
+  border-radius: 5px;
 }
 .tab--has-changes {
   color: var(--teriary-050);
 }
 .tab--is-new {
-  color: var(--danger);
+  color: var(--primary-050);
+  opacity: 0.8;
 }
 
 .tab__bookmark-icon {
@@ -61,4 +88,18 @@
   top: -3px;
   right: 20px;
   fill: var(--secondary-100);
+}
+
+.tab__separator {
+  height: calc(0.4 * var(--tabs));
+  width: 1px;
+  position: absolute;
+  background-color: var(--tab-separator-color);
+  transition: all 200ms linear;
+}
+.tab__separator--left {
+  left: -1px;
+}
+.tab__separator--right {
+  right: -2px;
 }

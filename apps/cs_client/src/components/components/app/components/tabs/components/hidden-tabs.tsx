@@ -29,10 +29,11 @@ const HiddenTabs: React.FC<Props> = ({ nodes, documentId }) => {
           ))}
         </div>
       }
+      style={{ paddingLeft: 0, paddingRight: 0 }}
     >
       {({ ref, show }) => (
         <ButtonSquare
-          icon={<Icon name={Icons.material['arrow-down']} size={15} />}
+          icon={<Icon name={Icons.material['arrow-down']} />}
           className={modTabs.hiddenTabsButton}
           onClick={show}
           _ref={ref}

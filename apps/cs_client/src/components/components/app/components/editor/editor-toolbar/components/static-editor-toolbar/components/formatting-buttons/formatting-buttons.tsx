@@ -80,6 +80,7 @@ const FormattingButtons: React.FC<PropsFromRedux> = ({
               },
             });
           }}
+          tooltip={props.name}
         />
       ))}
       {categories.tertiary.map(([, props]) => (
