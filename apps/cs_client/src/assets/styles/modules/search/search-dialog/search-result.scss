@@ -6,15 +6,16 @@
   width: calc(100% - 40px);
   min-height: 88px;
   max-height: 250px;
-  padding: 10px 20px;
-  background-color: var(--background-100);
+  padding: 20px 20px;
+  background-color: var(--surface-050);
   &:not(:last-child) {
-    margin-bottom: 5px;
+    margin-bottom: 20px;
   }
   overflow: auto;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
+  gap: 6px;
   box-shadow: $box-shadow2;
   transition: background-color 200ms linear;
   cursor: pointer;
@@ -29,6 +30,7 @@
   background-color: var(--primary-100) !important;
   .search-result__location__document-name {
     color: var(--on-background);
+    opacity: 0.5;
   }
   .search-result__timestamps {
     color: var(--on-background);
@@ -37,23 +39,25 @@
 .search-result__location {
   align-self: flex-start;
   justify-self: flex-end;
-  margin-bottom: 5px;
   max-width: 100%;
-  opacity: 0.8;
   min-height: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .search-result__location__document-name {
   font-family: monospace;
   color: var(--on-surface);
   font-size: 12px;
+  opacity: 0.6;
 }
 .search-result__location__node-name {
   @include clampMultiLine(2);
   cursor: pointer;
   text-decoration: none;
   font-size: 12px;
-
+  opacity: 0.8;
   display: flex;
 }
 
@@ -82,11 +86,9 @@
   display: flex;
   flex-wrap: wrap;
   font-family: monospace;
-  font-size: 0.85rem;
-  @include respond-to($md-down) {
-    font-size: 0.8rem;
-  }
+  font-size: 11px;
   color: var(--on-surface);
+  opacity: 0.6;
 }
 .search-result__timestamps__separator {
   margin-left: 10px;

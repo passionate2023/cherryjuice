@@ -1,4 +1,4 @@
-import { modDialog } from '::sass-modules';
+import mod from './dialog.scss';
 import * as React from 'react';
 import { memo } from 'react';
 import {
@@ -63,9 +63,9 @@ const Dialog: React.FC<
         <animated.div
           {...keyboardEventsProps}
           className={joinClassNames([
-            modDialog.dialog,
-            [modDialog.dialogSmall, small],
-            [modDialog.dialogDocked, pinned],
+            mod.dialog,
+            [mod.dialogSmall, small],
+            [mod.dialogDocked, pinned],
           ])}
           style={{
             ...style,
@@ -82,7 +82,7 @@ const Dialog: React.FC<
             rightHeaderButtons={rightHeaderButtons}
             pinnable={pinnable}
           />
-          <DialogBody dialogBodyElements={children} />
+          <DialogBody>{children} </DialogBody>
           <DialogFooter
             footRightButtons={footRightButtons}
             footerLeftButtons={footerLeftButtons}
@@ -119,3 +119,4 @@ const DialogWithTransition: React.FC<
   );
 };
 export { Dialog, DialogWithTransition };
+export { mod as modDialog };

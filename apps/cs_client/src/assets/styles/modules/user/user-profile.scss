@@ -4,9 +4,11 @@
 
 .user-profile__group {
   display: flex;
-  padding-top: 10px;
+  padding-top: 20px;
   padding-bottom: 10px;
-  border-top: 1px solid var(--primary-050-10);
+  &:not(:first-child) {
+    border-top: 1px solid var(--primary-050-10);
+  }
   flex-wrap: wrap;
 }
 .user-profile__group__name {

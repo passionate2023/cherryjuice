@@ -1,0 +1,24 @@
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+.dialog-card {
+  margin-bottom: 5px;
+  box-shadow: $box-shadow2;
+  padding: 3px;
+  background-color: var(--background-100);
+  width: 100%;
+  box-sizing: border-box;
+}
+.dialog-card__items {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+.dialog-card__name {
+  width: 90%;
+  padding: 10px 10px 0px;
+  display: block;
+  overflow: auto;
+  margin-bottom: -5px;
+  color: var(--on-background);
+  font-family: monospace;
+  opacity: 0.8;
+}

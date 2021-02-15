@@ -3,7 +3,7 @@ import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 import { formattingBarUnmountAnimationDelay } from '::app/components/editor/editor-toolbar/components/animated-editor-toolbar/animated-editor-toolbar';
 import { filter, take, tap } from 'rxjs/operators';
 import { interval } from 'rxjs';
-import { modDialog } from '::sass-modules';
+import { modDialog } from '::shared-components/dialog/dialog';
 import { ac, Store } from '::store/store';
 import { useSelector } from 'react-redux';
 import { CssVariables } from '::store/ducks/css-variables';

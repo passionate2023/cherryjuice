@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { modDialog } from '::sass-modules';
+import mod from './dialog-card.scss';
 import { memo } from 'react';
 
 type DialogCardProps = {
@@ -8,9 +8,9 @@ type DialogCardProps = {
 };
 const DialogCard = ({ name, items }: DialogCardProps) => {
   return (
-    <div className={modDialog.dialogCard}>
-      {name && <span className={modDialog.dialogCard__name}>{name}</span>}
-      <span className={modDialog.dialogCard__items}>{items}</span>
+    <div className={mod.dialogCard}>
+      {name && <span className={mod.dialogCard__name}>{name}</span>}
+      <span className={mod.dialogCard__items}>{items}</span>
     </div>
   );
 };

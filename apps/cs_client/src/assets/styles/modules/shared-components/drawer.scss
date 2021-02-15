@@ -20,7 +20,7 @@ $navigation-width: 200px;
   padding-left: 10px;
   padding-bottom: 10px;
   position: absolute;
-  background-color: var(--surface);
+  background-color: var(--background-100);
   user-select: none;
   left: -500px;
   min-height: calc(100% - 10px - 8px);
@@ -44,6 +44,7 @@ $navigation-width: 200px;
   flex-direction: column;
   margin-left: auto;
   margin-right: auto;
+  gap: 20px;
   //width: $navigation-width;
   width: 180px;
   //height: 100%;
@@ -56,16 +57,21 @@ $navigation-width: 200px;
 }
 .drawer__navigation__category {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  //align-items: center;
   padding: 5px;
+  gap: 6px;
   color: var(--on-surface);
   font-family: 'Roboto Light', sans-serif;
   font-size: 0.8rem;
   transition: background-color 0.3s ease;
 }
+.drawer__navigation__category__name {
+  padding-left: 4px;
+}
 .drawer__navigation__element {
   padding: 15px 10px;
-  margin-bottom: 5px;
+  //margin-bottom: 5px;
 
   color: var(--on-background);
   transition: background-color 0.3s ease;
@@ -99,12 +105,8 @@ $navigation-width: 200px;
 }
 
 .drawer__content {
-  padding: 0px 5px;
-  height: calc(100% - 0px);
-  @include respond-to('md') {
-    //padding: 10px 30px;
-    //height: calc(100% - 20px);
-  }
+  padding: 20px 5px;
+  height: calc(100% - 40px);
 }
 
 .drawer__drawer-toggle {
@@ -123,4 +125,11 @@ $navigation-width: 200px;
   //font-size: 17px;
   //border-radius: 50% !important;
   //max-width: 36px;
+}
+
+.drawer__navigation__category-elements {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
 }

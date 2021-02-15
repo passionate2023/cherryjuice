@@ -25,6 +25,7 @@ type ButtonBaseProps = {
   text?: string;
   icon?: JSX.Element;
   iconName?: IconName;
+  iconSize?: number;
   variant?: 'danger';
   _ref?: MutableRefObject<HTMLButtonElement>;
   onContextMenu?: MouseEventHandler<HTMLButtonElement>;
@@ -53,6 +54,7 @@ const ButtonBase: React.FC<ButtonBaseProps & ButtonCircleProps> = ({
   variant,
   small,
   onContextMenu,
+  iconSize,
   ...props
 }) => {
   const buttonRef = useRef<HTMLButtonElement>();
@@ -79,7 +81,7 @@ const ButtonBase: React.FC<ButtonBaseProps & ButtonCircleProps> = ({
       {...(testId && { 'data-testid': testId })}
     >
       {iconName ? (
-        <Icon name={iconName} size={small ? 12 : undefined} />
+        <Icon name={iconName} size={small ? 12 : iconSize} />
       ) : icon ? (
         icon
       ) : (

@@ -1,3 +1,4 @@
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 .toolbar-button {
   min-width: var(--tabs);
   height: var(--tabs);
@@ -7,7 +8,9 @@
   cursor: pointer;
   &:hover {
     background-color: var(--background-100-95);
-
+    @include respond-to($md-down) {
+      background-color: var(--surface-030);
+    }
     // to hide the bottom border of the toolbar
     z-index: 1;
   }
@@ -15,8 +18,14 @@
     fill: grey;
   }
 }
+
 .toolbar-button--active {
   background-color: var(--background-100);
+
+  @include respond-to($md-down) {
+    background-color: var(--surface-030);
+  }
+  z-index: 1;
   svg {
     opacity: 1;
   }

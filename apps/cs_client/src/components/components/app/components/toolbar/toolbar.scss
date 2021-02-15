@@ -9,6 +9,7 @@
 }
 .toolbar::after {
   content: '|';
+  color: transparent;
   height: 1px;
   background-color: rgb(115, 115, 115, 0.08);
   width: 100vw;

@@ -9,7 +9,6 @@ import modInfoBar from './document/info-bar.scss';
 import modRichText from './document/rich-text.scss';
 import modAlertModal from './shared-components/alert-modal.scss';
 import modImportDocument from './import-document.scss';
-import modDialog from './shared-components/dialog.scss';
 import modAuthScreen from './auth/auth-screen.scss';
 import modLogin from './auth/login.scss';
 import modAuthBanner from './auth/banner.scss';
@@ -53,7 +52,6 @@ export {
   modTreeToolBar,
   modApp,
   modDrawer,
-  modDialog,
   modTextInput,
   modDocumentsList,
   modTabs,

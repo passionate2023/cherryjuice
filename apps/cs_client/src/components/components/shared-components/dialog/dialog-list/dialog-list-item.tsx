@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { modDialog } from '::sass-modules';
+import mod from './dialog-list-item.scss';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { memo, useEffect, useRef } from 'react';
 import { Icon, Icons } from '@cherryjuice/icons';
-import { CMItem } from '@cherryjuice/components';
-import { ContextMenuWrapper } from '@cherryjuice/components';
+import { ContextMenuWrapper, CMItem } from '@cherryjuice/components';
 
 const onContextMenu = e => {
   e.preventDefault();
@@ -51,9 +50,9 @@ const DialogListItem: React.FC<Props> = ({
   return (
     <div
       className={joinClassNames([
-        modDialog.dialogListItem,
-        [modDialog.dialogListItemFocused, selected],
-        [modDialog.dialogListItemActive, active],
+        mod.dialogListItem,
+        [mod.dialogListItemFocused, selected],
+        [mod.dialogListItemActive, active],
       ])}
       onClick={disabled ? undefined : onClick}
       tabIndex={0}
@@ -62,15 +61,13 @@ const DialogListItem: React.FC<Props> = ({
     >
       <div
         className={joinClassNames([
-          modDialog.dialogListItem__body,
-          [modDialog.dialogListItem__bodyDisabled, disabled],
+          mod.dialogListItem__body,
+          [mod.dialogListItem__bodyDisabled, disabled],
         ])}
       >
-        <span className={`${modDialog.dialogListItem__name} `}>{name}</span>
+        <span className={`${mod.dialogListItem__name} `}>{name}</span>
 
-        <span className={`${modDialog.dialogListItem__details} `}>
-          {details}
-        </span>
+        <span className={`${mod.dialogListItem__details} `}>{details}</span>
       </div>
       {cmItems && (
         <ContextMenuWrapper
@@ -82,7 +79,7 @@ const DialogListItem: React.FC<Props> = ({
         >
           {({ ref, show }) => (
             <div
-              className={`${modDialog.dialogListItem__contextMenuButton} `}
+              className={`${mod.dialogListItem__contextMenuButton} `}
               ref={ref}
               onClick={show}
               data-id={id}

@@ -1,0 +1,16 @@
+@import './dialog-header';
+.dialog__footer {
+  @include dialog-edge-size();
+  display: flex;
+  justify-content: space-between;
+  border-top: $dialog-border;
+  background-color: var(--background-100);
+  align-items: center;
+  z-index: 1;
+}
+
+.dialog__footer__left,
+.dialog__footer__right {
+  display: flex;
+  align-items: center;
+}
