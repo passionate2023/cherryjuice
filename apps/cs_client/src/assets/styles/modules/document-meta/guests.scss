@@ -1,4 +1,5 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
 .guests {
   display: flex;
   flex-direction: column;
@@ -28,29 +29,40 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  gap: 2px;
 }
 .guests__add-guest__input-container {
   flex: 1;
   display: flex;
   align-items: center;
-  background-color: var(--surface-010);
+  background-color: var(--surface-045);
   gap: 1px;
 }
 .chips__add-chip__input {
+  background-color: var(--surface-045);
   height: 40px;
   display: flex;
   flex: 1;
   &:invalid {
     color: var(--danger);
   }
+  font-size: 14px;
+  &::placeholder {
+    opacity: 0.4;
+  }
+  &:focus {
+    outline: none;
+  }
 }
 .chips__add-chip__button {
-  background-color: var(--surface-010);
-  &:disabled {
-    filter: brightness(0.95);
-  }
+  background-color: var(--surface-040);
   svg {
     fill: grey;
+  }
+  &:disabled {
+    svg {
+      opacity: 0.6;
+    }
   }
   width: 40px;
   height: 40px;
@@ -67,14 +79,19 @@
 .chips__chip {
   border-radius: 5px;
   height: 25px;
-  background-color: var(--primary-050-20);
   color: var(--primary-050);
-  box-shadow: $box-shadow2;
-  padding: 5px;
+  border: 1px solid var(--primary-050-80);
+  box-shadow: var(--shadow-3);
+  padding: 3px 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 3px;
+  @include type-c();
+}
+.chips__chip__text {
+  padding: 2px;
+  padding-bottom: 3px;
 }
 .guests__guest__email {
   margin-left: 5px;

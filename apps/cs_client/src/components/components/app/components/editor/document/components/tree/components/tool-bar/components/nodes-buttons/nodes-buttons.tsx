@@ -6,7 +6,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, store, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { createNode } from '::app/components/menus/dialogs/node-meta/hooks/save/helpers/create-node';
+import { createNode } from '::app/components/menus/dialogs/node-meta/hooks/save/helpers/create-node/create-node';
 import { nodeMetaInitialState } from '::app/components/menus/dialogs/node-meta/reducer/reducer';
 
 const mapState = (state: Store) => {

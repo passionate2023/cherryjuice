@@ -11,22 +11,30 @@ export const IconsList = ({ selectedIcon, setSelectedIcon }) => {
       className={`${modIconPicker.iconPicker__icon__list} `}
       data-testid={testIds.nodeMeta__customIconList}
     >
-      {icons.map(([iconId, iconName], i) => (
-        <Icon
-          name={iconName}
-          className={`${modIconPicker.iconPicker__icon} ${
-            selectedIcon === iconId
-              ? modIconPicker.iconPicker__iconSelected
-              : ''
-          }`}
-          key={i}
-          onClick={() => {
-            setSelectedIcon(iconId);
-          }}
-          tabIndex={0}
-          image={true}
-        />
-      ))}
+      {icons.map(([iconId, iconName], i) => {
+        const isSelected = +selectedIcon === +iconId;
+        return (
+          <span
+            className={`${modIconPicker.iconPicker__icon} ${
+              isSelected ? modIconPicker.iconPicker__iconSelected : ''
+            }`}
+            key={i}
+            onClick={() => {
+              setSelectedIcon(isSelected ? 0 : iconId);
+            }}
+          >
+            <Icon name={iconName} tabIndex={0} image={true} />
+            {isSelected && (
+              <Icon
+                name={'clear'}
+                tabIndex={0}
+                image={true}
+                className={modIconPicker.iconPicker__clear}
+              />
+            )}
+          </span>
+        );
+      })}
     </div>
   );
 };

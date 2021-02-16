@@ -1,7 +1,7 @@
 import { ac } from '::store/store';
-import { NodeMeta } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
+import { NodeMeta } from '::app/components/menus/dialogs/node-meta/reducer/reducer';
 import { getNode } from '::store/selectors/cache/document/node';
-import { generateNode } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/generate-node';
+import { generateNode } from '::app/components/menus/dialogs/node-meta/hooks/save/helpers/create-node/helpers/generate-node';
 import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 
 export const createNode = ({

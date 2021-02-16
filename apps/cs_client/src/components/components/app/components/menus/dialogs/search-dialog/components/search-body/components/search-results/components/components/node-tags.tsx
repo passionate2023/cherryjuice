@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { modSearchResult } from '::sass-modules';
-import { splitTags } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/edit-node';
+export const splitTags = (tags: string): string[] =>
+  tags
+    ?.split(/,\s/)
+    ?.map(tag => tag.trim())
+    ?.filter(Boolean);
 
 type Props = {
   tags?: string;

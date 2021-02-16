@@ -1,14 +1,12 @@
 import { QFullNode } from '::store/ducks/document-cache/document-cache';
 import { newNodePrefix } from '@cherryjuice/editor';
-import { NodeMeta } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
-import {
-  calculateNewStyle,
-  joinTags,
-} from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/edit-node';
+import { NodeMeta } from '::app/components/menus/dialogs/node-meta/reducer/reducer';
+import { joinTags } from '::app/components/menus/dialogs/node-meta/hooks/save/helpers/helpers/join-tags';
+import { stringifyNodeStyle } from '::app/components/menus/dialogs/node-meta/hooks/save/helpers/helpers/stringify-node-style';
 
 const defaultNode = {
   name: '',
-  node_title_styles: '{"color":"#ffffff","fontWeight":"normal","icon_id":0}',
+  node_title_styles: null,
   html: '<span class="rich-text__line"/>',
   read_only: 0,
   child_nodes: [],
@@ -38,7 +36,7 @@ const generateNode = ({
     updatedAt: new Date().getTime(),
     fatherId,
     name: nodeBMeta.name || '',
-    node_title_styles: calculateNewStyle(nodeBMeta),
+    node_title_styles: stringifyNodeStyle(nodeBMeta),
     read_only: nodeBMeta.isReadOnly ? 1 : 0,
     child_nodes: [],
     privacy: nodeBMeta.privacy,

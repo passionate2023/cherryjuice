@@ -1,6 +1,6 @@
-$widthRatio: 2.6;
-$circleRatio: 1.4;
-$pathHeight: 12px;
+$widthRatio: 2;
+$circleRatio: 1.2;
+$pathHeight: 15px;
 $pathWidth: #{$pathHeight * $widthRatio};
 $circleRadius: #{$pathHeight * $circleRatio};
 $halfPathHeight: #{$pathHeight * 0.5};

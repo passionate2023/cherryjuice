@@ -3,6 +3,7 @@ import { modNodeMeta } from '::sass-modules';
 import { Privacy } from '@cherryjuice/graphql-types';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { NodePrivacy } from '@cherryjuice/graphql-types';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 
 const privacyWeights = {
   [Privacy.PRIVATE]: 1,
@@ -63,7 +64,10 @@ const SelectPrivacy: React.FC<Props> = ({
   return (
     <select
       ref={ref}
-      className={modNodeMeta.nodeMeta__input__select}
+      className={joinClassNames([
+        modNodeMeta.nodeMeta__input__select,
+        disabled && modNodeMeta.nodeMeta__inputDisabled,
+      ])}
       onChange={onChangeM}
       defaultValue={privacy}
       disabled={disabled}

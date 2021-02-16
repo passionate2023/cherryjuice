@@ -1,24 +1,23 @@
 import * as React from 'react';
-import { modIconPicker, modNodeMeta, modSearchFilter } from '::sass-modules';
-import { Icon, Icons } from '@cherryjuice/icons';
+import { modIconPicker } from '::sass-modules';
+import { Icon } from '@cherryjuice/icons';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { IconsList } from '::root/components/app/components/menus/dialogs/node-meta/components/components/icons-list';
 import { ContextMenuWrapper } from '@cherryjuice/components';
+import { getNodeIconId } from '::app/components/editor/document/components/tree/components/node/components/node-icons/components/node-cherry';
 
-type Props = { value: string; disabled: boolean; onChange };
+type Props = { value: number; onChange; nodeDepth: number };
 
 const IconPicker: React.FC<Props> = ({
-  disabled,
   value: selectedIcon,
   onChange: setSelectedIcon,
+  nodeDepth,
 }) => {
-  const value = selectedIcon === '0' ? '1' : selectedIcon;
-
   return (
     <ContextMenuWrapper
       clickOutsideSelectorsWhitelist={[
         {
-          selector: '.' + modSearchFilter.searchFilter,
+          selector: '.' + modIconPicker.iconPicker__clear,
         },
       ]}
       showAsModal={'mb'}
@@ -50,13 +49,11 @@ const IconPicker: React.FC<Props> = ({
           <div
             className={modIconPicker.iconPicker}
             data-testid={testIds.nodeMeta__customIcon}
-            onClick={disabled ? undefined : show}
+            onClick={show}
           >
             <Icon
-              name={Icons.cherrytree.custom_icons[value]}
-              className={`${modIconPicker.iconPicker__icon} ${
-                disabled ? modNodeMeta.nodeMeta__inputDisabled : ''
-              }`}
+              name={getNodeIconId(+selectedIcon, nodeDepth)}
+              className={`${modIconPicker.iconPicker__icon} ${modIconPicker.iconPicker__iconCover}`}
               image={true}
             />
           </div>

@@ -1,4 +1,5 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
 .node-meta {
   box-sizing: border-box;
   padding: 20px 17px;
@@ -22,12 +23,14 @@
   margin-right: 10px;
   color: var(--on-background);
   width: 100px;
+  @include type-e2();
+  opacity: 0.9;
 }
 .node-meta__input__select {
   padding: 5px 20px;
   height: 40px;
   border: none;
-  background-color: var(--surface-010);
+  background-color: var(--surface-040);
   flex: 1;
   text-align: center;
 }
@@ -46,10 +49,10 @@
   width: 20px;
   padding: 2px;
   border: none;
-  background-color: var(--surface-010);
+  background-color: var(--surface-050);
   margin-left: 12px;
 }
 .node-meta__input--disabled {
-  filter: grayscale(1);
-  opacity: 0.3;
+  cursor: not-allowed;
+  opacity: 0.25;
 }
