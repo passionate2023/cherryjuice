@@ -11,7 +11,7 @@
   justify-content: center;
   height: 100%;
   &:hover {
-    background-color: var(--surface-010);
+    background-color: var(--surface-090);
   }
   transition: background-color 0.3s ease;
 }
@@ -26,7 +26,7 @@
   justify-content: center;
   transition: background-color 0.3s ease;
   svg {
-    fill: grey;
+    fill: var(--on-surface-060);
   }
 }
 
@@ -37,14 +37,14 @@
   }
   display: flex;
   flex-direction: column;
-  background-color: var(--surface);
+  background-color: var(--surface-100);
   align-items: flex-start;
-  box-shadow: $box-shadow2;
+  box-shadow: var(--shadow-2);
   z-index: 1;
 }
 .list__item {
   &:hover {
-    background-color: var(--surface-010);
+    background-color: var(--surface-090);
   }
   display: flex;
   align-items: center;
@@ -52,5 +52,5 @@
   width: 100%;
 }
 .list__item--selected {
-  background-color: var(--surface-010);
+  background-color: var(--surface-090);
 }

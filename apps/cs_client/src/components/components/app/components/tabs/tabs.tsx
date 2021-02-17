@@ -50,18 +50,20 @@ const Tabs: React.FC<Props & PropsFromRedux> = ({
 }) => {
   useForceUpdate();
 
-  let visible: number[], hidden: number[];
-  if (isOnMd) {
-    visible = recentNodes;
-    hidden = [];
-  } else {
-    const numberOfVisibleTabs = Math.floor(getNumberOfVisibleTabs());
-    [visible, hidden] = clampTabs(
-      recentNodes,
-      selectedNode_id,
-      numberOfVisibleTabs,
-    );
-  }
+  let visible: number[] = [],
+    hidden: number[] = [];
+  if (recentNodes)
+    if (isOnMd) {
+      visible = recentNodes;
+      hidden = [];
+    } else {
+      const numberOfVisibleTabs = Math.floor(getNumberOfVisibleTabs());
+      [visible, hidden] = clampTabs(
+        recentNodes,
+        selectedNode_id,
+        numberOfVisibleTabs,
+      );
+    }
 
   const [activeTab, setActiveTab] = useState<number>();
 

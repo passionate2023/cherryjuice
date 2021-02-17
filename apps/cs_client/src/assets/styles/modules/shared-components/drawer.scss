@@ -12,7 +12,7 @@
 }
 $navigation-width: 200px;
 .drawer__navigation {
-  border-right: $dialog-border;
+  border-right: var(--border-1);
   min-width: 180px;
   overflow-y: auto;
   padding-top: 8px;
@@ -52,7 +52,7 @@ $navigation-width: 200px;
 .drawer__navigation__category__separator {
   flex: 1;
   height: 1px;
-  background-color: var(--on-surface-1);
+  background-color: var(--on-surface-050-10);
   margin-left: 10px;
 }
 .drawer__navigation__category {
@@ -61,7 +61,7 @@ $navigation-width: 200px;
   //align-items: center;
   padding: 5px;
   gap: 6px;
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   font-family: 'Roboto Light', sans-serif;
   font-size: 0.8rem;
   transition: background-color 0.3s ease;
@@ -73,7 +73,7 @@ $navigation-width: 200px;
   padding: 15px 10px;
   //margin-bottom: 5px;
 
-  color: var(--on-background);
+  color: var(--on-background-010);
   transition: background-color 0.3s ease;
   cursor: pointer;
   &:hover {
@@ -90,7 +90,7 @@ $navigation-width: 200px;
     display: none;
   }
   opacity: 0;
-  background-color: var(--on-background);
+  background-color: var(--on-background-010);
   position: absolute;
   z-index: $ZI-drawer-navigation-scrim;
   height: 100%;

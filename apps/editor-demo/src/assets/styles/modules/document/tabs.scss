@@ -4,7 +4,7 @@
 .tabs-container {
   grid-area: tabs;
   display: flex;
-  background-color: var(--on-background);
+  background-color: var(--on-background-010);
   width: calc(100vw - var(--treeWidth));
   height: 35px;
   align-items: center;
@@ -42,7 +42,7 @@
   }
   width: 20px;
   border-radius: 0;
-  border-left: 1px solid var(--surface-010);
+  border-left: 1px solid var(--surface-090);
 }
 
 .tab {
@@ -71,7 +71,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 12px;
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   margin-bottom: -2.5px;
 }
 .tab--selected {

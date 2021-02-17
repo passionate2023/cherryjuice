@@ -10,9 +10,9 @@
 .tab {
   // variables
   --tab-border-color: rgb(115, 115, 115, 0.08);
-  --bg-color: var(--surface-045);
+  --bg-color: var(--surface-095);
   --bg-color-hover: var(--background-100);
-  --tab-separator-color: var(--on-surface-25);
+  --tab-separator-color: var(--on-surface-050-25);
   // position
   position: relative;
   box-sizing: border-box;
@@ -52,7 +52,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   @include type-e2();
 }
 
@@ -70,7 +70,7 @@
 .tab--hidden {
   background-color: transparent;
   &:hover {
-    background-color: var(--surface-050);
+    background-color: var(--surface-100);
   }
   border: none;
   border-radius: 5px;

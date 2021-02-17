@@ -88,7 +88,7 @@
 }
 .tool-bar__icon {
   svg {
-    fill: var(--on-surface);
+    fill: var(--on-surface-050);
   }
   display: flex;
   align-items: center;
@@ -105,7 +105,7 @@
 
   @include respond-to($md-up) {
     &:hover:not([data-disabled]) {
-      background-color: var(--surface-010);
+      background-color: var(--surface-090);
     }
   }
   &[data-disabled] {
@@ -124,13 +124,13 @@
 .tool-bar__icon--active {
   @include respond-to($md-down) {
     &:not([data-disabled]) {
-      background-color: var(--surface-010);
+      background-color: var(--surface-090);
     }
   }
 }
 
 .tool-bar__letter-icon {
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   font-family: sans-serif;
   font-weight: 700;
   font-size: 18px;
@@ -141,7 +141,7 @@
   margin-left: -1px;
   margin-right: -1px;
   width: 1px;
-  background-color: var(--on-surface);
+  background-color: var(--on-surface-050);
   height: 45%;
   opacity: 0.6;
 }

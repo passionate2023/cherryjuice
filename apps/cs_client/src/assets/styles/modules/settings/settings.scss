@@ -5,7 +5,7 @@
 
 .settings__screen {
   margin-left: 5px;
-  color: var(--on-background);
+  color: var(--on-background-010);
   overflow: auto;
   height: 100%;
   display: flex;
@@ -15,7 +15,7 @@
 
 .settings__group-container {
   display: flex;
-  color: var(--on-background);
+  color: var(--on-background-010);
   flex-direction: column;
   width: 100%;
   gap: 30px;

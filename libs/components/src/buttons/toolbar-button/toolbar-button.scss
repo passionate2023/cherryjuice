@@ -5,7 +5,7 @@
   position: relative;
 
   svg {
-    fill: var(--on-surface);
+    fill: var(--on-surface-050);
   }
 
   display: flex;
@@ -25,7 +25,7 @@
 
   @include respond-to($md-up) {
     &:hover:not([data-disabled='true']) {
-      background-color: var(--surface-010);
+      background-color: var(--surface-090);
     }
   }
   &[data-disabled='true'] {
@@ -45,7 +45,7 @@
 .tool-bar__icon--active {
   @include respond-to($md-down) {
     &:not([data-disabled='true']) {
-      background-color: var(--surface-010);
+      background-color: var(--surface-090);
     }
   }
 }

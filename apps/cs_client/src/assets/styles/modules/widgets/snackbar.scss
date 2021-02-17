@@ -14,14 +14,14 @@
 
   // style
   background-color: var(--background-100);
-  color: var(--on-background);
+  color: var(--on-background-010);
   border-radius: 3px;
-  box-shadow: $box-shadow1;
+  box-shadow: var(--shadow-1);
 }
 
 .snackbar__message {
   font-size: 0.95rem;
-  color: var(--on-background);
+  color: var(--on-background-010);
   display: block;
   padding: 5px;
 }
@@ -31,6 +31,6 @@
   align-items: center;
   justify-content: center;
   svg {
-    fill: grey;
+    fill: var(--on-surface-060);
   }
 }

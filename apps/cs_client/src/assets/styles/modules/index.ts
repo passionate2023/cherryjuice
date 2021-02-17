@@ -12,7 +12,6 @@ import modImportDocument from './import-document.scss';
 import modAuthScreen from './auth/auth-screen.scss';
 import modLogin from './auth/login.scss';
 import modAuthBanner from './auth/banner.scss';
-import modUserPopup from './user/user-popup.scss';
 import modApp from '::sass-modules/app.scss';
 import modDocumentOperations from './document-operations/document-operations.scss';
 import modNodeMeta from './node-meta/node-meta.scss';
@@ -62,7 +61,6 @@ export {
   modAuthScreen,
   modLogin,
   modAuthBanner,
-  modUserPopup,
   modDocumentOperations,
   modNodeMeta,
   modIconPicker,

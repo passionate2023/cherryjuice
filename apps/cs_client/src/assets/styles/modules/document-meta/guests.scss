@@ -35,11 +35,11 @@
   flex: 1;
   display: flex;
   align-items: center;
-  background-color: var(--surface-045);
+  background-color: var(--surface-095);
   gap: 1px;
 }
 .chips__add-chip__input {
-  background-color: var(--surface-045);
+  background-color: var(--surface-095);
   height: 40px;
   display: flex;
   flex: 1;
@@ -55,9 +55,9 @@
   }
 }
 .chips__add-chip__button {
-  background-color: var(--surface-040);
+  background-color: var(--surface-090);
   svg {
-    fill: grey;
+    fill: var(--on-surface-060);
   }
   &:disabled {
     svg {

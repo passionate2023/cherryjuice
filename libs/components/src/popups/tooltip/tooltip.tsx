@@ -13,34 +13,36 @@ const Tooltip: React.FC<
 > = ({ show = true, tooltip, children }) => {
   const id = useRef(0);
   if (!id.current) id.current = Date.now() + state.tooltips++;
-  return !(show && tooltip) ? (
-    children({})
-  ) : (
+  return (
     <>
-      <ContextMenuWrapper
-        customBody={() => <div className={mod.tooltip}>{tooltip}</div>}
-        hookProps={{
-          getIdOfActiveElement: () => 'tooltip',
-          getActiveElement: () =>
-            document.querySelector(`[data-tooltip-id="${id.current}"]`),
-        }}
-        positionPreferences={{
-          positionX: 'll',
-          positionY: 'bt',
-          offsetX: 3,
-          offsetY: 3,
-        }}
-        style={{ paddingTop: 0, paddingBottom: 0, opacity: 0.95 }}
-        level={-1}
-      >
-        {({ show, hide }) => {
-          return children({
-            'data-tooltip-id': id.current,
-            onMouseEnter: show,
-            onMouseLeave: hide,
-          });
-        }}
-      </ContextMenuWrapper>
+      {!(show && tooltip) ? (
+        children({})
+      ) : (
+        <ContextMenuWrapper
+          customBody={() => <div className={mod.tooltip}>{tooltip}</div>}
+          hookProps={{
+            getIdOfActiveElement: () => 'tooltip',
+            getActiveElement: () =>
+              document.querySelector(`[data-tooltip-id="${id.current}"]`),
+          }}
+          positionPreferences={{
+            positionX: 'll',
+            positionY: 'bt',
+            offsetX: 3,
+            offsetY: 3,
+          }}
+          style={{ paddingTop: 0, paddingBottom: 0, opacity: 0.95 }}
+          level={-1}
+        >
+          {({ show, hide }) => {
+            return children({
+              'data-tooltip-id': id.current,
+              onMouseEnter: show,
+              onMouseLeave: hide,
+            });
+          }}
+        </ContextMenuWrapper>
+      )}
     </>
   );
 };

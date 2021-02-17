@@ -3,7 +3,7 @@
   @include dialog-edge-size();
   display: flex;
   justify-content: space-between;
-  border-top: $dialog-border;
+  border-top: var(--border-1);
   background-color: var(--background-100);
   align-items: center;
   z-index: 1;

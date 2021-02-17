@@ -30,11 +30,11 @@
   align-items: flex-start;
 }
 .userProfile__group__elements__button {
-  background-color: var(--surface);
+  background-color: var(--surface-100);
 }
 .user-profile__personal-information__label {
   display: flex;
-  color: black;
+  color: var(--on-background-010);
 }
 .user-profile__personal-information__value {
   input {
@@ -45,7 +45,7 @@
   display: flex;
   flex-direction: column;
   font-size: 0.9rem;
-  background-color: var(--surface);
+  background-color: var(--surface-100);
   border-radius: 5px;
 }
 .userProfile__change-email__status {

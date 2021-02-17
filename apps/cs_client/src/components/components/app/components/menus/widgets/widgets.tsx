@@ -95,4 +95,4 @@ const Widgets: React.FC<PropsFromRedux> = ({
 };
 
 const _ = connector(Widgets);
-export { _ as Widgets };
+export default _;

@@ -1,6 +1,10 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
-@import '~@cherryjuice/shared-styles/build/mixins/form';
+@mixin form-element-size {
+  max-width: $form-input-width;
+  min-width: $form-input-width;
+  box-sizing: border-box;
+}
 
 .login__card {
   position: relative;
@@ -15,7 +19,7 @@
   background-color: var(--background-100);
   filter: none;
   border-radius: 10px;
-  box-shadow: $box-shadow1;
+  box-shadow: var(--shadow-1);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -48,7 +52,7 @@
   font-size: 0.825rem;
   gap: 10px;
   a {
-    color: var(--on-surface);
+    color: var(--on-surface-050);
     border: none;
   }
 }

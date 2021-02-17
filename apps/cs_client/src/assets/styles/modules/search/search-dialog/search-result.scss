@@ -7,7 +7,7 @@
   min-height: 88px;
   max-height: 250px;
   padding: 20px 20px;
-  background-color: var(--surface-050);
+  background-color: var(--surface-100);
   &:not(:last-child) {
     margin-bottom: 20px;
   }
@@ -16,7 +16,7 @@
   flex-direction: column;
   border-radius: 5px;
   gap: 6px;
-  box-shadow: $box-shadow2;
+  box-shadow: var(--shadow-2);
   transition: background-color 200ms linear;
   cursor: pointer;
   &:hover {
@@ -29,11 +29,11 @@
 .search-result--selected {
   background-color: var(--primary-100) !important;
   .search-result__location__document-name {
-    color: var(--on-background);
+    color: var(--on-background-010);
     opacity: 0.5;
   }
   .search-result__timestamps {
-    color: var(--on-background);
+    color: var(--on-background-010);
   }
 }
 .search-result__location {
@@ -48,7 +48,7 @@
 
 .search-result__location__document-name {
   font-family: monospace;
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   font-size: 12px;
   opacity: 0.6;
 }
@@ -87,7 +87,7 @@
   flex-wrap: wrap;
   font-family: monospace;
   font-size: 11px;
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   opacity: 0.6;
 }
 .search-result__timestamps__separator {
@@ -95,5 +95,5 @@
   margin-right: 10px;
 }
 .search-result__timestamps__item {
-  color: var(--on-surface);
+  color: var(--on-surface-050);
 }

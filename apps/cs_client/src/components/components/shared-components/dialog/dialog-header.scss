@@ -9,13 +9,13 @@
 .dialog__header {
   @include dialog-edge-size();
   background-color: var(--background-100);
-  border-bottom: $dialog-border;
+  border-bottom: var(--border-1);
   display: flex;
   align-items: center;
   user-select: none;
   h2 {
     @include type-a2();
-    color: var(--on-background);
+    color: var(--on-background-010);
     opacity: 0.8;
   }
 }
@@ -34,7 +34,7 @@
 .dialog__header__button {
   opacity: 0.6;
   svg {
-    fill: grey;
+    fill: var(--on-surface-060);
   }
   &:hover {
     opacity: 1;

@@ -4,26 +4,26 @@
   --warning: #bb6134;
 }
 .light-theme {
-  --surface-030: rgb(220, 220, 220);
-  --surface-020: rgb(230, 230, 230);
-  --surface-010: rgb(240, 240, 240);
-  --surface: rgb(250, 250, 250);
+  --surface-070: rgb(220, 220, 220);
+  --surface-080: rgb(230, 230, 230);
+  --surface-090: rgb(240, 240, 240);
+  --surface-100: rgb(250, 250, 250);
   --on-surface-010: rgb(55, 55, 55);
-  --on-surface: rgb(115, 115, 115);
-  --on-surface-1: rgb(115, 115, 115, 0.1);
-  --on-surface-25: rgb(115, 115, 115, 0.25);
-  --on-surface-5: rgb(115, 115, 115, 0.5);
+  --on-surface-050: rgb(115, 115, 115);
+  --on-surface-050-10: rgb(115, 115, 115, 0.1);
+  --on-surface-050-25: rgb(115, 115, 115, 0.25);
+  --on-surface-050-50: rgb(115, 115, 115, 0.5);
 
   --background-100: rgb(255, 255, 255);
   --background-100-20: rgba(255, 255, 255, 0.2);
   --background-100-15: rgba(255, 255, 255, 0.15);
-  --on-background: rgb(0, 0, 0);
-  --on-background-04: rgb(0, 0, 0, 0.04);
-  --on-background-07: rgb(0, 0, 0, 0.07);
-  --on-background-08: rgb(0, 0, 0, 0.08);
-  --on-background-12: rgb(0, 0, 0, 0.12);
-  --on-background-14: rgb(0, 0, 0, 0.14);
-  --on-background-20: rgb(0, 0, 0, 0.2);
+  --on-background-010: rgb(0, 0, 0);
+  --on-background-010-04: rgb(0, 0, 0, 0.04);
+  --on-background-010-07: rgb(0, 0, 0, 0.07);
+  --on-background-010-08: rgb(0, 0, 0, 0.08);
+  --on-background-010-12: rgb(0, 0, 0, 0.12);
+  --on-background-010-14: rgb(0, 0, 0, 0.14);
+  --on-background-010-20: rgb(0, 0, 0, 0.2);
 
   --primary-100: rgb(241, 229, 229);
   --primary-100-50: rgb(241, 229, 229, 0.5);
@@ -38,14 +38,14 @@
   --primary-020-10: rgba(40, 1, 1, 0.1);
   --primary-020-40: rgba(40, 1, 1, 0.4);
   --primary-010: rgb(25, 1, 1);
-  --on-primary: rgb(255, 255, 255);
+  --on-primary-100: rgb(255, 255, 255);
 
   --secondary-010: rgb(0, 65, 66);
   --secondary-010-50: rgb(0, 65, 66, 0.5);
   --secondary-050: #006d6d;
   --teriary-050: #00982b;
   --secondary-100: #469c9b;
-  --on-secondary: rgb(255, 255, 255);
+  --on-secondary-100: rgb(255, 255, 255);
 
   @include common-colors();
 }

@@ -30,7 +30,7 @@
   align-self: center;
   // style
   opacity: 0.4;
-  fill: black;
+  fill: var(--on-background-010);
   // content
   padding-left: 10px;
 }
@@ -61,7 +61,7 @@
   transform-origin: 0%;
   transform: translateY(15px) translateX(35px);
   transition: transform 200ms, opacity 200ms;
-  color: var(--on-surface);
+  color: var(--on-surface-050);
 }
 .v-text-input:focus-within .v-text-input__label,
 .v-text-icon__input:not(:placeholder-shown) {

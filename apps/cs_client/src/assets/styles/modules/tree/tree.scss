@@ -12,7 +12,7 @@
   grid-area: tree;
   height: var(--tree-height);
   overflow: hidden;
-  border-right: white 3px solid;
+  border-right: var(--background-100) 3px solid;
   max-height: 100%;
 }
 .tree_root-list {

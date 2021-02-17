@@ -30,7 +30,7 @@
   .dialog__header {
     display: none;
   }
-  border-top: $dialog-border;
+  border-top: var(--border-1);
 }
 $small-dialog-width: 350px;
 .dialog--small {

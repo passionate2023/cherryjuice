@@ -11,7 +11,7 @@
   padding: 5px 0;
   flex-direction: column;
   border-radius: 5px;
-  box-shadow: $box-shadow1;
+  box-shadow: var(--shadow-1);
   z-index: $ZI-context-menu;
   overflow: hidden;
 }

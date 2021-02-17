@@ -15,7 +15,7 @@
     filter: brightness(#{$br-base + 2 * $br-step});
     background-color: $bg-color;
     color: $color;
-    box-shadow: $box-shadow1;
+    box-shadow: var(--shadow-1);
   }
 }
 
@@ -35,7 +35,7 @@
   &:active:not([disabled]) {
     background-color: var(--primary-090);
     color: var(--primary-020);
-    box-shadow: $box-shadow1;
+    box-shadow: var(--shadow-1);
   }
   &:disabled {
     @include disabled-button();
@@ -65,15 +65,15 @@
     0.5
   );
   svg {
-    fill: white;
+    fill: var(--background-100);
   }
 }
 
 .button--pressed {
   background-color: var(--primary-050) !important;
   color: var(--background-100) !important;
-  box-shadow: $box-shadow1;
+  box-shadow: var(--shadow-1);
   svg {
-    fill: white;
+    fill: var(--background-100);
   }
 }

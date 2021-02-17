@@ -40,7 +40,7 @@ const useTabsMenuItems = ({
     );
     ac.node.close({ documentId, node_ids: unchanged });
     // hide();
-  }, [documentId, recentNodes, localState.editedNodes.edited]);
+  }, [documentId, recentNodes, localState?.editedNodes?.edited]);
 
   const closeOthersM = useCallback(() => {
     const others = recentNodes.filter(_node_id => _node_id !== activeTab);

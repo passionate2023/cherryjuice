@@ -9,7 +9,7 @@
   padding: 10px;
   justify-content: space-between;
   @include type-e();
-  color: var(--on-background);
+  color: var(--on-background-010);
   cursor: default;
   transition: background-color 200ms linear;
   max-width: 1300px;
@@ -46,6 +46,6 @@
 .row--collapsed {
 }
 .row--header {
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   opacity: 0.75;
 }

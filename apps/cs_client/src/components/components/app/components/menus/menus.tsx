@@ -1,19 +1,27 @@
 import * as React from 'react';
 import { Suspense } from 'react';
 import { Void } from '::root/components/shared-components/react/void';
-import ReloadDocument from '::root/components/app/components/menus/modals/reload-document/reload-document';
 import { connect, ConnectedProps } from 'react-redux';
-import { SearchDialog } from '::root/components/app/components/menus/dialogs/search-dialog/search-dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
-import { Widgets } from '::root/components/app/components/menus/widgets/widgets';
 
+const SearchDialog = React.lazy(() =>
+  import(
+    '::root/components/app/components/menus/dialogs/search-dialog/search-dialog'
+  ),
+);
 const AlertModal = React.lazy(() => import('./modals/alert-modal/alert-modal'));
+const Widgets = React.lazy(() =>
+  import('::root/components/app/components/menus/widgets/widgets'),
+);
+const ReloadDocument = React.lazy(() =>
+  import(
+    '::root/components/app/components/menus/modals/reload-document/reload-document'
+  ),
+);
 const PasswordModal = React.lazy(() =>
   import('./modals/password-modal/password-modal'),
 );
-const UserPopup = React.lazy(() =>
-  import('./modals/user/user-with-transition'),
-);
+
 const Anchor = React.lazy(() => import('./dialogs/anchor/anchor'));
 const Bookmarks = React.lazy(() =>
   import('./dialogs/bookmarks/bookmarks-dialog'),
@@ -47,7 +55,6 @@ const DeleteDocument = React.lazy(() =>
 );
 
 const components = [
-  <UserPopup key={'UserPopup'} />,
   <Bookmarks key={'Bookmarks'} />,
   <Settings key={'Settings'} />,
   <SearchDialog key={'SearchDialog'} />,

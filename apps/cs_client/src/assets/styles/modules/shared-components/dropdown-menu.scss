@@ -3,11 +3,11 @@
 @import '~@cherryjuice/shared-styles/build/mixins/typography';
 
 .dropdown-menu {
-  --border: 0.5px solid var(--on-surface-1);
+  --border: 0.5px solid var(--on-surface-050-10);
   --text-padding: 10px 16px;
 
   @include respond-to($md-down) {
-    --border: 0.5px solid var(--on-surface-5);
+    --border: 0.5px solid var(--on-surface-050-50);
   }
 }
 
@@ -27,7 +27,7 @@
   top: 100%;
   z-index: $ZI-dropdown-menu;
   // style
-  background-color: var(--surface);
+  background-color: var(--surface-100);
   border-radius: 5px;
   box-shadow: var(--shadow-4);
   margin-top: 2px;
@@ -56,7 +56,7 @@
   // size
   // position
   // style
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   opacity: 0.6;
   font-size: 0.75em;
   cursor: default;
@@ -79,7 +79,7 @@
   // style
   cursor: pointer;
   @include type-c();
-  color: var(--on-background);
+  color: var(--on-background-010);
 
   &:first-letter {
     text-transform: capitalize;

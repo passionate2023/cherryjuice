@@ -23,7 +23,7 @@
     background-color: var(--background-100);
   }
   input {
-    background-color: var(--surface);
+    background-color: var(--surface-100);
   }
 }
 .search-dialog__search-setting {
@@ -83,7 +83,7 @@
 
 .search-dialog__search-results__header {
   padding: 0 25px;
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   font-size: 0.8rem;
   align-self: flex-start;
 }

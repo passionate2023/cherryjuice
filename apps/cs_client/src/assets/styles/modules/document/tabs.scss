@@ -1,12 +1,6 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 @import '~@cherryjuice/shared-styles/build/mixins/typography';
 @import '~@cherryjuice/shared-styles/build/vars/vars';
-//$node-height: calc(#{$title-and-recent-bar-height-md} - 5px);
-//$node-width: 100px;
-//$node-left-margin: calc(
-//  calc(#{$title-and-recent-bar-height-md} - #{$node-height} + 1px) / 2
-//);
-//$recent-nodes-width: $node-width * 2+ 10px;
 
 .tabs-container {
   display: flex;
@@ -16,7 +10,7 @@
   height: var(--tabs);
   align-items: center;
   justify-content: flex-start;
-  background-color: var(--surface-045);
+  background-color: var(--surface-095);
 }
 
 .tabs-list {
@@ -49,7 +43,7 @@
   border-radius: 0;
   svg {
     transform: scale(1.3);
-    fill: grey;
+    fill: var(--on-surface-060);
   }
   &:focus {
     outline: none !important;
@@ -62,5 +56,5 @@
 .tab-separator {
   height: 80%;
   width: 1px;
-  background-color: var(--on-surface);
+  background-color: var(--on-surface-050);
 }

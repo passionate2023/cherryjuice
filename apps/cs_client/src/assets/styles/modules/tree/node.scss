@@ -88,7 +88,7 @@
     margin: 0;
   }
   svg {
-    fill: #dbdbdb;
+    fill: var(--surface-070);
   }
 }
 .node__title-cherry {
@@ -123,7 +123,7 @@ div.node[drag-enter='true'] + ul {
 
 .drop-hint {
   height: 2px;
-  background-color: white;
+  background-color: var(--background-100);
   opacity: 0.5;
   width: 80%;
   position: absolute;

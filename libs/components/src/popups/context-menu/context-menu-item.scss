@@ -10,9 +10,9 @@
   padding-right: 30px;
   min-width: 150px;
   width: 100%;
-  color: var(--on-background);
+  color: var(--on-background-010);
   &:hover:not([data-disabled]) {
-    background-color: var(--surface-010);
+    background-color: var(--surface-090);
   }
   filter: unset;
 
@@ -31,7 +31,7 @@
 }
 
 .context-menu-item--bottom-separator {
-  border-bottom: 1px solid var(--on-surface-1);
+  border-bottom: 1px solid var(--on-surface-050-10);
 }
 .context-menu-item__icon {
   box-sizing: border-box;
@@ -58,6 +58,6 @@
   align-items: center;
   justify-content: center;
   svg {
-    fill: grey;
+    fill: var(--on-surface-060);
   }
 }

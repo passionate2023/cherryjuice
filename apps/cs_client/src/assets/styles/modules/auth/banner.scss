@@ -1,6 +1,6 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
-@import '~@cherryjuice/shared-styles/build/mixins/form';
+@import './login.scss';
 
 .banner__container {
   position: absolute;

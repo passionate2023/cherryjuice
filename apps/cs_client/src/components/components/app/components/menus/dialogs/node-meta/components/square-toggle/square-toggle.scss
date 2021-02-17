@@ -1,8 +1,8 @@
 .square-toggle {
-  background-color: var(--surface-040);
+  background-color: var(--surface-090);
   cursor: pointer;
   &:hover {
-    background-color: var(--surface-020);
+    background-color: var(--surface-080);
   }
   height: 40px;
   width: 40px;
@@ -14,7 +14,7 @@
     opacity: 0.5;
     transform: scale(1);
     transition: all 200ms linear;
-    fill: grey;
+    fill: var(--on-surface-060);
   }
   transition: all 200ms linear;
 }
@@ -22,6 +22,6 @@
   svg {
     opacity: 0.8;
     transform: scale(1.1);
-    fill: black;
+    fill: var(--on-background-010);
   }
 }

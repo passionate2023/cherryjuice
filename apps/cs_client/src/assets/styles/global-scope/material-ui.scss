@@ -1,20 +1,7 @@
 @use "~@material/theme" with (
-  $primary: #790604,
-  $secondary: #76ff03,
-  $background: floralwhite,
+  $primary:  rgb(121, 6, 4),
+  $secondary: rgb(0, 109, 109),
+  $background: rgb(255, 255, 255),
 );
 // linear progress
 @use '~@material/linear-progress/mdc-linear-progress';
-// tab bar / tab
-//@use "~@material/tab-bar/mdc-tab-bar";
-//@use "~@material/tab-scroller/mdc-tab-scroller";
-//@use "~@material/tab-indicator/mdc-tab-indicator";
-//@use "~@material/tab/mdc-tab";
-// dialog
-//@use "~@material/dialog/mdc-dialog";
-// drawer
-//@use "~@material/drawer/mdc-drawer";
-//@use "~@material/list/mdc-list";
-// inputs
-//@use "~@material/textfield/mdc-text-field";
-//@use "~@material/button/mdc-button";

@@ -44,7 +44,7 @@
   @include respond-to('md') {
     margin-bottom: 0;
   }
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   width: 200px;
   @include type-c();
 }

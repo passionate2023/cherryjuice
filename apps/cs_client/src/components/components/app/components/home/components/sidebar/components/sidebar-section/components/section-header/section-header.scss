@@ -14,10 +14,10 @@
   user-select: none;
 
   svg {
-    fill: var(--on-surface);
+    fill: var(--on-surface-050);
     cursor: pointer;
   }
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   opacity: 0.75;
   @include type-g();
 }

@@ -15,6 +15,7 @@ export const calculateEditedAttribute = ({
   nodeBMeta,
 }: EditNodesProps): MutateNodeData => {
   const diff: MutateNodeData = {};
+  if (!nodeA) return diff;
   if (nodeA.name !== nodeBMeta.name) {
     diff.name = nodeBMeta.name;
   }

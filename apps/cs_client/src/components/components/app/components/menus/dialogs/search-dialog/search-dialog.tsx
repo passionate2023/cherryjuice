@@ -43,4 +43,4 @@ const SearchDialog: React.FC<Props & PropsFromRedux> = ({
 };
 
 const _ = connector(SearchDialog);
-export { _ as SearchDialog };
+export default _;
