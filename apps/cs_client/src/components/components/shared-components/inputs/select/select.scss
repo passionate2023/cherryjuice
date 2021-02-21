@@ -1,0 +1,23 @@
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
+.select {
+  padding: 5px 20px;
+  height: 40px;
+  border: none;
+  background-color: var(--surface-090);
+  color: var(--on-surface-010);
+  flex: 1;
+  text-align: center;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 0 24 24' width='24' fill='grey' %3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, repeat;
+  background-position: right 0.7em top 50%, 0 0;
+  @include type-e2();
+  option {
+    font-weight: normal;
+  }
+}
+
+.select--disabled {
+  cursor: not-allowed;
+  opacity: 0.25;
+}

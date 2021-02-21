@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "rollup -c ",
-    "dev": "rollup -c -w",
+    "dev:shared-styles": "rollup -c -w",
     "test": "exit 0",
     "lint": "eslint ./**"
   },

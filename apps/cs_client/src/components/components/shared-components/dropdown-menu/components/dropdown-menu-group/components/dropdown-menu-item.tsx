@@ -6,17 +6,18 @@ export type DropdownMenuItemProps = {
   onClick: () => void;
   disabled?: boolean;
   testId?: string;
+  hideOnClick?: boolean;
 };
 
 export const DropdownMenuItem: React.FC<
   DropdownMenuItemProps & {
     hide: () => void;
   }
-> = ({ text, onClick, hide, testId, disabled }) => {
+> = ({ text, onClick, hide, testId, disabled, hideOnClick = true }) => {
   const _onClick = e => {
     e.preventDefault();
     e.stopPropagation();
-    hide();
+    if (hideOnClick) hide();
     onClick();
   };
   return (

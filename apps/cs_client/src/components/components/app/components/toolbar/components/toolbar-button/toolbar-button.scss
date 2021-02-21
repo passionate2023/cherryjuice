@@ -7,25 +7,19 @@
   justify-content: center;
   cursor: pointer;
   &:hover {
-    background-color: var(--background-100-95);
-    @include respond-to($md-down) {
-      background-color: var(--surface-090);
-    }
-    // to hide the bottom border of the toolbar
-    z-index: 1;
+    background-color: var(--background-100);
   }
 
   svg {
-    fill: var(--on-surface-060);
+    fill: var(--icon-fill);
   }
+  transition: background-color 0.2s linear, filter 0.2s linear,
+    opacity 0.2s linear;
 }
 
 .toolbar-button--active {
   background-color: var(--background-100) !important;
 
-  @include respond-to($md-down) {
-    background-color: var(--surface-070) !important;
-  }
   z-index: 1;
   svg {
     opacity: 1;

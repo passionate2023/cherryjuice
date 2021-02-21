@@ -23,6 +23,7 @@ const mapState = (state: Store) => {
     documentActionNOF: state.timelines.documentActionNOF,
     showBookmarks: state.dialogs.showBookmarks,
     showHome: state.home.show,
+    tb: state.root.isOnTb,
   };
 };
 
@@ -37,13 +38,22 @@ const NavBar: React.FC<PropsFromRedux> = ({
   showTimeline,
   documentActionNOF,
   showHome,
+  tb,
 }) => {
   const noDocumentIsSelected = !documentId;
+  const size = tb ? 40 : 34;
   return (
     <>
       <div style={{ marginLeft: 'auto' }} />
       <div className={modToolbar.toolbar__group}>
-        <DocumentSearch style={{ backgroundColor: 'transparent' }} />
+        <DocumentSearch
+          style={{
+            buttonBc: 'transparent',
+            buttonHoverBc: 'var(--background-100)',
+            elementWidth: size,
+            elementHeight: size,
+          }}
+        />
         {isDocumentOwner && (
           <>
             <ToolbarButton

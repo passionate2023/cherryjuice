@@ -4,14 +4,13 @@
   width: 100%;
   display: flex;
   align-items: center;
-  background-color: var(--on-surface-010);
   opacity: 0.5;
   &:hover {
     opacity: 0.9;
   }
   height: var(--treeToolBarHeight);
+  background-color: var(--surface-100);
   transition: opacity 200ms linear;
-  padding: 2px;
   box-sizing: border-box;
 }
 
@@ -33,7 +32,10 @@
     margin-left: auto;
   }
   //gap: 1px;
-  background-color: var(--background-100);
+  background-color: var(--surface-100);
+  svg {
+    fill: var(--icon-fill);
+  }
 }
 .tree__search-field-wrapper {
   opacity: 1;
@@ -50,16 +52,4 @@
   @include respond-to($md-down) {
     width: 40px;
   }
-}
-.button {
-  height: 100%;
-  width: 30px;
-  min-width: 30px;
-
-  @include respond-to($md-down) {
-    width: 40px;
-    min-width: 40px;
-  }
-  background-color: var(--background-100);
-  border-radius: 0;
 }

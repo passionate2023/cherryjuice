@@ -121,7 +121,7 @@ const SearchFilters: React.FC<Props & PropsFromRedux> = ({
     <SearchHeaderContainer alignChildren={'v'}>
       <SearchHeaderGroup>
         <DocumentSearch
-          style={{ width: mb ? 300 : 400, height: 50 }}
+          style={{ elementWidth: mb ? 300 : 400, elementHeight: 50 }}
           navBar={false}
           lazyAutoFocus={showDialog}
         />

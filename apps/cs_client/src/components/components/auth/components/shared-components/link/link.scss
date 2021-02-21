@@ -7,7 +7,7 @@
   }
   align-items: center;
   &:focus {
-    outline: 2px solid rgba(60, 5, 3, 0.5);
+    outline: 2px solid var(--primary-053);
   }
 }
 
@@ -16,7 +16,7 @@
     text-decoration: none;
     padding-bottom: 4px;
     margin-bottom: -4px;
-    border-bottom: 0.5px solid var(--primary-020-40);
+    border-bottom: 0.5px solid var(--primary-053);
   }
   outline-offset: 3px;
 }

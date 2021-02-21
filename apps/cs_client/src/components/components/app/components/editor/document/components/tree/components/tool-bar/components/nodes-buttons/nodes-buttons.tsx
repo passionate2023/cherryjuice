@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { ButtonSquare } from '@cherryjuice/components';
-import { modTreeToolBar } from '::sass-modules';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, store, Store } from '::store/store';
@@ -8,6 +6,7 @@ import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-a
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { createNode } from '::app/components/menus/dialogs/node-meta/hooks/save/helpers/create-node/create-node';
 import { nodeMetaInitialState } from '::app/components/menus/dialogs/node-meta/reducer/reducer';
+import { TreeToolbarButton } from '::app/components/editor/document/components/tree/components/tool-bar/components/nodes-buttons/tree-toolbar-buton/tree-toolbar-button';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -51,42 +50,34 @@ const NodesButtons: React.FC<Props & PropsFromRedux> = ({
     <>
       {isDocumentOwner && (
         <>
-          <ButtonSquare
+          <TreeToolbarButton
+            icon={'create-sibling'}
+            tooltip={'Create a sibling node'}
+            disabled={noDocumentIsSelected}
             onClick={createNewNode(true)}
             testId={testIds.toolBar__main__createSiblingNode}
-            disabled={noDocumentIsSelected}
-            className={modTreeToolBar.button}
-            iconName={'create-sibling'}
-            iconSize={20}
-            tooltip={'Create a sibling node'}
           />
-          <ButtonSquare
-            onClick={createNewNode(false)}
-            className={modTreeToolBar.button}
-            testId={testIds.toolBar__main__createChildNode}
-            disabled={!selectedNode_id}
-            iconName={'create-child'}
+          <TreeToolbarButton
             tooltip={'Create a child node'}
-            iconSize={20}
+            icon={'create-child'}
+            disabled={!selectedNode_id}
+            onClick={createNewNode(false)}
+            testId={testIds.toolBar__main__createChildNode}
           />
 
-          <ButtonSquare
-            className={modTreeToolBar.button}
-            iconSize={20}
+          <TreeToolbarButton
+            tooltip={'Edit selected node'}
             onClick={ac.dialogs.showEditNode}
             disabled={noNodeIsSelected || noDocumentIsSelected}
             testId={testIds.toolBar__main__editNodeMeta}
-            iconName={'edit'}
-            tooltip={'Edit selected node'}
+            icon={'edit'}
           />
-          <ButtonSquare
-            className={modTreeToolBar.button}
-            iconSize={20}
+          <TreeToolbarButton
+            tooltip={'Delete selected node'}
             onClick={ac.dialogs.showDeleteNode}
             disabled={noNodeIsSelected || noDocumentIsSelected || read_only}
             testId={testIds.toolBar__main__deleteNode}
-            iconName={'delete'}
-            tooltip={'Delete selected node'}
+            icon={'delete'}
           />
         </>
       )}

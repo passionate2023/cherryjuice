@@ -110,7 +110,7 @@ const Bookmarks: React.FC<Props & PropsFromRedux> = ({
             onClear={ac.bookmarks.clearQuery}
             lazyAutoFocus={!isOnMd && showDialog ? 1200 : 0}
             searchImpossible={!bookmarks.length}
-            style={{ width: mb ? 300 : 400, height: 50 }}
+            style={{ elementWidth: mb ? 300 : 400, elementHeight: 50 }}
           />
           <SearchSetting iconName={Icons.material.sort} testId={'sortResults'}>
             <SortOptions

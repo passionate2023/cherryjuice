@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { joinClassNames } from '@cherryjuice/shared-helpers';
+import { joinClassNames, useOnKeyPress } from '@cherryjuice/shared-helpers';
 import mod from './square-toggle.scss';
 import { Icon, IconName } from '@cherryjuice/icons';
+import { useRef } from 'react';
 type Props = {
   enabled: boolean;
   testId?: string;
@@ -16,6 +17,8 @@ export const SquareToggle: React.FC<Props> = ({
   icon,
   iconSize,
 }) => {
+  const ref = useRef();
+  useOnKeyPress({ ref, onClick, keys: ['Space', 'Enter'] });
   return (
     <div
       className={joinClassNames([
@@ -24,6 +27,9 @@ export const SquareToggle: React.FC<Props> = ({
       ])}
       onClick={onClick}
       data-testid={testId}
+      tabIndex={0}
+      ref={ref}
+      data-focusable="self"
     >
       <Icon name={icon} size={iconSize} />
     </div>

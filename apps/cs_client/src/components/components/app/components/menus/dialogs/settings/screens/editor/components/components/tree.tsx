@@ -2,7 +2,7 @@ import * as React from 'react';
 import { SettingsGroup } from '::root/components/app/components/menus/dialogs/settings/shared/settings-group';
 import { SettingsElement } from '::root/components/app/components/menus/dialogs/settings/shared/settings-element';
 import { ColorInput } from '@cherryjuice/components';
-import { Select } from '::root/components/shared-components/inputs/select';
+import { Select } from '::root/components/shared-components/inputs/select/select';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { NumberInput } from '::root/components/shared-components/inputs/number-input';
@@ -18,9 +18,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-
-const Tree: React.FC<Props & PropsFromRedux> = ({
+const Tree: React.FC<PropsFromRedux> = ({
   treeFont,
   treeBg,
   treeColor,
@@ -39,9 +37,9 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
       </SettingsElement>
       <SettingsElement name={'font'}>
         <Select
+          value={treeFont}
           onChange={ac.editorSettings.setTreeFont}
           options={availableFonts.current}
-          value={treeFont}
         />
         <NumberInput
           min={6}

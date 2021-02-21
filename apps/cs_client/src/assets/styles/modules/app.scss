@@ -22,7 +22,7 @@
   flex-direction: column;
   // style
   color: var(--background-100);
-  background-color: var(--on-background-010);
+  background-color: var(--void);
   font-family: Verdana, sans-serif;
 
   @include respond-to($md-down) {

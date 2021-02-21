@@ -21,6 +21,9 @@
     margin-left: auto;
     background-color: transparent;
   }
+  button {
+    background-color: var(--surface-070);
+  }
 }
 .collapsable-list__header {
   transition: opacity 200ms linear;
@@ -52,6 +55,9 @@
   border-radius: 5px;
   height: calc(100% - 4px);
   align-items: center;
+  svg {
+    fill: var(--icon-fill);
+  }
 }
 
 .collapsable-list__body {
@@ -88,6 +94,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   flex: 1;
+  svg {
+    fill: var(--icon-fill);
+  }
 }
 .collapsable-list__item__button {
   margin-right: -5px;
@@ -99,12 +108,14 @@
   font-size: 13.5px;
 }
 .collapsable-list__item--active {
-  background-color: var(--primary-050);
-  filter: grayscale(0.4);
+  background-color: var(--primary-045);
   .collapsable-list__item__name {
     color: var(--on-primary-100);
   }
   .collapsable-list__item__description {
     color: var(--on-primary-100);
+  }
+  svg {
+    fill: white;
   }
 }

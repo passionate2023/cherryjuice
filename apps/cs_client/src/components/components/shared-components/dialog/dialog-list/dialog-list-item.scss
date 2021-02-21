@@ -6,17 +6,12 @@
   color: var(--on-background-010);
   margin-top: 5px;
   max-width: 100%;
+  transition: background-color 200ms linear;
 }
 
 .dialog-list-item__body {
   padding: 10px 20px;
-  &:active {
-    background-color: var(--primary-050-20);
-  }
   transition: background-color 0.3s ease;
-  svg {
-    fill: var(--on-surface-050);
-  }
 }
 
 .dialog-list-item__body--disabled {
@@ -32,6 +27,9 @@
   position: absolute;
   right: 10px;
   top: 10px;
+  svg {
+    fill: var(--icon-fill);
+  }
 }
 
 .dialog-list-item__name {
@@ -43,18 +41,28 @@
 }
 
 .dialog-list-item--focused {
-  background-color: var(--primary-050-20);
+  background-color: var(--primary-085);
   span {
     color: var(--on-background-010);
   }
 }
 .dialog-list-item--active {
-  background-color: var(--primary-050);
-  color: var(--background-100);
-  span {
-    color: var(--background-100);
+  &::after {
+    --width: 2px;
+    content: '';
+    position: absolute;
+    left: 0px;
+    top: 0;
+    height: calc(100% - var(--width) * 2);
+    border: var(--width) var(--primary-053) solid;
+    opacity: 0.3;
   }
-  svg {
-    fill: var(--background-100);
-  }
+  //background-color: var(--primary-050);
+  //color: var(--background-100);
+  //span {
+  //  color: var(--background-100);
+  //}
+  //svg {
+  //  fill: var(--background-100);
+  //}
 }

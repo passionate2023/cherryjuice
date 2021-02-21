@@ -12,7 +12,7 @@
 }
 
 .auth-screen__card-container {
-  position: relative;
+  //position: relative;
   @include respond-to($mb-down) {
     width: 95%;
     height: 92%;

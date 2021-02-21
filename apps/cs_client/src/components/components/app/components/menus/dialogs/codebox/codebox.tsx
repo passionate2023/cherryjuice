@@ -9,7 +9,7 @@ import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
-import { Select } from '::root/components/shared-components/inputs/select';
+import { Select } from '::root/components/shared-components/inputs/select/select';
 import {
   codeboxAC,
   codeboxR,

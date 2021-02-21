@@ -77,13 +77,13 @@ $navigation-width: 200px;
   transition: background-color 0.3s ease;
   cursor: pointer;
   &:hover {
-    background-color: var(--primary-100-50);
+    background-color: var(--primary-090);
   }
   @include type-c();
   text-transform: capitalize;
 }
 .drawer__navigation__element--active {
-  background-color: var(--primary-100);
+  background-color: var(--primary-085);
 }
 .drawer__navigation__scrim {
   @include respond-to('md') {
@@ -117,8 +117,8 @@ $navigation-width: 200px;
   margin-right: 5px;
   width: 40px;
   height: 40px;
-  img {
-    //width: 1.1em
+  svg {
+    fill: var(--icon-fill);
   }
 }
 .drawer__drawer-toggle__circle {

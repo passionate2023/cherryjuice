@@ -40,6 +40,8 @@
 }
 .chips__add-chip__input {
   background-color: var(--surface-095);
+  color: var(--on-background-010);
+  @include type-e2();
   height: 40px;
   display: flex;
   flex: 1;
@@ -48,7 +50,7 @@
   }
   font-size: 14px;
   &::placeholder {
-    opacity: 0.4;
+    opacity: 0.6;
   }
   &:focus {
     outline: none;
@@ -57,7 +59,7 @@
 .chips__add-chip__button {
   background-color: var(--surface-090);
   svg {
-    fill: var(--on-surface-060);
+    fill: var(--icon-fill);
   }
   &:disabled {
     svg {
@@ -79,15 +81,15 @@
 .chips__chip {
   border-radius: 5px;
   height: 25px;
-  color: var(--primary-050);
-  border: 1px solid var(--primary-050-80);
+  color: var(--primary-053);
+  border: 1px solid var(--primary-055);
   box-shadow: var(--shadow-3);
-  padding: 3px 8px;
+  padding: 5px 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 3px;
-  @include type-c();
+  @include type-e2();
 }
 .chips__chip__text {
   padding: 2px;

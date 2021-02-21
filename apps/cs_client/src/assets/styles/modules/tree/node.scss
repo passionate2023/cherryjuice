@@ -27,7 +27,7 @@
   height: 100%;
   position: absolute;
   left: var(--overlay-left);
-  background-color: var(--background-100-15);
+  background-color: var(--node-overlay);
 }
 
 .node__title {
@@ -88,7 +88,7 @@
     margin: 0;
   }
   svg {
-    fill: var(--surface-070);
+    fill: var(--icon-fill);
   }
 }
 .node__title-cherry {
@@ -103,22 +103,22 @@
 }
 
 div.node[data-dragged='true'] + ul {
-  background-color: var(--secondary-010-50);
+  background-color: var(--secondary-020);
 }
 
 div.droppable--dragging-over {
-  background-color: var(--secondary-010-50);
+  background-color: var(--secondary-020);
 }
 
 div.node[drag-enter='true'] {
   .node__title {
-    background-color: var(--secondary-010-50);
+    background-color: var(--secondary-020);
   }
 }
 
 ul.droppable--dragging-over,
 div.node[drag-enter='true'] + ul {
-  background-color: var(--secondary-010-50);
+  background-color: var(--secondary-020);
 }
 
 .drop-hint {

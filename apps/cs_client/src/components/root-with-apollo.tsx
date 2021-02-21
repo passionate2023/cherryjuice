@@ -28,7 +28,12 @@ import { setContextMenusAnchor } from '@cherryjuice/components';
 import { modApp } from '::sass-modules';
 setContextMenusAnchor('.' + modApp.app);
 // eslint-disable-next-line node/no-extraneous-import
-
+import modTheme from '@cherryjuice/shared-styles/build/themes/themes.scss';
+import modDarkTheme from '@cherryjuice/shared-styles/build/themes/dark-theme.scss';
+const themes = {
+  light: modTheme.lightTheme,
+  dark: modDarkTheme.darkTheme,
+};
 enablePatches();
 
 const updateBreakpointState = ({
@@ -62,6 +67,7 @@ const mapState = (state: Store) => ({
   userHasUnsavedChanges: getDocumentsList(state).some(
     documentHasUnsavedChanges,
   ),
+  theme: state.root.theme,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -74,6 +80,7 @@ const Root: React.FC<PropsFromRedux> = ({
   document,
   userHasUnsavedChanges,
   online,
+  theme,
 }) => {
   const client = useApolloClient(token, userId);
   useOnWindowResize([
@@ -105,12 +112,14 @@ const Root: React.FC<PropsFromRedux> = ({
   useTasks();
   return (
     <>
-      {client && (
-        <Switch>
-          <Route path={'/auth'} component={Auth} />
-          <Route path={'(/|/document/*|/documents/*)'} component={App} />
-        </Switch>
-      )}
+      <div className={themes[theme]}>
+        {client && (
+          <Switch>
+            <Route path={'/auth'} component={Auth} />
+            <Route path={'(/|/document/*|/documents/*)'} component={App} />
+          </Switch>
+        )}
+      </div>
     </>
   );
 };

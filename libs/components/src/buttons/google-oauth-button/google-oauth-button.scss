@@ -1,3 +1,4 @@
+$hover-shadow: rgba(0, 0, 0, 0.2);
 .google-btn {
   margin: 25px;
   margin-bottom: 8px;
@@ -7,7 +8,7 @@
   height: 42px;
   background-color: var(--surface-100);
   border-radius: 5px;
-  box-shadow: 0 3px 4px 0 var(--on-background-010-20);
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2);
   cursor: pointer;
   cursor: hand;
   align-self: center;
@@ -15,7 +16,7 @@
   transition: box-shadow 400ms ease 0s;
   display: flex;
   &:focus {
-    outline: 2px solid var(--primary-030-50);
+    outline: 2px solid var(--primary-053);
   }
 }
 
@@ -46,11 +47,11 @@
   user-select: none;
 }
 .google-btn:hover {
-  box-shadow: 0 3px 8px var(--on-surface-050-50);
+  box-shadow: 0 3px 8px $hover-shadow;
   user-select: none;
 }
 .google-btn:active {
-  box-shadow: 0 1px 1px var(--on-surface-050);
+  box-shadow: 0 1px 1px $hover-shadow;
   background: var(--surface-100);
   color: var(--background-100);
   user-select: none;
@@ -66,7 +67,7 @@
   height: 42px;
   background-color: var(--surface-100);
   border-radius: 2px;
-  box-shadow: 0 3px 4px 0 var(--on-background-010-20);
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2);
   cursor: pointer;
   cursor: hand;
   align-self: center;
@@ -88,11 +89,11 @@
   user-select: none;
 }
 .normal-btn:hover {
-  box-shadow: 0 3px 8px var(--on-surface-050-50);
+  box-shadow: 0 3px 8px $hover-shadow;
   user-select: none;
 }
 .normal-btn:active {
-  box-shadow: 0 1px 1px var(--on-surface-050);
+  box-shadow: 0 1px 1px $hover-shadow;
   background: var(--background-100);
   color: var(--background-100);
   user-select: none;

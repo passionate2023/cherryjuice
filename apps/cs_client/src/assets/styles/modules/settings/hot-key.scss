@@ -9,10 +9,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 10px;
-  @include respond-to('md') {
-    flex-direction: row;
-    align-items: center;
-  }
+  gap: 7px;
+
   border-radius: 5px;
   transition: background-color 200ms linear;
 }
@@ -36,14 +34,16 @@
     height: 36px;
     border: none;
     border-radius: 5px;
+    background-color: var(--surface-090);
+    color: var(--on-surface-010);
+    font-family: monospace;
+    font-size: 15px;
   }
 }
 
 .hot-key__name {
-  margin-bottom: 5px;
-  @include respond-to('md') {
-    margin-bottom: 0;
-  }
+  padding: 5px;
+  padding-bottom: 0;
   color: var(--on-surface-050);
   width: 200px;
   @include type-c();
@@ -52,7 +52,7 @@
 .hot-key__keys {
   justify-self: center;
   align-self: center;
-  @include respond-to($md-down) {
-    margin-left: auto;
-  }
+  //@include respond-to($md-down) {
+  //  margin-left: auto;
+  //}
 }

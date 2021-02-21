@@ -25,11 +25,11 @@
   --on-background-010-14: rgb(0, 0, 0, 0.14);
   --on-background-010-20: rgb(0, 0, 0, 0.2);
 
-  --primary-100: rgb(241, 229, 229);
-  --primary-100-50: rgb(241, 229, 229, 0.5);
-  --primary-100-20: rgb(241, 229, 229, 0.2);
-  --primary-090: rgb(223, 200, 199);
-  --primary-090-10: rgba(223, 200, 199, 0.1);
+  --primary-085: rgb(241, 229, 229);
+  --primary-085-50: rgb(241, 229, 229, 0.5);
+  --primary-085-20: rgb(241, 229, 229, 0.2);
+  --primary-060: rgb(223, 200, 199);
+  --primary-080-10: rgba(223, 200, 199, 0.1);
   --primary-050: rgb(121, 6, 4);
   --primary-050-10: rgba(121, 6, 4, 0.1);
   --primary-050-20: rgba(121, 6, 4, 0.2);
@@ -41,10 +41,10 @@
   --on-primary-100: rgb(255, 255, 255);
 
   --secondary-010: rgb(0, 65, 66);
-  --secondary-010-50: rgb(0, 65, 66, 0.5);
+  --secondary-020: rgb(0, 65, 66, 0.5);
   --secondary-050: #006d6d;
   --teriary-050: #00982b;
-  --secondary-100: #469c9b;
+  --secondary-080: #469c9b;
   --on-secondary-100: rgb(255, 255, 255);
 
   @include common-colors();

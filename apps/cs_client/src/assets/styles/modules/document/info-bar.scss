@@ -75,7 +75,7 @@
   display: flex;
   align-items: center;
   svg {
-    fill: var(--on-surface-060);
+    fill: var(--icon-fill);
   }
 }
 
@@ -107,7 +107,7 @@
   width: 11px;
   top: -6px;
   right: -6px;
-  background-color: var(--secondary-100);
+  background-color: var(--secondary-080);
   color: var(--on-secondary-100) !important;
 }
 .info-bar__document-privacy {

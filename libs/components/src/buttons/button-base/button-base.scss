@@ -29,12 +29,11 @@
 
   cursor: pointer;
   &:hover:not([disabled]) {
-    background-color: var(--primary-100);
-    color: var(--primary-020);
+    background-color: var(--primary-085);
   }
   &:active:not([disabled]) {
-    background-color: var(--primary-090);
-    color: var(--primary-020);
+    color: var(--primary-010);
+    background-color: var(--primary-060);
     box-shadow: var(--shadow-1);
   }
   &:disabled {
@@ -50,7 +49,7 @@
 }
 .button--text {
   display: inline-block;
-  padding: 10px 10px;
+  padding: 10px 12px;
   margin: 2px;
 }
 
@@ -65,15 +64,15 @@
     0.5
   );
   svg {
-    fill: var(--background-100);
+    fill: var(--icon-fill);
   }
 }
 
 .button--pressed {
   background-color: var(--primary-050) !important;
-  color: var(--background-100) !important;
+  color: var(--on-primary-100) !important;
   box-shadow: var(--shadow-1);
   svg {
-    fill: var(--background-100);
+    fill: var(--icon-fill);
   }
 }

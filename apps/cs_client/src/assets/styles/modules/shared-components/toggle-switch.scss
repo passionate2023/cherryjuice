@@ -45,7 +45,7 @@ $circleHOffset: #{$pathHeight * $widthRatio - $pathHeight * $circleRatio * 0.9};
 }
 
 input:checked + .slider {
-  background-color: var(--primary-090);
+  background-color: var(--primary-060);
 }
 
 input:checked + .slider:before {

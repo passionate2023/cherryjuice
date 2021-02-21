@@ -1,17 +1,16 @@
 import * as React from 'react';
 import { modTreeToolBar } from '::sass-modules';
-import { Icons } from '@cherryjuice/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { useEffect, useState } from 'react';
-import { ButtonSquare } from '@cherryjuice/components';
 import { useSortMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/sort-menu-items';
 import { useFoldMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/fold-menu-items';
 import { Search } from '::shared-components/search-input/search';
 import { NodesButtons } from './components/nodes-buttons/nodes-buttons';
 import { ContextMenuWrapper } from '@cherryjuice/components';
 import { testIds } from '::cypress/support/helpers/test-ids';
+import { TreeToolbarButton } from '::app/components/editor/document/components/tree/components/tool-bar/components/nodes-buttons/tree-toolbar-buton/tree-toolbar-button';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -64,8 +63,14 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
           onChange={ac.document.setNodesFilter}
           placeholder={'filter nodes'}
           hideableInput={'manual'}
-          style={{ height: tb ? 36 : 30, width: '100%' }}
+          style={{
+            elementHeight: tb ? 36 : 30,
+            elementWidth: '100%',
+            buttonBc: 'var(--surface-100)',
+            buttonHoverBc: 'var(--primary-085)',
+          }}
           onInputShown={setInputShown}
+          tooltip={'filter nodes'}
         />
         {!inputShown && (
           <>
@@ -96,11 +101,11 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
               }}
             >
               {({ show }) => (
-                <ButtonSquare
-                  iconName={Icons.material['three-dots-vertical']}
-                  className={modTreeToolBar.button}
+                <TreeToolbarButton
+                  icon={'three-dots-vertical'}
                   onClick={show}
                   testId={testIds.tree__threeDots}
+                  tooltip={'More options'}
                 />
               )}
             </ContextMenuWrapper>

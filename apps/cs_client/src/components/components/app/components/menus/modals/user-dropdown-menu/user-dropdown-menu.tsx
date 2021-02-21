@@ -7,19 +7,19 @@ import { testIds } from '::cypress/support/helpers/test-ids';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
-  online: state.root.online,
+  theme: state.root.theme,
   user: state.auth.user,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = { hide: () => undefined };
 const UserDropdownMenu: React.FC<Props & PropsFromRedux> = ({
-  online,
+  theme,
   documentId,
   user,
   hide,
 }) => {
-  const elements = useGroups({ online, documentId, user });
+  const elements = useGroups({ theme, documentId, user });
   return (
     <DropdownMenu
       groups={elements}

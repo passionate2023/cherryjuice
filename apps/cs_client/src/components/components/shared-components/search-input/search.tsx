@@ -10,9 +10,10 @@ import { useEffect, useRef } from 'react';
 import { IconName } from '@cherryjuice/icons';
 
 const cssVariables = {
-  height: '--search-element-height',
-  width: '--search-element-width',
-  backgroundColor: '--search-element-bc',
+  elementHeight: '--search-element-height',
+  elementWidth: '--search-element-width',
+  buttonBc: '--search-button-bc',
+  buttonHoverBc: '--search-button-hover-bc',
 };
 type EmptyFunction = () => void;
 export type SearchProps = {
@@ -26,11 +27,13 @@ export type SearchProps = {
   lazyAutoFocus?: boolean;
   onInputShown?: (value: boolean) => void;
   style?: {
-    height?: number;
-    width?: number | string;
-    backgroundColor?: string;
+    elementHeight?: number | string;
+    elementWidth?: number | string;
+    buttonBc?: string;
     icon?: IconName;
+    buttonHoverBc?: string;
   };
+  tooltip?: string;
 };
 
 const Search: React.FC<SearchProps> = ({
@@ -44,6 +47,7 @@ const Search: React.FC<SearchProps> = ({
   lazyAutoFocus,
   onInputShown,
   style = {},
+  tooltip,
 }) => {
   const [
     { toggleInputVisibility, clearSearchInput, onInputChange },
@@ -100,6 +104,7 @@ const Search: React.FC<SearchProps> = ({
               : toggleInputVisibility
           }
           icon={style.icon || 'search'}
+          tooltip={tooltip}
         />
       )}
     </div>

@@ -1,8 +1,8 @@
-@import '../~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
 .time-filter {
   display: flex;
   flex-direction: column;
-  width: 200px;
+  min-width: 200px;
   align-items: flex-start;
   justify-content: center;
 }

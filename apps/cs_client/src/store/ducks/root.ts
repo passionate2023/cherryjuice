@@ -13,6 +13,7 @@ const ac = {
   setDocking: _(ap('set-docking'), _ => (b: boolean) => _(b)),
   setNetworkStatus: _(ap('set-network-status'), _ => (b: boolean) => _(b)),
   toggleDockedDialog: _(ap('toggle-docked-dialog')),
+  toggleTheme: _(ap('toggle-theme')),
 };
 
 type State = {
@@ -22,6 +23,7 @@ type State = {
   dockedDialog: boolean;
   docking: boolean;
   online: boolean;
+  theme: 'light' | 'dark';
 };
 
 const initialState: State = {
@@ -31,6 +33,7 @@ const initialState: State = {
   dockedDialog: false,
   docking: false,
   online: true,
+  theme: 'light',
 };
 const reducer = createReducer(initialState, _ => [
   _(ac.resetState, state => ({
@@ -62,6 +65,10 @@ const reducer = createReducer(initialState, _ => [
     _(ac.setNetworkStatus, (state, { payload }) => ({
       ...state,
       online: payload,
+    })),
+    _(ac.toggleTheme, state => ({
+      ...state,
+      theme: state.theme === 'light' ? 'dark' : 'light',
     })),
   ],
 ]);

@@ -7,7 +7,7 @@
   padding-top: 20px;
   padding-bottom: 10px;
   &:not(:first-child) {
-    border-top: 1px solid var(--primary-050-10);
+    border-top: var(--border-1);
   }
   flex-wrap: wrap;
 }
@@ -30,7 +30,6 @@
   align-items: flex-start;
 }
 .userProfile__group__elements__button {
-  background-color: var(--surface-100);
 }
 .user-profile__personal-information__label {
   display: flex;

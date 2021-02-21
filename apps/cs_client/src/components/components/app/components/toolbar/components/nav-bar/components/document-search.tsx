@@ -44,6 +44,7 @@ const DocumentSearch: React.FC<Props & PropsFromRedux> = ({
       hideableInput={'external'}
       hideInput={navBar}
       style={style}
+      tooltip={'search documents'}
     />
   );
 };

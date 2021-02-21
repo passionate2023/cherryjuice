@@ -14,11 +14,13 @@
   overflow: hidden;
   border-right: var(--background-100) 3px solid;
   max-height: 100%;
+  background-color: var(--void);
 }
+
 .tree_root-list {
   margin: 0 0 0 -40px;
   flex-direction: column;
-  height: calc(100% - 44px);
+  height: calc(100% - 40px);
 
   overflow: auto;
   background-color: var(--treeBg);

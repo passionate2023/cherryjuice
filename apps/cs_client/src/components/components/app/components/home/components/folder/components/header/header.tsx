@@ -2,7 +2,7 @@ import * as React from 'react';
 import mod from './header.scss';
 import { Search } from '::shared-components/search-input/search';
 import { ac } from '::store/store';
-import { ToolbarButton } from '::app/components/toolbar/components/toolbar-button/toolbar-button';
+import { ButtonCircle, Tooltip } from '@cherryjuice/components';
 
 export type HeaderProps = {
   folderName: string;
@@ -21,13 +21,18 @@ export const Header: React.FC<HeaderProps> = ({
     <div className={mod.header}>
       <span className={mod.header__folderName}>
         {isOnMd && (
-          <ToolbarButton
-            onClick={ac.home.toggleSidebar}
-            icon={'menu'}
-            tooltip={'toggle sidebar'}
-          />
+          <Tooltip tooltip={'toggle sidebar'}>
+            {bind => (
+              <ButtonCircle
+                onClick={ac.home.toggleSidebar}
+                iconName={'menu'}
+                iconSize={16}
+                {...bind}
+              />
+            )}
+          </Tooltip>
         )}
-        {folderName}
+        <span>{folderName}</span>
       </span>
       <div className={mod.header__buttons}>
         <Search

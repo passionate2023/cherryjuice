@@ -26,14 +26,7 @@
   @include type-e2();
   opacity: 0.9;
 }
-.node-meta__input__select {
-  padding: 5px 20px;
-  height: 40px;
-  border: none;
-  background-color: var(--surface-090);
-  flex: 1;
-  text-align: center;
-}
+
 .node-meta__input__text-input {
   flex: 1;
   border-bottom: none;

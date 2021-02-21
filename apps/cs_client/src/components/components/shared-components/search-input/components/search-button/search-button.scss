@@ -6,12 +6,12 @@
   border-radius: 0;
   width: var(--search-element-height);
   height: var(--search-element-height);
-  background-color: var(--search-element-bc);
+  background-color: var(--search-button-bc);
   svg {
-    fill: var(--on-surface-050);
+    fill: var(--icon-fill);
   }
   &:hover {
-    //background-color: var(--surface-040) !important;
+    background-color: var(--search-button-hover-bc) !important;
   }
   &:active {
     box-shadow: initial !important;

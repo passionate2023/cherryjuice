@@ -9,6 +9,9 @@
   &:hover {
     background-color: var(--surface-080);
   }
+  &:focus {
+    z-index: 1;
+  }
 }
 .color-input--disabled {
   filter: grayscale(1);

@@ -1,0 +1,76 @@
+@import './themes';
+
+.dark-theme {
+  --surface-100: rgb(43, 43, 43);
+  --surface-095: rgb(50, 50, 50);
+  --surface-090: rgb(60, 60, 60);
+  --surface-080: rgb(70, 70, 70);
+  --surface-070: rgb(75, 75, 75);
+
+  --on-surface-060: rgb(100, 100, 100);
+  --on-surface-060-30: rgb(100, 100, 100, 0.3);
+  --on-surface-050: rgb(200, 200, 200);
+  --on-surface-050-10: rgb(200, 200, 200, 0.1);
+  --on-surface-050-25: rgb(200, 200, 200, 0.25);
+  --on-surface-050-50: rgb(200, 200, 200, 0.5);
+  --on-surface-010: rgb(240, 240, 240);
+
+  --background-100: rgb(25, 25, 25);
+  --background-100-95: rgb(25, 25, 25, 0.95);
+  --background-100-20: rgba(25, 25, 25, 0.2);
+  --background-100-15: rgba(25, 25, 25, 0.15);
+
+  --on-background-010: rgb(240, 240, 240);
+  --on-background-010-20: rgb(240, 240, 240, 0.2);
+  --on-background-010-14: rgb(240, 240, 240, 0.14);
+  --on-background-010-12: rgb(240, 240, 240, 0.12);
+  --on-background-010-10: rgb(240, 240, 240, 0.1);
+  --on-background-010-08: rgb(240, 240, 240, 0.08);
+  --on-background-010-07: rgb(240, 240, 240, 0.07);
+  --on-background-010-04: rgb(240, 240, 240, 0.04);
+
+  --primary-090: rgb(40, 34, 34);
+  --primary-085: rgb(54, 48, 48);
+
+  --primary-060: rgb(223, 200, 199);
+  --primary-057: rgb(242, 218, 216);
+  --primary-055: rgb(184, 167, 166);
+  --primary-053: rgb(223, 200, 199);
+  --primary-050: rgb(121, 6, 4);
+  --primary-045: rgb(149, 119, 118);
+  --primary-030: rgb(178, 159, 158);
+  --primary-020: rgb(224, 215, 215);
+  --primary-020-10: rgba(224, 215, 215, 0.1);
+  --primary-010: #0c0606;
+
+  --on-primary-100: rgb(255, 255, 255);
+
+  --secondary-010: rgb(0, 65, 66);
+  --secondary-020: rgb(0, 72, 74);
+  --secondary-050: rgb(0, 109, 109);
+  --secondary-070: #23a492;
+  --secondary-080: rgb(70, 156, 155);
+  --on-secondary-100: rgb(255, 255, 255);
+
+  --danger: #f63636;
+  --danger--100: rgba(183, 123, 123, 0.21);
+  --warning: #c3a495;
+  --text-highlight-color: rgb(10, 108, 29);
+
+  --shadow-1: 0 3px 1px -2px rgb(0, 0, 0, 0.2), 0 2px 2px 0 rgb(0, 0, 0, 0.14),
+    0 1px 5px 0 rgb(0, 0, 0, 0.12);
+  --shadow-2: 0 1px 3px rgb(0, 0, 0, 0.08), 0 1px 2px rgb(0, 0, 0, 0.14);
+  --shadow-3: 0 1px 3px rgb(0, 0, 0, 0.04), 0 1px 2px rgb(0, 0, 0, 0.07);
+  --shadow-4: 0px 5px 10px 0px rgba(0, 0, 0, 0.32);
+  --shadow-5: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+
+  --border-1: 0.5px var(--primary-020-10) solid;
+
+  --icon-fill: rgb(230, 230, 230);
+  --void: black;
+  --node-overlay: rgb(25, 25, 25);
+  --scrim: #0707078f;
+}
+//.dark-theme {
+//  @include common-colors();
+//}

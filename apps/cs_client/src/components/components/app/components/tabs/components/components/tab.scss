@@ -73,21 +73,20 @@
     background-color: var(--surface-100);
   }
   border: none;
-  border-radius: 5px;
+  border-radius: 0 !important;
 }
 .tab--has-changes {
-  color: var(--teriary-050);
+  color: var(--secondary-070);
 }
 .tab--is-new {
-  color: var(--primary-050);
-  opacity: 0.8;
+  color: var(--primary-045);
 }
 
 .tab__bookmark-icon {
   position: absolute;
   top: -3px;
   right: 20px;
-  fill: var(--secondary-100);
+  fill: var(--secondary-080);
 }
 
 .tab__separator {

@@ -11,7 +11,7 @@ const HighlightedHeadline: React.FC<Props> = ({ headline, color }) => (
     </span>
     <span
       className={modSearchResult.searchResult__headline__match}
-      style={{ backgroundColor: color || '#99ff2b' }}
+      style={{ backgroundColor: color || 'var(--text-highlight-color)' }}
     >
       {headline.match}
     </span>

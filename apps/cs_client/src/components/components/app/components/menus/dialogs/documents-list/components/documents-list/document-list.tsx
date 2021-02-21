@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { memo, useMemo } from 'react';
-import { modSearchDialog } from '::sass-modules';
 import { DocumentGroup } from './components/document-group';
 import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 import { Search } from '::shared-components/search-input/search';
@@ -44,7 +43,6 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
   query,
   isOnMd,
   currentSortOptions,
-  showFilters,
 }) => {
   const filesPerFolders: [string, CachedDocument[]][] = useMemo(() => {
     let sortedDocuments: CachedDocument[] = mapSortDocumentBy[
@@ -70,7 +68,6 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
       <SearchHeaderContainer>
         <SearchHeaderGroup>
           <Search
-            containerClassName={modSearchDialog.searchDialog__header__field}
             placeholder={'find documents'}
             value={query}
             onChange={ac.documentsList.setQuery}
@@ -78,12 +75,7 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
             lazyAutoFocus={!isOnMd && show}
             searchImpossible={!documents.length}
           />
-          <SearchSetting
-            iconName={Icons.material.sort}
-            hide={ac.documentsList.toggleFilters}
-            show={ac.documentsList.toggleFilters}
-            shown={showFilters}
-          >
+          <SearchSetting iconName={Icons.material.sort}>
             <SortOptions
               options={options}
               setSortBy={ac.documentsList.setSortBy}

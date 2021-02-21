@@ -5,14 +5,16 @@ import { UserInfo } from '::app/components/menus/modals/user/components/user-inf
 import * as React from 'react';
 import { User } from '@cherryjuice/graphql-types';
 import { router } from '::root/router/router';
+import { RootReducerState } from '::store/ducks/root';
 
 export const useGroups = ({
   user,
   documentId,
+  theme,
 }: {
-  online: boolean;
   documentId: string;
   user: User;
+  theme: RootReducerState['theme'];
 }): DropdownMenuGroupProps[] => {
   return user
     ? [
@@ -34,6 +36,11 @@ export const useGroups = ({
               onClick: ac.dialogs.showSettingsDialog,
               // testId:testIds.toolBar__navBar__showDocumentList,
               // dontShow: !isLoggedIn,
+            },
+            {
+              text: 'theme: ' + ' ' + theme,
+              onClick: ac.root.toggleTheme,
+              hideOnClick: false,
             },
             {
               text: 'sign out',
