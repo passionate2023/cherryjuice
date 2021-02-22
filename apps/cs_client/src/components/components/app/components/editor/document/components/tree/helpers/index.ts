@@ -2,6 +2,7 @@ import treeModule from '::sass-modules/tree/tree.scss';
 import { ac } from '::store/store';
 import { CssVariables } from '::store/ducks/css-variables';
 import { nodeOverlay } from '::app/components/editor/document/components/tree/components/node/helpers/node-overlay';
+import { cssVariables } from '::assets/styles/css-variables/set-css-variables';
 
 const attachTreeResizeBubble = onResize => {
   const handleRef = document.querySelector('.' + treeModule.tree__resizeHandle);
@@ -17,7 +18,10 @@ const createTreeHelper = () => {
   return {
     init: () => (state.tree = document.querySelector('.' + treeModule.tree)),
     updateTreeSizeCssVariable: () => {
-      ac.cssVariables.set(CssVariables.treeWidth, state.tree.offsetWidth);
+      cssVariables.setVariable(
+        CssVariables.treeWidth,
+        state.tree.offsetWidth + 'px',
+      );
     },
     getTreeWidth: () => state.tree.offsetWidth,
   };
@@ -31,7 +35,6 @@ const onResizeStop = () => {
 };
 const onResize = () => {
   treeHelper.updateTreeSizeCssVariable();
-  nodeOverlay.updateWidth();
 };
 const onStart = () => {
   treeHelper.init();
