@@ -35,8 +35,8 @@ const getRoute = createSelector(
     if (unfinishedOauthSignup) router.goto.oauthSignup();
     else if (resetPasswordToken) router.goto.resetPassword();
     else {
-      const loggedInUser =
-        userId && /\/auth\/(login|signup)/.test(location.pathname);
+      const onAuthScreen = /\/auth\/(login|signup)/.test(location.pathname);
+      const loggedInUser = userId && onAuthScreen;
       if (loggedInUser || (userId && showHome)) router.goto.home(folder.name);
       else if (fetch === 'idle') {
         const isAtHomePage = /\/documents\/.*/.test(location.pathname);
@@ -45,8 +45,9 @@ const getRoute = createSelector(
             router.goto.node(documentId, node_id, hash);
           } else router.goto.document(documentId);
         } else {
-          if (!userId) router.goto.signIn();
-          else {
+          if (!userId) {
+            if (!onAuthScreen) router.goto.signIn();
+          } else {
             const swappingDocumentIdInProgress = !swappedIds[
               extractDocumentFromPathname().documentId
             ];

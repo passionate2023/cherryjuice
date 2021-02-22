@@ -1,5 +1,4 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
-@import '~@cherryjuice/shared-styles/build/vars/states';
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 .toolbar-button {
   position: relative;
@@ -29,11 +28,10 @@
     }
   }
   &[data-disabled='true'] {
-    //filter: grayscale(0.9) opacity(0.6);
-    //cursor: initial;
     svg,
     img {
-      @include disabled-button();
+      filter: grayscale(0.9) opacity(0.5);
+      cursor: not-allowed;
     }
   }
   transition: $bg-transition-1;

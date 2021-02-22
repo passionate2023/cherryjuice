@@ -30,6 +30,10 @@ import {
   createFolder,
   CreateFolderPayload,
 } from '::store/ducks/home/reducers/create-folder';
+import {
+  FetchFoldersPayload,
+  loadFetchedFolders,
+} from '::store/ducks/home/reducers/load-fetched-folders';
 
 export enum SortDocumentsBy {
   CreatedAt = 'CreatedAt',
@@ -62,7 +66,7 @@ const ac = {
     fetchFolders: __('fetch-folders'),
     fetchFoldersInProgress: __('fetch-folders-in-progress'),
     fetchFoldersFailed: __('fetch-folders-failed'),
-    fetchFoldersFulfilled: _<Folder[]>('fetch-folders-fulfilled'),
+    fetchFoldersFulfilled: _<FetchFoldersPayload>('fetch-folders-fulfilled'),
   },
 };
 
@@ -90,7 +94,7 @@ type State = {
   };
 };
 
-const changes = {
+export const defaultFolderChanges = {
   folders: {
     created: [],
     edited: {},
@@ -113,7 +117,7 @@ const initialState: State = {
   asyncOperations: {
     fetchFolders: 'idle',
   },
-  changes: cloneObj(changes),
+  changes: cloneObj(defaultFolderChanges),
 };
 const reducer = createReducer(initialState, _ => [
   _(rac.resetState, () => ({
@@ -172,35 +176,9 @@ const reducer = createReducer(initialState, _ => [
       fetchFolders: 'idle',
     },
   })),
-  _(ac.fetchFoldersFulfilled, (state, { payload }) => {
-    let draftsFolderId;
-    const folders = {
-      ...state.folders,
-      ...Object.fromEntries(
-        payload.reduce((acc, folder) => {
-          if (folder.name === 'Drafts') draftsFolderId = folder.id;
-          acc.push([folder.id, folder]);
-          return acc;
-        }, []),
-      ),
-    };
-    return {
-      ...state,
-      folders,
-      changes: cloneObj(changes),
-      draftsFolderId,
-      asyncOperations: {
-        ...state.asyncOperations,
-        fetchFolders: 'idle',
-      },
-      folder: Object.keys(state.folder).length
-        ? state.folder
-        : {
-            name: folders[draftsFolderId].name.toLowerCase(),
-            id: draftsFolderId,
-          },
-    };
-  }),
+  _(ac.fetchFoldersFulfilled, (state, { payload }) =>
+    produce(state, loadFetchedFolders(payload)),
+  ),
   // side-effects
   _(nac.select, state => ({
     ...state,

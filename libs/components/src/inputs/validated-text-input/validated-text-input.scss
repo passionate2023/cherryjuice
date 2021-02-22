@@ -1,11 +1,11 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
-@import '~@cherryjuice/shared-styles/build/mixins/form';
-
 .v-text-input {
   // size
   max-height: 50px;
-  @include form-element-size();
+  max-width: 260px;
+  min-width: 260px;
+  box-sizing: border-box;
   // position
   position: relative;
   margin-top: 2px;

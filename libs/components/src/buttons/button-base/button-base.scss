@@ -1,5 +1,4 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
-@import '~@cherryjuice/shared-styles/build/vars/states';
 @import '~@cherryjuice/shared-styles/build/mixins/typography';
 
 @mixin button-variant($color, $bg-color, $br-base, $br-step) {
@@ -37,7 +36,8 @@
     box-shadow: var(--shadow-1);
   }
   &:disabled {
-    @include disabled-button();
+    filter: grayscale(0.9) opacity(0.5);
+    cursor: not-allowed;
   }
   display: flex;
   align-items: center;

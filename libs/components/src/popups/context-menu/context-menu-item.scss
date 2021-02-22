@@ -1,7 +1,6 @@
-@import '../../../../../node_modules/@cherryjuice/shared-styles/build/vars/vars';
-@import '../../../../../node_modules/@cherryjuice/shared-styles/build/vars/states';
-@import '../../../../../node_modules/@cherryjuice/shared-styles/build/mixins/breakpoints';
-@import '../../../../../node_modules/@cherryjuice/shared-styles/build/mixins/typography';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
 .context-menu-item {
   position: relative;
   cursor: pointer;
@@ -27,7 +26,8 @@
 }
 
 .context-menu-item--disabled {
-  @include disabled-button();
+  filter: grayscale(0.9) opacity(0.5);
+  cursor: not-allowed;
 }
 
 .context-menu-item--bottom-separator {

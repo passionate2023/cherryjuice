@@ -39,8 +39,8 @@
 
 /* When the checkbox is checked, add a blue background */
 .container input:checked ~ .checkmark {
-  background-color: var(--primary-030);
-  filter: brightness(1.5);
+  background-color: var(--primary-050);
+  filter: hue-rotate(34deg);
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */

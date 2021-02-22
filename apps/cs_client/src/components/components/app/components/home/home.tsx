@@ -28,6 +28,7 @@ const Home: React.FC<Props & PropsFromRedux> = ({ showSidebar, isOnMd }) => {
   );
   useEffect(() => {
     ac.home.fetchFolders();
+    ac.documentsList.fetchDocuments();
   }, []);
   return (
     <div
