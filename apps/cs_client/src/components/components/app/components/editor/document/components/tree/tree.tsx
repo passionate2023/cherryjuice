@@ -30,8 +30,6 @@ const getParamsFromLocation = () => {
   return params;
 };
 
-type Props = Record<string, never>;
-
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
   return {
@@ -50,7 +48,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const Tree: React.FC<Props & PropsFromRedux> = ({
+const Tree: React.FC<PropsFromRedux> = ({
   nodes,
   documentPrivacy,
   treeState,
@@ -74,15 +72,7 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
       }
     }
   }, [selectedNode_id]);
-  useEffect(() => {
-    const t = setTimeout(() => {
-      nodeOverlay.updateWidth();
-      nodeOverlay.updateLeft();
-    }, 500);
-    return () => {
-      clearTimeout(t);
-    };
-  }, []);
+
   const params = getParamsFromLocation();
   const hookProps = {
     getIdOfActiveElement: target => {
