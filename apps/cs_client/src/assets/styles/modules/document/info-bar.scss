@@ -16,8 +16,8 @@
     height: 60px;
   }
   // position
-  z-index: $ZI-info-bar;
   @include respond-to($md-down) {
+    z-index: $ZI-info-bar;
     left: 5px;
     position: absolute;
     bottom: calc(5px + var(--formatting-bar) + var(--recent-nodes));

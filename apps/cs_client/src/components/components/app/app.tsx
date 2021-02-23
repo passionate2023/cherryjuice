@@ -8,7 +8,8 @@ import { Empty } from '::app/components/empty/empty';
 
 import { Toolbar } from '::app/components/toolbar/toolbar';
 import { Store } from '::store/store';
-import { Route } from 'react-router-dom';
+import { aDialogIsPinned } from '::store/selectors/layout/a-dialog-is-pinned';
+import { HomeSkeleton } from '::app/components/home/home-skeleton';
 
 const Menus = React.lazy(() =>
   import('::root/components/app/components/menus/menus'),
@@ -22,33 +23,32 @@ const Home = React.lazy(() =>
 
 const mapState = (state: Store) => ({
   isAuthenticated: !!state.auth.user?.id,
+  dockedDialog: aDialogIsPinned(state),
+  showHome: state.home.show,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const App: React.FC<PropsFromRedux> = ({ isAuthenticated }) => {
+const App: React.FC<PropsFromRedux> = ({
+  isAuthenticated,
+  dockedDialog,
+  showHome,
+}) => {
   // useRefreshToken({ token });
   return (
     <div
       className={joinClassNames([
         modApp.app,
-        // [modApp.appDialogDocked, dockedDialog],
+        dockedDialog && modApp.appDialogDocked,
       ])}
     >
       <Toolbar />
-      <Route
-        path={`/documents/:folder?/`}
-        render={() => {
-          return (
-            isAuthenticated && (
-              <Suspense fallback={<Void style={'blockBackgroundFullSize'} />}>
-                <Home />
-              </Suspense>
-            )
-          );
-        }}
-      />
+      {isAuthenticated && showHome && (
+        <Suspense fallback={<HomeSkeleton />}>
+          <Home />
+        </Suspense>
+      )}
       <Suspense fallback={<Void />}>
         <Editor />
       </Suspense>

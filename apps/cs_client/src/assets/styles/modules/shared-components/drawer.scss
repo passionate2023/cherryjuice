@@ -107,6 +107,11 @@ $navigation-width: 200px;
 .drawer__content {
   padding: 20px 5px;
   height: calc(100% - 40px);
+
+  @include respond-to($md-down) {
+    padding: 5px;
+    height: calc(100% - 10px);
+  }
 }
 
 .drawer__drawer-toggle {

@@ -6,7 +6,6 @@ import { Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { AnimatedEditorToolbar } from '::app/components/editor/editor-toolbar/components/animated-editor-toolbar/animated-editor-toolbar';
-import { useComponentIsReady } from '::root/hooks/is-ready';
 import { modEditor } from '::app/components/editor/editor';
 import { Portal } from '@cherryjuice/components';
 
@@ -26,7 +25,6 @@ const EditorToolbar: React.FC<PropsFromRedux> = ({
   isDocumentOwner,
   docking,
 }) => {
-  useComponentIsReady(true);
   const hideDuringDocking = docking && isOnMd;
   return (
     <>

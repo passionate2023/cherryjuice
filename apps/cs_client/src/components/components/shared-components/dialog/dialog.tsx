@@ -66,6 +66,7 @@ const Dialog: React.FC<
             mod.dialog,
             [mod.dialogSmall, small],
             [mod.dialogDocked, pinned],
+            [mod.dialogDockedAndShown, pinned && show],
           ])}
           style={{
             ...style,

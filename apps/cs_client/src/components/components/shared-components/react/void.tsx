@@ -8,16 +8,8 @@ const blockBackgroundFullSize: CSSProperties = {
   height: '100%',
 };
 
-const fallbackStyles = {
-  blockBackgroundFullSize,
-};
-
-type Props = {
-  style?: keyof typeof fallbackStyles;
-};
-
-const Void: React.FC<Props> = ({ style }) => {
-  return <span style={fallbackStyles[style]} />;
+const Void: React.FC = () => {
+  return <span style={blockBackgroundFullSize} />;
 };
 
 export { Void };

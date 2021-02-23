@@ -2,24 +2,26 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 
 .app {
+  --editor-height: calc(0.5vh - var(--tabs));
   // size
   width: var(--vw);
   height: var(--vh);
   // children
-  //display: grid;
-  //grid-template-areas:
-  //  'tabs'
-  //  'editor';
-  //grid-template-columns: 1fr;
-  //grid-template-rows: var(--tabs) 1fr;
+  display: grid;
+  grid-template-columns: 100vw;
 
-  //@include respond-to($md-up) {
-  //  grid-template-areas:
-  //    'tabs tabs'
-  //    'editor editor';
-  //}
-  display: flex;
-  flex-direction: column;
+  grid-template-areas:
+    'editor'
+    'toolbar';
+
+  grid-template-rows: 1fr var(--tabs);
+  @include respond-to($md-up) {
+    grid-template-rows: var(--tabs) 1fr;
+    grid-template-areas:
+      'toolbar'
+      'editor';
+  }
+
   // style
   color: var(--background-100);
   background-color: var(--void);
@@ -31,8 +33,17 @@
 }
 
 .app--dialog-docked {
-  //grid-template-areas:
-  //  'tabs'
-  //  'editor'
-  //  'dialog';
+  --docked-dialog-height: calc(0.5 * (var(--vh) - var(--tabs)));
+  grid-template-areas:
+    'toolbar'
+    'editor'
+    'dialog';
+  grid-template-rows: var(--tabs) 1fr 1fr;
+  @include respond-to($md-down) {
+    grid-template-rows: 1fr 1fr var(--tabs);
+    grid-template-areas:
+      'editor'
+      'dialog'
+      'toolbar';
+  }
 }

@@ -2,12 +2,6 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 
 .tree {
-  --tree-height: calc(
-    var(--vh) - #{2 * $tool-bar-height} - var(--formatting-bar) - var(--recent-nodes)
-  );
-  @include respond-to('md') {
-    --tree-height: calc(var(--vh) - var(--info-bar));
-  }
   // size
   grid-area: tree;
   height: var(--tree-height);
@@ -27,14 +21,13 @@
   transition: background-color 200ms linear;
 }
 .tree__resize-handle {
-  height: calc(
-    100vh - var(--docked-dialog-height) - #{2 * $tool-bar-height}
-  ) !important;
-  @include respond-to($md-up) {
-    height: calc(
-      100vh - var(--docked-dialog-height) - #{1 * $tool-bar-height}
-    ) !important;
+  --tree-height: calc(
+    var(--vh) - #{2 * $tool-bar-height} - var(--formatting-bar) - var(--recent-nodes)
+  );
+  @include respond-to('md') {
+    --tree-height: calc(var(--vh) - var(--info-bar));
   }
+  height: var(--tree-height);
   span > div {
     min-width: 10px;
   }
@@ -50,7 +43,7 @@ $bubble-width: 35px;
     height: $bubble-width;
     width: $bubble-width;
     border-radius: 50%;
-    background-color: var(--background-100);
+    background-color: #6e6e6e;
     cursor: grab;
     z-index: $ZI-resize-bubble;
   }

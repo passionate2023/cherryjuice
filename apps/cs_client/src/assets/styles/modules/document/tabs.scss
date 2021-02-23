@@ -3,6 +3,7 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 
 .tabs-container {
+  grid-area: tabs;
   display: flex;
   flex: 1;
   overflow: hidden;

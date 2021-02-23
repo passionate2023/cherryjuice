@@ -1,11 +1,13 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
 .toolbar {
-  grid-area: tabs;
+  grid-area: toolbar;
   display: flex;
   align-items: center;
   height: var(--tabs);
   background-color: var(--surface-095);
   //overflow: hidden;
+  z-index: $ZI-toolbar;
 }
 .toolbar::after {
   content: '|';

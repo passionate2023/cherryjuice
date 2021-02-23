@@ -7,6 +7,7 @@ import { modDialog } from '::shared-components/dialog/dialog';
 import { ac, Store } from '::store/store';
 import { useSelector } from 'react-redux';
 import { CssVariables } from '::store/ducks/css-variables';
+import { aDialogIsPinned } from '::store/selectors/layout/a-dialog-is-pinned';
 
 export const useUpdateCssVariables = (
   isDocumentOwner: boolean,
@@ -24,19 +25,6 @@ export const useUpdateCssVariables = (
     ac.cssVariables.set(CssVariables.nodePath, showNodePath ? barHeight : 0);
   }, [showNodePath, isOnMd]);
 
-  const dockedDialog = useSelector((state: Store) => state.root.dockedDialog);
-  const showSearchDialog = useSelector(
-    (state: Store) => state.search.searchState !== 'idle',
-  );
-  const showSettingsDialog = useSelector(
-    (state: Store) => state.dialogs.showSettingsDialog,
-  );
-  const showDocumentList = useSelector(
-    (state: Store) => state.dialogs.showDocumentList,
-  );
-  const showBookmarks = useSelector(
-    (state: Store) => state.dialogs.showBookmarks,
-  );
   useEffect(() => {
     ac.cssVariables.set(
       CssVariables.treeWidth,
@@ -64,15 +52,12 @@ export const useUpdateCssVariables = (
     }
   }, [showRecentNodes]);
 
-  const dialogIsShown =
-    showSearchDialog || showSettingsDialog || showDocumentList || showBookmarks;
+  const pinnedDialog = useSelector(aDialogIsPinned);
   useEffect(() => {
-    if (dockedDialog && dialogIsShown) {
-      cssVariables.setDockedDialogHeight(50);
+    if (pinnedDialog) {
       ac.root.setDocking(false);
     } else {
       ac.root.setDocking(true);
-      cssVariables.setDockedDialogHeight(0);
       interval(50)
         .pipe(
           filter(() => !document.querySelector('.' + modDialog.dialogDocked)),
@@ -83,5 +68,5 @@ export const useUpdateCssVariables = (
         )
         .subscribe();
     }
-  }, [dockedDialog, dialogIsShown]);
+  }, [pinnedDialog]);
 };

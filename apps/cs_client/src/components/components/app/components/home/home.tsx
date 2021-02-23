@@ -6,6 +6,7 @@ import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { useEffect, useMemo } from 'react';
 import { createGesturesHandler } from '@cherryjuice/shared-helpers';
+import { useComponentIsReady } from '::root/hooks/is-ready';
 
 const mapState = (state: Store) => ({
   showSidebar: state.home.showSidebar,
@@ -30,6 +31,7 @@ const Home: React.FC<Props & PropsFromRedux> = ({ showSidebar, isOnMd }) => {
     ac.home.fetchFolders();
     ac.documentsList.fetchDocuments();
   }, []);
+  useComponentIsReady(true);
   return (
     <div
       className={mod.home}
@@ -46,5 +48,6 @@ const Home: React.FC<Props & PropsFromRedux> = ({ showSidebar, isOnMd }) => {
     </div>
   );
 };
+
 export default connector(Home);
 export { mod as modHome };

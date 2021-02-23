@@ -9,8 +9,8 @@ import { NavBar } from '::app/components/toolbar/components/nav-bar/nav-bar';
 import { MobileButtons } from '::app/components/toolbar/components/mobile-buttons/mobile-buttons';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
 import { Portal } from '@cherryjuice/components';
-import { modApp } from '::sass-modules';
 import { Separator } from '::app/components/editor/editor-toolbar/components/separator';
+import { modEditor } from '::app/components/editor/editor';
 
 const mapState = (state: Store) => {
   return {
@@ -26,9 +26,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = Record<string, never>;
-
-const Toolbar: React.FC<Props & PropsFromRedux> = ({
+const Toolbar: React.FC<PropsFromRedux> = ({
   showHome,
   isAuthenticated,
   documentId,
@@ -63,7 +61,7 @@ const Toolbar: React.FC<Props & PropsFromRedux> = ({
           </>
         )}
         {(!showHome || !tb) && documentId && (
-          <Portal targetSelector={'.' + modApp.app} predicate={tb}>
+          <Portal targetSelector={'.' + modEditor.editor} predicate={tb}>
             <Tabs />
           </Portal>
         )}

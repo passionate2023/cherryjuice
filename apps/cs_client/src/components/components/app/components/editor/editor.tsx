@@ -7,6 +7,7 @@ import { Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import mod from './editor.scss';
 import { LinearProgress } from '::shared-components/loading-indicator/linear-progress';
+import { useComponentIsReady } from '::root/hooks/is-ready';
 const Document = React.lazy(() =>
   import('::root/components/app/components/editor/document/document'),
 );
@@ -33,6 +34,7 @@ const Editor: React.FC<PropsFromRedux> = ({
   fetchDocumentInProgress,
   saveInProgress,
 }) => {
+  useComponentIsReady(true);
   return (
     <div className={mod.editor}>
       <LinearProgress loading={fetchDocumentInProgress || saveInProgress} />

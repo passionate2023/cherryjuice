@@ -4,9 +4,9 @@
 
 .user-profile__group {
   display: flex;
-  padding-top: 20px;
   padding-bottom: 10px;
   &:not(:first-child) {
+    padding-top: 20px;
     border-top: var(--border-1);
   }
   flex-wrap: wrap;
