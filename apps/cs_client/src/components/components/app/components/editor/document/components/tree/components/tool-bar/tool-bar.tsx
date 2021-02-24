@@ -11,6 +11,7 @@ import { NodesButtons } from './components/nodes-buttons/nodes-buttons';
 import { ContextMenuWrapper } from '@cherryjuice/components';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { TreeToolbarButton } from '::app/components/editor/document/components/tree/components/tool-bar/components/nodes-buttons/tree-toolbar-buton/tree-toolbar-button';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -24,7 +25,6 @@ const mapState = (state: Store) => {
     showNodePath: state.editor.showNodePath,
     selectedNode_id,
     filter: state.document.nodesFilter,
-    tb: state.root.isOnTb,
   };
 };
 const mapDispatch = {};
@@ -37,9 +37,9 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   documentId,
   showNodePath,
   selectedNode_id,
-  tb,
   filter,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const foldMenuItems = useFoldMenuItems({
     documentId,
     node_id: selectedNode_id,
@@ -64,7 +64,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
           placeholder={'filter nodes'}
           hideableInput={'manual'}
           style={{
-            elementHeight: tb ? 36 : 30,
+            elementHeight: mbOrTb ? 36 : 30,
             elementWidth: '100%',
             buttonBc: 'var(--surface-100)',
             buttonHoverBc: 'var(--primary-085)',

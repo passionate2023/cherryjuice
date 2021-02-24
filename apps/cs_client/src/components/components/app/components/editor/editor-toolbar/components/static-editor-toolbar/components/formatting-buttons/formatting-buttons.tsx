@@ -14,7 +14,6 @@ const mapState = (state: Store) => {
     selectedNode_id: getCurrentDocument(state)?.persistedState?.selectedNode_id,
     documentId: state.document.documentId,
     formattingHotKeys: getHotkeys(state).formatting,
-    md: state.root.isOnTb,
   };
 };
 const mapDispatch = {};

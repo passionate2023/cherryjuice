@@ -11,6 +11,7 @@ import { useTabsMenuItems } from '::app/components/tabs/hooks/tabs-menu-items';
 import { createNodePropsMapper } from '::app/components/tabs/helpers/map-props';
 import { useForceUpdate } from '::hooks/react/force-update';
 import { ContextMenuWrapper } from '@cherryjuice/components';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const getNumberOfVisibleTabs = () => {
   const tabsList = document.querySelector('.' + modTabs.tabsList);
@@ -23,7 +24,6 @@ const mapState = (state: Store) => {
   return {
     localState: document?.localState,
     nodes: document?.nodes,
-    isOnMd: state.root.isOnTb,
     vw: state.cssVariables.vw,
     selectedNode_id: document?.persistedState?.selectedNode_id,
     recentNodes: document?.persistedState?.recentNodes,
@@ -36,24 +36,21 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = Record<string, never>;
-
-const Tabs: React.FC<Props & PropsFromRedux> = ({
+const Tabs: React.FC<PropsFromRedux> = ({
   nodes,
   selectedNode_id,
   recentNodes,
   documentId,
-  isOnMd,
   localState,
   bookmarks,
   showHome,
 }) => {
   useForceUpdate();
-
+  const { mbOrTb } = useCurrentBreakpoint();
   let visible: number[] = [],
     hidden: number[] = [];
   if (recentNodes)
-    if (isOnMd) {
+    if (mbOrTb) {
       visible = recentNodes;
       hidden = [];
     } else {
@@ -96,7 +93,7 @@ const Tabs: React.FC<Props & PropsFromRedux> = ({
           <VisibleTabs
             documentId={documentId}
             nodes={visible.map(mapNodeProps)}
-            isOnMd={isOnMd}
+            mbOrTb={mbOrTb}
             onContextMenu={show}
             indexOfSelectedTab={indexOfSelectedTab}
           >

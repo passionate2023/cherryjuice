@@ -18,13 +18,13 @@ import {
 import { useFooterButtons } from '::app/components/menus/dialogs/document-meta/hooks/footer-buttons';
 import { useEditDocument } from '::app/components/menus/dialogs/document-meta/hooks/edit-document';
 import { useFormInputs } from '::app/components/menus/dialogs/document-meta/hooks/inputs';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const mapState = (state: Store) => ({
   currentFolderId: state.home.folder.id,
   showDialog: state.dialogs.showDocumentMetaDialog,
   focusedDocumentId: state.home.activeDocumentId || state.document.documentId,
   documents: getDocumentsList(state),
-  isOnMd: state.root.isOnTb,
   userId: state.auth.user?.id,
   documentUserId: getDocumentUserId(state),
 });
@@ -39,11 +39,11 @@ type DocumentMetaDialogProps = {
 type Props = PropsFromRedux & DocumentMetaDialogProps;
 const DocumentMetaDialogWithTransition: React.FC<Props> = ({
   showDialog,
-  isOnMd,
   focusedDocumentId,
   documents,
   userId,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const focusedDocument = useMemo(
     () => documents.find(document => document.id === focusedDocumentId),
     [documents, focusedDocumentId],
@@ -66,7 +66,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
     }
   }, [showDialog, focusedDocumentId, userId]);
   const inputs = useFormInputs({
-    isOnMd,
+    mbOrTb,
     isOwnerOfFocusedDocument,
     userId,
     state,
@@ -85,7 +85,7 @@ const DocumentMetaDialogWithTransition: React.FC<Props> = ({
     <DialogWithTransition
       dialogTitle={'Document Properties'}
       footRightButtons={buttonsRight}
-      isOnMobile={isOnMd}
+      isOnMobile={mbOrTb}
       show={Boolean(showDialog)}
       onClose={ac.dialogs.hideDocumentMetaDialog}
       onConfirm={apply}

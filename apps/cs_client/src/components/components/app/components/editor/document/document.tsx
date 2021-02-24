@@ -9,6 +9,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { NodePath } from '::root/components/app/components/editor/document/components/node-path/node-path';
 import { Void } from '::shared-components/react/void';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 const ToolBar = React.lazy(() =>
   import('::app/components/editor/editor-toolbar/editor-toolbar'),
 );
@@ -20,23 +21,19 @@ const mapState = (state: Store) => {
 
     showTree: state.editor.showTree,
     showNodePath: state.editor.showNodePath,
-    isOnMd: state.root.isOnTb,
   };
 };
 
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = Record<string, never>;
-
-const Document: React.FC<Props & PropsFromRedux> = ({
+const Document: React.FC<PropsFromRedux> = ({
   nodes,
-
   selectedNode_id,
   showTree,
   showNodePath,
-  isOnMd,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   return (
     <>
       <ErrorBoundary>
@@ -46,7 +43,7 @@ const Document: React.FC<Props & PropsFromRedux> = ({
       </ErrorBoundary>
       {nodes && (
         <Fragment>
-          {(showNodePath || !isOnMd) && Boolean(selectedNode_id) && (
+          {(showNodePath || !mbOrTb) && Boolean(selectedNode_id) && (
             <ErrorBoundary>
               <NodePath />
             </ErrorBoundary>

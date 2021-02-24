@@ -17,6 +17,7 @@ import { Icons } from '@cherryjuice/icons';
 import { SearchSetting } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/search-filters';
 import { DialogScrollableSurface } from '::root/components/shared-components/dialog/dialog-list/dialog-scrollable-surface';
 import { mapSortDocumentBy } from '::app/components/home/components/folder/hooks/sort-documents';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const options: { optionName: SortNodesBy }[] = [
   { optionName: SortNodesBy.UpdatedAt },
@@ -30,20 +31,18 @@ const mapState = (state: Store) => ({
   query: state.documentsList.query,
   showFilters: state.documentsList.showFilters,
   currentSortOptions: state.documentsList.sortOptions,
-  isOnMd: state.root.isOnTb,
   pinned: state.root.dockedDialog,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = Record<string, never>;
-const DocumentList: React.FC<Props & PropsFromRedux> = ({
+const DocumentList: React.FC<PropsFromRedux> = ({
   documents,
   show,
   query,
-  isOnMd,
   currentSortOptions,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const filesPerFolders: [string, CachedDocument[]][] = useMemo(() => {
     let sortedDocuments: CachedDocument[] = mapSortDocumentBy[
       currentSortOptions.sortBy
@@ -72,7 +71,7 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
             value={query}
             onChange={ac.documentsList.setQuery}
             onClear={ac.documentsList.clearQuery}
-            lazyAutoFocus={!isOnMd && show}
+            lazyAutoFocus={!mbOrTb && show}
             searchImpossible={!documents.length}
           />
           <SearchSetting iconName={Icons.material.sort}>

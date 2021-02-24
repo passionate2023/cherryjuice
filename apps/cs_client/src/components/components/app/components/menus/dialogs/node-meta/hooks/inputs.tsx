@@ -12,7 +12,7 @@ import { SquareToggle } from '::app/components/menus/dialogs/node-meta/component
 export const useFormInputs = ({
   documentPrivacy,
   state,
-  isOnMd,
+  mbOrTb,
   showDialog,
   isOwnerOfDocument,
 }) => {
@@ -75,5 +75,5 @@ export const useFormInputs = ({
       },
     ].filter(Boolean);
     return inputs;
-  }, [documentPrivacy, state, isOnMd, showDialog, isOwnerOfDocument]);
+  }, [documentPrivacy, state, mbOrTb, showDialog, isOwnerOfDocument]);
 };

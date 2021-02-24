@@ -11,14 +11,13 @@ import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-a
 import { Portal } from '@cherryjuice/components';
 import { Separator } from '::app/components/editor/editor-toolbar/components/separator';
 import { modEditor } from '::app/components/editor/editor';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const mapState = (state: Store) => {
   return {
     showHome: state.home.show,
     isAuthenticated: !!state.auth.user?.id,
-    showTree: state.editor.showTree,
     documentId: state.document.documentId,
-    tb: state.root.isOnTb,
     isDocumentOwner: hasWriteAccessToDocument(state),
   };
 };
@@ -30,9 +29,9 @@ const Toolbar: React.FC<PropsFromRedux> = ({
   showHome,
   isAuthenticated,
   documentId,
-  tb,
   isDocumentOwner,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const ref = useRef<HTMLDivElement>();
 
   return (
@@ -54,14 +53,14 @@ const Toolbar: React.FC<PropsFromRedux> = ({
             iconIsImage={true}
           />
         )}
-        {isDocumentOwner && tb && !showHome && (
+        {isDocumentOwner && mbOrTb && !showHome && (
           <>
             <Separator />
             <MobileButtons />
           </>
         )}
-        {(!showHome || !tb) && documentId && (
-          <Portal targetSelector={'.' + modEditor.editor} predicate={tb}>
+        {(!showHome || !mbOrTb) && documentId && (
+          <Portal targetSelector={'.' + modEditor.editor} predicate={mbOrTb}>
             <Tabs />
           </Portal>
         )}

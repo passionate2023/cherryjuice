@@ -8,9 +8,9 @@ import { ErrorBoundary } from '::root/components/shared-components/react/error-b
 import { AnimatedEditorToolbar } from '::app/components/editor/editor-toolbar/components/animated-editor-toolbar/animated-editor-toolbar';
 import { modEditor } from '::app/components/editor/editor';
 import { Portal } from '@cherryjuice/components';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const mapState = (state: Store) => ({
-  isOnMd: state.root.isOnTb,
   docking: state.root.docking,
   showFormattingButtons: state.editor.showFormattingButtons,
   isDocumentOwner: hasWriteAccessToDocument(state),
@@ -20,19 +20,19 @@ const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const EditorToolbar: React.FC<PropsFromRedux> = ({
-  isOnMd,
   showFormattingButtons,
   isDocumentOwner,
   docking,
 }) => {
-  const hideDuringDocking = docking && isOnMd;
+  const { mbOrTb } = useCurrentBreakpoint();
+  const hideDuringDocking = docking && mbOrTb;
   return (
     <>
       {isDocumentOwner && (
         <div className={mod.editorToolbar}>
           <ErrorBoundary>
-            <Portal targetSelector={'.' + modEditor.editor} predicate={isOnMd}>
-              {isOnMd ? (
+            <Portal targetSelector={'.' + modEditor.editor} predicate={mbOrTb}>
+              {mbOrTb ? (
                 <AnimatedEditorToolbar show={showFormattingButtons} />
               ) : (
                 !hideDuringDocking && <StaticEditorToolbar />

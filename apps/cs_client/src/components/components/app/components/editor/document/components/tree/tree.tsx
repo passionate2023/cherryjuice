@@ -20,6 +20,7 @@ import {
 } from '::shared-components/inline-input/hooks/inline-input-provider';
 import { getEditor } from '@cherryjuice/editor';
 import { nodeOverlay } from '::app/components/editor/document/components/tree/components/node/helpers/node-overlay';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 export const TreeContext = createInlineInputProviderContext();
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -41,7 +42,6 @@ const mapState = (state: Store) => {
     documentId: state.document.documentId,
     copiedNode: state.documentCache.copiedNode,
     isOwnerOfCurrentDocument: state.auth.user?.id === document.userId,
-    tb: state.root.isOnTb,
   };
 };
 const mapDispatch = {};
@@ -56,9 +56,9 @@ const Tree: React.FC<PropsFromRedux> = ({
   documentId,
   copiedNode,
   isOwnerOfCurrentDocument,
-  tb,
   selectedNode_id,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   useEffect(onStart, []);
   useEffect(() => {
     if (selectedNode_id) {
@@ -122,7 +122,7 @@ const Tree: React.FC<PropsFromRedux> = ({
         <ContextMenuWrapper hookProps={hookProps} items={contextMenuItems}>
           {({ show }) => (
             <div className={modTree.tree} onContextMenu={show} id="tree">
-              {!tb && <ToolBar />}
+              {!mbOrTb && <ToolBar />}
               <TreeContext.Provider value={inlineInputProps}>
                 <Droppable
                   anchorId={'0'}
@@ -163,7 +163,7 @@ const Tree: React.FC<PropsFromRedux> = ({
                   )}
                 </Droppable>
               </TreeContext.Provider>
-              {tb && <ToolBar />}
+              {mbOrTb && <ToolBar />}
             </div>
           )}
         </ContextMenuWrapper>

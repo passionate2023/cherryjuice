@@ -8,19 +8,19 @@ export type HeaderProps = {
   folderName: string;
   query: string;
   noSearch?: boolean;
-  isOnMd: boolean;
+  mbOrTb: boolean;
 };
 
 export const Header: React.FC<HeaderProps> = ({
   noSearch,
   folderName,
   query,
-  isOnMd,
+  mbOrTb,
 }) => {
   return (
     <div className={mod.header}>
       <span className={mod.header__folderName}>
-        {isOnMd && (
+        {mbOrTb && (
           <Tooltip tooltip={'toggle sidebar'}>
             {bind => (
               <ButtonCircle

@@ -18,6 +18,7 @@ import { useFormInputs } from '::app/components/menus/dialogs/node-meta/hooks/in
 import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/get-parents-node-ids/get-parents-node-ids';
 import { QFullNode } from '::store/ducks/document-cache/document-cache';
 import { calculateEditedAttribute } from '::app/components/menus/dialogs/node-meta/hooks/save/helpers/calculate-edited-attributes/calculate-edited-attributes';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -28,7 +29,6 @@ const mapState = (state: Store) => {
     documentUserId: document?.userId,
     documentPrivacy: document?.privacy,
     showDialog: state.dialogs.showNodeMetaDialog,
-    isOnMd: state.root.isOnTb,
     userId: state.auth.user?.id,
   };
 };
@@ -38,13 +38,8 @@ const mapDispatch = {
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type TNodeMetaModalProps = Record<string, never>;
-
-const NodeMetaModalWithTransition: React.FC<
-  TNodeMetaModalProps & PropsFromRedux
-> = ({
+const NodeMetaModalWithTransition: React.FC<PropsFromRedux> = ({
   showDialog,
-  isOnMd,
   onClose,
   document,
   node_id,
@@ -52,6 +47,7 @@ const NodeMetaModalWithTransition: React.FC<
   documentUserId,
   documentPrivacy,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const isOwnerOfDocument = documentUserId === userId;
   const nodeDepthRef = useRef(0);
   const editedNodeRef = useRef<QFullNode>();
@@ -112,7 +108,7 @@ const NodeMetaModalWithTransition: React.FC<
   const inputs = useFormInputs({
     documentPrivacy,
     state,
-    isOnMd,
+    mbOrTb,
     showDialog,
     isOwnerOfDocument,
   });
@@ -122,7 +118,7 @@ const NodeMetaModalWithTransition: React.FC<
       dialogTitle={'Node Properties'}
       footerLeftButtons={[]}
       footRightButtons={buttonsRight}
-      isOnMobile={isOnMd}
+      isOnMobile={mbOrTb}
       show={Boolean(showDialog)}
       onClose={onClose}
       onConfirm={apply}

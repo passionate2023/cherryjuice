@@ -15,6 +15,7 @@ import {
   anchorR,
   anchorRTC,
 } from '::root/components/app/components/menus/dialogs/anchor/reducer/reducer';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const getExistingAnchorIds = (): string[] =>
   Array.from(document.querySelectorAll('.rich-text__anchor')).map(el =>
@@ -25,7 +26,6 @@ const mapState = (state: Store) => ({
   showDialog: state.dialogs.showAnchorDialog,
   anchorId: state.editor.anchorId,
   selection: state.editor.selection,
-  isOnMd: state.root.isOnTb,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -34,9 +34,9 @@ type Props = PropsFromRedux;
 const AnchorDialogWithTransition: React.FC<Props> = ({
   showDialog,
   anchorId: existingAnchorId = '',
-  isOnMd,
   selection,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const [state, dispatch] = useReducer(anchorR, undefined, anchorRTC);
   useEffect(() => {
     anchorAC.init(dispatch);
@@ -56,7 +56,7 @@ const AnchorDialogWithTransition: React.FC<Props> = ({
       value: state.anchorId,
       type: 'text',
       label: 'id',
-      lazyAutoFocus: !isOnMd && Boolean(showDialog),
+      lazyAutoFocus: !mbOrTb && Boolean(showDialog),
     },
   ];
   const createAnchor = () => {
@@ -108,7 +108,7 @@ const AnchorDialogWithTransition: React.FC<Props> = ({
     <DialogWithTransition
       dialogTitle={existingAnchorId ? 'Edit Anchor' : 'Create anchor'}
       footRightButtons={buttonsRight}
-      isOnMobile={isOnMd}
+      isOnMobile={mbOrTb}
       show={Boolean(showDialog)}
       onClose={ac.dialogs.hideAnchorDialog}
       onConfirm={apply}

@@ -15,6 +15,7 @@ import {
   useInlineInputProvider,
 } from '::shared-components/inline-input/hooks/inline-input-provider';
 import { getDocuments } from '::store/selectors/cache/document/document';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 export const FolderContext = createInlineInputProviderContext();
 
@@ -32,7 +33,6 @@ const mapState = (state: Store) => ({
   sortDirection: state.home.sortDirection,
   query: state.home.query,
   folders: state.home.folders,
-  isOnMd: state.root.isOnTb,
   loading: state.documentsList.fetchDocuments === 'in-progress',
   showSidebar: state.home.showSidebar,
 });
@@ -52,11 +52,11 @@ const Folder: React.FC<PropsFromRedux> = ({
   sortBy,
   sortDirection,
   query,
-  isOnMd,
   loading,
   isOwnerOfActiveDocument,
   showSidebar,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const sorted = useSortDocuments({
     documents,
     openedDocumentId,
@@ -66,7 +66,7 @@ const Folder: React.FC<PropsFromRedux> = ({
     query,
     draftsFolderId,
     folders,
-    draggable: (isOnMd && showSidebar) || !isOnMd,
+    draggable: (mbOrTb && showSidebar) || !mbOrTb,
   });
   const inlineInputProps = useInlineInputProvider({
     disable: !isOwnerOfActiveDocument,
@@ -89,8 +89,8 @@ const Folder: React.FC<PropsFromRedux> = ({
   return (
     <FolderContext.Provider value={inlineInputProps}>
       <div className={mod.folder}>
-        <Portal targetSelector={'.' + modHome.home} predicate={isOnMd}>
-          <Header folderName={folderName} query={query} isOnMd={isOnMd} />
+        <Portal targetSelector={'.' + modHome.home} predicate={mbOrTb}>
+          <Header folderName={folderName} query={query} mbOrTb={mbOrTb} />
         </Portal>
         <div className={mod.folder__tables}>
           <LinearProgress loading={loading} />
@@ -105,7 +105,6 @@ const Folder: React.FC<PropsFromRedux> = ({
                   cmItems={cmItems}
                   sortBy={sortBy}
                   sortDirection={sortDirection}
-                  isOnMd={isOnMd}
                 />
               )}
             </>

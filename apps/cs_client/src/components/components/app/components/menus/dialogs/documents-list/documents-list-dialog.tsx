@@ -9,6 +9,7 @@ import { useDeleteListItems } from '::root/components/app/components/menus/dialo
 import { useFetchDocumentsList } from '::app/components/menus/dialogs/documents-list/hooks/fetch-documents-list';
 import { memo, useCallback } from 'react';
 import { useFooterButtons } from '::app/components/menus/dialogs/documents-list/hooks/footer-buttons';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
@@ -16,7 +17,6 @@ const mapState = (state: Store) => ({
   showDocumentList: state.dialogs.showDocumentList,
   documents: getDocumentsList(state),
   loading: state.documentsList.fetchDocuments === 'in-progress',
-  isOnMobile: state.root.isOnTb,
   deletionMode: state.documentsList.deletionMode,
   selectedIDs: state.documentsList.selectedIDs,
   fetchDocuments: state.documentsList.fetchDocuments,
@@ -30,7 +30,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 const DocumentsListDialog: React.FC<PropsFromRedux> = ({
   documentId,
   showDocumentList,
-  isOnMobile,
   documents,
   deletionMode,
   selectedIDs,
@@ -39,6 +38,7 @@ const DocumentsListDialog: React.FC<PropsFromRedux> = ({
   online,
   docked,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   useFetchDocumentsList({ userId, online, showDocumentList });
 
   const close = ac.dialogs.hideDocumentList;
@@ -72,7 +72,7 @@ const DocumentsListDialog: React.FC<PropsFromRedux> = ({
       footerLeftButtons={buttonsLeft}
       footRightButtons={buttonsRight}
       rightHeaderButtons={rightHeaderButtons}
-      isOnMobile={isOnMobile}
+      isOnMobile={mbOrTb}
       show={showDocumentList}
       onClose={close}
       pinned={docked}

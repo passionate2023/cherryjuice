@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { memo, useRef } from 'react';
+import { memo } from 'react';
 import { SearchTarget } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/search-target';
 import { SearchOptions } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-options/search-options';
 import { SearchScope } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-scope/search-scope';
 import { SearchType } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-type/search-type';
-import { useOnWindowResize } from '::hooks/use-on-window-resize';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { TimeFilters } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/time-filters';
@@ -23,6 +22,7 @@ import {
 import { Icons } from '@cherryjuice/icons';
 import { DocumentSearch } from '::app/components/toolbar/components/nav-bar/components/document-search';
 import { ContextMenuWrapper } from '@cherryjuice/components';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 export const SearchSetting: React.FC<{
   iconName: string;
@@ -70,27 +70,6 @@ export const SearchSetting: React.FC<{
   );
 });
 
-export const useSetCssVariablesOnWindowResize = (
-  actionCreator,
-  hookDependency1?: boolean,
-) => {
-  const ref = useRef<HTMLDivElement>();
-  const height = useRef(0);
-  useOnWindowResize(
-    [
-      () => {
-        const clientHeight = ref.current.clientHeight;
-        if (clientHeight !== height.current) {
-          height.current = clientHeight;
-          actionCreator(clientHeight);
-        }
-      },
-    ],
-    hookDependency1,
-  );
-  return ref;
-};
-
 type Props = {
   show: boolean;
   showDialog: boolean;
@@ -99,7 +78,6 @@ type Props = {
 const mapState = (state: Store) => ({
   dockedDialog: state.root.dockedDialog,
   currentSortOptions: state.search.sortOptions,
-  mb: state.root.isOnMb,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -115,8 +93,8 @@ const options: { optionName: SortNodesBy }[] = [
 const SearchFilters: React.FC<Props & PropsFromRedux> = ({
   currentSortOptions,
   showDialog,
-  mb,
 }) => {
+  const { mb } = useCurrentBreakpoint();
   return (
     <SearchHeaderContainer alignChildren={'v'}>
       <SearchHeaderGroup>

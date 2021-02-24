@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
 
-const useOnWindowResize = (
-  callbacks: ((w: number, h: number) => void)[],
-  hookDependency1?: boolean,
-) => {
+type Callback = (w: number, h: number) => void;
+export const useOnWindowResize = (callbacks: Callback[]) => {
   useEffect(() => {
     const handle = () => {
       callbacks.forEach(callback =>
@@ -13,7 +11,5 @@ const useOnWindowResize = (
     handle();
     window.addEventListener('resize', handle);
     return () => window.removeEventListener('resize', handle);
-  }, [hookDependency1]);
+  }, []);
 };
-
-export { useOnWindowResize };

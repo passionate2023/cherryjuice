@@ -9,6 +9,7 @@ import { useHubTransition } from '::root/components/app/components/menus/widgets
 import { ActionSnackbar } from '::root/components/app/components/menus/widgets/components/undo-action/action-snackbar';
 import { ChangesHistory } from '::root/components/app/components/menus/widgets/components/changes-history/changes-history';
 import { UndoRedo } from '::root/components/app/components/menus/widgets/components/undo-action/components/undo-redo';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 export type Widget = {
   component: JSX.Element;
@@ -22,7 +23,6 @@ const mapState = (state: Store) => ({
   showTimeline: state.timelines.showTimeline,
   documentActionNOF: state.timelines.documentActionNOF,
   showHome: state.home.show,
-  tb: state.root.isOnTb,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -35,8 +35,8 @@ const Widgets: React.FC<PropsFromRedux> = ({
   showTimeline,
   documentActionNOF,
   showHome,
-  tb,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const widgets: Widget[] = [];
 
   if (snackbar?.message)
@@ -78,7 +78,7 @@ const Widgets: React.FC<PropsFromRedux> = ({
   return (
     <div
       className={modWidgets.widgets}
-      style={{ bottom: showHome ? (tb ? 45 : 5) : undefined }}
+      style={{ bottom: showHome ? (mbOrTb ? 45 : 5) : undefined }}
     >
       {transitions.map(({ key, item, props: style }) => (
         <animated.div

@@ -7,6 +7,7 @@ import { Timestamps } from '::root/components/app/components/editor/info-bar/com
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { Tooltip } from '@cherryjuice/components';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -15,9 +16,9 @@ const mapState = (state: Store) => {
   return {
     node,
     documentId: state.document.documentId,
-    isOnMobile: state.root.isOnTb,
     online: state.root.online,
     showInfoBar: state.editor.showInfoBar,
+    showHome: state.home.show,
     documentPrivacy: document?.privacy,
     numberOfGuests: document?.guests?.length,
     selectedNode_id,
@@ -27,19 +28,18 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = Record<string, never>;
-
-const InfoBar: React.FC<Props & PropsFromRedux> = ({
+const InfoBar: React.FC<PropsFromRedux> = ({
   node,
   documentId,
-  isOnMobile,
   showInfoBar,
   documentPrivacy,
   selectedNode_id,
   numberOfGuests,
   online,
+  showHome,
 }) => {
-  const showBar = !isOnMobile || showInfoBar;
+  const { mbOrTb } = useCurrentBreakpoint();
+  const showBar = !mbOrTb || (showInfoBar && !showHome);
   const noSelectedDocument = !documentId;
   return showBar ? (
     <footer className={modInfoBar.infoBar}>

@@ -15,6 +15,7 @@ import {
   hasDefaulHotkeySettingsSettings,
   hasDefaultEditorSettings,
 } from '::store/selectors/settings/editor-settings';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 export const screenHasUnsavedChanges = createSelector(
   (state: Store) => !!state.editorSettings.previous,
@@ -29,7 +30,6 @@ const mapState = (state: Store) => {
   const selectedScreen = state.settings.selectedScreen;
   return {
     show: state.dialogs.showSettingsDialog,
-    isOnMobile: state.root.isOnTb,
     selectedScreen,
     screenHasChanges: screenHasUnsavedChanges(state),
     saveOperation: state.settings.saveOperation,
@@ -46,12 +46,9 @@ const mapState = (state: Store) => {
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = Record<string, never>;
-
-const Settings: React.FC<Props & PropsFromRedux> = ({
+const Settings: React.FC<PropsFromRedux> = ({
   show,
   userId,
-  isOnMobile,
   selectedScreen,
   screenHasChanges,
   saveOperation,
@@ -60,6 +57,7 @@ const Settings: React.FC<Props & PropsFromRedux> = ({
   duplicateHotkeys,
   hasDefaulHotkeySettingsSettings,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const savePending = saveOperation !== 'idle';
   const saveInProgress = saveOperation === 'in-progress';
   const onClose = useUnsavedSettingsPrompt(
@@ -108,7 +106,7 @@ const Settings: React.FC<Props & PropsFromRedux> = ({
       footRightButtons={footerRightButtons}
       footerLeftButtons={footerLeftButtons}
       loading={saveInProgress}
-      isOnMobile={isOnMobile}
+      isOnMobile={mbOrTb}
       onClose={onClose}
       show={show && Boolean(userId)}
       pinned={docked}

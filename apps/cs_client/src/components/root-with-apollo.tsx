@@ -36,28 +36,6 @@ const themes = {
 };
 enablePatches();
 
-const updateBreakpointState = ({
-  breakpoint,
-  callback,
-  mode = 'smallerThan',
-}: {
-  breakpoint: number;
-  callback: (value: boolean) => void;
-  mode?: 'smallerThan' | 'biggerThan';
-}) => {
-  let previousState = undefined;
-  return () => {
-    const newState =
-      mode === 'smallerThan'
-        ? window.innerWidth <= breakpoint
-        : window.innerWidth > breakpoint;
-    if (previousState != newState) {
-      previousState = newState;
-      callback(newState);
-    }
-  };
-};
-
 const mapState = (state: Store) => ({
   token: state.auth.token,
   online: state.root.online,
@@ -84,21 +62,10 @@ const Root: React.FC<PropsFromRedux> = ({
 }) => {
   const client = useApolloClient(token, userId);
   useOnWindowResize([
-    (w, h) => ac.cssVariables.set(CssVariables.vh, h),
-    w => ac.cssVariables.set(CssVariables.vw, w),
-    updateBreakpointState({
-      breakpoint: 1200,
-      callback: ac.root.setIsOnWd,
-      mode: 'biggerThan',
-    }),
-    updateBreakpointState({
-      breakpoint: 850,
-      callback: ac.root.setIsOnTb,
-    }),
-    updateBreakpointState({
-      breakpoint: 425,
-      callback: ac.root.setIsOnMb,
-    }),
+    (w, h) => {
+      ac.cssVariables.set(CssVariables.vh, h);
+      ac.cssVariables.set(CssVariables.vw, w);
+    },
   ]);
   useRegisterHotKeys(hotKeys);
   useTrackDocumentChanges({

@@ -17,23 +17,23 @@ import {
 } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
 import { NumberInput } from '::root/components/shared-components/inputs/number-input';
 import { createCodeboxHtml, insertObject } from '@cherryjuice/editor';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showCodeboxDialog,
   selection: state.editor.selection,
   selectedCodebox: state.editor.selectedCodebox,
-  isOnMd: state.root.isOnTb,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux;
 const CodeboxDialogWithTransition: React.FC<Props> = ({
-  isOnMd,
   showDialog,
   selection,
   selectedCodebox,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const [state, dispatch] = useReducer(codeboxR, undefined, codeboxRTC);
   useEffect(() => {
     codeboxAC.init(dispatch);
@@ -147,7 +147,7 @@ const CodeboxDialogWithTransition: React.FC<Props> = ({
     <DialogWithTransition
       dialogTitle={selectedCodebox ? 'Edit codebox' : 'Create codebox'}
       footRightButtons={buttonsRight}
-      isOnMobile={isOnMd}
+      isOnMobile={mbOrTb}
       show={Boolean(showDialog)}
       onClose={ac.dialogs.hideCodeboxDialog}
       onConfirm={apply}

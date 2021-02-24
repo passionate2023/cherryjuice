@@ -7,18 +7,17 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useEffect, useMemo } from 'react';
 import { createGesturesHandler } from '@cherryjuice/shared-helpers';
 import { useComponentIsReady } from '::root/hooks/is-ready';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const mapState = (state: Store) => ({
   showSidebar: state.home.showSidebar,
-  isOnMd: state.root.isOnTb,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = Record<string, never>;
-
-const Home: React.FC<Props & PropsFromRedux> = ({ showSidebar, isOnMd }) => {
+const Home: React.FC<PropsFromRedux> = ({ showSidebar }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const { onTouchEnd, onTouchStart } = useMemo(
     () =>
       createGesturesHandler({
@@ -42,7 +41,7 @@ const Home: React.FC<Props & PropsFromRedux> = ({ showSidebar, isOnMd }) => {
         className={mod.mod__sidebarAndFolder}
         data-show-sidebar={showSidebar}
       >
-        {(!isOnMd || showSidebar) && <Sidebar />}
+        {(!mbOrTb || showSidebar) && <Sidebar />}
         <Folder />
       </div>
     </div>

@@ -9,9 +9,7 @@ import { modToolbar } from '::app/components/toolbar/toolbar';
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
   showFormattingButtons: state.editor.showFormattingButtons,
-  contentEditable: state.editor.contentEditable,
   showInfoBar: state.editor.showInfoBar,
-  isOnMb: state.root.isOnMb,
   isDocumentOwner: hasWriteAccessToDocument(state),
 });
 const mapDispatch = {};

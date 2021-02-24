@@ -6,14 +6,14 @@ import { NodeProps, Tab } from './components/tab';
 type Props = {
   documentId: string;
   nodes: NodeProps[];
-  isOnMd: boolean;
+  mbOrTb: boolean;
   onContextMenu: (e: MouseEvent<HTMLDivElement>) => void;
   indexOfSelectedTab: number;
 };
 
 const VisibleTabs: React.FC<Props> = ({
   nodes,
-  isOnMd,
+  mbOrTb,
   documentId,
   onContextMenu,
   indexOfSelectedTab,
@@ -34,7 +34,7 @@ const VisibleTabs: React.FC<Props> = ({
             <Tab
               documentId={documentId}
               {...props}
-              isOnMd={isOnMd}
+              mbOrTb={mbOrTb}
               showLeftSeparator={showLeftSeparator}
               showRightSeparator={showRightSeparator}
             />

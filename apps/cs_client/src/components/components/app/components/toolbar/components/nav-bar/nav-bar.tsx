@@ -10,6 +10,7 @@ import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-a
 import { connect, ConnectedProps } from 'react-redux';
 import { modToolbar } from '::app/components/toolbar/toolbar';
 import { ToolbarButton } from '::app/components/toolbar/components/toolbar-button/toolbar-button';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const mapState = (state: Store) => {
   return {
@@ -23,7 +24,6 @@ const mapState = (state: Store) => {
     documentActionNOF: state.timelines.documentActionNOF,
     showBookmarks: state.dialogs.showBookmarks,
     showHome: state.home.show,
-    tb: state.root.isOnTb,
   };
 };
 
@@ -38,10 +38,10 @@ const NavBar: React.FC<PropsFromRedux> = ({
   showTimeline,
   documentActionNOF,
   showHome,
-  tb,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const noDocumentIsSelected = !documentId;
-  const size = tb ? 40 : 34;
+  const size = mbOrTb ? 40 : 34;
   return (
     <>
       <div style={{ marginLeft: 'auto' }} />

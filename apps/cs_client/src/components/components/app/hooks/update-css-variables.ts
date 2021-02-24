@@ -8,6 +8,7 @@ import { ac, Store } from '::store/store';
 import { useSelector } from 'react-redux';
 import { CssVariables } from '::store/ducks/css-variables';
 import { aDialogIsPinned } from '::store/selectors/layout/a-dialog-is-pinned';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 export const useUpdateCssVariables = (
   isDocumentOwner: boolean,
@@ -17,13 +18,12 @@ export const useUpdateCssVariables = (
   treeWidth: number,
   previousTreeWidth: number,
 ) => {
-  const isOnMd = useSelector((state: Store) => state.root.isOnTb);
-
+  const { mbOrTb } = useCurrentBreakpoint();
   const showNodePath = useSelector((state: Store) => state.editor.showNodePath);
-  const barHeight = isOnMd ? 40 : 34;
+  const barHeight = mbOrTb ? 40 : 34;
   useEffect(() => {
     ac.cssVariables.set(CssVariables.nodePath, showNodePath ? barHeight : 0);
-  }, [showNodePath, isOnMd]);
+  }, [showNodePath, barHeight]);
 
   useEffect(() => {
     ac.cssVariables.set(
@@ -32,7 +32,7 @@ export const useUpdateCssVariables = (
     );
   }, [showTree, previousTreeWidth]);
 
-  const showToolbar = isDocumentOwner && (!isOnMd || showFormattingButtons);
+  const showToolbar = isDocumentOwner && (!mbOrTb || showFormattingButtons);
   useEffect(() => {
     if (showToolbar) {
       cssVariables.setFormattingBar(barHeight);

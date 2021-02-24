@@ -19,7 +19,7 @@ export type NodeProps = {
 
 type Props = {
   documentId: string;
-  isOnMd?: boolean;
+  mbOrTb?: boolean;
   hidden?: boolean;
   showLeftSeparator?: boolean;
   showRightSeparator?: boolean;
@@ -30,7 +30,7 @@ const Tab: React.FC<Props> = ({
   node_id,
   documentId,
   isSelected,
-  isOnMd,
+  mbOrTb,
   hasChanges,
   isNew,
   isBookmarked,
@@ -52,7 +52,7 @@ const Tab: React.FC<Props> = ({
       setTimeout(() => {
         smoothScrollIntoView(tab.current);
       }, 50);
-      if (isOnMd)
+      if (mbOrTb)
         try {
           scrollIntoToolbar();
         } catch (e) {
@@ -60,7 +60,7 @@ const Tab: React.FC<Props> = ({
           console.error(e);
         }
     }
-  }, [isSelected, isOnMd]);
+  }, [isSelected, mbOrTb]);
 
   return (
     <div

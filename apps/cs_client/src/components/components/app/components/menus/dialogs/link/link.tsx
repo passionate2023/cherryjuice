@@ -18,6 +18,7 @@ import {
 } from '::root/components/app/components/menus/dialogs/link/reducer/reducer';
 import { Select } from '::root/components/shared-components/inputs/select/select';
 import { execK } from '@cherryjuice/editor';
+import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
 
 const getAttributes = (
   state: LinkState,
@@ -49,18 +50,17 @@ const mapState = (state: Store) => ({
   showDialog: state.dialogs.showLinkDialog,
   selectedLink: state.editor.selectedLink,
   selection: state.editor.selection,
-  isOnMd: state.root.isOnTb,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux;
 const LinkDialogWithTransition: React.FC<Props> = ({
-  isOnMd,
   showDialog,
   selectedLink,
   selection,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const [state, dispatch] = useReducer(linkR, undefined, linkRTC);
   useEffect(() => {
     linkAC.init(dispatch);
@@ -133,7 +133,7 @@ const LinkDialogWithTransition: React.FC<Props> = ({
       value: state.url,
       type: 'text',
       label: 'url',
-      lazyAutoFocus: !isOnMd && Boolean(showDialog),
+      lazyAutoFocus: !mbOrTb && Boolean(showDialog),
     });
   } else
     inputs.push({
@@ -141,7 +141,7 @@ const LinkDialogWithTransition: React.FC<Props> = ({
       value: state.location,
       type: 'text',
       label: 'location',
-      lazyAutoFocus: !isOnMd && Boolean(showDialog),
+      lazyAutoFocus: !mbOrTb && Boolean(showDialog),
     });
   const create = () => {
     try {
@@ -199,7 +199,7 @@ const LinkDialogWithTransition: React.FC<Props> = ({
     <DialogWithTransition
       dialogTitle={selectedLink ? 'Edit link' : 'Create link'}
       footRightButtons={buttonsRight}
-      isOnMobile={isOnMd}
+      isOnMobile={mbOrTb}
       show={Boolean(showDialog)}
       onClose={ac.dialogs.hideLinkDialog}
       onConfirm={apply}
