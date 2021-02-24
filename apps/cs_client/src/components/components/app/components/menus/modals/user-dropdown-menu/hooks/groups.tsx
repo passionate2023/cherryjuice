@@ -16,12 +16,18 @@ export const useGroups = ({
   user: User;
   theme: RootReducerState['theme'];
 }): DropdownMenuGroupProps[] => {
+  const toggleTheme = {
+    text: 'theme: ' + ' ' + theme,
+    onClick: ac.root.toggleTheme,
+    hideOnClick: false,
+  };
   return user
     ? [
         {
           id: 'user-info',
           body: <UserInfo user={user} />,
         },
+
         {
           id: 'documents-and-preferences',
           header: {},
@@ -37,11 +43,7 @@ export const useGroups = ({
               // testId:testIds.toolBar__navBar__showDocumentList,
               // dontShow: !isLoggedIn,
             },
-            {
-              text: 'theme: ' + ' ' + theme,
-              onClick: ac.root.toggleTheme,
-              hideOnClick: false,
-            },
+            toggleTheme,
             {
               text: 'sign out',
               onClick: ac.root.resetState,
@@ -55,6 +57,7 @@ export const useGroups = ({
         {
           id: 'user',
           body: [
+            toggleTheme,
             {
               onClick: router.goto.signIn,
               text: 'sign in',

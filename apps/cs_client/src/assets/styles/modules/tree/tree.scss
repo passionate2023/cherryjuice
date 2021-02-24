@@ -14,7 +14,7 @@
 .tree_root-list {
   margin: 0 0 0 -40px;
   flex-direction: column;
-  height: calc(100% - 40px);
+  height: calc(100% - var(--treeToolBarHeight));
 
   overflow: auto;
   background-color: var(--treeBg);

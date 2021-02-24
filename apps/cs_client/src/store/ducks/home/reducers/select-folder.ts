@@ -10,14 +10,17 @@ export const selectFolder = ({ id, name }: SelectFolderPayload) => (
     Object.values(state.folders).filter(
       _folder => _folder.name.toLowerCase() === name,
     )[0]?.id;
-  const drafts = state.folders[state.draftsFolderId];
-  if (!name || !id) {
-    state.folder = {
-      id: drafts.id,
-      name: drafts.name.toLowerCase(),
-    };
+  const selectedFolderIsInvalid = !name || !id;
+  if (selectedFolderIsInvalid) {
+    const drafts = state.folders[state.draftsFolderId];
+    if (drafts)
+      state.folder = {
+        id: drafts.id,
+        name: drafts.name.toLowerCase(),
+      };
   } else state.folder = { id, name };
-  state.show = true;
+
+  if (state.folder?.id) state.show = true;
 
   return state;
 };
