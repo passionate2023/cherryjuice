@@ -31,6 +31,7 @@ export const ToolbarButton: React.FC<Props> = ({
           className={joinClassNames([
             mod.toolbarButton,
             active && mod.toolbarButtonActive,
+            disabled && mod.toolbarButtonDisabled,
           ])}
           data-testid={testId}
           {...bind}

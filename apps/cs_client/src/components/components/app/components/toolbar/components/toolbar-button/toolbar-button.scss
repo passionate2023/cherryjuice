@@ -1,4 +1,6 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+$hover-bg: var(--background-100);
+$active-bg: var(--background-100);
 .toolbar-button {
   min-width: var(--tabs);
   height: var(--tabs);
@@ -7,7 +9,7 @@
   justify-content: center;
   cursor: pointer;
   &:hover {
-    background-color: var(--background-100);
+    background-color: $hover-bg;
   }
 
   svg {
@@ -18,10 +20,15 @@
 }
 
 .toolbar-button--active {
-  background-color: var(--background-100) !important;
+  background-color: $active-bg !important;
 
   z-index: 1;
   svg {
     opacity: 1;
   }
+}
+
+.toolbar-button--disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }

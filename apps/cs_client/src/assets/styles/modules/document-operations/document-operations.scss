@@ -108,7 +108,10 @@
   font-size: 13.5px;
 }
 .collapsable-list__item--active {
-  background-color: var(--primary-045);
+  background-color: var(--primary-050);
+  filter: grayscale(0.4);
+  opacity: 0.9;
+  border-radius: 0;
   .collapsable-list__item__name {
     color: var(--on-primary-100);
   }
