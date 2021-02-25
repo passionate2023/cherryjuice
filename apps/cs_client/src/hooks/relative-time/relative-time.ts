@@ -11,8 +11,28 @@ type RelativeTimeProps = {
   time: number;
   delay?: number;
 };
-
-const useRelativeTime = ({ time, delay = 300 }: RelativeTimeProps) => {
+export type Time = {
+  relative: string;
+  absolute: string;
+  relativeOrAbsolute: string;
+};
+export const formatAbsolutTime = time => {
+  if (time) {
+    const date = new Date(time);
+    return (
+      date.toLocaleString('en-gb', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      }) +
+      ' - ' +
+      date.toLocaleString('en-GB', { timeStyle: 'short' })
+    );
+  } else {
+    return '';
+  }
+};
+const useRelativeTime = ({ time, delay = 300 }: RelativeTimeProps): Time => {
   const [relativeTime, setRelativeTime] = useState();
   const aliveRef = useRef(undefined);
 
@@ -25,11 +45,20 @@ const useRelativeTime = ({ time, delay = 300 }: RelativeTimeProps) => {
       if (interval) aliveRef.current = setTimeout(update, interval);
     };
     aliveRef.current = setTimeout(update, delay);
+    absoluteRef.current = formatAbsolutTime(time);
     return () => {
       clearTimeout(aliveRef.current);
     };
   }, [time]);
-  return relativeTime || '';
+  const absoluteRef = useRef('');
+  if (!absoluteRef.current) {
+    absoluteRef.current = formatAbsolutTime(time);
+  }
+  return {
+    relative: relativeTime,
+    absolute: absoluteRef.current,
+    relativeOrAbsolute: relativeTime || absoluteRef.current,
+  };
 };
 
 export { useRelativeTime };

@@ -84,16 +84,17 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
         positionX: 'rl',
         positionY: 'tt',
         offsetX: 0,
-        offsetY: 0,
+        offsetY: -5,
       }}
       level={level + 1}
     >
-      {({ show }) => (
+      {({ show, shown }) => (
         <div
           className={joinClassNames([
             mod.contextMenuItem,
             [mod.contextMenuItemDisabled, isDisabled],
             [mod.contextMenuItemBottomSeparator, bottomSeparator],
+            shown && mod.contextMenuItemShown,
           ])}
           onClick={isDisabled ? undefined : items.length ? show : onClickM}
           onMouseEnter={isDisabled ? undefined : show}
