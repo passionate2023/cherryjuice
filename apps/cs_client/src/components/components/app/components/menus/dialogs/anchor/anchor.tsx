@@ -15,7 +15,7 @@ import {
   anchorR,
   anchorRTC,
 } from '::root/components/app/components/menus/dialogs/anchor/reducer/reducer';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const getExistingAnchorIds = (): string[] =>
   Array.from(document.querySelectorAll('.rich-text__anchor')).map(el =>

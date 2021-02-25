@@ -20,7 +20,7 @@ import {
 } from '::shared-components/inline-input/hooks/inline-input-provider';
 import { getEditor } from '@cherryjuice/editor';
 import { nodeOverlay } from '::app/components/editor/document/components/tree/components/node/helpers/node-overlay';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 export const TreeContext = createInlineInputProviderContext();
 const getParamsFromLocation = () => {
   const params = { expand: undefined };

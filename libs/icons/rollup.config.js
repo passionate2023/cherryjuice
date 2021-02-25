@@ -51,6 +51,8 @@ const icons = {
   add: 'src/assets/icons/material/add.svg',
   anchor: 'src/assets/icons/material/anchor.svg',
   'arrow-down': 'src/assets/icons/material/arrow-down.svg',
+  'light-mode': 'src/assets/icons/material/light-mode.svg',
+  'dark-mode': 'src/assets/icons/material/dark-mode.svg',
   'arrow-left': 'src/assets/icons/material/arrow-left.svg',
   'arrow-right': 'src/assets/icons/material/arrow-right.svg',
   'arrow-up': 'src/assets/icons/material/arrow-up.svg',

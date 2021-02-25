@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => ({
   dialogIsOpen:

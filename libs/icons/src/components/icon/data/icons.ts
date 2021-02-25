@@ -9,6 +9,8 @@ export const Icons = {
     filter: 'filter',
     key: 'key',
     home: 'home',
+    'light-mode': 'light-mode',
+    'dark-mode': 'dark-mode',
     time: 'time',
     link: 'link',
     code: 'code',

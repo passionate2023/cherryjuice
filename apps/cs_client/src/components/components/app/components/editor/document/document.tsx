@@ -9,7 +9,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { NodePath } from '::root/components/app/components/editor/document/components/node-path/node-path';
 import { Void } from '::shared-components/react/void';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 const ToolBar = React.lazy(() =>
   import('::app/components/editor/editor-toolbar/editor-toolbar'),
 );

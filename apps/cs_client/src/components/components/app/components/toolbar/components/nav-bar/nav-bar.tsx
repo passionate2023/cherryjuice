@@ -10,7 +10,7 @@ import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-a
 import { connect, ConnectedProps } from 'react-redux';
 import { modToolbar } from '::app/components/toolbar/toolbar';
 import { ToolbarButton } from '::app/components/toolbar/components/toolbar-button/toolbar-button';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => {
   return {

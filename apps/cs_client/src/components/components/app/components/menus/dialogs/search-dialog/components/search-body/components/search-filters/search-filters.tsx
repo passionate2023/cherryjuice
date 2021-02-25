@@ -22,7 +22,7 @@ import {
 import { Icons } from '@cherryjuice/icons';
 import { DocumentSearch } from '::app/components/toolbar/components/nav-bar/components/document-search';
 import { ContextMenuWrapper } from '@cherryjuice/components';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 export const SearchSetting: React.FC<{
   iconName: string;

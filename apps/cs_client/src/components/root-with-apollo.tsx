@@ -7,7 +7,7 @@ import { useApolloClient } from '::graphql/client/hooks/apollo-client';
 import { Route, Switch } from 'react-router';
 import { connect, ConnectedProps } from 'react-redux';
 import { App } from '::root/components/app/app';
-import { useOnWindowResize } from '::hooks/use-on-window-resize';
+import { useOnWindowResize } from '@cherryjuice/shared-helpers';
 import { ac, Store } from '::store/store';
 import { useRegisterHotKeys } from '::helpers/hotkeys/hooks/register-hot-keys';
 import { useConsumeToken } from '::root/hooks/consume-token';

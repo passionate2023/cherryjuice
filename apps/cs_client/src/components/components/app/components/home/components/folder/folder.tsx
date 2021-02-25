@@ -15,7 +15,7 @@ import {
   useInlineInputProvider,
 } from '::shared-components/inline-input/hooks/inline-input-provider';
 import { getDocuments } from '::store/selectors/cache/document/document';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 export const FolderContext = createInlineInputProviderContext();
 

@@ -20,7 +20,7 @@ $height: 65;
     transform: rotate(270deg);
   }
 }
-$spinner-color: var(--background-100);
+$spinner-color: white;
 @keyframes colors {
   0% {
     stroke: $spinner-color;

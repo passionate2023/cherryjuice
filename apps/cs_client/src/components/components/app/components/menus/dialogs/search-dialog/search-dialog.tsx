@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { footerLeftButtons } from '::root/components/app/components/menus/dialogs/search-dialog/components/footer-buttons/footer-buttons';
 import { SearchBody } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/search-body';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => ({
   searchState: state.search.searchState,

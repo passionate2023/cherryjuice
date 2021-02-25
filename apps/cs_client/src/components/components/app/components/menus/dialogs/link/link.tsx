@@ -18,7 +18,7 @@ import {
 } from '::root/components/app/components/menus/dialogs/link/reducer/reducer';
 import { Select } from '::root/components/shared-components/inputs/select/select';
 import { execK } from '@cherryjuice/editor';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const getAttributes = (
   state: LinkState,

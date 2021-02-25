@@ -4,6 +4,7 @@ import { ButtonCircle } from '@cherryjuice/components';
 import { EventHandler, memo } from 'react';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ac } from '::store/store';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 
 export type DialogHeaderButton = Pick<TDialogFooterButton, 'onClick'> & {
   icon: string;
@@ -19,6 +20,7 @@ export type DialogHeaderProps = {
   menuButton?: JSX.Element;
   rightHeaderButtons?: DialogHeaderButton[];
   pinnable?: boolean;
+  pinned?: boolean;
 };
 
 const iconSize = 15;
@@ -28,9 +30,15 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
   dialogTitle,
   onClose,
   pinnable,
+  pinned,
 }) => {
   return (
-    <div className={mod.dialog__header}>
+    <div
+      className={joinClassNames([
+        mod.dialog__header,
+        pinned && mod.dialog__headerPinned,
+      ])}
+    >
       {menuButton}
       <h2 className={mod.dialog__header__title}>{dialogTitle}</h2>
       <span className={mod.dialog__header__subTitle} />

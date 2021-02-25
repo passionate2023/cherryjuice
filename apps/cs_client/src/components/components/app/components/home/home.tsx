@@ -7,7 +7,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useEffect, useMemo } from 'react';
 import { createGesturesHandler } from '@cherryjuice/shared-helpers';
 import { useComponentIsReady } from '::root/hooks/is-ready';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => ({
   showSidebar: state.home.showSidebar,

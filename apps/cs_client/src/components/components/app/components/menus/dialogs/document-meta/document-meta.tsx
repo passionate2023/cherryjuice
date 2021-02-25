@@ -18,7 +18,7 @@ import {
 import { useFooterButtons } from '::app/components/menus/dialogs/document-meta/hooks/footer-buttons';
 import { useEditDocument } from '::app/components/menus/dialogs/document-meta/hooks/edit-document';
 import { useFormInputs } from '::app/components/menus/dialogs/document-meta/hooks/inputs';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => ({
   currentFolderId: state.home.folder.id,

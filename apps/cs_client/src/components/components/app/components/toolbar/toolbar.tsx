@@ -11,7 +11,7 @@ import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-a
 import { Portal } from '@cherryjuice/components';
 import { Separator } from '::app/components/editor/editor-toolbar/components/separator';
 import { modEditor } from '::app/components/editor/editor';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => {
   return {

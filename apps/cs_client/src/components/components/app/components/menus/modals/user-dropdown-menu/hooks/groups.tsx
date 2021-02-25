@@ -17,9 +17,10 @@ export const useGroups = ({
   theme: RootReducerState['theme'];
 }): DropdownMenuGroupProps[] => {
   const toggleTheme = {
-    text: 'theme: ' + ' ' + theme,
+    text: 'theme',
     onClick: ac.root.toggleTheme,
     hideOnClick: false,
+    icon: theme === 'light' ? 'light-mode' : 'dark-mode',
   };
   return user
     ? [

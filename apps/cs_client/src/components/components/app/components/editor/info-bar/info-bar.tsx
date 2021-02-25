@@ -5,9 +5,8 @@ import { Store } from '::store/store';
 import { VisibilityIcon } from '::root/components/app/components/editor/info-bar/components/components/visibility-icon';
 import { Timestamps } from '::root/components/app/components/editor/info-bar/components/components/timestamp';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { Icon, Icons } from '@cherryjuice/icons';
-import { Tooltip } from '@cherryjuice/components';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
+import { InfoBarIcon } from '::app/components/editor/info-bar/components/info-bar-icon/info-bar-icon';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -50,13 +49,7 @@ const InfoBar: React.FC<PropsFromRedux> = ({
       </div>
       <div className={modInfoBar.infoBar__group}>
         {!online && (
-          <Tooltip tooltip={'You are offline'}>
-            {bind => (
-              <div {...bind}>
-                <Icon name={Icons.material['no-connection']} size={20} />
-              </div>
-            )}
-          </Tooltip>
+          <InfoBarIcon tooltip={'You are offline'} icon={'no-connection'} />
         )}
         {!noSelectedDocument && (
           <VisibilityIcon

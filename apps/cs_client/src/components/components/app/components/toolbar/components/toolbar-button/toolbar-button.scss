@@ -29,6 +29,9 @@ $active-bg: var(--background-100);
 }
 
 .toolbar-button--disabled {
-  opacity: 0.3;
+  opacity: 0.4;
   cursor: not-allowed;
+  &:hover {
+    background-color: initial;
+  }
 }

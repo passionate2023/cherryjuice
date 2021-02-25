@@ -110,12 +110,7 @@
   background-color: var(--secondary-080);
   color: var(--on-secondary-100) !important;
 }
-.info-bar__document-privacy {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-}
+
 .info-bar__timestamp {
   @include respond-to($md-down) {
     flex-direction: column;

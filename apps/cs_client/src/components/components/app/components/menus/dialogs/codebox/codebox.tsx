@@ -17,7 +17,7 @@ import {
 } from '::root/components/app/components/menus/dialogs/codebox/reducer/reducer';
 import { NumberInput } from '::root/components/shared-components/inputs/number-input';
 import { createCodeboxHtml, insertObject } from '@cherryjuice/editor';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => ({
   showDialog: state.dialogs.showCodeboxDialog,

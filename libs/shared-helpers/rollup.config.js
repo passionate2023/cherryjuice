@@ -18,5 +18,7 @@ export default {
     'modal-keyboard-events':
       'src/hooks/modal-keyboard-events/modal-keyboard-events.ts',
     'on-key-up': 'src/hooks/on-key-up.ts',
+    'current-breakpoint': 'src/current-breakpoint.ts',
+    'on-window-resize': 'src/on-window-resize.ts',
   },
 };

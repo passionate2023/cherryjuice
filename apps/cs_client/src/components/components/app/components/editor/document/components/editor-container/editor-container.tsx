@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { QFullNode } from '::store/ducks/document-cache/document-cache';
 import { OfflineBanner } from '::root/components/app/components/editor/document/components/editor-container/components/offline-banner';
 import { ContentEditableProps, Editor } from '@cherryjuice/editor';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 type Props = {
   node: QFullNode;

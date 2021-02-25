@@ -5,7 +5,7 @@ import { SortDocumentsBy } from '::store/ducks/home/home';
 import { SortDirection } from '@cherryjuice/graphql-types';
 import { mapEnumToReadableText } from '::app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
 import { PinnedDocumentsProps } from '::app/components/home/components/folder/components/sections/pinned/pinned-documents';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 type Props = PinnedDocumentsProps & {
   sortBy: SortDocumentsBy;

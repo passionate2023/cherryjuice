@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useOnWindowResize } from '::hooks/use-on-window-resize';
+import { useOnWindowResize } from './on-window-resize';
 
 const breakpoints = {
   mb: 425,

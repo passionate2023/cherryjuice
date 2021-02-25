@@ -16,7 +16,7 @@ import {
   tableR,
   tableRTC,
 } from '::root/components/app/components/menus/dialogs/table/reducer/reducer';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const createAlert = e => ({
   title: 'Could not create the table',

@@ -8,7 +8,7 @@ import { ac, Store } from '::store/store';
 import { useSelector } from 'react-redux';
 import { CssVariables } from '::store/ducks/css-variables';
 import { aDialogIsPinned } from '::store/selectors/layout/a-dialog-is-pinned';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 export const useUpdateCssVariables = (
   isDocumentOwner: boolean,

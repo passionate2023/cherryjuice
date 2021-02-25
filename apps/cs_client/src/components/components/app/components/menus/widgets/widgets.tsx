@@ -9,7 +9,7 @@ import { useHubTransition } from '::root/components/app/components/menus/widgets
 import { ActionSnackbar } from '::root/components/app/components/menus/widgets/components/undo-action/action-snackbar';
 import { ChangesHistory } from '::root/components/app/components/menus/widgets/components/changes-history/changes-history';
 import { UndoRedo } from '::root/components/app/components/menus/widgets/components/undo-action/components/undo-redo';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 export type Widget = {
   component: JSX.Element;

@@ -82,6 +82,7 @@ const Dialog: React.FC<
             onClose={onClose}
             rightHeaderButtons={rightHeaderButtons}
             pinnable={pinnable}
+            pinned={pinned}
           />
           <DialogBody>{children} </DialogBody>
           <DialogFooter

@@ -17,7 +17,7 @@ import { Icons } from '@cherryjuice/icons';
 import { SearchSetting } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/search-filters';
 import { DialogScrollableSurface } from '::root/components/shared-components/dialog/dialog-list/dialog-scrollable-surface';
 import { mapSortDocumentBy } from '::app/components/home/components/folder/hooks/sort-documents';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const options: { optionName: SortNodesBy }[] = [
   { optionName: SortNodesBy.UpdatedAt },

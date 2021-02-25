@@ -4,6 +4,7 @@ import {
   useClickOutsideModal,
   joinClassNames,
   useModalKeyboardEvents,
+  useCurrentBreakpoint,
 } from '@cherryjuice/shared-helpers';
 import {
   CMItem,
@@ -31,7 +32,7 @@ export type ContextMenuProps = {
   id: string;
   context: Record<string, any>;
   //
-  showAsModal?: 'md' | 'mb';
+  showAsModal?: 'tb' | 'mb';
   clickOutsideSelectorsWhitelist?: any[];
   children?: ReactNode;
   style?: {
@@ -72,18 +73,21 @@ const ContextMenu: React.FC<ContextMenuProps> = ({
   });
 
   const { x, y } = useCalculateElementPosition(position, ref);
+  const breakpoint = useCurrentBreakpoint();
   return (
     <>
-      {!!showAsModal && <Scrim onClick={hide} isShownOnTopOfDialog={true} />}
+      {!!breakpoint[showAsModal] && (
+        <Scrim onClick={hide} isShownOnTopOfDialog={true} />
+      )}
       <div
         {...clkOProps}
         {...keprops}
         className={joinClassNames([
           mod.contextMenu,
-          [mod.contextMenuModal, !!showAsModal],
+          [mod.contextMenuModal, !!breakpoint[showAsModal]],
         ])}
         style={
-          showAsModal
+          breakpoint[showAsModal]
             ? { ...style }
             : {
                 left: Math.max(x, 0),

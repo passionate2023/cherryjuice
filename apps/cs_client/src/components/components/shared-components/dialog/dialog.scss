@@ -27,9 +27,6 @@
   margin: 0;
   border-radius: 0;
   z-index: $ZI-dialog--docked;
-  .dialog__header {
-    display: none;
-  }
 
   box-shadow: none;
 }

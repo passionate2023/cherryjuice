@@ -14,7 +14,7 @@
     "dev:components": "rollup -c  -w --environment TSC_NONPOLLING_WATCHER:true,mode:ts_es,clean:false",
     "dev:components:cjs": "rollup -c  -w --environment TSC_NONPOLLING_WATCHER:true,mode:ts_cjs,clean:false",
     "build": "rollup -c --environment mode:ts_es",
-    "types": "tsc -w -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
+    "types:components": "tsc -w -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
     "test": "exit 0",
     "lint": "eslint ./**",
     "generate-named-inputs": "node ../../scripts/generate-named-inputs.js"

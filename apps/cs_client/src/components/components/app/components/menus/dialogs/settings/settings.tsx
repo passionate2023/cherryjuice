@@ -15,7 +15,7 @@ import {
   hasDefaulHotkeySettingsSettings,
   hasDefaultEditorSettings,
 } from '::store/selectors/settings/editor-settings';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 export const screenHasUnsavedChanges = createSelector(
   (state: Store) => !!state.editorSettings.previous,

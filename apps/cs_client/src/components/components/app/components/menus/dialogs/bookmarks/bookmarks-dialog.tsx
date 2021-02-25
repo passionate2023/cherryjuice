@@ -8,7 +8,7 @@ import { ac, Store } from '::store/store';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { useDeleteListItems } from '::root/components/app/components/menus/dialogs/documents-list/hooks/delete-list-items';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);

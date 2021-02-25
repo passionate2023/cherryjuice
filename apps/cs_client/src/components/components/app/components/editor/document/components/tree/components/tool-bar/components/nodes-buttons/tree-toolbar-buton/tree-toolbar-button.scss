@@ -7,4 +7,15 @@
   &:focus {
     outline: none;
   }
+  svg {
+    fill: var(--icon-fill);
+  }
+}
+
+.tree-toolbar-button--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  &:hover {
+    background-color: initial;
+  }
 }

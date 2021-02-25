@@ -9,7 +9,7 @@ import { useDeleteListItems } from '::root/components/app/components/menus/dialo
 import { useFetchDocumentsList } from '::app/components/menus/dialogs/documents-list/hooks/fetch-documents-list';
 import { memo, useCallback } from 'react';
 import { useFooterButtons } from '::app/components/menus/dialogs/documents-list/hooks/footer-buttons';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,

@@ -18,7 +18,7 @@ import { useFormInputs } from '::app/components/menus/dialogs/node-meta/hooks/in
 import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/get-parents-node-ids/get-parents-node-ids';
 import { QFullNode } from '::store/ducks/document-cache/document-cache';
 import { calculateEditedAttribute } from '::app/components/menus/dialogs/node-meta/hooks/save/helpers/calculate-edited-attributes/calculate-edited-attributes';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);

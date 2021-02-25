@@ -11,7 +11,7 @@ import { NodesButtons } from './components/nodes-buttons/nodes-buttons';
 import { ContextMenuWrapper } from '@cherryjuice/components';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { TreeToolbarButton } from '::app/components/editor/document/components/tree/components/tool-bar/components/nodes-buttons/tree-toolbar-buton/tree-toolbar-button';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);

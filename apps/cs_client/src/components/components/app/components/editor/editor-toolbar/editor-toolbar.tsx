@@ -8,7 +8,7 @@ import { ErrorBoundary } from '::root/components/shared-components/react/error-b
 import { AnimatedEditorToolbar } from '::app/components/editor/editor-toolbar/components/animated-editor-toolbar/animated-editor-toolbar';
 import { modEditor } from '::app/components/editor/editor';
 import { Portal } from '@cherryjuice/components';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => ({
   docking: state.root.docking,

@@ -19,7 +19,9 @@
     opacity: 0.8;
   }
 }
-
+.dialog__header--pinned {
+  display: none;
+}
 .dialog__header__buttons {
   display: flex;
   gap: 5px;

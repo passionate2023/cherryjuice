@@ -25,7 +25,7 @@ import {
 import { Search } from '::shared-components/search-input/search';
 import { modSearchDialog } from '::sass-modules';
 import { useMemo } from 'react';
-import { useCurrentBreakpoint } from '::hooks/current-breakpoint';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const options: { optionName: SortNodesBy }[] = [
   // @ts-ignore
