@@ -28,9 +28,13 @@ const ac = {
     _ => (object: TableProperties & { target: HTMLElement }) => _(object),
   ),
   toggleNodePath: _(ap('toggle-node-path')),
+  setTreePosition: _(ap('set-tree-position'), _ => (position: TreePosition) =>
+    _(position),
+  ),
 };
 
 export type Link = { href: string; type: LinkType; target: HTMLElement };
+export type TreePosition = 'left' | 'bottom';
 type State = {
   showTree: boolean;
   showFormattingButtons: boolean;
@@ -43,6 +47,7 @@ type State = {
   selectedTable: TableProperties & { target: HTMLElement };
   selection?: CustomRange;
   showNodePath: boolean;
+  treePosition: TreePosition;
 };
 
 const initialState: State = {
@@ -57,6 +62,7 @@ const initialState: State = {
   selectedCodebox: undefined,
   selectedTable: undefined,
   showNodePath: false,
+  treePosition: 'left',
 };
 const reducer = createReducer(initialState, _ => [
   _(rac.resetState, () => ({
@@ -138,6 +144,10 @@ const reducer = createReducer(initialState, _ => [
   _(ac.toggleNodePath, state => ({
     ...state,
     showNodePath: !state.showNodePath,
+  })),
+  _(ac.setTreePosition, (state, { payload }) => ({
+    ...state,
+    treePosition: payload,
   })),
 ]);
 

@@ -86,7 +86,7 @@ const localStorageReducers = {
     {
       ...localStorageReducerConfig,
       key: 'root',
-      blacklist: ['online'],
+      blacklist: ['online', 'breakpoint'],
     },
     rootReducer,
   ) as Reducer<RootReducerState>,

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Fragment, Suspense } from 'react';
+import { Fragment, Suspense, useEffect } from 'react';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { Tree } from './components/tree/tree';
 import { Route } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { NodePath } from '::root/components/app/components/editor/document/components/node-path/node-path';
 import { Void } from '::shared-components/react/void';
 import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
+import { TreeResizeHandler } from '::app/components/editor/document/components/tree/helpers/tree-resize-handler/tree-resize-handler';
 const ToolBar = React.lazy(() =>
   import('::app/components/editor/editor-toolbar/editor-toolbar'),
 );
@@ -26,7 +27,7 @@ const mapState = (state: Store) => {
 
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
-
+export const treeResizeHandler = new TreeResizeHandler();
 const Document: React.FC<PropsFromRedux> = ({
   nodes,
   selectedNode_id,
@@ -34,6 +35,9 @@ const Document: React.FC<PropsFromRedux> = ({
   showNodePath,
 }) => {
   const { mbOrTb } = useCurrentBreakpoint();
+  useEffect(() => {
+    treeResizeHandler.onTreeVisibilityChange(showTree);
+  }, [showTree]);
   return (
     <>
       <ErrorBoundary>

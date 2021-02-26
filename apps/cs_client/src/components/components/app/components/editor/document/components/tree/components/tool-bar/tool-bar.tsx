@@ -12,6 +12,7 @@ import { ContextMenuWrapper } from '@cherryjuice/components';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { TreeToolbarButton } from '::app/components/editor/document/components/tree/components/tool-bar/components/nodes-buttons/tree-toolbar-buton/tree-toolbar-button';
 import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
+import { treePosition } from '::store/selectors/editor/tree-position';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -25,6 +26,7 @@ const mapState = (state: Store) => {
     showNodePath: state.editor.showNodePath,
     selectedNode_id,
     filter: state.document.nodesFilter,
+    treePosition: treePosition(state),
   };
 };
 const mapDispatch = {};
@@ -38,6 +40,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   showNodePath,
   selectedNode_id,
   filter,
+  treePosition,
 }) => {
   const { mbOrTb } = useCurrentBreakpoint();
   const foldMenuItems = useFoldMenuItems({
@@ -92,7 +95,25 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
                   active: showNodePath,
                   hideOnClick: false,
                 },
-              ]}
+                mbOrTb && {
+                  name: 'tree position',
+                  onClick: () => undefined,
+                  items: [
+                    {
+                      name: 'left',
+                      onClick: () => ac.editor.setTreePosition('left'),
+                      active: treePosition === 'left',
+                      hideOnClick: false,
+                    },
+                    {
+                      name: 'bottom',
+                      onClick: () => ac.editor.setTreePosition('bottom'),
+                      active: treePosition === 'bottom',
+                      hideOnClick: false,
+                    },
+                  ],
+                },
+              ].filter(Boolean)}
               positionPreferences={{
                 positionX: 'rl',
                 positionY: 'tt',

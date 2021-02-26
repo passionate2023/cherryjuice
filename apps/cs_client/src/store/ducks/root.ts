@@ -1,6 +1,7 @@
 import { createActionCreator as _, createReducer } from 'deox';
 import { createActionPrefixer } from './helpers/shared';
 import { cloneObj } from '::helpers/objects';
+import { Breakpoint } from '@cherryjuice/shared-helpers';
 
 const ap = createActionPrefixer('root');
 
@@ -11,6 +12,9 @@ const ac = {
   setNetworkStatus: _(ap('set-network-status'), _ => (b: boolean) => _(b)),
   toggleDockedDialog: _(ap('toggle-docked-dialog')),
   toggleTheme: _(ap('toggle-theme')),
+  setBreakpoint: _(ap('set-breakpoint'), _ => (breakpoint: Breakpoint) =>
+    _(breakpoint),
+  ),
 };
 
 type State = {
@@ -18,6 +22,15 @@ type State = {
   docking: boolean;
   online: boolean;
   theme: 'light' | 'dark';
+  breakpoint: Breakpoint;
+};
+
+const defaultBreakpoint = {
+  mb: false,
+  tb: false,
+  mbOrTb: false,
+  md: true,
+  wd: false,
 };
 
 const initialState: State = {
@@ -25,10 +38,12 @@ const initialState: State = {
   docking: false,
   online: true,
   theme: 'light',
+  breakpoint: { ...defaultBreakpoint },
 };
 const reducer = createReducer(initialState, _ => [
   _(ac.resetState, () => ({
     ...cloneObj(initialState),
+    breakpoint: { ...defaultBreakpoint },
   })),
   ...[
     _(ac.setDocking, (state, { payload }) => ({
@@ -46,6 +61,10 @@ const reducer = createReducer(initialState, _ => [
     _(ac.toggleTheme, state => ({
       ...state,
       theme: state.theme === 'light' ? 'dark' : 'light',
+    })),
+    _(ac.setBreakpoint, (state, { payload }) => ({
+      ...state,
+      breakpoint: payload,
     })),
   ],
 ]);

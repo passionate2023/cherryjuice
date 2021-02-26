@@ -13,10 +13,7 @@ import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 export const useUpdateCssVariables = (
   isDocumentOwner: boolean,
   showFormattingButtons: boolean,
-  showTree: boolean,
   showRecentNodes: boolean,
-  treeWidth: number,
-  previousTreeWidth: number,
 ) => {
   const { mbOrTb } = useCurrentBreakpoint();
   const showNodePath = useSelector((state: Store) => state.editor.showNodePath);
@@ -24,13 +21,6 @@ export const useUpdateCssVariables = (
   useEffect(() => {
     ac.cssVariables.set(CssVariables.nodePath, showNodePath ? barHeight : 0);
   }, [showNodePath, barHeight]);
-
-  useEffect(() => {
-    ac.cssVariables.set(
-      CssVariables.treeWidth,
-      showTree ? previousTreeWidth : 0,
-    );
-  }, [showTree, previousTreeWidth]);
 
   const showToolbar = isDocumentOwner && (!mbOrTb || showFormattingButtons);
   useEffect(() => {

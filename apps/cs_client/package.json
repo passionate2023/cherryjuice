@@ -116,6 +116,7 @@
     "xstate": "^4.16.0",
     "@xstate/react": "^1.2.2",
     "@xstate/immer": "^0.1.0",
-    "@xstate/inspect": "^0.4.1"
+    "@xstate/inspect": "^0.4.1",
+    "react-content-loader": "^6.0.1"
   }
 }

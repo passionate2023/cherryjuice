@@ -7,10 +7,10 @@ const breakpoints = {
   wd: 1200,
 };
 
-const defaultBreakpoint = {
+export const defaultBreakpoint = {
   mb: false,
   tb: false,
-  md: false,
+  md: true,
   mbOrTb: false,
   wd: false,
 };
@@ -37,12 +37,17 @@ const calculateCurrentBreakpoint = (windowWidth: number): Breakpoint => {
   return _breakpoint;
 };
 
-export const useCurrentBreakpoint = () => {
+export const useCurrentBreakpoint = (
+  onChange?: (breakpoint: Breakpoint) => void,
+) => {
   const [breakpoint, setBreakpoint] = useState<Breakpoint>(defaultBreakpoint);
   useOnWindowResize([
     width => {
       const newBreakpoint = calculateCurrentBreakpoint(width);
-      if (newBreakpoint !== breakpoint) setBreakpoint(newBreakpoint);
+      if (newBreakpoint !== breakpoint) {
+        setBreakpoint(newBreakpoint);
+        if (onChange) onChange(newBreakpoint);
+      }
     },
   ]);
   return breakpoint;

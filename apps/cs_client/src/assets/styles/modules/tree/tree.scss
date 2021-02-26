@@ -3,14 +3,18 @@
 
 .tree {
   // size
-  grid-area: tree;
-  height: var(--tree-height);
+  height: 100%;
   overflow: hidden;
-  border-right: var(--background-100) 3px solid;
+
   max-height: 100%;
   background-color: var(--void);
 }
-
+.tree--left {
+  border-right: var(--background-100) 2px solid;
+}
+.tree--bottom {
+  border-top: var(--background-100) 2px solid;
+}
 .tree_root-list {
   margin: 0 0 0 -40px;
   flex-direction: column;
@@ -21,6 +25,12 @@
   transition: background-color 200ms linear;
 }
 .tree__resize-handle {
+  span > div {
+    min-width: 10px;
+  }
+  grid-area: tree;
+}
+.tree__resize-handle--tree-left {
   --tree-height: calc(
     var(--vh) - #{2 * $tool-bar-height} - var(--formatting-bar) - var(--recent-nodes)
   );
@@ -28,17 +38,20 @@
     --tree-height: calc(var(--vh) - var(--info-bar));
   }
   height: var(--tree-height);
-  span > div {
-    min-width: 10px;
-  }
-  grid-area: tree;
+  width: var(--treeWidth);
 }
+
+.tree__resize-handle--tree-bottom {
+  height: var(--treeHeight);
+  width: 100vw;
+}
+
 $bubble-width: 35px;
 .tree__resizeHandle__bubble {
+  display: none;
   @media (pointer: coarse) {
+    display: block;
     position: absolute;
-    left: -#{$bubble-width * 0.4};
-    bottom: 150px;
     opacity: 0.3;
     height: $bubble-width;
     width: $bubble-width;
@@ -47,4 +60,13 @@ $bubble-width: 35px;
     cursor: grab;
     z-index: $ZI-resize-bubble;
   }
+}
+.tree__resizeHandle__bubble--left {
+  left: -#{$bubble-width * 0.4};
+  bottom: 150px;
+}
+
+.tree__resizeHandle__bubble--bottom {
+  top: -#{$bubble-width * 0.4};
+  right: 20px;
 }

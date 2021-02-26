@@ -8,6 +8,8 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import mod from './editor.scss';
 import { LinearProgress } from '::shared-components/loading-indicator/linear-progress';
 import { useComponentIsReady } from '::root/hooks/is-ready';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
+import { treePosition } from '::store/selectors/editor/tree-position';
 const Document = React.lazy(() =>
   import('::root/components/app/components/editor/document/document'),
 );
@@ -22,6 +24,7 @@ const mapState = (state: Store) => ({
   fetchDocumentInProgress:
     state.document.asyncOperations.fetch === 'in-progress',
   saveInProgress: state.document.asyncOperations.save === 'in-progress',
+  treePosition: treePosition(state),
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -32,10 +35,16 @@ const Editor: React.FC<PropsFromRedux> = ({
   docking,
   fetchDocumentInProgress,
   saveInProgress,
+  treePosition,
 }) => {
   useComponentIsReady(true);
   return (
-    <div className={mod.editor}>
+    <div
+      className={joinClassNames([
+        mod.editor,
+        treePosition === 'bottom' && mod.editorTreeBottom,
+      ])}
+    >
       <LinearProgress loading={fetchDocumentInProgress || saveInProgress} />
       {document?.nodes && document.nodes[0] && (
         <>

@@ -30,3 +30,15 @@
       );
   }
 }
+.editor--tree-bottom {
+  grid-template-areas:
+    'tabs'
+    'node-path'
+    'rich-text'
+    'tree'
+    'formatting-bar';
+  grid-template-columns: 100vw;
+  grid-template-rows: var(--tabs) var(--nodePath) 1fr var(--treeHeight) var(
+      --formatting-bar
+    );
+}

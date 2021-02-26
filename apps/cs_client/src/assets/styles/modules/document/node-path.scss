@@ -3,7 +3,6 @@
   box-sizing: border-box;
   grid-area: node-path;
   height: 100%;
-  width: calc(100vw - var(--treeWidth));
   overflow-x: auto;
   background-color: var(--surface-100);
   color: var(--on-surface-050);

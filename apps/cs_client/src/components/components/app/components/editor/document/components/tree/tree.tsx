@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { Node } from './components/node/node';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { Resizable } from 're-resizable';
-import { onResize, onResizeStop, onStart } from './helpers';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { NodePrivacy } from '@cherryjuice/graphql-types';
@@ -20,7 +19,12 @@ import {
 } from '::shared-components/inline-input/hooks/inline-input-provider';
 import { getEditor } from '@cherryjuice/editor';
 import { nodeOverlay } from '::app/components/editor/document/components/tree/components/node/helpers/node-overlay';
-import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
+import {
+  joinClassNames,
+  useCurrentBreakpoint,
+} from '@cherryjuice/shared-helpers';
+import { treeResizeHandler } from '::app/components/editor/document/document';
+import { treePosition } from '::store/selectors/editor/tree-position';
 export const TreeContext = createInlineInputProviderContext();
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -42,6 +46,8 @@ const mapState = (state: Store) => {
     documentId: state.document.documentId,
     copiedNode: state.documentCache.copiedNode,
     isOwnerOfCurrentDocument: state.auth.user?.id === document.userId,
+    showTree: state.editor.showTree,
+    treePosition: treePosition(state),
   };
 };
 const mapDispatch = {};
@@ -57,9 +63,17 @@ const Tree: React.FC<PropsFromRedux> = ({
   copiedNode,
   isOwnerOfCurrentDocument,
   selectedNode_id,
+  treePosition,
 }) => {
   const { mbOrTb } = useCurrentBreakpoint();
-  useEffect(onStart, []);
+  useEffect(() => {
+    treeResizeHandler.init(
+      document.querySelector('.' + modTree.tree__resizeHandle),
+    );
+  }, []);
+  useEffect(() => {
+    treeResizeHandler.onTreePositionChange(treePosition);
+  }, [treePosition]);
   useEffect(() => {
     if (selectedNode_id) {
       const node = document
@@ -111,17 +125,34 @@ const Tree: React.FC<PropsFromRedux> = ({
     rename: id => inlineInputProps.enableInput(id)(),
     isOwnerOfCurrentDocument,
   });
+  const treeLeft = treePosition === 'left';
+  const treeBottom = treePosition === 'bottom';
   return (
     <Resizable
-      enable={{ right: true }}
-      onResize={onResize}
-      onResizeStop={onResizeStop}
-      className={modTree.tree__resizeHandle}
+      enable={{
+        right: treeLeft,
+        top: treeBottom,
+      }}
+      onResize={treeResizeHandler.onResize}
+      onResizeStop={treeResizeHandler.onResizeStop}
+      className={joinClassNames([
+        modTree.tree__resizeHandle,
+        treeLeft && modTree.tree__resizeHandleTreeLeft,
+        treeBottom && modTree.tree__resizeHandleTreeBottom,
+      ])}
     >
       <ErrorBoundary>
         <ContextMenuWrapper hookProps={hookProps} items={contextMenuItems}>
           {({ show }) => (
-            <div className={modTree.tree} onContextMenu={show} id="tree">
+            <div
+              className={joinClassNames([
+                modTree.tree,
+                treeLeft && modTree.treeLeft,
+                treeBottom && modTree.treeBottom,
+              ])}
+              onContextMenu={show}
+              id="tree"
+            >
               {!mbOrTb && <ToolBar />}
               <TreeContext.Provider value={inlineInputProps}>
                 <Droppable
