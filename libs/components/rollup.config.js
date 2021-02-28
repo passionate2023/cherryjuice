@@ -5,6 +5,7 @@ const input = {
   'button-base': 'src/buttons/button-base/button-base.tsx',
   'button-circle': 'src/buttons/button-circle/button-circle.tsx',
   'button-square': 'src/buttons/button-square/button-square.tsx',
+  'drop-down-button': 'src/buttons/drop-down-button/drop-down-button.tsx',
   'google-oauth-button':
     'src/buttons/google-oauth-button/google-oauth-button.tsx',
   'toolbar-button': 'src/buttons/toolbar-button/toolbar-button.tsx',

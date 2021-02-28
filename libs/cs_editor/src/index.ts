@@ -1,3 +1,5 @@
+export { useSortFormattingButtons } from '::hooks/sort-formatting-buttons';
+
 export { registerDevHKs } from '::helpers/hotkeys/register-dev-hotkeys';
 export { registerFormattingHKs } from '::helpers/hotkeys/register-formatting-hot-keys';
 export {
@@ -11,7 +13,6 @@ export { pagesManager } from '::helpers/pages-manager/pages-manager';
 export { getEditor } from '::helpers/pages-manager/helpers/get-editor';
 
 export { toggleBulletPoint } from '::helpers/lists/bullet-points/toggle-bullet-point';
-
 export {
   stringToSingleElement,
   stringToMultipleElements,

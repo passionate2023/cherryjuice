@@ -3,11 +3,9 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { getHotkeys } from '::store/selectors/cache/settings/hotkeys';
 import { connect, ConnectedProps } from 'react-redux';
 import * as React from 'react';
-import { execK } from '@cherryjuice/editor';
-import { ToolbarColorInput } from '@cherryjuice/components';
+import { execK, useSortFormattingButtons } from '@cherryjuice/editor';
+import { ToolbarColorInput, DropDownButton } from '@cherryjuice/components';
 import { FormattingButton } from '::app/components/editor/editor-toolbar/components/static-editor-toolbar/components/formatting-buttons/components/formatting-button';
-import { DropDownButton } from '::shared-components/drop-down-button/drop-down-button';
-import { useSortButtons } from '::app/components/editor/editor-toolbar/components/static-editor-toolbar/components/formatting-buttons/hooks/sort-buttons';
 
 const mapState = (state: Store) => {
   return {
@@ -27,7 +25,7 @@ const FormattingButtons: React.FC<PropsFromRedux> = ({
 }) => {
   const disabled = !documentId || !selectedNode_id;
 
-  const categories = useSortButtons(formattingHotKeys);
+  const categories = useSortFormattingButtons(formattingHotKeys);
 
   return (
     <>

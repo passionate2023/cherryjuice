@@ -19,6 +19,13 @@
   background-color: var(--background-100);
   user-select: none;
 }
+.tool-bar__formatting-buttons {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  height: 100%;
+}
 .tool-bar__group {
   display: flex;
   align-items: center;
@@ -87,9 +94,6 @@
   }
 }
 .tool-bar__icon {
-  svg {
-    fill: var(--on-surface-050);
-  }
   display: flex;
   align-items: center;
   justify-content: center;

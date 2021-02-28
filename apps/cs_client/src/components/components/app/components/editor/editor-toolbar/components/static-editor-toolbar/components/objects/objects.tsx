@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { ToolbarButton } from '@cherryjuice/components';
+import { ToolbarButton, DropDownButton } from '@cherryjuice/components';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { DropDownButton } from '::shared-components/drop-down-button/drop-down-button';
 
 const mapState = (state: Store) => {
   return {

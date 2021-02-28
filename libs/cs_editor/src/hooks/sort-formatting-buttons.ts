@@ -2,10 +2,10 @@ import { useMemo } from 'react';
 import {
   FormattingButtonCategory,
   formattingHotkeysProps,
-} from '@cherryjuice/editor';
+} from '::helpers/hotkeys/props/formatting-props';
 import { HotKey } from '@cherryjuice/graphql-types';
 
-export const useSortButtons = (hotkeys: HotKey[]) => {
+export const useSortFormattingButtons = (hotkeys: HotKey[]) => {
   return useMemo(
     () =>
       hotkeys.reduce(

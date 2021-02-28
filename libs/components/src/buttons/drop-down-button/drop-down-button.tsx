@@ -2,7 +2,7 @@ import * as React from 'react';
 import mod from './drop-down-button.scss';
 import { useRef } from 'react';
 import { Icon } from '@cherryjuice/icons';
-import { Popper } from '@cherryjuice/components';
+import { Popper } from '::root/popups';
 
 const List = ({
   buttons,
