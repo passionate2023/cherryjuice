@@ -1,3 +1,4 @@
+export { useLoader } from './loader';
 export { useOnWindowResize } from '../on-window-resize';
 export { useCurrentBreakpoint, Breakpoint } from '../current-breakpoint';
 export { useLazyAutoFocus } from './lazy-auto-focus/lazy-auto-focus';

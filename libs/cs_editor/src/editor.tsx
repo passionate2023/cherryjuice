@@ -5,6 +5,7 @@ import { onKeyDown } from '::helpers/typing';
 import {
   createGesturesHandler,
   GestureHandlerProps,
+  useLoader,
 } from '@cherryjuice/shared-helpers';
 import { useOnMouseEvents } from '::hooks/on-mouse-events/on-mouse-event';
 import './assets/styles/global-classes/global-classes.scss';
@@ -34,6 +35,7 @@ const Editor: React.FC<Props> = ({
   );
   useOnMouseEvents();
   useRenderPage(contentEditableProps, loading);
+  const showFallback = useLoader({ loading });
   return (
     <div
       className={modEditor.editor}
@@ -45,7 +47,7 @@ const Editor: React.FC<Props> = ({
       ref={ref}
       style={style}
     >
-      {loading && fallbackComponent}
+      {showFallback && loading && fallbackComponent}
     </div>
   );
 };

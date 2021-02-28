@@ -1,6 +1,6 @@
 import * as React from 'react';
 import modLinearProgress from '::sass-modules/shared-components/linear-progress.scss';
-import { useSpinner } from '::hooks/use-spinner';
+import { useLoader } from '@cherryjuice/shared-helpers';
 
 type Props = {
   loading: boolean;
@@ -11,11 +11,11 @@ const LinearProgress: React.FC<Props> = ({
   loading = true,
   showAfter = 350,
 }) => {
-  const show = useSpinner({ showAfter });
+  const show = useLoader({ timeout: showAfter, loading });
 
   return (
     <>
-      {show && loading && (
+      {show && (
         <div
           role="progressbar"
           className={`mdc-linear-progress mdc-linear-progress--indeterminate ${modLinearProgress.linearProgress}`}
