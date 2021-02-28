@@ -8,7 +8,7 @@ import { useSortMenuItems } from '::root/components/app/components/editor/docume
 import { useFoldMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/fold-menu-items';
 import { Search } from '::shared-components/search-input/search';
 import { NodesButtons } from './components/nodes-buttons/nodes-buttons';
-import { ContextMenuWrapper } from '@cherryjuice/components';
+import { ContextMenu } from '@cherryjuice/components';
 import { testIds } from '::cypress/support/helpers/test-ids';
 import { TreeToolbarButton } from '::app/components/editor/document/components/tree/components/tool-bar/components/nodes-buttons/tree-toolbar-buton/tree-toolbar-button';
 import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
@@ -78,8 +78,8 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
         {!inputShown && (
           <>
             <NodesButtons />
-            <ContextMenuWrapper
-              hookProps={{
+            <ContextMenu
+              getContext={{
                 getIdOfActiveElement: () => testIds.tree__threeDots,
                 getActiveElement: () =>
                   document.querySelector(
@@ -129,7 +129,7 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
                   tooltip={'More options'}
                 />
               )}
-            </ContextMenuWrapper>
+            </ContextMenu>
           </>
         )}
       </div>

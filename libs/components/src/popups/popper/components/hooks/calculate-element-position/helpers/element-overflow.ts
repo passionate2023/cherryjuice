@@ -1,4 +1,4 @@
-import { PositionContext } from '::root/popups/context-menu/hooks/calculate-element-position/helpers/calculate-element-position';
+import { PositionContext } from '::root/popups/popper/components/hooks/calculate-element-position/helpers/calculate-element-position';
 
 export const leftOverflow = (x: number) => x < 0;
 export const rightOverflow = (x: number, context: PositionContext) =>

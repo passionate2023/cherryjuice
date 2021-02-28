@@ -3,7 +3,7 @@ import mod from './dialog-list-item.scss';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { memo, useEffect, useRef } from 'react';
 import { Icon, Icons } from '@cherryjuice/icons';
-import { ContextMenuWrapper, CMItem } from '@cherryjuice/components';
+import { ContextMenu, CMItem } from '@cherryjuice/components';
 
 const onContextMenu = e => {
   e.preventDefault();
@@ -70,9 +70,9 @@ const DialogListItem: React.FC<Props> = ({
         <span className={`${mod.dialogListItem__details} `}>{details}</span>
       </div>
       {cmItems && (
-        <ContextMenuWrapper
+        <ContextMenu
           items={cmItems}
-          hookProps={{
+          getContext={{
             getIdOfActiveElement: () => id,
             getActiveElement: () => document.querySelector(`[data-id=${id}]`),
           }}
@@ -87,7 +87,7 @@ const DialogListItem: React.FC<Props> = ({
               <Icon name={Icons.material.menu} />
             </div>
           )}
-        </ContextMenuWrapper>
+        </ContextMenu>
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 import { MouseEvent, useCallback, useState } from 'react';
-import { Position } from '::root/popups/context-menu/context-menu';
-export type ContextMenuItemContext = Record<string, any>;
-export type ChildContextMenuProps<Context = ContextMenuItemContext> = {
+import { Position } from '::root/popups/popper/components/popper-body';
+export type Dictionary = Record<string, any>;
+export type PopperContextProps<Context = Dictionary> = {
   getIdOfActiveElement: (e: HTMLElement, activeElement: HTMLElement) => string;
   getActiveElement?: (e: HTMLElement) => HTMLElement;
   onSelectElement?: (id: string, context: Context) => void;
@@ -24,15 +24,12 @@ const cursorPositionPreferences: PositionPreferences = {
   positionY: 'tt',
   positionX: 'rl',
 };
-export const useChildContextMenu = <
-  T = HTMLDivElement,
-  Context = ContextMenuItemContext
->(
+export const usePopperContext = <T = HTMLDivElement, Context = Dictionary>(
   {
     getIdOfActiveElement,
     getActiveElement = () => undefined,
     onSelectElement = () => undefined,
-  }: ChildContextMenuProps<Context>,
+  }: PopperContextProps<Context>,
   positionPreferences?: PositionPreferences,
 ) => {
   const [position, setPosition] = useState<Position>(initialState);

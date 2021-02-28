@@ -13,9 +13,8 @@ const input = {
     'src/inputs/toolbar-color-input/toolbar-color-input.tsx',
   'validated-text-input':
     'src/inputs/validated-text-input/validated-text-input.tsx',
-  'context-menu-item': 'src/popups/context-menu/context-menu-item.tsx',
-  'context-menu-wrapper': 'src/popups/context-menu/context-menu-wrapper.tsx',
   'context-menu': 'src/popups/context-menu/context-menu.tsx',
+  popper: 'src/popups/popper/popper.tsx',
   scrim: 'src/popups/scrim/scrim.tsx',
   tooltip: 'src/popups/tooltip/tooltip.tsx',
   board: 'src/storybook/board.tsx',

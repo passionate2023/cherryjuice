@@ -1,5 +1,5 @@
-import { Position } from '::root/popups/context-menu/context-menu';
-import { PositionContext } from '::root/popups/context-menu/hooks/calculate-element-position/helpers/calculate-element-position';
+import { Position } from '::root/popups/popper/components/popper-body';
+import { PositionContext } from '::root/popups/popper/components/hooks/calculate-element-position/helpers/calculate-element-position';
 /**
  first side is that of the anchor
  second side is that of the element

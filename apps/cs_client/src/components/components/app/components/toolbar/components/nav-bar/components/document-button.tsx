@@ -5,7 +5,7 @@ import { ToolbarButton } from '::app/components/toolbar/components/toolbar-butto
 import { connect, ConnectedProps } from 'react-redux';
 import { DocumentDropdownMenu } from '::app/components/menus/modals/document-dropdown-menu/document-dropdown-menu';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';
-import { ContextMenuWrapper } from '@cherryjuice/components';
+import { Popper } from '@cherryjuice/components';
 
 const mapState = (state: Store) => ({
   isDocumentOwner: hasWriteAccessToDocument(state),
@@ -25,15 +25,15 @@ const DocumentButton: React.FC<Props & PropsFromRedux> = ({
   return (
     <>
       {isDocumentOwner && (
-        <ContextMenuWrapper
-          customBody={({ hide }) => (
+        <Popper
+          body={({ hide }) => (
             <DocumentDropdownMenu
               key={'DocumentDropdownMenu'}
               includeCurrentDocumentSection={includeCurrentDocumentSection}
               hide={hide}
             />
           )}
-          hookProps={{
+          getContext={{
             getIdOfActiveElement: () => 'DocumentDropdownMenu',
             getActiveElement: () =>
               document.querySelector(
@@ -57,7 +57,7 @@ const DocumentButton: React.FC<Props & PropsFromRedux> = ({
               tooltip={'Document menu'}
             />
           )}
-        </ContextMenuWrapper>
+        </Popper>
       )}
     </>
   );

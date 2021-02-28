@@ -3,7 +3,7 @@ import { modTabs } from '::sass-modules';
 import { NodeProps, Tab } from './components/tab';
 import { ButtonSquare } from '@cherryjuice/components';
 import { Icon, Icons } from '@cherryjuice/icons';
-import { ContextMenuWrapper } from '@cherryjuice/components';
+import { Popper } from '@cherryjuice/components';
 
 type Props = {
   nodes: NodeProps[];
@@ -12,12 +12,12 @@ type Props = {
 
 const HiddenTabs: React.FC<Props> = ({ nodes, documentId }) => {
   return (
-    <ContextMenuWrapper
-      hookProps={{
+    <Popper
+      getContext={{
         onSelectElement: () => undefined,
         getIdOfActiveElement: () => 'hidden-tabs',
       }}
-      customBody={
+      body={
         <div className={modTabs.tabsHidden}>
           {nodes.map(props => (
             <Tab
@@ -39,7 +39,7 @@ const HiddenTabs: React.FC<Props> = ({ nodes, documentId }) => {
           _ref={ref}
         />
       )}
-    </ContextMenuWrapper>
+    </Popper>
   );
 };
 

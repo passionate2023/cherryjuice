@@ -73,6 +73,6 @@
   color: var(--on-primary-100) !important;
   box-shadow: var(--shadow-1);
   svg {
-    fill: var(--icon-fill);
+    fill: var(--on-primary-100) !important;
   }
 }

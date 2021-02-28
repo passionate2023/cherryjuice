@@ -1,55 +1,54 @@
 import * as React from 'react';
 import {
-  ContextMenu,
-  ContextMenuProps,
-} from '::root/popups/context-menu/context-menu';
+  PopperBody,
+  PopperBodyProps,
+} from '::root/popups/popper/components/popper-body';
 import { useEffect, useRef, MouseEvent } from 'react';
 import { Portal } from '::root/unclassified/portal/portal';
 import {
-  ChildContextMenuProps,
+  PopperContextProps,
   PositionPreferences,
-  useChildContextMenu,
-} from '::root/popups/context-menu/hooks/child-context-menu';
-import { CMItem } from '::root/popups/context-menu/context-menu-item';
-type renderCustomBody = ({ hide }) => JSX.Element;
-type renderChildren = (props: {
+  usePopperContext,
+} from '::root/popups/popper/hooks/popper-context';
+type RenderPopperBody = ({ hide, context, level, id }) => JSX.Element;
+export type PopperAnchor = (props: {
   show: (e: MouseEvent<HTMLDivElement>) => void;
   hide: () => void;
   shown: boolean;
 }) => JSX.Element;
 
 type Props = {
-  hookProps: ChildContextMenuProps;
-  customBody?: JSX.Element | renderCustomBody;
+  getContext: PopperContextProps;
+  body?: JSX.Element | RenderPopperBody;
   positionPreferences?: PositionPreferences;
-  children: renderChildren;
-  items?: CMItem[];
-} & Pick<
-  ContextMenuProps,
-  'clickOutsideSelectorsWhitelist' | 'showAsModal' | 'level' | 'style'
->;
+  children: PopperAnchor;
+};
+export type PopperProps = Props &
+  Pick<
+    PopperBodyProps,
+    'clickOutsideSelectorsWhitelist' | 'showAsModal' | 'level' | 'style'
+  >;
 
 const state = {
   root: '',
   hide: new Map<number, Set<() => undefined>>(),
 };
-export const setContextMenusAnchor = (anchorSelector: string) => {
+export const setPopperAnchor = (anchorSelector: string) => {
   state.root = anchorSelector;
 };
 
-const ContextMenuWrapper: React.FC<Props> = ({
-  customBody,
+const Popper: React.FC<PopperProps> = ({
+  body,
   level,
   children,
-  hookProps,
+  getContext,
   positionPreferences,
-  items,
   clickOutsideSelectorsWhitelist,
   showAsModal,
   style,
 }) => {
-  const { position, show, hide, shown } = useChildContextMenu(
-    hookProps,
+  const { position, show, hide, shown } = usePopperContext(
+    getContext,
     positionPreferences,
   );
 
@@ -76,25 +75,27 @@ const ContextMenuWrapper: React.FC<Props> = ({
       {children({ shown, show: showM, hide })}
       <Portal targetSelector={state.root}>
         {shown && (
-          <ContextMenu
-            items={items}
+          <PopperBody
             hide={hide}
             level={level}
             position={position}
-            id={id.current.id}
-            context={id.current.context}
             clickOutsideSelectorsWhitelist={clickOutsideSelectorsWhitelist}
             showAsModal={showAsModal}
             style={style}
           >
-            {typeof customBody === 'function'
-              ? customBody({ hide })
-              : customBody}
-          </ContextMenu>
+            {typeof body === 'function'
+              ? body({
+                  hide,
+                  context: id.current.context,
+                  id: id.current.id,
+                  level,
+                })
+              : body}
+          </PopperBody>
         )}
       </Portal>
     </>
   );
 };
 
-export { ContextMenuWrapper };
+export { Popper };

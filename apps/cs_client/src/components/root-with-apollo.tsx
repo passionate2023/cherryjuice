@@ -24,9 +24,9 @@ import { documentHasUnsavedChanges } from '::root/components/app/components/menu
 import { useRouterEffect } from '::root/components/app/components/editor/hooks/router-effect/router-effect';
 import { useTasks } from '::root/hooks/tasks';
 import { CssVariables } from '::store/ducks/css-variables';
-import { setContextMenusAnchor } from '@cherryjuice/components';
+import { setPopperAnchor } from '@cherryjuice/components';
 import { modApp } from '::sass-modules';
-setContextMenusAnchor('.' + modApp.app);
+setPopperAnchor('.' + modApp.app);
 // eslint-disable-next-line node/no-extraneous-import
 import modTheme from '@cherryjuice/shared-styles/build/themes/themes.scss';
 import modDarkTheme from '@cherryjuice/shared-styles/build/themes/dark-theme.scss';

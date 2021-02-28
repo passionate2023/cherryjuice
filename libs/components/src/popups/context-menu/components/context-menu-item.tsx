@@ -3,7 +3,7 @@ import { joinClassNames } from '@cherryjuice/shared-helpers';
 import mod from './context-menu-item.scss';
 import { ReactNode } from 'react';
 import { Icon } from '@cherryjuice/icons';
-import { ContextMenuWrapper } from '::root/popups/context-menu/context-menu-wrapper';
+import { ContextMenu } from '::root/popups';
 
 export type CMItem = Omit<
   ContextMenuItemProps,
@@ -66,12 +66,12 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
   //   }
   // }, [activeItem]);
   return (
-    <ContextMenuWrapper
+    <ContextMenu
       // shown={CMShown}
       // hide={hide}
       // show={showSub}
       items={items}
-      hookProps={{
+      getContext={{
         getIdOfActiveElement: target => {
           const row: HTMLElement = target.closest('.' + mod.contextMenuItem);
           if (row) return row.dataset.cmiId;
@@ -114,7 +114,7 @@ const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
           )}
         </div>
       )}
-    </ContextMenuWrapper>
+    </ContextMenu>
   );
 };
 

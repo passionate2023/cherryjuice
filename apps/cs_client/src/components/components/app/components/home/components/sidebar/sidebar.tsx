@@ -9,7 +9,7 @@ import {
   SharedSectionElementProps,
 } from '::app/components/home/components/sidebar/components/sidebar-section/components/section-element/section-element';
 import { useMemo } from 'react';
-import { ContextMenuWrapper } from '@cherryjuice/components';
+import { ContextMenu } from '@cherryjuice/components';
 import { deleteFolder } from '::app/components/home/components/sidebar/callbacks/delete-folder';
 import { useInlineInputProvider } from '::shared-components/inline-input/hooks/inline-input-provider';
 
@@ -46,7 +46,7 @@ const Sidebar: React.FC<Props & PropsFromRedux> = ({
   const sharedSectionElementProps: SharedSectionElementProps = {
     onClick: id => ac.home.selectFolder({ id }),
   };
-  const hookProps = {
+  const getContext = {
     getIdOfActiveElement: target => {
       const element: HTMLElement = target.closest(
         '.' + modSectionElement.sectionElement,
@@ -57,8 +57,8 @@ const Sidebar: React.FC<Props & PropsFromRedux> = ({
   };
 
   return (
-    <ContextMenuWrapper
-      hookProps={hookProps}
+    <ContextMenu
+      getContext={getContext}
       items={[
         { name: 'rename', onClick: id => inlineInputProps.enableInput(id)() },
         {
@@ -94,7 +94,7 @@ const Sidebar: React.FC<Props & PropsFromRedux> = ({
           />
         </div>
       )}
-    </ContextMenuWrapper>
+    </ContextMenu>
   );
 };
 

@@ -10,7 +10,7 @@ import { HiddenTabs } from '::app/components/tabs/components/hidden-tabs';
 import { useTabsMenuItems } from '::app/components/tabs/hooks/tabs-menu-items';
 import { createNodePropsMapper } from '::app/components/tabs/helpers/map-props';
 import { useForceUpdate } from '::hooks/react/force-update';
-import { ContextMenuWrapper } from '@cherryjuice/components';
+import { ContextMenu } from '@cherryjuice/components';
 import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const getNumberOfVisibleTabs = () => {
@@ -64,7 +64,7 @@ const Tabs: React.FC<PropsFromRedux> = ({
 
   const [activeTab, setActiveTab] = useState<number>();
 
-  const hookProps = {
+  const getContext = {
     onSelectElement: id => setActiveTab(+id),
     getIdOfActiveElement: target =>
       target.dataset.id || target.parentElement.dataset.id,
@@ -88,7 +88,7 @@ const Tabs: React.FC<PropsFromRedux> = ({
   const indexOfSelectedTab = showHome ? -1 : visible.indexOf(selectedNode_id);
   return (
     <div className={modTabs.tabsContainer}>
-      <ContextMenuWrapper items={tabContextMenuOptions} hookProps={hookProps}>
+      <ContextMenu items={tabContextMenuOptions} getContext={getContext}>
         {({ show }) => (
           <VisibleTabs
             documentId={documentId}
@@ -105,7 +105,7 @@ const Tabs: React.FC<PropsFromRedux> = ({
             )}
           </VisibleTabs>
         )}
-      </ContextMenuWrapper>
+      </ContextMenu>
     </div>
   );
 };

@@ -2,19 +2,19 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 @import '~@cherryjuice/shared-styles/build/mixins/typography';
 
-.context-menu {
+.popper-body {
   user-select: none;
   position: absolute;
   box-sizing: border-box;
   background-color: var(--background-100);
-  padding: 5px 0;
+  padding: 0;
   flex-direction: column;
   border-radius: 5px;
   box-shadow: var(--shadow-1);
   z-index: $ZI-context-menu;
   overflow: hidden;
 }
-.context-menu--modal {
+.popper-body--modal {
   margin: auto;
   left: 0 !important;
   right: 0 !important;
@@ -27,8 +27,4 @@
   overflow: auto;
   display: flex;
   align-items: center;
-}
-.context-menu--custom-body {
-  padding: 0;
-  border-radius: 0;
 }

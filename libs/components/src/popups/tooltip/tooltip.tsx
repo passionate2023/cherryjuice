@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ContextMenuWrapper } from '::root/popups/context-menu/context-menu-wrapper';
+import { Popper } from '::root/popups/popper/popper';
 import { useRef } from 'react';
 import mod from './tooltip.scss';
 const state = { tooltips: 0 };
@@ -18,9 +18,9 @@ const Tooltip: React.FC<
       {!(show && tooltip) ? (
         children({})
       ) : (
-        <ContextMenuWrapper
-          customBody={() => <div className={mod.tooltip}>{tooltip}</div>}
-          hookProps={{
+        <Popper
+          body={() => <div className={mod.tooltip}>{tooltip}</div>}
+          getContext={{
             getIdOfActiveElement: () => 'tooltip',
             getActiveElement: () =>
               document.querySelector(`[data-tooltip-id="${id.current}"]`),
@@ -41,7 +41,7 @@ const Tooltip: React.FC<
               onMouseLeave: hide,
             });
           }}
-        </ContextMenuWrapper>
+        </Popper>
       )}
     </>
   );

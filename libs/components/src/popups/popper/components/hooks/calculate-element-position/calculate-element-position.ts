@@ -1,6 +1,6 @@
-import { Position } from '::root/popups/context-menu/context-menu';
+import { Position } from '::root/popups/popper/components/popper-body';
 import { MutableRefObject, useLayoutEffect, useState } from 'react';
-import { calculateElementPosition } from '::root/popups/context-menu/hooks/calculate-element-position/helpers/calculate-element-position';
+import { calculateElementPosition } from '::root/popups/popper/components/hooks/calculate-element-position/helpers/calculate-element-position';
 
 export const useCalculateElementPosition = (
   position: Position,

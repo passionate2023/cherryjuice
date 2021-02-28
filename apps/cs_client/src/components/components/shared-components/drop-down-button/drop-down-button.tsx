@@ -2,7 +2,7 @@ import * as React from 'react';
 import mod from './drop-down-button.scss';
 import { useRef } from 'react';
 import { Icon } from '@cherryjuice/icons';
-import { ContextMenuWrapper } from '@cherryjuice/components';
+import { Popper } from '@cherryjuice/components';
 
 const List = ({
   buttons,
@@ -53,8 +53,8 @@ export const DropDownButton: React.FC<Props> = ({
   };
 
   return (
-    <ContextMenuWrapper
-      customBody={({ hide }) => {
+    <Popper
+      body={({ hide }) => {
         return (
           <List
             buttons={buttons}
@@ -64,7 +64,7 @@ export const DropDownButton: React.FC<Props> = ({
           />
         );
       }}
-      hookProps={{
+      getContext={{
         getIdOfActiveElement: () => 'drop-down',
         getActiveElement: target => target.closest('.' + mod.dropDownButton),
       }}
@@ -81,6 +81,6 @@ export const DropDownButton: React.FC<Props> = ({
           </div>
         </div>
       )}
-    </ContextMenuWrapper>
+    </Popper>
   );
 };

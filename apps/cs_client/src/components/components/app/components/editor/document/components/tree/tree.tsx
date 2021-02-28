@@ -10,7 +10,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { ToolBar } from './components/tool-bar/tool-bar';
 import { Droppable } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';
 import { modNode, modTree } from '::sass-modules';
-import { ContextMenuWrapper } from '@cherryjuice/components';
+import { ContextMenu } from '@cherryjuice/components';
 import { useTreeContextMenuItems } from '::root/components/app/components/editor/document/components/tree/hooks/tree-context-menu-items';
 import nodeMod from '::sass-modules/tree/node.scss';
 import {
@@ -88,7 +88,7 @@ const Tree: React.FC<PropsFromRedux> = ({
   }, [selectedNode_id]);
 
   const params = getParamsFromLocation();
-  const hookProps = {
+  const getContext = {
     getIdOfActiveElement: target => {
       const nodeElement: HTMLElement = target.closest('.' + modNode.node);
       if (nodeElement) return nodeElement.dataset.cmiId;
@@ -142,7 +142,7 @@ const Tree: React.FC<PropsFromRedux> = ({
       ])}
     >
       <ErrorBoundary>
-        <ContextMenuWrapper hookProps={hookProps} items={contextMenuItems}>
+        <ContextMenu getContext={getContext} items={contextMenuItems}>
           {({ show }) => (
             <div
               className={joinClassNames([
@@ -197,7 +197,7 @@ const Tree: React.FC<PropsFromRedux> = ({
               {mbOrTb && <ToolBar />}
             </div>
           )}
-        </ContextMenuWrapper>
+        </ContextMenu>
       </ErrorBoundary>
     </Resizable>
   );

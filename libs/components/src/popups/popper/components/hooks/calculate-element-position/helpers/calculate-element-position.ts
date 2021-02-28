@@ -1,10 +1,10 @@
-import { Position } from '::root/popups/context-menu/context-menu';
+import { Position } from '::root/popups/popper/components/popper-body';
 import {
   bottomOverflow,
   leftOverflow,
   rightOverflow,
   topOverflow,
-} from '::root/popups/context-menu/hooks/calculate-element-position/helpers/element-overflow';
+} from '::root/popups/popper/components/hooks/calculate-element-position/helpers/element-overflow';
 import {
   bottomBottom,
   bottomTop,
@@ -14,7 +14,7 @@ import {
   rightRight,
   topBottom,
   topTop,
-} from '::root/popups/context-menu/hooks/calculate-element-position/helpers/element-position';
+} from '::root/popups/popper/components/hooks/calculate-element-position/helpers/element-position';
 
 export type PositionContext = {
   elementW;

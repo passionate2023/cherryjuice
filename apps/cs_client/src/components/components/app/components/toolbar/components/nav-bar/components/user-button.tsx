@@ -7,7 +7,7 @@ import { Icon, Icons } from '@cherryjuice/icons';
 import { UserDropdownMenu } from '::app/components/menus/modals/user-dropdown-menu/user-dropdown-menu';
 import { ToolbarButton } from '::app/components/toolbar/components/toolbar-button/toolbar-button';
 import { connect, ConnectedProps } from 'react-redux';
-import { ContextMenuWrapper } from '@cherryjuice/components';
+import { Popper } from '@cherryjuice/components';
 
 const mapState = (state: Store) => ({
   user: state.auth.user,
@@ -20,11 +20,11 @@ type Props = Record<string, never>;
 
 const UserButton: React.FC<Props & PropsFromRedux> = ({ user }) => {
   return (
-    <ContextMenuWrapper
-      customBody={({ hide }) => (
+    <Popper
+      body={({ hide }) => (
         <UserDropdownMenu key={'UserDropdownMenu'} hide={hide} />
       )}
-      hookProps={{
+      getContext={{
         getIdOfActiveElement: () => 'UserDropdownMenu',
         getActiveElement: () =>
           document.querySelector(
@@ -64,7 +64,7 @@ const UserButton: React.FC<Props & PropsFromRedux> = ({ user }) => {
           )}
         </ToolbarButton>
       )}
-    </ContextMenuWrapper>
+    </Popper>
   );
 };
 

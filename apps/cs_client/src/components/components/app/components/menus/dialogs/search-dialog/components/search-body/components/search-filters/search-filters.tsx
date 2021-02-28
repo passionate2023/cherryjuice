@@ -21,7 +21,7 @@ import {
 } from '::sass-modules';
 import { Icons } from '@cherryjuice/icons';
 import { DocumentSearch } from '::app/components/toolbar/components/nav-bar/components/document-search';
-import { ContextMenuWrapper } from '@cherryjuice/components';
+import { Popper } from '@cherryjuice/components';
 import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 export const SearchSetting: React.FC<{
@@ -29,7 +29,7 @@ export const SearchSetting: React.FC<{
   testId: string;
 }> = memo(function SearchSetting({ iconName, children, testId }) {
   return (
-    <ContextMenuWrapper
+    <Popper
       clickOutsideSelectorsWhitelist={[
         {
           selector: '.' + modSearchFilter.searchFilter,
@@ -39,12 +39,12 @@ export const SearchSetting: React.FC<{
         },
       ]}
       showAsModal={'mb'}
-      hookProps={{
+      getContext={{
         getActiveElement: () =>
           document.querySelector(`[data-testid="${testId}"]`),
         getIdOfActiveElement: () => testId,
       }}
-      customBody={
+      body={
         <div className={modSearchDialog.searchDialog__searchSetting}>
           {children}
         </div>
@@ -66,7 +66,7 @@ export const SearchSetting: React.FC<{
           _ref={ref}
         />
       )}
-    </ContextMenuWrapper>
+    </Popper>
   );
 });
 

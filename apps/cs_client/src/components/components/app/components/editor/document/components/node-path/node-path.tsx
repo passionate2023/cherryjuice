@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/get-parents-node-ids/get-parents-node-ids';
-import { CMItem, ContextMenuWrapper } from '@cherryjuice/components';
+import { CMItem, ContextMenu } from '@cherryjuice/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createNodePropsMapper } from '::root/components/app/components/tabs/helpers/map-props';
 
@@ -56,13 +56,13 @@ const NodePath: React.FC<Props & PropsFromRedux> = ({
         }))
       : [];
   }, [activeTab, nodes, documentId]);
-  const hookProps = {
+  const getContext = {
     onSelectElement: id => setActiveTab(+id),
     getIdOfActiveElement: target =>
       target.dataset.id || target.parentElement.dataset.id,
   };
   return (
-    <ContextMenuWrapper items={contextMenuItems} hookProps={hookProps}>
+    <ContextMenu items={contextMenuItems} getContext={getContext}>
       {({ ref, show }) => (
         <div className={modNodePath.nodePath} onContextMenu={show} ref={ref}>
           <div
@@ -84,7 +84,7 @@ const NodePath: React.FC<Props & PropsFromRedux> = ({
           </div>
         </div>
       )}
-    </ContextMenuWrapper>
+    </ContextMenu>
   );
 };
 

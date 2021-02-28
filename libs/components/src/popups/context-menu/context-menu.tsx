@@ -1,117 +1,45 @@
-import React, { ReactNode } from 'react';
-import { useRef } from 'react';
-import {
-  useClickOutsideModal,
-  joinClassNames,
-  useModalKeyboardEvents,
-  useCurrentBreakpoint,
-} from '@cherryjuice/shared-helpers';
-import {
-  CMItem,
-  ContextMenuItem,
-} from '::root/popups/context-menu/context-menu-item';
-import mod from './context-menu.scss';
-import { Scrim } from '::root/popups/scrim/scrim';
-import { useCalculateElementPosition } from '::root/popups/context-menu/hooks/calculate-element-position/calculate-element-position';
-export type Position = {
-  anchorX: number;
-  anchorY: number;
-  anchorW?: number;
-  anchorH?: number;
-  offsetX?: number;
-  offsetY?: number;
-  positionX?: 'lr' | 'rl' | 'rr' | 'll';
-  positionY?: 'bt' | 'tb' | 'tt' | 'bb';
-};
+import * as React from 'react';
+import { CMItem, Popper } from '::root/popups';
+import { PopperProps } from '::root/popups/popper/popper';
+import { ContextMenuItem } from '::root/popups/context-menu/components/context-menu-item';
 
-export type ContextMenuProps = {
-  hide: () => void;
-  level?: number;
+type Props = {
   items?: CMItem[];
-  position: Position;
-  id: string;
-  context: Record<string, any>;
-  //
-  showAsModal?: 'tb' | 'mb';
-  clickOutsideSelectorsWhitelist?: any[];
-  children?: ReactNode;
-  style?: {
-    borderRadius?: number;
-    paddingTop?: number;
-    paddingBottom?: number;
-    paddingLeft?: number;
-    paddingRight?: number;
-    opacity?: number;
-  };
-};
+} & Pick<
+  PopperProps,
+  'getContext' | 'positionPreferences' | 'level' | 'children'
+>;
 
-const ContextMenu: React.FC<ContextMenuProps> = ({
+const style = { paddingBottom: 5, paddingTop: 5 };
+export const ContextMenu: React.FC<Props> = ({
   items,
-  level = 0,
-  hide,
-  position,
-  id,
-  context,
+  getContext,
   children,
-  showAsModal,
-  clickOutsideSelectorsWhitelist = [],
-  style = {},
+  level,
+  positionPreferences,
 }) => {
-  const ref = useRef<HTMLDivElement>();
-  const { clkOProps } = useClickOutsideModal({
-    callback: hide,
-    assertions: [
-      ...clickOutsideSelectorsWhitelist,
-      {
-        selector: '.' + mod.contextMenu,
-      },
-    ],
-  });
-  const keprops = useModalKeyboardEvents({
-    dismiss: hide,
-    focusableElementsSelector: [],
-  });
-
-  const { x, y } = useCalculateElementPosition(position, ref);
-  const breakpoint = useCurrentBreakpoint();
   return (
-    <>
-      {!!breakpoint[showAsModal] && (
-        <Scrim onClick={hide} isShownOnTopOfDialog={true} />
+    <Popper
+      getContext={getContext}
+      style={style}
+      body={({ hide, context, id, level }) => (
+        <>
+          {items.map(item => (
+            <ContextMenuItem
+              {...item}
+              key={item.name}
+              hide={hide}
+              id={id}
+              context={context}
+              level={level}
+            />
+          ))}
+        </>
       )}
-      <div
-        {...clkOProps}
-        {...keprops}
-        className={joinClassNames([
-          mod.contextMenu,
-          [mod.contextMenuModal, !!breakpoint[showAsModal]],
-        ])}
-        style={
-          breakpoint[showAsModal]
-            ? { ...style }
-            : {
-                left: Math.max(x, 0),
-                top: Math.max(y, 0),
-                ...style,
-              }
-        }
-        ref={ref}
-      >
-        {items
-          ? items.map(item => (
-              <ContextMenuItem
-                {...item}
-                key={item.name}
-                hide={hide}
-                id={id}
-                context={context}
-                level={level}
-              />
-            ))
-          : children}
-      </div>
-    </>
+      level={level}
+      positionPreferences={positionPreferences}
+    >
+      {children}
+    </Popper>
   );
 };
-
-export { ContextMenu };
