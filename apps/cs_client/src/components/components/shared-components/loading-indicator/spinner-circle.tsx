@@ -1,6 +1,6 @@
 import modSpinnerCircle from '::sass-modules/shared-components/spinner-circle.scss';
 import * as React from 'react';
-import { useSpinner } from '::hooks/use-spinner';
+import { useLoader } from '@cherryjuice/shared-helpers';
 
 type Props = {
   showAfter?: number;
@@ -8,7 +8,7 @@ type Props = {
 };
 
 const SpinnerCircle: React.FC<Props> = ({ style = {} }) => {
-  const show = useSpinner();
+  const show = useLoader();
   return (
     <>
       {show && (

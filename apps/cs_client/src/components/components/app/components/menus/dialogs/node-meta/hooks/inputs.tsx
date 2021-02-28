@@ -4,16 +4,15 @@ import { testIds } from '::cypress/support/helpers/test-ids';
 import { SelectPrivacy } from '::app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
 import { Privacy } from '@cherryjuice/graphql-types';
 import { Chips } from '::app/components/menus/dialogs/document-meta/components/chips/chips';
-import { ToggleSwitch } from '::shared-components/inputs/toggle-switch';
-import { ColorInput } from '@cherryjuice/components';
-import { IconPicker } from '::app/components/menus/dialogs/node-meta/components/icon-picker';
 import * as React from 'react';
 import { useMemo } from 'react';
+import { NodeStyle } from '::app/components/menus/dialogs/node-meta/components/node-style/node-style';
+import { SquareToggle } from '::app/components/menus/dialogs/node-meta/components/square-toggle/square-toggle';
 
 export const useFormInputs = ({
   documentPrivacy,
   state,
-  isOnMd,
+  mbOrTb,
   showDialog,
   isOwnerOfDocument,
 }) => {
@@ -30,13 +29,13 @@ export const useFormInputs = ({
             testId={testIds.nodeMeta__privacy}
           />
         ),
-        label: 'visibility',
+        label: 'Visibility',
       },
       {
-        label: 'tags',
+        label: 'Tags',
         monolithComponent: (
           <Chips
-            label={'tags'}
+            label={'Tags'}
             chips={state.tags.map(tag => ({ text: tag }))}
             onRemove={nodeMetaActionCreators.removeTag}
             addChip={tag =>
@@ -53,60 +52,28 @@ export const useFormInputs = ({
         ),
       },
       {
-        label: 'bold',
+        label: 'Style',
         customInput: (
-          <ToggleSwitch
-            value={state.isBold}
-            onChange={nodeMetaActionCreators.setIsBold}
-            testId={testIds.nodeMeta__isBold}
+          <NodeStyle
+            customColor={state.customColor}
+            customIcon={state.customIcon}
+            isBold={state.isBold}
+            nodeDepth={state.nodeDepth}
           />
         ),
       },
       {
+        label: 'Read only',
         customInput: (
-          <ToggleSwitch
-            value={state.hasCustomColor}
-            onChange={nodeMetaActionCreators.setHasCustomColor}
-            testId={testIds.nodeMeta__hasCustomColor}
-          />
-        ),
-        label: 'color',
-        additionalInput: (
-          <ColorInput
-            disabled={!state.hasCustomColor}
-            onChange={nodeMetaActionCreators.setCustomColor}
-            value={state.customColor}
-            testId={testIds.nodeMeta__customColor}
-          />
-        ),
-      },
-      {
-        label: 'icon',
-        customInput: (
-          <ToggleSwitch
-            value={state.hasCustomIcon}
-            onChange={nodeMetaActionCreators.setHasCustomIcon}
-            testId={testIds.nodeMeta__hasCustomIcon}
-          />
-        ),
-        additionalInput: (
-          <IconPicker
-            onChange={nodeMetaActionCreators.setCustomIcon}
-            value={state.customIcon}
-            disabled={!state.hasCustomIcon}
-          />
-        ),
-      },
-      {
-        label: 'read only',
-        customInput: (
-          <ToggleSwitch
-            value={state.isReadOnly}
-            onChange={nodeMetaActionCreators.setIsReadOnly}
+          <SquareToggle
+            onClick={nodeMetaActionCreators.toggleIsReadOnly}
+            icon={'lock'}
+            enabled={state.isReadOnly}
+            iconSize={14}
           />
         ),
       },
     ].filter(Boolean);
     return inputs;
-  }, [documentPrivacy, state, isOnMd, showDialog, isOwnerOfDocument]);
+  }, [documentPrivacy, state, mbOrTb, showDialog, isOwnerOfDocument]);
 };

@@ -1,0 +1,37 @@
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+$hover-bg: var(--background-100);
+$active-bg: var(--background-100);
+.toolbar-button {
+  min-width: var(--tabs);
+  height: var(--tabs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  &:hover {
+    background-color: $hover-bg;
+  }
+
+  svg {
+    fill: var(--icon-fill);
+  }
+  transition: background-color 0.2s linear, filter 0.2s linear,
+    opacity 0.2s linear;
+}
+
+.toolbar-button--active {
+  background-color: $active-bg !important;
+
+  z-index: 1;
+  svg {
+    opacity: 1;
+  }
+}
+
+.toolbar-button--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  &:hover {
+    background-color: initial;
+  }
+}

@@ -1,7 +1,7 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 
 .sidebar {
-  --border: 1px solid var(--on-background-10);
+  --border: 1px solid var(--on-background-010-10);
   width: 200px;
   height: 100%;
   // style
@@ -9,6 +9,7 @@
 
   @include respond-to($md-down) {
     border-top: var(--border);
+    max-width: 50vw;
   }
   border-right: var(--border);
 }

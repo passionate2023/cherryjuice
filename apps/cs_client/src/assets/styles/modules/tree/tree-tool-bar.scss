@@ -4,12 +4,14 @@
   width: 100%;
   display: flex;
   align-items: center;
-  background-color: var(--on-surface-010);
   opacity: 0.5;
   &:hover {
     opacity: 0.9;
   }
+  height: var(--treeToolBarHeight);
+  background-color: var(--surface-100);
   transition: opacity 200ms linear;
+  box-sizing: border-box;
 }
 
 .tree-tool-bar--active {
@@ -17,14 +19,23 @@
 }
 
 .tree-tool-bar__controls {
-  height: var(--treeToolBarHeight);
+  height: 100%;
 
   box-sizing: border-box;
-  padding: 2px;
+  //padding: 2px;
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 1px;
+  //justify-content: flex-end;
+  overflow-x: auto;
+  & > :first-child {
+    margin-left: auto;
+  }
+  //gap: 1px;
+  background-color: var(--surface-100);
+  svg {
+    fill: var(--icon-fill);
+  }
 }
 .tree__search-field-wrapper {
   opacity: 1;
@@ -41,13 +52,4 @@
   @include respond-to($md-down) {
     width: 40px;
   }
-}
-.tree_focus-button {
-  height: 100%;
-  width: 30px;
-  @include respond-to($md-down) {
-    width: 40px;
-  }
-  background-color: white;
-  border-radius: 0;
 }

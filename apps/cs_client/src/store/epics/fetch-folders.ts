@@ -11,7 +11,7 @@ import { FOLDERS } from '::graphql/queries/folders';
 
 export const fetchFoldersEpic = (action$: Observable<Actions>) => {
   return action$.pipe(
-    ofType([ac_.home.fetchFolders, ac_.auth.setAuthenticationSucceeded]),
+    ofType([ac_.home.fetchFolders]),
     filter(() => store.getState().home.asyncOperations.fetchFolders === 'idle'),
     switchMap(() => {
       const request = gqlQuery$(FOLDERS()).pipe(
@@ -29,6 +29,7 @@ export const fetchFoldersEpic = (action$: Observable<Actions>) => {
           },
           due: 5000,
           actionCreators: [ac_.home.fetchFoldersFailed],
+          mode: 'snackbar',
         }),
         createErrorHandler({
           alertDetails: {

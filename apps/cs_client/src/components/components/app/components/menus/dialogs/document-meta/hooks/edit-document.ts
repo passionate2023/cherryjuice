@@ -19,6 +19,5 @@ export const useEditDocument = ({ state, focusedDocument }) => {
       }, []),
     );
     ac.documentCache.mutateDocument({ documentId: focusedDocumentId, meta });
-    ac.documentsList.fetchDocuments();
   }, [state, focusedDocument]);
 };

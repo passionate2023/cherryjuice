@@ -1,9 +1,11 @@
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
+
 .user-info {
   padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary-020);
+  color: var(--on-surface-050);
   text-align: center;
 }
 
@@ -16,13 +18,12 @@
     text-transform: capitalize;
   }
 
-  font-size: 0.9em;
-  line-height: 22px;
+  @include type-c();
 }
 
 .user-info__username {
   font-weight: bold;
-  color: var(--primary-050);
+  color: var(--primary-045);
   overflow-wrap: anywhere;
 }
 

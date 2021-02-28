@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { modNodeMeta } from '::sass-modules';
 import { Privacy } from '@cherryjuice/graphql-types';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import { NodePrivacy } from '@cherryjuice/graphql-types';
+import { Select } from '::shared-components/inputs/select/select';
 
 const privacyWeights = {
   [Privacy.PRIVATE]: 1,
@@ -47,38 +47,18 @@ const SelectPrivacy: React.FC<Props> = ({
   maximumPrivacy,
   testId,
 }) => {
-  const ref = useRef<HTMLSelectElement>();
-  useEffect(() => {
-    ref.current.value = privacy;
-  }, [privacy]);
-  const onChangeM = useCallback(
-    e => {
-      onChange(e.target.value as Privacy);
-    },
-    [onChange],
-  );
   const isBelowDocumentPrivacy = useMemo(() => {
     return privacyIsBelowOrEqual(maximumPrivacy);
   }, [maximumPrivacy]);
   return (
-    <select
-      ref={ref}
-      className={modNodeMeta.nodeMeta__input__select}
-      onChange={onChangeM}
-      defaultValue={privacy}
+    <Select
+      onChange={onChange}
+      value={privacy}
       disabled={disabled}
       data-testid={testId}
-    >
-      {(useNodeOptions ? nodeOptions : options).map(({ value, label }) => (
-        <option
-          value={value}
-          key={value}
-          disabled={isBelowDocumentPrivacy(value)}
-        >
-          {label}
-        </option>
-      ))}
-    </select>
+      options={useNodeOptions ? nodeOptions : options}
+      isOptionDisabled={isBelowDocumentPrivacy}
+    />
   );
 };
 

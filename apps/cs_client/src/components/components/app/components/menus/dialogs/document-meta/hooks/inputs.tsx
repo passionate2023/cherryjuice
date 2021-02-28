@@ -8,7 +8,7 @@ import { Privacy } from '@cherryjuice/graphql-types';
 import { Guests } from '::app/components/menus/dialogs/document-meta/components/guests/guests';
 
 export const useFormInputs = ({
-  isOnMd,
+  mbOrTb,
   isOwnerOfFocusedDocument,
   userId,
   state,
@@ -34,5 +34,5 @@ export const useFormInputs = ({
       }
     }
     return inputs;
-  }, [isOnMd, isOwnerOfFocusedDocument, userId, state]);
+  }, [mbOrTb, isOwnerOfFocusedDocument, userId, state]);
 };

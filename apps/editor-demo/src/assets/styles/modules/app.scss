@@ -1,6 +1,7 @@
 @import '../mixins/breakpoints';
 @import '../vars/vars';
 
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 .app {
   // size
   width: var(--vw);
@@ -9,14 +10,17 @@
   display: grid;
   grid-template-areas:
     'tool-bar'
-    'tabs'
     'rich-text';
   grid-template-columns: 1fr;
-  grid-template-rows: 40px 40px 1fr;
+  grid-template-rows: 34px 1fr;
 
   overflow: hidden;
   // style
   color: var(--background-100);
-  background-color: var(--on-background);
+  background-color: var(--on-background-010);
   font-family: Verdana, sans-serif;
+
+  @include respond-to($md-down) {
+    grid-template-rows: 40px 1fr;
+  }
 }

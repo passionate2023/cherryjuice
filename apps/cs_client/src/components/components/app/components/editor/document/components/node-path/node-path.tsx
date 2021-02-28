@@ -5,11 +5,9 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/get-parents-node-ids/get-parents-node-ids';
-import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
-import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
+import { CMItem, ContextMenu } from '@cherryjuice/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useChildContextMenu } from '::root/components/shared-components/context-menu/hooks/child-context-menu';
-import { createNodePropsMapper } from '::root/components/app/components/tabs/document-nodes/helpers/map-props';
+import { createNodePropsMapper } from '::root/components/app/components/tabs/helpers/map-props';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -38,12 +36,6 @@ const NodePath: React.FC<Props & PropsFromRedux> = ({
   }, [selectedNode_id]);
   const [activeTab, setActiveTab] = useState<number>();
 
-  const { position, show, hide, shown } = useChildContextMenu({
-    onSelectElement: id => setActiveTab(+id),
-    getIdOfActiveElement: target =>
-      target.dataset.id || target.parentElement.dataset.id,
-  });
-
   const mapNodeProps = createNodePropsMapper(
     nodes,
     localState,
@@ -64,31 +56,35 @@ const NodePath: React.FC<Props & PropsFromRedux> = ({
         }))
       : [];
   }, [activeTab, nodes, documentId]);
-
+  const getContext = {
+    onSelectElement: id => setActiveTab(+id),
+    getIdOfActiveElement: target =>
+      target.dataset.id || target.parentElement.dataset.id,
+  };
   return (
-    <div className={modNodePath.nodePath} onContextMenu={show}>
-      <ContextMenuWrapperLegacy
-        shown={shown}
-        hide={hide}
-        items={contextMenuItems}
-        position={position}
-      >
-        <div
-          className={modNodePath.nodePath__nodes}
-          onContextMenu={show}
-          ref={nodesR}
-        >
-          {nodeProps.map(node => (
-            <React.Fragment key={node.node_id}>
-              <Node {...node} documentId={documentId} />
-            </React.Fragment>
-          ))}
-          {!!selectedNode_id && (
-            <Node documentId={documentId} {...mapNodeProps(selectedNode_id)} />
-          )}
+    <ContextMenu items={contextMenuItems} getContext={getContext}>
+      {({ ref, show }) => (
+        <div className={modNodePath.nodePath} onContextMenu={show} ref={ref}>
+          <div
+            className={modNodePath.nodePath__nodes}
+            onContextMenu={show}
+            ref={nodesR}
+          >
+            {nodeProps.map(node => (
+              <React.Fragment key={node.node_id}>
+                <Node {...node} documentId={documentId} />
+              </React.Fragment>
+            ))}
+            {!!selectedNode_id && (
+              <Node
+                documentId={documentId}
+                {...mapNodeProps(selectedNode_id)}
+              />
+            )}
+          </div>
         </div>
-      </ContextMenuWrapperLegacy>
-    </div>
+      )}
+    </ContextMenu>
   );
 };
 

@@ -5,31 +5,34 @@ import { UserInfo } from '::app/components/menus/modals/user/components/user-inf
 import * as React from 'react';
 import { User } from '@cherryjuice/graphql-types';
 import { router } from '::root/router/router';
+import { RootReducerState } from '::store/ducks/root';
 
 export const useGroups = ({
   user,
   documentId,
+  theme,
 }: {
-  online: boolean;
   documentId: string;
   user: User;
+  theme: RootReducerState['theme'];
 }): DropdownMenuGroupProps[] => {
+  const toggleTheme = {
+    text: 'theme',
+    onClick: ac.root.toggleTheme,
+    hideOnClick: false,
+    icon: theme === 'light' ? 'light-mode' : 'dark-mode',
+  };
   return user
     ? [
         {
           id: 'user-info',
           body: <UserInfo user={user} />,
         },
+
         {
           id: 'documents-and-preferences',
           header: {},
           body: [
-            {
-              text: 'documents',
-              onClick: ac.dialogs.showDocumentList,
-              testId: testIds.toolBar__navBar__showDocumentList,
-              // dontShow: !isLoggedIn,
-            },
             {
               text: 'bookmarks',
               onClick: ac.dialogs.showBookmarksDialog,
@@ -41,6 +44,7 @@ export const useGroups = ({
               // testId:testIds.toolBar__navBar__showDocumentList,
               // dontShow: !isLoggedIn,
             },
+            toggleTheme,
             {
               text: 'sign out',
               onClick: ac.root.resetState,
@@ -54,6 +58,7 @@ export const useGroups = ({
         {
           id: 'user',
           body: [
+            toggleTheme,
             {
               onClick: router.goto.signIn,
               text: 'sign in',

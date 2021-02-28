@@ -6,8 +6,7 @@ import {
   SectionBodyProps,
 } from '::app/components/home/components/folder/components/sections/components/section/componnets/section-body/rows-container';
 import modRow from './componnets/row/row.scss';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
-import { CMItem } from '::shared-components/context-menu/context-menu-item';
+import { ContextMenu, CMItem } from '@cherryjuice/components';
 
 export type SectionProps = SectionBodyProps & {
   header: RowProps;
@@ -22,7 +21,7 @@ export const Table: React.FC<SectionProps> = ({
   onRowDoubleClick,
   cmItems,
 }) => {
-  const hookProps = {
+  const getContext = {
     getIdOfActiveElement: target => {
       const row: HTMLElement = target.closest('.' + modRow.row);
       if (row) return row.dataset.rowId;
@@ -42,7 +41,7 @@ export const Table: React.FC<SectionProps> = ({
         onRowClick={onRowClick}
         onRowDoubleClick={onRowDoubleClick}
       />
-      <ContextMenuWrapper hookProps={hookProps} items={cmItems}>
+      <ContextMenu getContext={getContext} items={cmItems}>
         {({ ref, show }) => (
           <RowsContainer
             rows={rows}
@@ -53,7 +52,7 @@ export const Table: React.FC<SectionProps> = ({
             onContextMenu={show}
           />
         )}
-      </ContextMenuWrapper>
+      </ContextMenu>
     </div>
   );
 };

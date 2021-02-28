@@ -1,63 +1,70 @@
 import * as React from 'react';
-import { ToolbarButton, ToolbarColorInput } from '@cherryjuice/components';
-import { execK, formattingHotkeysProps } from '@cherryjuice/editor';
-import { modToolbar } from '::sass-modules';
-import { Icon } from '@cherryjuice/icons';
-import { HotKeyActionType } from '@cherryjuice/graphql-types';
+import { execK, useSortFormattingButtons } from '@cherryjuice/editor';
+import { ToolbarColorInput, DropDownButton } from '@cherryjuice/components';
+import { FormattingButton } from '::root/app/components/editor/components/toolbar/components/formatting-buttons/components/formatting-button';
 import { getDefaultSettings } from '@cherryjuice/default-settings';
 
 const formattingHotkeys = getDefaultSettings().hotKeys.formatting;
-
-type Props = {};
-
-const Buttons: React.FC<Props> = () => {
+const FormattingButtons: React.FC = () => {
+  const categories = useSortFormattingButtons(formattingHotkeys);
+  const disabled = false;
   return (
     <>
-      {formattingHotkeys.map(hotKey => {
-        const formattingHotkeysProp = formattingHotkeysProps[hotKey.type];
-        if (!('icon' in formattingHotkeysProp))
-          return <React.Fragment key={hotKey.type} />;
-        const onChange = value => {
-          execK({
-            style: {
-              ...formattingHotkeysProp.execCommandArguments.style,
-              value,
-            },
-          });
-        };
-        return hotKey.type === HotKeyActionType.FOREGROUND_COLOR ||
-          hotKey.type === HotKeyActionType.BACKGROUND_COLOR ? (
-          <ToolbarColorInput
-            key={hotKey.type}
-            hotKey={hotKey}
-            disabled={false}
-            icon={formattingHotkeysProp.icon}
-            onChange={onChange}
-            id={hotKey.type}
-          />
-        ) : (
-          <ToolbarButton
-            key={hotKey.type}
-            onClick={() => execK(formattingHotkeysProp.execCommandArguments)}
-            className={modToolbar.toolBar__iconStrictWidth}
-          >
-            <Icon name={formattingHotkeysProp.icon} />
-          </ToolbarButton>
-        );
-      })}
-    </>
-  );
-};
-
-const FormattingButtons: React.FC<Props> = () => {
-  return (
-    <div
-      className={
-        modToolbar.toolBar__groupFormatting + ' ' + modToolbar.toolBar__group
+      {categories.primary.map(([, props]) => (
+        <FormattingButton {...props} disabled={disabled} key={props.name} />
+      ))}
+      {
+        <DropDownButton
+          buttons={categories.headers.map(([, props]) => ({
+            element: (
+              <FormattingButton
+                {...props}
+                disabled={disabled}
+                key={props.name}
+              />
+            ),
+            key: props.name,
+          }))}
+        />
       }
-    >
-      <Buttons />
-    </div>
+      {categories.secondary.map(([, props]) => (
+        <FormattingButton {...props} disabled={disabled} key={props.name} />
+      ))}
+      {
+        <DropDownButton
+          buttons={categories.justification.map(([, props]) => ({
+            element: (
+              <FormattingButton
+                {...props}
+                disabled={disabled}
+                key={props.name}
+              />
+            ),
+            key: props.name,
+          }))}
+        />
+      }
+      {categories.colors.map(([hk, props]) => (
+        <ToolbarColorInput
+          key={hk.type}
+          id={hk.type}
+          disabled={disabled}
+          icon={props.icon}
+          onChange={value => {
+            execK({
+              style: {
+                ...props.execCommandArguments.style,
+                value,
+              },
+            });
+          }}
+          tooltip={props.name}
+        />
+      ))}
+      {categories.tertiary.map(([, props]) => (
+        <FormattingButton {...props} disabled={disabled} key={props.name} />
+      ))}
+    </>
   );
 };
 export { FormattingButtons };

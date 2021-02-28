@@ -9,7 +9,6 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 const filterTreeEpic = (action$: Observable<Actions>) => {
   return merge(
     action$.pipe(ofType([ac_.document.setNodesFilter]), debounceTime(200)),
-    action$.pipe(ofType([ac_.document.clearNodesFilter])),
   ).pipe(
     switchMap(action => {
       const filter = action['payload'];

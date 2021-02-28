@@ -18,6 +18,13 @@ import '@cherryjuice/shared-styles/build/global/css-variables.scss';
     'https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap';
   document.head.appendChild(link);
 }
+import { inspect } from '@xstate/inspect';
+
+inspect({
+  // options
+  // url: 'https://statecharts.io/inspect', // (default)
+  iframe: false, // open in new window
+});
 addDecorator(story => (
   <MemoryRouter initialEntries={['/']}>
     <div className={modTheme.lightTheme}>{story()}</div>

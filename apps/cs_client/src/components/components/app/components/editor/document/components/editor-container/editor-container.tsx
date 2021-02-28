@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { QFullNode } from '::store/ducks/document-cache/document-cache';
 import { OfflineBanner } from '::root/components/app/components/editor/document/components/editor-container/components/offline-banner';
 import { ContentEditableProps, Editor } from '@cherryjuice/editor';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 type Props = {
   node: QFullNode;
@@ -22,9 +23,8 @@ const mapState = (state: Store) => {
       state.document.asyncOperations.fetch === 'in-progress',
     fetchNodeStarted:
       state.node.asyncOperations.fetch[node_id] === 'in-progress',
-    contentEditable: state.editor.contentEditable || !state.root.isOnMd,
+    contentEditable: state.editor.contentEditable,
     isDocumentOwner: hasWriteAccessToDocument(state),
-    isOnMd: state.root.isOnMd,
     online: state.root.online,
     scrollPosition: document
       ? document.persistedState.scrollPositions[node_id]
@@ -40,10 +40,11 @@ const EditorContainer: React.FC<Props & PropsFromRedux> = ({
   fetchNodeStarted,
   isDocumentOwner,
   node,
-  isOnMd,
   scrollPosition,
   online,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
+  contentEditable = contentEditable || !mbOrTb;
   useEffect(() => {
     if (online)
       if (node && !node?.html && !fetchDocumentInProgress) ac.node.fetch(node);
@@ -57,7 +58,7 @@ const EditorContainer: React.FC<Props & PropsFromRedux> = ({
 
   const contentEditableProps: ContentEditableProps = {
     editable: Boolean(!node?.read_only && contentEditable && isDocumentOwner),
-    focusOnUpdate: !isOnMd,
+    focusOnUpdate: !mbOrTb,
     html: node?.html,
     images: node?.image,
     nodeId: node?.node_id ? node.documentId + '/' + node.node_id : undefined,

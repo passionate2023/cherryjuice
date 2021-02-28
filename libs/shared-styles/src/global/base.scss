@@ -1,5 +1,6 @@
 @import '../vars/vars';
 @import '../mixins/breakpoints';
+$outline: 2px solid var(--primary-053);
 
 h1,
 h2,
@@ -29,8 +30,17 @@ a:focus,
 button:focus,
 input:focus,
 textarea:focus,
-div:focus {
-  outline: 1px solid rgba(grey, 0.4);
+select:focus {
+  outline: $outline;
+}
+div[data-focusable='input'] {
+  input:focus-within {
+    outline: $outline;
+  }
+}
+
+div[data-focusable='self']:focus {
+  outline: $outline;
 }
 
 $color: #7c7c7c;

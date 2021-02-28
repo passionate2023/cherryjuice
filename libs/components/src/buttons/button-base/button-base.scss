@@ -1,5 +1,4 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
-@import '~@cherryjuice/shared-styles/build/vars/states';
 @import '~@cherryjuice/shared-styles/build/mixins/typography';
 
 @mixin button-variant($color, $bg-color, $br-base, $br-step) {
@@ -15,7 +14,7 @@
     filter: brightness(#{$br-base + 2 * $br-step});
     background-color: $bg-color;
     color: $color;
-    box-shadow: $box-shadow1;
+    box-shadow: var(--shadow-1);
   }
 }
 
@@ -24,20 +23,21 @@
   border: none;
   background-color: var(--background-100);
   color: var(--primary-020);
-  transition: background-color 0.3s ease, filter 0.3s ease;
+  transition: background-color 0.2s linear, filter 0.2s linear,
+    opacity 0.2s linear;
 
   cursor: pointer;
   &:hover:not([disabled]) {
-    background-color: var(--primary-100);
-    color: var(--primary-020);
+    background-color: var(--primary-085);
   }
   &:active:not([disabled]) {
-    background-color: var(--primary-090);
-    color: var(--primary-020);
-    box-shadow: $box-shadow1;
+    color: var(--primary-010);
+    background-color: var(--primary-060);
+    box-shadow: var(--shadow-1);
   }
   &:disabled {
-    @include disabled-button();
+    filter: grayscale(0.9) opacity(0.5);
+    cursor: not-allowed;
   }
   display: flex;
   align-items: center;
@@ -49,7 +49,7 @@
 }
 .button--text {
   display: inline-block;
-  padding: 10px 10px;
+  padding: 10px 12px;
   margin: 2px;
 }
 
@@ -64,15 +64,15 @@
     0.5
   );
   svg {
-    fill: white;
+    fill: var(--icon-fill);
   }
 }
 
 .button--pressed {
   background-color: var(--primary-050) !important;
-  color: var(--background-100) !important;
-  box-shadow: $box-shadow1;
+  color: var(--on-primary-100) !important;
+  box-shadow: var(--shadow-1);
   svg {
-    fill: white;
+    fill: var(--on-primary-100) !important;
   }
 }

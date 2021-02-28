@@ -1,46 +1,48 @@
 import * as React from 'react';
 import mod from './header.scss';
-import { SearchInput } from '::shared-components/inputs/search-input';
+import { Search } from '::shared-components/search-input/search';
 import { ac } from '::store/store';
-import { UserButton } from '::app/components/editor/tool-bar/components/groups/nav-bar/components/user-button';
-import { DocumentButton } from '::app/components/editor/tool-bar/components/groups/nav-bar/components/document-button';
-import { ToolbarButton } from '@cherryjuice/components';
+import { ButtonCircle, Tooltip } from '@cherryjuice/components';
+
 export type HeaderProps = {
   folderName: string;
   query: string;
-  noSearch: boolean;
-  isOnMd: boolean;
+  noSearch?: boolean;
+  mbOrTb: boolean;
 };
-// const noop = () => undefined;
+
 export const Header: React.FC<HeaderProps> = ({
   noSearch,
   folderName,
   query,
-  isOnMd,
+  mbOrTb,
 }) => {
   return (
     <div className={mod.header}>
       <span className={mod.header__folderName}>
-        {isOnMd && (
-          <ToolbarButton
-            onClick={ac.home.toggleSidebar}
-            icon={'menu'}
-            tooltip={{ label: 'toggle sidebar', position: 'bottom-right' }}
-          />
+        {mbOrTb && (
+          <Tooltip tooltip={'toggle sidebar'}>
+            {bind => (
+              <ButtonCircle
+                onClick={ac.home.toggleSidebar}
+                iconName={'menu'}
+                iconSize={16}
+                {...bind}
+              />
+            )}
+          </Tooltip>
         )}
-        {folderName}
+        <span>{folderName}</span>
       </span>
       <div className={mod.header__buttons}>
-        <SearchInput
-          containerClassName={mod.header__searchInput}
-          placeHolder={'filter documents'}
-          value={query}
+        <Search
+          placeholder={'filter documents'}
+          providedValue={query}
           onChange={ac.home.setQuery}
-          onClear={ac.home.clearQuery}
-          searchImpossible={noSearch}
+          disabled={noSearch}
+          hideableInput={'manual'}
+          style={{ icon: 'filter' }}
         />
-        <DocumentButton includeCurrentDocumentSection={false} />
-        <UserButton />
       </div>
     </div>
   );

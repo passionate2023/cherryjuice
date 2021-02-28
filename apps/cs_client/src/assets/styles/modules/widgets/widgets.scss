@@ -27,6 +27,6 @@
   position: relative;
   overflow: hidden;
   &:not([data-collapsed]) {
-    box-shadow: $box-shadow1;
+    box-shadow: var(--shadow-1);
   }
 }

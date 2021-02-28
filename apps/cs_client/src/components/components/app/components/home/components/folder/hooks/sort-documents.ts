@@ -3,7 +3,10 @@ import { useMemo } from 'react';
 import { SortDirection } from '@cherryjuice/graphql-types';
 import { FoldersDict, SortDocumentsBy } from '::store/ducks/home/home';
 import { RowProps } from '::app/components/home/components/folder/components/sections/components/section/componnets/row/row';
-import { timeAgo } from '::hooks/relative-time/relative-time';
+import {
+  formatAbsolutTime,
+  timeAgo,
+} from '::hooks/relative-time/relative-time';
 import { mapPrivacyToIcon } from '::app/components/editor/info-bar/components/components/visibility-icon';
 import { IconName } from '@cherryjuice/icons';
 
@@ -32,6 +35,7 @@ type Props = {
   activeDocumentId: string;
   draftsFolderId;
   folders: FoldersDict;
+  draggable: boolean;
 };
 
 type SortedDocuments = Record<string, { rows: RowProps[]; pinned: RowProps[] }>;
@@ -45,6 +49,7 @@ export const useSortDocuments = ({
   activeDocumentId,
   draftsFolderId,
   folders,
+  draggable,
 }: Props) => {
   return useMemo<SortedDocuments>(() => {
     let sortedDocuments: CachedDocument[] = mapSortDocumentBy[sortBy](
@@ -69,16 +74,27 @@ export const useSortDocuments = ({
           pinned: document.persistedState.pinned,
           elements: [
             document.name,
-            timeAgo.format(document.updatedAt, 'round'),
-            timeAgo.format(document.createdAt, 'round'),
+            [
+              timeAgo.format(document.updatedAt, 'round'),
+              formatAbsolutTime(document.updatedAt),
+            ],
+            [
+              timeAgo.format(document.createdAt, 'round'),
+              formatAbsolutTime(document.createdAt),
+            ],
             document.size,
-          ].map((text, i) => ({
-            text,
-            icon: i === 0 && (mapPrivacyToIcon(document.privacy) as IconName),
-          })),
+          ].map((text, i) => {
+            const hasTooltip = Array.isArray(text);
+            return {
+              text: hasTooltip ? text[0] : text,
+              tooltip: hasTooltip ? text[1] : undefined,
+              icon: i === 0 && (mapPrivacyToIcon(document.privacy) as IconName),
+            };
+          }),
           state: {
             opened: openedDocumentId === document.id,
             active: activeDocumentId === document.id,
+            draggable,
           },
         };
 
@@ -96,5 +112,6 @@ export const useSortDocuments = ({
     openedDocumentId,
     activeDocumentId,
     folders,
+    draggable,
   ]);
 };

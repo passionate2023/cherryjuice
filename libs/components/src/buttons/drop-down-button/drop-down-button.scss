@@ -1,8 +1,8 @@
-@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '../../../../../node_modules/@cherryjuice/shared-styles/build/vars/vars';
 
+@import '../../../../../node_modules/@cherryjuice/shared-styles/build/mixins/breakpoints';
 .drop-down-button {
   padding: 0;
-  position: relative;
 }
 
 .head {
@@ -11,7 +11,7 @@
   justify-content: center;
   height: 100%;
   &:hover {
-    background-color: var(--surface-010);
+    background-color: var(--surface-090);
   }
   transition: background-color 0.3s ease;
 }
@@ -26,29 +26,31 @@
   justify-content: center;
   transition: background-color 0.3s ease;
   svg {
-    fill: grey;
+    fill: var(--icon-fill);
   }
 }
 
 .list {
-  width: 100%;
-  position: absolute;
+  width: 44px;
+  @include respond-to($md-down) {
+    width: 50px;
+  }
   display: flex;
   flex-direction: column;
-  background-color: var(--surface);
-  align-items: center;
-  box-shadow: $box-shadow2;
+  background-color: var(--surface-100);
+  align-items: flex-start;
+  box-shadow: var(--shadow-2);
   z-index: 1;
 }
 .list__item {
-  width: 100%;
   &:hover {
-    background-color: var(--surface-010);
+    background-color: var(--surface-090);
   }
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 .list__item--selected {
-  background-color: var(--surface-010);
+  background-color: var(--surface-090);
 }

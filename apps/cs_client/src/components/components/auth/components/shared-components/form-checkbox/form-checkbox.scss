@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   &:focus {
-    outline: 2px solid rgba(60, 5, 3, 0.5);
+    outline: 2px solid var(--primary-053);
   }
 }
 

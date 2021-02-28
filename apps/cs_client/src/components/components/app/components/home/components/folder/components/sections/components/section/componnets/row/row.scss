@@ -9,7 +9,7 @@
   padding: 10px;
   justify-content: space-between;
   @include type-e();
-  color: var(--on-background);
+  color: var(--on-background-010);
   cursor: default;
   transition: background-color 200ms linear;
   max-width: 1300px;
@@ -29,23 +29,23 @@
 }
 
 .row--active {
-  background-color: var(--primary-100-50);
+  background-color: var(--primary-085);
 }
 .row--opened {
   position: relative;
   &::after {
-    --width: 1px;
+    --width: 2px;
     content: '';
     position: absolute;
     left: 0px;
     height: calc(100% - var(--width) * 2);
-    border: var(--width) var(--primary-050) solid;
+    border: var(--width) var(--primary-053) solid;
     opacity: 0.3;
   }
 }
 .row--collapsed {
 }
 .row--header {
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   opacity: 0.75;
 }

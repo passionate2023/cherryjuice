@@ -6,14 +6,6 @@ $tool-bar-height: 40px;
 $tool-bar-height-md: 34px;
 $info-bar-height-md: 18px;
 $max-node-width: 400px;
-// style
-$dialog-border: 0.5px var(--primary-050-20) solid;
-$box-shadow1: 0 3px 1px -2px var(--on-background-20),
-  0 2px 2px 0 var(--on-background-14), 0 1px 5px 0 var(--on-background-12);
-$box-shadow2: 0 1px 3px var(--on-background-08),
-  0 1px 2px var(--on-background-14);
-$box-shadow3: 0 1px 3px var(--on-background-04),
-  0 1px 2px var(--on-background-07);
 
 // transitions
 $bg-transition-1: background-color 0.3s ease;
@@ -29,6 +21,7 @@ $ZI-widget: 8;
 $ZI-scrim-on-top-of-dialog: 8;
 $ZI-drawer-navigation: 8;
 $ZI-scrim: 7;
+$ZI-toolbar: 6;
 $ZI-document-operations: 6;
 $ZI-floating-scrollbar: 5;
 $ZI-info-bar: 5;

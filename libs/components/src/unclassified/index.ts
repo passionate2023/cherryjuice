@@ -1,1 +1,1 @@
-export { Tooltip } from '::root/unclassified/tooltip/tooltip';
+export { Portal } from '::root/unclassified/portal/portal';

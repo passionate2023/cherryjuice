@@ -1,4 +1,4 @@
-import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
+import { CMItem } from '@cherryjuice/components';
 import { CopyNodeParams } from '::store/ducks/document-cache/helpers/node/copy-cut-paste/copy-node';
 import {
   copyNode,

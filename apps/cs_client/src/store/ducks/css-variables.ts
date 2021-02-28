@@ -8,6 +8,7 @@ export enum CssVariables {
   vh = 'vh',
   vw = 'vw',
   treeWidth = 'treeWidth',
+  treeHeight = 'treeHeight',
   nodePath = 'nodePath',
 }
 
@@ -31,7 +32,6 @@ type State = {
   dialogBodyHeight: number;
   vh: number;
   vw: number;
-  treeWidth: number;
   nodePath: number;
   previous: {
     treeWidth: number;
@@ -43,7 +43,6 @@ const initialState: State = {
   dialogBodyHeight: 500,
   vh: 1,
   vw: 1,
-  treeWidth: 250,
   nodePath: 30,
   previous: {
     treeWidth: 250,
@@ -63,9 +62,6 @@ const reducer = createReducer(initialState, _ => [
   })),
   _(ac.set, (state, { payload }) =>
     produce(state, draft => {
-      if (payload.variable === CssVariables.treeWidth && payload.value !== 0) {
-        draft.previous[payload.variable] = payload.value as number;
-      }
       draft[payload.variable] = payload.value as number;
     }),
   ),

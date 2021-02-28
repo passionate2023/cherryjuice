@@ -3,7 +3,7 @@ import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
 import { modInfoBar } from '::sass-modules';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
-import { LabelPosition, Tooltip } from '@cherryjuice/components';
+import { InfoBarIcon } from '::app/components/editor/info-bar/components/info-bar-icon/info-bar-icon';
 
 export const mapPrivacyToIcon = (privacy: NodePrivacy | Privacy) => {
   switch (privacy) {
@@ -21,9 +21,7 @@ type Props = {
   numberOfGuests: number;
   className?: string;
   displayNumberOfGuestsAsBadge?: boolean;
-  labelPosition?: LabelPosition;
   labelSubject?: 'document' | 'node';
-  showTooltip?: boolean;
 };
 
 const VisibilityIcon: React.FC<Props> = ({
@@ -31,63 +29,49 @@ const VisibilityIcon: React.FC<Props> = ({
   privacy,
   className,
   displayNumberOfGuestsAsBadge = true,
-  labelPosition = 'top-left',
   labelSubject = 'document',
-  showTooltip = true,
 }) => {
   const name = mapPrivacyToIcon(privacy);
   return (
-    <>
-      <Tooltip
-        label={
-          privacy === Privacy.PRIVATE
-            ? `This ${labelSubject} is private`
-            : privacy === Privacy.GUESTS_ONLY
-            ? `This ${labelSubject} is visible for guests`
-            : privacy === Privacy.PUBLIC
-            ? `This ${labelSubject} is public`
-            : ''
-        }
-        position={labelPosition}
-        show={showTooltip}
+    <InfoBarIcon
+      tooltip={
+        privacy === Privacy.PRIVATE
+          ? `This ${labelSubject} is private`
+          : privacy === Privacy.GUESTS_ONLY
+          ? `This ${labelSubject} is visible for guests`
+          : privacy === Privacy.PUBLIC
+          ? `This ${labelSubject} is public`
+          : ''
+      }
+      className={className}
+    >
+      <div
+        className={joinClassNames([
+          modInfoBar.infoBar__documentPrivacy__iconContainer,
+          [
+            modInfoBar.infoBar__documentPrivacy__iconContainerBadge,
+            displayNumberOfGuestsAsBadge,
+          ],
+        ])}
       >
-        {name && (
-          <div
-            className={
-              modInfoBar.infoBar__documentPrivacy + ' ' + (className || '')
-            }
-          >
-            <div
+        <Icon name={name} size={14} />
+
+        {Boolean(numberOfGuests) &&
+          (privacy === Privacy.GUESTS_ONLY || privacy === Privacy.PUBLIC) && (
+            <span
               className={joinClassNames([
-                modInfoBar.infoBar__documentPrivacy__iconContainer,
+                modInfoBar.infoBar__documentPrivacy__icon__numberOfGuests,
                 [
-                  modInfoBar.infoBar__documentPrivacy__iconContainerBadge,
+                  modInfoBar.infoBar__documentPrivacy__icon__numberOfGuestsBadge,
                   displayNumberOfGuestsAsBadge,
                 ],
               ])}
             >
-              <Icon name={name} size={14} />
-
-              {Boolean(numberOfGuests) &&
-                (privacy === Privacy.GUESTS_ONLY ||
-                  privacy === Privacy.PUBLIC) && (
-                  <span
-                    className={joinClassNames([
-                      modInfoBar.infoBar__documentPrivacy__icon__numberOfGuests,
-                      [
-                        modInfoBar.infoBar__documentPrivacy__icon__numberOfGuestsBadge,
-                        displayNumberOfGuestsAsBadge,
-                      ],
-                    ])}
-                  >
-                    {numberOfGuests}
-                  </span>
-                )}
-            </div>
-          </div>
-        )}
-      </Tooltip>
-    </>
+              {numberOfGuests}
+            </span>
+          )}
+      </div>
+    </InfoBarIcon>
   );
 };
 

@@ -1,0 +1,30 @@
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+.toolbar {
+  grid-area: toolbar;
+  display: flex;
+  align-items: center;
+  height: var(--tabs);
+  background-color: var(--surface-095);
+  //overflow: hidden;
+  z-index: $ZI-toolbar;
+}
+.toolbar::after {
+  content: '|';
+  color: transparent;
+  height: 1px;
+  background-color: rgb(115, 115, 115, 0.08);
+  width: 100vw;
+  position: absolute;
+  margin-top: 32px;
+  z-index: 0;
+
+  @include respond-to($md-down) {
+    display: none;
+  }
+}
+.toolbar__group {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}

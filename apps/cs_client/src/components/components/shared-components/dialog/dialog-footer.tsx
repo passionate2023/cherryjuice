@@ -2,7 +2,7 @@ import * as React from 'react';
 import { EventHandler, memo } from 'react';
 import { ButtonSquare } from '@cherryjuice/components';
 import { ac } from '::store/store';
-import { modDialog } from '::sass-modules';
+import mod from './dialog-footer.scss';
 export type TDialogFooterButton = {
   label: string;
   onClick: EventHandler<any>;
@@ -27,7 +27,7 @@ const DialogFooter: React.FC<TDialogFooterProps> = ({
   show,
 }) => {
   return (
-    <footer className={`${modDialog.dialog__footer}`}>
+    <footer className={`${mod.dialog__footer}`}>
       <div>
         {pinned ? (
           <ButtonSquare

@@ -7,7 +7,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useRowContextMenuItems } from '::app/components/home/components/folder/hooks/row-context-menu-items';
 import { useSortDocuments } from '::app/components/home/components/folder/hooks/sort-documents';
 import { LinearProgress } from '::shared-components/loading-indicator/linear-progress';
-import { Portal } from '::app/components/editor/tool-bar/tool-bar';
+import { Portal } from '@cherryjuice/components';
 import { modHome } from '::app/components/home/home';
 import { PinnedDocuments } from '::app/components/home/components/folder/components/sections/pinned/pinned-documents';
 import {
@@ -15,6 +15,7 @@ import {
   useInlineInputProvider,
 } from '::shared-components/inline-input/hooks/inline-input-provider';
 import { getDocuments } from '::store/selectors/cache/document/document';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 export const FolderContext = createInlineInputProviderContext();
 
@@ -32,15 +33,15 @@ const mapState = (state: Store) => ({
   sortDirection: state.home.sortDirection,
   query: state.home.query,
   folders: state.home.folders,
-  isOnMd: state.root.isOnMd,
   loading: state.documentsList.fetchDocuments === 'in-progress',
+  showSidebar: state.home.showSidebar,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export type FolderProps = Record<string, never>;
-const Folder: React.FC<FolderProps & PropsFromRedux> = ({
+const Folder: React.FC<PropsFromRedux> = ({
   documents,
   folder: currentFolder,
   draftsFolderId,
@@ -51,10 +52,11 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
   sortBy,
   sortDirection,
   query,
-  isOnMd,
   loading,
   isOwnerOfActiveDocument,
+  showSidebar,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const sorted = useSortDocuments({
     documents,
     openedDocumentId,
@@ -64,6 +66,7 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
     query,
     draftsFolderId,
     folders,
+    draggable: (mbOrTb && showSidebar) || !mbOrTb,
   });
   const inlineInputProps = useInlineInputProvider({
     disable: !isOwnerOfActiveDocument,
@@ -86,13 +89,8 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
   return (
     <FolderContext.Provider value={inlineInputProps}>
       <div className={mod.folder}>
-        <Portal targetSelector={'.' + modHome.home} predicate={isOnMd}>
-          <Header
-            folderName={folderName}
-            query={query}
-            noSearch={rows.length === 0 && pinned.length === 0}
-            isOnMd={isOnMd}
-          />
+        <Portal targetSelector={'.' + modHome.home} predicate={mbOrTb}>
+          <Header folderName={folderName} query={query} mbOrTb={mbOrTb} />
         </Portal>
         <div className={mod.folder__tables}>
           <LinearProgress loading={loading} />
@@ -107,7 +105,6 @@ const Folder: React.FC<FolderProps & PropsFromRedux> = ({
                   cmItems={cmItems}
                   sortBy={sortBy}
                   sortDirection={sortDirection}
-                  isOnMd={isOnMd}
                 />
               )}
             </>

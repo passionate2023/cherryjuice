@@ -1,0 +1,32 @@
+.square-toggle {
+  background-color: var(--surface-090);
+  cursor: pointer;
+  &:hover {
+    background-color: var(--surface-080);
+  }
+  height: 40px;
+  width: 40px;
+  // content
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    opacity: 0.4;
+    filter: brightness(0.5);
+    transform: scale(1);
+    transition: all 200ms linear;
+    fill: var(--icon-fill);
+  }
+  transition: all 200ms linear, outline 0ms;
+  &:focus {
+    z-index: 1;
+  }
+}
+.square-toggle--enabled {
+  svg {
+    opacity: 0.8;
+    transform: scale(1.1);
+    fill: var(--on-background-010);
+    filter: brightness(1);
+  }
+}

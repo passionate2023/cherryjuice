@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { useTransition } from 'react-spring';
-import {
-  Scrim,
-  ScrimProps,
-} from '::root/components/shared-components/scrim/scrim';
+import { Scrim, ScrimProps } from '@cherryjuice/components';
 
 type TTransitionWrapperProps<T> = {
   componentProps: T;

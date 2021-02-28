@@ -1,8 +1,9 @@
 .home {
+  //position
+  grid-area: editor;
+  z-index: 1;
   // size
-  height: calc(100% - var(--tabs));
   width: 100%;
-
   // content
   overflow: hidden;
   display: flex;

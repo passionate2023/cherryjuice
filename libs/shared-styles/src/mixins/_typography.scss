@@ -10,6 +10,14 @@ $weight-medium: 500;
   line-height: 23px;
 }
 
+@mixin type-a2() {
+  // dialog header
+  font-family: $font-family;
+  font-weight: $weight-medium;
+  font-size: 16px;
+  line-height: 23px;
+}
+
 @mixin type-b() {
   family: Verdana, sans-serif;
   font-size: 18px;
@@ -40,7 +48,13 @@ $weight-medium: 500;
   line-height: 16px;
   letter-spacing: 0.02rem;
 }
-
+@mixin type-e2() {
+  font-family: $font-family;
+  font-weight: $weight-medium;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.02rem;
+}
 @mixin type-f() {
   font-family: $font-family;
   font-weight: $weight-medium;

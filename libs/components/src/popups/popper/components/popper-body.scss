@@ -1,0 +1,30 @@
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
+
+.popper-body {
+  user-select: none;
+  position: absolute;
+  box-sizing: border-box;
+  background-color: var(--background-100);
+  padding: 0;
+  flex-direction: column;
+  border-radius: 5px;
+  box-shadow: var(--shadow-1);
+  z-index: $ZI-context-menu;
+  overflow: hidden;
+}
+.popper-body--modal {
+  margin: auto;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  top: 0 !important;
+  max-width: calc(var(--vw) * 0.975);
+  width: fit-content;
+  max-height: calc(var(--vh) * 0.95);
+  height: fit-content;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+}

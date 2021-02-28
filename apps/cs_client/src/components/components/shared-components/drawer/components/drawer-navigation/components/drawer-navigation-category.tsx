@@ -7,13 +7,15 @@ type DrawerNavigationCategoryProps = {
 
 const DrawerNavigationCategory: React.FC<DrawerNavigationCategoryProps> = ({
   category,
+  children,
 }) => {
   return (
     <span className={`${modDrawer.drawer__navigation__category}`}>
-      <span> {category}</span>
-      <span
-        className={`${modDrawer.drawer__navigation__category__separator}`}
-      />
+      <span className={`${modDrawer.drawer__navigation__category__name}`}>
+        {' '}
+        {category}
+      </span>
+      {children}
     </span>
   );
 };

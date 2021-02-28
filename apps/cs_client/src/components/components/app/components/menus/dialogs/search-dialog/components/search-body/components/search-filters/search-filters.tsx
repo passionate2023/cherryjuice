@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { memo, useRef } from 'react';
+import { memo } from 'react';
 import { SearchTarget } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/search-target';
 import { SearchOptions } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-options/search-options';
 import { SearchScope } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-scope/search-scope';
 import { SearchType } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-type/search-type';
-import { useOnWindowResize } from '::hooks/use-on-window-resize';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { TimeFilters } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/time-filter/time-filters';
@@ -14,7 +13,6 @@ import {
   SearchHeaderContainer,
   SearchHeaderGroup,
 } from '::root/components/shared-components/dialog/animations/search-header-container';
-import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 import { ButtonCircle } from '@cherryjuice/components';
 import {
   modPickTimeRange,
@@ -22,16 +20,16 @@ import {
   modSearchFilter,
 } from '::sass-modules';
 import { Icons } from '@cherryjuice/icons';
-import { Search } from '::root/components/app/components/editor/tool-bar/components/groups/nav-bar/components/search/search';
+import { DocumentSearch } from '::app/components/toolbar/components/nav-bar/components/document-search';
+import { Popper } from '@cherryjuice/components';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 export const SearchSetting: React.FC<{
   iconName: string;
-  shown: boolean;
-  show: () => void;
-  hide: () => void;
-}> = memo(function SearchSetting({ iconName, shown, show, hide, children }) {
+  testId: string;
+}> = memo(function SearchSetting({ iconName, children, testId }) {
   return (
-    <ContextMenuWrapperLegacy
+    <Popper
       clickOutsideSelectorsWhitelist={[
         {
           selector: '.' + modSearchFilter.searchFilter,
@@ -41,44 +39,36 @@ export const SearchSetting: React.FC<{
         },
       ]}
       showAsModal={'mb'}
-      shown={shown}
-      hide={hide}
-      show={show}
-      customBody={
+      getContext={{
+        getActiveElement: () =>
+          document.querySelector(`[data-testid="${testId}"]`),
+        getIdOfActiveElement: () => testId,
+      }}
+      body={
         <div className={modSearchDialog.searchDialog__searchSetting}>
           {children}
         </div>
       }
+      positionPreferences={{
+        positionX: 'rl',
+        positionY: 'tt',
+        offsetX: 0,
+        offsetY: 0,
+      }}
     >
-      <ButtonCircle
-        className={modSearchDialog.searchDialog__header__toggleFilters}
-        iconName={iconName}
-        active={shown}
-      />
-    </ContextMenuWrapperLegacy>
+      {({ ref, show, shown }) => (
+        <ButtonCircle
+          className={modSearchDialog.searchDialog__header__toggleFilters}
+          iconName={iconName}
+          active={shown}
+          testId={testId}
+          onClick={show}
+          _ref={ref}
+        />
+      )}
+    </Popper>
   );
 });
-
-export const useSetCssVariablesOnWindowResize = (
-  actionCreator,
-  hookDependency1?: boolean,
-) => {
-  const ref = useRef<HTMLDivElement>();
-  const height = useRef(0);
-  useOnWindowResize(
-    [
-      () => {
-        const clientHeight = ref.current.clientHeight;
-        if (clientHeight !== height.current) {
-          height.current = clientHeight;
-          actionCreator(clientHeight);
-        }
-      },
-    ],
-    hookDependency1,
-  );
-  return ref;
-};
 
 type Props = {
   show: boolean;
@@ -88,10 +78,6 @@ type Props = {
 const mapState = (state: Store) => ({
   dockedDialog: state.root.dockedDialog,
   currentSortOptions: state.search.sortOptions,
-  showSortOptions: state.search.showSortOptions,
-  showFilters: state.search.showFilters,
-  showTuning: state.search.showTuning,
-  showTimeFilter: state.search.showTimeFilter,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -106,17 +92,14 @@ const options: { optionName: SortNodesBy }[] = [
 
 const SearchFilters: React.FC<Props & PropsFromRedux> = ({
   currentSortOptions,
-  showSortOptions,
-  showFilters,
-  showTuning,
-  showTimeFilter,
   showDialog,
 }) => {
+  const { mb } = useCurrentBreakpoint();
   return (
     <SearchHeaderContainer alignChildren={'v'}>
       <SearchHeaderGroup>
-        <Search
-          className={modSearchDialog.searchDialog__header__field}
+        <DocumentSearch
+          style={{ elementWidth: mb ? 300 : 400, elementHeight: 50 }}
           navBar={false}
           lazyAutoFocus={showDialog}
         />
@@ -124,9 +107,7 @@ const SearchFilters: React.FC<Props & PropsFromRedux> = ({
       <SearchHeaderGroup>
         <SearchSetting
           iconName={Icons.material.sort}
-          hide={ac.search.toggleSortOptions}
-          show={ac.search.toggleSortOptions}
-          shown={showSortOptions}
+          testId={'toggleSortOptions'}
         >
           <SortOptions
             options={options}
@@ -139,27 +120,18 @@ const SearchFilters: React.FC<Props & PropsFromRedux> = ({
 
         <SearchSetting
           iconName={Icons.material.filter}
-          hide={ac.search.toggleFilters}
-          show={ac.search.toggleFilters}
-          shown={showFilters}
+          testId={'toggleFilters'}
         >
           <SearchTarget />
           <SearchScope />
         </SearchSetting>
         <SearchSetting
           iconName={Icons.material.time}
-          hide={ac.search.toggleTimeFilter}
-          show={ac.search.toggleTimeFilter}
-          shown={showTimeFilter}
+          testId={'toggleTimeFilter'}
         >
           <TimeFilters />
         </SearchSetting>
-        <SearchSetting
-          iconName={Icons.material.tune}
-          hide={ac.search.toggleTuning}
-          show={ac.search.toggleTuning}
-          shown={showTuning}
-        >
+        <SearchSetting iconName={Icons.material.tune} testId={'toggleTuning'}>
           <SearchType />
           <SearchOptions />
         </SearchSetting>

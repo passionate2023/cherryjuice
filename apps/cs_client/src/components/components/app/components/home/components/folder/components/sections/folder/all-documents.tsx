@@ -5,11 +5,11 @@ import { SortDocumentsBy } from '::store/ducks/home/home';
 import { SortDirection } from '@cherryjuice/graphql-types';
 import { mapEnumToReadableText } from '::app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/components/search-target/components/target';
 import { PinnedDocumentsProps } from '::app/components/home/components/folder/components/sections/pinned/pinned-documents';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 type Props = PinnedDocumentsProps & {
   sortBy: SortDocumentsBy;
   sortDirection: SortDirection;
-  isOnMd: boolean;
 };
 
 export const AllDocuments: React.FC<Props> = ({
@@ -17,7 +17,6 @@ export const AllDocuments: React.FC<Props> = ({
   cmItems,
   sortBy,
   sortDirection,
-  isOnMd,
 }) => {
   const folderHeader = {
     elements: [
@@ -35,6 +34,7 @@ export const AllDocuments: React.FC<Props> = ({
     id: 'header',
     isHeader: true,
   };
+  const { mbOrTb } = useCurrentBreakpoint();
   return (
     <Table
       rows={rows}
@@ -42,7 +42,7 @@ export const AllDocuments: React.FC<Props> = ({
       onRowClick={ac.home.selectDocument}
       onRowDoubleClick={ac.document.setDocumentId}
       cmItems={cmItems}
-      collapsed={isOnMd}
+      collapsed={mbOrTb}
     />
   );
 };

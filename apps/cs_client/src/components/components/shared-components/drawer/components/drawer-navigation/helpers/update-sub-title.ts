@@ -1,4 +1,4 @@
-import { modDialog } from '::sass-modules';
+import { modDialogHeader } from '::shared-components/dialog/dialog-header';
 
 const updateSubTitle = ({
   selectedScreenTitle,
@@ -6,7 +6,7 @@ const updateSubTitle = ({
   selectedScreenTitle: string;
 }) => {
   const subTitleElement = document.querySelector(
-    '.' + modDialog.dialog__header__subTitle,
+    '.' + modDialogHeader.dialog__header__subTitle,
   );
   subTitleElement.innerHTML = selectedScreenTitle;
 };

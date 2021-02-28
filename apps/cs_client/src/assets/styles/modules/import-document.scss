@@ -16,6 +16,9 @@
 .import-document__button {
   display: flex;
   align-items: center;
+  svg {
+    fill: var(--icon-fill);
+  }
 }
 
 .import-document__button__icon {

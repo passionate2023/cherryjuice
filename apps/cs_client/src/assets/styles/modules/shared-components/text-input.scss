@@ -1,6 +1,7 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 .text-input {
-  background-color: var(--surface-010);
+  background-color: var(--surface-090);
+  color: var(--on-surface-010);
   padding: 10px 20px;
   box-sizing: border-box;
   width: 100%;
@@ -9,7 +10,8 @@
 
 .number-input {
   box-sizing: border-box;
-  background-color: var(--surface-010);
+  background-color: var(--surface-090);
+  color: var(--on-surface-010);
   text-align: center;
   width: 65px;
   border: none;

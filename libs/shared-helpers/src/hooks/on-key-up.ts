@@ -8,7 +8,7 @@ const useOnKeyPress = ({
   keys = defaultKeys,
 }: {
   ref: MutableRefObject<HTMLElement>;
-  onClick: () => void;
+  onClick: (e: KeyboardEvent) => void;
   keys?: KeyCodes[];
 }) => {
   useEffect(() => {
@@ -16,7 +16,7 @@ const useOnKeyPress = ({
     if (!element) return;
     const eventHandler = e => {
       if (keys.includes(e.code)) {
-        onClick();
+        onClick(e);
       }
     };
     element.addEventListener('keyup', eventHandler);

@@ -16,13 +16,11 @@
     height: 60px;
   }
   // position
-  z-index: $ZI-info-bar;
   @include respond-to($md-down) {
+    z-index: $ZI-info-bar;
     left: 5px;
     position: absolute;
-    bottom: calc(
-      5px + var(--nodes-bar) + var(--formatting-bar) + var(--recent-nodes)
-    );
+    bottom: calc(5px + var(--formatting-bar) + var(--recent-nodes));
   }
   @include respond-to($md-up) {
     grid-area: info-bar;
@@ -43,13 +41,13 @@
   }
   // style
   background-color: var(--background-100);
-  color: var(--on-background);
+  color: var(--on-background-010);
   @include type-f();
   cursor: default;
   @include respond-to($md-down) {
     opacity: 0.95;
     border-radius: 5px;
-    box-shadow: $box-shadow2;
+    box-shadow: var(--shadow-2);
   }
 }
 .info-bar__separator {
@@ -59,7 +57,7 @@
   margin-left: -1px;
   margin-right: -1px;
   width: 1px;
-  background-color: var(--on-surface);
+  background-color: var(--on-surface-050);
   height: 10px;
   opacity: 1;
   align-self: center;
@@ -77,7 +75,7 @@
   display: flex;
   align-items: center;
   svg {
-    fill: grey;
+    fill: var(--icon-fill);
   }
 }
 
@@ -96,7 +94,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   padding-top: 2px;
   margin-left: -1px;
 }
@@ -109,12 +107,10 @@
   width: 11px;
   top: -6px;
   right: -6px;
-  background-color: var(--secondary-100);
-  color: var(--on-secondary) !important;
+  background-color: var(--secondary-080);
+  color: var(--on-secondary-100) !important;
 }
-.info-bar__document-privacy {
-  display: inline;
-}
+
 .info-bar__timestamp {
   @include respond-to($md-down) {
     flex-direction: column;

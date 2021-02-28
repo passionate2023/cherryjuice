@@ -6,54 +6,58 @@
   width: calc(100% - 40px);
   min-height: 88px;
   max-height: 250px;
-  padding: 10px 20px;
-  background-color: var(--background-100);
+  padding: 20px 20px;
+  background-color: var(--surface-100);
   &:not(:last-child) {
-    margin-bottom: 5px;
+    margin-bottom: 20px;
   }
   overflow: auto;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
-  box-shadow: $box-shadow2;
+  gap: 6px;
+  box-shadow: var(--shadow-2);
   transition: background-color 200ms linear;
   cursor: pointer;
   &:hover {
-    background-color: var(--primary-100-20);
+    background-color: var(--primary-090);
   }
   .search-result__timestamps {
     padding: 5px;
   }
 }
 .search-result--selected {
-  background-color: var(--primary-100) !important;
+  background-color: var(--primary-085) !important;
   .search-result__location__document-name {
-    color: var(--on-background);
+    color: var(--on-background-010);
+    opacity: 0.5;
   }
   .search-result__timestamps {
-    color: var(--on-background);
+    color: var(--on-background-010);
   }
 }
 .search-result__location {
   align-self: flex-start;
   justify-self: flex-end;
-  margin-bottom: 5px;
   max-width: 100%;
-  opacity: 0.8;
   min-height: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .search-result__location__document-name {
   font-family: monospace;
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   font-size: 12px;
+  opacity: 0.6;
 }
 .search-result__location__node-name {
   @include clampMultiLine(2);
   cursor: pointer;
   text-decoration: none;
   font-size: 12px;
-
+  opacity: 0.8;
   display: flex;
 }
 
@@ -82,16 +86,14 @@
   display: flex;
   flex-wrap: wrap;
   font-family: monospace;
-  font-size: 0.85rem;
-  @include respond-to($md-down) {
-    font-size: 0.8rem;
-  }
-  color: var(--on-surface);
+  font-size: 11px;
+  color: var(--on-surface-050);
+  opacity: 0.6;
 }
 .search-result__timestamps__separator {
   margin-left: 10px;
   margin-right: 10px;
 }
 .search-result__timestamps__item {
-  color: var(--on-surface);
+  color: var(--on-surface-050);
 }

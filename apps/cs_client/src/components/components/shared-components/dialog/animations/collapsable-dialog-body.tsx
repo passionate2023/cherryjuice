@@ -9,7 +9,6 @@ import { animated, useSpring } from 'react-spring';
 const mapState = (state: Store) => ({
   searchFiltersHeight: state.cssVariables.searchFiltersHeight,
   dialogBodyHeight: state.cssVariables.dialogBodyHeight,
-  isOnMobile: state.root.isOnMd,
 });
 
 export const adjustDialogBodyHeight = (

@@ -13,15 +13,19 @@
   cursor: pointer;
   // style
   &:hover {
-    background-color: var(--primary-100-20);
+    background-color: var(--primary-090);
   }
+  transition: all 200ms linear;
 }
 
 .section-element--opened {
-  background-color: var(--primary-100-50);
+  background-color: var(--primary-085);
+  &:hover {
+    background-color: var(--primary-085);
+  }
 }
 .section-element--drag-enter {
-  background-color: var(--primary-100);
+  background-color: var(--primary-085);
 }
 .section-element__content {
   // size
@@ -35,7 +39,7 @@
   gap: 7px;
 
   // style
-  color: var(--on-background);
+  color: var(--on-background-010);
 }
 
 .section-element__text {

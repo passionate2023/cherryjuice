@@ -1,18 +1,18 @@
-@import '../~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/vars/vars';
 .time-filter {
   display: flex;
   flex-direction: column;
-  width: 200px;
+  min-width: 200px;
   align-items: flex-start;
   justify-content: center;
 }
 .time-filter__filter-toggle {
   z-index: 1;
-  background-color: var(--surface-010);
+  background-color: var(--surface-090);
 }
 .time-filter__filter-container {
   display: flex;
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   align-items: center;
   transition: transform 200ms cubic-bezier(0, 1.29, 1, 0.7),
     opacity 200ms cubic-bezier(0, 1.29, 1, 0.7);
@@ -24,7 +24,7 @@
 }
 .time-filter__select-container {
   display: flex;
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   align-items: center;
   gap: 5px;
 }
@@ -35,11 +35,11 @@
   padding: 10px 0px;
   border: none;
   border-radius: 5px;
-  background-color: var(--surface-010);
+  background-color: var(--surface-090);
 }
 .time-filter__filter-name {
   padding: 10px;
-  color: var(--on-surface);
+  color: var(--on-surface-050);
 }
 .time-filter__timestamp {
   display: flex;
@@ -50,7 +50,7 @@
   padding: 10px 0;
 }
 .time-filter__timestamp__item {
-  color: var(--on-surface);
+  color: var(--on-surface-050);
   font-family: monospace;
   font-weight: bold;
   margin-left: 5px;

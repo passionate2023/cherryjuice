@@ -1,0 +1,63 @@
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
+@mixin dialog-edge-size() {
+  padding: 15px;
+  box-sizing: border-box;
+  height: 50px;
+}
+.dialog__header {
+  @include dialog-edge-size();
+  background-color: var(--background-100);
+  border-bottom: var(--border-1);
+  display: flex;
+  align-items: center;
+  user-select: none;
+  h2 {
+    @include type-a2();
+    color: var(--on-background-010);
+    opacity: 0.8;
+  }
+}
+.dialog__header--pinned {
+  display: none;
+}
+.dialog__header__buttons {
+  display: flex;
+  gap: 5px;
+  justify-self: flex-end;
+  margin-left: auto;
+  align-items: center;
+  //& > button {
+  //  display: inline-block;
+  //}
+}
+
+.dialog__header__button {
+  opacity: 0.6;
+  svg {
+    fill: var(--icon-fill);
+  }
+  &:hover {
+    opacity: 1;
+    background-color: transparent !important;
+  }
+  &:active {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+}
+
+.dialog__header__exit-button {
+}
+.dialog__header__sub-title {
+  @include respond-to('md') {
+    display: none;
+  }
+  margin-left: 10px;
+  font-size: 14px;
+  opacity: 0.5;
+  &::before {
+    //content: ' ▶ ';
+  }
+}

@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { modDialog } from '::sass-modules';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
 import { Result } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/result';
-import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { ResultsHeader } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-results/components/results-header';
 import {
   getCurrentDocument,
   getDocumentsList,
 } from '::store/selectors/cache/document/document';
 import { memo } from 'react';
+import { DialogScrollableSurface } from '::shared-components/dialog/dialog-list/dialog-scrollable-surface';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -28,9 +27,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-
-const SearchResults: React.FC<Props & PropsFromRedux> = ({
+const SearchResults: React.FC<PropsFromRedux> = ({
   searchResults,
   query,
   searchTarget,
@@ -40,31 +37,30 @@ const SearchResults: React.FC<Props & PropsFromRedux> = ({
   selectedNode_id,
   hasNoDocuments,
 }) => (
-  <div className={modDialog.dialogSurface}>
-    {
+  <DialogScrollableSurface
+    header={
       <ResultsHeader
         searchResults={searchResults}
         hasNoDocuments={hasNoDocuments}
       />
     }
-    <div className={joinClassNames([modDialog.dialogBody__scrollableSurface])}>
-      {searchResults.results.map((result, i) => (
-        <Result
-          key={result.nodeId + searchResults.meta.timestamp}
-          documentId={documentId}
-          selectedNode_id={selectedNode_id}
-          result={result}
-          searchContext={{
-            query,
-            searchType,
-            searchOptions,
-            searchTarget,
-          }}
-          listIndex={i}
-        />
-      ))}
-    </div>
-  </div>
+  >
+    {searchResults.results.map((result, i) => (
+      <Result
+        key={result.nodeId + searchResults.meta.timestamp}
+        documentId={documentId}
+        selectedNode_id={selectedNode_id}
+        result={result}
+        searchContext={{
+          query,
+          searchType,
+          searchOptions,
+          searchTarget,
+        }}
+        listIndex={i}
+      />
+    ))}
+  </DialogScrollableSurface>
 );
 
 const _ = connector(SearchResults);

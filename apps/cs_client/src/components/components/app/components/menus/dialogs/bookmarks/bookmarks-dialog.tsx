@@ -8,12 +8,12 @@ import { ac, Store } from '::store/store';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { useDeleteListItems } from '::root/components/app/components/menus/dialogs/documents-list/hooks/delete-list-items';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
   return {
     shown: state.dialogs.showBookmarks,
-    isOnMd: state.root.isOnMd,
     documentId: state.document.documentId,
     selectedIDs: state.bookmarks.selectedIDs,
     bookmarks: document?.persistedState?.bookmarks,
@@ -25,11 +25,8 @@ const mapState = (state: Store) => {
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-
-const BookmarksDialog: React.FC<Props & PropsFromRedux> = ({
+const BookmarksDialog: React.FC<PropsFromRedux> = ({
   shown,
-  isOnMd,
   bookmarks = [],
   selectedIDs,
   selectedNode_id,
@@ -37,6 +34,7 @@ const BookmarksDialog: React.FC<Props & PropsFromRedux> = ({
   deletionMode,
   pinned,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const closeDialog = ac.dialogs.hideBookmarksDialog;
   const buttonsRight: TDialogFooterButton[] = [
     { label: 'close', onClick: closeDialog },
@@ -64,7 +62,7 @@ const BookmarksDialog: React.FC<Props & PropsFromRedux> = ({
       footerLeftButtons={[]}
       footRightButtons={buttonsRight}
       rightHeaderButtons={rightHeaderButtons}
-      isOnMobile={isOnMd}
+      isOnMobile={mbOrTb}
       show={shown}
       onClose={closeDialog}
       pinned={pinned}

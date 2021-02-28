@@ -1,0 +1,18 @@
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+.search {
+  --search-element-height: 34px;
+  --search-element-width: 250px;
+  --search-button-bc: var(--background-100);
+  --search-button-hover-bc: var(--surface-090);
+  width: var(--search-element-width);
+  height: var(--search-element-height);
+  display: flex;
+  align-items: center;
+  button:focus {
+    outline: none;
+  }
+}
+
+.search--hidden-input {
+  width: var(--search-element-height);
+}

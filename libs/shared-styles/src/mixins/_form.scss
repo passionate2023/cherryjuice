@@ -1,6 +1,0 @@
-@import '../vars/vars';
-@mixin form-element-size {
-  max-width: $form-input-width;
-  min-width: $form-input-width;
-  box-sizing: border-box;
-}

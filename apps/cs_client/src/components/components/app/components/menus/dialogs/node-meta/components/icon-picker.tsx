@@ -1,59 +1,82 @@
 import * as React from 'react';
-import { modIconPicker, modNodeMeta, modSearchFilter } from '::sass-modules';
-import { Icon, Icons } from '@cherryjuice/icons';
-import { useState } from 'react';
+import { modIconPicker } from '::sass-modules';
+import { Icon, IconName } from '@cherryjuice/icons';
 import { testIds } from '::cypress/support/helpers/test-ids';
-import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
 import { IconsList } from '::root/components/app/components/menus/dialogs/node-meta/components/components/icons-list';
+import { Popper } from '@cherryjuice/components';
+import { getNodeIconId } from '::app/components/editor/document/components/tree/components/node/components/node-icons/components/node-cherry';
+import { useRef } from 'react';
+import { useOnKeyPress } from '@cherryjuice/shared-helpers';
 
-type Props = { value: string; disabled: boolean; onChange };
+const IconButton: React.FC<{ show: () => void; icon: IconName }> = ({
+  show,
+  icon,
+}) => {
+  const ref = useRef();
+  useOnKeyPress({ ref, onClick: show, keys: ['Space', 'Enter'] });
+  return (
+    <div
+      className={modIconPicker.iconPicker}
+      data-testid={testIds.nodeMeta__customIcon}
+      onClick={show}
+      ref={ref}
+      tabIndex={0}
+      data-focusable={'self'}
+    >
+      <Icon
+        name={icon}
+        className={`${modIconPicker.iconPicker__icon} ${modIconPicker.iconPicker__iconCover}`}
+        image={true}
+      />
+    </div>
+  );
+};
+
+type Props = { value: number; onChange; nodeDepth: number };
 
 const IconPicker: React.FC<Props> = ({
-  disabled,
   value: selectedIcon,
   onChange: setSelectedIcon,
+  nodeDepth,
 }) => {
-  const [shown, setShown] = useState(false);
-  const show = () => setShown(true);
-  const hide = () => setShown(false);
-  const value = selectedIcon === '0' ? '1' : selectedIcon;
-
   return (
-    <ContextMenuWrapperLegacy
+    <Popper
       clickOutsideSelectorsWhitelist={[
         {
-          selector: '.' + modSearchFilter.searchFilter,
+          selector: '.' + modIconPicker.iconPicker__clear,
         },
       ]}
       showAsModal={'mb'}
-      shown={shown}
-      hide={hide}
-      show={show}
-      customBody={
+      getContext={{
+        getActiveElement: () =>
+          document.querySelector(
+            `[data-testid=${testIds.nodeMeta__customIcon}]`,
+          ),
+        getIdOfActiveElement: () => 'icon-picker',
+      }}
+      positionPreferences={{
+        positionX: 'rl',
+        positionY: 'tt',
+        offsetX: 0,
+        offsetY: 0,
+      }}
+      body={
         <IconsList
           {...{
             selectedIcon,
             setSelectedIcon,
-            hide,
-            shown,
           }}
         />
       }
+      style={{ paddingTop: 0, paddingBottom: 0 }}
     >
-      <div
-        className={modIconPicker.iconPicker}
-        data-testid={testIds.nodeMeta__customIcon}
-      >
-        <Icon
-          name={Icons.cherrytree.custom_icons[value]}
-          className={`${modIconPicker.iconPicker__icon} ${
-            disabled ? modNodeMeta.nodeMeta__inputDisabled : ''
-          }`}
-          onClick={() => !disabled && setShown(shown => !shown)}
-          image={true}
+      {({ show }) => (
+        <IconButton
+          show={show}
+          icon={getNodeIconId(+selectedIcon, nodeDepth)}
         />
-      </div>
-    </ContextMenuWrapperLegacy>
+      )}
+    </Popper>
   );
 };
 

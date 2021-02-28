@@ -14,9 +14,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-
-const KeyboardShortcuts: React.FC<Props & PropsFromRedux> = ({
+const KeyboardShortcuts: React.FC<PropsFromRedux> = ({
   hotKeys,
   current,
   duplicates,
@@ -29,13 +27,16 @@ const KeyboardShortcuts: React.FC<Props & PropsFromRedux> = ({
             <div className={modHotKeys.hotkeys__category__name}>{name}</div>
           </div>
           <div className={modHotKeys.hotkeys__category__hotkeysList}>
-            {hotkeys.map(({ type }) => (
-              <KeyboardShortcut
-                key={type}
-                hotKey={{ type, keys: current[type] }}
-                duplicate={duplicates && duplicates[type]}
-              />
-            ))}
+            {hotkeys.map(
+              ({ type }) =>
+                current[type] && (
+                  <KeyboardShortcut
+                    key={type}
+                    hotKey={{ type, keys: current[type] }}
+                    duplicate={duplicates && duplicates[type]}
+                  />
+                ),
+            )}
           </div>
         </div>
       ))}

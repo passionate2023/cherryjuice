@@ -9,6 +9,7 @@ import { useHubTransition } from '::root/components/app/components/menus/widgets
 import { ActionSnackbar } from '::root/components/app/components/menus/widgets/components/undo-action/action-snackbar';
 import { ChangesHistory } from '::root/components/app/components/menus/widgets/components/changes-history/changes-history';
 import { UndoRedo } from '::root/components/app/components/menus/widgets/components/undo-action/components/undo-redo';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 export type Widget = {
   component: JSX.Element;
@@ -21,19 +22,21 @@ const mapState = (state: Store) => ({
   showUndoDocumentAction: state.timelines.showUndoDocumentAction,
   showTimeline: state.timelines.showTimeline,
   documentActionNOF: state.timelines.documentActionNOF,
+  showHome: state.home.show,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-const Widgets: React.FC<Props & PropsFromRedux> = ({
+const Widgets: React.FC<PropsFromRedux> = ({
   operations,
   snackbar,
   showUndoDocumentAction,
   showTimeline,
   documentActionNOF,
+  showHome,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const widgets: Widget[] = [];
 
   if (snackbar?.message)
@@ -73,7 +76,10 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
   const { transitions, setRef } = useHubTransition({ widgets });
 
   return (
-    <div className={modWidgets.widgets}>
+    <div
+      className={modWidgets.widgets}
+      style={{ bottom: showHome ? (mbOrTb ? 45 : 5) : undefined }}
+    >
       {transitions.map(({ key, item, props: style }) => (
         <animated.div
           style={style}
@@ -89,4 +95,4 @@ const Widgets: React.FC<Props & PropsFromRedux> = ({
 };
 
 const _ = connector(Widgets);
-export { _ as Widgets };
+export default _;

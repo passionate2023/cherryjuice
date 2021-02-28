@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { memo, useEffect, useMemo, useReducer } from 'react';
+import { memo, useEffect, useReducer, useRef, useState } from 'react';
 import { DialogWithTransition } from '::root/components/shared-components/dialog/dialog';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { MetaForm } from '::root/components/shared-components/form/meta-form/meta-form';
@@ -13,9 +13,12 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { getNode as getNodeSelector } from '::store/selectors/cache/document/node';
-import { editNode } from '::root/components/app/components/menus/dialogs/node-meta/hooks/save/helpers/edit-node';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';
 import { useFormInputs } from '::app/components/menus/dialogs/node-meta/hooks/inputs';
+import { getParentsNode_ids } from '::store/ducks/document-cache/helpers/node/expand-node/helpers/tree/helpers/get-parents-node-ids/get-parents-node-ids';
+import { QFullNode } from '::store/ducks/document-cache/document-cache';
+import { calculateEditedAttribute } from '::app/components/menus/dialogs/node-meta/hooks/save/helpers/calculate-edited-attributes/calculate-edited-attributes';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -26,7 +29,6 @@ const mapState = (state: Store) => {
     documentUserId: document?.userId,
     documentPrivacy: document?.privacy,
     showDialog: state.dialogs.showNodeMetaDialog,
-    isOnMd: state.root.isOnMd,
     userId: state.auth.user?.id,
   };
 };
@@ -36,13 +38,8 @@ const mapDispatch = {
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type TNodeMetaModalProps = Record<string, never>;
-
-const NodeMetaModalWithTransition: React.FC<
-  TNodeMetaModalProps & PropsFromRedux
-> = ({
+const NodeMetaModalWithTransition: React.FC<PropsFromRedux> = ({
   showDialog,
-  isOnMd,
   onClose,
   document,
   node_id,
@@ -50,23 +47,49 @@ const NodeMetaModalWithTransition: React.FC<
   documentUserId,
   documentPrivacy,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const isOwnerOfDocument = documentUserId === userId;
+  const nodeDepthRef = useRef(0);
+  const editedNodeRef = useRef<QFullNode>();
   const [state, dispatch] = useReducer(nodeMetaReducer, nodeMetaInitialState);
   useEffect(() => {
     nodeMetaActionCreators.init(dispatch);
   }, []);
 
-  const editedNode = useMemo(() => {
-    const documentId = document?.id;
-    return getNodeSelector({ node_id, documentId: documentId });
-  }, [node_id, document?.id]);
-
   useEffect(() => {
-    if (editedNode) nodeMetaActionCreators.resetToEdit({ node: editedNode });
-  }, [node_id]);
+    const documentId = document?.id;
+    nodeDepthRef.current = document?.nodes
+      ? getParentsNode_ids({
+          node_id,
+          nodes: document.nodes,
+        }).length
+      : 0;
+    editedNodeRef.current = getNodeSelector({
+      node_id,
+      documentId: documentId,
+    });
+    if (editedNodeRef.current)
+      nodeMetaActionCreators.resetToEdit({
+        node: editedNodeRef.current,
+        nodeDepth: nodeDepthRef.current,
+      });
+  }, [showDialog]);
 
+  const [changes, setChanges] = useState({});
+  useEffect(() => {
+    setChanges(
+      calculateEditedAttribute({
+        nodeA: editedNodeRef.current,
+        nodeBMeta: state,
+      }),
+    );
+  }, [state]);
   const apply = useDelayedCallback(onClose, () =>
-    editNode({ nodeA: editedNode, nodeBMeta: state }),
+    ac.documentCache.mutateNodeMeta({
+      node_id: editedNodeRef.current.node_id,
+      documentId: document?.id,
+      data: changes,
+    }),
   );
   const buttonsRight = [
     {
@@ -77,7 +100,7 @@ const NodeMetaModalWithTransition: React.FC<
     {
       label: 'apply',
       onClick: apply,
-      disabled: false,
+      disabled: Object.keys(changes).length === 0,
       testId: testIds.nodeMeta__apply,
     },
   ];
@@ -85,7 +108,7 @@ const NodeMetaModalWithTransition: React.FC<
   const inputs = useFormInputs({
     documentPrivacy,
     state,
-    isOnMd,
+    mbOrTb,
     showDialog,
     isOwnerOfDocument,
   });
@@ -95,7 +118,7 @@ const NodeMetaModalWithTransition: React.FC<
       dialogTitle={'Node Properties'}
       footerLeftButtons={[]}
       footRightButtons={buttonsRight}
-      isOnMobile={isOnMd}
+      isOnMobile={mbOrTb}
       show={Boolean(showDialog)}
       onClose={onClose}
       onConfirm={apply}

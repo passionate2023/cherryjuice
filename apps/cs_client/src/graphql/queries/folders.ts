@@ -3,7 +3,7 @@ import { Folder } from '@cherryjuice/graphql-types';
 
 export const FOLDERS = () => ({
   variables: undefined,
-  path: (data): Folder => data?.userMeta?.folders,
+  path: (data): Folder[] => data?.userMeta?.folders,
   query: gql`
     query folders {
       userMeta {

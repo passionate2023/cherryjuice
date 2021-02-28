@@ -5,10 +5,8 @@ import { Void } from '::shared-components/react/void';
 import { rootAC, rootR } from '::root/reducer';
 const RootWithRedux = React.lazy(() => import('::root/root-with-redux'));
 
-type Props = Record<string, never>;
-
 const skipLoader = process.env.NODE_ENV !== 'production';
-export const Root: React.FC<Props> = () => {
+export const Root: React.FC = () => {
   const [state, dispatch] = useReducer(rootR, undefined, () => ({
     ready: false,
     showLoader: false,

@@ -1,30 +1,44 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 .editor {
-  overflow: hidden;
+  // position
+  position: relative;
   grid-area: editor;
-  display: grid;
+  // size
   flex: 1;
-  // tablet and mobile
+  // content
+  overflow: hidden;
+  display: grid;
   grid-template-areas:
-    'tool-bar tool-bar '
+    'tabs tabs'
     'tree node-path'
     'tree rich-text '
-    'formatting-bar formatting-bar'
-    'main-bar main-bar';
-
+    'formatting-bar formatting-bar';
   grid-template-columns: var(--treeWidth) 1fr;
   grid-template-rows:
-    $tool-bar-height var(--nodePath) 1fr
-    var(--formatting-bar)
-    var(--nodes-bar);
+    var(--tabs) var(--nodePath) 1fr
+    var(--formatting-bar);
   // desktop
   @include respond-to($md-up) {
     grid-template-areas:
-      'tool-bar tool-bar '
+      'tree tool-bar '
       'tree node-path'
       'tree rich-text '
       'info-bar info-bar';
-    grid-template-rows: $tool-bar-height-md var(--nodePath) 1fr var(--info-bar);
+    grid-template-rows: var(--formatting-bar) var(--nodePath) 1fr var(
+        --info-bar
+      );
   }
+}
+.editor--tree-bottom {
+  grid-template-areas:
+    'tabs'
+    'node-path'
+    'rich-text'
+    'tree'
+    'formatting-bar';
+  grid-template-columns: 100vw;
+  grid-template-rows: var(--tabs) var(--nodePath) 1fr var(--treeHeight) var(
+      --formatting-bar
+    );
 }

@@ -5,24 +5,22 @@ import { NodePrivacy } from '@cherryjuice/graphql-types';
 type TState = {
   name: string;
   customColor: string;
-  hasCustomColor: boolean;
-  customIcon: string;
-  hasCustomIcon: boolean;
+  customIcon: number;
   isBold: boolean;
   isReadOnly: boolean;
   privacy: NodePrivacy;
   tags: string[];
+  nodeDepth: number;
 };
 const initialState: TState = {
   name: '',
   customColor: '#ffffff',
-  hasCustomColor: false,
-  customIcon: '0',
-  hasCustomIcon: false,
+  customIcon: 0,
   isBold: false,
   isReadOnly: false,
   privacy: NodePrivacy.DEFAULT,
   tags: [],
+  nodeDepth: 0,
 };
 
 type ResetToCreateProps = {
@@ -36,19 +34,18 @@ const resetToCreate = ({ fatherNode }: ResetToCreateProps): TState => {
 };
 type ResetToEditProps = {
   node: QNodeMeta;
+  nodeDepth: number;
 };
-const resetToEdit = ({ node }: ResetToEditProps): TState => {
-  return calculateState(node);
+const resetToEdit = ({ node, nodeDepth }: ResetToEditProps): TState => {
+  return calculateState(node, { nodeDepth });
 };
 
 enum actions {
   setName,
   setCustomColor,
-  setHasCustomColor,
   setCustomIcon,
-  setHasCustomIcon,
-  setIsBold,
-  setIsReadOnly,
+  toggleBold,
+  toggleIsReadOnly,
   resetToEdit,
   resetToCreate,
   setPrivacy,
@@ -65,15 +62,10 @@ const actionCreators = (() => {
     setName: value => state.dispatch({ type: actions.setName, value }),
     setCustomColor: value =>
       state.dispatch({ type: actions.setCustomColor, value }),
-    setHasCustomColor: value =>
-      state.dispatch({ type: actions.setHasCustomColor, value }),
     setCustomIcon: value =>
       state.dispatch({ type: actions.setCustomIcon, value }),
-    setHasCustomIcon: value =>
-      state.dispatch({ type: actions.setHasCustomIcon, value }),
-    setIsBold: value => state.dispatch({ type: actions.setIsBold, value }),
-    setIsReadOnly: value =>
-      state.dispatch({ type: actions.setIsReadOnly, value }),
+    toggleBold: () => state.dispatch({ type: actions.toggleBold }),
+    toggleIsReadOnly: () => state.dispatch({ type: actions.toggleIsReadOnly }),
     resetToEdit: (value: ResetToEditProps) =>
       state.dispatch({ type: actions.resetToEdit, value }),
     resetToCreate: (value: ResetToCreateProps) =>
@@ -97,15 +89,11 @@ const reducer = (
     case actions.setCustomColor:
       return { ...state, customColor: action.value };
     case actions.setCustomIcon:
-      return { ...state, customIcon: action.value };
-    case actions.setHasCustomColor:
-      return { ...state, hasCustomColor: action.value };
-    case actions.setHasCustomIcon:
-      return { ...state, hasCustomIcon: action.value };
-    case actions.setIsBold:
-      return { ...state, isBold: action.value };
-    case actions.setIsReadOnly:
-      return { ...state, isReadOnly: action.value };
+      return { ...state, customIcon: +action.value };
+    case actions.toggleBold:
+      return { ...state, isBold: !state.isBold };
+    case actions.toggleIsReadOnly:
+      return { ...state, isReadOnly: !state.isReadOnly };
     case actions.setName:
       return { ...state, name: action.value };
     case actions.addTag:

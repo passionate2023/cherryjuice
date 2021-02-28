@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { ac } from '::store/store';
-import { CMItem } from '::root/components/shared-components/context-menu/context-menu-item';
+import { CMItem } from '@cherryjuice/components';
 
 type FoldMenuItemsProps = {
   documentId: string;

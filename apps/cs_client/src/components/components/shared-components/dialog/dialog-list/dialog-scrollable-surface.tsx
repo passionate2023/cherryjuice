@@ -1,16 +1,15 @@
 import * as React from 'react';
-import { modDialog } from '::sass-modules';
-import { memo } from 'react';
-
-type Props = {};
-
-const DialogScrollableSurface: React.FC<Props> = ({ children }) => {
+import mod from './dialog-scrollable-surface.scss';
+type Props = {
+  header?: JSX.Element;
+};
+const DialogScrollableSurface: React.FC<Props> = ({ header, children }) => {
   return (
-    <div className={modDialog.dialogSurface}>
-      <div className={modDialog.dialogBody__scrollableSurface}>{children}</div>
+    <div className={mod.dialogSurface}>
+      {header}
+      <div className={mod.dialogBody__scrollableSurface}>{children}</div>
     </div>
   );
 };
 
-const M = memo(DialogScrollableSurface);
-export { M as DialogScrollableSurface };
+export { DialogScrollableSurface };

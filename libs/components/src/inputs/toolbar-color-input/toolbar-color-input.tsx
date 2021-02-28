@@ -10,6 +10,7 @@ type Props = {
   id: string;
   icon?: IconName;
   testId?: string;
+  tooltip?: string;
 };
 
 const ToolbarColorInput: React.FC<Props> = ({
@@ -17,10 +18,11 @@ const ToolbarColorInput: React.FC<Props> = ({
   disabled,
   onChange,
   id,
+  tooltip,
 }) => {
   const onChangeM = useDebouncedEventHandler(onChange, 200);
   return (
-    <ToolbarButton disabled={disabled}>
+    <ToolbarButton disabled={disabled} tooltip={tooltip}>
       <label htmlFor={id} style={!disabled ? { cursor: 'pointer' } : {}}>
         <Icon name={icon} />
         <input

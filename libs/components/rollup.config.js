@@ -10,11 +10,16 @@ const input = {
     'src/buttons/google-oauth-button/google-oauth-button.tsx',
   'toolbar-button': 'src/buttons/toolbar-button/toolbar-button.tsx',
   'color-input': 'src/inputs/color-input/color-input.tsx',
-  'validated-text-input':
-    'src/inputs/validated-text-input/validated-text-input.tsx',
   'toolbar-color-input':
     'src/inputs/toolbar-color-input/toolbar-color-input.tsx',
-  tooltip: 'src/unclassified/tooltip/tooltip.tsx',
+  'validated-text-input':
+    'src/inputs/validated-text-input/validated-text-input.tsx',
+  'context-menu': 'src/popups/context-menu/context-menu.tsx',
+  popper: 'src/popups/popper/popper.tsx',
+  scrim: 'src/popups/scrim/scrim.tsx',
+  tooltip: 'src/popups/tooltip/tooltip.tsx',
+  board: 'src/storybook/board.tsx',
+  portal: 'src/unclassified/portal/portal.tsx',
 };
 
 export default {

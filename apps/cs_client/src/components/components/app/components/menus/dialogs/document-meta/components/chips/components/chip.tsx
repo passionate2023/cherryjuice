@@ -20,7 +20,7 @@ const Chip: React.FC<ChipProps & { onRemove: RemoveChipCallback }> = ({
   }, []);
   return (
     <div className={modChips.chips__chip}>
-      {text}
+      <span className={modChips.chips__chip__text}>{text}</span>
       {additionalButton}
       <ButtonCircle
         iconName={Icons.material.clear}

@@ -24,13 +24,19 @@ const DrawerNavigation: React.FC<DrawerNavigationProps> = ({ screens }) => {
         <nav className={`${modDrawer.drawer__navigation__list}`}>
           {Object.entries(screensCategoriesMap).map(([category, screens]) => (
             <React.Fragment key={category}>
-              <DrawerNavigationCategory category={category} key={category} />
-              {screens.map(screen => (
-                <DrawerNavigationElement
-                  key={screen.name}
-                  title={screen.name as ScreenName}
-                />
-              ))}
+              <DrawerNavigationCategory category={category} key={category}>
+                <div
+                  className={modDrawer.drawer__navigation__categoryElements}
+                  key={category + ' list'}
+                >
+                  {screens.map(screen => (
+                    <DrawerNavigationElement
+                      key={screen.name}
+                      title={screen.name as ScreenName}
+                    />
+                  ))}
+                </div>
+              </DrawerNavigationCategory>
             </React.Fragment>
           ))}
         </nav>

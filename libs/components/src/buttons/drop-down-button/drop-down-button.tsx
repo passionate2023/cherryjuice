@@ -1,63 +1,86 @@
 import * as React from 'react';
-import modDropdownButton from './drop-down-button.scss';
-import { useLayoutEffect, useRef, useState } from 'react';
-import { useClickOutsideModal } from '@cherryjuice/shared-helpers';
+import mod from './drop-down-button.scss';
+import { useRef } from 'react';
 import { Icon } from '@cherryjuice/icons';
+import { Popper } from '::root/popups';
 
+const List = ({
+  buttons,
+  selectButton,
+  previouslySelected,
+  hide,
+}: {
+  buttons: Button[];
+  selectButton: (i: number) => void;
+  previouslySelected: number;
+  hide: () => void;
+}) => (
+  <>
+    <div className={mod.list}>
+      {buttons.map((button, i) =>
+        i !== previouslySelected ? (
+          <div
+            key={button.key}
+            onClick={() => {
+              selectButton(i);
+              hide();
+            }}
+            className={mod.list__item}
+          >
+            {button.element}
+          </div>
+        ) : undefined,
+      )}
+    </div>
+  </>
+);
+
+type Button = { key: string; element: JSX.Element };
 type Props = {
-  buttons: { key: string; element: JSX.Element }[];
+  buttons: Button[];
   collapseOnInsideClick?: boolean;
-  md: boolean;
-  onToggle?: (shown: boolean) => void;
 };
+
+const noop = () => undefined;
 
 export const DropDownButton: React.FC<Props> = ({
   buttons,
   collapseOnInsideClick,
-  md,
-  onToggle = () => undefined,
 }) => {
   const previouslySelected = useRef(0);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const toggleDropdown = () => setShowDropdown(shown => !shown);
-  const hideDropdownMenu = () => setShowDropdown(false);
-  const selectButton = i => () => {
-    if (collapseOnInsideClick) hideDropdownMenu();
+  const selectButton = i => {
     previouslySelected.current = i;
   };
-  const { clkOProps } = useClickOutsideModal({
-    assertions: [],
-    callback: hideDropdownMenu,
-  });
-  useLayoutEffect(() => {
-    onToggle(showDropdown);
-  }, [showDropdown]);
+
   return (
-    <div className={modDropdownButton.dropDownButton} {...clkOProps}>
-      <div className={modDropdownButton.head}>
-        {buttons[previouslySelected.current].element}
-        <div onClick={toggleDropdown} className={modDropdownButton.head__arrow}>
-          <Icon name={'arrow-down'} size={14} />
-        </div>
-      </div>
-      {showDropdown && (
-        <div
-          className={modDropdownButton.list}
-          style={{ top: md ? -((buttons.length - 1) * 40) : undefined }}
-        >
-          {buttons.map((button, i) =>
-            i !== previouslySelected.current ? (
-              <div
-                key={button.key}
-                onClick={selectButton(i)}
-                className={modDropdownButton.list__item}
-              >
-                {button.element}
-              </div>
-            ) : undefined,
-          )}
+    <Popper
+      body={({ hide }) => {
+        return (
+          <List
+            buttons={buttons}
+            hide={collapseOnInsideClick ? hide : noop}
+            previouslySelected={previouslySelected.current}
+            selectButton={selectButton}
+          />
+        );
+      }}
+      getContext={{
+        getIdOfActiveElement: () => 'drop-down',
+        getActiveElement: target => target.closest('.' + mod.dropDownButton),
+      }}
+      positionPreferences={{ positionY: 'bt', positionX: 'll' }}
+      style={{ paddingTop: 0, paddingBottom: 0, borderRadius: 0 }}
+    >
+      {({ show }) => (
+        <div className={mod.dropDownButton}>
+          <div className={mod.head}>
+            {buttons[previouslySelected.current].element}
+            <div onClick={show} className={mod.head__arrow}>
+              <Icon name={'arrow-down'} size={14} />
+            </div>
+          </div>
         </div>
       )}
-    </div>
+    </Popper>
   );
 };

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useRef } from 'react';
 import { useSelectNode } from '::root/components/app/components/editor/document/components/tree/components/node/hooks/select-node';
 import { NodePrivacy, Privacy } from '@cherryjuice/graphql-types';
 import { ToggleChildren } from '::root/components/app/components/editor/document/components/tree/components/node/components/toggle-children';
@@ -43,7 +42,6 @@ const Node: React.FC<NodeProps> = ({
   const userId = useSelector((state: Store) => state.auth.user?.id);
   const documentId = useSelector((state: Store) => state.document.documentId);
   const { child_nodes, name, privacy, html, read_only, tags } = nodes[node_id];
-  const componentRef = useRef();
 
   const showChildren =
     expand > depth || !!(fatherState && fatherState[node_id]);
@@ -61,7 +59,6 @@ const Node: React.FC<NodeProps> = ({
         className={`${modNode.node} ${
           !online && !html ? modNode.nodeNotAvailable : ''
         }`}
-        ref={componentRef}
         onClick={selectNode}
         data-node-id={node_id}
         data-cmi-id={documentId + '/' + node_id}
@@ -90,11 +87,7 @@ const Node: React.FC<NodeProps> = ({
           index={index}
           tags={tags}
         />
-        <NodeOverlay
-          clickTimestamp={clickTimestamp}
-          nodeComponentRef={componentRef}
-          node_id={node_id}
-        />
+        <NodeOverlay clickTimestamp={clickTimestamp} node_id={node_id} />
       </div>
 
       {showChildren && (

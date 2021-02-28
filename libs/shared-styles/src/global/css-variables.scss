@@ -6,6 +6,7 @@
   @include respond-to($md-down) {
     --treeToolBarHeight: 40px;
     --tabs: 40px;
+    --formatting-bar: 40px;
   }
 
   --vh: 100vh;
@@ -13,8 +14,9 @@
   --overlay-width: 0;
   --overlay-left: 0;
   --treeWidth: 250px;
+  --treeHeight: 200px;
   --nodePath: 34px;
-  --formatting-bar: $tool-bar-height;
+  --formatting-bar: 34px;
   --tabs: 34px;
   --recent-nodes: 40px;
   --info-bar: 22.5px;

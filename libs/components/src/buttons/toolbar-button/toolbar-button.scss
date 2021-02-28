@@ -1,21 +1,22 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
-@import '~@cherryjuice/shared-styles/build/vars/states';
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 .toolbar-button {
   position: relative;
 
   svg {
-    fill: var(--on-surface);
+    fill: var(--icon-fill);
   }
 
   display: flex;
   align-items: center;
   justify-content: center;
   width: $tool-bar-height;
+  min-width: $tool-bar-height;
   height: $tool-bar-height;
   @include respond-to($md-up) {
     height: $tool-bar-height-md;
     width: $tool-bar-height-md;
+    min-width: $tool-bar-height-md;
   }
   &:not([data-disabled='true']) {
     cursor: pointer;
@@ -23,15 +24,14 @@
 
   @include respond-to($md-up) {
     &:hover:not([data-disabled='true']) {
-      background-color: var(--surface-010);
+      background-color: var(--surface-090);
     }
   }
   &[data-disabled='true'] {
-    //filter: grayscale(0.9) opacity(0.6);
-    //cursor: initial;
     svg,
     img {
-      @include disabled-button();
+      filter: grayscale(0.9) opacity(0.5);
+      cursor: not-allowed;
     }
   }
   transition: $bg-transition-1;
@@ -43,7 +43,7 @@
 .tool-bar__icon--active {
   @include respond-to($md-down) {
     &:not([data-disabled='true']) {
-      background-color: var(--surface-010);
+      background-color: var(--surface-090);
     }
   }
 }

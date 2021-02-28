@@ -1,3 +1,4 @@
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
 .hotkeys__category {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -5,9 +6,10 @@
 
 .hotkeys__category__name {
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 8px;
   text-transform: capitalize;
-  color: var(--on-surface);
+  color: var(--on-surface-050);
+  @include type-a();
 }
 .hotkeys__category__name-container {
   display: flex;
@@ -15,6 +17,8 @@
 
 .hotkeys__category__hotkeys-list {
   display: flex;
-  gap: 5px;
+  gap: 6px;
   flex-direction: column;
+
+  max-width: 500px;
 }

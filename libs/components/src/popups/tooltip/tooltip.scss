@@ -1,0 +1,8 @@
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
+.tooltip {
+  padding: 10px;
+  background-color: var(--surface-100);
+  color: var(--on-surface-050);
+  @include type-e();
+  box-sizing: border-box;
+}

@@ -12,15 +12,15 @@ import { useEffect, useRef, useState } from 'react';
 
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const mapState = (state: Store) => ({
   dialogIsOpen:
-    state.root.isOnMd &&
-    (state.dialogs.showDocumentList ||
-      state.dialogs.showSettingsDialog ||
-      state.dialogs.showDocumentMetaDialog ||
-      state.search.searchState !== 'idle' ||
-      state.dialogs.showNodeMetaDialog),
+    state.dialogs.showDocumentList ||
+    state.dialogs.showSettingsDialog ||
+    state.dialogs.showDocumentMetaDialog ||
+    state.search.searchState !== 'idle' ||
+    state.dialogs.showNodeMetaDialog,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -36,12 +36,13 @@ const CollapsableList: React.FC<CollapsableListProps & PropsFromRedux> = ({
   additionalHeaderButtons,
   dialogIsOpen,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const ref = useRef<HTMLDivElement>();
   const [collapsed, setCollapsed] = useState(false);
   const toggleCollapsed = () => void setCollapsed(!collapsed);
   useEffect(() => {
-    if (dialogIsOpen) setCollapsed(true);
-  }, [dialogIsOpen]);
+    if (dialogIsOpen && mbOrTb) setCollapsed(true);
+  }, [dialogIsOpen, mbOrTb]);
 
   useEffect(() => {
     const parentElement = ref.current?.parentElement;

@@ -1,10 +1,10 @@
-import { modDialog } from '::sass-modules';
+import mod from './dialog-header.scss';
 import * as React from 'react';
 import { ButtonCircle } from '@cherryjuice/components';
 import { EventHandler, memo } from 'react';
-import { Icon, Icons } from '@cherryjuice/icons';
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ac } from '::store/store';
+import { joinClassNames } from '@cherryjuice/shared-helpers';
 
 export type DialogHeaderButton = Pick<TDialogFooterButton, 'onClick'> & {
   icon: string;
@@ -20,45 +20,58 @@ export type DialogHeaderProps = {
   menuButton?: JSX.Element;
   rightHeaderButtons?: DialogHeaderButton[];
   pinnable?: boolean;
+  pinned?: boolean;
 };
 
+const iconSize = 15;
 const DialogHeader: React.FC<DialogHeaderProps> = ({
   rightHeaderButtons = [],
   menuButton,
   dialogTitle,
   onClose,
   pinnable,
+  pinned,
 }) => {
   return (
-    <div className={modDialog.dialog__header}>
+    <div
+      className={joinClassNames([
+        mod.dialog__header,
+        pinned && mod.dialog__headerPinned,
+      ])}
+    >
       {menuButton}
-      <h2 className={modDialog.dialog__header__title}>{dialogTitle}</h2>
-      <span className={modDialog.dialog__header__subTitle} />
-      <div className={modDialog.dialog__header__buttons}>
-        {rightHeaderButtons.map(
-          button =>
+      <h2 className={mod.dialog__header__title}>{dialogTitle}</h2>
+      <span className={mod.dialog__header__subTitle} />
+      <div className={mod.dialog__header__buttons}>
+        {rightHeaderButtons.map(button => {
+          return (
             !button.hidden && (
               <ButtonCircle
                 onClick={button.onClick}
                 testId={button.testId}
-                icon={<Icon name={button.icon} />}
+                iconName={button.icon}
+                iconSize={iconSize}
                 key={button.icon}
-                className={button.className}
+                className={mod.dialog__header__button}
                 disabled={button.disabled}
               />
-            ),
-        )}
+            )
+          );
+        })}
         {pinnable && (
           <ButtonCircle
             onClick={ac.root.toggleDockedDialog}
             rotated45={true}
-            iconName={Icons.material.pin}
+            iconName={'pin'}
+            iconSize={iconSize - 1}
+            className={mod.dialog__header__button}
           />
         )}
         <ButtonCircle
-          className={modDialog.dialog__header__exitButton}
           onClick={onClose}
-          icon={<Icon {...{ name: Icons.material.close }} />}
+          iconName={'close'}
+          iconSize={iconSize}
+          className={mod.dialog__header__button}
         />
       </div>
     </div>
@@ -67,3 +80,4 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
 
 const M = memo(DialogHeader);
 export { M as DialogHeader };
+export { mod as modDialogHeader };

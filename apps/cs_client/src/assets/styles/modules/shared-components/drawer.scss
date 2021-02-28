@@ -1,5 +1,6 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
 .drawer {
   height: 100%;
   @include respond-to('md') {
@@ -11,7 +12,7 @@
 }
 $navigation-width: 200px;
 .drawer__navigation {
-  border-right: $dialog-border;
+  border-right: var(--border-1);
   min-width: 180px;
   overflow-y: auto;
   padding-top: 8px;
@@ -19,7 +20,7 @@ $navigation-width: 200px;
   padding-left: 10px;
   padding-bottom: 10px;
   position: absolute;
-  background-color: var(--surface);
+  background-color: var(--background-100);
   user-select: none;
   left: -500px;
   min-height: calc(100% - 10px - 8px);
@@ -43,6 +44,7 @@ $navigation-width: 200px;
   flex-direction: column;
   margin-left: auto;
   margin-right: auto;
+  gap: 20px;
   //width: $navigation-width;
   width: 180px;
   //height: 100%;
@@ -50,41 +52,45 @@ $navigation-width: 200px;
 .drawer__navigation__category__separator {
   flex: 1;
   height: 1px;
-  background-color: var(--on-surface-1);
+  background-color: var(--on-surface-050-10);
   margin-left: 10px;
 }
 .drawer__navigation__category {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  //align-items: center;
   padding: 5px;
-  color: var(--on-surface);
+  gap: 6px;
+  color: var(--on-surface-050);
   font-family: 'Roboto Light', sans-serif;
   font-size: 0.8rem;
   transition: background-color 0.3s ease;
 }
+.drawer__navigation__category__name {
+  padding-left: 4px;
+}
 .drawer__navigation__element {
   padding: 15px 10px;
-  margin-bottom: 5px;
+  //margin-bottom: 5px;
 
-  color: var(--on-background);
-  font-family: 'Roboto Light', sans-serif;
+  color: var(--on-background-010);
   transition: background-color 0.3s ease;
   cursor: pointer;
   &:hover {
-    background-color: var(--primary-100);
+    background-color: var(--primary-090);
   }
-  background-color: var(--primary-100-50);
+  @include type-c();
+  text-transform: capitalize;
 }
 .drawer__navigation__element--active {
-  background-color: var(--primary-050-20);
-  color: var(--primary-050);
+  background-color: var(--primary-085);
 }
 .drawer__navigation__scrim {
   @include respond-to('md') {
     display: none;
   }
   opacity: 0;
-  background-color: var(--on-background);
+  background-color: var(--on-background-010);
   position: absolute;
   z-index: $ZI-drawer-navigation-scrim;
   height: 100%;
@@ -99,11 +105,12 @@ $navigation-width: 200px;
 }
 
 .drawer__content {
-  padding: 0px 5px;
-  height: calc(100% - 0px);
-  @include respond-to('md') {
-    //padding: 10px 30px;
-    //height: calc(100% - 20px);
+  padding: 20px 5px;
+  height: calc(100% - 40px);
+
+  @include respond-to($md-down) {
+    padding: 5px;
+    height: calc(100% - 10px);
   }
 }
 
@@ -115,12 +122,19 @@ $navigation-width: 200px;
   margin-right: 5px;
   width: 40px;
   height: 40px;
-  img {
-    //width: 1.1em
+  svg {
+    fill: var(--icon-fill);
   }
 }
 .drawer__drawer-toggle__circle {
   //font-size: 17px;
   //border-radius: 50% !important;
   //max-width: 36px;
+}
+
+.drawer__navigation__category-elements {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
 }

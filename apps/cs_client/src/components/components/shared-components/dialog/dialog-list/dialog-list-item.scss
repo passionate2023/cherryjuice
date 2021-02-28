@@ -1,0 +1,68 @@
+.dialog-list-item {
+  cursor: pointer;
+  display: block;
+  background-color: var(--surface-100);
+  position: relative;
+  color: var(--on-background-010);
+  margin-top: 5px;
+  max-width: 100%;
+  transition: background-color 200ms linear;
+}
+
+.dialog-list-item__body {
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
+}
+
+.dialog-list-item__body--disabled {
+  filter: brightness(0.5) contrast(0.5) grayscale(0.5);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.dialog-list-item__context-menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  svg {
+    fill: var(--icon-fill);
+  }
+}
+
+.dialog-list-item__name {
+  display: block;
+  margin-bottom: 2px;
+  padding: 5px;
+  overflow: auto;
+  font-size: 14px;
+}
+
+.dialog-list-item--focused {
+  background-color: var(--primary-085);
+  span {
+    color: var(--on-background-010);
+  }
+}
+.dialog-list-item--active {
+  &::after {
+    --width: 2px;
+    content: '';
+    position: absolute;
+    left: 0px;
+    top: 0;
+    height: calc(100% - var(--width) * 2);
+    border: var(--width) var(--primary-053) solid;
+    opacity: 0.3;
+  }
+  //background-color: var(--primary-050);
+  //color: var(--background-100);
+  //span {
+  //  color: var(--background-100);
+  //}
+  //svg {
+  //  fill: var(--background-100);
+  //}
+}

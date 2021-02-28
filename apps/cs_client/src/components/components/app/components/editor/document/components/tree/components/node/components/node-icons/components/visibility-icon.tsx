@@ -31,7 +31,7 @@ const NodeVisibility: React.FC<NodeVisibilityProps> = memo(
             [modNode.node__titlePrivacyDisabled, b],
           ])}
           numberOfGuests={0}
-          showTooltip={false}
+          labelSubject={'node'}
         />
       )
     );

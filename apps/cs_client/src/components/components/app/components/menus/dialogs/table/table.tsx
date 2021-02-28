@@ -16,6 +16,7 @@ import {
   tableR,
   tableRTC,
 } from '::root/components/app/components/menus/dialogs/table/reducer/reducer';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const createAlert = e => ({
   title: 'Could not create the table',
@@ -28,18 +29,17 @@ const mapState = (state: Store) => ({
   showDialog: state.dialogs.showTableDialog,
   selection: state.editor.selection,
   selectedTable: state.editor.selectedTable,
-  isOnMd: state.root.isOnMd,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux;
 const TableDialogWithTransition: React.FC<Props> = ({
-  isOnMd,
   showDialog,
   selection,
   selectedTable,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const [state, dispatch] = useReducer(tableR, undefined, tableRTC);
   useEffect(() => {
     tableAC.init(dispatch);
@@ -154,7 +154,7 @@ const TableDialogWithTransition: React.FC<Props> = ({
     <DialogWithTransition
       dialogTitle={selectedTable ? 'Edit table' : 'Create table'}
       footRightButtons={buttonsRight}
-      isOnMobile={isOnMd}
+      isOnMobile={mbOrTb}
       show={Boolean(showDialog)}
       onClose={ac.dialogs.hideTableDialog}
       onConfirm={apply}

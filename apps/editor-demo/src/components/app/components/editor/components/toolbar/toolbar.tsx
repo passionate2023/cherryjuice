@@ -12,7 +12,9 @@ export const Toolbar: React.FC<Props> = ({ documentId }: Props) => {
     <div className={modToolbar.toolBar}>
       <UndoRedo documentId={documentId} />
       <Separator />
-      <FormattingButtons />
+      <div className={modToolbar.toolBar__formattingButtons}>
+        <FormattingButtons />
+      </div>
     </div>
   );
 };

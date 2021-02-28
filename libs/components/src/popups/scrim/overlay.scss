@@ -1,0 +1,15 @@
+@import '~@cherryjuice/shared-styles/build/vars/vars';
+.body-scrim {
+  position: absolute;
+  background-color: var(--scrim);
+  height: 100vh;
+  width: 100vw;
+  z-index: $ZI-scrim;
+}
+.body-scrim--alert-modal {
+  z-index: $ZI-alert-modal-scrim;
+}
+
+.body-scrim--on-top-of-dialog {
+  z-index: $ZI-scrim-on-top-of-dialog;
+}

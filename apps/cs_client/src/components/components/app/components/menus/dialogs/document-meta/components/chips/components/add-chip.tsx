@@ -58,6 +58,7 @@ const AddChip: React.FC<AddChipProps> = ({
           className={joinClassNames([
             modChips.guests__addGuest__inputContainer,
           ])}
+          data-focusable={'input'}
         >
           <input
             ref={inputRef}

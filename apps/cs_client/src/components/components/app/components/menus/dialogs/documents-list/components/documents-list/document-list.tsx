@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { memo, useMemo } from 'react';
-import { modSearchDialog } from '::sass-modules';
 import { DocumentGroup } from './components/document-group';
 import { CachedDocument } from '::store/ducks/document-cache/document-cache';
-import { SearchInput } from '::root/components/shared-components/inputs/search-input';
+import { Search } from '::shared-components/search-input/search';
 import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { getDocumentsList } from '::store/selectors/cache/document/document';
@@ -18,6 +17,7 @@ import { Icons } from '@cherryjuice/icons';
 import { SearchSetting } from '::root/components/app/components/menus/dialogs/search-dialog/components/search-body/components/search-filters/search-filters';
 import { DialogScrollableSurface } from '::root/components/shared-components/dialog/dialog-list/dialog-scrollable-surface';
 import { mapSortDocumentBy } from '::app/components/home/components/folder/hooks/sort-documents';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const options: { optionName: SortNodesBy }[] = [
   { optionName: SortNodesBy.UpdatedAt },
@@ -31,21 +31,18 @@ const mapState = (state: Store) => ({
   query: state.documentsList.query,
   showFilters: state.documentsList.showFilters,
   currentSortOptions: state.documentsList.sortOptions,
-  isOnMd: state.root.isOnMd,
   pinned: state.root.dockedDialog,
 });
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = Record<string, never>;
-const DocumentList: React.FC<Props & PropsFromRedux> = ({
+const DocumentList: React.FC<PropsFromRedux> = ({
   documents,
   show,
   query,
-  isOnMd,
   currentSortOptions,
-  showFilters,
 }) => {
+  const { mbOrTb } = useCurrentBreakpoint();
   const filesPerFolders: [string, CachedDocument[]][] = useMemo(() => {
     let sortedDocuments: CachedDocument[] = mapSortDocumentBy[
       currentSortOptions.sortBy
@@ -69,21 +66,15 @@ const DocumentList: React.FC<Props & PropsFromRedux> = ({
     <DialogBody>
       <SearchHeaderContainer>
         <SearchHeaderGroup>
-          <SearchInput
-            containerClassName={modSearchDialog.searchDialog__header__field}
-            placeHolder={'find documents'}
+          <Search
+            placeholder={'find documents'}
             value={query}
             onChange={ac.documentsList.setQuery}
             onClear={ac.documentsList.clearQuery}
-            lazyAutoFocus={!isOnMd && show}
+            lazyAutoFocus={!mbOrTb && show}
             searchImpossible={!documents.length}
           />
-          <SearchSetting
-            iconName={Icons.material.sort}
-            hide={ac.documentsList.toggleFilters}
-            show={ac.documentsList.toggleFilters}
-            shown={showFilters}
-          >
+          <SearchSetting iconName={Icons.material.sort}>
             <SortOptions
               options={options}
               setSortBy={ac.documentsList.setSortBy}

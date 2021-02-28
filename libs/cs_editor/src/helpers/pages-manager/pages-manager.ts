@@ -52,7 +52,7 @@ export class PagesManager {
     );
   }
 
-  private hidePage = async () => {
+  hideCurrentPage = async () => {
     const page = getEditor();
     if (page) {
       const { nodeId } = page.dataset;
@@ -76,7 +76,7 @@ export class PagesManager {
 
   render = (props: ContentEditableProps) => {
     const page = renderPage(props, {
-      hidePage: this.hidePage,
+      hidePage: this.hideCurrentPage,
       restorePage: this.restorePage,
       page: this.pages[props.nodeId],
       onFrameChange: this.onFrameChange,

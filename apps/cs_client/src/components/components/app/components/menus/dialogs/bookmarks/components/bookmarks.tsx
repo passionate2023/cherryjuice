@@ -22,9 +22,10 @@ import {
   mapSortNodesBy,
   PartialNode,
 } from '::root/components/app/components/menus/dialogs/bookmarks/components/helpers/sort';
-import { SearchInput } from '::root/components/shared-components/inputs/search-input';
+import { Search } from '::shared-components/search-input/search';
 import { modSearchDialog } from '::sass-modules';
 import { useMemo } from 'react';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 
 const options: { optionName: SortNodesBy }[] = [
   // @ts-ignore
@@ -45,30 +46,25 @@ const mapState = (state: Store) => {
     selectedIDs: state.bookmarks.selectedIDs,
     deletionMode: state.bookmarks.deletionMode,
     currentSortOptions: state.bookmarks.sortOptions,
-    showSortOptions: state.bookmarks.showSortOptions,
     showDialog: state.dialogs.showBookmarks,
     query: state.bookmarks.query,
-    isOnMd: state.root.isOnMd,
   };
 };
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-
-const Bookmarks: React.FC<Props & PropsFromRedux> = ({
+const Bookmarks: React.FC<PropsFromRedux> = ({
   selectedNode_id,
   bookmarks = [],
   nodes,
-  showSortOptions,
   currentSortOptions,
   selectedIDs,
   documentId,
   deletionMode,
   query,
   showDialog,
-  isOnMd,
 }) => {
+  const { mb, mbOrTb } = useCurrentBreakpoint();
   const bookmarkProps = useMemo(() => {
     let bookmarkProps: (BookmarkProps & PartialNode)[] = bookmarks.map(
       (node_id, i) => {
@@ -102,21 +98,17 @@ const Bookmarks: React.FC<Props & PropsFromRedux> = ({
     <DialogBody>
       <SearchHeaderContainer>
         <SearchHeaderGroup>
-          <SearchInput
+          <Search
             containerClassName={modSearchDialog.searchDialog__header__field}
-            placeHolder={'filter by node name'}
+            placeholder={'filter nodes'}
             value={query}
             onChange={ac.bookmarks.setQuery}
             onClear={ac.bookmarks.clearQuery}
-            lazyAutoFocus={!isOnMd && showDialog ? 1200 : 0}
+            lazyAutoFocus={!mbOrTb && showDialog}
             searchImpossible={!bookmarks.length}
+            style={{ elementWidth: mb ? 300 : 400, elementHeight: 50 }}
           />
-          <SearchSetting
-            iconName={Icons.material.sort}
-            hide={ac.bookmarks.toggleSortOptions}
-            show={ac.bookmarks.toggleSortOptions}
-            shown={showSortOptions}
-          >
+          <SearchSetting iconName={Icons.material.sort} testId={'sortResults'}>
             <SortOptions
               options={options}
               setSortBy={ac.bookmarks.setSortBy}

@@ -28,11 +28,11 @@
   letter-spacing: 1.25px;
   cursor: pointer;
   &:hover:not([disabled]) {
-    background-color: var(--primary-100);
+    background-color: var(--primary-085);
     color: var(--primary-020);
   }
   &:active:not([disabled]) {
-    background-color: var(--primary-090);
+    background-color: var(--primary-060);
     color: var(--primary-020);
     box-shadow: $box-shadow1;
   }

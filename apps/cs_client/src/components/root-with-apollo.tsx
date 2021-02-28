@@ -7,7 +7,7 @@ import { useApolloClient } from '::graphql/client/hooks/apollo-client';
 import { Route, Switch } from 'react-router';
 import { connect, ConnectedProps } from 'react-redux';
 import { App } from '::root/components/app/app';
-import { useOnWindowResize } from '::hooks/use-on-window-resize';
+import { useOnWindowResize } from '@cherryjuice/shared-helpers';
 import { ac, Store } from '::store/store';
 import { useRegisterHotKeys } from '::helpers/hotkeys/hooks/register-hot-keys';
 import { useConsumeToken } from '::root/hooks/consume-token';
@@ -24,21 +24,17 @@ import { documentHasUnsavedChanges } from '::root/components/app/components/menu
 import { useRouterEffect } from '::root/components/app/components/editor/hooks/router-effect/router-effect';
 import { useTasks } from '::root/hooks/tasks';
 import { CssVariables } from '::store/ducks/css-variables';
-import 'hint.css';
+import { setPopperAnchor } from '@cherryjuice/components';
+import { modApp } from '::sass-modules';
+setPopperAnchor('.' + modApp.app);
 // eslint-disable-next-line node/no-extraneous-import
-
-enablePatches();
-
-const updateBreakpointState = ({ breakpoint, callback }) => {
-  let previousState = undefined;
-  return () => {
-    const newState = window.innerWidth <= breakpoint;
-    if (previousState != newState) {
-      previousState = newState;
-      callback(newState);
-    }
-  };
+import modTheme from '@cherryjuice/shared-styles/build/themes/themes.scss';
+import modDarkTheme from '@cherryjuice/shared-styles/build/themes/dark-theme.scss';
+const themes = {
+  light: modTheme.lightTheme,
+  dark: modDarkTheme.darkTheme,
 };
+enablePatches();
 
 const mapState = (state: Store) => ({
   token: state.auth.token,
@@ -49,6 +45,7 @@ const mapState = (state: Store) => ({
   userHasUnsavedChanges: getDocumentsList(state).some(
     documentHasUnsavedChanges,
   ),
+  theme: state.root.theme,
 });
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
@@ -61,19 +58,14 @@ const Root: React.FC<PropsFromRedux> = ({
   document,
   userHasUnsavedChanges,
   online,
+  theme,
 }) => {
   const client = useApolloClient(token, userId);
   useOnWindowResize([
-    (w, h) => ac.cssVariables.set(CssVariables.vh, h),
-    w => ac.cssVariables.set(CssVariables.vw, w),
-    updateBreakpointState({
-      breakpoint: 850,
-      callback: ac.root.setIsOnMd,
-    }),
-    updateBreakpointState({
-      breakpoint: 425,
-      callback: ac.root.setIsOnMb,
-    }),
+    (w, h) => {
+      ac.cssVariables.set(CssVariables.vh, h);
+      ac.cssVariables.set(CssVariables.vw, w);
+    },
   ]);
   useRegisterHotKeys(hotKeys);
   useTrackDocumentChanges({
@@ -87,12 +79,14 @@ const Root: React.FC<PropsFromRedux> = ({
   useTasks();
   return (
     <>
-      {client && (
-        <Switch>
-          <Route path={'/auth'} component={Auth} />
-          <Route path={'(/|/document/*|/documents/*)'} component={App} />
-        </Switch>
-      )}
+      <div className={themes[theme]}>
+        {client && (
+          <Switch>
+            <Route path={'/auth'} component={Auth} />
+            <Route path={'(/|/document/*|/documents/*)'} component={App} />
+          </Switch>
+        )}
+      </div>
     </>
   );
 };

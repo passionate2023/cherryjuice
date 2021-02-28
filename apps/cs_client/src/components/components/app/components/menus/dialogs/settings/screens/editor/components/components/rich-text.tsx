@@ -2,7 +2,7 @@ import * as React from 'react';
 import { SettingsGroup } from '::root/components/app/components/menus/dialogs/settings/shared/settings-group';
 import { SettingsElement } from '::root/components/app/components/menus/dialogs/settings/shared/settings-element';
 import { ColorInput } from '@cherryjuice/components';
-import { Select } from '::root/components/shared-components/inputs/select';
+import { Select } from '::root/components/shared-components/inputs/select/select';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { availableFonts } from '::root/components/app/components/menus/dialogs/settings/screens/editor/components/components/helpers/get-fonts-list';
@@ -18,9 +18,7 @@ const mapState = (state: Store) => ({
 const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-
-const RichTextSettings: React.FC<Props & PropsFromRedux> = ({
+const RichTextSettings: React.FC<PropsFromRedux> = ({
   monospaceBg,
   richTextBg,
   richTextColor,

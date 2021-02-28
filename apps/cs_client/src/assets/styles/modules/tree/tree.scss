@@ -1,55 +1,72 @@
 @import '~@cherryjuice/shared-styles/build/vars/vars';
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
-@mixin tree-height() {
-  height: calc(
-    var(--vh) - #{3 * $tool-bar-height} - var(--formatting-bar) - var(--recent-nodes)
-  );
-  @include respond-to('md') {
-    height: calc(var(--vh) - var(--info-bar) - #{$tool-bar-height-md});
-  }
-}
+
 .tree {
   // size
-  grid-area: tree;
-  @include tree-height();
+  height: 100%;
   overflow: hidden;
-  border-right: white 3px solid;
+
   max-height: 100%;
+  background-color: var(--void);
+}
+.tree--left {
+  border-right: var(--background-100) 2px solid;
+}
+.tree--bottom {
+  border-top: var(--background-100) 2px solid;
 }
 .tree_root-list {
   margin: 0 0 0 -40px;
   flex-direction: column;
-  height: calc(100% - 44px);
+  height: calc(100% - var(--treeToolBarHeight));
 
   overflow: auto;
   background-color: var(--treeBg);
   transition: background-color 200ms linear;
 }
 .tree__resize-handle {
-  height: calc(
-    100vh - var(--docked-dialog-height) - #{3 * $tool-bar-height}
-  ) !important;
-  @include respond-to($md-up) {
-    height: calc(
-      100vh - var(--docked-dialog-height) - #{2 * $tool-bar-height}
-    ) !important;
-  }
   span > div {
     min-width: 10px;
   }
+  grid-area: tree;
 }
+.tree__resize-handle--tree-left {
+  --tree-height: calc(
+    var(--vh) - #{2 * $tool-bar-height} - var(--formatting-bar) - var(--recent-nodes)
+  );
+  @include respond-to('md') {
+    --tree-height: calc(var(--vh) - var(--info-bar));
+  }
+  height: var(--tree-height);
+  width: var(--treeWidth);
+}
+
+.tree__resize-handle--tree-bottom {
+  height: var(--treeHeight);
+  width: 100vw;
+}
+
 $bubble-width: 35px;
 .tree__resizeHandle__bubble {
+  display: none;
   @media (pointer: coarse) {
+    display: block;
     position: absolute;
-    left: -#{$bubble-width * 0.4};
-    bottom: 110px;
     opacity: 0.3;
     height: $bubble-width;
     width: $bubble-width;
     border-radius: 50%;
-    background-color: var(--background-100);
+    background-color: #6e6e6e;
     cursor: grab;
     z-index: $ZI-resize-bubble;
   }
+}
+.tree__resizeHandle__bubble--left {
+  left: -#{$bubble-width * 0.4};
+  bottom: 150px;
+}
+
+.tree__resizeHandle__bubble--bottom {
+  top: -#{$bubble-width * 0.4};
+  right: 20px;
 }

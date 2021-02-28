@@ -17,6 +17,7 @@ const input = {
   typing: 'src/helpers/typing/index.ts',
   'mutation-observer': 'src/hooks/mutation-observer.ts',
   'render-page': 'src/hooks/render-page.ts',
+  'sort-formatting-buttons': 'src/hooks/sort-formatting-buttons.ts',
   'on-mouse-event': 'src/hooks/on-mouse-events/on-mouse-event.ts',
   bridge: 'src/bridge.ts',
   editor: 'src/editor.tsx',

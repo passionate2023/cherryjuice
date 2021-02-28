@@ -5,8 +5,8 @@ import { Store } from '::store/store';
 import { VisibilityIcon } from '::root/components/app/components/editor/info-bar/components/components/visibility-icon';
 import { Timestamps } from '::root/components/app/components/editor/info-bar/components/components/timestamp';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { Icon, Icons } from '@cherryjuice/icons';
-import { Tooltip } from '@cherryjuice/components';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
+import { InfoBarIcon } from '::app/components/editor/info-bar/components/info-bar-icon/info-bar-icon';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -15,9 +15,9 @@ const mapState = (state: Store) => {
   return {
     node,
     documentId: state.document.documentId,
-    isOnMobile: state.root.isOnMd,
     online: state.root.online,
     showInfoBar: state.editor.showInfoBar,
+    showHome: state.home.show,
     documentPrivacy: document?.privacy,
     numberOfGuests: document?.guests?.length,
     selectedNode_id,
@@ -27,19 +27,18 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-
-const InfoBar: React.FC<Props & PropsFromRedux> = ({
+const InfoBar: React.FC<PropsFromRedux> = ({
   node,
   documentId,
-  isOnMobile,
   showInfoBar,
   documentPrivacy,
   selectedNode_id,
   numberOfGuests,
   online,
+  showHome,
 }) => {
-  const showBar = !isOnMobile || showInfoBar;
+  const { mbOrTb } = useCurrentBreakpoint();
+  const showBar = !mbOrTb || (showInfoBar && !showHome);
   const noSelectedDocument = !documentId;
   return showBar ? (
     <footer className={modInfoBar.infoBar}>
@@ -50,9 +49,7 @@ const InfoBar: React.FC<Props & PropsFromRedux> = ({
       </div>
       <div className={modInfoBar.infoBar__group}>
         {!online && (
-          <Tooltip label={'You are offline'}>
-            <Icon name={Icons.material['no-connection']} size={20} />
-          </Tooltip>
+          <InfoBarIcon tooltip={'You are offline'} icon={'no-connection'} />
         )}
         {!noSelectedDocument && (
           <VisibilityIcon

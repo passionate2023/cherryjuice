@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { Node } from './components/node/node';
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { Resizable } from 're-resizable';
-import { onResize, onResizeStop, onStart } from './helpers';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { NodePrivacy } from '@cherryjuice/graphql-types';
@@ -11,7 +10,7 @@ import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { ToolBar } from './components/tool-bar/tool-bar';
 import { Droppable } from '::root/components/app/components/editor/document/components/tree/components/node/_/droppable';
 import { modNode, modTree } from '::sass-modules';
-import { ContextMenuWrapper } from '::shared-components/context-menu/context-menu-wrapper';
+import { ContextMenu } from '@cherryjuice/components';
 import { useTreeContextMenuItems } from '::root/components/app/components/editor/document/components/tree/hooks/tree-context-menu-items';
 import nodeMod from '::sass-modules/tree/node.scss';
 import {
@@ -19,6 +18,13 @@ import {
   useInlineInputProvider,
 } from '::shared-components/inline-input/hooks/inline-input-provider';
 import { getEditor } from '@cherryjuice/editor';
+import { nodeOverlay } from '::app/components/editor/document/components/tree/components/node/helpers/node-overlay';
+import {
+  joinClassNames,
+  useCurrentBreakpoint,
+} from '@cherryjuice/shared-helpers';
+import { treeResizeHandler } from '::app/components/editor/document/document';
+import { treePosition } from '::store/selectors/editor/tree-position';
 export const TreeContext = createInlineInputProviderContext();
 const getParamsFromLocation = () => {
   const params = { expand: undefined };
@@ -29,25 +35,26 @@ const getParamsFromLocation = () => {
   return params;
 };
 
-type Props = Record<string, never>;
-
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
   return {
     nodes: document?.nodes,
     documentPrivacy: document?.privacy,
     treeState: document?.persistedState?.treeState,
+    selectedNode_id: document?.persistedState?.selectedNode_id,
     filteredNodes: state.document.filteredNodes,
     documentId: state.document.documentId,
     copiedNode: state.documentCache.copiedNode,
     isOwnerOfCurrentDocument: state.auth.user?.id === document.userId,
+    showTree: state.editor.showTree,
+    treePosition: treePosition(state),
   };
 };
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const Tree: React.FC<Props & PropsFromRedux> = ({
+const Tree: React.FC<PropsFromRedux> = ({
   nodes,
   documentPrivacy,
   treeState,
@@ -55,11 +62,33 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
   documentId,
   copiedNode,
   isOwnerOfCurrentDocument,
+  selectedNode_id,
+  treePosition,
 }) => {
-  useEffect(onStart, []);
+  const { mbOrTb } = useCurrentBreakpoint();
+  useEffect(() => {
+    treeResizeHandler.init(
+      document.querySelector('.' + modTree.tree__resizeHandle),
+    );
+  }, []);
+  useEffect(() => {
+    treeResizeHandler.onTreePositionChange(treePosition);
+  }, [treePosition]);
+  useEffect(() => {
+    if (selectedNode_id) {
+      const node = document
+        .querySelector('.' + modTree.tree)
+        .querySelector(`[data-node-id="${selectedNode_id}"]`);
+      if (node) {
+        nodeOverlay.setNode(node);
+        nodeOverlay.updateWidth();
+        nodeOverlay.updateLeft();
+      }
+    }
+  }, [selectedNode_id]);
 
   const params = getParamsFromLocation();
-  const hookProps = {
+  const getContext = {
     getIdOfActiveElement: target => {
       const nodeElement: HTMLElement = target.closest('.' + modNode.node);
       if (nodeElement) return nodeElement.dataset.cmiId;
@@ -96,23 +125,35 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
     rename: id => inlineInputProps.enableInput(id)(),
     isOwnerOfCurrentDocument,
   });
+  const treeLeft = treePosition === 'left';
+  const treeBottom = treePosition === 'bottom';
   return (
     <Resizable
-      enable={{ right: true }}
-      onResize={onResize}
-      onResizeStop={onResizeStop}
-      className={modTree.tree__resizeHandle}
+      enable={{
+        right: treeLeft,
+        top: treeBottom,
+      }}
+      onResize={treeResizeHandler.onResize}
+      onResizeStop={treeResizeHandler.onResizeStop}
+      className={joinClassNames([
+        modTree.tree__resizeHandle,
+        treeLeft && modTree.tree__resizeHandleTreeLeft,
+        treeBottom && modTree.tree__resizeHandleTreeBottom,
+      ])}
     >
       <ErrorBoundary>
-        <ContextMenuWrapper hookProps={hookProps} items={contextMenuItems}>
-          {({ ref, show }) => (
+        <ContextMenu getContext={getContext} items={contextMenuItems}>
+          {({ show }) => (
             <div
-              className={modTree.tree}
+              className={joinClassNames([
+                modTree.tree,
+                treeLeft && modTree.treeLeft,
+                treeBottom && modTree.treeBottom,
+              ])}
               onContextMenu={show}
-              ref={ref}
               id="tree"
             >
-              <ToolBar />
+              {!mbOrTb && <ToolBar />}
               <TreeContext.Provider value={inlineInputProps}>
                 <Droppable
                   anchorId={'0'}
@@ -153,9 +194,10 @@ const Tree: React.FC<Props & PropsFromRedux> = ({
                   )}
                 </Droppable>
               </TreeContext.Provider>
+              {mbOrTb && <ToolBar />}
             </div>
           )}
-        </ContextMenuWrapper>
+        </ContextMenu>
       </ErrorBoundary>
     </Resizable>
   );

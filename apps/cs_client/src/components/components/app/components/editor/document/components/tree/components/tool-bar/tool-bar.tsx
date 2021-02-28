@@ -1,15 +1,18 @@
 import * as React from 'react';
 import { modTreeToolBar } from '::sass-modules';
-import { Icons } from '@cherryjuice/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import { useState } from 'react';
-import { FilterNodes } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/components/filter-nodes';
-import { ButtonSquare } from '@cherryjuice/components';
-import { ContextMenuWrapperLegacy } from '::shared-components/context-menu/context-menu-wrapper-legacy';
+import { useEffect, useState } from 'react';
 import { useSortMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/sort-menu-items';
 import { useFoldMenuItems } from '::root/components/app/components/editor/document/components/tree/components/tool-bar/hooks/fold-menu-items';
+import { Search } from '::shared-components/search-input/search';
+import { NodesButtons } from './components/nodes-buttons/nodes-buttons';
+import { ContextMenu } from '@cherryjuice/components';
+import { testIds } from '::cypress/support/helpers/test-ids';
+import { TreeToolbarButton } from '::app/components/editor/document/components/tree/components/tool-bar/components/nodes-buttons/tree-toolbar-buton/tree-toolbar-button';
+import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
+import { treePosition } from '::store/selectors/editor/tree-position';
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -22,6 +25,8 @@ const mapState = (state: Store) => {
     documentId: document?.id,
     showNodePath: state.editor.showNodePath,
     selectedNode_id,
+    filter: state.document.nodesFilter,
+    treePosition: treePosition(state),
   };
 };
 const mapDispatch = {};
@@ -34,11 +39,10 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
   documentId,
   showNodePath,
   selectedNode_id,
+  filter,
+  treePosition,
 }) => {
-  const [CMShown, setCMShown] = useState(false);
-  const hide = () => setCMShown(false);
-  const show = () => setCMShown(true);
-
+  const { mbOrTb } = useCurrentBreakpoint();
   const foldMenuItems = useFoldMenuItems({
     documentId,
     node_id: selectedNode_id,
@@ -47,31 +51,87 @@ const ToolBar: React.FC<Props & PropsFromRedux> = ({
     documentId,
     node_id: selectedNode_id,
   });
-
+  useEffect(() => {
+    const parent = document.querySelector('.' + modTreeToolBar.treeToolBar);
+    if (filter) {
+      parent.classList.add(modTreeToolBar.treeToolBarActive);
+    } else parent.classList.remove(modTreeToolBar.treeToolBarActive);
+  }, [filter]);
+  const [inputShown, setInputShown] = useState(false);
   return (
     <div className={modTreeToolBar.treeToolBar}>
       <div className={modTreeToolBar.treeToolBar__controls}>
-        <FilterNodes />
-        <ContextMenuWrapperLegacy
-          shown={CMShown}
-          hide={hide}
-          show={show}
-          items={[
-            ...foldMenuItems,
-            ...sortMenuItems,
-            {
-              name: 'show node path',
-              onClick: ac.editor.toggleNodePath,
-              active: showNodePath,
-              hideOnClick: false,
-            },
-          ]}
-        >
-          <ButtonSquare
-            iconName={Icons.material['three-dots-vertical']}
-            className={modTreeToolBar.tree_focusButton}
-          />
-        </ContextMenuWrapperLegacy>
+        <Search
+          providedValue={filter}
+          onChange={ac.document.setNodesFilter}
+          placeholder={'filter nodes'}
+          hideableInput={'manual'}
+          style={{
+            elementHeight: mbOrTb ? 36 : 30,
+            elementWidth: '100%',
+            buttonBc: 'var(--surface-100)',
+            buttonHoverBc: 'var(--primary-085)',
+          }}
+          onInputShown={setInputShown}
+          tooltip={'filter nodes'}
+        />
+        {!inputShown && (
+          <>
+            <NodesButtons />
+            <ContextMenu
+              getContext={{
+                getIdOfActiveElement: () => testIds.tree__threeDots,
+                getActiveElement: () =>
+                  document.querySelector(
+                    `[data-testid="${testIds.tree__threeDots}"]`,
+                  ),
+              }}
+              items={[
+                ...foldMenuItems,
+                ...sortMenuItems,
+                {
+                  name: 'show node path',
+                  onClick: ac.editor.toggleNodePath,
+                  active: showNodePath,
+                  hideOnClick: false,
+                },
+                mbOrTb && {
+                  name: 'tree position',
+                  onClick: () => undefined,
+                  items: [
+                    {
+                      name: 'left',
+                      onClick: () => ac.editor.setTreePosition('left'),
+                      active: treePosition === 'left',
+                      hideOnClick: false,
+                    },
+                    {
+                      name: 'bottom',
+                      onClick: () => ac.editor.setTreePosition('bottom'),
+                      active: treePosition === 'bottom',
+                      hideOnClick: false,
+                    },
+                  ],
+                },
+              ].filter(Boolean)}
+              positionPreferences={{
+                positionX: 'rl',
+                positionY: 'tt',
+                offsetX: 3,
+                offsetY: 0,
+              }}
+            >
+              {({ show }) => (
+                <TreeToolbarButton
+                  icon={'three-dots-vertical'}
+                  onClick={show}
+                  testId={testIds.tree__threeDots}
+                  tooltip={'More options'}
+                />
+              )}
+            </ContextMenu>
+          </>
+        )}
       </div>
     </div>
   );

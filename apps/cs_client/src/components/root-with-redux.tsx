@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { store } from '::store/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
-import modTheme from '@cherryjuice/shared-styles/build/themes/themes.scss';
 import { RootWithApollo } from '::root/root-with-apollo';
 
 const RootWithRedux: React.FC = () => {
@@ -16,9 +15,7 @@ const RootWithRedux: React.FC = () => {
       {loadedEpics && (
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistStore(store)}>
-            <div className={modTheme.lightTheme}>
-              <RootWithApollo />
-            </div>
+            <RootWithApollo />
           </PersistGate>
         </Provider>
       )}

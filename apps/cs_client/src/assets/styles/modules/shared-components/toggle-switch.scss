@@ -1,6 +1,6 @@
-$widthRatio: 2.6;
-$circleRatio: 1.4;
-$pathHeight: 12px;
+$widthRatio: 2;
+$circleRatio: 1.2;
+$pathHeight: 15px;
 $pathWidth: #{$pathHeight * $widthRatio};
 $circleRadius: #{$pathHeight * $circleRatio};
 $halfPathHeight: #{$pathHeight * 0.5};
@@ -26,7 +26,7 @@ $circleHOffset: #{$pathHeight * $widthRatio - $pathHeight * $circleRatio * 0.9};
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--surface-010);
+  background-color: var(--surface-090);
   -webkit-transition: 0.4s;
   transition: 0.4s;
   border-radius: 15px;
@@ -38,14 +38,14 @@ $circleHOffset: #{$pathHeight * $widthRatio - $pathHeight * $circleRatio * 0.9};
   content: '';
   height: $circleRadius;
   width: $circleRadius;
-  background-color: var(--on-surface);
+  background-color: var(--on-surface-050);
   transition: 0.4s;
   border-radius: 50%;
   bottom: $circleVOffset;
 }
 
 input:checked + .slider {
-  background-color: var(--primary-090);
+  background-color: var(--primary-060);
 }
 
 input:checked + .slider:before {

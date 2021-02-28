@@ -11,10 +11,11 @@
     "build"
   ],
   "scripts": {
-    "dev": "rollup -c  -w --environment TSC_NONPOLLING_WATCHER:true,mode:ts2_es",
+    "dev:shared-helpers": "rollup -c  -w --environment TSC_NONPOLLING_WATCHER:true,mode:ts_es,clean:false",
     "build": "rollup -c --environment mode:ts2_es",
     "test": "exit 0",
     "lint": "eslint ./**",
+    "types:shared-helpers": "tsc -w -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
     "generate-named-inputs": "node ../../scripts/generate-named-inputs.js"
   },
   "dependencies": {},
