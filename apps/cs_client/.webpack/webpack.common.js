@@ -5,7 +5,7 @@ const paths = require('./paths');
 const rules = require('./rules');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-
+const CopyPlugin = require('copy-webpack-plugin');
 module.exports = {
   entry: {
     index: paths.index,
@@ -45,5 +45,6 @@ module.exports = {
       template: paths.template,
       meta: { 'build-date': new Date().toUTCString() },
     }),
+    new CopyPlugin([{ from: paths.icons, to: paths.iconsDist }]),
   ].filter(Boolean),
 };

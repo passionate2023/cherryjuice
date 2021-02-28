@@ -5,6 +5,8 @@ module.exports = {
   dist: path.resolve(__dirname, '../dist'),
   index: path.resolve(__dirname, '../src/index.tsx'),
   template: path.resolve(__dirname, '../src/assets/index.html'),
+  iconsDist: path.resolve(__dirname, '../dist/icons/'),
+  icons: path.resolve(__dirname, '../src/assets/icons'),
   serviceWorker: path.resolve(
     __dirname,
     '../src/service-worker/service-worker.ts',
