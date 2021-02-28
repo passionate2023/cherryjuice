@@ -31,12 +31,7 @@
       background-color: var(--surface-090);
     }
   }
-  svg {
-    margin-top: -2px;
-  }
-  span {
-    margin-top: -4px;
-  }
+
   overflow: hidden;
   white-space: nowrap;
   @include type-e();
