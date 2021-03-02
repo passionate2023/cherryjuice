@@ -4,12 +4,11 @@ import * as React from 'react';
 import { Void } from '::root/components/shared-components/react/void';
 import { connect, ConnectedProps } from 'react-redux';
 import { Store } from '::store/store';
-import { getCurrentDocument } from '::store/selectors/cache/document/document';
-import mod from './editor.scss';
 import { LinearProgress } from '::shared-components/loading-indicator/linear-progress';
 import { useComponentIsReady } from '::root/hooks/is-ready';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
 import { treePosition } from '::store/selectors/editor/tree-position';
+import mod from './editor.scss';
 const Document = React.lazy(() =>
   import('::root/components/app/components/editor/document/document'),
 );
@@ -20,7 +19,6 @@ const InfoBar = React.lazy(() =>
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
   docking: state.root.docking,
-  document: getCurrentDocument(state),
   fetchDocumentInProgress:
     state.document.asyncOperations.fetch === 'in-progress',
   saveInProgress: state.document.asyncOperations.save === 'in-progress',
@@ -30,7 +28,6 @@ const connector = connect(mapState);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const Editor: React.FC<PropsFromRedux> = ({
-  document,
   documentId,
   docking,
   fetchDocumentInProgress,
@@ -46,21 +43,17 @@ const Editor: React.FC<PropsFromRedux> = ({
       ])}
     >
       <LinearProgress loading={fetchDocumentInProgress || saveInProgress} />
-      {document?.nodes && document.nodes[0] && (
-        <>
-          {!documentId && location.pathname === '/' ? (
-            <></>
-          ) : (
-            <Route
-              path={`/document/:file_id?/`}
-              render={() => (
-                <Suspense fallback={<Void />}>
-                  <Document />
-                </Suspense>
-              )}
-            />
+      {!documentId && location.pathname === '/' ? (
+        <></>
+      ) : (
+        <Route
+          path={`/document/:file_id?/`}
+          render={() => (
+            <Suspense fallback={<Void />}>
+              <Document />
+            </Suspense>
           )}
-        </>
+        />
       )}
       <Suspense fallback={<Void />}>{!docking && <InfoBar />}</Suspense>
     </div>

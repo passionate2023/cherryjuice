@@ -46,7 +46,7 @@ export const initBridge = () => {
     documentId,
   }): string[] => {
     const document = getDocuments(store.getState())[documentId];
-    return document.nodes[node_id].image.map(image => image.id);
+    return document ? document.nodes[node_id].image.map(image => image.id) : [];
   };
   bridge.current.onPasteErrorHandler = error => {
     ac.dialogs.setAlert({

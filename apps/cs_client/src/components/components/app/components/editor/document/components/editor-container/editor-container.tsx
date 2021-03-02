@@ -6,14 +6,9 @@ import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-a
 import { ErrorBoundary } from '::root/components/shared-components/react/error-boundary';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { useEffect } from 'react';
-import { QFullNode } from '::store/ducks/document-cache/document-cache';
 import { OfflineBanner } from '::root/components/app/components/editor/document/components/editor-container/components/offline-banner';
 import { ContentEditableProps, Editor } from '@cherryjuice/editor';
 import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
-
-type Props = {
-  node: QFullNode;
-};
 
 const mapState = (state: Store) => {
   const document = getCurrentDocument(state);
@@ -29,12 +24,13 @@ const mapState = (state: Store) => {
     scrollPosition: document
       ? document.persistedState.scrollPositions[node_id]
       : undefined,
+    node: document?.nodes && document?.nodes[node_id],
   };
 };
 const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
-const EditorContainer: React.FC<Props & PropsFromRedux> = ({
+const EditorContainer: React.FC<PropsFromRedux> = ({
   contentEditable,
   fetchDocumentInProgress,
   fetchNodeStarted,

@@ -1,0 +1,11 @@
+.root-list-skeleton {
+  box-sizing: border-box;
+  padding: 20px;
+  padding-left: 20px;
+  width: 100%;
+  height: calc(100% - var(--treeToolBarHeight));
+  svg {
+    opacity: 0.3;
+  }
+  background-color: var(--treeBg);
+}

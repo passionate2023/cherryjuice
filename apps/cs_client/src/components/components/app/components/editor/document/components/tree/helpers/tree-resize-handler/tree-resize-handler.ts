@@ -39,8 +39,7 @@ export class TreeResizeHandler {
   };
   init = (treeResizeHandler: HTMLDivElement) => {
     this.treeResizeHandle = treeResizeHandler;
-    nodeOverlay.init();
-    nodeOverlay.updateWidth();
+
     this.updateCssVariable();
     const treeSize = localStorage.getItem(treeSizeLocalStorageKey);
     if (treeSize) {
