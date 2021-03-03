@@ -9,7 +9,8 @@
         "loose": false,
         "transform": {
             "decoratorMetadata": true
-        }
+        },
+	"keepClassNames": true
     },
     "module": {
         "type": "commonjs",
@@ -17,5 +18,6 @@
         "strictMode": true,
         "lazy": false,
         "noInterop": false
+	
     }
 }

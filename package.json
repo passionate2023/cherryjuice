@@ -10,6 +10,7 @@
   "scripts": {
     "dev:client": "yarn workspace @cherryjuice/react-client  run dev",
     "dev:server": "yarn workspace @cherryjuice/nest-server  run dev",
+    "migration:run": "yarn workspace @cherryjuice/nest-server  run typeorm:migration:run",
     "build:lib0:1": "yarn workspace @cherryjuice/rollup-plugin-svg run build",
     "build:lib:1": "yarn workspace @cherryjuice/graphql-types run build",
     "build:lib:2": "yarn workspace @cherryjuice/ahtml-to-html run build",
