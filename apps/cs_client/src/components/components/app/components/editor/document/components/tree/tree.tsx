@@ -17,6 +17,7 @@ import { getEditor } from '@cherryjuice/editor';
 import {
   joinClassNames,
   useCurrentBreakpoint,
+  useLoader,
 } from '@cherryjuice/shared-helpers';
 import { treeResizeHandler } from '::app/components/editor/document/document';
 import { treePosition } from '::store/selectors/editor/tree-position';
@@ -95,6 +96,11 @@ const Tree: React.FC<PropsFromRedux> = ({
   });
   const treeLeft = treePosition === 'left';
   const treeBottom = treePosition === 'bottom';
+  const showLoader = useLoader({
+    waitBeforeShowing: 1000,
+    minimumLoadingDuration: 1000,
+    loading: !ready,
+  });
   return (
     <Resizable
       enable={{
@@ -123,7 +129,7 @@ const Tree: React.FC<PropsFromRedux> = ({
             >
               {!mbOrTb && <ToolBar />}
               <TreeContext.Provider value={inlineInputProps}>
-                {ready ? <RootList /> : <RootListSkeleton />}
+                {showLoader ? <RootListSkeleton /> : <RootList />}
               </TreeContext.Provider>
               {mbOrTb && <ToolBar />}
             </div>

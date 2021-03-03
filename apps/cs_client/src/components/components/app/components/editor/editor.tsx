@@ -19,8 +19,6 @@ const InfoBar = React.lazy(() =>
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,
   docking: state.root.docking,
-  fetchDocumentInProgress:
-    state.document.asyncOperations.fetch === 'in-progress',
   saveInProgress: state.document.asyncOperations.save === 'in-progress',
   treePosition: treePosition(state),
 });
@@ -30,7 +28,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 const Editor: React.FC<PropsFromRedux> = ({
   documentId,
   docking,
-  fetchDocumentInProgress,
   saveInProgress,
   treePosition,
 }) => {
@@ -42,7 +39,7 @@ const Editor: React.FC<PropsFromRedux> = ({
         treePosition === 'bottom' && mod.editorTreeBottom,
       ])}
     >
-      <LinearProgress loading={fetchDocumentInProgress || saveInProgress} />
+      <LinearProgress loading={saveInProgress} />
       {!documentId && location.pathname === '/' ? (
         <></>
       ) : (

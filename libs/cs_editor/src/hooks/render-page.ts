@@ -7,9 +7,9 @@ export const useRenderPage = (
   loading: boolean,
 ) => {
   useEffect(() => {
-    if (loading) {
-      pagesManager.hideCurrentPage();
-    } else if (props.nodeId) {
+    if (loading || !props.nodeId) {
+      pagesManager.hideCurrentPage().catch(() => undefined);
+    } else if (props.html) {
       pagesManager.render(props);
     }
   }, [loading, props.html, props.nodeId, props.images, props.editable]);

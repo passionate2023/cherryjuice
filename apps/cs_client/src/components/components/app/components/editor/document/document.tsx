@@ -10,7 +10,6 @@ import { NodePath } from '::root/components/app/components/editor/document/compo
 import { Void } from '::shared-components/react/void';
 import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 import { TreeResizeHandler } from '::app/components/editor/document/components/tree/helpers/tree-resize-handler/tree-resize-handler';
-import { Route } from 'react-router-dom';
 const ToolBar = React.lazy(() =>
   import('::app/components/editor/editor-toolbar/editor-toolbar'),
 );
@@ -51,11 +50,7 @@ const Document: React.FC<PropsFromRedux> = ({
         <Tree />
       </ErrorBoundary>
       <ErrorBoundary>
-        <Route
-          exact
-          path={`/document/:file_id/node/:node_id/`}
-          component={EditorContainer}
-        />
+        <EditorContainer />
       </ErrorBoundary>
     </>
   );

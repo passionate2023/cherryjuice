@@ -4,8 +4,8 @@
   padding-left: 20px;
   width: 100%;
   height: calc(100% - var(--treeToolBarHeight));
+  background-color: var(--treeBg);
   svg {
     opacity: 0.3;
   }
-  background-color: var(--treeBg);
 }

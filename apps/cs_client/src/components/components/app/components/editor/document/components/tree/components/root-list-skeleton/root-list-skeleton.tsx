@@ -1,13 +1,17 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
 import mod from './root-list-skeleton.scss';
-import { useLoader } from '@cherryjuice/shared-helpers';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export const RootListSkeleton = () => {
-  const show = useLoader();
   return (
-    <div className={mod.rootListSkeleton}>
-      {show && (
+    <AnimatePresence>
+      <motion.div
+        className={mod.rootListSkeleton}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
         <ContentLoader
           speed={2}
           width={177}
@@ -18,7 +22,7 @@ export const RootListSkeleton = () => {
         >
           <path d="M 0 0 h 177 v 20 H 0 z M 0 38 h 142 v 20 H 0 z M 0 76 h 155 v 20 H 0 z M 0 114 h 92 v 20 H 0 z M 0 152 h 109 v 20 H 0 z M 0 190 h 84 v 20 H 0 z M 0 228 h 109 v 20 H 0 z" />
         </ContentLoader>
-      )}
-    </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
