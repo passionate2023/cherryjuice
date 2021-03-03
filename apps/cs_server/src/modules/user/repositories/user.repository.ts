@@ -9,7 +9,6 @@ import {
 import { SignInCredentials } from '../dto/sign-in-credentials.dto';
 import { DeleteAccountDTO, OauthJson } from '../user.service';
 import { UpdateUserProfileIt } from '../input-types/update-user-profile.it';
-import { classToClass } from 'class-transformer';
 import { OauthSignUpCredentials } from '../dto/oauth-sign-up-credentials.dto';
 import {
   EmailChangeTp,
@@ -54,8 +53,7 @@ class UserRepository extends Repository<User> {
     return user;
   }
   async getUser(emailOrUsername?: string, id?: string): Promise<User> {
-    const user = await this._getUser(emailOrUsername, id);
-    return classToClass(user);
+    return await this._getUser(emailOrUsername, id);
   }
   async findOneByThirdPartyId(
     thirdPartyId: string,
@@ -72,7 +70,7 @@ class UserRepository extends Repository<User> {
         },
       ],
     });
-    return classToClass(user);
+    return user;
   }
 
   async signUp({
@@ -97,7 +95,7 @@ class UserRepository extends Repository<User> {
       }
     }
 
-    return classToClass(user);
+    return user;
   }
   async validateUserPassword({
     password,
@@ -109,7 +107,7 @@ class UserRepository extends Repository<User> {
       throw new UnauthorizedException(`Please use ${user.thirdParty} to login`);
 
     await user.validatePassword(password);
-    return classToClass(user);
+    return user;
   }
 
   async registerOAuthUser(
@@ -149,7 +147,7 @@ class UserRepository extends Repository<User> {
       }
     }
 
-    return classToClass(user);
+    return user;
   }
 
   private async updateUser(
@@ -219,7 +217,7 @@ class UserRepository extends Repository<User> {
     await user.setPassword(input.password);
     delete input.password;
     await this.updateUser(user, input);
-    return classToClass(user);
+    return user;
   }
 
   async deleteAccount({

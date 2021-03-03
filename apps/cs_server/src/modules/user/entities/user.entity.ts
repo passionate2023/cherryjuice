@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
-import { Exclude } from 'class-transformer';
 import { UnauthorizedException } from '@nestjs/common';
 import { AfterLoad } from 'typeorm';
 import { UserToken } from './user-token.entity';
@@ -59,19 +58,15 @@ class User extends BaseEntity {
   @Column()
   firstName: string;
 
-  @Exclude()
   @Column({ name: 'password' })
   private passwordHash: string;
 
-  @Exclude()
   @Column()
   private salt: string;
 
-  @Exclude()
   @Column({ nullable: true })
   private thirdPartyId: string;
 
-  @Exclude()
   @Column({ nullable: true })
   thirdParty: string;
 

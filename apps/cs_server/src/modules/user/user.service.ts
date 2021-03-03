@@ -88,6 +88,10 @@ export class UserService {
   private packageAuthUser(user: User): AuthUser {
     const settings = user.settings;
     delete user.settings;
+    delete user['passwordHash'];
+    delete user['salt'];
+    delete user['thirdPartyId'];
+    delete user['thirdParty'];
     return {
       token: this.jwtService.sign(createJWTPayload.authn(user)),
       user,
