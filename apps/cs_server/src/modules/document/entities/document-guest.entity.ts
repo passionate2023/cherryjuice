@@ -14,8 +14,12 @@ import {
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { AddGuestDTO } from '../repositories/document-guest.repository';
-
+export type AddGuestDTO = {
+  userId: string;
+  documentId: string;
+  accessLevel: AccessLevel;
+  email: string;
+};
 export enum AccessLevel {
   READER = 1,
   WRITER,

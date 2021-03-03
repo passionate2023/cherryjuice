@@ -3,7 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const StartServerPlugin = require('start-server-webpack-plugin');
+const { RunScriptWebpackPlugin } = require('run-script-webpack-plugin');
 
 module.exports = {
   entry: ['webpack/hot/poll?100', './src/main.ts'],
@@ -21,8 +21,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: ['ts-loader'],
+        test: /\.[tj]sx?$/,
+        use: ['swc-loader'],
         exclude: /node_modules/,
       },
     ],
@@ -37,6 +37,6 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['dist'] }),
     new webpack.HotModuleReplacementPlugin(),
-    new StartServerPlugin({ name: 'main.js' }),
+    new RunScriptWebpackPlugin({ name: 'main.js' }),
   ],
 };

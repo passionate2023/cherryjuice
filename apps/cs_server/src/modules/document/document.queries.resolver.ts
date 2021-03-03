@@ -28,7 +28,8 @@ export class DocumentQueriesResolver {
 
   @Query(() => [Document], { nullable: 'items' })
   async document(
-    @Args('file_id', { nullable: true }) file_id: string | undefined,
+    @Args('file_id', { nullable: true, type: () => String })
+    file_id: string | undefined,
     @GetUserGql() user: User,
   ): Promise<Document[]> {
     if (!file_id && !user) throw new UnauthorizedException();

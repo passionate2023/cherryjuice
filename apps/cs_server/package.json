@@ -12,7 +12,8 @@
   "private": true,
   "scripts": {
     "dev": "cross-env TS_NODE_TRANSPILE_ONLY=true TSC_NONPOLLING_WATCHER=true nest start --watch ",
-    "dev:webpack": "nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
+    "dev:webpack": "rimraf dist && nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
+    "dev:swc": "./node_modules/.bin/swc.cmd src -s -d ./dist",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "test": "jest",
@@ -88,7 +89,11 @@
     "webpack-merge": "^4.2.2",
     "webpack-node-externals": "^1.7.2",
     "chalk": "^4.1.0",
-    "graphql-upload": "^11.0.0"
+    "graphql-upload": "^11.0.0",
+	 "@swc/core":"1.2.49",
+    "@swc/cli":"0.1.35",
+    "swc-loader":"0.1.12",
+    "run-script-webpack-plugin": "^0.0.8"
   },
   "optionalDependencies": {
     "@types/jest": "^25.1.0",
