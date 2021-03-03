@@ -90,9 +90,9 @@
     "webpack-node-externals": "^1.7.2",
     "chalk": "^4.1.0",
     "graphql-upload": "^11.0.0",
-	 "@swc/core":"1.2.49",
-    "@swc/cli":"0.1.35",
-    "swc-loader":"0.1.12",
+    "@swc/core": "1.2.49",
+    "@swc/cli": "0.1.35",
+    "swc-loader": "0.1.12",
     "run-script-webpack-plugin": "^0.0.8"
   },
   "optionalDependencies": {

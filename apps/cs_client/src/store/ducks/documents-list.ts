@@ -17,7 +17,6 @@ const ap = createActionPrefixer('document-list');
 const ac = {
   ...{
     fetchDocuments: _(ap('fetch-documents')),
-    fetchDocumentsPending: _(ap('fetch-documents-pending')),
     fetchDocumentsInProgress: _(ap('fetch-documents-in-progress')),
     fetchDocumentsFulfilled: _(
       ap('fetch-documents-fulfilled'),
@@ -60,7 +59,9 @@ const ac = {
 type State = {
   focusedDocumentId?: string;
   query?: string;
-  fetchDocuments: AsyncOperation;
+  asyncOperations: {
+    fetchDocuments: AsyncOperation;
+  };
   deleteDocuments: AsyncOperation;
   selectedIDs: string[];
   deletionMode: boolean;
@@ -69,7 +70,9 @@ type State = {
 };
 
 const initialState: State = {
-  fetchDocuments: 'idle',
+  asyncOperations: {
+    fetchDocuments: 'idle',
+  },
   deleteDocuments: 'idle',
   selectedIDs: [],
   deletionMode: false,
@@ -176,6 +179,36 @@ const reducer = createReducer(initialState, _ => [
     _(ac.toggleFilters, state => ({
       ...state,
       showFilters: !state.showFilters,
+    })),
+  ],
+  ...[
+    _(ac.fetchDocuments, state => ({
+      ...state,
+      asyncOperations: {
+        ...state.asyncOperations,
+        fetchDocuments: 'pending',
+      },
+    })),
+    _(ac.fetchDocumentsInProgress, state => ({
+      ...state,
+      asyncOperations: {
+        ...state.asyncOperations,
+        fetchDocuments: 'in-progress',
+      },
+    })),
+    _(ac.fetchDocumentsFulfilled, state => ({
+      ...state,
+      asyncOperations: {
+        ...state.asyncOperations,
+        fetchDocuments: 'idle',
+      },
+    })),
+    _(ac.fetchDocumentsFailed, state => ({
+      ...state,
+      asyncOperations: {
+        ...state.asyncOperations,
+        fetchDocuments: 'idle',
+      },
     })),
   ],
 ]);

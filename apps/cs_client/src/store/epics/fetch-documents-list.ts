@@ -45,7 +45,11 @@ const fetchDocumentsListEpic = (action$: Observable<Actions>) => {
       ac_.documentsList.deleteDocumentsFulfilled,
       ac_.document.saveFulfilled,
     ]),
-    filter(() => store.getState().documentsList.fetchDocuments === 'idle'),
+    filter(
+      () =>
+        store.getState().documentsList.asyncOperations.fetchDocuments ===
+        'pending',
+    ),
     switchMap(() => {
       const request = gqlQuery$(DOCUMENTS_LIST()).pipe(
         flatMap(documents => {

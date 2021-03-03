@@ -6,7 +6,6 @@ import { ac, Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { useRowContextMenuItems } from '::app/components/home/components/folder/hooks/row-context-menu-items';
 import { useSortDocuments } from '::app/components/home/components/folder/hooks/sort-documents';
-import { LinearProgress } from '::shared-components/loading-indicator/linear-progress';
 import { Portal } from '@cherryjuice/components';
 import { modHome } from '::app/components/home/home';
 import { PinnedDocuments } from '::app/components/home/components/folder/components/sections/pinned/pinned-documents';
@@ -15,7 +14,8 @@ import {
   useInlineInputProvider,
 } from '::shared-components/inline-input/hooks/inline-input-provider';
 import { getDocuments } from '::store/selectors/cache/document/document';
-import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
+import { useCurrentBreakpoint, useLoader } from '@cherryjuice/shared-helpers';
+import { DocumentsListSkeleton } from '::app/components/home/components/folder/components/folder-skeleton/documents-list-skeleton';
 
 export const FolderContext = createInlineInputProviderContext();
 
@@ -33,7 +33,7 @@ const mapState = (state: Store) => ({
   sortDirection: state.home.sortDirection,
   query: state.home.query,
   folders: state.home.folders,
-  loading: state.documentsList.fetchDocuments === 'in-progress',
+  loading: state.documentsList.asyncOperations.fetchDocuments === 'in-progress',
   showSidebar: state.home.showSidebar,
 });
 const mapDispatch = {};
@@ -86,6 +86,11 @@ const Folder: React.FC<PropsFromRedux> = ({
     isOwnerOfActiveDocument,
   });
   const folderName = folders[currentFolder.id]?.name;
+  const showSkeleton = useLoader({
+    waitBeforeShowing: 1000,
+    minimumLoadingDuration: 1000,
+    loading: loading && !(pinned.length || rows.length),
+  });
   return (
     <FolderContext.Provider value={inlineInputProps}>
       <div className={mod.folder}>
@@ -93,8 +98,9 @@ const Folder: React.FC<PropsFromRedux> = ({
           <Header folderName={folderName} query={query} mbOrTb={mbOrTb} />
         </Portal>
         <div className={mod.folder__tables}>
-          <LinearProgress loading={loading} />
-          {!loading && (
+          {showSkeleton ? (
+            <DocumentsListSkeleton />
+          ) : (
             <>
               {pinned.length > 0 && (
                 <PinnedDocuments rows={pinned} cmItems={cmItems} />
