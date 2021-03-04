@@ -14,12 +14,13 @@ import { RESET_PASSWORD } from '::graphql/mutations/user/reset-password';
 import { router } from '::root/router/router';
 import { VERIFY_TOKEN } from '::graphql/mutations/user/verify-token';
 import { ReturnToLoginPage } from '::root/components/auth/components/signup-form';
-import { ac } from '::store/store';
+import { ac, Store } from '::store/store';
 import { useMutation } from '::hooks/graphql/use-mutation';
 import { connect, ConnectedProps } from 'react-redux';
-import { Store } from '::store/store';
 import { SubmitButton } from '::auth/components/shared-components/submit-buttton/submit-button';
 import { authFormFocusableElements } from '::auth/components/login-form/login-form';
+import { properErrorMessage } from '::auth/hooks/proper-error-message';
+import { AlertType } from '::types/react';
 
 const idPrefix = 'reset--password';
 const inputs: ValidatedTextInputProps[] = [
@@ -53,7 +54,7 @@ export const getToken = () => {
   return token ? token[1] : '';
 };
 
-const useVerifyToken = (setError, token: string) => {
+const useVerifyToken = (token: string) => {
   const [valid, setValid] = useState<boolean>();
   useEffect(() => {
     if (token) {
@@ -64,7 +65,10 @@ const useVerifyToken = (setError, token: string) => {
         })
         .catch(error => {
           setValid(false);
-          setError({ ...error, persistent: true });
+          ac.auth.setAlert({
+            title: properErrorMessage(error),
+            type: AlertType.Error,
+          });
         });
     } else {
       router.goto.signIn();
@@ -80,12 +84,11 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-const ResetPassword: React.FC<Props & PropsFromRedux> = ({ token }) => {
+const ResetPassword: React.FC<PropsFromRedux> = ({ token }) => {
   const password = useStatefulValidatedInput(inputs[0]);
   const passwordConfirmation = useStatefulValidatedInput(inputs[1]);
   const formRef = useRef<HTMLFormElement>();
-  const valid = useVerifyToken(ac.auth.setAuthenticationFailed, token);
+  const valid = useVerifyToken(token);
   const validPassword =
     valid && password.valid && password.value === passwordConfirmation.value;
   const [resetPassword, resetPasswordState] = useMutation({
@@ -100,7 +103,11 @@ const ResetPassword: React.FC<Props & PropsFromRedux> = ({ token }) => {
       router.goto.signIn();
       ac.auth.clearResetPasswordToken();
     },
-    onFailure: ac.auth.setAuthenticationFailed,
+    onFailure: error =>
+      ac.auth.setAlert({
+        title: properErrorMessage(error),
+        type: AlertType.Error,
+      }),
   });
   const submit = (e?: any) => {
     if (formRef.current.checkValidity()) {

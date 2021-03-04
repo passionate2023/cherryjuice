@@ -9,9 +9,9 @@ import {
   User,
 } from '@cherryjuice/graphql-types';
 import { AsyncOperation } from './document';
-import { AsyncError } from '::root/components/auth/hooks/proper-error-message';
 import { rootActionCreators as rac } from '::store/ducks/root';
 import { cloneObj } from '@cherryjuice/shared-helpers';
+import { TAlert } from '::types/react';
 
 const ap = createActionPrefixer('auth');
 
@@ -43,10 +43,7 @@ const ac = {
   },
   ...{
     setAuthenticationInProgress: _(ap('set-authentication-in-progress')),
-    setAuthenticationFailed: _(
-      ap('set-authentication-failed'),
-      _ => (alert: AsyncError) => _(alert),
-    ),
+    setAlert: _(ap('set-alert'), _ => (alert: TAlert) => _(alert)),
     setAuthenticationSucceeded: _(
       ap('set-authentication-succeeded'),
       _ => (session: AuthUser) => _(session),
@@ -60,7 +57,7 @@ type State = {
   user: User;
   secrets: Secrets;
   storageType: StorageType;
-  alert: AsyncError;
+  alert: TAlert;
   ongoingOperation: AsyncOperation;
   resetPasswordToken: string;
 };
@@ -94,7 +91,7 @@ const reducer = createReducer(initialState, _ => [
         ongoingOperation: 'idle',
       };
     }),
-    _(ac.setAuthenticationFailed, (state, { payload }) => ({
+    _(ac.setAlert, (state, { payload }) => ({
       ...state,
       alert: payload,
       ongoingOperation: 'idle',

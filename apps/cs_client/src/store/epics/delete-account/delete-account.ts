@@ -1,7 +1,7 @@
 import { filter, map, switchMap } from 'rxjs/operators';
 import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
-import { store, ac_ } from '../../store';
+import { ac_, store } from '../../store';
 import { Actions } from '../../actions.types';
 import { gqlMutation$ } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
@@ -10,6 +10,7 @@ import { AsyncOperation } from '../../ducks/document';
 import { USER_MUTATION } from '::graphql/mutations';
 import { properErrorMessage } from '::root/components/auth/hooks/proper-error-message';
 import { alerts } from '::helpers/texts/alerts';
+import { AlertType } from '::types/react';
 
 const deleteAccount = (currentPassword: string) =>
   gqlMutation$({
@@ -51,7 +52,14 @@ const deleteAccountEpic = (action$: Observable<Actions>) => {
                 title: 'Could not perform the operation',
                 descriptionFactory: properErrorMessage,
               },
-              actionCreators: [ac_.auth.setAuthenticationFailed],
+              actionCreators: [
+                error =>
+                  ac_.auth.setAlert({
+                    type: AlertType.Error,
+                    error,
+                    title: properErrorMessage(error),
+                  }),
+              ],
             }),
           );
         }),

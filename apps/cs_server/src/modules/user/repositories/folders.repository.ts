@@ -1,11 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Folder } from '../entities/folder/folder.entity';
-import { UnauthorizedException } from '@nestjs/common';
 import { UpdateFolderIt } from '../input-types/update-folder.it';
+import { FolderNotOwnedException } from '../exceptions/folder-not-owned.exception';
 
 const validateAllFoldersBelongToUser = (userId: string, folders: Folder[]) => {
-  if (!folders.every(folder => folder.userId === userId))
-    throw new UnauthorizedException('folder does not belong to the user');
+  const notOwnFolder = folders.find(folder => folder.userId === userId);
+  if (!notOwnFolder) throw new FolderNotOwnedException(notOwnFolder.name);
 };
 
 export type FindUserFoldersDTO = { userId: string };

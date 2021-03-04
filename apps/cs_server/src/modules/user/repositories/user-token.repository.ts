@@ -5,7 +5,7 @@ import {
   UserTokenType,
 } from '../entities/user-token.entity';
 import { PasswordResetTp } from '../interfaces/jwt-payload.interface';
-import { NotFoundException } from '@nestjs/common';
+import { InvalidTokenException } from '../exceptions/invalid-token.exception';
 
 type CreateTokenDTO = {
   userId: string;
@@ -22,7 +22,7 @@ export type GetTokenDTO = {
 export class UserTokenRepository extends Repository<UserToken> {
   private async _getToken({ id, userId }: GetTokenDTO): Promise<UserToken> {
     const token = await this.findOne({ where: { id, userId } });
-    if (!token) throw new NotFoundException('invalid token');
+    if (!token) throw new InvalidTokenException();
     return token;
   }
 

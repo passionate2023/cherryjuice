@@ -92,8 +92,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-const SignUpForm: React.FC<Props & PropsFromRedux> = ({ loading }) => {
+const SignUpForm: React.FC<PropsFromRedux> = ({ loading }) => {
   const formRef = useRef<HTMLFormElement>();
   const signUp = (e?: any) => {
     if (formRef.current.checkValidity()) {

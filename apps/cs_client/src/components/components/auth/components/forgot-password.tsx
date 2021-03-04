@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { createRef, useRef, useState } from 'react';
 import { modLogin } from '::sass-modules';
 import { Icons } from '@cherryjuice/icons';
 import { useModalKeyboardEvents } from '@cherryjuice/shared-helpers';
@@ -6,7 +7,6 @@ import {
   ValidatedTextInput,
   ValidatedTextInputProps,
 } from '@cherryjuice/components';
-import { createRef, useRef, useState } from 'react';
 import { LinearProgress } from '::root/components/shared-components/loading-indicator/linear-progress';
 import { patterns } from '::root/components/auth/helpers/form-validation';
 import { apolloClient } from '::graphql/client/apollo-client';
@@ -16,6 +16,8 @@ import { ReturnToLoginPage } from '::root/components/auth/components/signup-form
 import { ac } from '::store/store';
 import { SubmitButton } from '::auth/components/shared-components/submit-buttton/submit-button';
 import { authFormFocusableElements } from '::auth/components/login-form/login-form';
+import { properErrorMessage } from '::auth/hooks/proper-error-message';
+import { AlertType } from '::types/react';
 
 const idPrefix = 'forgot-password';
 const inputs: ValidatedTextInputProps[] = [
@@ -40,8 +42,7 @@ const inputs: ValidatedTextInputProps[] = [
   },
 ];
 
-type Props = {};
-const ForgotPassword: React.FC<Props> = () => {
+const ForgotPassword: React.FC = () => {
   const [timestamp, setTimestamp] = useState(0);
   const [loading, setLoading] = useState(false);
   const email = useStatefulValidatedInput(inputs[0]);
@@ -61,14 +62,19 @@ const ForgotPassword: React.FC<Props> = () => {
           )
           .then(tokenTimestamp => {
             if (tokenTimestamp) {
-              ac.auth.setAuthenticationFailed({
-                localMessage: `a verification email was sent to ${email.value}`,
+              ac.auth.setAlert({
+                title: `a verification email was sent to ${email.value}`,
+                type: AlertType.Neutral,
               });
               setTimestamp(tokenTimestamp);
             }
           })
           .catch(error => {
-            ac.auth.setAuthenticationFailed(error);
+            ac.auth.setAlert({
+              title: properErrorMessage(error),
+              error,
+              type: AlertType.Error,
+            });
             setTimestamp(0);
           })
           .finally(() => {

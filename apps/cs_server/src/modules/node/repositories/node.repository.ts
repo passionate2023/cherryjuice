@@ -1,6 +1,6 @@
 import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { Node } from '../entities/node.entity';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { copyProperties } from '../../document/helpers';
 import { SaveHtmlIt } from '../it/save-html.it';
 import { NodeMetaIt, NodePrivacy } from '../it/node-meta.it';
@@ -28,7 +28,9 @@ import {
 } from '../../document/entities/document-guest.entity';
 import { GetterSettings } from '../../document/repositories/document.repository';
 import { PrivateNode } from '../entities/private-node.ot';
-import { createErrorDescription } from '../../shared/errors/create-error-description';
+import { NodeIsReadonlyException } from '../exceptions/node-is-readonly.exception';
+import { CantEditNodeException } from '../exceptions/cant-edit-node.exception';
+import { NodeNotFoundException } from '../exceptions/node-not-found.exception';
 const nodeMeta = [
   `n.id`,
   `n.name`,
@@ -144,13 +146,17 @@ export class NodeRepository extends Repository<Node> {
     dto: GetNodeDTO,
     target: NodeSelection = 'meta',
   ): Promise<Node> {
-    return this._getNodeById(dto, target, false);
+    const node = await this._getNodeById(dto, target, false);
+    if (!node) throw new NodeNotFoundException(dto);
+    return node;
   }
   async getWNodeById(
     dto: GetNodeDTO,
     target: NodeSelection = 'meta',
   ): Promise<Node> {
-    return this._getNodeById(dto, target, true);
+    const node = await this._getNodeById(dto, target, true);
+    if (!node) throw new CantEditNodeException(dto);
+    return node;
   }
   async getAHtml(dto: GetNodeDTO): Promise<AHtmlLine[]> {
     return await this.getNodeById(dto, 'ahtml').then(node =>
@@ -202,9 +208,7 @@ export class NodeRepository extends Repository<Node> {
       node.privacy = null;
     }
     if (node.read_only && attributes['ahtml'] && node.ahtml) {
-      throw new BadRequestException(
-        createErrorDescription.node.nodeIsReadOnly(dto.node_id),
-      );
+      throw new NodeIsReadonlyException(dto);
     }
     Object.entries(attributes).forEach(([k, v]) => {
       node[k] = v;
@@ -225,10 +229,7 @@ export class NodeRepository extends Repository<Node> {
   }
   async deleteNode(dto: DeleteNodeDTO): Promise<string> {
     const node = await this.getWNodeById(dto.getNodeDTO);
-    if (node.read_only)
-      throw new BadRequestException(
-        createErrorDescription.node.nodeIsReadOnly(dto.getNodeDTO.node_id),
-      );
+    if (node.read_only) throw new NodeIsReadonlyException(dto.getNodeDTO);
     return await this.remove(node).then(res => JSON.stringify(res));
   }
   async getNodesMetaAndAHtml(dto: GetNodesDTO): Promise<Node[]> {

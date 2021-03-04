@@ -6,8 +6,6 @@ import {
   OPERATION_STATE,
   DocumentOperation,
 } from '../entities/document-operation.entity';
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { createErrorDescription } from '../../shared/errors/create-error-description';
 import { AccessLevel, DocumentGuest } from '../entities/document-guest.entity';
 import {
   CreateDocumentDTO,
@@ -22,6 +20,9 @@ import {
 } from '../../search/helpers/pg-queries/helpers/clause-builder';
 import { RunFirst } from '../../node/repositories/node.repository';
 import { DocumentState } from '../entities/document-state.entity';
+import { DocumentNotExistException } from '../exceptions/document-not-exist.exception';
+import { DocumentCantBeEditedException } from '../exceptions/document-cant-be-edited.exception';
+import { DocumentCantBeRemovedException } from '../exceptions/document-cant-be-removed.exception';
 
 const nullableEvents = [OPERATION_STATE.FINISHED, OPERATION_STATE.FAILED];
 const documentMetaFields = [
@@ -108,20 +109,14 @@ export class DocumentRepository extends Repository<Document> {
 
   async getDocumentById(dto: GetDocumentDTO): Promise<Document> {
     const document = await this._getDocumentById(dto, false);
-    if (!document)
-      throw new NotFoundException(
-        createErrorDescription.document.doesNotExist(dto.documentId),
-      );
+    if (!document) throw new DocumentNotExistException(dto.documentId);
 
     return removeDocumentStateForNonOwner(dto.userId)(document);
   }
 
   async getWDocumentById(dto: GetDocumentDTO): Promise<Document> {
     const document = await this._getDocumentById(dto, true);
-    if (!document)
-      throw new NotFoundException(
-        createErrorDescription.document.notEnoughAccessLevel(dto.documentId),
-      );
+    if (!document) throw new DocumentCantBeEditedException(dto.documentId);
     return document;
   }
 
@@ -153,11 +148,7 @@ export class DocumentRepository extends Repository<Document> {
     const onlyATimeStampEdit =
       entries.length === 1 && entries[0][0] === 'updatedAt';
     if (!isDocumentOwner && !onlyATimeStampEdit)
-      throw new NotFoundException(
-        createErrorDescription.document.notEnoughAccessLevel(
-          getDocumentDTO.documentId,
-        ),
-      );
+      throw new DocumentCantBeEditedException(getDocumentDTO.documentId);
 
     if ('state' in meta && document.state.updatedAt > meta.state.updatedAt)
       return document;
@@ -200,9 +191,7 @@ export class DocumentRepository extends Repository<Document> {
     );
     await this.remove(ownedDocuments);
     if (ownedDocuments.length < documents.length)
-      throw new UnauthorizedException(
-        createErrorDescription.document.notEnoughAccessLevel(),
-      );
+      throw new DocumentCantBeRemovedException();
     return IDs;
   }
   async markUnfinishedImportsAsFailed(): Promise<Document[]> {

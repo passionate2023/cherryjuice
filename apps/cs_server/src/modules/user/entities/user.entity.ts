@@ -7,12 +7,12 @@ import {
 } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
-import { UnauthorizedException } from '@nestjs/common';
 import { AfterLoad } from 'typeorm';
 import { UserToken } from './user-token.entity';
 import { Settings } from './settings/settings.entity';
 import { getDefaultSettings } from '@cherryjuice/default-settings';
 import { Workspace } from './workspace/workspace.entity';
+import { InvalidPasswordException } from '../exceptions/invalid-password.exception';
 
 type UserConstructorProps = {
   username: string;
@@ -86,8 +86,7 @@ class User extends BaseEntity {
 
   async validatePassword(passwordToValidate: string): Promise<void> {
     const hash = await bcrypt.hash(passwordToValidate, this.salt);
-    if (hash !== this.passwordHash)
-      throw new UnauthorizedException('invalid password');
+    if (hash !== this.passwordHash) throw new InvalidPasswordException();
   }
 
   async setPassword(password: string): Promise<void> {

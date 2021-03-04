@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   CreatePasswordResetTokenDTO,
@@ -39,6 +34,9 @@ import { VerifyEmailIt } from './input-types/verify-email.it';
 import { EmailService } from '../email/email.service';
 import { ConfirmEmailChangeIt } from './input-types/confirm-email-change.it';
 import { FoldersService } from './folders.service';
+import { InvalidTokenException } from './exceptions/invalid-token.exception';
+import { EmailDoesNotMatchUsernameException } from './exceptions/email-does-not-match-username.exception';
+import { EmailIdenticalToCurrentException } from './exceptions/email-identical-to-current.exception';
 
 export type OauthJson = {
   sub: string;
@@ -145,23 +143,19 @@ export class UserService {
     provider: string,
     _json: OauthJson,
   ): Promise<AuthUser> {
-    try {
-      let user = await this.userRepository.findOneByThirdPartyId(
+    let user = await this.userRepository.findOneByThirdPartyId(
+      thirdPartyId,
+      provider,
+      _json.email,
+    );
+    if (!user)
+      user = await this.userRepository.registerOAuthUser(
         thirdPartyId,
         provider,
-        _json.email,
+        _json,
       );
-      if (!user)
-        user = await this.userRepository.registerOAuthUser(
-          thirdPartyId,
-          provider,
-          _json,
-        );
-      user.tokens = await this.getTokens(user.id);
-      return this.packageAuthUser(user);
-    } catch (err) {
-      throw new InternalServerErrorException('validateOAuthLogin', err.message);
-    }
+    user.tokens = await this.getTokens(user.id);
+    return this.packageAuthUser(user);
   }
 
   async userExists(dto: UserExistsDTO): Promise<string | undefined> {
@@ -171,9 +165,7 @@ export class UserService {
   async updateUserProfile(dto: UpdateUserProfileDTO): Promise<string> {
     if (dto.input.email) {
       if (dto.email === dto.input.email)
-        throw new UnauthorizedException(
-          'the new email is identical to current email',
-        );
+        throw new EmailIdenticalToCurrentException(dto.input.email);
       await this.createEmailChangeToken({
         userId: dto.userId,
         newEmail: dto.input.email,
@@ -198,7 +190,7 @@ export class UserService {
     const { email, username } = dto;
     const user = await this.userRepository.getUser(email);
     if (user.username !== username) {
-      throw new UnauthorizedException(`user not found`);
+      throw new EmailDoesNotMatchUsernameException();
     }
     const userToken = await this.userTokenRepository.createToken({
       userId: user.id,
@@ -263,7 +255,7 @@ export class UserService {
     try {
       return this.jwtService.verify(token);
     } catch {
-      throw new BadRequestException('invalid token');
+      throw new InvalidTokenException();
     }
   }
 

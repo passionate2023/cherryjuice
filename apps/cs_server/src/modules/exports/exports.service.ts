@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DocumentService } from '../document/document.service';
 import { NodeService } from '../node/node.service';
 import { ExportCTB } from './helpers/export-ctb';
@@ -11,6 +11,7 @@ import { paths } from '../shared/fs/paths';
 import { resolveFileLocation } from '../shared/fs/resolve-file-location';
 import { GetDocumentDTO } from '../document/dto/document.dto';
 import Timeout = NodeJS.Timeout;
+import { ExportNotFoundException } from './exception/export-not-found.exception';
 
 export type Notify = () => Promise<void>;
 type ChunkifyProps = {
@@ -175,7 +176,7 @@ export class ExportsService {
     });
     if (fs.existsSync(path)) return fs.createReadStream(path);
     else {
-      throw new NotFoundException();
+      throw new ExportNotFoundException();
     }
   };
 }

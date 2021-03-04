@@ -4,7 +4,7 @@ import { AuthUser } from './entities/auth.user';
 import { UserQuery } from './entities/user.mutation.entity';
 import { GetUserGql } from './decorators/get-user.decorator';
 import { User } from './entities/user.entity';
-import { UnauthorizedException, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from './guards/graphql.guard';
 import { Timestamp } from '../document/helpers/graphql-types/timestamp';
 import { UserToken } from './entities/user-token.entity';
@@ -24,7 +24,7 @@ export class UserQueriesResolver {
   constructor(private userService: UserService) {}
 
   @Query(() => UserQuery)
-  async user(): Promise<{}> {
+  async user(): Promise<Partial<User>> {
     return {};
   }
 
@@ -35,10 +35,9 @@ export class UserQueriesResolver {
 
   @ResolveField(() => String, { nullable: true })
   async userExists(
-    @GetUserGql() user: User,
+    @GetUserGql({ nullable: false }) user: User,
     @Args({ name: 'email', type: () => String }) email: string,
   ): Promise<string | undefined> {
-    if (!user) throw new UnauthorizedException();
     return this.userService.userExists({ email });
   }
 

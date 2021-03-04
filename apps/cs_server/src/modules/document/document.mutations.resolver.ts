@@ -1,4 +1,4 @@
-import { UnauthorizedException, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
 import {
   Args,
@@ -34,10 +34,9 @@ export class DocumentMutationsResolver {
 
   @Mutation(() => DocumentMutation)
   async document(
-    @GetUserGql() user: User,
+    @GetUserGql({ nullable: false }) user: User,
     @Args('file_id', { nullable: true }) file_id?: string,
   ) {
-    if (!user) throw new UnauthorizedException();
     return { id: file_id };
   }
 

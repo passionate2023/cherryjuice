@@ -11,20 +11,20 @@ import { Field, InputType } from '@nestjs/graphql';
 export const patterns = {
   password: {
     pattern: /^((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
-    description: `password: at least 1 upper case letter, at least 1 lower case letter, at least 1 number or special character`,
+    description: `password must include 1 upper case letter, 1 lower case letter, 1 number or special character`,
   },
   username: {
-    pattern: /^(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
+    pattern: /^(?![_.])[a-zA-Z0-9._]+(?<![_.])$/,
     description:
-      'username: only a-zA-Z0-9._ allowed, no _ or . at teh beginning, no __ or _. or ._ or .. inside,  no _ or . at the end',
+      'username can include letters,  numbers and ._ (allowed only in the middle)',
   },
   firstName: {
     pattern: /^([a-zA-Z'\-,.]|[^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]){2,}$/,
-    description: 'first-name: letters only',
+    description: 'first name can be letters only',
   },
   lastName: {
     pattern: /^([a-zA-Z'\-,.]|[^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]){2,}$/,
-    description: 'last-name: letters only',
+    description: 'last name can be letters only',
   },
 };
 

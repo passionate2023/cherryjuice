@@ -35,7 +35,7 @@ const getRoute = createSelector(
     if (unfinishedOauthSignup) router.goto.oauthSignup();
     else if (resetPasswordToken) router.goto.resetPassword();
     else {
-      const onAuthScreen = /\/auth\/(login|signup)/.test(location.pathname);
+      const onAuthScreen = /\/auth\/*/.test(location.pathname);
       const loggedInUser = userId && onAuthScreen;
       if (loggedInUser || (userId && showHome)) router.goto.home(folder.name);
       else if (fetch === 'idle') {

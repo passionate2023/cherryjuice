@@ -9,6 +9,7 @@ import { NODE_HTML } from '::graphql/queries/node-html';
 import { getNode } from '::store/selectors/cache/document/node';
 import { FETCH_NODE_IMAGES } from '::graphql/queries/node-images';
 import { alerts } from '::helpers/texts/alerts';
+import { properErrorMessage } from '::auth/hooks/proper-error-message';
 
 export type FetchContentProps = {
   documentId: string;
@@ -83,7 +84,8 @@ const fetchNodeEpic = (action$: Observable<Actions>) => {
         createErrorHandler({
           alertDetails: {
             title: 'Could not fetch the node',
-            description: alerts.somethingWentWrong,
+            descriptionFactory: error =>
+              properErrorMessage(error) || alerts.somethingWentWrong,
           },
           actionCreators: [ac_.node.fetchFailed],
           mode: 'snackbar',

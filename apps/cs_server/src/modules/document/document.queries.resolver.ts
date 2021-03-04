@@ -11,11 +11,12 @@ import { Document } from './entities/document.entity';
 import { Node } from '../node/entities/node.entity';
 import { NodeService } from '../node/node.service';
 import { GqlAuthGuard } from '../user/guards/graphql.guard';
-import { UnauthorizedException, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { GetUserGql } from '../user/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
 import { ExportsService } from '../exports/exports.service';
 import { PrivateNode } from '../node/entities/private-node.ot';
+import { NotLoggedInException } from '../user/exceptions/not-logged-in.exception';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Document)
@@ -32,7 +33,7 @@ export class DocumentQueriesResolver {
     file_id: string | undefined,
     @GetUserGql() user: User,
   ): Promise<Document[]> {
-    if (!file_id && !user) throw new UnauthorizedException();
+    if (!file_id && !user) throw new NotLoggedInException();
     return file_id
       ? [
           await this.documentService.getDocumentById({

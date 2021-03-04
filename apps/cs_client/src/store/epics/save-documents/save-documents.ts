@@ -13,6 +13,7 @@ import { Epic } from 'redux-observable';
 import { SnackbarMessages } from '::root/components/app/components/menus/widgets/components/snackbar/snackbar-messages';
 import { getEditedDocuments } from '::store/selectors/cache/document/document';
 import { alerts } from '::helpers/texts/alerts';
+import { properErrorMessage } from '::auth/hooks/proper-error-message';
 
 const saveDocument$ = () => {
   const state: SaveOperationState = createSaveState();
@@ -46,7 +47,8 @@ const saveDocument$ = () => {
       createErrorHandler({
         alertDetails: {
           title: 'Could not save',
-          description: alerts.somethingWentWrong,
+          descriptionFactory: error =>
+            properErrorMessage(error) || alerts.somethingWentWrong,
         },
         actionCreators: [ac_.document.saveFailed],
       }),

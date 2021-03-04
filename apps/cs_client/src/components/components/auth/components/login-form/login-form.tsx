@@ -2,7 +2,6 @@ import * as React from 'react';
 import { createRef, useRef } from 'react';
 import { modLogin } from '::sass-modules';
 import { GoogleOauthButton } from '@cherryjuice/components';
-import { Icons } from '@cherryjuice/icons';
 import { useModalKeyboardEvents } from '@cherryjuice/shared-helpers';
 import {
   ValidatedTextInput,
@@ -25,7 +24,7 @@ import { FormCheckbox } from '::auth/components/shared-components/form-checkbox/
 const inputs: ValidatedTextInputProps[] = [
   {
     label: 'username',
-    icon: [Icons.material.username],
+    icon: ['username'],
     patterns: [patterns.userName, patterns.email],
     minLength: 4,
     required: true,
@@ -38,7 +37,7 @@ const inputs: ValidatedTextInputProps[] = [
     variableName: 'password',
     label: 'password',
     type: 'password',
-    icon: [Icons.material.lock],
+    icon: ['lock'],
     required: true,
     idPrefix: 'login',
   },
@@ -58,9 +57,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-
-const LoginForm: React.FC<Props & PropsFromRedux> = ({ loading }) => {
+const LoginForm: React.FC<PropsFromRedux> = ({ loading }) => {
   const formRef = useRef<HTMLFormElement>();
   const staySignedRef = useRef<HTMLInputElement>();
   const login = (e?: any) => {

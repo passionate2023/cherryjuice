@@ -1,11 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm/index';
 import { SignUpCredentials } from '../dto/sign-up-credentials.dto';
 import { User } from '../entities/user.entity';
-import {
-  ConflictException,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
 import { SignInCredentials } from '../dto/sign-in-credentials.dto';
 import { DeleteAccountDTO, OauthJson } from '../user.service';
 import { UpdateUserProfileIt } from '../input-types/update-user-profile.it';
@@ -18,6 +13,13 @@ import { removeDots } from '../pipes/gmail-dots';
 import { UpdateUserSettingsIt } from '../input-types/update-user-settings.it';
 import { Settings } from '../entities/settings/settings.entity';
 import { Workspace } from '../entities/workspace/workspace.entity';
+import { UsernameExistsException } from '../exceptions/username-exists.exception';
+import { CouldNotSaveUserDataException } from '../exceptions/could-not-save-user-data.exception';
+import { UserAlreadyHasPasswordException } from '../exceptions/user-already-has-password.exception';
+import { InvalidTokenException } from '../exceptions/invalid-token.exception';
+import { UserNotFoundException } from '../exceptions/user-not-found.exception';
+import { NotLoggedInException } from '../exceptions/not-logged-in.exception';
+import { MustUseThirdPartyToLoginException } from '../exceptions/must-use-third-party-to-login.exception';
 
 export type UserExistsDTO = { email: string };
 export type CreatePasswordResetTokenDTO = { email: string; username: string };
@@ -49,7 +51,7 @@ class UserRepository extends Repository<User> {
             },
           ],
         });
-    if (!user) throw new UnauthorizedException(`user not found`);
+    if (!user) throw new UserNotFoundException(id || emailOrUsername);
     return user;
   }
   async getUser(emailOrUsername?: string, id?: string): Promise<User> {
@@ -70,6 +72,7 @@ class UserRepository extends Repository<User> {
         },
       ],
     });
+    if (!user) throw new UserNotFoundException(email);
     return user;
   }
 
@@ -87,11 +90,9 @@ class UserRepository extends Repository<User> {
       await user.save();
     } catch (e) {
       if (e.code === '23505') {
-        throw new ConflictException('Username or email exists');
+        throw new UsernameExistsException();
       } else {
-        // eslint-disable-next-line no-console
-        console.log(e);
-        throw new InternalServerErrorException('Database error');
+        throw new CouldNotSaveUserDataException();
       }
     }
 
@@ -102,9 +103,9 @@ class UserRepository extends Repository<User> {
     emailOrUsername,
   }: SignInCredentials): Promise<User> {
     const user = await this._getUser(emailOrUsername);
-    if (!user) throw new UnauthorizedException();
+    if (!user) throw new NotLoggedInException();
     if (user.thirdParty && !user.hasPassword)
-      throw new UnauthorizedException(`Please use ${user.thirdParty} to login`);
+      throw new MustUseThirdPartyToLoginException(user.thirdParty);
 
     await user.validatePassword(password);
     return user;
@@ -139,11 +140,11 @@ class UserRepository extends Repository<User> {
       await user.save();
     } catch (e) {
       if (e.code === '23505') {
-        throw new ConflictException(e.detail);
+        throw new UsernameExistsException();
       } else {
         // eslint-disable-next-line no-console
         console.log(e);
-        throw new InternalServerErrorException('Database error');
+        throw new CouldNotSaveUserDataException();
       }
     }
 
@@ -167,11 +168,11 @@ class UserRepository extends Repository<User> {
       await this.save(user);
     } catch (e) {
       if (e.code === '23505') {
-        if ('username' in data) throw new ConflictException('username exists');
+        if ('username' in data) throw new UsernameExistsException();
       } else {
         // eslint-disable-next-line no-console
         console.log(e);
-        throw new InternalServerErrorException('Database error');
+        throw new CouldNotSaveUserDataException();
       }
     }
   }
@@ -213,7 +214,7 @@ class UserRepository extends Repository<User> {
 
   async oauthSignUp({ input, userId }: OauthSignupDTO): Promise<User> {
     const user = await this._getUser(undefined, userId);
-    if (user.hasPassword) throw new UnauthorizedException('user has password');
+    if (user.hasPassword) throw new UserAlreadyHasPasswordException();
     await user.setPassword(input.password);
     delete input.password;
     await this.updateUser(user, input);
@@ -247,8 +248,7 @@ class UserRepository extends Repository<User> {
     newEmail,
   }: EmailChangeTp): Promise<void> {
     const user = await this._getUser(undefined, userId);
-    if (user.email !== currentEmail)
-      throw new UnauthorizedException('invalid token');
+    if (user.email !== currentEmail) throw new InvalidTokenException();
     await this.updateUser(user, { email: newEmail, email_verified: false });
   }
 }

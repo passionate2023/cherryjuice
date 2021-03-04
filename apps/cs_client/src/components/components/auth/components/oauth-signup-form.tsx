@@ -64,11 +64,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = {};
-const OauthSignUpForm: React.FC<Props & PropsFromRedux> = ({
-  loading,
-  username,
-}) => {
+const OauthSignUpForm: React.FC<PropsFromRedux> = ({ loading, username }) => {
   const [passwordValid, setPasswordValid] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');

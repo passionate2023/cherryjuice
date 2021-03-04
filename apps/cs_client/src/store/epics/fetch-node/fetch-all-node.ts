@@ -20,6 +20,7 @@ import { CachedDocument } from '::store/ducks/document-cache/document-cache';
 import { doKey } from '::store/ducks/document-operation/reducers/add-document-operations';
 import { progressify } from '::helpers/shared';
 import { alerts } from '::helpers/texts/alerts';
+import { properErrorMessage } from '::auth/hooks/proper-error-message';
 
 const mapToProps = (documentId: string) => (node_ids: number[]) => ({
   node_ids,
@@ -31,6 +32,7 @@ const createCacheOperation = (document: CachedDocument) => (
   progress: number,
   context?: OPERATION_CONTEXT,
 ): DocumentOperation => ({
+  id: document.id,
   target: {
     id: document.id,
     hash: document.hash,
@@ -104,7 +106,8 @@ const fetchAllNodesEpic = (action$: Observable<Actions>) => {
         createErrorHandler({
           alertDetails: {
             title: 'Could not fetch the nodes',
-            description: alerts.somethingWentWrong,
+            descriptionFactory: error =>
+              properErrorMessage(error) || alerts.somethingWentWrong,
           },
           actionCreators: [
             () =>

@@ -3,7 +3,6 @@ import {
   Module,
   // NestModule,
   // RequestMethod,
-  ValidationPipe,
 } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { DocumentModule } from './document/document.module';
@@ -21,6 +20,7 @@ import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
 import { APP_PIPE } from '@nestjs/core';
 import { SearchModule } from './search/search.module';
+import { ValidationPipe } from './user/pipes/validation.pipe';
 
 @Module({
   imports: [

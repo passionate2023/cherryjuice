@@ -7,6 +7,8 @@ import { AlertType, TAlert } from '::types/react';
 import { cloneObj } from '@cherryjuice/shared-helpers';
 import { rootActionCreators as rac } from '::store/ducks/root';
 import { authActionCreators as aac } from './auth';
+import { properErrorMessage } from '::auth/hooks/proper-error-message';
+import { ApolloError } from '@apollo/client';
 
 const ap = createActionPrefixer('dialogs');
 
@@ -45,13 +47,8 @@ const ac = {
         setTimeout(() => {
           throw alert.error;
         });
-      if (alert.error?.message.includes('errorId')) {
-        // @ts-ignore
-        const { graphQLErrors } = alert.error;
-        if (graphQLErrors?.length) {
-          const { description } = JSON.parse(graphQLErrors[0].message);
-          alert.description = description;
-        }
+      if (alert.error && !alert.description) {
+        alert.description = properErrorMessage(alert.error as ApolloError);
       }
       return _(alert);
     }),

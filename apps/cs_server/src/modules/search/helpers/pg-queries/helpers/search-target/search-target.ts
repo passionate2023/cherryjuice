@@ -6,8 +6,8 @@ import {
 import { fts, HeadlineProps } from './helpers/fts';
 import { regex } from './helpers/regex';
 import { simple } from './helpers/simple';
-import { ForbiddenException } from '@nestjs/common';
 import { QueryCreatorState } from '../time-filter';
+import { InvalidSearchTargetException } from '../../../../exceptions/invalid-search-target.exception';
 type PGHeadline = {
   nodeNameHeadline?: string;
   ahtmlHeadline?: string;
@@ -135,7 +135,7 @@ const searchTargetWC = ({
 
       break;
   }
-  if (!state.whereClause) throw new ForbiddenException();
+  if (!state.whereClause) throw new InvalidSearchTargetException();
 
   if (searchTarget.includes(SearchTarget.nodeTitle))
     res.orWhereClauses.push(`n."name" ${state.whereClause}`);

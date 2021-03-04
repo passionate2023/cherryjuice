@@ -1,7 +1,7 @@
 import { filter, map, switchMap } from 'rxjs/operators';
 import { concat, Observable, of } from 'rxjs';
 import { ofType } from 'deox';
-import { store, ac_ } from '../../store';
+import { ac_, store } from '../../store';
 import { Actions } from '../../actions.types';
 import { gqlMutation$ } from '../shared/gql-query';
 import { createTimeoutHandler } from '../shared/create-timeout-handler';
@@ -14,6 +14,8 @@ import {
   SignUpCredentials,
 } from '@cherryjuice/graphql-types';
 import { alerts } from '::helpers/texts/alerts';
+import { properErrorMessage } from '::auth/hooks/proper-error-message';
+import { AlertType } from '::types/react';
 
 const signIn = (payload: SignInCredentials) =>
   gqlMutation$({
@@ -41,6 +43,14 @@ const authEpic = (action$: Observable<Actions>) => {
     ofType([ac_.auth.signIn, ac_.auth.signUp, ac_.auth.refreshToken]),
     filter(() => asyncStates.includes(store.getState().auth.ongoingOperation)),
     switchMap(action => {
+      const online = store.getState().root.online;
+      if (!online)
+        return of(
+          ac_.auth.setAlert({
+            type: AlertType.Error,
+            title: 'you are offline',
+          }),
+        );
       let authenticate;
       if ('payload' in action) {
         const { type, payload, meta } = action;
@@ -70,7 +80,14 @@ const authEpic = (action$: Observable<Actions>) => {
             title: 'Could not perform the operation',
             description: alerts.somethingWentWrong,
           },
-          actionCreators: [ac_.auth.setAuthenticationFailed],
+          actionCreators: [
+            error =>
+              ac_.auth.setAlert({
+                title: properErrorMessage(error),
+                type: AlertType.Error,
+                error,
+              }),
+          ],
         }),
       );
     }),

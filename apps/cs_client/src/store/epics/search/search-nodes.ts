@@ -10,6 +10,7 @@ import { createErrorHandler } from '../shared/create-error-handler';
 import { SearchState } from '../../ducks/search';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';
 import { alerts } from '::helpers/texts/alerts';
+import { properErrorMessage } from '::auth/hooks/proper-error-message';
 
 const searchStates: SearchState[] = ['stand-by', 'idle'];
 const searchNodesEpic = (action$: Observable<Actions>) => {
@@ -81,7 +82,8 @@ const searchNodesEpic = (action$: Observable<Actions>) => {
           createErrorHandler({
             alertDetails: {
               title: 'Could not perform the search',
-              description: alerts.somethingWentWrong,
+              descriptionFactory: error =>
+                properErrorMessage(error) || alerts.somethingWentWrong,
             },
             actionCreators: [ac.search.setSearchStandBy],
           }),

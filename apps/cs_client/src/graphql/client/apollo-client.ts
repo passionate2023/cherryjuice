@@ -22,7 +22,7 @@ export type GraphqlQueryArgs<T, U> = {
   fetchPolicy: FetchPolicy;
 };
 
-export type GraphqlSubscriptionArgs<T, U> = GraphqlMutationArgs<T, U> & {};
+export type GraphqlSubscriptionArgs<T, U> = GraphqlMutationArgs<T, U>;
 
 export type GraphqlMutation = <T, U>(
   args: GraphqlMutationArgs<T, U>,

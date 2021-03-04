@@ -1,7 +1,7 @@
 import { filter, flatMap, map, switchMap, tap } from 'rxjs/operators';
 import { concat, from, Observable, ObservedValueOf, of } from 'rxjs';
 import { ofType } from 'deox';
-import { store, ac_, ac } from '../../store';
+import { store, ac_ } from '../../store';
 import { Actions } from '../../actions.types';
 import { handleFetchError } from '::root/components/app/components/editor/document/hooks/get-document-meta/helpers/handle-fetch-error';
 import { gqlQuery$ } from '../shared/gql-query';
@@ -12,6 +12,7 @@ import { getDocuments } from '::store/selectors/cache/document/document';
 import { pagesManager } from '@cherryjuice/editor';
 import { adaptToPersistedState } from '::store/ducks/document-cache/helpers/document/shared/adapt-persisted-state';
 import { alerts } from '::helpers/texts/alerts';
+import { properErrorMessage } from '::auth/hooks/proper-error-message';
 
 const createLocalRequest = (
   file_id: string,
@@ -97,11 +98,8 @@ const fetchDocumentEpic = (action$: Observable<Actions>) => {
           dontShowAlert: isNewDocument,
           alertDetails: {
             title: 'Could not fetch the document',
-            description: alerts.somethingWentWrong,
-            action: {
-              name: 'select a document',
-              callbacks: [ac.dialogs.clearAlert, ac.dialogs.showDocumentList],
-            },
+            descriptionFactory: error =>
+              properErrorMessage(error) || alerts.somethingWentWrong,
           },
           actionCreators: handleFetchError(),
           mode: 'snackbar',

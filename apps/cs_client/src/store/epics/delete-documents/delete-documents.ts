@@ -8,6 +8,7 @@ import { createErrorHandler } from '../shared/create-error-handler';
 import { AsyncOperation } from '../../ducks/document';
 import { DELETE_DOCUMENT } from '::graphql/mutations/document/delete-document';
 import { alerts } from '::helpers/texts/alerts';
+import { properErrorMessage } from '::auth/hooks/proper-error-message';
 
 const asyncStates: AsyncOperation[] = ['idle', 'pending'];
 const deleteDocumentsEpic = (action$: Observable<Actions>) => {
@@ -64,7 +65,8 @@ const deleteDocumentsEpic = (action$: Observable<Actions>) => {
         createErrorHandler({
           alertDetails: {
             title: 'Could not perform the deletion',
-            description: alerts.somethingWentWrong,
+            descriptionFactory: error =>
+              properErrorMessage(error) || alerts.somethingWentWrong,
           },
           actionCreators: [ac_.documentsList.deleteDocumentsFailed],
         }),

@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { modAuthBanner } from '::sass-modules';
-import {
-  AsyncError,
-  properErrorMessage,
-} from '::root/components/auth/hooks/proper-error-message';
 import { useEffect, useRef, useState } from 'react';
+import { modAuthBanner } from '::sass-modules';
+import { AlertType, TAlert } from '::types/react';
+
 type Timer = ReturnType<typeof window.setTimeout>;
 type BannerProps = {
-  error?: AsyncError;
+  error?: TAlert;
   className?: string;
 };
 
@@ -17,9 +15,8 @@ const Banner: React.FC<BannerProps> = ({ error, className = '' }) => {
   useEffect(() => {
     if (error) {
       clearTimeout(timeoutHandler.current);
-      const message = properErrorMessage(error);
-      setMessage(message);
-      if (!('persistent' in error)) {
+      setMessage(error.title);
+      if (error.type === AlertType.Error) {
         timeoutHandler.current = setTimeout(() => {
           setMessage('');
         }, 7000);
