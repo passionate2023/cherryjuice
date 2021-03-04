@@ -60,7 +60,7 @@ const Root: React.FC<PropsFromRedux> = ({
   online,
   theme,
 }) => {
-  const client = useApolloClient(token, userId);
+  const client = useApolloClient(token, userId, ac.root.setNetworkStatus);
   useOnWindowResize([
     (w, h) => {
       ac.cssVariables.set(CssVariables.vh, h);
