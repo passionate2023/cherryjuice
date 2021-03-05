@@ -4,7 +4,6 @@
   "description": "",
   "author": "",
   "license": "ISC",
-  "module": "build/index.js",
   "main": "build/cjs/index.js",
   "types": "build/types",
   "exports": {
