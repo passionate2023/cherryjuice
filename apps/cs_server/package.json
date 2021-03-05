@@ -93,7 +93,8 @@
     "@swc/core": "1.2.50",
     "@swc/cli": "0.1.35",
     "swc-loader": "0.1.12",
-    "run-script-webpack-plugin": "^0.0.8"
+    "run-script-webpack-plugin": "^0.0.8",
+    "@swc/jest": "0.1.2"
   },
   "optionalDependencies": {
     "@types/jest": "^25.1.0",
