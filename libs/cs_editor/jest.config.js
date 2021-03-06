@@ -3,14 +3,11 @@
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
 // eslint-disable-next-line no-undef
 const tsconfig = require('./tsconfig');
+const config = require('../../config/jest/jest.config');
 // eslint-disable-next-line no-undef
 module.exports = {
-  roots: [/*'<rootDir>/.storybook', */ '<rootDir>/src'],
-  transform: {
-    '^.+\\.(t|j)sx?$': ['@swc/jest'],
-  },
+  ...config,
   testEnvironment: 'jsdom',
-
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       '<rootDir>/__mocks__/fileMock.js',
@@ -19,5 +16,4 @@ module.exports = {
       prefix: '<rootDir>/',
     }),
   },
-  testPathIgnorePatterns: ['/__data__/', '/__tests__/data/', '__helpers__'],
 };

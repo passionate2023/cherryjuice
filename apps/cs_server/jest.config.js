@@ -1,24 +1,5 @@
 /*eslint @typescript-eslint/no-var-requires:0*/
+const config = require('../../config/jest/jest.config');
 module.exports = {
-  roots: ['<rootDir>/src'],
-  transform: {
-    '^.+\\.(t|j)sx?$': ['@swc/jest'],
-  },
-  // testEnvironment: 'jsdom',
-
-  // jest.config.js
-  // In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
-  // which contains the path mapping (ie the `compilerOptions.paths` option):
-
-  // moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-  //   prefix: '<rootDir>/',
-  // }),
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/__data__/',
-    '/__assertions__/',
-    '/__preparations__/',
-    '__helpers__',
-    'node/__tests__',
-  ],
+  ...config,
 };

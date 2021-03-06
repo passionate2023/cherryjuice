@@ -1,15 +1,5 @@
 /*eslint @typescript-eslint/no-var-requires:0*/
+const config = require('../../config/jest/jest.config');
 module.exports = {
-  roots: ['<rootDir>/src'],
-  transform: {
-    '^.+\\.(t|j)sx?$': ['@swc/jest'],
-  },
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/__data__/',
-    '/__assertions__/',
-    '/__preparations__/',
-    '__helpers__',
-    'node/__tests__',
-  ],
+  ...config,
 };
