@@ -13,6 +13,7 @@ RUN ["chmod", "+x", "/scripts/node.sh"]
 # nginx
 COPY nginx/cj.conf.template /etc/nginx/conf.d/default.conf.template
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/shared/ /etc/nginx/shared
 
 # server runtime dependencies
 COPY ./libs/ /usr/share/cj/libs

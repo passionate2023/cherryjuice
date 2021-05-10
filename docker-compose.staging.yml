@@ -8,5 +8,3 @@ services:
     network_mode: 'host'
     env_file:
       - .env
-    volumes:
-      - ./nginx/shared:/etc/nginx/shared:ro
