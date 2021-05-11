@@ -11,8 +11,7 @@ import { DocumentGuest } from '../modules/document/entities/document-guest.entit
 import { UserToken } from '../modules/user/entities/user-token.entity';
 import { Folder } from '../modules/user/entities/folder/folder.entity';
 
-const url =
-  process.env.DATABASE_URL || 'postgres://postgres:oooo@localhost:5432/cs';
+const url = process.env.DATABASE_URL;
 
 const config: TypeOrmModuleOptions = {
   type: 'postgres',
