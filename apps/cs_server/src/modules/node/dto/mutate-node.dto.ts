@@ -22,4 +22,5 @@ export type MutateNodeMetaDTO = MutateNodeDTO & {
 
 export type CreateNodeDTO = MutateNodeDTO & {
   data: CreateNodeIt;
+  allowOrphanNode?: boolean;
 };

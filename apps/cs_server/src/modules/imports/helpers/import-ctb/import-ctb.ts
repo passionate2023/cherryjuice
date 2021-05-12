@@ -140,6 +140,7 @@ export class ImportCTB {
           node_id: nodeA.node_id,
           userId,
         },
+        allowOrphanNode: true,
         data: {
           father_id: nodeA.father_id,
           child_nodes: nodeA.child_nodes,

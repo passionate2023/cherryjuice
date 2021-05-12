@@ -164,7 +164,11 @@ export class NodeRepository extends Repository<Node> {
     );
   }
 
-  async createNode({ data, getNodeDTO }: CreateNodeDTO): Promise<Node> {
+  async createNode({
+    data,
+    getNodeDTO,
+    allowOrphanNode,
+  }: CreateNodeDTO): Promise<Node> {
     const node = new Node();
     if (data.privacy === NodePrivacy.DEFAULT) delete data.privacy;
     copyProperties(data, node, [
@@ -186,10 +190,14 @@ export class NodeRepository extends Repository<Node> {
     node.createdAt = new Date(data.createdAt);
     node.updatedAt = new Date(data.updatedAt);
     if (node.father_id !== -1) {
-      node.father = await this.getNodeById({
-        ...getNodeDTO,
-        node_id: node.father_id,
-      });
+      try {
+        node.father = await this.getNodeById({
+          ...getNodeDTO,
+          node_id: node.father_id,
+        });
+      } catch (e) {
+        if (!allowOrphanNode) throw e;
+      }
     }
     await this.save(node);
     return node;
