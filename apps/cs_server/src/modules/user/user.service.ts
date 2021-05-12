@@ -133,7 +133,6 @@ export class UserService {
 
   getSecrets(): Secrets {
     return {
-      google_api_key: process.env.OAUTH_GOOGLE_DEVELOPER_KEY,
       google_client_id: process.env.OAUTH_GOOGLE_CLIENT_ID,
     };
   }

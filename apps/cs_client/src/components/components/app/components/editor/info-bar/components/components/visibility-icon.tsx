@@ -8,7 +8,7 @@ import { InfoBarIcon } from '::app/components/editor/info-bar/components/info-ba
 export const mapPrivacyToIcon = (privacy: NodePrivacy | Privacy) => {
   switch (privacy) {
     case Privacy.PRIVATE:
-      return undefined; //Icons.material['lock-closed'];
+      return Icons.material['lock-closed'];
     case Privacy.GUESTS_ONLY:
       return Icons.material.people;
     case Privacy.PUBLIC:

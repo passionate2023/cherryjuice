@@ -224,7 +224,6 @@ export interface AuthUser {
 }
 
 export interface Secrets {
-  google_api_key: string;
   google_client_id: string;
 }
 
@@ -1252,12 +1251,7 @@ export interface AuthUserToUserResolver<TParent = any, TResult = any> {
 }
 
 export interface SecretsTypeResolver<TParent = any> {
-  google_api_key?: SecretsToGoogle_api_keyResolver<TParent>;
   google_client_id?: SecretsToGoogle_client_idResolver<TParent>;
-}
-
-export interface SecretsToGoogle_api_keyResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface SecretsToGoogle_client_idResolver<
