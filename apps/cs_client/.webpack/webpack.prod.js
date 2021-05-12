@@ -28,6 +28,12 @@ module.exports = merge(common, {
       algorithm: 'brotliCompress',
       test: /\.(js|css|svg)$/,
     }),
+    new CompressionPlugin({
+      filename: '[path].gz[query]',
+      algorithm: 'gzip',
+      test: /\.(js|css|svg)$/,
+      minRatio: 0.8,
+    }),
     new FaviconsWebpackPlugin({
       logo: '../../libs/icons/src/assets/icons/material/cherry-juice.svg',
       mode: 'webapp',

@@ -14,11 +14,12 @@ const ProgressCircle: React.FC<Props> = ({
   size = 30,
   stroke = 'var(--on-surface-060)',
   className = '',
+  children,
 }) => {
   const strokeDashoffset =
     strokeDasharray - Math.min(progress, 1) * strokeDasharray;
   return (
-    <>
+    <span className={modSpinnerCircle.container + ' ' + className}>
       {
         <svg
           className={modSpinnerCircle.circleContainer + ' ' + className}
@@ -30,7 +31,7 @@ const ProgressCircle: React.FC<Props> = ({
           <circle
             className={modSpinnerCircle.circle}
             fill="none"
-            strokeWidth="6"
+            strokeWidth="4"
             stroke={progress ? stroke : undefined}
             strokeLinecap="round"
             strokeDasharray={strokeDasharray}
@@ -41,7 +42,8 @@ const ProgressCircle: React.FC<Props> = ({
           />
         </svg>
       }
-    </>
+      <span>{children}</span>
+    </span>
   );
 };
 

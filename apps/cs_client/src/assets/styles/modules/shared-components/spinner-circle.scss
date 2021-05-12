@@ -4,9 +4,20 @@ $offset: 187;
 $duration: 1.4s;
 $width: 65;
 $height: 65;
+.container {
+  position: relative;
+  display: flex;
+  margin-block-end: 0;
+  padding: 0;
+}
 
 .circle-container {
   transform: rotate(180deg);
+  position: absolute;
+  left: -6px;
+  top: -6px;
+  width: 30px;
+  height: 30px;
 }
 .circle {
   transform-origin: center;

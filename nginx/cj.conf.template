@@ -3,6 +3,7 @@ server {
     root /usr/share/nginx/html;
     index  index.html index.htm;
     brotli_static on;
+    gzip_static on;
     include       /etc/nginx/mime.types;
 
     proxy_intercept_errors on;

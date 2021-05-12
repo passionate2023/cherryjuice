@@ -36,15 +36,7 @@ const DocumentOperations: React.FC<Props> = ({ operations }) => {
     key: operation.target?.id + operation.type,
     name: operation.target.name,
     description: mapEventType(operation),
-    button: (
-      <ActionButton
-        open={() => {
-          ac.document.setDocumentId(operation.target.id);
-          // ac.document.fetch();
-        }}
-        operation={operation}
-      />
-    ),
+    button: <ActionButton operation={operation} />,
   }));
 
   const headerButtons = !stats.active ? (
