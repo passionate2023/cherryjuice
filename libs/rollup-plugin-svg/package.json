@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "dev": "rollup -c -w --environment TSC_NONPOLLING_WATCHER:true",
-    "types": "tsc -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
+    "types": "exit 0",
     "build": "rollup -c",
     "test": "exit 0",
     "lint": "eslint ./**"

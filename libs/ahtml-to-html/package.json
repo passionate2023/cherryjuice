@@ -14,7 +14,8 @@
     "dev": "rollup -c  -w --environment TSC_NONPOLLING_WATCHER:true,mode:ts_cjs",
     "build": "rollup -c --environment mode:ts2_es_cjs",
     "test": "jest",
-    "lint": "eslint ./**"
+    "lint": "eslint ./**",
+    "types": "exit 0"
   },
   "devDependencies": {
     "typescript": "^4.1.3",

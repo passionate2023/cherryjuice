@@ -11,8 +11,7 @@ export const addEmptyLineBeforeHeader = (acc, val) => {
   if (isHeader) {
     acc.push('\n', val);
   } else if (isDefinitionDefinition) {
-    // eslint-disable-next-line no-useless-escape
-    val._ = `\&nbsp; &nbsp; ${val._ || ''}`;
+    val._ = `&nbsp; &nbsp; ${val._ || ''}`;
     acc.push('\n', val);
   } else if (isDefinitionTitle) {
     acc.push('\n', val);

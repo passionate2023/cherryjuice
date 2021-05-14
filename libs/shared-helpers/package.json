@@ -15,7 +15,7 @@
     "build": "rollup -c --environment mode:ts2_es",
     "test": "exit 0",
     "lint": "eslint ./**",
-    "types:shared-helpers": "tsc -w -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
+    "types": "tsc -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
     "generate-named-inputs": "node ../../scripts/generate-named-inputs.js"
   },
   "dependencies": {},
