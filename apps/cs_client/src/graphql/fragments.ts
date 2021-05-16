@@ -31,7 +31,6 @@ const FRAGMENT_AUTH_USER = {
         ...UserInfo
       }
       secrets {
-        google_api_key
         google_client_id
       }
       settings {

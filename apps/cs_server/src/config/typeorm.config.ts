@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-require('dotenv').config({ path: '../../../.env' });
+import '../env';
 
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import path from 'path';
