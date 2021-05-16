@@ -16,6 +16,7 @@
     "test:libs": "yarn ws test -p",
     "types:libs": "yarn ws types",
     "build:apps": "yarn ws -a -p build",
+    "start": "yarn workspace @cherryjuice/nest-server run start",
     "test:apps": "yarn ws -a -p test",
     "test": "run-p test:*",
     "strip:deps": "node scripts/strip-dev-dependencies.js",

@@ -3,7 +3,6 @@ process.env.NODE_ENV = 'development';
 const paths = require('./paths');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
-const DotEnv = require('dotenv-webpack');
 
 module.exports = merge(common, {
   mode: 'development',
@@ -21,7 +20,6 @@ module.exports = merge(common, {
     writeToDisk: true,
     host: '0.0.0.0',
   },
-  plugins: [paths.env && new DotEnv({ path: paths.env })].filter(Boolean),
   module: {
     rules: [
       {

@@ -32,7 +32,7 @@ module.exports = merge(common, {
       filename: '[path].gz[query]',
       algorithm: 'gzip',
       test: /\.(js|css|svg)$/,
-      minRatio: 0.8,
+      minRatio: Number.MAX_SAFE_INTEGER,
     }),
     new FaviconsWebpackPlugin({
       logo: '../../libs/icons/src/assets/icons/material/cherry-juice.svg',

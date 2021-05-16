@@ -19,8 +19,11 @@ const contentTypes = {
 };
 const sendCompressedJavascript = (req, res, next) => {
   if (req.url.indexOf('sw.js') === -1) {
-    req.url = req.url + '.br';
-    res.set('Content-Encoding', 'br');
+    const compression = req.get('accept-encoding')?.includes('br')
+      ? { ext: '.br', enc: 'br' }
+      : { ext: '.gz', enc: 'gzip' };
+    req.url = req.url + compression.ext;
+    res.set('Content-Encoding', compression.enc);
     res.set('Content-Type', contentTypes[req.route.path]);
   }
   next();

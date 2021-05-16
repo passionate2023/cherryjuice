@@ -1,17 +1,11 @@
 import {
-  // MiddlewareConsumer,
+  MiddlewareConsumer,
   Module,
-  // NestModule,
-  // RequestMethod,
+  NestModule,
+  RequestMethod,
 } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { DocumentModule } from './document/document.module';
-// import {
-//   addSTSHeader,
-//   redirectToHTTPS,
-//   sendCompressedJavascript,
-// } from '../middleware';
-// import express from 'express';
 import { NodeModule } from './node/node.module';
 import { ImageModule } from './image/image.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -21,9 +15,20 @@ import { AppController } from './app.controller';
 import { APP_PIPE } from '@nestjs/core';
 import { SearchModule } from './search/search.module';
 import { ValidationPipe } from './user/pipes/validation.pipe';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import {
+  addSTSHeader,
+  redirectToHTTPS,
+  sendCompressedJavascript,
+} from '../middleware';
 
 @Module({
   imports: [
+    process.env.NODE_SERVE_STATIC === 'true' &&
+      ServeStaticModule.forRoot({
+        rootPath: join(__dirname, '../../../../cs_client/dist'),
+      }),
     GraphQLModule.forRoot({
       include: [
         NodeModule,
@@ -45,7 +50,7 @@ import { ValidationPipe } from './user/pipes/validation.pipe';
     TypeOrmModule.forRoot(typeOrmConfig),
     UserModule,
     DocumentModule,
-  ],
+  ].filter(Boolean),
   providers: [
     {
       provide: APP_PIPE,
@@ -54,22 +59,20 @@ import { ValidationPipe } from './user/pipes/validation.pipe';
   ],
   controllers: [AppController],
 })
-export class AppModule /*implements NestModule */ {
-  // configure(consumer: MiddlewareConsumer): void {
-  //   if (process.env.NODE_ENV === 'production') {
-  //     consumer.apply(addSTSHeader, redirectToHTTPS).forRoutes('*');
-  //     consumer
-  //       .apply(sendCompressedJavascript)
-  //       .exclude('/graphql')
-  //       .forRoutes(
-  //         ...['js', 'css', 'svg'].map(extension => ({
-  //           path: '*.' + extension,
-  //           method: RequestMethod.GET,
-  //         })),
-  //       );
-  //   }
-  //   consumer
-  //     .apply(express.static(process.env.ASSETS_PATH))
-  //     .forRoutes({ path: '*', method: RequestMethod.GET });
-  // }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    if (process.env.NODE_SERVE_STATIC === 'true')
+      consumer.apply(sendCompressedJavascript).forRoutes(
+        ...['js', 'css', 'svg'].map(extension => ({
+          path: '*.' + extension,
+          method: RequestMethod.GET,
+        })),
+      );
+
+    if (process.env.NODE_REDIRECT_TO_HTTPS === 'true')
+      consumer.apply(redirectToHTTPS).forRoutes('*');
+
+    if (process.env.NODE_STS === 'true')
+      consumer.apply(addSTSHeader).forRoutes('*');
+  }
 }
