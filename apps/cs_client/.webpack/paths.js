@@ -11,7 +11,7 @@ module.exports = {
     __dirname,
     '../src/service-worker/service-worker.ts',
   ),
-  env: undefined /*path.join(__dirname, '../.env')*/,
+  env: path.join(__dirname, '../../../.env'),
   src: path.resolve(__dirname, '../src'),
   cypress: path.resolve(__dirname, '../cypress'),
   types: path.resolve(__dirname, '../types'),

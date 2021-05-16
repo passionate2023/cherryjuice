@@ -8,13 +8,15 @@ import { useEffect, useRef, useState } from 'react';
 import { apolloClient } from '../apollo-client';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
-if (
-  process.env.NODE_ENV === 'development' &&
-  !localStorage.getItem('graphqlAPIHost')
-)
-  localStorage.setItem('graphqlAPIHost', `${location.hostname}:1230`);
+if (!localStorage.getItem('graphqlAPIHost'))
+  localStorage.setItem(
+    'graphqlAPIHost',
+    process.env.NODE_PORT
+      ? `${location.hostname}:${process.env.NODE_PORT}`
+      : location.host,
+  );
 
-const host = localStorage.getItem('graphqlAPIHost') || location.host;
+const host = localStorage.getItem('graphqlAPIHost');
 const secure = location.protocol === 'https:';
 
 const uri = {
