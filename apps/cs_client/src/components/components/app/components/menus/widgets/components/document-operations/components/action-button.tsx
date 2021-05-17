@@ -1,11 +1,11 @@
 import React from 'react';
 import { OperationTypes } from './helpers/operation-types';
 import { DocumentOperation, OPERATION_TYPE } from '@cherryjuice/graphql-types';
-import { Active } from '::app/components/menus/widgets/components/document-operations/components/components/active';
-import { Failed } from '::app/components/menus/widgets/components/document-operations/components/components/failed';
-import { Blocked } from '::app/components/menus/widgets/components/document-operations/components/components/blocked';
-import { SuccessfullyCreated } from '::app/components/menus/widgets/components/document-operations/components/components/successfully-created';
-import { SuccessfullyExported } from '::app/components/menus/widgets/components/document-operations/components/components/successfully-exported';
+import { StopDocumentOperation } from '::app/components/menus/widgets/components/document-operations/components/components/stop-document-operation';
+import { DeleteDocument } from '::app/components/menus/widgets/components/document-operations/components/components/delete-document';
+import { ClearDocumentOperation } from '::app/components/menus/widgets/components/document-operations/components/components/clear-document-operation';
+import { OpenDocument } from '::app/components/menus/widgets/components/document-operations/components/components/open-document';
+import { DownloadDocument } from '::app/components/menus/widgets/components/document-operations/components/components/download-document';
 
 type Props = {
   operation: DocumentOperation;
@@ -13,22 +13,26 @@ type Props = {
 const ActionButton: React.FC<Props> = ({ operation }) => {
   const { state } = operation;
   if (OperationTypes.active[state]) {
-    return <Active operation={operation} />;
+    return <StopDocumentOperation operation={operation} />;
   } else if (OperationTypes.failed[state]) {
-    return <Failed operation={operation} />;
+    return operation.type === OPERATION_TYPE.EXPORT ? (
+      <ClearDocumentOperation />
+    ) : (
+      <DeleteDocument operation={operation} />
+    );
   } else if (
     OperationTypes.successful[state] &&
     (operation.type === OPERATION_TYPE.IMPORT ||
       operation.type === OPERATION_TYPE.CLONE)
   ) {
-    return <SuccessfullyCreated operation={operation} />;
+    return <OpenDocument operation={operation} />;
   } else if (
     OperationTypes.successful[state] &&
     operation.type === OPERATION_TYPE.EXPORT
   ) {
-    return <SuccessfullyExported operation={operation} />;
+    return <DownloadDocument operation={operation} />;
   } else if (OperationTypes.blocked[state]) {
-    return <Blocked />;
+    return <ClearDocumentOperation />;
   } else return <></>;
 };
 

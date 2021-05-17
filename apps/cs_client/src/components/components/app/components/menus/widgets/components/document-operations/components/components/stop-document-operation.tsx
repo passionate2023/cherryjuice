@@ -7,7 +7,7 @@ import { DocumentOperation } from '@cherryjuice/graphql-types';
 import { ac } from '::store/store';
 
 type Props = { operation: DocumentOperation };
-export const Active: React.FC<Props> = ({ operation }) => {
+export const StopDocumentOperation: React.FC<Props> = ({ operation }) => {
   return (
     <ButtonCircle
       className={modDocumentOperations.collapsableList__item__button}

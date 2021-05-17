@@ -8,7 +8,7 @@ import { Icon } from '@cherryjuice/icons';
 import { uri } from '::graphql/client/hooks/apollo-client';
 
 type Props = { operation: DocumentOperation };
-export const SuccessfullyExported: React.FC<Props> = ({ operation }) => {
+export const DownloadDocument: React.FC<Props> = ({ operation }) => {
   const { id, hash, name } = operation.target;
   const { userId } = operation;
   return (

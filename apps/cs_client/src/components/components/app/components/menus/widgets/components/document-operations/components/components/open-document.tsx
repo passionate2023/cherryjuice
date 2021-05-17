@@ -7,7 +7,7 @@ import { DocumentOperation } from '@cherryjuice/graphql-types';
 import { useEffect } from 'react';
 
 type Props = { operation: DocumentOperation };
-export const SuccessfullyCreated: React.FC<Props> = ({ operation }) => {
+export const OpenDocument: React.FC<Props> = ({ operation }) => {
   useEffect(() => {
     ac.documentsList.fetchDocuments();
   }, []);

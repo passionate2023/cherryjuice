@@ -5,7 +5,7 @@ import { ac } from '::store/store';
 import { ButtonCircle } from '@cherryjuice/components';
 
 type Props = { operation: DocumentOperation };
-export const Failed: React.FC<Props> = ({ operation }) => {
+export const DeleteDocument: React.FC<Props> = ({ operation }) => {
   return (
     <ButtonCircle
       className={modDocumentOperations.collapsableList__item__button}
