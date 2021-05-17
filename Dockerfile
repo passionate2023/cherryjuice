@@ -2,9 +2,6 @@ FROM ycnmhd/nginx-node:14.15.3
 LABEL maintainer=ycnmhd
 
 # entrypoint
-RUN mkdir -p /.cs/exports
-RUN mkdir -p /.cs/imports
-
 COPY scripts /scripts
 RUN ["chmod", "+x", "/scripts/entrypoint.sh"]
 RUN ["chmod", "+x", "/scripts/nginx.sh"]
