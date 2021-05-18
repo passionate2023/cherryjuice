@@ -36,7 +36,9 @@
     "dc:up": "sudo docker-compose up -d",
     "dc:down": "sudo docker-compose down",
     "storybook": "rimraf node_modules/.cache/storybook && start-storybook -c storybook -p 1237",
-    "storybook:build": "build-storybook -c storybook -o storybook-static"
+    "storybook:build": "build-storybook -c storybook -o storybook-static",
+    "docker:build": "./scripts/docs/docker-build.sh",
+    "build:app": "./scripts/docs/build-app.sh"
   },
   "config": {
     "commitizen": {

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+require('./env');
 process.env.NODE_ENV = 'development';
 const paths = require('./paths');
 const merge = require('webpack-merge');
@@ -11,7 +12,7 @@ module.exports = merge(common, {
     contentBase: paths.dist,
     index: '',
     historyApiFallback: true,
-    port: 1236,
+    port: process.env.CLIENT_PORT,
     open: false,
     hot: true,
     compress: false,

@@ -8,8 +8,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID: process.env.OAUTH_GOOGLE_CLIENT_ID || '_',
       clientSecret: process.env.OAUTH_GOOGLE_CLIENT_SECRET || '_',
-      callbackURL:
-        process.env.SERVER_URL + process.env.OAUTH_CALLBACK_PATH || '_',
+      callbackURL: process.env.SERVER_URL
+        ? process.env.SERVER_URL + '/auth/google/callback'
+        : '_',
       passReqToCallback: true,
       prompt: 'select_account',
       scope: ['profile', 'email', 'openid'],
