@@ -33,7 +33,7 @@
   "forwardPorts": [1230, 1236, 5432],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "yarn && yarn build:libs && yarn migration:run",
+  "postCreateCommand": "echo \"DATABASE_URL=postgres://postgres:oooo@localhost:5432/cs\nJWT_SECRET=SECRET\nJWT_EXPIRES_IN=30d\nNODE_PORT=1230\nCLIENT_PORT=1236\nNODE_ENV=development\" > .env && yarn setup:dev",
 
   // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "node"

@@ -37,8 +37,9 @@
     "dc:down": "sudo docker-compose down",
     "storybook": "rimraf node_modules/.cache/storybook && start-storybook -c storybook -p 1237",
     "storybook:build": "build-storybook -c storybook -o storybook-static",
-    "docker:build": "./scripts/docs/docker-build.sh",
-    "build:app": "./scripts/docs/build-app.sh"
+    "build:app": "yarn && yarn build:libs && yarn build:apps",
+    "build:docker": "yarn build:app &&  yarn strip:deps --dev --include-client --include-server && sudo docker image build -t \"${1:-cherryjuice}\" .",
+    "setup:dev": "yarn && yarn build:libs && yarn types:libs && yarn migration:run"
   },
   "config": {
     "commitizen": {
