@@ -10,3 +10,4 @@ build
 *.graphql
 *.map
 *.d.ts
+bin

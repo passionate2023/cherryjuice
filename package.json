@@ -7,6 +7,7 @@
       "libs/*"
     ]
   },
+  "bin": "apps/cs_server/dist/src/main.js",
   "scripts": {
     "dev:client": "yarn workspace @cherryjuice/react-client  run dev",
     "dev:server": "yarn workspace @cherryjuice/nest-server  run dev",
@@ -39,7 +40,9 @@
     "storybook:build": "build-storybook -c storybook -o storybook-static",
     "build:app": "yarn && yarn build:libs && yarn build:apps",
     "build:docker": "yarn build:app &&  yarn strip:deps --dev --include-client --include-server && sudo docker image build -t \"${1:-cherryjuice}\" .",
-    "setup:dev": "yarn && yarn build:libs && yarn types:libs && yarn migration:run"
+    "setup:dev": "yarn && yarn build:libs && yarn types:libs && yarn migration:run",
+    "build:bin": "rimraf bin && npx pkg@4.4.9 --out-path=bin .",
+    "postbuild:bin": "./scripts/build-bin/download-node-binaries-win.sh && ./scripts/build-bin/gzip-artifects.sh"
   },
   "config": {
     "commitizen": {
@@ -125,5 +128,15 @@
     "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0"
+  },
+  "pkg": {
+    "assets": [
+      "apps/cs_client/dist/**/*",
+      "apps/cs_server/src/modules/email/templates/**"
+    ],
+    "targets": [
+      "node14-linux-x64",
+      "node14-win-x64"
+    ]
   }
 }
