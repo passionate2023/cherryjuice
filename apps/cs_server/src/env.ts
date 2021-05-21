@@ -1,7 +1,14 @@
 import dotenv from 'dotenv';
 import path from 'path';
-
-dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
-if (!process.env.JWT_SECRET)
-  dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
+const possiblePaths = [
+  path.resolve(__dirname, '../../../.env'),
+  path.resolve(__dirname, '../../../../.env'),
+  path.resolve(
+    process.execPath.substring(0, process.execPath.lastIndexOf('/')),
+    '.env',
+  ),
+];
+for (const path of possiblePaths) {
+  dotenv.config({ path });
+}
 process.env.TZ = 'UTC';

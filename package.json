@@ -132,7 +132,7 @@
   "pkg": {
     "assets": [
       "apps/cs_client/dist/**/*",
-      "apps/cs_server/src/modules/email/templates/**"
+      "apps/cs_server/dist/modules/email/templates/**/*"
     ],
     "targets": [
       "node14-linux-x64",

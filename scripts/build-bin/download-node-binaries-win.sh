@@ -6,7 +6,7 @@ download()
 mkdir -p bin/cherryjuice-win
 cd bin/cherryjuice-win
 
-BIN_FOLDER=bcrypt
+BIN_FOLDER=bcrypt/lib/binding
 BIN_URL=https://github.com/kelektiv/node.bcrypt.js/releases/download/v4.0.0/bcrypt_lib-v4.0.0-napi-v3-win32-x64-unknown.tar.gz
 download
 

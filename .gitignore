@@ -11,4 +11,5 @@ debug.log
 *.tsbuildinfo
 build
 .env
+bin
 */cs_editor/types

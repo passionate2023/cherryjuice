@@ -4,6 +4,8 @@
   "type": "application",
   "entryFile": "main",
   "compilerOptions": {
-    "tsConfigPath": "tsconfig.json"
+    "tsConfigPath": "tsconfig.json",
+    "assets": ["/**/**/*.hbs"],
+    "watchAssets": true
   }
 }

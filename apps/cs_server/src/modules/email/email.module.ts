@@ -5,7 +5,10 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import path from 'path';
 import { transporterConfig } from '../../config/email.config';
 
-const templatesFolder = path.join(process.cwd(), 'src/modules/email/templates');
+const templatesFolder = path.join(
+  __dirname,
+  '../../../modules/email/templates',
+);
 
 @Module({
   imports: [

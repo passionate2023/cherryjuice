@@ -6,7 +6,6 @@ const rules = require('./rules');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const DotEnv = require('dotenv-webpack');
 
 module.exports = {
   entry: {
@@ -42,7 +41,6 @@ module.exports = {
     },
   },
   plugins: [
-    paths.env && new DotEnv({ path: paths.env }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: paths.template,
