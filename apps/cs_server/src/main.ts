@@ -1,9 +1,10 @@
 import './env';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app.module';
+import { migrations } from './migrations';
 
-const port = process.env.NODE_PORT || '3000';
 async function bootstrap() {
+  const port = process.env.NODE_PORT;
   const app = await NestFactory.create(AppModule);
   if (process.env.NODE_ENV === 'development') {
     app.enableCors();
@@ -18,5 +19,12 @@ async function bootstrap() {
   }
 }
 
-// eslint-disable-next-line no-console
-bootstrap().catch(console.error);
+(async () => {
+  try {
+    await migrations();
+    await bootstrap();
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error(e);
+  }
+})();

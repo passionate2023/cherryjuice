@@ -9,7 +9,7 @@ import { DocumentModule } from '../../document/document.module';
 import { ImageModule } from '../../image/image.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NodeRepository } from '../../node/repositories/node.repository';
-import * as typeOrmConfig from '../../../config/typeorm.config';
+import typeOrmConfig from '../../../config/typeorm.config';
 import { ImportsModule } from '../../imports/imports.module';
 
 export type NodeTH = {

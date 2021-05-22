@@ -3,7 +3,7 @@ import { NodeModule } from '../../node/node.module';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ImageModule } from '../../image/image.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as typeOrmConfig from '../../../config/typeorm.config';
+import typeOrmConfig from '../../../config/typeorm.config';
 import { ImportsModule } from '../../imports/imports.module';
 import { DocumentRepository } from '../../document/repositories/document.repository';
 import { DocumentQueriesResolver } from '../../document/document.queries.resolver';

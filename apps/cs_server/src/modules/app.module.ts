@@ -9,7 +9,7 @@ import { DocumentModule } from './document/document.module';
 import { NodeModule } from './node/node.module';
 import { ImageModule } from './image/image.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as typeOrmConfig from '../config/typeorm.config';
+import typeOrmConfig from '../config/typeorm.config';
 import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
 import { APP_PIPE } from '@nestjs/core';
@@ -27,7 +27,7 @@ import {
   imports: [
     process.env.NODE_SERVE_STATIC === 'true' &&
       ServeStaticModule.forRoot({
-        rootPath: join(__dirname, '../../../../cs_client/dist'),
+        rootPath: join(__dirname, '../../../cs_client/dist'),
       }),
     GraphQLModule.forRoot({
       include: [

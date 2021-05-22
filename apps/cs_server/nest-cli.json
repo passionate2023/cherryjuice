@@ -5,7 +5,7 @@
   "entryFile": "main",
   "compilerOptions": {
     "tsConfigPath": "tsconfig.json",
-    "assets": ["/**/**/*.hbs"],
+    "assets": ["/templates/**/*"],
     "watchAssets": true
   }
 }

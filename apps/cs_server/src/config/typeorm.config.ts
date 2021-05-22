@@ -17,12 +17,12 @@ const config: TypeOrmModuleOptions = {
   type: 'postgres',
   url,
   entities: [Document, Node, Image, User, DocumentGuest, UserToken, Folder],
-  migrations: [path.resolve(__dirname, '../../migrations/**/*.ts')],
+  migrations: [path.join(__dirname, '../migrations/*.js')],
   cli: {
     migrationsDir: 'migrations',
   },
   keepConnectionAlive: true,
-  logging: process.env.NODE_ENV === 'development' && false,
+  logging: Boolean(process.env.NODE_ENV === 'development' && false),
 };
 
-module.exports = config;
+export default config;

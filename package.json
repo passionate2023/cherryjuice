@@ -7,7 +7,7 @@
       "libs/*"
     ]
   },
-  "bin": "apps/cs_server/dist/src/main.js",
+  "bin": "apps/cs_server/dist/main.js",
   "scripts": {
     "dev:client": "yarn workspace @cherryjuice/react-client  run dev",
     "dev:server": "yarn workspace @cherryjuice/nest-server  run dev",
@@ -132,7 +132,8 @@
   "pkg": {
     "assets": [
       "apps/cs_client/dist/**/*",
-      "apps/cs_server/dist/modules/email/templates/**/*"
+      "apps/cs_server/dist/templates/**/*",
+      "apps/cs_server/dist/migrations/**/*"
     ],
     "targets": [
       "node14-linux-x64",

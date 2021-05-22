@@ -3,9 +3,6 @@ LABEL maintainer=ycnmhd
 
 # entrypoint
 COPY scripts /scripts
-RUN ["chmod", "+x", "/scripts/entrypoint.sh"]
-RUN ["chmod", "+x", "/scripts/nginx.sh"]
-RUN ["chmod", "+x", "/scripts/node.sh"]
 
 # nginx
 COPY nginx/cj.conf.template /etc/nginx/conf.d/default.conf.template
@@ -23,9 +20,6 @@ WORKDIR /usr/share/cj/apps/server
 RUN yarn install
 
 # server code
-COPY ./apps/cs_server/tsconfig.json /usr/share/cj/apps/server/tsconfig.json
-COPY ./apps/cs_server/migrations /usr/share/cj/apps/server/migrations
-COPY ./apps/cs_server/src /usr/share/cj/apps/server/src
 COPY ./apps/cs_server/dist /usr/share/cj/apps/server/dist
 
 # client code
