@@ -13,6 +13,11 @@
         "preset": "conventionalcommits"
       }
     ],
-    "@semantic-release/github"
+    ["@semantic-release/github", {
+          "assets": [
+            {"path": "cherryjuice-linux/cherryjuice-linux.tar.gz", "label": "cherryjuice-linux.tar.gz"},
+            {"path": "cherryjuice-win/cherryjuice-win.tar.gz", "label": "cherryjuice-win.tar.gz"}
+          ]
+    }],
   ]
 }

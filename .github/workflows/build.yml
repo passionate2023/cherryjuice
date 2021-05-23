@@ -31,6 +31,25 @@ jobs:
       - name: build app
         run: yarn build:app
 
+      - name: package binaries
+        run: yarn build:bin
+
+      - name: upload linux binary
+        uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: cherryjuice-linux
+          path: /home/runner/work/cherryjuice/cherryjuice/bin/cherryjuice-linux.tar.gz
+          retention-days: 1
+
+      - name: upload windows binary
+        uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: cherryjuice-win
+          path: /home/runner/work/cherryjuice/cherryjuice/bin/cherryjuice-win.tar.gz
+          retention-days: 1
+
       - name: remove dev dependencies
         run: yarn strip:deps --dev --include-client --include-server
 
