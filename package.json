@@ -40,7 +40,7 @@
     "storybook:build": "build-storybook -c storybook -o storybook-static",
     "build:app": "yarn && yarn build:libs && yarn build:apps",
     "build:docker": "yarn build:app &&  yarn strip:deps --dev --include-client --include-server && sudo docker image build -t \"${1:-cherryjuice}\" .",
-    "setup:dev": "yarn && yarn build:libs && yarn types:libs && yarn migration:run",
+    "setup:dev": "yarn && yarn build:libs && yarn types:libs",
     "build:bin": "rimraf bin && npx pkg@4.4.9 --out-path=bin .",
     "postbuild:bin": "./scripts/build-bin/download-node-binaries-win.sh && ./scripts/build-bin/gzip-artifects.sh"
   },

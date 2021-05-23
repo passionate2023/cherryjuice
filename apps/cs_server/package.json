@@ -72,7 +72,8 @@
     "@cherryjuice/ctb-to-ahtml": "0.0.2",
     "@cherryjuice/default-settings": "0.0.2",
     "xml2js": "^0.4.22",
-    "tsconfig-paths": "^3.9.0"
+    "tsconfig-paths": "^3.9.0",
+    "convict": "^6.1.0"
   },
   "devDependencies": {
     "@babel/runtime": "^7.9.6",
@@ -103,7 +104,8 @@
     "@types/webpack-env": "^1.15.1",
     "@types/nodemailer": "^6.4.0",
     "@types/jsdom": "^12.2.4",
-    "@types/ramda": "^0.27.6"
+    "@types/ramda": "^0.27.6",
+    "@types/convict": "^6.0.2"
   },
   "keywords": [
     "cherrytree"

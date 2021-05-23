@@ -25,9 +25,8 @@ COPY ./apps/cs_server/dist /usr/share/cj/apps/server/dist
 # client code
 COPY ./apps/cs_client/dist /usr/share/nginx/html
 
-ENV PORT=3000
-ENV NODE_PORT=3001
-ENV NODE_ENV=production
-ENV JWT_EXPIRES_IN=30d
+ENV PORT=4000
+ENV NODE_PORT=3000
+ENV NODE_SERVE_STATIC=false
 
 ENTRYPOINT ["/scripts/entrypoint.sh"]

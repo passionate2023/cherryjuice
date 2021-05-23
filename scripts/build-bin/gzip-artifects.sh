@@ -1,5 +1,5 @@
 cd bin
-echo "JWT_SECRET=SECRET\nJWT_EXPIRES_IN=30d\nNODE_PORT=3000\nNODE_SERVE_STATIC=true\nDATABASE_URL=postgres://USER:PASSWORD@HOST:5432/DATABASE" > .env
+echo "DATABASE_URL=" > .env
 
 mkdir -p cherryjuice-win
 mv cherryjuice-win.exe cherryjuice-win
