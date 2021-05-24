@@ -8,6 +8,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require('webpack');
 const common = require('./webpack.common.js');
 const [head, ...tail] = common.plugins;
 module.exports = merge(common, {
@@ -16,6 +17,7 @@ module.exports = merge(common, {
     head,
     new MiniCssExtractPlugin(),
     ...tail,
+    new webpack.EnvironmentPlugin(['COMMIT_SHA', 'BUILD_DATE']),
     new WorkboxPlugin.InjectManifest({
       swSrc: paths.serviceWorker,
       maximumFileSizeToCacheInBytes: 1024 * 2000, // production ? 1024 * 2000 : 1024 * 20000,

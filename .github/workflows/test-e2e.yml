@@ -1,4 +1,4 @@
-name: Cypress tests
+name: cypress-tests
 
 on: workflow_dispatch
 

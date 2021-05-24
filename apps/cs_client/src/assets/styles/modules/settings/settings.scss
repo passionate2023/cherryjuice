@@ -1,5 +1,6 @@
 @import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
 @import '~@cherryjuice/shared-styles/build/vars/vars';
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
 .settings {
 }
 
@@ -30,4 +31,6 @@
 }
 .settings-element__name {
   padding: 5px;
+  min-width: 84px;
+  @include type-e2();
 }
