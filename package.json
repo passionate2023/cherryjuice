@@ -42,7 +42,7 @@
     "build:docker": "yarn build:app &&  yarn strip:deps --dev --include-client --include-server && sudo docker image build -t \"${1:-cherryjuice}\" .",
     "setup:dev": "yarn && yarn build:libs && yarn types:libs",
     "build:bin": "rimraf bin && npx pkg@4.4.9 --out-path=bin .",
-    "postbuild:bin": "./scripts/build-bin/download-node-binaries-win.sh && ./scripts/build-bin/gzip-artifects.sh"
+    "postbuild:bin": "./scripts/build-bin/download-node-binaries-linux.sh && ./scripts/build-bin/download-node-binaries-win.sh && ./scripts/build-bin/gzip-artifects.sh"
   },
   "config": {
     "commitizen": {

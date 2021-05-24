@@ -18,6 +18,8 @@ BIN_FOLDER=sharp
 BIN_URL=https://github.com/lovell/sharp/releases/download/v0.25.4/sharp-v0.25.4-node-v83-win32-x64.tar.gz
 download
 
-wget -qO- https://github.com/libvips/libvips/releases/download/v8.9.1/vips-dev-w64-web-8.9.1.zip | busybox unzip -q -
-mv vips-dev-8.9/bin/*.dll sharp/build/Release/
-rm -rf vips-dev-8.9
+BIN_FOLDER=sharp/build/Release/temp
+BIN_URL=https://github.com/lovell/sharp-libvips/releases/download/v8.9.0/libvips-8.9.0-win32-x64.tar.gz
+download
+mv sharp/build/Release/temp/lib/*.dll sharp/build/Release/
+rm -rf sharp/build/Release/temp
