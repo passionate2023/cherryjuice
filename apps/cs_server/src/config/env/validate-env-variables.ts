@@ -6,14 +6,15 @@ const validateEnvVariables = () => {
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error('Invalid environment variables:');
+    const errors = e.message.split('\n');
     // eslint-disable-next-line no-console
-    console.error(
-      e.message
-        .split('\n')
-        .map(message => `\t${message}`)
-        .join('\n'),
-    );
-    process.exit(1);
+    console.error(errors.map(message => `\t${message}`).join('\n'));
+    const onlyDbIsMissing =
+      errors.length === 1 && errors[0].startsWith('DATABASE_URL');
+
+    if (!onlyDbIsMissing) {
+      process.exit(1);
+    }
   }
 };
 

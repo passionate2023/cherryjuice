@@ -12,8 +12,8 @@
   "private": true,
   "scripts": {
     "dev": "cross-env TS_NODE_TRANSPILE_ONLY=true TSC_NONPOLLING_WATCHER=true nest start --watch ",
-    "dev:webpack": "rimraf dist && nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
-    "dev:swc": "./node_modules/.bin/swc.cmd src -s -d ./dist",
+    "dev:swc": "rimraf dist && nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
+    "build:swc": "./node_modules/.bin/swc.cmd src -s -d ./dist",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "test": "jest",
