@@ -13,7 +13,7 @@ module.exports = merge(common, {
     contentBase: paths.dist,
     index: '',
     historyApiFallback: true,
-    port: process.env.CLIENT_PORT,
+    port: process.env.CLIENT_PORT || 1236,
     open: false,
     hot: true,
     compress: false,

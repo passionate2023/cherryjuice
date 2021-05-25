@@ -9,8 +9,8 @@ import { apolloClient } from '../apollo-client';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 const host =
-  process.env.NODE_PORT && process.env.NODE_ENV === 'development'
-    ? `${location.hostname}:${process.env.NODE_PORT}`
+  process.env.NODE_ENV === 'development'
+    ? `${location.hostname}:${process.env.NODE_PORT || 3000}`
     : location.host;
 const secure = location.protocol === 'https:';
 

@@ -10,7 +10,7 @@ const templatesFolder = path.join(__dirname, '../../templates/email');
 @Module({
   imports: [
     MailerModule.forRoot({
-      transport: transporterConfig({ useTrap: true }),
+      transport: transporterConfig(),
       defaults: {
         from: process.env.EMAIL_SENDER,
       },

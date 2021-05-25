@@ -1,24 +1,20 @@
-const getEnvVariable = (prefix: string) => (variable: string) =>
-  process.env[prefix + variable];
-
-const transporterConfig = (options: { useTrap?: boolean } = {}) => {
-  const propertyPrefix =
-    options.useTrap && process.env.NODE_ENV === 'development' ? 'TRAP_' : '';
-  const _ = getEnvVariable(propertyPrefix);
-  const secure = _('EMAIL_SECURE') === 'true';
+const transporterConfig = () => {
+  const secure = process.env.EMAIL_SECURE === 'true';
   return {
-    port: +_('EMAIL_PORT'),
+    port: +process.env.EMAIL_PORT,
     secure,
     ...(secure && {
       tls: {
         ciphers: 'SSLv3',
       },
     }),
-    host: _('EMAIL_HOST'),
-    auth: {
-      user: _('EMAIL_USER'),
-      pass: _('EMAIL_PASSWORD'),
-    },
+    host: process.env.EMAIL_HOST,
+    auth: process.env.EMAIL_USER
+      ? {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASSWORD,
+        }
+      : undefined,
   };
 };
 

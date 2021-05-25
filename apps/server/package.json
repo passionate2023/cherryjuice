@@ -11,8 +11,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env TS_NODE_TRANSPILE_ONLY=true TSC_NONPOLLING_WATCHER=true nest start --watch ",
-    "dev:swc": "rimraf dist && nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
+    "dev": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true TSC_NONPOLLING_WATCHER=true nest start --watch ",
+    "dev:swc": "rimraf dist && cross-env NODE_ENV=development nest build --watch --webpack --webpackPath \"webpack.config.js\" ",
     "build:swc": "./node_modules/.bin/swc.cmd src -s -d ./dist",
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -73,8 +73,7 @@
     "@cherryjuice/default-settings": "0.0.2",
     "xml2js": "^0.4.22",
     "tsconfig-paths": "^3.9.0",
-    "convict": "^6.1.0",
-    "open": "^8.2.0"
+    "convict": "^6.1.0"
   },
   "devDependencies": {
     "@babel/runtime": "^7.9.6",

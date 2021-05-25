@@ -5,7 +5,6 @@ import { runMigrations } from './run-migrations';
 import { bootstrapServer } from './bootstrap-server';
 import { createDatabase } from './config/assistance/create-database';
 import { isPkg } from './config/env/load-env-variables';
-import { openInBrowser } from './config/assistance/open-in-browser';
 
 (async () => {
   try {
@@ -14,7 +13,6 @@ import { openInBrowser } from './config/assistance/open-in-browser';
     } else {
       await runMigrations();
       await bootstrapServer();
-      if (isPkg) await openInBrowser();
     }
   } catch (e) {
     // eslint-disable-next-line no-console
