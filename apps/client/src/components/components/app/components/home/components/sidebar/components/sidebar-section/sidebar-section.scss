@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 5px 0;
+  padding: 5px 0 0 0;
 }
 
 .sidebar-section__border {
@@ -10,7 +10,7 @@
   // size
   height: 1px;
   box-sizing: border-box;
-  width: calc(100% - var(--padding) * 2);
+  width: calc(100% - var(--padding) * 3);
   border-top: var(--border);
   padding: 0 var(--padding);
   margin-block-end: 5px;

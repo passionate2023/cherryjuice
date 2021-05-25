@@ -9,7 +9,7 @@ export async function bootstrapServer() {
   }
   await app.listen(port);
   // eslint-disable-next-line no-console
-  console.log(`Listening on port ${port}`);
+  console.log(`Listening at http://localhost:${process.env.NODE_PORT}`);
 
   if (module.hot) {
     module.hot.accept();

@@ -1,4 +1,5 @@
 .home {
+  --border: 1px solid var(--on-background-010-10);
   //position
   grid-area: editor;
   z-index: 1;

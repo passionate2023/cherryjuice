@@ -10,9 +10,9 @@ const groups = [
   {
     name: 'build',
     info: [
-      { label: 'build date', text: process.env.BUILD_DATE || '-' },
+      { label: 'Build Date', text: process.env.BUILD_DATE || '-' },
       {
-        label: 'commit',
+        label: 'Commit',
         text: (process.env.COMMIT_SHA || '-').substring(0, 10),
         link: process.env.COMMIT_SHA
           ? repoLink + '/commit/' + process.env.COMMIT_SHA
@@ -43,7 +43,7 @@ export const About: React.FC = () => {
       {groups.map(({ name, info }) => (
         <SettingsGroup name={name} key={name}>
           {info.map(({ label, text, link }) => (
-            <SettingsElement name={label + ':'} key={label}>
+            <SettingsElement name={label} key={label}>
               {link ? (
                 <InformationLink text={text} link={link} />
               ) : (
