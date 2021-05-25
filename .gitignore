@@ -12,4 +12,4 @@ debug.log
 build
 .env
 bin
-*/cs_editor/types
+*/editor/types
