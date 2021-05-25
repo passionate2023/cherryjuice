@@ -29,10 +29,10 @@ jobs:
       - name: build local dependencies
         run: yarn build:lib0:1 && yarn build:lib:1 && yarn build:lib:3 && yarn build:lib:4
 
-      - name: Cypress run with env
+      - name: cypress run with env
         uses: cypress-io/github-action@v2
         with:
-          working-directory: ./apps/cs_client
+          working-directory: ./apps/client
           config-file: cypress.ci.json
           browser: chrome
           headless: true

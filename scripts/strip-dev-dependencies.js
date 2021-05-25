@@ -40,8 +40,8 @@ const resolveGlobs = folders =>
 
 const paths = [
   './',
-  includeServerDeps ? './apps/cs_server' : '',
-  includeClientDeps ? './apps/cs_client' : '',
+  includeServerDeps ? './apps/server' : '',
+  includeClientDeps ? './apps/client' : '',
   './apps/editor-demo',
   './libs/*',
 ].filter(Boolean);

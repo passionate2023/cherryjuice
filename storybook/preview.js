@@ -6,8 +6,8 @@ import '@storybook/addon-console';
 import { Provider } from 'react-redux';
 import { store } from '::store/store';
 import modTheme from '@cherryjuice/shared-styles/build/themes/themes.scss';
-import '../apps/cs_client/src/assets/styles/global-scope/material-ui.scss';
-import '../apps/cs_client/src/assets/styles/global-scope/google-picker.scss';
+import '../apps/client/src/assets/styles/global-scope/material-ui.scss';
+import '../apps/client/src/assets/styles/global-scope/google-picker.scss';
 import '@cherryjuice/shared-styles/build/global/base.scss';
 import '@cherryjuice/shared-styles/build/global/css-variables.scss';
 {
