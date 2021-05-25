@@ -24,7 +24,7 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
-          workflow: release_${{ steps.extract_branch.outputs.branch }}
+          workflow: release
 
       - name: Notify slack success
         if: success()
