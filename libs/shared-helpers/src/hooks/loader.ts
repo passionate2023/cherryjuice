@@ -1,26 +1,36 @@
 import { useEffect, useRef, useState } from 'react';
 
 type Props = {
-  timeout?: number;
+  waitBeforeShowing?: number;
   loading?: boolean;
+  minimumLoadingDuration?: number;
 };
+type Timeout = ReturnType<typeof setTimeout>;
 export const useLoader = (
-  { timeout, loading = true }: Props = { timeout: 250 },
+  { waitBeforeShowing, loading = true, minimumLoadingDuration }: Props = {
+    waitBeforeShowing: 250,
+    minimumLoadingDuration: 0,
+  },
 ) => {
   const [show, setShow] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const showTimeoutRef = useRef<Timeout>();
+  const hideTimeoutRef = useRef<Timeout>();
   useEffect(() => {
-    clearTimeout(timeoutRef.current);
+    clearTimeout(showTimeoutRef.current);
+    clearTimeout(hideTimeoutRef.current);
     if (loading) {
-      timeoutRef.current = setTimeout(() => {
+      showTimeoutRef.current = setTimeout(() => {
         setShow(true);
-      }, timeout);
-      return () => {
-        clearTimeout(timeoutRef.current);
-      };
+      }, waitBeforeShowing);
     } else {
-      setShow(false);
+      hideTimeoutRef.current = setTimeout(() => {
+        setShow(false);
+      }, minimumLoadingDuration);
     }
-  }, [timeout, loading]);
+    return () => {
+      clearTimeout(showTimeoutRef.current);
+      clearTimeout(hideTimeoutRef.current);
+    };
+  }, [waitBeforeShowing, loading, minimumLoadingDuration]);
   return show;
 };

@@ -1,0 +1,7 @@
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
+.information-text {
+  @include type-e2();
+  color: var(--on-background-010);
+  font-family: monospace;
+  padding: 3px;
+}

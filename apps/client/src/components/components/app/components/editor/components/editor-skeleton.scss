@@ -1,0 +1,10 @@
+.editor-skeleton {
+  box-sizing: border-box;
+  overflow: auto;
+  padding: 20px;
+  svg {
+    opacity: 0.3;
+    width: 100%;
+    max-width: 1200px;
+  }
+}

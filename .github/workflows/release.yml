@@ -1,4 +1,4 @@
-name: release_master
+name: release
 
 on: workflow_dispatch
 
@@ -16,6 +16,12 @@ jobs:
 
       - name: install dependencies
         run: npm i conventional-changelog-conventionalcommits
+
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          branch: master
 
       - name: Release
         env:

@@ -1,0 +1,15 @@
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+.documents-list-skeleton {
+  box-sizing: border-box;
+  padding: 30px;
+  svg {
+    width: 100%;
+    max-width: 1200px;
+
+    @include respond-to($md-down) {
+      width: auto;
+      max-width: 100%;
+    }
+    opacity: 0.3;
+  }
+}

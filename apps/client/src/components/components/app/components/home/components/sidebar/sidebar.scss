@@ -1,0 +1,14 @@
+@import '~@cherryjuice/shared-styles/build/mixins/breakpoints';
+
+.sidebar {
+  width: 200px;
+  height: 100%;
+  // style
+  background-color: var(--background-100);
+
+  @include respond-to($md-down) {
+    border-top: var(--border);
+    max-width: 50vw;
+  }
+  border-right: var(--border);
+}

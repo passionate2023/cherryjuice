@@ -1,0 +1,16 @@
+@import '~@cherryjuice/shared-styles/build/mixins/typography';
+.information-link {
+  @include type-e2();
+  text-decoration: none;
+  position: relative;
+  color: #3c86c7;
+  &:after {
+    position: absolute;
+    content: '↗';
+    right: -11px;
+    top: -2px;
+    font-size: 13px;
+  }
+  font-family: monospace;
+  padding: 3px;
+}

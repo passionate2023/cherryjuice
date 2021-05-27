@@ -1,0 +1,32 @@
+.home {
+  --border: 1px solid var(--on-background-010-10);
+  //position
+  grid-area: editor;
+  z-index: 1;
+  // size
+  width: 100%;
+  // content
+  overflow: hidden;
+  display: flex;
+  flex-direction: column-reverse;
+  // style
+  background-color: var(--background-100);
+  // temporary hacks
+  //position: absolute;
+  //z-index: 1;
+}
+
+.mod__sidebar-and-folder {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  flex: 1;
+
+  // sets width of folder component
+  & > div:last-child {
+    width: 100%;
+  }
+  &[data-show-sidebar='true'] > div:last-child {
+    width: calc(100% - 200px);
+  }
+}

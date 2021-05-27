@@ -1,0 +1,10 @@
+{
+    "jsc": {
+        "target": "es2018",
+        "parser": {
+            "syntax": "typescript",
+  "tsx":true,          "dynamicImport": true,
+            "decorators": true
+        },"loose": true
+    }
+}
