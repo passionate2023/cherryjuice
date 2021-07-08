@@ -50,6 +50,7 @@ importers:
       prettier: ^2.3.2
       react: ^17.0.1
       react-dom: ^17.0.1
+      rimraf: 3.0.2
       rollup: ^2.34.2
       rollup-plugin-commonjs: ^10.1.0
       rollup-plugin-delete: ^2.0.0
@@ -115,6 +116,7 @@ importers:
       node-sass: 4.14.1
       postcss: 8.2.1
       prettier: 2.3.2
+      rimraf: 3.0.2
       rollup: 2.52.7
       rollup-plugin-commonjs: 10.1.0_rollup@2.52.7
       rollup-plugin-delete: 2.0.0
@@ -231,6 +233,9 @@ importers:
       webpack-cli: ^3.3.11
       webpack-dev-server: ^3.10.3
       webpack-merge: ^4.2.2
+      workbox-core: 5.1.4
+      workbox-precaching: 5.1.4
+      workbox-routing: 5.1.4
       workbox-webpack-plugin: ^5.1.4
       worker-loader: ^2.0.0
       xstate: ^4.16.0
@@ -336,6 +341,9 @@ importers:
       webpack-cli: 3.3.12_webpack@4.46.0
       webpack-dev-server: 3.11.2_46edf965869dcc7c8d09e022f331d1ea
       webpack-merge: 4.2.2
+      workbox-core: 5.1.4
+      workbox-precaching: 5.1.4
+      workbox-routing: 5.1.4
       workbox-webpack-plugin: 5.1.4_webpack@4.46.0
       worker-loader: 2.0.0_webpack@4.46.0
       xstate: 4.22.0

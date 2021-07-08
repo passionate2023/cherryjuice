@@ -13,11 +13,12 @@ COPY nginx/shared/ /etc/nginx/shared
 COPY ./libs/ /usr/share/cj/libs
 COPY ./node_modules/@cherryjuice /usr/share/cj/node_modules/@cherryjuice
 COPY ./package.json/ /usr/share/cj/package.json
-COPY ./yarn.lock /usr/share/cj/yarn.lock
+COPY ./pnpm-lock.yaml /usr/share/cj/pnpm-locl.yaml
+COPY ./pnpm-workspace.yaml /usr/share/cj/pnpm-workspace.yaml
 COPY ./apps/server/package.json /usr/share/cj/apps/server/package.json
 COPY ./apps/server/node_modules /usr/share/cj/apps/server/node_modules
 WORKDIR /usr/share/cj/apps/server
-RUN yarn install
+RUN pnpm i --frozen-lockfile=false
 
 # server code
 COPY ./apps/server/dist /usr/share/cj/apps/server/dist
