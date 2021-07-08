@@ -19,10 +19,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
 
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v2
         with:
-          version: 6.0.2
-          run_install: true
+          version: 6.9.1
 
       - name: install dependencies
         run: pnpm i
@@ -31,7 +30,7 @@ jobs:
         run: pnpm build:libs
 
       - name: run jest tests
-        run: sudo pnpm test
+        run: sudo -E env "PATH=$PATH" pnpm test
 
       - name: trigger build workflow
         if: success()
