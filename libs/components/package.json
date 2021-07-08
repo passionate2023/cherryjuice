@@ -20,6 +20,7 @@
     "generate-named-inputs": "node ../../scripts/generate-named-inputs.js"
   },
   "peerDependencies": {
+    "@cherryjuice/shared-styles": "0.0.1",
     "@cherryjuice/icons": "0.0.1",
     "@cherryjuice/shared-helpers": "0.0.1",
     "react": ">=17.0.1",
@@ -30,6 +31,8 @@
   "devDependencies": {
     "@cherryjuice/rollup-plugin-svg": "0.0.1",
     "@cherryjuice/shared-styles": "0.0.1",
+    "@cherryjuice/icons": "0.0.1",
+    "@cherryjuice/shared-helpers": "0.0.1",
     "node-sass": "4.14.1",
     "postcss": "8.2.1",
     "sass": "^1.23.7",

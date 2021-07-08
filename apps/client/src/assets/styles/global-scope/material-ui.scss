@@ -1,7 +1,8 @@
-@use "~@material/theme" with (
-  $primary:  rgb(121, 6, 4),
-  $secondary: rgb(0, 109, 109),
-  $background: rgb(255, 255, 255),
-);
 // linear progress
 @use '~@material/linear-progress/mdc-linear-progress';
+
+body{
+  --mdc-theme-primary: rgb(121, 6, 4);
+  --mdc-theme-secondary:  rgb(0, 109, 109);
+  --mdc-theme-background:  rgb(255, 255, 255);
+}

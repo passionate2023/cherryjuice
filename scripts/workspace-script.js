@@ -33,7 +33,7 @@ const apps = { 0: { 1: 'react-client', 2: 'nest-server' } };
 const runScriptAtLevel = script => level => {
   return Promise.allSettled(
     Array.from(level).map(packageName => {
-      const command = `yarn workspace @cherryjuice/${packageName} run ${script}`;
+      const command = `pnpm run ${script} --filter @cherryjuice/${packageName}`;
       log(packageName)(command);
       const promise = exec(command);
       const child = promise.child;

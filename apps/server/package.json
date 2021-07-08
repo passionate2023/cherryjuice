@@ -20,9 +20,9 @@
     "start": "node dist/main.js",
     "lint": "eslint ./**",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/config/typeorm.config.ts",
-    "typeorm:migration:generate": "yarn typeorm migration:generate -- -n",
-    "typeorm:migration:run": "yarn typeorm migration:run",
-    "typeorm:migration:revert": "yarn typeorm migration:revert"
+    "typeorm:migration:generate": "pnpm typeorm migration:generate -- -n",
+    "typeorm:migration:run": "pnpm typeorm migration:run",
+    "typeorm:migration:revert": "pnpm typeorm migration:revert"
   },
   "dependencies": {
     "@apollo/gateway": "^0.21.4",
@@ -73,7 +73,8 @@
     "@cherryjuice/default-settings": "0.0.2",
     "xml2js": "^0.4.22",
     "tsconfig-paths": "^3.9.0",
-    "convict": "^6.1.0"
+    "convict": "^6.1.0",
+    "graphql-subscriptions":"1.2.1"
   },
   "devDependencies": {
     "@babel/runtime": "^7.9.6",

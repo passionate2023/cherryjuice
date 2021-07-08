@@ -2,7 +2,6 @@
 dist
 node_modules
 temp
-yarn-error.log
 *.swp
 report*.json
 .idea
@@ -13,3 +12,4 @@ build
 .env
 bin
 */editor/types
+.pnpm-debug.log

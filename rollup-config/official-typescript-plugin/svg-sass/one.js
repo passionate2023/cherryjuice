@@ -9,7 +9,7 @@ export const one = ({ clean }) => ({
     external(),
     resolve(),
     commonjs({
-      include: ['../../node_modules/**', 'node_modules/**'],
+      include: ['node_modules/**'],
     }),
   ].filter(Boolean),
 });
