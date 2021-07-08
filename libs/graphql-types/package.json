@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "generate": "cd src && node generate.js",
-    "postgenerate": "yarn build",
+    "postgenerate": "pnpm build",
     "build": "rollup -c --environment mode:ts2_es_cjs",
     "types": "exit 0",
     "test": "exit 0",

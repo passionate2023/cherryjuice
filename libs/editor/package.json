@@ -25,7 +25,9 @@
     "react-router-dom": "^5.1.2",
     "rxjs": "^6.5.5"
   },
-  "dependencies": {},
+  "dependencies": {
+    "rxjs": "^6.5.5"
+  },
   "devDependencies": {
     "@cherryjuice/ahtml-to-html": "0.0.2",
     "@cherryjuice/graphql-types": "0.0.1",

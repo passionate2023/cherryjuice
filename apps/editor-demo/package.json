@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "webpack-dev-server --color --progress --config .webpack/webpack.dev.js ",
-    "dev:editor-demo": "yarn dev",
+    "dev:editor-demo": "pnpm dev",
     "build": "webpack --config .webpack/webpack.prod.js",
-    "build:editor-demo": "yarn build",
-    "cypress": "yarn cypress open",
+    "build:editor-demo": "pnpm build",
+    "cypress": "pnpm cypress open",
     "test": "jest",
     "storybook": "start-storybook -p 1237",
     "storybook:build": "build-storybook -c .storybook -o .storybook-static",

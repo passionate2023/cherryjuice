@@ -18,4 +18,5 @@ module.exports = {
       prefix: '<rootDir>/',
     }),
   },
+  testEnvironment :"jsdom"
 };

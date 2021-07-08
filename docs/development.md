@@ -20,7 +20,7 @@
 - Data is cached in the browser using **LocalForage**, and stored server-side using **Postgres**
 - The app state and data are managed using **Redux**
 - **GraphQL** is used as a data layer
-- Code is shared between the server and client using **Yarn workspaces**
+- Code is shared between the server and client using **pnpm workspaces**
 
 ### Repository Structure
 
@@ -53,13 +53,13 @@ You can use [GitHub Codespaces](https://docs.github.com/en/codespaces/developing
 Start client development:
 
 ```sh
-yarn dev:client
+pnpm dev:client
 ```
 
 Start server development:
 
 ```sh
-yarn dev:server
+pnpm dev:server
 ```
 
 ## Local Development
@@ -67,7 +67,7 @@ yarn dev:server
 ### Prerequisites
 
 - [Node 14](./prerequisits.md#node)
-- [Yarn 1](./prerequisits.md#yarn)
+- [pnpm 6](./prerequisits.md#pnpm)
 - [Postgres 12](./prerequisits.md#postgres)
 - [SMTP server](./prerequisits.md#smtp-server) (optional)
 
@@ -92,19 +92,19 @@ DATABASE_URL=postgres://USER:PASSWORD@HOST:5432/DATABASE
 Install dependencies and build local libraries:
 
 ```sh
-yarn setup:dev
+pnpm setup:dev
 ```
 
 Start client development:
 
 ```sh
-yarn dev:client
+pnpm dev:client
 ```
 
 Start server development:
 
 ```sh
-yarn dev:server
+pnpm dev:server
 ```
 
 ## Building
@@ -124,7 +124,7 @@ Build the image:
 
 ```sh
 # you can provide the image name as an argument (default is "cherryjuice")
-yarn build:docker
+pnpm build:docker
 ```
 
 >Related: [Running the container](./running-locally.md#running-the-container).
@@ -143,12 +143,12 @@ cd cherryjuice
 Build the app:
 
 ```sh
-yarn build:app
+pnpm build:app
 ```
 
 Package the app:
 ```sh
-yarn build:bin
+pnpm build:bin
 ```
 The executables should be generated at `./bin` directory.
 

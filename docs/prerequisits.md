@@ -78,8 +78,8 @@ ASSETS_URL=http://localhost:3000
 **Windows**: [https://github.com/coreybutler/nvm-windows](https://github.com/coreybutler/nvm-windows)  
 **Mac** and **Linux**: [https://github.com/nvm-sh/nvm](https://github.com/nvm-sh/nvm)
 
-## Yarn
-[https://classic.yarnpkg.com/en/docs/install/](https://classic.yarnpkg.com/en/docs/install/)
+## pnpm
+[https://pnpm.io/installation]](https://pnpm.io/installation)
 
 ### Docker
 [https://docs.docker.com/get-docker/]()  

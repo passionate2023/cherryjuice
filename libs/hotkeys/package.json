@@ -23,6 +23,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@cherryjuice/graphql-types": "0.0.1",
     "typescript": "^4.1.3"
   },
   "optionalDependencies": {
