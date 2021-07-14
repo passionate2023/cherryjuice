@@ -1,0 +1,14 @@
+{
+  "name": "lint-staged",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "i": "pnpm i && rush update-autoinstaller --name lint-staged"
+  },
+  "dependencies": {
+    "eslint": "7.30.0",
+    "lint-staged": "11.0.0",
+    "prettier": "2.3.2",
+    "typescript": "4.3.5"
+  }
+}

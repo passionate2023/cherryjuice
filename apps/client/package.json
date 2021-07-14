@@ -57,6 +57,7 @@
     "@cherryjuice/components": "workspace:*",
     "@cherryjuice/hotkeys": "workspace:*",
     "@cherryjuice/icons": "workspace:*",
+    "eslint-config-cherryjuice": "workspace:*",
     "@material/animation": "^5.1.0",
     "@material/base": "^5.1.0",
     "@material/feature-targeting": "^5.1.0",

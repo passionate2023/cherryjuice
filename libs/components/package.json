@@ -44,6 +44,7 @@
     "rollup-plugin-typescript2": "0.30.0",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-node-resolve": "5.2.0",
+    "eslint-config-cherryjuice": "workspace:*",
     "@cherryjuice/rollup-plugin-svg": "workspace:*"
   },
   "optionalDependencies": {

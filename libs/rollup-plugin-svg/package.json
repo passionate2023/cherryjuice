@@ -26,6 +26,7 @@
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@rollup/plugin-typescript": "^8.0.0",
+    "eslint-config-cherryjuice": "workspace:*",
     "rollup-plugin-terser": "7.0.2",
     "rollup-plugin-delete": "^2.0.0"
   },

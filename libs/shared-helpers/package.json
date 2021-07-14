@@ -37,6 +37,7 @@
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-node-resolve": "5.2.0",
     "@cherryjuice/rollup-plugin-svg": "workspace:*",
+    "eslint-config-cherryjuice": "workspace:*",
     "@types/node": "14.17.0"
   }
 }
