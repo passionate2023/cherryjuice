@@ -10,14 +10,22 @@
    * "rush my-global-command --help".
    */
   "commands": [
-    // global
+    // autoinstallers
     {
+      "name": "commit-lint",
+      "commandKind": "global",
+      "summary": "Used by the pre-commit Git hook.",
+      "autoinstallerName": "commit-lint",
+      "shellCommand": "commitlint --edit $1"
+    },
+     {
       "name": "lint-staged",
       "commandKind": "global",
       "summary": "Used by the pre-commit Git hook. This command invokes lint-staged to reformat staged changes.",
       "autoinstallerName": "lint-staged",
       "shellCommand": "lint-staged"
     },
+    // global
     // bulk
     // ignores warnings from rollup and webpack
     // https://github.com/microsoft/rushstack/issues/1329#issuecomment-502940264
