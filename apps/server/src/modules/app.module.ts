@@ -27,7 +27,7 @@ import {
   imports: [
     process.env.NODE_SERVE_STATIC === 'true' &&
       ServeStaticModule.forRoot({
-        rootPath: join(__dirname, '../../../client/dist'),
+        rootPath: join(__dirname, '../../../client/build'),
       }),
     GraphQLModule.forRoot({
       include: [

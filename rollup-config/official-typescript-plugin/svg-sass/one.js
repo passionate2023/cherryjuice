@@ -3,13 +3,17 @@ import external from 'rollup-plugin-node-externals';
 import { nodeResolve as resolve } from '@rollup/plugin-node-resolve';
 import { zero } from '../../zero';
 
-export const one = ({ clean }) => ({
-  plugins: [
-    ...zero({ clean }).plugins,
-    external(),
-    resolve(),
-    commonjs({
-      include: ['node_modules/**'],
-    }),
-  ].filter(Boolean),
-});
+export const one = ({ clean }) => {
+  const z = zero({ clean });
+  return ({
+    ...z,
+    plugins: [
+      ...z.plugins,
+      external(),
+      resolve(),
+      commonjs({
+        include: ['node_modules/**'],
+      }),
+    ].filter(Boolean),
+  });
+};

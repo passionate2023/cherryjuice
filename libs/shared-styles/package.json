@@ -7,25 +7,22 @@
   "main": "build/cjs/index.js",
   "types": "build/types",
   "exports": {
-    "./": "./dist/"
+    "./": "./build/"
   },
   "files": [
     "build"
   ],
   "scripts": {
-    "build": "rollup -c ",
+    "build": "rollup -c --silent",
     "dev:shared-styles": "rollup -c -w",
     "test": "exit 0",
     "types": "exit 0",
     "lint": "eslint ./**"
   },
-  "peerDependencies": {},
-  "dependencies": {},
   "devDependencies": {
-    "rollup-plugin-copy": "^3.3.0",
-    "rollup": "^2.34.2",
+    "rollup-plugin-copy": "~3.4.0",
+    "rollup": "~2.53.1",
     "rollup-plugin-node-externals": "^2.2.0",
-    "rollup-plugin-delete": "^2.0.0"
-  },
-  "optionalDependencies": {}
+    "rollup-plugin-delete": "~2.0.0"
+  }
 }

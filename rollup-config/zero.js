@@ -19,4 +19,7 @@ export const zero = ({ clean }) => ({
     production && terser(),
     clean && del({ targets: 'build' }),
   ].filter(Boolean),
+  onwarn() {
+    return
+  }
 });

@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "rollup -c -w --environment TSC_NONPOLLING_WATCHER:true",
     "types": "exit 0",
-    "build": "rollup -c",
+    "build": "rollup -c --silent",
     "test": "exit 0",
     "lint": "eslint ./**"
   },

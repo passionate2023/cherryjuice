@@ -3,7 +3,6 @@ import external from 'rollup-plugin-node-externals';
 import typescript from '@rollup/plugin-typescript';
 import { nodeResolve as resolve } from '@rollup/plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
-import del from 'rollup-plugin-delete';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -25,7 +24,7 @@ const mainConfig = {
     },
   ],
   plugins: [
-    production && del({ targets: 'build/*' }),
+    //production && del({ targets: 'build/*' }),
     external(),
     resolve(),
     typescript({

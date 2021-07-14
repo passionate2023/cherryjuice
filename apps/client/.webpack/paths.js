@@ -2,10 +2,10 @@
 const path = require('path');
 
 module.exports = {
-  dist: path.resolve(__dirname, '../dist'),
+  dist: path.resolve(__dirname, '../build'),
   index: path.resolve(__dirname, '../src/index.tsx'),
   template: path.resolve(__dirname, '../src/assets/index.html'),
-  iconsDist: path.resolve(__dirname, '../dist/icons/'),
+  iconsDist: path.resolve(__dirname, '../build/icons/'),
   icons: path.resolve(__dirname, '../src/assets/icons'),
   serviceWorker: path.resolve(
     __dirname,

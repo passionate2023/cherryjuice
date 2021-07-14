@@ -22,6 +22,7 @@ export const ts2 = ({ cjs, es, clean }) => {
         sourcemap: !production,
       },
     ].filter(Boolean),
+    ...shared,
     plugins: [
       ...shared.plugins,
       external(),

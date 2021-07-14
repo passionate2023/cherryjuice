@@ -1,7 +1,7 @@
 {
   "name": "cherryjuice",
   "private": true,
-  "bin": "apps/server/dist/main.js",
+  "bin": "apps/server/build/main.js",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev:client": "pnpm run dev --filter @cherryjuice/react-client  ",
@@ -131,9 +131,9 @@
   },
   "pkg": {
     "assets": [
-      "apps/client/dist/**/*",
-      "apps/server/dist/templates/**/*",
-      "apps/server/dist/migrations/**/*"
+      "apps/client/build/**/*",
+      "apps/server/build/templates/**/*",
+      "apps/server/build/migrations/**/*"
     ],
     "targets": [
       "node14-linux-x64",
