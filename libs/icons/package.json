@@ -15,7 +15,6 @@
     "dev:icons:cjs": "rollup -c  -w --environment TSC_NONPOLLING_WATCHER:true,mode:ts_cjs,clean:false",
     "build": "rollup -c --silent --environment mode:ts2_es",
     "types": "tsc -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
-    "test": "exit 0",
     "lint": "eslint ./**",
     "generate-named-inputs-svg": "node ../../scripts/generate-named-inputs.js --depth=6 --svg",
     "generate-named-inputs": "node ../../scripts/generate-named-inputs.js --depth=6"

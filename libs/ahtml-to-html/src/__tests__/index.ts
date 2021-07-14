@@ -1,6 +1,5 @@
 import { aHtmlToHtml } from '../ahtml-to-html';
-import { ctbToAHtml } from '@cherryjuice/ctb-to-ahtml';
-import { renderingIssue } from '../shared/__data__'
+import { ctbToAHtml , renderingIssues} from '@cherryjuice/ctb-to-ahtml';
 
 const renderingTestTemplate = async ({ txt, otherTables }) => {
   const res = aHtmlToHtml(

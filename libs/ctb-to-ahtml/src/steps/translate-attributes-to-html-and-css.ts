@@ -1,4 +1,4 @@
-import { parseLink } from '@cherryjuice/ahtml-to-html';
+import { parseLink } from "./helpers/parse-link";
 
 const utils = {
   rrrrggggbbbbbToRrggbb: c => c[0] + c[1] + c[2] + c[5] + c[6] + c[9] + c[10],

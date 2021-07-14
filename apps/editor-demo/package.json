@@ -7,7 +7,6 @@
     "build": "webpack --config .webpack/webpack.prod.js",
     "build:editor-demo": "pnpm build",
     "cypress": "pnpm cypress open",
-    "test": "jest",
     "storybook": "start-storybook -p 1237",
     "storybook:build": "build-storybook -c .storybook -o .storybook-static",
     "lint": "eslint ./**"

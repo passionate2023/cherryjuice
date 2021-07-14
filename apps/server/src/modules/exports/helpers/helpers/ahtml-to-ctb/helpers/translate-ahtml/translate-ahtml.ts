@@ -1,4 +1,3 @@
-import { AHtmlLine, AHtmlNode, AHtmlObject } from '@cherryjuice/ahtml-to-html';
 import {
   CTBObject,
   translateObject,
@@ -7,7 +6,7 @@ import {
   CTJustification,
   translateNode,
 } from './helpers/translate-node/translate-node';
-import { justificationMap } from '@cherryjuice/ctb-to-ahtml';
+import { AHtmlLine, AHtmlNode, AHtmlObject , justificationMap } from '@cherryjuice/ctb-to-ahtml';
 
 const reverseJustificationMap = {
   'text-align': Object.fromEntries(

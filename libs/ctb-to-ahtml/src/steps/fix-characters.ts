@@ -1,4 +1,6 @@
-import { DOUBLE_SPACE, QUAD_SPACE } from '@cherryjuice/ahtml-to-html';
+export const NB_SPACE = '\u00A0';
+export const DOUBLE_SPACE = NB_SPACE + NB_SPACE;
+export const QUAD_SPACE = NB_SPACE + NB_SPACE + NB_SPACE + NB_SPACE;
 
 const fixCharacters = {
   flagOrphanWhiteSpace: xmlString =>

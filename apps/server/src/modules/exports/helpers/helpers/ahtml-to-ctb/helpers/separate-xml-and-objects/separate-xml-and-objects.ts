@@ -1,6 +1,5 @@
 import { extractObjects } from './helpers/tables';
-import { objToXml } from '@cherryjuice/ctb-to-ahtml';
-import { AHtmlNode } from '@cherryjuice/ahtml-to-html';
+import { AHtmlNode,objToXml } from '@cherryjuice/ctb-to-ahtml';
 
 type PreCTB = { objects: any; xmlString: string };
 const separateXmlAndObjects = (nodes: AHtmlNode[]): PreCTB => {

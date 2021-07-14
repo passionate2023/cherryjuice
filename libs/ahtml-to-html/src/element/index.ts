@@ -1,5 +1,5 @@
 import { escapeHtml } from '../helpers/escape-html';
-import { AHtmlNode } from '../ahtml-to-html';
+import { AHtmlNode } from '@cherryjuice/ctb-to-ahtml';
 
 const stringifyStyles = (style = {}, onlyStylesThatStartWith = undefined) =>
   (

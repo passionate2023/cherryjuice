@@ -5,7 +5,7 @@ import { Codebox } from '../entities/Codebox';
 import { getPNGSize } from '../rendering/image/get-image-size';
 import { parseXml } from '@cherryjuice/ctb-to-ahtml';
 import { ctbToAHtml } from '@cherryjuice/ctb-to-ahtml';
-import { AHtmlLine } from '@cherryjuice/ahtml-to-html';
+import { AHtmlLine } from '@cherryjuice/ctb-to-ahtml';
 import { nodeQueries, SqliteNodeMeta } from './queries/node';
 import { generateRootNode } from '../rendering/node-meta/generate-root-node';
 

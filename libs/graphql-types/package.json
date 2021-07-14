@@ -14,7 +14,6 @@
     "postgenerate": "pnpm build",
     "build": "rollup -c --silent --environment mode:ts2_es_cjs",
     "types": "exit 0",
-    "test": "exit 0",
     "lint": "eslint ./**"
   },
   "devDependencies": {

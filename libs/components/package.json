@@ -15,7 +15,6 @@
     "dev:components:cjs": "rollup -c  -w --environment TSC_NONPOLLING_WATCHER:true,mode:ts_cjs,clean:false",
     "build": "rollup -c --silent --environment mode:ts_es",
     "types": "tsc -p ./tsconfig.dts.json && tsc-alias -p ./tsconfig.dts.alias.json",
-    "test": "exit 0",
     "lint": "eslint ./**",
     "generate-named-inputs": "node ../../scripts/generate-named-inputs.js"
   },
@@ -45,8 +44,7 @@
     "rollup-plugin-typescript2": "0.30.0",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-node-resolve": "5.2.0",
-    "@cherryjuice/rollup-plugin-svg": "workspace:*",
-    "@types/node": "14.17.0"
+    "@cherryjuice/rollup-plugin-svg": "workspace:*"
   },
   "optionalDependencies": {
     "@testing-library/jest-dom": "^5.5.0",
