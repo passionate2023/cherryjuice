@@ -20,9 +20,9 @@
   },
   "devDependencies": {
     "rollup-plugin-copy": "~3.4.0",
-    "rollup": "~2.53.1",
+    "rollup": "^2.53.1",
     "rollup-plugin-node-externals": "^2.2.0",
-    "rollup-plugin-delete": "~2.0.0",
+    "rollup-plugin-delete": "2.0.0",
     "eslint-config-cherryjuice": "workspace:*"
   }
 }
