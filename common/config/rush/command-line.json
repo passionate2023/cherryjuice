@@ -25,6 +25,13 @@
       "autoinstallerName": "lint-staged",
       "shellCommand": "lint-staged"
     },
+     {
+      "name": "semantic-release",
+      "commandKind": "global",
+      "summary": "Used by CI to generate releases",
+      "autoinstallerName": "semantic-release",
+      "shellCommand": "semantic-release"
+    },
     // global
     {
       "name": "prepare-docker-context",
