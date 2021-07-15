@@ -9,7 +9,6 @@
     + [First Time Setup](#first-time-setup)
 * [Building](#building)
     + [Building The Docker Image](#building-the-docker-image)
-    + [Building The Executable](#building-the-executable)
 
 
 ## Codebase
@@ -128,28 +127,3 @@ pnpm build:docker
 ```
 
 >Related: [Running the container](./running-locally.md#running-the-container).
-
-### Building The Executable
-
->Note: [the development prerequisites](#prerequisites) are required.
-
-Clone the repository:
-
-```sh
-git clone git@github.com:ycnmhd/cherryjuice.git
-cd cherryjuice
-```
-
-Build the app:
-
-```sh
-pnpm build:app
-```
-
-Package the app:
-```sh
-pnpm build:bin
-```
-The executables should be generated at `./bin` directory.
-
-> Related: [Running the executable](./running-locally.md#running-the-executable).
