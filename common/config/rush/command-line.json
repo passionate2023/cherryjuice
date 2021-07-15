@@ -12,13 +12,13 @@
   "commands": [
     // autoinstallers
     {
-      "name": "commit-lint",
+      "name": "lint-commit",
       "commandKind": "global",
       "summary": "Used by the pre-commit Git hook.",
-      "autoinstallerName": "commit-lint",
+      "autoinstallerName": "lint-commit",
       "shellCommand": "commitlint --edit $1"
     },
-     {
+    {
       "name": "lint-staged",
       "commandKind": "global",
       "summary": "Used by the pre-commit Git hook. This command invokes lint-staged to reformat staged changes.",
@@ -26,6 +26,19 @@
       "shellCommand": "lint-staged"
     },
     // global
+    {
+      "name": "build-docker",
+      "commandKind": "global",
+      "summary": "build docker",
+      "shellCommand": "cp -r common/autoinstallers/build-docker/docker/* common/deploy && mkdir -p common/deploy/apps/client && cp -r apps/client/build common/deploy/apps/client && cd common/deploy && docker image build -t \"${1:-cherryjuice}\" ."
+    },
+    {
+      "name": "build-pkg",
+      "commandKind": "global",
+      "summary": "build pkg",
+      "autoinstallerName": "build-pkg",
+      "shellCommand": "cd common/autoinstallers/build-pkg && ./scripts/build.sh"
+    },
     // bulk
     // ignores warnings from rollup and webpack
     // https://github.com/microsoft/rushstack/issues/1329#issuecomment-502940264

@@ -18,4 +18,4 @@
 
 # This example enforces that commit message should contain a minimum amount of
 # description text.
-node common/scripts/install-run-rush.js commit-lint || exit $?
+node common/scripts/install-run-rush.js lint-commit || exit $?

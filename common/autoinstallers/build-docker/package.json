@@ -1,0 +1,9 @@
+{
+  "name": "build-docker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "i": "pnpm i && rush update-autoinstaller --name build-pkg"
+  },
+  "dependencies": {}
+}

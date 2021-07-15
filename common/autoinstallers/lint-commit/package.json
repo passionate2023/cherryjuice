@@ -1,10 +1,10 @@
 {
-  "name": "commit-lint",
+  "name": "lint-commit",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "i": "pnpm i && rush update-autoinstaller --name commit-lint"
+    "i": "pnpm i && rush update-autoinstaller --name lint-commit"
   },
   "keywords": [],
   "author": "",
