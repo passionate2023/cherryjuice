@@ -27,10 +27,16 @@
     },
     // global
     {
+      "name": "prepare-docker-context",
+      "commandKind": "global",
+      "summary": "prepare docker context",
+      "shellCommand": "cp -r common/autoinstallers/build-docker/docker/* common/deploy && mkdir -p common/deploy/apps/client && cp -r apps/client/build common/deploy/apps/client"
+    },
+    {
       "name": "build-docker",
       "commandKind": "global",
       "summary": "build docker",
-      "shellCommand": "cp -r common/autoinstallers/build-docker/docker/* common/deploy && mkdir -p common/deploy/apps/client && cp -r apps/client/build common/deploy/apps/client && cd common/deploy && docker image build -t \"${1:-cherryjuice}\" ."
+      "shellCommand": "cd common/deploy && docker image build -t \"${1:-cherryjuice}\" ."
     },
     // bulk
     // ignores warnings from rollup and webpack
