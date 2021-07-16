@@ -440,6 +440,7 @@ importers:
       react-test-renderer: ^16.13.1
       rollup: ^2.53.1
       rollup-config: workspace:*
+      tsc-alias: 1.3.7
       typescript: ^4.1.3
     optionalDependencies:
       '@testing-library/jest-dom': 5.14.1
@@ -459,6 +460,7 @@ importers:
       react-dom: 17.0.2_react@17.0.2
       rollup: 2.53.1
       rollup-config: link:../../tools/rollup-config
+      tsc-alias: 1.3.7
       typescript: 4.3.5
 
   ../../libs/ctb-to-ahtml:
@@ -542,6 +544,7 @@ importers:
       rxjs: ^6.6.3
       sass: 1.32.12
       ts-jest: 27.0.3
+      tsc-alias: 1.3.7
       typescript: ^4.1.3
     optionalDependencies:
       '@testing-library/jest-dom': 5.14.1
@@ -576,6 +579,7 @@ importers:
       rxjs: 6.6.7
       sass: 1.32.12
       ts-jest: 27.0.3_jest@27.0.6+typescript@4.3.5
+      tsc-alias: 1.3.7
       typescript: 4.3.5
 
   ../../libs/graphql-types:
@@ -608,6 +612,7 @@ importers:
       identity-obj-proxy: ^3.0.0
       rollup: ^2.53.1
       rollup-config: workspace:*
+      tsc-alias: 1.3.7
       typescript: ^4.1.3
     optionalDependencies:
       '@testing-library/jest-dom': 5.14.1
@@ -619,6 +624,7 @@ importers:
       eslint-config-cherryjuice: link:../../tools/eslint-config-cherryjuice
       rollup: 2.53.1
       rollup-config: link:../../tools/rollup-config
+      tsc-alias: 1.3.7
       typescript: 4.3.5
 
   ../../libs/icons:
@@ -640,6 +646,7 @@ importers:
       rollup: ^2.53.1
       rollup-config: workspace:*
       sass: 1.32.12
+      tsc-alias: 1.3.7
       typescript: ^4.1.3
     optionalDependencies:
       '@testing-library/jest-dom': 5.14.1
@@ -660,6 +667,7 @@ importers:
       rollup: 2.53.1
       rollup-config: link:../../tools/rollup-config
       sass: 1.32.12
+      tsc-alias: 1.3.7
       typescript: 4.3.5
 
   ../../libs/rollup-plugin-svg:
@@ -704,6 +712,7 @@ importers:
       rollup: ^2.53.1
       rollup-config: workspace:*
       rxjs: ^6.6.3
+      tsc-alias: 1.3.7
       typescript: ^4.1.3
     devDependencies:
       '@types/node': 14.17.0
@@ -715,6 +724,7 @@ importers:
       rollup: 2.53.1
       rollup-config: link:../../tools/rollup-config
       rxjs: 6.6.7
+      tsc-alias: 1.3.7
       typescript: 4.3.5
 
   ../../libs/shared-styles:
@@ -3767,6 +3777,20 @@ packages:
       '@types/node': 14.17.0
       '@types/yargs': 16.0.4
       chalk: 4.1.1
+    dev: true
+
+  /@jfonx/console-utils/1.0.3:
+    resolution: {integrity: sha512-/XbnqjWc7yNZVLAJJO9rimfIz9DYte+cj3EF9hwhIv7vw6ok2t3cjl0huYsmD89srKH03vWjeqAcIH86CuYj3g==}
+    dependencies:
+      colors: 1.4.0
+    dev: true
+
+  /@jfonx/file-utils/3.0.1:
+    resolution: {integrity: sha512-qwH0CuzWmghtTHGMyuPHj6SJPQgWeiXFJBfrxCWMbzxVCa3aLZPEfzSdlSnC/UABsk6feRkNdHXw59rVshNPqw==}
+    dependencies:
+      '@jfonx/console-utils': 1.0.3
+      comment-json: 4.1.0
+      find-up: 4.1.0
     dev: true
 
   /@jimp/bmp/0.16.1_@jimp+custom@0.16.1:
@@ -8723,6 +8747,10 @@ packages:
       is-string: 1.0.6
     dev: false
 
+  /array-timsort/1.0.3:
+    resolution: {integrity: sha512-/+3GRL7dDAGEfM6TseQk/U+mi18TU2Ms9I3UlLdUMhz2hbvGNTKdj9xniwXfUqgYhHxRx0+8UnKkvlNwVU+cWQ==}
+    dev: true
+
   /array-union/1.0.2:
     resolution: {integrity: sha1-mjRBDk9OPaI96jdb5b5w8kd47Dk=}
     engines: {node: '>=0.10.0'}
@@ -10434,11 +10462,21 @@ packages:
   /commander/6.2.1:
     resolution: {integrity: sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==}
     engines: {node: '>= 6'}
-    dev: false
 
   /commander/7.2.0:
     resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
     engines: {node: '>= 10'}
+    dev: true
+
+  /comment-json/4.1.0:
+    resolution: {integrity: sha512-WEghmVYaNq9NlWbrkzQTSsya9ycLyxJxpTQfZEan6a5Jomnjw18zS3Podf8q1Zf9BvonvQd/+Z7Z39L7KKzzdQ==}
+    engines: {node: '>= 6'}
+    dependencies:
+      array-timsort: 1.0.3
+      core-util-is: 1.0.2
+      esprima: 4.0.1
+      has-own-prop: 2.0.0
+      repeat-string: 1.6.1
     dev: true
 
   /common-tags/1.8.0:
@@ -12954,6 +12992,13 @@ packages:
       make-dir: 3.1.0
       pkg-dir: 4.2.0
 
+  /find-node-modules/2.1.2:
+    resolution: {integrity: sha512-x+3P4mbtRPlSiVE1Qco0Z4YLU8WFiFcuWTf3m75OV9Uzcfs2Bg+O9N+r/K0AnmINBW06KpfqKwYJbFlFq4qNug==}
+    dependencies:
+      findup-sync: 4.0.0
+      merge: 2.1.1
+    dev: true
+
   /find-root/1.1.0:
     resolution: {integrity: sha512-NKfW6bec6GfKc0SGx1e07QZY9PE99u0Bft/0rzSD5k3sO/vwkVUpDUKVm5Gpp5Ue3YfShPFTX2070tDs5kB9Ng==}
 
@@ -12993,6 +13038,16 @@ packages:
       detect-file: 1.0.0
       is-glob: 4.0.1
       micromatch: 3.1.10
+      resolve-dir: 1.0.1
+    dev: true
+
+  /findup-sync/4.0.0:
+    resolution: {integrity: sha512-6jvvn/12IC4quLBL1KNokxC7wWTvYncaVUYSoxWw7YykPLuRrnv4qdHcSOywOI5RpkOVGeQRtWM8/q+G6W6qfQ==}
+    engines: {node: '>= 8'}
+    dependencies:
+      detect-file: 1.0.0
+      is-glob: 4.0.1
+      micromatch: 4.0.4
       resolve-dir: 1.0.1
     dev: true
 
@@ -14094,6 +14149,11 @@ packages:
     dependencies:
       is-glob: 3.1.0
     dev: false
+
+  /has-own-prop/2.0.0:
+    resolution: {integrity: sha512-Pq0h+hvsVm6dDEa8x82GnLSYHOzNDt7f0ddFa3FqcQlgzEiptPqL+XrOJNavjOzSYiYWIrgeVYYgGlLmnxwilQ==}
+    engines: {node: '>=8'}
+    dev: true
 
   /has-symbols/1.0.2:
     resolution: {integrity: sha512-chXa79rL/UC2KlX17jo3vRGz0azaWEx5tGqZg5pO3NUyEJVB17dMruQlzCCOfUvElghKcm5194+BCRvi2Rv/Gw==}
@@ -17374,6 +17434,10 @@ packages:
 
   /merge-stream/2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
+
+  /merge/2.1.1:
+    resolution: {integrity: sha512-jz+Cfrg9GWOZbQAnDQ4hlVnQky+341Yk5ru8bZSe6sIDTCIg8n9i/u7hSQGSVOF3C7lH6mGtqjkiT9G4wFLL0w==}
+    dev: true
 
   /merge2/1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
@@ -23743,6 +23807,19 @@ packages:
 
   /ts-toolbelt/6.15.5:
     resolution: {integrity: sha512-FZIXf1ksVyLcfr7M317jbB67XFJhOO1YqdTcuGaq9q5jLUoTikukZ+98TPjKiP2jC5CgmYdWWYs0s2nLSU0/1A==}
+
+  /tsc-alias/1.3.7:
+    resolution: {integrity: sha512-Q/WcSjhbehLB2pTKuK6QC+R0m/bLXwhXoITec5zb4PEkaLv1X2GHdLb0HagLJVa3QWPKNsbp7NZex8WE0EbX3A==}
+    hasBin: true
+    dependencies:
+      '@jfonx/console-utils': 1.0.3
+      '@jfonx/file-utils': 3.0.1
+      chokidar: 3.5.2
+      commander: 6.2.1
+      find-node-modules: 2.1.2
+      globby: 11.0.3
+      normalize-path: 3.0.0
+    dev: true
 
   /tsconfig-paths-webpack-plugin/3.5.1:
     resolution: {integrity: sha512-n5CMlUUj+N5pjBhBACLq4jdr9cPTitySCjIosoQm0zwK99gmrcTGAfY9CwxRFT9+9OleNWXPRUcxsKP4AYExxQ==}

@@ -69,6 +69,18 @@
       "enableParallelism": true,
       "ignoreDependencyOrder": true,
       "safeForSimultaneousRushProcesses": true
+    },
+    {
+      "commandKind": "bulk",
+      "name": "types",
+      "summary": "generate libs types",
+      "watchForChanges": false,
+      "ignoreMissingScript": true,
+      "incremental": true,
+      "allowWarningsInSuccessfulBuild": true,
+      "enableParallelism": true,
+      "ignoreDependencyOrder": true,
+      "safeForSimultaneousRushProcesses": true
     }
     // {
     //   /**

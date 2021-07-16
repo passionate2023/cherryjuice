@@ -36,7 +36,8 @@
     "typescript": "^4.1.3",
     "rollup": "^2.53.1",
     "eslint-config-cherryjuice": "workspace:*",
-    "rollup-config":"workspace:*"
+    "rollup-config": "workspace:*",
+    "tsc-alias": "1.3.7"
   },
   "optionalDependencies": {
     "@testing-library/jest-dom": "^5.5.0",
