@@ -19,7 +19,7 @@
 - Data is cached in the browser using **LocalForage**, and stored server-side using **Postgres**
 - The app state and data are managed using **Redux**
 - **GraphQL** is used as a data layer
-- Code is shared between the server and client using **pnpm workspaces**
+- Code is shared between the server and client using **Rushjs**
 
 ### Repository Structure
 
@@ -36,7 +36,6 @@
   │
   ├── components         # Reusable react components
   ├── icons wrapper      # Svg icons wrapper
-  ├── rollup-plugin-SVG  # Used to builds icons
   │
   ├── default-settings
   ├── hotkeys

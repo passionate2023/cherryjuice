@@ -464,9 +464,8 @@
       "reviewCategory": "libs"
     },
     {
-      "packageName": "@cherryjuice/rollup-plugin-svg",
-      "projectFolder": "libs/rollup-plugin-svg",
-      "reviewCategory": "libs"
+      "packageName": "rollup-plugin-svg",
+      "projectFolder": "tools/rollup-plugin-svg",
     },
     {
       "packageName": "@cherryjuice/shared-helpers",

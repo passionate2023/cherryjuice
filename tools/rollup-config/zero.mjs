@@ -1,4 +1,4 @@
-import svg from '@cherryjuice/rollup-plugin-svg';
+import svg from 'rollup-plugin-svg';
 import postcss from 'rollup-plugin-postcss';
 import { terser } from 'rollup-plugin-terser';
 import del from 'rollup-plugin-delete';
