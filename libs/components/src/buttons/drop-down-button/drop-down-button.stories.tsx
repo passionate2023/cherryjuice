@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DropDownButton, ButtonSquare } from '../button-square/button-square';
+import { DropDownButton, ButtonSquare } from '@cherryjuice/components';
 import { Grid } from '../../storybook/board';
 
 const config = {

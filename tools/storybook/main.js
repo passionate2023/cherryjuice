@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 process.env.NODE_ENV = 'development';
 process.env.STORYBOOK = 'true';
+process.env.USE_BABEL = 'true';
 const merge = require('webpack-merge');
-const common = require('../apps/client/.webpack/webpack.common.js');
+const common = require('../../apps/client/.webpack/webpack.common.js');
 module.exports = {
   stories: [
-    '../apps/client/src/**/*.stories.tsx',
-    '../libs/components/src/**/*.stories.tsx',
+    '../../apps/client/src/**/*.stories.tsx',
+    '../../libs/components/src/**/*.stories.tsx',
   ],
 
   webpackFinal: async config => {

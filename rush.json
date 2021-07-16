@@ -486,8 +486,7 @@
     },
     {
       "packageName": "@cherryjuice/editor-demo",
-      "projectFolder": "apps/editor-demo",
-      "reviewCategory": "app"
+      "projectFolder": "tools/editor-demo",
     },
     {
       "packageName": "@cherryjuice/nest-server",
@@ -504,6 +503,10 @@
 
       "packageName": "rollup-config",
       "projectFolder": "tools/rollup-config",
+    },
+    {
+      "packageName": "storybook-cherryjuice",
+      "projectFolder": "tools/storybook",
     }
   ]
 }

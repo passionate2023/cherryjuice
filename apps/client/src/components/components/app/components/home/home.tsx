@@ -16,7 +16,7 @@ const mapDispatch = {};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const Home: React.FC<PropsFromRedux> = ({ showSidebar }) => {
+export const Home: React.FC<PropsFromRedux> = ({ showSidebar }) => {
   const { mbOrTb } = useCurrentBreakpoint();
   const { onTouchEnd, onTouchStart } = useMemo(
     () =>
