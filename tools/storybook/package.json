@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "build-storybook -c . -o storybook-static",
+    "build": "exit 0",
+    "build:static": "build-storybook -c . -o storybook-static",
     "start": "rimraf node_modules/.cache/storybook && start-storybook -c . -p 1237"
   },
-  "dependencies": {
+  "devDependencies": {
     "rimraf": "3.0.2",
     "@storybook/addon-a11y": "6.3.4",
     "@storybook/addon-console": "1.2.3",

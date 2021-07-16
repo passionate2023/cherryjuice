@@ -4,7 +4,7 @@ import { DocumentOperation } from '@cherryjuice/graphql-types';
 import { OperationTypes } from '::root/components/app/components/menus/widgets/components/document-operations/components/helpers/operation-types';
 import { ButtonCircle } from '@cherryjuice/components';
 import { ac } from '::store/store';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { CollapsableListItemProps } from '::root/components/app/components/menus/widgets/components/collapsable-list/components/body/components/collapsable-list-item';
 import { ActionButton } from '::root/components/app/components/menus/widgets/components/document-operations/components/action-button';
 import { mapEventType } from '::root/components/app/components/menus/widgets/components/document-operations/components/helpers/map-event-type';

@@ -1,6 +1,6 @@
 import { DialogHeaderButton } from '::root/components/shared-components/dialog/dialog-header';
 import { Icons } from '@cherryjuice/icons';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { MuteCallback } from '::root/components/shared-components/dialog/dialog-list/dialog-list-item';
 
 type DeleteListItemsProps = {

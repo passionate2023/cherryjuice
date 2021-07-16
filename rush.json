@@ -478,6 +478,10 @@
       "projectFolder": "libs/shared-styles",
       "reviewCategory": "libs"
     },
+    {
+      "packageName": "@cherryjuice/test-ids",
+      "projectFolder": "libs/test-ids",
+    },
     // // apps
     {
       "packageName": "@cherryjuice/react-client",
@@ -507,6 +511,10 @@
     {
       "packageName": "storybook-cherryjuice",
       "projectFolder": "tools/storybook",
+    },
+    {
+      "packageName": "cypress-tests",
+      "projectFolder": "tools/cypress",
     }
   ]
 }

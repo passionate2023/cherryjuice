@@ -1,0 +1,6 @@
+{
+  "baseUrl": "https://cherryjuice.app",
+  "projectId": "mv7ech",
+  "testFiles": ["auth/01. login.ts"],
+  "scrollBehavior": "nearest"
+}

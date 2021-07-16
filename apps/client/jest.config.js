@@ -8,7 +8,7 @@ const tsconfig = require('./tsconfig');
 // eslint-disable-next-line no-undef
 module.exports = {
   ...config,
-  roots: [/*'<rootDir>/.storybook', */ '<rootDir>/src', '<rootDir>/cypress'],
+  roots: [/*'<rootDir>/.storybook', */ '<rootDir>/src', ],
 
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':

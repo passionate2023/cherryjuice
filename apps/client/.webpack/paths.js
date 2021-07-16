@@ -13,7 +13,7 @@ module.exports = {
   ),
   env: path.join(__dirname, '../../../.env'),
   src: path.resolve(__dirname, '../src'),
-  cypress: path.resolve(__dirname, '../cypress'),
+  cypress: path.resolve(__dirname, '../../../tools/cypress/cypress'),
   types: path.resolve(__dirname, '../types'),
   components: path.resolve(__dirname, '../../../libs/components'),
 };

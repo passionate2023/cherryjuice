@@ -4,7 +4,6 @@
   "scripts": {
     "dev": "webpack-dev-server --color --progress --config .webpack/webpack.dev.js ",
     "build": "webpack --config .webpack/webpack.prod.js",
-    "cypress:open": "cypress open",
     "test": "jest",
     "lint": "eslint ./**"
   },
@@ -15,10 +14,6 @@
     "cypress": "^6.2.0"
   },
   "optionalDependencies": {
-    "@4tw/cypress-drag-drop": "^1.3.1",
-    "@cypress/webpack-preprocessor": "^5.4.1",
-    "@testing-library/cypress": "^5.3.0",
-    "cypress-file-upload": "^4.0.7",
     "@testing-library/react": "^10.0.4",
     "@testing-library/react-hooks": "^3.4.1",
     "@types/jest": "26.0.24",
@@ -31,25 +26,13 @@
     "@types/react-router-dom": "^5.1.3",
     "@types/gapi": "^0.0.39",
     "identity-obj-proxy": "^3.0.0",
-    "ramda": "^0.27.0",
-    "react-test-renderer": "^16.13.1",
-    "stylelint": "^13.2.1",
-    "stylelint-config-sass-guidelines": "^7.0.0",
-    "stylelint-config-standard": "^20.0.0",
-    "stylelint-scss": "^3.16.0"
+    "react-test-renderer": "^16.13.1"
   },
   "devDependencies": {
     "framer-motion": "^3.2.1",
     "@apollo/client": "^3.3.6",
-    "@babel/core": "^7.12.10",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
-    "@babel/plugin-syntax-optional-chaining": "^7.8.3",
-    "@babel/plugin-transform-runtime": "^7.9.0",
-    "@babel/preset-env": "^7.9.6",
-    "@babel/preset-react": "^7.12.10",
-    "@babel/preset-typescript": "^7.9.0",
     "@cherryjuice/default-settings": "workspace:*",
+    "@cherryjuice/test-ids": "workspace:*",
     "@cherryjuice/graphql-types": "workspace:*",
     "@cherryjuice/shared-helpers": "workspace:*",
     "@cherryjuice/shared-styles": "workspace:*",
@@ -63,8 +46,6 @@
     "@material/feature-targeting": "^5.1.0",
     "@material/linear-progress": "^5.1.0",
     "apollo-upload-client": "^14.1.3",
-    "babel-loader": "^8.1.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
     "clean-webpack-plugin": "^3.0.0",
     "compression-webpack-plugin": "^3.1.0",
     "copy-webpack-plugin": "^5.1.1",

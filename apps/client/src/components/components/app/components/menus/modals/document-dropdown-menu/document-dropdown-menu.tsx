@@ -4,7 +4,7 @@ import { Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { DropdownMenu } from '::shared-components/dropdown-menu/dropdown-menu';
 import { documentHasUnsavedChanges } from '::app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 
 const mapState = (state: Store) => {
   const documentId = state.document.documentId;

@@ -6,7 +6,7 @@ import {
   NodeMeta,
   nodeMetaActionCreators,
 } from '::app/components/menus/dialogs/node-meta/reducer/reducer';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { IconPicker } from '::app/components/menus/dialogs/node-meta/components/icon-picker';
 
 type Props = Pick<

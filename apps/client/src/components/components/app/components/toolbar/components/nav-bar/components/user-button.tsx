@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Store } from '::store/store';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { User } from '@cherryjuice/graphql-types';
 import { GeneratedAvatar } from '::app/components/menus/modals/user/components/components/generated-avatar';
 import { Icon, Icons } from '@cherryjuice/icons';
