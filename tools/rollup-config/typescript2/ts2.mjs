@@ -2,7 +2,7 @@ import typescript from 'rollup-plugin-typescript2';
 import commonjs from 'rollup-plugin-commonjs';
 import external from 'rollup-plugin-node-externals';
 import resolve from 'rollup-plugin-node-resolve';
-import { zero } from '../zero';
+import { zero } from '../zero.mjs';
 const production = !process.env.ROLLUP_WATCH;
 
 export const ts2 = ({ cjs, es, clean }) => {

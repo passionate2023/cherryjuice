@@ -1,7 +1,7 @@
 import commonjs from '@rollup/plugin-commonjs';
 import external from 'rollup-plugin-node-externals';
 import { nodeResolve as resolve } from '@rollup/plugin-node-resolve';
-import { zero } from '../../zero';
+import { zero } from '../../zero.mjs';
 
 export const one = ({ clean }) => {
   const z = zero({ clean });

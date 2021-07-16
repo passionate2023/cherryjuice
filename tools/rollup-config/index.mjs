@@ -1,6 +1,6 @@
-import { ts2 as ts2_es_cjs } from './typescript2/ts2';
-import { es as ts_es } from './official-typescript-plugin/svg-sass/es';
-import { cjs as ts_cjs } from './official-typescript-plugin/svg-sass/cjs';
+import { ts2 as ts2_es_cjs } from './typescript2/ts2.mjs';
+import { es as ts_es } from './official-typescript-plugin/svg-sass/es.mjs';
+import { cjs as ts_cjs } from './official-typescript-plugin/svg-sass/cjs.mjs';
 
 const clean = process.env.clean !== 'false';
 const mode = process.argv.includes('--ts2_cjs') ? 'ts2_cjs' : process.env.mode;

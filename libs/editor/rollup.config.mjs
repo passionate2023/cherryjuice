@@ -1,4 +1,4 @@
-import { rollupConfig } from '../../rollup-config/index';
+import { rollupConfig } from 'rollup-config';
 
 const input = {
   index: 'src/index.ts',

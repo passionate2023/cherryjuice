@@ -499,6 +499,11 @@
 
       "packageName": "jest-config",
       "projectFolder": "tools/jest-config",
+    },
+    {
+
+      "packageName": "rollup-config",
+      "projectFolder": "tools/rollup-config",
     }
   ]
 }

@@ -6,7 +6,7 @@ import del from 'rollup-plugin-delete';
 const production = !process.env.ROLLUP_WATCH;
 export const zero = ({ clean }) => ({
   plugins: [
-    svg(),
+    svg.default(),
     postcss({
       extensions: ['scss', 'css'],
       modules: true,

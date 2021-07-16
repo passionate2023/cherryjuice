@@ -1,4 +1,4 @@
-import { rollupConfig } from '../../rollup-config/index.js';
+import { rollupConfig } from 'rollup-config';
 
 const icons = {
   'add-ct': 'src/assets/icons/cherrytree/add-ct.svg',

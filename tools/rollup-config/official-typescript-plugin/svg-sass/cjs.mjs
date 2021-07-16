@@ -1,16 +1,15 @@
 import typescript from '@rollup/plugin-typescript';
-
-import { one } from './one';
+import { one } from './one.mjs';
 const production = !process.env.ROLLUP_WATCH;
 
-export const es = ({ clean }) => {
+export const cjs = ({ clean }) => {
   const shared = one({ clean });
   return {
     ...shared,
     output: [
       {
-        dir: 'build',
-        format: 'es',
+        dir: 'build/cjs',
+        format: 'cjs',
         exports: 'named',
         sourcemap: !production,
       },
@@ -20,8 +19,8 @@ export const es = ({ clean }) => {
       typescript({
         sourceMap: !production,
         inlineSources: !production,
-        tsconfig: './tsconfig.es.json',
+        tsconfig: './tsconfig.cjs.json',
       }),
-    ].filter(Boolean),
+    ],
   };
 };

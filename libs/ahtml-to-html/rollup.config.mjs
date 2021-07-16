@@ -1,4 +1,4 @@
-import { rollupConfig } from '../../rollup-config/index';
+import { rollupConfig } from 'rollup-config';
 
 export default {
   ...rollupConfig(),
