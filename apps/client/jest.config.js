@@ -1,7 +1,7 @@
 /*eslint @typescript-eslint/no-var-requires:0*/
 // eslint-disable-next-line no-undef
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
-const config = require('../../config/jest/jest.config');
+const config = require('jest-config');
 // eslint-disable-next-line no-undef
 const tsconfig = require('./tsconfig');
 
@@ -18,5 +18,5 @@ module.exports = {
       prefix: '<rootDir>/',
     }),
   },
-  testEnvironment :"jsdom"
+  testEnvironment: 'jsdom',
 };

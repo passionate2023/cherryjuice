@@ -493,6 +493,12 @@
       "packageName": "@cherryjuice/nest-server",
       "projectFolder": "apps/server",
       "reviewCategory": "app"
+    },
+    // tools
+    {
+
+      "packageName": "jest-config",
+      "projectFolder": "tools/jest-config",
     }
   ]
 }

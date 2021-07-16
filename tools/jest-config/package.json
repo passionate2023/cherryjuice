@@ -1,0 +1,12 @@
+{
+  "name": "jest-config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "jest.config.js",
+  "scripts": {
+    "build": "exit 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

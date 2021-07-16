@@ -1,4 +1,4 @@
-const resolver = '<rootDir>/../../config/jest/jest-resolver';
+const resolver = '<rootDir>/../../tools/jest-config/jest-resolver';
 // eslint-disable-next-line no-undef
 module.exports = {
   transform: {

@@ -55,7 +55,8 @@
     "@swc/jest": "0.1.4",
     "@types/jest": "26.0.24",
     "jest": "27.0.6",
-    "ts-jest":"27.0.3"
+    "ts-jest":"27.0.3",
+    "jest-config":"workspace:*"
   },
   "optionalDependencies": {
     "@testing-library/react": "^10.0.4",
