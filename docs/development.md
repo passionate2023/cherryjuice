@@ -51,13 +51,15 @@ You can use [GitHub Codespaces](https://docs.github.com/en/codespaces/developing
 Start client development:
 
 ```sh
-pnpm dev:client
+cd apps/client
+rushx dev
 ```
 
 Start server development:
 
 ```sh
-pnpm dev:server
+cd apps/server
+rushx dev
 ```
 
 ## Local Development
@@ -65,7 +67,7 @@ pnpm dev:server
 ### Prerequisites
 
 - [Node 14](./prerequisits.md#node)
-- [pnpm 6](./prerequisits.md#pnpm)
+- [Rushjs](./prerequisits.md#rushjs)
 - [Postgres 12](./prerequisits.md#postgres)
 - [SMTP server](./prerequisits.md#smtp-server) (optional)
 
@@ -90,19 +92,23 @@ DATABASE_URL=postgres://USER:PASSWORD@HOST:5432/DATABASE
 Install dependencies and build local libraries:
 
 ```sh
-pnpm setup:dev
+rush update
+rush build 
+rush types
 ```
 
 Start client development:
 
 ```sh
-pnpm dev:client
+cd apps/client
+rushx dev
 ```
 
 Start server development:
 
 ```sh
-pnpm dev:server
+cd apps/server
+rushx dev
 ```
 
 ## Building
@@ -122,7 +128,11 @@ Build the image:
 
 ```sh
 # you can provide the image name as an argument (default is "cherryjuice")
-pnpm build:docker
+rush update
+rush build --to @cherryjuice/nest-server --to @cherryjuice/react-client
+rush deploy
+rush prepare-docker-context
+rush build-docker
 ```
 
 >Related: [Running the container](./running-locally.md#running-the-container).

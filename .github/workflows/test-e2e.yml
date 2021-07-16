@@ -24,7 +24,7 @@ jobs:
         run: node common/scripts/install-run-rush.js install
 
       - name: build libs and apps
-        run: node common/scripts/install-run-rush.js build --to cypress-tests
+        run: node common/scripts/install-run-rush.js build 
 
       - name: cypress run with env
         uses: cypress-io/github-action@v2

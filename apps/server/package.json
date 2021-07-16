@@ -92,7 +92,8 @@
     "@swc/jest": "0.1.4",
     "@types/jest": "26.0.24",
     "jest": "27.0.6",
-    "jest-config":"workspace:*"
+    "jest-config": "workspace:*",
+    "cross-env": "7.0.3"
   },
   "optionalDependencies": {
     "@types/jest": "26.0.24",
