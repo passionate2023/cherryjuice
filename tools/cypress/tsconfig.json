@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "allowJs": true,
+    "strict": false,
+    "target": "es2019",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "types": ["cypress", "@types/testing-library__cypress"]
+  },
+  "include": ["**/*.ts"]
+}

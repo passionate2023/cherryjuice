@@ -3,7 +3,7 @@
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
 // eslint-disable-next-line no-undef
 const tsconfig = require('./tsconfig');
-const config = require('../../config/jest/jest.config');
+const config = require('jest-config');
 // eslint-disable-next-line no-undef
 module.exports = {
   ...config,

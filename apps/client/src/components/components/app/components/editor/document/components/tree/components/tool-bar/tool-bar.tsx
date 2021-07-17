@@ -9,7 +9,7 @@ import { useFoldMenuItems } from '::root/components/app/components/editor/docume
 import { Search } from '::shared-components/search-input/search';
 import { NodesButtons } from './components/nodes-buttons/nodes-buttons';
 import { ContextMenu } from '@cherryjuice/components';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { TreeToolbarButton } from '::app/components/editor/document/components/tree/components/tool-bar/components/nodes-buttons/tree-toolbar-buton/tree-toolbar-button';
 import { useCurrentBreakpoint } from '@cherryjuice/shared-helpers';
 import { treePosition } from '::store/selectors/editor/tree-position';

@@ -8,8 +8,8 @@ type SendEmailDTO = {
   token: string;
 };
 
-const onRejected = () => {
-  throw new CouldNotSendEmailException();
+const onRejected = e => {
+  throw new CouldNotSendEmailException(e);
 };
 
 @Injectable()
@@ -27,7 +27,7 @@ export class EmailService {
           resetPasswordUrl: url,
           email,
         },
-        template: 'reset-password',
+        template: './reset-password',
       })
       .catch(onRejected);
   }
@@ -42,7 +42,7 @@ export class EmailService {
         context: {
           verifyEmailUrl: url,
         },
-        template: 'verify-email',
+        template: './verify-email',
       })
       .catch(onRejected);
   }
@@ -72,7 +72,7 @@ export class EmailService {
           currentEmail: tokenMeta.currentEmail,
           newEmail: tokenMeta.newEmail,
         },
-        template: 'change-email',
+        template: './change-email',
       })
       .catch(onRejected);
   }

@@ -1,5 +1,5 @@
 import { extractLinkAttributes } from '::helpers/rendering/html-to-ahtml/extractors/link';
-import { LinkAttributes } from '@cherryjuice/ahtml-to-html';
+import { LinkAttributes } from '@cherryjuice/ctb-to-ahtml';
 
 type AHtml = Record<string, any>;
 const getStyles = el =>

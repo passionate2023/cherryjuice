@@ -1,0 +1,28 @@
+{
+  "name": "rollup-config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.mjs",
+  "scripts": {
+    "build": "echo 0"
+  },
+  "devDependencies": {
+    "typescript": "^4.1.3",
+    "rollup": "^2.53.1",
+    "@rollup/plugin-typescript":"8.2.3",
+    "rollup-plugin-delete": "2.0.0",
+    "rollup-plugin-postcss": "4.0.0",
+    "rollup-plugin-terser": "7.0.2",
+    "rollup-plugin-typescript2": "0.30.0",
+    "rollup-plugin-commonjs": "10.1.0",
+    "rollup-plugin-node-resolve": "5.2.0",
+    "rollup-plugin-node-externals":"2.2.0",
+    "eslint-config-cherryjuice": "workspace:*",
+    "rollup-plugin-svg": "workspace:*",
+    "@rollup/plugin-commonjs":"19.0.1",
+    "@rollup/plugin-node-resolve":"13.0.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

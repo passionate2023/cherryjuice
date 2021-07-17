@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { modIconPicker } from '::sass-modules';
 import { Icon, IconName } from '@cherryjuice/icons';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { IconsList } from '::root/components/app/components/menus/dialogs/node-meta/components/components/icons-list';
 import { Popper } from '@cherryjuice/components';
 import { getNodeIconId } from '::app/components/editor/document/components/tree/components/node/components/node-icons/components/node-cherry';

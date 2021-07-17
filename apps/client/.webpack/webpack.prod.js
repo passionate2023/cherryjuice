@@ -13,6 +13,7 @@ const common = require('./webpack.common.js');
 const [head, ...tail] = common.plugins;
 module.exports = merge(common, {
   mode: 'production',
+  stats: 'errors-only',
   plugins: [
     head,
     new MiniCssExtractPlugin(),

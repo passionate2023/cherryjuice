@@ -5,7 +5,7 @@ import { AlertType, TAlert } from '::types/react';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac } from '::store/store';
 import { Store } from '::store/store';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 
 const createAlert = (
   selectedDocumentIds: string[],

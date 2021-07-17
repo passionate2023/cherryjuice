@@ -1,6 +1,0 @@
-{
-  "baseUrl": "https://cherryjuice.app",
-  "projectId": "mv7ech",
-  "testFiles": ["content/01. tree.ts"],
-  "scrollBehavior": "nearest"
-}

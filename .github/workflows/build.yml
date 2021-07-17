@@ -13,50 +13,31 @@ jobs:
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v2
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-pnpm-modules
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: remove optional dependencies
-        run: yarn strip:deps --opt --include-client
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
 
       - name: set env variables
         run: |
           echo "BUILD_DATE=$(date)" >> $GITHUB_ENV
           echo "COMMIT_SHA=`echo ${GITHUB_SHA}`" >> $GITHUB_ENV
 
-      - name: build app
-        run: yarn build:app
+      - name: install rush
+        run: node common/scripts/install-run-rush.js install
 
-      - name: package binaries
-        run: yarn build:bin
+      - name: build libs and apps
+        run: node common/scripts/install-run-rush.js build --to @cherryjuice/nest-server --to @cherryjuice/react-client
 
-      - name: upload linux binary
-        uses: actions/upload-artifact@v2
-        if: success()
-        with:
-          name: cherryjuice-linux
-          path: /home/runner/work/cherryjuice/cherryjuice/bin/cherryjuice-linux.tar.gz
-          retention-days: 1
-
-      - name: upload windows binary
-        uses: actions/upload-artifact@v2
-        if: success()
-        with:
-          name: cherryjuice-win
-          path: /home/runner/work/cherryjuice/cherryjuice/bin/cherryjuice-win.tar.gz
-          retention-days: 1
-
-      - name: remove dev dependencies
-        run: yarn strip:deps --dev --include-client --include-server
+      - name: prepare docker context
+        run: |
+          node common/scripts/install-run-rush.js deploy
+          node common/scripts/install-run-rush.js prepare-docker-context
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -71,8 +52,8 @@ jobs:
       - name: Build and push to docker.github
         uses: docker/build-push-action@v2
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./common/deploy
+          file: ./common/deploy/Dockerfile
           push: true
           tags: ghcr.io/ycnmhd/cherryjuice/app-${{ steps.extract_branch.outputs.branch }}:latest
           cache-from: type=local,src=/tmp/.buildx-cache

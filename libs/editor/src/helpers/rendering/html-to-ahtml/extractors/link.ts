@@ -1,4 +1,4 @@
-import { LinkAttributes } from '@cherryjuice/ahtml-to-html';
+import { LinkAttributes } from '@cherryjuice/ctb-to-ahtml';
 
 export const extractLinkAttributes = (
   el: HTMLAnchorElement,

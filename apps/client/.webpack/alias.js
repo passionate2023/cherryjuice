@@ -15,5 +15,4 @@ module.exports = {
   '::auth': path.resolve(__dirname, '../src/components/components/auth/'),
   '::root': path.resolve(__dirname, '../src/components/'),
   '::store': path.resolve(__dirname, '../src/store/'),
-  '::cypress': path.resolve(__dirname, '../cypress/'),
 };

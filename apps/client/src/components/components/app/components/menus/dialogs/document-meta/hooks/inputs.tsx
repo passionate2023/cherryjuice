@@ -2,7 +2,7 @@ import { FormInputProps } from '::shared-components/form/meta-form/meta-form-inp
 import * as React from 'react';
 import { useMemo } from 'react';
 import { documentMetaActionCreators } from '::app/components/menus/dialogs/document-meta/reducer/reducer';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { SelectPrivacy } from '::app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
 import { Privacy } from '@cherryjuice/graphql-types';
 import { Guests } from '::app/components/menus/dialogs/document-meta/components/guests/guests';

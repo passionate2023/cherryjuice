@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { modChips, modNodeMeta, modTextInput } from '::sass-modules';
 import { joinClassNames } from '@cherryjuice/shared-helpers';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { ButtonSquare } from '@cherryjuice/components';
 import { Icons } from '@cherryjuice/icons';
 import { useCallback, useMemo, useRef, useState } from 'react';

@@ -28,7 +28,7 @@ Please read [development.md](./development.md) for details on this project.
 
 # Running locally
 
-The app is available as either a [Docker image](running-locally.md#docker-image) or an [executable](running-locally.md#executable) (packaged using [Pkg](https://github.com/vercel/pkg)).
+The app is available as a [Docker image](running-locally.md#docker-image).  
 
 # License
 The project is licensed under the [GNU Affero General Public License version 3 (or newer)](https://github.com/ycnmhd/cherryjuice/blob/master/LICENSE).

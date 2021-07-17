@@ -9,7 +9,6 @@
     + [First Time Setup](#first-time-setup)
 * [Building](#building)
     + [Building The Docker Image](#building-the-docker-image)
-    + [Building The Executable](#building-the-executable)
 
 
 ## Codebase
@@ -20,7 +19,7 @@
 - Data is cached in the browser using **LocalForage**, and stored server-side using **Postgres**
 - The app state and data are managed using **Redux**
 - **GraphQL** is used as a data layer
-- Code is shared between the server and client using **Yarn workspaces**
+- Code is shared between the server and client using **Rushjs**
 
 ### Repository Structure
 
@@ -37,7 +36,6 @@
   │
   ├── components         # Reusable react components
   ├── icons wrapper      # Svg icons wrapper
-  ├── rollup-plugin-SVG  # Used to builds icons
   │
   ├── default-settings
   ├── hotkeys
@@ -53,13 +51,15 @@ You can use [GitHub Codespaces](https://docs.github.com/en/codespaces/developing
 Start client development:
 
 ```sh
-yarn dev:client
+cd apps/client
+rushx dev
 ```
 
 Start server development:
 
 ```sh
-yarn dev:server
+cd apps/server
+rushx dev
 ```
 
 ## Local Development
@@ -67,7 +67,7 @@ yarn dev:server
 ### Prerequisites
 
 - [Node 14](./prerequisits.md#node)
-- [Yarn 1](./prerequisits.md#yarn)
+- [Rushjs](./prerequisits.md#rushjs)
 - [Postgres 12](./prerequisits.md#postgres)
 - [SMTP server](./prerequisits.md#smtp-server) (optional)
 
@@ -92,19 +92,23 @@ DATABASE_URL=postgres://USER:PASSWORD@HOST:5432/DATABASE
 Install dependencies and build local libraries:
 
 ```sh
-yarn setup:dev
+rush update
+rush build 
+rush types
 ```
 
 Start client development:
 
 ```sh
-yarn dev:client
+cd apps/client
+rushx dev
 ```
 
 Start server development:
 
 ```sh
-yarn dev:server
+cd apps/server
+rushx dev
 ```
 
 ## Building
@@ -124,32 +128,11 @@ Build the image:
 
 ```sh
 # you can provide the image name as an argument (default is "cherryjuice")
-yarn build:docker
+rush update
+rush build --to @cherryjuice/nest-server --to @cherryjuice/react-client
+rush deploy
+rush prepare-docker-context
+rush build-docker
 ```
 
 >Related: [Running the container](./running-locally.md#running-the-container).
-
-### Building The Executable
-
->Note: [the development prerequisites](#prerequisites) are required.
-
-Clone the repository:
-
-```sh
-git clone git@github.com:ycnmhd/cherryjuice.git
-cd cherryjuice
-```
-
-Build the app:
-
-```sh
-yarn build:app
-```
-
-Package the app:
-```sh
-yarn build:bin
-```
-The executables should be generated at `./bin` directory.
-
-> Related: [Running the executable](./running-locally.md#running-the-executable).

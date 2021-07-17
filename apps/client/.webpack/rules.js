@@ -1,9 +1,9 @@
 const paths = require('./paths');
 const production = process.env.NODE_ENV === 'production';
 const storybook = process.env.STORYBOOK === 'true';
+const useBabel = process.env.USE_BABEL === 'true';
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const styleLoader = production ? MiniCssExtractPlugin.loader : 'style-loader';
-
 const globalStyles = new RegExp(
   `(${[
     'node_modules/',
@@ -32,36 +32,52 @@ module.exports = {
 
   javascriptAndTypescript: {
     test: /\.(mjs|js|ts|tsx)$/,
-    use: [
-      {
-        loader: 'babel-loader',
-        options: {
-          presets: [
-            [
-              '@babel/preset-env',
-              {
-                targets: '>2%',
+    use: useBabel
+      ? {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              [
+                '@babel/preset-env',
+                {
+                  targets: '>2%',
+                },
+              ],
+              [
+                '@babel/preset-react',
+                {
+                  runtime: 'automatic',
+                },
+              ],
+              '@babel/typescript',
+            ],
+            plugins: [
+              '@babel/plugin-proposal-optional-chaining',
+              '@babel/plugin-proposal-class-properties',
+              [
+                '@babel/plugin-transform-runtime',
+                { regenerator: true, runtime: true },
+              ],
+            ],
+          },
+        }
+      : {
+          loader: 'swc-loader',
+          options: {
+            // sync: true makes swc-loader invoke swc synchronously. useful to see errors
+            sync: false,
+            jsc: {
+              target: 'es2018',
+              parser: {
+                syntax: 'typescript',
+                tsx: true,
+                dynamicImport: true,
+                decorators: true,
               },
-            ],
-            [
-              '@babel/preset-react',
-              {
-                runtime: 'automatic',
-              },
-            ],
-            '@babel/typescript',
-          ],
-          plugins: [
-            '@babel/plugin-proposal-optional-chaining',
-            '@babel/plugin-proposal-class-properties',
-            [
-              '@babel/plugin-transform-runtime',
-              { regenerator: true, runtime: true },
-            ],
-          ],
+              loose: true,
+            },
+          },
         },
-      },
-    ],
     include: [
       paths.src,
       paths.cypress,
@@ -110,7 +126,7 @@ module.exports = {
         loader: 'sass-loader',
         options: {
           sassOptions: {
-            includePaths: ['node_modules', '../../node_modules'],
+            includePaths: ['node_modules'],
           },
           implementation: require('sass'),
         },

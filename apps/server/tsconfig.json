@@ -7,12 +7,12 @@
     "experimentalDecorators": true,
     "target": "es2019",
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": "./build",
     "baseUrl": "./",
     "incremental": true,
     "esModuleInterop": true,
     "jsx": "react",
     "skipLibCheck": true
   },
-  "exclude": ["node_modules", "test", "dist", "**/__tests__/"]
+  "exclude": ["node_modules", "test", "build", "**/__tests__/"]
 }
