@@ -22,6 +22,7 @@ import {
   redirectToHTTPS,
   sendCompressedJavascript,
 } from '../middleware';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import {
         return { req };
       },
       installSubscriptionHandlers: true,
+      uploads: false,
     }),
     TypeOrmModule.forRoot(typeOrmConfig),
     UserModule,
@@ -61,6 +63,7 @@ import {
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(graphqlUploadExpress()).forRoutes('graphql');
     if (process.env.NODE_SERVE_STATIC === 'true')
       consumer.apply(sendCompressedJavascript).forRoutes(
         ...['js', 'css', 'svg'].map(extension => ({
