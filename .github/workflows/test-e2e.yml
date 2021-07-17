@@ -20,21 +20,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
 
-      - uses: pnpm/action-setup@v2.0.1
-        with:
-          version: 6.0.2
-          run_install: true
+      - name: install rush
+        run: node common/scripts/install-run-rush.js install
 
-      - name: install dependencies
-        run:  pnpm install
-
-      - name: build local dependencies
-        run: pnpm build:libs
+      - name: build libs and apps
+        run: node common/scripts/install-run-rush.js build 
 
       - name: cypress run with env
         uses: cypress-io/github-action@v2
         with:
-          working-directory: ./apps/client
+          working-directory: ./tools/cypress
           config-file: cypress.ci.json
           browser: chrome
           headless: true

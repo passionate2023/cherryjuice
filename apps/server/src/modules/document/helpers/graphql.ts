@@ -17,6 +17,7 @@ const GraphQLUpload = (acceptedMimeTypes: string[], TypeName: string) =>
       value: Promise<{ file: FileUpload }>,
     ): Promise<FileUpload> {
       const { file } = await value;
+      if (!file) throw new GraphQLError('invalid upload');
       const stream = file.createReadStream();
       const fileType = await FileType.fromStream(stream);
       if (!acceptedMimeTypes.includes(fileType.mime))

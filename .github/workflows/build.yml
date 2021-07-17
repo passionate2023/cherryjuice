@@ -23,43 +23,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
 
-      - uses: pnpm/action-setup@v2.0.1
-        with:
-          version: 6.0.2
-          run_install: true
-
-      - name: remove optional dependencies
-        run: pnpm strip:deps -- --opt --include-client
-
       - name: set env variables
         run: |
           echo "BUILD_DATE=$(date)" >> $GITHUB_ENV
           echo "COMMIT_SHA=`echo ${GITHUB_SHA}`" >> $GITHUB_ENV
 
-      - name: build app
-        run: pnpm build:app
+      - name: install rush
+        run: node common/scripts/install-run-rush.js install
 
-      - name: package binaries
-        run: pnpm build:bin
+      - name: build libs and apps
+        run: node common/scripts/install-run-rush.js build --to @cherryjuice/nest-server --to @cherryjuice/react-client
 
-      - name: upload linux binary
-        uses: actions/upload-artifact@v2
-        if: success()
-        with:
-          name: cherryjuice-linux
-          path: /home/runner/work/cherryjuice/cherryjuice/bin/cherryjuice-linux.tar.gz
-          retention-days: 1
-
-      - name: upload windows binary
-        uses: actions/upload-artifact@v2
-        if: success()
-        with:
-          name: cherryjuice-win
-          path: /home/runner/work/cherryjuice/cherryjuice/bin/cherryjuice-win.tar.gz
-          retention-days: 1
-
-      - name: remove dev dependencies
-        run: pnpm strip:deps -- --dev --include-client --include-server
+      - name: prepare docker context
+        run: |
+          node common/scripts/install-run-rush.js deploy
+          node common/scripts/install-run-rush.js prepare-docker-context
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -74,8 +52,8 @@ jobs:
       - name: Build and push to docker.github
         uses: docker/build-push-action@v2
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./common/deploy
+          file: ./common/deploy/Dockerfile
           push: true
           tags: ghcr.io/ycnmhd/cherryjuice/app-${{ steps.extract_branch.outputs.branch }}:latest
           cache-from: type=local,src=/tmp/.buildx-cache

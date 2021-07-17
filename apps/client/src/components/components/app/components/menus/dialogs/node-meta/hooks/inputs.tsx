@@ -1,6 +1,6 @@
 import { FormInputProps } from '::shared-components/form/meta-form/meta-form-input';
 import { nodeMetaActionCreators } from '::app/components/menus/dialogs/node-meta/reducer/reducer';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { SelectPrivacy } from '::app/components/menus/dialogs/document-meta/components/select-privacy/select-privacy';
 import { Privacy } from '@cherryjuice/graphql-types';
 import { Chips } from '::app/components/menus/dialogs/document-meta/components/chips/chips';

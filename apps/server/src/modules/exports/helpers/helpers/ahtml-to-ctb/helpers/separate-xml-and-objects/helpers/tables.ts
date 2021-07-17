@@ -1,4 +1,4 @@
-import { AHtmlNode } from '@cherryjuice/ahtml-to-html';
+import { AHtmlNode } from '@cherryjuice/ctb-to-ahtml'
 import { CTBObject } from '../../translate-ahtml/helpers/translate-object/translate-object';
 
 const extractObjects = (nodes: (AHtmlNode | CTBObject)[]) => {

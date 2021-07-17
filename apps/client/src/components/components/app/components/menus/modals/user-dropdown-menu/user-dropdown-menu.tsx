@@ -3,7 +3,7 @@ import { useGroups } from './hooks/groups';
 import { Store } from '::store/store';
 import { connect, ConnectedProps } from 'react-redux';
 import { DropdownMenu } from '::shared-components/dropdown-menu/dropdown-menu';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 
 const mapState = (state: Store) => ({
   documentId: state.document.documentId,

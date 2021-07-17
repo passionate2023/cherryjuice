@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Home } from '::app/components/home/home';
-import { homeProps } from '::app/components/home/temp/home-props';
 // eslint-disable-next-line node/no-extraneous-import
 
 const config = {
@@ -8,7 +7,7 @@ const config = {
 };
 
 export const full = () => {
-  return <Home folder={homeProps} />;
+  return <Home />;
 };
 
 full.parameters = {

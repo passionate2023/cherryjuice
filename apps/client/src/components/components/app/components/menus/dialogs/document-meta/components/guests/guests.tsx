@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AccessLevel, DocumentGuestOt } from '@cherryjuice/graphql-types';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { documentMetaActionCreators } from '::root/components/app/components/menus/dialogs/document-meta/reducer/reducer';
 import { ButtonCircle } from '@cherryjuice/components';
 import { Icons } from '@cherryjuice/icons';

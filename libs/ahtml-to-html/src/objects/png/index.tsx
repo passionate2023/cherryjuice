@@ -1,4 +1,4 @@
-import { LinkAttributes } from '../../helpers/parse-link';
+import { LinkAttributes } from '@cherryjuice/ctb-to-ahtml';
 
 type Props = {
   style: {

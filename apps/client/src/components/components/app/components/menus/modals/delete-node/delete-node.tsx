@@ -4,7 +4,7 @@ import { deleteNode } from '::root/components/app/components/menus/modals/delete
 import { TDialogFooterButton } from '::root/components/shared-components/dialog/dialog-footer';
 import { ConfirmationModal } from '::root/components/shared-components/modal/confirmation-modal';
 import { AlertType } from '::types/react';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { useDelayedCallback } from '::hooks/react/delayed-callback';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Store } from '::store/store';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { ToolbarButton } from '::app/components/toolbar/components/toolbar-button/toolbar-button';
 import { connect, ConnectedProps } from 'react-redux';
 import { DocumentDropdownMenu } from '::app/components/menus/modals/document-dropdown-menu/document-dropdown-menu';

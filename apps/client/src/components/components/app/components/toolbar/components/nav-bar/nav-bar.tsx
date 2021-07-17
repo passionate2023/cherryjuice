@@ -3,7 +3,7 @@ import { DocumentSearch } from '::app/components/toolbar/components/nav-bar/comp
 import { UserButton } from '::app/components/toolbar/components/nav-bar/components/user-button';
 import { DocumentButton } from '::app/components/toolbar/components/nav-bar/components/document-button';
 import { ac, Store } from '::store/store';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { getDocumentsList } from '::store/selectors/cache/document/document';
 import { documentHasUnsavedChanges } from '::app/components/menus/dialogs/documents-list/components/documents-list/components/document/document';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';

@@ -3,7 +3,7 @@ import { extractGrid, GridRow } from './objects/grid';
 import { AnchorRow, extractAnchor } from './objects/anchor';
 import { extractImage, UnloadedImageRow } from './objects/image';
 import { CTJustification } from '../translate-node/translate-node';
-import { AHtmlObject } from '@cherryjuice/ahtml-to-html';
+import { AHtmlObject } from '@cherryjuice/ctb-to-ahtml';
 
 type ObjectType = 'codebox' | 'grid' | 'anchor' | 'image';
 type CTBObject = {

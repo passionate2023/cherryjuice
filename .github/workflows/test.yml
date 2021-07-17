@@ -19,18 +19,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
 
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 6.9.1
+      - name: install rush
+        run: node common/scripts/install-run-rush.js install
 
-      - name: install dependencies
-        run: pnpm i
+      - name: build libs and apps
+        run: node common/scripts/install-run-rush.js build --to @cherryjuice/nest-server --to @cherryjuice/react-client
 
-      - name: build local dependencies
-        run: pnpm build:libs
-
-      - name: run jest tests
-        run: sudo -E env "PATH=$PATH" pnpm test
+      - name: run tests
+        run: node common/scripts/install-run-rush.js test
 
       - name: trigger build workflow
         if: success()

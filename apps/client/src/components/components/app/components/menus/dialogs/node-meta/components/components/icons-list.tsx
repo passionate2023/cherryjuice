@@ -1,5 +1,5 @@
 import { modIconPicker } from '::sass-modules';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { Icon, Icons } from '@cherryjuice/icons';
 import * as React from 'react';
 

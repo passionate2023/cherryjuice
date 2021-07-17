@@ -18,7 +18,7 @@
       "::auth/*": ["./src/components/components/auth/*"],
       "::root/*": ["./src/components/*"],
       "::store/*": ["./src/store/*"],
-      "::cypress/*": ["./cypress/*"]
+      "::cypress/*": ["../../tools/cypress/*"]
     },
     "target": "es2020",
     "module": "CommonJS",

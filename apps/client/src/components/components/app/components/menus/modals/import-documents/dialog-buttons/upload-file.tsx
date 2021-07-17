@@ -5,7 +5,7 @@ import { modImportDocument } from '::sass-modules';
 import { Icon, Icons } from '@cherryjuice/icons';
 import { DOCUMENT_MUTATION } from '::graphql/mutations';
 import { apolloClient } from '::graphql/client/apollo-client';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 
 const UploadFile: React.FC<{}> = () => {
   const inputRef = useRef<HTMLInputElement>();

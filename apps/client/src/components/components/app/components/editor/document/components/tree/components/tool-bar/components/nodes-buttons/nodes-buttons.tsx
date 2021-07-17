@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, store, Store } from '::store/store';
 import { hasWriteAccessToDocument } from '::store/selectors/document/has-write-access-to-document';

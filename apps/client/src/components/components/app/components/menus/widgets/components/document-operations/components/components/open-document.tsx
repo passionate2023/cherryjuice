@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ButtonCircle } from '@cherryjuice/components';
 import { modDocumentOperations } from '::sass-modules';
 import { ac } from '::store/store';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { DocumentOperation } from '@cherryjuice/graphql-types';
 import { useEffect } from 'react';
 

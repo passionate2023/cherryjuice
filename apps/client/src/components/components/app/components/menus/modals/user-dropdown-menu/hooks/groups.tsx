@@ -1,6 +1,6 @@
 import { ac } from '::store/store';
 import { DropdownMenuGroupProps } from '::shared-components/dropdown-menu/components/dropdown-menu-group/dropdown-menu-group';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { UserInfo } from '::app/components/menus/modals/user/components/user-info';
 import * as React from 'react';
 import { User } from '@cherryjuice/graphql-types';

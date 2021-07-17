@@ -32,10 +32,10 @@ module.exports = {
   },
   output: {
     filename: 'main.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'build'),
   },
   plugins: [
-    new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['dist'] }),
+    new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['build'] }),
     new webpack.HotModuleReplacementPlugin(),
     new RunScriptWebpackPlugin({ name: 'main.js' }),
   ],

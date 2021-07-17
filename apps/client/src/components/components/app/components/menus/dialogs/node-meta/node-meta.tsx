@@ -8,7 +8,7 @@ import {
   nodeMetaInitialState,
   nodeMetaReducer,
 } from '::root/components/app/components/menus/dialogs/node-meta/reducer/reducer';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { connect, ConnectedProps } from 'react-redux';
 import { ac, Store } from '::store/store';
 import { getCurrentDocument } from '::store/selectors/cache/document/document';

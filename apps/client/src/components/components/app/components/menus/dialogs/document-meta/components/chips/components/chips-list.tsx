@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { modChips } from '::sass-modules';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import {
   Chip,
   ChipProps,

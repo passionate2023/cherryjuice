@@ -1,5 +1,5 @@
 import { ac } from '::store/store';
-import { testIds } from '::cypress/support/helpers/test-ids';
+import { testIds } from '@cherryjuice/test-ids';
 import { TDialogFooterButton } from '::shared-components/dialog/dialog-footer';
 import { useMemo } from 'react';
 
